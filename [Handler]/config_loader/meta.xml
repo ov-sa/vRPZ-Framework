@@ -1,0 +1,23 @@
+<meta>
+
+    <info author="vStudio" name="Config Loader" type="Handler" version="1.0.0"/>
+    <oop>true</oop>
+
+    <script src="exports/shared.lua" type="shared" cache="false"/>
+
+    <script src="exports/shared.lua" type="shared" cache="false"/>
+    <script src="configs/gameplay/index.lua" type="shared" cache="false"/>
+    <script src="configs/character/player.lua" type="shared" cache="false"/>
+    <script src="configs/character/character.lua" type="shared" cache="false"/>
+    <script src="configs/inventory/index.lua" type="shared" cache="false"/>
+    <script src="configs/inventory/slots.lua" type="shared" cache="false"/>
+    <script src="configs/inventory/items.lua" type="shared" cache="false"/>
+    <script src="configs/gameplay/tasks.lua" type="shared" cache="false"/>
+    <script src="configs/map/index.lua" type="shared" cache="false"/>
+    <script src="configs/weapon/index.lua" type="shared" cache="false"/>
+    <script src="configs/vehicle/index.lua" type="shared" cache="false"/>
+
+    <export function="getConfig" type="shared"/>
+
+</meta>
+
