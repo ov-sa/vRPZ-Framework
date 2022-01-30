@@ -1,0 +1,10 @@
+<meta>
+
+    <info author="vStudio" name="Resource Loader" type="Handler" version="1.0.0"/>
+
+    <include resource="config_loader"/>
+    <!--include resource="pickup_handler"/-->
+    <!--include resource="sound_handler"/-->
+    <include resource="player_handler"/>
+
+</meta>
