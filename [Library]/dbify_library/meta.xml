@@ -1,0 +1,16 @@
+<meta>
+
+    <info author="OvileAmriam" name="DBify Library" type="Library" version="1.0.3"/>
+
+    <!-- Settings & Utilities -->
+    <script src="utilities/server.lua" type="server"/>
+    <script src="settings/server.lua" type="server"/>
+
+    <!-- Handlers -->
+    <script src="handlers/bundler.lua" type="server"/>
+
+    <!-- Exports -->
+    <export function="fetchImports" type="server"/>
+    <export function="fetchDatabase" type="server"/>
+
+</meta>
