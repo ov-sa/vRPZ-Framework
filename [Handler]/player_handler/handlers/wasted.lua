@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
     ipairs = ipairs,
     tonumber = tonumber,
     isElement = isElement,
@@ -25,6 +26,7 @@ local imports = {
     setCameraTarget = setCameraTarget,
     setPedAnimation = setPedAnimation,
     setElementHealth = setElementHealth,
+    setPedHeadless = setPedHeadless,
     createPed = createPed,
     createMarker = createMarker,
     spawnPlayer = spawnPlayer,
@@ -72,7 +74,7 @@ addEventHandler("Player:onDeath", root, function(killer, headshot, weapon, bodyp
     local hour, minute = getCurrentTime()	
     local ped = imports.createPed(0, posVector.x, posVector.y, posVector.z, rotVector.z)
     local marker = imports.createMarker(0, 0, 0, "cylinder", 1.2, 0, 0, 0, 0)
-    if headshot then ped:setHeadless(true) end
+    if headshot then imports.setPedHeadless(ped, true) end
     ped:setCollisionsEnabled(false)
     ped:setData("Element:Parent", marker)
     marker:setData("Loot:Type", "deadperson")
@@ -82,7 +84,7 @@ addEventHandler("Player:onDeath", root, function(killer, headshot, weapon, bodyp
     marker:attach(ped, 0, 0, -0.1)
     source:attach(ped, 0, 0, -2)
     imports.triggerClientEvent("Player:onSyncPedClothes", source, ped, getPlayerClothes(source))
-    for i, j in pairs(inventoryDatas) do
+    for i, j in imports.pairs(inventoryDatas) do
         if not j.saveOnWasted then
             for k, v in imports.ipairs(j) do
                 local itemValue = imports.tonumber(source:getData("Item:"..v.dataName)) or 0
