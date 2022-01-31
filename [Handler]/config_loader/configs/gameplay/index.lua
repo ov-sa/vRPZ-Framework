@@ -15,10 +15,15 @@
 configVars = {
 
     ["Game"] = {
-        ["FPS_Limit"] = 200,
+        ["FPS_Limit"] = 120,
+        ["Sync_Rate"] = 50,
         ["Draw_Distance_Limit"] = {500, 1000},
         ["Fog_Distance_Limit"] = {50, 100},
-        ["Water_Level_Limit"] = {0, 10},
+        ["Aircraft_Max_Height"] = 1000,
+        ["Jetpack_Max_Height"] = 1000,
+        ["Minute_Duration"] = 1000,
+        ["Game_Type"] = "vRP",
+        ["Game_Map"] = "vRP : SA",
 
         ["Character"] = {
             ["Max_Blood"] = 1000,

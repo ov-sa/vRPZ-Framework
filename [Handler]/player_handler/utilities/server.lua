@@ -76,7 +76,7 @@ addEventHandler("onResourceStart", resource, function()
         if serverTickSyncer and isElement(serverTickSyncer) then
             serverTickSyncer:setData("Server:TickSyncer", 0) --TODO: ...
         end
-    end, 50, 0, serverTickSyncer)
+    end, FRAMEWORK_CONFIGS.Game["Sync_Rate"], 0, serverTickSyncer)
 
     --[[
     for i, j in pairs(availableWeaponSlots) do
@@ -99,14 +99,14 @@ addEventHandler("onResourceStart", resource, function()
     end
     ]]--
 
-    setFPSLimit(serverFPSLimit)
-    setFarClipDistance(serverDrawDistanceLimit)
-    setFogDistance(serverFogDistanceLimit)
-    setGameType(serverGameType)
-    setMapName(serverMapName)
-    setAircraftMaxHeight(serverAircraftMaxHeight)
-    setJetpackMaxHeight(serverJetpackMaxHeight)
-    setMinuteDuration(serverMinuteDuration)
+    setFPSLimit(FRAMEWORK_CONFIGS.Game["FPS_Limit"])
+    setFarClipDistance(FRAMEWORK_CONFIGS.Game["Draw_Distance_Limit"][2])
+    setFogDistance(FRAMEWORK_CONFIGS.Game["Fog_Distance_Limit"][2])
+    setAircraftMaxHeight(FRAMEWORK_CONFIGS.Game["Aircraft_Max_Height"])
+    setJetpackMaxHeight(FRAMEWORK_CONFIGS.Game["Jetpack_Max_Height"])
+    setMinuteDuration(FRAMEWORK_CONFIGS.Game["Minute_Duration"])
+    setGameType(FRAMEWORK_CONFIGS.Game.{"Game_Type"})
+    setMapName(FRAMEWORK_CONFIGS.Game["Game_Map"])
     for i, j in ipairs(Element.getAllByType("player")) do
         if isPlayerInitialized(j) then
             j:setBlurLevel(0)

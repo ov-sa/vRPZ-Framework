@@ -14,27 +14,25 @@
 
 resource = getResourceRootElement(getThisResource())
 
---[[
-serverFPSLimit = exports.config_loader:getConfig("server_fpsLimit")
-serverDrawDistanceLimit = exports.config_loader:getConfig("server_drawDistanceLimit")
-serverFogDistanceLimit = exports.config_loader:getConfig("server_fogDistanceLimit")
-serverGameType = exports.config_loader:getConfig("server_gameType")
-serverMapName = exports.config_loader:getConfig("server_mapName")
-serverWaterLevel = exports.config_loader:getConfig("server_waterLevel")
-serverAircraftMaxHeight = exports.config_loader:getConfig("server_aircraftMaxHeight")
-serverJetpackMaxHeight = exports.config_loader:getConfig("server_jetpackMaxHeight")
-serverMinuteDuration = exports.config_loader:getConfig("server_minuteDuration")
-serverLogoutCoolDownDuration = exports.config_loader:getConfig("server_logoutCoolDownDuration")
-serverDisabledCMDs = exports.config_loader:getConfig("server_disabledCMDs")
-serverWeaponFakeAmmoAmount = exports.config_loader:getConfig("server_weaponFakeAmmoAmount")
-serverWaterTemperature = exports.config_loader:getConfig("server_waterTemperature")
-serverSprintTemperature = exports.config_loader:getConfig("server_sprintTemperature")
-serverRoleplayCursorBindKey = exports.config_loader:getConfig("server_roleplayCursorBindKey")
-serverNPCInteractionRange = exports.config_loader:getConfig("server_npcInteractionRange")
-serverVehicleInteractionRange = exports.config_loader:getConfig("server_vehicleInteractionRange")
-serverPickupInteractionRange = exports.config_loader:getConfig("server_pickupInteractionRange")
-serverWeather = exports.config_loader:getConfig("server_weather")
+FRAMEWORK_CONFIGS = {
+    ["Game"] = exports.config_loader:getConfig("Game"),
+        --[[
+        serverMinuteDuration = exports.config_loader:getConfig("server_minuteDuration")
+        serverLogoutCoolDownDuration = exports.config_loader:getConfig("server_logoutCoolDownDuration")
+        serverDisabledCMDs = exports.config_loader:getConfig("server_disabledCMDs")
+        serverWeaponFakeAmmoAmount = exports.config_loader:getConfig("server_weaponFakeAmmoAmount")
+        serverWaterTemperature = exports.config_loader:getConfig("server_waterTemperature")
+        serverSprintTemperature = exports.config_loader:getConfig("server_sprintTemperature")
+        serverRoleplayCursorBindKey = exports.config_loader:getConfig("server_roleplayCursorBindKey")
+        serverNPCInteractionRange = exports.config_loader:getConfig("server_npcInteractionRange")
+        serverVehicleInteractionRange = exports.config_loader:getConfig("server_vehicleInteractionRange")
+        serverPickupInteractionRange = exports.config_loader:getConfig("server_pickupInteractionRange")
+        serverWeather = exports.config_loader:getConfig("server_weather")
+        ]]--
+    }
+}
 
+--[[
 lobbyDatas = exports.config_loader:getConfig("lobby_datas")
 taskDatas = exports.config_loader:getConfig("task_datas")
 factionDatas = exports.config_loader:getConfig("faction_datas")
