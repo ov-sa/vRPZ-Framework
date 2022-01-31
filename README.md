@@ -10,9 +10,9 @@
 
 * Completely Open-Source
 * Config Loader Integration
-* Assetify Library Integration
-* Beautify Library Integration
-* DBify Library Integration
+* [DBify Library](https://github.com/ov-sa/DBify-Library) Integration
+* [Assetify Library](https://github.com/ov-sa/Assetify-Library) Integration
+* [Beautify Library](https://github.com/ov-sa/Beautify-Library) Integration
 * Completely Performance-Friendly
 
 ## ━ Developers
@@ -30,7 +30,7 @@
 ## ━ Installation
 
 1. Download the latest release
-2. Unpack it in your `YourMTAFolder\server\mods\deathmatch\resources` directory
+2. Unpack it to your `YourMTAFolder\server\mods\deathmatch\resources` directory
 3. Add below mentioned to your `mtaserver.conf` 
 ```xml
 <resource src="admin" startup="1" protected="0"/>
