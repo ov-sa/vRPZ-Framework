@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    ipairs = ipairs,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     triggerEvent = triggerEvent,
@@ -322,7 +323,7 @@ loginScreenCache = {
     }
 }
 
-for i, j in ipairs(loginScreenCache.phases[1].optionsui) do
+for i, j in imports.ipairs(loginScreenCache.phases[1].optionsui) do
     j.width = dxGetTextWidth(j.title, 1, loginScreenCache.phases[1].optionsui.font) + 5
     j.startX = loginScreenCache.phases[1].optionsui.startX - (j.width/2)
     j.startY = loginScreenCache.phases[1].optionsui.startY + CLIENT_MTA_RESOLUTION[2] - (loginScreenCache.phases[1].optionsui.height*(#loginScreenCache.phases[1].optionsui - (i - 1))) - (loginScreenCache.phases[1].optionsui.paddingY*(#loginScreenCache.phases[1].optionsui - i))
@@ -335,7 +336,7 @@ loginScreenCache.phases[2].customizerui.button.startX = loginScreenCache.phases[
 loginScreenCache.phases[2].customizerui.button.startY = loginScreenCache.phases[2].customizerui.button.startY + loginScreenCache.phases[2].customizerui.button.paddingY
 loginScreenCache.phases[3].back_navigator.height = loginScreenCache.phases[3].back_navigator.height + dxGetFontHeight(1, loginScreenCache.phases[3].back_navigator.font)
 --[[
-for i, j in ipairs(serverCredits) do
+for i, j in imports.ipairs(serverCredits) do
     loginScreenCache.phases[3].view.content = ((i == 1) and tostring(j)) or loginScreenCache.phases[3].view.content.."\n\n"..tostring(j)
 end
 ]]--
@@ -344,7 +345,7 @@ loginScreenCache.phases[3].view.contentWidth, loginScreenCache.phases[3].view.co
 loginScreenCache.phases[3].view.scrollAnimDuration = math.max(1, math.ceil((loginScreenCache.phases[3].view.contentHeight + loginScreenCache.phases[3].view.height)/loginScreenCache.phases[3].view.height))*loginScreenCache.phases[3].view.scrollAnimDuration
 loginScreenCache.phases[3].view.renderTarget = DxRenderTarget(loginScreenCache.phases[3].view.width, loginScreenCache.phases[3].view.height, true)
 --[[
-for i, j in ipairs(playerClothes["Gender"]) do
+for i, j in imports.ipairs(playerClothes["Gender"]) do
     table.insert(loginScreenCache.phases[2].customizerui.option[3].placeDataTable, j.modelType)
 end
 for i, j in pairs(playerSpawnPoints) do
@@ -369,7 +370,7 @@ local function loadLoginPreviewCharacter(loadDefault)
     end
 
     if loadDefault then
-        for i, j in ipairs(loginScreenCache.phases[2].customizerui.option) do
+        for i, j in imports.ipairs(loginScreenCache.phases[2].customizerui.option) do
             if j.isEditBox then
                 j.placeDataValue = ""
             else
@@ -377,7 +378,7 @@ local function loadLoginPreviewCharacter(loadDefault)
             end
         end
     else
-        for i, j in ipairs(loginScreenCache.phases[2].customizerui.option) do
+        for i, j in imports.ipairs(loginScreenCache.phases[2].customizerui.option) do
             if j.isEditBox then
                 j.placeDataValue = loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter][j.optionType] or ""
             else
@@ -385,7 +386,7 @@ local function loadLoginPreviewCharacter(loadDefault)
                 if j.optionType == "gender" or j.clothingCategoryIndex then
                     matchedDataIndex = loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter][j.optionType]
                 else
-                    for k, v in ipairs(j.placeDataTable) do
+                    for k, v in imports.ipairs(j.placeDataTable) do
                         if loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter][j.optionType] == v then
                             matchedDataIndex = k
                             break
@@ -409,7 +410,7 @@ function updateLoginPreviewCharacter()
     local selectedGender, selectedClothing = playerClothes["Gender"][(loginScreenCache.phases[2].customizerui.option[3].placeDataValue)], {}
     loginScreenCache.character:setModel(selectedGender.modelSkin)
     selectedClothing["gender"] = loginScreenCache.phases[2].customizerui.option[3].placeDataValue
-    for i, j in ipairs(loginScreenCache.phases[2].customizerui.option) do
+    for i, j in imports.ipairs(loginScreenCache.phases[2].customizerui.option) do
         if not j.isEditBox and j.clothingCategoryIndex then
             if j.clothingCategoryIndex == "Race" then
                 j.placeDataTable = playerClothes[selectedGender.modelType][j.clothingCategoryIndex]
@@ -419,7 +420,7 @@ function updateLoginPreviewCharacter()
                         j.placeDataTable = playerClothes[selectedGender.modelType][j.clothingCategoryIndex]
                     else
                         local generatedDataTable = {}
-                        for k, v in ipairs(playerClothes[selectedGender.modelType][j.clothingCategoryIndex]) do
+                        for k, v in imports.ipairs(playerClothes[selectedGender.modelType][j.clothingCategoryIndex]) do
                             if v.isAvailableForCharacterCreation then
                                 local copiedTable = table.copy(v, true)
                                 copiedTable.isAvailableForCharacterCreation = nil
@@ -540,7 +541,7 @@ function manageLoginPreviewCharacter(manageType)
         setLoginUIEnabled(false, false)
         imports.triggerEvent("Player:onNotification", localPlayer, "◴ Saving..", {175, 175, 175, 255})
         local characterData = {}
-        for i, j in ipairs(loginScreenCache.phases[2].customizerui.option) do
+        for i, j in imports.ipairs(loginScreenCache.phases[2].customizerui.option) do
             if j.isEditBox then
                 characterData[j.optionType] = j.placeDataValue
             else
@@ -556,7 +557,7 @@ function manageLoginPreviewCharacter(manageType)
         local selectedCharacter = loginScreenCache.selectedCharacter
         local charactersPendingToBeSaved = {}
         local charactersToBeSaved = table.copy(loginScreenCache.clientCharacters, true)
-        for i, j in ipairs(charactersToBeSaved) do
+        for i, j in imports.ipairs(charactersToBeSaved) do
             if j.isUnverified then
                 charactersToBeSaved[i] = nil
             end
@@ -643,18 +644,18 @@ function setLoginUIPhase(phaseID)
         end
         loginScreenCache.phase = phaseID
         local unverifiedCharacters = {}
-        for i, j in ipairs(loginScreenCache.clientCharacters) do
+        for i, j in imports.ipairs(loginScreenCache.clientCharacters) do
             if j.isUnverified then
                 table.insert(unverifiedCharacters, i)
             end
         end
-        for i, j in ipairs(loginScreenCache.clientCharacters) do
+        for i, j in imports.ipairs(loginScreenCache.clientCharacters) do
             if j.isUnverified then
                 table.remove(loginScreenCache.clientCharacters, i)
                 loginScreenCache._unsavedCharacters[i] = nil
             end
         end
-        for i, j in ipairs(unverifiedCharacters) do
+        for i, j in imports.ipairs(unverifiedCharacters) do
             if loginScreenCache.selectedCharacter == j then
                 loginScreenCache.selectedCharacter = 0
                 loginScreenCache._selectedCharacter = 0
@@ -771,7 +772,7 @@ imports.addEventHandler("onClientKey", root, function(button, press)
                     local nextEditboxIndex = false
                     local editboxIndex = {}
                     local currentEditbox = false
-                    for i, j in ipairs(loginScreenCache.phases[2].customizerui.option) do
+                    for i, j in imports.ipairs(loginScreenCache.phases[2].customizerui.option) do
                         if j.isEditBox then
                             table.insert(editboxIndex, i)
                             if loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox == i then
@@ -870,7 +871,7 @@ local function renderUI()
     if currentLoginPhase == 1 then
         --Draws Options UI
         dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginScreenCache.phases[1].bgPath, 0, 0, 0, tocolor(unpack(loginScreenCache.phases[1].bgColor)), false)
-        for i, j in ipairs(loginScreenCache.phases[1].optionsui) do
+        for i, j in imports.ipairs(loginScreenCache.phases[1].optionsui) do
             local options_offsetX, options_offsetY = j.startX, j.startY
             local option_width, option_height = j.width, loginScreenCache.phases[1].optionsui.height
             local isOptionHovered = isMouseOnPosition(options_offsetX, options_offsetY, option_width, option_height)
@@ -910,7 +911,7 @@ local function renderUI()
         dxDrawBorderedText(loginScreenCache.phases[2].customizerui.titleBar.outlineWeight, loginScreenCache.phases[2].customizerui.titleBar.fontColor, loginScreenCache.phases[2].customizerui.titleBar.text, customizer_offsetX, customizer_offsetY, customizer_offsetX + loginScreenCache.phases[2].customizerui.width, customizer_offsetY + loginScreenCache.phases[2].customizerui.titleBar.height, tocolor(unpack(loginScreenCache.phases[2].customizerui.titleBar.fontColor)), 1, loginScreenCache.phases[2].customizerui.titleBar.font, "center", "center", true, false, false)
         customizer_offsetY = customizer_offsetY + loginScreenCache.phases[2].customizerui.titleBar.height
         local isOptionEditBoxClicked = false
-        for i, j in ipairs(loginScreenCache.phases[2].customizerui.option) do
+        for i, j in imports.ipairs(loginScreenCache.phases[2].customizerui.option) do
             local option_offsetX, option_offsetY = customizer_offsetX, customizer_offsetY
             local option_width, option_height = loginScreenCache.phases[2].customizerui.width, loginScreenCache.phases[2].customizerui.option.height
             if not j.isEditBox then
@@ -1119,7 +1120,7 @@ local function renderUI()
                                     if getKeyState("lshift") or getKeyState("rshift") then
                                         local customKey, isKeyValid = _currentPressedKey, false
                                         if j.inputSettings.shiftAllowed then
-                                            for k, v in ipairs(j.inputSettings.validKeys) do
+                                            for k, v in imports.ipairs(j.inputSettings.validKeys) do
                                                 if v == customKey then
                                                     isKeyValid = true
                                                     break
@@ -1128,7 +1129,7 @@ local function renderUI()
                                             if isKeyValid then currentPressedKey = customKey end
                                         else
                                             customKey = false
-                                            for k, v in ipairs(j.inputSettings.validKeys) do
+                                            for k, v in imports.ipairs(j.inputSettings.validKeys) do
                                                 if getKeyState(v) then
                                                     customKey = v:gsub("num_", "")
                                                     customKey = customKey:gsub("space", "")
@@ -1137,7 +1138,7 @@ local function renderUI()
                                             end
                                         end
                                         if not isKeyValid and customKey and j.inputSettings.capsAllowed then
-                                            for k, v in ipairs(j.inputSettings.validKeys) do
+                                            for k, v in imports.ipairs(j.inputSettings.validKeys) do
                                                 if v == customKey then
                                                     isKeyValid = true
                                                     break
@@ -1146,7 +1147,7 @@ local function renderUI()
                                             if isKeyValid then currentPressedKey = string.upper(customKey) end
                                         end
                                     else
-                                        for k, v in ipairs(j.inputSettings.validKeys) do
+                                        for k, v in imports.ipairs(j.inputSettings.validKeys) do
                                             if getKeyState(v) then
                                                 currentPressedKey = v:gsub("num_", "")
                                                 break
@@ -1210,7 +1211,7 @@ local function renderUI()
         dxDrawRectangle(customizer_offsetX, loginScreenCache.phases[2].customizerui.startY + loginScreenCache.phases[2].customizerui.titleBar.height, loginScreenCache.phases[2].customizerui.width, loginScreenCache.phases[2].customizerui.titleBar.dividerSize, tocolor(unpack(loginScreenCache.phases[2].customizerui.titleBar.dividerColor)), false)
         local switcher_offsetX, switcher_offsetY = customizer_offsetX + loginScreenCache.phases[2].customizerui.switcher.startX, loginScreenCache.phases[2].customizerui.startY + loginScreenCache.phases[2].customizerui.switcher.startY
         local switcher_width, switcher_height = loginScreenCache.phases[2].customizerui.switcher.width, loginScreenCache.phases[2].customizerui.switcher.height
-        for i, j in ipairs(loginScreenCache.phases[2].customizerui.switcher) do
+        for i, j in imports.ipairs(loginScreenCache.phases[2].customizerui.switcher) do
             local isSwitcherHovered = isMouseOnPosition(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height)
             if not j.hoverAnimStatus then j.hoverAnimStatus = "backward" end
             if not j.hoverAnimTickCounter then j.hoverAnimTickCounter = CLIENT_CURRENT_TICK end
@@ -1245,7 +1246,7 @@ local function renderUI()
         end
         local button_offsetX, button_offsetY = customizer_offsetX + loginScreenCache.phases[2].customizerui.button.startX, customizer_offsetY + loginScreenCache.phases[2].customizerui.button.startY
         local button_width, button_height = loginScreenCache.phases[2].customizerui.button.width, loginScreenCache.phases[2].customizerui.button.height
-        for i, j in ipairs(loginScreenCache.phases[2].customizerui.button) do
+        for i, j in imports.ipairs(loginScreenCache.phases[2].customizerui.button) do
             local isButtonHovered = isMouseOnPosition(button_offsetX, button_offsetY, button_width, button_height)
             if not j.hoverAnimStatus then j.hoverAnimStatus = "backward" end
             if not j.hoverAnimTickCounter then j.hoverAnimTickCounter = CLIENT_CURRENT_TICK end
@@ -1384,7 +1385,7 @@ end
 imports.addEvent("onPlayerShowLoginScreen", true)
 imports.addEventHandler("onPlayerShowLoginScreen", root, function(character, characters, isPremium)
 
-    for i, j in ipairs(characters) do
+    for i, j in imports.ipairs(characters) do
         j.__isPreLoaded = true
     end
     loginScreenCache.selectedCharacter = character
