@@ -25,6 +25,9 @@
     <script src="gui/login.lua" type="client" cache="false"/>
     <script src="gui/respawner.lua" type="client" cache="false"/>
 
+    <!-- Hnalders -->
+    <script src="handlers/character/server.lua" type="server"/>
+
     <!-- Files: Fonts -->
     <file src="files/fonts/courgette.ttf"/>
     <file src="files/fonts/architectsdaughter.ttf"/>
