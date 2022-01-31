@@ -1,17 +1,16 @@
 ----------------------------------------------------------------
---[[ Resource: Player Handler
-     Script: gui: loginScreen: toggler.lua
-     Server: ᴏᴠ | Halo:Combat
-     Author: OvileAmriam
-     Developer: -
-     DOC: 11/06/2021 (OvileAmriam)
-     Desc: Login Screen Toggler ]]--
+--[[ Resource: Config Loader
+     Script: configs: gameplay: gui: login.lua
+     Author: vStudio
+     Developer(s): Tron
+     DOC: 31/01/2022
+     Desc: Login UI Toggler ]]--
 ----------------------------------------------------------------
 
 
--------------------------------------------
---[[ Functions: Sets Login GUI's Phase ]]--
--------------------------------------------
+------------------------------------------
+--[[ Functions: Sets Login UI's Phase ]]--
+------------------------------------------
 
 function setLoginUIPhase(phaseID)
 
@@ -27,9 +26,6 @@ function setLoginUIPhase(phaseID)
         loginUICache.phaseUI.animStatus = "forward"
         loginUICache.phaseUI.currentPhase = phaseID
         loginUICache.phaseUI.scheduledPhase = nil
-        if loginUICache.optionUI[phaseID].optionType and (loginUICache.optionUI[phaseID].optionType == "credits") then
-            loginUICache.phaseUI[phaseID].scrollTickCounter = getTickCount()
-        end
     end
     loginUICache.phaseUI.animTickCounter = getTickCount()
     local unverifiedCharacters = {}
@@ -62,8 +58,8 @@ function setLoginUIPhase(phaseID)
     return true
 
 end
-addEvent("onClientSetLoginUIPhase", true)
-addEventHandler("onClientSetLoginUIPhase", root, setLoginUIPhase)
+addEvent("Player-Handler:onSetLoginPhase", true)
+addEventHandler("Player-Handler:onSetLoginPhase", root, setLoginUIPhase)
 
 
 ----------------------------------------------
@@ -94,18 +90,17 @@ function showLoginScreen()
     if loginUICache.state then return false end
 
     loginUICache.state = true
-    --loginUICache.cinemationData = lobbyDatas.cinemationPoints[math.random(#lobbyDatas.cinemationPoints)]
-    loginUICache.character = Ped(0, 0, 0, 90)
-    --loginUICache.character = Ped(0, loginUICache.cinemationData.characterPoint.x, loginUICache.cinemationData.characterPoint.y, loginUICache.cinemationData.characterPoint.z + 0.01, loginUICache.cinemationData.characterPoint.rotation)
-    --loginUICache.character:setDimension(lobbyDatas.lobbyDimension)
+    loginUICache.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].cinemationPoints[math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].cinemationPoints)]
+    loginUICache.character = Ped(0, loginUICache.cinemationData.characterPoint.x, loginUICache.cinemationData.characterPoint.y, loginUICache.cinemationData.characterPoint.z + 0.01, loginUICache.cinemationData.characterPoint.rotation)
+    loginUICache.character:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].lobbyDimension)
     loginUICache.character:setAlpha(0)
     if #loginUICache.clientCharacters <= 0 then
         --loadLoginPreviewCharacter(true, true)
     else
         --loadLoginPreviewCharacter()
     end
-    --setLoginUIPhase(1)
-    --exports.cinecam_handler:startCinemation(loginUICache.cinemationData.cinemationPoint, true, true, loginUICache.cinemationData.cinemationFOV, true, true, true, false)
+    setLoginUIPhase(1)
+    exports.cinecam_handler:startCinemation(loginUICache.cinemationData.cinemationPoint, true, true, loginUICache.cinemationData.cinemationFOV, true, true, true, false)
     triggerEvent("onLoginSoundStart", localPlayer, true)
     beautify.render.create(renderLoginScreen)
     showChat(false)
@@ -119,7 +114,7 @@ function hideLoginScreen()
     if not loginUICache.state then return false end
 
     beautify.render.remove(renderLoginScreen)
-    --exports.cinecam_handler:stopCinemation()
+    exports.cinecam_handler:stopCinemation()
     triggerEvent("onLoginSoundStop", localPlayer)
     loginUICache.character:destroy()
     loginUICache.phaseUI.currentPhase = 1
@@ -144,9 +139,9 @@ addEventHandler("onPlayerShowLoginScreen", root, function(character, characters)
     loginUICache._selectedCharacter = loginUICache.selectedCharacter
     loginUICache.clientCharacters = characters
     loginUICache._unsavedCharacters = {}
-    exports.asset_loader:loadMap(lobbyDatas.lobbyMap, lobbyDatas.lobbyDimension)
-    localPlayer:setPosition(lobbyDatas.lobbyPosition.x, lobbyDatas.lobbyPosition.y, lobbyDatas.lobbyPosition.z)
-    localPlayer:setDimension(lobbyDatas.lobbyDimension)
+    exports.asset_loader:loadMap(FRAMEWORK_CONFIGS["UI"]["Login"].lobbyMap, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyDimension)
+    localPlayer:setPosition(FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.x, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.y, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.z)
+    localPlayer:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].lobbyDimension)
     toggleControl("fire", true)
     localPlayer:setData("Character:Reloading", nil)
     setLoginUIEnabled(true, true)

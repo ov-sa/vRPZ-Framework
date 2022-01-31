@@ -3,7 +3,7 @@
      Script: configs: character: player.lua
      Author: vStudio
      Developer(s): Tron
-     DOC: 25/01/2022
+     DOC: 31/01/2022
      Desc: Player Configns ]]--
 ----------------------------------------------------------------
 

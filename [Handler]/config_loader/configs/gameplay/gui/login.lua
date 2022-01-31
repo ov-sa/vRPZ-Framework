@@ -3,7 +3,7 @@
      Script: configs: gameplay: gui: login.lua
      Author: vStudio
      Developer(s): Tron
-     DOC: 25/01/2022
+     DOC: 31/01/2022
      Desc: Login UI Configns ]]--
 ----------------------------------------------------------------
 

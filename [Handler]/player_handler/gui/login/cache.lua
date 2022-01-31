@@ -3,7 +3,7 @@
      Script: gui: loginScreen: cache.lua
      Author: OvileAmriam
      Developer: -
-     DOC: 11/06/2021 (OvileAmriam)
+     DOC: 31/01/2022
      Desc: Login Screen Cache ]]--
 ----------------------------------------------------------------
 
