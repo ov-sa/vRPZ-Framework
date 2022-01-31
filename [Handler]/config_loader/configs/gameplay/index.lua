@@ -22,8 +22,8 @@ configVars = {
         ["Aircraft_Max_Height"] = 1000000,
         ["Jetpack_Max_Height"] = 10000,
         ["Minute_Duration"] = 60000,
-        ["Game_Type"] = "vRP",
-        ["Game_Map"] = "vRP : SA",
+        ["Game_Type"] = "vRPZ",
+        ["Game_Map"] = "vRPZ : SA",
         ["Disabled_CMDS"] = {"login", "register", "logout", "nick"},
     
         ["Character"] = {
