@@ -4,6 +4,8 @@
     <oop>true</oop>
 
     <include resource="config_loader"/>
+    <include resource="assetify_library"/>
+    <include resource="beautify_library"/>
     <!--include resource="pickup_handler"/-->
     <!--include resource="sound_handler"/-->
     <include resource="player_handler"/>
