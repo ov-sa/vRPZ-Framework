@@ -37,7 +37,8 @@ local prevInputKey = false
 local prevInputKeyStreak = 0
 local _currentKeyCheck = true
 local _currentPressedKey = false
-local manageLoginPreviewCharacter = nil
+setLoginUIPhase = nil
+local manageCharacter, toggleLoginUI = nil, nil
 loginScreenCache = {
     state = false,
     phase = false,
@@ -69,19 +70,19 @@ loginScreenCache = {
                     title = "P L A Y",
                     hoverStatus = "backward",
                     hoverAnimTickCounter = CLIENT_CURRENT_TICK,
-                    execFunc = manageLoginPreviewCharacter("play")
+                    execFunc = manageCharacter("play")
                 },
                 {
                     title = "C H A R A C T E R",
                     hoverStatus = "backward",
                     hoverAnimTickCounter = CLIENT_CURRENT_TICK,
-                    execFunc = "setLoginUIPhase(2)",
+                    execFunc = setLoginUIPhase(2),
                 },
                 {
                     title = "C R E D I T S",
                     hoverStatus = "backward",
                     hoverAnimTickCounter = CLIENT_CURRENT_TICK,
-                    execFunc = "setLoginUIPhase(3)"
+                    execFunc = setLoginUIPhase(3)
                 }
             }
         },
@@ -240,19 +241,19 @@ loginScreenCache = {
                     hoverAnimDuration = 2500,
                     {
                         title = "❮",
-                        execFunc = manageLoginPreviewCharacter("switch_prev")
+                        execFunc = manageCharacter("switch_prev")
                     },
                     {
                         title = "❯",
-                        execFunc = manageLoginPreviewCharacter("switch_next")
+                        execFunc = manageCharacter("switch_next")
                     },
                     {
                         title = "X",
-                        execFunc = manageLoginPreviewCharacter("delete")
+                        execFunc = manageCharacter("delete")
                     },
                     {
                         title = "✎",
-                        execFunc = manageLoginPreviewCharacter("create")
+                        execFunc = manageCharacter("create")
                     }
                 },
                 button = {
@@ -273,15 +274,15 @@ loginScreenCache = {
                     rightCurvedEdgePath = DxTexture("files/images/hud/curved_square/right.png", "argb", true, "clamp"),
                     {
                         title = "B A C K",
-                        execFunc = "setLoginUIPhase(1)"
+                        execFunc = setLoginUIPhase(1)
                     },
                     {
                         title = "S A V E",
-                        execFunc = manageLoginPreviewCharacter("save")
+                        execFunc = manageCharacter("save")
                     },
                     {
                         title = "P I C K",
-                        execFunc = manageLoginPreviewCharacter("pick")
+                        execFunc = manageCharacter("pick")
                     }
                 }
             }
@@ -304,7 +305,7 @@ loginScreenCache = {
                 hoverStatus = "backward",
                 hoverAnimTickCounter = CLIENT_CURRENT_TICK,
                 hoverAnimDuration = 1500,
-                execFunc = "setLoginUIPhase(1)"
+                execFunc = setLoginUIPhase(1)
             },
             view = {
                 startX = 0,
@@ -451,7 +452,7 @@ function updateLoginPreviewCharacter()
 
 end
 
-function manageLoginPreviewCharacter(manageType)
+manageCharacter = function(manageType)
 
     if not manageType then return false end
 
@@ -590,7 +591,7 @@ function manageLoginPreviewCharacter(manageType)
         imports.triggerEvent("Player:onNotification", localPlayer, "◴ Processing..", {175, 175, 175, 255})
         imports.triggerEvent("Player:onHideLoadingUI", localPlayer)
         imports.setTimer(function()
-            hideLoginScreen()
+            toggleUI(false)
         end, loadingScreenCache.animFadeInDuration + 250, 1)
         imports.setTimer(function(selectedCharacter, clientCharacters)
             triggerServerEvent("onPlayerResumeGame", localPlayer, selectedCharacter, clientCharacters)
@@ -622,7 +623,7 @@ function getLoginUIPhase()
 
 end
 
-function setLoginUIPhase(phaseID)
+setLoginUIPhase = function(phaseID)
 
     phaseID = tonumber(phaseID)
     if not phaseID or not loginScreenCache.phases[1].optionsui[phaseID] or (loginScreenCache.phase and loginScreenCache.phase == phaseID) then return false end
@@ -1313,7 +1314,7 @@ local function renderUI()
             if isLMBClicked then
                 setLoginUIEnabled(false)
                 imports.setTimer(function()
-                    loadstring(loginScreenCache.phases[3].back_navigator.execFunc)()
+                    loginScreenCache.phases[3].back_navigator.execFunc()
                 end, 1, 1)
             end
             if loginScreenCache.phases[3].back_navigator.hoverStatus ~= "forward" then
@@ -1341,42 +1342,35 @@ local function renderUI()
 end
 
 
----------------------------------------------
---[[ Functions: Shows/Hides Login Screen ]]--
----------------------------------------------
+------------------------------
+--[[ Function: Toggles UI ]]--
+------------------------------
 
-function showLoginScreen()
+toggleLoginUI = function(state)
 
-    if loginScreenCache.state then return false end
+    if (((state ~= true) and (state ~= false)) or (state == loginScreenCache.state)) then return false end
 
-    loginScreenCache.state = true
-    loginScreenCache.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
-    setLoginUIPhase(1)
-    imports.triggerEvent("onLoginSoundStart", localPlayer)
-    beautify.render.create(renderUI)
-    showChat(false)
-    showCursor(true)
-    return true
-
-end
-
-function hideLoginScreen()
-
-    if not loginScreenCache.state then return false end
-
-    beautify.render.remove(renderUI)
-    exports.cinecam_handler:stopCinemation()
-    if loginScreenCache.character and isElement(loginScreenCache.character) then loginScreenCache.character:destroy() end
-    loginScreenCache.phase = false
-    loginScreenCache.cinemationData = false
-    loginScreenCache.character = false
-    loginScreenCache.selectedCharacter = 0
-    loginScreenCache._selectedCharacter = false
-    loginScreenCache.clientCharacters = {}
-    loginScreenCache.isPremium = false
-    loginScreenCache.state = false
-    showChat(true)
-    showCursor(false)
+    if state then
+        loginScreenCache.state = true
+        loginScreenCache.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
+        setLoginUIPhase(1)
+        imports.triggerEvent("onLoginSoundStart", localPlayer)
+        beautify.render.create(renderUI)
+    else
+        beautify.render.remove(renderUI)
+        exports.cinecam_handler:stopCinemation()
+        if loginScreenCache.character and isElement(loginScreenCache.character) then loginScreenCache.character:destroy() end
+        loginScreenCache.phase = false
+        loginScreenCache.cinemationData = false
+        loginScreenCache.character = false
+        loginScreenCache.selectedCharacter = 0
+        loginScreenCache._selectedCharacter = false
+        loginScreenCache.clientCharacters = {}
+        loginScreenCache.isPremium = false
+        loginScreenCache.state = false
+    end
+    showChat(not state)
+    showCursor(state)
     return true
 
 end
@@ -1403,7 +1397,7 @@ imports.addEventHandler("onPlayerShowLoginScreen", root, function(character, cha
 
     setLoginUIEnabled(true, true)
     imports.setTimer(function()
-        showLoginScreen()
+        toggleUI(true)
         Camera.fade(true)
         imports.triggerEvent("Player:onShowLoadingUI", localPlayer)
     end, 10000, 1)
@@ -1428,7 +1422,7 @@ imports.addEventHandler("onClientResourceStart", resource, function()
         Camera.fade(true)
     end]]
 
-    showLoginScreen() --TODO: REMOVE LATER
+    toggleUI(true) --TODO: REMOVE LATER
     setPedTargetingMarkerEnabled(false)
     setPlayerHudComponentVisible("all", false)
     setPlayerHudComponentVisible("crosshair", true)
