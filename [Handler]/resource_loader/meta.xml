@@ -4,6 +4,7 @@
     <oop>true</oop>
 
     <include resource="config_loader"/>
+    <include resource="cinecam_handler"/>
     <include resource="assetify_library"/>
     <include resource="beautify_library"/>
     <!--include resource="pickup_handler"/-->
