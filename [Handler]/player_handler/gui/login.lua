@@ -1418,8 +1418,9 @@ imports.addEventHandler("onClientResourceStart", resource, function()
         imports.fadeCamera(false)
         imports.triggerEvent("Player:onHideLoadingUI", localPlayer, true)
         triggerServerEvent("onPlayerRequestShowLoginScreen", localPlayer)
-    else
-        imports.fadeCamera(true)
     end
 
+    imports.fadeCamera(true)
+    toggleUI(true)
+    
 end)
