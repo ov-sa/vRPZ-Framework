@@ -1,12 +1,21 @@
 ----------------------------------------------------------------
 --[[ Resource: Player Handler
-     Script: gui: respawnScreen.lua
-     Server: -
-     Author: OvileAmriam
-     Developer: -
-     DOC: 18/11/2020 (OvileAmriam)
-     Desc: Respawn Screen UI ]]--
+     Script: gui: respawner.lua
+     Author: vStudio
+     Developer(s): Mario, Tron
+     DOC: 31/01/2022
+     Desc: Respawner UI Handler ]]--
 ----------------------------------------------------------------
+
+
+
+-----------------
+--[[ Imports ]]--
+-----------------
+
+local imports = {
+    dxCreateTexture = dxCreateTexture
+}
 
 
 -------------------
@@ -19,7 +28,7 @@ local respawnScreenCache = {
     flashInterval = 2000,
     flashTerminationDuration = 10000,
     flashColor = {0, 0, 0, 255},
-    vignetteTexture = DxTexture("files/images/hud/vignette.png", "argb", true, "clamp")
+    vignetteTexture = dxCreateTexture("files/images/hud/vignette.png", "argb", true, "clamp")
 }
 
 

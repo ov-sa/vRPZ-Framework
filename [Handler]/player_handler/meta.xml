@@ -23,7 +23,7 @@
     <script src="gui/loading.lua" type="client" cache="false"/>
     <script src="gui/notification.lua" type="client" cache="false"/>
     <script src="gui/login.lua" type="client" cache="false"/>
-    <script src="gui/respawnScreen.lua" type="client" cache="false"/>
+    <script src="gui/respawner.lua" type="client" cache="false"/>
 
     <!-- Files: Fonts -->
     <file src="files/fonts/courgette.ttf"/>
