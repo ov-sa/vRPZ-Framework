@@ -14,6 +14,7 @@
 
 local imports = {
     ipairs = ipairs,
+    tonumber = tonumber,
     isElement = isElement,
     destroyElement = destroyElement,
     addEvent = addEvent,
@@ -25,6 +26,7 @@ local imports = {
     setPedAnimation = setPedAnimation,
     setElementHealth = setElementHealth,
     createPed = createPed,
+    createMarker = createMarker,
     spawnPlayer = spawnPlayer,
     killPed = killPed,
     setTimer = setTimer,
@@ -69,7 +71,7 @@ addEventHandler("Player:onDeath", root, function(killer, headshot, weapon, bodyp
     local rotVector = source:getRotation()
     local hour, minute = getCurrentTime()	
     local ped = imports.createPed(0, posVector.x, posVector.y, posVector.z, rotVector.z)
-    local marker = Marker(0, 0, 0, "cylinder", 1.2, 0, 0, 0, 0)
+    local marker = imports.createMarker(0, 0, 0, "cylinder", 1.2, 0, 0, 0, 0)
     if headshot then ped:setHeadless(true) end
     ped:setCollisionsEnabled(false)
     ped:setData("Element:Parent", marker)
@@ -83,7 +85,7 @@ addEventHandler("Player:onDeath", root, function(killer, headshot, weapon, bodyp
     for i, j in pairs(inventoryDatas) do
         if not j.saveOnWasted then
             for k, v in imports.ipairs(j) do
-                local itemValue = tonumber(source:getData("Item:"..v.dataName)) or 0
+                local itemValue = imports.tonumber(source:getData("Item:"..v.dataName)) or 0
                 if itemValue > 0 then
                     local isItemToBeAdded = true
                     if i == "Helmet" or i == "Armor" then
