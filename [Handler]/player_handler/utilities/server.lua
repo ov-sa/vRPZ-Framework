@@ -73,7 +73,7 @@ addEventHandler("onResourceStart", resource, function()
     local serverTickSyncer = Element("Server:TickSyncer")
     Timer(function(serverTickSyncer)
         if serverTickSyncer and imports.isElement(serverTickSyncer) then
-            serverTickSyncer:setData("Server:TickSyncer", 0) --TODO: ...
+            serverTickSyncer:setData("Server:TickSyncer", imports.getTickCount())
         end
     end, FRAMEWORK_CONFIGS.Game["Sync_Rate"], 0, serverTickSyncer)
 
@@ -121,7 +121,6 @@ addEventHandler("onResourceStart", resource, function()
                         local isPlayerOnLogoutCoolDown = false
                         local playerLoginTick = getPlayerLoginTick(source)
                         if playerLoginTick then
-                            --TODO: ...
                             local elapsedDuration = imports.getTickCount() - playerLoginTick
                             if elapsedDuration < serverLogoutCoolDownDuration then
                                 isPlayerOnLogoutCoolDown = serverLogoutCoolDownDuration - elapsedDuration
