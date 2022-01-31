@@ -13,6 +13,9 @@
 -----------------
 
 local imports = {
+    addEvent = addEvent,
+    addEventHandler = addEventHandler,
+    triggerEvent = triggerEvent,
     setTimer = setTimer
 }
 
@@ -438,7 +441,7 @@ function updateLoginPreviewCharacter()
             end
         end
     end
-    triggerEvent("onSyncPedClothes", root, loginScreenCache.character, selectedClothing)
+    imports.triggerEvent("onSyncPedClothes", root, loginScreenCache.character, selectedClothing)
     return true
 
 end
@@ -452,7 +455,7 @@ function manageLoginPreviewCharacter(manageType)
         local characterLimit = playerCharacterLimit
         if loginScreenCache.isPremium then characterLimit = playerPremiumCharacterLimit end
         if #loginScreenCache.clientCharacters >= characterLimit then
-            triggerEvent("Player:onNotification", localPlayer, "Unfortunately, you have reached the character creation limit!", {255, 80, 80, 255})
+            imports.triggerEvent("Player:onNotification", localPlayer, "Unfortunately, you have reached the character creation limit!", {255, 80, 80, 255})
             return false
         end
         local characterData = {
@@ -462,20 +465,20 @@ function manageLoginPreviewCharacter(manageType)
         loginScreenCache._selectedCharacter = #loginScreenCache.clientCharacters
         loginScreenCache._unsavedCharacters[loginScreenCache._selectedCharacter] = true
         loadLoginPreviewCharacter(true)
-        triggerEvent("Player:onNotification", localPlayer, "You've successfully created a character!", {80, 255, 80, 255})
+        imports.triggerEvent("Player:onNotification", localPlayer, "You've successfully created a character!", {80, 255, 80, 255})
     elseif manageType == "delete" then
         setLoginUIEnabled(true)
         if #loginScreenCache.clientCharacters <= 0 then
-            triggerEvent("Player:onNotification", localPlayer, "Unfortunately, you don't have enough characters to delete!", {255, 80, 80, 255})
+            imports.triggerEvent("Player:onNotification", localPlayer, "Unfortunately, you don't have enough characters to delete!", {255, 80, 80, 255})
             return false
         end
         if not loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter] then
-            triggerEvent("Player:onNotification", localPlayer, "You must select a character inorder to delete!", {255, 80, 80, 255})
+            imports.triggerEvent("Player:onNotification", localPlayer, "You must select a character inorder to delete!", {255, 80, 80, 255})
             return false
         end
         if not loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter].isUnverified or loginScreenCache._charactersUnderProcess[loginScreenCache._selectedCharacter] then
             if not loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter]._id or loginScreenCache._charactersUnderProcess[loginScreenCache._selectedCharacter] then
-                triggerEvent("Player:onNotification", localPlayer, "You must wait until the character processing is done!", {255, 80, 80, 255})
+                imports.triggerEvent("Player:onNotification", localPlayer, "You must wait until the character processing is done!", {255, 80, 80, 255})
                 return false
             else
                 triggerServerEvent("onClientCharacterDelete", localPlayer, loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter]._id)
@@ -485,11 +488,11 @@ function manageLoginPreviewCharacter(manageType)
         loginScreenCache._unsavedCharacters[loginScreenCache._selectedCharacter] = nil
         loginScreenCache._selectedCharacter = math.max(0, loginScreenCache._selectedCharacter - 1)
         loadLoginPreviewCharacter()
-        triggerEvent("Player:onNotification", localPlayer, "You've successfully deleted the character!", {80, 255, 80, 255})
+        imports.triggerEvent("Player:onNotification", localPlayer, "You've successfully deleted the character!", {80, 255, 80, 255})
     elseif (manageType == "switch_prev") or (manageType == "switch_next") then
         setLoginUIEnabled(true)
         if #loginScreenCache.clientCharacters <= 1 then
-            triggerEvent("Player:onNotification", localPlayer, "Unfortunately, you don't have enough characters to switch!", {255, 80, 80, 255})
+            imports.triggerEvent("Player:onNotification", localPlayer, "Unfortunately, you don't have enough characters to switch!", {255, 80, 80, 255})
             return false
         end
         if manageType == "switch_prev" then
@@ -506,19 +509,19 @@ function manageLoginPreviewCharacter(manageType)
     elseif manageType == "pick" then
         setLoginUIEnabled(true)
         if (loginScreenCache._selectedCharacter ~= 0) and (loginScreenCache.selectedCharacter == loginScreenCache._selectedCharacter) then
-            triggerEvent("Player:onNotification", localPlayer, "You've already picked the specified character!", {255, 80, 80, 255})
+            imports.triggerEvent("Player:onNotification", localPlayer, "You've already picked the specified character!", {255, 80, 80, 255})
             return false
         end
         if (not loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter]) or loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter].isUnverified then
-            triggerEvent("Player:onNotification", localPlayer, "You must save the character inorder to pick!", {255, 80, 80, 255})
+            imports.triggerEvent("Player:onNotification", localPlayer, "You must save the character inorder to pick!", {255, 80, 80, 255})
             return false
         end
         loginScreenCache.selectedCharacter = loginScreenCache._selectedCharacter
-        triggerEvent("Player:onNotification", localPlayer, "You've successfully picked the character!", {80, 255, 80, 255})
+        imports.triggerEvent("Player:onNotification", localPlayer, "You've successfully picked the character!", {80, 255, 80, 255})
     elseif manageType == "save" then
         if #loginScreenCache.clientCharacters > 0 and not loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter].isUnverified then
             setLoginUIEnabled(true)
-            triggerEvent("Player:onNotification", localPlayer, "Your character is already saved!", {255, 80, 80, 255})
+            imports.triggerEvent("Player:onNotification", localPlayer, "Your character is already saved!", {255, 80, 80, 255})
             return false
         end
         local clientNameCounter = 0
@@ -526,16 +529,16 @@ function manageLoginPreviewCharacter(manageType)
         for _ in string.gmatch(loginScreenCache.phases[2].customizerui.option[1].placeDataValue, "(%w+)%s*") do clientNameCounter = clientNameCounter + 1 end
         if clientNameCounter < FRAMEWORK_CONFIGS["UI"]["Login"].minimumCharacterNameWordCount then
             setLoginUIEnabled(true)
-            triggerEvent("Player:onNotification", localPlayer, "Please enter your full name!", {255, 80, 80, 255})
+            imports.triggerEvent("Player:onNotification", localPlayer, "Please enter your full name!", {255, 80, 80, 255})
             return false
         end
         if clientAgeCounter < FRAMEWORK_CONFIGS["UI"]["Login"].minimumCharacterAge then
             setLoginUIEnabled(true)
-            triggerEvent("Player:onNotification", localPlayer, "Please enter a valid age! ["..FRAMEWORK_CONFIGS["UI"]["Login"].minimumCharacterAge.."+]", {255, 80, 80, 255})
+            imports.triggerEvent("Player:onNotification", localPlayer, "Please enter a valid age! ["..FRAMEWORK_CONFIGS["UI"]["Login"].minimumCharacterAge.."+]", {255, 80, 80, 255})
             return false
         end
         setLoginUIEnabled(false, false)
-        triggerEvent("Player:onNotification", localPlayer, "◴ Saving..", {175, 175, 175, 255})
+        imports.triggerEvent("Player:onNotification", localPlayer, "◴ Saving..", {175, 175, 175, 255})
         local characterData = {}
         for i, j in ipairs(loginScreenCache.phases[2].customizerui.option) do
             if j.isEditBox then
@@ -569,18 +572,18 @@ function manageLoginPreviewCharacter(manageType)
     elseif manageType == "play" then
         if #loginScreenCache.clientCharacters <= 0 then
             setLoginUIEnabled(true)
-            triggerEvent("Player:onNotification", localPlayer, "You must create a character to play!", {255, 80, 80, 255})
+            imports.triggerEvent("Player:onNotification", localPlayer, "You must create a character to play!", {255, 80, 80, 255})
             return false
         else
             if not loginScreenCache.clientCharacters[loginScreenCache.selectedCharacter] then
                 setLoginUIEnabled(true)
-                triggerEvent("Player:onNotification", localPlayer, "You must pick a character to play!", {255, 80, 80, 255})
+                imports.triggerEvent("Player:onNotification", localPlayer, "You must pick a character to play!", {255, 80, 80, 255})
                 return false
             end
         end
         setLoginUIEnabled(false, false)
-        triggerEvent("Player:onNotification", localPlayer, "◴ Processing..", {175, 175, 175, 255})
-        triggerEvent("Player:onHideLoadingUI", localPlayer)
+        imports.triggerEvent("Player:onNotification", localPlayer, "◴ Processing..", {175, 175, 175, 255})
+        imports.triggerEvent("Player:onHideLoadingUI", localPlayer)
         imports.setTimer(function()
             hideLoginScreen()
         end, loadingScreenCache.animFadeInDuration + 250, 1)
@@ -621,7 +624,7 @@ function setLoginUIPhase(phaseID)
     if prevPhaseTimer and prevPhaseTimer:isValid() then prevPhaseTimer:destroy(); prevPhaseTimer = false end
     if prevEnablerTimer and prevEnablerTimer:isValid() then prevEnablerTimer:destroy(); prevEnablerTimer = false end
 
-    triggerEvent("Player:onHideLoadingUI", localPlayer)
+    imports.triggerEvent("Player:onHideLoadingUI", localPlayer)
     prevPhaseTimer = imports.setTimer(function()
         if phaseID == 1 then
             exports.cinecam_handler:startCinemation(loginScreenCache.cinemationData.cinemationPoint, true, true, loginScreenCache.cinemationData.cinemationFOV, true, true, true, false)
@@ -662,7 +665,7 @@ function setLoginUIPhase(phaseID)
                 end
             end
         end
-        triggerEvent("Player:onShowLoadingUI", localPlayer)
+        imports.triggerEvent("Player:onShowLoadingUI", localPlayer)
         prevPhaseTimer = false
     end, loadingScreenCache.animFadeInDuration + 250, 1)
     prevEnablerTimer = imports.setTimer(function()
@@ -672,8 +675,8 @@ function setLoginUIPhase(phaseID)
     return true
 
 end
-addEvent("onClientSetLoginUIPhase", true)
-addEventHandler("onClientSetLoginUIPhase", root, setLoginUIPhase)
+imports.addEvent("onClientSetLoginUIPhase", true)
+imports.addEventHandler("onClientSetLoginUIPhase", root, setLoginUIPhase)
 
 
 ----------------------------------------------
@@ -693,25 +696,25 @@ function setLoginUIEnabled(state, forcedState)
     return true
 
 end
-addEvent("onClientLoginUIEnable", true)
-addEventHandler("onClientLoginUIEnable", root, setLoginUIEnabled)
+imports.addEvent("onClientLoginUIEnable", true)
+imports.addEventHandler("onClientLoginUIEnable", root, setLoginUIEnabled)
 
 
 -------------------------------------------------------
 --[[ Event: On Client Recieve Character Save State ]]--
 -------------------------------------------------------
 
-addEvent("onClientRecieveCharacterSaveState", true)
-addEventHandler("onClientRecieveCharacterSaveState", root, function(state, errorMessage, character)
+imports.addEvent("onClientRecieveCharacterSaveState", true)
+imports.addEventHandler("onClientRecieveCharacterSaveState", root, function(state, errorMessage, character)
 
     if state then
-        triggerEvent("Player:onNotification", localPlayer, "You've successfully saved the character!", {80, 255, 80, 255})
+        imports.triggerEvent("Player:onNotification", localPlayer, "You've successfully saved the character!", {80, 255, 80, 255})
     else
         if errorMessage then
             if character then
                 loginScreenCache._charactersUnderProcess[character] = nil
             end
-            triggerEvent("Player:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
+            imports.triggerEvent("Player:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
         end
     end
     setLoginUIEnabled(true, true)
@@ -723,8 +726,8 @@ end)
 --[[ Event: On Client Load Character ID ]]--
 --------------------------------------------
 
-addEvent("onClientLoadCharacterID", true)
-addEventHandler("onClientLoadCharacterID", root, function(character, characterID, characterData)
+imports.addEvent("onClientLoadCharacterID", true)
+imports.addEventHandler("onClientLoadCharacterID", root, function(character, characterID, characterData)
 
     character = tonumber(character); characterID = tonumber(characterID);
     if not character or not characterID or not characterData then return false end
@@ -741,7 +744,7 @@ end)
 --[[ Events: On Client Character/Key ]]--
 -----------------------------------------
 
-addEventHandler("onClientCharacter", root, function(character)
+imports.addEventHandler("onClientCharacter", root, function(character)
 
     if GuiElement.isMTAWindowActive() or not isLoginScreenVisible() or getLoginUIPhase() ~= 2 or not loginScreenCache.isEnabled or loginScreenCache.isForcedDisabled then return false end
 
@@ -755,7 +758,7 @@ addEventHandler("onClientCharacter", root, function(character)
 
 end)
 
-addEventHandler("onClientKey", root, function(button, press)
+imports.addEventHandler("onClientKey", root, function(button, press)
 
     if GuiElement.isMTAWindowActive() or not isLoginScreenVisible() or getLoginUIPhase() ~= 2 or not loginScreenCache.isEnabled or loginScreenCache.isForcedDisabled then return false end
 
@@ -1344,7 +1347,7 @@ function showLoginScreen()
     loginScreenCache.state = true
     loginScreenCache.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
     setLoginUIPhase(1)
-    triggerEvent("onLoginSoundStart", localPlayer)
+    imports.triggerEvent("onLoginSoundStart", localPlayer)
     beautify.render.create(renderUI)
     showChat(false)
     showCursor(true)
@@ -1378,8 +1381,8 @@ end
 --[[ Event: On Player Show Login Screen ]]--
 --------------------------------------------
 
-addEvent("onPlayerShowLoginScreen", true)
-addEventHandler("onPlayerShowLoginScreen", root, function(character, characters, isPremium)
+imports.addEvent("onPlayerShowLoginScreen", true)
+imports.addEventHandler("onPlayerShowLoginScreen", root, function(character, characters, isPremium)
 
     for i, j in ipairs(characters) do
         j.__isPreLoaded = true
@@ -1397,7 +1400,7 @@ addEventHandler("onPlayerShowLoginScreen", root, function(character, characters,
     imports.setTimer(function()
         showLoginScreen()
         Camera.fade(true)
-        triggerEvent("Player:onShowLoadingUI", localPlayer)
+        imports.triggerEvent("Player:onShowLoadingUI", localPlayer)
     end, 10000, 1)
 
 end)
@@ -1407,14 +1410,14 @@ end)
 --[[ Event: On Client Resource Start ]]--
 -----------------------------------------
 
-addEventHandler("onClientResourceStart", resource, function()
+imports.addEventHandler("onClientResourceStart", resource, function()
 
     --[[
     if not isPlayerInitialized(localPlayer) then
         Camera.fade(false)
         toggleControl("fire", true)
         toggleControl("action", false)
-        triggerEvent("Player:onHideLoadingUI", localPlayer, true)
+        imports.triggerEvent("Player:onHideLoadingUI", localPlayer, true)
         triggerServerEvent("onPlayerRequestShowLoginScreen", localPlayer)
     else
         Camera.fade(true)
