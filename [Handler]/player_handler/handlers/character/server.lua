@@ -58,9 +58,18 @@ CCharacter = {
         return true
     end,
 
-    setData = function(characterID, ...)
-        dbify.character.setData(characterID, characterDatas, ...)
-        --return CCharacter.buffer[characterID][data]
+    setData = function(characterID, characterDatas, callback, ...)
+        dbify.character.setData(characterID, characterDatas, function(result, characterDatas, ...)
+            local callbackReference = callback
+            if (callbackReference and (imports.type(callbackReference) == "function")) then
+                callbackReference(result, ...)
+            end
+            if result and CCharacter.buffer[characterID] then
+                for i, j in imports.pairs(characterDatas) do
+                    CCharacter.buffer[characterID][j] = result[j]
+                end
+            end
+        end, characterDatas, ...)
         return true
     end,
 
