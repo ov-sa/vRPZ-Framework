@@ -20,8 +20,8 @@ syncSettings = {
 
 dbSettings = {
     username = "vrp_template",
-    password = "vrp_template",
-    database = "vrp_template_test",
+    password = "vrp_template_test",
+    database = "vrp_template",
     host = "db4free.net",
     port = "3306",
     options = ""
