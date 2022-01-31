@@ -14,6 +14,10 @@
 
 configVars["UI"]["Login"] = {
 
+    weather = 7,
+    time = {1, 0},
+    dimension = 100,
+    clientPoint = {x = 0, y = 0, z = 0},
     cinemationPoints = {
         {
             cinemationFOV = 85,
