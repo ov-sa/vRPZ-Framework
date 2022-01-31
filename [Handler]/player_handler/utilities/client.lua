@@ -61,34 +61,6 @@ addEvent("Player:onToggleChat", true)
 addEventHandler("Player:onToggleChat", root, showChat)
 
 
--------------------------------------------------------
---[[ Function: Retrieves Drop Position From Screen ]]--
--------------------------------------------------------
-
---[[
-function getDropPositionFromScreen(cursor_offsetX, cursor_offsetY)
-
-    cursor_offsetX, cursor_offsetY = imports.tonumber(cursor_offsetX), imports.tonumber(cursor_offsetY)
-    if not cursor_offsetX or not cursor_offsetY then
-        cursor_offsetX, cursor_offsetY = getAbsoluteCursorPosition()
-    end
-    if cursor_offsetX and cursor_offsetY then
-        local posVector = localPlayer:getPosition()
-        local cameraMatrix, worldMatrix = {getCameraMatrix()}, {getWorldFromScreenPosition(cursor_offsetX, cursor_offsetY, 10)}
-        local sightMatrix = {processLineOfSight(cameraMatrix[1], cameraMatrix[2], cameraMatrix[3], worldMatrix[1], worldMatrix[2], worldMatrix[3])}
-        if sightMatrix[1] then
-            sightMatrix[4] = getGroundPosition(sightMatrix[2], sightMatrix[3], sightMatrix[4] + 1)
-            if sightMatrix[4] and getDistanceBetweenPoints3D(posVector.x, posVector.y, posVector.z, sightMatrix[2], sightMatrix[3], sightMatrix[4]) <= serverPickupInteractionRange then
-                return sightMatrix[2], sightMatrix[3], sightMatrix[4]
-            end
-        end
-    end
-    return false
-
-end
-]]
-
-
 ------------------------------------------------
 --[[ Function: Verifies Player's Clear View ]]--
 ------------------------------------------------
