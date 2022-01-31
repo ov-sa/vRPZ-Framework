@@ -14,6 +14,7 @@
 
 loadstring(exports.dbify_library:fetchImports())()
 local imports = {
+    getTickCount = getTickCount,
     triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent
 }
@@ -124,7 +125,7 @@ addEventHandler("onResourceStart", resource, function()
                         local playerLoginTick = getPlayerLoginTick(source)
                         if playerLoginTick then
                             --TODO: ...
-                            --local elapsedDuration = imports.CLIENT_CURRENT_TICK - playerLoginTick
+                            local elapsedDuration = imports.getTickCount() - playerLoginTick
                             if elapsedDuration < serverLogoutCoolDownDuration then
                                 isPlayerOnLogoutCoolDown = serverLogoutCoolDownDuration - elapsedDuration
                             end
