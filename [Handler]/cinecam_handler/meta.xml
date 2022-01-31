@@ -1,0 +1,28 @@
+<meta>
+
+    <info author="OvileAmriam" name="Cinematic Camera Handler" type="Handler" version="1.0.0"/>
+    <oop>true</oop>
+
+    <!-- Settings & Utilities -->
+    <script src="utilities/client.lua" type="client" cache="false"/>
+    <script src="settings/client.lua" type="client" cache="false"/>
+
+    <!-- Exports -->
+    <script src="exports/client.lua" type="client" cache="false"/>
+
+    <!-- Handlers -->
+    <script src="handlers/render.lua" type="client" cache="false"/>
+
+    <!-- Files: Shaders -->
+    <file src="files/shaders/blur.fx"/>
+
+    <!-- Params: startCinemation(customCinemationPoint, customCinemationLoop, skipCinemationBlur, customCinemationFOV, reverseCinemationLoop, forceStart, animateFOV, freezeLastFrame) | Returns Boolean -->
+    <export function="startCinemation" type="client"/>
+
+    <!-- Params: stopCinemation() | Returns Boolean -->
+    <export function="stopCinemation" type="client"/>
+
+    <!-- Params: getCinemationData() | Returns Data; Else false Boolean -->
+    <export function="getCinemationData" type="client"/>
+
+</meta>
