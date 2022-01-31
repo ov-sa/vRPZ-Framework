@@ -52,11 +52,11 @@ loadingScreenCache.loader.startX = loadingScreenCache.loader.startX + ((CLIENT_M
 loadingScreenCache.loader.startY = loadingScreenCache.loader.startY + ((CLIENT_MTA_RESOLUTION[2] - loadingScreenCache.loader.height)/2)
 
 
----------------------------------
---[[ Event: On Client Render ]]--
----------------------------------
+------------------------------
+--[[ Function: Renders UI ]]--
+------------------------------
 
-imports.addEventHandler("onClientRender", root, function()
+beautify.render.create.(function()
 
     if ((loadingScreenCache.animStatus == "forward") or (loadingScreenCache.animStatus == "reverse_backward")) then
         loadingScreenCache.fadeAnimPercent = imports.interpolateBetween(loadingScreenCache.fadeAnimPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loadingScreenCache.tickCounter, loadingScreenCache.animFadeInDuration), "Linear")

@@ -32,7 +32,7 @@ local function hideRespawnScreen()
 
     if not respawnScreenCache.state then return false end
 
-    removeEventHandler("onClientRender", root, renderRespawnScreen)
+    beautify.render.remove(renderRespawnScreen)
     respawnScreenCache.mode = false
     respawnScreenCache.state = false
     return true
@@ -111,7 +111,7 @@ addEventHandler("onPlayerGenerateRespawnPoint", root, function()
         wastedPoint = localPlayer:getPosition()
     }
     respawnScreenCache.state = true
-    addEventHandler("onClientRender", root, renderRespawnScreen)
+    beautify.render.create(renderRespawnScreen)
 
 end)
 
@@ -132,6 +132,6 @@ addEventHandler("onClientRespawn", root, function()
         animAlphaPercent = 0
     }
     respawnScreenCache.state = true
-    addEventHandler("onClientRender", root, renderRespawnScreen)
+    beautify.render.create(renderRespawnScreen)
 
 end)
