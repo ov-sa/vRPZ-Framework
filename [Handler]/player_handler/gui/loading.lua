@@ -57,7 +57,6 @@ loadingUI.loader.startY = loadingUI.loader.startY + ((CLIENT_MTA_RESOLUTION[2] -
 ------------------------------
 
 beautify.render.create(function()
-
     if ((loadingUI.animStatus == "forward") or (loadingUI.animStatus == "reverse_backward")) then
         loadingUI.fadeAnimPercent = imports.interpolateBetween(loadingUI.fadeAnimPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loadingUI.tickCounter, loadingUI.animFadeInDuration), "Linear")
         if loadingUI.animStatus == "reverse_backward" and imports.math.round(loadingUI.fadeAnimPercent, 2) == 1 then
@@ -76,30 +75,15 @@ beautify.render.create(function()
     end
     imports.dxDrawRectangle(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], imports.tocolor(0, 0, 0, 255*loadingUI.fadeAnimPercent), true)
     imports.dxDrawImage(loadingUI.loader.startX, loadingUI.loader.startY, loadingUI.loader.width, loadingUI.loader.height, loadingUI.loader.bgPath, loadingUI.loader.rotationValue, 0, 0, imports.tocolor(255, 255, 255, 200*loadingUI.fadeAnimPercent), true)
-
 end)
 
 
-------------------------------------------------
---[[ Events: On Player Show/Hide Loading UI ]]--
-------------------------------------------------
-
-imports.addEvent("Player:onHideLoadingUI", true)
-imports.addEventHandler("Player:onHideLoadingUI", root, function(shuffleMusic)
-
-    if loadingUI.animStatus == "forward" then return false end
-    
-    loadingUI.animStatus = "forward"
-    loadingUI.tickCounter = CLIENT_CURRENT_TICK
-    loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
-    imports.triggerEvent("onLoginSoundStart", localPlayer, (shuffleMusic and true) or false)
-    return true
-
-end)
+-----------------------------------------
+--[[ Events: On Show/Hide Loading UI ]]--
+-----------------------------------------
 
 imports.addEvent("Player:onShowLoadingUI", true)
 imports.addEventHandler("Player:onShowLoadingUI", root, function()
-
     if ((loadingUI.animStatus == "backward") or (loadingUI.animStatus == "reverse_backward")) then return false end
 
     loadingUI.animStatus = "reverse_backward"
@@ -108,5 +92,15 @@ imports.addEventHandler("Player:onShowLoadingUI", root, function()
         imports.triggerEvent("onLoginSoundStop", localPlayer)
     end
     return true
+end)
 
+imports.addEvent("Player:onHideLoadingUI", true)
+imports.addEventHandler("Player:onHideLoadingUI", root, function(shuffleMusic)
+    if loadingUI.animStatus == "forward" then return false end
+    
+    loadingUI.animStatus = "forward"
+    loadingUI.tickCounter = CLIENT_CURRENT_TICK
+    loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
+    imports.triggerEvent("onLoginSoundStart", localPlayer, (shuffleMusic and true) or false)
+    return true
 end)
