@@ -115,7 +115,7 @@ function showLoginScreen()
     --setLoginUIPhase(1)
     --exports.cinecam_handler:startCinemation(loginUICache.cinemationData.cinemationPoint, true, true, loginUICache.cinemationData.cinemationFOV, true, true, true, false)
     triggerEvent("onLoginSoundStart", localPlayer, true)
-    addEventHandler("onClientRender", root, renderLoginScreen)
+    beautify.render.create(renderLoginScreen)
     showChat(false)
     showCursor(true)
     return true
@@ -126,7 +126,7 @@ function hideLoginScreen()
 
     if not loginUICache.state then return false end
 
-    removeEventHandler("onClientRender", root, renderLoginScreen)
+    beautify.render.remove(renderLoginScreen)
     --exports.cinecam_handler:stopCinemation()
     triggerEvent("onLoginSoundStop", localPlayer)
     loginUICache.character:destroy()
