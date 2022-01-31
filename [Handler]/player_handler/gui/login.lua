@@ -898,9 +898,9 @@ local function renderUI()
             end
             if not j.animAlphaPercent then j.animAlphaPercent = 0 end
             if j.hoverStatus == "forward" then
-                j.animAlphaPercent = imports.interpolateBetween((j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress((j.hoverAnimTickCounter, loginUI.phases[1].optionsui.hoverAnimDuration), "Linear")
+                j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTickCounter, loginUI.phases[1].optionsui.hoverAnimDuration), "Linear")
             else
-                j.animAlphaPercent = imports.interpolateBetween((j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress((j.hoverAnimTickCounter, loginUI.phases[1].optionsui.hoverAnimDuration), "Linear")
+                j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTickCounter, loginUI.phases[1].optionsui.hoverAnimDuration), "Linear")
             end
             --TODO: MOVE THIS TO BEAUTIFY...
             dxDrawBorderedText(loginUI.phases[1].optionsui.outlineWeight, loginUI.phases[1].optionsui.fontColor, j.title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(unpack(loginUI.phases[1].optionsui.fontColor)), 1, loginUI.phases[1].optionsui.font, "center", "center", true, false, false)
@@ -963,14 +963,14 @@ local function renderUI()
                 if not j.leftArrowAnimAlphaPercent then j.leftArrowAnimAlphaPercent = 0 end
                 if not j.rightArrowAnimAlphaPercent then j.rightArrowAnimAlphaPercent = 0 end
                 if j.leftArrowAnimStatus == "forward" then
-                    j.leftArrowAnimAlphaPercent = imports.interpolateBetween((j.leftArrowAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress((j.leftArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
+                    j.leftArrowAnimAlphaPercent = imports.interpolateBetween(j.leftArrowAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.leftArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
                 elseif j.leftArrowAnimStatus == "backward" then
-                    j.leftArrowAnimAlphaPercent = imports.interpolateBetween((j.leftArrowAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress((j.leftArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
+                    j.leftArrowAnimAlphaPercent = imports.interpolateBetween(j.leftArrowAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.leftArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
                 end
                 if j.rightArrowAnimStatus == "forward" then
-                    j.rightArrowAnimAlphaPercent = imports.interpolateBetween((j.rightArrowAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress((j.rightArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
+                    j.rightArrowAnimAlphaPercent = imports.interpolateBetween(j.rightArrowAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.rightArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
                 elseif j.rightArrowAnimStatus == "backward" then
-                    j.rightArrowAnimAlphaPercent = imports.interpolateBetween((j.rightArrowAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress((j.rightArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
+                    j.rightArrowAnimAlphaPercent = imports.interpolateBetween(j.rightArrowAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.rightArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
                 end
             else
                 local isEditboxHovered = isMouseOnPosition(option_offsetX, option_offsetY, option_width, option_height) and (#loginUI.clientCharacters <= 0 or loginUI.clientCharacters[loginUI._selectedCharacter].isUnverified)
@@ -1004,9 +1004,9 @@ local function renderUI()
                 end
                 if not j.embedLineAlphaPercent then j.embedLineAlphaPercent = 0 end
                 if j.hoverAnimStatus == "forward" then
-                    j.embedLineAlphaPercent = imports.interpolateBetween((j.embedLineAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress((j.hoverAnimTickCounter, loginUI.phases[2].customizerui.option.editbox.hoverAnimDuration), "Linear")
+                    j.embedLineAlphaPercent = imports.interpolateBetween(j.embedLineAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTickCounter, loginUI.phases[2].customizerui.option.editbox.hoverAnimDuration), "Linear")
                 elseif j.hoverAnimStatus == "backward" then
-                    j.embedLineAlphaPercent = imports.interpolateBetween((j.embedLineAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress((j.hoverAnimTickCounter, loginUI.phases[2].customizerui.option.editbox.hoverAnimDuration), "Linear")
+                    j.embedLineAlphaPercent = imports.interpolateBetween(j.embedLineAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTickCounter, loginUI.phases[2].customizerui.option.editbox.hoverAnimDuration), "Linear")
                 end
             end
             imports.dxDrawRectangle(option_offsetX, option_offsetY, option_width, option_height, tocolor(unpack(loginUI.phases[2].customizerui.option.bgColor)), false)
@@ -1239,9 +1239,9 @@ local function renderUI()
             end
             if not j.hoverAnimAlphaPercent then j.hoverAnimAlphaPercent = 0 end
             if j.hoverAnimStatus == "forward" then
-                j.hoverAnimAlphaPercent = imports.interpolateBetween((j.hoverAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress((j.hoverAnimTickCounter, loginUI.phases[2].customizerui.switcher.hoverAnimDuration), "Linear")
+                j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTickCounter, loginUI.phases[2].customizerui.switcher.hoverAnimDuration), "Linear")
             elseif j.hoverAnimStatus == "backward" then
-                j.hoverAnimAlphaPercent = imports.interpolateBetween((j.hoverAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress((j.hoverAnimTickCounter, loginUI.phases[2].customizerui.switcher.hoverAnimDuration), "Linear")
+                j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTickCounter, loginUI.phases[2].customizerui.switcher.hoverAnimDuration), "Linear")
             end
             imports.dxDrawImage(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height, loginUI.phases[2].customizerui.switcher.bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.switcher.bgColor)), false)
             imports.dxDrawImage(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height, loginUI.phases[2].customizerui.switcher.bgPath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.switcher.hoverBGColor[1], loginUI.phases[2].customizerui.switcher.hoverBGColor[2], loginUI.phases[2].customizerui.switcher.hoverBGColor[3], loginUI.phases[2].customizerui.switcher.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
@@ -1274,9 +1274,9 @@ local function renderUI()
             end
             if not j.hoverAnimAlphaPercent then j.hoverAnimAlphaPercent = 0 end
             if j.hoverAnimStatus == "forward" then
-                j.hoverAnimAlphaPercent = imports.interpolateBetween((j.hoverAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress((j.hoverAnimTickCounter, loginUI.phases[2].customizerui.button.hoverAnimDuration), "Linear")
+                j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTickCounter, loginUI.phases[2].customizerui.button.hoverAnimDuration), "Linear")
             elseif j.hoverAnimStatus == "backward" then
-                j.hoverAnimAlphaPercent = imports.interpolateBetween((j.hoverAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress((j.hoverAnimTickCounter, loginUI.phases[2].customizerui.button.hoverAnimDuration), "Linear")
+                j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTickCounter, loginUI.phases[2].customizerui.button.hoverAnimDuration), "Linear")
             end
             imports.dxDrawRectangle(button_offsetX + button_height, button_offsetY, button_width - (button_height*2), button_height, tocolor(unpack(loginUI.phases[2].customizerui.button.bgColor)), false)
             imports.dxDrawImage(button_offsetX, button_offsetY, button_height, button_height, loginUI.phases[2].customizerui.button.leftCurvedEdgePath, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.button.bgColor)), false)
@@ -1297,7 +1297,7 @@ local function renderUI()
         imports.dxSetRenderTarget(loginUI.phases[3].view.renderTarget, true)
         local credits_offsetY = -loginUI.phases[3].view.contentHeight - (view_height/2)
         if (CLIENT_CURRENT_TICK - loginUI.phases[3].view.scrollAnimTickCounter) >= loginUI.phases[3].view.scrollDelayDuration then
-            credits_offsetY = imports.interpolateBetween((credits_offsetY, 0, 0, view_height*1.5, 0, 0, imports.getInterpolationProgress((loginUI.phases[3].view.scrollAnimTickCounter + loginUI.phases[3].view.scrollDelayDuration, loginUI.phases[3].view.scrollAnimDuration), "Linear")
+            credits_offsetY = imports.interpolateBetween(credits_offsetY, 0, 0, view_height*1.5, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].view.scrollAnimTickCounter + loginUI.phases[3].view.scrollDelayDuration, loginUI.phases[3].view.scrollAnimDuration), "Linear")
             if math.round(credits_offsetY, 2) == math.round(view_height*1.5) and loginUI.isEnabled then
                 setLoginUIEnabled(false)
                 setLoginUIPhase(1)
@@ -1329,9 +1329,9 @@ local function renderUI()
         end
         if not loginUI.phases[3].back_navigator.animAlphaPercent then loginUI.phases[3].back_navigator.animAlphaPercent = 0.75 end
         if loginUI.phases[3].back_navigator.hoverStatus == "forward" then
-            loginUI.phases[3].back_navigator.animAlphaPercent = imports.interpolateBetween((loginUI.phases[3].back_navigator.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress((loginUI.phases[3].back_navigator.hoverAnimTickCounter, loginUI.phases[1].optionsui.hoverAnimDuration), "Linear")
+            loginUI.phases[3].back_navigator.animAlphaPercent = imports.interpolateBetween(loginUI.phases[3].back_navigator.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].back_navigator.hoverAnimTickCounter, loginUI.phases[1].optionsui.hoverAnimDuration), "Linear")
         else
-            loginUI.phases[3].back_navigator.animAlphaPercent = imports.interpolateBetween((loginUI.phases[3].back_navigator.animAlphaPercent, 0, 0, 0.75, 0, 0, imports.getInterpolationProgress((loginUI.phases[3].back_navigator.hoverAnimTickCounter, loginUI.phases[1].optionsui.hoverAnimDuration), "Linear")
+            loginUI.phases[3].back_navigator.animAlphaPercent = imports.interpolateBetween(loginUI.phases[3].back_navigator.animAlphaPercent, 0, 0, 0.75, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].back_navigator.hoverAnimTickCounter, loginUI.phases[1].optionsui.hoverAnimDuration), "Linear")
         end
         imports.dxDrawRectangle(back_navigator_offsetX + back_navigator_height, back_navigator_offsetY, back_navigator_width - (back_navigator_height*2), back_navigator_height, tocolor(loginUI.phases[3].back_navigator.bgColor[1], loginUI.phases[3].back_navigator.bgColor[2], loginUI.phases[3].back_navigator.bgColor[3], loginUI.phases[3].back_navigator.bgColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), false)
         imports.dxDrawImage(back_navigator_offsetX, back_navigator_offsetY, back_navigator_height, back_navigator_height, loginUI.phases[3].back_navigator.leftEdgePath, 0, 0, 0, tocolor(loginUI.phases[3].back_navigator.bgColor[1], loginUI.phases[3].back_navigator.bgColor[2], loginUI.phases[3].back_navigator.bgColor[3], loginUI.phases[3].back_navigator.bgColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), false)
