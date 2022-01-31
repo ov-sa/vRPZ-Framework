@@ -40,6 +40,7 @@ imports.addEventHandler("Player:onRespawn", root, function(spawnPoint)
     imports.setCameraTarget(source, source)
     loadPlayerDefaultDatas(source)
     CCharacter.setData(characterID, "dead", false)
+    --TODO: APPEND FUNCTION TO RETRIEVE CHARACTER'S CURRENT CLOTHES..
     imports.triggerClientEvent("onSyncPedClothes", source, source, getPlayerClothes(source))
     imports.triggerClientEvent(source, "Player:onClientRespawn", source)
     imports.triggerClientEvent(source, "Player:onHideLoadingUI", source)
