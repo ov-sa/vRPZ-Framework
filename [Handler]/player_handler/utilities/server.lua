@@ -14,9 +14,12 @@
 
 loadstring(exports.dbify_library:fetchImports())()
 local imports = {
+    type = type,
+    ipairs = ipairs,
     getTickCount = getTickCount,
     triggerEvent = triggerEvent,
-    triggerClientEvent = triggerClientEvent
+    triggerClientEvent = triggerClientEvent,
+    getPlayerSerial = getPlayerSerial
 }
 
 
@@ -26,7 +29,7 @@ local imports = {
 
 function showChat(player, bool, isForced)
 
-    if not player or not isElement(player) or player:getType() ~= "player" then return false end
+    if not player or not isElement(player) or player:getimports.type() ~= "player" then return false end
 
     imports.triggerClientEvent(player, "Player:onToggleChat", player, bool, isForced)
     return true
@@ -40,10 +43,10 @@ end
 
 function getPlayerFromSerial(serial)
 
-    if not serial or type(serial) ~= "string" then return false end
+    if (not serial or (imports.type(serial) ~= "string")) then return false end
 
-    for i, j in ipairs(Element.getAllByType("player")) do
-        if j:getSerial() == serial then
+    for i, j in imports.ipairs(Element.getAllByimports.type("player")) do
+        if imports.getPlayerSerial(j) == serial then
             return j
         end
     end
@@ -91,7 +94,7 @@ addEventHandler("onResourceStart", resource, function()
                 end
             end  
         end
-        for k, v in ipairs(inventoryDatas[i]) do
+        for k, v in imports.ipairs(inventoryDatas[i]) do
             if v.magSize then
                 setWeaponProperty(v.weaponID, "poor", "maximum_clip_ammo", 1000)
                 setWeaponProperty(v.weaponID, "std", "maximum_clip_ammo", 1000)
@@ -107,16 +110,16 @@ addEventHandler("onResourceStart", resource, function()
     setAircraftMaxHeight(FRAMEWORK_CONFIGS.Game["Aircraft_Max_Height"])
     setJetpackMaxHeight(FRAMEWORK_CONFIGS.Game["Jetpack_Max_Height"])
     setMinuteDuration(FRAMEWORK_CONFIGS.Game["Minute_Duration"])
-    setGameType(FRAMEWORK_CONFIGS.Game["Game_Type"])
+    setGameimports.type(FRAMEWORK_CONFIGS.Game["Game_imports.type"])
     setMapName(FRAMEWORK_CONFIGS.Game["Game_Map"])
-    for i, j in ipairs(Element.getAllByType("player")) do
+    for i, j in imports.ipairs(Element.getAllByimports.type("player")) do
         if isPlayerInitialized(j) then
             j:setBlurLevel(0)
         end
     end
 
     addEventHandler("onPlayerCommand", root, function(command)
-        for i, j in ipairs(FRAMEWORK_CONFIGS.Game["Disabled_CMDS"]) do
+        for i, j in imports.ipairs(FRAMEWORK_CONFIGS.Game["Disabled_CMDS"]) do
             if j == command then
                 cancelEvent()
                 if command == "logout" then
