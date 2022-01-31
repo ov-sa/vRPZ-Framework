@@ -58,7 +58,7 @@ CCharacter = {
 
     fetchCharacters = function(characterID, ...)
         characterID = imports.tonumber(characterID)
-        if not characterID or not CCharacter.buffer[characterID] then return false end
+        if not characterID then return false end
         dbify.character.fetchAll({
             {dbify.character.__connection__.keyColumn, characterID}
         }, ...)
@@ -77,7 +77,7 @@ CCharacter = {
 
     delete = function(characterID)
         characterID = imports.tonumber(characterID)
-        if not characterID or not CCharacter.buffer[characterID] then return false end
+        if not characterID then return false end
         dbify.character.delete(characterID, function(result)
             if result then
                 CCharacter.buffer[characterID] = nil
