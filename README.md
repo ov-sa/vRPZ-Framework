@@ -20,6 +20,13 @@
 * **Aviril**
 * **Tron**
 
+## ━ Third Party
+
+* **admin**
+* **runcode**
+* **pAttach**
+* **parachute**
+
 ## ━ Installation
 
 1. Download the latest release
