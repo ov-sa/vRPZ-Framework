@@ -55,25 +55,26 @@ CCharacter = {
     end,
 
     setData = function(characterID, characterDatas, callback, ...)
-        dbify.character.setData(characterID, characterDatas, function(result, characterDatas, ...)
-            local callbackReference = callback
-            if (callbackReference and (imports.type(callbackReference) == "function")) then
-                callbackReference(result, ...)
-            end
+        dbify.character.setData(characterID, characterDatas, function(result, arguments)
             if result and CCharacter.buffer[characterID] then
                 for i, j in imports.ipairs(characterDatas) do
                     CCharacter.buffer[characterID][(j[1])] = j[2]
                 end
+            end
+            imports.table.remove(arguments, 1)
+            local callbackReference = callback
+            if (callbackReference and (imports.type(callbackReference) == "function")) then
+                callbackReference(result, arguments)
             end
         end, characterDatas, ...)
         return true
     end,
 
     getData = function(characterID, characterDatas, callback, ...)
-        dbify.character.getData(characterID, characterDatas, function(result, ...)
+        dbify.character.getData(characterID, characterDatas, function(result, arguments)
             local callbackReference = callback
             if (callbackReference and (imports.type(callbackReference) == "function")) then
-                callbackReference(result, ...)
+                callbackReference(result, arguments)
             end
             if result and CCharacter.buffer[characterID] then
                 for i, j in imports.pairs(characterDatas) do
