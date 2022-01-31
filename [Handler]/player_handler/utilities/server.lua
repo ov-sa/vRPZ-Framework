@@ -1,0 +1,147 @@
+----------------------------------------------------------------
+--[[ Resource: Player Handler
+     Script: utilities: server.lua
+     Server: -
+     Author: OvileAmriam
+     Developer: -
+     DOC: 15/01/2021 (OvileAmriam)
+     Desc: Server Sided Utilities ]]--
+----------------------------------------------------------------
+
+
+------------------------------------
+--[[ Function: Custom Show Chat ]]--
+------------------------------------
+
+--[[
+function showChat(player, bool, isForced)
+
+    if not player or not isElement(player) or player:getType() ~= "player" then return false end
+
+    triggerClientEvent(player, "Player-Handler:onToggleChat", player, bool, isForced)
+    return true
+
+end
+]]--
+
+
+------------------------------------------------
+--[[ Function: Retrieves Player From Serial ]]--
+------------------------------------------------
+
+function getPlayerFromSerial(serial)
+
+    if not serial or type(serial) ~= "string" then return false end
+
+    for i, j in ipairs(Element.getAllByType("player")) do
+        if j:getSerial() == serial then
+            return j
+        end
+    end
+    return false
+
+end
+
+
+---------------------------------------------
+--[[ Function: Retrieves Void Guest Nick ]]--
+---------------------------------------------
+
+function getVoidGuestNick()
+
+    local voidNick = "Guest_"..math.random(1, 10000)
+    while Player(voidNick) do
+        voidNick = "Guest_"..math.random(1, 10000)
+    end
+    return voidNick
+
+end
+
+
+----------------------------------
+--[[ Event: On Resource Start ]]--
+----------------------------------
+
+addEventHandler("onResourceStart", resource, function()
+
+    local serverTickSyncer = Element("Server:TickSyncer")
+    Timer(function(serverTickSyncer)
+        if serverTickSyncer and isElement(serverTickSyncer) then
+            serverTickSyncer:setData("Server:TickSyncer", getTickCount())
+        end
+    end, 50, 0, serverTickSyncer)
+
+    --[[
+    for i, j in pairs(availableWeaponSlots) do
+        for k, v in pairs(j.slots) do
+            if v.properties then
+                for m, n in pairs(v.properties) do
+                    setWeaponProperty(k, "poor", m, n)
+                    setWeaponProperty(k, "std", m, n)
+                    setWeaponProperty(k, "pro", m, n)
+                end
+            end  
+        end
+        for k, v in ipairs(inventoryDatas[i]) do
+            if v.magSize then
+                setWeaponProperty(v.weaponID, "poor", "maximum_clip_ammo", 1000)
+                setWeaponProperty(v.weaponID, "std", "maximum_clip_ammo", 1000)
+                setWeaponProperty(v.weaponID, "pro", "maximum_clip_ammo", 1000)
+            end
+        end
+    end
+    ]]--
+
+    setFPSLimit(serverFPSLimit)
+    setFarClipDistance(serverDrawDistanceLimit)
+    setFogDistance(serverFogDistanceLimit)
+    setGameType(serverGameType)
+    setMapName(serverMapName)
+    setAircraftMaxHeight(serverAircraftMaxHeight)
+    setJetpackMaxHeight(serverJetpackMaxHeight)
+    setMinuteDuration(serverMinuteDuration)
+    for i, j in ipairs(Element.getAllByType("player")) do
+        if isPlayerInitialized(j) then
+            j:setBlurLevel(0)
+        end
+    end
+
+end)
+
+
+----------------------------------
+--[[ Event: On Player Command ]]--
+----------------------------------
+
+addEventHandler("onPlayerCommand", root, function(cmd)
+
+    for i, j in ipairs(serverDisabledCMDs) do
+        if j == cmd then
+            cancelEvent()
+            if cmd == "logout" then
+                if isPlayerInitialized(source) then
+                    local isPlayerOnLogoutCoolDown = false
+                    local playerLoginTick = getPlayerLoginTick(source)
+                    if playerLoginTick then
+                        local elapsedDuration = getTickCount() - playerLoginTick
+                        if elapsedDuration < serverLogoutCoolDownDuration then
+                            isPlayerOnLogoutCoolDown = serverLogoutCoolDownDuration - elapsedDuration
+                        end
+                    end
+                    if isPlayerOnLogoutCoolDown then
+                        triggerClientEvent(source, "onDisplayNotification", source, "Please wait "..math.ceil(isPlayerOnLogoutCoolDown/1000).."s before logging out!", {255, 35, 35, 255})
+                    else
+                        local posVector = source:getPosition()
+                        local characterID = source:getData("Character:ID")
+                        local characterIdentity = getCharacterData(characterID, "identity")
+                        savePlayerProgress(source)
+                        triggerEvent("onPlayerRequestShowLoginScreen", source)
+                        outputChatBox("#FFFFFF- #5050FF"..characterIdentity.name.."#FFFFFF left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)    
+                    end
+                end
+            end
+            break
+        end
+    end
+
+end)
