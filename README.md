@@ -40,7 +40,8 @@
 <resource src="dbify_library" startup="1" protected="0"/>
 <resource src="resource_loader" startup="1" protected="0"/>
 ```
-4. Boot the server
+4. Add your MySQL database credentials into `[Library]/dbify_library/settings/server.lua`
+5. Boot your server
 
 ## ━ Contents
 
