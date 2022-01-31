@@ -22,7 +22,7 @@ loadingScreenCache = {
     tickCounter = CLIENT_CURRENT_TICK,
     loader = {
         startX = 0,
-        startY = (sY/768)*15,
+        startY = (CLIENT_MTA_RESOLUTION[2]/768)*15,
         width = 90,
         height = 90,
         tickCounter = CLIENT_CURRENT_TICK,
@@ -31,8 +31,8 @@ loadingScreenCache = {
         bgPath = DxTexture("files/images/loading/loader.png", "argb", true, "clamp")
     }
 }
-loadingScreenCache.loader.startX = loadingScreenCache.loader.startX + ((sX - loadingScreenCache.loader.width)/2)
-loadingScreenCache.loader.startY = loadingScreenCache.loader.startY + ((sY - loadingScreenCache.loader.height)/2)
+loadingScreenCache.loader.startX = loadingScreenCache.loader.startX + ((CLIENT_MTA_RESOLUTION[1] - loadingScreenCache.loader.width)/2)
+loadingScreenCache.loader.startY = loadingScreenCache.loader.startY + ((CLIENT_MTA_RESOLUTION[2] - loadingScreenCache.loader.height)/2)
 
 
 ---------------------------------
@@ -56,7 +56,7 @@ addEventHandler("onClientRender", root, function()
     if math.round(loadingScreenCache.loader.rotationValue, 2) == 360 then
         loadingScreenCache.loader.tickCounter = CLIENT_CURRENT_TICK
     end
-    dxDrawRectangle(0, 0, sX, sY, tocolor(0, 0, 0, 255*loadingScreenCache.fadeAnimPercent), true)
+    dxDrawRectangle(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], tocolor(0, 0, 0, 255*loadingScreenCache.fadeAnimPercent), true)
     dxDrawImage(loadingScreenCache.loader.startX, loadingScreenCache.loader.startY, loadingScreenCache.loader.width, loadingScreenCache.loader.height, loadingScreenCache.loader.bgPath, loadingScreenCache.loader.rotationValue, 0, 0, tocolor(255, 255, 255, 200*loadingScreenCache.fadeAnimPercent), true)
 
 end)

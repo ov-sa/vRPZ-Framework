@@ -1334,8 +1334,8 @@ function showLoginScreen()
     if loginScreenCache.state then return false end
 
     loginScreenCache.state = true
-    loginScreenCache.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnPoints[math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnPoints)]
-    --setLoginUIPhase(1)
+    loginScreenCache.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
+    setLoginUIPhase(1)
     triggerEvent("onLoginSoundStart", localPlayer)
     beautify.render.create(renderUI)
     showChat(false)
