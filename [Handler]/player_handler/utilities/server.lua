@@ -26,7 +26,15 @@ local imports = {
     getPlayerSerial = getPlayerSerial,
     setTimer = setTimer,
     setPlayerBlurLevel = setPlayerBlurLevel,
-    outputChatBox = outputChatBox
+    outputChatBox = outputChatBox,
+    setFPSLimit = setFPSLimit,
+    setFarClipDistance = setFarClipDistance,
+    setFogDistance = setFogDistance,
+    setAircraftMaxHeight = setAircraftMaxHeight,
+    setJetpackMaxHeight = setJetpackMaxHeight,
+    setMinuteDuration = setMinuteDuration,
+    setGameType = setGameType,
+    setMapName = setMapName
 }
 
 
@@ -102,14 +110,14 @@ addEventHandler("onResourceStart", resource, function()
     end
     ]]--
 
-    setFPSLimit(FRAMEWORK_CONFIGS.Game["FPS_Limit"])
-    setFarClipDistance(FRAMEWORK_CONFIGS.Game["Draw_Distance_Limit"][2])
-    setFogDistance(FRAMEWORK_CONFIGS.Game["Fog_Distance_Limit"][2])
-    setAircraftMaxHeight(FRAMEWORK_CONFIGS.Game["Aircraft_Max_Height"])
-    setJetpackMaxHeight(FRAMEWORK_CONFIGS.Game["Jetpack_Max_Height"])
-    setMinuteDuration(FRAMEWORK_CONFIGS.Game["Minute_Duration"])
-    setGameimports.type(FRAMEWORK_CONFIGS.Game["Game_imports.type"])
-    setMapName(FRAMEWORK_CONFIGS.Game["Game_Map"])
+    imports.setFPSLimit(FRAMEWORK_CONFIGS.Game["FPS_Limit"])
+    imports.setFarClipDistance(FRAMEWORK_CONFIGS.Game["Draw_Distance_Limit"][2])
+    imports.setFogDistance(FRAMEWORK_CONFIGS.Game["Fog_Distance_Limit"][2])
+    imports.setAircraftMaxHeight(FRAMEWORK_CONFIGS.Game["Aircraft_Max_Height"])
+    imports.setJetpackMaxHeight(FRAMEWORK_CONFIGS.Game["Jetpack_Max_Height"])
+    imports.setMinuteDuration(FRAMEWORK_CONFIGS.Game["Minute_Duration"])
+    imports.setGameType(FRAMEWORK_CONFIGS.Game["Game_imports.type"])
+    imports.setMapName(FRAMEWORK_CONFIGS.Game["Game_Map"])
     for i, j in imports.ipairs(imports.getElementsByType"player")) do
         if isPlayerInitialized(j) then
             imports.setPlayerBlurLevel(0)
