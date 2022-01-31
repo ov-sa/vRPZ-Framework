@@ -843,8 +843,8 @@ end)
 local function renderUI()
 
     if not loginUI.state or isPlayerInitialized(localPlayer) then return false end
-    local currentLoginPhase = getLoginUIPhase()
-    if not currentLoginPhase then return false end
+    local currentPhase = getLoginUIPhase()
+    if not currentPhase then return false end
 
     local isLMBClicked = false
     if not GuiElement.isMTAWindowActive() and loginUI.isEnabled and not loginUI.isForcedDisabled then
@@ -860,7 +860,7 @@ local function renderUI()
         end
     end
 
-    if currentLoginPhase == 2 then
+    if currentPhase == 2 then
         setWeather(FRAMEWORK_CONFIGS["UI"]["Login"].characterScreenWeather)
         setTime(FRAMEWORK_CONFIGS["UI"]["Login"].characterScreenTime[1], FRAMEWORK_CONFIGS["UI"]["Login"].characterScreenTime[2])
     else
@@ -875,7 +875,7 @@ local function renderUI()
         background_offsetX, background_offsetY = -(background_width - CLIENT_MTA_RESOLUTION[1])/2, 0
     end
 
-    if currentLoginPhase == 1 then
+    if currentPhase == 1 then
         --Draws Options UI
         imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[1].bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[1].bgColor)), false)
         for i, j in imports.ipairs(loginUI.phases[1].optionsui) do
@@ -909,7 +909,7 @@ local function renderUI()
             dxDrawBorderedText(loginUI.phases[1].optionsui.outlineWeight, {loginUI.phases[1].optionsui.hoverfontColor[1], loginUI.phases[1].optionsui.hoverfontColor[2], loginUI.phases[1].optionsui.hoverfontColor[3], loginUI.phases[1].optionsui.hoverfontColor[4]*j.animAlphaPercent}, j.title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(loginUI.phases[1].optionsui.hoverfontColor[1], loginUI.phases[1].optionsui.hoverfontColor[2], loginUI.phases[1].optionsui.hoverfontColor[3], loginUI.phases[1].optionsui.hoverfontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsui.font, "center", "center", true, false, false)
             imports.dxDrawRectangle(options_offsetX, options_offsetY + option_height, option_width*j.animAlphaPercent, loginUI.phases[1].optionsui.embedLineSize, tocolor(unpack(loginUI.phases[1].optionsui.embedLineColor)), false)
         end
-    elseif currentLoginPhase == 2 then
+    elseif currentPhase == 2 then
         --Draws Character UI
         local customizer_offsetX, customizer_offsetY = loginUI.phases[2].customizerui.startX, loginUI.phases[2].customizerui.startY
         imports.dxDrawRectangle(customizer_offsetX + loginUI.phases[2].customizerui.titleBar.height, customizer_offsetY, loginUI.phases[2].customizerui.width - (loginUI.phases[2].customizerui.titleBar.height*2), loginUI.phases[2].customizerui.titleBar.height, tocolor(unpack(loginUI.phases[2].customizerui.titleBar.bgColor)), false)
@@ -1291,7 +1291,7 @@ local function renderUI()
             button_offsetX = button_offsetX + button_width + loginUI.phases[2].customizerui.button.paddingX
         end
         _currentKeyCheck = true
-    elseif currentLoginPhase == 3 then
+    elseif currentPhase == 3 then
         --Draws Credits UI
         imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[3].bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[3].bgColor)), false)
         local view_offsetX, view_offsetY = loginUI.phases[3].view.startX, loginUI.phases[3].view.startY
