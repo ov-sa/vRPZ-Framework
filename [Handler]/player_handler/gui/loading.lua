@@ -17,7 +17,9 @@ local imports = {
     addEventHandler = addEventHandler,
     triggerEvent = triggerEvent,
     dxDrawRectangle = dxDrawRectangle,
-    dxDrawImage = dxDrawImage
+    dxDrawImage = dxDrawImage,
+    interpolateBetween = interpolateBetween,
+    getInterpolationProgress = getInterpolationProgress
 }
 
 
@@ -54,7 +56,7 @@ loadingScreenCache.loader.startY = loadingScreenCache.loader.startY + ((CLIENT_M
 imports.addEventHandler("onClientRender", root, function()
 
     if loadingScreenCache.animStatus == "forward" or loadingScreenCache.animStatus == "reverse_backward" then
-        loadingScreenCache.fadeAnimPercent = interpolateBetween(loadingScreenCache.fadeAnimPercent, 0, 0, 1, 0, 0, getInterpolationProgress(loadingScreenCache.tickCounter, loadingScreenCache.animFadeInDuration), "Linear")
+        loadingScreenCache.fadeAnimPercent = imports.interpolateBetween(loadingScreenCache.fadeAnimPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loadingScreenCache.tickCounter, loadingScreenCache.animFadeInDuration), "Linear")
         if loadingScreenCache.animStatus == "reverse_backward" and math.round(loadingScreenCache.fadeAnimPercent, 2) == 1 then
             if (CLIENT_CURRENT_TICK - loadingScreenCache.tickCounter) >= (loadingScreenCache.animFadeInDuration + loadingScreenCache.animFadeDelayDuration) then
                 loadingScreenCache.animStatus = "backward"
@@ -62,9 +64,9 @@ imports.addEventHandler("onClientRender", root, function()
             end
         end
     elseif loadingScreenCache.animStatus == "backward" then
-        loadingScreenCache.fadeAnimPercent = interpolateBetween(loadingScreenCache.fadeAnimPercent, 0, 0, 0, 0, 0, getInterpolationProgress(loadingScreenCache.tickCounter, loadingScreenCache.animFadeOutDuration), "Linear")
+        loadingScreenCache.fadeAnimPercent = imports.interpolateBetween(loadingScreenCache.fadeAnimPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(loadingScreenCache.tickCounter, loadingScreenCache.animFadeOutDuration), "Linear")
     end
-    loadingScreenCache.loader.rotationValue = interpolateBetween(0, 0, 0, 360, 0, 0, getInterpolationProgress(loadingScreenCache.loader.tickCounter, loadingScreenCache.loader.animDuration), "Linear")
+    loadingScreenCache.loader.rotationValue = imports.interpolateBetween(0, 0, 0, 360, 0, 0, imports.getInterpolationProgress(loadingScreenCache.loader.tickCounter, loadingScreenCache.loader.animDuration), "Linear")
     if math.round(loadingScreenCache.loader.rotationValue, 2) == 360 then
         loadingScreenCache.loader.tickCounter = CLIENT_CURRENT_TICK
     end
@@ -79,14 +81,14 @@ end)
 ------------------------------------------------
 
 imports.addEvent("Player:onHideLoadingUI", true)
-imports.addEventHandler("Player:onHideLoadingUI", root, function(isLoginMusicToBeShuffled)
+imports.addEventHandler("Player:onHideLoadingUI", root, function(shuffleMusic)
 
     if (loadingScreenCache.animStatus == "forward") then return false end
     
     loadingScreenCache.animStatus = "forward"
     loadingScreenCache.tickCounter = CLIENT_CURRENT_TICK
     loadingScreenCache.loader.tickCounter = CLIENT_CURRENT_TICK
-    imports.triggerEvent("onLoginSoundStart", localPlayer, (isLoginMusicToBeShuffled and true) or false)
+    imports.triggerEvent("onLoginSoundStart", localPlayer, (shuffleMusic and true) or false)
     return true
 
 end)
