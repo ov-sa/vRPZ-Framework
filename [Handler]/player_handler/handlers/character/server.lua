@@ -34,14 +34,19 @@ CCharacter = {
         return true
     end,
 
-    create = function(serial)
+    create = function(serial, callback, ...)
         if (not serial or (imports.type(serial) ~= "string")) then return false end
-        dbify.character.create(function(characterID, characterOwner)
+        dbify.character.create(function(characterID, arguments)
             CCharacter.buffer[characterID] = {
                 {"owner", characterOwner}
             }
             dbify.character.setData(characterID, CCharacter.buffer[characterID])
-        end, serial)
+            local callbackReference = callback
+            if (callbackReference and (imports.type(callbackReference) == "function")) then
+                imports.table.remove(arguments, 1)
+                callbackReference(characterID, arguments)
+            end
+        end, serial, ...)
         return true
     end,
 
@@ -61,9 +66,9 @@ CCharacter = {
                     CCharacter.buffer[characterID][(j[1])] = j[2]
                 end
             end
-            imports.table.remove(arguments, 1)
             local callbackReference = callback
             if (callbackReference and (imports.type(callbackReference) == "function")) then
+                imports.table.remove(arguments, 1)
                 callbackReference(result, arguments)
             end
         end, characterDatas, ...)
