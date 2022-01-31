@@ -23,6 +23,7 @@ local imports = {
     dxSetRenderTarget = dxSetRenderTarget,
     dxDrawRectangle = dxDrawRectangle,
     dxDrawImage = dxDrawImage,
+    fadeCamera = fadeCamera,
 }
 
 
@@ -1400,7 +1401,7 @@ imports.addEventHandler("Player:onShowLoginUI", root, function(character, charac
     setLoginUIEnabled(true, true)
     imports.setTimer(function()
         toggleUI(true)
-        fadeCamera(true)
+        imports.fadeCamera(true)
         imports.triggerEvent("Player:onShowLoadingUI", localPlayer)
     end, 10000, 1)
 
@@ -1415,13 +1416,13 @@ imports.addEventHandler("onClientResourceStart", resource, function()
 
     --[[
     if not isPlayerInitialized(localPlayer) then
-        fadeCamera(false)
+        imports.fadeCamera(false)
         toggleControl("fire", true)
         toggleControl("action", false)
         imports.triggerEvent("Player:onHideLoadingUI", localPlayer, true)
         triggerServerEvent("onPlayerRequestShowLoginScreen", localPlayer)
     else
-        fadeCamera(true)
+        imports.fadeCamera(true)
     end]]
 
     toggleUI(true) --TODO: REMOVE LATER
