@@ -22,7 +22,8 @@ local imports = {
     getTickCount = getTickCount,
     triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent,
-    getPlayerSerial = getPlayerSerial
+    getPlayerSerial = getPlayerSerial,
+    setTimer = setTimer
 }
 
 
@@ -71,7 +72,7 @@ end
 
 addEventHandler("onResourceStart", resource, function()
     local serverTickSyncer = Element("Server:TickSyncer")
-    Timer(function(serverTickSyncer)
+    imports.setTimer(function(serverTickSyncer)
         if serverTickSyncer and imports.isElement(serverTickSyncer) then
             serverTickSyncer:setData("Server:TickSyncer", imports.getTickCount())
         end
