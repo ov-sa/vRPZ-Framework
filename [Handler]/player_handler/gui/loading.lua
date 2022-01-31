@@ -21,7 +21,8 @@ local imports = {
     dxDrawRectangle = dxDrawRectangle,
     dxDrawImage = dxDrawImage,
     interpolateBetween = interpolateBetween,
-    getInterpolationProgress = getInterpolationProgress
+    getInterpolationProgress = getInterpolationProgress,
+    math = math
 }
 
 
@@ -59,7 +60,7 @@ imports.addEventHandler("onClientRender", root, function()
 
     if ((loadingScreenCache.animStatus == "forward") or (loadingScreenCache.animStatus == "reverse_backward")) then
         loadingScreenCache.fadeAnimPercent = imports.interpolateBetween(loadingScreenCache.fadeAnimPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loadingScreenCache.tickCounter, loadingScreenCache.animFadeInDuration), "Linear")
-        if loadingScreenCache.animStatus == "reverse_backward" and math.round(loadingScreenCache.fadeAnimPercent, 2) == 1 then
+        if loadingScreenCache.animStatus == "reverse_backward" and imports.math.round(loadingScreenCache.fadeAnimPercent, 2) == 1 then
             if (CLIENT_CURRENT_TICK - loadingScreenCache.tickCounter) >= (loadingScreenCache.animFadeInDuration + loadingScreenCache.animFadeDelayDuration) then
                 loadingScreenCache.animStatus = "backward"
                 loadingScreenCache.tickCounter = CLIENT_CURRENT_TICK
@@ -69,7 +70,7 @@ imports.addEventHandler("onClientRender", root, function()
         loadingScreenCache.fadeAnimPercent = imports.interpolateBetween(loadingScreenCache.fadeAnimPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(loadingScreenCache.tickCounter, loadingScreenCache.animFadeOutDuration), "Linear")
     end
     loadingScreenCache.loader.rotationValue = imports.interpolateBetween(0, 0, 0, 360, 0, 0, imports.getInterpolationProgress(loadingScreenCache.loader.tickCounter, loadingScreenCache.loader.animDuration), "Linear")
-    if math.round(loadingScreenCache.loader.rotationValue, 2) == 360 then
+    if imports.math.round(loadingScreenCache.loader.rotationValue, 2) == 360 then
         loadingScreenCache.loader.tickCounter = CLIENT_CURRENT_TICK
     end
     imports.dxDrawRectangle(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], imports.tocolor(0, 0, 0, 255*loadingScreenCache.fadeAnimPercent), true)
