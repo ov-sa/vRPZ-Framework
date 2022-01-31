@@ -30,53 +30,35 @@ loginUICache = {
             paddingY = -2,
             text = "vRP FRAMEWORK",
             font = FRAMEWORK_FONTS[1],
-            fontColor = {255, 30, 30, 255},
-            bgColor = {0, 0, 0, 255}
+            fontColor = tocolor(255, 30, 30, 255),
+            bgColor = tocolor(0, 0, 0, 255)
         }
     },
     optionUI = {
-        startX = 15,
-        startY = 70,
-        width = 275,
+        startY = 15,
+        width = 400,
         height = 0,
-        slotHeight = 32,
-        slotPaddingX = 20,
-        slotPaddingY = 17,
+        paddingY = 5,
         font = FRAMEWORK_FONTS[1],
         borderSize = 3,
         hoverAnimDuration = 2000,
-        fontColor = {158, 252, 145, 255},
-        hoverBGColor = {0, 0, 0, 240},
-        bgColor = {0, 0, 0, 150},
+        fontColor = {255, 255, 255, 255},
+        bgColor = tocolor(0, 0, 0, 255),
+        leftEdgePath = beautify.assets["images"]["curved_square/regular/left.rw"],
+        rightEdgePath = beautify.assets["images"]["curved_square/regular/right.rw"],
         {
             placeholder = "P L A Y",
             hoverStatus = "backward",
-            hoverAnimTickCounter = getTickCount(),
-            funcString = "manageLoginPreviewCharacter(\"play\")",
-            fontColor = {255, 255, 255, 255}
+            hoverAnimTickCounter = CLIENT_CURRENT_TICK,
+            funcString = "manageLoginPreviewCharacter(\"play\")"
         },
         {
             placeholder = "C H A R A C T E R S",
             optionType = "characters",
             nudgeOptionY = 110,
             hoverStatus = "backward",
-            hoverAnimTickCounter = getTickCount(),
+            hoverAnimTickCounter = CLIENT_CURRENT_TICK,
             funcString = "setLoginUIPhase(2)"
-        },
-        {
-            placeholder = "S O C I A L S",
-            optionType = "socials",
-            hoverStatus = "backward",
-            hoverAnimTickCounter = getTickCount(),
-            funcString = "setLoginUIPhase(3)",
-        },
-        {
-            placeholder = "C R E D I T S",
-            optionType = "credits",
-            hoverStatus = "backward",
-            hoverAnimTickCounter = getTickCount(),
-            funcString = "setLoginUIPhase(4)",
-            fontColor = {215, 215, 150, 255}
         }
     },
     --[[
@@ -91,7 +73,7 @@ loginUICache = {
         borderSize = 22,
         embedLineSize = 2,
         animStatus = "backward",
-        animTickCounter = getTickCount(),
+        animTickCounter = CLIENT_CURRENT_TICK,
         animDuration = 1500,
         animOpenerDelay = 250,
         borderColor = {0, 0, 0, 255},
@@ -311,73 +293,6 @@ loginUICache = {
                 }
             }
         },
-        [3] = {
-            width = 965,
-            height = 275,
-            discordLinks = {
-                startY = 20,
-                paddingX = 35, 
-                width = 385,
-                height = 145,
-                iconSize = 100,
-                font = FRAMEWORK_FONTS[8],
-                FRAMEWORK_FONTScale = 0.4,
-                outlineWeight = 3,
-                fontColor = {200, 200, 200, 255},
-                outlineColor = {0, 0, 0, 200},
-                {
-                    placeholder = "DISCORD.GG/sVCnxPW",
-                    bgColor = {255, 255, 255, 255},
-                    bgPath = DxTexture("files/images/logo/ov.png", "argb", true, "clamp")
-                },
-                {
-                    placeholder = "DISCORD.GG/ryc47wDEKb",
-                    bgColor = {255, 255, 255, 255},
-                    bgPath = DxTexture("files/images/logo/logo.png", "argb", true, "clamp")
-                }
-            },
-            socialLinks = {
-                startY = 0,
-                startY = 42,
-                paddingX = 25,
-                dataPaddingX = 7,
-                dataPaddingY = 3,
-                width = 270,
-                height = 33,
-                font = FRAMEWORK_FONTS[9],
-                FRAMEWORK_FONTScale = 0.25,
-                fontColor = {100, 100, 100, 255},
-                bgColor = {0, 0, 0, 255},
-                {
-                    placeholder = "COMING SOON",
-                    bgColor = {255, 255, 255, 255},
-                    bgPath = DxTexture("files/images/logo/website.png", "argb", true, "clamp")
-                },
-                {
-                    placeholder = "COMING SOON",
-                    bgColor = {255, 255, 255, 255},
-                    bgPath = DxTexture("files/images/logo/twitch.png", "argb", true, "clamp")
-                },
-                {
-                    placeholder = "COMING SOON",
-                    bgColor = {255, 255, 255, 255},
-                    bgPath = DxTexture("files/images/logo/youtube.png", "argb", true, "clamp")
-                }
-            }
-        },
-        [4] = {
-            dataValue = lobbyDatas.devCredits,
-            width = 245,
-            height = 250,
-            dataHeight = 0,
-            paddingX = -35,
-            font = FRAMEWORK_FONTS[7],
-            FRAMEWORK_FONTScale = 0.5,
-            fontColor = {200, 200, 200, 255},
-            scrollDuration = 5000,
-            scrollDelayDuration = 1250,
-            scrollTickCounter = getTickCount()
-        }
     }
     ]]--
 }
@@ -385,32 +300,20 @@ loginUICache = {
 loginUICache.serverBanner.serverName.width, loginUICache.serverBanner.serverName.height = dxGetTextSize(loginUICache.serverBanner.serverName.text, dxGetTextWidth(loginUICache.serverBanner.serverName.text, 1, loginUICache.serverBanner.serverName.font), 1, loginUICache.serverBanner.serverName.font)
 loginUICache.serverBanner.serverName.width =  math.max(loginUICache.serverBanner.minWidth, loginUICache.serverBanner.serverName.width)
 loginUICache.serverBanner.serverName.height = loginUICache.serverBanner.serverName.height + loginUICache.serverBanner.serverName.paddingY
+loginUICache.optionUI.slotHeight = dxGetFontHeight(1, loginUICache.optionUI.font)
 for i, j in ipairs(loginUICache.optionUI) do
-    loginUICache.optionUI.height = loginUICache.optionUI.height + loginUICache.optionUI.slotHeight + loginUICache.optionUI.slotPaddingY
+    loginUICache.optionUI.height = loginUICache.optionUI.height + loginUICache.optionUI.slotHeight + loginUICache.optionUI.paddingY
+    --[[
     if loginUICache.phaseUI[i] then
         if j.optionType == "characters" then
             for k, v in pairs(serverCharacters) do
                 table.insert(loginUICache.phaseUI[i].placeDataTable, k)
             end 
-        else
-            loginUICache.phaseUI[i].renderTarget = DxRenderTarget(loginUICache.phaseUI[i].width, loginUICache.phaseUI[i].height, true)
-            if j.optionType == "socials" then
-                local socials_discord_dataWidth, socials_social_dataWidth = (loginUICache.phaseUI[i].discordLinks.width*#loginUICache.phaseUI[i].discordLinks) + (loginUICache.phaseUI[i].discordLinks.paddingX*math.max(0, #loginUICache.phaseUI[i].discordLinks - 1)), (loginUICache.phaseUI[i].socialLinks.width*#loginUICache.phaseUI[i].socialLinks) + (loginUICache.phaseUI[i].socialLinks.paddingX*math.max(0, #loginUICache.phaseUI[i].socialLinks - 1))
-                local socials_discord_startX, socials_social_startX = (loginUICache.phaseUI[i].width - socials_discord_dataWidth)/2, (loginUICache.phaseUI[i].width - socials_social_dataWidth)/2
-                for k, v in ipairs(loginUICache.phaseUI[i].discordLinks) do
-                    v.startX = socials_discord_startX + ((loginUICache.phaseUI[i].discordLinks.width + loginUICache.phaseUI[i].discordLinks.paddingX)*math.max(0, k - 1))
-                end
-                loginUICache.phaseUI[i].socialLinks.startY = loginUICache.phaseUI[i].socialLinks.startY + loginUICache.phaseUI[i].discordLinks.startY + loginUICache.phaseUI[i].discordLinks.height
-                for k, v in ipairs(loginUICache.phaseUI[i].socialLinks) do
-                    v.startX = socials_social_startX + ((loginUICache.phaseUI[i].socialLinks.width + loginUICache.phaseUI[i].socialLinks.paddingX)*math.max(0, k - 1))
-                end
-            elseif j.optionType == "credits" then
-                local _, credits_dataHeight = dxGetTextSize(loginUICache.phaseUI[i].dataValue, loginUICache.phaseUI[i].width, loginUICache.phaseUI[i].FRAMEWORK_FONTScale, loginUICache.phaseUI[i].font)
-                loginUICache.phaseUI[i].dataHeight = credits_dataHeight
-                loginUICache.phaseUI[i].scrollDuration = math.max(1, math.ceil((credits_dataHeight + loginUICache.phaseUI[i].height)/loginUICache.phaseUI[i].height))*loginUICache.phaseUI[i].scrollDuration
-            end
         end
     end
+    ]]
 end
-loginUICache.optionUI.height = math.max(0, loginUICache.optionUI.height - loginUICache.optionUI.slotPaddingY)
-loginUICache.optionUI.startY = loginUICache.optionUI.startY + (loginUICache.serverBanner.startY + loginUICache.serverBanner.serverLogo.height) + ((sY - (loginUICache.serverBanner.startY + loginUICache.serverBanner.serverLogo.height) - loginUICache.optionUI.height)/2)
+loginUICache.optionUI.width = loginUICache.serverBanner.serverName.width
+loginUICache.optionUI.height = math.max(0, loginUICache.optionUI.height - loginUICache.optionUI.paddingY)
+loginUICache.optionUI.startX = loginUICache.serverBanner.startX
+loginUICache.optionUI.startY = loginUICache.serverBanner.startY + loginUICache.serverBanner.serverName.height + loginUICache.optionUI.startY

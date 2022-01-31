@@ -14,7 +14,7 @@
 -------------------
 
 local prevLMBClickState = false
-local inputTickCounter = getTickCount()
+local inputTickCounter = CLIENT_CURRENT_TICK
 local prevInputKey = false
 local prevInputKeyStreak = 0
 local _currentKeyCheck = true
@@ -25,6 +25,7 @@ local _currentPressedKey = false
 --[[ Events: On Client Character/Key ]]--
 -----------------------------------------
 
+--[[
 addEventHandler("onClientCharacter", root, function(character)
 
     if GuiElement.isMTAWindowActive() or not loginUICache.state or not loginUICache.isEnabled or loginUICache.isForcedDisabled then return false end
@@ -62,7 +63,7 @@ addEventHandler("onClientKey", root, function(button, press)
     end
 
 end)
-
+]]
 
 ----------------------------------------
 --[[ Function: Renders Login Screen ]]--
@@ -74,10 +75,9 @@ function renderLoginScreen()
     --local currentLoginPhase = getLoginUIPhase()
     --if not currentLoginPhase then return false end
 
-    outputChatBox("AA?")
     --[[
     local isLMBClicked, isLMBOnHold = false, false
-    local isPhaseAnimating = (getTickCount() - loginUICache.phaseUI.animTickCounter) < loginUICache.phaseUI.animDuration
+    local isPhaseAnimating = (CLIENT_CURRENT_TICK - loginUICache.phaseUI.animTickCounter) < loginUICache.phaseUI.animDuration
     if not GuiElement.isMTAWindowActive() and not isPhaseAnimating and loginUICache.isEnabled and not loginUICache.isForcedDisabled then
         if not prevLMBClickState then
             if getKeyState("mouse1") then
@@ -93,11 +93,10 @@ function renderLoginScreen()
     end
     ]]--
 
-    local serverNameBanner_bgColor = tocolor(loginUICache.serverBanner.serverName.bgColor[1], loginUICache.serverBanner.serverName.bgColor[2], loginUICache.serverBanner.serverName.bgColor[3], loginUICache.serverBanner.serverName.bgColor[4])
-    dxDrawRectangle(loginUICache.serverBanner.startX + loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.startY, loginUICache.serverBanner.serverName.width - (loginUICache.serverBanner.serverName.height*2), loginUICache.serverBanner.serverName.height, serverNameBanner_bgColor, false)
-    dxDrawImage(loginUICache.serverBanner.startX, loginUICache.serverBanner.startY, loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.leftEdgePath, 0, 0, 0, serverNameBanner_bgColor, false)
-    dxDrawImage(loginUICache.serverBanner.startX + loginUICache.serverBanner.serverName.width - loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.startY, loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.rightEdgePath, 0, 0, 0, serverNameBanner_bgColor, false)
-    dxDrawText(loginUICache.serverBanner.serverName.text, loginUICache.serverBanner.startX, loginUICache.serverBanner.startY, loginUICache.serverBanner.startX + loginUICache.serverBanner.serverName.width, loginUICache.serverBanner.startY + loginUICache.serverBanner.serverName.height, tocolor(loginUICache.serverBanner.serverName.fontColor[1], loginUICache.serverBanner.serverName.fontColor[2], loginUICache.serverBanner.serverName.fontColor[3], loginUICache.serverBanner.serverName.fontColor[4]), 1, loginUICache.serverBanner.serverName.font, "center", "center", true, false, false)
+    dxDrawRectangle(loginUICache.serverBanner.startX + loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.startY, loginUICache.serverBanner.serverName.width - (loginUICache.serverBanner.serverName.height*2), loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.serverName.bgColor, false)
+    dxDrawImage(loginUICache.serverBanner.startX, loginUICache.serverBanner.startY, loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.leftEdgePath, 0, 0, 0, loginUICache.serverBanner.serverName.bgColor, false)
+    dxDrawImage(loginUICache.serverBanner.startX + loginUICache.serverBanner.serverName.width - loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.startY, loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.rightEdgePath, 0, 0, 0, loginUICache.serverBanner.serverName.bgColor, false)
+    dxDrawText(loginUICache.serverBanner.serverName.text, loginUICache.serverBanner.startX, loginUICache.serverBanner.startY, loginUICache.serverBanner.startX + loginUICache.serverBanner.serverName.width, loginUICache.serverBanner.startY + loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.serverName.fontColor, 1, loginUICache.serverBanner.serverName.font, "center", "center", true, false, false)
     
     local option_offsetY = 0
     --[[
@@ -108,7 +107,7 @@ function renderLoginScreen()
             local phase_wrapper_startX, phase_wrapper_startY = loginUICache.phaseUI.startX + sX - phase_wrapper_width, loginUICache.phaseUI.startY + (loginUICache.serverBanner.startY + loginUICache.serverBanner.serverLogo.height) + ((sY - (loginUICache.serverBanner.startY + loginUICache.serverBanner.serverLogo.height) - phase_wrapper_height)/2)
             local phase_wrapper_animPercent, phase_wrapper_border_animPercent, phase_wrapper_content_animPercent = 1, 1, 1
             if loginUICache.phaseUI.animStatus == "forward" then
-                if (getTickCount() - loginUICache.phaseUI.animTickCounter) >= loginUICache.phaseUI.animOpenerDelay then
+                if (CLIENT_CURRENT_TICK - loginUICache.phaseUI.animTickCounter) >= loginUICache.phaseUI.animOpenerDelay then
                     phase_wrapper_animPercent = interpolateBetween(0, 0, 0, 1, 0, 0, getInterpolationProgress(loginUICache.phaseUI.animTickCounter + loginUICache.phaseUI.animOpenerDelay, loginUICache.phaseUI.animDuration - loginUICache.phaseUI.animOpenerDelay), "OutBack")
                     phase_wrapper_content_animPercent = interpolateBetween(0, 0, 0, 1, 0, 0, getInterpolationProgress(loginUICache.phaseUI.animTickCounter + loginUICache.phaseUI.animOpenerDelay, (loginUICache.phaseUI.animDuration - loginUICache.phaseUI.animOpenerDelay)*2), "OutQuad")
                 else
@@ -119,7 +118,7 @@ function renderLoginScreen()
             else
                 phase_wrapper_animPercent = interpolateBetween(1, 0, 0, 0, 0, 0, getInterpolationProgress(loginUICache.phaseUI.animTickCounter, loginUICache.phaseUI.animDuration - loginUICache.phaseUI.animOpenerDelay), "InBack")
                 phase_wrapper_content_animPercent = interpolateBetween(1, 0, 0, 0, 0, 0, getInterpolationProgress(loginUICache.phaseUI.animTickCounter, (loginUICache.phaseUI.animDuration - loginUICache.phaseUI.animOpenerDelay)/2), "OutQuad")
-                if (getTickCount() - loginUICache.phaseUI.animTickCounter) >= (loginUICache.phaseUI.animDuration - loginUICache.phaseUI.animOpenerDelay) then
+                if (CLIENT_CURRENT_TICK - loginUICache.phaseUI.animTickCounter) >= (loginUICache.phaseUI.animDuration - loginUICache.phaseUI.animOpenerDelay) then
                     phase_wrapper_border_animPercent = interpolateBetween(1, 0, 0, 0, 0, 0, getInterpolationProgress(loginUICache.phaseUI.animTickCounter + (loginUICache.phaseUI.animDuration - loginUICache.phaseUI.animOpenerDelay), loginUICache.phaseUI.animOpenerDelay), "OutQuad")    
                 end
                 if math.round(phase_wrapper_border_animPercent, 2) <= 0 then
@@ -157,7 +156,7 @@ function renderLoginScreen()
                     end
                 elseif loginUICache.optionUI[currentLoginPhase].optionType == "credits" then
                     local credits_offsetY = -loginUICache.phaseUI[currentLoginPhase].dataHeight
-                    if (getTickCount() - loginUICache.phaseUI[currentLoginPhase].scrollTickCounter) >= (loginUICache.phaseUI.animDuration + loginUICache.phaseUI[currentLoginPhase].scrollDelayDuration) then
+                    if (CLIENT_CURRENT_TICK - loginUICache.phaseUI[currentLoginPhase].scrollTickCounter) >= (loginUICache.phaseUI.animDuration + loginUICache.phaseUI[currentLoginPhase].scrollDelayDuration) then
                         credits_offsetY = interpolateBetween(-loginUICache.phaseUI[currentLoginPhase].dataHeight, 0, 0, loginUICache.phaseUI[currentLoginPhase].height*1.5, 0, 0, getInterpolationProgress(loginUICache.phaseUI[currentLoginPhase].scrollTickCounter + loginUICache.phaseUI.animDuration + loginUICache.phaseUI[currentLoginPhase].scrollDelayDuration, loginUICache.phaseUI[currentLoginPhase].scrollDuration), "Linear")
                         if (math.round(credits_offsetY, 2) >= math.round(loginUICache.phaseUI[currentLoginPhase].height*1.25)) and (loginUICache.phaseUI.animStatus ~= "backward") then
                             setLoginUIEnabled(false)
@@ -212,7 +211,7 @@ function renderLoginScreen()
                     if not j.hoverAnimPercent then
                         j.hoverAnimPercent = 0.25
                         j.hoverStatus = "backward"
-                        j.hoverAnimTickCounter = getTickCount()
+                        j.hoverAnimTickCounter = CLIENT_CURRENT_TICK
                     end
                     if isButtonHovered then
                         if isLMBClicked then
@@ -222,12 +221,12 @@ function renderLoginScreen()
                         if j.hoverStatus ~= "forward" then
                             --Sound.playFrontEnd(550)
                             j.hoverStatus = "forward"
-                            j.hoverAnimTickCounter = getTickCount()
+                            j.hoverAnimTickCounter = CLIENT_CURRENT_TICK
                         end
                     else
                         if j.hoverStatus ~= "backward" then
                             j.hoverStatus = "backward"
-                            j.hoverAnimTickCounter = getTickCount()
+                            j.hoverAnimTickCounter = CLIENT_CURRENT_TICK
                         end
                     end
                     if j.hoverStatus == "forward" then
@@ -253,7 +252,7 @@ function renderLoginScreen()
                     if not j.hoverAnimPercent then
                         j.hoverAnimPercent = 0.35
                         j.hoverStatus = "backward"
-                        j.hoverAnimTickCounter = getTickCount()
+                        j.hoverAnimTickCounter = CLIENT_CURRENT_TICK
                     end
                     if isEditboxHovered or (loginUICache.phaseUI[currentLoginPhase].editboxes.focussedEditbox == i) then
                         if isEditboxHovered and isLMBClicked then
@@ -265,12 +264,12 @@ function renderLoginScreen()
                         if j.hoverStatus ~= "forward" then
                             --Sound.playFrontEnd(550)
                             j.hoverStatus = "forward"
-                            j.hoverAnimTickCounter = getTickCount()
+                            j.hoverAnimTickCounter = CLIENT_CURRENT_TICK
                         end
                     else
                         if j.hoverStatus ~= "backward" then
                             j.hoverStatus = "backward"
-                            j.hoverAnimTickCounter = getTickCount()
+                            j.hoverAnimTickCounter = CLIENT_CURRENT_TICK
                         end
                     end
                     if loginUICache.phaseUI[currentLoginPhase].editboxes.focussedEditbox == i then
@@ -334,7 +333,7 @@ function renderLoginScreen()
                             else
                                 local isOnDelay = false
                                 if prevInputKey and prevInputKey == currentPressedKey then
-                                    if prevInputKeyStreak < 1 and (loginUICache.phaseUI[currentLoginPhase].editboxes.inputDelayDuration - getTickCount() + inputTickCounter) >= 0 then
+                                    if prevInputKeyStreak < 1 and (loginUICache.phaseUI[currentLoginPhase].editboxes.inputDelayDuration - CLIENT_CURRENT_TICK + inputTickCounter) >= 0 then
                                         isOnDelay = true
                                     else
                                         prevInputKeyStreak = prevInputKeyStreak + 1
@@ -350,7 +349,7 @@ function renderLoginScreen()
                                             j.placeDataValue = editbox_fieldText..currentPressedKey:gsub("space", " ")
                                         end
                                     end
-                                    inputTickCounter = getTickCount()
+                                    inputTickCounter = CLIENT_CURRENT_TICK
                                     prevInputKey = currentPressedKey
                                 end
                             end
@@ -377,7 +376,7 @@ function renderLoginScreen()
                     if not j.hoverAnimPercent then
                         j.hoverAnimPercent = 0.35
                         j.hoverStatus = "backward"
-                        j.hoverAnimTickCounter = getTickCount()
+                        j.hoverAnimTickCounter = CLIENT_CURRENT_TICK
                     end
                     if isSliderHovered or (loginUICache.phaseUI[currentLoginPhase].sliders.focussedSlider == i) then
                         if isSliderHovered then
@@ -390,13 +389,13 @@ function renderLoginScreen()
                             if j.hoverStatus ~= "forward" then
                                 --Sound.playFrontEnd(550)
                                 j.hoverStatus = "forward"
-                                j.hoverAnimTickCounter = getTickCount()
+                                j.hoverAnimTickCounter = CLIENT_CURRENT_TICK
                             end
                         end
                     else
                         if j.hoverStatus ~= "backward" then
                             j.hoverStatus = "backward"
-                            j.hoverAnimTickCounter = getTickCount()
+                            j.hoverAnimTickCounter = CLIENT_CURRENT_TICK
                         end
                     end
                     if loginUICache.phaseUI[currentLoginPhase].sliders.focussedSlider == i then
@@ -432,14 +431,14 @@ function renderLoginScreen()
     ]]--
 
     for i, j in ipairs(loginUICache.optionUI) do
-        local option_startX, option_startY = loginUICache.optionUI.startX, loginUICache.optionUI.startY - option_offsetY + (math.max(0, i - 1)*(loginUICache.optionUI.slotHeight + loginUICache.optionUI.slotPaddingY))
+        local option_startX, option_startY = loginUICache.optionUI.startX, loginUICache.optionUI.startY - option_offsetY + (math.max(0, i - 1)*(loginUICache.optionUI.slotHeight + loginUICache.optionUI.paddingY))
         local options_width, options_height = loginUICache.optionUI.width, loginUICache.optionUI.slotHeight
         local isOptionSelected = ((currentLoginPhase ~= 1) and (currentLoginPhase == i))
         local isOptionHovered = isMouseOnPosition(option_startX, option_startY, options_width, options_height)
         if not j.hoverAnimPercent then
             j.hoverAnimPercent = 0
             j.hoverStatus = "backward"
-            j.hoverAnimTickCounter = getTickCount()
+            j.hoverAnimTickCounter = CLIENT_CURRENT_TICK
         end
         if isOptionHovered or isOptionSelected then
             if isLMBClicked and isOptionHovered then
@@ -459,12 +458,12 @@ function renderLoginScreen()
             if j.hoverStatus ~= "forward" then
                 --Sound.playFrontEnd(550)
                 j.hoverStatus = "forward"
-                j.hoverAnimTickCounter = getTickCount()
+                j.hoverAnimTickCounter = CLIENT_CURRENT_TICK
             end
         else
             if j.hoverStatus ~= "backward" then
                 j.hoverStatus = "backward"
-                j.hoverAnimTickCounter = getTickCount()
+                j.hoverAnimTickCounter = CLIENT_CURRENT_TICK
             end
         end
         if j.hoverStatus == "forward" then
@@ -473,10 +472,10 @@ function renderLoginScreen()
             j.hoverAnimPercent = interpolateBetween(j.hoverAnimPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.hoverAnimTickCounter, loginUICache.optionUI.hoverAnimDuration), "InQuad")
         end
         local option_color = (j.fontColor and tocolor(j.fontColor[1], j.fontColor[2], j.fontColor[3], j.fontColor[4]*math.max(0.1, j.hoverAnimPercent))) or tocolor(loginUICache.optionUI.fontColor[1], loginUICache.optionUI.fontColor[2], loginUICache.optionUI.fontColor[3], loginUICache.optionUI.fontColor[4]*math.max(0.1, j.hoverAnimPercent))
-        dxDrawRoundedRectangle(option_startX, option_startY, options_width, options_height, tocolor(unpack(loginUICache.optionUI.bgColor)), false, true)
-        dxDrawRoundedRectangle(option_startX, option_startY, options_width*j.hoverAnimPercent, options_height, tocolor(loginUICache.optionUI.hoverBGColor[1], loginUICache.optionUI.hoverBGColor[2], loginUICache.optionUI.hoverBGColor[3], loginUICache.optionUI.hoverBGColor[4]*j.hoverAnimPercent), false, true)
-        dxDrawRectangle(option_startX, option_startY, loginUICache.optionUI.borderSize, options_height, option_color, false)
-        dxDrawText(j.placeholder, option_startX + loginUICache.optionUI.slotPaddingX, option_startY, option_startX + options_width, option_startY + options_height, option_color, 1, loginUICache.optionUI.font, "left", "center", true, false, false)
+        dxDrawImage(option_startX, option_startY, options_height, options_height, loginUICache.optionUI.leftEdgePath, 0, 0, 0, loginUICache.optionUI.bgColor, false)
+        dxDrawImage(option_startX + options_width - options_height, option_startY, options_height, options_height, loginUICache.optionUI.rightEdgePath, 0, 0, 0, loginUICache.optionUI.bgColor, false)
+        dxDrawRectangle(option_startX + options_height, option_startY, options_width - (options_height*2), options_height, loginUICache.optionUI.bgColor, false)
+        dxDrawText(j.placeholder, option_startX + options_height, option_startY, option_startX + options_width - (options_height*2), option_startY + options_height, option_color, 1, loginUICache.optionUI.font, "center", "center", true, false, false)
     end
 
 end
