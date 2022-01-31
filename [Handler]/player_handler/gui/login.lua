@@ -843,8 +843,8 @@ end)
 local function renderUI()
 
     if not loginUI.state or isPlayerInitialized(localPlayer) then return false end
-    --local currentLoginPhase = getLoginUIPhase()
-    --if not currentLoginPhase then return false end
+    local currentLoginPhase = getLoginUIPhase()
+    if not currentLoginPhase then return false end
 
     local isLMBClicked = false
     if not GuiElement.isMTAWindowActive() and loginUI.isEnabled and not loginUI.isForcedDisabled then
