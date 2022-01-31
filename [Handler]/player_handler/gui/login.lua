@@ -878,7 +878,7 @@ local function renderUI()
 
     if currentPhase == 1 then
         --Draws Options UI
-        --imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[1].bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[1].bgColor)), false)
+        imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[1].bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[1].bgColor)), false)
         for i, j in imports.ipairs(loginUI.phases[1].optionsui) do
             local options_offsetX, options_offsetY = j.startX, j.startY
             local option_width, option_height = j.width, loginUI.phases[1].optionsui.height
