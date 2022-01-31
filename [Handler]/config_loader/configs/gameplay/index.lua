@@ -46,6 +46,8 @@ configVars = {
         ["Pickup"] = {
             ["Expiry_Duration"] = 48*60*1000
         }
-    }
+    },
+
+    ["UI"] = {}
 
 }

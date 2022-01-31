@@ -8,6 +8,7 @@
 
     <!-- Configurations -->
     <script src="configs/gameplay/index.lua" type="shared" cache="false"/>
+    <script src="configs/gameplay/gui/login.lua" type="shared" cache="false"/>
     <script src="configs/character/player.lua" type="shared" cache="false"/>
     <script src="configs/character/character.lua" type="shared" cache="false"/>
     <script src="configs/inventory/index.lua" type="shared" cache="false"/>
