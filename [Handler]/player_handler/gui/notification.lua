@@ -93,7 +93,7 @@ beautify.render.create(function()
     end
 
 end)
---end, true, "low-10")
+--end, true, "low-10") --TODO: DOES BEAUTIFY SUPPORTS ORDERING?
 
 
 ----------------------------------------
@@ -103,7 +103,7 @@ end)
 imports.addEvent("Player:onNotification", true)
 imports.addEventHandler("Player:onNotification", root, function(notifMessage, notifColor)
 
-    if not notifMessage or imports.type(notifMessage) ~= "string" or notifMessage == "" then return false end
+    if (not notifMessage or imports.type(notifMessage) ~= "string" or notifMessage == "") then return false end
 
     imports.table.insert(notifUI.buffer, {
         text = notifMessage,
