@@ -20,7 +20,7 @@
     <script src="settings/client.lua" type="client" cache="false"/>
 
     <!-- GUIs -->
-    <script src="gui/loadingScreen.lua" type="client" cache="false"/>
+    <script src="gui/loading.lua" type="client" cache="false"/>
     <script src="gui/notification.lua" type="client" cache="false"/>
     <script src="gui/login.lua" type="client" cache="false"/>
     <script src="gui/respawnScreen.lua" type="client" cache="false"/>

@@ -1,12 +1,21 @@
 ----------------------------------------------------------------
 --[[ Resource: Player Handler
-     Script: gui: loadingScreen.lua
-     Server: -
-     Author: OvileAmriam
-     Developer: -
-     DOC: 18/12/2020 (OvileAmriam)
-     Desc: Loading Screen UI ]]--
+     Script: gui: loading.lua
+     Author: vStudio
+     Developer(s): Mario, Tron
+     DOC: 31/01/2022
+     Desc: Loading UI Handler ]]--
 ----------------------------------------------------------------
+
+
+-----------------
+--[[ Imports ]]--
+-----------------
+
+local imports = {
+    addEvent = addEvent,
+    addEventHandler = addEventHandler
+}
 
 
 -------------------
@@ -39,7 +48,7 @@ loadingScreenCache.loader.startY = loadingScreenCache.loader.startY + ((CLIENT_M
 --[[ Event: On Client Render ]]--
 ---------------------------------
 
-addEventHandler("onClientRender", root, function()
+imports.addEventHandler("onClientRender", root, function()
 
     if loadingScreenCache.animStatus == "forward" or loadingScreenCache.animStatus == "reverse_backward" then
         loadingScreenCache.fadeAnimPercent = interpolateBetween(loadingScreenCache.fadeAnimPercent, 0, 0, 1, 0, 0, getInterpolationProgress(loadingScreenCache.tickCounter, loadingScreenCache.animFadeInDuration), "Linear")
@@ -66,8 +75,8 @@ end)
 --[[ Events: On Player Show/Hide Loading Screen ]]--
 ----------------------------------------------------
 
-addEvent("onPlayerShowLoadingScreen", true)
-addEventHandler("onPlayerShowLoadingScreen", root, function(isLoginMusicToBeShuffled)
+imports.addEvent("onPlayerShowLoadingScreen", true)
+imports.addEventHandler("onPlayerShowLoadingScreen", root, function(isLoginMusicToBeShuffled)
 
     if loadingScreenCache.animStatus == "forward" then return false end
     
@@ -79,8 +88,8 @@ addEventHandler("onPlayerShowLoadingScreen", root, function(isLoginMusicToBeShuf
 
 end)
 
-addEvent("onPlayerHideLoadingScreen", true)
-addEventHandler("onPlayerHideLoadingScreen", root, function()
+imports.addEvent("onPlayerHideLoadingScreen", true)
+imports.addEventHandler("onPlayerHideLoadingScreen", root, function()
 
     if loadingScreenCache.animStatus == "backward" or loadingScreenCache.animStatus == "reverse_backward" then return false end
 
