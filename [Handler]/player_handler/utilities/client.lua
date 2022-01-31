@@ -27,20 +27,6 @@ local imports = {
 }
 
 
-------------------------------------
---[[ Event: On Client GUI Click ]]--
-------------------------------------
-
-addEventHandler("onClientGUIClick", root, function()
-    local guiElement = imports.getElementType(source)
-    if ((guiElement == "gui-edit") or (guiElement == "gui-memo")) then
-        imports.guiSetInputMode("no_binds_when_editing")
-    else
-        imports.guiSetInputMode("allow_binds")
-    end
-end)
-
-
 ---------------------------------------
 --[[ Function: Overrides Show Chat ]]--
 ---------------------------------------
@@ -224,6 +210,20 @@ addEventHandler("Player:onSyncWeather", root, function(serverWeather, serverTime
     imports.setWeather(serverWeather)
     imports.setTime(serverTime[1], serverTime[2])
     return true
+end)
+
+
+------------------------------------
+--[[ Event: On Client GUI Click ]]--
+------------------------------------
+
+addEventHandler("onClientGUIClick", root, function()
+    local guiElement = imports.getElementType(source)
+    if ((guiElement == "gui-edit") or (guiElement == "gui-memo")) then
+        imports.guiSetInputMode("no_binds_when_editing")
+    else
+        imports.guiSetInputMode("allow_binds")
+    end
 end)
 
 
