@@ -1,11 +1,10 @@
 ----------------------------------------------------------------
 --[[ Resource: Player Handler
-     Script: gui: loginScreen.lua
-     Server: -
-     Author: OvileAmriam
-     Developer: -
-     DOC: 18/11/2020 (OvileAmriam)
-     Desc: Login Screen UI ]]--
+     Script: gui: login.lua
+     Author: vStudio
+     Developer(s): Mario, Tron
+     DOC: 31/01/2022
+     Desc: Login UI Handler ]]--
 ----------------------------------------------------------------
 
 
