@@ -46,7 +46,7 @@ function showChat(bool, isForced)
         return _showChat(bool)
     else
         if bool then
-            --if isPlayerInitialized(localPlayer) and not loginUICache.state and not isWastedScreenVisible() and not isSpawnScreenVisible() and not isDashboardVisible() and not isMapOpened() and getClientSetting("checkbox", "chat_state") then
+            --if isPlayerInitialized(localPlayer) and not isLoginScreenVisible() and not isWastedScreenVisible() and not isSpawnScreenVisible() and not isDashboardVisible() and not isMapOpened() and getClientSetting("checkbox", "chat_state") then
               --  return _showChat(bool)
             --end
         else

@@ -821,7 +821,7 @@ end)
 --[[ Function: Renders Login Screen ]]--
 ----------------------------------------
 
-local function renderLoginScreen()
+local function renderUI()
 
     if not loginScreenCache.state or isPlayerInitialized(localPlayer) then return false end
     --local currentLoginPhase = getLoginUIPhase()
@@ -1337,7 +1337,7 @@ function showLoginScreen()
     loginScreenCache.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnPoints[math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnPoints)]
     --setLoginUIPhase(1)
     triggerEvent("onLoginSoundStart", localPlayer)
-    addEventHandler("onClientRender", root, renderLoginScreen)
+    beautify.render.create(renderUI)
     showChat(false)
     showCursor(true)
     return true
@@ -1348,7 +1348,7 @@ function hideLoginScreen()
 
     if not loginScreenCache.state then return false end
 
-    removeEventHandler("onClientRender", root, renderLoginScreen)
+    beautify.render.remove(renderUI)
     exports.cinecam_handler:stopCinemation()
     if loginScreenCache.character and isElement(loginScreenCache.character) then loginScreenCache.character:destroy() end
     loginScreenCache.phase = false
