@@ -68,14 +68,14 @@ renderRespawnScreen = function()
                 localPlayer:setPosition(generatedSpawnPoint.x, generatedSpawnPoint.y, respawnerUI.mode.wastedPoint.z)
                 generatedSpawnPoint.z = getGroundPosition(generatedSpawnPoint.x, generatedSpawnPoint.y, respawnerUI.mode.wastedPoint.z + 2.5)
                 if generatedSpawnPoint.x and generatedSpawnPoint.y and generatedSpawnPoint.z and generatedSpawnPoint.z ~= 0 then
-                    triggerServerEvent("onPlayerRespawn", localPlayer, generatedSpawnPoint)
+                    triggerServerEvent("Player:onRespawn", localPlayer, generatedSpawnPoint)
                     hideRespawnScreen()
                     return false
                 end
             end
             local availableSpawnPoints = playerSpawnPoints[characterSpawn]
             local generatedSpawnPoint = availableSpawnPoints[math.random(1, #availableSpawnPoints)]
-            triggerServerEvent("onPlayerRespawn", localPlayer, generatedSpawnPoint)
+            triggerServerEvent("Player:onRespawn", localPlayer, generatedSpawnPoint)
             hideRespawnScreen()
             return false
         end
