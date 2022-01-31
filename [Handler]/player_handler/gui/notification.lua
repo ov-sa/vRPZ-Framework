@@ -14,6 +14,8 @@
 
 local imports = {
     type = type,
+    addEvent = addEvent,
+    addEventHandler = addEventHandler,
     ipairs = ipairs,
     table = table,
     math = math
@@ -94,8 +96,8 @@ end)
 --[[ Event: On Display Notification ]]--
 ----------------------------------------
 
-addEvent("Player:onDisplayNotification", true)
-addEventHandler("Player:onDisplayNotification", root, function(notifMessage, notifColor)
+imports.addEvent("Player:onDisplayNotification", true)
+imports.addEventHandler("Player:onDisplayNotification", root, function(notifMessage, notifColor)
 
     if not notifMessage or imports.type(notifMessage) ~= "string" or notifMessage == "" then return false end
 
