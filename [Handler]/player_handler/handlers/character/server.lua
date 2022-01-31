@@ -20,35 +20,6 @@ local imports = {
 }
 
 
-----------------------------------------------------
---[[ Functions: Retrieves/Sets Character's Data ]]--
-----------------------------------------------------
-
-function getCharacterData(characterID, data, viaFetch)
-
-    characterID = imports.tonumber(characterID)
-    if not characterID or not CCharacter.buffer[characterID] then return false end
-
-    if not viaFetch then
-        return CCharacter.buffer[characterID][data]
-    else
-        return exports.mysql_library:getRowData(connection.tableName, characterID, connection.keyColumnName, data)
-    end
-
-end
-
-function setCharacterData(characterID, data, value)
-
-    characterID = imports.tonumber(characterID)
-    if not characterID or not CCharacter.buffer[characterID] then return false end
-
-    if not exports.mysql_library:setRowData(connection.tableName, characterID, connection.keyColumnName, data, tostring(value)) then return false end
-    CCharacter.buffer[characterID][data] = value
-    return true
-
-end
-
-
 -------------------------
 --[[ Character Class ]]--
 -------------------------
@@ -84,6 +55,19 @@ CCharacter = {
                 CCharacter.buffer[characterID] = nil
             end
         end)
+        return true
+    end,
+
+    setData = function(characterID, ...)
+        dbify.character.setData(characterID, characterDatas, ...)
+        --return CCharacter.buffer[characterID][data]
+        return true
+    end,
+
+    getData = function(characterID, ...)
+        dbify.character.getData(characterID, ...)
+        --USE CALLBACK..
+        --CCharacter.buffer[characterID][data] = value
         return true
     end
 }
