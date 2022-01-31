@@ -13,10 +13,11 @@
 -----------------
 
 local imports = {
+    type = type,
     pairs = pairs,
     tonumber = tonumber,
     isElement = isElement,
-    getElements = Element.getAllByType
+    getElements = Element.getAllByimports.type
 }
 
 
@@ -260,7 +261,7 @@ function getElementMaxSlots(element)
 
     if not element or not imports.isElement(element) then return false end
 
-    if element:getType() == "player" then
+    if element:getimports.type() == "player" then
         if isPlayerInitialized(element) then
             if localPlayer then
                 if inventoryCache.inventorySlots then
@@ -302,22 +303,22 @@ end
 --[[ Functions: Retrieves Weapon's/Backpack's Offsets ]]--
 ----------------------------------------------------------
 
-function getWeaponOffset(weaponType, isBackpackWeapon)
+function getWeaponOffset(weaponimports.type, isBackpackWeapon)
 
-    if not weaponType or type(weaponType) ~= "string" then return false end
+    if not weaponimports.type or imports.type(weaponimports.type) ~= "string" then return false end
 
-    local objectID = getItemObjectID(weaponType)
+    local objectID = getItemObjectID(weaponimports.type)
     if objectID then
         if not isBackpackWeapon then
-            if weaponOffsets[weaponType] and type(weaponOffsets[weaponType]) == "table" and weaponOffsets[weaponType].offsets then
-                return objectID, weaponOffsets[weaponType].offsets
+            if weaponOffsets[weaponimports.type] and imports.type(weaponOffsets[weaponimports.type]) == "table" and weaponOffsets[weaponimports.type].offsets then
+                return objectID, weaponOffsets[weaponimports.type].offsets
             end
             return objectID, weaponOffsets.defaultOffsets
         else
-            if weaponOffsets[weaponType] and type(weaponOffsets[weaponType]) == "table" and weaponOffsets[weaponType].backpackOffsets and type(weaponOffsets[weaponType].backpackOffsets) == "table" then
+            if weaponOffsets[weaponimports.type] and imports.type(weaponOffsets[weaponimports.type]) == "table" and weaponOffsets[weaponimports.type].backpackOffsets and imports.type(weaponOffsets[weaponimports.type].backpackOffsets) == "table" then
                 return objectID, {
-                    onBackpack = weaponOffsets[weaponType].backpackOffsets.onBackpack or weaponOffsets.defaultBackpackOffsets.onBackpack,
-                    noBackpack = weaponOffsets[weaponType].backpackOffsets.noBackpack or weaponOffsets.defaultBackpackOffsets.noBackpack
+                    onBackpack = weaponOffsets[weaponimports.type].backpackOffsets.onBackpack or weaponOffsets.defaultBackpackOffsets.onBackpack,
+                    noBackpack = weaponOffsets[weaponimports.type].backpackOffsets.noBackpack or weaponOffsets.defaultBackpackOffsets.noBackpack
                 }
             end
             return objectID, weaponOffsets.defaultBackpackOffsets
@@ -327,15 +328,15 @@ function getWeaponOffset(weaponType, isBackpackWeapon)
 
 end
 
-function getBackpackOffset(skinModel, backpackType)
+function getBackpackOffset(skinModel, backpackimports.type)
 
     skinModel = imports.tonumber(skinModel)
-    if not skinModel or not backpackType or type(backpackType) ~= "string" then return false end
+    if not skinModel or not backpackimports.type or imports.type(backpackimports.type) ~= "string" then return false end
 
-    local objectID = getItemObjectID(backpackType)
+    local objectID = getItemObjectID(backpackimports.type)
     if objectID then
-        if backpackOffsets[backpackType] and type(backpackOffsets[backpackType]) == "table" and backpackOffsets[backpackType][tostring(skinModel)] then
-            return objectID, backpackOffsets[backpackType][tostring(skinModel)]
+        if backpackOffsets[backpackimports.type] and imports.type(backpackOffsets[backpackimports.type]) == "table" and backpackOffsets[backpackimports.type][tostring(skinModel)] then
+            return objectID, backpackOffsets[backpackimports.type][tostring(skinModel)]
         else
             return objectID, backpackOffsets.defaultOffsets
         end
