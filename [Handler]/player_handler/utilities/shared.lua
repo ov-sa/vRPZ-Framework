@@ -14,6 +14,7 @@
 
 loadstring(exports.assetify_library:fetchImports())()
 
+--TODO:NEEDS TO BE OPTIMIZED...
 
 ----------------------------------------------
 --[[ Function: Retrieves Resource's State ]]--
