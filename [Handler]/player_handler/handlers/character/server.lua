@@ -66,7 +66,7 @@ CCharacter = {
             end
             if result and CCharacter.buffer[characterID] then
                 for i, j in imports.pairs(characterDatas) do
-                    CCharacter.buffer[characterID][j] = result[j]
+                    CCharacter.buffer[characterID][(j[1])] = j[2]
                 end
             end
         end, characterDatas, ...)
