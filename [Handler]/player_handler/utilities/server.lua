@@ -19,6 +19,7 @@ local imports = {
     isElement = isElement,
     getElementType = getElementType,
     getElementsByType = getElementsByType,
+    getElementPosition = getElementPosition,
     getTickCount = getTickCount,
     triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent,
@@ -131,7 +132,7 @@ addEventHandler("onResourceStart", resource, function()
                         if isPlayerOnLogoutCoolDown then
                             imports.triggerClientEvent(source, "Player:onNotification", source, "Please wait "..math.ceil(isPlayerOnLogoutCoolDown/1000).."s before logging out!", {255, 35, 35, 255})
                         else
-                            local posVector = source:getPosition()
+                            local posVector = imports.getElementPosition(source)
                             local characterID = source:getData("Character:ID")
                             local characterIdentity = getCharacterData(characterID, "identity")
                             savePlayerProgress(source)
