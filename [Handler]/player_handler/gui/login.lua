@@ -70,19 +70,19 @@ loginScreenCache = {
                     title = "P L A Y",
                     hoverStatus = "backward",
                     hoverAnimTickCounter = CLIENT_CURRENT_TICK,
-                    execFunc = manageCharacter("play")
+                    execFunc = function() manageCharacter("play") end
                 },
                 {
                     title = "C H A R A C T E R",
                     hoverStatus = "backward",
                     hoverAnimTickCounter = CLIENT_CURRENT_TICK,
-                    execFunc = setLoginUIPhase(2),
+                    execFunc = function() setLoginUIPhase(2) end
                 },
                 {
                     title = "C R E D I T S",
                     hoverStatus = "backward",
                     hoverAnimTickCounter = CLIENT_CURRENT_TICK,
-                    execFunc = setLoginUIPhase(3)
+                    execFunc = function() setLoginUIPhase(3) end
                 }
             }
         },
@@ -241,19 +241,19 @@ loginScreenCache = {
                     hoverAnimDuration = 2500,
                     {
                         title = "❮",
-                        execFunc = manageCharacter("switch_prev")
+                        execFunc = function() manageCharacter("switch_prev") end
                     },
                     {
                         title = "❯",
-                        execFunc = manageCharacter("switch_next")
+                        execFunc = function() manageCharacter("switch_next") end
                     },
                     {
                         title = "X",
-                        execFunc = manageCharacter("delete")
+                        execFunc = function() manageCharacter("delete") end
                     },
                     {
                         title = "✎",
-                        execFunc = manageCharacter("create")
+                        execFunc = function() manageCharacter("create") end
                     }
                 },
                 button = {
@@ -274,15 +274,15 @@ loginScreenCache = {
                     rightCurvedEdgePath = DxTexture("files/images/hud/curved_square/right.png", "argb", true, "clamp"),
                     {
                         title = "B A C K",
-                        execFunc = setLoginUIPhase(1)
+                        execFunc = function() setLoginUIPhase(1) end
                     },
                     {
                         title = "S A V E",
-                        execFunc = manageCharacter("save")
+                        execFunc = function() manageCharacter("save") end
                     },
                     {
                         title = "P I C K",
-                        execFunc = manageCharacter("pick")
+                        execFunc = function() manageCharacter("pick") end
                     }
                 }
             }
@@ -305,7 +305,7 @@ loginScreenCache = {
                 hoverStatus = "backward",
                 hoverAnimTickCounter = CLIENT_CURRENT_TICK,
                 hoverAnimDuration = 1500,
-                execFunc = setLoginUIPhase(1)
+                execFunc = function() setLoginUIPhase(1) end
             },
             view = {
                 startX = 0,
