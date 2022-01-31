@@ -63,6 +63,7 @@ addEventHandler("Player-Handler:onToggleChat", root, showChat)
 --[[ Function: Retrieves Drop Position From Screen ]]--
 -------------------------------------------------------
 
+--[[
 function getDropPositionFromScreen(cursor_offsetX, cursor_offsetY)
 
     cursor_offsetX, cursor_offsetY = tonumber(cursor_offsetX), tonumber(cursor_offsetY)
@@ -83,6 +84,7 @@ function getDropPositionFromScreen(cursor_offsetX, cursor_offsetY)
     return false
 
 end
+]]
 
 
 ------------------------------------------------
@@ -138,6 +140,7 @@ end
 --[[ Function: Draws Progress Bar ]]--
 --------------------------------------
 
+--[[
 local progressBarDatas = {
     edgePaths = {
         DxTexture("files/images/hud/curved_square/left.png", "argb", true, "clamp"),
@@ -171,6 +174,7 @@ function drawProgressBar(percent, placeHolder)
     return true
 
 end
+]]
 
 
 ---------------------------------------
@@ -188,61 +192,6 @@ function dxDrawBorderedText(outlineWeight, outlineColor, text, left, top, right,
         end
     end
     dxDrawText(text, left, top, right, bottom, color, scale, font, alignX, alignY, clip, wordBreak, postGUI, colorCoded, subPixelPositioning, fRotation, fRotationCenterX, fRotationCenterY)
-    return true
-
-end
-
-
--------------------------------------------
---[[ Function: Draws Rounded Rectangle ]]--
--------------------------------------------
-
-local roundedEdgePaths = {
-    DxTexture("files/images/hud/curved_square/top_left.png", "argb", true, "clamp"),
-    DxTexture("files/images/hud/curved_square/top_right.png", "argb", true, "clamp"),
-    DxTexture("files/images/hud/curved_square/bottom_left.png", "argb", true, "clamp"),
-    DxTexture("files/images/hud/curved_square/bottom_right.png", "argb", true, "clamp"),
-    DxTexture("files/images/hud/curved_square/left.png", "argb", true, "clamp"),
-    DxTexture("files/images/hud/curved_square/right.png", "argb", true, "clamp"),
-    DxTexture("files/images/hud/curved_square/square.png", "argb", true, "clamp")
-}
-
-function dxDrawRoundedRectangle(x, y, width, height, color, postGUI, duoCorneringMode)
-
-    x = tonumber(x); y = tonumber(y); width = tonumber(width); height = tonumber(height);
-    if not x or not y or not width or not height or not color then return false end
-
-    if not duoCorneringMode then
-        local defaultMinSize = 50
-        if width < defaultMinSize then width = defaultMinSize end
-        if height < defaultMinSize then height = defaultMinSize end
-        dxDrawImage(x, y, defaultMinSize/2, defaultMinSize/2, roundedEdgePaths[1], 0, 0, 0, color, postGUI)
-        dxDrawImage(x + width - (defaultMinSize/2), y, defaultMinSize/2, defaultMinSize/2, roundedEdgePaths[2], 0, 0, 0, color, postGUI)
-        dxDrawImage(x, y + height - (defaultMinSize/2), defaultMinSize/2, defaultMinSize/2, roundedEdgePaths[3], 0, 0, 0, color, postGUI)
-        dxDrawImage(x + width - (defaultMinSize/2), y + height - (defaultMinSize/2), defaultMinSize/2, defaultMinSize/2, roundedEdgePaths[4], 0, 0, 0, color, postGUI)
-        if width > defaultMinSize then
-            dxDrawRectangle(x + (defaultMinSize/2), y, width - defaultMinSize, defaultMinSize/2, color, postGUI)
-            dxDrawRectangle(x + (defaultMinSize/2), y + height - defaultMinSize/2, width - defaultMinSize, defaultMinSize/2, color, postGUI)
-        end
-        if height > defaultMinSize then
-            dxDrawRectangle(x, y + (defaultMinSize/2), defaultMinSize/2, height - defaultMinSize, color, postGUI)
-            dxDrawRectangle(x + width - (defaultMinSize/2), y + (defaultMinSize/2), defaultMinSize/2, height - defaultMinSize, color, postGUI)
-        end
-        if width > defaultMinSize and height > defaultMinSize then
-            dxDrawRectangle(x + (defaultMinSize/2), y + (defaultMinSize/2), width - defaultMinSize, height - defaultMinSize, color, postGUI)
-        end
-    elseif duoCorneringMode then
-        if width < height then width = height end
-        if width < (height*2) then
-            dxDrawImage(x, y, width, height, roundedEdgePaths[7], 0, 0, 0, color, postGUI)
-        else
-            dxDrawImage(x, y, height, height, roundedEdgePaths[5], 0, 0, 0, color, postGUI)
-            dxDrawImage(x + width - height, y, height, height, roundedEdgePaths[6], 0, 0, 0, color, postGUI)
-            if width > height then
-                dxDrawRectangle(x + height, y, width - (height*2), height, color, postGUI)
-            end
-        end
-    end
     return true
 
 end
