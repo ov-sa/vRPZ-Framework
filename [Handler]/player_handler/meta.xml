@@ -9,4 +9,35 @@
     <script src="exports/shared/main.lua" type="shared" cache="false"/>
     <script src="exports/shared/player.lua" type="shared" cache="false"/>
 
+    <export function="getServerCurrentTick" type="shared"/>
+    <export function="getCurrentTime" type="shared"/>
+    <export function="getItemDetails" type="shared"/>
+    <export function="getItemName" type="shared"/>
+    <export function="getItemWeight" type="shared"/>
+    <export function="getItemObjectID" type="shared"/>
+    <export function="getWeaponSlotDetails" type="shared"/>
+    <export function="getWeaponSlotData" type="shared"/>
+    <export function="getWeaponSlotName" type="shared"/>
+    <export function="getWeaponSlotID" type="shared"/>
+    <export function="getWeaponID" type="shared"/>
+    <export function="getWeaponAmmoName" type="shared"/>
+    <export function="getWeaponMagSize" type="shared"/>
+    <export function="getElementMaxSlots" type="shared"/>
+    <export function="getElementUsedSlots" type="shared"/>
+    <export function="getBackpackOffset" type="shared"/>
+    <export function="getWeaponOffset" type="shared"/>
+
+    <export function="isPlayerInitialized" type="shared"/>
+    <export function="getPlayerByCharacterID" type="shared"/>
+    <export function="getPlayerHealth" type="shared"/>
+    <export function="getPlayerMaximumHealth" type="shared"/>
+    <export function="setPlayerMoney" type="shared"/>
+    <export function="getPlayerMoney" type="shared"/>
+    <export function="getPlayerOccupation" type="shared"/>
+    <export function="getPlayerFaction" type="shared"/>
+    <export function="getPlayerCurrentSlotItem" type="shared"/>
+    <export function="isPlayerInLoot" type="shared"/>
+    <export function="isPlayerReloadingWeapon" type="shared"/>
+    <export function="isPlayerKnocked" type="shared"/>
+
 </meta>
