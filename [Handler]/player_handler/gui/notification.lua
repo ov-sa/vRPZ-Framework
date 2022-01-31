@@ -14,6 +14,7 @@
 
 local imports = {
     type = type,
+    ipairs = ipairs,
     table = table,
     math = math
 }
@@ -54,7 +55,7 @@ beautify.render.create(function()
     if #notifUI.buffer <= 0 then return false end
 
     local currentYOffset = interpolateBetween(notifUI.currentYOffset, 0, 0, 0, 0, 0, getInterpolationProgress(notifUI.slideTopTickCounter, notifUI.slideTopDuration), "OutBack")
-    for i, j in ipairs(notifUI.buffer) do
+    for i, j in imports.ipairs(notifUI.buffer) do
         local notifFontColor = j.fontColor or notifUI.defaultFontColor
         local notif_width, notif_height = dxGetTextWidth(j.text, 1, notifUI.font), notifUI.height
         local notif_offsetX, notif_offsetY = 0, 0
