@@ -261,7 +261,7 @@ function getElementMaxSlots(element)
 
     if not element or not imports.isElement(element) then return false end
 
-    if element:getimports.type() == "player" then
+    if element:getType() == "player" then
         if isPlayerInitialized(element) then
             if localPlayer then
                 if inventoryCache.inventorySlots then
