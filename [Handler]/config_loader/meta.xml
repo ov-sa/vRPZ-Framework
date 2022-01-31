@@ -3,8 +3,10 @@
     <info author="vStudio" name="Config Loader" type="Handler" version="1.0.0"/>
     <oop>true</oop>
 
+    <!-- Exports -->
     <script src="exports/shared.lua" type="shared" cache="false"/>
 
+    <!-- Configurations -->
     <script src="configs/gameplay/index.lua" type="shared" cache="false"/>
     <script src="configs/character/player.lua" type="shared" cache="false"/>
     <script src="configs/character/character.lua" type="shared" cache="false"/>
@@ -16,6 +18,7 @@
     <script src="configs/weapon/index.lua" type="shared" cache="false"/>
     <script src="configs/vehicle/index.lua" type="shared" cache="false"/>
 
+    <!-- Exports -->
     <export function="getConfig" type="shared"/>
 
 </meta>
