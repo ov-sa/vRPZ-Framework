@@ -68,9 +68,10 @@ CCharacter = {
     create = function(serial)
         if (not serial or (imports.type(serial) ~= "string")) then return false end
         dbify.character.create(function(characterID, characterOwner)
-            dbify.character.setData(characterID, {
+            CCharacter.buffer[characterID] = {
                 {"owner", characterOwner}
-            })
+            }
+            dbify.character.setData(characterID, CCharacter.buffer[characterID])
         end, serial)
         return true
     end,
