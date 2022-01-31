@@ -75,6 +75,8 @@ function renderLoginScreen()
     local currentLoginPhase = loginUICache.phaseUI.currentPhase
     if not currentLoginPhase then return false end
 
+    setWeather(FRAMEWORK_CONFIGS["UI"]["Login"].weather)
+    setTime(FRAMEWORK_CONFIGS["UI"]["Login"].time[1], FRAMEWORK_CONFIGS["UI"]["Login"].time[2])
     --[[
     local isLMBClicked, isLMBOnHold = false, false
     local isPhaseAnimating = (CLIENT_CURRENT_TICK - loginUICache.phaseUI.animTickCounter) < loginUICache.phaseUI.animDuration

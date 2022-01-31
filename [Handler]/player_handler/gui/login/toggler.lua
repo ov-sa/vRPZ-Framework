@@ -92,8 +92,8 @@ function showLoginScreen()
     loginUICache.state = true
     loginUICache.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].cinemationPoints[math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].cinemationPoints)]
     loginUICache.character = Ped(0, loginUICache.cinemationData.characterPoint.x, loginUICache.cinemationData.characterPoint.y, loginUICache.cinemationData.characterPoint.z + 0.01, loginUICache.cinemationData.characterPoint.rotation)
-    loginUICache.character:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].lobbyDimension)
-    loginUICache.character:setAlpha(0)
+    loginUICache.character:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
+    loginUICache.character:setAlpha(255)
     if #loginUICache.clientCharacters <= 0 then
         --loadLoginPreviewCharacter(true, true)
     else
@@ -139,9 +139,8 @@ addEventHandler("onPlayerShowLoginScreen", root, function(character, characters)
     loginUICache._selectedCharacter = loginUICache.selectedCharacter
     loginUICache.clientCharacters = characters
     loginUICache._unsavedCharacters = {}
-    exports.asset_loader:loadMap(FRAMEWORK_CONFIGS["UI"]["Login"].lobbyMap, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyDimension)
-    localPlayer:setPosition(FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.x, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.y, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.z)
-    localPlayer:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].lobbyDimension)
+    localPlayer:setPosition(FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.x, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.y, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.z)
+    localPlayer:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
     toggleControl("fire", true)
     localPlayer:setData("Character:Reloading", nil)
     setLoginUIEnabled(true, true)
