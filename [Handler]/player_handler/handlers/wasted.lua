@@ -1,0 +1,157 @@
+----------------------------------------------------------------
+--[[ Resource: Player Handler
+     Script: handlers: wasted.lua
+     Author: vStudio
+     Developer(s): Mario, Tron
+     DOC: 31/01/2022
+     Desc: Wasted Handler ]]--
+----------------------------------------------------------------
+
+
+-----------------
+--[[ Imports ]]--
+-----------------
+
+local imports = {
+    ipairs = ipairs,
+    isElement = isElement,
+    destroyElement = destroyElement,
+    addEvent = addEvent,
+    addEventHandler = addEventHandler,
+    triggerClientEvent = triggerClientEvent,
+    setElementAlpha = setElementAlpha,
+    setElementCollisionsEnabled = setElementCollisionsEnabled,
+    setCameraTarget = setCameraTarget,
+    setPedAnimation = setPedAnimation,
+    setElementHealth = setElementHealth,
+    createPed = createPed,
+    spawnPlayer = spawnPlayer,
+    killPed = killPed,
+    setTimer = setTimer,
+    showChat = showChat
+}
+
+
+-------------------
+--[[ Variables ]]--
+-------------------
+
+local deathAnimations = {
+    [9] = {"PED", "KO_shot_face"},
+    [3] = {"PED", "KO_shot_stom"},
+    [8] = {"PED", "KD_right"},
+    [7] = {"PED", "KD_left"},
+    [6] = {"PED", "KO_spin_R"},
+    [5] = {"PED", "KO_spin_L"},
+    [4] = {"PED", "KO_skid_back"}
+}
+
+
+--------------------------------
+--[[ Event: On Player Death ]]--
+--------------------------------
+
+local function destroyPedLoot(ped, marker)
+    if ped and imports.isElement(ped) then imports.destroyElement(ped) end
+    if marker and imports.isElement(marker) then imports.destroyElement(marker) end
+    return true
+end
+
+addEvent("Player:onDeath", true)
+addEventHandler("Player:onDeath", root, function(killer, headshot, weapon, bodypart)
+    if not isPlayerInitialized(source) then return false end
+
+    local characterID = source:getData("Character:ID")
+    CCharacter.setData(characterID, "dead", true)
+    imports.setElementCollisionsEnabled(source, false)
+    imports.setElementAlpha(source, 0)
+    local posVector = source:getPosition()
+    local rotVector = source:getRotation()
+    local hour, minute = getCurrentTime()	
+    local ped = imports.createPed(0, posVector.x, posVector.y, posVector.z, rotVector.z)
+    local marker = Marker(0, 0, 0, "cylinder", 1.2, 0, 0, 0, 0)
+    if headshot then ped:setHeadless(true) end
+    ped:setCollisionsEnabled(false)
+    ped:setData("Element:Parent", marker)
+    marker:setData("Loot:Type", "deadperson")
+    marker:setData("Loot:Name", "Dead Body")
+    marker:setData("Inventory:Slots", getElementMaxSlots(source))
+    marker:setData("Element:Parent", ped)
+    marker:attach(ped, 0, 0, -0.1)
+    source:attach(ped, 0, 0, -2)
+    imports.triggerClientEvent("Player:onSyncPedClothes", source, ped, getPlayerClothes(source))
+    for i, j in pairs(inventoryDatas) do
+        if not j.saveOnWasted then
+            for k, v in imports.ipairs(j) do
+                local itemValue = tonumber(source:getData("Item:"..v.dataName)) or 0
+                if itemValue > 0 then
+                    local isItemToBeAdded = true
+                    if i == "Helmet" or i == "Armor" then
+                        local shieldType = false
+                        if i == "Helmet" then
+                            shieldType = "helmet"
+                        elseif i == "Armor" then
+                            shieldType = "armor"
+                        end
+                        if shieldType then
+                            local shieldHealth = getPlayerShieldHealth(source, shieldType)
+                            if not shieldHealth or shieldHealth < 100 then
+                                isItemToBeAdded = false
+                            end
+                        else
+                            isItemToBeAdded = false
+                        end
+                    end
+                    if isItemToBeAdded then
+                        marker:setData("Item:"..v.dataName, itemValue)
+                    end
+                end
+            end
+        end
+    end
+
+    local block, anim = false, false
+    if bodypart and deathAnimations[bodypart] then
+        block, anim = deathAnimations[bodypart][1], deathAnimations[bodypart][2]
+    else
+        block, anim = "PED", "KO_skid_front"
+    end
+    imports.killPed(source)
+    imports.setTimer(function(ped, block, anim)
+        if ped and imports.isElement(ped) then
+            imports.setPedAnimation(ped, block, anim, -1, false, true, false)
+        end
+    end, 200, 1, ped, block, anim)
+    imports.setTimer(function(ped)
+        if ped and imports.isElement(ped) then
+            imports.setElementHealth(ped, 0)
+        end
+    end, 500, 1, ped)
+    imports.setTimer(function(ped, marker)
+        destroyPedLoot(ped, marker)
+    end, playerDeadLootDuration, 1, ped, marker)
+end)
+
+
+---------------------------
+--[[ Event: On Respawn ]]--
+---------------------------
+
+imports.addEvent("Player:onRespawn", true)
+imports.addEventHandler("Player:onRespawn", root, function(spawnPoint)
+    if not spawnPoint then return false end
+
+    local characterID = source:getData("Character:ID")
+    local characterIdentity = CCharacter.getData(characterID, "identity")
+    imports.spawnPlayer(source, spawnPoint.x, spawnPoint.y, spawnPoint.z + 1, 0, playerClothes["Gender"][(characterIdentity["gender"])].modelSkin)
+    imports.setElementAlpha(255)
+    imports.setElementCollisionsEnabled(source, true)
+    imports.setCameraTarget(source, source)
+    loadPlayerDefaultDatas(source)
+    CCharacter.setData(characterID, "dead", false)
+    --TODO: APPEND FUNCTION TO RETRIEVE CHARACTER'S CURRENT CLOTHES..
+    imports.triggerClientEvent("Player:onSyncPedClothes", source, source, getPlayerClothes(source))
+    imports.triggerClientEvent(source, "Player:onClientRespawn", source)
+    imports.triggerClientEvent(source, "Player:onHideLoadingUI", source)
+    imports.showChat(source, true)
+end)

@@ -27,6 +27,7 @@
 
     <!-- Hnalders -->
     <script src="handlers/character/server.lua" type="server"/>
+    <script src="handlers/wasted.lua" type="server"/>
 
     <!-- Files: Fonts -->
     <file src="files/fonts/courgette.ttf"/>

@@ -452,7 +452,7 @@ function updateLoginPreviewCharacter()
             end
         end
     end
-    imports.triggerEvent("onSyncPedClothes", root, loginUI.character, selectedClothing)
+    imports.triggerEvent("Player:onSyncPedClothes", root, loginUI.character, selectedClothing)
     return true
 
 end
