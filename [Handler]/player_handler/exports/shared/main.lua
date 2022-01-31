@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
     tonumber = tonumber,
     isElement = isElement,
     getElements = Element.getAllByType
@@ -63,8 +64,8 @@ function getItemDetails(item)
 
     if not item then return false end
 
-    for i, j in pairs(inventoryDatas) do
-        for key, value in ipairs(j) do
+    for i, j in imports.pairs(inventoryDatas) do
+        for key, value in iimports.pairs(j) do
             if value.dataName == item then
                 return value, i
             end
@@ -147,8 +148,8 @@ function getWeaponSlotData(slotID)
     slotID = imports.tonumber(slotID)
     if not slotID then return false end
 
-    for i, j in pairs(availableWeaponSlots) do
-        for k, v in pairs(j.slots) do
+    for i, j in imports.pairs(availableWeaponSlots) do
+        for k, v in imports.pairs(j.slots) do
             if k == slotID then
                 local weaponSlotData = v
                 weaponSlotData["slotName"] = i
@@ -170,8 +171,8 @@ function getWeaponSlotName(weapon)
     if not weapon then return false end
     weapon = tostring(weapon)
 
-    for i, j in pairs(availableWeaponSlots) do
-        for k, v in ipairs(inventoryDatas[(characterSlots[i].slotCategory)]) do
+    for i, j in imports.pairs(availableWeaponSlots) do
+        for k, v in iimports.pairs(inventoryDatas[(characterSlots[i].slotCategory)]) do
             if v.dataName == weapon then
                 return i
             end
@@ -191,8 +192,8 @@ function getWeaponSlotID(weapon)
     if not weapon then return false end
     weapon = tostring(weapon)
 
-    for i, j in pairs(availableWeaponSlots) do
-        for k, v in ipairs(inventoryDatas[(characterSlots[i].slotCategory)]) do
+    for i, j in imports.pairs(availableWeaponSlots) do
+        for k, v in iimports.pairs(inventoryDatas[(characterSlots[i].slotCategory)]) do
             if v.dataName == weapon then
                 return imports.tonumber(j.slotID)
             end
@@ -283,8 +284,8 @@ function getElementUsedSlots(element)
     if not element or not imports.isElement(element) then return false end
 
     local usedSlots = 0
-    for i, j in pairs(inventoryDatas) do
-        for k, v in ipairs(j) do
+    for i, j in imports.pairs(inventoryDatas) do
+        for k, v in iimports.pairs(j) do
             local elementItemData = imports.tonumber(element:getData("Item:"..v.dataName)) or 0
             local itemWeight = getItemWeight(v.dataName)
             if elementItemData > 0 then
