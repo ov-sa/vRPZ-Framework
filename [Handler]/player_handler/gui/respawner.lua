@@ -130,7 +130,6 @@ end)
 
 addEvent("Player:onClientRespawn", true)
 addEventHandler("Player:onClientRespawn", root, function()
-
     if not isPlayerInitialized(localPlayer) then return false end
 
     if respawnerUI.state then hideRespawnScreen() end
@@ -141,5 +140,4 @@ addEventHandler("Player:onClientRespawn", root, function()
     }
     respawnerUI.state = true
     beautify.render.create(renderRespawnScreen)
-
 end)
