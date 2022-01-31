@@ -25,6 +25,7 @@ local imports = {
     triggerClientEvent = triggerClientEvent,
     getPlayerSerial = getPlayerSerial,
     setTimer = setTimer,
+    setPlayerBlurLevel = setPlayerBlurLevel,
     outputChatBox = outputChatBox
 }
 
@@ -111,7 +112,7 @@ addEventHandler("onResourceStart", resource, function()
     setMapName(FRAMEWORK_CONFIGS.Game["Game_Map"])
     for i, j in imports.ipairs(imports.getElementsByType"player")) do
         if isPlayerInitialized(j) then
-            j:setBlurLevel(0)
+            imports.setPlayerBlurLevel(0)
         end
     end
 
