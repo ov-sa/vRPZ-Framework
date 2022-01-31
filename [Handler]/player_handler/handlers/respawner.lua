@@ -17,8 +17,8 @@ local imports = {
     addEventHandler = addEventHandler,
     triggerClientEvent = triggerClientEvent,
     setElementAlpha = setElementAlpha,
-    setCameraTarget = setCameraTarget,
     setElementCollisionsEnabled = setElementCollisionsEnabled,
+    setCameraTarget = setCameraTarget,
     spawnPlayer= spawnPlayer,
     showChat = showChat
 }
