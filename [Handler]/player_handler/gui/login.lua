@@ -1378,12 +1378,12 @@ toggleUI = function(state)
 end
 
 
---------------------------------------------
---[[ Event: On Player Show Login Screen ]]--
---------------------------------------------
+----------------------------------------
+--[[ Event: On Client Show Login UI ]]--
+----------------------------------------
 
-imports.addEvent("onPlayerShowLoginScreen", true)
-imports.addEventHandler("onPlayerShowLoginScreen", root, function(character, characters, isPremium)
+imports.addEvent("Player:onClientShowLoadingUI", true)
+imports.addEventHandler("Player:onClientShowLoadingUI", root, function(character, characters, isPremium)
 
     for i, j in imports.ipairs(characters) do
         j.__isPreLoaded = true
