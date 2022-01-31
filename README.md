@@ -23,8 +23,8 @@
 ## ━ Installation
 
 1. Download the latest release
-2. Unpack it in your MTA-Server/resources directory
-3. Modify `mtaserver.conf` w/
+2. Unpack it in your `YourMTAFolder\server\mods\deathmatch\resources` directory
+3. Add below mentioned to your `mtaserver.conf` 
 ```xml
 <resource src="admin" startup="1" protected="0"/>
 <resource src="dbify_library" startup="1" protected="0"/>
