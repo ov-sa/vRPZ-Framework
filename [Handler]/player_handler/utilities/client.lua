@@ -13,18 +13,9 @@
 -----------------
 
 local imports = {
-    getTickCount = getTickCount,
     setWeather = setWeather,
     setTime = setTime
 }
-
-
--------------------
---[[ Variables ]]--
--------------------
-
-sX, sY = GuiElement.getScreenSize()
-centerX, centerY = sX/2, sY/2
 
 
 ------------------------------------
@@ -66,84 +57,6 @@ function showChat(bool, isForced)
 end
 addEvent("Player-Handler:onToggleChat", true)
 addEventHandler("Player-Handler:onToggleChat", root, showChat)
-
-
-------------------------------------------------------
---[[ Function: Retrieves Interpolation's Progress ]]--
-------------------------------------------------------
-
-function getInterpolationProgress(tickCount, delay)
-
-    if not tickCount or not delay then return false end
-
-    local now = imports.getTickCount()
-    local endTime = tickCount + delay
-    local elapsedTime = now - tickCount
-    local duration = endTime - tickCount
-    local progress = elapsedTime / duration
-    return progress
-
-end
-
-
---------------------------------------------------------
---[[ Function: Retrieves Cursor's Absolute Position ]]--
---------------------------------------------------------
-
-function getAbsoluteCursorPosition()
-
-    if not isCursorShowing() then return false end
-
-    local cX, cY = getCursorPosition()
-    return cX*sX, cY*sY
-
-end
-
-
----------------------------------------------
---[[ Function: Verifies Mouse's Position ]]--
----------------------------------------------
-
-function isMouseOnPosition(x, y, w, h)
-
-    x = tonumber(x); y = tonumber(y); w = tonumber(w); h = tonumber(h);
-    if not isCursorShowing() then return false end
-    if not x or not y or not w or not h then return false end
-
-    local cX, cY = getAbsoluteCursorPosition()
-    if (cX >= x and cX <= x + w and cY >= y and cY <= y + h) then
-        return true
-    end
-    return false
-
-end
-
-
-------------------------------------
---[[ Function: Attaches Effects ]]--
-------------------------------------
-
-local attachedEffects = {}
-addEventHandler("onClientPreRender", root, function()
-
-    for i, j in pairs(attachedEffects) do
-        if i and isElement(i) and j.element and isElement(j.element) then
-            local x, y, z = getPositionFromElementOffset(j.element, j.offset.x, j.offset.y, j.offset.z)
-            i:setPosition(x, y, z)
-        end
-    end
-
-end)
-
-function attachEffect(effect, element, offset)
-
-    if not effect or not isElement(effect) or not element or not isElement(element) or not offset then return false end
-
-    attachedEffects[effect] = {effect = effect, element = element, offset = offset}
-    addEventHandler("onClientElementDestroy", effect, function() attachedEffects[source] = nil end)
-    return true
-
-end
 
 
 -------------------------------------------------------
@@ -230,7 +143,7 @@ local progressBarDatas = {
         DxTexture("files/images/hud/curved_square/left.png", "argb", true, "clamp"),
         DxTexture("files/images/hud/curved_square/right.png", "argb", true, "clamp")
     },
-    borderAnimTickCounter = imports.getTickCount(),
+    borderAnimTickCounter = CLIENT_CURRENT_TICK,
     borderAnimDuration = 2500
 }
 
