@@ -303,22 +303,22 @@ end
 --[[ Functions: Retrieves Weapon's/Backpack's Offsets ]]--
 ----------------------------------------------------------
 
-function getWeaponOffset(weaponimports.type, isBackpackWeapon)
+function getWeaponOffset(weaponType, isBackpackWeapon)
 
-    if not weaponimports.type or imports.type(weaponimports.type) ~= "string" then return false end
+    if not weaponType or imports.type(weaponType) ~= "string" then return false end
 
-    local objectID = getItemObjectID(weaponimports.type)
+    local objectID = getItemObjectID(weaponType)
     if objectID then
         if not isBackpackWeapon then
-            if weaponOffsets[weaponimports.type] and imports.type(weaponOffsets[weaponimports.type]) == "table" and weaponOffsets[weaponimports.type].offsets then
-                return objectID, weaponOffsets[weaponimports.type].offsets
+            if weaponOffsets[weaponType] and imports.type(weaponOffsets[weaponType]) == "table" and weaponOffsets[weaponType].offsets then
+                return objectID, weaponOffsets[weaponType].offsets
             end
             return objectID, weaponOffsets.defaultOffsets
         else
-            if weaponOffsets[weaponimports.type] and imports.type(weaponOffsets[weaponimports.type]) == "table" and weaponOffsets[weaponimports.type].backpackOffsets and imports.type(weaponOffsets[weaponimports.type].backpackOffsets) == "table" then
+            if weaponOffsets[weaponType] and imports.type(weaponOffsets[weaponType]) == "table" and weaponOffsets[weaponType].backpackOffsets and imports.type(weaponOffsets[weaponType].backpackOffsets) == "table" then
                 return objectID, {
-                    onBackpack = weaponOffsets[weaponimports.type].backpackOffsets.onBackpack or weaponOffsets.defaultBackpackOffsets.onBackpack,
-                    noBackpack = weaponOffsets[weaponimports.type].backpackOffsets.noBackpack or weaponOffsets.defaultBackpackOffsets.noBackpack
+                    onBackpack = weaponOffsets[weaponType].backpackOffsets.onBackpack or weaponOffsets.defaultBackpackOffsets.onBackpack,
+                    noBackpack = weaponOffsets[weaponType].backpackOffsets.noBackpack or weaponOffsets.defaultBackpackOffsets.noBackpack
                 }
             end
             return objectID, weaponOffsets.defaultBackpackOffsets
@@ -328,15 +328,15 @@ function getWeaponOffset(weaponimports.type, isBackpackWeapon)
 
 end
 
-function getBackpackOffset(skinModel, backpackimports.type)
+function getBackpackOffset(skinModel, backpackType)
 
     skinModel = imports.tonumber(skinModel)
-    if not skinModel or not backpackimports.type or imports.type(backpackimports.type) ~= "string" then return false end
+    if not skinModel or not backpackType or imports.type(backpackType) ~= "string" then return false end
 
-    local objectID = getItemObjectID(backpackimports.type)
+    local objectID = getItemObjectID(backpackType)
     if objectID then
-        if backpackOffsets[backpackimports.type] and imports.type(backpackOffsets[backpackimports.type]) == "table" and backpackOffsets[backpackimports.type][tostring(skinModel)] then
-            return objectID, backpackOffsets[backpackimports.type][tostring(skinModel)]
+        if backpackOffsets[backpackType] and imports.type(backpackOffsets[backpackType]) == "table" and backpackOffsets[backpackType][tostring(skinModel)] then
+            return objectID, backpackOffsets[backpackType][tostring(skinModel)]
         else
             return objectID, backpackOffsets.defaultOffsets
         end

@@ -30,7 +30,7 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-loadingScreenCache = {
+loadingUI = {
     animStatus = "backward",
     animFadeInDuration = 500,
     animFadeOutDuration = 2500,
@@ -48,8 +48,8 @@ loadingScreenCache = {
         bgPath = imports.dxCreateTexture("files/images/loading/loader.png", "argb", true, "clamp")
     }
 }
-loadingScreenCache.loader.startX = loadingScreenCache.loader.startX + ((CLIENT_MTA_RESOLUTION[1] - loadingScreenCache.loader.width)/2)
-loadingScreenCache.loader.startY = loadingScreenCache.loader.startY + ((CLIENT_MTA_RESOLUTION[2] - loadingScreenCache.loader.height)/2)
+loadingUI.loader.startX = loadingUI.loader.startX + ((CLIENT_MTA_RESOLUTION[1] - loadingUI.loader.width)/2)
+loadingUI.loader.startY = loadingUI.loader.startY + ((CLIENT_MTA_RESOLUTION[2] - loadingUI.loader.height)/2)
 
 
 ------------------------------
@@ -58,24 +58,24 @@ loadingScreenCache.loader.startY = loadingScreenCache.loader.startY + ((CLIENT_M
 
 beautify.render.create(function()
 
-    if ((loadingScreenCache.animStatus == "forward") or (loadingScreenCache.animStatus == "reverse_backward")) then
-        loadingScreenCache.fadeAnimPercent = imports.interpolateBetween(loadingScreenCache.fadeAnimPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loadingScreenCache.tickCounter, loadingScreenCache.animFadeInDuration), "Linear")
-        if loadingScreenCache.animStatus == "reverse_backward" and imports.math.round(loadingScreenCache.fadeAnimPercent, 2) == 1 then
-            if (CLIENT_CURRENT_TICK - loadingScreenCache.tickCounter) >= (loadingScreenCache.animFadeInDuration + loadingScreenCache.animFadeDelayDuration) then
-                loadingScreenCache.animStatus = "backward"
-                loadingScreenCache.tickCounter = CLIENT_CURRENT_TICK
+    if ((loadingUI.animStatus == "forward") or (loadingUI.animStatus == "reverse_backward")) then
+        loadingUI.fadeAnimPercent = imports.interpolateBetween(loadingUI.fadeAnimPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loadingUI.tickCounter, loadingUI.animFadeInDuration), "Linear")
+        if loadingUI.animStatus == "reverse_backward" and imports.math.round(loadingUI.fadeAnimPercent, 2) == 1 then
+            if (CLIENT_CURRENT_TICK - loadingUI.tickCounter) >= (loadingUI.animFadeInDuration + loadingUI.animFadeDelayDuration) then
+                loadingUI.animStatus = "backward"
+                loadingUI.tickCounter = CLIENT_CURRENT_TICK
             end
         end
-    elseif loadingScreenCache.animStatus == "backward" then
-        loadingScreenCache.fadeAnimPercent = imports.interpolateBetween(loadingScreenCache.fadeAnimPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(loadingScreenCache.tickCounter, loadingScreenCache.animFadeOutDuration), "Linear")
+    elseif loadingUI.animStatus == "backward" then
+        loadingUI.fadeAnimPercent = imports.interpolateBetween(loadingUI.fadeAnimPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(loadingUI.tickCounter, loadingUI.animFadeOutDuration), "Linear")
     end
 
-    loadingScreenCache.loader.rotationValue = imports.interpolateBetween(0, 0, 0, 360, 0, 0, imports.getInterpolationProgress(loadingScreenCache.loader.tickCounter, loadingScreenCache.loader.animDuration), "Linear")
-    if imports.math.round(loadingScreenCache.loader.rotationValue, 2) == 360 then
-        loadingScreenCache.loader.tickCounter = CLIENT_CURRENT_TICK
+    loadingUI.loader.rotationValue = imports.interpolateBetween(0, 0, 0, 360, 0, 0, imports.getInterpolationProgress(loadingUI.loader.tickCounter, loadingUI.loader.animDuration), "Linear")
+    if imports.math.round(loadingUI.loader.rotationValue, 2) == 360 then
+        loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
     end
-    imports.dxDrawRectangle(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], imports.tocolor(0, 0, 0, 255*loadingScreenCache.fadeAnimPercent), true)
-    imports.dxDrawImage(loadingScreenCache.loader.startX, loadingScreenCache.loader.startY, loadingScreenCache.loader.width, loadingScreenCache.loader.height, loadingScreenCache.loader.bgPath, loadingScreenCache.loader.rotationValue, 0, 0, imports.tocolor(255, 255, 255, 200*loadingScreenCache.fadeAnimPercent), true)
+    imports.dxDrawRectangle(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], imports.tocolor(0, 0, 0, 255*loadingUI.fadeAnimPercent), true)
+    imports.dxDrawImage(loadingUI.loader.startX, loadingUI.loader.startY, loadingUI.loader.width, loadingUI.loader.height, loadingUI.loader.bgPath, loadingUI.loader.rotationValue, 0, 0, imports.tocolor(255, 255, 255, 200*loadingUI.fadeAnimPercent), true)
 
 end)
 
@@ -87,11 +87,11 @@ end)
 imports.addEvent("Player:onHideLoadingUI", true)
 imports.addEventHandler("Player:onHideLoadingUI", root, function(shuffleMusic)
 
-    if loadingScreenCache.animStatus == "forward" then return false end
+    if loadingUI.animStatus == "forward" then return false end
     
-    loadingScreenCache.animStatus = "forward"
-    loadingScreenCache.tickCounter = CLIENT_CURRENT_TICK
-    loadingScreenCache.loader.tickCounter = CLIENT_CURRENT_TICK
+    loadingUI.animStatus = "forward"
+    loadingUI.tickCounter = CLIENT_CURRENT_TICK
+    loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
     imports.triggerEvent("onLoginSoundStart", localPlayer, (shuffleMusic and true) or false)
     return true
 
@@ -100,10 +100,10 @@ end)
 imports.addEvent("Player:onShowLoadingUI", true)
 imports.addEventHandler("Player:onShowLoadingUI", root, function()
 
-    if ((loadingScreenCache.animStatus == "backward") or (loadingScreenCache.animStatus == "reverse_backward")) then return false end
+    if ((loadingUI.animStatus == "backward") or (loadingUI.animStatus == "reverse_backward")) then return false end
 
-    loadingScreenCache.animStatus = "reverse_backward"
-    loadingScreenCache.tickCounter = CLIENT_CURRENT_TICK
+    loadingUI.animStatus = "reverse_backward"
+    loadingUI.tickCounter = CLIENT_CURRENT_TICK
     if not loginUI.state then
         imports.triggerEvent("onLoginSoundStop", localPlayer)
     end

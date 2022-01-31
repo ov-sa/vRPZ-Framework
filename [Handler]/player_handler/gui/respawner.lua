@@ -8,7 +8,6 @@
 ----------------------------------------------------------------
 
 
-
 -----------------
 --[[ Imports ]]--
 -----------------
@@ -57,7 +56,7 @@ renderRespawnScreen = function()
 
     if respawnerUI.mode.type == "generate_client_spawn" then
         local elapsedDuration = CLIENT_CURRENT_TICK - respawnerUI.mode.tickCounter
-        if elapsedDuration >= (loadingScreenCache.animFadeInDuration + loadingScreenCache.animFadeDelayDuration) then
+        if elapsedDuration >= (loadingUI.animFadeInDuration + loadingUI.animFadeDelayDuration) then
             local clientPosVector = localPlayer:getPosition()
             local characterSpawn = localPlayer:getData("Character:spawn") 
             if not characterSpawn or not playerSpawnPoints[characterSpawn] then

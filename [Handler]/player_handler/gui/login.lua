@@ -324,7 +324,7 @@ loginUI = {
                 outlineColor = {0, 0, 0, 255},
                 scrollAnimTickCounter = CLIENT_CURRENT_TICK,
                 scrollDelayDuration = 1000,
-                --scrollDelayDuration = loadingScreenCache.animFadeOutDuration + loadingScreenCache.animFadeDelayDuration - 1000,
+                --scrollDelayDuration = loadingUI.animFadeOutDuration + loadingUI.animFadeDelayDuration - 1000,
                 scrollAnimDuration = 5000,
             }
         }
@@ -581,6 +581,7 @@ manageCharacter = function(manageType)
     elseif manageType == "play" then
         if #loginUI.clientCharacters <= 0 then
             setLoginUIEnabled(true)
+            print("TRIGGEREDDDD??")
             imports.triggerEvent("Player:onNotification", localPlayer, "You must create a character to play!", {255, 80, 80, 255})
             return false
         else
@@ -595,10 +596,10 @@ manageCharacter = function(manageType)
         imports.triggerEvent("Player:onHideLoadingUI", localPlayer)
         imports.setTimer(function()
             toggleUI(false)
-        end, loadingScreenCache.animFadeInDuration + 250, 1)
+        end, loadingUI.animFadeInDuration + 250, 1)
         imports.setTimer(function(selectedCharacter, clientCharacters)
             triggerServerEvent("onPlayerResumeGame", localPlayer, selectedCharacter, clientCharacters)
-        end, loadingScreenCache.animFadeInDuration + loadingScreenCache.animFadeOutDuration + loadingScreenCache.animFadeDelayDuration, 1, loginUI.selectedCharacter, loginUI.clientCharacters)
+        end, loadingUI.animFadeInDuration + loadingUI.animFadeOutDuration + loadingUI.animFadeDelayDuration, 1, loginUI.selectedCharacter, loginUI.clientCharacters)
     end
     return true
 
@@ -676,11 +677,11 @@ setLoginUIPhase = function(phaseID)
         end
         imports.triggerEvent("Player:onShowLoadingUI", localPlayer)
         prevPhaseTimer = false
-    end, loadingScreenCache.animFadeInDuration + 250, 1)
+    end, loadingUI.animFadeInDuration + 250, 1)
     prevEnablerTimer = imports.setTimer(function()
         setLoginUIEnabled(true)
         prevEnablerTimer = false
-    end, loadingScreenCache.animFadeOutDuration + loadingScreenCache.animFadeDelayDuration - (loadingScreenCache.animFadeInDuration + 250), 1)
+    end, loadingUI.animFadeOutDuration + loadingUI.animFadeDelayDuration - (loadingUI.animFadeInDuration + 250), 1)
     return true
 
 end
@@ -878,7 +879,7 @@ local function renderUI()
 
     if currentPhase == 1 then
         --Draws Options UI
-        imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[1].bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[1].bgColor)), false)
+        --imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[1].bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[1].bgColor)), false)
         for i, j in imports.ipairs(loginUI.phases[1].optionsui) do
             local options_offsetX, options_offsetY = j.startX, j.startY
             local option_width, option_height = j.width, loginUI.phases[1].optionsui.height
