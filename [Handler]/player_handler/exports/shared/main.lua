@@ -17,7 +17,7 @@ local imports = {
     pairs = pairs,
     tonumber = tonumber,
     isElement = isElement,
-    getElements = Element.getAllByimports.type
+    getElementsByType = getElementsByType
 }
 
 
@@ -30,7 +30,7 @@ function getServerTick()
 
     local currentTick = 0
     if not serverTickSyncer or not imports.isElement(serverTickSyncer) then
-        local tickSyncers = imports.getElements("Server:TickSyncer", resourceRoot)
+        local tickSyncers = imports.getElementsByType("Server:TickSyncer", resourceRoot)
         if #tickSyncers > 0 then
             serverTickSyncer = tickSyncers[1]
         end
