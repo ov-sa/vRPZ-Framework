@@ -1412,7 +1412,7 @@ addEventHandler("onClientResourceStart", resource, function()
         Camera.fade(true)
     end]]
 
-    showLoginScreen()
+    showLoginScreen() --TODO: REMOVE LATER
     setPedTargetingMarkerEnabled(false)
     setPlayerHudComponentVisible("all", false)
     setPlayerHudComponentVisible("crosshair", true)
