@@ -15,18 +15,15 @@
 loadstring(exports.assetify_library:fetchImports())()
 
 
----------------------------------------------------
---[[ Function: Checks Resource's Running State ]]--
----------------------------------------------------
+----------------------------------------------
+--[[ Function: Retrieves Resource's State ]]--
+----------------------------------------------
 
 function isResourceRunning(resourceName)
-
     if not resourceName then return false end
     local serverResource = Resource.getFromName(resourceName)
     if not serverResource or serverResource:getState() ~= "running" then return false end
-
     return true
-
 end
 
 

@@ -64,7 +64,8 @@ addEventHandler("Player:onToggleChat", root, showChat)
 ------------------------------------------------
 --[[ Function: Verifies Player's Clear View ]]--
 ------------------------------------------------
-
+--TODO: NEEEDS TO BE MOVED
+--[[
 function isObjectAroundPlayer(player, distance, height, initialHeight, targetMaterial, ignoredElements, ignoredMaterials)
 
     distance = imports.tonumber(distance)
@@ -108,12 +109,12 @@ function isObjectAroundPlayer(player, distance, height, initialHeight, targetMat
     return false
 
 end
-
+]]
 
 --------------------------------------
 --[[ Function: Draws Progress Bar ]]--
 --------------------------------------
-
+--TODO: NEEEDS TO BE MOVED
 --[[
 local progressBarDatas = {
     edgePaths = {
@@ -154,9 +155,8 @@ end
 ---------------------------------------
 --[[ Function: Draws Bordered Text ]]--
 ---------------------------------------
-
+--TODO: NEEEDS TO BE MOVED
 function dxDrawBorderedText(outlineWeight, outlineColor, text, left, top, right, bottom, color, scale, font, alignX, alignY, clip, wordBreak, postGUI, colorCoded, subPixelPositioning, fRotation, fRotationCenterX, fRotationCenterY)
-
     outlineWeight = imports.tonumber(outlineWeight); left = imports.tonumber(left); top = imports.tonumber(top); right = imports.tonumber(right); bottom = imports.tonumber(bottom); scale = imports.tonumber(scale);
     if not outlineWeight or not outlineColor or not left or not top or not right or not bottom  or not color or not scale or not font then return false end
 
@@ -167,7 +167,6 @@ function dxDrawBorderedText(outlineWeight, outlineColor, text, left, top, right,
     end
     dxDrawText(text, left, top, right, bottom, color, scale, font, alignX, alignY, clip, wordBreak, postGUI, colorCoded, subPixelPositioning, fRotation, fRotationCenterX, fRotationCenterY)
     return true
-
 end
 
 
