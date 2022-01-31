@@ -7,13 +7,14 @@
      Desc: Main Shared Exports ]]--
 ----------------------------------------------------------------
 
+
 ------------------------------------------------------------
 --[[ Function: Retrieves Player's Initialization Status ]]--
 ------------------------------------------------------------
 
 function isPlayerInitialized(player)
 
-    if not player or not isElement(player) or player:getType() ~= "player" then return false end
+    if (not player or not isElement(player) or player:getType() ~= "player") then return false end
 
     return player:getData("Player:Initialized") or false
 
@@ -47,7 +48,7 @@ end
 
 function getPlayerHealth(player)
 
-    if not player or not isElement(player) or player:getType() ~= "player" then return false end
+    if (not player or not isElement(player) or player:getType() ~= "player") then return false end
     if not isPlayerInitialized(player) then return false end
 
     return tonumber(player:getData("Character:blood")) or 0
@@ -61,7 +62,7 @@ end
 
 function getPlayerMaximumHealth(player)
 
-    if not player or not isElement(player) or player:getType() ~= "player" then return false end
+    if (not player or not isElement(player) or player:getType() ~= "player") then return false end
     if not isPlayerInitialized(player) then return false end
 
     return characterMaximumBlood
@@ -85,7 +86,7 @@ end
 
 function getPlayerMoney(player)
 
-    if not player or not isElement(player) or player:getType() ~= "player" then return false end
+    if (not player or not isElement(player) or player:getType() ~= "player") then return false end
     if not isPlayerInitialized(player) then return false end
 
     return tonumber(player:getData("Character:money")) or 0
@@ -99,7 +100,7 @@ end
 
 function getPlayerOccupation(player)
 
-    if not player or not isElement(player) or player:getType() ~= "player" then return false end
+    if (not player or not isElement(player) or player:getType() ~= "player") then return false end
     if not isPlayerInitialized(player) then return false end
 
     local playerOccupation = player:getData("Character:occupation")
@@ -117,7 +118,7 @@ end
 
 function getPlayerFaction(player)
 
-    if not player or not isElement(player) or player:getType() ~= "player" then return false end
+    if (not player or not isElement(player) or player:getType() ~= "player") then return false end
     if not isPlayerInitialized(player) then return false end
 
     return player:getData("Character:Faction") or false
@@ -161,7 +162,7 @@ end
 
 function isPlayerInLoot(player)
 
-    if not player or not isElement(player) or player:getType() ~= "player" then return false end
+    if (not player or not isElement(player) or player:getType() ~= "player") then return false end
     if not isPlayerInitialized(player) then return false end
 
     if player:getData("Character:Looting") then
@@ -181,7 +182,7 @@ end
 
 function isPlayerReloadingWeapon(player)
 
-    if not player or not isElement(player) or player:getType() ~= "player" then return false end
+    if (not player or not isElement(player) or player:getType() ~= "player") then return false end
     if not isPlayerInitialized(player) then return false end
 
     return player:getData("Character:ReloadingWeapon") or false
@@ -195,7 +196,7 @@ end
 
 function isPlayerKnocked(player)
 
-    if not player or not isElement(player) or player:getType() ~= "player" then return false end
+    if (not player or not isElement(player) or player:getType() ~= "player") then return false end
     if not isPlayerInitialized(player) then return false end
 
     return player:getData("Character:Knocked") or false
