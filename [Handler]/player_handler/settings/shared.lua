@@ -28,7 +28,6 @@ FRAMEWORK_CONFIGS = {
         serverPickupInteractionRange = exports.config_loader:getConfig("server_pickupInteractionRange")
         serverWeather = exports.config_loader:getConfig("server_weather")
         ]]--
-    }
 }
 
 --[[

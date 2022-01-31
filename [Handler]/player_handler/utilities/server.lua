@@ -12,6 +12,7 @@
 --[[ Imports ]]--
 -----------------
 
+loadstring(exports.dbify_library:fetchImports())()
 local imports = {
     triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent
@@ -105,7 +106,7 @@ addEventHandler("onResourceStart", resource, function()
     setAircraftMaxHeight(FRAMEWORK_CONFIGS.Game["Aircraft_Max_Height"])
     setJetpackMaxHeight(FRAMEWORK_CONFIGS.Game["Jetpack_Max_Height"])
     setMinuteDuration(FRAMEWORK_CONFIGS.Game["Minute_Duration"])
-    setGameType(FRAMEWORK_CONFIGS.Game.{"Game_Type"})
+    setGameType(FRAMEWORK_CONFIGS.Game["Game_Type"])
     setMapName(FRAMEWORK_CONFIGS.Game["Game_Map"])
     for i, j in ipairs(Element.getAllByType("player")) do
         if isPlayerInitialized(j) then

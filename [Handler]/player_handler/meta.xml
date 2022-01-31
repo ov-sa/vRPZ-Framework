@@ -1,6 +1,7 @@
 <meta>
 
     <info author="vStudio" name="Player Handler" type="Handler" version="1.0.0"/>
+    <min_mta_version server="1.5.9" client="1.5.9"/>
     <oop>true</oop>
 
     <include resource="bone_attach"/>
@@ -9,6 +10,19 @@
     <!-- Exports -->
     <script src="exports/shared/main.lua" type="shared" cache="false"/>
     <script src="exports/shared/player.lua" type="shared" cache="false"/>
+
+    <!-- Settings & Utilities -->
+    <script src="utilities/shared.lua" type="shared" cache="false"/>
+    <script src="settings/shared.lua" type="shared" cache="false"/>
+    <script src="utilities/client.lua" type="client" cache="false"/>
+    <script src="utilities/server.lua" type="server"/>
+    <script src="settings/client.lua" type="client" cache="false"/>
+
+    <!-- GUI: Login -->
+    <script src="gui/login/cache.lua" type="client" cache="false"/>
+    <script src="gui/login/manager.lua" type="client" cache="false"/>
+    <script src="gui/login/renderer.lua" type="client" cache="false"/>
+    <script src="gui/login/toggler.lua" type="client" cache="false"/>
 
     <!-- Exports: Shared: Main -->
     <export function="getServerTick" type="shared"/>
