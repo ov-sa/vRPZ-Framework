@@ -69,6 +69,7 @@ imports.addEventHandler("onClientRender", root, function()
     elseif loadingScreenCache.animStatus == "backward" then
         loadingScreenCache.fadeAnimPercent = imports.interpolateBetween(loadingScreenCache.fadeAnimPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(loadingScreenCache.tickCounter, loadingScreenCache.animFadeOutDuration), "Linear")
     end
+
     loadingScreenCache.loader.rotationValue = imports.interpolateBetween(0, 0, 0, 360, 0, 0, imports.getInterpolationProgress(loadingScreenCache.loader.tickCounter, loadingScreenCache.loader.animDuration), "Linear")
     if imports.math.round(loadingScreenCache.loader.rotationValue, 2) == 360 then
         loadingScreenCache.loader.tickCounter = CLIENT_CURRENT_TICK
