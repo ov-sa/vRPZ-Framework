@@ -27,7 +27,7 @@ function showChat(player, bool, isForced)
 
     if not player or not isElement(player) or player:getType() ~= "player" then return false end
 
-    imports.triggerClientEvent(player, "Player-Handler:onToggleChat", player, bool, isForced)
+    imports.triggerClientEvent(player, "Player:onToggleChat", player, bool, isForced)
     return true
 
 end
@@ -124,19 +124,19 @@ addEventHandler("onResourceStart", resource, function()
                         local playerLoginTick = getPlayerLoginTick(source)
                         if playerLoginTick then
                             --TODO: ...
-                            --local elapsedDuration = imports.getTickCount() - playerLoginTick
+                            --local elapsedDuration = imports.CLIENT_CURRENT_TICK - playerLoginTick
                             if elapsedDuration < serverLogoutCoolDownDuration then
                                 isPlayerOnLogoutCoolDown = serverLogoutCoolDownDuration - elapsedDuration
                             end
                         end
                         if isPlayerOnLogoutCoolDown then
-                            imports.triggerClientEvent(source, "Player-Handler:onDisplayNotification", source, "Please wait "..math.ceil(isPlayerOnLogoutCoolDown/1000).."s before logging out!", {255, 35, 35, 255})
+                            imports.triggerClientEvent(source, "Player:onDisplayNotification", source, "Please wait "..math.ceil(isPlayerOnLogoutCoolDown/1000).."s before logging out!", {255, 35, 35, 255})
                         else
                             local posVector = source:getPosition()
                             local characterID = source:getData("Character:ID")
                             local characterIdentity = getCharacterData(characterID, "identity")
                             savePlayerProgress(source)
-                            imports.triggerEvent("Player-Handler:onRequestShowLoginScreen", source)
+                            imports.triggerEvent("Player:onRequestShowLoginScreen", source)
                             outputChatBox("#FFFFFF- #5050FF"..characterIdentity.name.."#FFFFFF left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)    
                         end
                     end

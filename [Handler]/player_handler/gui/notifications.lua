@@ -25,7 +25,7 @@ local notificationsCache = {
     slideOutDuration = 500,
     slideTopDuration = 500,
     slideAnimDelayDuration = 2000,
-    slideTopTickCounter = getTickCount(),
+    slideTopTickCounter = CLIENT_CURRENT_TICK,
     font = FRAMEWORK_FONTS[8],
     bgColor = {0, 0, 0, 240},
     defaultFontColor = {175, 175, 175, 255},
@@ -55,11 +55,11 @@ addEventHandler("onClientRender", root, function()
 		    notif_offsetX, notif_offsetY = interpolateBetween(screenX*1366, notificationsCache.startY + ((i - 1)*(notificationsCache.height + notificationsCache.paddingY)) - notificationsCache.height, 0, (screenX*1366) - notificationsCache.startX - notif_width, notificationsCache.startY + ((i - 1)*(notificationsCache.height + notificationsCache.paddingY)) + currentYOffset, 0, getInterpolationProgress(j.tickCounter, notificationsCache.slideInDuration), "InOutBack")
             notifAlphaPercent = interpolateBetween(0, 0, 0, 1, 0, 0, getInterpolationProgress(j.tickCounter, notificationsCache.slideInDuration), "Linear")
             if math.round(notifAlphaPercent, 2) == 1 then
-                if (getTickCount() - j.tickCounter - notificationsCache.slideInDuration) >= notificationsCache.slideAnimDelayDuration then
+                if (CLIENT_CURRENT_TICK - j.tickCounter - notificationsCache.slideInDuration) >= notificationsCache.slideAnimDelayDuration then
                     j.slideStatus = "backward"
-                    j.tickCounter = getTickCount()
+                    j.tickCounter = CLIENT_CURRENT_TICK
                     notificationsCache.currentYOffset = notificationsCache.height
-                    notificationsCache.slideTopTickCounter = getTickCount()
+                    notificationsCache.slideTopTickCounter = CLIENT_CURRENT_TICK
                 end
             end
         else
@@ -93,7 +93,7 @@ addEventHandler("onDisplayNotification", root, function(notifMessage, notifColor
         text = notifMessage,
         fontColor = notifColor,
         slideStatus = "forward",
-        tickCounter = getTickCount()
+        tickCounter = CLIENT_CURRENT_TICK
     })
 
 end)

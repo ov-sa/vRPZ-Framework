@@ -47,7 +47,7 @@ renderRespawnScreen = function()
     end
 
     if respawnScreenCache.mode.type == "generate_client_spawn" then
-        local elapsedDuration = getTickCount() - respawnScreenCache.mode.tickCounter
+        local elapsedDuration = CLIENT_CURRENT_TICK - respawnScreenCache.mode.tickCounter
         if elapsedDuration >= (loadingScreenCache.animFadeInDuration + loadingScreenCache.animFadeDelayDuration) then
             local clientPosVector = localPlayer:getPosition()
             local characterSpawn = localPlayer:getData("Character:spawn") 
@@ -73,7 +73,7 @@ renderRespawnScreen = function()
         end
     elseif respawnScreenCache.mode.type == "respawn_client" then
         local flashAnimAlphaPercent = false
-        local elapsedDuration = getTickCount() - respawnScreenCache.mode.tickCounter
+        local elapsedDuration = CLIENT_CURRENT_TICK - respawnScreenCache.mode.tickCounter
         if elapsedDuration >= respawnScreenCache.flashTerminationDuration then
             flashAnimAlphaPercent = interpolateBetween(respawnScreenCache.mode.animAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(respawnScreenCache.mode.tickCounter + respawnScreenCache.flashTerminationDuration, respawnScreenCache.flashTerminationDuration/2), "OutBack")
             if math.round(flashAnimAlphaPercent, 2) == 0 then
@@ -107,7 +107,7 @@ addEventHandler("onPlayerGenerateRespawnPoint", root, function()
     outputChatBox("- You were found by a survivor and dragged to safety, Good Luck...", 255, 80, 80)
     respawnScreenCache.mode = {
         type = "generate_client_spawn",
-        tickCounter = getTickCount(),
+        tickCounter = CLIENT_CURRENT_TICK,
         wastedPoint = localPlayer:getPosition()
     }
     respawnScreenCache.state = true
@@ -128,7 +128,7 @@ addEventHandler("onClientRespawn", root, function()
     if respawnScreenCache.state then hideRespawnScreen() end
     respawnScreenCache.mode = {
         type = "respawn_client",
-        tickCounter = getTickCount(),
+        tickCounter = CLIENT_CURRENT_TICK,
         animAlphaPercent = 0
     }
     respawnScreenCache.state = true

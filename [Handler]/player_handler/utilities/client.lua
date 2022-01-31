@@ -56,8 +56,8 @@ function showChat(bool, isForced)
     end
 
 end
-addEvent("Player-Handler:onToggleChat", true)
-addEventHandler("Player-Handler:onToggleChat", root, showChat)
+addEvent("Player:onToggleChat", true)
+addEventHandler("Player:onToggleChat", root, showChat)
 
 
 -------------------------------------------------------
@@ -202,8 +202,8 @@ end
 --[[ Event: On Sync Server Weather ]]--
 ---------------------------------------
 
-addEvent("Player-Handler:onSyncServerWeather", true)
-addEventHandler("Player-Handler:onSyncServerWeather", root, function(serverWeather, serverTime)
+addEvent("Player:onSyncServerWeather", true)
+addEventHandler("Player:onSyncServerWeather", root, function(serverWeather, serverTime)
 
     serverWeather = tonumber(serverWeather)
     if not serverWeather or not serverTime then return false end
