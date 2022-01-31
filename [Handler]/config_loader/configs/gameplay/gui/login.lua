@@ -18,16 +18,43 @@ configVars["UI"]["Login"] = {
     time = {12, 0},
     dimension = 100,
     clientPoint = {x = 0, y = 0, z = 0},
-    cinemationPoints = {
+    spawnLocations = {
         {
-            cinemationFOV = 50,
-            characterPoint = {x = 1381.38232421875, y = -1088.770141601562, z = 26.8180450439453, rotation = 85},
-            cinemationPoint = {
-                cameraStart = {x = 1377.195434570312, y = -1088.299682617188, z = 27.16420021057129},
-                cameraStartLook = {x = 1378.178100585938, y = -1088.125244140625, z = 27.22710647583008},
-                cameraEnd = {x = 1377.145874023438, y = -1087.547729492188, z = 27.14230003356934},
-                cameraEndLook = {x = 1378.142700195312, y = -1087.588134765625, z = 27.21147575378418},
+            cinemationFOV = 150,
+            characterCinemationFOV = 85,
+            characterPoint = {x = -1432.02795, y = 1499.02197, z = 1.86719, rotation = 130},
+            characterCinemationPoint = {
+                cameraStart = {x = -1433.584838867188, y = 1497.171142578125, z = 1.699100017547607},
+                cameraStartLook = {x = -1433.377319335938, y = 1498.148193359375, z = 1.746061682701111},
+                cameraEnd = {x = -1433.415649414063, y = 1497.1474609375, z = 1.662500023841858},
+                cameraEndLook = {x = -1433.32470703125, y = 1498.140747070313, z = 1.734715104103088},
                 cinemationDuration = 7000
+            },
+            cinemationPoint = {
+                cameraStart = {x = -2024.715209960938, y = -2452.98876953125, z = 95.59519958496094},
+                cameraStartLook = {x = -2024.66796875, y = -2452.803955078125, z = 94.61355590820313},
+                cameraEnd = {x = -1831.124755859375, y = -2424.668701171875, z = 128.3296051025391},
+                cameraEndLook = {x = -1831.974975585938, y = -2424.701416015625, z = 127.8042526245117},
+                cinemationDuration = 10000 
+            }
+        },
+        {
+            characterCinemationFOV = 85,
+            cinemationFOV = 150,
+            characterPoint = {x = -1432.02795, y = 1499.02197, z = 1.86719, rotation = 130},
+            characterCinemationPoint = {
+                cameraStart = {x = -1433.584838867188, y = 1497.171142578125, z = 1.699100017547607},
+                cameraStartLook = {x = -1433.377319335938, y = 1498.148193359375, z = 1.746061682701111},
+                cameraEnd = {x = -1433.415649414063, y = 1497.1474609375, z = 1.662500023841858},
+                cameraEndLook = {x = -1433.32470703125, y = 1498.140747070313, z = 1.734715104103088},
+                cinemationDuration = 7000
+            },
+            cinemationPoint = {
+                cameraStart = {x = -2024.715209960938, y = -2452.98876953125, z = 95.59519958496094},
+                cameraStartLook = {x = -2024.66796875, y = -2452.803955078125, z = 94.61355590820313},
+                cameraEnd = {x = -1726.987548828125, y = -2236.419189453125, z = 139.2445983886719},
+                cameraEndLook = {x = -1726.531982421875, y = -2237.2822265625, z = 139.0268249511719},
+                cinemationDuration = 15000 
             }
         }
     }

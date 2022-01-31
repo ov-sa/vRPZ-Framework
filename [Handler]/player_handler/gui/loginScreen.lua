@@ -1334,7 +1334,7 @@ function showLoginScreen()
     if loginScreenCache.state then return false end
 
     loginScreenCache.state = true
-    loginScreenCache.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].cinemationPoints[math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].cinemationPoints)]
+    loginScreenCache.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnPoints[math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnPoints)]
     --setLoginUIPhase(1)
     triggerEvent("onLoginSoundStart", localPlayer)
     addEventHandler("onClientRender", root, renderLoginScreen)
