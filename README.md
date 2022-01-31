@@ -18,6 +18,8 @@
 
 ## ━ Developers
 
+* **Mario**
+* **Buddy**
 * **Aviril**
 * **Tron**
 
