@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    type = type,
     pairs = pairs,
     tonumber = tonumber,
     table = table
