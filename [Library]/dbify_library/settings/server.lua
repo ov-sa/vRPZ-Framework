@@ -14,7 +14,7 @@
 ------------------
 
 syncSettings = {
-    syncAccounts = true,
+    syncAccounts = false,
     syncSerials = true
 }
 
