@@ -56,9 +56,12 @@ CCharacter = {
     buffer = {},
 
     fetchCharacters = function(characterID, ...)
+        characterID = imports.tonumber(characterID)
+        if not characterID or not CCharacter.buffer[characterID] then return false end
         dbify.character.fetchAll({
             {dbify.character.__connection__.keyColumn, characterID}
         }, ...)
+        return true
     end,
 
     create = function(serial)
@@ -68,6 +71,7 @@ CCharacter = {
                 {"owner", characterOwner}
             })
         end, serial)
+        return true
     end,
 
     delete = function(characterID)
