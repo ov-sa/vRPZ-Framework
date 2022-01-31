@@ -1,0 +1,333 @@
+----------------------------------------------------------------
+--[[ Resource: Player Handler
+     Script: exports: shared: main.lua
+     Author: vStudio
+     Developer(s): Tron
+     DOC: 31/01/2022
+     Desc: Main Shared Exports ]]--
+----------------------------------------------------------------
+
+
+---------------------------------------------------
+--[[ Function: Retrieves Server's Current Tick ]]--
+---------------------------------------------------
+
+local serverTickSyncer = nil
+function getServerCurrentTick()
+
+    local currentServerTick = 0
+    if not serverTickSyncer or not isElement(serverTickSyncer) then
+        local tickSyncers = Element.getAllByType("Server:TickSyncer", resourceRoot)
+        if #tickSyncers > 0 then
+            serverTickSyncer = tickSyncers[1]
+        end
+    end
+    if serverTickSyncer and isElement(serverTickSyncer) then
+        currentServerTick = tonumber(serverTickSyncer:getData("Server:TickSyncer")) or 0
+    end
+    return currentServerTick
+
+end
+
+
+------------------------------------------
+--[[ Function: Retrieves Current Time ]]--
+------------------------------------------
+
+function getCurrentTime()
+
+    local hour, minutes = getTime()
+    hour = ((hour < 10) and "0"..hour) or hour
+    minutes = ((minutes < 10) and "0"..minutes) or minutes 
+    return hour, minutes
+
+end
+
+
+--------------------------------------------
+--[[ Function: Retrieves Item's Details ]]--
+--------------------------------------------
+
+function getItemDetails(item)
+
+    if not item then return false end
+
+    for i, j in pairs(inventoryDatas) do
+        for key, value in ipairs(j) do
+            if value.dataName == item then
+                return value, i
+            end
+        end
+    end
+    return false
+
+end
+
+
+-----------------------------------------
+--[[ Function: Retrieves Item's Name ]]--
+-----------------------------------------
+
+function getItemName(item)
+
+    if not item then return false end
+    local itemDetails = getItemDetails(item)
+    if not itemDetails then return false end
+
+    return itemDetails.itemName
+
+end
+
+
+-------------------------------------------
+--[[ Function: Retrieves Item's Weight ]]--
+-------------------------------------------
+
+function getItemWeight(item)
+
+    if not item then return false end
+    local itemDetails = getItemDetails(item)
+    if not itemDetails then return false end
+
+    return tonumber(itemDetails.itemWeight) or 1
+
+end
+
+
+---------------------------------------------
+--[[ Function: Retrieves Item's ObjectID ]]--
+---------------------------------------------
+
+function getItemObjectID(item)
+
+    if not item then return false end
+    local itemDetails = getItemDetails(item)
+    if not itemDetails then return false end
+
+    return tonumber(itemDetails.itemObjectID)
+
+end
+
+
+---------------------------------------------------
+--[[ Function: Retrieves Weapon Slot's Details ]]--
+---------------------------------------------------
+
+function getWeaponSlotDetails(slotName)
+
+    if not slotName then return false end
+    slotName = tostring(slotName)
+
+    if availableWeaponSlots[i] then
+        return j
+    else
+        return false
+    end
+
+end
+
+
+-------------------------------------------------
+--[[ Function: Retrieves Weapon's Slot Datas ]]--
+-------------------------------------------------
+
+function getWeaponSlotData(slotID)
+
+    slotID = tonumber(slotID)
+    if not slotID then return false end
+
+    for i, j in pairs(availableWeaponSlots) do
+        for k, v in pairs(j.slots) do
+            if k == slotID then
+                local weaponSlotData = v
+                weaponSlotData["slotName"] = i
+                return weaponSlotData
+            end
+        end
+    end
+    return false
+
+end
+
+
+-----------------------------------------------
+--[[ Function: Retrieves Weapon's SlotName ]]--
+-----------------------------------------------
+
+function getWeaponSlotName(weapon)
+
+    if not weapon then return false end
+    weapon = tostring(weapon)
+
+    for i, j in pairs(availableWeaponSlots) do
+        for k, v in ipairs(inventoryDatas[(characterSlots[i].slotCategory)]) do
+            if v.dataName == weapon then
+                return i
+            end
+        end
+    end
+    return false
+
+end
+
+
+---------------------------------------------
+--[[ Function: Retrieves Weapon's SlotID ]]--
+---------------------------------------------
+
+function getWeaponSlotID(weapon)
+
+    if not weapon then return false end
+    weapon = tostring(weapon)
+
+    for i, j in pairs(availableWeaponSlots) do
+        for k, v in ipairs(inventoryDatas[(characterSlots[i].slotCategory)]) do
+            if v.dataName == weapon then
+                return tonumber(j.slotID)
+            end
+        end
+    end
+    return false
+
+end
+
+
+------------------------------------------
+--[[ Function: Retrieves Weapon's ID  ]]--
+------------------------------------------
+
+function getWeaponID(weapon)
+
+    if not weapon then return false end
+    weapon = tostring(weapon)
+    local weaponDetails = getItemDetails(weapon)
+    if not weaponDetails then return false end
+
+    return tonumber(weaponDetails.weaponID)
+
+end
+
+
+------------------------------------------------
+--[[ Function: Retrieves Weapon's Ammo Name ]]--
+------------------------------------------------
+
+function getWeaponAmmoName(weapon)
+
+    if not weapon then return false end
+    weapon = tostring(weapon)
+    local weaponDetails = getItemDetails(weapon)
+    if not weaponDetails then return false end
+
+    return weaponDetails.weaponAmmo
+
+end
+
+
+-----------------------------------------------
+--[[ Function: Retrieves Weapon's Mag Size ]]--
+-----------------------------------------------
+
+function getWeaponMagSize(weapon)
+
+    if not weapon then return false end
+    weapon = tostring(weapon)
+    local weaponDetails = getItemDetails(weapon)
+    if not weaponDetails then return false end
+
+    return tonumber(weaponDetails.magSize) or getWeaponProperty(weaponDetails.weaponID, "poor", "maximum_clip_ammo")
+
+end
+
+
+-------------------------------------------------------
+--[[ Functions: Retrieves Element's Max/Used Slots ]]--
+-------------------------------------------------------
+
+function getElementMaxSlots(element)
+
+    if not element or not isElement(element) then return false end
+
+    if element:getType() == "player" then
+        if isPlayerInitialized(element) then
+            if localPlayer then
+                if inventoryCache.inventorySlots then
+                    return tonumber(inventoryCache.inventorySlots.maxSlots) or 0
+                end
+            else
+                if playerInventorySlots[element] then
+                    return tonumber(playerInventorySlots[element].maxSlots) or 0
+                end
+            end
+        end
+        return 0
+    else
+        return tonumber(element:getData("Inventory:Slots")) or 0
+    end
+
+end
+
+function getElementUsedSlots(element)
+
+    if not element or not isElement(element) then return false end
+
+    local usedSlots = 0
+    for i, j in pairs(inventoryDatas) do
+        for k, v in ipairs(j) do
+            local elementItemData = tonumber(element:getData("Item:"..v.dataName)) or 0
+            local itemWeight = getItemWeight(v.dataName)
+            if elementItemData > 0 then
+                usedSlots = usedSlots + (itemWeight*elementItemData)
+            end
+        end
+    end
+    return usedSlots
+
+end
+
+
+----------------------------------------------------------
+--[[ Functions: Retrieves Weapon's/Backpack's Offsets ]]--
+----------------------------------------------------------
+
+function getWeaponOffset(weaponType, isBackpackWeapon)
+
+    if not weaponType or type(weaponType) ~= "string" then return false end
+
+    local objectID = getItemObjectID(weaponType)
+    if objectID then
+        if not isBackpackWeapon then
+            if weaponOffsets[weaponType] and type(weaponOffsets[weaponType]) == "table" and weaponOffsets[weaponType].offsets then
+                return objectID, weaponOffsets[weaponType].offsets
+            end
+            return objectID, weaponOffsets.defaultOffsets
+        else
+            if weaponOffsets[weaponType] and type(weaponOffsets[weaponType]) == "table" and weaponOffsets[weaponType].backpackOffsets and type(weaponOffsets[weaponType].backpackOffsets) == "table" then
+                return objectID, {
+                    onBackpack = weaponOffsets[weaponType].backpackOffsets.onBackpack or weaponOffsets.defaultBackpackOffsets.onBackpack,
+                    noBackpack = weaponOffsets[weaponType].backpackOffsets.noBackpack or weaponOffsets.defaultBackpackOffsets.noBackpack
+                }
+            end
+            return objectID, weaponOffsets.defaultBackpackOffsets
+        end
+    end
+    return false
+
+end
+
+function getBackpackOffset(skinModel, backpackType)
+
+    skinModel = tonumber(skinModel)
+    if not skinModel or not backpackType or type(backpackType) ~= "string" then return false end
+
+    local objectID = getItemObjectID(backpackType)
+    if objectID then
+        if backpackOffsets[backpackType] and type(backpackOffsets[backpackType]) == "table" and backpackOffsets[backpackType][tostring(skinModel)] then
+            return objectID, backpackOffsets[backpackType][tostring(skinModel)]
+        else
+            return objectID, backpackOffsets.defaultOffsets
+        end
+    end
+    return false
+
+end
