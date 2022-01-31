@@ -14,7 +14,6 @@
     <script src="configs/inventory/slots.lua" type="shared" cache="false"/>
     <script src="configs/inventory/items.lua" type="shared" cache="false"/>
     <script src="configs/gameplay/tasks.lua" type="shared" cache="false"/>
-    <script src="configs/map/index.lua" type="shared" cache="false"/>
     <script src="configs/weapon/index.lua" type="shared" cache="false"/>
     <script src="configs/vehicle/index.lua" type="shared" cache="false"/>
 
