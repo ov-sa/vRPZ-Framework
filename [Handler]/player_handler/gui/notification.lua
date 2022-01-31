@@ -95,21 +95,18 @@ beautify.render.create(function()
         end
     end
 
---end)
-end, true, "low-10") --TODO: DOES BEAUTIFY SUPPORTS ORDERING?
+end)
 
 
-----------------------------------------
---[[ Event: On Display Notification ]]--
-----------------------------------------
+--------------------------------
+--[[ Event: On Notification ]]--
+--------------------------------
 
 imports.addEvent("Player:onNotification", true)
 imports.addEventHandler("Player:onNotification", root, function(notifMessage, notifColor)
 
-    print("WOT 1")
     if (not notifMessage or imports.type(notifMessage) ~= "string" or notifMessage == "") then return false end
 
-    print("WOT 2")
     imports.table.insert(notifUI.buffer, {
         text = notifMessage,
         fontColor = notifColor,

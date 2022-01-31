@@ -581,7 +581,6 @@ manageCharacter = function(manageType)
     elseif manageType == "play" then
         if #loginUI.clientCharacters <= 0 then
             setLoginUIEnabled(true)
-            print("TRIGGEREDDDD??")
             imports.triggerEvent("Player:onNotification", localPlayer, "You must create a character to play!", {255, 80, 80, 255})
             return false
         else
