@@ -113,43 +113,35 @@ addEventHandler("onResourceStart", resource, function()
         end
     end
 
-end)
-
-
-----------------------------------
---[[ Event: On Player Command ]]--
-----------------------------------
-
-addEventHandler("onPlayerCommand", root, function(cmd)
-
-    for i, j in ipairs(serverDisabledCMDs) do
-        if j == cmd then
-            cancelEvent()
-            if cmd == "logout" then
-                if isPlayerInitialized(source) then
-                    local isPlayerOnLogoutCoolDown = false
-                    local playerLoginTick = getPlayerLoginTick(source)
-                    if playerLoginTick then
-                        --TODO: ...
-                        --local elapsedDuration = imports.getTickCount() - playerLoginTick
-                        if elapsedDuration < serverLogoutCoolDownDuration then
-                            isPlayerOnLogoutCoolDown = serverLogoutCoolDownDuration - elapsedDuration
+    addEventHandler("onPlayerCommand", root, function(command)
+        for i, j in ipairs(FRAMEWORK_CONFIGS.Game["Disabled_CMDS"]) do
+            if j == command then
+                cancelEvent()
+                if command == "logout" then
+                    if isPlayerInitialized(source) then
+                        local isPlayerOnLogoutCoolDown = false
+                        local playerLoginTick = getPlayerLoginTick(source)
+                        if playerLoginTick then
+                            --TODO: ...
+                            --local elapsedDuration = imports.getTickCount() - playerLoginTick
+                            if elapsedDuration < serverLogoutCoolDownDuration then
+                                isPlayerOnLogoutCoolDown = serverLogoutCoolDownDuration - elapsedDuration
+                            end
+                        end
+                        if isPlayerOnLogoutCoolDown then
+                            imports.triggerClientEvent(source, "Player-Handler:onDisplayNotification", source, "Please wait "..math.ceil(isPlayerOnLogoutCoolDown/1000).."s before logging out!", {255, 35, 35, 255})
+                        else
+                            local posVector = source:getPosition()
+                            local characterID = source:getData("Character:ID")
+                            local characterIdentity = getCharacterData(characterID, "identity")
+                            savePlayerProgress(source)
+                            imports.triggerEvent("Player-Handler:onRequestShowLoginScreen", source)
+                            outputChatBox("#FFFFFF- #5050FF"..characterIdentity.name.."#FFFFFF left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)    
                         end
                     end
-                    if isPlayerOnLogoutCoolDown then
-                        imports.triggerClientEvent(source, "Player-Handler:onDisplayNotification", source, "Please wait "..math.ceil(isPlayerOnLogoutCoolDown/1000).."s before logging out!", {255, 35, 35, 255})
-                    else
-                        local posVector = source:getPosition()
-                        local characterID = source:getData("Character:ID")
-                        local characterIdentity = getCharacterData(characterID, "identity")
-                        savePlayerProgress(source)
-                        imports.triggerEvent("Player-Handler:onRequestShowLoginScreen", source)
-                        outputChatBox("#FFFFFF- #5050FF"..characterIdentity.name.."#FFFFFF left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)    
-                    end
                 end
+                break
             end
-            break
         end
-    end
-
+    end)
 end)

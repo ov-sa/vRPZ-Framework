@@ -24,7 +24,8 @@ configVars = {
         ["Minute_Duration"] = 60000,
         ["Game_Type"] = "vRP",
         ["Game_Map"] = "vRP : SA",
-
+        ["Disabled_CMDS"] = {"login", "register", "logout", "nick"},
+    
         ["Character"] = {
             ["Max_Blood"] = 1000,
             ["Default_Damage"] = 5,

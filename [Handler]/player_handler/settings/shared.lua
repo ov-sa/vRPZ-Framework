@@ -17,7 +17,6 @@ resource = getResourceRootElement(getThisResource())
 FRAMEWORK_CONFIGS = {
     ["Game"] = exports.config_loader:getConfig("Game"),
         --[[
-        serverMinuteDuration = exports.config_loader:getConfig("server_minuteDuration")
         serverLogoutCoolDownDuration = exports.config_loader:getConfig("server_logoutCoolDownDuration")
         serverDisabledCMDs = exports.config_loader:getConfig("server_disabledCMDs")
         serverWeaponFakeAmmoAmount = exports.config_loader:getConfig("server_weaponFakeAmmoAmount")
