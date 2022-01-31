@@ -203,20 +203,17 @@ function dxDrawBorderedText(outlineWeight, outlineColor, text, left, top, right,
 end
 
 
----------------------------------------
---[[ Event: On Sync Server Weather ]]--
----------------------------------------
+--------------------------------
+--[[ Event: On Sync Weather ]]--
+--------------------------------
 
-addEvent("Player:onSyncServerWeather", true)
-addEventHandler("Player:onSyncServerWeather", root, function(serverWeather, serverTime)
-
+addEvent("Player:onSyncWeather", true)
+addEventHandler("Player:onSyncWeather", root, function(serverWeather, serverTime)
     serverWeather = imports.tonumber(serverWeather)
     if not serverWeather or not serverTime then return false end
-
     imports.setWeather(serverWeather)
     imports.setTime(serverTime[1], serverTime[2])
     return true
-
 end)
 
 
@@ -225,7 +222,6 @@ end)
 -----------------------------------------
 
 imports.addEventHandler("onClientResourceStart", resource, function()
-
     imports.toggleControl("fire", true)
     imports.toggleControl("action", false)
     imports.toggleControl("radar", false)
@@ -233,5 +229,4 @@ imports.addEventHandler("onClientResourceStart", resource, function()
     imports.setPedTargetingMarkerEnabled(false)
     imports.setPlayerHudComponentVisible("all", false)
     imports.setPlayerHudComponentVisible("crosshair", true)
-
 end)

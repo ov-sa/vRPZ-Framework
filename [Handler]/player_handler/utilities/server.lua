@@ -88,7 +88,6 @@ addEventHandler("onResourceStart", resource, function()
             serverTickSyncer:setData("Server:TickSyncer", imports.getTickCount())
         end
     end, FRAMEWORK_CONFIGS.Game["Sync_Rate"], 0, serverTickSyncer)
-
     --[[
     for i, j in pairs(availableWeaponSlots) do
         for k, v in pairs(j.slots) do
@@ -109,7 +108,6 @@ addEventHandler("onResourceStart", resource, function()
         end
     end
     ]]--
-
     imports.setFPSLimit(FRAMEWORK_CONFIGS.Game["FPS_Limit"])
     imports.setFarClipDistance(FRAMEWORK_CONFIGS.Game["Draw_Distance_Limit"][2])
     imports.setFogDistance(FRAMEWORK_CONFIGS.Game["Fog_Distance_Limit"][2])

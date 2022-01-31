@@ -863,13 +863,7 @@ local function renderUI()
         end
     end
 
-    if currentPhase == 2 then
-        setWeather(FRAMEWORK_CONFIGS["UI"]["Login"].characterScreenWeather)
-        setTime(FRAMEWORK_CONFIGS["UI"]["Login"].characterScreenTime[1], FRAMEWORK_CONFIGS["UI"]["Login"].characterScreenTime[2])
-    else
-        setWeather(FRAMEWORK_CONFIGS["UI"]["Login"].weather)
-        setTime(FRAMEWORK_CONFIGS["UI"]["Login"].time[1], FRAMEWORK_CONFIGS["UI"]["Login"].time[2])
-    end
+    imports.triggerEvent("Player:onSyncWeather", FRAMEWORK_CONFIGS["UI"]["Login"].weather, FRAMEWORK_CONFIGS["UI"]["Login"].time)
     local currentRatio = (CLIENT_MTA_RESOLUTION[1]/CLIENT_MTA_RESOLUTION[2])/(1366/768)
     local background_width, background_height = CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2]*currentRatio
     local background_offsetX, background_offsetY = 0, -(background_height - CLIENT_MTA_RESOLUTION[2])/2
