@@ -20,6 +20,7 @@ loginUICache = {
     character = false,
     selectedCharacter = 0,
     clientCharacters = {},
+
     serverBanner = {
         startX = 5,
         startY = 5,
@@ -34,6 +35,7 @@ loginUICache = {
             bgColor = tocolor(0, 0, 0, 255)
         }
     },
+
     optionUI = {
         startY = 15,
         width = 400,
@@ -61,7 +63,8 @@ loginUICache = {
             funcString = "setLoginUIPhase(2)"
         }
     },
-    --[[
+
+    --TODO:WIP
     phaseUI = {
         currentPhase = 1,
         ______isGameResuming = false,
@@ -294,7 +297,6 @@ loginUICache = {
             }
         },
     }
-    ]]--
 }
 
 loginUICache.serverBanner.serverName.width, loginUICache.serverBanner.serverName.height = dxGetTextSize(loginUICache.serverBanner.serverName.text, dxGetTextWidth(loginUICache.serverBanner.serverName.text, 1, loginUICache.serverBanner.serverName.font), 1, loginUICache.serverBanner.serverName.font)
@@ -303,15 +305,15 @@ loginUICache.serverBanner.serverName.height = loginUICache.serverBanner.serverNa
 loginUICache.optionUI.slotHeight = dxGetFontHeight(1, loginUICache.optionUI.font)
 for i, j in ipairs(loginUICache.optionUI) do
     loginUICache.optionUI.height = loginUICache.optionUI.height + loginUICache.optionUI.slotHeight + loginUICache.optionUI.paddingY
-    --[[
     if loginUICache.phaseUI[i] then
         if j.optionType == "characters" then
+            --[[
             for k, v in pairs(serverCharacters) do
                 table.insert(loginUICache.phaseUI[i].placeDataTable, k)
-            end 
+            end
+            ]]--
         end
     end
-    ]]
 end
 loginUICache.optionUI.width = loginUICache.serverBanner.serverName.width
 loginUICache.optionUI.height = math.max(0, loginUICache.optionUI.height - loginUICache.optionUI.paddingY)
