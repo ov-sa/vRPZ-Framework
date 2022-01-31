@@ -37,6 +37,7 @@ local prevInputKey = false
 local prevInputKeyStreak = 0
 local _currentKeyCheck = true
 local _currentPressedKey = false
+local manageLoginPreviewCharacter = nil
 loginScreenCache = {
     state = false,
     phase = false,
@@ -68,19 +69,19 @@ loginScreenCache = {
                     title = "P L A Y",
                     hoverStatus = "backward",
                     hoverAnimTickCounter = CLIENT_CURRENT_TICK,
-                    funcString = "manageLoginPreviewCharacter(\"play\")"
+                    execFunc = manageLoginPreviewCharacter("play")
                 },
                 {
                     title = "C H A R A C T E R",
                     hoverStatus = "backward",
                     hoverAnimTickCounter = CLIENT_CURRENT_TICK,
-                    funcString = "setLoginUIPhase(2)",
+                    execFunc = "setLoginUIPhase(2)",
                 },
                 {
                     title = "C R E D I T S",
                     hoverStatus = "backward",
                     hoverAnimTickCounter = CLIENT_CURRENT_TICK,
-                    funcString = "setLoginUIPhase(3)"
+                    execFunc = "setLoginUIPhase(3)"
                 }
             }
         },
@@ -239,19 +240,19 @@ loginScreenCache = {
                     hoverAnimDuration = 2500,
                     {
                         title = "❮",
-                        funcString = "manageLoginPreviewCharacter(\"switch_prev\")"
+                        execFunc = manageLoginPreviewCharacter("switch_prev")
                     },
                     {
                         title = "❯",
-                        funcString = "manageLoginPreviewCharacter(\"switch_next\")"
+                        execFunc = manageLoginPreviewCharacter("switch_next")
                     },
                     {
                         title = "X",
-                        funcString = "manageLoginPreviewCharacter(\"delete\")"
+                        execFunc = manageLoginPreviewCharacter("delete")
                     },
                     {
                         title = "✎",
-                        funcString = "manageLoginPreviewCharacter(\"create\")"
+                        execFunc = manageLoginPreviewCharacter("create")
                     }
                 },
                 button = {
@@ -272,15 +273,15 @@ loginScreenCache = {
                     rightCurvedEdgePath = DxTexture("files/images/hud/curved_square/right.png", "argb", true, "clamp"),
                     {
                         title = "B A C K",
-                        funcString = "setLoginUIPhase(1)"
+                        execFunc = "setLoginUIPhase(1)"
                     },
                     {
                         title = "S A V E",
-                        funcString = "manageLoginPreviewCharacter(\"save\")"
+                        execFunc = manageLoginPreviewCharacter("save")
                     },
                     {
                         title = "P I C K",
-                        funcString = "manageLoginPreviewCharacter(\"pick\")"
+                        execFunc = manageLoginPreviewCharacter("pick")
                     }
                 }
             }
@@ -303,7 +304,7 @@ loginScreenCache = {
                 hoverStatus = "backward",
                 hoverAnimTickCounter = CLIENT_CURRENT_TICK,
                 hoverAnimDuration = 1500,
-                funcString = "setLoginUIPhase(1)"
+                execFunc = "setLoginUIPhase(1)"
             },
             view = {
                 startX = 0,
@@ -882,7 +883,7 @@ local function renderUI()
                 if isLMBClicked then
                     setLoginUIEnabled(false)
                     imports.setTimer(function()
-                        loadstring(j.funcString)()
+                        j.execFunc()
                     end, 1, 1)
                 end
                 if j.hoverStatus ~= "forward" then
@@ -1222,7 +1223,7 @@ local function renderUI()
                 if isLMBClicked then
                     setLoginUIEnabled(false)
                     imports.setTimer(function()
-                        loadstring(j.funcString)()
+                        j.execFunc()
                     end, 1, 1)
                 end
                 if j.hoverAnimStatus ~= "forward" then
@@ -1257,7 +1258,7 @@ local function renderUI()
                 if isLMBClicked then
                     setLoginUIEnabled(false)
                     imports.setTimer(function()
-                        loadstring(j.funcString)()
+                        j.execFunc()
                     end, 1, 1)
                 end
                 if j.hoverAnimStatus ~= "forward" then
@@ -1312,7 +1313,7 @@ local function renderUI()
             if isLMBClicked then
                 setLoginUIEnabled(false)
                 imports.setTimer(function()
-                    loadstring(loginScreenCache.phases[3].back_navigator.funcString)()
+                    loadstring(loginScreenCache.phases[3].back_navigator.execFunc)()
                 end, 1, 1)
             end
             if loginScreenCache.phases[3].back_navigator.hoverStatus ~= "forward" then
