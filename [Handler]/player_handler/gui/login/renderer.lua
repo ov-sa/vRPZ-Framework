@@ -71,9 +71,11 @@ end)
 function renderLoginScreen()
 
     if not loginUICache.state or isPlayerInitialized(localPlayer) then return false end
-    local currentLoginPhase = getLoginUIPhase()
-    if not currentLoginPhase then return false end
+    --local currentLoginPhase = getLoginUIPhase()
+    --if not currentLoginPhase then return false end
 
+    outputChatBox("AA?")
+    --[[
     local isLMBClicked, isLMBOnHold = false, false
     local isPhaseAnimating = (getTickCount() - loginUICache.phaseUI.animTickCounter) < loginUICache.phaseUI.animDuration
     if not GuiElement.isMTAWindowActive() and not isPhaseAnimating and loginUICache.isEnabled and not loginUICache.isForcedDisabled then
@@ -89,15 +91,16 @@ function renderLoginScreen()
         end
         isLMBOnHold = getKeyState("mouse1")
     end
+    ]]--
 
-    local option_offsetY = 0
     local serverNameBanner_bgColor = tocolor(loginUICache.serverBanner.serverName.bgColor[1], loginUICache.serverBanner.serverName.bgColor[2], loginUICache.serverBanner.serverName.bgColor[3], loginUICache.serverBanner.serverName.bgColor[4])
-    dxDrawImage(loginUICache.serverBanner.startX + loginUICache.serverBanner.serverLogo.startX, loginUICache.serverBanner.startY + loginUICache.serverBanner.serverLogo.startY, loginUICache.serverBanner.serverLogo.width, loginUICache.serverBanner.serverLogo.height, loginUICache.serverBanner.serverLogo.bgPath, 0, 0, 0, tocolor(loginUICache.serverBanner.serverLogo.bgColor[1], loginUICache.serverBanner.serverLogo.bgColor[2], loginUICache.serverBanner.serverLogo.bgColor[3], loginUICache.serverBanner.serverLogo.bgColor[4]), false)
-    dxDrawBorderedText(loginUICache.serverBanner.serverTitle.outlineWeight, loginUICache.serverBanner.serverTitle.outlineColor, loginUICache.serverBanner.serverTitle.text, loginUICache.serverBanner.startX + loginUICache.serverBanner.serverTitle.startX, loginUICache.serverBanner.startY + loginUICache.serverBanner.serverTitle.startY, loginUICache.serverBanner.startX + loginUICache.serverBanner.serverTitle.startX + loginUICache.serverBanner.serverTitle.width, loginUICache.serverBanner.startY + loginUICache.serverBanner.serverTitle.startY + loginUICache.serverBanner.serverTitle.height, tocolor(loginUICache.serverBanner.serverTitle.fontColor[1], loginUICache.serverBanner.serverTitle.fontColor[2], loginUICache.serverBanner.serverTitle.fontColor[3], loginUICache.serverBanner.serverTitle.fontColor[4]), 1, loginUICache.serverBanner.serverTitle.font, "center", "center", true, false, false)
-    dxDrawRectangle(loginUICache.serverBanner.startX + loginUICache.serverBanner.serverName.startX + loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.startY + loginUICache.serverBanner.serverName.startY, loginUICache.serverBanner.serverName.width - (loginUICache.serverBanner.serverName.height*2), loginUICache.serverBanner.serverName.height, serverNameBanner_bgColor, false)
-    dxDrawImage(loginUICache.serverBanner.startX + loginUICache.serverBanner.serverName.startX, loginUICache.serverBanner.startY + loginUICache.serverBanner.serverName.startY, loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.leftEdgePath, 0, 0, 0, serverNameBanner_bgColor, false)
-    dxDrawImage(loginUICache.serverBanner.startX + loginUICache.serverBanner.serverName.startX + loginUICache.serverBanner.serverName.width - loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.startY + loginUICache.serverBanner.serverName.startY, loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.rightEdgePath, 0, 0, 0, serverNameBanner_bgColor, false)
-    dxDrawText(loginUICache.serverBanner.serverName.text, loginUICache.serverBanner.startX + loginUICache.serverBanner.serverName.startX, loginUICache.serverBanner.startY + loginUICache.serverBanner.serverName.startY, loginUICache.serverBanner.startX + loginUICache.serverBanner.serverName.startX + loginUICache.serverBanner.serverName.width, loginUICache.serverBanner.startY + loginUICache.serverBanner.serverName.startY + loginUICache.serverBanner.serverName.height, tocolor(loginUICache.serverBanner.serverName.fontColor[1], loginUICache.serverBanner.serverName.fontColor[2], loginUICache.serverBanner.serverName.fontColor[3], loginUICache.serverBanner.serverName.fontColor[4]), 1, loginUICache.serverBanner.serverName.font, "center", "center", true, false, false)
+    dxDrawRectangle(loginUICache.serverBanner.startX + loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.startY, loginUICache.serverBanner.serverName.width - (loginUICache.serverBanner.serverName.height*2), loginUICache.serverBanner.serverName.height, serverNameBanner_bgColor, false)
+    dxDrawImage(loginUICache.serverBanner.startX, loginUICache.serverBanner.startY, loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.leftEdgePath, 0, 0, 0, serverNameBanner_bgColor, false)
+    dxDrawImage(loginUICache.serverBanner.startX + loginUICache.serverBanner.serverName.width - loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.startY, loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.serverName.height, loginUICache.serverBanner.rightEdgePath, 0, 0, 0, serverNameBanner_bgColor, false)
+    dxDrawText(loginUICache.serverBanner.serverName.text, loginUICache.serverBanner.startX, loginUICache.serverBanner.startY, loginUICache.serverBanner.startX + loginUICache.serverBanner.serverName.width, loginUICache.serverBanner.startY + loginUICache.serverBanner.serverName.height, tocolor(loginUICache.serverBanner.serverName.fontColor[1], loginUICache.serverBanner.serverName.fontColor[2], loginUICache.serverBanner.serverName.fontColor[3], loginUICache.serverBanner.serverName.fontColor[4]), 1, loginUICache.serverBanner.serverName.font, "center", "center", true, false, false)
+    
+    local option_offsetY = 0
+    --[[
     if loginUICache.phaseUI[currentLoginPhase] then
         dxSetRenderTarget()
         if loginUICache.optionUI[currentLoginPhase].optionType ~= "characters" then
@@ -426,6 +429,7 @@ function renderLoginScreen()
             loadstring(loginUICache.optionUI[currentLoginPhase].funcString)()
         end
     end
+    ]]--
 
     for i, j in ipairs(loginUICache.optionUI) do
         local option_startX, option_startY = loginUICache.optionUI.startX, loginUICache.optionUI.startY - option_offsetY + (math.max(0, i - 1)*(loginUICache.optionUI.slotHeight + loginUICache.optionUI.slotPaddingY))
@@ -442,12 +446,12 @@ function renderLoginScreen()
                 setLoginUIEnabled(false)
                 if not isOptionSelected then
                     Timer(function()
-                        loadstring(j.funcString)()
+                        --loadstring(j.funcString)()
                     end, 1, 1)
                 else
                     if currentLoginPhase ~= 1 then
                         Timer(function()
-                            setLoginUIPhase(1)
+                            --setLoginUIPhase(1)
                         end, 1, 1)
                     end
                 end

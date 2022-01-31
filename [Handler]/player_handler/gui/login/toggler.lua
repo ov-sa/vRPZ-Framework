@@ -102,17 +102,18 @@ function showLoginScreen()
     if loginUICache.state then return false end
 
     loginUICache.state = true
-    loginUICache.cinemationData = lobbyDatas.cinemationPoints[math.random(#lobbyDatas.cinemationPoints)]
-    loginUICache.character = Ped(0, loginUICache.cinemationData.characterPoint.x, loginUICache.cinemationData.characterPoint.y, loginUICache.cinemationData.characterPoint.z + 0.01, loginUICache.cinemationData.characterPoint.rotation)
-    loginUICache.character:setDimension(lobbyDatas.lobbyDimension)
+    --loginUICache.cinemationData = lobbyDatas.cinemationPoints[math.random(#lobbyDatas.cinemationPoints)]
+    loginUICache.character = Ped(0, 0, 0, 90)
+    --loginUICache.character = Ped(0, loginUICache.cinemationData.characterPoint.x, loginUICache.cinemationData.characterPoint.y, loginUICache.cinemationData.characterPoint.z + 0.01, loginUICache.cinemationData.characterPoint.rotation)
+    --loginUICache.character:setDimension(lobbyDatas.lobbyDimension)
     loginUICache.character:setAlpha(0)
     if #loginUICache.clientCharacters <= 0 then
-        loadLoginPreviewCharacter(true, true)
+        --loadLoginPreviewCharacter(true, true)
     else
-        loadLoginPreviewCharacter()
+        --loadLoginPreviewCharacter()
     end
-    setLoginUIPhase(1)
-    exports.cinecam_handler:startCinemation(loginUICache.cinemationData.cinemationPoint, true, true, loginUICache.cinemationData.cinemationFOV, true, true, true, false)
+    --setLoginUIPhase(1)
+    --exports.cinecam_handler:startCinemation(loginUICache.cinemationData.cinemationPoint, true, true, loginUICache.cinemationData.cinemationFOV, true, true, true, false)
     triggerEvent("onLoginSoundStart", localPlayer, true)
     addEventHandler("onClientRender", root, renderLoginScreen)
     showChat(false)
@@ -126,7 +127,7 @@ function hideLoginScreen()
     if not loginUICache.state then return false end
 
     removeEventHandler("onClientRender", root, renderLoginScreen)
-    exports.cinecam_handler:stopCinemation()
+    --exports.cinecam_handler:stopCinemation()
     triggerEvent("onLoginSoundStop", localPlayer)
     loginUICache.character:destroy()
     loginUICache.phaseUI.currentPhase = 1
@@ -172,7 +173,8 @@ end)
 
 addEventHandler("onClientResourceStart", resource, function()
 
-    Camera.fade(false)
+    showLoginScreen() --TODO: REMOVE LATER
+    --Camera.fade(false)
     --triggerEvent("onPlayerShowLoadingScreen", localPlayer)
     --triggerServerEvent("onPlayerRequestShowLoginScreen", localPlayer)
     setPedTargetingMarkerEnabled(false)

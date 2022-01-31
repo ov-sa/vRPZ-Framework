@@ -12,7 +12,6 @@
 --[[ Variables ]]--
 -------------------
 
-local screenX, screenY = CLIENT_MTA_RESOLUTION[1]/1366, CLIENT_MTA_RESOLUTION[2]/768
 loginUICache = {
     state = false,
     isEnabled = false,
@@ -22,34 +21,16 @@ loginUICache = {
     selectedCharacter = 0,
     clientCharacters = {},
     serverBanner = {
-        startX = 10,
+        startX = 5,
         startY = 5,
-        leftEdgePath = DxTexture("files/images/hud/right_triangle/default.png", "argb", true, "clamp"),
-        rightEdgePath = DxTexture("files/images/hud/right_triangle/flipped_inverted.png", "argb", true, "clamp"),
-        serverLogo = {
-            startX = 0,
-            startY = 0,
-            width = 60,
-            height = 60,
-            bgColor = {255, 255, 255, 255},
-            bgPath = DxTexture("files/images/logo/ov.png", "argb", true, "clamp")
-        },
-        serverTitle = {
-            startX = 5,
-            startY = 6,
-            text = "C R E A T E D  W I T H  ❤️  b y  O V  N E T W O R K",
-            font = fonts[2],
-            outlineWeight = 2,
-            fontColor = {230, 30, 30, 255},
-            outlineColor = {0, 0, 0, 255}
-        },
+        minWidth = 300,
+        leftEdgePath = beautify.assets["images"]["right_triangle/default.rw"],
+        rightEdgePath = beautify.assets["images"]["right_triangle/flipped_inverted.rw"],
         serverName = {
-            startX = 5,
-            startY = 3,
-            paddingY = 0,
-            text = "SERVER NAME....",
-            font = fonts[3],
-            fontColor = {200, 200, 200, 255},
+            paddingY = -2,
+            text = "vRP FRAMEWORK",
+            font = FRAMEWORK_FONTS[1],
+            fontColor = {255, 30, 30, 255},
             bgColor = {0, 0, 0, 255}
         }
     },
@@ -61,7 +42,7 @@ loginUICache = {
         slotHeight = 32,
         slotPaddingX = 20,
         slotPaddingY = 17,
-        font = fonts[5],
+        font = FRAMEWORK_FONTS[1],
         borderSize = 3,
         hoverAnimDuration = 2000,
         fontColor = {158, 252, 145, 255},
@@ -106,7 +87,7 @@ loginUICache = {
         startY = 40,
         paddingX = 7,
         paddingY = 0,
-        font = fonts[6],
+        font = FRAMEWORK_FONTS[6],
         borderSize = 22,
         embedLineSize = 2,
         animStatus = "backward",
@@ -137,7 +118,7 @@ loginUICache = {
                 }
             },
             buttons = {
-                font = fonts[10],
+                font = FRAMEWORK_FONTS[10],
                 hoverAnimDuration = 1250,
                 {
                     placeholder = "C R E A T E",
@@ -246,7 +227,7 @@ loginUICache = {
                 }
             },
             editboxes = {
-                font = fonts[11],
+                font = FRAMEWORK_FONTS[11],
                 focussedEditbox = 0,
                 embedLineSize = 2,
                 cursorSize = 2,
@@ -339,8 +320,8 @@ loginUICache = {
                 width = 385,
                 height = 145,
                 iconSize = 100,
-                font = fonts[8],
-                fontScale = 0.4,
+                font = FRAMEWORK_FONTS[8],
+                FRAMEWORK_FONTScale = 0.4,
                 outlineWeight = 3,
                 fontColor = {200, 200, 200, 255},
                 outlineColor = {0, 0, 0, 200},
@@ -363,8 +344,8 @@ loginUICache = {
                 dataPaddingY = 3,
                 width = 270,
                 height = 33,
-                font = fonts[9],
-                fontScale = 0.25,
+                font = FRAMEWORK_FONTS[9],
+                FRAMEWORK_FONTScale = 0.25,
                 fontColor = {100, 100, 100, 255},
                 bgColor = {0, 0, 0, 255},
                 {
@@ -390,8 +371,8 @@ loginUICache = {
             height = 250,
             dataHeight = 0,
             paddingX = -35,
-            font = fonts[7],
-            fontScale = 0.5,
+            font = FRAMEWORK_FONTS[7],
+            FRAMEWORK_FONTScale = 0.5,
             fontColor = {200, 200, 200, 255},
             scrollDuration = 5000,
             scrollDelayDuration = 1250,
@@ -401,14 +382,9 @@ loginUICache = {
     ]]--
 }
 
-loginUICache.serverBanner.serverTitle.width, loginUICache.serverBanner.serverTitle.height = dxGetTextSize(loginUICache.serverBanner.serverTitle.text, dxGetTextWidth(loginUICache.serverBanner.serverTitle.text, 1, loginUICache.serverBanner.serverTitle.font), 1, loginUICache.serverBanner.serverTitle.font)
-loginUICache.serverBanner.serverTitle.width = loginUICache.serverBanner.serverTitle.width + loginUICache.serverBanner.serverTitle.startX
-loginUICache.serverBanner.serverTitle.startX = loginUICache.serverBanner.serverTitle.startX + loginUICache.serverBanner.serverLogo.startX + loginUICache.serverBanner.serverLogo.width
 loginUICache.serverBanner.serverName.width, loginUICache.serverBanner.serverName.height = dxGetTextSize(loginUICache.serverBanner.serverName.text, dxGetTextWidth(loginUICache.serverBanner.serverName.text, 1, loginUICache.serverBanner.serverName.font), 1, loginUICache.serverBanner.serverName.font)
-loginUICache.serverBanner.serverName.width = math.max(loginUICache.serverBanner.serverTitle.width, loginUICache.serverBanner.serverName.width + loginUICache.serverBanner.serverName.startX)
+loginUICache.serverBanner.serverName.width =  math.max(loginUICache.serverBanner.minWidth, loginUICache.serverBanner.serverName.width)
 loginUICache.serverBanner.serverName.height = loginUICache.serverBanner.serverName.height + loginUICache.serverBanner.serverName.paddingY
-loginUICache.serverBanner.serverName.startX = loginUICache.serverBanner.serverName.startX + loginUICache.serverBanner.serverLogo.startX + loginUICache.serverBanner.serverLogo.width
-loginUICache.serverBanner.serverName.startY = loginUICache.serverBanner.serverName.startY + loginUICache.serverBanner.serverTitle.startY + loginUICache.serverBanner.serverTitle.height
 for i, j in ipairs(loginUICache.optionUI) do
     loginUICache.optionUI.height = loginUICache.optionUI.height + loginUICache.optionUI.slotHeight + loginUICache.optionUI.slotPaddingY
     if loginUICache.phaseUI[i] then
@@ -429,7 +405,7 @@ for i, j in ipairs(loginUICache.optionUI) do
                     v.startX = socials_social_startX + ((loginUICache.phaseUI[i].socialLinks.width + loginUICache.phaseUI[i].socialLinks.paddingX)*math.max(0, k - 1))
                 end
             elseif j.optionType == "credits" then
-                local _, credits_dataHeight = dxGetTextSize(loginUICache.phaseUI[i].dataValue, loginUICache.phaseUI[i].width, loginUICache.phaseUI[i].fontScale, loginUICache.phaseUI[i].font)
+                local _, credits_dataHeight = dxGetTextSize(loginUICache.phaseUI[i].dataValue, loginUICache.phaseUI[i].width, loginUICache.phaseUI[i].FRAMEWORK_FONTScale, loginUICache.phaseUI[i].font)
                 loginUICache.phaseUI[i].dataHeight = credits_dataHeight
                 loginUICache.phaseUI[i].scrollDuration = math.max(1, math.ceil((credits_dataHeight + loginUICache.phaseUI[i].height)/loginUICache.phaseUI[i].height))*loginUICache.phaseUI[i].scrollDuration
             end

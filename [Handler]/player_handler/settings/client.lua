@@ -12,4 +12,6 @@
 --[[ Settings ]]--
 ------------------
 
-FRAMEWORK_FONTS = {}
+FRAMEWORK_FONTS = {
+    [1] = dxCreateFont(":beautify_library/files/assets/fonts/poppins_medium.rw", 15)
+}
