@@ -4,6 +4,7 @@
     <min_mta_version server="1.5.9" client="1.5.9"/>
     <oop>true</oop>
 
+    <!-- Includes -->
     <include resource="bone_attach"/>
     <include resource="parachute"/>
 
