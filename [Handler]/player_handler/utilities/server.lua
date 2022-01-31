@@ -16,6 +16,9 @@ loadstring(exports.dbify_library:fetchImports())()
 local imports = {
     type = type,
     ipairs = ipairs,
+    isElement = isElement,
+    getElementType = getElementType,
+    getElementsByType = getElementsByType,
     getTickCount = getTickCount,
     triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent,
@@ -28,12 +31,9 @@ local imports = {
 ---------------------------------------
 
 function showChat(player, bool, isForced)
-
-    if not player or not isElement(player) or player:getimports.type() ~= "player" then return false end
-
+    if (not player or not imports.isElement(player) or (getElementType(player) ~= "player")) then return false end
     imports.triggerClientEvent(player, "Player:onToggleChat", player, bool, isForced)
     return true
-
 end
 
 
@@ -42,16 +42,13 @@ end
 ------------------------------------------------
 
 function getPlayerFromSerial(serial)
-
     if (not serial or (imports.type(serial) ~= "string")) then return false end
-
-    for i, j in imports.ipairs(Element.getAllByimports.type("player")) do
+    for i, j in imports.ipairs(imports.getElementsByType"player")) do
         if imports.getPlayerSerial(j) == serial then
             return j
         end
     end
     return false
-
 end
 
 
@@ -60,13 +57,11 @@ end
 ---------------------------------------------
 
 function getVoidGuestNick()
-
     local voidNick = "Guest_"..math.random(1, 10000)
     while Player(voidNick) do
         voidNick = "Guest_"..math.random(1, 10000)
     end
     return voidNick
-
 end
 
 
@@ -75,10 +70,9 @@ end
 ----------------------------------
 
 addEventHandler("onResourceStart", resource, function()
-
     local serverTickSyncer = Element("Server:TickSyncer")
     Timer(function(serverTickSyncer)
-        if serverTickSyncer and isElement(serverTickSyncer) then
+        if serverTickSyncer and imports.isElement(serverTickSyncer) then
             serverTickSyncer:setData("Server:TickSyncer", 0) --TODO: ...
         end
     end, FRAMEWORK_CONFIGS.Game["Sync_Rate"], 0, serverTickSyncer)
@@ -112,7 +106,7 @@ addEventHandler("onResourceStart", resource, function()
     setMinuteDuration(FRAMEWORK_CONFIGS.Game["Minute_Duration"])
     setGameimports.type(FRAMEWORK_CONFIGS.Game["Game_imports.type"])
     setMapName(FRAMEWORK_CONFIGS.Game["Game_Map"])
-    for i, j in imports.ipairs(Element.getAllByimports.type("player")) do
+    for i, j in imports.ipairs(imports.getElementsByType"player")) do
         if isPlayerInitialized(j) then
             j:setBlurLevel(0)
         end
