@@ -16,7 +16,6 @@ local imports = {
     type = type,
     pairs = pairs,
     ipairs = ipairs,
-    tonumber = tonumber,
     table = table
 }
 
@@ -29,8 +28,6 @@ CCharacter = {
     buffer = {},
 
     fetchCharacters = function(characterID, ...)
-        characterID = imports.tonumber(characterID)
-        if not characterID then return false end
         dbify.character.fetchAll({
             {dbify.character.__connection__.keyColumn, characterID}
         }, ...)
@@ -49,8 +46,6 @@ CCharacter = {
     end,
 
     delete = function(characterID)
-        characterID = imports.tonumber(characterID)
-        if not characterID then return false end
         dbify.character.delete(characterID, function(result)
             if result then
                 CCharacter.buffer[characterID] = nil
