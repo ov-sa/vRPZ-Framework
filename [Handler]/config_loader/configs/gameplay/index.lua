@@ -15,7 +15,7 @@
 configVars = {
 
     ["Game"] = {
-        ["FPS_Limit"] = 120,
+        ["FPS_Limit"] = 100,
         ["Sync_Rate"] = 50,
         ["Draw_Distance_Limit"] = {500, 1000},
         ["Fog_Distance_Limit"] = {5, 50},
