@@ -65,7 +65,7 @@ CCharacter = {
                 callbackReference(result, ...)
             end
             if result and CCharacter.buffer[characterID] then
-                for i, j in imports.pairs(characterDatas) do
+                for i, j in imports.ipairs(characterDatas) do
                     CCharacter.buffer[characterID][(j[1])] = j[2]
                 end
             end
@@ -73,10 +73,18 @@ CCharacter = {
         return true
     end,
 
-    getData = function(characterID, ...)
-        dbify.character.getData(characterID, ...)
-        --USE CALLBACK..
-        --CCharacter.buffer[characterID][data] = value
+    getData = function(characterID, characterDatas, callback, ...)
+        dbify.character.getData(characterID, characterDatas, function(result, ...)
+            local callbackReference = callback
+            if (callbackReference and (imports.type(callbackReference) == "function")) then
+                callbackReference(result, ...)
+            end
+            if result and CCharacter.buffer[characterID] then
+                for i, j in imports.pairs(characterDatas) do
+                    CCharacter.buffer[characterID][j] = result[j]
+                end
+            end
+        end, ...)
         return true
     end
 }
