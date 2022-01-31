@@ -12,4 +12,4 @@
 --[[ Settings ]]--
 ------------------
 
-fonts = {}
+FRAMEWORK_FONTS = {}
