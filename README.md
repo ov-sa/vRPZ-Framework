@@ -9,7 +9,7 @@
 💎**CONSIDER** [**SPONSORING**](https://ko-fi.com/ovStudio) **US TO SUPPORT THE DEVELOPMENT.**
 
 * Completely Open-Source
-* Config Loader Integration
+* Config Loader
 * [DBify Library](https://github.com/ov-sa/DBify-Library) Integration
 * [Assetify Library](https://github.com/ov-sa/Assetify-Library) Integration
 * [Beautify Library](https://github.com/ov-sa/Beautify-Library) Integration
