@@ -23,7 +23,8 @@ local imports = {
     triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent,
     getPlayerSerial = getPlayerSerial,
-    setTimer = setTimer
+    setTimer = setTimer,
+    outputChatBox = outputChatBox
 }
 
 
@@ -32,7 +33,7 @@ local imports = {
 ---------------------------------------
 
 function showChat(player, bool, isForced)
-    if (not player or not imports.isElement(player) or (getElementType(player) ~= "player")) then return false end
+    if (not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player")) then return false end
     imports.triggerClientEvent(player, "Player:onToggleChat", player, bool, isForced)
     return true
 end
@@ -135,7 +136,7 @@ addEventHandler("onResourceStart", resource, function()
                             local characterIdentity = getCharacterData(characterID, "identity")
                             savePlayerProgress(source)
                             imports.triggerEvent("Player:onRequestShowLoginScreen", source)
-                            outputChatBox("#FFFFFF- #5050FF"..characterIdentity.name.."#FFFFFF left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)    
+                            imports.outputChatBox("#FFFFFF- #5050FF"..characterIdentity.name.."#FFFFFF left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)    
                         end
                     end
                 end
