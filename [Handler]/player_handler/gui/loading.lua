@@ -74,14 +74,14 @@ imports.addEventHandler("onClientRender", root, function()
 end)
 
 
-----------------------------------------------------
---[[ Events: On Player Show/Hide Loading Screen ]]--
-----------------------------------------------------
+------------------------------------------------
+--[[ Events: On Player Show/Hide Loading UI ]]--
+------------------------------------------------
 
 imports.addEvent("Player:onHideLoadingUI", true)
 imports.addEventHandler("Player:onHideLoadingUI", root, function(isLoginMusicToBeShuffled)
 
-    if loadingScreenCache.animStatus == "forward" then return false end
+    if (loadingScreenCache.animStatus == "forward") then return false end
     
     loadingScreenCache.animStatus = "forward"
     loadingScreenCache.tickCounter = CLIENT_CURRENT_TICK
@@ -94,7 +94,7 @@ end)
 imports.addEvent("Player:onShowLoadingUI", true)
 imports.addEventHandler("Player:onShowLoadingUI", root, function()
 
-    if loadingScreenCache.animStatus == "backward" or loadingScreenCache.animStatus == "reverse_backward" then return false end
+    if (loadingScreenCache.animStatus == "backward") or (loadingScreenCache.animStatus == "reverse_backward") then return false end
 
     loadingScreenCache.animStatus = "reverse_backward"
     loadingScreenCache.tickCounter = CLIENT_CURRENT_TICK
