@@ -13,7 +13,6 @@
 -----------------
 
 local imports = {
-    getTickCount = getTickCount,
     triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent
 }
@@ -75,7 +74,7 @@ addEventHandler("onResourceStart", resource, function()
     local serverTickSyncer = Element("Server:TickSyncer")
     Timer(function(serverTickSyncer)
         if serverTickSyncer and isElement(serverTickSyncer) then
-            serverTickSyncer:setData("Server:TickSyncer", imports.getTickCount())
+            serverTickSyncer:setData("Server:TickSyncer", 0) --TODO: ...
         end
     end, 50, 0, serverTickSyncer)
 
@@ -131,7 +130,8 @@ addEventHandler("onPlayerCommand", root, function(cmd)
                     local isPlayerOnLogoutCoolDown = false
                     local playerLoginTick = getPlayerLoginTick(source)
                     if playerLoginTick then
-                        local elapsedDuration = imports.getTickCount() - playerLoginTick
+                        --TODO: ...
+                        --local elapsedDuration = imports.getTickCount() - playerLoginTick
                         if elapsedDuration < serverLogoutCoolDownDuration then
                             isPlayerOnLogoutCoolDown = serverLogoutCoolDownDuration - elapsedDuration
                         end
