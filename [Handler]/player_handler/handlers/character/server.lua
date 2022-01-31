@@ -50,12 +50,16 @@ CCharacter = {
         return true
     end,
 
-    delete = function(characterID)
-        dbify.character.delete(characterID, function(result)
+    delete = function(characterID, callback, ...)
+        dbify.character.delete(characterID, function(result, arguments)
             if result then
                 CCharacter.buffer[characterID] = nil
             end
-        end)
+            local callbackReference = callback
+            if (callbackReference and (imports.type(callbackReference) == "function")) then
+                callbackReference(result, arguments)
+            end
+        end, ...)
         return true
     end,
 
