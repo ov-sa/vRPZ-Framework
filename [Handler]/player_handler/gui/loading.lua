@@ -78,8 +78,8 @@ end)
 --[[ Events: On Player Show/Hide Loading Screen ]]--
 ----------------------------------------------------
 
-imports.addEvent("onPlayerShowLoadingScreen", true)
-imports.addEventHandler("onPlayerShowLoadingScreen", root, function(isLoginMusicToBeShuffled)
+imports.addEvent("Player:onHideLoadingUI", true)
+imports.addEventHandler("Player:onHideLoadingUI", root, function(isLoginMusicToBeShuffled)
 
     if loadingScreenCache.animStatus == "forward" then return false end
     
@@ -91,8 +91,8 @@ imports.addEventHandler("onPlayerShowLoadingScreen", root, function(isLoginMusic
 
 end)
 
-imports.addEvent("onPlayerHideLoadingScreen", true)
-imports.addEventHandler("onPlayerHideLoadingScreen", root, function()
+imports.addEvent("Player:onShowLoadingUI", true)
+imports.addEventHandler("Player:onShowLoadingUI", root, function()
 
     if loadingScreenCache.animStatus == "backward" or loadingScreenCache.animStatus == "reverse_backward" then return false end
 

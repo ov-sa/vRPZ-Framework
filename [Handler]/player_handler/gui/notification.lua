@@ -96,8 +96,8 @@ end)
 --[[ Event: On Display Notification ]]--
 ----------------------------------------
 
-imports.addEvent("Player:onDisplayNotification", true)
-imports.addEventHandler("Player:onDisplayNotification", root, function(notifMessage, notifColor)
+imports.addEvent("Player:onNotification", true)
+imports.addEventHandler("Player:onNotification", root, function(notifMessage, notifColor)
 
     if not notifMessage or imports.type(notifMessage) ~= "string" or notifMessage == "" then return false end
 
