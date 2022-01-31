@@ -58,7 +58,7 @@ local notifUI = {
 --[[ Event: On Client Render ]]--
 ---------------------------------
 
-beautify.render.create(function()
+addEventHandler("onClientRender", function()
 
     if #notifUI.buffer <= 0 then return false end
 
@@ -95,7 +95,7 @@ beautify.render.create(function()
         end
     end
 
-end)
+end, true, "low-10") --TODO: DOES BEAUTIFY SUPPORTS ORDERING?
 
 
 --------------------------------
