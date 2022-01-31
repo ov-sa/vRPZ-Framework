@@ -18,11 +18,151 @@
     <script src="utilities/server.lua" type="server"/>
     <script src="settings/client.lua" type="client" cache="false"/>
 
-    <!-- GUI: Login -->
-    <script src="gui/login/cache.lua" type="client" cache="false"/>
-    <script src="gui/login/manager.lua" type="client" cache="false"/>
-    <script src="gui/login/renderer.lua" type="client" cache="false"/>
-    <script src="gui/login/toggler.lua" type="client" cache="false"/>
+    <!-- GUIs -->
+    <script src="gui/loadingScreen.lua" type="client" cache="false"/>
+    <script src="gui/notifications.lua" type="client" cache="false"/>
+    <script src="gui/loginScreen.lua" type="client" cache="false"/>
+    <script src="gui/respawnScreen.lua" type="client" cache="false"/>
+
+    <!-- Files: Fonts -->
+    <file src="files/fonts/courgette.ttf"/>
+    <file src="files/fonts/architectsdaughter.ttf"/>
+    <file src="files/fonts/signika_semibold.ttf"/>
+
+    <!-- Files: Shaders -->
+    <file src="files/shaders/texreplace.fx"/>
+
+    <!-- Files: Images: Login -->
+    <file src="files/images/login/login/background.png"/>
+    <file src="files/images/login/credits/background.png"/>
+
+    <!-- Files: Images: loading -->
+    <file src="files/images/loading/loader.png"/>
+
+    <!-- Files: Images: Characters: Male -->
+    <file src="files/images/character/male/races/caucasian/body.png"/>
+    <file src="files/images/character/male/races/caucasian/hair.png"/>
+    <file src="files/images/character/male/races/hispanic/body.png"/>
+    <file src="files/images/character/male/races/hispanic/hair.png"/>
+    <file src="files/images/character/male/races/african_american/body.png"/>
+    <file src="files/images/character/male/races/african_american/hair.png"/>
+    <file src="files/images/character/male/races/asian/body.png"/>
+    <file src="files/images/character/male/races/asian/hair.png"/>
+    <file src="files/images/character/male/shirts/1.png"/>
+    <file src="files/images/character/male/shirts/2.png"/>
+    <file src="files/images/character/male/shirts/3.png"/>
+    <file src="files/images/character/male/shirts/4.png"/>
+    <file src="files/images/character/male/shirts/5.png"/>
+    <file src="files/images/character/male/shirts/6.png"/>
+    <file src="files/images/character/male/shirts/7.png"/>
+    <file src="files/images/character/male/trousers/1.png"/>
+    <file src="files/images/character/male/trousers/2.png"/>
+    <file src="files/images/character/male/trousers/3.png"/>
+    <file src="files/images/character/male/trousers/4.png"/>
+    <file src="files/images/character/male/shoes/1.png"/>
+    <file src="files/images/character/male/shoes/2.png"/>
+
+    <!-- Files: Images: Characters: Female -->
+    <file src="files/images/character/female/races/caucasian/body.png"/>
+    <file src="files/images/character/female/races/caucasian/hair.png"/>
+    <file src="files/images/character/female/races/hispanic/body.png"/>
+    <file src="files/images/character/female/races/hispanic/hair.png"/>
+    <file src="files/images/character/female/races/african_american/body.png"/>
+    <file src="files/images/character/female/races/african_american/hair.png"/>
+    <file src="files/images/character/female/races/asian/body.png"/>
+    <file src="files/images/character/female/races/asian/hair.png"/>
+    <file src="files/images/character/female/shirts/1.png"/>
+    <file src="files/images/character/female/shirts/2.png"/>
+    <file src="files/images/character/female/shirts/3.png"/>
+    <file src="files/images/character/female/shirts/4.png"/>
+    <file src="files/images/character/female/shirts/5.png"/>
+    <file src="files/images/character/female/shirts/6.png"/>
+    <file src="files/images/character/female/shirts/7.png"/>
+    <file src="files/images/character/female/trousers/1.png"/>
+    <file src="files/images/character/female/trousers/2.png"/>
+    <file src="files/images/character/female/trousers/3.png"/>
+    <file src="files/images/character/female/trousers/4.png"/>
+    <file src="files/images/character/female/shoes/1.png"/>
+    <file src="files/images/character/female/shoes/2.png"/>
+
+    <!-- Files: Images: HUD -->
+    <file src="files/images/hud/vignette.png"/>
+    <file src="files/images/hud/right_triangle/default.png"/>
+    <file src="files/images/hud/right_triangle/flipped.png"/>
+    <file src="files/images/hud/right_triangle/inverted.png"/>
+    <file src="files/images/hud/right_triangle/flipped_inverted.png"/>
+    <file src="files/images/hud/curved_square/left.png"/>
+    <file src="files/images/hud/curved_square/right.png"/>
+    <file src="files/images/hud/curved_square/top_left.png"/>
+    <file src="files/images/hud/curved_square/top_right.png"/>
+    <file src="files/images/hud/curved_square/bottom_left.png"/>
+    <file src="files/images/hud/curved_square/bottom_right.png"/>
+    <file src="files/images/hud/curved_square/square.png"/>
+    <file src="files/images/hud/lock/locked.png"/>
+    <file src="files/images/hud/lock/unlocked.png"/>
+    <file src="files/images/hud/arrow.png"/>
+    <file src="files/images/hud/crosshair.png"/>
+    <file src="files/images/hud/status/blood.png"/>
+    <file src="files/images/hud/status/infection.png"/>
+    <file src="files/images/hud/status/bleeding.png"/>
+    <file src="files/images/hud/status/brokenbone.png"/>
+    <file src="files/images/hud/status/hunger.png"/>
+    <file src="files/images/hud/status/thirst.png"/>
+    <file src="files/images/hud/status/temperature.png"/>
+    <file src="files/images/hud/status/visibility.png"/>
+    <file src="files/images/hud/status/volume.png"/>
+
+    <!-- Files: Images: Inventory: UI -->
+    <file src="files/images/inventory/ui/equipment/body.png"/>
+    <file src="files/images/inventory/ui/equipment/itemBox/itemSlot.png"/>
+    <file src="files/images/inventory/ui/equipment/itemBox/itemNameSlot.png"/>
+    <file src="files/images/inventory/ui/equipment/itemBox/template_2.png"/>
+    <file src="files/images/inventory/ui/primary_slot.png"/>
+    <file src="files/images/inventory/ui/secondary_slot.png"/>
+    <file src="files/images/inventory/ui/tertiary_slot.png"/>
+    <file src="files/images/inventory/ui/shirt_slot.png"/>
+    <file src="files/images/inventory/ui/helmet_slot.png"/>
+    <file src="files/images/inventory/ui/armor_slot.png"/>
+    <file src="files/images/inventory/ui/torso_slot.png"/>
+    <file src="files/images/inventory/ui/shoes_slot.png"/>
+    <file src="files/images/inventory/ui/backpack_slot.png"/>
+
+    <!-- Files: Images: Inventory: Icons: Weapons -->
+    <file src="files/images/inventory/icons/weapons/primary/awm.png"/>
+    <file src="files/images/inventory/icons/weapons/primary/colt_model_733.png"/>
+    <file src="files/images/inventory/icons/weapons/primary/double_barreled_shotgun.png"/>
+    <file src="files/images/inventory/icons/weapons/primary/fn_fal_g.png"/>
+    <file src="files/images/inventory/icons/weapons/primary/m60.png"/>
+    <file src="files/images/inventory/icons/weapons/primary/norinco_type_56.png"/>
+    <file src="files/images/inventory/icons/weapons/primary/remington_700.png"/>
+    <file src="files/images/inventory/icons/weapons/primary/mp5.png"/>
+    <file src="files/images/inventory/icons/weapons/secondary/desert_eagle.png"/>
+    <file src="files/images/inventory/icons/weapons/secondary/glock_17.png"/>
+    <file src="files/images/inventory/icons/weapons/secondary/glock_17_silenced.png"/>
+    <file src="files/images/inventory/icons/weapons/special/axe.png"/>
+
+    <!-- Files: Images: Inventory: Icons: Ammos -->
+    <file src="files/images/inventory/icons/ammos/pistol_ammo.png"/>
+    <file src="files/images/inventory/icons/ammos/assault_ammo.png"/>
+    <file src="files/images/inventory/icons/ammos/shotgun_ammo.png"/>
+    <file src="files/images/inventory/icons/ammos/sniper_ammo.png"/>
+    <file src="files/images/inventory/icons/ammos/smg_ammo.png"/>
+
+    <!-- Files: Images: Inventory: Icons: Medicals -->
+    <file src="files/images/inventory/icons/medicals/painkiller.png"/>
+    <file src="files/images/inventory/icons/medicals/morphine.png"/>
+    <file src="files/images/inventory/icons/medicals/firstaidkit.png"/>
+
+    <!-- Files: Images: Inventory: Icons: Backpacks -->
+    <file src="files/images/inventory/icons/backpacks/alice_backpack.png"/>
+    <file src="files/images/inventory/icons/backpacks/coyote_backpack.png"/>
+    <file src="files/images/inventory/icons/backpacks/small_backpack.png"/>
+
+    <!-- Files: Images: Inventory: Icons: Nutritions -->
+    <file src="files/images/inventory/icons/nutritions/beans_can.png"/>
+    <file src="files/images/inventory/icons/nutritions/pasta_can.png"/>
+    <file src="files/images/inventory/icons/nutritions/soda_can.png"/>
+    <file src="files/images/inventory/icons/nutritions/water_bottle.png"/>
 
     <!-- Exports: Shared: Main -->
     <export function="getServerTick" type="shared"/>
