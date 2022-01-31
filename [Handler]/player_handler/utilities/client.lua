@@ -15,6 +15,8 @@
 loadstring(exports.beautify_library:fetchImports())()
 local imports = {
     tonumber = tonumber,
+    getElementType = getElementType,
+    guiSetInputMode = guiSetInputMode,
     setWeather = setWeather,
     setTime = setTime,
     showChat = showChat,
@@ -30,14 +32,12 @@ local imports = {
 ------------------------------------
 
 addEventHandler("onClientGUIClick", root, function()
-
-    local guiElement = source:getType()
-    if guiElement == "gui-edit" or guiElement == "gui-memo" then
-        GuiElement.setInputMode("no_binds_when_editing")
+    local guiElement = imports.getElementType(source)
+    if ((guiElement == "gui-edit") or (guiElement == "gui-memo")) then
+        imports.guiSetInputMode("no_binds_when_editing")
     else
-        GuiElement.setInputMode("allow_binds")
+        imports.guiSetInputMode("allow_binds")
     end
-
 end)
 
 
