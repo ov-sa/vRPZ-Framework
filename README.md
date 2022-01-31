@@ -2,7 +2,7 @@
 
 **━ Maintainer(s):** [**Tron**](https://github.com/OvileAmriam)
 
-**vRP** is a startup **Roleplay Template** focussing on optimization and integrating existing libraries created under us. You must consider using this framework only if you are a developer and experienced enough to extend it. This is not recommended for production ready server rather serving as core.
+**vRPZ** is a startup **Dayz-Roleplay Template** focussing on optimization and integrating existing vStudio licensed libraries. You must consider using this framework only if you are a developer and experienced enough to extend it. This is not recommended for production ready server rather serving as core.
 
 ## ━ Features
 
