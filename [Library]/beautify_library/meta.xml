@@ -1,0 +1,245 @@
+<meta>
+
+    <info author="OvileAmriam" name="Beautify Library" type="Library" version="1.0.0"/>
+
+    <!-- Settings & Utilities -->
+    <script src="utilities/client.lua" type="client"/>
+    <script src="settings/client.lua" type="client"/>
+
+    <!-- Exports -->
+    <script src="exports/essential.lua" type="client"/>
+    <script src="exports/window.lua" type="client"/>
+    <script src="exports/gridlist.lua" type="client"/>
+    <script src="exports/button.lua" type="client"/>
+    <script src="exports/label.lua" type="client"/>
+    <script src="exports/slider.lua" type="client"/>
+    <script src="exports/selector.lua" type="client"/>
+    <script src="exports/checkbox.lua" type="client"/>
+    <script src="exports/deckpane.lua" type="client"/>
+    <script src="exports/deck.lua" type="client"/>
+    <script src="exports/card.lua" type="client"/>
+
+    <!-- Handlers -->
+    <script src="handlers/logger/client.lua" type="client"/>
+    <script src="handlers/cache/asset.lua" type="client"/>
+    <script src="handlers/cache/event.lua" type="client"/>
+    <script src="handlers/cache/template.lua" type="client"/>
+    <script src="handlers/cache/bundler.lua" type="client"/>
+    <script src="handlers/element/input.lua" type="client"/>
+    <script src="handlers/element/manager.lua" type="client"/>
+    <script src="handlers/element/attacher.lua" type="client"/>
+    <script src="handlers/element/renderer.lua" type="client"/>
+    <script src="handlers/renderer/component/scrollbar.lua" type="client"/>
+    <script src="handlers/renderer/window.lua" type="client"/>
+    <script src="handlers/renderer/gridlist.lua" type="client"/>
+    <script src="handlers/renderer/button.lua" type="client"/>
+    <script src="handlers/renderer/label.lua" type="client"/>
+    <script src="handlers/renderer/slider.lua" type="client"/>
+    <script src="handlers/renderer/selector.lua" type="client"/>
+    <script src="handlers/renderer/checkbox.lua" type="client"/>
+    <script src="handlers/renderer/deckpane.lua" type="client"/>
+    <script src="handlers/renderer/deck.lua" type="client"/>
+    <script src="handlers/renderer/card.lua" type="client"/>
+
+    <!-- Configurations -->
+    <script src="configurations/assets/initial.lua" type="client"/>
+    <script src="configurations/assets/images.lua" type="client"/>
+    <script src="configurations/elements/initial.lua" type="client"/>
+    <script src="configurations/elements/window.lua" type="client"/>
+    <script src="configurations/elements/gridlist.lua" type="client"/>
+    <script src="configurations/elements/button.lua" type="client"/>
+    <script src="configurations/elements/label.lua" type="client"/>
+    <script src="configurations/elements/slider.lua" type="client"/>
+    <script src="configurations/elements/selector.lua" type="client"/>
+    <script src="configurations/elements/checkbox.lua" type="client"/>
+    <script src="configurations/elements/deckpane.lua" type="client"/>
+    <script src="configurations/elements/card.lua" type="client"/>
+    <script src="configurations/elements/deck.lua" type="client"/>
+    <script src="configurations/events/initial.lua" type="client"/>
+    <script src="configurations/events/generic.lua" type="client"/>
+    <script src="configurations/templates/initial.lua" type="client"/>
+    <script src="configurations/templates/scrollbar.lua" type="client"/>
+    <script src="configurations/templates/window.lua" type="client"/>
+    <script src="configurations/templates/card.lua" type="client"/>
+    <script src="configurations/templates/gridlist.lua" type="client"/>
+    <script src="configurations/templates/button.lua" type="client"/>
+    <script src="configurations/templates/label.lua" type="client"/>
+    <script src="configurations/templates/slider.lua" type="client"/>
+    <script src="configurations/templates/selector.lua" type="client"/>
+    <script src="configurations/templates/checkbox.lua" type="client"/>
+    <script src="configurations/templates/deckpane.lua" type="client"/>
+    <script src="configurations/templates/deck.lua" type="client"/>
+
+    <!-- Files: Assets: Fonts -->
+    <file src="files/assets/fonts/teko_regular.rw"/>
+    <file src="files/assets/fonts/teko_medium.rw"/>
+    <file src="files/assets/fonts/signika_semibold.rw"/>
+    <file src="files/assets/fonts/poppins_medium.rw"/>
+
+    <!-- Files: Assets: Images -->
+    <file src="files/assets/images/canvas/circle.rw"/>
+    <file src="files/assets/images/arrow/left.rw"/>
+    <file src="files/assets/images/arrow/right.rw"/>
+    <file src="files/assets/images/arrow/top.rw"/>
+    <file src="files/assets/images/arrow/bottom.rw"/>
+    <file src="files/assets/images/tick_box/regular.rw"/>
+    <file src="files/assets/images/collar/left.rw"/>
+    <file src="files/assets/images/collar/right.rw"/>
+    <file src="files/assets/images/collar/top.rw"/>
+    <file src="files/assets/images/collar/bottom.rw"/>
+    <file src="files/assets/images/right_triangle/default.rw"/>
+    <file src="files/assets/images/right_triangle/flipped.rw"/>
+    <file src="files/assets/images/right_triangle/inverted.rw"/>
+    <file src="files/assets/images/right_triangle/flipped_inverted.rw"/>
+    <file src="files/assets/images/curved_square/regular/left.rw"/>
+    <file src="files/assets/images/curved_square/regular/right.rw"/>
+    <file src="files/assets/images/curved_square/regular/top_left.rw"/>
+    <file src="files/assets/images/curved_square/regular/top_right.rw"/>
+    <file src="files/assets/images/curved_square/regular/bottom_left.rw"/>
+    <file src="files/assets/images/curved_square/regular/bottom_right.rw"/>
+    <file src="files/assets/images/curved_square/regular/square.rw"/>
+    <file src="files/assets/images/curved_square/semi_thick/left.rw"/>
+    <file src="files/assets/images/curved_square/semi_thick/right.rw"/>
+    <file src="files/assets/images/curved_square/semi_thick/top_left.rw"/>
+    <file src="files/assets/images/curved_square/semi_thick/top_right.rw"/>
+    <file src="files/assets/images/curved_square/semi_thick/bottom_left.rw"/>
+    <file src="files/assets/images/curved_square/semi_thick/bottom_right.rw"/>
+    <file src="files/assets/images/curved_square/semi_thick/square.rw"/>
+
+    <!-- Params: fetchImports() | Returns Data; Else false Boolean -->
+    <export function="fetchImports" type="client"/>
+
+    <!-- Params: fetchAssets() | Returns Data -->
+    <export function="fetchAssets" type="client"/>
+
+    <!-- Params: clearResourceUITemplates() | Returns Boolean -->
+    <export function="clearResourceUITemplates" type="client"/>
+
+    <!-- Params: clearResourceUIElements() | Returns Boolean -->
+    <export function="clearResourceUIElements" type="client"/>
+
+    <!-- Params: getUITemplate(elementType) | Returns Data; Else false Boolean -->
+    <export function="getUITemplate" type="client"/>
+
+    <!-- Params: setUITemplate(elementType, elementTemplate) | Returns Boolean -->
+    <export function="setUITemplate" type="client"/>
+
+    <!-- Params: getUIParent(element) | Returns Element; Else false Boolean -->
+    <export function="getUIParent" type="client"/>
+
+    <!-- Params: getUIViewRT(element) | Returns Element; Else false Boolean -->
+    <export function="getUIViewRT" type="client"/>
+
+    <!-- Params: isUIBeingForceRendered(element) | Returns Boolean -->
+    <export function="isUIBeingForceRendered" type="client"/>
+
+    <!-- Params: isUIValid(element) | Returns Boolean -->
+    <export function="isUIValid" type="client"/>
+
+    <!-- Params: isUIVisible(element) | Returns Boolean -->
+    <export function="isUIVisible" type="client"/>
+
+    <!-- Params: setUIVisible(element, state) | Returns Boolean -->
+    <export function="setUIVisible" type="client"/>
+
+    <!-- Params: isUIDraggable(element) | Returns Boolean -->
+    <export function="isUIDraggable" type="client"/>
+
+    <!-- Params: setUIDraggable(element, state) | Returns Boolean -->
+    <export function="setUIDraggable" type="client"/>
+
+    <!-- Params: isUIDisabled(element) | Returns Boolean -->
+    <export function="isUIDisabled" type="client"/>
+
+    <!-- Params: setUIDisabled(element, state) | Returns Boolean -->
+    <export function="setUIDisabled" type="client"/>
+
+    <!-- Params: getUIPosition(element) | Returns Float, Float; Else false Boolean -->
+    <export function="getUIPosition" type="client"/>
+
+    <!-- Params: setUIPosition(element, x, y) | Returns Boolean -->
+    <export function="setUIPosition" type="client"/>
+
+    <!-- Exports: Element: Window -->
+    <export function="createWindow" type="client"/>
+
+    <!-- Exports: Element: Gridlist -->
+    <export function="createGridlist" type="client"/>
+    <export function="countGridlistColumns" type="client"/>
+    <export function="addGridlistColumn" type="client"/>
+    <export function="removeGridlistColumn" type="client"/>
+    <export function="setGridlistColumnName" type="client"/>
+    <export function="getGridlistColumnName" type="client"/>
+    <export function="countGridlistRows" type="client"/>
+    <export function="clearGridlistRows" type="client"/>
+    <export function="addGridlistRow" type="client"/>
+    <export function="removeGridlistRow" type="client"/>
+    <export function="setGridlistRowData" type="client"/>
+    <export function="getGridlistRowData" type="client"/>
+    <export function="setGridlistSelection" type="client"/>
+    <export function="getGridlistSelection" type="client"/>
+
+    <!-- Exports: Element: Button -->
+    <export function="createButton" type="client"/>
+    <export function="setButtonText" type="client"/>
+    <export function="getButtonText" type="client"/>
+
+    <!-- Exports: Element: Label -->
+    <export function="createLabel" type="client"/>
+    <export function="setLabelText" type="client"/>
+    <export function="getLabelText" type="client"/>
+    <export function="clearLabelColor" type="client"/>
+    <export function="setLabelColor" type="client"/>
+    <export function="getLabelColor" type="client"/>
+    <export function="setLabelHorizontalAlignment" type="client"/>
+    <export function="getLabelHorizontalAlignment" type="client"/>
+    <export function="setLabelVerticalAlignment" type="client"/>
+    <export function="getLabelVerticalAlignment" type="client"/>
+
+    <!-- Exports: Element: Slider -->
+    <export function="createSlider" type="client"/>
+    <export function="setSliderPercent" type="client"/>
+    <export function="getSliderPercent" type="client"/>
+    <export function="clearSliderText" type="client"/>
+    <export function="setSliderText" type="client"/>
+    <export function="getSliderText" type="client"/>
+    <export function="clearSliderTextColor" type="client"/>
+    <export function="setSliderTextColor" type="client"/>
+    <export function="getSliderTextColor" type="client"/>
+
+    <!-- Exports: Element: Selector -->
+    <export function="createSelector" type="client"/>
+    <export function="setSelectorDataList" type="client"/>
+    <export function="getSelectorDataList" type="client"/>
+    <export function="clearSelectorText" type="client"/>
+    <export function="setSelectorText" type="client"/>
+    <export function="getSelectorText" type="client"/>
+    <export function="clearSelectorTextColor" type="client"/>
+    <export function="setSelectorTextColor" type="client"/>
+    <export function="getSelectorTextColor" type="client"/>
+    <export function="setSelectorSelection" type="client"/>
+    <export function="getSelectorSelection" type="client"/>
+
+    <!-- Exports: Element: Checkbox -->
+    <export function="createCheckbox" type="client"/>
+    <export function="setCheckboxSelection" type="client"/>
+    <export function="getCheckboxSelection" type="client"/>
+    <export function="clearCheckboxText" type="client"/>
+    <export function="setCheckboxText" type="client"/>
+    <export function="getCheckboxText" type="client"/>
+    <export function="clearCheckboxTextColor" type="client"/>
+    <export function="setCheckboxTextColor" type="client"/>
+    <export function="getCheckboxTextColor" type="client"/>
+
+    <!-- Exports: Element: Deckpane -->
+    <export function="createDeckpane" type="client"/>
+
+    <!-- Exports: Element: Deck -->
+    <export function="createDeck" type="client"/>
+    <export function="setDeckMaximized" type="client"/>
+    <export function="isDeckMaximized" type="client"/>
+
+    <!-- Exports: Element: Card -->
+    <export function="createCard" type="client"/>
+
+</meta>
