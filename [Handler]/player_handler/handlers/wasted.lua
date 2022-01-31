@@ -115,13 +115,12 @@ addEventHandler("Player:onDeath", root, function(killer, headshot, weapon, bodyp
         end
     end
 
-    local deathAnim = (bodypart and deathAnimations[bodypart]) or deathAnimations.default
     imports.killPed(source)
     imports.setTimer(function(ped, deathAnim)
         if ped and imports.isElement(ped) then
             imports.setPedAnimation(ped, deathAnim[1], deathAnim[2], -1, false, true, false)
         end
-    end, 200, 1, ped, deathAnim)
+    end, 200, 1, ped, (bodypart and deathAnimations[bodypart]) or deathAnimations.default)
     imports.setTimer(function(ped)
         if ped and imports.isElement(ped) then
             imports.setElementHealth(ped, 0)
@@ -151,7 +150,7 @@ imports.addEventHandler("Player:onRespawn", root, function(spawnPoint)
     CCharacter.setData(characterID, "dead", false)
     --TODO: APPEND FUNCTION TO RETRIEVE CHARACTER'S CURRENT CLOTHES..
     imports.triggerClientEvent("Player:onSyncPedClothes", source, source, getPlayerClothes(source))
-    imports.triggerClientEvent(source, "Player:onClientRespawn", source)
+    imports.triggerClientEvent(source, "Client:onRespawn", source)
     imports.triggerClientEvent(source, "Player:onHideLoadingUI", source)
     imports.showChat(source, true)
 end)

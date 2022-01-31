@@ -124,12 +124,12 @@ addEventHandler("onPlayerGenerateRespawnPoint", root, function()
 end)
 
 
-----------------------------------
---[[ Event: On Client Respawn ]]--
-----------------------------------
+---------------------------
+--[[ Event: On Respawn ]]--
+---------------------------
 
-addEvent("Player:onClientRespawn", true)
-addEventHandler("Player:onClientRespawn", root, function()
+addEvent("Client:onRespawn", true)
+addEventHandler("Client:onRespawn", root, function()
     if not isPlayerInitialized(localPlayer) then return false end
 
     if respawnerUI.state then hideRespawnScreen() end
