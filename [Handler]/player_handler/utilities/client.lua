@@ -17,6 +17,7 @@ local imports = {
     tonumber = tonumber,
     setWeather = setWeather,
     setTime = setTime,
+    showChat = showChat,
     toggleControl = toggleControl,
     setTrafficLightState = setTrafficLightState,
     setPedTargetingMarkerEnabled = setPedTargetingMarkerEnabled,
@@ -44,22 +45,35 @@ end)
 --[[ Function: Overrides Show Chat ]]--
 ---------------------------------------
 
-local _showChat = showChat
 function showChat(bool, isForced)
-
     if isForced then
-        return _showChat(bool)
+        return imports.showChat(bool)
     else
         if bool then
-            --if isPlayerInitialized(localPlayer) and not isLoginScreenVisible() and not isWastedScreenVisible() and not isSpawnScreenVisible() and not isDashboardVisible() and not isMapOpened() and getClientSetting("checkbox", "chat_state") then
-              --  return _showChat(bool)
-            --end
+            local conditionChecks = {
+                isPlayerInitialized(localPlayer),
+                not isLoginScreenVisible(),
+                not isWastedScreenVisible(),
+                not isSpawnScreenVisible(),
+                not isDashboardVisible(),
+                not isMapOpened(),
+                not isMapOpened()
+            }
+            local isStateValid = true
+            for i, j in imports.ipairs(conditionChecks) do
+                if not j then
+                    isStateValid = false
+                    break
+                end
+            end
+            if isStateValid then
+                return imports.showChat(bool)
+            end
         else
-            return _showChat(bool)
+            return imports.showChat(bool)
         end
         return false
     end
-
 end
 addEvent("Player:onToggleChat", true)
 addEventHandler("Player:onToggleChat", root, showChat)
