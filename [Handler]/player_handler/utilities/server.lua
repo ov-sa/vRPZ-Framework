@@ -1,10 +1,9 @@
 ----------------------------------------------------------------
 --[[ Resource: Player Handler
      Script: utilities: server.lua
-     Server: -
-     Author: OvileAmriam
-     Developer: -
-     DOC: 15/01/2021 (OvileAmriam)
+     Author: vStudio
+     Developer(s): Tron
+     DOC: 31/01/2022
      Desc: Server Sided Utilities ]]--
 ----------------------------------------------------------------
 
