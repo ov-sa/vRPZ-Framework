@@ -1,12 +1,22 @@
 ----------------------------------------------------------------
 --[[ Resource: Player Handler
-     Script: gui: notifications.lua
-     Server: -
-     Author: OvileAmriam
-     Developer: -
-     DOC: 18/11/2020 (OvileAmriam)
-     Desc: Notifications Handler ]]--
+     Script: gui: notification.lua
+     Author: vStudio
+     Developer(s): Mario, Tron
+     DOC: 31/01/2022
+     Desc: Notification Handler ]]--
 ----------------------------------------------------------------
+
+
+-----------------
+--[[ Imports ]]--
+-----------------
+
+local imports = {
+    type = type,
+    table = table,
+    math = math
+}
 
 
 -------------------
@@ -70,7 +80,7 @@ beautify.render.create(function()
         dxDrawBorderedText(notifUI.fontBorderWeight, {notifUI.fontBorderColor[1], notifUI.fontBorderColor[2], notifUI.fontBorderColor[3], notifUI.fontBorderColor[4]*notifAlphaPercent}, j.text, notif_offsetX, notif_offsetY, notif_offsetX + notif_width, notif_offsetY + notif_height, tocolor(notifFontColor[1], notifFontColor[2], notifFontColor[3], notifFontColor[4]*notifAlphaPercent), 1, notifUI.font, "center", "center", true, false, false, false, true)
         if j.slideStatus == "backward" then
             if math.round(notifAlphaPercent, 2) == 0 then
-                table.remove(notifUI.buffer, i)
+                imports.table.remove(notifUI.buffer, i)
             end
         end
     end
@@ -86,9 +96,9 @@ end)
 addEvent("Player:onDisplayNotification", true)
 addEventHandler("Player:onDisplayNotification", root, function(notifMessage, notifColor)
 
-    if not notifMessage or type(notifMessage) ~= "string" or notifMessage == "" then return false end
+    if not notifMessage or imports.type(notifMessage) ~= "string" or notifMessage == "" then return false end
 
-    table.insert(notifUI.buffer, {
+    imports.table.insert(notifUI.buffer, {
         text = notifMessage,
         fontColor = notifColor,
         slideStatus = "forward",

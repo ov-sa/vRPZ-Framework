@@ -2,7 +2,7 @@
 --[[ Resource: Player Handler
      Script: utilities: client.lua
      Author: vStudio
-     Developer(s): Tron
+     Developer(s): Mario, Tron
      DOC: 31/01/2022
      Desc: Client Sided Utilities ]]--
 ----------------------------------------------------------------
