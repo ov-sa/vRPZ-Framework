@@ -14,7 +14,10 @@
 
 local imports = {
     addEvent = addEvent,
-    addEventHandler = addEventHandler
+    addEventHandler = addEventHandler,
+    triggerEvent = triggerEvent,
+    dxDrawRectangle = dxDrawRectangle,
+    dxDrawImage = dxDrawImage
 }
 
 
@@ -65,8 +68,8 @@ imports.addEventHandler("onClientRender", root, function()
     if math.round(loadingScreenCache.loader.rotationValue, 2) == 360 then
         loadingScreenCache.loader.tickCounter = CLIENT_CURRENT_TICK
     end
-    dxDrawRectangle(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], tocolor(0, 0, 0, 255*loadingScreenCache.fadeAnimPercent), true)
-    dxDrawImage(loadingScreenCache.loader.startX, loadingScreenCache.loader.startY, loadingScreenCache.loader.width, loadingScreenCache.loader.height, loadingScreenCache.loader.bgPath, loadingScreenCache.loader.rotationValue, 0, 0, tocolor(255, 255, 255, 200*loadingScreenCache.fadeAnimPercent), true)
+    imports.dxDrawRectangle(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], tocolor(0, 0, 0, 255*loadingScreenCache.fadeAnimPercent), true)
+    imports.dxDrawImage(loadingScreenCache.loader.startX, loadingScreenCache.loader.startY, loadingScreenCache.loader.width, loadingScreenCache.loader.height, loadingScreenCache.loader.bgPath, loadingScreenCache.loader.rotationValue, 0, 0, tocolor(255, 255, 255, 200*loadingScreenCache.fadeAnimPercent), true)
 
 end)
 
@@ -83,7 +86,7 @@ imports.addEventHandler("onPlayerShowLoadingScreen", root, function(isLoginMusic
     loadingScreenCache.animStatus = "forward"
     loadingScreenCache.tickCounter = CLIENT_CURRENT_TICK
     loadingScreenCache.loader.tickCounter = CLIENT_CURRENT_TICK
-    triggerEvent("onLoginSoundStart", localPlayer, (isLoginMusicToBeShuffled and true) or false)
+    imports.triggerEvent("onLoginSoundStart", localPlayer, (isLoginMusicToBeShuffled and true) or false)
     return true
 
 end)
@@ -96,7 +99,7 @@ imports.addEventHandler("onPlayerHideLoadingScreen", root, function()
     loadingScreenCache.animStatus = "reverse_backward"
     loadingScreenCache.tickCounter = CLIENT_CURRENT_TICK
     if not loginScreenCache.state then
-        triggerEvent("onLoginSoundStop", localPlayer)
+        imports.triggerEvent("onLoginSoundStop", localPlayer)
     end
     return true
 
