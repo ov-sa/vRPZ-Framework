@@ -14,6 +14,7 @@
 
 local imports = {
     ipairs = ipairs,
+    isElement = isElement,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     triggerEvent = triggerEvent,
@@ -410,7 +411,7 @@ end
 
 function updateLoginPreviewCharacter()
 
-    if not loginScreenCache.character or not isElement(loginScreenCache.character) then return false end
+    if not loginScreenCache.character or not imports.isElement(loginScreenCache.character) then return false end
 
     local disabledTextures = {}
     local selectedGender, selectedClothing = playerClothes["Gender"][(loginScreenCache.phases[2].customizerui.option[3].placeDataValue)], {}
@@ -636,7 +637,7 @@ setLoginUIPhase = function(phaseID)
         if phaseID == 1 then
             exports.cinecam_handler:startCinemation(loginScreenCache.cinemationData.cinemationPoint, true, true, loginScreenCache.cinemationData.cinemationFOV, true, true, true, false)
         elseif phaseID == 2 then
-            if loginScreenCache.character and isElement(loginScreenCache.character) then loginScreenCache.character:destroy(); loginScreenCache.character = false end
+            if loginScreenCache.character and imports.isElement(loginScreenCache.character) then loginScreenCache.character:destroy(); loginScreenCache.character = false end
             exports.cinecam_handler:startCinemation(loginScreenCache.cinemationData.characterCinemationPoint, true, true, loginScreenCache.cinemationData.characterCinemationFOV, true, true, true, false)
             loginScreenCache.character = Ped(0, loginScreenCache.cinemationData.characterPoint.x, loginScreenCache.cinemationData.characterPoint.y, loginScreenCache.cinemationData.characterPoint.z, loginScreenCache.cinemationData.characterPoint.rotation)
             loginScreenCache.character:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].lobbyDimension)
@@ -1360,7 +1361,7 @@ toggleUI = function(state)
     else
         beautify.render.remove(renderUI)
         exports.cinecam_handler:stopCinemation()
-        if loginScreenCache.character and isElement(loginScreenCache.character) then loginScreenCache.character:destroy() end
+        if loginScreenCache.character and imports.isElement(loginScreenCache.character) then loginScreenCache.character:destroy() end
         loginScreenCache.phase = false
         loginScreenCache.cinemationData = false
         loginScreenCache.character = false
