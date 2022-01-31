@@ -23,7 +23,7 @@ local imports = {
     dxSetRenderTarget = dxSetRenderTarget,
     dxDrawRectangle = dxDrawRectangle,
     dxDrawImage = dxDrawImage,
-    fadeCamera = fadeCamera,
+    fadeCamera = fadeCamera
 }
 
 
@@ -1414,22 +1414,12 @@ end)
 
 imports.addEventHandler("onClientResourceStart", resource, function()
 
-    --[[
     if not isPlayerInitialized(localPlayer) then
         imports.fadeCamera(false)
-        toggleControl("fire", true)
-        toggleControl("action", false)
         imports.triggerEvent("Player:onHideLoadingUI", localPlayer, true)
         triggerServerEvent("onPlayerRequestShowLoginScreen", localPlayer)
     else
         imports.fadeCamera(true)
-    end]]
-
-    toggleUI(true) --TODO: REMOVE LATER
-    setPedTargetingMarkerEnabled(false)
-    setPlayerHudComponentVisible("all", false)
-    setPlayerHudComponentVisible("crosshair", true)
-    setTrafficLightState("disabled")
-    toggleControl("radar", false)
+    end
 
 end)

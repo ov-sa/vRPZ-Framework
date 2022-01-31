@@ -16,7 +16,11 @@ loadstring(exports.beautify_library:fetchImports())()
 local imports = {
     tonumber = tonumber,
     setWeather = setWeather,
-    setTime = setTime
+    setTime = setTime,
+    toggleControl = toggleControl,
+    setTrafficLightState = setTrafficLightState,
+    setPedTargetingMarkerEnabled = setPedTargetingMarkerEnabled,
+    setPedTargetingMarkerEnabled = setPedTargetingMarkerEnabled
 }
 
 
@@ -212,5 +216,22 @@ addEventHandler("Player:onSyncServerWeather", root, function(serverWeather, serv
     imports.setWeather(serverWeather)
     imports.setTime(serverTime[1], serverTime[2])
     return true
+
+end)
+
+
+-----------------------------------------
+--[[ Event: On Client Resource Start ]]--
+-----------------------------------------
+
+imports.addEventHandler("onClientResourceStart", resource, function()
+
+    imports.toggleControl("fire", true)
+    imports.toggleControl("action", false)
+    imports.toggleControl("radar", false)
+    imports.setTrafficLightState("disabled")
+    imports.setPedTargetingMarkerEnabled(false)
+    imports.setPlayerHudComponentVisible("all", false)
+    imports.setPlayerHudComponentVisible("crosshair", true)
 
 end)
