@@ -6,9 +6,11 @@
     <include resource="bone_attach"/>
     <include resource="parachute"/>
 
+    <!-- Exports -->
     <script src="exports/shared/main.lua" type="shared" cache="false"/>
     <script src="exports/shared/player.lua" type="shared" cache="false"/>
 
+    <!-- Exports: Shared: Main -->
     <export function="getServerCurrentTick" type="shared"/>
     <export function="getCurrentTime" type="shared"/>
     <export function="getItemDetails" type="shared"/>
@@ -27,6 +29,7 @@
     <export function="getBackpackOffset" type="shared"/>
     <export function="getWeaponOffset" type="shared"/>
 
+    <!-- Exports: Shared: Player -->
     <export function="isPlayerInitialized" type="shared"/>
     <export function="getPlayerByCharacterID" type="shared"/>
     <export function="getPlayerHealth" type="shared"/>
