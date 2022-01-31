@@ -14,6 +14,7 @@
 
 loadstring(exports.beautify_library:fetchImports())()
 local imports = {
+    tonumber = tonumber,
     setWeather = setWeather,
     setTime = setTime
 }
@@ -67,7 +68,7 @@ addEventHandler("Player:onToggleChat", root, showChat)
 --[[
 function getDropPositionFromScreen(cursor_offsetX, cursor_offsetY)
 
-    cursor_offsetX, cursor_offsetY = tonumber(cursor_offsetX), tonumber(cursor_offsetY)
+    cursor_offsetX, cursor_offsetY = imports.tonumber(cursor_offsetX), imports.tonumber(cursor_offsetY)
     if not cursor_offsetX or not cursor_offsetY then
         cursor_offsetX, cursor_offsetY = getAbsoluteCursorPosition()
     end
@@ -94,14 +95,14 @@ end
 
 function isObjectAroundPlayer(player, distance, height, initialHeight, targetMaterial, ignoredElements, ignoredMaterials)
 
-    distance = tonumber(distance)
-    height = tonumber(height)
+    distance = imports.tonumber(distance)
+    height = imports.tonumber(height)
     if not player or not isElement(player) or player:getType() ~= "player" or not distance or not height then return false end
 
     local posVector = player:getPosition()
     for i = 0, 360, 1 do
         local nx, ny = getPointFromDistanceRotation(posVector.x, posVector.y, distance, i)
-        local hit, hitX, hitY, hitZ, hitElement, normalX, normalY, normalZ, material = processLineOfSight(posVector.x, posVector.y, posVector.z + (tonumber(initialHeight) or 0), nx, ny, posVector.z + height, true, true, false, true, false)
+        local hit, hitX, hitY, hitZ, hitElement, normalX, normalY, normalZ, material = processLineOfSight(posVector.x, posVector.y, posVector.z + (imports.tonumber(initialHeight) or 0), nx, ny, posVector.z + height, true, true, false, true, false)
         if hit then
             local isElementIgnored = false
             local isMaterialIgnored = false
@@ -153,7 +154,7 @@ local progressBarDatas = {
 
 function drawProgressBar(percent, placeHolder)
 
-    percent = tonumber(percent)
+    percent = imports.tonumber(percent)
     if not percent then return false end
     percent = math.max(0, math.min(100, percent))
     placeHolder = (placeHolder and tostring(placeHolder)) or ""
@@ -184,7 +185,7 @@ end
 
 function dxDrawBorderedText(outlineWeight, outlineColor, text, left, top, right, bottom, color, scale, font, alignX, alignY, clip, wordBreak, postGUI, colorCoded, subPixelPositioning, fRotation, fRotationCenterX, fRotationCenterY)
 
-    outlineWeight = tonumber(outlineWeight); left = tonumber(left); top = tonumber(top); right = tonumber(right); bottom = tonumber(bottom); scale = tonumber(scale);
+    outlineWeight = imports.tonumber(outlineWeight); left = imports.tonumber(left); top = imports.tonumber(top); right = imports.tonumber(right); bottom = imports.tonumber(bottom); scale = imports.tonumber(scale);
     if not outlineWeight or not outlineColor or not left or not top or not right or not bottom  or not color or not scale or not font then return false end
 
     for oX = (outlineWeight * -1), outlineWeight do
@@ -205,7 +206,7 @@ end
 addEvent("Player:onSyncServerWeather", true)
 addEventHandler("Player:onSyncServerWeather", root, function(serverWeather, serverTime)
 
-    serverWeather = tonumber(serverWeather)
+    serverWeather = imports.tonumber(serverWeather)
     if not serverWeather or not serverTime then return false end
 
     imports.setWeather(serverWeather)
