@@ -18,6 +18,7 @@ local imports = {
     triggerClientEvent = triggerClientEvent,
     setElementAlpha = setElementAlpha,
     setCameraTarget = setCameraTarget,
+    setElementCollisionsEnabled = setElementCollisionsEnabled,
     spawnPlayer= spawnPlayer,
     showChat = showChat
 }
@@ -35,7 +36,7 @@ imports.addEventHandler("Player:onRespawn", root, function(spawnPoint)
     local characterIdentity = CCharacter.getData(characterID, "identity")
     imports.spawnPlayer(source, spawnPoint.x, spawnPoint.y, spawnPoint.z + 1, 0, playerClothes["Gender"][(characterIdentity["gender"])].modelSkin)
     imports.setElementAlpha(255)
-    source:setCollisionsEnabled(true)
+    imports.setElementCollisionsEnabled(source, true)
     imports.setCameraTarget(source, source)
     loadPlayerDefaultDatas(source)
     CCharacter.setData(characterID, "dead", false)
