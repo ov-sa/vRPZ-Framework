@@ -8,24 +8,35 @@
 ----------------------------------------------------------------
 
 
----------------------------------------------------
---[[ Function: Retrieves Server's Current Tick ]]--
----------------------------------------------------
+-----------------
+--[[ Imports ]]--
+-----------------
+
+local imports = {
+    tonumber = tonumber,
+    isElement = isElement,
+    getElements = Element.getAllByType
+}
+
+
+-------------------------------------------
+--[[ Function: Retrieves Server's Tick ]]--
+-------------------------------------------
 
 local serverTickSyncer = nil
-function getServerCurrentTick()
+function getServerTick()
 
-    local currentServerTick = 0
-    if not serverTickSyncer or not isElement(serverTickSyncer) then
-        local tickSyncers = Element.getAllByType("Server:TickSyncer", resourceRoot)
+    local currentTick = 0
+    if not serverTickSyncer or not imports.isElement(serverTickSyncer) then
+        local tickSyncers = imports.getElements("Server:TickSyncer", resourceRoot)
         if #tickSyncers > 0 then
             serverTickSyncer = tickSyncers[1]
         end
     end
-    if serverTickSyncer and isElement(serverTickSyncer) then
-        currentServerTick = tonumber(serverTickSyncer:getData("Server:TickSyncer")) or 0
+    if serverTickSyncer and imports.isElement(serverTickSyncer) then
+        currentTick = imports.tonumber(serverTickSyncer:getData("Server:TickSyncer")) or 0
     end
-    return currentServerTick
+    return currentTick
 
 end
 
@@ -89,7 +100,7 @@ function getItemWeight(item)
     local itemDetails = getItemDetails(item)
     if not itemDetails then return false end
 
-    return tonumber(itemDetails.itemWeight) or 1
+    return imports.tonumber(itemDetails.itemWeight) or 1
 
 end
 
@@ -104,7 +115,7 @@ function getItemObjectID(item)
     local itemDetails = getItemDetails(item)
     if not itemDetails then return false end
 
-    return tonumber(itemDetails.itemObjectID)
+    return imports.tonumber(itemDetails.itemObjectID)
 
 end
 
@@ -133,7 +144,7 @@ end
 
 function getWeaponSlotData(slotID)
 
-    slotID = tonumber(slotID)
+    slotID = imports.tonumber(slotID)
     if not slotID then return false end
 
     for i, j in pairs(availableWeaponSlots) do
@@ -183,7 +194,7 @@ function getWeaponSlotID(weapon)
     for i, j in pairs(availableWeaponSlots) do
         for k, v in ipairs(inventoryDatas[(characterSlots[i].slotCategory)]) do
             if v.dataName == weapon then
-                return tonumber(j.slotID)
+                return imports.tonumber(j.slotID)
             end
         end
     end
@@ -203,7 +214,7 @@ function getWeaponID(weapon)
     local weaponDetails = getItemDetails(weapon)
     if not weaponDetails then return false end
 
-    return tonumber(weaponDetails.weaponID)
+    return imports.tonumber(weaponDetails.weaponID)
 
 end
 
@@ -235,7 +246,7 @@ function getWeaponMagSize(weapon)
     local weaponDetails = getItemDetails(weapon)
     if not weaponDetails then return false end
 
-    return tonumber(weaponDetails.magSize) or getWeaponProperty(weaponDetails.weaponID, "poor", "maximum_clip_ammo")
+    return imports.tonumber(weaponDetails.magSize) or getWeaponProperty(weaponDetails.weaponID, "poor", "maximum_clip_ammo")
 
 end
 
@@ -246,35 +257,35 @@ end
 
 function getElementMaxSlots(element)
 
-    if not element or not isElement(element) then return false end
+    if not element or not imports.isElement(element) then return false end
 
     if element:getType() == "player" then
         if isPlayerInitialized(element) then
             if localPlayer then
                 if inventoryCache.inventorySlots then
-                    return tonumber(inventoryCache.inventorySlots.maxSlots) or 0
+                    return imports.tonumber(inventoryCache.inventorySlots.maxSlots) or 0
                 end
             else
                 if playerInventorySlots[element] then
-                    return tonumber(playerInventorySlots[element].maxSlots) or 0
+                    return imports.tonumber(playerInventorySlots[element].maxSlots) or 0
                 end
             end
         end
         return 0
     else
-        return tonumber(element:getData("Inventory:Slots")) or 0
+        return imports.tonumber(element:getData("Inventory:Slots")) or 0
     end
 
 end
 
 function getElementUsedSlots(element)
 
-    if not element or not isElement(element) then return false end
+    if not element or not imports.isElement(element) then return false end
 
     local usedSlots = 0
     for i, j in pairs(inventoryDatas) do
         for k, v in ipairs(j) do
-            local elementItemData = tonumber(element:getData("Item:"..v.dataName)) or 0
+            local elementItemData = imports.tonumber(element:getData("Item:"..v.dataName)) or 0
             local itemWeight = getItemWeight(v.dataName)
             if elementItemData > 0 then
                 usedSlots = usedSlots + (itemWeight*elementItemData)
@@ -317,7 +328,7 @@ end
 
 function getBackpackOffset(skinModel, backpackType)
 
-    skinModel = tonumber(skinModel)
+    skinModel = imports.tonumber(skinModel)
     if not skinModel or not backpackType or type(backpackType) ~= "string" then return false end
 
     local objectID = getItemObjectID(backpackType)
