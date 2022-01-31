@@ -59,7 +59,6 @@ local notifUI = {
 ------------------------------
 
 beautify.render.create(function()
-
     if #notifUI.buffer <= 0 then return false end
 
     local currentYOffset = imports.interpolateBetween(notifUI.currentYOffset, 0, 0, 0, 0, 0, imports.getInterpolationProgress(notifUI.slideTopTickCounter, notifUI.slideTopDuration), "OutBack")
@@ -94,7 +93,6 @@ beautify.render.create(function()
             end
         end
     end
-
 end, {
     renderType = "input"
 })
@@ -105,15 +103,13 @@ end, {
 --------------------------------
 
 imports.addEvent("Player:onNotification", true)
-imports.addEventHandler("Player:onNotification", root, function(notifMessage, notifColor)
-
-    if (not notifMessage or imports.type(notifMessage) ~= "string" or notifMessage == "") then return false end
+imports.addEventHandler("Player:onNotification", root, function(message, color)
+    if (not message or imports.type(message) ~= "string" or message == "") then return false end
 
     imports.table.insert(notifUI.buffer, {
-        text = notifMessage,
-        fontColor = notifColor,
+        text = message,
+        fontColor = color,
         slideStatus = "forward",
         tickCounter = CLIENT_CURRENT_TICK
     })
-
 end)
