@@ -9,17 +9,9 @@
 ----------------------------------------------------------------
 
 
-------------------------------------------------
---[[ Functions: Gets/Sets Login GUI's Phase ]]--
-------------------------------------------------
-
-function getLoginUIPhase()
-
-    if not loginUICache.state then return false end
-
-    return loginUICache.phaseUI.currentPhase
-
-end
+-------------------------------------------
+--[[ Functions: Sets Login GUI's Phase ]]--
+-------------------------------------------
 
 function setLoginUIPhase(phaseID)
 

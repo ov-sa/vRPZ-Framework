@@ -245,7 +245,7 @@ function manageLoginPreviewCharacter(manageType)
         triggerServerEvent("onClientCharacterSave", localPlayer, loginUICache.selectedCharacter, charactersToBeSaved, loginUICache._unsavedCharacters)
         loginUICache._unsavedCharacters = charactersPendingToBeSaved
     elseif manageType == "play" then
-        local currentLoginPhase = getLoginUIPhase()
+        local currentLoginPhase = loginUICache.phaseUI.currentPhase
         if not currentLoginPhase then
             setLoginUIEnabled(true)
             return false

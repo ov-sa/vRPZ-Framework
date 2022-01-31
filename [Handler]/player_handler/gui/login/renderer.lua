@@ -29,7 +29,7 @@ local _currentPressedKey = false
 addEventHandler("onClientCharacter", root, function(character)
 
     if GuiElement.isMTAWindowActive() or not loginUICache.state or not loginUICache.isEnabled or loginUICache.isForcedDisabled then return false end
-    local currentLoginPhase = getLoginUIPhase()
+    local currentLoginPhase = loginUICache.phaseUI.currentPhase
     if loginUICache.optionUI[currentLoginPhase].optionType ~= "characters" or loginUICache.phaseUI[currentLoginPhase].editboxes.focussedEditbox <= 0 then return false end
 
     if _currentKeyCheck then
@@ -45,7 +45,7 @@ end)
 addEventHandler("onClientKey", root, function(button, press)
 
     if GuiElement.isMTAWindowActive() or not loginUICache.state or not loginUICache.isEnabled or loginUICache.isForcedDisabled then return false end
-    local currentLoginPhase = getLoginUIPhase()
+    local currentLoginPhase = loginUICache.phaseUI.currentPhase
     if loginUICache.optionUI[currentLoginPhase].optionType ~= "characters" or loginUICache.phaseUI[currentLoginPhase].editboxes.focussedEditbox <= 0 then return false end
 
     if not press then
@@ -72,8 +72,8 @@ end)
 function renderLoginScreen()
 
     if not loginUICache.state or isPlayerInitialized(localPlayer) then return false end
-    --local currentLoginPhase = getLoginUIPhase()
-    --if not currentLoginPhase then return false end
+    local currentLoginPhase = loginUICache.phaseUI.currentPhase
+    if not currentLoginPhase then return false end
 
     --[[
     local isLMBClicked, isLMBOnHold = false, false
