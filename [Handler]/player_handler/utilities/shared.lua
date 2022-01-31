@@ -68,6 +68,7 @@ end
 --[[ Function: Retrieves Copy Of Table ]]--
 -------------------------------------------
 
+--TODO: MAKE BEAUTIFY UTILS SHARED...
 function table.copy(recievedTable, recursive)
 
     if not recievedTable or type(recievedTable) ~= "table" then return false end

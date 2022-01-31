@@ -8,6 +8,15 @@
 ----------------------------------------------------------------
 
 
+-----------------
+--[[ Imports ]]--
+-----------------
+
+local imports = {
+    setTimer = setTimer
+}
+
+
 -------------------
 --[[ Variables ]]--
 -------------------
@@ -572,10 +581,10 @@ function manageLoginPreviewCharacter(manageType)
         setLoginUIEnabled(false, false)
         triggerEvent("Player:onNotification", localPlayer, "◴ Processing..", {175, 175, 175, 255})
         triggerEvent("Player:onHideLoadingUI", localPlayer)
-        Timer(function()
+        imports.setTimer(function()
             hideLoginScreen()
         end, loadingScreenCache.animFadeInDuration + 250, 1)
-        Timer(function(selectedCharacter, clientCharacters)
+        imports.setTimer(function(selectedCharacter, clientCharacters)
             triggerServerEvent("onPlayerResumeGame", localPlayer, selectedCharacter, clientCharacters)
         end, loadingScreenCache.animFadeInDuration + loadingScreenCache.animFadeOutDuration + loadingScreenCache.animFadeDelayDuration, 1, loginScreenCache.selectedCharacter, loginScreenCache.clientCharacters)
     end
@@ -613,7 +622,7 @@ function setLoginUIPhase(phaseID)
     if prevEnablerTimer and prevEnablerTimer:isValid() then prevEnablerTimer:destroy(); prevEnablerTimer = false end
 
     triggerEvent("Player:onHideLoadingUI", localPlayer)
-    prevPhaseTimer = Timer(function()
+    prevPhaseTimer = imports.setTimer(function()
         if phaseID == 1 then
             exports.cinecam_handler:startCinemation(loginScreenCache.cinemationData.cinemationPoint, true, true, loginScreenCache.cinemationData.cinemationFOV, true, true, true, false)
         elseif phaseID == 2 then
@@ -656,7 +665,7 @@ function setLoginUIPhase(phaseID)
         triggerEvent("Player:onShowLoadingUI", localPlayer)
         prevPhaseTimer = false
     end, loadingScreenCache.animFadeInDuration + 250, 1)
-    prevEnablerTimer = Timer(function()
+    prevEnablerTimer = imports.setTimer(function()
         setLoginUIEnabled(true)
         prevEnablerTimer = false
     end, loadingScreenCache.animFadeOutDuration + loadingScreenCache.animFadeDelayDuration - (loadingScreenCache.animFadeInDuration + 250), 1)
@@ -865,7 +874,7 @@ local function renderUI()
             if isOptionHovered then
                 if isLMBClicked then
                     setLoginUIEnabled(false)
-                    Timer(function()
+                    imports.setTimer(function()
                         loadstring(j.funcString)()
                     end, 1, 1)
                 end
@@ -1205,7 +1214,7 @@ local function renderUI()
             if isSwitcherHovered then
                 if isLMBClicked then
                     setLoginUIEnabled(false)
-                    Timer(function()
+                    imports.setTimer(function()
                         loadstring(j.funcString)()
                     end, 1, 1)
                 end
@@ -1240,7 +1249,7 @@ local function renderUI()
             if isButtonHovered then
                 if isLMBClicked then
                     setLoginUIEnabled(false)
-                    Timer(function()
+                    imports.setTimer(function()
                         loadstring(j.funcString)()
                     end, 1, 1)
                 end
@@ -1295,7 +1304,7 @@ local function renderUI()
         if isBackNavigatorHovered then
             if isLMBClicked then
                 setLoginUIEnabled(false)
-                Timer(function()
+                imports.setTimer(function()
                     loadstring(loginScreenCache.phases[3].back_navigator.funcString)()
                 end, 1, 1)
             end
@@ -1385,7 +1394,7 @@ addEventHandler("onPlayerShowLoginScreen", root, function(character, characters,
     localPlayer:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].lobbyDimension)
 
     setLoginUIEnabled(true, true)
-    Timer(function()
+    imports.setTimer(function()
         showLoginScreen()
         Camera.fade(true)
         triggerEvent("Player:onShowLoadingUI", localPlayer)
