@@ -22,13 +22,13 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-local respawnScreenCache = {
+local respawnerUI = {
     state = false,
     mode = false,
     flashInterval = 2000,
     flashTerminationDuration = 10000,
     flashColor = {0, 0, 0, 255},
-    vignetteTexture = dxCreateTexture("files/images/hud/vignette.png", "argb", true, "clamp")
+    vignetteTexture = imports.dxCreateTexture("files/images/hud/vignette.png", "argb", true, "clamp")
 }
 
 
@@ -39,24 +39,24 @@ local respawnScreenCache = {
 local renderRespawnScreen = nil
 local function hideRespawnScreen()
 
-    if not respawnScreenCache.state then return false end
+    if not respawnerUI.state then return false end
 
     beautify.render.remove(renderRespawnScreen)
-    respawnScreenCache.mode = false
-    respawnScreenCache.state = false
+    respawnerUI.mode = false
+    respawnerUI.state = false
     return true
 
 end
 
 renderRespawnScreen = function()
 
-    if not respawnScreenCache.state or not respawnScreenCache.mode or not isPlayerInitialized(localPlayer) then
+    if not respawnerUI.state or not respawnerUI.mode or not isPlayerInitialized(localPlayer) then
         hideRespawnScreen()
         return false
     end
 
-    if respawnScreenCache.mode.type == "generate_client_spawn" then
-        local elapsedDuration = CLIENT_CURRENT_TICK - respawnScreenCache.mode.tickCounter
+    if respawnerUI.mode.type == "generate_client_spawn" then
+        local elapsedDuration = CLIENT_CURRENT_TICK - respawnerUI.mode.tickCounter
         if elapsedDuration >= (loadingScreenCache.animFadeInDuration + loadingScreenCache.animFadeDelayDuration) then
             local clientPosVector = localPlayer:getPosition()
             local characterSpawn = localPlayer:getData("Character:spawn") 
@@ -65,9 +65,9 @@ renderRespawnScreen = function()
             end
             for i = 1, 360 do
                 local generatedSpawnPoint = {}
-                generatedSpawnPoint.x, generatedSpawnPoint.y = getPointFromDistanceRotation(respawnScreenCache.mode.wastedPoint.x, respawnScreenCache.mode.wastedPoint.y, i + 275, i)
-                localPlayer:setPosition(generatedSpawnPoint.x, generatedSpawnPoint.y, respawnScreenCache.mode.wastedPoint.z)
-                generatedSpawnPoint.z = getGroundPosition(generatedSpawnPoint.x, generatedSpawnPoint.y, respawnScreenCache.mode.wastedPoint.z + 2.5)
+                generatedSpawnPoint.x, generatedSpawnPoint.y = getPointFromDistanceRotation(respawnerUI.mode.wastedPoint.x, respawnerUI.mode.wastedPoint.y, i + 275, i)
+                localPlayer:setPosition(generatedSpawnPoint.x, generatedSpawnPoint.y, respawnerUI.mode.wastedPoint.z)
+                generatedSpawnPoint.z = getGroundPosition(generatedSpawnPoint.x, generatedSpawnPoint.y, respawnerUI.mode.wastedPoint.z + 2.5)
                 if generatedSpawnPoint.x and generatedSpawnPoint.y and generatedSpawnPoint.z and generatedSpawnPoint.z ~= 0 then
                     triggerServerEvent("onPlayerRespawn", localPlayer, generatedSpawnPoint)
                     hideRespawnScreen()
@@ -80,21 +80,21 @@ renderRespawnScreen = function()
             hideRespawnScreen()
             return false
         end
-    elseif respawnScreenCache.mode.type == "respawn_client" then
+    elseif respawnerUI.mode.type == "respawn_client" then
         local flashAnimAlphaPercent = false
-        local elapsedDuration = CLIENT_CURRENT_TICK - respawnScreenCache.mode.tickCounter
-        if elapsedDuration >= respawnScreenCache.flashTerminationDuration then
-            flashAnimAlphaPercent = interpolateBetween(respawnScreenCache.mode.animAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(respawnScreenCache.mode.tickCounter + respawnScreenCache.flashTerminationDuration, respawnScreenCache.flashTerminationDuration/2), "OutBack")
+        local elapsedDuration = CLIENT_CURRENT_TICK - respawnerUI.mode.tickCounter
+        if elapsedDuration >= respawnerUI.flashTerminationDuration then
+            flashAnimAlphaPercent = interpolateBetween(respawnerUI.mode.animAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(respawnerUI.mode.tickCounter + respawnerUI.flashTerminationDuration, respawnerUI.flashTerminationDuration/2), "OutBack")
             if math.round(flashAnimAlphaPercent, 2) == 0 then
                 Timer(function()
                     hideRespawnScreen()
                 end, 1, 1)
             end
         else
-            respawnScreenCache.mode.animAlphaPercent = interpolateBetween(0.65, 0, 0, 0.98, 0, 0, getInterpolationProgress(respawnScreenCache.mode.tickCounter, respawnScreenCache.flashInterval), "CosineCurve")
-            flashAnimAlphaPercent = respawnScreenCache.mode.animAlphaPercent
+            respawnerUI.mode.animAlphaPercent = interpolateBetween(0.65, 0, 0, 0.98, 0, 0, getInterpolationProgress(respawnerUI.mode.tickCounter, respawnerUI.flashInterval), "CosineCurve")
+            flashAnimAlphaPercent = respawnerUI.mode.animAlphaPercent
         end
-        dxDrawImage(0, 0, sX, sY, respawnScreenCache.vignetteTexture, 0, 0, 0, tocolor(respawnScreenCache.flashColor[1], respawnScreenCache.flashColor[2], respawnScreenCache.flashColor[3], respawnScreenCache.flashColor[4]*flashAnimAlphaPercent), false)
+        dxDrawImage(0, 0, sX, sY, respawnerUI.vignetteTexture, 0, 0, 0, tocolor(respawnerUI.flashColor[1], respawnerUI.flashColor[2], respawnerUI.flashColor[3], respawnerUI.flashColor[4]*flashAnimAlphaPercent), false)
     else
         hideRespawnScreen()
         return false
@@ -112,14 +112,14 @@ addEventHandler("onPlayerGenerateRespawnPoint", root, function()
 
     if not isPlayerInitialized(localPlayer) then return false end
 
-    if respawnScreenCache.state then hideRespawnScreen() end
+    if respawnerUI.state then hideRespawnScreen() end
     outputChatBox("- You were found by a survivor and dragged to safety, Good Luck...", 255, 80, 80)
-    respawnScreenCache.mode = {
+    respawnerUI.mode = {
         type = "generate_client_spawn",
         tickCounter = CLIENT_CURRENT_TICK,
         wastedPoint = localPlayer:getPosition()
     }
-    respawnScreenCache.state = true
+    respawnerUI.state = true
     beautify.render.create(renderRespawnScreen)
 
 end)
@@ -134,13 +134,13 @@ addEventHandler("Player:onClientRespawn", root, function()
 
     if not isPlayerInitialized(localPlayer) then return false end
 
-    if respawnScreenCache.state then hideRespawnScreen() end
-    respawnScreenCache.mode = {
+    if respawnerUI.state then hideRespawnScreen() end
+    respawnerUI.mode = {
         type = "respawn_client",
         tickCounter = CLIENT_CURRENT_TICK,
         animAlphaPercent = 0
     }
-    respawnScreenCache.state = true
+    respawnerUI.state = true
     beautify.render.create(renderRespawnScreen)
 
 end)

@@ -104,7 +104,7 @@ imports.addEventHandler("Player:onShowLoadingUI", root, function()
 
     loadingScreenCache.animStatus = "reverse_backward"
     loadingScreenCache.tickCounter = CLIENT_CURRENT_TICK
-    if not loginScreenCache.state then
+    if not loginUI.state then
         imports.triggerEvent("onLoginSoundStop", localPlayer)
     end
     return true

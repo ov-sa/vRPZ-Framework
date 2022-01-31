@@ -41,7 +41,7 @@ local _currentKeyCheck = true
 local _currentPressedKey = false
 setLoginUIPhase = nil
 local manageCharacter, toggleUI = nil, nil
-loginScreenCache = {
+loginUI = {
     state = false,
     phase = false,
     isEnabled = false,
@@ -330,33 +330,33 @@ loginScreenCache = {
     }
 }
 
-for i, j in imports.ipairs(loginScreenCache.phases[1].optionsui) do
-    j.width = dxGetTextWidth(j.title, 1, loginScreenCache.phases[1].optionsui.font) + 5
-    j.startX = loginScreenCache.phases[1].optionsui.startX - (j.width/2)
-    j.startY = loginScreenCache.phases[1].optionsui.startY + CLIENT_MTA_RESOLUTION[2] - (loginScreenCache.phases[1].optionsui.height*(#loginScreenCache.phases[1].optionsui - (i - 1))) - (loginScreenCache.phases[1].optionsui.paddingY*(#loginScreenCache.phases[1].optionsui - i))
+for i, j in imports.ipairs(loginUI.phases[1].optionsui) do
+    j.width = dxGetTextWidth(j.title, 1, loginUI.phases[1].optionsui.font) + 5
+    j.startX = loginUI.phases[1].optionsui.startX - (j.width/2)
+    j.startY = loginUI.phases[1].optionsui.startY + CLIENT_MTA_RESOLUTION[2] - (loginUI.phases[1].optionsui.height*(#loginUI.phases[1].optionsui - (i - 1))) - (loginUI.phases[1].optionsui.paddingY*(#loginUI.phases[1].optionsui - i))
 end
-loginScreenCache.phases[2].customizerui.height = loginScreenCache.phases[2].customizerui.height + (#loginScreenCache.phases[2].customizerui.option*(loginScreenCache.phases[2].customizerui.option.height + loginScreenCache.phases[2].customizerui.option.dividerSize))
-loginScreenCache.phases[2].customizerui.startY = CLIENT_MTA_RESOLUTION[2] + loginScreenCache.phases[2].customizerui.startY - loginScreenCache.phases[2].customizerui.titleBar.height - loginScreenCache.phases[2].customizerui.height - (loginScreenCache.phases[2].customizerui.switcher.startY + loginScreenCache.phases[2].customizerui.switcher.paddingY + loginScreenCache.phases[2].customizerui.button.height)
-loginScreenCache.phases[2].customizerui.switcher.startX = loginScreenCache.phases[2].customizerui.switcher.startX + (loginScreenCache.phases[2].customizerui.width - (#loginScreenCache.phases[2].customizerui.switcher*loginScreenCache.phases[2].customizerui.switcher.width) - math.max(0, (#loginScreenCache.phases[2].customizerui.button - 1)*loginScreenCache.phases[2].customizerui.switcher.paddingX))
-loginScreenCache.phases[2].customizerui.switcher.startY = loginScreenCache.phases[2].customizerui.switcher.startY - loginScreenCache.phases[2].customizerui.switcher.height - loginScreenCache.phases[2].customizerui.switcher.paddingY
-loginScreenCache.phases[2].customizerui.button.startX = loginScreenCache.phases[2].customizerui.button.startX + (loginScreenCache.phases[2].customizerui.width - (#loginScreenCache.phases[2].customizerui.button*loginScreenCache.phases[2].customizerui.button.width) - math.max(0, (#loginScreenCache.phases[2].customizerui.button - 1)*loginScreenCache.phases[2].customizerui.button.paddingX))/2
-loginScreenCache.phases[2].customizerui.button.startY = loginScreenCache.phases[2].customizerui.button.startY + loginScreenCache.phases[2].customizerui.button.paddingY
-loginScreenCache.phases[3].back_navigator.height = loginScreenCache.phases[3].back_navigator.height + dxGetFontHeight(1, loginScreenCache.phases[3].back_navigator.font)
+loginUI.phases[2].customizerui.height = loginUI.phases[2].customizerui.height + (#loginUI.phases[2].customizerui.option*(loginUI.phases[2].customizerui.option.height + loginUI.phases[2].customizerui.option.dividerSize))
+loginUI.phases[2].customizerui.startY = CLIENT_MTA_RESOLUTION[2] + loginUI.phases[2].customizerui.startY - loginUI.phases[2].customizerui.titleBar.height - loginUI.phases[2].customizerui.height - (loginUI.phases[2].customizerui.switcher.startY + loginUI.phases[2].customizerui.switcher.paddingY + loginUI.phases[2].customizerui.button.height)
+loginUI.phases[2].customizerui.switcher.startX = loginUI.phases[2].customizerui.switcher.startX + (loginUI.phases[2].customizerui.width - (#loginUI.phases[2].customizerui.switcher*loginUI.phases[2].customizerui.switcher.width) - math.max(0, (#loginUI.phases[2].customizerui.button - 1)*loginUI.phases[2].customizerui.switcher.paddingX))
+loginUI.phases[2].customizerui.switcher.startY = loginUI.phases[2].customizerui.switcher.startY - loginUI.phases[2].customizerui.switcher.height - loginUI.phases[2].customizerui.switcher.paddingY
+loginUI.phases[2].customizerui.button.startX = loginUI.phases[2].customizerui.button.startX + (loginUI.phases[2].customizerui.width - (#loginUI.phases[2].customizerui.button*loginUI.phases[2].customizerui.button.width) - math.max(0, (#loginUI.phases[2].customizerui.button - 1)*loginUI.phases[2].customizerui.button.paddingX))/2
+loginUI.phases[2].customizerui.button.startY = loginUI.phases[2].customizerui.button.startY + loginUI.phases[2].customizerui.button.paddingY
+loginUI.phases[3].back_navigator.height = loginUI.phases[3].back_navigator.height + dxGetFontHeight(1, loginUI.phases[3].back_navigator.font)
 --[[
 for i, j in imports.ipairs(serverCredits) do
-    loginScreenCache.phases[3].view.content = ((i == 1) and tostring(j)) or loginScreenCache.phases[3].view.content.."\n\n"..tostring(j)
+    loginUI.phases[3].view.content = ((i == 1) and tostring(j)) or loginUI.phases[3].view.content.."\n\n"..tostring(j)
 end
 ]]--
-loginScreenCache.phases[3].view.width, loginScreenCache.phases[3].view.height = loginScreenCache.phases[3].view.width + (CLIENT_MTA_RESOLUTION[1] - loginScreenCache.phases[3].view.startX), loginScreenCache.phases[3].view.height + (CLIENT_MTA_RESOLUTION[2] - loginScreenCache.phases[3].view.startY)
-loginScreenCache.phases[3].view.contentWidth, loginScreenCache.phases[3].view.contentHeight = dxGetTextSize(loginScreenCache.phases[3].view.content, loginScreenCache.phases[3].view.width, 1, loginScreenCache.phases[3].view.font, false)
-loginScreenCache.phases[3].view.scrollAnimDuration = math.max(1, math.ceil((loginScreenCache.phases[3].view.contentHeight + loginScreenCache.phases[3].view.height)/loginScreenCache.phases[3].view.height))*loginScreenCache.phases[3].view.scrollAnimDuration
-loginScreenCache.phases[3].view.renderTarget = DxRenderTarget(loginScreenCache.phases[3].view.width, loginScreenCache.phases[3].view.height, true)
+loginUI.phases[3].view.width, loginUI.phases[3].view.height = loginUI.phases[3].view.width + (CLIENT_MTA_RESOLUTION[1] - loginUI.phases[3].view.startX), loginUI.phases[3].view.height + (CLIENT_MTA_RESOLUTION[2] - loginUI.phases[3].view.startY)
+loginUI.phases[3].view.contentWidth, loginUI.phases[3].view.contentHeight = dxGetTextSize(loginUI.phases[3].view.content, loginUI.phases[3].view.width, 1, loginUI.phases[3].view.font, false)
+loginUI.phases[3].view.scrollAnimDuration = math.max(1, math.ceil((loginUI.phases[3].view.contentHeight + loginUI.phases[3].view.height)/loginUI.phases[3].view.height))*loginUI.phases[3].view.scrollAnimDuration
+loginUI.phases[3].view.renderTarget = DxRenderTarget(loginUI.phases[3].view.width, loginUI.phases[3].view.height, true)
 --[[
 for i, j in imports.ipairs(playerClothes["Gender"]) do
-    table.insert(loginScreenCache.phases[2].customizerui.option[3].placeDataTable, j.modelType)
+    table.insert(loginUI.phases[2].customizerui.option[3].placeDataTable, j.modelType)
 end
 for i, j in pairs(playerSpawnPoints) do
-    table.insert(loginScreenCache.phases[2].customizerui.option[10].placeDataTable, i)
+    table.insert(loginUI.phases[2].customizerui.option[10].placeDataTable, i)
 end
 ]]--
 
@@ -367,17 +367,17 @@ end
 
 local function loadLoginPreviewCharacter(loadDefault)
 
-    if not loadDefault and not loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter] then
-        if #loginScreenCache.clientCharacters > 0 then
-            loginScreenCache.selectedCharacter = 1
-            loginScreenCache._selectedCharacter = loginScreenCache.selectedCharacter
+    if not loadDefault and not loginUI.clientCharacters[loginUI._selectedCharacter] then
+        if #loginUI.clientCharacters > 0 then
+            loginUI.selectedCharacter = 1
+            loginUI._selectedCharacter = loginUI.selectedCharacter
         else
             loadDefault = true
         end
     end
 
     if loadDefault then
-        for i, j in imports.ipairs(loginScreenCache.phases[2].customizerui.option) do
+        for i, j in imports.ipairs(loginUI.phases[2].customizerui.option) do
             if j.isEditBox then
                 j.placeDataValue = ""
             else
@@ -385,16 +385,16 @@ local function loadLoginPreviewCharacter(loadDefault)
             end
         end
     else
-        for i, j in imports.ipairs(loginScreenCache.phases[2].customizerui.option) do
+        for i, j in imports.ipairs(loginUI.phases[2].customizerui.option) do
             if j.isEditBox then
-                j.placeDataValue = loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter][j.optionType] or ""
+                j.placeDataValue = loginUI.clientCharacters[loginUI._selectedCharacter][j.optionType] or ""
             else
                 local matchedDataIndex = false
                 if j.optionType == "gender" or j.clothingCategoryIndex then
-                    matchedDataIndex = loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter][j.optionType]
+                    matchedDataIndex = loginUI.clientCharacters[loginUI._selectedCharacter][j.optionType]
                 else
                     for k, v in imports.ipairs(j.placeDataTable) do
-                        if loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter][j.optionType] == v then
+                        if loginUI.clientCharacters[loginUI._selectedCharacter][j.optionType] == v then
                             matchedDataIndex = k
                             break
                         end
@@ -411,19 +411,19 @@ end
 
 function updateLoginPreviewCharacter()
 
-    if not loginScreenCache.character or not imports.isElement(loginScreenCache.character) then return false end
+    if not loginUI.character or not imports.isElement(loginUI.character) then return false end
 
     local disabledTextures = {}
-    local selectedGender, selectedClothing = playerClothes["Gender"][(loginScreenCache.phases[2].customizerui.option[3].placeDataValue)], {}
-    loginScreenCache.character:setModel(selectedGender.modelSkin)
-    selectedClothing["gender"] = loginScreenCache.phases[2].customizerui.option[3].placeDataValue
-    for i, j in imports.ipairs(loginScreenCache.phases[2].customizerui.option) do
+    local selectedGender, selectedClothing = playerClothes["Gender"][(loginUI.phases[2].customizerui.option[3].placeDataValue)], {}
+    loginUI.character:setModel(selectedGender.modelSkin)
+    selectedClothing["gender"] = loginUI.phases[2].customizerui.option[3].placeDataValue
+    for i, j in imports.ipairs(loginUI.phases[2].customizerui.option) do
         if not j.isEditBox and j.clothingCategoryIndex then
             if j.clothingCategoryIndex == "Race" then
                 j.placeDataTable = playerClothes[selectedGender.modelType][j.clothingCategoryIndex]
             else
                 if j.clothingCategoryIndex ~= "Hair" and j.clothingCategoryIndex ~= "Hair_Color" then
-                    if loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter] and loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter].__isPreLoaded then
+                    if loginUI.clientCharacters[loginUI._selectedCharacter] and loginUI.clientCharacters[loginUI._selectedCharacter].__isPreLoaded then
                         j.placeDataTable = playerClothes[selectedGender.modelType][j.clothingCategoryIndex]
                     else
                         local generatedDataTable = {}
@@ -440,8 +440,8 @@ function updateLoginPreviewCharacter()
                 end
             end
             if j.clothingCategoryIndex == "Race" then
-                loginScreenCache.phases[2].customizerui.option[5].placeDataTable = (j.placeDataTable[j.placeDataValue] and j.placeDataTable[j.placeDataValue]["Hair"]) or {}
-                loginScreenCache.phases[2].customizerui.option[6].placeDataTable = (j.placeDataTable[j.placeDataValue] and j.placeDataTable[j.placeDataValue]["Hair_Color"]) or {}
+                loginUI.phases[2].customizerui.option[5].placeDataTable = (j.placeDataTable[j.placeDataValue] and j.placeDataTable[j.placeDataValue]["Hair"]) or {}
+                loginUI.phases[2].customizerui.option[6].placeDataTable = (j.placeDataTable[j.placeDataValue] and j.placeDataTable[j.placeDataValue]["Hair_Color"]) or {}
             end
             if not j.placeDataTable[j.placeDataValue] then j.placeDataValue = 1 end
             if j.placeDataTable[j.placeDataValue] then
@@ -449,7 +449,7 @@ function updateLoginPreviewCharacter()
             end
         end
     end
-    imports.triggerEvent("onSyncPedClothes", root, loginScreenCache.character, selectedClothing)
+    imports.triggerEvent("onSyncPedClothes", root, loginUI.character, selectedClothing)
     return true
 
 end
@@ -461,80 +461,80 @@ manageCharacter = function(manageType)
     if manageType == "create" then
         setLoginUIEnabled(true)
         local characterLimit = playerCharacterLimit
-        if loginScreenCache.isPremium then characterLimit = playerPremiumCharacterLimit end
-        if #loginScreenCache.clientCharacters >= characterLimit then
+        if loginUI.isPremium then characterLimit = playerPremiumCharacterLimit end
+        if #loginUI.clientCharacters >= characterLimit then
             imports.triggerEvent("Player:onNotification", localPlayer, "Unfortunately, you have reached the character creation limit!", {255, 80, 80, 255})
             return false
         end
         local characterData = {
             isUnverified = true
         }
-        table.insert(loginScreenCache.clientCharacters, characterData)
-        loginScreenCache._selectedCharacter = #loginScreenCache.clientCharacters
-        loginScreenCache._unsavedCharacters[loginScreenCache._selectedCharacter] = true
+        table.insert(loginUI.clientCharacters, characterData)
+        loginUI._selectedCharacter = #loginUI.clientCharacters
+        loginUI._unsavedCharacters[loginUI._selectedCharacter] = true
         loadLoginPreviewCharacter(true)
         imports.triggerEvent("Player:onNotification", localPlayer, "You've successfully created a character!", {80, 255, 80, 255})
     elseif manageType == "delete" then
         setLoginUIEnabled(true)
-        if #loginScreenCache.clientCharacters <= 0 then
+        if #loginUI.clientCharacters <= 0 then
             imports.triggerEvent("Player:onNotification", localPlayer, "Unfortunately, you don't have enough characters to delete!", {255, 80, 80, 255})
             return false
         end
-        if not loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter] then
+        if not loginUI.clientCharacters[loginUI._selectedCharacter] then
             imports.triggerEvent("Player:onNotification", localPlayer, "You must select a character inorder to delete!", {255, 80, 80, 255})
             return false
         end
-        if not loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter].isUnverified or loginScreenCache._charactersUnderProcess[loginScreenCache._selectedCharacter] then
-            if not loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter]._id or loginScreenCache._charactersUnderProcess[loginScreenCache._selectedCharacter] then
+        if not loginUI.clientCharacters[loginUI._selectedCharacter].isUnverified or loginUI._charactersUnderProcess[loginUI._selectedCharacter] then
+            if not loginUI.clientCharacters[loginUI._selectedCharacter]._id or loginUI._charactersUnderProcess[loginUI._selectedCharacter] then
                 imports.triggerEvent("Player:onNotification", localPlayer, "You must wait until the character processing is done!", {255, 80, 80, 255})
                 return false
             else
-                triggerServerEvent("onClientCharacterDelete", localPlayer, loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter]._id)
+                triggerServerEvent("onClientCharacterDelete", localPlayer, loginUI.clientCharacters[loginUI._selectedCharacter]._id)
             end
         end
-        table.remove(loginScreenCache.clientCharacters, loginScreenCache._selectedCharacter)
-        loginScreenCache._unsavedCharacters[loginScreenCache._selectedCharacter] = nil
-        loginScreenCache._selectedCharacter = math.max(0, loginScreenCache._selectedCharacter - 1)
+        table.remove(loginUI.clientCharacters, loginUI._selectedCharacter)
+        loginUI._unsavedCharacters[loginUI._selectedCharacter] = nil
+        loginUI._selectedCharacter = math.max(0, loginUI._selectedCharacter - 1)
         loadLoginPreviewCharacter()
         imports.triggerEvent("Player:onNotification", localPlayer, "You've successfully deleted the character!", {80, 255, 80, 255})
     elseif (manageType == "switch_prev") or (manageType == "switch_next") then
         setLoginUIEnabled(true)
-        if #loginScreenCache.clientCharacters <= 1 then
+        if #loginUI.clientCharacters <= 1 then
             imports.triggerEvent("Player:onNotification", localPlayer, "Unfortunately, you don't have enough characters to switch!", {255, 80, 80, 255})
             return false
         end
         if manageType == "switch_prev" then
-            if loginScreenCache._selectedCharacter > 1 then
-                loginScreenCache._selectedCharacter = loginScreenCache._selectedCharacter - 1
+            if loginUI._selectedCharacter > 1 then
+                loginUI._selectedCharacter = loginUI._selectedCharacter - 1
                 loadLoginPreviewCharacter()
             end
         elseif manageType == "switch_next" then
-            if loginScreenCache._selectedCharacter < #loginScreenCache.clientCharacters then
-                loginScreenCache._selectedCharacter = loginScreenCache._selectedCharacter + 1
+            if loginUI._selectedCharacter < #loginUI.clientCharacters then
+                loginUI._selectedCharacter = loginUI._selectedCharacter + 1
                 loadLoginPreviewCharacter()
             end
         end
     elseif manageType == "pick" then
         setLoginUIEnabled(true)
-        if (loginScreenCache._selectedCharacter ~= 0) and (loginScreenCache.selectedCharacter == loginScreenCache._selectedCharacter) then
+        if (loginUI._selectedCharacter ~= 0) and (loginUI.selectedCharacter == loginUI._selectedCharacter) then
             imports.triggerEvent("Player:onNotification", localPlayer, "You've already picked the specified character!", {255, 80, 80, 255})
             return false
         end
-        if (not loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter]) or loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter].isUnverified then
+        if (not loginUI.clientCharacters[loginUI._selectedCharacter]) or loginUI.clientCharacters[loginUI._selectedCharacter].isUnverified then
             imports.triggerEvent("Player:onNotification", localPlayer, "You must save the character inorder to pick!", {255, 80, 80, 255})
             return false
         end
-        loginScreenCache.selectedCharacter = loginScreenCache._selectedCharacter
+        loginUI.selectedCharacter = loginUI._selectedCharacter
         imports.triggerEvent("Player:onNotification", localPlayer, "You've successfully picked the character!", {80, 255, 80, 255})
     elseif manageType == "save" then
-        if #loginScreenCache.clientCharacters > 0 and not loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter].isUnverified then
+        if #loginUI.clientCharacters > 0 and not loginUI.clientCharacters[loginUI._selectedCharacter].isUnverified then
             setLoginUIEnabled(true)
             imports.triggerEvent("Player:onNotification", localPlayer, "Your character is already saved!", {255, 80, 80, 255})
             return false
         end
         local clientNameCounter = 0
-        local clientAgeCounter = tonumber(loginScreenCache.phases[2].customizerui.option[2].placeDataValue) or 0
-        for _ in string.gmatch(loginScreenCache.phases[2].customizerui.option[1].placeDataValue, "(%w+)%s*") do clientNameCounter = clientNameCounter + 1 end
+        local clientAgeCounter = tonumber(loginUI.phases[2].customizerui.option[2].placeDataValue) or 0
+        for _ in string.gmatch(loginUI.phases[2].customizerui.option[1].placeDataValue, "(%w+)%s*") do clientNameCounter = clientNameCounter + 1 end
         if clientNameCounter < FRAMEWORK_CONFIGS["UI"]["Login"].minimumCharacterNameWordCount then
             setLoginUIEnabled(true)
             imports.triggerEvent("Player:onNotification", localPlayer, "Please enter your full name!", {255, 80, 80, 255})
@@ -548,7 +548,7 @@ manageCharacter = function(manageType)
         setLoginUIEnabled(false, false)
         imports.triggerEvent("Player:onNotification", localPlayer, "◴ Saving..", {175, 175, 175, 255})
         local characterData = {}
-        for i, j in imports.ipairs(loginScreenCache.phases[2].customizerui.option) do
+        for i, j in imports.ipairs(loginUI.phases[2].customizerui.option) do
             if j.isEditBox then
                 characterData[j.optionType] = j.placeDataValue
             else
@@ -561,29 +561,29 @@ manageCharacter = function(manageType)
                 end
             end
         end
-        local selectedCharacter = loginScreenCache.selectedCharacter
+        local selectedCharacter = loginUI.selectedCharacter
         local charactersPendingToBeSaved = {}
-        local charactersToBeSaved = table.copy(loginScreenCache.clientCharacters, true)
+        local charactersToBeSaved = table.copy(loginUI.clientCharacters, true)
         for i, j in imports.ipairs(charactersToBeSaved) do
             if j.isUnverified then
                 charactersToBeSaved[i] = nil
             end
         end
-        if #loginScreenCache.clientCharacters <= 0 then
+        if #loginUI.clientCharacters <= 0 then
             selectedCharacter = 1
-            loginScreenCache._selectedCharacter = selectedCharacter
+            loginUI._selectedCharacter = selectedCharacter
         end
-        charactersPendingToBeSaved[loginScreenCache._selectedCharacter] = true
-        charactersToBeSaved[loginScreenCache._selectedCharacter] = characterData
-        loginScreenCache._charactersUnderProcess[loginScreenCache._selectedCharacter] = true
+        charactersPendingToBeSaved[loginUI._selectedCharacter] = true
+        charactersToBeSaved[loginUI._selectedCharacter] = characterData
+        loginUI._charactersUnderProcess[loginUI._selectedCharacter] = true
         triggerServerEvent("onClientCharacterSave", localPlayer, selectedCharacter, charactersToBeSaved, charactersPendingToBeSaved)
     elseif manageType == "play" then
-        if #loginScreenCache.clientCharacters <= 0 then
+        if #loginUI.clientCharacters <= 0 then
             setLoginUIEnabled(true)
             imports.triggerEvent("Player:onNotification", localPlayer, "You must create a character to play!", {255, 80, 80, 255})
             return false
         else
-            if not loginScreenCache.clientCharacters[loginScreenCache.selectedCharacter] then
+            if not loginUI.clientCharacters[loginUI.selectedCharacter] then
                 setLoginUIEnabled(true)
                 imports.triggerEvent("Player:onNotification", localPlayer, "You must pick a character to play!", {255, 80, 80, 255})
                 return false
@@ -597,7 +597,7 @@ manageCharacter = function(manageType)
         end, loadingScreenCache.animFadeInDuration + 250, 1)
         imports.setTimer(function(selectedCharacter, clientCharacters)
             triggerServerEvent("onPlayerResumeGame", localPlayer, selectedCharacter, clientCharacters)
-        end, loadingScreenCache.animFadeInDuration + loadingScreenCache.animFadeOutDuration + loadingScreenCache.animFadeDelayDuration, 1, loginScreenCache.selectedCharacter, loginScreenCache.clientCharacters)
+        end, loadingScreenCache.animFadeInDuration + loadingScreenCache.animFadeOutDuration + loadingScreenCache.animFadeDelayDuration, 1, loginUI.selectedCharacter, loginUI.clientCharacters)
     end
     return true
 
@@ -610,7 +610,7 @@ end
 
 function isLoginScreenVisible()
 
-    return loginScreenCache.state
+    return loginUI.state
 
 end
 
@@ -621,55 +621,55 @@ end
 
 function getLoginUIPhase()
 
-    return loginScreenCache.phase
+    return loginUI.phase
 
 end
 
 setLoginUIPhase = function(phaseID)
 
     phaseID = tonumber(phaseID)
-    if not phaseID or not loginScreenCache.phases[1].optionsui[phaseID] or (loginScreenCache.phase and loginScreenCache.phase == phaseID) then return false end
+    if not phaseID or not loginUI.phases[1].optionsui[phaseID] or (loginUI.phase and loginUI.phase == phaseID) then return false end
     if prevPhaseTimer and prevPhaseTimer:isValid() then prevPhaseTimer:destroy(); prevPhaseTimer = false end
     if prevEnablerTimer and prevEnablerTimer:isValid() then prevEnablerTimer:destroy(); prevEnablerTimer = false end
 
     imports.triggerEvent("Player:onHideLoadingUI", localPlayer)
     prevPhaseTimer = imports.setTimer(function()
         if phaseID == 1 then
-            exports.cinecam_handler:startCinemation(loginScreenCache.cinemationData.cinemationPoint, true, true, loginScreenCache.cinemationData.cinemationFOV, true, true, true, false)
+            exports.cinecam_handler:startCinemation(loginUI.cinemationData.cinemationPoint, true, true, loginUI.cinemationData.cinemationFOV, true, true, true, false)
         elseif phaseID == 2 then
-            if loginScreenCache.character and imports.isElement(loginScreenCache.character) then loginScreenCache.character:destroy(); loginScreenCache.character = false end
-            exports.cinecam_handler:startCinemation(loginScreenCache.cinemationData.characterCinemationPoint, true, true, loginScreenCache.cinemationData.characterCinemationFOV, true, true, true, false)
-            loginScreenCache.character = Ped(0, loginScreenCache.cinemationData.characterPoint.x, loginScreenCache.cinemationData.characterPoint.y, loginScreenCache.cinemationData.characterPoint.z, loginScreenCache.cinemationData.characterPoint.rotation)
-            loginScreenCache.character:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].lobbyDimension)
-            loginScreenCache.character:setFrozen(true)
+            if loginUI.character and imports.isElement(loginUI.character) then loginUI.character:destroy(); loginUI.character = false end
+            exports.cinecam_handler:startCinemation(loginUI.cinemationData.characterCinemationPoint, true, true, loginUI.cinemationData.characterCinemationFOV, true, true, true, false)
+            loginUI.character = Ped(0, loginUI.cinemationData.characterPoint.x, loginUI.cinemationData.characterPoint.y, loginUI.cinemationData.characterPoint.z, loginUI.cinemationData.characterPoint.rotation)
+            loginUI.character:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].lobbyDimension)
+            loginUI.character:setFrozen(true)
             loadLoginPreviewCharacter()
         else
             exports.cinecam_handler:stopCinemation()
             if phaseID == 3 then
-                loginScreenCache.phases[3].view.scrollAnimTickCounter = CLIENT_CURRENT_TICK
+                loginUI.phases[3].view.scrollAnimTickCounter = CLIENT_CURRENT_TICK
             end
         end
-        loginScreenCache.phase = phaseID
+        loginUI.phase = phaseID
         local unverifiedCharacters = {}
-        for i, j in imports.ipairs(loginScreenCache.clientCharacters) do
+        for i, j in imports.ipairs(loginUI.clientCharacters) do
             if j.isUnverified then
                 table.insert(unverifiedCharacters, i)
             end
         end
-        for i, j in imports.ipairs(loginScreenCache.clientCharacters) do
+        for i, j in imports.ipairs(loginUI.clientCharacters) do
             if j.isUnverified then
-                table.remove(loginScreenCache.clientCharacters, i)
-                loginScreenCache._unsavedCharacters[i] = nil
+                table.remove(loginUI.clientCharacters, i)
+                loginUI._unsavedCharacters[i] = nil
             end
         end
         for i, j in imports.ipairs(unverifiedCharacters) do
-            if loginScreenCache.selectedCharacter == j then
-                loginScreenCache.selectedCharacter = 0
-                loginScreenCache._selectedCharacter = 0
+            if loginUI.selectedCharacter == j then
+                loginUI.selectedCharacter = 0
+                loginUI._selectedCharacter = 0
                 break
             else
-                if loginScreenCache._selectedCharacter == j then
-                    loginScreenCache._selectedCharacter = 0
+                if loginUI._selectedCharacter == j then
+                    loginUI._selectedCharacter = 0
                 end
             end
         end
@@ -696,10 +696,10 @@ function setLoginUIEnabled(state, forcedState)
     if prevEnablerTimer and prevEnablerTimer:isValid() then prevEnablerTimer:destroy(); prevEnablerTimer = false end
     
     if forcedState ~= nil then
-        loginScreenCache.isForcedDisabled = not forcedState
-        loginScreenCache.isEnabled = forcedState
+        loginUI.isForcedDisabled = not forcedState
+        loginUI.isEnabled = forcedState
     else
-        loginScreenCache.isEnabled = state
+        loginUI.isEnabled = state
     end
     return true
 
@@ -720,7 +720,7 @@ imports.addEventHandler("onClientRecieveCharacterSaveState", root, function(stat
     else
         if errorMessage then
             if character then
-                loginScreenCache._charactersUnderProcess[character] = nil
+                loginUI._charactersUnderProcess[character] = nil
             end
             imports.triggerEvent("Player:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
         end
@@ -740,10 +740,10 @@ imports.addEventHandler("onClientLoadCharacterID", root, function(character, cha
     character = tonumber(character); characterID = tonumber(characterID);
     if not character or not characterID or not characterData then return false end
 
-    loginScreenCache._unsavedCharacters[character] = nil
-    loginScreenCache._charactersUnderProcess[character] = nil
-    loginScreenCache.clientCharacters[character] = characterData
-    loginScreenCache.clientCharacters[character]._id = characterID
+    loginUI._unsavedCharacters[character] = nil
+    loginUI._charactersUnderProcess[character] = nil
+    loginUI.clientCharacters[character] = characterData
+    loginUI.clientCharacters[character]._id = characterID
 
 end)
 
@@ -754,7 +754,7 @@ end)
 
 imports.addEventHandler("onClientCharacter", root, function(character)
 
-    if GuiElement.isMTAWindowActive() or not isLoginScreenVisible() or getLoginUIPhase() ~= 2 or not loginScreenCache.isEnabled or loginScreenCache.isForcedDisabled then return false end
+    if GuiElement.isMTAWindowActive() or not isLoginScreenVisible() or getLoginUIPhase() ~= 2 or not loginUI.isEnabled or loginUI.isForcedDisabled then return false end
 
     if _currentKeyCheck then
         _currentKeyCheck = false
@@ -768,62 +768,62 @@ end)
 
 imports.addEventHandler("onClientKey", root, function(button, press)
 
-    if GuiElement.isMTAWindowActive() or not isLoginScreenVisible() or getLoginUIPhase() ~= 2 or not loginScreenCache.isEnabled or loginScreenCache.isForcedDisabled then return false end
+    if GuiElement.isMTAWindowActive() or not isLoginScreenVisible() or getLoginUIPhase() ~= 2 or not loginUI.isEnabled or loginUI.isForcedDisabled then return false end
 
     if (button == "lshift" or button == "rshift") then
         _currentPressedKey = false
     else
         if not press then
             if button == "tab" then
-                if loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
+                if loginUI.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
                     local nextEditboxIndex = false
                     local editboxIndex = {}
                     local currentEditbox = false
-                    for i, j in imports.ipairs(loginScreenCache.phases[2].customizerui.option) do
+                    for i, j in imports.ipairs(loginUI.phases[2].customizerui.option) do
                         if j.isEditBox then
                             table.insert(editboxIndex, i)
-                            if loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox == i then
+                            if loginUI.phases[2].customizerui.option.editbox.focussedEditbox == i then
                                 currentEditbox = #editboxIndex
                             end
                         end
                     end
                     if (getKeyState("lshift") or getKeyState("rshift")) then
                         if not editboxIndex[currentEditbox - 1] then
-                            loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox = editboxIndex[#editboxIndex]
+                            loginUI.phases[2].customizerui.option.editbox.focussedEditbox = editboxIndex[#editboxIndex]
                         else
-                            loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox = editboxIndex[currentEditbox - 1]
+                            loginUI.phases[2].customizerui.option.editbox.focussedEditbox = editboxIndex[currentEditbox - 1]
                         end
                     else
                         if not editboxIndex[currentEditbox + 1] then
-                            loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox = 1
+                            loginUI.phases[2].customizerui.option.editbox.focussedEditbox = 1
                         else
-                            loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox = editboxIndex[currentEditbox + 1]
+                            loginUI.phases[2].customizerui.option.editbox.focussedEditbox = editboxIndex[currentEditbox + 1]
                         end
                     end
-                    loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum = string.len(loginScreenCache.phases[2].customizerui.option[loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox].placeDataValue)
+                    loginUI.phases[2].customizerui.option.editbox.cursor.posNum = string.len(loginUI.phases[2].customizerui.option[loginUI.phases[2].customizerui.option.editbox.focussedEditbox].placeDataValue)
                 end
             elseif button == "home" then
-                if loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
-                    loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum = 0
+                if loginUI.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
+                    loginUI.phases[2].customizerui.option.editbox.cursor.posNum = 0
                 end
             elseif button == "end" then
-                if loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
-                    loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum = string.len(loginScreenCache.phases[2].customizerui.option[loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox].placeDataValue)
+                if loginUI.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
+                    loginUI.phases[2].customizerui.option.editbox.cursor.posNum = string.len(loginUI.phases[2].customizerui.option[loginUI.phases[2].customizerui.option.editbox.focussedEditbox].placeDataValue)
                 end
             elseif string.find(button, "arrow") then
-                if loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
-                    local fieldLength = string.len(loginScreenCache.phases[2].customizerui.option[loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox].placeDataValue)
+                if loginUI.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
+                    local fieldLength = string.len(loginUI.phases[2].customizerui.option[loginUI.phases[2].customizerui.option.editbox.focussedEditbox].placeDataValue)
                     if button == "arrow_l" then
-                        if loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum - 1 < 0 then
-                            loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum = fieldLength
+                        if loginUI.phases[2].customizerui.option.editbox.cursor.posNum - 1 < 0 then
+                            loginUI.phases[2].customizerui.option.editbox.cursor.posNum = fieldLength
                         else
-                            loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum = loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum - 1
+                            loginUI.phases[2].customizerui.option.editbox.cursor.posNum = loginUI.phases[2].customizerui.option.editbox.cursor.posNum - 1
                         end
                     elseif button == "arrow_r" then
-                        if loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum + 1 > fieldLength then
-                            loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum = 0
+                        if loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1 > fieldLength then
+                            loginUI.phases[2].customizerui.option.editbox.cursor.posNum = 0
                         else
-                            loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum = loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum + 1
+                            loginUI.phases[2].customizerui.option.editbox.cursor.posNum = loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1
                         end
                     end
                 end
@@ -842,12 +842,12 @@ end)
 
 local function renderUI()
 
-    if not loginScreenCache.state or isPlayerInitialized(localPlayer) then return false end
+    if not loginUI.state or isPlayerInitialized(localPlayer) then return false end
     --local currentLoginPhase = getLoginUIPhase()
     --if not currentLoginPhase then return false end
 
     local isLMBClicked = false
-    if not GuiElement.isMTAWindowActive() and loginScreenCache.isEnabled and not loginScreenCache.isForcedDisabled then
+    if not GuiElement.isMTAWindowActive() and loginUI.isEnabled and not loginUI.isForcedDisabled then
         if not prevLMBClickState then
             if getKeyState("mouse1") then
                 isLMBClicked = true
@@ -877,10 +877,10 @@ local function renderUI()
 
     if currentLoginPhase == 1 then
         --Draws Options UI
-        imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginScreenCache.phases[1].bgPath, 0, 0, 0, tocolor(unpack(loginScreenCache.phases[1].bgColor)), false)
-        for i, j in imports.ipairs(loginScreenCache.phases[1].optionsui) do
+        imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[1].bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[1].bgColor)), false)
+        for i, j in imports.ipairs(loginUI.phases[1].optionsui) do
             local options_offsetX, options_offsetY = j.startX, j.startY
-            local option_width, option_height = j.width, loginScreenCache.phases[1].optionsui.height
+            local option_width, option_height = j.width, loginUI.phases[1].optionsui.height
             local isOptionHovered = isMouseOnPosition(options_offsetX, options_offsetY, option_width, option_height)
             if isOptionHovered then
                 if isLMBClicked then
@@ -901,29 +901,29 @@ local function renderUI()
             end
             if not j.animAlphaPercent then j.animAlphaPercent = 0 end
             if j.hoverStatus == "forward" then
-                j.animAlphaPercent = interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, getInterpolationProgress(j.hoverAnimTickCounter, loginScreenCache.phases[1].optionsui.hoverAnimDuration), "Linear")
+                j.animAlphaPercent = interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, getInterpolationProgress(j.hoverAnimTickCounter, loginUI.phases[1].optionsui.hoverAnimDuration), "Linear")
             else
-                j.animAlphaPercent = interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.hoverAnimTickCounter, loginScreenCache.phases[1].optionsui.hoverAnimDuration), "Linear")
+                j.animAlphaPercent = interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.hoverAnimTickCounter, loginUI.phases[1].optionsui.hoverAnimDuration), "Linear")
             end
-            dxDrawBorderedText(loginScreenCache.phases[1].optionsui.outlineWeight, loginScreenCache.phases[1].optionsui.fontColor, j.title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(unpack(loginScreenCache.phases[1].optionsui.fontColor)), 1, loginScreenCache.phases[1].optionsui.font, "center", "center", true, false, false)
-            dxDrawBorderedText(loginScreenCache.phases[1].optionsui.outlineWeight, {loginScreenCache.phases[1].optionsui.hoverfontColor[1], loginScreenCache.phases[1].optionsui.hoverfontColor[2], loginScreenCache.phases[1].optionsui.hoverfontColor[3], loginScreenCache.phases[1].optionsui.hoverfontColor[4]*j.animAlphaPercent}, j.title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(loginScreenCache.phases[1].optionsui.hoverfontColor[1], loginScreenCache.phases[1].optionsui.hoverfontColor[2], loginScreenCache.phases[1].optionsui.hoverfontColor[3], loginScreenCache.phases[1].optionsui.hoverfontColor[4]*j.animAlphaPercent), 1, loginScreenCache.phases[1].optionsui.font, "center", "center", true, false, false)
-            imports.dxDrawRectangle(options_offsetX, options_offsetY + option_height, option_width*j.animAlphaPercent, loginScreenCache.phases[1].optionsui.embedLineSize, tocolor(unpack(loginScreenCache.phases[1].optionsui.embedLineColor)), false)
+            dxDrawBorderedText(loginUI.phases[1].optionsui.outlineWeight, loginUI.phases[1].optionsui.fontColor, j.title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(unpack(loginUI.phases[1].optionsui.fontColor)), 1, loginUI.phases[1].optionsui.font, "center", "center", true, false, false)
+            dxDrawBorderedText(loginUI.phases[1].optionsui.outlineWeight, {loginUI.phases[1].optionsui.hoverfontColor[1], loginUI.phases[1].optionsui.hoverfontColor[2], loginUI.phases[1].optionsui.hoverfontColor[3], loginUI.phases[1].optionsui.hoverfontColor[4]*j.animAlphaPercent}, j.title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(loginUI.phases[1].optionsui.hoverfontColor[1], loginUI.phases[1].optionsui.hoverfontColor[2], loginUI.phases[1].optionsui.hoverfontColor[3], loginUI.phases[1].optionsui.hoverfontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsui.font, "center", "center", true, false, false)
+            imports.dxDrawRectangle(options_offsetX, options_offsetY + option_height, option_width*j.animAlphaPercent, loginUI.phases[1].optionsui.embedLineSize, tocolor(unpack(loginUI.phases[1].optionsui.embedLineColor)), false)
         end
     elseif currentLoginPhase == 2 then
         --Draws Character UI
-        local customizer_offsetX, customizer_offsetY = loginScreenCache.phases[2].customizerui.startX, loginScreenCache.phases[2].customizerui.startY
-        imports.dxDrawRectangle(customizer_offsetX + loginScreenCache.phases[2].customizerui.titleBar.height, customizer_offsetY, loginScreenCache.phases[2].customizerui.width - (loginScreenCache.phases[2].customizerui.titleBar.height*2), loginScreenCache.phases[2].customizerui.titleBar.height, tocolor(unpack(loginScreenCache.phases[2].customizerui.titleBar.bgColor)), false)
-        imports.dxDrawImage(customizer_offsetX, customizer_offsetY, loginScreenCache.phases[2].customizerui.titleBar.height, loginScreenCache.phases[2].customizerui.titleBar.height, loginScreenCache.phases[2].customizerui.titleBar.leftCurvedEdgePath, 0, 0, 0, tocolor(unpack(loginScreenCache.phases[2].customizerui.titleBar.bgColor)), false)
-        imports.dxDrawImage(customizer_offsetX + loginScreenCache.phases[2].customizerui.width - loginScreenCache.phases[2].customizerui.titleBar.height, customizer_offsetY, loginScreenCache.phases[2].customizerui.titleBar.height, loginScreenCache.phases[2].customizerui.titleBar.height, loginScreenCache.phases[2].customizerui.titleBar.rightCurvedEdgePath, 0, 0, 0, tocolor(unpack(loginScreenCache.phases[2].customizerui.titleBar.bgColor)), false)
-        dxDrawBorderedText(loginScreenCache.phases[2].customizerui.titleBar.outlineWeight, loginScreenCache.phases[2].customizerui.titleBar.fontColor, loginScreenCache.phases[2].customizerui.titleBar.text, customizer_offsetX, customizer_offsetY, customizer_offsetX + loginScreenCache.phases[2].customizerui.width, customizer_offsetY + loginScreenCache.phases[2].customizerui.titleBar.height, tocolor(unpack(loginScreenCache.phases[2].customizerui.titleBar.fontColor)), 1, loginScreenCache.phases[2].customizerui.titleBar.font, "center", "center", true, false, false)
-        customizer_offsetY = customizer_offsetY + loginScreenCache.phases[2].customizerui.titleBar.height
+        local customizer_offsetX, customizer_offsetY = loginUI.phases[2].customizerui.startX, loginUI.phases[2].customizerui.startY
+        imports.dxDrawRectangle(customizer_offsetX + loginUI.phases[2].customizerui.titleBar.height, customizer_offsetY, loginUI.phases[2].customizerui.width - (loginUI.phases[2].customizerui.titleBar.height*2), loginUI.phases[2].customizerui.titleBar.height, tocolor(unpack(loginUI.phases[2].customizerui.titleBar.bgColor)), false)
+        imports.dxDrawImage(customizer_offsetX, customizer_offsetY, loginUI.phases[2].customizerui.titleBar.height, loginUI.phases[2].customizerui.titleBar.height, loginUI.phases[2].customizerui.titleBar.leftCurvedEdgePath, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.titleBar.bgColor)), false)
+        imports.dxDrawImage(customizer_offsetX + loginUI.phases[2].customizerui.width - loginUI.phases[2].customizerui.titleBar.height, customizer_offsetY, loginUI.phases[2].customizerui.titleBar.height, loginUI.phases[2].customizerui.titleBar.height, loginUI.phases[2].customizerui.titleBar.rightCurvedEdgePath, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.titleBar.bgColor)), false)
+        dxDrawBorderedText(loginUI.phases[2].customizerui.titleBar.outlineWeight, loginUI.phases[2].customizerui.titleBar.fontColor, loginUI.phases[2].customizerui.titleBar.text, customizer_offsetX, customizer_offsetY, customizer_offsetX + loginUI.phases[2].customizerui.width, customizer_offsetY + loginUI.phases[2].customizerui.titleBar.height, tocolor(unpack(loginUI.phases[2].customizerui.titleBar.fontColor)), 1, loginUI.phases[2].customizerui.titleBar.font, "center", "center", true, false, false)
+        customizer_offsetY = customizer_offsetY + loginUI.phases[2].customizerui.titleBar.height
         local isOptionEditBoxClicked = false
-        for i, j in imports.ipairs(loginScreenCache.phases[2].customizerui.option) do
+        for i, j in imports.ipairs(loginUI.phases[2].customizerui.option) do
             local option_offsetX, option_offsetY = customizer_offsetX, customizer_offsetY
-            local option_width, option_height = loginScreenCache.phases[2].customizerui.width, loginScreenCache.phases[2].customizerui.option.height
+            local option_width, option_height = loginUI.phases[2].customizerui.width, loginUI.phases[2].customizerui.option.height
             if not j.isEditBox then
-                local isLeftArrowHovered = isMouseOnPosition(option_offsetX + loginScreenCache.phases[2].customizerui.option.paddingY, option_offsetY + (loginScreenCache.phases[2].customizerui.option.paddingY/2), option_height - loginScreenCache.phases[2].customizerui.option.paddingY, option_height - loginScreenCache.phases[2].customizerui.option.paddingY) and (#loginScreenCache.clientCharacters <= 0 or loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter].isUnverified)
-                local isRightArrowHovered = isMouseOnPosition(option_offsetX + option_width - option_height, option_offsetY + (loginScreenCache.phases[2].customizerui.option.paddingY/2), option_height - loginScreenCache.phases[2].customizerui.option.paddingY, option_height - loginScreenCache.phases[2].customizerui.option.paddingY) and (#loginScreenCache.clientCharacters <= 0 or loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter].isUnverified)
+                local isLeftArrowHovered = isMouseOnPosition(option_offsetX + loginUI.phases[2].customizerui.option.paddingY, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY) and (#loginUI.clientCharacters <= 0 or loginUI.clientCharacters[loginUI._selectedCharacter].isUnverified)
+                local isRightArrowHovered = isMouseOnPosition(option_offsetX + option_width - option_height, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY) and (#loginUI.clientCharacters <= 0 or loginUI.clientCharacters[loginUI._selectedCharacter].isUnverified)
                 if not j.leftArrowAnimStatus then j.leftArrowAnimStatus = "backward" end
                 if not j.leftArrowAnimTickCounter then j.leftArrowAnimTickCounter = CLIENT_CURRENT_TICK end
                 if not j.rightArrowAnimStatus then j.rightArrowAnimStatus = "backward" end
@@ -965,25 +965,25 @@ local function renderUI()
                 if not j.leftArrowAnimAlphaPercent then j.leftArrowAnimAlphaPercent = 0 end
                 if not j.rightArrowAnimAlphaPercent then j.rightArrowAnimAlphaPercent = 0 end
                 if j.leftArrowAnimStatus == "forward" then
-                    j.leftArrowAnimAlphaPercent = interpolateBetween(j.leftArrowAnimAlphaPercent, 0, 0, 1, 0, 0, getInterpolationProgress(j.leftArrowAnimTickCounter, loginScreenCache.phases[2].customizerui.option.arrowAnimDuration), "Linear")
+                    j.leftArrowAnimAlphaPercent = interpolateBetween(j.leftArrowAnimAlphaPercent, 0, 0, 1, 0, 0, getInterpolationProgress(j.leftArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
                 elseif j.leftArrowAnimStatus == "backward" then
-                    j.leftArrowAnimAlphaPercent = interpolateBetween(j.leftArrowAnimAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.leftArrowAnimTickCounter, loginScreenCache.phases[2].customizerui.option.arrowAnimDuration), "Linear")
+                    j.leftArrowAnimAlphaPercent = interpolateBetween(j.leftArrowAnimAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.leftArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
                 end
                 if j.rightArrowAnimStatus == "forward" then
-                    j.rightArrowAnimAlphaPercent = interpolateBetween(j.rightArrowAnimAlphaPercent, 0, 0, 1, 0, 0, getInterpolationProgress(j.rightArrowAnimTickCounter, loginScreenCache.phases[2].customizerui.option.arrowAnimDuration), "Linear")
+                    j.rightArrowAnimAlphaPercent = interpolateBetween(j.rightArrowAnimAlphaPercent, 0, 0, 1, 0, 0, getInterpolationProgress(j.rightArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
                 elseif j.rightArrowAnimStatus == "backward" then
-                    j.rightArrowAnimAlphaPercent = interpolateBetween(j.rightArrowAnimAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.rightArrowAnimTickCounter, loginScreenCache.phases[2].customizerui.option.arrowAnimDuration), "Linear")
+                    j.rightArrowAnimAlphaPercent = interpolateBetween(j.rightArrowAnimAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.rightArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
                 end
             else
-                local isEditboxHovered = isMouseOnPosition(option_offsetX, option_offsetY, option_width, option_height) and (#loginScreenCache.clientCharacters <= 0 or loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter].isUnverified)
+                local isEditboxHovered = isMouseOnPosition(option_offsetX, option_offsetY, option_width, option_height) and (#loginUI.clientCharacters <= 0 or loginUI.clientCharacters[loginUI._selectedCharacter].isUnverified)
                 if not j.hoverAnimStatus then j.hoverAnimStatus = "backward" end
                 if not j.hoverAnimTickCounter then j.hoverAnimTickCounter = CLIENT_CURRENT_TICK end
-                if #loginScreenCache.clientCharacters > 0 and not loginScreenCache.clientCharacters[loginScreenCache._selectedCharacter].isUnverified then loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox = 0 end
+                if #loginUI.clientCharacters > 0 and not loginUI.clientCharacters[loginUI._selectedCharacter].isUnverified then loginUI.phases[2].customizerui.option.editbox.focussedEditbox = 0 end
                 if isEditboxHovered then
                     if isLMBClicked then
-                        if (loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox ~= i) then
-                            loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox = i
-                            loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum = string.len(j.placeDataValue)
+                        if (loginUI.phases[2].customizerui.option.editbox.focussedEditbox ~= i) then
+                            loginUI.phases[2].customizerui.option.editbox.focussedEditbox = i
+                            loginUI.phases[2].customizerui.option.editbox.cursor.posNum = string.len(j.placeDataValue)
                         end
                         isOptionEditBoxClicked = true
                     end
@@ -992,7 +992,7 @@ local function renderUI()
                         j.hoverAnimTickCounter = CLIENT_CURRENT_TICK
                     end
                 else
-                    if loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox == i then
+                    if loginUI.phases[2].customizerui.option.editbox.focussedEditbox == i then
                         if j.hoverAnimStatus ~= "forward" then
                             j.hoverAnimStatus = "forward"
                             j.hoverAnimTickCounter = CLIENT_CURRENT_TICK
@@ -1006,31 +1006,31 @@ local function renderUI()
                 end
                 if not j.embedLineAlphaPercent then j.embedLineAlphaPercent = 0 end
                 if j.hoverAnimStatus == "forward" then
-                    j.embedLineAlphaPercent = interpolateBetween(j.embedLineAlphaPercent, 0, 0, 1, 0, 0, getInterpolationProgress(j.hoverAnimTickCounter, loginScreenCache.phases[2].customizerui.option.editbox.hoverAnimDuration), "Linear")
+                    j.embedLineAlphaPercent = interpolateBetween(j.embedLineAlphaPercent, 0, 0, 1, 0, 0, getInterpolationProgress(j.hoverAnimTickCounter, loginUI.phases[2].customizerui.option.editbox.hoverAnimDuration), "Linear")
                 elseif j.hoverAnimStatus == "backward" then
-                    j.embedLineAlphaPercent = interpolateBetween(j.embedLineAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.hoverAnimTickCounter, loginScreenCache.phases[2].customizerui.option.editbox.hoverAnimDuration), "Linear")
+                    j.embedLineAlphaPercent = interpolateBetween(j.embedLineAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.hoverAnimTickCounter, loginUI.phases[2].customizerui.option.editbox.hoverAnimDuration), "Linear")
                 end
             end
-            imports.dxDrawRectangle(option_offsetX, option_offsetY, option_width, option_height, tocolor(unpack(loginScreenCache.phases[2].customizerui.option.bgColor)), false)
-            customizer_offsetY = customizer_offsetY + option_height + loginScreenCache.phases[2].customizerui.option.dividerSize
-            imports.dxDrawRectangle(option_offsetX, customizer_offsetY - loginScreenCache.phases[2].customizerui.option.dividerSize, option_width, loginScreenCache.phases[2].customizerui.option.dividerSize, tocolor(unpack(loginScreenCache.phases[2].customizerui.option.dividerColor)), false)
+            imports.dxDrawRectangle(option_offsetX, option_offsetY, option_width, option_height, tocolor(unpack(loginUI.phases[2].customizerui.option.bgColor)), false)
+            customizer_offsetY = customizer_offsetY + option_height + loginUI.phases[2].customizerui.option.dividerSize
+            imports.dxDrawRectangle(option_offsetX, customizer_offsetY - loginUI.phases[2].customizerui.option.dividerSize, option_width, loginUI.phases[2].customizerui.option.dividerSize, tocolor(unpack(loginUI.phases[2].customizerui.option.dividerColor)), false)
             if not j.isEditBox then
-                local option_slotWidth, option_slotHeight = (option_width - (option_height*2) - (loginScreenCache.phases[2].customizerui.option.paddingY*2))/2, option_height - loginScreenCache.phases[2].customizerui.option.paddingY
-                local option_slotOffsetY = option_offsetY + (loginScreenCache.phases[2].customizerui.option.paddingY/2)
-                local option_left_slotOffsetX = option_offsetX + option_height + (loginScreenCache.phases[2].customizerui.option.paddingY/2)
-                local option_right_slotOffsetX = option_left_slotOffsetX + option_slotWidth + (loginScreenCache.phases[2].customizerui.option.paddingY)
+                local option_slotWidth, option_slotHeight = (option_width - (option_height*2) - (loginUI.phases[2].customizerui.option.paddingY*2))/2, option_height - loginUI.phases[2].customizerui.option.paddingY
+                local option_slotOffsetY = option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2)
+                local option_left_slotOffsetX = option_offsetX + option_height + (loginUI.phases[2].customizerui.option.paddingY/2)
+                local option_right_slotOffsetX = option_left_slotOffsetX + option_slotWidth + (loginUI.phases[2].customizerui.option.paddingY)
                 local option_fieldText = j.placeDataValue
                 if j.placeDataValue and j.placeDataTable then option_fieldText = j.placeDataTable[j.placeDataValue] or option_fieldText end
                 if j.placeDataTable[j.placeDataValue] and j.clothingCategoryIndex then option_fieldText = j.placeDataTable[j.placeDataValue].clothingName or j.placeDataValue end
-                imports.dxDrawImage(option_offsetX + loginScreenCache.phases[2].customizerui.option.paddingY, option_offsetY + (loginScreenCache.phases[2].customizerui.option.paddingY/2), option_height - loginScreenCache.phases[2].customizerui.option.paddingY, option_height - loginScreenCache.phases[2].customizerui.option.paddingY, loginScreenCache.phases[2].customizerui.option.arrowBGPath, 0, 0, 0, tocolor(loginScreenCache.phases[2].customizerui.option.arrowBGColor[1], loginScreenCache.phases[2].customizerui.option.arrowBGColor[2], loginScreenCache.phases[2].customizerui.option.arrowBGColor[3], loginScreenCache.phases[2].customizerui.option.arrowBGColor[4]), false)
-                imports.dxDrawImage(option_offsetX + loginScreenCache.phases[2].customizerui.option.paddingY, option_offsetY + (loginScreenCache.phases[2].customizerui.option.paddingY/2), option_height - loginScreenCache.phases[2].customizerui.option.paddingY, option_height - loginScreenCache.phases[2].customizerui.option.paddingY, loginScreenCache.phases[2].customizerui.option.arrowBGPath, 0, 0, 0, tocolor(loginScreenCache.phases[2].customizerui.option.arrowHoveredBGColor[1], loginScreenCache.phases[2].customizerui.option.arrowHoveredBGColor[2], loginScreenCache.phases[2].customizerui.option.arrowHoveredBGColor[3], loginScreenCache.phases[2].customizerui.option.arrowHoveredBGColor[4]*j.leftArrowAnimAlphaPercent), false)
-                imports.dxDrawImage(option_offsetX + option_width - option_height, option_offsetY + (loginScreenCache.phases[2].customizerui.option.paddingY/2), option_height - loginScreenCache.phases[2].customizerui.option.paddingY, option_height - loginScreenCache.phases[2].customizerui.option.paddingY, loginScreenCache.phases[2].customizerui.option.arrowBGPath, 180, 0, 0, tocolor(loginScreenCache.phases[2].customizerui.option.arrowBGColor[1], loginScreenCache.phases[2].customizerui.option.arrowBGColor[2], loginScreenCache.phases[2].customizerui.option.arrowBGColor[3], loginScreenCache.phases[2].customizerui.option.arrowBGColor[4]), false)
-                imports.dxDrawImage(option_offsetX + option_width - option_height, option_offsetY + (loginScreenCache.phases[2].customizerui.option.paddingY/2), option_height - loginScreenCache.phases[2].customizerui.option.paddingY, option_height - loginScreenCache.phases[2].customizerui.option.paddingY, loginScreenCache.phases[2].customizerui.option.arrowBGPath, 180, 0, 0, tocolor(loginScreenCache.phases[2].customizerui.option.arrowHoveredBGColor[1], loginScreenCache.phases[2].customizerui.option.arrowHoveredBGColor[2], loginScreenCache.phases[2].customizerui.option.arrowHoveredBGColor[3], loginScreenCache.phases[2].customizerui.option.arrowHoveredBGColor[4]*j.rightArrowAnimAlphaPercent), false)
-                dxDrawText(j.placeHolder..":", option_left_slotOffsetX, option_slotOffsetY, option_left_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginScreenCache.phases[2].customizerui.option.placeDataFontColor)), 1, loginScreenCache.phases[2].customizerui.option.font, "right", "center", true, false, false)
-                dxDrawText(option_fieldText, option_right_slotOffsetX, option_slotOffsetY, option_right_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginScreenCache.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginScreenCache.phases[2].customizerui.option.font, "left", "center", true, false, false)
+                imports.dxDrawImage(option_offsetX + loginUI.phases[2].customizerui.option.paddingY, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowBGPath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowBGColor[1], loginUI.phases[2].customizerui.option.arrowBGColor[2], loginUI.phases[2].customizerui.option.arrowBGColor[3], loginUI.phases[2].customizerui.option.arrowBGColor[4]), false)
+                imports.dxDrawImage(option_offsetX + loginUI.phases[2].customizerui.option.paddingY, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowBGPath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowHoveredBGColor[1], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[2], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[3], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[4]*j.leftArrowAnimAlphaPercent), false)
+                imports.dxDrawImage(option_offsetX + option_width - option_height, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowBGPath, 180, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowBGColor[1], loginUI.phases[2].customizerui.option.arrowBGColor[2], loginUI.phases[2].customizerui.option.arrowBGColor[3], loginUI.phases[2].customizerui.option.arrowBGColor[4]), false)
+                imports.dxDrawImage(option_offsetX + option_width - option_height, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowBGPath, 180, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowHoveredBGColor[1], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[2], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[3], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[4]*j.rightArrowAnimAlphaPercent), false)
+                dxDrawText(j.placeHolder..":", option_left_slotOffsetX, option_slotOffsetY, option_left_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataFontColor)), 1, loginUI.phases[2].customizerui.option.font, "right", "center", true, false, false)
+                dxDrawText(option_fieldText, option_right_slotOffsetX, option_slotOffsetY, option_right_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "left", "center", true, false, false)
             else
-                local option_slotWidth, option_slotHeight = option_width - (option_height*2) - (loginScreenCache.phases[2].customizerui.option.paddingY*2) + loginScreenCache.phases[2].customizerui.option.editbox.width, option_height - loginScreenCache.phases[2].customizerui.option.paddingY + loginScreenCache.phases[2].customizerui.option.editbox.height
-                local option_slotOffsetX, option_slotOffsetY = option_offsetX + option_height + loginScreenCache.phases[2].customizerui.option.paddingY + loginScreenCache.phases[2].customizerui.option.editbox.startX, option_offsetY + (loginScreenCache.phases[2].customizerui.option.paddingY/2) + loginScreenCache.phases[2].customizerui.option.editbox.startY
+                local option_slotWidth, option_slotHeight = option_width - (option_height*2) - (loginUI.phases[2].customizerui.option.paddingY*2) + loginUI.phases[2].customizerui.option.editbox.width, option_height - loginUI.phases[2].customizerui.option.paddingY + loginUI.phases[2].customizerui.option.editbox.height
+                local option_slotOffsetX, option_slotOffsetY = option_offsetX + option_height + loginUI.phases[2].customizerui.option.paddingY + loginUI.phases[2].customizerui.option.editbox.startX, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2) + loginUI.phases[2].customizerui.option.editbox.startY
                 local fieldText = j.placeDataValue
                 local fieldLength = string.len(fieldText)
                 if j.censored then
@@ -1040,72 +1040,72 @@ local function renderUI()
                     end
                     fieldText = censored
                 end
-                if (loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox ~= i) then
-                    dxDrawText((string.len(j.placeDataValue) <= 0 and j.placeHolder) or fieldText, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, (string.len(j.placeDataValue) <= 0 and tocolor(unpack(loginScreenCache.phases[2].customizerui.option.placeDataFontColor))) or tocolor(unpack(loginScreenCache.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginScreenCache.phases[2].customizerui.option.font, "center", "center", true, false, false)
+                if (loginUI.phases[2].customizerui.option.editbox.focussedEditbox ~= i) then
+                    dxDrawText((string.len(j.placeDataValue) <= 0 and j.placeHolder) or fieldText, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, (string.len(j.placeDataValue) <= 0 and tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataFontColor))) or tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "center", "center", true, false, false)
                 else
                     local horizontalShift = 0
-                    local fieldWidth = dxGetTextWidth(fieldText, 1, loginScreenCache.phases[2].customizerui.option.font)
+                    local fieldWidth = dxGetTextWidth(fieldText, 1, loginUI.phases[2].customizerui.option.font)
                     local fieldX_offset = option_slotOffsetX + ((option_slotWidth + fieldWidth)/2) - fieldWidth
                     if fieldWidth >= option_slotWidth then
                         fieldX_offset = option_slotOffsetX + option_slotWidth - fieldWidth
                     end
-                    local firstString = string.sub(fieldText, 1, loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum)
-                    local secondString = string.sub(fieldText, loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum + 1, fieldLength)
+                    local firstString = string.sub(fieldText, 1, loginUI.phases[2].customizerui.option.editbox.cursor.posNum)
+                    local secondString = string.sub(fieldText, loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1, fieldLength)
                     local cursor_equivalentPadding = ""
-                    local cursorX_offset = fieldX_offset + dxGetTextWidth(firstString, 1, loginScreenCache.phases[2].customizerui.option.font)
+                    local cursorX_offset = fieldX_offset + dxGetTextWidth(firstString, 1, loginUI.phases[2].customizerui.option.font)
                     local cursorX_startBounding = option_slotOffsetX
                     local cursorX_endBounding = cursorX_startBounding + option_slotWidth
-                    while dxGetTextWidth(cursor_equivalentPadding, 1, loginScreenCache.phases[2].customizerui.option.font) < loginScreenCache.phases[2].customizerui.option.editbox.cursor.paddingX do
+                    while dxGetTextWidth(cursor_equivalentPadding, 1, loginUI.phases[2].customizerui.option.font) < loginUI.phases[2].customizerui.option.editbox.cursor.paddingX do
                         cursor_equivalentPadding = cursor_equivalentPadding.." "
                     end
                     if cursorX_offset < cursorX_startBounding then cursorX_offset = cursorX_startBounding end
                     if cursorX_offset > cursorX_endBounding then cursorX_offset = cursorX_endBounding end
                     if fieldWidth >= option_slotWidth then
-                        if loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum == fieldLength then
-                            dxDrawText(firstString, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginScreenCache.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginScreenCache.phases[2].customizerui.option.font, "right", "center", true, false, false)
-                            imports.dxDrawRectangle(cursorX_offset + (loginScreenCache.phases[2].customizerui.option.editbox.cursor.paddingX/3), option_slotOffsetY + loginScreenCache.phases[2].customizerui.option.editbox.cursor.paddingY, loginScreenCache.phases[2].customizerui.option.editbox.cursor.width, option_slotHeight - (loginScreenCache.phases[2].customizerui.option.editbox.cursor.paddingY*2), tocolor(unpack(loginScreenCache.phases[2].customizerui.option.editbox.cursor.bgColor)), false)
+                        if loginUI.phases[2].customizerui.option.editbox.cursor.posNum == fieldLength then
+                            dxDrawText(firstString, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "right", "center", true, false, false)
+                            imports.dxDrawRectangle(cursorX_offset + (loginUI.phases[2].customizerui.option.editbox.cursor.paddingX/3), option_slotOffsetY + loginUI.phases[2].customizerui.option.editbox.cursor.paddingY, loginUI.phases[2].customizerui.option.editbox.cursor.width, option_slotHeight - (loginUI.phases[2].customizerui.option.editbox.cursor.paddingY*2), tocolor(unpack(loginUI.phases[2].customizerui.option.editbox.cursor.bgColor)), false)
                         else
                             local equivalentSpace = ""
                             local secondStringLength = string.len(secondString)
-                            local secondStringWidth = dxGetTextWidth(secondString, 1, loginScreenCache.phases[2].customizerui.option.font)
+                            local secondStringWidth = dxGetTextWidth(secondString, 1, loginUI.phases[2].customizerui.option.font)
                             local generatedText = firstString..cursor_equivalentPadding..secondString
                             if secondStringWidth > option_slotWidth then
                                 horizontalShift = secondStringWidth - option_slotWidth + (option_slotWidth/3)
                             end
                             if horizontalShift > 0 then
                                 local extraCharacters = 1
-                                while dxGetTextWidth(string.sub(secondString, 1, extraCharacters), 1, loginScreenCache.phases[2].customizerui.option.font) <= horizontalShift do
+                                while dxGetTextWidth(string.sub(secondString, 1, extraCharacters), 1, loginUI.phases[2].customizerui.option.font) <= horizontalShift do
                                     extraCharacters = extraCharacters + 1
                                 end
                                 local _firstString = string.sub(secondString, 1, secondStringLength - extraCharacters)
                                 local _secondString = string.sub(secondString, secondStringLength - extraCharacters + 1, secondStringLength)
-                                while dxGetTextWidth(equivalentSpace, 1, loginScreenCache.phases[2].customizerui.option.font) < dxGetTextWidth(_secondString, 1, loginScreenCache.phases[2].customizerui.option.font) do
+                                while dxGetTextWidth(equivalentSpace, 1, loginUI.phases[2].customizerui.option.font) < dxGetTextWidth(_secondString, 1, loginUI.phases[2].customizerui.option.font) do
                                     equivalentSpace = equivalentSpace.." "
                                 end
                                 generatedText = firstString..cursor_equivalentPadding.._firstString..equivalentSpace
-                                fieldWidth = dxGetTextWidth(generatedText, 1, loginScreenCache.phases[2].customizerui.option.font)
-                                fieldX_offset = option_slotOffsetX + option_slotWidth - fieldWidth + dxGetTextWidth(equivalentSpace, 1, loginScreenCache.phases[2].customizerui.option.font)
-                                cursorX_offset = fieldX_offset + dxGetTextWidth(firstString, 1, loginScreenCache.phases[2].customizerui.option.font) + loginScreenCache.phases[2].customizerui.option.editbox.cursor.paddingX
+                                fieldWidth = dxGetTextWidth(generatedText, 1, loginUI.phases[2].customizerui.option.font)
+                                fieldX_offset = option_slotOffsetX + option_slotWidth - fieldWidth + dxGetTextWidth(equivalentSpace, 1, loginUI.phases[2].customizerui.option.font)
+                                cursorX_offset = fieldX_offset + dxGetTextWidth(firstString, 1, loginUI.phases[2].customizerui.option.font) + loginUI.phases[2].customizerui.option.editbox.cursor.paddingX
                             end
-                            dxDrawText(generatedText, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginScreenCache.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginScreenCache.phases[2].customizerui.option.font, "right", "center", true, false, false)
-                            imports.dxDrawRectangle(cursorX_offset - (loginScreenCache.phases[2].customizerui.option.editbox.cursor.paddingX/2), option_slotOffsetY + loginScreenCache.phases[2].customizerui.option.editbox.cursor.paddingY, loginScreenCache.phases[2].customizerui.option.editbox.cursor.width, option_slotHeight - (loginScreenCache.phases[2].customizerui.option.editbox.cursor.paddingY*2), tocolor(unpack(loginScreenCache.phases[2].customizerui.option.editbox.cursor.bgColor)), false)
+                            dxDrawText(generatedText, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "right", "center", true, false, false)
+                            imports.dxDrawRectangle(cursorX_offset - (loginUI.phases[2].customizerui.option.editbox.cursor.paddingX/2), option_slotOffsetY + loginUI.phases[2].customizerui.option.editbox.cursor.paddingY, loginUI.phases[2].customizerui.option.editbox.cursor.width, option_slotHeight - (loginUI.phases[2].customizerui.option.editbox.cursor.paddingY*2), tocolor(unpack(loginUI.phases[2].customizerui.option.editbox.cursor.bgColor)), false)
                         end
                     else
-                        if loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum == fieldLength then
-                            dxDrawText(firstString, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginScreenCache.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginScreenCache.phases[2].customizerui.option.font, "center", "center", true, false, false)
-                            imports.dxDrawRectangle(cursorX_offset + (loginScreenCache.phases[2].customizerui.option.editbox.cursor.paddingX/3), option_slotOffsetY + loginScreenCache.phases[2].customizerui.option.editbox.cursor.paddingY, loginScreenCache.phases[2].customizerui.option.editbox.cursor.width, option_slotHeight - (loginScreenCache.phases[2].customizerui.option.editbox.cursor.paddingY*2), tocolor(unpack(loginScreenCache.phases[2].customizerui.option.editbox.cursor.bgColor)), false)
+                        if loginUI.phases[2].customizerui.option.editbox.cursor.posNum == fieldLength then
+                            dxDrawText(firstString, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "center", "center", true, false, false)
+                            imports.dxDrawRectangle(cursorX_offset + (loginUI.phases[2].customizerui.option.editbox.cursor.paddingX/3), option_slotOffsetY + loginUI.phases[2].customizerui.option.editbox.cursor.paddingY, loginUI.phases[2].customizerui.option.editbox.cursor.width, option_slotHeight - (loginUI.phases[2].customizerui.option.editbox.cursor.paddingY*2), tocolor(unpack(loginUI.phases[2].customizerui.option.editbox.cursor.bgColor)), false)
                         else
-                            dxDrawText(firstString..cursor_equivalentPadding..secondString, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginScreenCache.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginScreenCache.phases[2].customizerui.option.font, "center", "center", true, false, false)
-                            imports.dxDrawRectangle(cursorX_offset, option_slotOffsetY + loginScreenCache.phases[2].customizerui.option.editbox.cursor.paddingY, loginScreenCache.phases[2].customizerui.option.editbox.cursor.width, option_slotHeight - (loginScreenCache.phases[2].customizerui.option.editbox.cursor.paddingY*2), tocolor(unpack(loginScreenCache.phases[2].customizerui.option.editbox.cursor.bgColor)), false)
+                            dxDrawText(firstString..cursor_equivalentPadding..secondString, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "center", "center", true, false, false)
+                            imports.dxDrawRectangle(cursorX_offset, option_slotOffsetY + loginUI.phases[2].customizerui.option.editbox.cursor.paddingY, loginUI.phases[2].customizerui.option.editbox.cursor.width, option_slotHeight - (loginUI.phases[2].customizerui.option.editbox.cursor.paddingY*2), tocolor(unpack(loginUI.phases[2].customizerui.option.editbox.cursor.bgColor)), false)
                         end
                     end
                     if isOptionEditBoxClicked then
                         local clickedX = getAbsoluteCursorPosition()
                         local _inputCursorX = 0
                         for i=1, fieldLength, 1 do
-                            local _fieldX = fieldX_offset + dxGetTextWidth(string.sub(fieldText, 1, i), 1, loginScreenCache.phases[2].customizerui.option.font) - (loginScreenCache.phases[2].customizerui.option.editbox.cursor.width*2)
+                            local _fieldX = fieldX_offset + dxGetTextWidth(string.sub(fieldText, 1, i), 1, loginUI.phases[2].customizerui.option.font) - (loginUI.phases[2].customizerui.option.editbox.cursor.width*2)
                             if horizontalShift > 0 then
-                                _fieldX = fieldX_offset + dxGetTextWidth(string.sub(fieldText, 1, i), 1, loginScreenCache.phases[2].customizerui.option.font) + loginScreenCache.phases[2].customizerui.option.editbox.cursor.width
+                                _fieldX = fieldX_offset + dxGetTextWidth(string.sub(fieldText, 1, i), 1, loginUI.phases[2].customizerui.option.font) + loginUI.phases[2].customizerui.option.editbox.cursor.width
                             end
                             if clickedX >= _fieldX then
                                 _inputCursorX = i
@@ -1113,9 +1113,9 @@ local function renderUI()
                                 break
                             end
                         end
-                        loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum = _inputCursorX
+                        loginUI.phases[2].customizerui.option.editbox.cursor.posNum = _inputCursorX
                     end
-                    if not GuiElement.isMTAWindowActive() and loginScreenCache.isEnabled and not loginScreenCache.isForcedDisabled then
+                    if not GuiElement.isMTAWindowActive() and loginUI.isEnabled and not loginUI.isForcedDisabled then
                         local currentPressedKey = false
                         if getKeyState("backspace") then
                             currentPressedKey = "backspace"
@@ -1179,7 +1179,7 @@ local function renderUI()
                         else
                             local isOnDelay = false
                             if prevInputKey and prevInputKey == currentPressedKey then
-                                if prevInputKeyStreak < 1 and (loginScreenCache.phases[2].customizerui.option.editbox.inputDelayDuration - CLIENT_CURRENT_TICK + inputTickCounter) >= 0 then
+                                if prevInputKeyStreak < 1 and (loginUI.phases[2].customizerui.option.editbox.inputDelayDuration - CLIENT_CURRENT_TICK + inputTickCounter) >= 0 then
                                     isOnDelay = true
                                 else
                                     prevInputKeyStreak = prevInputKeyStreak + 1
@@ -1188,20 +1188,20 @@ local function renderUI()
                                 prevInputKeyStreak = 0
                             end
                             if not isOnDelay then
-                                local _firstString = string.sub(j.placeDataValue, 1, loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum)
-                                local _secondString = string.sub(j.placeDataValue, loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum + 1, string.len(j.placeDataValue))
+                                local _firstString = string.sub(j.placeDataValue, 1, loginUI.phases[2].customizerui.option.editbox.cursor.posNum)
+                                local _secondString = string.sub(j.placeDataValue, loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1, string.len(j.placeDataValue))
                                 if currentPressedKey == "backspace" then
                                     j.placeDataValue = string.sub(_firstString, 1, string.len(_firstString) - 1).._secondString
-                                    loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum = loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum - 1
-                                    if loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum < 0 then loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum = 0 end
+                                    loginUI.phases[2].customizerui.option.editbox.cursor.posNum = loginUI.phases[2].customizerui.option.editbox.cursor.posNum - 1
+                                    if loginUI.phases[2].customizerui.option.editbox.cursor.posNum < 0 then loginUI.phases[2].customizerui.option.editbox.cursor.posNum = 0 end
                                 elseif currentPressedKey == "delete" then
                                     j.placeDataValue = _firstString..string.sub(_secondString, 2, string.len(_secondString))
                                 else
                                     if j.inputSettings and j.inputSettings.rangeLimit and (string.len(j.placeDataValue) < j.inputSettings.rangeLimit[2]) then
                                         j.placeDataValue = _firstString..currentPressedKey:gsub("space", " ").._secondString
-                                        loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum = loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum + 1
+                                        loginUI.phases[2].customizerui.option.editbox.cursor.posNum = loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1
                                         local _fieldLength = string.len(j.placeDataValue)
-                                        if loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum > _fieldLength then loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum = _fieldLength end
+                                        if loginUI.phases[2].customizerui.option.editbox.cursor.posNum > _fieldLength then loginUI.phases[2].customizerui.option.editbox.cursor.posNum = _fieldLength end
                                     end
                                 end
                                 inputTickCounter = CLIENT_CURRENT_TICK
@@ -1210,15 +1210,15 @@ local function renderUI()
                         end
                     end
                 end
-                imports.dxDrawRectangle(option_slotOffsetX - loginScreenCache.phases[2].customizerui.option.editbox.embedLineSize, option_slotOffsetY + option_slotHeight + (loginScreenCache.phases[2].customizerui.option.paddingY/2), option_slotWidth + (loginScreenCache.phases[2].customizerui.option.editbox.embedLineSize*2), loginScreenCache.phases[2].customizerui.option.editbox.embedLineSize, tocolor(unpack(loginScreenCache.phases[2].customizerui.option.editbox.embedLineColor)), false)
-                imports.dxDrawRectangle(option_slotOffsetX - loginScreenCache.phases[2].customizerui.option.editbox.embedLineSize, option_slotOffsetY + option_slotHeight + (loginScreenCache.phases[2].customizerui.option.paddingY/2), option_slotWidth + (loginScreenCache.phases[2].customizerui.option.editbox.embedLineSize*2), loginScreenCache.phases[2].customizerui.option.editbox.embedLineSize, tocolor(loginScreenCache.phases[2].customizerui.option.editbox.focussedEmbedLineColor[1], loginScreenCache.phases[2].customizerui.option.editbox.focussedEmbedLineColor[2], loginScreenCache.phases[2].customizerui.option.editbox.focussedEmbedLineColor[3], loginScreenCache.phases[2].customizerui.option.editbox.focussedEmbedLineColor[4]*j.embedLineAlphaPercent), false)
+                imports.dxDrawRectangle(option_slotOffsetX - loginUI.phases[2].customizerui.option.editbox.embedLineSize, option_slotOffsetY + option_slotHeight + (loginUI.phases[2].customizerui.option.paddingY/2), option_slotWidth + (loginUI.phases[2].customizerui.option.editbox.embedLineSize*2), loginUI.phases[2].customizerui.option.editbox.embedLineSize, tocolor(unpack(loginUI.phases[2].customizerui.option.editbox.embedLineColor)), false)
+                imports.dxDrawRectangle(option_slotOffsetX - loginUI.phases[2].customizerui.option.editbox.embedLineSize, option_slotOffsetY + option_slotHeight + (loginUI.phases[2].customizerui.option.paddingY/2), option_slotWidth + (loginUI.phases[2].customizerui.option.editbox.embedLineSize*2), loginUI.phases[2].customizerui.option.editbox.embedLineSize, tocolor(loginUI.phases[2].customizerui.option.editbox.focussedEmbedLineColor[1], loginUI.phases[2].customizerui.option.editbox.focussedEmbedLineColor[2], loginUI.phases[2].customizerui.option.editbox.focussedEmbedLineColor[3], loginUI.phases[2].customizerui.option.editbox.focussedEmbedLineColor[4]*j.embedLineAlphaPercent), false)
             end
         end
-        if isLMBClicked and (not isOptionEditBoxClicked) then loginScreenCache.phases[2].customizerui.option.editbox.focussedEditbox = 0; loginScreenCache.phases[2].customizerui.option.editbox.cursor.posNum = 0; end
-        imports.dxDrawRectangle(customizer_offsetX, loginScreenCache.phases[2].customizerui.startY + loginScreenCache.phases[2].customizerui.titleBar.height, loginScreenCache.phases[2].customizerui.width, loginScreenCache.phases[2].customizerui.titleBar.dividerSize, tocolor(unpack(loginScreenCache.phases[2].customizerui.titleBar.dividerColor)), false)
-        local switcher_offsetX, switcher_offsetY = customizer_offsetX + loginScreenCache.phases[2].customizerui.switcher.startX, loginScreenCache.phases[2].customizerui.startY + loginScreenCache.phases[2].customizerui.switcher.startY
-        local switcher_width, switcher_height = loginScreenCache.phases[2].customizerui.switcher.width, loginScreenCache.phases[2].customizerui.switcher.height
-        for i, j in imports.ipairs(loginScreenCache.phases[2].customizerui.switcher) do
+        if isLMBClicked and (not isOptionEditBoxClicked) then loginUI.phases[2].customizerui.option.editbox.focussedEditbox = 0; loginUI.phases[2].customizerui.option.editbox.cursor.posNum = 0; end
+        imports.dxDrawRectangle(customizer_offsetX, loginUI.phases[2].customizerui.startY + loginUI.phases[2].customizerui.titleBar.height, loginUI.phases[2].customizerui.width, loginUI.phases[2].customizerui.titleBar.dividerSize, tocolor(unpack(loginUI.phases[2].customizerui.titleBar.dividerColor)), false)
+        local switcher_offsetX, switcher_offsetY = customizer_offsetX + loginUI.phases[2].customizerui.switcher.startX, loginUI.phases[2].customizerui.startY + loginUI.phases[2].customizerui.switcher.startY
+        local switcher_width, switcher_height = loginUI.phases[2].customizerui.switcher.width, loginUI.phases[2].customizerui.switcher.height
+        for i, j in imports.ipairs(loginUI.phases[2].customizerui.switcher) do
             local isSwitcherHovered = isMouseOnPosition(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height)
             if not j.hoverAnimStatus then j.hoverAnimStatus = "backward" end
             if not j.hoverAnimTickCounter then j.hoverAnimTickCounter = CLIENT_CURRENT_TICK end
@@ -1241,19 +1241,19 @@ local function renderUI()
             end
             if not j.hoverAnimAlphaPercent then j.hoverAnimAlphaPercent = 0 end
             if j.hoverAnimStatus == "forward" then
-                j.hoverAnimAlphaPercent = interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 1, 0, 0, getInterpolationProgress(j.hoverAnimTickCounter, loginScreenCache.phases[2].customizerui.switcher.hoverAnimDuration), "Linear")
+                j.hoverAnimAlphaPercent = interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 1, 0, 0, getInterpolationProgress(j.hoverAnimTickCounter, loginUI.phases[2].customizerui.switcher.hoverAnimDuration), "Linear")
             elseif j.hoverAnimStatus == "backward" then
-                j.hoverAnimAlphaPercent = interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.hoverAnimTickCounter, loginScreenCache.phases[2].customizerui.switcher.hoverAnimDuration), "Linear")
+                j.hoverAnimAlphaPercent = interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.hoverAnimTickCounter, loginUI.phases[2].customizerui.switcher.hoverAnimDuration), "Linear")
             end
-            imports.dxDrawImage(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height, loginScreenCache.phases[2].customizerui.switcher.bgPath, 0, 0, 0, tocolor(unpack(loginScreenCache.phases[2].customizerui.switcher.bgColor)), false)
-            imports.dxDrawImage(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height, loginScreenCache.phases[2].customizerui.switcher.bgPath, 0, 0, 0, tocolor(loginScreenCache.phases[2].customizerui.switcher.hoverBGColor[1], loginScreenCache.phases[2].customizerui.switcher.hoverBGColor[2], loginScreenCache.phases[2].customizerui.switcher.hoverBGColor[3], loginScreenCache.phases[2].customizerui.switcher.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
-            dxDrawBorderedText(loginScreenCache.phases[2].customizerui.switcher.outlineWeight, loginScreenCache.phases[2].customizerui.switcher.fontColor, j.title, switcher_offsetX, switcher_offsetY, switcher_offsetX + switcher_width, switcher_offsetY + switcher_height, tocolor(unpack(loginScreenCache.phases[2].customizerui.switcher.fontColor)), 1, loginScreenCache.phases[2].customizerui.switcher.font, "center", "center", true, false, false)
-            dxDrawBorderedText(loginScreenCache.phases[2].customizerui.switcher.outlineWeight, {loginScreenCache.phases[2].customizerui.switcher.hoverfontColor[1], loginScreenCache.phases[2].customizerui.switcher.hoverfontColor[2], loginScreenCache.phases[2].customizerui.switcher.hoverfontColor[3], loginScreenCache.phases[2].customizerui.switcher.hoverfontColor[4]*j.hoverAnimAlphaPercent}, j.title, switcher_offsetX, switcher_offsetY, switcher_offsetX + switcher_width, switcher_offsetY + switcher_height, tocolor(loginScreenCache.phases[2].customizerui.switcher.hoverfontColor[1], loginScreenCache.phases[2].customizerui.switcher.hoverfontColor[2], loginScreenCache.phases[2].customizerui.switcher.hoverfontColor[3], loginScreenCache.phases[2].customizerui.switcher.hoverfontColor[4]*j.hoverAnimAlphaPercent), 1, loginScreenCache.phases[2].customizerui.switcher.font, "center", "center", true, false, false)
-            switcher_offsetX = switcher_offsetX + switcher_width + loginScreenCache.phases[2].customizerui.switcher.paddingX
+            imports.dxDrawImage(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height, loginUI.phases[2].customizerui.switcher.bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.switcher.bgColor)), false)
+            imports.dxDrawImage(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height, loginUI.phases[2].customizerui.switcher.bgPath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.switcher.hoverBGColor[1], loginUI.phases[2].customizerui.switcher.hoverBGColor[2], loginUI.phases[2].customizerui.switcher.hoverBGColor[3], loginUI.phases[2].customizerui.switcher.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
+            dxDrawBorderedText(loginUI.phases[2].customizerui.switcher.outlineWeight, loginUI.phases[2].customizerui.switcher.fontColor, j.title, switcher_offsetX, switcher_offsetY, switcher_offsetX + switcher_width, switcher_offsetY + switcher_height, tocolor(unpack(loginUI.phases[2].customizerui.switcher.fontColor)), 1, loginUI.phases[2].customizerui.switcher.font, "center", "center", true, false, false)
+            dxDrawBorderedText(loginUI.phases[2].customizerui.switcher.outlineWeight, {loginUI.phases[2].customizerui.switcher.hoverfontColor[1], loginUI.phases[2].customizerui.switcher.hoverfontColor[2], loginUI.phases[2].customizerui.switcher.hoverfontColor[3], loginUI.phases[2].customizerui.switcher.hoverfontColor[4]*j.hoverAnimAlphaPercent}, j.title, switcher_offsetX, switcher_offsetY, switcher_offsetX + switcher_width, switcher_offsetY + switcher_height, tocolor(loginUI.phases[2].customizerui.switcher.hoverfontColor[1], loginUI.phases[2].customizerui.switcher.hoverfontColor[2], loginUI.phases[2].customizerui.switcher.hoverfontColor[3], loginUI.phases[2].customizerui.switcher.hoverfontColor[4]*j.hoverAnimAlphaPercent), 1, loginUI.phases[2].customizerui.switcher.font, "center", "center", true, false, false)
+            switcher_offsetX = switcher_offsetX + switcher_width + loginUI.phases[2].customizerui.switcher.paddingX
         end
-        local button_offsetX, button_offsetY = customizer_offsetX + loginScreenCache.phases[2].customizerui.button.startX, customizer_offsetY + loginScreenCache.phases[2].customizerui.button.startY
-        local button_width, button_height = loginScreenCache.phases[2].customizerui.button.width, loginScreenCache.phases[2].customizerui.button.height
-        for i, j in imports.ipairs(loginScreenCache.phases[2].customizerui.button) do
+        local button_offsetX, button_offsetY = customizer_offsetX + loginUI.phases[2].customizerui.button.startX, customizer_offsetY + loginUI.phases[2].customizerui.button.startY
+        local button_width, button_height = loginUI.phases[2].customizerui.button.width, loginUI.phases[2].customizerui.button.height
+        for i, j in imports.ipairs(loginUI.phases[2].customizerui.button) do
             local isButtonHovered = isMouseOnPosition(button_offsetX, button_offsetY, button_width, button_height)
             if not j.hoverAnimStatus then j.hoverAnimStatus = "backward" end
             if not j.hoverAnimTickCounter then j.hoverAnimTickCounter = CLIENT_CURRENT_TICK end
@@ -1276,69 +1276,69 @@ local function renderUI()
             end
             if not j.hoverAnimAlphaPercent then j.hoverAnimAlphaPercent = 0 end
             if j.hoverAnimStatus == "forward" then
-                j.hoverAnimAlphaPercent = interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 1, 0, 0, getInterpolationProgress(j.hoverAnimTickCounter, loginScreenCache.phases[2].customizerui.button.hoverAnimDuration), "Linear")
+                j.hoverAnimAlphaPercent = interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 1, 0, 0, getInterpolationProgress(j.hoverAnimTickCounter, loginUI.phases[2].customizerui.button.hoverAnimDuration), "Linear")
             elseif j.hoverAnimStatus == "backward" then
-                j.hoverAnimAlphaPercent = interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.hoverAnimTickCounter, loginScreenCache.phases[2].customizerui.button.hoverAnimDuration), "Linear")
+                j.hoverAnimAlphaPercent = interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.hoverAnimTickCounter, loginUI.phases[2].customizerui.button.hoverAnimDuration), "Linear")
             end
-            imports.dxDrawRectangle(button_offsetX + button_height, button_offsetY, button_width - (button_height*2), button_height, tocolor(unpack(loginScreenCache.phases[2].customizerui.button.bgColor)), false)
-            imports.dxDrawImage(button_offsetX, button_offsetY, button_height, button_height, loginScreenCache.phases[2].customizerui.button.leftCurvedEdgePath, 0, 0, 0, tocolor(unpack(loginScreenCache.phases[2].customizerui.button.bgColor)), false)
-            imports.dxDrawImage(button_offsetX + button_width - button_height, button_offsetY, button_height, button_height, loginScreenCache.phases[2].customizerui.button.rightCurvedEdgePath, 0, 0, 0, tocolor(unpack(loginScreenCache.phases[2].customizerui.button.bgColor)), false)
-            imports.dxDrawRectangle(button_offsetX + button_height, button_offsetY, button_width - (button_height*2), button_height, tocolor(loginScreenCache.phases[2].customizerui.button.hoverBGColor[1], loginScreenCache.phases[2].customizerui.button.hoverBGColor[2], loginScreenCache.phases[2].customizerui.button.hoverBGColor[3], loginScreenCache.phases[2].customizerui.button.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
-            imports.dxDrawImage(button_offsetX, button_offsetY, button_height, button_height, loginScreenCache.phases[2].customizerui.button.leftCurvedEdgePath, 0, 0, 0, tocolor(loginScreenCache.phases[2].customizerui.button.hoverBGColor[1], loginScreenCache.phases[2].customizerui.button.hoverBGColor[2], loginScreenCache.phases[2].customizerui.button.hoverBGColor[3], loginScreenCache.phases[2].customizerui.button.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
-            imports.dxDrawImage(button_offsetX + button_width - button_height, button_offsetY, button_height, button_height, loginScreenCache.phases[2].customizerui.button.rightCurvedEdgePath, 0, 0, 0, tocolor(loginScreenCache.phases[2].customizerui.button.hoverBGColor[1], loginScreenCache.phases[2].customizerui.button.hoverBGColor[2], loginScreenCache.phases[2].customizerui.button.hoverBGColor[3], loginScreenCache.phases[2].customizerui.button.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
-            dxDrawBorderedText(loginScreenCache.phases[2].customizerui.button.outlineWeight, loginScreenCache.phases[2].customizerui.button.fontColor, j.title, button_offsetX, button_offsetY, button_offsetX + button_width, button_offsetY + button_height, tocolor(unpack(loginScreenCache.phases[2].customizerui.button.fontColor)), 1, loginScreenCache.phases[2].customizerui.button.font, "center", "center", true, false, false)
-            dxDrawBorderedText(loginScreenCache.phases[2].customizerui.button.outlineWeight, {loginScreenCache.phases[2].customizerui.button.hoverfontColor[1], loginScreenCache.phases[2].customizerui.button.hoverfontColor[2], loginScreenCache.phases[2].customizerui.button.hoverfontColor[3], loginScreenCache.phases[2].customizerui.button.hoverfontColor[4]*j.hoverAnimAlphaPercent}, j.title, button_offsetX, button_offsetY, button_offsetX + button_width, button_offsetY + button_height, tocolor(loginScreenCache.phases[2].customizerui.button.hoverfontColor[1], loginScreenCache.phases[2].customizerui.button.hoverfontColor[2], loginScreenCache.phases[2].customizerui.button.hoverfontColor[3], loginScreenCache.phases[2].customizerui.button.hoverfontColor[4]*j.hoverAnimAlphaPercent), 1, loginScreenCache.phases[2].customizerui.button.font, "center", "center", true, false, false)
-            button_offsetX = button_offsetX + button_width + loginScreenCache.phases[2].customizerui.button.paddingX
+            imports.dxDrawRectangle(button_offsetX + button_height, button_offsetY, button_width - (button_height*2), button_height, tocolor(unpack(loginUI.phases[2].customizerui.button.bgColor)), false)
+            imports.dxDrawImage(button_offsetX, button_offsetY, button_height, button_height, loginUI.phases[2].customizerui.button.leftCurvedEdgePath, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.button.bgColor)), false)
+            imports.dxDrawImage(button_offsetX + button_width - button_height, button_offsetY, button_height, button_height, loginUI.phases[2].customizerui.button.rightCurvedEdgePath, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.button.bgColor)), false)
+            imports.dxDrawRectangle(button_offsetX + button_height, button_offsetY, button_width - (button_height*2), button_height, tocolor(loginUI.phases[2].customizerui.button.hoverBGColor[1], loginUI.phases[2].customizerui.button.hoverBGColor[2], loginUI.phases[2].customizerui.button.hoverBGColor[3], loginUI.phases[2].customizerui.button.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
+            imports.dxDrawImage(button_offsetX, button_offsetY, button_height, button_height, loginUI.phases[2].customizerui.button.leftCurvedEdgePath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.button.hoverBGColor[1], loginUI.phases[2].customizerui.button.hoverBGColor[2], loginUI.phases[2].customizerui.button.hoverBGColor[3], loginUI.phases[2].customizerui.button.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
+            imports.dxDrawImage(button_offsetX + button_width - button_height, button_offsetY, button_height, button_height, loginUI.phases[2].customizerui.button.rightCurvedEdgePath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.button.hoverBGColor[1], loginUI.phases[2].customizerui.button.hoverBGColor[2], loginUI.phases[2].customizerui.button.hoverBGColor[3], loginUI.phases[2].customizerui.button.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
+            dxDrawBorderedText(loginUI.phases[2].customizerui.button.outlineWeight, loginUI.phases[2].customizerui.button.fontColor, j.title, button_offsetX, button_offsetY, button_offsetX + button_width, button_offsetY + button_height, tocolor(unpack(loginUI.phases[2].customizerui.button.fontColor)), 1, loginUI.phases[2].customizerui.button.font, "center", "center", true, false, false)
+            dxDrawBorderedText(loginUI.phases[2].customizerui.button.outlineWeight, {loginUI.phases[2].customizerui.button.hoverfontColor[1], loginUI.phases[2].customizerui.button.hoverfontColor[2], loginUI.phases[2].customizerui.button.hoverfontColor[3], loginUI.phases[2].customizerui.button.hoverfontColor[4]*j.hoverAnimAlphaPercent}, j.title, button_offsetX, button_offsetY, button_offsetX + button_width, button_offsetY + button_height, tocolor(loginUI.phases[2].customizerui.button.hoverfontColor[1], loginUI.phases[2].customizerui.button.hoverfontColor[2], loginUI.phases[2].customizerui.button.hoverfontColor[3], loginUI.phases[2].customizerui.button.hoverfontColor[4]*j.hoverAnimAlphaPercent), 1, loginUI.phases[2].customizerui.button.font, "center", "center", true, false, false)
+            button_offsetX = button_offsetX + button_width + loginUI.phases[2].customizerui.button.paddingX
         end
         _currentKeyCheck = true
     elseif currentLoginPhase == 3 then
         --Draws Credits UI
-        imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginScreenCache.phases[3].bgPath, 0, 0, 0, tocolor(unpack(loginScreenCache.phases[3].bgColor)), false)
-        local view_offsetX, view_offsetY = loginScreenCache.phases[3].view.startX, loginScreenCache.phases[3].view.startY
-        local view_width, view_height = loginScreenCache.phases[3].view.width, loginScreenCache.phases[3].view.height
-        imports.dxSetRenderTarget(loginScreenCache.phases[3].view.renderTarget, true)
-        local credits_offsetY = -loginScreenCache.phases[3].view.contentHeight - (view_height/2)
-        if (CLIENT_CURRENT_TICK - loginScreenCache.phases[3].view.scrollAnimTickCounter) >= loginScreenCache.phases[3].view.scrollDelayDuration then
-            credits_offsetY = interpolateBetween(credits_offsetY, 0, 0, view_height*1.5, 0, 0, getInterpolationProgress(loginScreenCache.phases[3].view.scrollAnimTickCounter + loginScreenCache.phases[3].view.scrollDelayDuration, loginScreenCache.phases[3].view.scrollAnimDuration), "Linear")
-            if math.round(credits_offsetY, 2) == math.round(view_height*1.5) and loginScreenCache.isEnabled then
+        imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[3].bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[3].bgColor)), false)
+        local view_offsetX, view_offsetY = loginUI.phases[3].view.startX, loginUI.phases[3].view.startY
+        local view_width, view_height = loginUI.phases[3].view.width, loginUI.phases[3].view.height
+        imports.dxSetRenderTarget(loginUI.phases[3].view.renderTarget, true)
+        local credits_offsetY = -loginUI.phases[3].view.contentHeight - (view_height/2)
+        if (CLIENT_CURRENT_TICK - loginUI.phases[3].view.scrollAnimTickCounter) >= loginUI.phases[3].view.scrollDelayDuration then
+            credits_offsetY = interpolateBetween(credits_offsetY, 0, 0, view_height*1.5, 0, 0, getInterpolationProgress(loginUI.phases[3].view.scrollAnimTickCounter + loginUI.phases[3].view.scrollDelayDuration, loginUI.phases[3].view.scrollAnimDuration), "Linear")
+            if math.round(credits_offsetY, 2) == math.round(view_height*1.5) and loginUI.isEnabled then
                 setLoginUIEnabled(false)
                 setLoginUIPhase(1)
             end
         end
-        dxDrawBorderedText(loginScreenCache.phases[3].view.outlineWeight, loginScreenCache.phases[3].view.outlineColor, loginScreenCache.phases[3].view.content, loginScreenCache.phases[3].view.paddingX, credits_offsetY, view_width, credits_offsetY + loginScreenCache.phases[3].view.contentHeight, tocolor(unpack(loginScreenCache.phases[3].view.fontColor)), 1, loginScreenCache.phases[3].view.font, "left", "center", true, false, false, false, true)
+        dxDrawBorderedText(loginUI.phases[3].view.outlineWeight, loginUI.phases[3].view.outlineColor, loginUI.phases[3].view.content, loginUI.phases[3].view.paddingX, credits_offsetY, view_width, credits_offsetY + loginUI.phases[3].view.contentHeight, tocolor(unpack(loginUI.phases[3].view.fontColor)), 1, loginUI.phases[3].view.font, "left", "center", true, false, false, false, true)
         imports.dxSetRenderTarget()
-        imports.dxDrawImage(view_offsetX, view_offsetY, view_width, view_height, loginScreenCache.phases[3].view.renderTarget, 0, 0, 0, tocolor(255, 255, 255, 255), false)
-        local back_navigator_width, back_navigator_height = loginScreenCache.phases[3].back_navigator.width + dxGetTextWidth(loginScreenCache.phases[3].back_navigator.title, 1, loginScreenCache.phases[3].back_navigator.font), loginScreenCache.phases[3].back_navigator.height
+        imports.dxDrawImage(view_offsetX, view_offsetY, view_width, view_height, loginUI.phases[3].view.renderTarget, 0, 0, 0, tocolor(255, 255, 255, 255), false)
+        local back_navigator_width, back_navigator_height = loginUI.phases[3].back_navigator.width + dxGetTextWidth(loginUI.phases[3].back_navigator.title, 1, loginUI.phases[3].back_navigator.font), loginUI.phases[3].back_navigator.height
         back_navigator_width = back_navigator_width + (back_navigator_height*2)
-        local back_navigator_offsetX, back_navigator_offsetY = loginScreenCache.phases[3].back_navigator.startX + (CLIENT_MTA_RESOLUTION[1] - back_navigator_width), loginScreenCache.phases[3].back_navigator.startY + (CLIENT_MTA_RESOLUTION[2] - back_navigator_height)
+        local back_navigator_offsetX, back_navigator_offsetY = loginUI.phases[3].back_navigator.startX + (CLIENT_MTA_RESOLUTION[1] - back_navigator_width), loginUI.phases[3].back_navigator.startY + (CLIENT_MTA_RESOLUTION[2] - back_navigator_height)
         local isBackNavigatorHovered = isMouseOnPosition(back_navigator_offsetX, back_navigator_offsetY, back_navigator_width, back_navigator_height)
         if isBackNavigatorHovered then
             if isLMBClicked then
                 setLoginUIEnabled(false)
                 imports.setTimer(function()
-                    loginScreenCache.phases[3].back_navigator.execFunc()
+                    loginUI.phases[3].back_navigator.execFunc()
                 end, 1, 1)
             end
-            if loginScreenCache.phases[3].back_navigator.hoverStatus ~= "forward" then
-                loginScreenCache.phases[3].back_navigator.hoverStatus = "forward"
-                loginScreenCache.phases[3].back_navigator.hoverAnimTickCounter = CLIENT_CURRENT_TICK
+            if loginUI.phases[3].back_navigator.hoverStatus ~= "forward" then
+                loginUI.phases[3].back_navigator.hoverStatus = "forward"
+                loginUI.phases[3].back_navigator.hoverAnimTickCounter = CLIENT_CURRENT_TICK
             end
         else
-            if loginScreenCache.phases[3].back_navigator.hoverStatus ~= "backward" then
-                loginScreenCache.phases[3].back_navigator.hoverStatus = "backward"
-                loginScreenCache.phases[3].back_navigator.hoverAnimTickCounter = CLIENT_CURRENT_TICK
+            if loginUI.phases[3].back_navigator.hoverStatus ~= "backward" then
+                loginUI.phases[3].back_navigator.hoverStatus = "backward"
+                loginUI.phases[3].back_navigator.hoverAnimTickCounter = CLIENT_CURRENT_TICK
             end
         end
-        if not loginScreenCache.phases[3].back_navigator.animAlphaPercent then loginScreenCache.phases[3].back_navigator.animAlphaPercent = 0.75 end
-        if loginScreenCache.phases[3].back_navigator.hoverStatus == "forward" then
-            loginScreenCache.phases[3].back_navigator.animAlphaPercent = interpolateBetween(loginScreenCache.phases[3].back_navigator.animAlphaPercent, 0, 0, 1, 0, 0, getInterpolationProgress(loginScreenCache.phases[3].back_navigator.hoverAnimTickCounter, loginScreenCache.phases[1].optionsui.hoverAnimDuration), "Linear")
+        if not loginUI.phases[3].back_navigator.animAlphaPercent then loginUI.phases[3].back_navigator.animAlphaPercent = 0.75 end
+        if loginUI.phases[3].back_navigator.hoverStatus == "forward" then
+            loginUI.phases[3].back_navigator.animAlphaPercent = interpolateBetween(loginUI.phases[3].back_navigator.animAlphaPercent, 0, 0, 1, 0, 0, getInterpolationProgress(loginUI.phases[3].back_navigator.hoverAnimTickCounter, loginUI.phases[1].optionsui.hoverAnimDuration), "Linear")
         else
-            loginScreenCache.phases[3].back_navigator.animAlphaPercent = interpolateBetween(loginScreenCache.phases[3].back_navigator.animAlphaPercent, 0, 0, 0.75, 0, 0, getInterpolationProgress(loginScreenCache.phases[3].back_navigator.hoverAnimTickCounter, loginScreenCache.phases[1].optionsui.hoverAnimDuration), "Linear")
+            loginUI.phases[3].back_navigator.animAlphaPercent = interpolateBetween(loginUI.phases[3].back_navigator.animAlphaPercent, 0, 0, 0.75, 0, 0, getInterpolationProgress(loginUI.phases[3].back_navigator.hoverAnimTickCounter, loginUI.phases[1].optionsui.hoverAnimDuration), "Linear")
         end
-        imports.dxDrawRectangle(back_navigator_offsetX + back_navigator_height, back_navigator_offsetY, back_navigator_width - (back_navigator_height*2), back_navigator_height, tocolor(loginScreenCache.phases[3].back_navigator.bgColor[1], loginScreenCache.phases[3].back_navigator.bgColor[2], loginScreenCache.phases[3].back_navigator.bgColor[3], loginScreenCache.phases[3].back_navigator.bgColor[4]*loginScreenCache.phases[3].back_navigator.animAlphaPercent), false)
-        imports.dxDrawImage(back_navigator_offsetX, back_navigator_offsetY, back_navigator_height, back_navigator_height, loginScreenCache.phases[3].back_navigator.leftEdgePath, 0, 0, 0, tocolor(loginScreenCache.phases[3].back_navigator.bgColor[1], loginScreenCache.phases[3].back_navigator.bgColor[2], loginScreenCache.phases[3].back_navigator.bgColor[3], loginScreenCache.phases[3].back_navigator.bgColor[4]*loginScreenCache.phases[3].back_navigator.animAlphaPercent), false)
-        imports.dxDrawImage(back_navigator_offsetX + back_navigator_width - back_navigator_height, back_navigator_offsetY, back_navigator_height, back_navigator_height, loginScreenCache.phases[3].back_navigator.rightEdgePath, 0, 0, 0, tocolor(loginScreenCache.phases[3].back_navigator.bgColor[1], loginScreenCache.phases[3].back_navigator.bgColor[2], loginScreenCache.phases[3].back_navigator.bgColor[3], loginScreenCache.phases[3].back_navigator.bgColor[4]*loginScreenCache.phases[3].back_navigator.animAlphaPercent), false)
-        dxDrawBorderedText(loginScreenCache.phases[3].back_navigator.outlineWeight, loginScreenCache.phases[3].back_navigator.fontColor, loginScreenCache.phases[3].back_navigator.title, back_navigator_offsetX, back_navigator_offsetY, back_navigator_offsetX + back_navigator_width, back_navigator_offsetY + back_navigator_height, tocolor(loginScreenCache.phases[3].back_navigator.fontColor[1], loginScreenCache.phases[3].back_navigator.fontColor[2], loginScreenCache.phases[3].back_navigator.fontColor[3], loginScreenCache.phases[3].back_navigator.fontColor[4]*loginScreenCache.phases[3].back_navigator.animAlphaPercent), 1, loginScreenCache.phases[3].back_navigator.font, "center", "center", true, false, false)
+        imports.dxDrawRectangle(back_navigator_offsetX + back_navigator_height, back_navigator_offsetY, back_navigator_width - (back_navigator_height*2), back_navigator_height, tocolor(loginUI.phases[3].back_navigator.bgColor[1], loginUI.phases[3].back_navigator.bgColor[2], loginUI.phases[3].back_navigator.bgColor[3], loginUI.phases[3].back_navigator.bgColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), false)
+        imports.dxDrawImage(back_navigator_offsetX, back_navigator_offsetY, back_navigator_height, back_navigator_height, loginUI.phases[3].back_navigator.leftEdgePath, 0, 0, 0, tocolor(loginUI.phases[3].back_navigator.bgColor[1], loginUI.phases[3].back_navigator.bgColor[2], loginUI.phases[3].back_navigator.bgColor[3], loginUI.phases[3].back_navigator.bgColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), false)
+        imports.dxDrawImage(back_navigator_offsetX + back_navigator_width - back_navigator_height, back_navigator_offsetY, back_navigator_height, back_navigator_height, loginUI.phases[3].back_navigator.rightEdgePath, 0, 0, 0, tocolor(loginUI.phases[3].back_navigator.bgColor[1], loginUI.phases[3].back_navigator.bgColor[2], loginUI.phases[3].back_navigator.bgColor[3], loginUI.phases[3].back_navigator.bgColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), false)
+        dxDrawBorderedText(loginUI.phases[3].back_navigator.outlineWeight, loginUI.phases[3].back_navigator.fontColor, loginUI.phases[3].back_navigator.title, back_navigator_offsetX, back_navigator_offsetY, back_navigator_offsetX + back_navigator_width, back_navigator_offsetY + back_navigator_height, tocolor(loginUI.phases[3].back_navigator.fontColor[1], loginUI.phases[3].back_navigator.fontColor[2], loginUI.phases[3].back_navigator.fontColor[3], loginUI.phases[3].back_navigator.fontColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), 1, loginUI.phases[3].back_navigator.font, "center", "center", true, false, false)
     end
 
 end
@@ -1350,26 +1350,26 @@ end
 
 toggleUI = function(state)
 
-    if (((state ~= true) and (state ~= false)) or (state == loginScreenCache.state)) then return false end
+    if (((state ~= true) and (state ~= false)) or (state == loginUI.state)) then return false end
 
     if state then
-        loginScreenCache.state = true
-        loginScreenCache.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
+        loginUI.state = true
+        loginUI.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
         setLoginUIPhase(1)
         imports.triggerEvent("onLoginSoundStart", localPlayer)
         beautify.render.create(renderUI)
     else
         beautify.render.remove(renderUI)
         exports.cinecam_handler:stopCinemation()
-        if loginScreenCache.character and imports.isElement(loginScreenCache.character) then loginScreenCache.character:destroy() end
-        loginScreenCache.phase = false
-        loginScreenCache.cinemationData = false
-        loginScreenCache.character = false
-        loginScreenCache.selectedCharacter = 0
-        loginScreenCache._selectedCharacter = false
-        loginScreenCache.clientCharacters = {}
-        loginScreenCache.isPremium = false
-        loginScreenCache.state = false
+        if loginUI.character and imports.isElement(loginUI.character) then loginUI.character:destroy() end
+        loginUI.phase = false
+        loginUI.cinemationData = false
+        loginUI.character = false
+        loginUI.selectedCharacter = 0
+        loginUI._selectedCharacter = false
+        loginUI.clientCharacters = {}
+        loginUI.isPremium = false
+        loginUI.state = false
     end
     showChat(not state)
     showCursor(state)
@@ -1388,12 +1388,12 @@ imports.addEventHandler("onPlayerShowLoginScreen", root, function(character, cha
     for i, j in imports.ipairs(characters) do
         j.__isPreLoaded = true
     end
-    loginScreenCache.selectedCharacter = character
-    loginScreenCache._selectedCharacter = loginScreenCache.selectedCharacter
-    loginScreenCache.clientCharacters = characters
-    loginScreenCache._unsavedCharacters = {}
-    loginScreenCache._charactersUnderProcess = {}
-    loginScreenCache.isPremium = isPremium
+    loginUI.selectedCharacter = character
+    loginUI._selectedCharacter = loginUI.selectedCharacter
+    loginUI.clientCharacters = characters
+    loginUI._unsavedCharacters = {}
+    loginUI._charactersUnderProcess = {}
+    loginUI.isPremium = isPremium
     localPlayer:setPosition(FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.x, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.y, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.z)
     localPlayer:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].lobbyDimension)
 
