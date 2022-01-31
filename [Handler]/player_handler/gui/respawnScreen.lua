@@ -120,8 +120,8 @@ end)
 --[[ Event: On Client Respawn ]]--
 ----------------------------------
 
-addEvent("onClientRespawn", true)
-addEventHandler("onClientRespawn", root, function()
+addEvent("Player:onClientRespawn", true)
+addEventHandler("Player:onClientRespawn", root, function()
 
     if not isPlayerInitialized(localPlayer) then return false end
 
