@@ -41,6 +41,7 @@ local imports = {
 -------------------
 
 local deathAnimations = {
+    default = {"PED", "KO_skid_front"},
     [9] = {"PED", "KO_shot_face"},
     [3] = {"PED", "KO_shot_stom"},
     [8] = {"PED", "KD_right"},
@@ -114,18 +115,13 @@ addEventHandler("Player:onDeath", root, function(killer, headshot, weapon, bodyp
         end
     end
 
-    local block, anim = false, false
-    if bodypart and deathAnimations[bodypart] then
-        block, anim = deathAnimations[bodypart][1], deathAnimations[bodypart][2]
-    else
-        block, anim = "PED", "KO_skid_front"
-    end
+    local deathAnim = (bodypart and deathAnimations[bodypart]) or deathAnimations.default
     imports.killPed(source)
-    imports.setTimer(function(ped, block, anim)
+    imports.setTimer(function(ped, deathAnim)
         if ped and imports.isElement(ped) then
-            imports.setPedAnimation(ped, block, anim, -1, false, true, false)
+            imports.setPedAnimation(ped, deathAnim[1], deathAnim[2], -1, false, true, false)
         end
-    end, 200, 1, ped, block, anim)
+    end, 200, 1, ped, deathAnim)
     imports.setTimer(function(ped)
         if ped and imports.isElement(ped) then
             imports.setElementHealth(ped, 0)

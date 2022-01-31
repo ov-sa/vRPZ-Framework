@@ -55,7 +55,7 @@ end
 
 function getPlayerFromSerial(serial)
     if (not serial or (imports.type(serial) ~= "string")) then return false end
-    for i, j in imports.ipairs(imports.getElementsByType"player")) do
+    for i, j in imports.ipairs(imports.getElementsByType("player")) do
         if imports.getPlayerSerial(j) == serial then
             return j
         end
@@ -116,7 +116,7 @@ addEventHandler("onResourceStart", resource, function()
     imports.setMinuteDuration(FRAMEWORK_CONFIGS.Game["Minute_Duration"])
     imports.setGameType(FRAMEWORK_CONFIGS.Game["Game_imports.type"])
     imports.setMapName(FRAMEWORK_CONFIGS.Game["Game_Map"])
-    for i, j in imports.ipairs(imports.getElementsByType"player")) do
+    for i, j in imports.ipairs(imports.getElementsByType("player")) do
         if isPlayerInitialized(j) then
             imports.setPlayerBlurLevel(0)
         end
