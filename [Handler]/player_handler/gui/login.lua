@@ -38,7 +38,7 @@ local prevInputKeyStreak = 0
 local _currentKeyCheck = true
 local _currentPressedKey = false
 setLoginUIPhase = nil
-local manageCharacter, toggleLoginUI = nil, nil
+local manageCharacter, toggleUI = nil, nil
 loginScreenCache = {
     state = false,
     phase = false,
@@ -1346,7 +1346,7 @@ end
 --[[ Function: Toggles UI ]]--
 ------------------------------
 
-toggleLoginUI = function(state)
+toggleUI = function(state)
 
     if (((state ~= true) and (state ~= false)) or (state == loginScreenCache.state)) then return false end
 
