@@ -100,6 +100,7 @@ imports.addEventHandler("Client:onToggleLoadingUI", root, function(state, argume
         loadingUI.tickCounter = CLIENT_CURRENT_TICK
         loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
         loadingUI.hint.text = FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"][imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"])] or loadingUI.hint.text
+        --TODO: ,,,
         imports.triggerEvent("onLoginSoundStart", localPlayer, (arguments and arguments.shuffleMusic and true) or false)
     else
         if ((loadingUI.animStatus == "backward") or (loadingUI.animStatus == "reverse_backward")) then return false end
