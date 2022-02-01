@@ -54,7 +54,7 @@ loadingUI = {
         paddingY = 10,
         text = "",
         font = FRAMEWORK_FONTS[1],
-        fontColor = tocolor(200, 200, 200, 255)
+        fontColor = imports.tocolor(200, 200, 200, 255)
     }
 }
 loadingUI.loader.startX = loadingUI.loader.startX + ((CLIENT_MTA_RESOLUTION[1] - loadingUI.loader.size)/2)
