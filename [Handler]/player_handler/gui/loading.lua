@@ -88,23 +88,23 @@ beautify.render.create(function()
 end)
 
 
------------------------------------------
---[[ Events: On Show/Hide Loading UI ]]--
------------------------------------------
+-------------------------------------
+--[[ Event: On Toggle Loading UI ]]--
+-------------------------------------
 
 imports.addEvent("Client:onToggleLoadingUI", true)
 imports.addEventHandler("Client:onToggleLoadingUI", root, function(state, arguments)
-    if ((state and (loadingUI.animStatus == "forward")) or (loadingUI.animStatus == "backward") or (loadingUI.animStatus == "reverse_backward")) then return false end
-
-    if state then        
+    if state then
+        if (state and (loadingUI.animStatus == "forward")) then return false end
         loadingUI.animStatus = "forward"
         loadingUI.tickCounter = CLIENT_CURRENT_TICK
         loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
+        loadingUI.hint.text = FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"][imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"])] or loadingUI.hint.text
         imports.triggerEvent("onLoginSoundStart", localPlayer, (arguments and arguments.shuffleMusic and true) or false)
     else
+        if ((loadingUI.animStatus == "backward") or (loadingUI.animStatus == "reverse_backward")) then return false end
         loadingUI.animStatus = "reverse_backward"
         loadingUI.tickCounter = CLIENT_CURRENT_TICK
-        loadingUI.hint.text = FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"][imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"])] or loadingUI.hint.text
         if not loginUI.state then
             imports.triggerEvent("onLoginSoundStop", localPlayer)
         end

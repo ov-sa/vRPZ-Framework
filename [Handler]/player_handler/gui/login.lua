@@ -594,7 +594,7 @@ manageCharacter = function(manageType)
         end
         setLoginUIEnabled(false, false)
         imports.triggerEvent("Client:onNotification", localPlayer, "◴ Processing..", {175, 175, 175, 255})
-        imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, false)
+        imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
         imports.setTimer(function()
             toggleUI(false)
         end, loadingUI.animFadeInDuration + 250, 1)
@@ -629,13 +629,12 @@ function getLoginUIPhase()
 end
 
 setLoginUIPhase = function(phaseID)
-
     phaseID = tonumber(phaseID)
     if not phaseID or not loginUI.phases[1].optionsui[phaseID] or (loginUI.phase and loginUI.phase == phaseID) then return false end
     if prevPhaseTimer and prevPhaseTimer:isValid() then prevPhaseTimer:destroy(); prevPhaseTimer = false end
     if prevEnablerTimer and prevEnablerTimer:isValid() then prevEnablerTimer:destroy(); prevEnablerTimer = false end
 
-    imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, false)
+    imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
     prevPhaseTimer = imports.setTimer(function()
         if phaseID == 1 then
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.cinemationPoint, true, true, loginUI.cinemationData.cinemationFOV, true, true, true, false)
@@ -676,15 +675,15 @@ setLoginUIPhase = function(phaseID)
                 end
             end
         end
-        imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
+        imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, false)
         prevPhaseTimer = false
     end, loadingUI.animFadeInDuration + 250, 1)
+
     prevEnablerTimer = imports.setTimer(function()
         setLoginUIEnabled(true)
         prevEnablerTimer = false
     end, loadingUI.animFadeOutDuration + loadingUI.animFadeDelayDuration - (loadingUI.animFadeInDuration + 250), 1)
     return true
-
 end
 imports.addEvent("onClientSetLoginUIPhase", true)
 imports.addEventHandler("onClientSetLoginUIPhase", root, setLoginUIPhase)
@@ -1408,9 +1407,9 @@ end)
 -----------------------------------------
 
 imports.addEventHandler("onClientResourceStart", resource, function()
-    if not isPlayerInitialized(localPlayer) then
-        imports.fadeCamera(false)
-        imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
-        triggerServerEvent("onPlayerRequestShowLoginScreen", localPlayer)
-    end
+    imports.fadeCamera(false)
+    imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true, {
+        shuffleMusic = true
+    })
+    triggerServerEvent("onPlayerRequestShowLoginScreen", localPlayer)
 end)
