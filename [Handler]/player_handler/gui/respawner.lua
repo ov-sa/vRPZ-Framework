@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    setTimer = setTimer,
     dxCreateTexture = dxCreateTexture
 }
 
@@ -85,7 +86,7 @@ renderRespawnScreen = function()
         if elapsedDuration >= respawnerUI.flashTerminationDuration then
             flashAnimAlphaPercent = interpolateBetween(respawnerUI.mode.animAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(respawnerUI.mode.tickCounter + respawnerUI.flashTerminationDuration, respawnerUI.flashTerminationDuration/2), "OutBack")
             if math.round(flashAnimAlphaPercent, 2) == 0 then
-                Timer(function()
+                imports.setTimer(function()
                     hideRespawnScreen()
                 end, 1, 1)
             end

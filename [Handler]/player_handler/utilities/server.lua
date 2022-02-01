@@ -137,7 +137,7 @@ addEventHandler("onResourceStart", resource, function()
                             end
                         end
                         if isPlayerOnLogoutCoolDown then
-                            imports.triggerClientEvent(source, "Player:onNotification", source, "Please wait "..math.ceil(isPlayerOnLogoutCoolDown/1000).."s before logging out!", {255, 35, 35, 255})
+                            imports.triggerClientEvent(source, "Client:onNotification", source, "Please wait "..math.ceil(isPlayerOnLogoutCoolDown/1000).."s before logging out!", {255, 35, 35, 255})
                         else
                             local posVector = imports.getElementPosition(source)
                             local characterID = source:getData("Character:ID")

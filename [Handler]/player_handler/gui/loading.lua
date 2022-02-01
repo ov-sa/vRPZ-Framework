@@ -82,8 +82,8 @@ end)
 --[[ Events: On Show/Hide Loading UI ]]--
 -----------------------------------------
 
-imports.addEvent("Player:onShowLoadingUI", true)
-imports.addEventHandler("Player:onShowLoadingUI", root, function()
+imports.addEvent("Client:onShowLoadingUI", true)
+imports.addEventHandler("Client:onShowLoadingUI", root, function()
     if ((loadingUI.animStatus == "backward") or (loadingUI.animStatus == "reverse_backward")) then return false end
 
     loadingUI.animStatus = "reverse_backward"
@@ -94,8 +94,8 @@ imports.addEventHandler("Player:onShowLoadingUI", root, function()
     return true
 end)
 
-imports.addEvent("Player:onHideLoadingUI", true)
-imports.addEventHandler("Player:onHideLoadingUI", root, function(shuffleMusic)
+imports.addEvent("Client:onHideLoadingUI", true)
+imports.addEventHandler("Client:onHideLoadingUI", root, function(shuffleMusic)
     if loadingUI.animStatus == "forward" then return false end
     
     loadingUI.animStatus = "forward"

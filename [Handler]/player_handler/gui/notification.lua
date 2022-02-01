@@ -102,8 +102,8 @@ end, {
 --[[ Event: On Notification ]]--
 --------------------------------
 
-imports.addEvent("Player:onNotification", true)
-imports.addEventHandler("Player:onNotification", root, function(message, color)
+imports.addEvent("Client:onNotification", true)
+imports.addEventHandler("Client:onNotification", root, function(message, color)
     if (not message or imports.type(message) ~= "string" or message == "") then return false end
 
     imports.table.insert(notifUI.buffer, {
