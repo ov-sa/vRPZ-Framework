@@ -20,6 +20,7 @@ local imports = {
     dxCreateTexture = dxCreateTexture,
     dxDrawRectangle = dxDrawRectangle,
     dxDrawImage = dxDrawImage,
+    dxDrawText = dxDrawText,
     interpolateBetween = interpolateBetween,
     getInterpolationProgress = getInterpolationProgress,
     math = math
@@ -37,19 +38,27 @@ loadingUI = {
     animFadeDelayDuration = 2000,
     fadeAnimPercent = 0,
     tickCounter = CLIENT_CURRENT_TICK,
+    bgColor = {0, 0, 0, 255},
     loader = {
         startX = 0,
-        startY = (CLIENT_MTA_RESOLUTION[2]/768)*15,
-        width = 80,
-        height = 80,
+        startY = (CLIENT_MTA_RESOLUTION[2]/768)*-15,
+        size = 50,
         tickCounter = CLIENT_CURRENT_TICK,
         animDuration = 750,
         rotationValue = 0,
+        bgColor = {200, 200, 200, 255},
         bgPath = imports.dxCreateTexture("files/images/loading/loader.png", "argb", true, "clamp")
+    },
+    hint = {
+        paddingX = 5,
+        paddingY = 10,
+        text = "",
+        font = FRAMEWORK_FONTS[1],
+        fontColor = tocolor(200, 200, 200, 255)
     }
 }
-loadingUI.loader.startX = loadingUI.loader.startX + ((CLIENT_MTA_RESOLUTION[1] - loadingUI.loader.width)/2)
-loadingUI.loader.startY = loadingUI.loader.startY + ((CLIENT_MTA_RESOLUTION[2] - loadingUI.loader.height)/2)
+loadingUI.loader.startX = loadingUI.loader.startX + ((CLIENT_MTA_RESOLUTION[1] - loadingUI.loader.size)/2)
+loadingUI.loader.startY = loadingUI.loader.startY + ((CLIENT_MTA_RESOLUTION[2] - loadingUI.loader.size)/2)
 
 
 ------------------------------
@@ -73,8 +82,9 @@ beautify.render.create(function()
     if imports.math.round(loadingUI.loader.rotationValue, 2) == 360 then
         loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
     end
-    imports.dxDrawRectangle(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], imports.tocolor(0, 0, 0, 255*loadingUI.fadeAnimPercent), true)
-    imports.dxDrawImage(loadingUI.loader.startX, loadingUI.loader.startY, loadingUI.loader.width, loadingUI.loader.height, loadingUI.loader.bgPath, loadingUI.loader.rotationValue, 0, 0, imports.tocolor(255, 255, 255, 200*loadingUI.fadeAnimPercent), true)
+    imports.dxDrawRectangle(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], imports.tocolor(loadingUI.bgColor[1], loadingUI.bgColor[2], loadingUI.bgColor[3], loadingUI.bgColor[4]*loadingUI.fadeAnimPercent), true)
+    imports.dxDrawImage(loadingUI.loader.startX, loadingUI.loader.startY, loadingUI.loader.size, loadingUI.loader.size, loadingUI.loader.bgPath, loadingUI.loader.rotationValue, 0, 0, imports.tocolor(loadingUI.loader.bgColor[1], loadingUI.loader.bgColor[2], loadingUI.loader.bgColor[3], loadingUI.loader.bgColor[4]*loadingUI.fadeAnimPercent), true)
+    imports.dxDrawText(loadingUI.hint.text, loadingUI.hint.paddingX, loadingUI.loader.startY + loadingUI.loader.size + loadingUI.hint.paddingY, CLIENT_MTA_RESOLUTION[1] - loadingUI.hint.paddingX, CLIENT_MTA_RESOLUTION[2] - loadingUI.hint.paddingY, loadingUI.hint.fontColor, 1, loadingUI.hint.font, "center", "top", true, true, true)
 end)
 
 
@@ -82,25 +92,22 @@ end)
 --[[ Events: On Show/Hide Loading UI ]]--
 -----------------------------------------
 
-imports.addEvent("Client:onShowLoadingUI", true)
-imports.addEventHandler("Client:onShowLoadingUI", root, function()
-    if ((loadingUI.animStatus == "backward") or (loadingUI.animStatus == "reverse_backward")) then return false end
+imports.addEvent("Client:onToggleLoadingUI", true)
+imports.addEventHandler("Client:onToggleLoadingUI", root, function(state, arguments)
+    if ((state and (loadingUI.animStatus == "forward")) or (loadingUI.animStatus == "backward") or (loadingUI.animStatus == "reverse_backward")) then return false end
 
-    loadingUI.animStatus = "reverse_backward"
-    loadingUI.tickCounter = CLIENT_CURRENT_TICK
-    if not loginUI.state then
-        imports.triggerEvent("onLoginSoundStop", localPlayer)
+    if state then        
+        loadingUI.animStatus = "forward"
+        loadingUI.tickCounter = CLIENT_CURRENT_TICK
+        loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
+        imports.triggerEvent("onLoginSoundStart", localPlayer, (arguments and arguments.shuffleMusic and true) or false)
+    else
+        loadingUI.animStatus = "reverse_backward"
+        loadingUI.tickCounter = CLIENT_CURRENT_TICK
+        loadingUI.hint.text = FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"][imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"])] or loadingUI.hint.text
+        if not loginUI.state then
+            imports.triggerEvent("onLoginSoundStop", localPlayer)
+        end
     end
-    return true
-end)
-
-imports.addEvent("Client:onHideLoadingUI", true)
-imports.addEventHandler("Client:onHideLoadingUI", root, function(shuffleMusic)
-    if loadingUI.animStatus == "forward" then return false end
-    
-    loadingUI.animStatus = "forward"
-    loadingUI.tickCounter = CLIENT_CURRENT_TICK
-    loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
-    imports.triggerEvent("onLoginSoundStart", localPlayer, (shuffleMusic and true) or false)
     return true
 end)

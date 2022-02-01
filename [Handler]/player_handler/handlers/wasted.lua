@@ -151,6 +151,8 @@ imports.addEventHandler("Player:onRespawn", root, function(spawnPoint)
     --TODO: APPEND FUNCTION TO RETRIEVE CHARACTER'S CURRENT CLOTHES..
     imports.triggerClientEvent("Player:onSyncPedClothes", source, source, getPlayerClothes(source))
     imports.triggerClientEvent(source, "Client:onRespawn", source)
-    imports.triggerClientEvent(source, "Client:onHideLoadingUI", source)
+    imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, true, {
+        shuffleMusic = true
+    })
     imports.showChat(source, true)
 end)

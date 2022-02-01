@@ -22,7 +22,11 @@ local imports = {
 ------------------
 
 FRAMEWORK_FONTS = {
-    [1] = imports.dxCreateFont("files/fonts/architectsdaughter.ttf", 17, true),
+    [1] = imports.dxCreateFont(":beautify_library/files/assets/fonts/teko_medium.rw", 23),
+
+
+    --TODO: ALL THIS NEEDS TO BE MODIFIED TOO
+    --[1] = imports.dxCreateFont("files/fonts/architectsdaughter.ttf", 17, true),
     [2] = imports.dxCreateFont("files/fonts/signika_semibold.ttf", 15, true),
     [3] = imports.dxCreateFont("files/fonts/courgette.ttf", 20, true),
     [4] = imports.dxCreateFont("files/fonts/signika_semibold.ttf", 12, true),

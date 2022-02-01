@@ -594,7 +594,7 @@ manageCharacter = function(manageType)
         end
         setLoginUIEnabled(false, false)
         imports.triggerEvent("Client:onNotification", localPlayer, "◴ Processing..", {175, 175, 175, 255})
-        imports.triggerEvent("Client:onHideLoadingUI", localPlayer)
+        imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, false)
         imports.setTimer(function()
             toggleUI(false)
         end, loadingUI.animFadeInDuration + 250, 1)
@@ -635,7 +635,7 @@ setLoginUIPhase = function(phaseID)
     if prevPhaseTimer and prevPhaseTimer:isValid() then prevPhaseTimer:destroy(); prevPhaseTimer = false end
     if prevEnablerTimer and prevEnablerTimer:isValid() then prevEnablerTimer:destroy(); prevEnablerTimer = false end
 
-    imports.triggerEvent("Client:onHideLoadingUI", localPlayer)
+    imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, false)
     prevPhaseTimer = imports.setTimer(function()
         if phaseID == 1 then
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.cinemationPoint, true, true, loginUI.cinemationData.cinemationFOV, true, true, true, false)
@@ -676,7 +676,7 @@ setLoginUIPhase = function(phaseID)
                 end
             end
         end
-        imports.triggerEvent("Client:onShowLoadingUI", localPlayer)
+        imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
         prevPhaseTimer = false
     end, loadingUI.animFadeInDuration + 250, 1)
     prevEnablerTimer = imports.setTimer(function()
@@ -1398,7 +1398,7 @@ imports.addEventHandler("Client:onShowLoginUI", root, function(character, charac
     imports.setTimer(function()
         toggleUI(true)
         imports.fadeCamera(true)
-        imports.triggerEvent("Client:onShowLoadingUI", localPlayer)
+        imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, false)
     end, 10000, 1)
 end)
 
@@ -1410,7 +1410,7 @@ end)
 imports.addEventHandler("onClientResourceStart", resource, function()
     if not isPlayerInitialized(localPlayer) then
         imports.fadeCamera(false)
-        imports.triggerEvent("Client:onHideLoadingUI", localPlayer, true)
+        imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
         triggerServerEvent("onPlayerRequestShowLoginScreen", localPlayer)
     end
 end)
