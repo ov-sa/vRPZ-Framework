@@ -15,6 +15,8 @@
 loadstring(exports.beautify_library:fetchImports())()
 local imports = {
     tonumber = tonumber,
+    addEvent = addEvent,
+    addEventHandler = addEventHandler,
     triggerEvent = triggerEvent,
     triggerServerEvent = triggerServerEvent,
     getElementType = getElementType,
@@ -22,7 +24,6 @@ local imports = {
     setWeather = setWeather,
     setTime = setTime,
     showChat = showChat,
-    fadeCamera = fadeCamera,
     toggleControl = toggleControl,
     setTrafficLightState = setTrafficLightState,
     setPedTargetingMarkerEnabled = setPedTargetingMarkerEnabled,
@@ -60,8 +61,8 @@ function showChat(bool, isForced)
     end
     return false
 end
-addEvent("Player:onToggleChat", true)
-addEventHandler("Player:onToggleChat", root, showChat)
+imports.addEvent("Player:onToggleChat", true)
+imports.addEventHandler("Player:onToggleChat", root, showChat)
 
 
 ------------------------------------------------
@@ -177,8 +178,8 @@ end
 --[[ Event: On Sync Weather ]]--
 --------------------------------
 
-addEvent("Player:onSyncWeather", true)
-addEventHandler("Player:onSyncWeather", root, function(serverWeather, serverTime)
+imports.addEvent("Player:onSyncWeather", true)
+imports.addEventHandler("Player:onSyncWeather", root, function(serverWeather, serverTime)
     serverWeather = imports.tonumber(serverWeather)
     if not serverWeather or not serverTime then return false end
     imports.setWeather(serverWeather)
@@ -191,7 +192,7 @@ end)
 --[[ Event: On Client GUI Click ]]--
 ------------------------------------
 
-addEventHandler("onClientGUIClick", root, function()
+imports.addEventHandler("onClientGUIClick", root, function()
     local guiElement = imports.getElementType(source)
     if ((guiElement == "gui-edit") or (guiElement == "gui-memo")) then
         imports.guiSetInputMode("no_binds_when_editing")
@@ -213,7 +214,4 @@ imports.addEventHandler("onClientResourceStart", resource, function()
     imports.setPedTargetingMarkerEnabled(false)
     imports.setPlayerHudComponentVisible("all", false)
     imports.setPlayerHudComponentVisible("crosshair", true)
-    imports.fadeCamera(false)
-    imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
-    imports.triggerServerEvent("Player:onToggleLoginUI", localPlayer)
 end)
