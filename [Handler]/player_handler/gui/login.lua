@@ -43,6 +43,7 @@ local prevPhaseTimer = false
 local prevEnablerTimer = false
 local createdTextures = {}
 local inputTickCounter = CLIENT_CURRENT_TICK
+--TODO: INTEGRATE W/ BEAUTIFY I/P FUNCTIONS
 local prevInputKey = false
 local prevInputKeyStreak = 0
 local _currentKeyCheck = true
