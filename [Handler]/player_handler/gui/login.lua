@@ -27,7 +27,9 @@ local imports = {
     dxDrawImage = dxDrawImage,
     interpolateBetween = interpolateBetween,
     getInterpolationProgress = getInterpolationProgress,
-    fadeCamera = fadeCamera
+    fadeCamera = fadeCamera,
+    showChat = showChat,
+    showCursor = showCursor
 }
 
 
@@ -1372,8 +1374,8 @@ toggleUI = function(state, cArgs)
         loginUI.state = false
         imports.triggerEvent("Sound:onToggleLogin", localPlayer, state)
     end
-    showChat(not state)
-    showCursor(state)
+    imports.showChat(not state)
+    imports.showCursor(state)
     return true
 end
 
