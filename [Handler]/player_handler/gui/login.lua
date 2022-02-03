@@ -1348,7 +1348,6 @@ end
 ------------------------------
 
 toggleUI = function(state, cArgs)
-
     if (((state ~= true) and (state ~= false)) or (state == loginUI.state)) then return false end
 
     if state then
@@ -1376,34 +1375,37 @@ toggleUI = function(state, cArgs)
     showChat(not state)
     showCursor(state)
     return true
-
 end
 
 
----------------------------------
---[[ Event: On Show Login UI ]]--
----------------------------------
+-----------------------------------
+--[[ Event: On Toggle Login UI ]]--
+-----------------------------------
 
-imports.addEvent("Client:onShowLoginUI", true)
-imports.addEventHandler("Client:onShowLoginUI", root, function(cArgs)
-    for i, j in imports.ipairs(characters) do
-        j.__isPreLoaded = true
+imports.addEvent("Client:onToggleLoginUI", true)
+imports.addEventHandler("Client:onToggleLoginUI", root, function(state, cArgs)
+    if state then
+        for i, j in imports.ipairs(characters) do
+            j.__isPreLoaded = true
+        end
+        loginUI.selectedCharacter = cArgs.character
+        loginUI._selectedCharacter = loginUI.selectedCharacter
+        loginUI.clientCharacters = cArgs.characters
+        loginUI._unsavedCharacters = {}
+        loginUI._charactersUnderProcess = {}
+        loginUI.isPremium = cArgs.isPremium
+        imports.setElementPosition(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.x, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.y, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.z)
+        imports.setElementDimension(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyDimension)
+        setLoginUIEnabled(true, true)
+
+        imports.setTimer(function()
+            toggleUI(state, cArgs)
+            imports.fadeCamera(true)
+            imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, false)
+        end, 10000, 1)
+    else
+        toggleUI(state, cArgs)
     end
-    loginUI.selectedCharacter = cArgs.character
-    loginUI._selectedCharacter = loginUI.selectedCharacter
-    loginUI.clientCharacters = cArgs.characters
-    loginUI._unsavedCharacters = {}
-    loginUI._charactersUnderProcess = {}
-    loginUI.isPremium = cArgs.isPremium
-    imports.setElementPosition(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.x, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.y, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.z)
-    imports.setElementDimension(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyDimension)
-    setLoginUIEnabled(true, true)
-
-    imports.setTimer(function()
-        toggleUI(true, cArgs)
-        imports.fadeCamera(true)
-        imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, false)
-    end, 10000, 1)
 end)
 
 
