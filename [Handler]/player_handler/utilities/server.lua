@@ -17,10 +17,12 @@ local imports = {
     type = type,
     ipairs = ipairs,
     isElement = isElement,
+    createElement = createElement,
     getElementType = getElementType,
     getElementsByType = getElementsByType,
     getElementPosition = getElementPosition,
     getTickCount = getTickCount,
+    addEventHandler = addEventHandler,
     triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent,
     getPlayerSerial = getPlayerSerial,
@@ -34,7 +36,9 @@ local imports = {
     setJetpackMaxHeight = setJetpackMaxHeight,
     setMinuteDuration = setMinuteDuration,
     setGameType = setGameType,
-    setMapName = setMapName
+    setMapName = setMapName,
+    getPlayerFromName = getPlayerFromName,
+    math = math
 }
 
 
@@ -69,10 +73,10 @@ end
 ---------------------------------------------
 
 function getVoidGuestNick()
-    local voidNick = "Guest_"..math.random(1, 10000)
-    while Player(voidNick) do
-        voidNick = "Guest_"..math.random(1, 10000)
-    end
+    local voidNick = nil
+    repeat
+        voidNick = "Guest_"..imports.math.random(1, 10000)
+    until(imports.getPlayerFromName(voidNick))
     return voidNick
 end
 
@@ -81,13 +85,12 @@ end
 --[[ Event: On Resource Start ]]--
 ----------------------------------
 
-addEventHandler("onResourceStart", resource, function()
-    local serverTickSyncer = Element("Server:TickSyncer")
-    imports.setTimer(function(serverTickSyncer)
-        if serverTickSyncer and imports.isElement(serverTickSyncer) then
-            serverTickSyncer:setData("Server:TickSyncer", imports.getTickCount())
+imports.addEventHandler("onResourceStart", resource, function()
+    imports.setTimer(function(tickSyncer)
+        if tickSyncer and imports.isElement(tickSyncer) then
+            tickSyncer:setData("Server:TickSyncer", imports.getTickCount())
         end
-    end, FRAMEWORK_CONFIGS.Game["Sync_Rate"], 0, serverTickSyncer)
+    end, FRAMEWORK_CONFIGS.Game["Sync_Rate"], 0, imports.createElement("Server:TickSyncer"))
     --[[
     for i, j in pairs(availableWeaponSlots) do
         for k, v in pairs(j.slots) do
@@ -122,7 +125,7 @@ addEventHandler("onResourceStart", resource, function()
         end
     end
 
-    addEventHandler("onPlayerCommand", root, function(command)
+    imports.addEventHandler("onPlayerCommand", root, function(command)
         for i, j in imports.ipairs(FRAMEWORK_CONFIGS.Game["Disabled_CMDS"]) do
             if j == command then
                 cancelEvent()
