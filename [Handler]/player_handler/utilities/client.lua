@@ -15,11 +15,14 @@
 loadstring(exports.beautify_library:fetchImports())()
 local imports = {
     tonumber = tonumber,
+    triggerEvent = triggerEvent,
+    triggerServerEvent = triggerServerEvent,
     getElementType = getElementType,
     guiSetInputMode = guiSetInputMode,
     setWeather = setWeather,
     setTime = setTime,
     showChat = showChat,
+    fadeCamera = fadeCamera,
     toggleControl = toggleControl,
     setTrafficLightState = setTrafficLightState,
     setPedTargetingMarkerEnabled = setPedTargetingMarkerEnabled,
@@ -210,4 +213,7 @@ imports.addEventHandler("onClientResourceStart", resource, function()
     imports.setPedTargetingMarkerEnabled(false)
     imports.setPlayerHudComponentVisible("all", false)
     imports.setPlayerHudComponentVisible("crosshair", true)
+    imports.fadeCamera(false)
+    imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
+    imports.triggerServerEvent("Player:onToggleLoginUI", localPlayer)
 end)

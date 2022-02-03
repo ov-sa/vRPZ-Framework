@@ -1411,14 +1411,3 @@ imports.addEventHandler("Client:onToggleLoginUI", root, function(state, cArgs)
         toggleUI(state, cArgs)
     end
 end)
-
-
------------------------------------------
---[[ Event: On Client Resource Start ]]--
------------------------------------------
-
-imports.addEventHandler("onClientResourceStart", resource, function()
-    imports.fadeCamera(false)
-    imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
-    imports.triggerServerEvent("Player:onToggleLoginUI", localPlayer)
-end)
