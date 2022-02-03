@@ -59,9 +59,11 @@ dbify["mysql"] = {
             if not tableName or (imports.type(tableName) ~= "string") or not callback or (imports.type(callback) ~= "function") then return false end
             keyColumns = ((keyColumns and (imports.type(keyColumns) == "table") and (#keyColumns > 0)) and keyColumns) or false
             if keyColumns then
-                local validateKeyColumns = {}
+                local _validateKeyColumns, validateKeyColumns = {}, {}
                 for i, j in imports.ipairs(keyColumns) do
-                    imports.table.insert(validateKeyColumns, j[1])
+                    if not _validateKeyColumns[(j[1])] then
+                        imports.table.insert(validateKeyColumns, j[1])
+                    end
                 end
                 return dbify.mysql.column.areValid(tableName, validateKeyColumns, function(areValid, arguments)
                     if areValid then
@@ -197,9 +199,11 @@ dbify["mysql"] = {
         set = function(tableName, dataColumns, keyColumns, callback, ...)
             if not dbify.mysql.__connection__.instance then return false end
             if not tableName or (imports.type(tableName) ~= "string") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) or not keyColumns or (imports.type(keyColumns) ~= "table") or (#keyColumns <= 0) then return false end
-            local validateKeyColumns = {}
+            local _validateKeyColumns, validateKeyColumns = {}, {}
             for i, j in imports.ipairs(keyColumns) do
-                imports.table.insert(validateKeyColumns, j[1])
+                if not _validateKeyColumns[(j[1])] then
+                    imports.table.insert(validateKeyColumns, j[1])
+                end
             end
             return dbify.mysql.column.areValid(tableName, validateKeyColumns, function(areValid, arguments)
                 if areValid then
@@ -250,12 +254,16 @@ dbify["mysql"] = {
             if not dbify.mysql.__connection__.instance then return false end
             if not tableName or (imports.type(tableName) ~= "string") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) or not keyColumns or (imports.type(keyColumns) ~= "table") or (#keyColumns <= 0) or not callback or (imports.type(callback) ~= "function") then return false end
             soloFetch = (soloFetch and true) or false
-            local validateColumns = {}
+            local _validateColumns, validateColumns = {}, {}
             for i, j in imports.ipairs(dataColumns) do
+                _validateColumns[j] = true
                 imports.table.insert(validateColumns, j)
             end
             for i, j in imports.ipairs(keyColumns) do
-                imports.table.insert(validateColumns, j[1])
+                if not _validateColumns[(j[1])] then
+                    _validateColumns[(j[1])] = true
+                    imports.table.insert(validateColumns, j[1])
+                end
             end
             return dbify.mysql.column.areValid(tableName, validateColumns, function(areValid, arguments)
                 if areValid then
