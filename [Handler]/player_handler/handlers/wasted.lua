@@ -52,9 +52,9 @@ local deathAnimations = {
 }
 
 
---------------------------------
---[[ Event: On Player Death ]]--
---------------------------------
+---------------------------------
+--[[ Player: On Player Death ]]--
+---------------------------------
 
 local function destroyPedLoot(ped, marker)
     if ped and imports.isElement(ped) then imports.destroyElement(ped) end
@@ -132,9 +132,9 @@ addEventHandler("Player:onDeath", root, function(killer, headshot, weapon, bodyp
 end)
 
 
----------------------------
---[[ Event: On Respawn ]]--
----------------------------
+----------------------------
+--[[ Player: On Respawn ]]--
+----------------------------
 
 imports.addEvent("Player:onRespawn", true)
 imports.addEventHandler("Player:onRespawn", root, function(spawnPoint)

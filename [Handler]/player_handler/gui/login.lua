@@ -1380,9 +1380,9 @@ toggleUI = function(state, cArgs)
 end
 
 
------------------------------------
---[[ Event: On Toggle Login UI ]]--
------------------------------------
+------------------------------------
+--[[ Client: On Toggle Login UI ]]--
+------------------------------------
 
 imports.addEvent("Client:onToggleLoginUI", true)
 imports.addEventHandler("Client:onToggleLoginUI", root, function(state, cArgs)

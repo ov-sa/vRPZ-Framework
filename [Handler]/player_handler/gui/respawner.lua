@@ -125,9 +125,9 @@ addEventHandler("onPlayerGenerateRespawnPoint", root, function()
 end)
 
 
----------------------------
---[[ Event: On Respawn ]]--
----------------------------
+----------------------------
+--[[ Client: On Respawn ]]--
+----------------------------
 
 addEvent("Client:onRespawn", true)
 addEventHandler("Client:onRespawn", root, function()

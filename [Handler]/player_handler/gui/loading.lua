@@ -86,9 +86,9 @@ beautify.render.create(function()
 end)
 
 
--------------------------------------
---[[ Event: On Toggle Loading UI ]]--
--------------------------------------
+--------------------------------------
+--[[ Client: On Toggle Loading UI ]]--
+--------------------------------------
 
 imports.addEvent("Client:onToggleLoadingUI", true)
 imports.addEventHandler("Client:onToggleLoadingUI", root, function(state, cArgs)

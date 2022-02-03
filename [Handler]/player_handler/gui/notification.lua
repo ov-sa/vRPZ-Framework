@@ -98,9 +98,9 @@ end, {
 })
 
 
---------------------------------
---[[ Event: On Notification ]]--
---------------------------------
+---------------------------------
+--[[ Client: On Notification ]]--
+---------------------------------
 
 imports.addEvent("Client:onNotification", true)
 imports.addEventHandler("Client:onNotification", root, function(message, color)
