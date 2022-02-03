@@ -1,6 +1,6 @@
 <meta>
 
-    <info author="OvileAmriam" name="DBify Library" type="Library" version="1.0.3"/>
+    <info author="OvileAmriam" name="DBify Library" type="Library" version="1.0.4"/>
 
     <!-- Settings & Utilities -->
     <script src="utilities/server.lua" type="server"/>
