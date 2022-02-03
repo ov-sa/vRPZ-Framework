@@ -79,7 +79,6 @@ beautify.render.create(function()
     end
 
     loadingUI.loader.rotationValue = imports.interpolateBetween(0, 0, 0, 360, 0, 0, imports.getInterpolationProgress(loadingUI.loader.tickCounter, loadingUI.loader.animDuration), "CosineCurve")
-    loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
     imports.dxDrawRectangle(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], imports.tocolor(loadingUI.bgColor[1], loadingUI.bgColor[2], loadingUI.bgColor[3], loadingUI.bgColor[4]*loadingUI.fadeAnimPercent), true)
     imports.dxDrawImage(loadingUI.loader.startX, loadingUI.loader.startY, loadingUI.loader.size, loadingUI.loader.size, loadingUI.loader.bgPath, loadingUI.loader.rotationValue, 0, 0, imports.tocolor(loadingUI.loader.bgColor[1], loadingUI.loader.bgColor[2], loadingUI.loader.bgColor[3], loadingUI.loader.bgColor[4]*loadingUI.fadeAnimPercent), true)
     imports.dxDrawText(loadingUI.hint.text, loadingUI.hint.paddingX, loadingUI.loader.startY + loadingUI.loader.size + loadingUI.hint.paddingY, CLIENT_MTA_RESOLUTION[1] - loadingUI.hint.paddingX, CLIENT_MTA_RESOLUTION[2] - loadingUI.hint.paddingY, loadingUI.hint.fontColor, 1, loadingUI.hint.font, "center", "top", true, true, true)
