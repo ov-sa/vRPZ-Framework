@@ -68,8 +68,8 @@ loadingUI.loader.startY = loadingUI.loader.startY + ((CLIENT_MTA_RESOLUTION[2] -
 beautify.render.create(function()
     if ((loadingUI.animStatus == "forward") or (loadingUI.animStatus == "reverse_backward")) then
         loadingUI.fadeAnimPercent = imports.interpolateBetween(loadingUI.fadeAnimPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loadingUI.tickCounter, loadingUI.animFadeInDuration), "Linear")
-        if loadingUI.animStatus == "reverse_backward" and imports.math.round(loadingUI.fadeAnimPercent, 2) == 1 then
-            if (CLIENT_CURRENT_TICK - loadingUI.tickCounter) >= (loadingUI.animFadeInDuration + loadingUI.animFadeDelayDuration) then
+        if (loadingUI.animStatus == "reverse_backward") and (imports.math.round(loadingUI.fadeAnimPercent, 2) == 1) then
+            if ((CLIENT_CURRENT_TICK - loadingUI.tickCounter) >= (loadingUI.animFadeInDuration + loadingUI.animFadeDelayDuration)) then
                 loadingUI.animStatus = "backward"
                 loadingUI.tickCounter = CLIENT_CURRENT_TICK
             end
@@ -78,7 +78,10 @@ beautify.render.create(function()
         loadingUI.fadeAnimPercent = imports.interpolateBetween(loadingUI.fadeAnimPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(loadingUI.tickCounter, loadingUI.animFadeOutDuration), "Linear")
     end
 
-    loadingUI.loader.rotationValue = imports.interpolateBetween(0, 0, 0, 360, 0, 0, imports.getInterpolationProgress(loadingUI.loader.tickCounter, loadingUI.loader.animDuration), "CosineCurve")
+    loadingUI.loader.rotationValue = imports.interpolateBetween(0, 0, 0, 360, 0, 0, imports.getInterpolationProgress(loadingUI.loader.tickCounter, loadingUI.loader.animDuration), "Linear")
+    if imports.math.round(loadingUI.loader.rotationValue, 2) == 360 then
+        loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
+    end
     imports.dxDrawRectangle(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], imports.tocolor(loadingUI.bgColor[1], loadingUI.bgColor[2], loadingUI.bgColor[3], loadingUI.bgColor[4]*loadingUI.fadeAnimPercent), true)
     imports.dxDrawImage(loadingUI.loader.startX, loadingUI.loader.startY, loadingUI.loader.size, loadingUI.loader.size, loadingUI.loader.bgPath, loadingUI.loader.rotationValue, 0, 0, imports.tocolor(loadingUI.loader.bgColor[1], loadingUI.loader.bgColor[2], loadingUI.loader.bgColor[3], loadingUI.loader.bgColor[4]*loadingUI.fadeAnimPercent), true)
     imports.dxDrawText(loadingUI.hint.text, loadingUI.hint.paddingX, loadingUI.loader.startY + loadingUI.loader.size + loadingUI.hint.paddingY, CLIENT_MTA_RESOLUTION[1] - loadingUI.hint.paddingX, CLIENT_MTA_RESOLUTION[2] - loadingUI.hint.paddingY, loadingUI.hint.fontColor, 1, loadingUI.hint.font, "center", "top", true, true, true)
@@ -100,7 +103,6 @@ imports.addEventHandler("Client:onToggleLoadingUI", root, function(state, cArgs)
     else
         if ((loadingUI.animStatus == "backward") or (loadingUI.animStatus == "reverse_backward")) then return false end
         loadingUI.animStatus = "reverse_backward"
-        loadingUI.tickCounter = CLIENT_CURRENT_TICK
     end
     imports.triggerEvent("Sound:onToggleLoading", localPlayer, state)
     return true
