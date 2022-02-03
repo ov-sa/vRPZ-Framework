@@ -36,35 +36,35 @@ CCharacter = {
 
     create = function(serial, callback, ...)
         if (not serial or (imports.type(serial) ~= "string")) then return false end
-        dbify.character.create(function(characterID, arguments)
+        dbify.character.create(function(characterID, cArgs)
             CCharacter.buffer[characterID] = {
                 {"owner", characterOwner}
             }
             dbify.character.setData(characterID, CCharacter.buffer[characterID])
             local callbackReference = callback
             if (callbackReference and (imports.type(callbackReference) == "function")) then
-                imports.table.remove(arguments, 1)
-                callbackReference(characterID, arguments)
+                imports.table.remove(cArgs, 1)
+                callbackReference(characterID, cArgs)
             end
         end, serial, ...)
         return true
     end,
 
     delete = function(characterID, callback, ...)
-        dbify.character.delete(characterID, function(result, arguments)
+        dbify.character.delete(characterID, function(result, cArgs)
             if result then
                 CCharacter.buffer[characterID] = nil
             end
             local callbackReference = callback
             if (callbackReference and (imports.type(callbackReference) == "function")) then
-                callbackReference(result, arguments)
+                callbackReference(result, cArgs)
             end
         end, ...)
         return true
     end,
 
     setData = function(characterID, characterDatas, callback, ...)
-        dbify.character.setData(characterID, characterDatas, function(result, arguments)
+        dbify.character.setData(characterID, characterDatas, function(result, cArgs)
             if result and CCharacter.buffer[characterID] then
                 for i, j in imports.ipairs(characterDatas) do
                     CCharacter.buffer[characterID][(j[1])] = j[2]
@@ -72,18 +72,18 @@ CCharacter = {
             end
             local callbackReference = callback
             if (callbackReference and (imports.type(callbackReference) == "function")) then
-                imports.table.remove(arguments, 1)
-                callbackReference(result, arguments)
+                imports.table.remove(cArgs, 1)
+                callbackReference(result, cArgs)
             end
         end, characterDatas, ...)
         return true
     end,
 
     getData = function(characterID, characterDatas, callback, ...)
-        dbify.character.getData(characterID, characterDatas, function(result, arguments)
+        dbify.character.getData(characterID, characterDatas, function(result, cArgs)
             local callbackReference = callback
             if (callbackReference and (imports.type(callbackReference) == "function")) then
-                callbackReference(result, arguments)
+                callbackReference(result, cArgs)
             end
             if result and CCharacter.buffer[characterID] then
                 for i, j in imports.pairs(characterDatas) do

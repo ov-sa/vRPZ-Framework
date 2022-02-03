@@ -15,6 +15,8 @@
 local imports = {
     ipairs = ipairs,
     isElement = isElement,
+    setElementPosition = setElementPosition,
+    setElementDimension = setElementDimension,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     triggerEvent = triggerEvent,
@@ -1345,7 +1347,7 @@ end
 --[[ Function: Toggles UI ]]--
 ------------------------------
 
-toggleUI = function(state)
+toggleUI = function(state, cArgs)
 
     if (((state ~= true) and (state ~= false)) or (state == loginUI.state)) then return false end
 
@@ -1353,8 +1355,10 @@ toggleUI = function(state)
         loginUI.state = true
         loginUI.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
         setLoginUIPhase(1)
-        imports.triggerEvent("onLoginSoundStart", localPlayer)
         beautify.render.create(renderUI)
+        imports.triggerEvent("Sound:onToggleLogin", localPlayer, state, {
+            shuffleMusic = (cArgs and cArgs.shuffleMusic and true) or false
+        })
     else
         beautify.render.remove(renderUI)
         exports.cinecam_handler:stopCinemation()
@@ -1367,6 +1371,7 @@ toggleUI = function(state)
         loginUI.clientCharacters = {}
         loginUI.isPremium = false
         loginUI.state = false
+        imports.triggerEvent("Sound:onToggleLogin", localPlayer, state)
     end
     showChat(not state)
     showCursor(state)
@@ -1380,22 +1385,22 @@ end
 ---------------------------------
 
 imports.addEvent("Client:onShowLoginUI", true)
-imports.addEventHandler("Client:onShowLoginUI", root, function(character, characters, isPremium)
+imports.addEventHandler("Client:onShowLoginUI", root, function(cArgs)
     for i, j in imports.ipairs(characters) do
         j.__isPreLoaded = true
     end
-    loginUI.selectedCharacter = character
+    loginUI.selectedCharacter = cArgs.character
     loginUI._selectedCharacter = loginUI.selectedCharacter
-    loginUI.clientCharacters = characters
+    loginUI.clientCharacters = cArgs.characters
     loginUI._unsavedCharacters = {}
     loginUI._charactersUnderProcess = {}
-    loginUI.isPremium = isPremium
-    localPlayer:setPosition(FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.x, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.y, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.z)
-    localPlayer:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].lobbyDimension)
-
+    loginUI.isPremium = cArgs.isPremium
+    imports.setElementPosition(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.x, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.y, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.z)
+    imports.setElementDimension(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyDimension)
     setLoginUIEnabled(true, true)
+
     imports.setTimer(function()
-        toggleUI(true)
+        toggleUI(true, cArgs)
         imports.fadeCamera(true)
         imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, false)
     end, 10000, 1)
