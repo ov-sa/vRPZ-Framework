@@ -20,6 +20,7 @@ local imports = {
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     triggerEvent = triggerEvent,
+    triggerServerEvent = triggerServerEvent,
     setTimer = setTimer,
     dxCreateTexture = dxCreateTexture,
     dxSetRenderTarget = dxSetRenderTarget,
@@ -496,7 +497,7 @@ manageCharacter = function(manageType)
                 imports.triggerEvent("Client:onNotification", localPlayer, "You must wait until the character processing is done!", {255, 80, 80, 255})
                 return false
             else
-                triggerServerEvent("onClientCharacterDelete", localPlayer, loginUI.clientCharacters[loginUI._selectedCharacter]._id)
+                imports.triggerServerEvent("onClientCharacterDelete", localPlayer, loginUI.clientCharacters[loginUI._selectedCharacter]._id)
             end
         end
         table.remove(loginUI.clientCharacters, loginUI._selectedCharacter)
@@ -583,7 +584,7 @@ manageCharacter = function(manageType)
         charactersPendingToBeSaved[loginUI._selectedCharacter] = true
         charactersToBeSaved[loginUI._selectedCharacter] = characterData
         loginUI._charactersUnderProcess[loginUI._selectedCharacter] = true
-        triggerServerEvent("onClientCharacterSave", localPlayer, selectedCharacter, charactersToBeSaved, charactersPendingToBeSaved)
+        imports.triggerServerEvent("onClientCharacterSave", localPlayer, selectedCharacter, charactersToBeSaved, charactersPendingToBeSaved)
     elseif manageType == "play" then
         if #loginUI.clientCharacters <= 0 then
             setLoginUIEnabled(true)
@@ -603,7 +604,7 @@ manageCharacter = function(manageType)
             toggleUI(false)
         end, loadingUI.animFadeInDuration + 250, 1)
         imports.setTimer(function(selectedCharacter, clientCharacters)
-            triggerServerEvent("onPlayerResumeGame", localPlayer, selectedCharacter, clientCharacters)
+            imports.triggerServerEvent("onPlayerResumeGame", localPlayer, selectedCharacter, clientCharacters)
         end, loadingUI.animFadeInDuration + loadingUI.animFadeOutDuration + loadingUI.animFadeDelayDuration, 1, loginUI.selectedCharacter, loginUI.clientCharacters)
     end
     return true
@@ -1417,8 +1418,6 @@ end)
 
 imports.addEventHandler("onClientResourceStart", resource, function()
     imports.fadeCamera(false)
-    imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true, {
-        shuffleMusic = true
-    })
-    triggerServerEvent("onPlayerRequestShowLoginScreen", localPlayer)
+    imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
+    imports.triggerServerEvent("Player:onToggleLoginUI", localPlayer)
 end)
