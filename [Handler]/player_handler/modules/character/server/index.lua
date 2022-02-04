@@ -15,7 +15,6 @@
 local imports = {
     type = type,
     pairs = pairs,
-    ipairs = ipairs,
     table = table
 }
 
@@ -66,7 +65,8 @@ CCharacter = {
     setData = function(characterID, characterDatas, callback, ...)
         dbify.character.setData(characterID, characterDatas, function(result, cArgs)
             if result and CCharacter.CBuffer[characterID] then
-                for i, j in imports.ipairs(characterDatas) do
+                for i = 1, #characterDatas, 1 do
+                    local j = characterDatas[i]
                     CCharacter.CBuffer[characterID][(j[1])] = j[2]
                 end
             end
