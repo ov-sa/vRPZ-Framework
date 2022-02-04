@@ -24,7 +24,8 @@ local imports = {
 ----------------------
 
 CInventory = {
-    CItems = {}
+    CItems = {},
+    CSlots = {},
 
     fetchItem = function(item)
         if not item or not CInventory.CItems[item] then return false end
@@ -48,6 +49,12 @@ CInventory = {
 }
 
 for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
+    if FRAMEWORK_CONFIGS["Inventory"]["Slots"][i] and (FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].slotIdentifier == "Weapon") then
+        CInventory.CSlots[(FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].slotIdentifier)] = CInventory.CSlots[(FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].slotIdentifier)] or {}
+        CInventory.CSlots[(FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].slotIdentifier)][i] = FRAMEWORK_CONFIGS["Inventory"]["Slots"][i]
+    else
+        CInventory.CSlots[(FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].slotIdentifier)] = FRAMEWORK_CONFIGS["Inventory"]["Slots"][i]
+    end
     for k, v in imports.pairs(j) do
         CInventory.CItems[k] = i
     end
