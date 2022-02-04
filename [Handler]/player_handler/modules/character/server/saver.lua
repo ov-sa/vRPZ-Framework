@@ -24,9 +24,9 @@ local imports = {
 }
 
 
--------------------------
---[[ Character Class ]]--
--------------------------
+----------------
+--[[ Module ]]--
+----------------
 
 CCharacter.saveProgress = function(player, isQuitting)
     if not CPlayer.isInitialized(player) then return false end

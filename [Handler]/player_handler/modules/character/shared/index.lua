@@ -24,9 +24,9 @@ local imports = {
 }
 
 
--------------------------
---[[ Character Class ]]--
--------------------------
+----------------
+--[[ Module ]]--
+----------------
 
 CCharacter = {
     getPlayer = function(characterID)
