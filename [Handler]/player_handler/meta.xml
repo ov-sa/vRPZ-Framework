@@ -58,6 +58,8 @@
     <export function="fetchInventoryItemName" type="shared"/>
     <export function="fetchInventoryItemWeight" type="shared"/>
     <export function="fetchInventoryItemObjectID" type="shared"/>
+    <export function="fetchInventorySlot" type="shared"/>
+
 
     <!-- Handlers -->
     <script src="handlers/wasted.lua" type="server"/>
@@ -189,9 +191,6 @@
     <file src="files/images/inventory/icons/nutritions/water_bottle.png"/>
 
     <!-- Exports: Shared: Main -->
-    <export function="getCurrentTime" type="shared"/>
-    <export function="getItemObjectID" type="shared"/>
-    <export function="getWeaponSlotDetails" type="shared"/>
     <export function="getWeaponSlotData" type="shared"/>
     <export function="getWeaponSlotName" type="shared"/>
     <export function="getWeaponSlotID" type="shared"/>

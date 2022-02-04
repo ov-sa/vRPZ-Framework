@@ -21,24 +21,6 @@ local imports = {
 }
 
 
----------------------------------------------------
---[[ Function: Retrieves Weapon Slot's Details ]]--
----------------------------------------------------
-
-function getWeaponSlotDetails(slotName)
-
-    if not slotName then return false end
-    slotName = tostring(slotName)
-
-    if availableWeaponSlots[i] then
-        return j
-    else
-        return false
-    end
-
-end
-
-
 -------------------------------------------------
 --[[ Function: Retrieves Weapon's Slot Datas ]]--
 -------------------------------------------------

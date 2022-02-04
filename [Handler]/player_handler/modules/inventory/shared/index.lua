@@ -45,7 +45,12 @@ CInventory = {
     fetchItemObjectID = function(item)
         local itemData = CInventory.fetchItem(item)
         return (itemData and imports.tonumber(itemData.objectID)) or false
-    end
+    end,
+
+    fetchSlot = function(slot)
+        if not slot then return false end
+        return FRAMEWORK_CONFIGS["Inventory"]["Slots"][slot] or false
+    end  
 }
 
 for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
