@@ -40,6 +40,11 @@ CInventory = {
         local itemData = CInventory.fetchItem(item)
         return (itemData and imports.math.max(0, imports.tonumber(itemData.weight) or 0)) or false
     end,
+
+    fetchItemObjectID = function(item)
+        local itemData = CInventory.fetchItem(item)
+        return (itemData and imports.tonumber(itemData.objectID)) or false
+    end
 }
 
 for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do

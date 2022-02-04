@@ -57,6 +57,7 @@
     <export function="fetchInventoryItem" type="shared"/>
     <export function="fetchInventoryItemName" type="shared"/>
     <export function="fetchInventoryItemWeight" type="shared"/>
+    <export function="fetchInventoryItemObjectID" type="shared"/>
 
     <!-- Handlers -->
     <script src="handlers/wasted.lua" type="server"/>

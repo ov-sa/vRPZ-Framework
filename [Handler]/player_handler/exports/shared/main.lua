@@ -221,7 +221,7 @@ function getWeaponOffset(weaponType, isBackpackWeapon)
 
     if not weaponType or imports.type(weaponType) ~= "string" then return false end
 
-    local objectID = getItemObjectID(weaponType)
+    local objectID = CInventory.fetchItemObjectID(weaponType)
     if objectID then
         if not isBackpackWeapon then
             if weaponOffsets[weaponType] and imports.type(weaponOffsets[weaponType]) == "table" and weaponOffsets[weaponType].offsets then
@@ -247,7 +247,7 @@ function getBackpackOffset(skinModel, backpackType)
     skinModel = imports.tonumber(skinModel)
     if not skinModel or not backpackType or imports.type(backpackType) ~= "string" then return false end
 
-    local objectID = getItemObjectID(backpackType)
+    local objectID = CInventory.fetchItemObjectID(backpackType)
     if objectID then
         if backpackOffsets[backpackType] and imports.type(backpackOffsets[backpackType]) == "table" and backpackOffsets[backpackType][tostring(skinModel)] then
             return objectID, backpackOffsets[backpackType][tostring(skinModel)]
