@@ -37,11 +37,6 @@ CInventory = {
         return (itemData and itemData.slot) or false
     end,
 
-    fetchItemSlotID = function(item)
-        local itemData = CInventory.fetchItem(item)
-        return (itemData and itemData.slot and CInventory.CSlots["Weapon"][(itemData.slot)] and imports.tonumber(itemData.data.slotID)) or false
-    end,
-
     fetchItemName = function(item)
         local itemData = CInventory.fetchItem(item)
         return (itemData and itemData.data and itemData.data.name) or false
@@ -57,12 +52,17 @@ CInventory = {
         return (itemData and itemData.data and imports.tonumber(itemData.data.objectID)) or false
     end,
 
-    fetchItemWeaponID = function(item)
+    fetchWeaponSlotID = function(item)
+        local itemData = CInventory.fetchItem(item)
+        return (itemData and itemData.slot and CInventory.CSlots["Weapon"][(itemData.slot)] and imports.tonumber(itemData.data.slotID)) or false
+    end,
+
+    fetchWeaponID = function(item)
         local itemData = CInventory.fetchItem(item)
         return (itemData and itemData.slot and CInventory.CSlots["Weapon"][(itemData.slot)] and imports.tonumber(itemData.data.weaponID)) or false
     end,
 
-    fetchItemWeaponAmmo = function(item)
+    fetchWeaponAmmo = function(item)
         local itemData = CInventory.fetchItem(item)
         return (itemData and itemData.slot and CInventory.CSlots["Weapon"][(itemData.slot)] and imports.tonumber(itemData.data.weaponAmmo)) or false
     end,
