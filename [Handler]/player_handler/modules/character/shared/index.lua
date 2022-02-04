@@ -16,6 +16,8 @@ local imports = {
     tonumber = tonumber,
     ipairs = ipairs,
     getElementsByType,
+    getElementPosition = getElementPosition,
+    getElementRotation = getElementRotation,
     getElementData = getElementData,
     setElementData = setElementData,
     math = math
@@ -39,6 +41,14 @@ CCharacter = {
             end
         end
         return false
+    end,
+
+    getLocation = function(player)
+        if not CPlayer.isInitialized(player) then return false end
+        return {
+            position = {imports.getElementPosition(player)},
+            rotation = {imports.getElementRotation(player)}
+        }
     end,
 
     getHealth = function(player)
