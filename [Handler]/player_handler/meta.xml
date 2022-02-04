@@ -179,7 +179,7 @@
 
     <!-- Exports: Shared: Player -->
     <export function="isPlayerInitialized" type="shared"/>
-    <export function="getPlayerByCharacterID" type="shared"/>
+    <export function="getPlayerFromCharacterID" type="shared"/>
     <export function="getCharacterHealth" type="shared"/>
     <export function="getCharacterMaximumHealth" type="shared"/>
     <export function="setPlayerMoney" type="shared"/>

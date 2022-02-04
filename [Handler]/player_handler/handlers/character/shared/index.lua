@@ -13,7 +13,9 @@
 -----------------
 
 local imports = {
-    tonumber = tonumber
+    tonumber = tonumber,
+    ipairs = ipairs,
+    getElementsByType
 }
 
 
@@ -22,6 +24,20 @@ local imports = {
 -------------------------
 
 CCharacter = {
+    getPlayer = function(characterID)
+        characterID = imports.tonumber(characterID)
+        if not characterID then return false end
+        for i, j in imports.ipairs(imports.getElementsByType("player")) do
+            if CPlayer.isInitialized(j) then
+                local _characterID = j:getData("Character:ID")
+                if _characterID == characterID then
+                    return j
+                end
+            end
+        end
+        return false
+    end,
+
     getHealth = function(player)
         if not CPlayer.isInitialized(player) then return false end
         return imports.tonumber(player:getData("Character:blood")) or 0

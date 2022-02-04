@@ -13,32 +13,12 @@
 -----------------
 
 function isPlayerInitialized(...) return CPlayer.isInitialized(...) end
+function getPlayerFromCharacterID(...) return CCharacter.getPlayer(...) end
 function getCharacterHealth(...) return CCharacter.getHealth(...) end
 function getCharacterMaximumHealth(...) return CCharacter.getMaxHealth(...) end
 function getCharacterFaction(...) return CCharacter.getFaction(...) end
 function isCharacterKnocked(...) return CCharacter.isKnocked(...) end
 function isCharacterReloading(...) return CCharacter.isReloading(...) end
-
-
-----------------------------------------------------
---[[ Function: Retrieves Player By Character ID ]]--
-----------------------------------------------------
-
-function getPlayerByCharacterID(characterID)
-
-    if not characterID then return false end
-
-    for i, j in ipairs(Element.getAllByType("player")) do
-        if isPlayerInitialized(j) then
-            local _characterID = j:getData("Character:ID")
-            if _characterID == characterID then
-                return j
-            end
-        end
-    end
-    return false
-
-end
 
 
 --------------------------------------------------
