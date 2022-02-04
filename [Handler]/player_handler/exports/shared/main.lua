@@ -21,21 +21,6 @@ local imports = {
 }
 
 
--------------------------------------------
---[[ Function: Retrieves Item's Weight ]]--
--------------------------------------------
-
-function getItemWeight(item)
-
-    if not item then return false end
-    local itemDetails = fetchInventoryItem(item)
-    if not itemDetails then return false end
-
-    return imports.tonumber(itemDetails.itemWeight) or 1
-
-end
-
-
 ---------------------------------------------
 --[[ Function: Retrieves Item's ObjectID ]]--
 ---------------------------------------------
@@ -217,7 +202,7 @@ function getElementUsedSlots(element)
     for i, j in imports.pairs(inventoryDatas) do
         for k, v in iimports.pairs(j) do
             local elementItemData = imports.tonumber(element:getData("Item:"..v.dataName)) or 0
-            local itemWeight = getItemWeight(v.dataName)
+            local itemWeight = CInventory.fetchItemWeight(v.dataName)
             if elementItemData > 0 then
                 usedSlots = usedSlots + (itemWeight*elementItemData)
             end

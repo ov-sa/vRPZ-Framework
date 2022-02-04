@@ -14,3 +14,4 @@
 
 function fetchInventoryItem(...) return CInventory.fetchItem(...) end
 function fetchInventoryItemName(...) return CInventory.fetchItemName(...) end
+function fetchInventoryItemWeight(...) return CInventory.fetchItemWeight(...) end
