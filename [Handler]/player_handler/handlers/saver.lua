@@ -74,7 +74,7 @@ local initialInventoryItems = {
 
 function loadPlayerDefaultDatas(player)
 
-    if not player or not isElement(player) or player:getType() ~= "player" or not isPlayerInitialized(player) then return false end
+    if not isPlayerInitialized(player) then return false end
 
     --clearPlayerAllEquipmentSlots(player)
     --TODO: RESET ALL INVENTORY DATAS SOMEHOW... add another function clearPlayerAllInventory
@@ -158,7 +158,7 @@ imports.addEventHandler("onClientCharacterSave", root, function(character, chara
                 end
             end
             local characterID = addSerialCharacter(serial)
-            setCharacterData(characterID, "identity", toJSON(characters[i]))
+            CCharacter.setData(characterID, "identity", toJSON(characters[i]))
             characterCache[characterID]["identity"] = fromJSON(characterCache[characterID]["identity"])
             triggerClientEvent(source, "onClientLoadCharacterID", source, i, characterID, characters[i])
         end
@@ -190,62 +190,3 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
     triggerClientEvent(source, "onPlayerShowLoadingScreen", source, true)
     triggerClientEvent(source, "onPlayerShowLoginScreen", source, lastCharacter, lastCharacters, isPlayerPremium)
 end)
-
-
--------------------------------------------
---[[ Function: Saves Player's Progress ]]--
--------------------------------------------
-
-function savePlayerProgress(player, isClientQuitting)
-    if not player or not isElement(player) or player:getType() ~= "player" or not isPlayerInitialized(player) then return false end
-
-    local serial = player:getSerial()
-    local posVector = player:getPosition()
-    local rotVector = player:getRotation()
-    local characterID = player:getData("Character:ID")
-    local characterIdentity = getCharacterData(characterID, "identity")
-    if player:isInWater() then posVector.z = posVector.z + 5 end
-
-    setCharacterData(characterID, "location", toJSON({x = posVector.x, y = posVector.y, z = posVector.z, rotation = rotVector.z}))
-    for i, j in ipairs(FRAMEWORK_CONFIGS["Player"]["Datas"]) do
-        local data = tostring(player:getData("Player:"..j))
-        exports.serials_library:setSerialData(serial, j, data)
-    end
-    for i, j in ipairs(FRAMEWORK_CONFIGS["Character"]["Datas"]) do
-        local data = tostring(player:getData("Character:"..j))
-        setCharacterData(characterID, j, data)
-    end
-
-    if playerAttachments[player] then
-        for i, j in pairs(playerAttachments[player]) do
-            if j and isElement(j) then
-                j:destroy()
-            end
-        end
-    end
-    playerAttachments[player] = nil
-    playerInventorySlots[player] = nil
-    if not isClientQuitting then
-        player:setData("Player:Initialized", nil)
-        player:setData("Character:ID", nil)
-        for i, j in pairs(characterIdentity) do
-            player:setData("Character:"..i, nil)
-        end
-        for i, j in pairs(FRAMEWORK_CONFIGS["Inventory"]["Slots"]) do
-            player:setData("Slot:"..i, nil)
-            player:setData("Slot:Object:"..i, nil)
-        end
-        for i, j in ipairs(FRAMEWORK_CONFIGS["Player"]["Datas"]) do
-            player:setData("Player:"..j, nil)
-        end
-        for i, j in ipairs(FRAMEWORK_CONFIGS["Character"]["Datas"]) do
-            player:setData("Character:"..j, nil)
-        end
-        for i, j in pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
-            for k, v in pairs(j) do
-                player:setData("Item:"..k, nil)
-            end
-        end
-    end
-    return true
-end

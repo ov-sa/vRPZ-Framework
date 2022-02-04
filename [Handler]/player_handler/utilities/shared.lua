@@ -164,7 +164,7 @@ end
 
 function isPlayerWithinElementInteractionRange(player, element)
 
-    if not player or not isElement(player) or player:getType() ~= "player" or not isPlayerInitialized(player) or getPlayerHealth(player) <= 0 or not element or not isElement(element) then return false end
+    if not isPlayerInitialized(player) or getPlayerHealth(player) <= 0 or not element or not isElement(element) then return false end
 
     local elementType = element:getType()
     local elementRange = false
@@ -194,7 +194,7 @@ end
 
 function isPlayerWithinMarker(player, marker)
         
-    if not player or not isElement(player) or player:getType() ~= "player" or not isPlayerInitialized(player) or not marker or not isElement(marker) then return false end
+    if not isPlayerInitialized(player) or not marker or not isElement(marker) then return false end
 
     local markerSize = marker:getSize()
     local playerPosVector = player:getPosition()        
