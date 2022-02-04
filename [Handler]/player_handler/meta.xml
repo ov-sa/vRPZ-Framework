@@ -42,8 +42,10 @@
     <script src="modules/character/shared/index.lua" type="shared" cache="false"/>
     <script src="modules/character/shared/exports.lua" type="shared" cache="false"/>
     <script src="modules/character/server/index.lua" type="server"/>
+    <script src="modules/character/server/exports.lua" type="server"/>
     <script src="modules/character/server/saver.lua" type="server"/>
     <export function="getPlayerFromCharacterID" type="shared"/>
+    <export function="getCharacterLocation" type="shared"/>
     <export function="getCharacterHealth" type="shared"/>
     <export function="getCharacterMaximumHealth" type="shared"/>
     <export function="setCharacterMoney" type="shared"/>
@@ -53,6 +55,11 @@
     <export function="isReloading" type="shared"/>
     <export function="isCharacterKnocked" type="shared"/>
     <export function="isCharacterInLoot" type="shared"/>
+    <export function="fetchCharacter" type="server"/>
+    <export function="createCharacter" type="server"/>
+    <export function="deleteCharacter" type="server"/>
+    <export function="setCharacterData" type="server"/>
+    <export function="getCharacterData" type="server"/>
 
     <!-- Modules: Inventory -->
     <script src="modules/inventory/shared/index.lua" type="shared" cache="false"/>

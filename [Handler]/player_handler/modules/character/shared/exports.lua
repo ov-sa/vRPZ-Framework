@@ -13,6 +13,7 @@
 -----------------
 
 function getPlayerFromCharacterID(...) return CCharacter.getPlayer(...) end
+function getCharacterLocation(...) return CCharacter.getLocation(...) end
 function getCharacterHealth(...) return CCharacter.getHealth(...) end
 function getCharacterMaximumHealth(...) return CCharacter.getMaxHealth(...) end
 function getCharacterFaction(...) return CCharacter.getFaction(...) end
