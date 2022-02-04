@@ -59,6 +59,7 @@
     <export function="fetchInventoryItemName" type="shared"/>
     <export function="fetchInventoryItemWeight" type="shared"/>
     <export function="fetchInventoryItemObjectID" type="shared"/>
+    <export function="fetchInventoryWeaponSlot" type="shared"/>
     <export function="fetchInventoryWeaponSlotID" type="shared"/>
     <export function="fetchInventoryWeaponID" type="shared"/>
     <export function="fetchInventoryWeaponAmmo" type="shared"/>

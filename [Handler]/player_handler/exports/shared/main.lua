@@ -21,29 +21,6 @@ local imports = {
 }
 
 
--------------------------------------------------
---[[ Function: Retrieves Weapon's Slot Datas ]]--
--------------------------------------------------
-
-function getWeaponSlotData(slotID)
-
-    slotID = imports.tonumber(slotID)
-    if not slotID then return false end
-
-    for i, j in imports.pairs(availableWeaponSlots) do
-        for k, v in imports.pairs(j.slots) do
-            if k == slotID then
-                local weaponSlotData = v
-                weaponSlotData["slotName"] = i
-                return weaponSlotData
-            end
-        end
-    end
-    return false
-
-end
-
-
 -----------------------------------------------
 --[[ Function: Retrieves Weapon's Mag Size ]]--
 -----------------------------------------------
