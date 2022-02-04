@@ -17,7 +17,9 @@ local imports = {
     ipairs = ipairs,
     tostring = tostring,
     isElement = isElement,
-    destroyElement = destroyElement
+    destroyElement = destroyElement,
+    getElementPosition = getElementPosition,
+    getElementRotation = getElementRotation
 }
 
 
@@ -29,8 +31,8 @@ CCharacter.saveProgress = function(player, isClientQuitting)
     if not isPlayerInitialized(player) then return false end
 
     local serial = player:getSerial()
-    local posVector = player:getPosition()
-    local rotVector = player:getRotation()
+    local posVector = imports.getElementPosition(player)
+    local rotVector = imports.getElementRotation(player)
     local characterID = player:getData("Character:ID")
     local characterIdentity = getCharacterData(characterID, "identity")
     if player:isInWater() then posVector.z = posVector.z + 5 end
