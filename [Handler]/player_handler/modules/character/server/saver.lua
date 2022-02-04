@@ -14,7 +14,6 @@
 
 local imports = {
     pairs = pairs,
-    ipairs = ipairs,
     tostring = tostring,
     isElement = isElement,
     destroyElement = destroyElement,
@@ -41,7 +40,6 @@ CCharacter.saveProgress = function(player, isQuitting)
         local data = imports.tostring(imports.getElementData(player, "Player:"..j))
         exports.serials_library:setSerialData(serial, j, data)
     end
-    for i, j in imports.ipairs(FRAMEWORK_CONFIGS["Character"]["Datas"]) do
     for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
         local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
         local data = imports.tostring(imports.getElementData(player, "Character:"..j))
@@ -63,10 +61,12 @@ CCharacter.saveProgress = function(player, isQuitting)
         for i, j in imports.pairs(characterIdentity) do
             imports.setElementData(player, "Character:"..i, nil)
         end
-        for i, j in imports.ipairs(FRAMEWORK_CONFIGS["Player"]["Datas"]) do
+        for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
+            local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
             imports.setElementData(player, "Player:"..j, nil)
         end
-        for i, j in imports.ipairs(FRAMEWORK_CONFIGS["Character"]["Datas"]) do
+        for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
+            local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
             imports.setElementData(player, "Character:"..j, nil)
         end
         for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Slots"]) do
