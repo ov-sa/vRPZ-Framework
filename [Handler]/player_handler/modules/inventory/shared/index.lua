@@ -27,7 +27,17 @@ CInventory = {
     fetchItem = function(item)
         if not item or not CInventory.CItems[item] then return false end
         return CInventory.CItems[item]
-    end
+    end,
+
+    fetchItemName = function(item)
+        local itemData = CInventory.fetchItem(item)
+        return (itemData and itemData.name) or false
+    end,
+
+    fetchItemName = function(item)
+        local itemData = CInventory.fetchItem(item)
+        return (itemData and itemData.name) or false
+    end,
 }
 
 for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do

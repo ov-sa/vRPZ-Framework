@@ -12,4 +12,5 @@
 --[[ Exports ]]--
 -----------------
 
-function fetchInventoryItem(...) return CGame.fetchItem(...) end
+function fetchInventoryItem(...) return CInventory.fetchItem(...) end
+function fetchInventoryItemName(...) return CInventory.fetchItemName(...) end

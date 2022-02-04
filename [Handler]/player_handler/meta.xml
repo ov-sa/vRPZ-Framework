@@ -55,7 +55,8 @@
     <script src="modules/inventory/shared/index.lua" type="shared" cache="false"/>
     <script src="modules/inventory/shared/exports.lua" type="shared" cache="false"/>
     <export function="fetchInventoryItem" type="shared"/>
-
+    <export function="fetchInventoryItemName" type="shared"/>
+    
     <!-- Handlers -->
     <script src="handlers/wasted.lua" type="server"/>
 
@@ -187,8 +188,6 @@
 
     <!-- Exports: Shared: Main -->
     <export function="getCurrentTime" type="shared"/>
-    <export function="fetchInventoryItem" type="shared"/>
-    <export function="getItemName" type="shared"/>
     <export function="getItemWeight" type="shared"/>
     <export function="getItemObjectID" type="shared"/>
     <export function="getWeaponSlotDetails" type="shared"/>

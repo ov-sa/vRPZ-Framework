@@ -21,21 +21,6 @@ local imports = {
 }
 
 
------------------------------------------
---[[ Function: Retrieves Item's Name ]]--
------------------------------------------
-
-function getItemName(item)
-
-    if not item then return false end
-    local itemDetails = fetchInventoryItem(item)
-    if not itemDetails then return false end
-
-    return itemDetails.itemName
-
-end
-
-
 -------------------------------------------
 --[[ Function: Retrieves Item's Weight ]]--
 -------------------------------------------
