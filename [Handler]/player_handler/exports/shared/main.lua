@@ -21,22 +21,6 @@ local imports = {
 }
 
 
------------------------------------------------
---[[ Function: Retrieves Weapon's Mag Size ]]--
------------------------------------------------
-
-function getWeaponMagSize(weapon)
-
-    if not weapon then return false end
-    weapon = tostring(weapon)
-    local weaponDetails = fetchInventoryItem(weapon)
-    if not weaponDetails then return false end
-
-    return imports.tonumber(weaponDetails.magSize) or getWeaponProperty(weaponDetails.weaponID, "poor", "maximum_clip_ammo")
-
-end
-
-
 -------------------------------------------------------
 --[[ Functions: Retrieves Element's Max/Used Slots ]]--
 -------------------------------------------------------
