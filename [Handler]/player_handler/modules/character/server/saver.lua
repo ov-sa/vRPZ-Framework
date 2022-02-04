@@ -36,11 +36,14 @@ CCharacter.saveProgress = function(player, isQuitting)
     local characterID = imports.getElementData(player, "Character:ID")
     local characterIdentity = CCharacter.getData(characterID, "identity")
     CCharacter.setData(characterID, "location", imports.toJSON(CCharacter.getLocation(player)))
-    for i, j in imports.ipairs(FRAMEWORK_CONFIGS["Player"]["Datas"]) do
+    for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
+        local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
         local data = imports.tostring(imports.getElementData(player, "Player:"..j))
         exports.serials_library:setSerialData(serial, j, data)
     end
     for i, j in imports.ipairs(FRAMEWORK_CONFIGS["Character"]["Datas"]) do
+    for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
+        local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
         local data = imports.tostring(imports.getElementData(player, "Character:"..j))
         CCharacter.setData(characterID, j, data)
     end
