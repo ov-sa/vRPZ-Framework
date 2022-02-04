@@ -145,7 +145,7 @@ imports.addEventHandler("onResourceStart", resource, function()
                             local posVector = imports.getElementPosition(source)
                             local characterID = source:getData("Character:ID")
                             local characterIdentity = getCharacterData(characterID, "identity")
-                            savePlayerProgress(source)
+                            CCharacter.saveProgress(source)
                             imports.triggerEvent("Player:onRequestShowLoginScreen", source)
                             imports.outputChatBox("#FFFFFF- #5050FF"..characterIdentity.name.."#FFFFFF left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)    
                         end
@@ -159,6 +159,6 @@ end)
 
 imports.addEventHandler("onResourceStop", resource, function()
     for i, j in imports.ipairs(imports.getElementsByType("player")) do
-        savePlayerProgress(j)
+        CCharacter.saveProgress(j)
     end
 end)
