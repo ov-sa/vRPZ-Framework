@@ -73,8 +73,7 @@ local initialInventoryItems = {
 ----------------------------------------------
 
 function loadPlayerDefaultDatas(player)
-
-    if not isPlayerInitialized(player) then return false end
+    if not CPlayer.isInitialized(player) then return false end
 
     --clearPlayerAllEquipmentSlots(player)
     --TODO: RESET ALL INVENTORY DATAS SOMEHOW... add another function clearPlayerAllInventory

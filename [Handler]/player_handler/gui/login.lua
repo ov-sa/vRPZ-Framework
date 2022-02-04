@@ -850,7 +850,7 @@ end)
 
 local function renderUI()
 
-    if not loginUI.state or isPlayerInitialized(localPlayer) then return false end
+    if not loginUI.state or CPlayer.isInitialized(localPlayer) then return false end
     local currentPhase = getLoginUIPhase()
     if not currentPhase then return false end
 

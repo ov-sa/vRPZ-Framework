@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
 --[[ Resource: Player Handler
-     Script: handlers: character: index.lua
+     Script: handlers: character: server: index.lua
      Author: vStudio
      Developer(s): Mario, Tron
      DOC: 31/01/2022

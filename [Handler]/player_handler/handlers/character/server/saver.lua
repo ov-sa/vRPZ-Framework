@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
 --[[ Resource: Player Handler
-     Script: handlers: character: saver.lua
+     Script: handlers: character: server: saver.lua
      Author: vStudio
      Developer(s): Mario, Tron
      DOC: 31/01/2022
@@ -18,8 +18,6 @@ local imports = {
     tostring = tostring,
     isElement = isElement,
     destroyElement = destroyElement,
-    getElementPosition = getElementPosition,
-    getElementRotation = getElementRotation,
     getPlayerSerial = getPlayerSerial,
     toJSON = toJSON
 }
@@ -30,15 +28,12 @@ local imports = {
 -------------------------
 
 CCharacter.saveProgress = function(player, isQuitting)
-    if not isPlayerInitialized(player) then return false end
+    if not CPlayer.isInitialized(player) then return false end
 
     local serial = imports.getPlayerSerial(player)
-    local posVector = imports.getElementPosition(player)
-    local rotVector = imports.getElementRotation(player)
     local characterID = player:getData("Character:ID")
     local characterIdentity = CCharacter.getData(characterID, "identity")
-    if player:isInWater() then posVector.z = posVector.z + 5 end
-    CCharacter.setData(characterID, "location", imports.toJSON({x = posVector.x, y = posVector.y, z = posVector.z, rotation = rotVector.z}))
+    CCharacter.setData(characterID, "location", imports.toJSON(CPlayer.getLocation(player)))
     for i, j in imports.ipairs(FRAMEWORK_CONFIGS["Player"]["Datas"]) do
         local data = imports.tostring(player:getData("Player:"..j))
         exports.serials_library:setSerialData(serial, j, data)

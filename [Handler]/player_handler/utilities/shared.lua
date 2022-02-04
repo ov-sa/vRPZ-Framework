@@ -164,7 +164,7 @@ end
 
 function isPlayerWithinElementInteractionRange(player, element)
 
-    if not isPlayerInitialized(player) or getPlayerHealth(player) <= 0 or not element or not isElement(element) then return false end
+    if not CPlayer.isInitialized(player) or getPlayerHealth(player) <= 0 or not element or not isElement(element) then return false end
 
     local elementType = element:getType()
     local elementRange = false
@@ -194,7 +194,7 @@ end
 
 function isPlayerWithinMarker(player, marker)
         
-    if not isPlayerInitialized(player) or not marker or not isElement(marker) then return false end
+    if not CPlayer.isInitialized(player) or not marker or not isElement(marker) then return false end
 
     local markerSize = marker:getSize()
     local playerPosVector = player:getPosition()        
@@ -214,7 +214,7 @@ function getPlayersWithinMarker(marker)
 
     local players = {}
     for i, j in ipairs(Element.getAllByType("player")) do
-        if isPlayerInitialized(j) and isPlayerWithinMarker(j, marker) then
+        if CPlayer.isInitialized(j) and isPlayerWithinMarker(j, marker) then
             table.insert(players, j)
         end
     end

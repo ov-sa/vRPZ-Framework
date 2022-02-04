@@ -26,8 +26,10 @@
     <script src="gui/respawner.lua" type="client" cache="false"/>
 
     <!-- Hnalders -->
-    <script src="handlers/character/index.lua" type="server"/>
-    <script src="handlers/character/saver.lua" type="server"/>
+    <script src="handlers/player/shared/index.lua" type="shared" cache="false"/>
+    <script src="handlers/character/shared/index.lua" type="shared" cache="false"/>
+    <script src="handlers/character/server/index.lua" type="server"/>
+    <script src="handlers/character/server/saver.lua" type="server"/>
     <script src="handlers/wasted.lua" type="server"/>
 
     <!-- Files: Fonts -->

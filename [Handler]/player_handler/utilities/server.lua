@@ -120,7 +120,7 @@ imports.addEventHandler("onResourceStart", resource, function()
     imports.setGameType(FRAMEWORK_CONFIGS.Game["Game_imports.type"])
     imports.setMapName(FRAMEWORK_CONFIGS.Game["Game_Map"])
     for i, j in imports.ipairs(imports.getElementsByType("player")) do
-        if isPlayerInitialized(j) then
+        if CPlayer.isInitialized(j) then
             imports.setPlayerBlurLevel(0)
         end
     end
@@ -130,7 +130,7 @@ imports.addEventHandler("onResourceStart", resource, function()
             if j == command then
                 cancelEvent()
                 if command == "logout" then
-                    if isPlayerInitialized(source) then
+                    if CPlayer.isInitialized(source) then
                         local isPlayerOnLogoutCoolDown = false
                         local playerLoginTick = getPlayerLoginTick(source)
                         if playerLoginTick then

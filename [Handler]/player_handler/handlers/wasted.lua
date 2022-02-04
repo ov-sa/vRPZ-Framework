@@ -64,7 +64,7 @@ end
 
 addEvent("Player:onDeath", true)
 addEventHandler("Player:onDeath", root, function(killer, headshot, weapon, bodypart)
-    if not isPlayerInitialized(source) then return false end
+    if not CPlayer.isInitialized(source) then return false end
 
     local characterID = source:getData("Character:ID")
     CCharacter.setData(characterID, "dead", true)

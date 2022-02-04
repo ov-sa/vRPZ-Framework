@@ -50,7 +50,7 @@ end
 
 renderRespawnScreen = function()
 
-    if not respawnerUI.state or not respawnerUI.mode or not isPlayerInitialized(localPlayer) then
+    if not respawnerUI.state or not respawnerUI.mode or not CPlayer.isInitialized(localPlayer) then
         hideRespawnScreen()
         return false
     end
@@ -109,8 +109,7 @@ end
 
 addEvent("onPlayerGenerateRespawnPoint", true)
 addEventHandler("onPlayerGenerateRespawnPoint", root, function()
-
-    if not isPlayerInitialized(localPlayer) then return false end
+    if not CPlayer.isInitialized(localPlayer) then return false end
 
     if respawnerUI.state then hideRespawnScreen() end
     outputChatBox("- You were found by a survivor and dragged to safety, Good Luck...", 255, 80, 80)
@@ -121,7 +120,6 @@ addEventHandler("onPlayerGenerateRespawnPoint", root, function()
     }
     respawnerUI.state = true
     beautify.render.create(renderRespawnScreen)
-
 end)
 
 
@@ -131,7 +129,7 @@ end)
 
 addEvent("Client:onRespawn", true)
 addEventHandler("Client:onRespawn", root, function()
-    if not isPlayerInitialized(localPlayer) then return false end
+    if not CPlayer.isInitialized(localPlayer) then return false end
 
     if respawnerUI.state then hideRespawnScreen() end
     respawnerUI.mode = {
