@@ -173,7 +173,7 @@ end)
 
 imports.addEvent("Player:onToggleLoginUI", true)
 imports.addEventHandler("Player:onToggleLoginUI", root, function()
-    source:setName(getVoidGuestNick())
+    source:setName(CPlayer.generateNick())
     local serial = source:getSerial()
     local lastCharacter = tonumber(exports.serials_library:getSerialData(serial, "character")) or 0
     local lastCharacters, serialCharacters = {}, getCharactersBySerial(serial)

@@ -34,6 +34,7 @@
     <script src="modules/player/shared/index.lua" type="shared" cache="false"/>
     <script src="modules/player/shared/exports.lua" type="shared" cache="false"/>
     <export function="isPlayerInitialized" type="shared"/>
+    <export function="generatePlayerNick" type="shared"/>
 
     <!-- Modules: Character -->
     <script src="modules/character/shared/index.lua" type="shared" cache="false"/>

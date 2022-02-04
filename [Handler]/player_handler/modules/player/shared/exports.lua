@@ -13,3 +13,4 @@
 -----------------
 
 function isPlayerInitialized(...) return CPlayer.isInitialized(...) end
+function generatePlayerNick(...) return CPlayer.generateNick(...) end

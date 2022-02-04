@@ -68,19 +68,6 @@ function getPlayerFromSerial(serial)
 end
 
 
----------------------------------------------
---[[ Function: Retrieves Void Guest Nick ]]--
----------------------------------------------
-
-function getVoidGuestNick()
-    local voidNick = nil
-    repeat
-        voidNick = "Guest_"..imports.math.random(1, 10000)
-    until(imports.getPlayerFromName(voidNick))
-    return voidNick
-end
-
-
 ---------------------------------------
 --[[ Event: On Resource Start/Stop ]]--
 ---------------------------------------
