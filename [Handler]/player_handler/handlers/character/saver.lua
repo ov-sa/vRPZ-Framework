@@ -29,7 +29,7 @@ local imports = {
 --[[ Character Class ]]--
 -------------------------
 
-CCharacter.saveProgress = function(player, isClientQuitting)
+CCharacter.saveProgress = function(player, isQuitting)
     if not isPlayerInitialized(player) then return false end
 
     local serial = imports.getPlayerSerial(player)
@@ -57,7 +57,7 @@ CCharacter.saveProgress = function(player, isClientQuitting)
     end
     playerAttachments[player] = nil
     playerInventorySlots[player] = nil
-    if not isClientQuitting then
+    if not isQuitting then
         player:setData("Player:Initialized", nil)
         player:setData("Character:ID", nil)
         for i, j in imports.pairs(characterIdentity) do
