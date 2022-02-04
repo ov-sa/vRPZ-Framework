@@ -88,7 +88,7 @@ function loadPlayerDefaultDatas(player)
     for i, j in ipairs(initialPlayerDatas) do
         local amount = j.amount
         if j.name == "Character:blood" then
-            amount = getPlayerMaximumHealth(player)
+            amount = getCharacterMaximumHealth(player)
         else
             if amount and type(amount) == "function" then
                 amount = amount()

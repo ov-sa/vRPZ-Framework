@@ -164,7 +164,7 @@ end
 
 function isPlayerWithinElementInteractionRange(player, element)
 
-    if not CPlayer.isInitialized(player) or getPlayerHealth(player) <= 0 or not element or not isElement(element) then return false end
+    if not CPlayer.isInitialized(player) or getCharacterHealth(player) <= 0 or not element or not isElement(element) then return false end
 
     local elementType = element:getType()
     local elementRange = false

@@ -12,7 +12,11 @@
 --[[ Exports ]]--
 -----------------
 
-function isPlayerInitialized(player) return CPlayer.isInitialized(...) end
+function isPlayerInitialized(...) return CPlayer.isInitialized(...) end
+function getCharacterHealth(...) return CCharacter.getHealth(...) end
+function getCharacterMaximumHealth(...) return CCharacter.getMaxHealth(...) end
+function isCharacterKnocked(...) return CCharacter.isKnocked(...) end
+function isCharacterReloading(...) return CCharacter.isReloading(...) end
 
 
 ----------------------------------------------------
@@ -32,34 +36,6 @@ function getPlayerByCharacterID(characterID)
         end
     end
     return false
-
-end
-
-
----------------------------------------------
---[[ Function: Retrieves Player's Health ]]--
----------------------------------------------
-
-function getPlayerHealth(player)
-
-    if (not player or not isElement(player) or (player:getType() ~= "player")) then return false end
-    if not isPlayerInitialized(player) then return false end
-
-    return tonumber(player:getData("Character:blood")) or 0
-
-end
-
-
------------------------------------------------------
---[[ Function: Retrieves Player's Maximum Health ]]--
------------------------------------------------------
-
-function getPlayerMaximumHealth(player)
-
-    if (not player or not isElement(player) or (player:getType() ~= "player")) then return false end
-    if not isPlayerInitialized(player) then return false end
-
-    return characterMaximumBlood
 
 end
 
@@ -166,33 +142,5 @@ function isPlayerInLoot(player)
         end
     end
     return false
-
-end
-
-
-----------------------------------------------------------
---[[ FUnction: Checks Player's Weapon Reloading State ]]--
-----------------------------------------------------------
-
-function isPlayerReloadingWeapon(player)
-
-    if (not player or not isElement(player) or (player:getType() ~= "player")) then return false end
-    if not isPlayerInitialized(player) then return false end
-
-    return player:getData("Character:ReloadingWeapon") or false
-
-end
-
-
----------------------------------------------------
---[[ Function: Checks Player's Knockdown State ]]--
----------------------------------------------------
-
-function isPlayerKnocked(player)
-
-    if (not player or not isElement(player) or (player:getType() ~= "player")) then return false end
-    if not isPlayerInitialized(player) then return false end
-
-    return player:getData("Character:Knocked") or false
 
 end

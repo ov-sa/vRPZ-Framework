@@ -180,15 +180,15 @@
     <!-- Exports: Shared: Player -->
     <export function="isPlayerInitialized" type="shared"/>
     <export function="getPlayerByCharacterID" type="shared"/>
-    <export function="getPlayerHealth" type="shared"/>
-    <export function="getPlayerMaximumHealth" type="shared"/>
+    <export function="getCharacterHealth" type="shared"/>
+    <export function="getCharacterMaximumHealth" type="shared"/>
     <export function="setPlayerMoney" type="shared"/>
     <export function="getPlayerMoney" type="shared"/>
     <export function="getPlayerOccupation" type="shared"/>
     <export function="getPlayerFaction" type="shared"/>
     <export function="getPlayerCurrentSlotItem" type="shared"/>
     <export function="isPlayerInLoot" type="shared"/>
-    <export function="isPlayerReloadingWeapon" type="shared"/>
-    <export function="isPlayerKnocked" type="shared"/>
+    <export function="isReloading" type="shared"/>
+    <export function="isCharacterKnocked" type="shared"/>
 
 </meta>
