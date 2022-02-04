@@ -196,7 +196,6 @@
     <file src="files/images/inventory/icons/nutritions/water_bottle.png"/>
 
     <!-- Exports: Shared: Main -->
-    <export function="getWeaponSlotData" type="shared"/>
     <export function="getWeaponMagSize" type="shared"/>
     <export function="getElementMaxSlots" type="shared"/>
     <export function="getElementUsedSlots" type="shared"/>
