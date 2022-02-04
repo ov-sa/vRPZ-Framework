@@ -21,6 +21,7 @@ local imports = {
     getElementPosition = getElementPosition,
     getElementRotation = getElementRotation,
     getPlayerSerial = getPlayerSerial,
+    toJSON = toJSON
 }
 
 
@@ -35,9 +36,9 @@ CCharacter.saveProgress = function(player, isClientQuitting)
     local posVector = imports.getElementPosition(player)
     local rotVector = imports.getElementRotation(player)
     local characterID = player:getData("Character:ID")
-    local characterIdentity = getCharacterData(characterID, "identity")
+    local characterIdentity = CCharacter.getData(characterID, "identity")
     if player:isInWater() then posVector.z = posVector.z + 5 end
-    CCharacter.setData(characterID, "location", toJSON({x = posVector.x, y = posVector.y, z = posVector.z, rotation = rotVector.z}))
+    CCharacter.setData(characterID, "location", imports.toJSON({x = posVector.x, y = posVector.y, z = posVector.z, rotation = rotVector.z}))
     for i, j in imports.ipairs(FRAMEWORK_CONFIGS["Player"]["Datas"]) do
         local data = imports.tostring(player:getData("Player:"..j))
         exports.serials_library:setSerialData(serial, j, data)

@@ -144,7 +144,7 @@ imports.addEventHandler("onResourceStart", resource, function()
                         else
                             local posVector = imports.getElementPosition(source)
                             local characterID = source:getData("Character:ID")
-                            local characterIdentity = getCharacterData(characterID, "identity")
+                            local characterIdentity = CCharacter.getData(characterID, "identity")
                             CCharacter.saveProgress(source)
                             imports.triggerEvent("Player:onRequestShowLoginScreen", source)
                             imports.outputChatBox("#FFFFFF- #5050FF"..characterIdentity.name.."#FFFFFF left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)    
