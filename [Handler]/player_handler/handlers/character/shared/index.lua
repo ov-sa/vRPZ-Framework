@@ -15,7 +15,8 @@
 local imports = {
     tonumber = tonumber,
     ipairs = ipairs,
-    getElementsByType
+    getElementsByType,
+    getElementData = getElementData
 }
 
 
@@ -29,7 +30,7 @@ CCharacter = {
         if not characterID then return false end
         for i, j in imports.ipairs(imports.getElementsByType("player")) do
             if CPlayer.isInitialized(j) then
-                local _characterID = j:getData("Character:ID")
+                local _characterID = imports.getElementData(j, "Character:ID")
                 if _characterID == characterID then
                     return j
                 end
@@ -40,26 +41,26 @@ CCharacter = {
 
     getHealth = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.tonumber(player:getData("Character:blood")) or 0
+        return imports.tonumber(imports.getElementData(player, "Character:blood")) or 0
     end,
 
     getMaxHealth = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return characterMaximumBlood --TODO: ..CAHNGE
+        return FRAMEWORK_CONFIGS["Game"]["Character"]["Max_Blood"]
     end,
 
     getFaction = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return player:getData("Character:Faction") or false
+        return imports.getElementData(player, "Character:Faction") or false
     end,
 
     isKnocked = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return player:getData("Character:Knocked") or false
+        return imports.getElementData(player, "Character:Knocked") or false
     end,
 
     isReloading = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return player:getData("Character:Reloading") or false
+        return imports.getElementData(player, "Character:Reloading") or false
     end
 }
