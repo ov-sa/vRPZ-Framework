@@ -14,6 +14,7 @@
 
 local imports = {
     isElement = isElement,
+    getElementType = getElementType,
     getElementPosition = getElementPosition,
     getElementRotation = getElementRotation
 }
@@ -24,7 +25,12 @@ local imports = {
 ----------------------
 
 CPlayer = {
-    isInitialized = isPlayerInitialized,
+    CAttachments = {},
+
+    isInitialized = function(player)
+        if (not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player")) then return false end
+        return player:getData("Player:Initialized") or false
+    end,
 
     getLocation = function(player)
         if not CPlayer.isInitialized(player) then return false end

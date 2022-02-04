@@ -25,7 +25,7 @@ local imports = {
 -------------------------
 
 CCharacter = {
-    buffer = {},
+    CBuffer = {},
 
     fetchCharacters = function(characterID, ...)
         dbify.character.fetchAll({
@@ -37,10 +37,10 @@ CCharacter = {
     create = function(serial, callback, ...)
         if (not serial or (imports.type(serial) ~= "string")) then return false end
         dbify.character.create(function(characterID, cArgs)
-            CCharacter.buffer[characterID] = {
+            CCharacter.CBuffer[characterID] = {
                 {"owner", characterOwner}
             }
-            dbify.character.setData(characterID, CCharacter.buffer[characterID])
+            dbify.character.setData(characterID, CCharacter.CBuffer[characterID])
             local callbackReference = callback
             if (callbackReference and (imports.type(callbackReference) == "function")) then
                 imports.table.remove(cArgs, 1)
@@ -53,7 +53,7 @@ CCharacter = {
     delete = function(characterID, callback, ...)
         dbify.character.delete(characterID, function(result, cArgs)
             if result then
-                CCharacter.buffer[characterID] = nil
+                CCharacter.CBuffer[characterID] = nil
             end
             local callbackReference = callback
             if (callbackReference and (imports.type(callbackReference) == "function")) then
@@ -65,9 +65,9 @@ CCharacter = {
 
     setData = function(characterID, characterDatas, callback, ...)
         dbify.character.setData(characterID, characterDatas, function(result, cArgs)
-            if result and CCharacter.buffer[characterID] then
+            if result and CCharacter.CBuffer[characterID] then
                 for i, j in imports.ipairs(characterDatas) do
-                    CCharacter.buffer[characterID][(j[1])] = j[2]
+                    CCharacter.CBuffer[characterID][(j[1])] = j[2]
                 end
             end
             local callbackReference = callback
@@ -85,9 +85,9 @@ CCharacter = {
             if (callbackReference and (imports.type(callbackReference) == "function")) then
                 callbackReference(result, cArgs)
             end
-            if result and CCharacter.buffer[characterID] then
+            if result and CCharacter.CBuffer[characterID] then
                 for i, j in imports.pairs(characterDatas) do
-                    CCharacter.buffer[characterID][j] = result[j]
+                    CCharacter.CBuffer[characterID][j] = result[j]
                 end
             end
         end, ...)

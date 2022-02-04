@@ -43,14 +43,14 @@ CCharacter.saveProgress = function(player, isQuitting)
         CCharacter.setData(characterID, j, data)
     end
 
-    if playerAttachments[player] then
-        for i, j in imports.pairs(playerAttachments[player]) do
+    if CPlayer.CAttachments[player] then
+        for i, j in imports.pairs(CPlayer.CAttachments[player]) do
             if j and imports.isElement(j) then
                 imports.destroyElement(j)
             end
         end
     end
-    playerAttachments[player] = nil
+    CPlayer.CAttachments[player] = nil
     playerInventorySlots[player] = nil
     if not isQuitting then
         player:setData("Player:Initialized", nil)

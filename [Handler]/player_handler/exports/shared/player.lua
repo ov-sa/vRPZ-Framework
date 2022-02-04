@@ -4,21 +4,15 @@
      Author: vStudio
      Developer(s): Mario, Tron
      DOC: 31/01/2022
-     Desc: Main Shared Exports ]]--
+     Desc: Player Shared Exports ]]--
 ----------------------------------------------------------------
 
 
-------------------------------------------------------------
---[[ Function: Retrieves Player's Initialization Status ]]--
-------------------------------------------------------------
+-----------------
+--[[ Exports ]]--
+-----------------
 
-function isPlayerInitialized(player)
-
-    if (not player or not isElement(player) or (player:getType() ~= "player")) then return false end
-
-    return player:getData("Player:Initialized") or false
-
-end
+function isPlayerInitialized(player) return CPlayer.isInitialized(...) end
 
 
 ----------------------------------------------------
