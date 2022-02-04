@@ -81,9 +81,9 @@ function getVoidGuestNick()
 end
 
 
-----------------------------------
---[[ Event: On Resource Start ]]--
-----------------------------------
+---------------------------------------
+--[[ Event: On Resource Start/Stop ]]--
+---------------------------------------
 
 imports.addEventHandler("onResourceStart", resource, function()
     imports.setTimer(function(tickSyncer)
@@ -155,4 +155,10 @@ imports.addEventHandler("onResourceStart", resource, function()
             end
         end
     end)
+end)
+
+imports.addEventHandler("onResourceStop", resource, function()
+    for i, j in imports.ipairs(imports.getElementsByType("player")) do
+        savePlayerProgress(j)
+    end
 end)
