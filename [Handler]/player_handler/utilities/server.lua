@@ -37,7 +37,6 @@ local imports = {
     setMinuteDuration = setMinuteDuration,
     setGameType = setGameType,
     setMapName = setMapName,
-    getPlayerFromName = getPlayerFromName,
     math = math
 }
 
