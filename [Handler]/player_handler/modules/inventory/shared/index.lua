@@ -24,12 +24,17 @@ local imports = {
 ----------------------
 
 CInventory = {
-    CItems = {},
     CSlots = {},
+    CItems = {},
 
     fetchItem = function(item)
         if not item or not CInventory.CItems[item] then return false end
         return CInventory.CItems[item]
+    end,
+
+    fetchItemSlot = function(item)
+        local itemData = CInventory.fetchItem(item)
+        return (itemData and itemData.slot) or false
     end,
 
     fetchItemName = function(item)

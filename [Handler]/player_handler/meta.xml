@@ -55,6 +55,7 @@
     <script src="modules/inventory/shared/index.lua" type="shared" cache="false"/>
     <script src="modules/inventory/shared/exports.lua" type="shared" cache="false"/>
     <export function="fetchInventoryItem" type="shared"/>
+    <export function="fetchInventoryItemSlot" type="shared"/>
     <export function="fetchInventoryItemName" type="shared"/>
     <export function="fetchInventoryItemWeight" type="shared"/>
     <export function="fetchInventoryItemObjectID" type="shared"/>
@@ -192,7 +193,6 @@
 
     <!-- Exports: Shared: Main -->
     <export function="getWeaponSlotData" type="shared"/>
-    <export function="getWeaponSlotName" type="shared"/>
     <export function="getWeaponSlotID" type="shared"/>
     <export function="getWeaponID" type="shared"/>
     <export function="getWeaponAmmoName" type="shared"/>
