@@ -13,7 +13,9 @@
 -----------------
 
 local imports = {
-    pairs = pairs
+    tonumber = tonumber,
+    pairs = pairs,
+    math = math
 }
 
 
@@ -34,9 +36,9 @@ CInventory = {
         return (itemData and itemData.name) or false
     end,
 
-    fetchItemName = function(item)
+    fetchItemWeight = function(item)
         local itemData = CInventory.fetchItem(item)
-        return (itemData and itemData.name) or false
+        return (itemData and imports.math.max(0, imports.tonumber(itemData.weight) or 0)) or false
     end,
 }
 
