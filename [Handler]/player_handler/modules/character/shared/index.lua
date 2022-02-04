@@ -96,6 +96,5 @@ CCharacter = {
             end
         end
         return false
-    
     end
 }
