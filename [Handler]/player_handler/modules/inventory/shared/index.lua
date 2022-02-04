@@ -61,6 +61,6 @@ for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
         CInventory.CSlots[(FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].slotIdentifier)] = FRAMEWORK_CONFIGS["Inventory"]["Slots"][i]
     end
     for k, v in imports.pairs(j) do
-        CInventory.CItems[k] = {category = i, data = v}
+        CInventory.CItems[k] = {slot = i, data = v}
     end
 end
