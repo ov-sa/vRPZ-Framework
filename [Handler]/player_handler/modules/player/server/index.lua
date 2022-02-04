@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
 --[[ Resource: Player Handler
-     Script: modules: player: shared: index.lua
+     Script: modules: player: server: index.lua
      Author: vStudio
      Developer(s): Mario, Tron, Aviril
      DOC: 31/01/2022
@@ -40,5 +40,20 @@ CPlayer = {
             guestNick = "Guest_"..imports.math.random(1, 10000)
         until(imports.getPlayerFromName(guestNick))
         return guestNick
-    end
+    end,
+
+    getPlayer = function(serial)
+        if not serial then return false end
+        local players = imports.getElementsByType("player")
+        for i = 1, #players, 1 do
+            local j = players[i]
+            if CPlayer.isInitialized(j) then
+                local _characterID = imports.getElementData(j, "Character:ID")
+                if _characterID == characterID then
+                    return j
+                end
+            end
+        end
+        return false
+    end,
 }
