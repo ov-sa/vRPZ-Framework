@@ -44,27 +44,6 @@ function getWeaponSlotData(slotID)
 end
 
 
----------------------------------------------
---[[ Function: Retrieves Weapon's SlotID ]]--
----------------------------------------------
-
-function getWeaponSlotID(weapon)
-
-    if not weapon then return false end
-    weapon = tostring(weapon)
-
-    for i, j in imports.pairs(availableWeaponSlots) do
-        for k, v in iimports.pairs(inventoryDatas[(characterSlots[i].slotCategory)]) do
-            if v.dataName == weapon then
-                return imports.tonumber(j.slotID)
-            end
-        end
-    end
-    return false
-
-end
-
-
 ------------------------------------------
 --[[ Function: Retrieves Weapon's ID  ]]--
 ------------------------------------------
