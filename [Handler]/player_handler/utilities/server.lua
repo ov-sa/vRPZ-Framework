@@ -52,21 +52,6 @@ function showChat(player, bool, isForced)
 end
 
 
-------------------------------------------------
---[[ Function: Retrieves Player From Serial ]]--
-------------------------------------------------
-
-function getPlayerFromSerial(serial)
-    if (not serial or (imports.type(serial) ~= "string")) then return false end
-    for i, j in imports.ipairs(imports.getElementsByType("player")) do
-        if imports.getPlayerSerial(j) == serial then
-            return j
-        end
-    end
-    return false
-end
-
-
 ---------------------------------------
 --[[ Event: On Resource Start/Stop ]]--
 ---------------------------------------
