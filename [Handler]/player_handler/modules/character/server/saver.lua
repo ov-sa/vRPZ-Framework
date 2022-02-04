@@ -19,6 +19,8 @@ local imports = {
     isElement = isElement,
     destroyElement = destroyElement,
     getPlayerSerial = getPlayerSerial,
+    getElementData = getElementData,
+    setElementData = setElementData,
     toJSON = toJSON
 }
 
@@ -31,15 +33,15 @@ CCharacter.saveProgress = function(player, isQuitting)
     if not CPlayer.isInitialized(player) then return false end
 
     local serial = imports.getPlayerSerial(player)
-    local characterID = player:getData("Character:ID")
+    local characterID = imports.getElementData(player, "Character:ID")
     local characterIdentity = CCharacter.getData(characterID, "identity")
     CCharacter.setData(characterID, "location", imports.toJSON(CCharacter.getLocation(player)))
     for i, j in imports.ipairs(FRAMEWORK_CONFIGS["Player"]["Datas"]) do
-        local data = imports.tostring(player:getData("Player:"..j))
+        local data = imports.tostring(imports.getElementData(player, "Player:"..j))
         exports.serials_library:setSerialData(serial, j, data)
     end
     for i, j in imports.ipairs(FRAMEWORK_CONFIGS["Character"]["Datas"]) do
-        local data = imports.tostring(player:getData("Character:"..j))
+        local data = imports.tostring(imports.getElementData(player, "Character:"..j))
         CCharacter.setData(characterID, j, data)
     end
 
@@ -53,24 +55,24 @@ CCharacter.saveProgress = function(player, isQuitting)
     CPlayer.CAttachments[player] = nil
     playerInventorySlots[player] = nil
     if not isQuitting then
-        player:setData("Player:Initialized", nil)
-        player:setData("Character:ID", nil)
+        imports.setElementData(player, "Player:Initialized", nil)
+        imports.setElementData(player, "Character:ID", nil)
         for i, j in imports.pairs(characterIdentity) do
-            player:setData("Character:"..i, nil)
+            imports.setElementData(player, "Character:"..i, nil)
         end
         for i, j in imports.ipairs(FRAMEWORK_CONFIGS["Player"]["Datas"]) do
-            player:setData("Player:"..j, nil)
+            imports.setElementData(player, "Player:"..j, nil)
         end
         for i, j in imports.ipairs(FRAMEWORK_CONFIGS["Character"]["Datas"]) do
-            player:setData("Character:"..j, nil)
+            imports.setElementData(player, "Character:"..j, nil)
         end
         for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Slots"]) do
-            player:setData("Slot:"..i, nil)
-            player:setData("Slot:Object:"..i, nil)
+            imports.setElementData(player, "Slot:"..i, nil)
+            imports.setElementData(player, "Slot:Object:"..i, nil)
         end
         for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
             for k, v in imports.pairs(j) do
-                player:setData("Item:"..k, nil)
+                imports.setElementData(player, "Item:"..k, nil)
             end
         end
     end
