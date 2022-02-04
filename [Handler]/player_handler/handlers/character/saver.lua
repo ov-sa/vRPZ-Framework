@@ -19,7 +19,8 @@ local imports = {
     isElement = isElement,
     destroyElement = destroyElement,
     getElementPosition = getElementPosition,
-    getElementRotation = getElementRotation
+    getElementRotation = getElementRotation,
+    getPlayerSerial = getPlayerSerial,
 }
 
 
@@ -30,7 +31,7 @@ local imports = {
 CCharacter.saveProgress = function(player, isClientQuitting)
     if not isPlayerInitialized(player) then return false end
 
-    local serial = player:getSerial()
+    local serial = imports.getPlayerSerial(player)
     local posVector = imports.getElementPosition(player)
     local rotVector = imports.getElementRotation(player)
     local characterID = player:getData("Character:ID")
