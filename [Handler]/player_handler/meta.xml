@@ -46,7 +46,7 @@
     <export function="isCharacterKnocked" type="shared"/>
     <export function="isCharacterInLoot" type="shared"/>
 
-    <!-- Hnalders -->
+    <!-- Handlers -->
     <script src="handlers/wasted.lua" type="server"/>
 
     <!-- Files: Fonts -->
