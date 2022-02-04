@@ -28,6 +28,7 @@
     <script src="modules/game/shared/index.lua" type="shared" cache="false"/>
     <script src="modules/game/shared/exports.lua" type="shared" cache="false"/>
     <export function="getServerTick" type="shared"/>
+    <export function="getTime" type="shared"/>
 
     <!-- Modules: Player -->
     <script src="modules/player/shared/index.lua" type="shared" cache="false"/>

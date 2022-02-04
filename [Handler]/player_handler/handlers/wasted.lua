@@ -72,7 +72,7 @@ addEventHandler("Player:onDeath", root, function(killer, headshot, weapon, bodyp
     imports.setElementAlpha(source, 0)
     local posVector = source:getPosition()
     local rotVector = source:getRotation()
-    local hour, minute = getCurrentTime()	
+    local hour, minute = CGame.getTime()	
     local ped = imports.createPed(0, posVector.x, posVector.y, posVector.z, rotVector.z)
     local marker = imports.createMarker(0, 0, 0, "cylinder", 1.2, 0, 0, 0, 0)
     if headshot then imports.setPedHeadless(ped, true) end

@@ -21,20 +21,6 @@ local imports = {
 }
 
 
-------------------------------------------
---[[ Function: Retrieves Current Time ]]--
-------------------------------------------
-
-function getCurrentTime()
-
-    local hour, minutes = getTime()
-    hour = ((hour < 10) and "0"..hour) or hour
-    minutes = ((minutes < 10) and "0"..minutes) or minutes 
-    return hour, minutes
-
-end
-
-
 --------------------------------------------
 --[[ Function: Retrieves Item's Details ]]--
 --------------------------------------------
