@@ -21,21 +21,6 @@ local imports = {
 }
 
 
----------------------------------------------
---[[ Function: Retrieves Item's ObjectID ]]--
----------------------------------------------
-
-function getItemObjectID(item)
-
-    if not item then return false end
-    local itemDetails = fetchInventoryItem(item)
-    if not itemDetails then return false end
-
-    return imports.tonumber(itemDetails.itemObjectID)
-
-end
-
-
 ---------------------------------------------------
 --[[ Function: Retrieves Weapon Slot's Details ]]--
 ---------------------------------------------------
