@@ -21,26 +21,6 @@ local imports = {
 }
 
 
---------------------------------------------
---[[ Function: Retrieves Item's Details ]]--
---------------------------------------------
-
-function getItemDetails(item)
-
-    if not item then return false end
-
-    for i, j in imports.pairs(inventoryDatas) do
-        for key, value in iimports.pairs(j) do
-            if value.dataName == item then
-                return value, i
-            end
-        end
-    end
-    return false
-
-end
-
-
 -----------------------------------------
 --[[ Function: Retrieves Item's Name ]]--
 -----------------------------------------
@@ -48,7 +28,7 @@ end
 function getItemName(item)
 
     if not item then return false end
-    local itemDetails = getItemDetails(item)
+    local itemDetails = fetchInventoryItem(item)
     if not itemDetails then return false end
 
     return itemDetails.itemName
@@ -63,7 +43,7 @@ end
 function getItemWeight(item)
 
     if not item then return false end
-    local itemDetails = getItemDetails(item)
+    local itemDetails = fetchInventoryItem(item)
     if not itemDetails then return false end
 
     return imports.tonumber(itemDetails.itemWeight) or 1
@@ -78,7 +58,7 @@ end
 function getItemObjectID(item)
 
     if not item then return false end
-    local itemDetails = getItemDetails(item)
+    local itemDetails = fetchInventoryItem(item)
     if not itemDetails then return false end
 
     return imports.tonumber(itemDetails.itemObjectID)
@@ -177,7 +157,7 @@ function getWeaponID(weapon)
 
     if not weapon then return false end
     weapon = tostring(weapon)
-    local weaponDetails = getItemDetails(weapon)
+    local weaponDetails = fetchInventoryItem(weapon)
     if not weaponDetails then return false end
 
     return imports.tonumber(weaponDetails.weaponID)
@@ -193,7 +173,7 @@ function getWeaponAmmoName(weapon)
 
     if not weapon then return false end
     weapon = tostring(weapon)
-    local weaponDetails = getItemDetails(weapon)
+    local weaponDetails = fetchInventoryItem(weapon)
     if not weaponDetails then return false end
 
     return weaponDetails.weaponAmmo
@@ -209,7 +189,7 @@ function getWeaponMagSize(weapon)
 
     if not weapon then return false end
     weapon = tostring(weapon)
-    local weaponDetails = getItemDetails(weapon)
+    local weaponDetails = fetchInventoryItem(weapon)
     if not weaponDetails then return false end
 
     return imports.tonumber(weaponDetails.magSize) or getWeaponProperty(weaponDetails.weaponID, "poor", "maximum_clip_ammo")
@@ -321,7 +301,7 @@ function getPlayerCurrentSlotItem(player, slotType)
 
     if slotType == "backpack" then
         local item = player:getData("Slot:backpack")
-        if getItemDetails(item) then
+        if fetchInventoryItem(item) then
             return item
         end
     elseif slotType == "weapon" then

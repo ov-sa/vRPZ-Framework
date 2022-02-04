@@ -106,7 +106,7 @@ function loadPlayerDefaultDatas(player)
             local tempItems = j
             for k = 1, minAssignedItems, 1 do
                 local generatedItemIndex = math.random(#tempItems)
-                local itemDetails, itemCategory = getItemDetails(tempItems[generatedItemIndex].name)
+                local itemDetails, itemCategory = fetchInventoryItem(tempItems[generatedItemIndex].name)
                 if itemDetails and itemCategory then
                     player:setData("Item:"..tempItems[generatedItemIndex].name, tempItems[generatedItemIndex].amount)
                 end
@@ -115,7 +115,7 @@ function loadPlayerDefaultDatas(player)
         end
     end
     for i, j in ipairs(initialInventoryItems.fixed) do
-        local itemDetails, itemCategory = getItemDetails(j.name)
+        local itemDetails, itemCategory = fetchInventoryItem(j.name)
         if itemDetails and itemCategory then
             player:setData("Item:"..j.name, j.amount)
             if itemCategory == "Backpack" then
