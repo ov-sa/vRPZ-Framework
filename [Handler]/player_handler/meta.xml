@@ -24,6 +24,11 @@
     <script src="gui/login.lua" type="client" cache="false"/>
     <script src="gui/respawner.lua" type="client" cache="false"/>
 
+    <!-- Modules: Game -->
+    <script src="modules/game/shared/index.lua" type="shared" cache="false"/>
+    <script src="modules/game/shared/exports.lua" type="shared" cache="false"/>
+    <export function="getServerTick" type="shared"/>
+
     <!-- Modules: Player -->
     <script src="modules/player/shared/index.lua" type="shared" cache="false"/>
     <script src="modules/player/shared/exports.lua" type="shared" cache="false"/>
@@ -175,7 +180,6 @@
     <file src="files/images/inventory/icons/nutritions/water_bottle.png"/>
 
     <!-- Exports: Shared: Main -->
-    <export function="getServerTick" type="shared"/>
     <export function="getCurrentTime" type="shared"/>
     <export function="getItemDetails" type="shared"/>
     <export function="getItemName" type="shared"/>

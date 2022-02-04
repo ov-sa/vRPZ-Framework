@@ -21,28 +21,6 @@ local imports = {
 }
 
 
--------------------------------------------
---[[ Function: Retrieves Server's Tick ]]--
--------------------------------------------
-
-local serverTickSyncer = nil
-function getServerTick()
-
-    local currentTick = 0
-    if not serverTickSyncer or not imports.isElement(serverTickSyncer) then
-        local tickSyncers = imports.getElementsByType("Server:TickSyncer", resourceRoot)
-        if #tickSyncers > 0 then
-            serverTickSyncer = tickSyncers[1]
-        end
-    end
-    if serverTickSyncer and imports.isElement(serverTickSyncer) then
-        currentTick = imports.tonumber(serverTickSyncer:getData("Server:TickSyncer")) or 0
-    end
-    return currentTick
-
-end
-
-
 ------------------------------------------
 --[[ Function: Retrieves Current Time ]]--
 ------------------------------------------
