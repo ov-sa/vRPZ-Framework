@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
 --[[ Resource: Player Handler
-     Script: handlers: character: server: index.lua
+     Script: modules: character: server: index.lua
      Author: vStudio
      Developer(s): Mario, Tron
      DOC: 31/01/2022
-     Desc: Character Handler ]]--
+     Desc: Character Module ]]--
 ----------------------------------------------------------------
 
 

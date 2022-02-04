@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
 --[[ Resource: Player Handler
-     Script: handlers: character: shared: index.lua
+     Script: modules: character: shared: index.lua
      Author: vStudio
      Developer(s): Mario, Tron
      DOC: 31/01/2022
-     Desc: Character Handler ]]--
+     Desc: Character Module ]]--
 ----------------------------------------------------------------
 
 
@@ -75,16 +75,17 @@ CCharacter = {
     isReloading = function(player)
         if not CPlayer.isInitialized(player) then return false end
         return imports.getElementData(player, "Character:Reloading") or false
+    end,
+
+    isInLoot = function(player)
+        if not CPlayer.isInitialized(player) then return false end
+        if imports.getElementData(player, "Character:Looting") then
+            local marker = imports.getElementData(player, "Loot:Marker")
+            if marker and imports.isElement(marker) then
+                return marker
+            end
+        end
+        return false
+    
     end
 }
-
-
-function getPlayerFromCharacterID(...) return CCharacter.getPlayer(...) end
-function getCharacterHealth(...) return CCharacter.getHealth(...) end
-function getCharacterMaximumHealth(...) return CCharacter.getMaxHealth(...) end
-function getCharacterFaction(...) return CCharacter.getFaction(...) end
-function setCharacterMoney(...) return CCharacter.setMoney(...) end
-function getCharacterMoney(...) return CCharacter.getMoney(...) end
-function isCharacterKnocked(...) return CCharacter.isKnocked(...) end
-function isCharacterReloading(...) return CCharacter.isReloading(...) end
-function isCharacterReloading(...) return CCharacter.isReloading(...) end

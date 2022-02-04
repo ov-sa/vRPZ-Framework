@@ -8,24 +8,6 @@
 ----------------------------------------------------------------
 
 
--------------------------------------------------
---[[ Function: Retrieves Player's Occupation ]]--
--------------------------------------------------
-
-function getPlayerOccupation(player)
-
-    if (not player or not isElement(player) or (player:getType() ~= "player")) then return false end
-    if not isPlayerInitialized(player) then return false end
-
-    local playerOccupation = player:getData("Character:occupation")
-    if playerOccupation and playerOccupations[playerOccupation] then
-        return playerOccupation
-    end
-    return false
-
-end
-
-
 --------------------------------------------------------
 --[[ Function: Retrieves Player's Current Slot Item ]]--
 --------------------------------------------------------
@@ -49,26 +31,6 @@ function getPlayerCurrentSlotItem(player, slotType)
                     return weaponName, i
                 end
             end
-        end
-    end
-    return false
-
-end
-
-
-----------------------------------------------
---[[ Function: Checks Player's Loot State ]]--
-----------------------------------------------
-
-function isPlayerInLoot(player)
-
-    if (not player or not isElement(player) or (player:getType() ~= "player")) then return false end
-    if not isPlayerInitialized(player) then return false end
-
-    if player:getData("Character:Looting") then
-        local marker = player:getData("Loot:Marker")
-        if marker and isElement(marker) then
-            return marker
         end
     end
     return false

@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
 --[[ Resource: Player Handler
-     Script: handlers: character: server: saver.lua
+     Script: modules: character: server: saver.lua
      Author: vStudio
      Developer(s): Mario, Tron
      DOC: 31/01/2022

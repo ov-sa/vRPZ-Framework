@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
 --[[ Resource: Player Handler
-     Script: handlers: character: shared: exports.lua
+     Script: modules: character: shared: exports.lua
      Author: vStudio
      Developer(s): Mario, Tron
      DOC: 31/01/2022
-     Desc: Character Handler ]]--
+     Desc: Character Module ]]--
 ----------------------------------------------------------------
 
 

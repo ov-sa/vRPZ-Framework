@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
 --[[ Resource: Player Handler
-     Script: handlers: player: shared: index.lua
+     Script: modules: player: shared: index.lua
      Author: vStudio
      Developer(s): Mario, Tron
      DOC: 31/01/2022
-     Desc: Player Handler ]]--
+     Desc: Player Module ]]--
 ----------------------------------------------------------------
 
 
