@@ -14,7 +14,6 @@
 
 local imports = {
     tonumber = tonumber,
-    ipairs = ipairs,
     getElementsByType,
     getElementPosition = getElementPosition,
     getElementRotation = getElementRotation,
@@ -32,7 +31,9 @@ CCharacter = {
     getPlayer = function(characterID)
         characterID = imports.tonumber(characterID)
         if not characterID then return false end
-        for i, j in imports.ipairs(imports.getElementsByType("player")) do
+        local players = imports.getElementsByType("player")
+        for i = 1, #players, 1 do
+            local j = players[i]
             if CPlayer.isInitialized(j) then
                 local _characterID = imports.getElementData(j, "Character:ID")
                 if _characterID == characterID then

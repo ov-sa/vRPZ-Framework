@@ -15,6 +15,8 @@
 local imports = {
     isElement = isElement,
     getElementType = getElementType,
+    getElementsByType = getElementsByType,
+    getElementData = getElementData,
     getPlayerFromName = getPlayerFromName,
     math = math
 }
@@ -38,5 +40,20 @@ CPlayer = {
             guestNick = "Guest_"..imports.math.random(1, 10000)
         until(imports.getPlayerFromName(guestNick))
         return guestNick
-    end
+    end,
+
+    getPlayer = function(serial)
+        if not serial then return false end
+        local players = imports.getElementsByType("player")
+        for i = 1, #players, 1 do
+            local j = players[i]
+            if CPlayer.isInitialized(j) then
+                local _characterID = imports.getElementData(j, "Character:ID")
+                if _characterID == characterID then
+                    return j
+                end
+            end
+        end
+        return false
+    end,
 }
