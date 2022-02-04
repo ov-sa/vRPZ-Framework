@@ -2,7 +2,7 @@
 --[[ Resource: Player Handler
      Script: handlers: wasted.lua
      Author: vStudio
-     Developer(s): Mario, Tron
+     Developer(s): Mario, Tron, Aviril
      DOC: 31/01/2022
      Desc: Wasted Handler ]]--
 ----------------------------------------------------------------
