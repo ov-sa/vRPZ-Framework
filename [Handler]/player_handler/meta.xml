@@ -10,7 +10,6 @@
 
     <!-- Exports -->
     <script src="exports/shared/main.lua" type="shared" cache="false"/>
-    <script src="exports/shared/player.lua" type="shared" cache="false"/>
 
     <!-- Settings & Utilities -->
     <script src="utilities/shared.lua" type="shared" cache="false"/>
