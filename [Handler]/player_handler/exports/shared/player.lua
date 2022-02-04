@@ -15,6 +15,7 @@
 function isPlayerInitialized(...) return CPlayer.isInitialized(...) end
 function getCharacterHealth(...) return CCharacter.getHealth(...) end
 function getCharacterMaximumHealth(...) return CCharacter.getMaxHealth(...) end
+function getCharacterFaction(...) return CCharacter.getFaction(...) end
 function isCharacterKnocked(...) return CCharacter.isKnocked(...) end
 function isCharacterReloading(...) return CCharacter.isReloading(...) end
 
@@ -78,20 +79,6 @@ function getPlayerOccupation(player)
         return playerOccupation
     end
     return false
-
-end
-
-
-----------------------------------------------
---[[ Function: Retrieves Player's Faction ]]--
-----------------------------------------------
-
-function getPlayerFaction(player)
-
-    if (not player or not isElement(player) or (player:getType() ~= "player")) then return false end
-    if not isPlayerInitialized(player) then return false end
-
-    return player:getData("Character:Faction") or false
 
 end
 

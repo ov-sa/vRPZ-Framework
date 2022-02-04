@@ -185,7 +185,7 @@
     <export function="setPlayerMoney" type="shared"/>
     <export function="getPlayerMoney" type="shared"/>
     <export function="getPlayerOccupation" type="shared"/>
-    <export function="getPlayerFaction" type="shared"/>
+    <export function="getCharacterFaction" type="shared"/>
     <export function="getPlayerCurrentSlotItem" type="shared"/>
     <export function="isPlayerInLoot" type="shared"/>
     <export function="isReloading" type="shared"/>

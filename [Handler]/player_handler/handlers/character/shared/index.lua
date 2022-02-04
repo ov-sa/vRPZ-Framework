@@ -32,6 +32,11 @@ CCharacter = {
         return characterMaximumBlood --TODO: ..CAHNGE
     end,
 
+    getFaction = function(player)
+        if not CPlayer.isInitialized(player) then return false end
+        return player:getData("Character:Faction") or false
+    end,
+
     isKnocked = function(player)
         if not CPlayer.isInitialized(player) then return false end
         return player:getData("Character:Knocked") or false
