@@ -60,6 +60,8 @@
     <export function="fetchInventoryItemName" type="shared"/>
     <export function="fetchInventoryItemWeight" type="shared"/>
     <export function="fetchInventoryItemObjectID" type="shared"/>
+    <export function="fetchInventoryItemWeaponID" type="shared"/>
+    <export function="fetchInventoryItemWeaponAmmo" type="shared"/>
     <export function="fetchInventorySlot" type="shared"/>
 
 
@@ -194,8 +196,6 @@
 
     <!-- Exports: Shared: Main -->
     <export function="getWeaponSlotData" type="shared"/>
-    <export function="getWeaponID" type="shared"/>
-    <export function="getWeaponAmmoName" type="shared"/>
     <export function="getWeaponMagSize" type="shared"/>
     <export function="getElementMaxSlots" type="shared"/>
     <export function="getElementUsedSlots" type="shared"/>

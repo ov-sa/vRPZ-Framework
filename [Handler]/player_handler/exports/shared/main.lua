@@ -44,38 +44,6 @@ function getWeaponSlotData(slotID)
 end
 
 
-------------------------------------------
---[[ Function: Retrieves Weapon's ID  ]]--
-------------------------------------------
-
-function getWeaponID(weapon)
-
-    if not weapon then return false end
-    weapon = tostring(weapon)
-    local weaponDetails = fetchInventoryItem(weapon)
-    if not weaponDetails then return false end
-
-    return imports.tonumber(weaponDetails.weaponID)
-
-end
-
-
-------------------------------------------------
---[[ Function: Retrieves Weapon's Ammo Name ]]--
-------------------------------------------------
-
-function getWeaponAmmoName(weapon)
-
-    if not weapon then return false end
-    weapon = tostring(weapon)
-    local weaponDetails = fetchInventoryItem(weapon)
-    if not weaponDetails then return false end
-
-    return weaponDetails.weaponAmmo
-
-end
-
-
 -----------------------------------------------
 --[[ Function: Retrieves Weapon's Mag Size ]]--
 -----------------------------------------------

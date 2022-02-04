@@ -18,4 +18,6 @@ function fetchInventoryItemSlotID(...) return CInventory.fetchItemSlotID(...) en
 function fetchInventoryItemName(...) return CInventory.fetchItemName(...) end
 function fetchInventoryItemWeight(...) return CInventory.fetchItemWeight(...) end
 function fetchInventoryItemObjectID(...) return CInventory.fetchItemObjectID(...) end
+function fetchInventoryItemWeaponID(...) return CInventory.fetchItemWeaponID(...) end
+function fetchInventoryItemWeaponAmmo(...) return CInventory.fetchItemWeaponAmmo(...) end
 function fetchInventorySlot(...) return CInventory.fetchSlot(...) end

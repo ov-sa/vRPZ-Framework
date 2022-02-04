@@ -57,6 +57,16 @@ CInventory = {
         return (itemData and itemData.data and imports.tonumber(itemData.data.objectID)) or false
     end,
 
+    fetchItemWeaponID = function(item)
+        local itemData = CInventory.fetchItem(item)
+        return (itemData and itemData.slot and CInventory.CSlots["Weapon"][(itemData.slot)] and imports.tonumber(itemData.data.weaponID)) or false
+    end,
+
+    fetchItemWeaponAmmo = function(item)
+        local itemData = CInventory.fetchItem(item)
+        return (itemData and itemData.slot and CInventory.CSlots["Weapon"][(itemData.slot)] and imports.tonumber(itemData.data.weaponAmmo)) or false
+    end,
+
     fetchSlot = function(slot)
         if not slot then return false end
         return FRAMEWORK_CONFIGS["Inventory"]["Slots"][slot] or false
