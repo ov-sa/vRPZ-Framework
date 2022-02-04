@@ -16,7 +16,9 @@ local imports = {
     tonumber = tonumber,
     ipairs = ipairs,
     getElementsByType,
-    getElementData = getElementData
+    getElementData = getElementData,
+    setElementData = setElementData,
+    math = math
 }
 
 
@@ -54,6 +56,17 @@ CCharacter = {
         return imports.getElementData(player, "Character:Faction") or false
     end,
 
+    setMoney = function(player, amount)
+        money = imports.tonumber(money)
+        if not CPlayer.isInitialized(player) or not money then return false end
+        return imports.setElementData(player, "Character:money", imports.math.max(0, money))
+    end,
+
+    getMoney = function(player)
+        if not CPlayer.isInitialized(player) then return false end
+        return imports.tonumber(imports.getElementData(player, "Character:money")) or 0
+    end,
+
     isKnocked = function(player)
         if not CPlayer.isInitialized(player) then return false end
         return imports.getElementData(player, "Character:Knocked") or false
@@ -64,3 +77,14 @@ CCharacter = {
         return imports.getElementData(player, "Character:Reloading") or false
     end
 }
+
+
+function getPlayerFromCharacterID(...) return CCharacter.getPlayer(...) end
+function getCharacterHealth(...) return CCharacter.getHealth(...) end
+function getCharacterMaximumHealth(...) return CCharacter.getMaxHealth(...) end
+function getCharacterFaction(...) return CCharacter.getFaction(...) end
+function setCharacterMoney(...) return CCharacter.setMoney(...) end
+function getCharacterMoney(...) return CCharacter.getMoney(...) end
+function isCharacterKnocked(...) return CCharacter.isKnocked(...) end
+function isCharacterReloading(...) return CCharacter.isReloading(...) end
+function isCharacterReloading(...) return CCharacter.isReloading(...) end

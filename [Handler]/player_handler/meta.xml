@@ -27,7 +27,9 @@
 
     <!-- Hnalders -->
     <script src="handlers/player/shared/index.lua" type="shared" cache="false"/>
+    <script src="handlers/player/shared/exports.lua" type="shared" cache="false"/>
     <script src="handlers/character/shared/index.lua" type="shared" cache="false"/>
+    <script src="handlers/character/shared/exports.lua" type="shared" cache="false"/>
     <script src="handlers/character/server/index.lua" type="server"/>
     <script src="handlers/character/server/saver.lua" type="server"/>
     <script src="handlers/wasted.lua" type="server"/>
@@ -182,8 +184,8 @@
     <export function="getPlayerFromCharacterID" type="shared"/>
     <export function="getCharacterHealth" type="shared"/>
     <export function="getCharacterMaximumHealth" type="shared"/>
-    <export function="setPlayerMoney" type="shared"/>
-    <export function="getPlayerMoney" type="shared"/>
+    <export function="setCharacterMoney" type="shared"/>
+    <export function="getCharacterMoney" type="shared"/>
     <export function="getPlayerOccupation" type="shared"/>
     <export function="getCharacterFaction" type="shared"/>
     <export function="getPlayerCurrentSlotItem" type="shared"/>
