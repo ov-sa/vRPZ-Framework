@@ -73,7 +73,7 @@ CCharacter.resetProgress = function(player, isForceReset, skipResetSync, savePro
         end
         for i, j in imports.pairs(CInventory.CItems) do
             if saveProgress then
-                dbify.Inventory.item.setProperty(saveProgress.inventoryID, {i}, {
+                CInventory.setItemProperty(saveProgress.inventoryID, {i}, {
                     {dbify.Inventory.__connection__.itemFormat.counter, imports.max(0, imports.tonumber(imports.getElementData(player, "Item:"..i)) or 0)}
                 })
             end
