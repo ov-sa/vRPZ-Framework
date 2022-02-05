@@ -498,7 +498,7 @@ manageCharacter = function(manageType)
                 imports.triggerEvent("Client:onNotification", localPlayer, "You must wait until the character processing is done!", {255, 80, 80, 255})
                 return false
             else
-                imports.triggerServerEvent("onClientCharacterDelete", localPlayer, loginUI.clientCharacters[loginUI._selectedCharacter]._id)
+                imports.triggerServerEvent("Player:onDeleteCharacter", localPlayer, loginUI.clientCharacters[loginUI._selectedCharacter]._id)
             end
         end
         table.remove(loginUI.clientCharacters, loginUI._selectedCharacter)
@@ -585,7 +585,7 @@ manageCharacter = function(manageType)
         charactersPendingToBeSaved[loginUI._selectedCharacter] = true
         charactersToBeSaved[loginUI._selectedCharacter] = characterData
         loginUI._charactersUnderProcess[loginUI._selectedCharacter] = true
-        imports.triggerServerEvent("onClientCharacterSave", localPlayer, selectedCharacter, charactersToBeSaved, charactersPendingToBeSaved)
+        imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, selectedCharacter, charactersToBeSaved, charactersPendingToBeSaved)
     elseif manageType == "play" then
         if #loginUI.clientCharacters <= 0 then
             setLoginUIEnabled(true)
