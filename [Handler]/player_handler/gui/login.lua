@@ -877,7 +877,7 @@ local function renderUI()
         --Draws Options UI
         imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[1].bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[1].bgColor)), false)
         for i, j in imports.ipairs(loginUI.phases[1].optionsUI) do
-            local option_title = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)][FRAMEWORK_LANGUAGE]  :gsub(".","  %0"):sub(2):upper()
+            local option_title = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]:gsub(".","  %0"):sub(2):upper()
             local option_width, option_height = dxGetTextWidth(option_title, 1, loginUI.phases[1].optionsUI.font) + 5, loginUI.phases[1].optionsUI.height
             local options_offsetX, options_offsetY = loginUI.phases[1].optionsUI.startX - (option_width*0.5), j.startY
             local isOptionHovered = isMouseOnPosition(options_offsetX, options_offsetY, option_width, option_height)

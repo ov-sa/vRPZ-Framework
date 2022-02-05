@@ -62,18 +62,24 @@ configVars["UI"]["Login"] = {
 
     ["Options"] = {
         play = {
-            ["EN"] = "Play",
-            ["TR"] = "Oyna"
+            ["Titles"] = {
+                ["EN"] = "Play",
+                ["TR"] = "Oyna"
+            }
         },
 
         characters = {
-            ["EN"] = "Characters",
-            ["TR"] = "karakterler"
+            ["Titles"] = {
+                ["EN"] = "Characters",
+                ["TR"] = "karakterler"
+            }
         },
 
         credits = {
-            ["EN"] = "Credits",
-            ["TR"] = "Kredi"
+            ["Titles"] = {
+                ["EN"] = "Credits",
+                ["TR"] = "Kredi"
+            }
         }
     }
 
