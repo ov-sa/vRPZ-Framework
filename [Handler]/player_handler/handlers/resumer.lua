@@ -72,7 +72,8 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
     }, function(result)
         result.character = result.character or 0
         result.characters = result.characters or {}
-        for i, j in ipairs(result.characters) do
+        for i = 1, #result.characters, 1 do
+            local j = result.characters[i]
             --[[
             local _characterData = table.copy(characterCache[j].identity, true)
             _characterData._id = j
