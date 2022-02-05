@@ -79,11 +79,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
     imports.setElementFrozen(source, true)
     imports.setPlayerName(source, CPlayer.generateNick())
 
-    local lastCharacter = CPlayer.getData(CPlayer.getSerial(source), {
-        "character",
-        "characters",
-        "premimum"
-    }, function(result, Args)
+    CPlayer.fetch(CPlayer.getSerial(source), function(result, Args)
         result.character = result.character or 0
         result.characters = (result.characters and imports.fromJSON(result.characters)) or {}
         result.premimum = (result.premimum and true) or false
