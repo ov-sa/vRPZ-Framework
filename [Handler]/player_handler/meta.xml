@@ -38,6 +38,7 @@
     <script src="modules/player/server/exports.lua" type="server"/>
     <export function="isPlayerInitialized" type="shared"/>
     <export function="generatePlayerNick" type="shared"/>
+    <export function="fetchPlayer" type="server"/>
     <export function="setPlayerData" type="server"/>
     <export function="getPlayerData" type="server"/>
     <export function="getPlayerSerial" type="server"/>

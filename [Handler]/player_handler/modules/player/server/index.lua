@@ -24,6 +24,12 @@ local imports = {
 --[[ Module ]]--
 ----------------
 
+CPlayer.fetch = function(serial, ...)
+    dbify.serial.fetchAll({
+        {dbify.serial.__connection__.keyColumn, serial}
+    }, ...)
+    return true
+end
 CPlayer.setData = dbify.serial.setData
 CPlayer.getData = dbify.serial.getData
 
