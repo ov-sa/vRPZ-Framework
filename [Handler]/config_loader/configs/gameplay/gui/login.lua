@@ -19,7 +19,6 @@ configVars["UI"]["Login"] = {
     dimension = 100,
     fadeDelay = 7000,
     clientPoint = {x = 0, y = 0, z = 0},
-
     spawnLocations = {
         {
             cinemationFOV = 150,
@@ -58,6 +57,23 @@ configVars["UI"]["Login"] = {
                 cameraEndLook = {x = -1726.531982421875, y = -2237.2822265625, z = 139.0268249511719},
                 cinemationDuration = 15000 
             }
+        }
+    },
+
+    ["OptionsUI"] = {
+        play = {
+            ["EN"] = "Play",
+            ["TR"] = "Oyna"
+        },
+
+        characters = {
+            ["EN"] = "Characters",
+            ["TR"] = "karakterler"
+        },
+
+        credits = {
+            ["EN"] = "Credits",
+            ["TR"] = "Kredi"
         }
     }
 

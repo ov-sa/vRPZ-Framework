@@ -105,7 +105,6 @@
 
     <!-- Files: Fonts -->
     <file src="files/fonts/courgette.ttf"/>
-    <file src="files/fonts/architectsdaughter.ttf"/>
     <file src="files/fonts/signika_semibold.ttf"/>
 
     <!-- Files: Shaders -->
