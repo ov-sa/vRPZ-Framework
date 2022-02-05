@@ -37,6 +37,7 @@
     <script src="modules/player/server.lua" type="server"/>
     <export function="isPlayerInitialized" type="shared"/>
     <export function="generatePlayerNick" type="shared"/>
+    <export function="getPlayerSerial" type="server"/>
     <export function="getPlayerFromSerial" type="server"/>
 
     <!-- Modules: Character -->
@@ -95,6 +96,7 @@
     <export function="getInventoryItemData" type="server"/>
 
     <!-- Handlers -->
+    <script src="handlers/resumer.lua" type="server"/>
     <script src="handlers/wasted.lua" type="server"/>
 
     <!-- Files: Fonts -->

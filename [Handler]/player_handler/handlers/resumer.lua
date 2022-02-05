@@ -166,7 +166,7 @@ end)
 imports.addEvent("Player:onToggleLoginUI", true)
 imports.addEventHandler("Player:onToggleLoginUI", root, function()
     source:setName(CPlayer.generateNick())
-    local serial = source:getSerial()
+    local serial = CPlayer.getSerial(source)
     local lastCharacter = tonumber(exports.serials_library:getSerialData(serial, "character")) or 0
     local lastCharacters, serialCharacters = {}, getCharactersBySerial(serial)
     local isPlayerPremium = exports.serials_library:getSerialData(serial, "premimum")

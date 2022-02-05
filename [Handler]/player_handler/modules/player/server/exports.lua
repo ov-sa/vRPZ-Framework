@@ -12,4 +12,5 @@
 --[[ Exports ]]--
 -----------------
 
+function getPlayerSerial(...) return CPlayer.getSerial(...) end
 function getPlayerFromSerial(...) return CPlayer.getPlayer(...) end

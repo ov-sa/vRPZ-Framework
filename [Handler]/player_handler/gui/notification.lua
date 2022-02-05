@@ -20,6 +20,7 @@ local imports = {
     addEventHandler = addEventHandler,
     dxDrawRectangle = dxDrawRectangle,
     dxDrawImage = dxDrawImage,
+    dxDrawText = dxDrawText,
     dxGetTextWidth = dxGetTextWidth,
     interpolateBetween = interpolateBetween,
     getInterpolationProgress = getInterpolationProgress,
@@ -47,8 +48,6 @@ local notifUI = {
     font = FRAMEWORK_FONTS[8],
     bgColor = {0, 0, 0, 240},
     defaultFontColor = {175, 175, 175, 255},
-    fontBorderWeight = 0.25,
-    fontBorderColor = {0, 0, 0, 200},
     leftCurvedEdgePath = beautify.assets["images"]["curved_square/regular/left.rw"],
     rightCurvedEdgePath = beautify.assets["images"]["curved_square/regular/right.rw"]
 }
@@ -85,8 +84,7 @@ beautify.render.create(function()
         imports.dxDrawRectangle(notif_offsetX, notif_offsetY, notif_width, notif_height, imports.tocolor(notifUI.bgColor[1], notifUI.bgColor[2], notifUI.bgColor[3], notifUI.bgColor[4]*notifAlphaPercent), false)
         imports.dxDrawImage(notif_offsetX - notif_height, notif_offsetY, notif_height, notif_height, notifUI.leftCurvedEdgePath, 0, 0, 0, imports.tocolor(notifUI.bgColor[1], notifUI.bgColor[2], notifUI.bgColor[3], notifUI.bgColor[4]*notifAlphaPercent), false)
         imports.dxDrawImage(notif_offsetX + notif_width, notif_offsetY, notif_height, notif_height, notifUI.rightCurvedEdgePath, 0, 0, 0, imports.tocolor(notifUI.bgColor[1], notifUI.bgColor[2], notifUI.bgColor[3], notifUI.bgColor[4]*notifAlphaPercent), false)
-        --TODO: IS THIS BUILT ON BEAUTIFY?
-        dxDrawBorderedText(notifUI.fontBorderWeight, {notifUI.fontBorderColor[1], notifUI.fontBorderColor[2], notifUI.fontBorderColor[3], notifUI.fontBorderColor[4]*notifAlphaPercent}, j.text, notif_offsetX, notif_offsetY, notif_offsetX + notif_width, notif_offsetY + notif_height, imports.tocolor(notifFontColor[1], notifFontColor[2], notifFontColor[3], notifFontColor[4]*notifAlphaPercent), 1, notifUI.font, "center", "center", true, false, false, false, true)
+        imports.dxdrawText(j.text, notif_offsetX, notif_offsetY, notif_offsetX + notif_width, notif_offsetY + notif_height, imports.tocolor(notifFontColor[1], notifFontColor[2], notifFontColor[3], notifFontColor[4]*notifAlphaPercent), 1, notifUI.font, "center", "center", true, false, false, false, true)
         if j.slideStatus == "backward" then
             if imports.math.round(notifAlphaPercent, 2) == 0 then
                 imports.table.remove(notifUI.buffer, i)
