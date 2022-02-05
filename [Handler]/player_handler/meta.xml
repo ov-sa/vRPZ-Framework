@@ -112,8 +112,8 @@
     <file src="files/shaders/texreplace.fx"/>
 
     <!-- Files: Images: GUIs -->
-    <file src="files/images/login/login/background.png"/>
-    <file src="files/images/login/credits/background.png"/>
+    <file src="files/images/login/login.png"/>
+    <file src="files/images/login/background.png"/>
     <file src="files/images/loading/loader.png"/>
 
     <!-- Files: Images: Characters: Male -->

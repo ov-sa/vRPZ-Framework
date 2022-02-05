@@ -64,7 +64,7 @@ loginUI = {
     phases = {
         [1] = {
             bgColor = {255, 255, 255, 255},
-            bgPath = imports.dxCreateTexture("files/images/login/login/background.png", "argb", true, "clamp"),
+            bgPath = imports.dxCreateTexture("files/images/login/login.png", "argb", true, "clamp"),
             optionsui = {
                 startX = CLIENT_MTA_RESOLUTION[1]*0.5,
                 startY = -15,
@@ -301,7 +301,7 @@ loginUI = {
         },
         [3] = {
             bgColor = {255, 255, 255, 255},
-            bgPath = imports.dxCreateTexture("files/images/login/credits/background.png", "argb", true, "clamp"),
+            bgPath = imports.dxCreateTexture("files/images/login/background.png", "argb", true, "clamp"),
             back_navigator = {
                 title = "B A C K",
                 startX = -15,
