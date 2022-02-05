@@ -74,6 +74,8 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
     }, function(result, Args)
         result.character = result.character or 0
         result.characters = (result.characters and imports.fromJSON(result.characters)) or {}
+        result.premimum = (result.premimum and true) or false
+
         if (#result.characters > 0) then
             CCharacter.fetch(result.characters, function(result, Args)
                 Args[2].characters = result
@@ -86,8 +88,15 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                     character = Args[2].character,
                     characters = Args[2].characters,
                     isPremium = Args[2].premimum
-                }, Args[1], result)
-            end)
+                })
+            end, Args[1], result)
+        else
+            result.character = 0
+            imports.triggerClientEvent(Args[1], "Client:onToggleLoadingUI", Args[1], {
+                character = result.character,
+                characters = result.characters,
+                isPremium = result.premimum
+            })
         end
     end, source)
 end)
