@@ -70,15 +70,20 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
         "characters",
         "premimum"
     }, function(result)
-        for i, j in ipairs(serialCharacters) do
+        result.character = result.character or 0
+        result.characters = result.characters or {}
+        for i, j in ipairs(result.characters) do
+            --[[
             local _characterData = table.copy(characterCache[j].identity, true)
             _characterData._id = j
-            imports.table.insert(lastCharacters, _characterData)
+            imports.table.insert(characters, _characterData)
+            ]]
+            --TODO: FETCH CHARACTER'S IDENTITY AND LOAD IT
         end
-        if not lastCharacters[lastCharacter] then lastCharacter = 0 end
+        if not result.characters[(result.character)] then result.character = 0 end
         imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, {
             character = result.character,
-            characters = result.lastCharacters,
+            characters = result.characters,
             isPremium = result.premimum
         })
     end)
