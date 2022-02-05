@@ -37,7 +37,7 @@ CCharacter = {
         if (not serial or (imports.type(serial) ~= "string")) then return false end
         dbify.character.create(function(characterID, cArgs)
             CCharacter.CBuffer[characterID] = {
-                {"owner", characterOwner}
+                {"owner", cArgs[1]}
             }
             dbify.character.setData(characterID, CCharacter.CBuffer[characterID])
             local callbackReference = callback
