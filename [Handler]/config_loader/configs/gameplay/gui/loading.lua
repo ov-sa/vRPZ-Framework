@@ -15,10 +15,46 @@
 configVars["UI"]["Loading"] = {
 
     ["Hints"] = {
-        "Collect extra medical kits as backup",
-        "Get shields to cover up",
-        "Avoid radioactive zones while they are active",
-        "Get higher tier loots to unlock some of your secret skills"
+        {
+            ["EN"] = "Upgrade your skills to unlock higher blood limit!",
+            ["TR"] = "WIP"
+        },
+        {
+            ["EN"] = "Use Antiradiation suits to evade radiations effectively!",
+            ["TR"] = "WIP"
+        },
+        {
+            ["EN"] = "Use helmets to evade headshots!",
+            ["TR"] = "WIP"
+        },
+        {
+            ["EN"] = "Use armors to evade damages!",
+            ["TR"] = "WIP"
+        },
+        {
+            ["EN"] = "Use backpacks to carry more items!",
+            ["TR"] = "WIP"
+        },
+        {
+            ["EN"] = "Always be alarmed, never trust anyone!",
+            ["TR"] = "WIP"
+        },
+        {
+            ["EN"] = "Revive your faction/group members to gain more reputation!",
+            ["TR"] = "WIP"
+        },
+        {
+            ["EN"] = "Killing your faction/group members will reduce your reputation!",
+            ["TR"] = "WIP"
+        },
+        {
+            ["EN"] = "Maintain higher reputation to unlock high tier loots!",
+            ["TR"] = "WIP"
+        },
+        {
+            ["EN"] = "Collect GPS & Compass to help you travel on the map!",
+            ["TR"] = "WIP"
+        }
     }
 
 }
