@@ -22,6 +22,9 @@ local imports = {
 --[[ Module ]]--
 ----------------
 
+CPlayer.setData = dbify.serial.setData
+CPlayer.getData = dbify.serial.getData
+
 CPlayer.getSerial = function(player)
     if (not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player")) then return false end
     return imports.getPlayerSerial(player)

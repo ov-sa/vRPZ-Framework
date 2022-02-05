@@ -63,23 +63,23 @@ end)
 
 imports.addEvent("Player:onToggleLoginUI", true)
 imports.addEventHandler("Player:onToggleLoginUI", root, function()
-    local serial = CPlayer.getSerial(source)
-    local lastCharacter = tonumber(exports.serials_library:getSerialData(serial, "character")) or 0
-    local lastCharacters, serialCharacters = {}, getCharactersBySerial(serial)
-    local isPlayerPremium = exports.serials_library:getSerialData(serial, "premimum")
-
-    for i, j in ipairs(serialCharacters) do
-        local _characterData = table.copy(characterCache[j].identity, true)
-        _characterData._id = j
-        imports.table.insert(lastCharacters, _characterData)
-    end
-    if not lastCharacters[lastCharacter] then lastCharacter = 0 end
-
     imports.setElementFrozen(source, true)
     imports.setPlayerName(source, CPlayer.generateNick())
-    imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, {
-        character = lastCharacter,
-        characters = lastCharacters,
-        isPremium = isPlayerPremium
-    })
+    local lastCharacter = CPlayer.getData(CPlayer.getSerial(source), {
+        "character",
+        "characters",
+        "premimum"
+    }, function(result)
+        for i, j in ipairs(serialCharacters) do
+            local _characterData = table.copy(characterCache[j].identity, true)
+            _characterData._id = j
+            imports.table.insert(lastCharacters, _characterData)
+        end
+        if not lastCharacters[lastCharacter] then lastCharacter = 0 end
+        imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, {
+            character = result.character,
+            characters = result.lastCharacters,
+            isPremium = result.premimum
+        })
+    end)
 end)

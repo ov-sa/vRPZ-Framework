@@ -53,7 +53,7 @@ CCharacter.resetProgress = function(player, isForceReset, skipResetSync, savePro
             for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
                 local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
                 if saveProgress then
-                    dbify.serial.setData(saveProgress.serial, {
+                    CPlayer.setData(saveProgress.serial, {
                         {j, imports.tostring(imports.getElementData(player, "Player:"..j))}
                     })
                 end
