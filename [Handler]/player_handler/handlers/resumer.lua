@@ -49,7 +49,7 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(characterID, ch
     for i, j in imports.pairs(unsavedChars) do
         if characters[i] then
             for k, v in imports.pairs(characterCache) do
-                if v.identity["name"] == characters[i]["name"] then
+                if v["identity"]["name"] == characters[i]["name"] then
                     imports.triggerClientEvent(source, "onClientLoginUIEnable", source, true, true)
                     imports.triggerClientEvent(source, "onClientRecieveCharacterSaveState", source, false, "Unfortunately, '"..characters[i]["name"].."' is already registered!", i)
                     return false
@@ -90,7 +90,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                 Args[2].characters = result
                 for i = 1, #Args[2].characters, 1 do
                     local j = Args[2].characters[i]
-                    j.identity = imports.fromJSON(j.identity)
+                    j["identity"] = imports.fromJSON(j["identity"])
                 end
                 if not Args[2].characters[(Args[2].character)] then Args[2].character = 0 end
                 imports.triggerClientEvent(Args[1], "Client:onToggleLoadingUI", Args[1], {
