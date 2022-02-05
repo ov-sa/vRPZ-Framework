@@ -60,7 +60,7 @@ configVars["UI"]["Login"] = {
         }
     },
 
-    ["OptionsUI"] = {
+    ["Options"] = {
         play = {
             ["EN"] = "Play",
             ["TR"] = "Oyna"
