@@ -103,9 +103,10 @@ CCharacter.saveProgress = function(player, skipResetSync)
     local characterIdentity = CCharacter.getData(characterID, "identity")
     CCharacter.setData(characterID, "location", imports.toJSON(CCharacter.getLocation(player)))
     for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
-        local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
-        local data = imports.tostring(imports.getElementData(player, "Player:"..j))
-        exports.serials_library:setSerialData(serial, j, data)
+        local identifier = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
+        dbify.serial.setData(serial, {
+            {identifier, imports.tostring(imports.getElementData(player, "Player:"..identifier))}
+        })
     end
     for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
         local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
