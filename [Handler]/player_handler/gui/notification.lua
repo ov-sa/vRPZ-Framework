@@ -38,7 +38,7 @@ local notifUI = {
     startY = 15,
     height = 30,
     paddingY = 5,
-    currentYOffset = 0,
+    offsetY = 0,
     buffer = {},
     slideInDuration = 850,
     slideOutDuration = 500,
@@ -60,25 +60,25 @@ local notifUI = {
 beautify.render.create(function()
     if #notifUI.buffer <= 0 then return false end
 
-    local currentYOffset = imports.interpolateBetween(notifUI.currentYOffset, 0, 0, 0, 0, 0, imports.getInterpolationProgress(notifUI.slideTopTickCounter, notifUI.slideTopDuration), "OutBack")
+    local offsetY = imports.interpolateBetween(notifUI.offsetY, 0, 0, 0, 0, 0, imports.getInterpolationProgress(notifUI.slideTopTickCounter, notifUI.slideTopDuration), "OutBack")
     for i, j in imports.ipairs(notifUI.buffer) do
         local notifFontColor = j.fontColor or notifUI.defaultFontColor
         local notif_width, notif_height = imports.dxGetTextWidth(j.text, 1, notifUI.font), notifUI.height
         local notif_offsetX, notif_offsetY = 0, 0
         local notifAlphaPercent = 0
         if j.slideStatus == "forward" then
-		    notif_offsetX, notif_offsetY = imports.interpolateBetween(CLIENT_MTA_RESOLUTION[1], notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)) - notifUI.height, 0, (CLIENT_MTA_RESOLUTION[1]) - notifUI.startX - notif_width, notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)) + currentYOffset, 0, imports.getInterpolationProgress(j.tickCounter, notifUI.slideInDuration), "InOutBack")
+		    notif_offsetX, notif_offsetY = imports.interpolateBetween(CLIENT_MTA_RESOLUTION[1], notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)) - notifUI.height, 0, (CLIENT_MTA_RESOLUTION[1]) - notifUI.startX - notif_width, notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)) + offsetY, 0, imports.getInterpolationProgress(j.tickCounter, notifUI.slideInDuration), "InOutBack")
             notifAlphaPercent = imports.interpolateBetween(0, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.tickCounter, notifUI.slideInDuration), "Linear")
             if imports.math.round(notifAlphaPercent, 2) == 1 then
                 if (CLIENT_CURRENT_TICK - j.tickCounter - notifUI.slideInDuration) >= notifUI.slideAnimDelayDuration then
                     j.slideStatus = "backward"
                     j.tickCounter = CLIENT_CURRENT_TICK
-                    notifUI.currentYOffset = notifUI.height
+                    notifUI.offsetY = notifUI.height
                     notifUI.slideTopTickCounter = CLIENT_CURRENT_TICK
                 end
             end
         else
-		    notif_offsetX, notif_offsetY = imports.interpolateBetween((CLIENT_MTA_RESOLUTION[1]) - notifUI.startX - notif_width, notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)), 0, CLIENT_MTA_RESOLUTION[1], notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)) + (notifUI.height/2) - currentYOffset, 0, imports.getInterpolationProgress(j.tickCounter, notifUI.slideOutDuration), "InOutBack")
+		    notif_offsetX, notif_offsetY = imports.interpolateBetween((CLIENT_MTA_RESOLUTION[1]) - notifUI.startX - notif_width, notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)), 0, CLIENT_MTA_RESOLUTION[1], notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)) + (notifUI.height/2) - offsetY, 0, imports.getInterpolationProgress(j.tickCounter, notifUI.slideOutDuration), "InOutBack")
             notifAlphaPercent = imports.interpolateBetween(1, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.tickCounter, notifUI.slideOutDuration), "Linear")
         end
         imports.dxDrawRectangle(notif_offsetX, notif_offsetY, notif_width, notif_height, imports.tocolor(notifUI.bgColor[1], notifUI.bgColor[2], notifUI.bgColor[3], notifUI.bgColor[4]*notifAlphaPercent), false)
