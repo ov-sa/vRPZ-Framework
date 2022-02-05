@@ -68,6 +68,8 @@
     <!-- Modules: Inventory -->
     <script src="modules/inventory/shared/index.lua" type="shared" cache="false"/>
     <script src="modules/inventory/shared/exports.lua" type="shared" cache="false"/>
+    <script src="modules/inventory/server/index.lua" type="server"/>
+    <script src="modules/inventory/server/exports.lua" type="server"/>
     <export function="fetchInventoryItem" type="shared"/>
     <export function="fetchInventoryItemSlot" type="shared"/>
     <export function="fetchInventoryItemName" type="shared"/>
@@ -79,7 +81,17 @@
     <export function="fetchInventoryWeaponAmmo" type="shared"/>
     <export function="fetchInventoryWeaponMag" type="shared"/>
     <export function="fetchInventorySlot" type="shared"/>
-
+    <export function="fetchInventory" type="server"/>
+    <export function="createInventory" type="server"/>
+    <export function="deleteInventory" type="server"/>
+    <export function="setInventoryData" type="server"/>
+    <export function="getInventoryData" type="server"/>
+    <export function="addInventoryItem" type="server"/>
+    <export function="removeInventoryItem" type="server"/>
+    <export function="setInventoryItemProperty" type="server"/>
+    <export function="getInventoryItemProperty" type="server"/>
+    <export function="setInventoryItemData" type="server"/>
+    <export function="getInventoryItemData" type="server"/>
 
     <!-- Handlers -->
     <script src="handlers/wasted.lua" type="server"/>

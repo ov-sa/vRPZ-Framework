@@ -12,7 +12,7 @@
 --[[ Exports ]]--
 -----------------
 
-function fetchCharacter(...) return CCharacter.fetchCharacter(...) end
+function fetchCharacter(...) return CCharacter.fetch(...) end
 function createCharacter(...) return CCharacter.create(...) end
 function deleteCharacter(...) return CCharacter.delete(...) end
 function setCharacterData(...) return CCharacter.setData(...) end

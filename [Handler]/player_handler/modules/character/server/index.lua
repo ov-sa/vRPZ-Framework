@@ -26,7 +26,7 @@ local imports = {
 CCharacter = {
     CBuffer = {},
 
-    fetchCharacter = function(characterID, ...)
+    fetch = function(characterID, ...)
         dbify.character.fetchAll({
             {dbify.character.__connection__.keyColumn, characterID}
         }, ...)

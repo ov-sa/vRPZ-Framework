@@ -84,7 +84,7 @@ CInventory = {
     fetchSlot = function(slot)
         if not slot then return false end
         return FRAMEWORK_CONFIGS["Inventory"]["Slots"][slot] or false
-    end  
+    end
 }
 
 for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
