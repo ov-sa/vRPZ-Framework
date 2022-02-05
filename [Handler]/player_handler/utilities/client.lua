@@ -27,7 +27,7 @@ local imports = {
     toggleControl = toggleControl,
     setTrafficLightState = setTrafficLightState,
     setPedTargetingMarkerEnabled = setPedTargetingMarkerEnabled,
-    setPedTargetingMarkerEnabled = setPedTargetingMarkerEnabled
+    setPlayerHudComponentVisible = setPlayerHudComponentVisible
 }
 
 
