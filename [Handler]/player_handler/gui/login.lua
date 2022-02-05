@@ -15,7 +15,6 @@
 local imports = {
     pairs = pairs,
     ipairs = ipairs,
-    loadstring = loadstring,
     isElement = isElement,
     setElementPosition = setElementPosition,
     setElementDimension = setElementDimension,
@@ -83,15 +82,15 @@ loginUI = {
                 hoverAnimDuration = 2500,
                 {
                     identifier = "play",
-                    execFunc = "manageCharacter(\"play\")"
+                    execFunc = function() manageCharacter("play") end
                 },
                 {
                     identifier = "characters",
-                    execFunc = "setLoginUIPhase(2)"
+                    execFunc = function() setLoginUIPhase(2) end
                 },
                 {
                     identifier = "credits",
-                    execFunc = "setLoginUIPhase(3)"
+                    execFunc = function() setLoginUIPhase(3) end
                 }
             }
         },
@@ -878,7 +877,7 @@ local function renderUI(renderData)
                     if isLMBClicked then
                         setLoginUIEnabled(false)
                         imports.setTimer(function()
-                            imports.loadstring(j.execFunc)()
+                            j.execFunc()
                         end, 1, 1)
                     end
                     if j.hoverStatus ~= "forward" then
