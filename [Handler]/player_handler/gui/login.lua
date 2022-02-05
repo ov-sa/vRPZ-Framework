@@ -851,8 +851,6 @@ local function renderUI()
     if not currentPhase then return false end
 
     local isLMBClicked = isMouseClicked() == "mouse1"
-    --TODO: INTEGRATE W/ BEAUTIFY...
-
     imports.triggerEvent("Player:onSyncWeather", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].weather, FRAMEWORK_CONFIGS["UI"]["Login"].time)
     local currentRatio = (CLIENT_MTA_RESOLUTION[1]/CLIENT_MTA_RESOLUTION[2])/(1366/768)
     local background_width, background_height = CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2]*currentRatio
