@@ -92,7 +92,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                     j.identity = imports.fromJSON(j.identity)
                 end
                 if not Args[2].characters[(Args[2].character)] then Args[2].character = 0 end
-                imports.triggerClientEvent(Args[1], "Client:onToggleLoadingUI", Args[1], {
+                imports.triggerClientEvent(Args[1], "Client:onToggleLoginUI", Args[1], {
                     character = Args[2].character,
                     characters = Args[2].characters,
                     isPremium = Args[2].premimum
@@ -100,7 +100,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
             end, Args[1], result)
         else
             result.character = 0
-            imports.triggerClientEvent(Args[1], "Client:onToggleLoadingUI", Args[1], {
+            imports.triggerClientEvent(Args[1], "Client:onToggleLoginUI", Args[1], {
                 character = result.character,
                 characters = result.characters,
                 isPremium = result.premimum
