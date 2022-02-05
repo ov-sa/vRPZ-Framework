@@ -45,12 +45,14 @@ CCharacter.resetProgress = function(player, isForceReset, skipResetSync)
     playerInventorySlots[player] = nil
 
     if not skipResetSync then
-        for i, j in imports.pairs(characterIdentity) do
-            imports.setElementData(player, "Character:"..i, nil)
-        end
-        for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
-            local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
-            imports.setElementData(player, "Player:"..j, nil)
+        if isForceReset then
+            for i, j in imports.pairs(characterIdentity) do
+                imports.setElementData(player, "Character:"..i, nil)
+            end
+            for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
+                local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
+                imports.setElementData(player, "Player:"..j, nil)
+            end
         end
         for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
@@ -69,9 +71,10 @@ CCharacter.resetProgress = function(player, isForceReset, skipResetSync)
     return true
 end
 
-CCharacter.loadProgress = function(player)
+CCharacter.loadProgress = function(player, isForceReset)
     if CPlayer.isInitialized(player) then return false end
 
+    CCharacter.resetProgress(player, isForceReset)
     for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
         local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
         imports.setElementData(player, "Player:"..j, nil)

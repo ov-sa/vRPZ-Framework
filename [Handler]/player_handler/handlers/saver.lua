@@ -75,15 +75,7 @@ local initialInventoryItems = {
 function loadPlayerDefaultDatas(player)
     if not CPlayer.isInitialized(player) then return false end
 
-    --clearPlayerAllEquipmentSlots(player)
-    --TODO: RESET ALL INVENTORY DATAS SOMEHOW... add another function clearPlayerAllInventory
-    --[[
-    for i, j in pairs(inventoryDatas) do
-        for k, v in ipairs(j) do
-            player:setData("Item:"..v.dataName, 0)
-        end
-    end
-    ]]--
+    CCharacter.loadProgress(player, true)
     --[[
     for i, j in ipairs(initialPlayerDatas) do
         local amount = j.amount
