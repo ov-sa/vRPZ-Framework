@@ -41,13 +41,8 @@ local imports = {
 -------------------
 
 local tempCache = {
-    keys = {
-        mouse = false
-    },
-    timers = {
-        phaseChanger = nil,
-        uiEnabler = nil
-    }
+    keys = {},
+    timers = {}
 }
 local inputTickCounter = CLIENT_CURRENT_TICK
 --TODO: INTEGRATE W/ BEAUTIFY I/P FUNCTIONS
@@ -1361,6 +1356,16 @@ toggleUI = function(state, Args)
         beautify.render.remove(renderUI, {renderType = "input"})
         exports.cinecam_handler:stopCinemation()
         if loginUI.character and imports.isElement(loginUI.character) then loginUI.character:destroy() end
+        for i, j in imports.pairs(tempCache.keys) do
+            j = false
+        end
+        for i, j in imports.pairs(tempCache.timers) do
+            if j and imports.isTimer(j) then
+                imports.killTimer(j)
+                j = nil
+            end
+            j = false
+        end
         loginUI.phase = false
         loginUI.cinemationData = false
         loginUI.character = false
