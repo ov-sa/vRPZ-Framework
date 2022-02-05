@@ -18,6 +18,7 @@ CInventory.fetch = function(inventoryID, ...)
     }, ...)
     return true
 end
+CInventory.ensureItems = dbify.inventory.ensureItems
 CInventory.create = dbify.inventory.create
 CInventory.delete = dbify.inventory.delete
 CInventory.setData = dbify.inventory.setData

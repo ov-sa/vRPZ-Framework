@@ -13,6 +13,7 @@
 -----------------
 
 function fetchInventory(...) return CInventory.fetch(...) end
+function ensureInventoryItems(...) return CInventory.ensureItems(...) end
 function createInventory(...) return CInventory.create(...) end
 function deleteInventory(...) return CInventory.delete(...) end
 function setInventoryData(...) return CInventory.setData(...) end

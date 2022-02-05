@@ -82,6 +82,7 @@
     <export function="fetchInventoryWeaponMag" type="shared"/>
     <export function="fetchInventorySlot" type="shared"/>
     <export function="fetchInventory" type="server"/>
+    <export function="ensureInventoryItems" type="server"/>
     <export function="createInventory" type="server"/>
     <export function="deleteInventory" type="server"/>
     <export function="setInventoryData" type="server"/>
