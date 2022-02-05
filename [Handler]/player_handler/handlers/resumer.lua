@@ -48,6 +48,8 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(characterID, ch
     --TODO: NEEDS REFACTOR LATER MAYBE
     for i, j in imports.pairs(unsavedChars) do
         if characters[i] then
+            --TODO: ADD CHECK TO PREVENT USING SAME NICK LATER
+            --[[
             for k, v in imports.pairs(characterCache) do
                 if v.identity["name"] == characters[i]["name"] then
                     imports.triggerClientEvent(source, "onClientLoginUIEnable", source, true, true)
@@ -55,9 +57,10 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(characterID, ch
                     return false
                 end
             end
+            ]]
             local characterID = CCharacter.create(serial, function(characterID, Args)
                 CCharacter.setData(characterID, "identity", imports.toJSON(characters[i]))
-                characterCache[characterID].identity = fromJSON(characterCache[characterID].identity)
+                characterCache[characterID].identity = imports.fromJSON(characterCache[characterID].identity)
                 imports.triggerClientEvent(Args[1], "onClientLoadCharacterID", Args[1], i, characterID, characters[i])
             end, source)
         end
