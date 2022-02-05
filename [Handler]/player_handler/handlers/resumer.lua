@@ -19,6 +19,7 @@ local imports = {
     triggerClientEvent = triggerClientEvent,
     setElementFrozen = setElementFrozen,
     setPlayerName = setPlayerName,
+    toJSON = toJSON,
     fromJSON = fromJSON,
     table = table
 }
@@ -39,25 +40,26 @@ end)
 -----------------------------------
 
 imports.addEvent("Player:onSaveCharacter", true)
-imports.addEventHandler("Player:onSaveCharacter", root, function(characterID, characters, unsavedCharacters)
+imports.addEventHandler("Player:onSaveCharacter", root, function(characterID, characters, unsavedChars)
     characterID = tonumber(characterID)
-    if not characterID or not characterID or not unsavedCharacters then return false end
+    if not characterID or not characterID or not unsavedChars then return false end
 
     local serial = CPlayer.getSerial(source)
-    for i, j in imports.pairs(unsavedCharacters) do
+    --TODO: NEEDS REFACTOR LATER MAYBE
+    for i, j in imports.pairs(unsavedChars) do
         if characters[i] then
             for k, v in imports.pairs(characterCache) do
                 if v.identity["name"] == characters[i]["name"] then
-                    --TODO: THESE EVENTS MUST BE RENAMED..
                     imports.triggerClientEvent(source, "onClientLoginUIEnable", source, true, true)
                     imports.triggerClientEvent(source, "onClientRecieveCharacterSaveState", source, false, "Unfortunately, '"..characters[i]["name"].."' is already registered!", i)
                     return false
                 end
             end
-            local __characterID = CCharacter.create(serial)
-            CCharacter.setData(__characterID, "identity", toJSON(characters[i]))
-            characterCache[__characterID]["identity"] = fromJSON(characterCache[__characterID]["identity"])
-            imports.triggerClientEvent(source, "onClientLoadCharacterID", source, i, __characterID, characters[i])
+            local characterID = CCharacter.create(serial, function(characterID, Args)
+                CCharacter.setData(characterID, "identity", imports.toJSON(characters[i]))
+                characterCache[characterID]["identity"] = fromJSON(characterCache[characterID]["identity"])
+                imports.triggerClientEvent(Args[1], "onClientLoadCharacterID", Args[1], i, characterID, characters[i])
+            end, source)
         end
     end
     CPlayer.setData(serial, {"character", characterID})
