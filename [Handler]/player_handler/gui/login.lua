@@ -40,9 +40,10 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-local prevLMBClickState = false
-local prevPhaseTimer, prevEnablerTimer = false, false
-local prevEnablerTimer = false
+local prevTimers = {
+    phaseChanger = nil,
+    uiEnabler = nil
+}
 local inputTickCounter = CLIENT_CURRENT_TICK
 --TODO: INTEGRATE W/ BEAUTIFY I/P FUNCTIONS
 local prevInputKey = false
@@ -632,11 +633,11 @@ end
 setLoginUIPhase = function(phaseID)
     phaseID = tonumber(phaseID)
     if not phaseID or not loginUI.phases[1].optionsUI[phaseID] or (loginUI.phase and loginUI.phase == phaseID) then return false end
-    if prevPhaseTimer and prevPhaseTimer:isValid() then prevPhaseTimer:destroy(); prevPhaseTimer = false end
-    if prevEnablerTimer and prevEnablerTimer:isValid() then prevEnablerTimer:destroy(); prevEnablerTimer = false end
+    if prevTimers.phaseChanger and prevTimers.phaseChanger:isValid() then prevTimers.phaseChanger:destroy(); prevTimers.phaseChanger = false end
+    if prevTimers.uiEnabler and prevTimers.uiEnabler:isValid() then prevTimers.uiEnabler:destroy(); prevTimers.uiEnabler = false end
 
     imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
-    prevPhaseTimer = imports.setTimer(function()
+    prevTimers.phaseChanger = imports.setTimer(function()
         if phaseID == 1 then
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.cinemationPoint, true, true, loginUI.cinemationData.cinemationFOV, true, true, true, false)
         elseif phaseID == 2 then
@@ -677,12 +678,12 @@ setLoginUIPhase = function(phaseID)
             end
         end
         imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, false)
-        prevPhaseTimer = false
+        prevTimers.phaseChanger = false
     end, loadingUI.animFadeInDuration + 250, 1)
 
-    prevEnablerTimer = imports.setTimer(function()
+    prevTimers.uiEnabler = imports.setTimer(function()
         setLoginUIEnabled(true)
-        prevEnablerTimer = false
+        prevTimers.uiEnabler = false
     end, loadingUI.animFadeOutDuration + loadingUI.animFadeDelayDuration - (loadingUI.animFadeInDuration + 250), 1)
     return true
 end
@@ -696,7 +697,7 @@ imports.addEventHandler("onClientSetLoginUIPhase", root, setLoginUIPhase)
 
 function setLoginUIEnabled(state, forcedState)
 
-    if prevEnablerTimer and prevEnablerTimer:isValid() then prevEnablerTimer:destroy(); prevEnablerTimer = false end
+    if prevTimers.uiEnabler and prevTimers.uiEnabler:isValid() then prevTimers.uiEnabler:destroy(); prevTimers.uiEnabler = false end
     
     if forcedState ~= nil then
         loginUI.isForcedDisabled = not forcedState
@@ -849,19 +850,8 @@ local function renderUI()
     local currentPhase = getLoginUIPhase()
     if not currentPhase then return false end
 
-    local isLMBClicked = false
-    if not GuiElement.isMTAWindowActive() and loginUI.isEnabled and not loginUI.isForcedDisabled then
-        if not prevLMBClickState then
-            if getKeyState("mouse1") then
-                isLMBClicked = true
-                prevLMBClickState = true
-            end
-        else
-            if not getKeyState("mouse1") then
-                prevLMBClickState = false
-            end
-        end
-    end
+    local isLMBClicked = isMouseClicked() == "mouse1"
+    --TODO: INTEGRATE W/ BEAUTIFY...
 
     imports.triggerEvent("Player:onSyncWeather", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].weather, FRAMEWORK_CONFIGS["UI"]["Login"].time)
     local currentRatio = (CLIENT_MTA_RESOLUTION[1]/CLIENT_MTA_RESOLUTION[2])/(1366/768)
