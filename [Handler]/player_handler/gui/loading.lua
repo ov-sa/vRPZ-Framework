@@ -97,13 +97,13 @@ imports.addEventHandler("Client:onToggleLoadingUI", root, function(state, Args)
     if state then
         if (state and (loadingUI.animStatus == "forward")) then return false end
         loadingUI.animStatus = "forward"
-        loadingUI.tickCounter = CLIENT_CURRENT_TICK
-        loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
         loadingUI.hint.text = (FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"][imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"])] and FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"][imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"])][FRAMEWORK_LANGUAGE]) or loadingUI.hint.text
     else
         if ((loadingUI.animStatus == "backward") or (loadingUI.animStatus == "reverse_backward")) then return false end
         loadingUI.animStatus = "reverse_backward"
     end
+    loadingUI.tickCounter = CLIENT_CURRENT_TICK
+    loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
     imports.triggerEvent("Sound:onToggleLoading", localPlayer, state)
     return true
 end)
