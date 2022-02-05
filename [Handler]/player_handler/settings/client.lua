@@ -21,7 +21,7 @@ local imports = {
 --[[ Settings ]]--
 ------------------
 
-FRAMEWORK_LANGUAGE = "TR"
+FRAMEWORK_LANGUAGE = "EN"
 FRAMEWORK_FONTS = {
     [1] = imports.dxCreateFont(":beautify_library/files/assets/fonts/teko_medium.rw", 23),
     [2] = imports.dxCreateFont(":beautify_library/files/assets/fonts/teko_medium.rw", 30),
