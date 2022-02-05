@@ -61,6 +61,8 @@
     <export function="deleteCharacter" type="server"/>
     <export function="setCharacterData" type="server"/>
     <export function="getCharacterData" type="server"/>
+    <export function="loadCharacterProgress" type="server"/>
+    <export function="saveCharacterProgress" type="server"/>
 
     <!-- Modules: Inventory -->
     <script src="modules/inventory/shared/index.lua" type="shared" cache="false"/>

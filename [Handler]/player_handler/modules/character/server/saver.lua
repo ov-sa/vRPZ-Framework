@@ -28,6 +28,29 @@ local imports = {
 --[[ Module ]]--
 ----------------
 
+CCharacter.loadProgress = function(player)
+    if not CPlayer.isInitialized(player) then return false end
+
+    for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
+        local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
+        imports.setElementData(player, "Player:"..j, nil)
+    end
+    for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
+        local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
+        imports.setElementData(player, "Character:"..j, nil)
+    end
+    for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Slots"]) do
+        imports.setElementData(player, "Slot:"..i, nil)
+        imports.setElementData(player, "Slot:Object:"..i, nil)
+    end
+    for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
+        for k, v in imports.pairs(j) do
+            imports.setElementData(player, "Item:"..k, 0)
+        end
+    end
+    return true
+end
+
 CCharacter.saveProgress = function(player, isQuitting)
     if not CPlayer.isInitialized(player) then return false end
 
