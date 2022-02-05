@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
     ipairs = ipairs,
     isElement = isElement,
     setElementPosition = setElementPosition,
@@ -648,7 +649,7 @@ setLoginUIPhase = function(phaseID)
             if loginUI.character and imports.isElement(loginUI.character) then loginUI.character:destroy(); loginUI.character = false end
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.characterCinemationPoint, true, true, loginUI.cinemationData.characterCinemationFOV, true, true, true, false)
             loginUI.character = Ped(0, loginUI.cinemationData.characterPoint.x, loginUI.cinemationData.characterPoint.y, loginUI.cinemationData.characterPoint.z, loginUI.cinemationData.characterPoint.rotation)
-            loginUI.character:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].lobbyDimension)
+            loginUI.character:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
             loginUI.character:setFrozen(true)
             loadLoginPreviewCharacter()
         else
@@ -868,7 +869,7 @@ local function renderUI()
         end
     end
 
-    imports.triggerEvent("Player:onSyncWeather", FRAMEWORK_CONFIGS["UI"]["Login"].weather, FRAMEWORK_CONFIGS["UI"]["Login"].time)
+    imports.triggerEvent("Player:onSyncWeather", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].weather, FRAMEWORK_CONFIGS["UI"]["Login"].time)
     local currentRatio = (CLIENT_MTA_RESOLUTION[1]/CLIENT_MTA_RESOLUTION[2])/(1366/768)
     local background_width, background_height = CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2]*currentRatio
     local background_offsetX, background_offsetY = 0, -(background_height - CLIENT_MTA_RESOLUTION[2])/2
@@ -1389,7 +1390,7 @@ end
 imports.addEvent("Client:onToggleLoginUI", true)
 imports.addEventHandler("Client:onToggleLoginUI", root, function(state, Args)
     if state then
-        for i, j in imports.pairs(characters) do
+        for i, j in imports.pairs(Args.characters) do
             j.__isPreLoaded = true
         end
         loginUI.selectedCharacter = Args.character
@@ -1398,8 +1399,8 @@ imports.addEventHandler("Client:onToggleLoginUI", root, function(state, Args)
         loginUI._unsavedCharacters = {}
         loginUI._charactersUnderProcess = {}
         loginUI.isPremium = Args.isPremium
-        imports.setElementPosition(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.x, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.y, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyPosition.z)
-        imports.setElementDimension(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].lobbyDimension)
+        imports.setElementPosition(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.x, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.y, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.z)
+        imports.setElementDimension(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
         setLoginUIEnabled(true, true)
 
         imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
