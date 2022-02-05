@@ -18,6 +18,7 @@ local imports = {
     triggerClientEvent = triggerClientEvent,
     setElementFrozen = setElementFrozen,
     setPlayerName = setPlayerName,
+    fromJSON = fromJSON,
     table = table
 }
 
@@ -69,23 +70,23 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
         "character",
         "characters",
         "premimum"
-    }, function(result)
+    }, function(result, Args)
         result.character = result.character or 0
-        result.characters = result.characters or {}
-        for i = 1, #result.characters, 1 do
-            local j = result.characters[i]
-            --[[
-            local _characterData = table.copy(characterCache[j].identity, true)
-            _characterData._id = j
-            imports.table.insert(characters, _characterData)
-            ]]
-            --TODO: FETCH CHARACTER'S IDENTITY AND LOAD IT
+        result.characters = (result.characters and imports.fromJSON(result.characters)) or {}
+        if (#result.characters > 0) then
+            CCharacter.fetch(result.characters, function(result, Args)
+                Args[2].characters = result
+                for i = 1, #Args[2].characters, 1 do
+                    local j = Args[2].characters[i]
+                    j.identity = imports.fromJSON(j.identity)
+                end
+                if not Args[2].characters[(Args[2].character)] then Args[2].character = 0 end
+                imports.triggerClientEvent(Args[1], "Client:onToggleLoadingUI", Args[1], {
+                    character = Args[2].character,
+                    characters = Args[2].characters,
+                    isPremium = Args[2].premimum
+                }, Args[1], result)
+            end)
         end
-        if not result.characters[(result.character)] then result.character = 0 end
-        imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, {
-            character = result.character,
-            characters = result.characters,
-            isPremium = result.premimum
-        })
-    end)
+    end, source)
 end)
