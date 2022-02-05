@@ -40,9 +40,14 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-local prevTimers = {
-    phaseChanger = nil,
-    uiEnabler = nil
+local tempCache = {
+    keys = {
+        mouse = false
+    },
+    timers = {
+        phaseChanger = nil,
+        uiEnabler = nil
+    }
 }
 local inputTickCounter = CLIENT_CURRENT_TICK
 --TODO: INTEGRATE W/ BEAUTIFY I/P FUNCTIONS
@@ -633,11 +638,11 @@ end
 setLoginUIPhase = function(phaseID)
     phaseID = tonumber(phaseID)
     if not phaseID or not loginUI.phases[1].optionsUI[phaseID] or (loginUI.phase and loginUI.phase == phaseID) then return false end
-    if prevTimers.phaseChanger and prevTimers.phaseChanger:isValid() then prevTimers.phaseChanger:destroy(); prevTimers.phaseChanger = false end
-    if prevTimers.uiEnabler and prevTimers.uiEnabler:isValid() then prevTimers.uiEnabler:destroy(); prevTimers.uiEnabler = false end
+    if tempCache.timers.phaseChanger and tempCache.timers.phaseChanger:isValid() then tempCache.timers.phaseChanger:destroy(); tempCache.timers.phaseChanger = false end
+    if tempCache.timers.uiEnabler and tempCache.timers.uiEnabler:isValid() then tempCache.timers.uiEnabler:destroy(); tempCache.timers.uiEnabler = false end
 
     imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
-    prevTimers.phaseChanger = imports.setTimer(function()
+    tempCache.timers.phaseChanger = imports.setTimer(function()
         if phaseID == 1 then
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.cinemationPoint, true, true, loginUI.cinemationData.cinemationFOV, true, true, true, false)
         elseif phaseID == 2 then
@@ -678,12 +683,12 @@ setLoginUIPhase = function(phaseID)
             end
         end
         imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, false)
-        prevTimers.phaseChanger = false
+        tempCache.timers.phaseChanger = false
     end, loadingUI.animFadeInDuration + 250, 1)
 
-    prevTimers.uiEnabler = imports.setTimer(function()
+    tempCache.timers.uiEnabler = imports.setTimer(function()
         setLoginUIEnabled(true)
-        prevTimers.uiEnabler = false
+        tempCache.timers.uiEnabler = false
     end, loadingUI.animFadeOutDuration + loadingUI.animFadeDelayDuration - (loadingUI.animFadeInDuration + 250), 1)
     return true
 end
@@ -697,7 +702,7 @@ imports.addEventHandler("onClientSetLoginUIPhase", root, setLoginUIPhase)
 
 function setLoginUIEnabled(state, forcedState)
 
-    if prevTimers.uiEnabler and prevTimers.uiEnabler:isValid() then prevTimers.uiEnabler:destroy(); prevTimers.uiEnabler = false end
+    if tempCache.timers.uiEnabler and tempCache.timers.uiEnabler:isValid() then tempCache.timers.uiEnabler:destroy(); tempCache.timers.uiEnabler = false end
     
     if forcedState ~= nil then
         loginUI.isForcedDisabled = not forcedState
@@ -840,492 +845,496 @@ imports.addEventHandler("onClientKey", root, function(button, press)
 end)
 
 
-----------------------------------------
---[[ Function: Renders Login Screen ]]--
-----------------------------------------
+------------------------------
+--[[ Function: Renders UI ]]--
+------------------------------
 
-local function renderUI()
+local function renderUI(renderData)
 
     if not loginUI.state or CPlayer.isInitialized(localPlayer) then return false end
     local currentPhase = getLoginUIPhase()
     if not currentPhase then return false end
 
-    local isLMBClicked = isMouseClicked() == "mouse1"
-    imports.triggerEvent("Player:onSyncWeather", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].weather, FRAMEWORK_CONFIGS["UI"]["Login"].time)
-    local currentRatio = (CLIENT_MTA_RESOLUTION[1]/CLIENT_MTA_RESOLUTION[2])/(1366/768)
-    local background_width, background_height = CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2]*currentRatio
-    local background_offsetX, background_offsetY = 0, -(background_height - CLIENT_MTA_RESOLUTION[2])/2
-    if background_offsetY > 0 then
-        background_width, background_height = CLIENT_MTA_RESOLUTION[1]/currentRatio, CLIENT_MTA_RESOLUTION[2]
-        background_offsetX, background_offsetY = -(background_width - CLIENT_MTA_RESOLUTION[1])/2, 0
-    end
-
-    if currentPhase == 1 then
-        --Draws Options UI
-        imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[1].bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[1].bgColor)), false)
-        for i, j in imports.ipairs(loginUI.phases[1].optionsUI) do
-            local option_title = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]:gsub(".","  %0"):sub(2):upper()
-            local option_width, option_height = dxGetTextWidth(option_title, 1, loginUI.phases[1].optionsUI.font) + 5, loginUI.phases[1].optionsUI.height
-            local options_offsetX, options_offsetY = loginUI.phases[1].optionsUI.startX - (option_width*0.5), j.startY
-            local isOptionHovered = isMouseOnPosition(options_offsetX, options_offsetY, option_width, option_height)
-            if isOptionHovered then
-                if isLMBClicked then
-                    setLoginUIEnabled(false)
-                    imports.setTimer(function()
-                        j.execFunc()
-                    end, 1, 1)
-                end
-                if j.hoverStatus ~= "forward" then
-                    j.hoverStatus = "forward"
-                    j.hoverAnimTick = CLIENT_CURRENT_TICK
-                end
-            else
-                if j.hoverStatus ~= "backward" then
-                    j.hoverStatus = "backward"
-                    j.hoverAnimTick = CLIENT_CURRENT_TICK
-                end
-            end
-            if not j.animAlphaPercent then j.animAlphaPercent = 0 end
-            if j.hoverStatus == "forward" then
-                j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")
-            else
-                j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")
-            end
-
-            imports.dxDrawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(unpack(loginUI.phases[1].optionsUI.fontColor)), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
-            imports.dxDrawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(loginUI.phases[1].optionsUI.hoverfontColor[1], loginUI.phases[1].optionsUI.hoverfontColor[2], loginUI.phases[1].optionsUI.hoverfontColor[3], loginUI.phases[1].optionsUI.hoverfontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
-            imports.dxDrawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, loginUI.phases[1].optionsUI.embedLineSize, tocolor(unpack(loginUI.phases[1].optionsUI.embedLineColor)), false)
+    if renderData.renderType == "input" then
+        tempCache.keys.mouse = isMouseClicked()
+        imports.triggerEvent("Player:onSyncWeather", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].weather, FRAMEWORK_CONFIGS["UI"]["Login"].time)
+    elseif renderData.renderType == "render" then
+        local isLMBClicked = tempCache.keys.mouse == "mouse1"
+        local currentRatio = (CLIENT_MTA_RESOLUTION[1]/CLIENT_MTA_RESOLUTION[2])/(1366/768)
+        local background_width, background_height = CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2]*currentRatio
+        local background_offsetX, background_offsetY = 0, -(background_height - CLIENT_MTA_RESOLUTION[2])/2
+        if background_offsetY > 0 then
+            background_width, background_height = CLIENT_MTA_RESOLUTION[1]/currentRatio, CLIENT_MTA_RESOLUTION[2]
+            background_offsetX, background_offsetY = -(background_width - CLIENT_MTA_RESOLUTION[1])/2, 0
         end
-    elseif currentPhase == 2 then
-        --Draws Character UI
-        local customizer_offsetX, customizer_offsetY = loginUI.phases[2].customizerui.startX, loginUI.phases[2].customizerui.startY
-        imports.dxDrawRectangle(customizer_offsetX + loginUI.phases[2].customizerui.titleBar.height, customizer_offsetY, loginUI.phases[2].customizerui.width - (loginUI.phases[2].customizerui.titleBar.height*2), loginUI.phases[2].customizerui.titleBar.height, tocolor(unpack(loginUI.phases[2].customizerui.titleBar.bgColor)), false)
-        imports.dxDrawImage(customizer_offsetX, customizer_offsetY, loginUI.phases[2].customizerui.titleBar.height, loginUI.phases[2].customizerui.titleBar.height, loginUI.phases[2].customizerui.titleBar.leftCurvedEdgePath, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.titleBar.bgColor)), false)
-        imports.dxDrawImage(customizer_offsetX + loginUI.phases[2].customizerui.width - loginUI.phases[2].customizerui.titleBar.height, customizer_offsetY, loginUI.phases[2].customizerui.titleBar.height, loginUI.phases[2].customizerui.titleBar.height, loginUI.phases[2].customizerui.titleBar.rightCurvedEdgePath, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.titleBar.bgColor)), false)
-        dxDrawBorderedText(loginUI.phases[2].customizerui.titleBar.outlineWeight, loginUI.phases[2].customizerui.titleBar.fontColor, loginUI.phases[2].customizerui.titleBar.text, customizer_offsetX, customizer_offsetY, customizer_offsetX + loginUI.phases[2].customizerui.width, customizer_offsetY + loginUI.phases[2].customizerui.titleBar.height, tocolor(unpack(loginUI.phases[2].customizerui.titleBar.fontColor)), 1, loginUI.phases[2].customizerui.titleBar.font, "center", "center", true, false, false)
-        customizer_offsetY = customizer_offsetY + loginUI.phases[2].customizerui.titleBar.height
-        local isOptionEditBoxClicked = false
-        for i, j in imports.ipairs(loginUI.phases[2].customizerui.option) do
-            local option_offsetX, option_offsetY = customizer_offsetX, customizer_offsetY
-            local option_width, option_height = loginUI.phases[2].customizerui.width, loginUI.phases[2].customizerui.option.height
-            if not j.isEditBox then
-                local isLeftArrowHovered = isMouseOnPosition(option_offsetX + loginUI.phases[2].customizerui.option.paddingY, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY) and (#loginUI.characters <= 0 or loginUI.characters[loginUI._selectedCharacter].isUnverified)
-                local isRightArrowHovered = isMouseOnPosition(option_offsetX + option_width - option_height, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY) and (#loginUI.characters <= 0 or loginUI.characters[loginUI._selectedCharacter].isUnverified)
-                if not j.leftArrowAnimStatus then j.leftArrowAnimStatus = "backward" end
-                if not j.leftArrowAnimTickCounter then j.leftArrowAnimTickCounter = CLIENT_CURRENT_TICK end
-                if not j.rightArrowAnimStatus then j.rightArrowAnimStatus = "backward" end
-                if not j.rightArrowAnimTickCounter then j.rightArrowAnimTickCounter = CLIENT_CURRENT_TICK end
-                if isLeftArrowHovered then
-                    if j.leftArrowAnimStatus ~= "forward" then
-                        j.leftArrowAnimStatus = "forward"
-                        j.leftArrowAnimTickCounter = CLIENT_CURRENT_TICK
-                    end
+
+        if currentPhase == 1 then
+            --Draws Options UI
+            imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[1].bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[1].bgColor)), false)
+            for i, j in imports.ipairs(loginUI.phases[1].optionsUI) do
+                local option_title = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]:gsub(".","  %0"):sub(2):upper()
+                local option_width, option_height = dxGetTextWidth(option_title, 1, loginUI.phases[1].optionsUI.font) + 5, loginUI.phases[1].optionsUI.height
+                local options_offsetX, options_offsetY = loginUI.phases[1].optionsUI.startX - (option_width*0.5), j.startY
+                local isOptionHovered = isMouseOnPosition(options_offsetX, options_offsetY, option_width, option_height)
+                if isOptionHovered then
                     if isLMBClicked then
-                        if j.placeDataValue > 1 then
-                            j.placeDataValue = j.placeDataValue - 1
-                            updateLoginPreviewCharacter()
-                        end
+                        setLoginUIEnabled(false)
+                        imports.setTimer(function()
+                            j.execFunc()
+                        end, 1, 1)
+                    end
+                    if j.hoverStatus ~= "forward" then
+                        j.hoverStatus = "forward"
+                        j.hoverAnimTick = CLIENT_CURRENT_TICK
                     end
                 else
-                    if j.leftArrowAnimStatus ~= "backward" then
-                        j.leftArrowAnimStatus = "backward"
-                        j.leftArrowAnimTickCounter = CLIENT_CURRENT_TICK
+                    if j.hoverStatus ~= "backward" then
+                        j.hoverStatus = "backward"
+                        j.hoverAnimTick = CLIENT_CURRENT_TICK
                     end
                 end
-                if isRightArrowHovered then
-                    if j.rightArrowAnimStatus ~= "forward" then
-                        j.rightArrowAnimStatus = "forward"
-                        j.rightArrowAnimTickCounter = CLIENT_CURRENT_TICK
-                    end
-                    if isLMBClicked then
-                        if j.placeDataValue < #j.placeDataTable then
-                            j.placeDataValue = j.placeDataValue + 1
-                            updateLoginPreviewCharacter()
+                if not j.animAlphaPercent then j.animAlphaPercent = 0 end
+                if j.hoverStatus == "forward" then
+                    j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")
+                else
+                    j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")
+                end
+
+                imports.dxDrawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(unpack(loginUI.phases[1].optionsUI.fontColor)), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
+                imports.dxDrawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(loginUI.phases[1].optionsUI.hoverfontColor[1], loginUI.phases[1].optionsUI.hoverfontColor[2], loginUI.phases[1].optionsUI.hoverfontColor[3], loginUI.phases[1].optionsUI.hoverfontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
+                imports.dxDrawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, loginUI.phases[1].optionsUI.embedLineSize, tocolor(unpack(loginUI.phases[1].optionsUI.embedLineColor)), false)
+            end
+        elseif currentPhase == 2 then
+            --Draws Character UI
+            local customizer_offsetX, customizer_offsetY = loginUI.phases[2].customizerui.startX, loginUI.phases[2].customizerui.startY
+            imports.dxDrawRectangle(customizer_offsetX + loginUI.phases[2].customizerui.titleBar.height, customizer_offsetY, loginUI.phases[2].customizerui.width - (loginUI.phases[2].customizerui.titleBar.height*2), loginUI.phases[2].customizerui.titleBar.height, tocolor(unpack(loginUI.phases[2].customizerui.titleBar.bgColor)), false)
+            imports.dxDrawImage(customizer_offsetX, customizer_offsetY, loginUI.phases[2].customizerui.titleBar.height, loginUI.phases[2].customizerui.titleBar.height, loginUI.phases[2].customizerui.titleBar.leftCurvedEdgePath, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.titleBar.bgColor)), false)
+            imports.dxDrawImage(customizer_offsetX + loginUI.phases[2].customizerui.width - loginUI.phases[2].customizerui.titleBar.height, customizer_offsetY, loginUI.phases[2].customizerui.titleBar.height, loginUI.phases[2].customizerui.titleBar.height, loginUI.phases[2].customizerui.titleBar.rightCurvedEdgePath, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.titleBar.bgColor)), false)
+            dxDrawBorderedText(loginUI.phases[2].customizerui.titleBar.outlineWeight, loginUI.phases[2].customizerui.titleBar.fontColor, loginUI.phases[2].customizerui.titleBar.text, customizer_offsetX, customizer_offsetY, customizer_offsetX + loginUI.phases[2].customizerui.width, customizer_offsetY + loginUI.phases[2].customizerui.titleBar.height, tocolor(unpack(loginUI.phases[2].customizerui.titleBar.fontColor)), 1, loginUI.phases[2].customizerui.titleBar.font, "center", "center", true, false, false)
+            customizer_offsetY = customizer_offsetY + loginUI.phases[2].customizerui.titleBar.height
+            local isOptionEditBoxClicked = false
+            for i, j in imports.ipairs(loginUI.phases[2].customizerui.option) do
+                local option_offsetX, option_offsetY = customizer_offsetX, customizer_offsetY
+                local option_width, option_height = loginUI.phases[2].customizerui.width, loginUI.phases[2].customizerui.option.height
+                if not j.isEditBox then
+                    local isLeftArrowHovered = isMouseOnPosition(option_offsetX + loginUI.phases[2].customizerui.option.paddingY, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY) and (#loginUI.characters <= 0 or loginUI.characters[loginUI._selectedCharacter].isUnverified)
+                    local isRightArrowHovered = isMouseOnPosition(option_offsetX + option_width - option_height, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY) and (#loginUI.characters <= 0 or loginUI.characters[loginUI._selectedCharacter].isUnverified)
+                    if not j.leftArrowAnimStatus then j.leftArrowAnimStatus = "backward" end
+                    if not j.leftArrowAnimTickCounter then j.leftArrowAnimTickCounter = CLIENT_CURRENT_TICK end
+                    if not j.rightArrowAnimStatus then j.rightArrowAnimStatus = "backward" end
+                    if not j.rightArrowAnimTickCounter then j.rightArrowAnimTickCounter = CLIENT_CURRENT_TICK end
+                    if isLeftArrowHovered then
+                        if j.leftArrowAnimStatus ~= "forward" then
+                            j.leftArrowAnimStatus = "forward"
+                            j.leftArrowAnimTickCounter = CLIENT_CURRENT_TICK
+                        end
+                        if isLMBClicked then
+                            if j.placeDataValue > 1 then
+                                j.placeDataValue = j.placeDataValue - 1
+                                updateLoginPreviewCharacter()
+                            end
+                        end
+                    else
+                        if j.leftArrowAnimStatus ~= "backward" then
+                            j.leftArrowAnimStatus = "backward"
+                            j.leftArrowAnimTickCounter = CLIENT_CURRENT_TICK
                         end
                     end
+                    if isRightArrowHovered then
+                        if j.rightArrowAnimStatus ~= "forward" then
+                            j.rightArrowAnimStatus = "forward"
+                            j.rightArrowAnimTickCounter = CLIENT_CURRENT_TICK
+                        end
+                        if isLMBClicked then
+                            if j.placeDataValue < #j.placeDataTable then
+                                j.placeDataValue = j.placeDataValue + 1
+                                updateLoginPreviewCharacter()
+                            end
+                        end
+                    else
+                        if j.rightArrowAnimStatus ~= "backward" then
+                            j.rightArrowAnimStatus = "backward"
+                            j.rightArrowAnimTickCounter = CLIENT_CURRENT_TICK
+                        end
+                    end
+                    if not j.leftArrowAnimAlphaPercent then j.leftArrowAnimAlphaPercent = 0 end
+                    if not j.rightArrowAnimAlphaPercent then j.rightArrowAnimAlphaPercent = 0 end
+                    if j.leftArrowAnimStatus == "forward" then
+                        j.leftArrowAnimAlphaPercent = imports.interpolateBetween(j.leftArrowAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.leftArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
+                    elseif j.leftArrowAnimStatus == "backward" then
+                        j.leftArrowAnimAlphaPercent = imports.interpolateBetween(j.leftArrowAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.leftArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
+                    end
+                    if j.rightArrowAnimStatus == "forward" then
+                        j.rightArrowAnimAlphaPercent = imports.interpolateBetween(j.rightArrowAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.rightArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
+                    elseif j.rightArrowAnimStatus == "backward" then
+                        j.rightArrowAnimAlphaPercent = imports.interpolateBetween(j.rightArrowAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.rightArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
+                    end
                 else
-                    if j.rightArrowAnimStatus ~= "backward" then
-                        j.rightArrowAnimStatus = "backward"
-                        j.rightArrowAnimTickCounter = CLIENT_CURRENT_TICK
+                    local isEditboxHovered = isMouseOnPosition(option_offsetX, option_offsetY, option_width, option_height) and (#loginUI.characters <= 0 or loginUI.characters[loginUI._selectedCharacter].isUnverified)
+                    if not j.hoverAnimStatus then j.hoverAnimStatus = "backward" end
+                    if not j.hoverAnimTick then j.hoverAnimTick = CLIENT_CURRENT_TICK end
+                    if #loginUI.characters > 0 and not loginUI.characters[loginUI._selectedCharacter].isUnverified then loginUI.phases[2].customizerui.option.editbox.focussedEditbox = 0 end
+                    if isEditboxHovered then
+                        if isLMBClicked then
+                            if (loginUI.phases[2].customizerui.option.editbox.focussedEditbox ~= i) then
+                                loginUI.phases[2].customizerui.option.editbox.focussedEditbox = i
+                                loginUI.phases[2].customizerui.option.editbox.cursor.posNum = string.len(j.placeDataValue)
+                            end
+                            isOptionEditBoxClicked = true
+                        end
+                        if j.hoverAnimStatus ~= "forward" then
+                            j.hoverAnimStatus = "forward"
+                            j.hoverAnimTick = CLIENT_CURRENT_TICK
+                        end
+                    else
+                        if loginUI.phases[2].customizerui.option.editbox.focussedEditbox == i then
+                            if j.hoverAnimStatus ~= "forward" then
+                                j.hoverAnimStatus = "forward"
+                                j.hoverAnimTick = CLIENT_CURRENT_TICK
+                            end
+                        else
+                            if j.hoverAnimStatus ~= "backward" then
+                                j.hoverAnimStatus = "backward"
+                                j.hoverAnimTick = CLIENT_CURRENT_TICK
+                            end
+                        end
+                    end
+                    if not j.embedLineAlphaPercent then j.embedLineAlphaPercent = 0 end
+                    if j.hoverAnimStatus == "forward" then
+                        j.embedLineAlphaPercent = imports.interpolateBetween(j.embedLineAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.option.editbox.hoverAnimDuration), "Linear")
+                    elseif j.hoverAnimStatus == "backward" then
+                        j.embedLineAlphaPercent = imports.interpolateBetween(j.embedLineAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.option.editbox.hoverAnimDuration), "Linear")
                     end
                 end
-                if not j.leftArrowAnimAlphaPercent then j.leftArrowAnimAlphaPercent = 0 end
-                if not j.rightArrowAnimAlphaPercent then j.rightArrowAnimAlphaPercent = 0 end
-                if j.leftArrowAnimStatus == "forward" then
-                    j.leftArrowAnimAlphaPercent = imports.interpolateBetween(j.leftArrowAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.leftArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
-                elseif j.leftArrowAnimStatus == "backward" then
-                    j.leftArrowAnimAlphaPercent = imports.interpolateBetween(j.leftArrowAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.leftArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
+                imports.dxDrawRectangle(option_offsetX, option_offsetY, option_width, option_height, tocolor(unpack(loginUI.phases[2].customizerui.option.bgColor)), false)
+                customizer_offsetY = customizer_offsetY + option_height + loginUI.phases[2].customizerui.option.dividerSize
+                imports.dxDrawRectangle(option_offsetX, customizer_offsetY - loginUI.phases[2].customizerui.option.dividerSize, option_width, loginUI.phases[2].customizerui.option.dividerSize, tocolor(unpack(loginUI.phases[2].customizerui.option.dividerColor)), false)
+                if not j.isEditBox then
+                    local option_slotWidth, option_slotHeight = (option_width - (option_height*2) - (loginUI.phases[2].customizerui.option.paddingY*2))/2, option_height - loginUI.phases[2].customizerui.option.paddingY
+                    local option_slotOffsetY = option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2)
+                    local option_left_slotOffsetX = option_offsetX + option_height + (loginUI.phases[2].customizerui.option.paddingY/2)
+                    local option_right_slotOffsetX = option_left_slotOffsetX + option_slotWidth + (loginUI.phases[2].customizerui.option.paddingY)
+                    local option_fieldText = j.placeDataValue
+                    if j.placeDataValue and j.placeDataTable then option_fieldText = j.placeDataTable[j.placeDataValue] or option_fieldText end
+                    if j.placeDataTable[j.placeDataValue] and j.clothingCategoryIndex then option_fieldText = j.placeDataTable[j.placeDataValue].clothingName or j.placeDataValue end
+                    imports.dxDrawImage(option_offsetX + loginUI.phases[2].customizerui.option.paddingY, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowBGPath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowBGColor[1], loginUI.phases[2].customizerui.option.arrowBGColor[2], loginUI.phases[2].customizerui.option.arrowBGColor[3], loginUI.phases[2].customizerui.option.arrowBGColor[4]), false)
+                    imports.dxDrawImage(option_offsetX + loginUI.phases[2].customizerui.option.paddingY, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowBGPath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowHoveredBGColor[1], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[2], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[3], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[4]*j.leftArrowAnimAlphaPercent), false)
+                    imports.dxDrawImage(option_offsetX + option_width - option_height, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowBGPath, 180, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowBGColor[1], loginUI.phases[2].customizerui.option.arrowBGColor[2], loginUI.phases[2].customizerui.option.arrowBGColor[3], loginUI.phases[2].customizerui.option.arrowBGColor[4]), false)
+                    imports.dxDrawImage(option_offsetX + option_width - option_height, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowBGPath, 180, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowHoveredBGColor[1], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[2], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[3], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[4]*j.rightArrowAnimAlphaPercent), false)
+                    imports.dxDrawText(j.placeHolder..":", option_left_slotOffsetX, option_slotOffsetY, option_left_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataFontColor)), 1, loginUI.phases[2].customizerui.option.font, "right", "center", true, false, false)
+                    imports.dxDrawText(option_fieldText, option_right_slotOffsetX, option_slotOffsetY, option_right_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "left", "center", true, false, false)
+                else
+                    local option_slotWidth, option_slotHeight = option_width - (option_height*2) - (loginUI.phases[2].customizerui.option.paddingY*2) + loginUI.phases[2].customizerui.option.editbox.width, option_height - loginUI.phases[2].customizerui.option.paddingY + loginUI.phases[2].customizerui.option.editbox.height
+                    local option_slotOffsetX, option_slotOffsetY = option_offsetX + option_height + loginUI.phases[2].customizerui.option.paddingY + loginUI.phases[2].customizerui.option.editbox.startX, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2) + loginUI.phases[2].customizerui.option.editbox.startY
+                    local fieldText = j.placeDataValue
+                    local fieldLength = string.len(fieldText)
+                    if j.censored then
+                        local censored = ""
+                        for k=1, fieldLength, 1 do
+                            censored = censored.."*"
+                        end
+                        fieldText = censored
+                    end
+                    if (loginUI.phases[2].customizerui.option.editbox.focussedEditbox ~= i) then
+                        imports.dxDrawText((string.len(j.placeDataValue) <= 0 and j.placeHolder) or fieldText, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, (string.len(j.placeDataValue) <= 0 and tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataFontColor))) or tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "center", "center", true, false, false)
+                    else
+                        local horizontalShift = 0
+                        local fieldWidth = dxGetTextWidth(fieldText, 1, loginUI.phases[2].customizerui.option.font)
+                        local fieldX_offset = option_slotOffsetX + ((option_slotWidth + fieldWidth)/2) - fieldWidth
+                        if fieldWidth >= option_slotWidth then
+                            fieldX_offset = option_slotOffsetX + option_slotWidth - fieldWidth
+                        end
+                        local firstString = string.sub(fieldText, 1, loginUI.phases[2].customizerui.option.editbox.cursor.posNum)
+                        local secondString = string.sub(fieldText, loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1, fieldLength)
+                        local cursor_equivalentPadding = ""
+                        local cursorX_offset = fieldX_offset + dxGetTextWidth(firstString, 1, loginUI.phases[2].customizerui.option.font)
+                        local cursorX_startBounding = option_slotOffsetX
+                        local cursorX_endBounding = cursorX_startBounding + option_slotWidth
+                        while dxGetTextWidth(cursor_equivalentPadding, 1, loginUI.phases[2].customizerui.option.font) < loginUI.phases[2].customizerui.option.editbox.cursor.paddingX do
+                            cursor_equivalentPadding = cursor_equivalentPadding.." "
+                        end
+                        if cursorX_offset < cursorX_startBounding then cursorX_offset = cursorX_startBounding end
+                        if cursorX_offset > cursorX_endBounding then cursorX_offset = cursorX_endBounding end
+                        if fieldWidth >= option_slotWidth then
+                            if loginUI.phases[2].customizerui.option.editbox.cursor.posNum == fieldLength then
+                                imports.dxDrawText(firstString, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "right", "center", true, false, false)
+                                imports.dxDrawRectangle(cursorX_offset + (loginUI.phases[2].customizerui.option.editbox.cursor.paddingX/3), option_slotOffsetY + loginUI.phases[2].customizerui.option.editbox.cursor.paddingY, loginUI.phases[2].customizerui.option.editbox.cursor.width, option_slotHeight - (loginUI.phases[2].customizerui.option.editbox.cursor.paddingY*2), tocolor(unpack(loginUI.phases[2].customizerui.option.editbox.cursor.bgColor)), false)
+                            else
+                                local equivalentSpace = ""
+                                local secondStringLength = string.len(secondString)
+                                local secondStringWidth = dxGetTextWidth(secondString, 1, loginUI.phases[2].customizerui.option.font)
+                                local generatedText = firstString..cursor_equivalentPadding..secondString
+                                if secondStringWidth > option_slotWidth then
+                                    horizontalShift = secondStringWidth - option_slotWidth + (option_slotWidth/3)
+                                end
+                                if horizontalShift > 0 then
+                                    local extraCharacters = 1
+                                    while dxGetTextWidth(string.sub(secondString, 1, extraCharacters), 1, loginUI.phases[2].customizerui.option.font) <= horizontalShift do
+                                        extraCharacters = extraCharacters + 1
+                                    end
+                                    local _firstString = string.sub(secondString, 1, secondStringLength - extraCharacters)
+                                    local _secondString = string.sub(secondString, secondStringLength - extraCharacters + 1, secondStringLength)
+                                    while dxGetTextWidth(equivalentSpace, 1, loginUI.phases[2].customizerui.option.font) < dxGetTextWidth(_secondString, 1, loginUI.phases[2].customizerui.option.font) do
+                                        equivalentSpace = equivalentSpace.." "
+                                    end
+                                    generatedText = firstString..cursor_equivalentPadding.._firstString..equivalentSpace
+                                    fieldWidth = dxGetTextWidth(generatedText, 1, loginUI.phases[2].customizerui.option.font)
+                                    fieldX_offset = option_slotOffsetX + option_slotWidth - fieldWidth + dxGetTextWidth(equivalentSpace, 1, loginUI.phases[2].customizerui.option.font)
+                                    cursorX_offset = fieldX_offset + dxGetTextWidth(firstString, 1, loginUI.phases[2].customizerui.option.font) + loginUI.phases[2].customizerui.option.editbox.cursor.paddingX
+                                end
+                                imports.dxDrawText(generatedText, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "right", "center", true, false, false)
+                                imports.dxDrawRectangle(cursorX_offset - (loginUI.phases[2].customizerui.option.editbox.cursor.paddingX/2), option_slotOffsetY + loginUI.phases[2].customizerui.option.editbox.cursor.paddingY, loginUI.phases[2].customizerui.option.editbox.cursor.width, option_slotHeight - (loginUI.phases[2].customizerui.option.editbox.cursor.paddingY*2), tocolor(unpack(loginUI.phases[2].customizerui.option.editbox.cursor.bgColor)), false)
+                            end
+                        else
+                            if loginUI.phases[2].customizerui.option.editbox.cursor.posNum == fieldLength then
+                                imports.dxDrawText(firstString, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "center", "center", true, false, false)
+                                imports.dxDrawRectangle(cursorX_offset + (loginUI.phases[2].customizerui.option.editbox.cursor.paddingX/3), option_slotOffsetY + loginUI.phases[2].customizerui.option.editbox.cursor.paddingY, loginUI.phases[2].customizerui.option.editbox.cursor.width, option_slotHeight - (loginUI.phases[2].customizerui.option.editbox.cursor.paddingY*2), tocolor(unpack(loginUI.phases[2].customizerui.option.editbox.cursor.bgColor)), false)
+                            else
+                                imports.dxDrawText(firstString..cursor_equivalentPadding..secondString, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "center", "center", true, false, false)
+                                imports.dxDrawRectangle(cursorX_offset, option_slotOffsetY + loginUI.phases[2].customizerui.option.editbox.cursor.paddingY, loginUI.phases[2].customizerui.option.editbox.cursor.width, option_slotHeight - (loginUI.phases[2].customizerui.option.editbox.cursor.paddingY*2), tocolor(unpack(loginUI.phases[2].customizerui.option.editbox.cursor.bgColor)), false)
+                            end
+                        end
+                        if isOptionEditBoxClicked then
+                            local clickedX = getAbsoluteCursorPosition()
+                            local _inputCursorX = 0
+                            for i=1, fieldLength, 1 do
+                                local _fieldX = fieldX_offset + dxGetTextWidth(string.sub(fieldText, 1, i), 1, loginUI.phases[2].customizerui.option.font) - (loginUI.phases[2].customizerui.option.editbox.cursor.width*2)
+                                if horizontalShift > 0 then
+                                    _fieldX = fieldX_offset + dxGetTextWidth(string.sub(fieldText, 1, i), 1, loginUI.phases[2].customizerui.option.font) + loginUI.phases[2].customizerui.option.editbox.cursor.width
+                                end
+                                if clickedX >= _fieldX then
+                                    _inputCursorX = i
+                                else
+                                    break
+                                end
+                            end
+                            loginUI.phases[2].customizerui.option.editbox.cursor.posNum = _inputCursorX
+                        end
+                        if not GuiElement.isMTAWindowActive() and loginUI.isEnabled and not loginUI.isForcedDisabled then
+                            local currentPressedKey = false
+                            if getKeyState("backspace") then
+                                currentPressedKey = "backspace"
+                            elseif getKeyState("delete") then
+                                currentPressedKey = "delete"
+                            else
+                                if _currentPressedKey and j.inputSettings then
+                                    if j.inputSettings.validKeys then
+                                        if getKeyState("lshift") or getKeyState("rshift") then
+                                            local customKey, isKeyValid = _currentPressedKey, false
+                                            if j.inputSettings.shiftAllowed then
+                                                for k, v in imports.ipairs(j.inputSettings.validKeys) do
+                                                    if v == customKey then
+                                                        isKeyValid = true
+                                                        break
+                                                    end
+                                                end
+                                                if isKeyValid then currentPressedKey = customKey end
+                                            else
+                                                customKey = false
+                                                for k, v in imports.ipairs(j.inputSettings.validKeys) do
+                                                    if getKeyState(v) then
+                                                        customKey = v:gsub("num_", "")
+                                                        customKey = customKey:gsub("space", "")
+                                                        break
+                                                    end
+                                                end
+                                            end
+                                            if not isKeyValid and customKey and j.inputSettings.capsAllowed then
+                                                for k, v in imports.ipairs(j.inputSettings.validKeys) do
+                                                    if v == customKey then
+                                                        isKeyValid = true
+                                                        break
+                                                    end
+                                                end
+                                                if isKeyValid then currentPressedKey = string.upper(customKey) end
+                                            end
+                                        else
+                                            for k, v in imports.ipairs(j.inputSettings.validKeys) do
+                                                if getKeyState(v) then
+                                                    currentPressedKey = v:gsub("num_", "")
+                                                    break
+                                                end
+                                            end
+                                        end
+                                        if currentPressedKey and (string.lower(_currentPressedKey) == string.lower(currentPressedKey)) then
+                                            if j.inputSettings.capsAllowed then
+                                                if string.upper(currentPressedKey) == _currentPressedKey then
+                                                    currentPressedKey = _currentPressedKey
+                                                end
+                                            end
+                                        else
+                                            currentPressedKey = false
+                                        end
+                                    end
+                                end
+                            end
+                            if not currentPressedKey then
+                                prevInputKey = false
+                                prevInputKeyStreak = 0
+                            else
+                                local isOnDelay = false
+                                if prevInputKey and prevInputKey == currentPressedKey then
+                                    if prevInputKeyStreak < 1 and (loginUI.phases[2].customizerui.option.editbox.inputDelayDuration - CLIENT_CURRENT_TICK + inputTickCounter) >= 0 then
+                                        isOnDelay = true
+                                    else
+                                        prevInputKeyStreak = prevInputKeyStreak + 1
+                                    end
+                                else
+                                    prevInputKeyStreak = 0
+                                end
+                                if not isOnDelay then
+                                    local _firstString = string.sub(j.placeDataValue, 1, loginUI.phases[2].customizerui.option.editbox.cursor.posNum)
+                                    local _secondString = string.sub(j.placeDataValue, loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1, string.len(j.placeDataValue))
+                                    if currentPressedKey == "backspace" then
+                                        j.placeDataValue = string.sub(_firstString, 1, string.len(_firstString) - 1).._secondString
+                                        loginUI.phases[2].customizerui.option.editbox.cursor.posNum = loginUI.phases[2].customizerui.option.editbox.cursor.posNum - 1
+                                        if loginUI.phases[2].customizerui.option.editbox.cursor.posNum < 0 then loginUI.phases[2].customizerui.option.editbox.cursor.posNum = 0 end
+                                    elseif currentPressedKey == "delete" then
+                                        j.placeDataValue = _firstString..string.sub(_secondString, 2, string.len(_secondString))
+                                    else
+                                        if j.inputSettings and j.inputSettings.rangeLimit and (string.len(j.placeDataValue) < j.inputSettings.rangeLimit[2]) then
+                                            j.placeDataValue = _firstString..currentPressedKey:gsub("space", " ").._secondString
+                                            loginUI.phases[2].customizerui.option.editbox.cursor.posNum = loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1
+                                            local _fieldLength = string.len(j.placeDataValue)
+                                            if loginUI.phases[2].customizerui.option.editbox.cursor.posNum > _fieldLength then loginUI.phases[2].customizerui.option.editbox.cursor.posNum = _fieldLength end
+                                        end
+                                    end
+                                    inputTickCounter = CLIENT_CURRENT_TICK
+                                    prevInputKey = currentPressedKey
+                                end
+                            end
+                        end
+                    end
+                    imports.dxDrawRectangle(option_slotOffsetX - loginUI.phases[2].customizerui.option.editbox.embedLineSize, option_slotOffsetY + option_slotHeight + (loginUI.phases[2].customizerui.option.paddingY/2), option_slotWidth + (loginUI.phases[2].customizerui.option.editbox.embedLineSize*2), loginUI.phases[2].customizerui.option.editbox.embedLineSize, tocolor(unpack(loginUI.phases[2].customizerui.option.editbox.embedLineColor)), false)
+                    imports.dxDrawRectangle(option_slotOffsetX - loginUI.phases[2].customizerui.option.editbox.embedLineSize, option_slotOffsetY + option_slotHeight + (loginUI.phases[2].customizerui.option.paddingY/2), option_slotWidth + (loginUI.phases[2].customizerui.option.editbox.embedLineSize*2), loginUI.phases[2].customizerui.option.editbox.embedLineSize, tocolor(loginUI.phases[2].customizerui.option.editbox.focussedEmbedLineColor[1], loginUI.phases[2].customizerui.option.editbox.focussedEmbedLineColor[2], loginUI.phases[2].customizerui.option.editbox.focussedEmbedLineColor[3], loginUI.phases[2].customizerui.option.editbox.focussedEmbedLineColor[4]*j.embedLineAlphaPercent), false)
                 end
-                if j.rightArrowAnimStatus == "forward" then
-                    j.rightArrowAnimAlphaPercent = imports.interpolateBetween(j.rightArrowAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.rightArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
-                elseif j.rightArrowAnimStatus == "backward" then
-                    j.rightArrowAnimAlphaPercent = imports.interpolateBetween(j.rightArrowAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.rightArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
-                end
-            else
-                local isEditboxHovered = isMouseOnPosition(option_offsetX, option_offsetY, option_width, option_height) and (#loginUI.characters <= 0 or loginUI.characters[loginUI._selectedCharacter].isUnverified)
+            end
+            if isLMBClicked and (not isOptionEditBoxClicked) then loginUI.phases[2].customizerui.option.editbox.focussedEditbox = 0; loginUI.phases[2].customizerui.option.editbox.cursor.posNum = 0; end
+            imports.dxDrawRectangle(customizer_offsetX, loginUI.phases[2].customizerui.startY + loginUI.phases[2].customizerui.titleBar.height, loginUI.phases[2].customizerui.width, loginUI.phases[2].customizerui.titleBar.dividerSize, tocolor(unpack(loginUI.phases[2].customizerui.titleBar.dividerColor)), false)
+            local switcher_offsetX, switcher_offsetY = customizer_offsetX + loginUI.phases[2].customizerui.switcher.startX, loginUI.phases[2].customizerui.startY + loginUI.phases[2].customizerui.switcher.startY
+            local switcher_width, switcher_height = loginUI.phases[2].customizerui.switcher.width, loginUI.phases[2].customizerui.switcher.height
+            for i, j in imports.ipairs(loginUI.phases[2].customizerui.switcher) do
+                local isSwitcherHovered = isMouseOnPosition(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height)
                 if not j.hoverAnimStatus then j.hoverAnimStatus = "backward" end
                 if not j.hoverAnimTick then j.hoverAnimTick = CLIENT_CURRENT_TICK end
-                if #loginUI.characters > 0 and not loginUI.characters[loginUI._selectedCharacter].isUnverified then loginUI.phases[2].customizerui.option.editbox.focussedEditbox = 0 end
-                if isEditboxHovered then
+                if isSwitcherHovered then
                     if isLMBClicked then
-                        if (loginUI.phases[2].customizerui.option.editbox.focussedEditbox ~= i) then
-                            loginUI.phases[2].customizerui.option.editbox.focussedEditbox = i
-                            loginUI.phases[2].customizerui.option.editbox.cursor.posNum = string.len(j.placeDataValue)
-                        end
-                        isOptionEditBoxClicked = true
+                        setLoginUIEnabled(false)
+                        imports.setTimer(function()
+                            j.execFunc()
+                        end, 1, 1)
                     end
                     if j.hoverAnimStatus ~= "forward" then
                         j.hoverAnimStatus = "forward"
                         j.hoverAnimTick = CLIENT_CURRENT_TICK
                     end
                 else
-                    if loginUI.phases[2].customizerui.option.editbox.focussedEditbox == i then
-                        if j.hoverAnimStatus ~= "forward" then
-                            j.hoverAnimStatus = "forward"
-                            j.hoverAnimTick = CLIENT_CURRENT_TICK
-                        end
-                    else
-                        if j.hoverAnimStatus ~= "backward" then
-                            j.hoverAnimStatus = "backward"
-                            j.hoverAnimTick = CLIENT_CURRENT_TICK
-                        end
+                    if j.hoverAnimStatus ~= "backward" then
+                        j.hoverAnimStatus = "backward"
+                        j.hoverAnimTick = CLIENT_CURRENT_TICK
                     end
                 end
-                if not j.embedLineAlphaPercent then j.embedLineAlphaPercent = 0 end
+                if not j.hoverAnimAlphaPercent then j.hoverAnimAlphaPercent = 0 end
                 if j.hoverAnimStatus == "forward" then
-                    j.embedLineAlphaPercent = imports.interpolateBetween(j.embedLineAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.option.editbox.hoverAnimDuration), "Linear")
+                    j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.switcher.hoverAnimDuration), "Linear")
                 elseif j.hoverAnimStatus == "backward" then
-                    j.embedLineAlphaPercent = imports.interpolateBetween(j.embedLineAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.option.editbox.hoverAnimDuration), "Linear")
+                    j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.switcher.hoverAnimDuration), "Linear")
                 end
+                imports.dxDrawImage(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height, loginUI.phases[2].customizerui.switcher.bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.switcher.bgColor)), false)
+                imports.dxDrawImage(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height, loginUI.phases[2].customizerui.switcher.bgPath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.switcher.hoverBGColor[1], loginUI.phases[2].customizerui.switcher.hoverBGColor[2], loginUI.phases[2].customizerui.switcher.hoverBGColor[3], loginUI.phases[2].customizerui.switcher.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
+                dxDrawBorderedText(loginUI.phases[2].customizerui.switcher.outlineWeight, loginUI.phases[2].customizerui.switcher.fontColor, j.title, switcher_offsetX, switcher_offsetY, switcher_offsetX + switcher_width, switcher_offsetY + switcher_height, tocolor(unpack(loginUI.phases[2].customizerui.switcher.fontColor)), 1, loginUI.phases[2].customizerui.switcher.font, "center", "center", true, false, false)
+                dxDrawBorderedText(loginUI.phases[2].customizerui.switcher.outlineWeight, {loginUI.phases[2].customizerui.switcher.hoverfontColor[1], loginUI.phases[2].customizerui.switcher.hoverfontColor[2], loginUI.phases[2].customizerui.switcher.hoverfontColor[3], loginUI.phases[2].customizerui.switcher.hoverfontColor[4]*j.hoverAnimAlphaPercent}, j.title, switcher_offsetX, switcher_offsetY, switcher_offsetX + switcher_width, switcher_offsetY + switcher_height, tocolor(loginUI.phases[2].customizerui.switcher.hoverfontColor[1], loginUI.phases[2].customizerui.switcher.hoverfontColor[2], loginUI.phases[2].customizerui.switcher.hoverfontColor[3], loginUI.phases[2].customizerui.switcher.hoverfontColor[4]*j.hoverAnimAlphaPercent), 1, loginUI.phases[2].customizerui.switcher.font, "center", "center", true, false, false)
+                switcher_offsetX = switcher_offsetX + switcher_width + loginUI.phases[2].customizerui.switcher.paddingX
             end
-            imports.dxDrawRectangle(option_offsetX, option_offsetY, option_width, option_height, tocolor(unpack(loginUI.phases[2].customizerui.option.bgColor)), false)
-            customizer_offsetY = customizer_offsetY + option_height + loginUI.phases[2].customizerui.option.dividerSize
-            imports.dxDrawRectangle(option_offsetX, customizer_offsetY - loginUI.phases[2].customizerui.option.dividerSize, option_width, loginUI.phases[2].customizerui.option.dividerSize, tocolor(unpack(loginUI.phases[2].customizerui.option.dividerColor)), false)
-            if not j.isEditBox then
-                local option_slotWidth, option_slotHeight = (option_width - (option_height*2) - (loginUI.phases[2].customizerui.option.paddingY*2))/2, option_height - loginUI.phases[2].customizerui.option.paddingY
-                local option_slotOffsetY = option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2)
-                local option_left_slotOffsetX = option_offsetX + option_height + (loginUI.phases[2].customizerui.option.paddingY/2)
-                local option_right_slotOffsetX = option_left_slotOffsetX + option_slotWidth + (loginUI.phases[2].customizerui.option.paddingY)
-                local option_fieldText = j.placeDataValue
-                if j.placeDataValue and j.placeDataTable then option_fieldText = j.placeDataTable[j.placeDataValue] or option_fieldText end
-                if j.placeDataTable[j.placeDataValue] and j.clothingCategoryIndex then option_fieldText = j.placeDataTable[j.placeDataValue].clothingName or j.placeDataValue end
-                imports.dxDrawImage(option_offsetX + loginUI.phases[2].customizerui.option.paddingY, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowBGPath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowBGColor[1], loginUI.phases[2].customizerui.option.arrowBGColor[2], loginUI.phases[2].customizerui.option.arrowBGColor[3], loginUI.phases[2].customizerui.option.arrowBGColor[4]), false)
-                imports.dxDrawImage(option_offsetX + loginUI.phases[2].customizerui.option.paddingY, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowBGPath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowHoveredBGColor[1], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[2], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[3], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[4]*j.leftArrowAnimAlphaPercent), false)
-                imports.dxDrawImage(option_offsetX + option_width - option_height, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowBGPath, 180, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowBGColor[1], loginUI.phases[2].customizerui.option.arrowBGColor[2], loginUI.phases[2].customizerui.option.arrowBGColor[3], loginUI.phases[2].customizerui.option.arrowBGColor[4]), false)
-                imports.dxDrawImage(option_offsetX + option_width - option_height, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowBGPath, 180, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowHoveredBGColor[1], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[2], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[3], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[4]*j.rightArrowAnimAlphaPercent), false)
-                imports.dxDrawText(j.placeHolder..":", option_left_slotOffsetX, option_slotOffsetY, option_left_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataFontColor)), 1, loginUI.phases[2].customizerui.option.font, "right", "center", true, false, false)
-                imports.dxDrawText(option_fieldText, option_right_slotOffsetX, option_slotOffsetY, option_right_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "left", "center", true, false, false)
-            else
-                local option_slotWidth, option_slotHeight = option_width - (option_height*2) - (loginUI.phases[2].customizerui.option.paddingY*2) + loginUI.phases[2].customizerui.option.editbox.width, option_height - loginUI.phases[2].customizerui.option.paddingY + loginUI.phases[2].customizerui.option.editbox.height
-                local option_slotOffsetX, option_slotOffsetY = option_offsetX + option_height + loginUI.phases[2].customizerui.option.paddingY + loginUI.phases[2].customizerui.option.editbox.startX, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2) + loginUI.phases[2].customizerui.option.editbox.startY
-                local fieldText = j.placeDataValue
-                local fieldLength = string.len(fieldText)
-                if j.censored then
-                    local censored = ""
-                    for k=1, fieldLength, 1 do
-                        censored = censored.."*"
+            local button_offsetX, button_offsetY = customizer_offsetX + loginUI.phases[2].customizerui.button.startX, customizer_offsetY + loginUI.phases[2].customizerui.button.startY
+            local button_width, button_height = loginUI.phases[2].customizerui.button.width, loginUI.phases[2].customizerui.button.height
+            for i, j in imports.ipairs(loginUI.phases[2].customizerui.button) do
+                local isButtonHovered = isMouseOnPosition(button_offsetX, button_offsetY, button_width, button_height)
+                if not j.hoverAnimStatus then j.hoverAnimStatus = "backward" end
+                if not j.hoverAnimTick then j.hoverAnimTick = CLIENT_CURRENT_TICK end
+                if isButtonHovered then
+                    if isLMBClicked then
+                        setLoginUIEnabled(false)
+                        imports.setTimer(function()
+                            j.execFunc()
+                        end, 1, 1)
                     end
-                    fieldText = censored
-                end
-                if (loginUI.phases[2].customizerui.option.editbox.focussedEditbox ~= i) then
-                    imports.dxDrawText((string.len(j.placeDataValue) <= 0 and j.placeHolder) or fieldText, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, (string.len(j.placeDataValue) <= 0 and tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataFontColor))) or tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "center", "center", true, false, false)
+                    if j.hoverAnimStatus ~= "forward" then
+                        j.hoverAnimStatus = "forward"
+                        j.hoverAnimTick = CLIENT_CURRENT_TICK
+                    end
                 else
-                    local horizontalShift = 0
-                    local fieldWidth = dxGetTextWidth(fieldText, 1, loginUI.phases[2].customizerui.option.font)
-                    local fieldX_offset = option_slotOffsetX + ((option_slotWidth + fieldWidth)/2) - fieldWidth
-                    if fieldWidth >= option_slotWidth then
-                        fieldX_offset = option_slotOffsetX + option_slotWidth - fieldWidth
-                    end
-                    local firstString = string.sub(fieldText, 1, loginUI.phases[2].customizerui.option.editbox.cursor.posNum)
-                    local secondString = string.sub(fieldText, loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1, fieldLength)
-                    local cursor_equivalentPadding = ""
-                    local cursorX_offset = fieldX_offset + dxGetTextWidth(firstString, 1, loginUI.phases[2].customizerui.option.font)
-                    local cursorX_startBounding = option_slotOffsetX
-                    local cursorX_endBounding = cursorX_startBounding + option_slotWidth
-                    while dxGetTextWidth(cursor_equivalentPadding, 1, loginUI.phases[2].customizerui.option.font) < loginUI.phases[2].customizerui.option.editbox.cursor.paddingX do
-                        cursor_equivalentPadding = cursor_equivalentPadding.." "
-                    end
-                    if cursorX_offset < cursorX_startBounding then cursorX_offset = cursorX_startBounding end
-                    if cursorX_offset > cursorX_endBounding then cursorX_offset = cursorX_endBounding end
-                    if fieldWidth >= option_slotWidth then
-                        if loginUI.phases[2].customizerui.option.editbox.cursor.posNum == fieldLength then
-                            imports.dxDrawText(firstString, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "right", "center", true, false, false)
-                            imports.dxDrawRectangle(cursorX_offset + (loginUI.phases[2].customizerui.option.editbox.cursor.paddingX/3), option_slotOffsetY + loginUI.phases[2].customizerui.option.editbox.cursor.paddingY, loginUI.phases[2].customizerui.option.editbox.cursor.width, option_slotHeight - (loginUI.phases[2].customizerui.option.editbox.cursor.paddingY*2), tocolor(unpack(loginUI.phases[2].customizerui.option.editbox.cursor.bgColor)), false)
-                        else
-                            local equivalentSpace = ""
-                            local secondStringLength = string.len(secondString)
-                            local secondStringWidth = dxGetTextWidth(secondString, 1, loginUI.phases[2].customizerui.option.font)
-                            local generatedText = firstString..cursor_equivalentPadding..secondString
-                            if secondStringWidth > option_slotWidth then
-                                horizontalShift = secondStringWidth - option_slotWidth + (option_slotWidth/3)
-                            end
-                            if horizontalShift > 0 then
-                                local extraCharacters = 1
-                                while dxGetTextWidth(string.sub(secondString, 1, extraCharacters), 1, loginUI.phases[2].customizerui.option.font) <= horizontalShift do
-                                    extraCharacters = extraCharacters + 1
-                                end
-                                local _firstString = string.sub(secondString, 1, secondStringLength - extraCharacters)
-                                local _secondString = string.sub(secondString, secondStringLength - extraCharacters + 1, secondStringLength)
-                                while dxGetTextWidth(equivalentSpace, 1, loginUI.phases[2].customizerui.option.font) < dxGetTextWidth(_secondString, 1, loginUI.phases[2].customizerui.option.font) do
-                                    equivalentSpace = equivalentSpace.." "
-                                end
-                                generatedText = firstString..cursor_equivalentPadding.._firstString..equivalentSpace
-                                fieldWidth = dxGetTextWidth(generatedText, 1, loginUI.phases[2].customizerui.option.font)
-                                fieldX_offset = option_slotOffsetX + option_slotWidth - fieldWidth + dxGetTextWidth(equivalentSpace, 1, loginUI.phases[2].customizerui.option.font)
-                                cursorX_offset = fieldX_offset + dxGetTextWidth(firstString, 1, loginUI.phases[2].customizerui.option.font) + loginUI.phases[2].customizerui.option.editbox.cursor.paddingX
-                            end
-                            imports.dxDrawText(generatedText, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "right", "center", true, false, false)
-                            imports.dxDrawRectangle(cursorX_offset - (loginUI.phases[2].customizerui.option.editbox.cursor.paddingX/2), option_slotOffsetY + loginUI.phases[2].customizerui.option.editbox.cursor.paddingY, loginUI.phases[2].customizerui.option.editbox.cursor.width, option_slotHeight - (loginUI.phases[2].customizerui.option.editbox.cursor.paddingY*2), tocolor(unpack(loginUI.phases[2].customizerui.option.editbox.cursor.bgColor)), false)
-                        end
-                    else
-                        if loginUI.phases[2].customizerui.option.editbox.cursor.posNum == fieldLength then
-                            imports.dxDrawText(firstString, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "center", "center", true, false, false)
-                            imports.dxDrawRectangle(cursorX_offset + (loginUI.phases[2].customizerui.option.editbox.cursor.paddingX/3), option_slotOffsetY + loginUI.phases[2].customizerui.option.editbox.cursor.paddingY, loginUI.phases[2].customizerui.option.editbox.cursor.width, option_slotHeight - (loginUI.phases[2].customizerui.option.editbox.cursor.paddingY*2), tocolor(unpack(loginUI.phases[2].customizerui.option.editbox.cursor.bgColor)), false)
-                        else
-                            imports.dxDrawText(firstString..cursor_equivalentPadding..secondString, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "center", "center", true, false, false)
-                            imports.dxDrawRectangle(cursorX_offset, option_slotOffsetY + loginUI.phases[2].customizerui.option.editbox.cursor.paddingY, loginUI.phases[2].customizerui.option.editbox.cursor.width, option_slotHeight - (loginUI.phases[2].customizerui.option.editbox.cursor.paddingY*2), tocolor(unpack(loginUI.phases[2].customizerui.option.editbox.cursor.bgColor)), false)
-                        end
-                    end
-                    if isOptionEditBoxClicked then
-                        local clickedX = getAbsoluteCursorPosition()
-                        local _inputCursorX = 0
-                        for i=1, fieldLength, 1 do
-                            local _fieldX = fieldX_offset + dxGetTextWidth(string.sub(fieldText, 1, i), 1, loginUI.phases[2].customizerui.option.font) - (loginUI.phases[2].customizerui.option.editbox.cursor.width*2)
-                            if horizontalShift > 0 then
-                                _fieldX = fieldX_offset + dxGetTextWidth(string.sub(fieldText, 1, i), 1, loginUI.phases[2].customizerui.option.font) + loginUI.phases[2].customizerui.option.editbox.cursor.width
-                            end
-                            if clickedX >= _fieldX then
-                                _inputCursorX = i
-                            else
-                                break
-                            end
-                        end
-                        loginUI.phases[2].customizerui.option.editbox.cursor.posNum = _inputCursorX
-                    end
-                    if not GuiElement.isMTAWindowActive() and loginUI.isEnabled and not loginUI.isForcedDisabled then
-                        local currentPressedKey = false
-                        if getKeyState("backspace") then
-                            currentPressedKey = "backspace"
-                        elseif getKeyState("delete") then
-                            currentPressedKey = "delete"
-                        else
-                            if _currentPressedKey and j.inputSettings then
-                                if j.inputSettings.validKeys then
-                                    if getKeyState("lshift") or getKeyState("rshift") then
-                                        local customKey, isKeyValid = _currentPressedKey, false
-                                        if j.inputSettings.shiftAllowed then
-                                            for k, v in imports.ipairs(j.inputSettings.validKeys) do
-                                                if v == customKey then
-                                                    isKeyValid = true
-                                                    break
-                                                end
-                                            end
-                                            if isKeyValid then currentPressedKey = customKey end
-                                        else
-                                            customKey = false
-                                            for k, v in imports.ipairs(j.inputSettings.validKeys) do
-                                                if getKeyState(v) then
-                                                    customKey = v:gsub("num_", "")
-                                                    customKey = customKey:gsub("space", "")
-                                                    break
-                                                end
-                                            end
-                                        end
-                                        if not isKeyValid and customKey and j.inputSettings.capsAllowed then
-                                            for k, v in imports.ipairs(j.inputSettings.validKeys) do
-                                                if v == customKey then
-                                                    isKeyValid = true
-                                                    break
-                                                end
-                                            end
-                                            if isKeyValid then currentPressedKey = string.upper(customKey) end
-                                        end
-                                    else
-                                        for k, v in imports.ipairs(j.inputSettings.validKeys) do
-                                            if getKeyState(v) then
-                                                currentPressedKey = v:gsub("num_", "")
-                                                break
-                                            end
-                                        end
-                                    end
-                                    if currentPressedKey and (string.lower(_currentPressedKey) == string.lower(currentPressedKey)) then
-                                        if j.inputSettings.capsAllowed then
-                                            if string.upper(currentPressedKey) == _currentPressedKey then
-                                                currentPressedKey = _currentPressedKey
-                                            end
-                                        end
-                                    else
-                                        currentPressedKey = false
-                                    end
-                                end
-                            end
-                        end
-                        if not currentPressedKey then
-                            prevInputKey = false
-                            prevInputKeyStreak = 0
-                        else
-                            local isOnDelay = false
-                            if prevInputKey and prevInputKey == currentPressedKey then
-                                if prevInputKeyStreak < 1 and (loginUI.phases[2].customizerui.option.editbox.inputDelayDuration - CLIENT_CURRENT_TICK + inputTickCounter) >= 0 then
-                                    isOnDelay = true
-                                else
-                                    prevInputKeyStreak = prevInputKeyStreak + 1
-                                end
-                            else
-                                prevInputKeyStreak = 0
-                            end
-                            if not isOnDelay then
-                                local _firstString = string.sub(j.placeDataValue, 1, loginUI.phases[2].customizerui.option.editbox.cursor.posNum)
-                                local _secondString = string.sub(j.placeDataValue, loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1, string.len(j.placeDataValue))
-                                if currentPressedKey == "backspace" then
-                                    j.placeDataValue = string.sub(_firstString, 1, string.len(_firstString) - 1).._secondString
-                                    loginUI.phases[2].customizerui.option.editbox.cursor.posNum = loginUI.phases[2].customizerui.option.editbox.cursor.posNum - 1
-                                    if loginUI.phases[2].customizerui.option.editbox.cursor.posNum < 0 then loginUI.phases[2].customizerui.option.editbox.cursor.posNum = 0 end
-                                elseif currentPressedKey == "delete" then
-                                    j.placeDataValue = _firstString..string.sub(_secondString, 2, string.len(_secondString))
-                                else
-                                    if j.inputSettings and j.inputSettings.rangeLimit and (string.len(j.placeDataValue) < j.inputSettings.rangeLimit[2]) then
-                                        j.placeDataValue = _firstString..currentPressedKey:gsub("space", " ").._secondString
-                                        loginUI.phases[2].customizerui.option.editbox.cursor.posNum = loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1
-                                        local _fieldLength = string.len(j.placeDataValue)
-                                        if loginUI.phases[2].customizerui.option.editbox.cursor.posNum > _fieldLength then loginUI.phases[2].customizerui.option.editbox.cursor.posNum = _fieldLength end
-                                    end
-                                end
-                                inputTickCounter = CLIENT_CURRENT_TICK
-                                prevInputKey = currentPressedKey
-                            end
-                        end
+                    if j.hoverAnimStatus ~= "backward" then
+                        j.hoverAnimStatus = "backward"
+                        j.hoverAnimTick = CLIENT_CURRENT_TICK
                     end
                 end
-                imports.dxDrawRectangle(option_slotOffsetX - loginUI.phases[2].customizerui.option.editbox.embedLineSize, option_slotOffsetY + option_slotHeight + (loginUI.phases[2].customizerui.option.paddingY/2), option_slotWidth + (loginUI.phases[2].customizerui.option.editbox.embedLineSize*2), loginUI.phases[2].customizerui.option.editbox.embedLineSize, tocolor(unpack(loginUI.phases[2].customizerui.option.editbox.embedLineColor)), false)
-                imports.dxDrawRectangle(option_slotOffsetX - loginUI.phases[2].customizerui.option.editbox.embedLineSize, option_slotOffsetY + option_slotHeight + (loginUI.phases[2].customizerui.option.paddingY/2), option_slotWidth + (loginUI.phases[2].customizerui.option.editbox.embedLineSize*2), loginUI.phases[2].customizerui.option.editbox.embedLineSize, tocolor(loginUI.phases[2].customizerui.option.editbox.focussedEmbedLineColor[1], loginUI.phases[2].customizerui.option.editbox.focussedEmbedLineColor[2], loginUI.phases[2].customizerui.option.editbox.focussedEmbedLineColor[3], loginUI.phases[2].customizerui.option.editbox.focussedEmbedLineColor[4]*j.embedLineAlphaPercent), false)
+                if not j.hoverAnimAlphaPercent then j.hoverAnimAlphaPercent = 0 end
+                if j.hoverAnimStatus == "forward" then
+                    j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.button.hoverAnimDuration), "Linear")
+                elseif j.hoverAnimStatus == "backward" then
+                    j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.button.hoverAnimDuration), "Linear")
+                end
+                imports.dxDrawRectangle(button_offsetX + button_height, button_offsetY, button_width - (button_height*2), button_height, tocolor(unpack(loginUI.phases[2].customizerui.button.bgColor)), false)
+                imports.dxDrawImage(button_offsetX, button_offsetY, button_height, button_height, loginUI.phases[2].customizerui.button.leftCurvedEdgePath, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.button.bgColor)), false)
+                imports.dxDrawImage(button_offsetX + button_width - button_height, button_offsetY, button_height, button_height, loginUI.phases[2].customizerui.button.rightCurvedEdgePath, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.button.bgColor)), false)
+                imports.dxDrawRectangle(button_offsetX + button_height, button_offsetY, button_width - (button_height*2), button_height, tocolor(loginUI.phases[2].customizerui.button.hoverBGColor[1], loginUI.phases[2].customizerui.button.hoverBGColor[2], loginUI.phases[2].customizerui.button.hoverBGColor[3], loginUI.phases[2].customizerui.button.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
+                imports.dxDrawImage(button_offsetX, button_offsetY, button_height, button_height, loginUI.phases[2].customizerui.button.leftCurvedEdgePath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.button.hoverBGColor[1], loginUI.phases[2].customizerui.button.hoverBGColor[2], loginUI.phases[2].customizerui.button.hoverBGColor[3], loginUI.phases[2].customizerui.button.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
+                imports.dxDrawImage(button_offsetX + button_width - button_height, button_offsetY, button_height, button_height, loginUI.phases[2].customizerui.button.rightCurvedEdgePath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.button.hoverBGColor[1], loginUI.phases[2].customizerui.button.hoverBGColor[2], loginUI.phases[2].customizerui.button.hoverBGColor[3], loginUI.phases[2].customizerui.button.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
+                dxDrawBorderedText(loginUI.phases[2].customizerui.button.outlineWeight, loginUI.phases[2].customizerui.button.fontColor, j.title, button_offsetX, button_offsetY, button_offsetX + button_width, button_offsetY + button_height, tocolor(unpack(loginUI.phases[2].customizerui.button.fontColor)), 1, loginUI.phases[2].customizerui.button.font, "center", "center", true, false, false)
+                dxDrawBorderedText(loginUI.phases[2].customizerui.button.outlineWeight, {loginUI.phases[2].customizerui.button.hoverfontColor[1], loginUI.phases[2].customizerui.button.hoverfontColor[2], loginUI.phases[2].customizerui.button.hoverfontColor[3], loginUI.phases[2].customizerui.button.hoverfontColor[4]*j.hoverAnimAlphaPercent}, j.title, button_offsetX, button_offsetY, button_offsetX + button_width, button_offsetY + button_height, tocolor(loginUI.phases[2].customizerui.button.hoverfontColor[1], loginUI.phases[2].customizerui.button.hoverfontColor[2], loginUI.phases[2].customizerui.button.hoverfontColor[3], loginUI.phases[2].customizerui.button.hoverfontColor[4]*j.hoverAnimAlphaPercent), 1, loginUI.phases[2].customizerui.button.font, "center", "center", true, false, false)
+                button_offsetX = button_offsetX + button_width + loginUI.phases[2].customizerui.button.paddingX
             end
-        end
-        if isLMBClicked and (not isOptionEditBoxClicked) then loginUI.phases[2].customizerui.option.editbox.focussedEditbox = 0; loginUI.phases[2].customizerui.option.editbox.cursor.posNum = 0; end
-        imports.dxDrawRectangle(customizer_offsetX, loginUI.phases[2].customizerui.startY + loginUI.phases[2].customizerui.titleBar.height, loginUI.phases[2].customizerui.width, loginUI.phases[2].customizerui.titleBar.dividerSize, tocolor(unpack(loginUI.phases[2].customizerui.titleBar.dividerColor)), false)
-        local switcher_offsetX, switcher_offsetY = customizer_offsetX + loginUI.phases[2].customizerui.switcher.startX, loginUI.phases[2].customizerui.startY + loginUI.phases[2].customizerui.switcher.startY
-        local switcher_width, switcher_height = loginUI.phases[2].customizerui.switcher.width, loginUI.phases[2].customizerui.switcher.height
-        for i, j in imports.ipairs(loginUI.phases[2].customizerui.switcher) do
-            local isSwitcherHovered = isMouseOnPosition(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height)
-            if not j.hoverAnimStatus then j.hoverAnimStatus = "backward" end
-            if not j.hoverAnimTick then j.hoverAnimTick = CLIENT_CURRENT_TICK end
-            if isSwitcherHovered then
+            _currentKeyCheck = true
+        elseif currentPhase == 3 then
+            --Draws Credits UI
+            imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[3].bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[3].bgColor)), false)
+            local view_offsetX, view_offsetY = loginUI.phases[3].view.startX, loginUI.phases[3].view.startY
+            local view_width, view_height = loginUI.phases[3].view.width, loginUI.phases[3].view.height
+            imports.dxSetRenderTarget(loginUI.phases[3].view.renderTarget, true)
+            local credits_offsetY = -loginUI.phases[3].view.contentHeight - (view_height/2)
+            if (CLIENT_CURRENT_TICK - loginUI.phases[3].view.scrollAnimTickCounter) >= loginUI.phases[3].view.scrollDelayDuration then
+                credits_offsetY = imports.interpolateBetween(credits_offsetY, 0, 0, view_height*1.5, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].view.scrollAnimTickCounter + loginUI.phases[3].view.scrollDelayDuration, loginUI.phases[3].view.scrollAnimDuration), "Linear")
+                if math.round(credits_offsetY, 2) == math.round(view_height*1.5) and loginUI.isEnabled then
+                    setLoginUIEnabled(false)
+                    setLoginUIPhase(1)
+                end
+            end
+            dxDrawBorderedText(loginUI.phases[3].view.outlineWeight, loginUI.phases[3].view.outlineColor, loginUI.phases[3].view.content, loginUI.phases[3].view.paddingX, credits_offsetY, view_width, credits_offsetY + loginUI.phases[3].view.contentHeight, tocolor(unpack(loginUI.phases[3].view.fontColor)), 1, loginUI.phases[3].view.font, "left", "center", true, false, false, false, true)
+            imports.dxSetRenderTarget()
+            imports.dxDrawImage(view_offsetX, view_offsetY, view_width, view_height, loginUI.phases[3].view.renderTarget, 0, 0, 0, tocolor(255, 255, 255, 255), false)
+            local back_navigator_width, back_navigator_height = loginUI.phases[3].back_navigator.width + dxGetTextWidth(loginUI.phases[3].back_navigator.title, 1, loginUI.phases[3].back_navigator.font), loginUI.phases[3].back_navigator.height
+            back_navigator_width = back_navigator_width + (back_navigator_height*2)
+            local back_navigator_offsetX, back_navigator_offsetY = loginUI.phases[3].back_navigator.startX + (CLIENT_MTA_RESOLUTION[1] - back_navigator_width), loginUI.phases[3].back_navigator.startY + (CLIENT_MTA_RESOLUTION[2] - back_navigator_height)
+            local isBackNavigatorHovered = isMouseOnPosition(back_navigator_offsetX, back_navigator_offsetY, back_navigator_width, back_navigator_height)
+            if isBackNavigatorHovered then
                 if isLMBClicked then
                     setLoginUIEnabled(false)
                     imports.setTimer(function()
-                        j.execFunc()
+                        loginUI.phases[3].back_navigator.execFunc()
                     end, 1, 1)
                 end
-                if j.hoverAnimStatus ~= "forward" then
-                    j.hoverAnimStatus = "forward"
-                    j.hoverAnimTick = CLIENT_CURRENT_TICK
+                if loginUI.phases[3].back_navigator.hoverStatus ~= "forward" then
+                    loginUI.phases[3].back_navigator.hoverStatus = "forward"
+                    loginUI.phases[3].back_navigator.hoverAnimTick = CLIENT_CURRENT_TICK
                 end
             else
-                if j.hoverAnimStatus ~= "backward" then
-                    j.hoverAnimStatus = "backward"
-                    j.hoverAnimTick = CLIENT_CURRENT_TICK
+                if loginUI.phases[3].back_navigator.hoverStatus ~= "backward" then
+                    loginUI.phases[3].back_navigator.hoverStatus = "backward"
+                    loginUI.phases[3].back_navigator.hoverAnimTick = CLIENT_CURRENT_TICK
                 end
             end
-            if not j.hoverAnimAlphaPercent then j.hoverAnimAlphaPercent = 0 end
-            if j.hoverAnimStatus == "forward" then
-                j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.switcher.hoverAnimDuration), "Linear")
-            elseif j.hoverAnimStatus == "backward" then
-                j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.switcher.hoverAnimDuration), "Linear")
-            end
-            imports.dxDrawImage(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height, loginUI.phases[2].customizerui.switcher.bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.switcher.bgColor)), false)
-            imports.dxDrawImage(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height, loginUI.phases[2].customizerui.switcher.bgPath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.switcher.hoverBGColor[1], loginUI.phases[2].customizerui.switcher.hoverBGColor[2], loginUI.phases[2].customizerui.switcher.hoverBGColor[3], loginUI.phases[2].customizerui.switcher.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
-            dxDrawBorderedText(loginUI.phases[2].customizerui.switcher.outlineWeight, loginUI.phases[2].customizerui.switcher.fontColor, j.title, switcher_offsetX, switcher_offsetY, switcher_offsetX + switcher_width, switcher_offsetY + switcher_height, tocolor(unpack(loginUI.phases[2].customizerui.switcher.fontColor)), 1, loginUI.phases[2].customizerui.switcher.font, "center", "center", true, false, false)
-            dxDrawBorderedText(loginUI.phases[2].customizerui.switcher.outlineWeight, {loginUI.phases[2].customizerui.switcher.hoverfontColor[1], loginUI.phases[2].customizerui.switcher.hoverfontColor[2], loginUI.phases[2].customizerui.switcher.hoverfontColor[3], loginUI.phases[2].customizerui.switcher.hoverfontColor[4]*j.hoverAnimAlphaPercent}, j.title, switcher_offsetX, switcher_offsetY, switcher_offsetX + switcher_width, switcher_offsetY + switcher_height, tocolor(loginUI.phases[2].customizerui.switcher.hoverfontColor[1], loginUI.phases[2].customizerui.switcher.hoverfontColor[2], loginUI.phases[2].customizerui.switcher.hoverfontColor[3], loginUI.phases[2].customizerui.switcher.hoverfontColor[4]*j.hoverAnimAlphaPercent), 1, loginUI.phases[2].customizerui.switcher.font, "center", "center", true, false, false)
-            switcher_offsetX = switcher_offsetX + switcher_width + loginUI.phases[2].customizerui.switcher.paddingX
-        end
-        local button_offsetX, button_offsetY = customizer_offsetX + loginUI.phases[2].customizerui.button.startX, customizer_offsetY + loginUI.phases[2].customizerui.button.startY
-        local button_width, button_height = loginUI.phases[2].customizerui.button.width, loginUI.phases[2].customizerui.button.height
-        for i, j in imports.ipairs(loginUI.phases[2].customizerui.button) do
-            local isButtonHovered = isMouseOnPosition(button_offsetX, button_offsetY, button_width, button_height)
-            if not j.hoverAnimStatus then j.hoverAnimStatus = "backward" end
-            if not j.hoverAnimTick then j.hoverAnimTick = CLIENT_CURRENT_TICK end
-            if isButtonHovered then
-                if isLMBClicked then
-                    setLoginUIEnabled(false)
-                    imports.setTimer(function()
-                        j.execFunc()
-                    end, 1, 1)
-                end
-                if j.hoverAnimStatus ~= "forward" then
-                    j.hoverAnimStatus = "forward"
-                    j.hoverAnimTick = CLIENT_CURRENT_TICK
-                end
+            if not loginUI.phases[3].back_navigator.animAlphaPercent then loginUI.phases[3].back_navigator.animAlphaPercent = 0.75 end
+            if loginUI.phases[3].back_navigator.hoverStatus == "forward" then
+                loginUI.phases[3].back_navigator.animAlphaPercent = imports.interpolateBetween(loginUI.phases[3].back_navigator.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].back_navigator.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")
             else
-                if j.hoverAnimStatus ~= "backward" then
-                    j.hoverAnimStatus = "backward"
-                    j.hoverAnimTick = CLIENT_CURRENT_TICK
-                end
+                loginUI.phases[3].back_navigator.animAlphaPercent = imports.interpolateBetween(loginUI.phases[3].back_navigator.animAlphaPercent, 0, 0, 0.75, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].back_navigator.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")
             end
-            if not j.hoverAnimAlphaPercent then j.hoverAnimAlphaPercent = 0 end
-            if j.hoverAnimStatus == "forward" then
-                j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.button.hoverAnimDuration), "Linear")
-            elseif j.hoverAnimStatus == "backward" then
-                j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.button.hoverAnimDuration), "Linear")
-            end
-            imports.dxDrawRectangle(button_offsetX + button_height, button_offsetY, button_width - (button_height*2), button_height, tocolor(unpack(loginUI.phases[2].customizerui.button.bgColor)), false)
-            imports.dxDrawImage(button_offsetX, button_offsetY, button_height, button_height, loginUI.phases[2].customizerui.button.leftCurvedEdgePath, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.button.bgColor)), false)
-            imports.dxDrawImage(button_offsetX + button_width - button_height, button_offsetY, button_height, button_height, loginUI.phases[2].customizerui.button.rightCurvedEdgePath, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.button.bgColor)), false)
-            imports.dxDrawRectangle(button_offsetX + button_height, button_offsetY, button_width - (button_height*2), button_height, tocolor(loginUI.phases[2].customizerui.button.hoverBGColor[1], loginUI.phases[2].customizerui.button.hoverBGColor[2], loginUI.phases[2].customizerui.button.hoverBGColor[3], loginUI.phases[2].customizerui.button.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
-            imports.dxDrawImage(button_offsetX, button_offsetY, button_height, button_height, loginUI.phases[2].customizerui.button.leftCurvedEdgePath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.button.hoverBGColor[1], loginUI.phases[2].customizerui.button.hoverBGColor[2], loginUI.phases[2].customizerui.button.hoverBGColor[3], loginUI.phases[2].customizerui.button.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
-            imports.dxDrawImage(button_offsetX + button_width - button_height, button_offsetY, button_height, button_height, loginUI.phases[2].customizerui.button.rightCurvedEdgePath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.button.hoverBGColor[1], loginUI.phases[2].customizerui.button.hoverBGColor[2], loginUI.phases[2].customizerui.button.hoverBGColor[3], loginUI.phases[2].customizerui.button.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
-            dxDrawBorderedText(loginUI.phases[2].customizerui.button.outlineWeight, loginUI.phases[2].customizerui.button.fontColor, j.title, button_offsetX, button_offsetY, button_offsetX + button_width, button_offsetY + button_height, tocolor(unpack(loginUI.phases[2].customizerui.button.fontColor)), 1, loginUI.phases[2].customizerui.button.font, "center", "center", true, false, false)
-            dxDrawBorderedText(loginUI.phases[2].customizerui.button.outlineWeight, {loginUI.phases[2].customizerui.button.hoverfontColor[1], loginUI.phases[2].customizerui.button.hoverfontColor[2], loginUI.phases[2].customizerui.button.hoverfontColor[3], loginUI.phases[2].customizerui.button.hoverfontColor[4]*j.hoverAnimAlphaPercent}, j.title, button_offsetX, button_offsetY, button_offsetX + button_width, button_offsetY + button_height, tocolor(loginUI.phases[2].customizerui.button.hoverfontColor[1], loginUI.phases[2].customizerui.button.hoverfontColor[2], loginUI.phases[2].customizerui.button.hoverfontColor[3], loginUI.phases[2].customizerui.button.hoverfontColor[4]*j.hoverAnimAlphaPercent), 1, loginUI.phases[2].customizerui.button.font, "center", "center", true, false, false)
-            button_offsetX = button_offsetX + button_width + loginUI.phases[2].customizerui.button.paddingX
+            imports.dxDrawRectangle(back_navigator_offsetX + back_navigator_height, back_navigator_offsetY, back_navigator_width - (back_navigator_height*2), back_navigator_height, tocolor(loginUI.phases[3].back_navigator.bgColor[1], loginUI.phases[3].back_navigator.bgColor[2], loginUI.phases[3].back_navigator.bgColor[3], loginUI.phases[3].back_navigator.bgColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), false)
+            imports.dxDrawImage(back_navigator_offsetX, back_navigator_offsetY, back_navigator_height, back_navigator_height, loginUI.phases[3].back_navigator.leftEdgePath, 0, 0, 0, tocolor(loginUI.phases[3].back_navigator.bgColor[1], loginUI.phases[3].back_navigator.bgColor[2], loginUI.phases[3].back_navigator.bgColor[3], loginUI.phases[3].back_navigator.bgColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), false)
+            imports.dxDrawImage(back_navigator_offsetX + back_navigator_width - back_navigator_height, back_navigator_offsetY, back_navigator_height, back_navigator_height, loginUI.phases[3].back_navigator.rightEdgePath, 0, 0, 0, tocolor(loginUI.phases[3].back_navigator.bgColor[1], loginUI.phases[3].back_navigator.bgColor[2], loginUI.phases[3].back_navigator.bgColor[3], loginUI.phases[3].back_navigator.bgColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), false)
+            dxDrawBorderedText(loginUI.phases[3].back_navigator.outlineWeight, loginUI.phases[3].back_navigator.fontColor, loginUI.phases[3].back_navigator.title, back_navigator_offsetX, back_navigator_offsetY, back_navigator_offsetX + back_navigator_width, back_navigator_offsetY + back_navigator_height, tocolor(loginUI.phases[3].back_navigator.fontColor[1], loginUI.phases[3].back_navigator.fontColor[2], loginUI.phases[3].back_navigator.fontColor[3], loginUI.phases[3].back_navigator.fontColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), 1, loginUI.phases[3].back_navigator.font, "center", "center", true, false, false)
         end
-        _currentKeyCheck = true
-    elseif currentPhase == 3 then
-        --Draws Credits UI
-        imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[3].bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[3].bgColor)), false)
-        local view_offsetX, view_offsetY = loginUI.phases[3].view.startX, loginUI.phases[3].view.startY
-        local view_width, view_height = loginUI.phases[3].view.width, loginUI.phases[3].view.height
-        imports.dxSetRenderTarget(loginUI.phases[3].view.renderTarget, true)
-        local credits_offsetY = -loginUI.phases[3].view.contentHeight - (view_height/2)
-        if (CLIENT_CURRENT_TICK - loginUI.phases[3].view.scrollAnimTickCounter) >= loginUI.phases[3].view.scrollDelayDuration then
-            credits_offsetY = imports.interpolateBetween(credits_offsetY, 0, 0, view_height*1.5, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].view.scrollAnimTickCounter + loginUI.phases[3].view.scrollDelayDuration, loginUI.phases[3].view.scrollAnimDuration), "Linear")
-            if math.round(credits_offsetY, 2) == math.round(view_height*1.5) and loginUI.isEnabled then
-                setLoginUIEnabled(false)
-                setLoginUIPhase(1)
-            end
-        end
-        dxDrawBorderedText(loginUI.phases[3].view.outlineWeight, loginUI.phases[3].view.outlineColor, loginUI.phases[3].view.content, loginUI.phases[3].view.paddingX, credits_offsetY, view_width, credits_offsetY + loginUI.phases[3].view.contentHeight, tocolor(unpack(loginUI.phases[3].view.fontColor)), 1, loginUI.phases[3].view.font, "left", "center", true, false, false, false, true)
-        imports.dxSetRenderTarget()
-        imports.dxDrawImage(view_offsetX, view_offsetY, view_width, view_height, loginUI.phases[3].view.renderTarget, 0, 0, 0, tocolor(255, 255, 255, 255), false)
-        local back_navigator_width, back_navigator_height = loginUI.phases[3].back_navigator.width + dxGetTextWidth(loginUI.phases[3].back_navigator.title, 1, loginUI.phases[3].back_navigator.font), loginUI.phases[3].back_navigator.height
-        back_navigator_width = back_navigator_width + (back_navigator_height*2)
-        local back_navigator_offsetX, back_navigator_offsetY = loginUI.phases[3].back_navigator.startX + (CLIENT_MTA_RESOLUTION[1] - back_navigator_width), loginUI.phases[3].back_navigator.startY + (CLIENT_MTA_RESOLUTION[2] - back_navigator_height)
-        local isBackNavigatorHovered = isMouseOnPosition(back_navigator_offsetX, back_navigator_offsetY, back_navigator_width, back_navigator_height)
-        if isBackNavigatorHovered then
-            if isLMBClicked then
-                setLoginUIEnabled(false)
-                imports.setTimer(function()
-                    loginUI.phases[3].back_navigator.execFunc()
-                end, 1, 1)
-            end
-            if loginUI.phases[3].back_navigator.hoverStatus ~= "forward" then
-                loginUI.phases[3].back_navigator.hoverStatus = "forward"
-                loginUI.phases[3].back_navigator.hoverAnimTick = CLIENT_CURRENT_TICK
-            end
-        else
-            if loginUI.phases[3].back_navigator.hoverStatus ~= "backward" then
-                loginUI.phases[3].back_navigator.hoverStatus = "backward"
-                loginUI.phases[3].back_navigator.hoverAnimTick = CLIENT_CURRENT_TICK
-            end
-        end
-        if not loginUI.phases[3].back_navigator.animAlphaPercent then loginUI.phases[3].back_navigator.animAlphaPercent = 0.75 end
-        if loginUI.phases[3].back_navigator.hoverStatus == "forward" then
-            loginUI.phases[3].back_navigator.animAlphaPercent = imports.interpolateBetween(loginUI.phases[3].back_navigator.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].back_navigator.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")
-        else
-            loginUI.phases[3].back_navigator.animAlphaPercent = imports.interpolateBetween(loginUI.phases[3].back_navigator.animAlphaPercent, 0, 0, 0.75, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].back_navigator.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")
-        end
-        imports.dxDrawRectangle(back_navigator_offsetX + back_navigator_height, back_navigator_offsetY, back_navigator_width - (back_navigator_height*2), back_navigator_height, tocolor(loginUI.phases[3].back_navigator.bgColor[1], loginUI.phases[3].back_navigator.bgColor[2], loginUI.phases[3].back_navigator.bgColor[3], loginUI.phases[3].back_navigator.bgColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), false)
-        imports.dxDrawImage(back_navigator_offsetX, back_navigator_offsetY, back_navigator_height, back_navigator_height, loginUI.phases[3].back_navigator.leftEdgePath, 0, 0, 0, tocolor(loginUI.phases[3].back_navigator.bgColor[1], loginUI.phases[3].back_navigator.bgColor[2], loginUI.phases[3].back_navigator.bgColor[3], loginUI.phases[3].back_navigator.bgColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), false)
-        imports.dxDrawImage(back_navigator_offsetX + back_navigator_width - back_navigator_height, back_navigator_offsetY, back_navigator_height, back_navigator_height, loginUI.phases[3].back_navigator.rightEdgePath, 0, 0, 0, tocolor(loginUI.phases[3].back_navigator.bgColor[1], loginUI.phases[3].back_navigator.bgColor[2], loginUI.phases[3].back_navigator.bgColor[3], loginUI.phases[3].back_navigator.bgColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), false)
-        dxDrawBorderedText(loginUI.phases[3].back_navigator.outlineWeight, loginUI.phases[3].back_navigator.fontColor, loginUI.phases[3].back_navigator.title, back_navigator_offsetX, back_navigator_offsetY, back_navigator_offsetX + back_navigator_width, back_navigator_offsetY + back_navigator_height, tocolor(loginUI.phases[3].back_navigator.fontColor[1], loginUI.phases[3].back_navigator.fontColor[2], loginUI.phases[3].back_navigator.fontColor[3], loginUI.phases[3].back_navigator.fontColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), 1, loginUI.phases[3].back_navigator.font, "center", "center", true, false, false)
     end
 
 end
@@ -1343,11 +1352,13 @@ toggleUI = function(state, Args)
         loginUI.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
         setLoginUIPhase(1)
         beautify.render.create(renderUI)
+        beautify.render.create(renderUI, {renderType = "input"})
         imports.triggerEvent("Sound:onToggleLogin", localPlayer, state, {
             shuffleMusic = (Args and Args.shuffleMusic and true) or false
         })
     else
         beautify.render.remove(renderUI)
+        beautify.render.remove(renderUI, {renderType = "input"})
         exports.cinecam_handler:stopCinemation()
         if loginUI.character and imports.isElement(loginUI.character) then loginUI.character:destroy() end
         loginUI.phase = false
