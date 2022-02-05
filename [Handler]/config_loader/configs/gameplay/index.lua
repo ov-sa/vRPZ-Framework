@@ -24,7 +24,7 @@ configVars = {
         ["Minute_Duration"] = 60000,
         ["Game_Type"] = "vRPZ",
         ["Game_Map"] = "vRPZ : SA",
-        ["Disabled_CMDS"] = {"login", "register", "logout", "nick"},
+        ["Disabled_CMDS"] = {"register", "logout", "nick"},
     
         ["Character"] = {
             ["Max_Blood"] = 1000,
