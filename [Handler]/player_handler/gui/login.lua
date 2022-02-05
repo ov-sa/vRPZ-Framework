@@ -64,10 +64,11 @@ loginUI = {
     character = 0,
     characters = {},
     isPremium = false,
+    bgTexture = imports.dxCreateTexture("files/images/login/background.png", "argb", true, "clamp"),
     phases = {
         [1] = {
             bgColor = {255, 255, 255, 255},
-            bgPath = imports.dxCreateTexture("files/images/login/login.png", "argb", true, "clamp"),
+            bgTexture = imports.dxCreateTexture("files/images/login/login.png", "argb", true, "clamp"),
             optionsUI = {
                 startX = CLIENT_MTA_RESOLUTION[1]*0.5,
                 startY = -15,
@@ -124,7 +125,7 @@ loginUI = {
                     bgColor = {7, 7, 7, 253},
                     arrowBGColor = {175, 175, 175, 100},
                     arrowHoveredBGColor = {255, 80, 80, 255},
-                    arrowBGPath = beautify.assets["images"]["arrow/left.rw"],
+                    arrowbgTexture = beautify.assets["images"]["arrow/left.rw"],
                     arrowAnimDuration = 5000,
                     editbox = {
                         startX = 5,
@@ -239,7 +240,7 @@ loginUI = {
                     height = 30,
                     paddingX = 7,
                     paddingY = 7,
-                    bgPath = imports.dxCreateTexture("files/images/hud/curved_square/square.png", "argb", true, "clamp"),
+                    bgTexture = imports.dxCreateTexture("files/images/hud/curved_square/square.png", "argb", true, "clamp"),
                     font = FRAMEWORK_FONTS[6],
                     outlineWeight = 0.1,
                     fontColor = {255, 80, 80, 255},
@@ -297,7 +298,6 @@ loginUI = {
         },
         [3] = {
             bgColor = {255, 255, 255, 255},
-            bgPath = imports.dxCreateTexture("files/images/login/background.png", "argb", true, "clamp"),
             back_navigator = {
                 title = "B A C K",
                 startX = -15,
@@ -867,7 +867,7 @@ local function renderUI(renderData)
 
         if currentPhase == 1 then
             --Draws Options UI
-            imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[1].bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[1].bgColor)), false)
+            imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[currentPhase].bgTexture, 0, 0, 0, tocolor(unpack(loginUI.phases[1].bgColor)), false)
             for i, j in imports.ipairs(loginUI.phases[1].optionsUI) do
                 local option_title = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]:gsub(".","  %0"):sub(2):upper()
                 local option_width, option_height = dxGetTextWidth(option_title, 1, loginUI.phases[1].optionsUI.font) + 5, loginUI.phases[1].optionsUI.height
@@ -1014,10 +1014,10 @@ local function renderUI(renderData)
                     local option_fieldText = j.placeDataValue
                     if j.placeDataValue and j.placeDataTable then option_fieldText = j.placeDataTable[j.placeDataValue] or option_fieldText end
                     if j.placeDataTable[j.placeDataValue] and j.clothingCategoryIndex then option_fieldText = j.placeDataTable[j.placeDataValue].clothingName or j.placeDataValue end
-                    imports.dxDrawImage(option_offsetX + loginUI.phases[2].customizerui.option.paddingY, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowBGPath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowBGColor[1], loginUI.phases[2].customizerui.option.arrowBGColor[2], loginUI.phases[2].customizerui.option.arrowBGColor[3], loginUI.phases[2].customizerui.option.arrowBGColor[4]), false)
-                    imports.dxDrawImage(option_offsetX + loginUI.phases[2].customizerui.option.paddingY, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowBGPath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowHoveredBGColor[1], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[2], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[3], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[4]*j.leftArrowAnimAlphaPercent), false)
-                    imports.dxDrawImage(option_offsetX + option_width - option_height, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowBGPath, 180, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowBGColor[1], loginUI.phases[2].customizerui.option.arrowBGColor[2], loginUI.phases[2].customizerui.option.arrowBGColor[3], loginUI.phases[2].customizerui.option.arrowBGColor[4]), false)
-                    imports.dxDrawImage(option_offsetX + option_width - option_height, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowBGPath, 180, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowHoveredBGColor[1], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[2], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[3], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[4]*j.rightArrowAnimAlphaPercent), false)
+                    imports.dxDrawImage(option_offsetX + loginUI.phases[2].customizerui.option.paddingY, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowbgTexture, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowBGColor[1], loginUI.phases[2].customizerui.option.arrowBGColor[2], loginUI.phases[2].customizerui.option.arrowBGColor[3], loginUI.phases[2].customizerui.option.arrowBGColor[4]), false)
+                    imports.dxDrawImage(option_offsetX + loginUI.phases[2].customizerui.option.paddingY, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowbgTexture, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowHoveredBGColor[1], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[2], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[3], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[4]*j.leftArrowAnimAlphaPercent), false)
+                    imports.dxDrawImage(option_offsetX + option_width - option_height, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowbgTexture, 180, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowBGColor[1], loginUI.phases[2].customizerui.option.arrowBGColor[2], loginUI.phases[2].customizerui.option.arrowBGColor[3], loginUI.phases[2].customizerui.option.arrowBGColor[4]), false)
+                    imports.dxDrawImage(option_offsetX + option_width - option_height, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY, loginUI.phases[2].customizerui.option.arrowbgTexture, 180, 0, 0, tocolor(loginUI.phases[2].customizerui.option.arrowHoveredBGColor[1], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[2], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[3], loginUI.phases[2].customizerui.option.arrowHoveredBGColor[4]*j.rightArrowAnimAlphaPercent), false)
                     imports.dxDrawText(j.placeHolder..":", option_left_slotOffsetX, option_slotOffsetY, option_left_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataFontColor)), 1, loginUI.phases[2].customizerui.option.font, "right", "center", true, false, false)
                     imports.dxDrawText(option_fieldText, option_right_slotOffsetX, option_slotOffsetY, option_right_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, tocolor(unpack(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "left", "center", true, false, false)
                 else
@@ -1237,8 +1237,8 @@ local function renderUI(renderData)
                 elseif j.hoverAnimStatus == "backward" then
                     j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.switcher.hoverAnimDuration), "Linear")
                 end
-                imports.dxDrawImage(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height, loginUI.phases[2].customizerui.switcher.bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.switcher.bgColor)), false)
-                imports.dxDrawImage(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height, loginUI.phases[2].customizerui.switcher.bgPath, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.switcher.hoverBGColor[1], loginUI.phases[2].customizerui.switcher.hoverBGColor[2], loginUI.phases[2].customizerui.switcher.hoverBGColor[3], loginUI.phases[2].customizerui.switcher.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
+                imports.dxDrawImage(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height, loginUI.phases[2].customizerui.switcher.bgTexture, 0, 0, 0, tocolor(unpack(loginUI.phases[2].customizerui.switcher.bgColor)), false)
+                imports.dxDrawImage(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height, loginUI.phases[2].customizerui.switcher.bgTexture, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.switcher.hoverBGColor[1], loginUI.phases[2].customizerui.switcher.hoverBGColor[2], loginUI.phases[2].customizerui.switcher.hoverBGColor[3], loginUI.phases[2].customizerui.switcher.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
                 dxDrawBorderedText(loginUI.phases[2].customizerui.switcher.outlineWeight, loginUI.phases[2].customizerui.switcher.fontColor, j.title, switcher_offsetX, switcher_offsetY, switcher_offsetX + switcher_width, switcher_offsetY + switcher_height, tocolor(unpack(loginUI.phases[2].customizerui.switcher.fontColor)), 1, loginUI.phases[2].customizerui.switcher.font, "center", "center", true, false, false)
                 dxDrawBorderedText(loginUI.phases[2].customizerui.switcher.outlineWeight, {loginUI.phases[2].customizerui.switcher.hoverfontColor[1], loginUI.phases[2].customizerui.switcher.hoverfontColor[2], loginUI.phases[2].customizerui.switcher.hoverfontColor[3], loginUI.phases[2].customizerui.switcher.hoverfontColor[4]*j.hoverAnimAlphaPercent}, j.title, switcher_offsetX, switcher_offsetY, switcher_offsetX + switcher_width, switcher_offsetY + switcher_height, tocolor(loginUI.phases[2].customizerui.switcher.hoverfontColor[1], loginUI.phases[2].customizerui.switcher.hoverfontColor[2], loginUI.phases[2].customizerui.switcher.hoverfontColor[3], loginUI.phases[2].customizerui.switcher.hoverfontColor[4]*j.hoverAnimAlphaPercent), 1, loginUI.phases[2].customizerui.switcher.font, "center", "center", true, false, false)
                 switcher_offsetX = switcher_offsetX + switcher_width + loginUI.phases[2].customizerui.switcher.paddingX
@@ -1285,7 +1285,7 @@ local function renderUI(renderData)
             _currentKeyCheck = true
         elseif currentPhase == 3 then
             --Draws Credits UI
-            imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[3].bgPath, 0, 0, 0, tocolor(unpack(loginUI.phases[3].bgColor)), false)
+            imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, tocolor(unpack(loginUI.phases[3].bgColor)), false)
             local view_offsetX, view_offsetY = loginUI.phases[3].view.startX, loginUI.phases[3].view.startY
             local view_width, view_height = loginUI.phases[3].view.width, loginUI.phases[3].view.height
             imports.dxSetRenderTarget(loginUI.phases[3].view.renderTarget, true)
