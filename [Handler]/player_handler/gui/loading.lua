@@ -93,7 +93,7 @@ end)
 --------------------------------------
 
 imports.addEvent("Client:onToggleLoadingUI", true)
-imports.addEventHandler("Client:onToggleLoadingUI", root, function(state, cArgs)
+imports.addEventHandler("Client:onToggleLoadingUI", root, function(state, Args)
     if state then
         if (state and (loadingUI.animStatus == "forward")) then return false end
         loadingUI.animStatus = "forward"

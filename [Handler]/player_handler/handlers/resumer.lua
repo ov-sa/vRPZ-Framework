@@ -163,6 +163,11 @@ end)
 --[[ Player: On Toggle Login UI ]]--
 ------------------------------------
 
+
+local imports = {
+    triggerClientEvent = triggerClientEvent
+}
+
 imports.addEvent("Player:onToggleLoginUI", true)
 imports.addEventHandler("Player:onToggleLoginUI", root, function()
     source:setName(CPlayer.generateNick())
@@ -178,6 +183,10 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
     end
     if not lastCharacters[lastCharacter] then lastCharacter = 0 end
     source:setFrozen(true)
-    triggerClientEvent(source, "onPlayerShowLoadingScreen", source, true)
-    triggerClientEvent(source, "onPlayerShowLoginScreen", source, lastCharacter, lastCharacters, isPlayerPremium)
+
+    imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, {
+        lastCharacter,
+        lastCharacters,
+        isPlayerPremium
+    })
 end)
