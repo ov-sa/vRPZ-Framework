@@ -41,9 +41,8 @@ local imports = {
 -------------------
 
 local prevLMBClickState = false
-local prevPhaseTimer = false
+local prevPhaseTimer, prevEnablerTimer = false, false
 local prevEnablerTimer = false
-local createdTextures = {}
 local inputTickCounter = CLIENT_CURRENT_TICK
 --TODO: INTEGRATE W/ BEAUTIFY I/P FUNCTIONS
 local prevInputKey = false
@@ -59,8 +58,8 @@ loginUI = {
     isForcedDisabled = false,
     cinemationData = false,
     character = false,
-    selectedCharacter = 0,
-    clientCharacters = {},
+    character = 0,
+    characters = {},
     isPremium = false,
     phases = {
         [1] = {
@@ -372,10 +371,10 @@ end
 
 local function loadLoginPreviewCharacter(loadDefault)
 
-    if not loadDefault and not loginUI.clientCharacters[loginUI._selectedCharacter] then
-        if #loginUI.clientCharacters > 0 then
-            loginUI.selectedCharacter = 1
-            loginUI._selectedCharacter = loginUI.selectedCharacter
+    if not loadDefault and not loginUI.characters[loginUI._selectedCharacter] then
+        if #loginUI.characters > 0 then
+            loginUI.character = 1
+            loginUI._selectedCharacter = loginUI.character
         else
             loadDefault = true
         end
@@ -392,14 +391,14 @@ local function loadLoginPreviewCharacter(loadDefault)
     else
         for i, j in imports.ipairs(loginUI.phases[2].customizerui.option) do
             if j.isEditBox then
-                j.placeDataValue = loginUI.clientCharacters[loginUI._selectedCharacter][j.optionType] or ""
+                j.placeDataValue = loginUI.characters[loginUI._selectedCharacter][j.optionType] or ""
             else
                 local matchedDataIndex = false
                 if j.optionType == "gender" or j.clothingCategoryIndex then
-                    matchedDataIndex = loginUI.clientCharacters[loginUI._selectedCharacter][j.optionType]
+                    matchedDataIndex = loginUI.characters[loginUI._selectedCharacter][j.optionType]
                 else
                     for k, v in imports.ipairs(j.placeDataTable) do
-                        if loginUI.clientCharacters[loginUI._selectedCharacter][j.optionType] == v then
+                        if loginUI.characters[loginUI._selectedCharacter][j.optionType] == v then
                             matchedDataIndex = k
                             break
                         end
@@ -428,7 +427,7 @@ function updateLoginPreviewCharacter()
                 j.placeDataTable = playerClothes[selectedGender.modelType][j.clothingCategoryIndex]
             else
                 if j.clothingCategoryIndex ~= "Hair" and j.clothingCategoryIndex ~= "Hair_Color" then
-                    if loginUI.clientCharacters[loginUI._selectedCharacter] and loginUI.clientCharacters[loginUI._selectedCharacter].__isPreLoaded then
+                    if loginUI.characters[loginUI._selectedCharacter] and loginUI.characters[loginUI._selectedCharacter].__isPreLoaded then
                         j.placeDataTable = playerClothes[selectedGender.modelType][j.clothingCategoryIndex]
                     else
                         local generatedDataTable = {}
@@ -467,44 +466,44 @@ manageCharacter = function(manageType)
         setLoginUIEnabled(true)
         local characterLimit = playerCharacterLimit
         if loginUI.isPremium then characterLimit = playerPremiumCharacterLimit end
-        if #loginUI.clientCharacters >= characterLimit then
+        if #loginUI.characters >= characterLimit then
             imports.triggerEvent("Client:onNotification", localPlayer, "Unfortunately, you have reached the character creation limit!", {255, 80, 80, 255})
             return false
         end
         local characterData = {
             isUnverified = true
         }
-        table.insert(loginUI.clientCharacters, characterData)
-        loginUI._selectedCharacter = #loginUI.clientCharacters
+        table.insert(loginUI.characters, characterData)
+        loginUI._selectedCharacter = #loginUI.characters
         loginUI._unsavedCharacters[loginUI._selectedCharacter] = true
         loadLoginPreviewCharacter(true)
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully created a character!", {80, 255, 80, 255})
     elseif manageType == "delete" then
         setLoginUIEnabled(true)
-        if #loginUI.clientCharacters <= 0 then
+        if #loginUI.characters <= 0 then
             imports.triggerEvent("Client:onNotification", localPlayer, "Unfortunately, you don't have enough characters to delete!", {255, 80, 80, 255})
             return false
         end
-        if not loginUI.clientCharacters[loginUI._selectedCharacter] then
+        if not loginUI.characters[loginUI._selectedCharacter] then
             imports.triggerEvent("Client:onNotification", localPlayer, "You must select a character inorder to delete!", {255, 80, 80, 255})
             return false
         end
-        if not loginUI.clientCharacters[loginUI._selectedCharacter].isUnverified or loginUI._charactersUnderProcess[loginUI._selectedCharacter] then
-            if not loginUI.clientCharacters[loginUI._selectedCharacter]._id or loginUI._charactersUnderProcess[loginUI._selectedCharacter] then
+        if not loginUI.characters[loginUI._selectedCharacter].isUnverified or loginUI._charactersUnderProcess[loginUI._selectedCharacter] then
+            if not loginUI.characters[loginUI._selectedCharacter]._id or loginUI._charactersUnderProcess[loginUI._selectedCharacter] then
                 imports.triggerEvent("Client:onNotification", localPlayer, "You must wait until the character processing is done!", {255, 80, 80, 255})
                 return false
             else
-                imports.triggerServerEvent("Player:onDeleteCharacter", localPlayer, loginUI.clientCharacters[loginUI._selectedCharacter]._id)
+                imports.triggerServerEvent("Player:onDeleteCharacter", localPlayer, loginUI.characters[loginUI._selectedCharacter]._id)
             end
         end
-        table.remove(loginUI.clientCharacters, loginUI._selectedCharacter)
+        table.remove(loginUI.characters, loginUI._selectedCharacter)
         loginUI._unsavedCharacters[loginUI._selectedCharacter] = nil
         loginUI._selectedCharacter = math.max(0, loginUI._selectedCharacter - 1)
         loadLoginPreviewCharacter()
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully deleted the character!", {80, 255, 80, 255})
     elseif (manageType == "switch_prev") or (manageType == "switch_next") then
         setLoginUIEnabled(true)
-        if #loginUI.clientCharacters <= 1 then
+        if #loginUI.characters <= 1 then
             imports.triggerEvent("Client:onNotification", localPlayer, "Unfortunately, you don't have enough characters to switch!", {255, 80, 80, 255})
             return false
         end
@@ -514,25 +513,25 @@ manageCharacter = function(manageType)
                 loadLoginPreviewCharacter()
             end
         elseif manageType == "switch_next" then
-            if loginUI._selectedCharacter < #loginUI.clientCharacters then
+            if loginUI._selectedCharacter < #loginUI.characters then
                 loginUI._selectedCharacter = loginUI._selectedCharacter + 1
                 loadLoginPreviewCharacter()
             end
         end
     elseif manageType == "pick" then
         setLoginUIEnabled(true)
-        if (loginUI._selectedCharacter ~= 0) and (loginUI.selectedCharacter == loginUI._selectedCharacter) then
+        if (loginUI._selectedCharacter ~= 0) and (loginUI.character == loginUI._selectedCharacter) then
             imports.triggerEvent("Client:onNotification", localPlayer, "You've already picked the specified character!", {255, 80, 80, 255})
             return false
         end
-        if (not loginUI.clientCharacters[loginUI._selectedCharacter]) or loginUI.clientCharacters[loginUI._selectedCharacter].isUnverified then
+        if (not loginUI.characters[loginUI._selectedCharacter]) or loginUI.characters[loginUI._selectedCharacter].isUnverified then
             imports.triggerEvent("Client:onNotification", localPlayer, "You must save the character inorder to pick!", {255, 80, 80, 255})
             return false
         end
-        loginUI.selectedCharacter = loginUI._selectedCharacter
+        loginUI.character = loginUI._selectedCharacter
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully picked the character!", {80, 255, 80, 255})
     elseif manageType == "save" then
-        if #loginUI.clientCharacters > 0 and not loginUI.clientCharacters[loginUI._selectedCharacter].isUnverified then
+        if #loginUI.characters > 0 and not loginUI.characters[loginUI._selectedCharacter].isUnverified then
             setLoginUIEnabled(true)
             imports.triggerEvent("Client:onNotification", localPlayer, "Your character is already saved!", {255, 80, 80, 255})
             return false
@@ -566,29 +565,29 @@ manageCharacter = function(manageType)
                 end
             end
         end
-        local selectedCharacter = loginUI.selectedCharacter
+        local character = loginUI.character
         local charactersPendingToBeSaved = {}
-        local charactersToBeSaved = table.copy(loginUI.clientCharacters, true)
+        local charactersToBeSaved = table.copy(loginUI.characters, true)
         for i, j in imports.ipairs(charactersToBeSaved) do
             if j.isUnverified then
                 charactersToBeSaved[i] = nil
             end
         end
-        if #loginUI.clientCharacters <= 0 then
-            selectedCharacter = 1
-            loginUI._selectedCharacter = selectedCharacter
+        if #loginUI.characters <= 0 then
+            character = 1
+            loginUI._selectedCharacter = character
         end
         charactersPendingToBeSaved[loginUI._selectedCharacter] = true
         charactersToBeSaved[loginUI._selectedCharacter] = characterData
         loginUI._charactersUnderProcess[loginUI._selectedCharacter] = true
-        imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, selectedCharacter, charactersToBeSaved, charactersPendingToBeSaved)
+        imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, character, charactersToBeSaved, charactersPendingToBeSaved)
     elseif manageType == "play" then
-        if #loginUI.clientCharacters <= 0 then
+        if #loginUI.characters <= 0 then
             setLoginUIEnabled(true)
             imports.triggerEvent("Client:onNotification", localPlayer, "You must create a character to play!", {255, 80, 80, 255})
             return false
         else
-            if not loginUI.clientCharacters[loginUI.selectedCharacter] then
+            if not loginUI.characters[loginUI.character] then
                 setLoginUIEnabled(true)
                 imports.triggerEvent("Client:onNotification", localPlayer, "You must pick a character to play!", {255, 80, 80, 255})
                 return false
@@ -600,9 +599,9 @@ manageCharacter = function(manageType)
         imports.setTimer(function()
             toggleUI(false)
         end, loadingUI.animFadeInDuration + 250, 1)
-        imports.setTimer(function(selectedCharacter, clientCharacters)
-            imports.triggerServerEvent("onPlayerResumeGame", localPlayer, selectedCharacter, clientCharacters)
-        end, loadingUI.animFadeInDuration + loadingUI.animFadeOutDuration + loadingUI.animFadeDelayDuration, 1, loginUI.selectedCharacter, loginUI.clientCharacters)
+        imports.setTimer(function(character, characters)
+            imports.triggerServerEvent("onPlayerResumeGame", localPlayer, character, characters)
+        end, loadingUI.animFadeInDuration + loadingUI.animFadeOutDuration + loadingUI.animFadeDelayDuration, 1, loginUI.character, loginUI.characters)
     end
     return true
 
@@ -655,20 +654,20 @@ setLoginUIPhase = function(phaseID)
         end
         loginUI.phase = phaseID
         local unverifiedCharacters = {}
-        for i, j in imports.ipairs(loginUI.clientCharacters) do
+        for i, j in imports.ipairs(loginUI.characters) do
             if j.isUnverified then
                 table.insert(unverifiedCharacters, i)
             end
         end
-        for i, j in imports.ipairs(loginUI.clientCharacters) do
+        for i, j in imports.ipairs(loginUI.characters) do
             if j.isUnverified then
-                table.remove(loginUI.clientCharacters, i)
+                table.remove(loginUI.characters, i)
                 loginUI._unsavedCharacters[i] = nil
             end
         end
         for i, j in imports.ipairs(unverifiedCharacters) do
-            if loginUI.selectedCharacter == j then
-                loginUI.selectedCharacter = 0
+            if loginUI.character == j then
+                loginUI.character = 0
                 loginUI._selectedCharacter = 0
                 break
             else
@@ -746,8 +745,8 @@ imports.addEventHandler("onClientLoadCharacterID", root, function(character, cha
 
     loginUI._unsavedCharacters[character] = nil
     loginUI._charactersUnderProcess[character] = nil
-    loginUI.clientCharacters[character] = characterData
-    loginUI.clientCharacters[character]._id = characterID
+    loginUI.characters[character] = characterData
+    loginUI.characters[character]._id = characterID
 
 end)
 
@@ -922,8 +921,8 @@ local function renderUI()
             local option_offsetX, option_offsetY = customizer_offsetX, customizer_offsetY
             local option_width, option_height = loginUI.phases[2].customizerui.width, loginUI.phases[2].customizerui.option.height
             if not j.isEditBox then
-                local isLeftArrowHovered = isMouseOnPosition(option_offsetX + loginUI.phases[2].customizerui.option.paddingY, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY) and (#loginUI.clientCharacters <= 0 or loginUI.clientCharacters[loginUI._selectedCharacter].isUnverified)
-                local isRightArrowHovered = isMouseOnPosition(option_offsetX + option_width - option_height, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY) and (#loginUI.clientCharacters <= 0 or loginUI.clientCharacters[loginUI._selectedCharacter].isUnverified)
+                local isLeftArrowHovered = isMouseOnPosition(option_offsetX + loginUI.phases[2].customizerui.option.paddingY, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY) and (#loginUI.characters <= 0 or loginUI.characters[loginUI._selectedCharacter].isUnverified)
+                local isRightArrowHovered = isMouseOnPosition(option_offsetX + option_width - option_height, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2), option_height - loginUI.phases[2].customizerui.option.paddingY, option_height - loginUI.phases[2].customizerui.option.paddingY) and (#loginUI.characters <= 0 or loginUI.characters[loginUI._selectedCharacter].isUnverified)
                 if not j.leftArrowAnimStatus then j.leftArrowAnimStatus = "backward" end
                 if not j.leftArrowAnimTickCounter then j.leftArrowAnimTickCounter = CLIENT_CURRENT_TICK end
                 if not j.rightArrowAnimStatus then j.rightArrowAnimStatus = "backward" end
@@ -975,10 +974,10 @@ local function renderUI()
                     j.rightArrowAnimAlphaPercent = imports.interpolateBetween(j.rightArrowAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.rightArrowAnimTickCounter, loginUI.phases[2].customizerui.option.arrowAnimDuration), "Linear")
                 end
             else
-                local isEditboxHovered = isMouseOnPosition(option_offsetX, option_offsetY, option_width, option_height) and (#loginUI.clientCharacters <= 0 or loginUI.clientCharacters[loginUI._selectedCharacter].isUnverified)
+                local isEditboxHovered = isMouseOnPosition(option_offsetX, option_offsetY, option_width, option_height) and (#loginUI.characters <= 0 or loginUI.characters[loginUI._selectedCharacter].isUnverified)
                 if not j.hoverAnimStatus then j.hoverAnimStatus = "backward" end
                 if not j.hoverAnimTick then j.hoverAnimTick = CLIENT_CURRENT_TICK end
-                if #loginUI.clientCharacters > 0 and not loginUI.clientCharacters[loginUI._selectedCharacter].isUnverified then loginUI.phases[2].customizerui.option.editbox.focussedEditbox = 0 end
+                if #loginUI.characters > 0 and not loginUI.characters[loginUI._selectedCharacter].isUnverified then loginUI.phases[2].customizerui.option.editbox.focussedEditbox = 0 end
                 if isEditboxHovered then
                     if isLMBClicked then
                         if (loginUI.phases[2].customizerui.option.editbox.focussedEditbox ~= i) then
@@ -1366,9 +1365,9 @@ toggleUI = function(state, Args)
         loginUI.phase = false
         loginUI.cinemationData = false
         loginUI.character = false
-        loginUI.selectedCharacter = 0
+        loginUI.character = 0
         loginUI._selectedCharacter = false
-        loginUI.clientCharacters = {}
+        loginUI.characters = {}
         loginUI.isPremium = false
         loginUI.state = false
         imports.triggerEvent("Sound:onToggleLogin", localPlayer, state)
@@ -1389,9 +1388,9 @@ imports.addEventHandler("Client:onToggleLoginUI", root, function(state, Args)
         for i, j in imports.pairs(Args.characters) do
             j.__isPreLoaded = true
         end
-        loginUI.selectedCharacter = Args.character
-        loginUI._selectedCharacter = loginUI.selectedCharacter
-        loginUI.clientCharacters = Args.characters
+        loginUI.character = Args.character
+        loginUI._selectedCharacter = loginUI.character
+        loginUI.characters = Args.characters
         loginUI._unsavedCharacters = {}
         loginUI._charactersUnderProcess = {}
         loginUI.isPremium = Args.isPremium
