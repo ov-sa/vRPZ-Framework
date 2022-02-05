@@ -66,6 +66,7 @@ imports.addEvent("Player:onToggleLoginUI", true)
 imports.addEventHandler("Player:onToggleLoginUI", root, function()
     imports.setElementFrozen(source, true)
     imports.setPlayerName(source, CPlayer.generateNick())
+
     local lastCharacter = CPlayer.getData(CPlayer.getSerial(source), {
         "character",
         "characters",
