@@ -23,14 +23,19 @@ local imports = {
 }
 
 
--------------------------------------------------
---[[ Events: On Client Character Delete/Save ]]--
--------------------------------------------------
+-------------------------------------
+--[[ Player: On Delete Character ]]--
+-------------------------------------
 
 imports.addEvent("Player:onDeleteCharacter", true)
 imports.addEventHandler("Player:onDeleteCharacter", root, function(characterID)
     CCharacter.delete(characterID)
 end)
+
+
+-----------------------------------
+--[[ Player: On Save Character ]]--
+-----------------------------------
 
 imports.addEvent("Player:onSaveCharacter", true)
 imports.addEventHandler("Player:onSaveCharacter", root, function(character, characters, unsavedCharacters)
