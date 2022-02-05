@@ -28,7 +28,7 @@ CPlayer.getData = dbify.serial.getData
 CPlayer.getSerial = function(player)
     if (not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player")) then return false end
     return imports.getPlayerSerial(player)
-end,
+end
 
 CPlayer.getPlayer = function(serial)
     if not serial then return false end
