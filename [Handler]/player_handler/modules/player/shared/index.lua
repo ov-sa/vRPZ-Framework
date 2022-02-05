@@ -38,7 +38,7 @@ CPlayer = {
         local guestNick = nil
         repeat
             guestNick = "Guest_"..imports.math.random(1, 10000)
-        until(imports.getPlayerFromName(guestNick))
+        until(not imports.getPlayerFromName(guestNick))
         return guestNick
     end
 }

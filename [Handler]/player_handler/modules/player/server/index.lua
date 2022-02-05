@@ -13,6 +13,8 @@
 -----------------
 
 local imports = {
+    isElement = isElement,
+    getElementType = getElementType,
     getElementsByType = getElementsByType,
     getPlayerSerial = getPlayerSerial,
 }
