@@ -17,7 +17,9 @@ local imports = {
     isElement = isElement,
     getElementsByType = getElementsByType,
     getElementData = getElementData,
-    getTime = getTime
+    getTime = getTime,
+    math = math,
+    string = string
 }
 
 
@@ -42,8 +44,17 @@ CGame = {
 
     getTime = function()
         local time = {imports.getTime()}
-        time[1] = ((time[1] < 10) and "0"..time[1]) or time[1]
-        time[2] = ((time[2] < 10) and "0"..time[2]) or time[2] 
-        return time[1], time[2]
+        return imports.string.format("%02d:%02d", time[1], time[2])
+    end,
+
+    formatMS = function(milliseconds)
+        milliseconds = imports.tonumber(milliseconds)
+        if not milliseconds then return false end
+        local totalseconds = imports.math.floor(milliseconds/1000)
+        local seconds = totalseconds%60
+        local minutes = imports.math.floor(totalseconds/60)
+        local hours = imports.math.floor(minutes/60)
+        minutes = minutes%60
+        return imports.string.format("%02d:%02d:%02d", hours, minutes, seconds)
     end
 }

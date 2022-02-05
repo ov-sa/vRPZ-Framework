@@ -223,25 +223,6 @@ function getPlayersWithinMarker(marker)
 end
 
 
-----------------------------------------
---[[ Function: Formats Milliseconds ]]--
-----------------------------------------
-
-function formatMilliseconds(milliseconds)
-
-    milliseconds = tonumber(milliseconds)
-    if not milliseconds then return false end
-
-    local totalseconds = math.floor(milliseconds / 1000)
-    local seconds = totalseconds % 60
-    local minutes = math.floor(totalseconds / 60)
-    local hours = math.floor(minutes / 60)
-    minutes = minutes % 60
-    return string.format("%02d:%02d:%02d", hours, minutes, seconds)
-
-end
-
-
 ---------------------------------
 --[[ Function: Splits String ]]--
 ---------------------------------

@@ -14,3 +14,4 @@
 
 function getServerTick(...) return CGame.getServerTick(...) end
 function getTime(...) return CGame.getTime(...) end
+function formatMS(...) return CGame.formatMS(...) end
