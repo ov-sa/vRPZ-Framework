@@ -17,43 +17,43 @@ configVars["UI"]["Loading"] = {
     ["Hints"] = {
         {
             ["EN"] = "Upgrade your skills to unlock higher blood limit!",
-            ["TR"] = "WIP"
+            ["TR"] = "Daha yüksek kan limitinin kilidini açmak için yeteneklerinizi geliştirmelisin!"
         },
         {
             ["EN"] = "Use Antiradiation suits to evade radiations effectively!",
-            ["TR"] = "WIP"
+            ["TR"] = "Radyasyonlardan etkili bir şekilde kaçmak için Radyasyon Önleyici giysiler kullanmalısın!"
         },
         {
             ["EN"] = "Use helmets to evade headshots!",
-            ["TR"] = "WIP"
+            ["TR"] = "Kafa vuruşlarından kaçınmak için kask kullanmalısın!"
         },
         {
             ["EN"] = "Use armors to evade damages!",
-            ["TR"] = "WIP"
+            ["TR"] = "Hasarlardan kaçınmak için zırhları kullanmalısın!"
         },
         {
             ["EN"] = "Use backpacks to carry more items!",
-            ["TR"] = "WIP"
+            ["TR"] = "Daha fazla eşya taşımak için sırt çantalarını kullanmalısın!"
         },
         {
             ["EN"] = "Always be alarmed, never trust anyone!",
-            ["TR"] = "WIP"
+            ["TR"] = "Her zaman dikkatli olmalısın, asla kimseye güvenmemelisin!"
         },
         {
             ["EN"] = "Revive your faction/group members to gain more reputation!",
-            ["TR"] = "WIP"
+            ["TR"] = "Daha fazla itibar kazanmak için faction/grup üyelerinizi canlandırın!"
         },
         {
             ["EN"] = "Killing your faction/group members will reduce your reputation!",
-            ["TR"] = "WIP"
+            ["TR"] = "Faction/grup üyelerinizi öldürmek itibarınızı düşürür!"
         },
         {
             ["EN"] = "Maintain higher reputation to unlock high tier loots!",
-            ["TR"] = "WIP"
+            ["TR"] = "Yüksek seviyeli ganimetlerin kilidini açmak için daha yüksek itibarı koruyun!"
         },
         {
             ["EN"] = "Collect GPS & Compass to help you travel on the map!",
-            ["TR"] = "WIP"
+            ["TR"] = "Haritada seyahat etmenize yardımcı olması için GPS ve Pusula toplayın!"
         }
     }
 
