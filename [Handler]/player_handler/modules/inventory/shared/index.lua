@@ -98,3 +98,4 @@ for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
         CInventory.CItems[k] = {slot = i, data = v}
     end
 end
+dbify.Inventory.ensureItems(CInventory.CItems)
