@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     triggerClientEvent = triggerClientEvent,
@@ -38,28 +39,29 @@ end)
 -----------------------------------
 
 imports.addEvent("Player:onSaveCharacter", true)
-imports.addEventHandler("Player:onSaveCharacter", root, function(character, characters, unsavedCharacters)
-    character = tonumber(character)
-    if not character or not characters or not unsavedCharacters then return false end
+imports.addEventHandler("Player:onSaveCharacter", root, function(characterID, characters, unsavedCharacters)
+    characterID = tonumber(characterID)
+    if not characterID or not characterID or not unsavedCharacters then return false end
 
-    local serial = source:getSerial()
-    for i, j in pairs(unsavedCharacters) do
+    local serial = CPlayer.getSerial(source)
+    for i, j in imports.pairs(unsavedCharacters) do
         if characters[i] then
-            for k, v in pairs(characterCache) do
+            for k, v in imports.pairs(characterCache) do
                 if v.identity["name"] == characters[i]["name"] then
-                    triggerClientEvent(source, "onClientLoginUIEnable", source, true, true)
-                    triggerClientEvent(source, "onClientRecieveCharacterSaveState", source, false, "Unfortunately, '"..characters[i]["name"].."' is already registered!", i)
+                    --TODO: THESE EVENTS MUST BE RENAMED..
+                    imports.triggerClientEvent(source, "onClientLoginUIEnable", source, true, true)
+                    imports.triggerClientEvent(source, "onClientRecieveCharacterSaveState", source, false, "Unfortunately, '"..characters[i]["name"].."' is already registered!", i)
                     return false
                 end
             end
-            local characterID = addSerialCharacter(serial)
-            CCharacter.setData(characterID, "identity", toJSON(characters[i]))
-            characterCache[characterID]["identity"] = fromJSON(characterCache[characterID]["identity"])
-            triggerClientEvent(source, "onClientLoadCharacterID", source, i, characterID, characters[i])
+            local __characterID = addSerialCharacter(serial)
+            CCharacter.setData(__characterID, "identity", toJSON(characters[i]))
+            characterCache[__characterID]["identity"] = fromJSON(characterCache[__characterID]["identity"])
+            imports.triggerClientEvent(source, "onClientLoadCharacterID", source, i, __characterID, characters[i])
         end
     end
-    exports.serials_library:setSerialData(serial, "character", character)
-    triggerClientEvent(source, "onClientRecieveCharacterSaveState", source, true)
+    CPlayer.setData(serial, {"character", characterID})
+    imports.triggerClientEvent(source, "onClientRecieveCharacterSaveState", source, true)
 end)
 
 
