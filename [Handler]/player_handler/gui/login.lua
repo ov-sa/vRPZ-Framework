@@ -1389,7 +1389,7 @@ end
 imports.addEvent("Client:onToggleLoginUI", true)
 imports.addEventHandler("Client:onToggleLoginUI", root, function(state, Args)
     if state then
-        for i, j in imports.ipairs(characters) do
+        for i, j in imports.pairs(characters) do
             j.__isPreLoaded = true
         end
         loginUI.selectedCharacter = Args.character
@@ -1407,7 +1407,7 @@ imports.addEventHandler("Client:onToggleLoginUI", root, function(state, Args)
             toggleUI(state, Args)
             imports.fadeCamera(true)
             imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, false)
-        end, 10000, 1)
+        end, FRAMEWORK_CONFIGS["UI"]["Login"].fadeDelay, 1)
     else
         toggleUI(state, Args)
     end
