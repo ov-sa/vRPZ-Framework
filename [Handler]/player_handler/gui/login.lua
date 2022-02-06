@@ -65,16 +65,10 @@ local loginUI = {
             bgColor = {255, 255, 255, 255},
             bgTexture = imports.dxCreateTexture("files/images/login/login.png", "argb", true, "clamp"),
             optionsUI = {
-                startX = CLIENT_MTA_RESOLUTION[1]*0.5,
-                startY = -15,
-                width = 0,
-                height = 35,
-                paddingY = 10,
-                font = FRAMEWORK_FONTS[2],
-                embedLineSize = 3,
-                fontColor = {150, 150, 150, 25},
-                hoverfontColor = {170, 35, 35, 255},
-                embedLineColor = {170, 35, 35, 50},
+                startX = CLIENT_MTA_RESOLUTION[1]*0.5, startY = -15, paddingY = 10,
+                width = 0, height = 35,
+                font = FRAMEWORK_FONTS[2], fontColor = {150, 150, 150, 25}, hoverfontColor = {170, 35, 35, 255},
+                embedLineSize = 3, embedLineColor = {170, 35, 35, 50},
                 hoverAnimDuration = 2500,
                 {
                     identifier = "play",
@@ -92,10 +86,8 @@ local loginUI = {
         },
         [2] = {
             customizerui = {
-                startX = 20,
-                startY = -15,
-                width = 325,
-                height = 0,
+                startX = 20, startY = -15,
+                width = 325, height = 0,
                 bgColor = {0, 0, 0, 240},
                 titleBar = {
                     text = "C H A R A C T E R",

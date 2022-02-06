@@ -40,21 +40,17 @@ loadingUI = {
     tickCounter = CLIENT_CURRENT_TICK,
     bgColor = {0, 0, 0, 255},
     loader = {
-        startX = 0,
-        startY = (CLIENT_MTA_RESOLUTION[2]/768)*-15,
+        startX = 0, startY = (CLIENT_MTA_RESOLUTION[2]/768)*-15,
         size = 50,
         tickCounter = CLIENT_CURRENT_TICK,
         animDuration = 750,
         rotationValue = 0,
-        bgColor = {200, 200, 200, 255},
-        bgTexture = imports.dxCreateTexture("files/images/loading/loader.png", "argb", true, "clamp")
+        bgColor = {200, 200, 200, 255}, bgTexture = imports.dxCreateTexture("files/images/loading/loader.png", "argb", true, "clamp")
     },
     hint = {
-        paddingX = 5,
-        paddingY = 15,
+        paddingX = 5, paddingY = 15,
         text = "",
-        font = FRAMEWORK_FONTS[1],
-        fontColor = {200, 200, 200, 255}
+        font = FRAMEWORK_FONTS[1], fontColor = {200, 200, 200, 255}
     }
 }
 loadingUI.loader.startX = loadingUI.loader.startX + ((CLIENT_MTA_RESOLUTION[1] - loadingUI.loader.size)/2)

@@ -34,20 +34,13 @@ local imports = {
 -------------------
 
 local notifUI = {
-    startX = 50,
-    startY = 15,
-    height = 30,
-    paddingY = 5,
-    offsetY = 0,
     buffer = {},
-    slideInDuration = 850,
-    slideOutDuration = 500,
-    slideTopDuration = 500,
-    slideAnimDelayDuration = 2000,
+    startX = 50, startY = 15, paddingY = 5, offsetY = 0,
+    height = 30,
+    slideInDuration = 850, slideOutDuration = 500, slideTopDuration = 500, slideAnimDelayDuration = 2000,
     slideTopTickCounter = CLIENT_CURRENT_TICK,
-    font = FRAMEWORK_FONTS[8],
+    font = FRAMEWORK_FONTS[8], defaultFontColor = {175, 175, 175, 255},
     bgColor = {3, 3, 3, 255},
-    defaultFontColor = {175, 175, 175, 255},
     leftCurvedEdgePath = beautify.assets["images"]["curved_square/regular/left.rw"],
     rightCurvedEdgePath = beautify.assets["images"]["curved_square/regular/right.rw"]
 }
