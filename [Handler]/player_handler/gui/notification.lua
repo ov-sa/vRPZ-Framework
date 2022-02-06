@@ -37,10 +37,8 @@ local notifUI = {
     buffer = {},
     startX = 50, startY = 15, paddingY = 5, offsetY = 0,
     height = 30,
-    slideInDuration = 850, slideOutDuration = 500, slideTopDuration = 500, slideDelayDuration = 2000,
     slideTopTickCounter = CLIENT_CURRENT_TICK,
-    font = FRAMEWORK_FONTS[8], defaultFontColor = {175, 175, 175, 255},
-    bgColor = {3, 3, 3, 255},
+    font = FRAMEWORK_FONTS[8],
     leftCurvedEdgePath = beautify.assets["images"]["curved_square/regular/left.rw"],
     rightCurvedEdgePath = beautify.assets["images"]["curved_square/regular/right.rw"]
 }
@@ -53,17 +51,17 @@ local notifUI = {
 beautify.render.create(function()
     if #notifUI.buffer <= 0 then return false end
 
-    local offsetY = imports.interpolateBetween(notifUI.offsetY, 0, 0, 0, 0, 0, imports.getInterpolationProgress(notifUI.slideTopTickCounter, notifUI.slideTopDuration), "OutBack")
+    local offsetY = imports.interpolateBetween(notifUI.offsetY, 0, 0, 0, 0, 0, imports.getInterpolationProgress(notifUI.slideTopTickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideTopDuration), "OutBack")
     for i, j in imports.ipairs(notifUI.buffer) do
-        local notifFontColor = j.fontColor or notifUI.defaultFontColor
+        local notifFontColor = j.fontColor or FRAMEWORK_CONFIGS["UI"]["Notification"].fontColor
         local notif_width, notif_height = imports.dxGetTextWidth(j.text, 1, notifUI.font), notifUI.height
         local notif_offsetX, notif_offsetY = 0, 0
         local notifAlphaPercent = 0
         if j.slideStatus == "forward" then
-		    notif_offsetX, notif_offsetY = imports.interpolateBetween(CLIENT_MTA_RESOLUTION[1], notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)) - notifUI.height, 0, (CLIENT_MTA_RESOLUTION[1]) - notifUI.startX - notif_width, notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)) + offsetY, 0, imports.getInterpolationProgress(j.tickCounter, notifUI.slideInDuration), "InOutBack")
-            notifAlphaPercent = imports.interpolateBetween(0, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.tickCounter, notifUI.slideInDuration), "Linear")
+		    notif_offsetX, notif_offsetY = imports.interpolateBetween(CLIENT_MTA_RESOLUTION[1], notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)) - notifUI.height, 0, (CLIENT_MTA_RESOLUTION[1]) - notifUI.startX - notif_width, notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)) + offsetY, 0, imports.getInterpolationProgress(j.tickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideInDuration), "InOutBack")
+            notifAlphaPercent = imports.interpolateBetween(0, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.tickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideInDuration), "Linear")
             if imports.math.round(notifAlphaPercent, 2) == 1 then
-                if (CLIENT_CURRENT_TICK - j.tickCounter - notifUI.slideInDuration) >= notifUI.slideDelayDuration then
+                if (CLIENT_CURRENT_TICK - j.tickCounter - FRAMEWORK_CONFIGS["UI"]["Notification"].slideInDuration) >= FRAMEWORK_CONFIGS["UI"]["Notification"].slideDelayDuration then
                     j.slideStatus = "backward"
                     j.tickCounter = CLIENT_CURRENT_TICK
                     notifUI.offsetY = notifUI.height
@@ -71,12 +69,12 @@ beautify.render.create(function()
                 end
             end
         else
-		    notif_offsetX, notif_offsetY = imports.interpolateBetween((CLIENT_MTA_RESOLUTION[1]) - notifUI.startX - notif_width, notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)), 0, CLIENT_MTA_RESOLUTION[1], notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)) + (notifUI.height*0.5) - offsetY, 0, imports.getInterpolationProgress(j.tickCounter, notifUI.slideOutDuration), "InOutBack")
-            notifAlphaPercent = imports.interpolateBetween(1, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.tickCounter, notifUI.slideOutDuration), "Linear")
+		    notif_offsetX, notif_offsetY = imports.interpolateBetween((CLIENT_MTA_RESOLUTION[1]) - notifUI.startX - notif_width, notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)), 0, CLIENT_MTA_RESOLUTION[1], notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)) + (notifUI.height*0.5) - offsetY, 0, imports.getInterpolationProgress(j.tickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideOutDuration), "InOutBack")
+            notifAlphaPercent = imports.interpolateBetween(1, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.tickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideOutDuration), "Linear")
         end
-        imports.dxDrawRectangle(notif_offsetX, notif_offsetY, notif_width, notif_height, imports.tocolor(notifUI.bgColor[1], notifUI.bgColor[2], notifUI.bgColor[3], notifUI.bgColor[4]*notifAlphaPercent), false)
-        imports.dxDrawImage(notif_offsetX - notif_height, notif_offsetY, notif_height, notif_height, notifUI.leftCurvedEdgePath, 0, 0, 0, imports.tocolor(notifUI.bgColor[1], notifUI.bgColor[2], notifUI.bgColor[3], notifUI.bgColor[4]*notifAlphaPercent), false)
-        imports.dxDrawImage(notif_offsetX + notif_width, notif_offsetY, notif_height, notif_height, notifUI.rightCurvedEdgePath, 0, 0, 0, imports.tocolor(notifUI.bgColor[1], notifUI.bgColor[2], notifUI.bgColor[3], notifUI.bgColor[4]*notifAlphaPercent), false)
+        imports.dxDrawRectangle(notif_offsetX, notif_offsetY, notif_width, notif_height, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[1], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[2], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[3], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[4]*notifAlphaPercent), false)
+        imports.dxDrawImage(notif_offsetX - notif_height, notif_offsetY, notif_height, notif_height, notifUI.leftCurvedEdgePath, 0, 0, 0, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[1], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[2], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[3], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[4]*notifAlphaPercent), false)
+        imports.dxDrawImage(notif_offsetX + notif_width, notif_offsetY, notif_height, notif_height, notifUI.rightCurvedEdgePath, 0, 0, 0, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[1], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[2], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[3], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[4]*notifAlphaPercent), false)
         imports.dxDrawText(j.text, notif_offsetX, notif_offsetY, notif_offsetX + notif_width, notif_offsetY + notif_height, imports.tocolor(notifFontColor[1], notifFontColor[2], notifFontColor[3], notifFontColor[4]*notifAlphaPercent), 1, notifUI.font, "center", "center", true, false, false, false, true)
         if j.slideStatus == "backward" then
             if imports.math.round(notifAlphaPercent, 2) == 0 then
