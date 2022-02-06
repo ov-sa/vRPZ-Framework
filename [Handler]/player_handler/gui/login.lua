@@ -55,15 +55,6 @@ local loginUI = {
         keys = {},
         timers = {}
     },
-    state = false,
-    phase = false,
-    isEnabled = false,
-    isForcedDisabled = false,
-    cinemationData = false,
-    character = false,
-    character = 0,
-    characters = {},
-    isPremium = false,
     bgTexture = imports.dxCreateTexture("files/images/login/background.png", "argb", true, "clamp"),
     phases = {
         [1] = {
@@ -1399,7 +1390,7 @@ imports.addEventHandler("Client:onToggleLoginUI", root, function(state, Args)
         loginUI.characters = Args.characters
         loginUI._unsavedCharacters = {}
         loginUI._charactersUnderProcess = {}
-        loginUI.isPremium = Args.isPremium
+        loginUI.premium = Args.premium
         imports.setElementPosition(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.x, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.y, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.z)
         imports.setElementDimension(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
         setLoginUIEnabled(true, true)

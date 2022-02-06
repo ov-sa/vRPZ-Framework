@@ -95,7 +95,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                 imports.triggerClientEvent(Args[1], "Client:onToggleLoginUI", Args[1], true, {
                     character = Args[2].character,
                     characters = Args[2].characters,
-                    isPremium = Args[2].premimum
+                    premium = Args[2].premimum
                 })
             end, Args[1], result)
         else
@@ -103,7 +103,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
             imports.triggerClientEvent(Args[1], "Client:onToggleLoginUI", Args[1], true, {
                 character = result.character,
                 characters = result.characters,
-                isPremium = result.premimum
+                premium = result.premimum
             })
         end
     end, source)
