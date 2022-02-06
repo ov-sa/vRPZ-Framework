@@ -721,75 +721,6 @@ imports.addEventHandler("onClientCharacter", root, function(character)
 
 end)
 
-imports.addEventHandler("onClientKey", root, function(button, press)
-
-    if GuiElement.isMTAWindowActive() or not isLoginUIVisible() or getLoginUIPhase() ~= 2 or not loginUI.isEnabled or loginUI.isForcedDisabled then return false end
-
-    if (button == "lshift" or button == "rshift") then
-        _currentPressedKey = false
-    else
-        if not press then
-            if button == "tab" then
-                if loginUI.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
-                    local nextEditboxIndex = false
-                    local editboxIndex = {}
-                    local currentEditbox = false
-                    for i, j in imports.ipairs(loginUI.phases[2].customizerui.option) do
-                        if j.isEditBox then
-                            table.insert(editboxIndex, i)
-                            if loginUI.phases[2].customizerui.option.editbox.focussedEditbox == i then
-                                currentEditbox = #editboxIndex
-                            end
-                        end
-                    end
-                    if (getKeyState("lshift") or getKeyState("rshift")) then
-                        if not editboxIndex[currentEditbox - 1] then
-                            loginUI.phases[2].customizerui.option.editbox.focussedEditbox = editboxIndex[#editboxIndex]
-                        else
-                            loginUI.phases[2].customizerui.option.editbox.focussedEditbox = editboxIndex[currentEditbox - 1]
-                        end
-                    else
-                        if not editboxIndex[currentEditbox + 1] then
-                            loginUI.phases[2].customizerui.option.editbox.focussedEditbox = 1
-                        else
-                            loginUI.phases[2].customizerui.option.editbox.focussedEditbox = editboxIndex[currentEditbox + 1]
-                        end
-                    end
-                    loginUI.phases[2].customizerui.option.editbox.cursor.posNum = string.len(loginUI.phases[2].customizerui.option[loginUI.phases[2].customizerui.option.editbox.focussedEditbox].placeDataValue)
-                end
-            elseif button == "home" then
-                if loginUI.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
-                    loginUI.phases[2].customizerui.option.editbox.cursor.posNum = 0
-                end
-            elseif button == "end" then
-                if loginUI.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
-                    loginUI.phases[2].customizerui.option.editbox.cursor.posNum = string.len(loginUI.phases[2].customizerui.option[loginUI.phases[2].customizerui.option.editbox.focussedEditbox].placeDataValue)
-                end
-            elseif string.find(button, "arrow") then
-                if loginUI.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
-                    local fieldLength = string.len(loginUI.phases[2].customizerui.option[loginUI.phases[2].customizerui.option.editbox.focussedEditbox].placeDataValue)
-                    if button == "arrow_l" then
-                        if loginUI.phases[2].customizerui.option.editbox.cursor.posNum - 1 < 0 then
-                            loginUI.phases[2].customizerui.option.editbox.cursor.posNum = fieldLength
-                        else
-                            loginUI.phases[2].customizerui.option.editbox.cursor.posNum = loginUI.phases[2].customizerui.option.editbox.cursor.posNum - 1
-                        end
-                    elseif button == "arrow_r" then
-                        if loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1 > fieldLength then
-                            loginUI.phases[2].customizerui.option.editbox.cursor.posNum = 0
-                        else
-                            loginUI.phases[2].customizerui.option.editbox.cursor.posNum = loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1
-                        end
-                    end
-                end
-            elseif (getKeyState("lshift") or getKeyState("rshift")) then
-                _currentPressedKey = false
-            end
-        end
-    end
-
-end)
-
 
 ------------------------------
 --[[ Function: Renders UI ]]--
@@ -1372,3 +1303,94 @@ imports.addEventHandler("onClientResourceStart", resource, function()
     imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
     imports.triggerServerEvent("Player:onToggleLoginUI", localPlayer)
 end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--[[
+--TODO: NO NEED OF THIS SOON ANYMORE :0
+imports.addEventHandler("onClientKey", root, function(button, press)
+
+    if GuiElement.isMTAWindowActive() or not isLoginUIVisible() or getLoginUIPhase() ~= 2 or not loginUI.isEnabled or loginUI.isForcedDisabled then return false end
+
+    if (button == "lshift" or button == "rshift") then
+        _currentPressedKey = false
+    else
+        if not press then
+            if button == "tab" then
+                if loginUI.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
+                    local nextEditboxIndex = false
+                    local editboxIndex = {}
+                    local currentEditbox = false
+                    for i, j in imports.ipairs(loginUI.phases[2].customizerui.option) do
+                        if j.isEditBox then
+                            table.insert(editboxIndex, i)
+                            if loginUI.phases[2].customizerui.option.editbox.focussedEditbox == i then
+                                currentEditbox = #editboxIndex
+                            end
+                        end
+                    end
+                    if (getKeyState("lshift") or getKeyState("rshift")) then
+                        if not editboxIndex[currentEditbox - 1] then
+                            loginUI.phases[2].customizerui.option.editbox.focussedEditbox = editboxIndex[#editboxIndex]
+                        else
+                            loginUI.phases[2].customizerui.option.editbox.focussedEditbox = editboxIndex[currentEditbox - 1]
+                        end
+                    else
+                        if not editboxIndex[currentEditbox + 1] then
+                            loginUI.phases[2].customizerui.option.editbox.focussedEditbox = 1
+                        else
+                            loginUI.phases[2].customizerui.option.editbox.focussedEditbox = editboxIndex[currentEditbox + 1]
+                        end
+                    end
+                    loginUI.phases[2].customizerui.option.editbox.cursor.posNum = string.len(loginUI.phases[2].customizerui.option[loginUI.phases[2].customizerui.option.editbox.focussedEditbox].placeDataValue)
+                end
+            elseif button == "home" then
+                if loginUI.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
+                    loginUI.phases[2].customizerui.option.editbox.cursor.posNum = 0
+                end
+            elseif button == "end" then
+                if loginUI.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
+                    loginUI.phases[2].customizerui.option.editbox.cursor.posNum = string.len(loginUI.phases[2].customizerui.option[loginUI.phases[2].customizerui.option.editbox.focussedEditbox].placeDataValue)
+                end
+            elseif string.find(button, "arrow") then
+                if loginUI.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
+                    local fieldLength = string.len(loginUI.phases[2].customizerui.option[loginUI.phases[2].customizerui.option.editbox.focussedEditbox].placeDataValue)
+                    if button == "arrow_l" then
+                        if loginUI.phases[2].customizerui.option.editbox.cursor.posNum - 1 < 0 then
+                            loginUI.phases[2].customizerui.option.editbox.cursor.posNum = fieldLength
+                        else
+                            loginUI.phases[2].customizerui.option.editbox.cursor.posNum = loginUI.phases[2].customizerui.option.editbox.cursor.posNum - 1
+                        end
+                    elseif button == "arrow_r" then
+                        if loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1 > fieldLength then
+                            loginUI.phases[2].customizerui.option.editbox.cursor.posNum = 0
+                        else
+                            loginUI.phases[2].customizerui.option.editbox.cursor.posNum = loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1
+                        end
+                    end
+                end
+            elseif (getKeyState("lshift") or getKeyState("rshift")) then
+                _currentPressedKey = false
+            end
+        end
+    end
+
+end)
+]]--
