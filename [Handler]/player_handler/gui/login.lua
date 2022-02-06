@@ -301,7 +301,7 @@ local loginUI = {
             view = {
                 startX = 0, startY = 15, paddingX = 25,
                 width = 0, height = -15,
-                font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(100, 100, 100, 255),
+                font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(200, 200, 200, 255),
                 scrollAnimTickCounter = CLIENT_CURRENT_TICK,
                 scrollDelayDuration = loadingUI.fadeOutDuration + loadingUI.fadeDelayDuration - 1000,
                 scrollAnimDuration = 5000
