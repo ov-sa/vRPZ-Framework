@@ -31,11 +31,8 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-loadingUI = {
+local loadingUI = {
     animStatus = "backward",
-    animFadeInDuration = 500,
-    fadeOutDuration = 2500,
-    fadeDelayDuration = 2000,
     fadeAnimPercent = 0,
     tickCounter = CLIENT_CURRENT_TICK,
     bgColor = {0, 0, 0, 255},
@@ -63,15 +60,15 @@ loadingUI.loader.startY = loadingUI.loader.startY + ((CLIENT_MTA_RESOLUTION[2] -
 
 beautify.render.create(function()
     if ((loadingUI.animStatus == "forward") or (loadingUI.animStatus == "reverse_backward")) then
-        loadingUI.fadeAnimPercent = imports.interpolateBetween(loadingUI.fadeAnimPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loadingUI.tickCounter, loadingUI.animFadeInDuration), "Linear")
+        loadingUI.fadeAnimPercent = imports.interpolateBetween(loadingUI.fadeAnimPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loadingUI.tickCounter, FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"].fadeInDuration), "Linear")
         if (loadingUI.animStatus == "reverse_backward") and (imports.math.round(loadingUI.fadeAnimPercent, 2) == 1) then
-            if ((CLIENT_CURRENT_TICK - loadingUI.tickCounter) >= (loadingUI.animFadeInDuration + loadingUI.fadeDelayDuration)) then
+            if ((CLIENT_CURRENT_TICK - loadingUI.tickCounter) >= (FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"].fadeInDuration + FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"].fadeDelayDuration)) then
                 loadingUI.animStatus = "backward"
                 loadingUI.tickCounter = CLIENT_CURRENT_TICK
             end
         end
     elseif loadingUI.animStatus == "backward" then
-        loadingUI.fadeAnimPercent = imports.interpolateBetween(loadingUI.fadeAnimPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(loadingUI.tickCounter, loadingUI.fadeOutDuration), "Linear")
+        loadingUI.fadeAnimPercent = imports.interpolateBetween(loadingUI.fadeAnimPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(loadingUI.tickCounter, FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"].fadeOutDuration), "Linear")
     end
 
     loadingUI.loader.rotationValue = imports.interpolateBetween(0, 0, 0, 360, 0, 0, imports.getInterpolationProgress(loadingUI.loader.tickCounter, loadingUI.loader.animDuration), "Linear")

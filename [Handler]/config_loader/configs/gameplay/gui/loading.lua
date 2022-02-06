@@ -14,6 +14,10 @@
 
 configVars["UI"]["Loading"] = {
 
+    fadeInDuration = 500,
+    fadeOutDuration = 2500,
+    fadeDelayDuration = 2000,
+
     ["Hints"] = {
         {
             ["EN"] = "Upgrade your skills to unlock higher blood limit!",
