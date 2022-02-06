@@ -26,6 +26,7 @@ local imports = {
     setTimer = setTimer,
     killTimer = killTimer,
     dxCreateTexture = dxCreateTexture,
+    dxCreateRenderTarget = dxCreateRenderTarget,
     dxSetRenderTarget = dxSetRenderTarget,
     dxDrawRectangle = dxDrawRectangle,
     dxDrawImage = dxDrawImage,
@@ -347,7 +348,7 @@ end
 loginUI.phases[3].view.width, loginUI.phases[3].view.height = loginUI.phases[3].view.width + (CLIENT_MTA_RESOLUTION[1] - loginUI.phases[3].view.startX), loginUI.phases[3].view.height + (CLIENT_MTA_RESOLUTION[2] - loginUI.phases[3].view.startY)
 loginUI.phases[3].view.contentWidth, loginUI.phases[3].view.contentHeight = dxGetTextSize(loginUI.phases[3].view.content, loginUI.phases[3].view.width, 1, loginUI.phases[3].view.font, false)
 loginUI.phases[3].view.scrollAnimDuration = math.max(1, math.ceil((loginUI.phases[3].view.contentHeight + loginUI.phases[3].view.height)/loginUI.phases[3].view.height))*loginUI.phases[3].view.scrollAnimDuration
-loginUI.phases[3].view.renderTarget = DxRenderTarget(loginUI.phases[3].view.width, loginUI.phases[3].view.height, true)
+loginUI.phases[3].view.renderTarget = imports.dxCreateRenderTarget(loginUI.phases[3].view.width, loginUI.phases[3].view.height, true)
 --[[
 for i, j in imports.ipairs(playerClothes["Gender"]) do
     table.insert(loginUI.phases[2].customizerui.option[3].placeDataTable, j.modelType)
