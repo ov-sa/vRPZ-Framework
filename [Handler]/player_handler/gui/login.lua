@@ -319,8 +319,7 @@ local loginUI = {
                 fontColor = {100, 100, 100, 255},
                 outlineColor = {0, 0, 0, 255},
                 scrollAnimTickCounter = CLIENT_CURRENT_TICK,
-                scrollDelayDuration = 1000,
-                --scrollDelayDuration = loadingUI.animFadeOutDuration + loadingUI.animFadeDelayDuration - 1000,
+                scrollDelayDuration = loadingUI.fadeOutDuration + loadingUI.fadeDelayDuration - 1000,
                 scrollAnimDuration = 5000,
             }
         }
@@ -595,7 +594,7 @@ manageCharacter = function(manageType)
         end, loadingUI.animFadeInDuration + 250, 1)
         imports.setTimer(function(character, characters)
             imports.triggerServerEvent("onPlayerResumeGame", localPlayer, character, characters)
-        end, loadingUI.animFadeInDuration + loadingUI.animFadeOutDuration + loadingUI.animFadeDelayDuration, 1, loginUI.character, loginUI.characters)
+        end, loadingUI.animFadeInDuration + loadingUI.fadeOutDuration + loadingUI.fadeDelayDuration, 1, loginUI.character, loginUI.characters)
     end
     return true
 
@@ -677,7 +676,7 @@ setLoginUIPhase = function(phaseID)
     loginUI.cache.timers.uiEnabler = imports.setTimer(function()
         setLoginUIEnabled(true)
         loginUI.cache.timers.uiEnabler = false
-    end, loadingUI.animFadeOutDuration + loadingUI.animFadeDelayDuration - (loadingUI.animFadeInDuration + 250), 1)
+    end, loadingUI.fadeOutDuration + loadingUI.fadeDelayDuration - (loadingUI.animFadeInDuration + 250), 1)
     return true
 end
 imports.addEvent("onClientSetLoginUIPhase", true)
