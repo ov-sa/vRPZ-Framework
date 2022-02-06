@@ -301,8 +301,6 @@ local loginUI = {
             view = {
                 startX = 0, startY = 15, paddingX = 25,
                 width = 0, height = -15,
-                content = "",
-                contentHeight = 100,
                 font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(100, 100, 100, 255),
                 scrollAnimTickCounter = CLIENT_CURRENT_TICK,
                 scrollDelayDuration = loadingUI.fadeOutDuration + loadingUI.fadeDelayDuration - 1000,
@@ -325,12 +323,13 @@ loginUI.phases[2].customizerui.switcher.startY = loginUI.phases[2].customizerui.
 loginUI.phases[2].customizerui.button.startX = loginUI.phases[2].customizerui.button.startX + (loginUI.phases[2].customizerui.width - (#loginUI.phases[2].customizerui.button*loginUI.phases[2].customizerui.button.width) - imports.math.max(0, (#loginUI.phases[2].customizerui.button - 1)*loginUI.phases[2].customizerui.button.paddingX))/2
 loginUI.phases[2].customizerui.button.startY = loginUI.phases[2].customizerui.button.startY + loginUI.phases[2].customizerui.button.paddingY
 loginUI.phases[3].back_navigator.height = loginUI.phases[3].back_navigator.height + imports.dxGetFontHeight(1, loginUI.phases[3].back_navigator.font)
+loginUI.phases[3].view.contentText = ""
 for i = 1, #FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Contributors"] do
     local j = imports.tostring(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Contributors"][i])
-    loginUI.phases[3].view.content = ((i == 1) and j) or loginUI.phases[3].view.content.."\n\n"..j
+    loginUI.phases[3].view.contentText = ((i == 1) and j) or loginUI.phases[3].view.contentText.."\n\n"..j
 end
 loginUI.phases[3].view.width, loginUI.phases[3].view.height = loginUI.phases[3].view.width + (CLIENT_MTA_RESOLUTION[1] - loginUI.phases[3].view.startX), loginUI.phases[3].view.height + (CLIENT_MTA_RESOLUTION[2] - loginUI.phases[3].view.startY)
-loginUI.phases[3].view.contentWidth, loginUI.phases[3].view.contentHeight = imports.dxGetTextSize(loginUI.phases[3].view.content, loginUI.phases[3].view.width, 1, loginUI.phases[3].view.font, false)
+loginUI.phases[3].view.contentWidth, loginUI.phases[3].view.contentHeight = imports.dxGetTextSize(loginUI.phases[3].view.contentText, loginUI.phases[3].view.width, 1, loginUI.phases[3].view.font, false)
 loginUI.phases[3].view.scrollAnimDuration = imports.math.max(1, imports.math.ceil((loginUI.phases[3].view.contentHeight + loginUI.phases[3].view.height)/loginUI.phases[3].view.height))*loginUI.phases[3].view.scrollAnimDuration
 --[[
 for i, j in imports.ipairs(playerClothes["Gender"]) do
@@ -1139,7 +1138,7 @@ local function renderUI(renderData)
                 end
             end
             credits_offsetY = view_offsetY + credits_offsetY
-            imports.dxDrawText(loginUI.phases[3].view.content, view_offsetX + loginUI.phases[3].view.paddingX, credits_offsetY, view_offsetX + view_width, credits_offsetY + loginUI.phases[3].view.contentHeight, loginUI.phases[3].view.fontColor, 1, loginUI.phases[3].view.font, "center", "center", true, false, false, false, true)
+            imports.dxDrawText(loginUI.phases[3].view.contentText, view_offsetX + loginUI.phases[3].view.paddingX, credits_offsetY, view_offsetX + view_width, credits_offsetY + loginUI.phases[3].view.contentHeight, loginUI.phases[3].view.fontColor, 1, loginUI.phases[3].view.font, "center", "center", true, false, false, false, true)
             local back_navigator_width, back_navigator_height = loginUI.phases[3].back_navigator.width + dxGetTextWidth(loginUI.phases[3].back_navigator.title, 1, loginUI.phases[3].back_navigator.font), loginUI.phases[3].back_navigator.height
             back_navigator_width = back_navigator_width + (back_navigator_height*2)
             local back_navigator_offsetX, back_navigator_offsetY = loginUI.phases[3].back_navigator.startX + (CLIENT_MTA_RESOLUTION[1] - back_navigator_width), loginUI.phases[3].back_navigator.startY + (CLIENT_MTA_RESOLUTION[2] - back_navigator_height)
