@@ -52,7 +52,6 @@ local prevInputKey = false
 local prevInputKeyStreak = 0
 local _currentKeyCheck = true
 local _currentPressedKey = false
-setLoginUIPhase = nil
 local manageCharacter, toggleUI = nil, nil
 local loginUI = {
     cache = {
@@ -82,11 +81,11 @@ local loginUI = {
                 },
                 {
                     identifier = "characters",
-                    execFunc = function() setLoginUIPhase(2) end
+                    execFunc = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 2) end
                 },
                 {
                     identifier = "credits",
-                    execFunc = function() setLoginUIPhase(3) end
+                    execFunc = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 3) end
                 }
             }
         },
@@ -278,7 +277,7 @@ local loginUI = {
                     rightCurvedEdgePath = imports.dxCreateTexture("files/images/hud/curved_square/right.png", "argb", true, "clamp"),
                     {
                         title = "B A C K",
-                        execFunc = function() setLoginUIPhase(1) end
+                        execFunc = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end
                     },
                     {
                         title = "S A V E",
@@ -308,7 +307,7 @@ local loginUI = {
                 hoverStatus = "backward",
                 hoverAnimTick = CLIENT_CURRENT_TICK,
                 hoverAnimDuration = 1500,
-                execFunc = function() setLoginUIPhase(1) end
+                execFunc = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end
             },
             view = {
                 startX = 0,
@@ -610,7 +609,8 @@ end
 function isLoginUIVisible() return loginUI.state end
 function getLoginUIPhase() return loginUI.phase end
 
-setLoginUIPhase = function(phaseID)
+imports.addEvent("Client:onSetLoginUIPhase", true)
+imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
     phaseID = tonumber(phaseID)
     if not phaseID or not loginUI.phases[1].optionsUI[phaseID] or (loginUI.phase and loginUI.phase == phaseID) then return false end
     if loginUI.cache.timers.phaseChanger and loginUI.cache.timers.phaseChanger:isValid() then loginUI.cache.timers.phaseChanger:destroy(); loginUI.cache.timers.phaseChanger = false end
@@ -666,9 +666,7 @@ setLoginUIPhase = function(phaseID)
         loginUI.cache.timers.uiEnabler = false
     end, loadingUI.fadeOutDuration + loadingUI.fadeDelayDuration - (loadingUI.animFadeInDuration + 250), 1)
     return true
-end
-imports.addEvent("Client:onSetLoginUIPhase", true)
-imports.addEventHandler("Client:onSetLoginUIPhase", root, setLoginUIPhase)
+end)
 
 
 ----------------------------------------------
@@ -1272,7 +1270,7 @@ local function renderUI(renderData)
                 credits_offsetY = imports.interpolateBetween(credits_offsetY, 0, 0, view_height*1.5, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].view.scrollAnimTickCounter + loginUI.phases[3].view.scrollDelayDuration, loginUI.phases[3].view.scrollAnimDuration), "Linear")
                 if math.round(credits_offsetY, 2) == math.round(view_height*1.5) and loginUI.isEnabled then
                     setLoginUIEnabled(false)
-                    setLoginUIPhase(1)
+                    imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1)
                 end
             end
             dxDrawBorderedText(loginUI.phases[3].view.outlineWeight, loginUI.phases[3].view.outlineColor, loginUI.phases[3].view.content, loginUI.phases[3].view.paddingX, credits_offsetY, view_width, credits_offsetY + loginUI.phases[3].view.contentHeight, tocolor(unpack(loginUI.phases[3].view.fontColor)), 1, loginUI.phases[3].view.font, "left", "center", true, false, false, false, true)
@@ -1325,7 +1323,7 @@ toggleUI = function(state, Args)
     if state then
         loginUI.state = true
         loginUI.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
-        setLoginUIPhase(1)
+        imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1)
         beautify.render.create(renderUI)
         beautify.render.create(renderUI, {renderType = "input"})
         imports.triggerEvent("Sound:onToggleLogin", localPlayer, state, {
