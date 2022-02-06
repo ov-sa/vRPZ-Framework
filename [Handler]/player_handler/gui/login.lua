@@ -282,14 +282,12 @@ local loginUI = {
             }
         },
         [3] = {
-            view = {
-                startX = 0, startY = 15, paddingX = 25,
-                width = 0, height = -15,
-                font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits)),
-                scrollAnimTickCounter = CLIENT_CURRENT_TICK,
-                scrollDelayDuration = FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration - 1000,
-                scrollDuration = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.scrollDuration
-            },
+            startX = 0, startY = 15, paddingX = 25,
+            width = 0, height = -15,
+            font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits)),
+            scrollAnimTickCounter = CLIENT_CURRENT_TICK,
+            scrollDelayDuration = FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration - 1000,
+            scrollDuration = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.scrollDuration
             navigator = {
                 startX = -15, startY = 15,
                 width = 0, height = 25,
@@ -315,14 +313,14 @@ loginUI.phases[2].customizerui.switcher.startX = loginUI.phases[2].customizerui.
 loginUI.phases[2].customizerui.switcher.startY = loginUI.phases[2].customizerui.switcher.startY - loginUI.phases[2].customizerui.switcher.height - loginUI.phases[2].customizerui.switcher.paddingY
 loginUI.phases[2].customizerui.button.startX = loginUI.phases[2].customizerui.button.startX + (loginUI.phases[2].customizerui.width - (#loginUI.phases[2].customizerui.button*loginUI.phases[2].customizerui.button.width) - imports.math.max(0, (#loginUI.phases[2].customizerui.button - 1)*loginUI.phases[2].customizerui.button.paddingX))/2
 loginUI.phases[2].customizerui.button.startY = loginUI.phases[2].customizerui.button.startY + loginUI.phases[2].customizerui.button.paddingY
-loginUI.phases[3].view.contentText = ""
+loginUI.phases[3].contentText = ""
 for i = 1, #FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Contributors"] do
     local j = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Contributors"][i]
-    loginUI.phases[3].view.contentText = ((i == 1) and j) or loginUI.phases[3].view.contentText.."\n\n"..j
+    loginUI.phases[3].contentText = ((i == 1) and j) or loginUI.phases[3].contentText.."\n\n"..j
 end
-loginUI.phases[3].view.width, loginUI.phases[3].view.height = loginUI.phases[3].view.width + (CLIENT_MTA_RESOLUTION[1] - loginUI.phases[3].view.startX), loginUI.phases[3].view.height + (CLIENT_MTA_RESOLUTION[2] - loginUI.phases[3].view.startY)
-loginUI.phases[3].view.contentWidth, loginUI.phases[3].view.contentHeight = imports.dxGetTextSize(loginUI.phases[3].view.contentText, loginUI.phases[3].view.width, 1, loginUI.phases[3].view.font, false)
-loginUI.phases[3].view.scrollDuration = imports.math.max(1, imports.math.ceil((loginUI.phases[3].view.contentHeight + loginUI.phases[3].view.height)/loginUI.phases[3].view.height))*loginUI.phases[3].view.scrollDuration
+loginUI.phases[3].width, loginUI.phases[3].height = loginUI.phases[3].width + (CLIENT_MTA_RESOLUTION[1] - loginUI.phases[3].startX), loginUI.phases[3].height + (CLIENT_MTA_RESOLUTION[2] - loginUI.phases[3].startY)
+loginUI.phases[3].contentWidth, loginUI.phases[3].contentHeight = imports.dxGetTextSize(loginUI.phases[3].contentText, loginUI.phases[3].width, 1, loginUI.phases[3].font, false)
+loginUI.phases[3].scrollDuration = imports.math.max(1, imports.math.ceil((loginUI.phases[3].contentHeight + loginUI.phases[3].height)/loginUI.phases[3].height))*loginUI.phases[3].scrollDuration
 --[[
 for i, j in imports.ipairs(playerClothes["Gender"]) do
     table.insert(loginUI.phases[2].customizerui.option[3].placeDataTable, j.modelType)
@@ -608,7 +606,7 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
         else
             exports.cinecam_handler:stopCinemation()
             if phaseID == 3 then
-                loginUI.phases[3].view.scrollAnimTickCounter = CLIENT_CURRENT_TICK
+                loginUI.phases[3].scrollAnimTickCounter = CLIENT_CURRENT_TICK
             end
         end
         loginUI.phase = phaseID
@@ -1120,17 +1118,17 @@ local function renderUI(renderData)
         elseif loginUI.phase == 3 then
             --Draws Credits UI
             imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, tocolor(unpackColor(loginUI.phases[3].bgColor)), false)
-            local view_offsetX, view_offsetY = loginUI.phases[3].view.startX, loginUI.phases[3].view.startY
-            local view_width, view_height = loginUI.phases[3].view.width, loginUI.phases[3].view.height
-            local credits_offsetY = -loginUI.phases[3].view.contentHeight - (view_height/2)
-            if (CLIENT_CURRENT_TICK - loginUI.phases[3].view.scrollAnimTickCounter) >= loginUI.phases[3].view.scrollDelayDuration then
-                credits_offsetY = view_offsetY + imports.interpolateBetween(credits_offsetY, 0, 0, view_height*1.5, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].view.scrollAnimTickCounter + loginUI.phases[3].view.scrollDelayDuration, loginUI.phases[3].view.scrollDuration), "Linear")
+            local view_offsetX, view_offsetY = loginUI.phases[3].startX, loginUI.phases[3].startY
+            local view_width, view_height = loginUI.phases[3].width, loginUI.phases[3].height
+            local credits_offsetY = -loginUI.phases[3].contentHeight - (view_height/2)
+            if (CLIENT_CURRENT_TICK - loginUI.phases[3].scrollAnimTickCounter) >= loginUI.phases[3].scrollDelayDuration then
+                credits_offsetY = view_offsetY + imports.interpolateBetween(credits_offsetY, 0, 0, view_height*1.5, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].scrollAnimTickCounter + loginUI.phases[3].scrollDelayDuration, loginUI.phases[3].scrollDuration), "Linear")
                 if (imports.math.round(credits_offsetY, 2) >= imports.math.round(view_height*1.5)) and loginUI.isEnabled then
                     imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false)
                     imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1)
                 end
             end
-            imports.dxDrawText(loginUI.phases[3].view.contentText, view_offsetX + loginUI.phases[3].view.paddingX, credits_offsetY, view_offsetX + view_width, credits_offsetY + loginUI.phases[3].view.contentHeight, loginUI.phases[3].view.fontColor, 1, loginUI.phases[3].view.font, "center", "center", true, false, false, false, true)
+            imports.dxDrawText(loginUI.phases[3].contentText, view_offsetX + loginUI.phases[3].paddingX, credits_offsetY, view_offsetX + view_width, credits_offsetY + loginUI.phases[3].contentHeight, loginUI.phases[3].fontColor, 1, loginUI.phases[3].font, "center", "center", true, false, false, false, true)
             local navigator_title = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Navigator"]["Titles"][FRAMEWORK_LANGUAGE]
             local navigator_width, navigator_height = loginUI.phases[3].navigator.width + imports.dxGetTextWidth(navigator_title, 1, loginUI.phases[3].navigator.font), loginUI.phases[3].navigator.height
             local navigator_offsetX, navigator_offsetY = loginUI.phases[3].navigator.startX + (CLIENT_MTA_RESOLUTION[1] - navigator_width), loginUI.phases[3].navigator.startY
