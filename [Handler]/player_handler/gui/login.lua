@@ -282,7 +282,7 @@ local loginUI = {
             }
         },
         [3] = {
-            startX = 0, startY = 15, paddingX = 25,
+            startX = 0, startY = 15,
             width = 0, height = -15,
             font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.fontColor)),
             scrollAnimTickCounter = CLIENT_CURRENT_TICK,
@@ -1128,7 +1128,7 @@ local function renderUI(renderData)
                     imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1)
                 end
             end
-            imports.dxDrawText(loginUI.phases[3].contentText, view_offsetX + loginUI.phases[3].paddingX, credits_offsetY, view_offsetX + view_width, credits_offsetY + loginUI.phases[3].contentHeight, loginUI.phases[3].fontColor, 1, loginUI.phases[3].font, "center", "center", true, false, false, false, true)
+            imports.dxDrawText(loginUI.phases[3].contentText, view_offsetX, credits_offsetY, view_offsetX + view_width, credits_offsetY + loginUI.phases[3].contentHeight, loginUI.phases[3].fontColor, 1, loginUI.phases[3].font, "center", "center", true, false, false, false, true)
             local navigator_title = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Navigator"]["Titles"][FRAMEWORK_LANGUAGE]
             local navigator_width, navigator_height = loginUI.phases[3].navigator.width + imports.dxGetTextWidth(navigator_title, 1, loginUI.phases[3].navigator.font), loginUI.phases[3].navigator.height
             local navigator_offsetX, navigator_offsetY = loginUI.phases[3].navigator.startX + (CLIENT_MTA_RESOLUTION[1] - navigator_width), loginUI.phases[3].navigator.startY
