@@ -325,7 +325,7 @@ loginUI.phases[2].customizerui.button.startY = loginUI.phases[2].customizerui.bu
 loginUI.phases[3].back_navigator.height = loginUI.phases[3].back_navigator.height + imports.dxGetFontHeight(1, loginUI.phases[3].back_navigator.font)
 loginUI.phases[3].view.contentText = ""
 for i = 1, #FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Contributors"] do
-    local j = imports.tostring(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Contributors"][i]):gsub(".","  %0"):sub(2):upper()
+    local j = string.upper(string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Contributors"][i]))
     loginUI.phases[3].view.contentText = ((i == 1) and j) or loginUI.phases[3].view.contentText.."\n"..j
 end
 loginUI.phases[3].view.width, loginUI.phases[3].view.height = loginUI.phases[3].view.width + (CLIENT_MTA_RESOLUTION[1] - loginUI.phases[3].view.startX), loginUI.phases[3].view.height + (CLIENT_MTA_RESOLUTION[2] - loginUI.phases[3].view.startY)
@@ -717,7 +717,7 @@ local function renderUI(renderData)
             --Draws Options UI
             imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[loginUI.phase].bgTexture, 0, 0, 0, tocolor(unpackColor(loginUI.phases[1].bgColor)), false)
             for i, j in imports.ipairs(loginUI.phases[1].optionsUI) do
-                local option_title = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]:gsub(".","  %0"):sub(2):upper()
+                local option_title = string.upper(string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
                 local option_width, option_height = dxGetTextWidth(option_title, 1, loginUI.phases[1].optionsUI.font) + 5, loginUI.phases[1].optionsUI.height
                 local options_offsetX, options_offsetY = loginUI.phases[1].optionsUI.startX - (option_width*0.5), j.startY
                 local isOptionHovered = isMouseOnPosition(options_offsetX, options_offsetY, option_width, option_height)
