@@ -318,9 +318,9 @@ for i = 1, #loginUI.phases[1].optionsUI, 1 do
 end
 loginUI.phases[2].customizerui.height = loginUI.phases[2].customizerui.height + (#loginUI.phases[2].customizerui.option*(loginUI.phases[2].customizerui.option.height + loginUI.phases[2].customizerui.option.dividerSize))
 loginUI.phases[2].customizerui.startY = CLIENT_MTA_RESOLUTION[2] + loginUI.phases[2].customizerui.startY - loginUI.phases[2].customizerui.titleBar.height - loginUI.phases[2].customizerui.height - (loginUI.phases[2].customizerui.switcher.startY + loginUI.phases[2].customizerui.switcher.paddingY + loginUI.phases[2].customizerui.button.height)
-loginUI.phases[2].customizerui.switcher.startX = loginUI.phases[2].customizerui.switcher.startX + (loginUI.phases[2].customizerui.width - (#loginUI.phases[2].customizerui.switcher*loginUI.phases[2].customizerui.switcher.width) - math.max(0, (#loginUI.phases[2].customizerui.button - 1)*loginUI.phases[2].customizerui.switcher.paddingX))
+loginUI.phases[2].customizerui.switcher.startX = loginUI.phases[2].customizerui.switcher.startX + (loginUI.phases[2].customizerui.width - (#loginUI.phases[2].customizerui.switcher*loginUI.phases[2].customizerui.switcher.width) - imports.math.max(0, (#loginUI.phases[2].customizerui.button - 1)*loginUI.phases[2].customizerui.switcher.paddingX))
 loginUI.phases[2].customizerui.switcher.startY = loginUI.phases[2].customizerui.switcher.startY - loginUI.phases[2].customizerui.switcher.height - loginUI.phases[2].customizerui.switcher.paddingY
-loginUI.phases[2].customizerui.button.startX = loginUI.phases[2].customizerui.button.startX + (loginUI.phases[2].customizerui.width - (#loginUI.phases[2].customizerui.button*loginUI.phases[2].customizerui.button.width) - math.max(0, (#loginUI.phases[2].customizerui.button - 1)*loginUI.phases[2].customizerui.button.paddingX))/2
+loginUI.phases[2].customizerui.button.startX = loginUI.phases[2].customizerui.button.startX + (loginUI.phases[2].customizerui.width - (#loginUI.phases[2].customizerui.button*loginUI.phases[2].customizerui.button.width) - imports.math.max(0, (#loginUI.phases[2].customizerui.button - 1)*loginUI.phases[2].customizerui.button.paddingX))/2
 loginUI.phases[2].customizerui.button.startY = loginUI.phases[2].customizerui.button.startY + loginUI.phases[2].customizerui.button.paddingY
 loginUI.phases[3].back_navigator.height = loginUI.phases[3].back_navigator.height + imports.dxGetFontHeight(1, loginUI.phases[3].back_navigator.font)
 --[[
@@ -474,7 +474,7 @@ manageCharacter = function(manageType)
         end
         table.remove(loginUI.characters, loginUI._selectedCharacter)
         loginUI._unsavedCharacters[loginUI._selectedCharacter] = nil
-        loginUI._selectedCharacter = math.max(0, loginUI._selectedCharacter - 1)
+        loginUI._selectedCharacter = imports.math.max(0, loginUI._selectedCharacter - 1)
         loadLoginPreviewCharacter()
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully deleted the character!", {80, 255, 80, 255})
     elseif (manageType == "switch_prev") or (manageType == "switch_next") then
@@ -1132,7 +1132,7 @@ local function renderUI(renderData)
             local credits_offsetY = -loginUI.phases[3].view.contentHeight - (view_height/2)
             if (CLIENT_CURRENT_TICK - loginUI.phases[3].view.scrollAnimTickCounter) >= loginUI.phases[3].view.scrollDelayDuration then
                 credits_offsetY = imports.interpolateBetween(credits_offsetY, 0, 0, view_height*1.5, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].view.scrollAnimTickCounter + loginUI.phases[3].view.scrollDelayDuration, loginUI.phases[3].view.scrollAnimDuration), "Linear")
-                if math.round(credits_offsetY, 2) == math.round(view_height*1.5) and loginUI.isEnabled then
+                if (imports.math.round(credits_offsetY, 2) == imports.math.round(view_height*1.5)) and loginUI.isEnabled then
                     imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false)
                     imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1)
                 end
@@ -1179,7 +1179,7 @@ toggleUI = function(state, Args)
 
     if state then
         loginUI.state = true
-        loginUI.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
+        loginUI.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
         imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1)
         beautify.render.create(renderUI)
         beautify.render.create(renderUI, {renderType = "input"})
