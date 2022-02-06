@@ -326,7 +326,7 @@ loginUI.phases[3].back_navigator.height = loginUI.phases[3].back_navigator.heigh
 loginUI.phases[3].view.contentText = ""
 for i = 1, #FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Contributors"] do
     local j = imports.tostring(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Contributors"][i])
-    loginUI.phases[3].view.contentText = ((i == 1) and j) or loginUI.phases[3].view.contentText.."\n"..j
+    loginUI.phases[3].view.contentText = (((i == 1) and j) or loginUI.phases[3].view.contentText.."\n"..j):gsub(".","  %0"):sub(2):upper()
 end
 loginUI.phases[3].view.width, loginUI.phases[3].view.height = loginUI.phases[3].view.width + (CLIENT_MTA_RESOLUTION[1] - loginUI.phases[3].view.startX), loginUI.phases[3].view.height + (CLIENT_MTA_RESOLUTION[2] - loginUI.phases[3].view.startY)
 loginUI.phases[3].view.contentWidth, loginUI.phases[3].view.contentHeight = imports.dxGetTextSize(loginUI.phases[3].view.contentText, loginUI.phases[3].view.width, 1, loginUI.phases[3].view.font, false)
