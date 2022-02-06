@@ -699,22 +699,14 @@ imports.addEventHandler("Client:onSaveCharacter", root, function(state, errorMes
     imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (true, true)
 end)
 
-
---------------------------------------------
---[[ Event: On Client Load Character ID ]]--
---------------------------------------------
-
-imports.addEvent("onClientLoadCharacterID", true)
-imports.addEventHandler("onClientLoadCharacterID", root, function(character, characterID, characterData)
-
+imports.addEvent("Client:onLoadCharacterID", true)
+imports.addEventHandler("Client:onLoadCharacterID", root, function(character, characterID, characterData)
     character = imports.tonumber(character); characterID = imports.tonumber(characterID);
     if not character or not characterID or not characterData then return false end
-
     loginUI._unsavedCharacters[character] = nil
     loginUI._charactersUnderProcess[character] = nil
     loginUI.characters[character] = characterData
     loginUI.characters[character]._id = characterID
-
 end)
 
 

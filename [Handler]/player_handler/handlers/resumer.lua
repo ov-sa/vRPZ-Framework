@@ -61,7 +61,7 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(characterID, ch
             local characterID = CCharacter.create(serial, function(characterID, Args)
                 CCharacter.setData(characterID, "identity", imports.toJSON(characters[i]))
                 characterCache[characterID].identity = imports.fromJSON(characterCache[characterID].identity)
-                imports.triggerClientEvent(Args[1], "onClientLoadCharacterID", Args[1], i, characterID, characters[i])
+                imports.triggerClientEvent(Args[1], "Client:onLoadCharacterID", Args[1], i, characterID, characters[i])
             end, source)
         end
     end
