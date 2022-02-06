@@ -19,6 +19,8 @@ configVars["UI"]["Login"] = {
     dimension = 100,
     fadeDelay = 7000,
     clientPoint = {x = 0, y = 0, z = 0},
+    bgPath = "files/images/login/background.png",
+
     spawnLocations = {
         {
             cinemationFOV = 150,
@@ -62,6 +64,8 @@ configVars["UI"]["Login"] = {
 
     ["Options"] = {
         play = {
+            bgPath = "files/images/login/login.png",
+
             ["Titles"] = {
                 ["EN"] = "Play",
                 ["TR"] = "Oyna"

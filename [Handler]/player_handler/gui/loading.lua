@@ -39,7 +39,7 @@ local loadingUI = {
         startX = 0, startY = (CLIENT_MTA_RESOLUTION[2]/768)*-15,
         tickCounter = CLIENT_CURRENT_TICK,
         rotationValue = 0,
-        bgTexture = imports.dxCreateTexture(FRAMEWORK_CONFIGS["UI"]["Loading"].loader.bgTexture, "argb", true, "clamp")
+        bgTexture = imports.dxCreateTexture(FRAMEWORK_CONFIGS["UI"]["Loading"].loader.bgPath, "argb", true, "clamp")
     },
     hint = {
         paddingX = 5, paddingY = 15,

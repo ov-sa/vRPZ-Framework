@@ -61,11 +61,10 @@ local loginUI = {
         keys = {},
         timers = {}
     },
-    bgTexture = imports.dxCreateTexture("files/images/login/background.png", "argb", true, "clamp"),
+    bgTexture = imports.dxCreateTexture(FRAMEWORK_CONFIGS["UI"]["Login"].bgPath, "argb", true, "clamp"),
     phases = {
         [1] = {
-            bgColor = {255, 255, 255, 255},
-            bgTexture = imports.dxCreateTexture("files/images/login/login.png", "argb", true, "clamp"),
+            bgTexture = imports.dxCreateTexture(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.bgPath, "argb", true, "clamp"),
             optionsUI = {
                 startX = CLIENT_MTA_RESOLUTION[1]*0.5, startY = -15, paddingY = 10,
                 width = 0, height = 35,
@@ -292,7 +291,7 @@ local loginUI = {
                 width = 0, height = -15,
                 font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(170, 35, 35, 255),
                 scrollAnimTickCounter = CLIENT_CURRENT_TICK,
-                scrollDelayDuration = FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration - 1000,
+                scrollDelayDuration = FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"].fadeDelayDuration - 1000,
                 scrollDuration = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.scrollDuration
             },
             navigator = {
@@ -571,10 +570,10 @@ manageCharacter = function(manageType)
         imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
         imports.setTimer(function()
             toggleUI(false)
-        end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + 250, 1)
+        end, FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"].fadeInDuration + 250, 1)
         imports.setTimer(function(character, characters)
             imports.triggerServerEvent("onPlayerResumeGame", localPlayer, character, characters)
-        end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration, 1, loginUI.character, loginUI.characters)
+        end, FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"].fadeInDuration + FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"].fadeDelayDuration, 1, loginUI.character, loginUI.characters)
     end
     return true
 
@@ -642,11 +641,11 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
         end
         imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, false)
         loginUI.cache.timers.phaseChanger = false
-    end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + 250, 1)
+    end, FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"].fadeInDuration + 250, 1)
     loginUI.cache.timers.uiEnabler = imports.setTimer(function()
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
         loginUI.cache.timers.uiEnabler = false
-    end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration - (FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + 250), 1)
+    end, FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"].fadeDelayDuration - (FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"].fadeInDuration + 250), 1)
     return true
 end)
 
@@ -713,7 +712,7 @@ local function renderUI(renderData)
 
         if loginUI.phase == 1 then
             --Draws Options UI
-            imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[loginUI.phase].bgTexture, 0, 0, 0, tocolor(unpackColor(loginUI.phases[1].bgColor)), false)
+            imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[loginUI.phase].bgTexture, 0, 0, 0, -1, false)
             for i, j in imports.ipairs(loginUI.phases[1].optionsUI) do
                 local option_title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
                 local option_width, option_height = dxGetTextWidth(option_title, 1, loginUI.phases[1].optionsUI.font) + 5, loginUI.phases[1].optionsUI.height

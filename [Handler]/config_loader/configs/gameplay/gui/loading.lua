@@ -23,7 +23,7 @@ configVars["UI"]["Loading"] = {
         size = 50,
         animDuration = 750,
         bgColor = {200, 200, 200, 255},
-        bgTexture = "files/images/loading/loader.png"
+        bgPath = "files/images/loading/loader.png"
     },
 
     hint = {
