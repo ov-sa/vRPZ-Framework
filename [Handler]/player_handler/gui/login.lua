@@ -293,7 +293,7 @@ local loginUI = {
                 font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(170, 35, 35, 255),
                 scrollAnimTickCounter = CLIENT_CURRENT_TICK,
                 scrollDelayDuration = loadingUI.fadeOutDuration + loadingUI.fadeDelayDuration - 1000,
-                scrollAnimDuration = 7500
+                scrollDuration = FRAMEWORK_CONFIGS["UI"]["Login"].credits.scrollDuration
             },
             navigator = {
                 startX = -15, startY = 15,
@@ -327,7 +327,7 @@ for i = 1, #FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Contributors"] 
 end
 loginUI.phases[3].view.width, loginUI.phases[3].view.height = loginUI.phases[3].view.width + (CLIENT_MTA_RESOLUTION[1] - loginUI.phases[3].view.startX), loginUI.phases[3].view.height + (CLIENT_MTA_RESOLUTION[2] - loginUI.phases[3].view.startY)
 loginUI.phases[3].view.contentWidth, loginUI.phases[3].view.contentHeight = imports.dxGetTextSize(loginUI.phases[3].view.contentText, loginUI.phases[3].view.width, 1, loginUI.phases[3].view.font, false)
-loginUI.phases[3].view.scrollAnimDuration = imports.math.max(1, imports.math.ceil((loginUI.phases[3].view.contentHeight + loginUI.phases[3].view.height)/loginUI.phases[3].view.height))*loginUI.phases[3].view.scrollAnimDuration
+loginUI.phases[3].view.scrollDuration = imports.math.max(1, imports.math.ceil((loginUI.phases[3].view.contentHeight + loginUI.phases[3].view.height)/loginUI.phases[3].view.height))*loginUI.phases[3].view.scrollDuration
 --[[
 for i, j in imports.ipairs(playerClothes["Gender"]) do
     table.insert(loginUI.phases[2].customizerui.option[3].placeDataTable, j.modelType)
@@ -1128,7 +1128,7 @@ local function renderUI(renderData)
             local view_width, view_height = loginUI.phases[3].view.width, loginUI.phases[3].view.height
             local credits_offsetY = -loginUI.phases[3].view.contentHeight - (view_height/2)
             if (CLIENT_CURRENT_TICK - loginUI.phases[3].view.scrollAnimTickCounter) >= loginUI.phases[3].view.scrollDelayDuration then
-                credits_offsetY = view_offsetY + imports.interpolateBetween(credits_offsetY, 0, 0, view_height*1.5, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].view.scrollAnimTickCounter + loginUI.phases[3].view.scrollDelayDuration, loginUI.phases[3].view.scrollAnimDuration), "Linear")
+                credits_offsetY = view_offsetY + imports.interpolateBetween(credits_offsetY, 0, 0, view_height*1.5, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].view.scrollAnimTickCounter + loginUI.phases[3].view.scrollDelayDuration, loginUI.phases[3].view.scrollDuration), "Linear")
                 if (imports.math.round(credits_offsetY, 2) == imports.math.round(view_height*1.5)) and loginUI.isEnabled then
                     imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false)
                     imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1)
