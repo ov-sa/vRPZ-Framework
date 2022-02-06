@@ -35,23 +35,20 @@ local loadingUI = {
     animStatus = "backward",
     fadeAnimPercent = 0,
     tickCounter = CLIENT_CURRENT_TICK,
-    bgColor = {0, 0, 0, 255},
     loader = {
         startX = 0, startY = (CLIENT_MTA_RESOLUTION[2]/768)*-15,
-        size = 50,
         tickCounter = CLIENT_CURRENT_TICK,
-        animDuration = 750,
         rotationValue = 0,
-        bgColor = {200, 200, 200, 255}, bgTexture = imports.dxCreateTexture("files/images/loading/loader.png", "argb", true, "clamp")
+        bgTexture = imports.dxCreateTexture(FRAMEWORK_CONFIGS["UI"]["Loading"].loader.bgTexture, "argb", true, "clamp")
     },
     hint = {
         paddingX = 5, paddingY = 15,
         text = "",
-        font = FRAMEWORK_FONTS[1], fontColor = {200, 200, 200, 255}
+        font = FRAMEWORK_FONTS[1]
     }
 }
-loadingUI.loader.startX = loadingUI.loader.startX + ((CLIENT_MTA_RESOLUTION[1] - loadingUI.loader.size)*0.5)
-loadingUI.loader.startY = loadingUI.loader.startY + ((CLIENT_MTA_RESOLUTION[2] - loadingUI.loader.size)*0.5)
+loadingUI.loader.startX = loadingUI.loader.startX + ((CLIENT_MTA_RESOLUTION[1] - FRAMEWORK_CONFIGS["UI"]["Loading"].loader.size)*0.5)
+loadingUI.loader.startY = loadingUI.loader.startY + ((CLIENT_MTA_RESOLUTION[2] - FRAMEWORK_CONFIGS["UI"]["Loading"].loader.size)*0.5)
 
 
 ------------------------------
@@ -71,13 +68,13 @@ beautify.render.create(function()
         loadingUI.fadeAnimPercent = imports.interpolateBetween(loadingUI.fadeAnimPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(loadingUI.tickCounter, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration), "Linear")
     end
 
-    loadingUI.loader.rotationValue = imports.interpolateBetween(0, 0, 0, 360, 0, 0, imports.getInterpolationProgress(loadingUI.loader.tickCounter, loadingUI.loader.animDuration), "Linear")
+    loadingUI.loader.rotationValue = imports.interpolateBetween(0, 0, 0, 360, 0, 0, imports.getInterpolationProgress(loadingUI.loader.tickCounter, FRAMEWORK_CONFIGS["UI"]["Loading"].loader.animDuration), "Linear")
     if imports.math.round(loadingUI.loader.rotationValue, 2) == 360 then
         loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
     end
-    imports.dxDrawRectangle(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], imports.tocolor(loadingUI.bgColor[1], loadingUI.bgColor[2], loadingUI.bgColor[3], loadingUI.bgColor[4]*loadingUI.fadeAnimPercent), true)
-    imports.dxDrawImage(loadingUI.loader.startX, loadingUI.loader.startY, loadingUI.loader.size, loadingUI.loader.size, loadingUI.loader.bgTexture, loadingUI.loader.rotationValue, 0, 0, imports.tocolor(loadingUI.loader.bgColor[1], loadingUI.loader.bgColor[2], loadingUI.loader.bgColor[3], loadingUI.loader.bgColor[4]*loadingUI.fadeAnimPercent), true)
-    imports.dxDrawText(loadingUI.hint.text, loadingUI.hint.paddingX, loadingUI.loader.startY + loadingUI.loader.size + loadingUI.hint.paddingY, CLIENT_MTA_RESOLUTION[1] - loadingUI.hint.paddingX, CLIENT_MTA_RESOLUTION[2] - loadingUI.hint.paddingY, imports.tocolor(loadingUI.hint.fontColor[1], loadingUI.hint.fontColor[2], loadingUI.hint.fontColor[3], loadingUI.hint.fontColor[4]*loadingUI.fadeAnimPercent), 1, loadingUI.hint.font, "center", "top", true, true, true)
+    imports.dxDrawRectangle(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Loading"].bgColor[1], FRAMEWORK_CONFIGS["UI"]["Loading"].bgColor[2], FRAMEWORK_CONFIGS["UI"]["Loading"].bgColor[3], FRAMEWORK_CONFIGS["UI"]["Loading"].bgColor[4]*loadingUI.fadeAnimPercent), true)
+    imports.dxDrawImage(loadingUI.loader.startX, loadingUI.loader.startY, FRAMEWORK_CONFIGS["UI"]["Loading"].loader.size, FRAMEWORK_CONFIGS["UI"]["Loading"].loader.size, loadingUI.loader.bgTexture, loadingUI.loader.rotationValue, 0, 0, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Loading"].loader.bgColor[1], FRAMEWORK_CONFIGS["UI"]["Loading"].loader.bgColor[2], FRAMEWORK_CONFIGS["UI"]["Loading"].loader.bgColor[3], FRAMEWORK_CONFIGS["UI"]["Loading"].loader.bgColor[4]*loadingUI.fadeAnimPercent), true)
+    imports.dxDrawText(loadingUI.hint.text, loadingUI.hint.paddingX, loadingUI.loader.startY + FRAMEWORK_CONFIGS["UI"]["Loading"].loader.size + loadingUI.hint.paddingY, CLIENT_MTA_RESOLUTION[1] - loadingUI.hint.paddingX, CLIENT_MTA_RESOLUTION[2] - loadingUI.hint.paddingY, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Loading"].hint.fontColor[1], FRAMEWORK_CONFIGS["UI"]["Loading"].hint.fontColor[2], FRAMEWORK_CONFIGS["UI"]["Loading"].hint.fontColor[3], FRAMEWORK_CONFIGS["UI"]["Loading"].hint.fontColor[4]*loadingUI.fadeAnimPercent), 1, loadingUI.hint.font, "center", "top", true, true, true)
 end)
 
 
@@ -90,7 +87,7 @@ imports.addEventHandler("Client:onToggleLoadingUI", root, function(state, Args)
     if state then
         if (state and (loadingUI.animStatus == "forward")) then return false end
         loadingUI.animStatus = "forward"
-        loadingUI.hint.text = (FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"][imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"])] and FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"][imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"])][FRAMEWORK_LANGUAGE]) or loadingUI.hint.text
+        loadingUI.hint.text = (FRAMEWORK_CONFIGS["UI"]["Loading"].hint["Titles"][imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"].hint["Titles"])] and FRAMEWORK_CONFIGS["UI"]["Loading"].hint["Titles"][imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"].hint["Titles"])][FRAMEWORK_LANGUAGE]) or loadingUI.hint.text
     else
         if ((loadingUI.animStatus == "backward") or (loadingUI.animStatus == "reverse_backward")) then return false end
         loadingUI.animStatus = "reverse_backward"
