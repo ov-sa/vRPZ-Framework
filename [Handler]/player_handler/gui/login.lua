@@ -618,7 +618,7 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
     for i, j in imports.pairs(loginUI.cache.timers) do
         if j and imports.isTimer(j) then
             imports.killTimer(j)
-            loginUI.cache.timers = nil
+            loginUI.cache.timers[i] = nil
         end
     end
     imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
@@ -665,7 +665,6 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
         imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, false)
         loginUI.cache.timers.phaseChanger = false
     end, loadingUI.animFadeInDuration + 250, 1)
-
     loginUI.cache.timers.uiEnabler = imports.setTimer(function()
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (true)
         loginUI.cache.timers.uiEnabler = false
@@ -674,7 +673,10 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
 end)
 
 imports.addEventHandler("onClientLoginUIEnable", root, function(state, forcedState)
-    if loginUI.cache.timers.uiEnabler and loginUI.cache.timers.uiEnabler:isValid() then loginUI.cache.timers.uiEnabler:destroy(); loginUI.cache.timers.uiEnabler = false end
+    if loginUI.cache.timers.uiEnabler and imports.isTimer(loginUI.cache.timers.uiEnabler) then
+        imports.killTimer(loginUI.cache.timers.uiEnabler)
+        loginUI.cache.timers.uiEnabler = nil
+    end
     if forcedState ~= nil then
         loginUI.isForcedDisabled = not forcedState
         loginUI.isEnabled = forcedState
