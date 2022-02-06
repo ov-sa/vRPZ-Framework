@@ -42,10 +42,6 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-local tempCache = {
-    keys = {},
-    timers = {}
-}
 local inputTickCounter = CLIENT_CURRENT_TICK
 --TODO: INTEGRATE W/ BEAUTIFY I/P FUNCTIONS
 local prevInputKey = false
@@ -54,7 +50,11 @@ local _currentKeyCheck = true
 local _currentPressedKey = false
 setLoginUIPhase = nil
 local manageCharacter, toggleUI = nil, nil
-loginUI = {
+local loginUI = {
+    cache = {
+        keys = {},
+        timers = {}
+    },
     state = false,
     phase = false,
     isEnabled = false,
@@ -635,11 +635,11 @@ end
 setLoginUIPhase = function(phaseID)
     phaseID = tonumber(phaseID)
     if not phaseID or not loginUI.phases[1].optionsUI[phaseID] or (loginUI.phase and loginUI.phase == phaseID) then return false end
-    if tempCache.timers.phaseChanger and tempCache.timers.phaseChanger:isValid() then tempCache.timers.phaseChanger:destroy(); tempCache.timers.phaseChanger = false end
-    if tempCache.timers.uiEnabler and tempCache.timers.uiEnabler:isValid() then tempCache.timers.uiEnabler:destroy(); tempCache.timers.uiEnabler = false end
+    if loginUI.cache.timers.phaseChanger and loginUI.cache.timers.phaseChanger:isValid() then loginUI.cache.timers.phaseChanger:destroy(); loginUI.cache.timers.phaseChanger = false end
+    if loginUI.cache.timers.uiEnabler and loginUI.cache.timers.uiEnabler:isValid() then loginUI.cache.timers.uiEnabler:destroy(); loginUI.cache.timers.uiEnabler = false end
 
     imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
-    tempCache.timers.phaseChanger = imports.setTimer(function()
+    loginUI.cache.timers.phaseChanger = imports.setTimer(function()
         if phaseID == 1 then
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.cinemationPoint, true, true, loginUI.cinemationData.cinemationFOV, true, true, true, false)
         elseif phaseID == 2 then
@@ -680,12 +680,12 @@ setLoginUIPhase = function(phaseID)
             end
         end
         imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, false)
-        tempCache.timers.phaseChanger = false
+        loginUI.cache.timers.phaseChanger = false
     end, loadingUI.animFadeInDuration + 250, 1)
 
-    tempCache.timers.uiEnabler = imports.setTimer(function()
+    loginUI.cache.timers.uiEnabler = imports.setTimer(function()
         setLoginUIEnabled(true)
-        tempCache.timers.uiEnabler = false
+        loginUI.cache.timers.uiEnabler = false
     end, loadingUI.animFadeOutDuration + loadingUI.animFadeDelayDuration - (loadingUI.animFadeInDuration + 250), 1)
     return true
 end
@@ -699,7 +699,7 @@ imports.addEventHandler("onClientSetLoginUIPhase", root, setLoginUIPhase)
 
 function setLoginUIEnabled(state, forcedState)
 
-    if tempCache.timers.uiEnabler and tempCache.timers.uiEnabler:isValid() then tempCache.timers.uiEnabler:destroy(); tempCache.timers.uiEnabler = false end
+    if loginUI.cache.timers.uiEnabler and loginUI.cache.timers.uiEnabler:isValid() then loginUI.cache.timers.uiEnabler:destroy(); loginUI.cache.timers.uiEnabler = false end
     
     if forcedState ~= nil then
         loginUI.isForcedDisabled = not forcedState
@@ -853,10 +853,10 @@ local function renderUI(renderData)
     if not currentPhase then return false end
 
     if renderData.renderType == "input" then
-        tempCache.keys.mouse = isMouseClicked()
+        loginUI.cache.keys.mouse = isMouseClicked()
         imports.triggerEvent("Player:onSyncWeather", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].weather, FRAMEWORK_CONFIGS["UI"]["Login"].time)
     elseif renderData.renderType == "render" then
-        local isLMBClicked = tempCache.keys.mouse == "mouse1"
+        local isLMBClicked = loginUI.cache.keys.mouse == "mouse1"
         local currentRatio = (CLIENT_MTA_RESOLUTION[1]/CLIENT_MTA_RESOLUTION[2])/(1366/768)
         local background_width, background_height = CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2]*currentRatio
         local background_offsetX, background_offsetY = 0, -(background_height - CLIENT_MTA_RESOLUTION[2])/2
@@ -1358,10 +1358,10 @@ toggleUI = function(state, Args)
         beautify.render.remove(renderUI, {renderType = "input"})
         exports.cinecam_handler:stopCinemation()
         if loginUI.character and imports.isElement(loginUI.character) then loginUI.character:destroy() end
-        for i, j in imports.pairs(tempCache.keys) do
+        for i, j in imports.pairs(loginUI.cache.keys) do
             j = false
         end
-        for i, j in imports.pairs(tempCache.timers) do
+        for i, j in imports.pairs(loginUI.cache.timers) do
             if j and imports.isTimer(j) then
                 imports.killTimer(j)
                 j = nil
