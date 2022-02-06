@@ -36,7 +36,6 @@ local imports = {
 local notifUI = {
     buffer = {},
     startX = 50, startY = 15, paddingY = 5, offsetY = 0,
-    height = 30,
     slideTopTickCounter = CLIENT_CURRENT_TICK,
     font = FRAMEWORK_FONTS[8],
     leftCurvedEdgePath = beautify.assets["images"]["curved_square/regular/left.rw"],
@@ -54,22 +53,22 @@ beautify.render.create(function()
     local offsetY = imports.interpolateBetween(notifUI.offsetY, 0, 0, 0, 0, 0, imports.getInterpolationProgress(notifUI.slideTopTickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideTopDuration), "OutBack")
     for i, j in imports.ipairs(notifUI.buffer) do
         local notifFontColor = j.fontColor or FRAMEWORK_CONFIGS["UI"]["Notification"].fontColor
-        local notif_width, notif_height = imports.dxGetTextWidth(j.text, 1, notifUI.font), notifUI.height
+        local notif_width, notif_height = imports.dxGetTextWidth(j.text, 1, notifUI.font), FRAMEWORK_CONFIGS["UI"]["Notification"].height
         local notif_offsetX, notif_offsetY = 0, 0
         local notifAlphaPercent = 0
         if j.slideStatus == "forward" then
-		    notif_offsetX, notif_offsetY = imports.interpolateBetween(CLIENT_MTA_RESOLUTION[1], notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)) - notifUI.height, 0, (CLIENT_MTA_RESOLUTION[1]) - notifUI.startX - notif_width, notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)) + offsetY, 0, imports.getInterpolationProgress(j.tickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideInDuration), "InOutBack")
+		    notif_offsetX, notif_offsetY = imports.interpolateBetween(CLIENT_MTA_RESOLUTION[1], notifUI.startY + ((i - 1)*(FRAMEWORK_CONFIGS["UI"]["Notification"].height + notifUI.paddingY)) - FRAMEWORK_CONFIGS["UI"]["Notification"].height, 0, (CLIENT_MTA_RESOLUTION[1]) - notifUI.startX - notif_width, notifUI.startY + ((i - 1)*(FRAMEWORK_CONFIGS["UI"]["Notification"].height + notifUI.paddingY)) + offsetY, 0, imports.getInterpolationProgress(j.tickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideInDuration), "InOutBack")
             notifAlphaPercent = imports.interpolateBetween(0, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.tickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideInDuration), "Linear")
             if imports.math.round(notifAlphaPercent, 2) == 1 then
                 if (CLIENT_CURRENT_TICK - j.tickCounter - FRAMEWORK_CONFIGS["UI"]["Notification"].slideInDuration) >= FRAMEWORK_CONFIGS["UI"]["Notification"].slideDelayDuration then
                     j.slideStatus = "backward"
                     j.tickCounter = CLIENT_CURRENT_TICK
-                    notifUI.offsetY = notifUI.height
+                    notifUI.offsetY = FRAMEWORK_CONFIGS["UI"]["Notification"].height
                     notifUI.slideTopTickCounter = CLIENT_CURRENT_TICK
                 end
             end
         else
-		    notif_offsetX, notif_offsetY = imports.interpolateBetween((CLIENT_MTA_RESOLUTION[1]) - notifUI.startX - notif_width, notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)), 0, CLIENT_MTA_RESOLUTION[1], notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)) + (notifUI.height*0.5) - offsetY, 0, imports.getInterpolationProgress(j.tickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideOutDuration), "InOutBack")
+		    notif_offsetX, notif_offsetY = imports.interpolateBetween((CLIENT_MTA_RESOLUTION[1]) - notifUI.startX - notif_width, notifUI.startY + ((i - 1)*(FRAMEWORK_CONFIGS["UI"]["Notification"].height + notifUI.paddingY)), 0, CLIENT_MTA_RESOLUTION[1], notifUI.startY + ((i - 1)*(FRAMEWORK_CONFIGS["UI"]["Notification"].height + notifUI.paddingY)) + (FRAMEWORK_CONFIGS["UI"]["Notification"].height*0.5) - offsetY, 0, imports.getInterpolationProgress(j.tickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideOutDuration), "InOutBack")
             notifAlphaPercent = imports.interpolateBetween(1, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.tickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideOutDuration), "Linear")
         end
         imports.dxDrawRectangle(notif_offsetX, notif_offsetY, notif_width, notif_height, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[1], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[2], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[3], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[4]*notifAlphaPercent), false)
