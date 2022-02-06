@@ -41,7 +41,7 @@ local imports = {
     showChat = showChat,
     showCursor = showCursor,
     math = math,
-    string = string
+    string = string,
 }
 
 
@@ -282,11 +282,10 @@ local loginUI = {
             }
         },
         [3] = {
-            bgColor = {255, 255, 255, 255},
             view = {
                 startX = 0, startY = 15, paddingX = 25,
                 width = 0, height = -15,
-                font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(170, 35, 35, 255),
+                font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits)),
                 scrollAnimTickCounter = CLIENT_CURRENT_TICK,
                 scrollDelayDuration = FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration - 1000,
                 scrollDuration = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.scrollDuration
