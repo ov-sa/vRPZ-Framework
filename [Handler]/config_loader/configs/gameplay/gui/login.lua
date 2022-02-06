@@ -76,7 +76,7 @@ configVars["UI"]["Login"] = {
         },
 
         credits = {
-            scrollDuration = 7500,
+            scrollDuration = 7000,
 
             ["Titles"] = {
                 ["EN"] = "Credits",

@@ -37,7 +37,7 @@ local notifUI = {
     buffer = {},
     startX = 50, startY = 15, paddingY = 5, offsetY = 0,
     height = 30,
-    slideInDuration = 850, slideOutDuration = 500, slideTopDuration = 500, slideAnimDelayDuration = 2000,
+    slideInDuration = 850, slideOutDuration = 500, slideTopDuration = 500, slideDelayDuration = 2000,
     slideTopTickCounter = CLIENT_CURRENT_TICK,
     font = FRAMEWORK_FONTS[8], defaultFontColor = {175, 175, 175, 255},
     bgColor = {3, 3, 3, 255},
@@ -63,7 +63,7 @@ beautify.render.create(function()
 		    notif_offsetX, notif_offsetY = imports.interpolateBetween(CLIENT_MTA_RESOLUTION[1], notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)) - notifUI.height, 0, (CLIENT_MTA_RESOLUTION[1]) - notifUI.startX - notif_width, notifUI.startY + ((i - 1)*(notifUI.height + notifUI.paddingY)) + offsetY, 0, imports.getInterpolationProgress(j.tickCounter, notifUI.slideInDuration), "InOutBack")
             notifAlphaPercent = imports.interpolateBetween(0, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.tickCounter, notifUI.slideInDuration), "Linear")
             if imports.math.round(notifAlphaPercent, 2) == 1 then
-                if (CLIENT_CURRENT_TICK - j.tickCounter - notifUI.slideInDuration) >= notifUI.slideAnimDelayDuration then
+                if (CLIENT_CURRENT_TICK - j.tickCounter - notifUI.slideInDuration) >= notifUI.slideDelayDuration then
                     j.slideStatus = "backward"
                     j.tickCounter = CLIENT_CURRENT_TICK
                     notifUI.offsetY = notifUI.height
