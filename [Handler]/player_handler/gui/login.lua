@@ -1135,7 +1135,7 @@ local function renderUI(renderData)
                 end
             end
             imports.dxDrawText(loginUI.phases[3].view.contentText, view_offsetX + loginUI.phases[3].view.paddingX, credits_offsetY, view_offsetX + view_width, credits_offsetY + loginUI.phases[3].view.contentHeight, loginUI.phases[3].view.fontColor, 1, loginUI.phases[3].view.font, "center", "center", true, false, false, false, true)
-            local navigator_title = FRAMEWORK_CONFIGS["UI"]["Login"].credits["Navigator"]["Titles"][FRAMEWORK_LANGUAGE]
+            local navigator_title = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Navigator"]["Titles"][FRAMEWORK_LANGUAGE]
             local navigator_width, navigator_height = loginUI.phases[3].navigator.width + imports.dxGetTextWidth(navigator_title, 1, loginUI.phases[3].navigator.font), loginUI.phases[3].navigator.height
             local navigator_offsetX, navigator_offsetY = loginUI.phases[3].navigator.startX + (CLIENT_MTA_RESOLUTION[1] - navigator_width), loginUI.phases[3].navigator.startY
             local isNavigatorHovered = isMouseOnPosition(navigator_offsetX, navigator_offsetY, navigator_width, navigator_height)
