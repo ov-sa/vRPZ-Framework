@@ -285,13 +285,9 @@ local loginUI = {
             bgColor = {255, 255, 255, 255},
             back_navigator = {
                 title = "B A C K",
-                startX = -15,
-                startY = -20,
-                width = 20,
-                height = 0.25,
-                font = FRAMEWORK_FONTS[2],
-                outlineWeight = 0.75,
-                fontColor = {0, 0, 0, 255},
+                startX = -15, startY = -20,
+                width = 20, height = 0.25,
+                font = FRAMEWORK_FONTS[2], fontColor = {0, 0, 0, 255},
                 bgColor = {175, 175, 175, 255},
                 leftEdgePath =  beautify.assets["images"]["right_triangle/default.rw"],
                 rightEdgePath = beautify.assets["images"]["right_triangle/flipped_inverted.rw"],
@@ -301,15 +297,11 @@ local loginUI = {
                 execFunc = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end
             },
             view = {
-                startX = 0,
-                startY = 15,
-                width = 0,
-                height = -15,
-                paddingX = 25,
+                startX = 0, startY = 15, paddingX = 25,
+                width = 0, height = -15,
                 content = "",
                 contentHeight = 100,
-                font = FRAMEWORK_FONTS[3],
-                fontColor = {100, 100, 100, 255},
+                font = FRAMEWORK_FONTS[3], fontColor = {100, 100, 100, 255},
                 scrollAnimTickCounter = CLIENT_CURRENT_TICK,
                 scrollDelayDuration = loadingUI.fadeOutDuration + loadingUI.fadeDelayDuration - 1000,
                 scrollAnimDuration = 5000
@@ -1178,7 +1170,7 @@ local function renderUI(renderData)
             imports.dxDrawRectangle(back_navigator_offsetX + back_navigator_height, back_navigator_offsetY, back_navigator_width - (back_navigator_height*2), back_navigator_height, tocolor(loginUI.phases[3].back_navigator.bgColor[1], loginUI.phases[3].back_navigator.bgColor[2], loginUI.phases[3].back_navigator.bgColor[3], loginUI.phases[3].back_navigator.bgColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), false)
             imports.dxDrawImage(back_navigator_offsetX, back_navigator_offsetY, back_navigator_height, back_navigator_height, loginUI.phases[3].back_navigator.leftEdgePath, 0, 0, 0, tocolor(loginUI.phases[3].back_navigator.bgColor[1], loginUI.phases[3].back_navigator.bgColor[2], loginUI.phases[3].back_navigator.bgColor[3], loginUI.phases[3].back_navigator.bgColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), false)
             imports.dxDrawImage(back_navigator_offsetX + back_navigator_width - back_navigator_height, back_navigator_offsetY, back_navigator_height, back_navigator_height, loginUI.phases[3].back_navigator.rightEdgePath, 0, 0, 0, tocolor(loginUI.phases[3].back_navigator.bgColor[1], loginUI.phases[3].back_navigator.bgColor[2], loginUI.phases[3].back_navigator.bgColor[3], loginUI.phases[3].back_navigator.bgColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), false)
-            dxDrawBorderedText(loginUI.phases[3].back_navigator.outlineWeight, loginUI.phases[3].back_navigator.fontColor, loginUI.phases[3].back_navigator.title, back_navigator_offsetX, back_navigator_offsetY, back_navigator_offsetX + back_navigator_width, back_navigator_offsetY + back_navigator_height, tocolor(loginUI.phases[3].back_navigator.fontColor[1], loginUI.phases[3].back_navigator.fontColor[2], loginUI.phases[3].back_navigator.fontColor[3], loginUI.phases[3].back_navigator.fontColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), 1, loginUI.phases[3].back_navigator.font, "center", "center", true, false, false)
+            imports.dxDrawText(loginUI.phases[3].back_navigator.title, back_navigator_offsetX, back_navigator_offsetY, back_navigator_offsetX + back_navigator_width, back_navigator_offsetY + back_navigator_height, tocolor(loginUI.phases[3].back_navigator.fontColor[1], loginUI.phases[3].back_navigator.fontColor[2], loginUI.phases[3].back_navigator.fontColor[3], loginUI.phases[3].back_navigator.fontColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), 1, loginUI.phases[3].back_navigator.font, "center", "center", true, false, false)
         end
     end
 
