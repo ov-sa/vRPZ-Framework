@@ -695,6 +695,7 @@ imports.addEvent("Client:onLoadCharacterID", true)
 imports.addEventHandler("Client:onLoadCharacterID", root, function(character, characterID, characterData)
     character = imports.tonumber(character); characterID = imports.tonumber(characterID);
     if not character or not characterID or not characterData then return false end
+
     loginUI._unsavedCharacters[character] = nil
     loginUI._charactersUnderProcess[character] = nil
     loginUI.characters[character] = characterData
