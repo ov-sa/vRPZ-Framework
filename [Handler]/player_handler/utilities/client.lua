@@ -41,7 +41,7 @@ function showChat(bool, isForced)
     else
         local conditionChecks = {
             isPlayerInitialized(localPlayer),
-            not isLoginScreenVisible(),
+            not isLoginUIVisible(),
             not isWastedScreenVisible(),
             not isSpawnScreenVisible(),
             not isDashboardVisible(),

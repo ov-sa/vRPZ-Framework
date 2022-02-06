@@ -603,26 +603,12 @@ manageCharacter = function(manageType)
 end
 
 
---------------------------------------------------
---[[ Function: Retrieves Login Screen's State ]]--
---------------------------------------------------
+----------------------------------
+--[[ Function: UI Controllers ]]--
+----------------------------------
 
-function isLoginScreenVisible()
-
-    return loginUI.state
-
-end
-
-
------------------------------------------------
---[[ Functions: Gets/Sets Login GUI's Phase ]]--
------------------------------------------------
-
-function getLoginUIPhase()
-
-    return loginUI.phase
-
-end
+function isLoginUIVisible() return loginUI.state end
+function getLoginUIPhase() return loginUI.phase end
 
 setLoginUIPhase = function(phaseID)
     phaseID = tonumber(phaseID)
@@ -752,7 +738,7 @@ end)
 
 imports.addEventHandler("onClientCharacter", root, function(character)
 
-    if GuiElement.isMTAWindowActive() or not isLoginScreenVisible() or getLoginUIPhase() ~= 2 or not loginUI.isEnabled or loginUI.isForcedDisabled then return false end
+    if GuiElement.isMTAWindowActive() or not isLoginUIVisible() or getLoginUIPhase() ~= 2 or not loginUI.isEnabled or loginUI.isForcedDisabled then return false end
 
     if _currentKeyCheck then
         _currentKeyCheck = false
@@ -766,7 +752,7 @@ end)
 
 imports.addEventHandler("onClientKey", root, function(button, press)
 
-    if GuiElement.isMTAWindowActive() or not isLoginScreenVisible() or getLoginUIPhase() ~= 2 or not loginUI.isEnabled or loginUI.isForcedDisabled then return false end
+    if GuiElement.isMTAWindowActive() or not isLoginUIVisible() or getLoginUIPhase() ~= 2 or not loginUI.isEnabled or loginUI.isForcedDisabled then return false end
 
     if (button == "lshift" or button == "rshift") then
         _currentPressedKey = false
