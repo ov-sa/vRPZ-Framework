@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    tonumber = tonumber,
     pairs = pairs,
     ipairs = ipairs,
     isElement = isElement,
@@ -457,7 +458,7 @@ manageCharacter = function(manageType)
     if not manageType then return false end
 
     if manageType == "create" then
-        setLoginUIEnabled(true)
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (true)
         local characterLimit = playerCharacterLimit
         if loginUI.isPremium then characterLimit = playerPremiumCharacterLimit end
         if #loginUI.characters >= characterLimit then
@@ -473,7 +474,7 @@ manageCharacter = function(manageType)
         loadLoginPreviewCharacter(true)
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully created a character!", {80, 255, 80, 255})
     elseif manageType == "delete" then
-        setLoginUIEnabled(true)
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (true)
         if #loginUI.characters <= 0 then
             imports.triggerEvent("Client:onNotification", localPlayer, "Unfortunately, you don't have enough characters to delete!", {255, 80, 80, 255})
             return false
@@ -496,7 +497,7 @@ manageCharacter = function(manageType)
         loadLoginPreviewCharacter()
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully deleted the character!", {80, 255, 80, 255})
     elseif (manageType == "switch_prev") or (manageType == "switch_next") then
-        setLoginUIEnabled(true)
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (true)
         if #loginUI.characters <= 1 then
             imports.triggerEvent("Client:onNotification", localPlayer, "Unfortunately, you don't have enough characters to switch!", {255, 80, 80, 255})
             return false
@@ -513,7 +514,7 @@ manageCharacter = function(manageType)
             end
         end
     elseif manageType == "pick" then
-        setLoginUIEnabled(true)
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (true)
         if (loginUI._selectedCharacter ~= 0) and (loginUI.character == loginUI._selectedCharacter) then
             imports.triggerEvent("Client:onNotification", localPlayer, "You've already picked the specified character!", {255, 80, 80, 255})
             return false
@@ -526,24 +527,24 @@ manageCharacter = function(manageType)
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully picked the character!", {80, 255, 80, 255})
     elseif manageType == "save" then
         if #loginUI.characters > 0 and not loginUI.characters[loginUI._selectedCharacter].isUnverified then
-            setLoginUIEnabled(true)
+            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (true)
             imports.triggerEvent("Client:onNotification", localPlayer, "Your character is already saved!", {255, 80, 80, 255})
             return false
         end
         local clientNameCounter = 0
-        local clientAgeCounter = tonumber(loginUI.phases[2].customizerui.option[2].placeDataValue) or 0
+        local clientAgeCounter = imports.tonumberloginUI.phases[2].customizerui.option[2].placeDataValue) or 0
         for _ in string.gmatch(loginUI.phases[2].customizerui.option[1].placeDataValue, "(%w+)%s*") do clientNameCounter = clientNameCounter + 1 end
         if clientNameCounter < FRAMEWORK_CONFIGS["UI"]["Login"].minimumCharacterNameWordCount then
-            setLoginUIEnabled(true)
+            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (true)
             imports.triggerEvent("Client:onNotification", localPlayer, "Please enter your full name!", {255, 80, 80, 255})
             return false
         end
         if clientAgeCounter < FRAMEWORK_CONFIGS["UI"]["Login"].minimumCharacterAge then
-            setLoginUIEnabled(true)
+            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (true)
             imports.triggerEvent("Client:onNotification", localPlayer, "Please enter a valid age! ["..FRAMEWORK_CONFIGS["UI"]["Login"].minimumCharacterAge.."+]", {255, 80, 80, 255})
             return false
         end
-        setLoginUIEnabled(false, false)
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (false, false)
         imports.triggerEvent("Client:onNotification", localPlayer, "◴ Saving..", {175, 175, 175, 255})
         local characterData = {}
         for i, j in imports.ipairs(loginUI.phases[2].customizerui.option) do
@@ -577,17 +578,17 @@ manageCharacter = function(manageType)
         imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, character, charactersToBeSaved, charactersPendingToBeSaved)
     elseif manageType == "play" then
         if #loginUI.characters <= 0 then
-            setLoginUIEnabled(true)
+            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (true)
             imports.triggerEvent("Client:onNotification", localPlayer, "You must create a character to play!", {255, 80, 80, 255})
             return false
         else
             if not loginUI.characters[loginUI.character] then
-                setLoginUIEnabled(true)
+                imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (true)
                 imports.triggerEvent("Client:onNotification", localPlayer, "You must pick a character to play!", {255, 80, 80, 255})
                 return false
             end
         end
-        setLoginUIEnabled(false, false)
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (false, false)
         imports.triggerEvent("Client:onNotification", localPlayer, "◴ Processing..", {175, 175, 175, 255})
         imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
         imports.setTimer(function()
@@ -611,7 +612,7 @@ function getLoginUIPhase() return loginUI.phase end
 
 imports.addEvent("Client:onSetLoginUIPhase", true)
 imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
-    phaseID = tonumber(phaseID)
+    phaseID = imports.tonumberphaseID)
     if not phaseID or not loginUI.phases[1].optionsUI[phaseID] or (loginUI.phase and loginUI.phase == phaseID) then return false end
     if loginUI.cache.timers.phaseChanger and loginUI.cache.timers.phaseChanger:isValid() then loginUI.cache.timers.phaseChanger:destroy(); loginUI.cache.timers.phaseChanger = false end
     if loginUI.cache.timers.uiEnabler and loginUI.cache.timers.uiEnabler:isValid() then loginUI.cache.timers.uiEnabler:destroy(); loginUI.cache.timers.uiEnabler = false end
@@ -662,21 +663,14 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
     end, loadingUI.animFadeInDuration + 250, 1)
 
     loginUI.cache.timers.uiEnabler = imports.setTimer(function()
-        setLoginUIEnabled(true)
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (true)
         loginUI.cache.timers.uiEnabler = false
     end, loadingUI.fadeOutDuration + loadingUI.fadeDelayDuration - (loadingUI.animFadeInDuration + 250), 1)
     return true
 end)
 
-
-----------------------------------------------
---[[ Function: Enables/Disables Login GUI ]]--
-----------------------------------------------
-
-function setLoginUIEnabled(state, forcedState)
-
+imports.addEventHandler("onClientLoginUIEnable", root, function(state, forcedState)
     if loginUI.cache.timers.uiEnabler and loginUI.cache.timers.uiEnabler:isValid() then loginUI.cache.timers.uiEnabler:destroy(); loginUI.cache.timers.uiEnabler = false end
-    
     if forcedState ~= nil then
         loginUI.isForcedDisabled = not forcedState
         loginUI.isEnabled = forcedState
@@ -684,10 +678,7 @@ function setLoginUIEnabled(state, forcedState)
         loginUI.isEnabled = state
     end
     return true
-
-end
-imports.addEvent("onClientLoginUIEnable", true)
-imports.addEventHandler("onClientLoginUIEnable", root, setLoginUIEnabled)
+end)
 
 
 -------------------------------------------------------
@@ -707,7 +698,7 @@ imports.addEventHandler("onClientRecieveCharacterSaveState", root, function(stat
             imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
         end
     end
-    setLoginUIEnabled(true, true)
+    imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (true, true)
 
 end)
 
@@ -719,7 +710,7 @@ end)
 imports.addEvent("onClientLoadCharacterID", true)
 imports.addEventHandler("onClientLoadCharacterID", root, function(character, characterID, characterData)
 
-    character = tonumber(character); characterID = tonumber(characterID);
+    character = imports.tonumbercharacter); characterID = imports.tonumbercharacterID);
     if not character or not characterID or not characterData then return false end
 
     loginUI._unsavedCharacters[character] = nil
@@ -851,7 +842,7 @@ local function renderUI(renderData)
                 local isOptionHovered = isMouseOnPosition(options_offsetX, options_offsetY, option_width, option_height)
                 if isOptionHovered then
                     if isLMBClicked then
-                        setLoginUIEnabled(false)
+                        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (false)
                         imports.setTimer(function()
                             j.execFunc()
                         end, 1, 1)
@@ -1192,7 +1183,7 @@ local function renderUI(renderData)
                 if not j.hoverAnimTick then j.hoverAnimTick = CLIENT_CURRENT_TICK end
                 if isSwitcherHovered then
                     if isLMBClicked then
-                        setLoginUIEnabled(false)
+                        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (false)
                         imports.setTimer(function()
                             j.execFunc()
                         end, 1, 1)
@@ -1227,7 +1218,7 @@ local function renderUI(renderData)
                 if not j.hoverAnimTick then j.hoverAnimTick = CLIENT_CURRENT_TICK end
                 if isButtonHovered then
                     if isLMBClicked then
-                        setLoginUIEnabled(false)
+                        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (false)
                         imports.setTimer(function()
                             j.execFunc()
                         end, 1, 1)
@@ -1269,7 +1260,7 @@ local function renderUI(renderData)
             if (CLIENT_CURRENT_TICK - loginUI.phases[3].view.scrollAnimTickCounter) >= loginUI.phases[3].view.scrollDelayDuration then
                 credits_offsetY = imports.interpolateBetween(credits_offsetY, 0, 0, view_height*1.5, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].view.scrollAnimTickCounter + loginUI.phases[3].view.scrollDelayDuration, loginUI.phases[3].view.scrollAnimDuration), "Linear")
                 if math.round(credits_offsetY, 2) == math.round(view_height*1.5) and loginUI.isEnabled then
-                    setLoginUIEnabled(false)
+                    imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (false)
                     imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1)
                 end
             end
@@ -1282,7 +1273,7 @@ local function renderUI(renderData)
             local isBackNavigatorHovered = isMouseOnPosition(back_navigator_offsetX, back_navigator_offsetY, back_navigator_width, back_navigator_height)
             if isBackNavigatorHovered then
                 if isLMBClicked then
-                    setLoginUIEnabled(false)
+                    imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (false)
                     imports.setTimer(function()
                         loginUI.phases[3].back_navigator.execFunc()
                     end, 1, 1)
@@ -1378,7 +1369,7 @@ imports.addEventHandler("Client:onToggleLoginUI", root, function(state, Args)
         loginUI.premium = Args.premium
         imports.setElementPosition(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.x, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.y, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.z)
         imports.setElementDimension(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
-        setLoginUIEnabled(true, true)
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (true, true)
 
         imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
         imports.setTimer(function()
