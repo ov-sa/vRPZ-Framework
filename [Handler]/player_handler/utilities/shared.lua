@@ -12,19 +12,7 @@
 --[[ Imports ]]--
 -----------------
 
---TODO:NEEDS TO BE OPTIMIZED & move to beautify + add shared code for all this.....
-local _string = string
-string = utf8
-for i, j in pairs(_string) do
-    if not string[i] then
-        string[i] = j
-    end
-end
-function string.spaceChars(str)
-    return string.sub(string.gsub(str, ".", " %0"), 2)
-end
-
-
+--TODO:NEEDS TO BE OPTIMIZED....
 loadstring(exports.assetify_library:fetchImports())()
 
 

@@ -39,7 +39,8 @@ local imports = {
     fadeCamera = fadeCamera,
     showChat = showChat,
     showCursor = showCursor,
-    math = math
+    math = math,
+    string = string
 }
 
 
@@ -325,7 +326,7 @@ loginUI.phases[2].customizerui.button.startY = loginUI.phases[2].customizerui.bu
 loginUI.phases[3].back_navigator.height = loginUI.phases[3].back_navigator.height + imports.dxGetFontHeight(1, loginUI.phases[3].back_navigator.font)
 loginUI.phases[3].view.contentText = ""
 for i = 1, #FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Contributors"] do
-    local j = string.upper(string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Contributors"][i]))
+    local j = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Contributors"][i]))
     loginUI.phases[3].view.contentText = ((i == 1) and j) or loginUI.phases[3].view.contentText.."\n"..j
 end
 loginUI.phases[3].view.width, loginUI.phases[3].view.height = loginUI.phases[3].view.width + (CLIENT_MTA_RESOLUTION[1] - loginUI.phases[3].view.startX), loginUI.phases[3].view.height + (CLIENT_MTA_RESOLUTION[2] - loginUI.phases[3].view.startY)
@@ -514,7 +515,7 @@ manageCharacter = function(manageType)
         end
         local clientNameCounter = 0
         local clientAgeCounter = imports.tonumber(loginUI.phases[2].customizerui.option[2].placeDataValue) or 0
-        for _ in string.gmatch(loginUI.phases[2].customizerui.option[1].placeDataValue, "(%w+)%s*") do clientNameCounter = clientNameCounter + 1 end
+        for _ in imports.string.gmatch(loginUI.phases[2].customizerui.option[1].placeDataValue, "(%w+)%s*") do clientNameCounter = clientNameCounter + 1 end
         if clientNameCounter < FRAMEWORK_CONFIGS["UI"]["Login"].minimumCharacterNameWordCount then
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
             imports.triggerEvent("Client:onNotification", localPlayer, "Please enter your full name!", {255, 80, 80, 255})
@@ -717,7 +718,7 @@ local function renderUI(renderData)
             --Draws Options UI
             imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[loginUI.phase].bgTexture, 0, 0, 0, tocolor(unpackColor(loginUI.phases[1].bgColor)), false)
             for i, j in imports.ipairs(loginUI.phases[1].optionsUI) do
-                local option_title = string.upper(string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
+                local option_title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
                 local option_width, option_height = dxGetTextWidth(option_title, 1, loginUI.phases[1].optionsUI.font) + 5, loginUI.phases[1].optionsUI.height
                 local options_offsetX, options_offsetY = loginUI.phases[1].optionsUI.startX - (option_width*0.5), j.startY
                 local isOptionHovered = isMouseOnPosition(options_offsetX, options_offsetY, option_width, option_height)
@@ -816,7 +817,7 @@ local function renderUI(renderData)
                         if isLMBClicked then
                             if (loginUI.phases[2].customizerui.option.editbox.focussedEditbox ~= i) then
                                 loginUI.phases[2].customizerui.option.editbox.focussedEditbox = i
-                                loginUI.phases[2].customizerui.option.editbox.cursor.posNum = string.len(j.placeDataValue)
+                                loginUI.phases[2].customizerui.option.editbox.cursor.posNum = imports.string.len(j.placeDataValue)
                             end
                             isOptionEditBoxClicked = true
                         end
@@ -865,7 +866,7 @@ local function renderUI(renderData)
                     local option_slotWidth, option_slotHeight = option_width - (option_height*2) - (loginUI.phases[2].customizerui.option.paddingY*2) + loginUI.phases[2].customizerui.option.editbox.width, option_height - loginUI.phases[2].customizerui.option.paddingY + loginUI.phases[2].customizerui.option.editbox.height
                     local option_slotOffsetX, option_slotOffsetY = option_offsetX + option_height + loginUI.phases[2].customizerui.option.paddingY + loginUI.phases[2].customizerui.option.editbox.startX, option_offsetY + (loginUI.phases[2].customizerui.option.paddingY/2) + loginUI.phases[2].customizerui.option.editbox.startY
                     local fieldText = j.placeDataValue
-                    local fieldLength = string.len(fieldText)
+                    local fieldLength = imports.string.len(fieldText)
                     if j.censored then
                         local censored = ""
                         for k=1, fieldLength, 1 do
@@ -874,7 +875,7 @@ local function renderUI(renderData)
                         fieldText = censored
                     end
                     if (loginUI.phases[2].customizerui.option.editbox.focussedEditbox ~= i) then
-                        imports.dxDrawText((string.len(j.placeDataValue) <= 0 and j.placeHolder) or fieldText, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, (string.len(j.placeDataValue) <= 0 and tocolor(unpackColor(loginUI.phases[2].customizerui.option.placeDataFontColor))) or tocolor(unpackColor(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "center", "center", true, false, false)
+                        imports.dxDrawText((imports.string.len(j.placeDataValue) <= 0 and j.placeHolder) or fieldText, option_slotOffsetX, option_slotOffsetY, option_slotOffsetX + option_slotWidth, option_slotOffsetY + option_slotHeight, (imports.string.len(j.placeDataValue) <= 0 and tocolor(unpackColor(loginUI.phases[2].customizerui.option.placeDataFontColor))) or tocolor(unpackColor(loginUI.phases[2].customizerui.option.placeDataValueFontColor)), 1, loginUI.phases[2].customizerui.option.font, "center", "center", true, false, false)
                     else
                         local horizontalShift = 0
                         local fieldWidth = dxGetTextWidth(fieldText, 1, loginUI.phases[2].customizerui.option.font)
@@ -882,8 +883,8 @@ local function renderUI(renderData)
                         if fieldWidth >= option_slotWidth then
                             fieldX_offset = option_slotOffsetX + option_slotWidth - fieldWidth
                         end
-                        local firstString = string.sub(fieldText, 1, loginUI.phases[2].customizerui.option.editbox.cursor.posNum)
-                        local secondString = string.sub(fieldText, loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1, fieldLength)
+                        local firstString = imports.string.sub(fieldText, 1, loginUI.phases[2].customizerui.option.editbox.cursor.posNum)
+                        local secondString = imports.string.sub(fieldText, loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1, fieldLength)
                         local cursor_equivalentPadding = ""
                         local cursorX_offset = fieldX_offset + dxGetTextWidth(firstString, 1, loginUI.phases[2].customizerui.option.font)
                         local cursorX_startBounding = option_slotOffsetX
@@ -899,7 +900,7 @@ local function renderUI(renderData)
                                 imports.dxDrawRectangle(cursorX_offset + (loginUI.phases[2].customizerui.option.editbox.cursor.paddingX/3), option_slotOffsetY + loginUI.phases[2].customizerui.option.editbox.cursor.paddingY, loginUI.phases[2].customizerui.option.editbox.cursor.width, option_slotHeight - (loginUI.phases[2].customizerui.option.editbox.cursor.paddingY*2), tocolor(unpackColor(loginUI.phases[2].customizerui.option.editbox.cursor.bgColor)), false)
                             else
                                 local equivalentSpace = ""
-                                local secondStringLength = string.len(secondString)
+                                local secondStringLength = imports.string.len(secondString)
                                 local secondStringWidth = dxGetTextWidth(secondString, 1, loginUI.phases[2].customizerui.option.font)
                                 local generatedText = firstString..cursor_equivalentPadding..secondString
                                 if secondStringWidth > option_slotWidth then
@@ -907,11 +908,11 @@ local function renderUI(renderData)
                                 end
                                 if horizontalShift > 0 then
                                     local extraCharacters = 1
-                                    while dxGetTextWidth(string.sub(secondString, 1, extraCharacters), 1, loginUI.phases[2].customizerui.option.font) <= horizontalShift do
+                                    while dxGetTextWidth(imports.string.sub(secondString, 1, extraCharacters), 1, loginUI.phases[2].customizerui.option.font) <= horizontalShift do
                                         extraCharacters = extraCharacters + 1
                                     end
-                                    local _firstString = string.sub(secondString, 1, secondStringLength - extraCharacters)
-                                    local _secondString = string.sub(secondString, secondStringLength - extraCharacters + 1, secondStringLength)
+                                    local _firstString = imports.string.sub(secondString, 1, secondStringLength - extraCharacters)
+                                    local _secondString = imports.string.sub(secondString, secondStringLength - extraCharacters + 1, secondStringLength)
                                     while dxGetTextWidth(equivalentSpace, 1, loginUI.phases[2].customizerui.option.font) < dxGetTextWidth(_secondString, 1, loginUI.phases[2].customizerui.option.font) do
                                         equivalentSpace = equivalentSpace.." "
                                     end
@@ -936,9 +937,9 @@ local function renderUI(renderData)
                             local clickedX = getAbsoluteCursorPosition()
                             local _inputCursorX = 0
                             for i=1, fieldLength, 1 do
-                                local _fieldX = fieldX_offset + dxGetTextWidth(string.sub(fieldText, 1, i), 1, loginUI.phases[2].customizerui.option.font) - (loginUI.phases[2].customizerui.option.editbox.cursor.width*2)
+                                local _fieldX = fieldX_offset + dxGetTextWidth(imports.string.sub(fieldText, 1, i), 1, loginUI.phases[2].customizerui.option.font) - (loginUI.phases[2].customizerui.option.editbox.cursor.width*2)
                                 if horizontalShift > 0 then
-                                    _fieldX = fieldX_offset + dxGetTextWidth(string.sub(fieldText, 1, i), 1, loginUI.phases[2].customizerui.option.font) + loginUI.phases[2].customizerui.option.editbox.cursor.width
+                                    _fieldX = fieldX_offset + dxGetTextWidth(imports.string.sub(fieldText, 1, i), 1, loginUI.phases[2].customizerui.option.font) + loginUI.phases[2].customizerui.option.editbox.cursor.width
                                 end
                                 if clickedX >= _fieldX then
                                     _inputCursorX = i
@@ -984,7 +985,7 @@ local function renderUI(renderData)
                                                         break
                                                     end
                                                 end
-                                                if isKeyValid then currentPressedKey = string.upper(customKey) end
+                                                if isKeyValid then currentPressedKey = imports.string.upper(customKey) end
                                             end
                                         else
                                             for k, v in imports.ipairs(j.inputSettings.validKeys) do
@@ -994,9 +995,9 @@ local function renderUI(renderData)
                                                 end
                                             end
                                         end
-                                        if currentPressedKey and (string.lower(_currentPressedKey) == string.lower(currentPressedKey)) then
+                                        if currentPressedKey and (imports.string.lower(_currentPressedKey) == imports.string.lower(currentPressedKey)) then
                                             if j.inputSettings.capsAllowed then
-                                                if string.upper(currentPressedKey) == _currentPressedKey then
+                                                if imports.string.upper(currentPressedKey) == _currentPressedKey then
                                                     currentPressedKey = _currentPressedKey
                                                 end
                                             end
@@ -1021,19 +1022,19 @@ local function renderUI(renderData)
                                     prevInputKeyStreak = 0
                                 end
                                 if not isOnDelay then
-                                    local _firstString = string.sub(j.placeDataValue, 1, loginUI.phases[2].customizerui.option.editbox.cursor.posNum)
-                                    local _secondString = string.sub(j.placeDataValue, loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1, string.len(j.placeDataValue))
+                                    local _firstString = imports.string.sub(j.placeDataValue, 1, loginUI.phases[2].customizerui.option.editbox.cursor.posNum)
+                                    local _secondString = imports.string.sub(j.placeDataValue, loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1, imports.string.len(j.placeDataValue))
                                     if currentPressedKey == "backspace" then
-                                        j.placeDataValue = string.sub(_firstString, 1, string.len(_firstString) - 1).._secondString
+                                        j.placeDataValue = imports.string.sub(_firstString, 1, imports.string.len(_firstString) - 1).._secondString
                                         loginUI.phases[2].customizerui.option.editbox.cursor.posNum = loginUI.phases[2].customizerui.option.editbox.cursor.posNum - 1
                                         if loginUI.phases[2].customizerui.option.editbox.cursor.posNum < 0 then loginUI.phases[2].customizerui.option.editbox.cursor.posNum = 0 end
                                     elseif currentPressedKey == "delete" then
-                                        j.placeDataValue = _firstString..string.sub(_secondString, 2, string.len(_secondString))
+                                        j.placeDataValue = _firstString..imports.string.sub(_secondString, 2, imports.string.len(_secondString))
                                     else
-                                        if j.inputSettings and j.inputSettings.rangeLimit and (string.len(j.placeDataValue) < j.inputSettings.rangeLimit[2]) then
+                                        if j.inputSettings and j.inputSettings.rangeLimit and (imports.string.len(j.placeDataValue) < j.inputSettings.rangeLimit[2]) then
                                             j.placeDataValue = _firstString..currentPressedKey:gsub("space", " ").._secondString
                                             loginUI.phases[2].customizerui.option.editbox.cursor.posNum = loginUI.phases[2].customizerui.option.editbox.cursor.posNum + 1
-                                            local _fieldLength = string.len(j.placeDataValue)
+                                            local _fieldLength = imports.string.len(j.placeDataValue)
                                             if loginUI.phases[2].customizerui.option.editbox.cursor.posNum > _fieldLength then loginUI.phases[2].customizerui.option.editbox.cursor.posNum = _fieldLength end
                                         end
                                     end
@@ -1329,7 +1330,7 @@ imports.addEventHandler("onClientKey", root, function(button, press)
                             loginUI.phases[2].customizerui.option.editbox.focussedEditbox = editboxIndex[currentEditbox + 1]
                         end
                     end
-                    loginUI.phases[2].customizerui.option.editbox.cursor.posNum = string.len(loginUI.phases[2].customizerui.option[loginUI.phases[2].customizerui.option.editbox.focussedEditbox].placeDataValue)
+                    loginUI.phases[2].customizerui.option.editbox.cursor.posNum = imports.string.len(loginUI.phases[2].customizerui.option[loginUI.phases[2].customizerui.option.editbox.focussedEditbox].placeDataValue)
                 end
             elseif button == "home" then
                 if loginUI.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
@@ -1337,11 +1338,11 @@ imports.addEventHandler("onClientKey", root, function(button, press)
                 end
             elseif button == "end" then
                 if loginUI.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
-                    loginUI.phases[2].customizerui.option.editbox.cursor.posNum = string.len(loginUI.phases[2].customizerui.option[loginUI.phases[2].customizerui.option.editbox.focussedEditbox].placeDataValue)
+                    loginUI.phases[2].customizerui.option.editbox.cursor.posNum = imports.string.len(loginUI.phases[2].customizerui.option[loginUI.phases[2].customizerui.option.editbox.focussedEditbox].placeDataValue)
                 end
-            elseif string.find(button, "arrow") then
+            elseif imports.string.find(button, "arrow") then
                 if loginUI.phases[2].customizerui.option.editbox.focussedEditbox > 0 then
-                    local fieldLength = string.len(loginUI.phases[2].customizerui.option[loginUI.phases[2].customizerui.option.editbox.focussedEditbox].placeDataValue)
+                    local fieldLength = imports.string.len(loginUI.phases[2].customizerui.option[loginUI.phases[2].customizerui.option.editbox.focussedEditbox].placeDataValue)
                     if button == "arrow_l" then
                         if loginUI.phases[2].customizerui.option.editbox.cursor.posNum - 1 < 0 then
                             loginUI.phases[2].customizerui.option.editbox.cursor.posNum = fieldLength
