@@ -24,12 +24,3 @@ function setInventoryItemProperty(...) return CInventory.setItemProperty(...) en
 function getInventoryItemProperty(...) return CInventory.getItemProperty(...) end
 function setInventoryItemData(...) return CInventory.setItemData(...) end
 function getInventoryItemData(...) return CInventory.getItemData(...) end
-
-
-
-
-
-
-
-
-

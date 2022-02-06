@@ -31,6 +31,3 @@ CInventory.setItemData = dbify.inventory.item.setData
 CInventory.getItemData = dbify.inventory.item.getData
 
 CInventory.ensureItems(CInventory.CItems)
-
-
-
