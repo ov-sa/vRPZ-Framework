@@ -27,8 +27,6 @@ local imports = {
     setTimer = setTimer,
     killTimer = killTimer,
     dxCreateTexture = dxCreateTexture,
-    dxCreateRenderTarget = dxCreateRenderTarget,
-    dxSetRenderTarget = dxSetRenderTarget,
     dxDrawRectangle = dxDrawRectangle,
     dxDrawImage = dxDrawImage,
     dxDrawText = dxDrawText,
@@ -341,7 +339,6 @@ end
 loginUI.phases[3].view.width, loginUI.phases[3].view.height = loginUI.phases[3].view.width + (CLIENT_MTA_RESOLUTION[1] - loginUI.phases[3].view.startX), loginUI.phases[3].view.height + (CLIENT_MTA_RESOLUTION[2] - loginUI.phases[3].view.startY)
 loginUI.phases[3].view.contentWidth, loginUI.phases[3].view.contentHeight = imports.dxGetTextSize(loginUI.phases[3].view.content, loginUI.phases[3].view.width, 1, loginUI.phases[3].view.font, false)
 loginUI.phases[3].view.scrollAnimDuration = imports.math.max(1, imports.math.ceil((loginUI.phases[3].view.contentHeight + loginUI.phases[3].view.height)/loginUI.phases[3].view.height))*loginUI.phases[3].view.scrollAnimDuration
-loginUI.phases[3].view.renderTarget = imports.dxCreateRenderTarget(loginUI.phases[3].view.width, loginUI.phases[3].view.height, true)
 --[[
 for i, j in imports.ipairs(playerClothes["Gender"]) do
     table.insert(loginUI.phases[2].customizerui.option[3].placeDataTable, j.modelType)
@@ -1147,7 +1144,6 @@ local function renderUI(renderData)
             imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, tocolor(unpack(loginUI.phases[3].bgColor)), false)
             local view_offsetX, view_offsetY = loginUI.phases[3].view.startX, loginUI.phases[3].view.startY
             local view_width, view_height = loginUI.phases[3].view.width, loginUI.phases[3].view.height
-            imports.dxSetRenderTarget(loginUI.phases[3].view.renderTarget, true)
             local credits_offsetY = -loginUI.phases[3].view.contentHeight - (view_height/2)
             if (CLIENT_CURRENT_TICK - loginUI.phases[3].view.scrollAnimTickCounter) >= loginUI.phases[3].view.scrollDelayDuration then
                 credits_offsetY = imports.interpolateBetween(credits_offsetY, 0, 0, view_height*1.5, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].view.scrollAnimTickCounter + loginUI.phases[3].view.scrollDelayDuration, loginUI.phases[3].view.scrollAnimDuration), "Linear")
@@ -1156,9 +1152,8 @@ local function renderUI(renderData)
                     imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1)
                 end
             end
-            dxDrawBorderedText(loginUI.phases[3].view.outlineWeight, loginUI.phases[3].view.outlineColor, loginUI.phases[3].view.content, loginUI.phases[3].view.paddingX, credits_offsetY, view_width, credits_offsetY + loginUI.phases[3].view.contentHeight, tocolor(unpack(loginUI.phases[3].view.fontColor)), 1, loginUI.phases[3].view.font, "left", "center", true, false, false, false, true)
-            imports.dxSetRenderTarget()
-            imports.dxDrawImage(view_offsetX, view_offsetY, view_width, view_height, loginUI.phases[3].view.renderTarget, 0, 0, 0, tocolor(255, 255, 255, 255), false)
+            credits_offsetY = view_offsetY + credits_offsetY
+            imports.dxDrawText(loginUI.phases[3].view.content, view_offsetX + loginUI.phases[3].view.paddingX, credits_offsetY, view_offsetX + view_width, credits_offsetY + loginUI.phases[3].view.contentHeight, tocolor(unpack(loginUI.phases[3].view.fontColor)), 1, loginUI.phases[3].view.font, "left", "center", true, false, false, false, true)
             local back_navigator_width, back_navigator_height = loginUI.phases[3].back_navigator.width + dxGetTextWidth(loginUI.phases[3].back_navigator.title, 1, loginUI.phases[3].back_navigator.font), loginUI.phases[3].back_navigator.height
             back_navigator_width = back_navigator_width + (back_navigator_height*2)
             local back_navigator_offsetX, back_navigator_offsetY = loginUI.phases[3].back_navigator.startX + (CLIENT_MTA_RESOLUTION[1] - back_navigator_width), loginUI.phases[3].back_navigator.startY + (CLIENT_MTA_RESOLUTION[2] - back_navigator_height)
