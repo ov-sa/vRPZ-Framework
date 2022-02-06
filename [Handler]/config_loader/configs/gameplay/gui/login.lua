@@ -79,6 +79,17 @@ configVars["UI"]["Login"] = {
             ["Titles"] = {
                 ["EN"] = "Credits",
                 ["TR"] = "Kredi"
+            },
+
+            ["Contributors"] = {
+                "ᴏᴠ | Mario",
+                "ᴏᴠ | Buddy",
+                "ᴏᴠ | Aviril",
+                "ᴏᴠ | April",
+                "ᴏᴠ | Tron",
+                "ᴏᴠ | Neor",
+                "ᴏᴠ | Skann",
+                "ᴏᴠ | Mazvis"
             }
         }
     }

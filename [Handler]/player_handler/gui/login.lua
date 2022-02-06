@@ -14,6 +14,7 @@
 
 local imports = {
     tonumber = tonumber,
+    tostring = tostring,
     pairs = pairs,
     ipairs = ipairs,
     isElement = isElement,
@@ -323,11 +324,10 @@ loginUI.phases[2].customizerui.switcher.startY = loginUI.phases[2].customizerui.
 loginUI.phases[2].customizerui.button.startX = loginUI.phases[2].customizerui.button.startX + (loginUI.phases[2].customizerui.width - (#loginUI.phases[2].customizerui.button*loginUI.phases[2].customizerui.button.width) - imports.math.max(0, (#loginUI.phases[2].customizerui.button - 1)*loginUI.phases[2].customizerui.button.paddingX))/2
 loginUI.phases[2].customizerui.button.startY = loginUI.phases[2].customizerui.button.startY + loginUI.phases[2].customizerui.button.paddingY
 loginUI.phases[3].back_navigator.height = loginUI.phases[3].back_navigator.height + imports.dxGetFontHeight(1, loginUI.phases[3].back_navigator.font)
---[[
-for i, j in imports.ipairs(serverCredits) do
-    loginUI.phases[3].view.content = ((i == 1) and tostring(j)) or loginUI.phases[3].view.content.."\n\n"..tostring(j)
+for i = 1, #FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Contributors"] do
+    local j = imports.tostring(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Contributors"][i])
+    loginUI.phases[3].view.content = ((i == 1) and j) or loginUI.phases[3].view.content.."\n\n"..j
 end
-]]--
 loginUI.phases[3].view.width, loginUI.phases[3].view.height = loginUI.phases[3].view.width + (CLIENT_MTA_RESOLUTION[1] - loginUI.phases[3].view.startX), loginUI.phases[3].view.height + (CLIENT_MTA_RESOLUTION[2] - loginUI.phases[3].view.startY)
 loginUI.phases[3].view.contentWidth, loginUI.phases[3].view.contentHeight = imports.dxGetTextSize(loginUI.phases[3].view.content, loginUI.phases[3].view.width, 1, loginUI.phases[3].view.font, false)
 loginUI.phases[3].view.scrollAnimDuration = imports.math.max(1, imports.math.ceil((loginUI.phases[3].view.contentHeight + loginUI.phases[3].view.height)/loginUI.phases[3].view.height))*loginUI.phases[3].view.scrollAnimDuration
