@@ -296,7 +296,6 @@ local loginUI = {
                 scrollAnimDuration = 7500
             },
             navigator = {
-                title = "BACK",
                 startX = -15, startY = 15,
                 width = 0, height = 25,
                 font = FRAMEWORK_FONTS[1], fontColor = {200, 200, 200, 255},
@@ -1136,7 +1135,8 @@ local function renderUI(renderData)
                 end
             end
             imports.dxDrawText(loginUI.phases[3].view.contentText, view_offsetX + loginUI.phases[3].view.paddingX, credits_offsetY, view_offsetX + view_width, credits_offsetY + loginUI.phases[3].view.contentHeight, loginUI.phases[3].view.fontColor, 1, loginUI.phases[3].view.font, "center", "center", true, false, false, false, true)
-            local navigator_width, navigator_height = loginUI.phases[3].navigator.width + imports.dxGetTextWidth(loginUI.phases[3].navigator.title, 1, loginUI.phases[3].navigator.font), loginUI.phases[3].navigator.height
+            local navigator_title = FRAMEWORK_CONFIGS["UI"]["Login"].credits["Navigator"]["Titles"][FRAMEWORK_LANGUAGE]
+            local navigator_width, navigator_height = loginUI.phases[3].navigator.width + imports.dxGetTextWidth(navigator_title, 1, loginUI.phases[3].navigator.font), loginUI.phases[3].navigator.height
             local navigator_offsetX, navigator_offsetY = loginUI.phases[3].navigator.startX + (CLIENT_MTA_RESOLUTION[1] - navigator_width), loginUI.phases[3].navigator.startY
             local isNavigatorHovered = isMouseOnPosition(navigator_offsetX, navigator_offsetY, navigator_width, navigator_height)
             if isNavigatorHovered then
@@ -1156,7 +1156,7 @@ local function renderUI(renderData)
             end
             loginUI.phases[3].navigator.animAlphaPercent = loginUI.phases[3].navigator.animAlphaPercent or 0.25
             loginUI.phases[3].navigator.animAlphaPercent = ((loginUI.phases[3].navigator.hoverStatus == "forward") and imports.interpolateBetween(loginUI.phases[3].navigator.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].navigator.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")) or imports.interpolateBetween(loginUI.phases[3].navigator.animAlphaPercent, 0, 0, 0.25, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].navigator.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")
-            imports.dxDrawText(loginUI.phases[3].navigator.title, navigator_offsetX, navigator_offsetY, navigator_offsetX + navigator_width, navigator_offsetY + navigator_height, tocolor(loginUI.phases[3].navigator.fontColor[1], loginUI.phases[3].navigator.fontColor[2], loginUI.phases[3].navigator.fontColor[3], loginUI.phases[3].navigator.fontColor[4]*loginUI.phases[3].navigator.animAlphaPercent), 1, loginUI.phases[3].navigator.font, "center", "center", true, false, false)
+            imports.dxDrawText(navigator_title, navigator_offsetX, navigator_offsetY, navigator_offsetX + navigator_width, navigator_offsetY + navigator_height, tocolor(loginUI.phases[3].navigator.fontColor[1], loginUI.phases[3].navigator.fontColor[2], loginUI.phases[3].navigator.fontColor[3], loginUI.phases[3].navigator.fontColor[4]*loginUI.phases[3].navigator.animAlphaPercent), 1, loginUI.phases[3].navigator.font, "center", "center", true, false, false)
         end
     end
 
