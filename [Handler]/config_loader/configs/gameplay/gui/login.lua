@@ -87,7 +87,7 @@ configVars["UI"]["Login"] = {
 
         credits = {
             fontColor = {170, 35, 35, 255},
-            scrollDuration = 5000,
+            scrollDuration = 6500,
 
             ["Titles"] = {
                 ["EN"] = "Credits",
