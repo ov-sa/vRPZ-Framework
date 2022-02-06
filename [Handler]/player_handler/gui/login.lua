@@ -713,9 +713,9 @@ local function renderUI(renderData)
             background_offsetX, background_offsetY = -(background_width - CLIENT_MTA_RESOLUTION[1])/2, 0
         end
 
-        if currentPhase == 1 then
+        if loginUI.phase == 1 then
             --Draws Options UI
-            imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[currentPhase].bgTexture, 0, 0, 0, tocolor(unpack(loginUI.phases[1].bgColor)), false)
+            imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[loginUI.phase].bgTexture, 0, 0, 0, tocolor(unpack(loginUI.phases[1].bgColor)), false)
             for i, j in imports.ipairs(loginUI.phases[1].optionsUI) do
                 local option_title = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]:gsub(".","  %0"):sub(2):upper()
                 local option_width, option_height = dxGetTextWidth(option_title, 1, loginUI.phases[1].optionsUI.font) + 5, loginUI.phases[1].optionsUI.height
@@ -749,7 +749,7 @@ local function renderUI(renderData)
                 imports.dxDrawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(loginUI.phases[1].optionsUI.hoverfontColor[1], loginUI.phases[1].optionsUI.hoverfontColor[2], loginUI.phases[1].optionsUI.hoverfontColor[3], loginUI.phases[1].optionsUI.hoverfontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
                 imports.dxDrawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, loginUI.phases[1].optionsUI.embedLineSize, tocolor(unpack(loginUI.phases[1].optionsUI.embedLineColor)), false)
             end
-        elseif currentPhase == 2 then
+        elseif loginUI.phase == 2 then
             --Draws Character UI
             local customizer_offsetX, customizer_offsetY = loginUI.phases[2].customizerui.startX, loginUI.phases[2].customizerui.startY
             imports.dxDrawRectangle(customizer_offsetX + loginUI.phases[2].customizerui.titleBar.height, customizer_offsetY, loginUI.phases[2].customizerui.width - (loginUI.phases[2].customizerui.titleBar.height*2), loginUI.phases[2].customizerui.titleBar.height, tocolor(unpack(loginUI.phases[2].customizerui.titleBar.bgColor)), false)
@@ -1131,7 +1131,7 @@ local function renderUI(renderData)
                 button_offsetX = button_offsetX + button_width + loginUI.phases[2].customizerui.button.paddingX
             end
             _currentKeyCheck = true
-        elseif currentPhase == 3 then
+        elseif loginUI.phase == 3 then
             --Draws Credits UI
             imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, tocolor(unpack(loginUI.phases[3].bgColor)), false)
             local view_offsetX, view_offsetY = loginUI.phases[3].view.startX, loginUI.phases[3].view.startY
