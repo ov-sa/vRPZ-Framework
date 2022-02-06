@@ -57,7 +57,7 @@ renderRespawnScreen = function()
 
     if respawnerUI.mode.type == "generate_client_spawn" then
         local elapsedDuration = CLIENT_CURRENT_TICK - respawnerUI.mode.tickCounter
-        if elapsedDuration >= (FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"].fadeInDuration + FRAMEWORK_CONFIGS["UI"]["Loading"]["Hints"].fadeDelayDuration) then
+        if elapsedDuration >= (FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration) then
             local clientPosVector = localPlayer:getPosition()
             local characterSpawn = localPlayer:getData("Character:spawn") 
             if not characterSpawn or not playerSpawnPoints[characterSpawn] then
