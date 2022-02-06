@@ -53,8 +53,8 @@ loadingUI = {
         font = FRAMEWORK_FONTS[1], fontColor = {200, 200, 200, 255}
     }
 }
-loadingUI.loader.startX = loadingUI.loader.startX + ((CLIENT_MTA_RESOLUTION[1] - loadingUI.loader.size)/2)
-loadingUI.loader.startY = loadingUI.loader.startY + ((CLIENT_MTA_RESOLUTION[2] - loadingUI.loader.size)/2)
+loadingUI.loader.startX = loadingUI.loader.startX + ((CLIENT_MTA_RESOLUTION[1] - loadingUI.loader.size)*0.5)
+loadingUI.loader.startY = loadingUI.loader.startY + ((CLIENT_MTA_RESOLUTION[2] - loadingUI.loader.size)*0.5)
 
 
 ------------------------------
