@@ -64,6 +64,12 @@ configVars["UI"]["Login"] = {
 
     ["Options"] = {
         play = {
+            height = 35,
+            embedLineSize = 3,
+            fontColor = {150, 150, 150, 25},
+            hoverfontColor = {170, 35, 35, 255},
+            embedLineColor = {170, 35, 35, 50},
+            hoverDuration = 2500,
             bgPath = "files/images/login/login.png",
 
             ["Titles"] = {

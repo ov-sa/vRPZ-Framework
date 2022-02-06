@@ -67,10 +67,7 @@ local loginUI = {
             bgTexture = imports.dxCreateTexture(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.bgPath, "argb", true, "clamp"),
             optionsUI = {
                 startX = CLIENT_MTA_RESOLUTION[1]*0.5, startY = -15, paddingY = 10,
-                width = 0, height = 35,
-                font = FRAMEWORK_FONTS[2], fontColor = {150, 150, 150, 25}, hoverfontColor = {170, 35, 35, 255},
-                embedLineSize = 3, embedLineColor = {170, 35, 35, 50},
-                hoverAnimDuration = 2500,
+                font = FRAMEWORK_FONTS[2],
                 {
                     identifier = "play",
                     execFunc = function() manageCharacter("play") end
@@ -125,7 +122,7 @@ local loginUI = {
                         embedLineSize = 1,
                         embedLineColor = {175, 175, 175, 100},
                         focussedEmbedLineColor = {170, 35, 35, 255},
-                        hoverAnimDuration = 5000,
+                        hoverDuration = 5000,
                         cursor = {
                             posNum = 0,
                             paddingX = 6,
@@ -235,7 +232,7 @@ local loginUI = {
                     bgColor = {0, 0, 0, 255},
                     hoverfontColor = {0, 0, 0, 255},
                     hoverBGColor = {255, 80, 80, 255},
-                    hoverAnimDuration = 2500,
+                    hoverDuration = 2500,
                     {
                         title = "❮",
                         execFunc = function() manageCharacter("switch_prev") end
@@ -266,7 +263,7 @@ local loginUI = {
                     bgColor = {0, 0, 0, 235},
                     hoverfontColor = {175, 175, 175, 255},
                     hoverBGColor = {0, 0, 0, 255},
-                    hoverAnimDuration = 2500,
+                    hoverDuration = 2500,
                     leftCurvedEdgePath = imports.dxCreateTexture("files/images/hud/curved_square/left.png", "argb", true, "clamp"),
                     rightCurvedEdgePath = imports.dxCreateTexture("files/images/hud/curved_square/right.png", "argb", true, "clamp"),
                     {
@@ -300,7 +297,7 @@ local loginUI = {
                 font = FRAMEWORK_FONTS[1], fontColor = {200, 200, 200, 255},
                 hoverStatus = "backward",
                 hoverAnimTick = CLIENT_CURRENT_TICK,
-                hoverAnimDuration = 1500,
+                hoverDuration = 1500,
                 execFunc = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end
             }
         }
@@ -309,7 +306,7 @@ local loginUI = {
 
 for i = 1, #loginUI.phases[1].optionsUI, 1 do
     local j = loginUI.phases[1].optionsUI[i]
-    j.startY = loginUI.phases[1].optionsUI.startY + CLIENT_MTA_RESOLUTION[2] - (loginUI.phases[1].optionsUI.height*(#loginUI.phases[1].optionsUI - (i - 1))) - (loginUI.phases[1].optionsUI.paddingY*(#loginUI.phases[1].optionsUI - i))
+    j.startY = loginUI.phases[1].optionsUI.startY + CLIENT_MTA_RESOLUTION[2] - (FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.height*(#loginUI.phases[1].optionsUI - (i - 1))) - (loginUI.phases[1].optionsUI.paddingY*(#loginUI.phases[1].optionsUI - i))
     j.hoverStatus = "backward"
     j.hoverAnimTick = CLIENT_CURRENT_TICK
 end
@@ -715,7 +712,7 @@ local function renderUI(renderData)
             imports.dxDrawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[loginUI.phase].bgTexture, 0, 0, 0, -1, false)
             for i, j in imports.ipairs(loginUI.phases[1].optionsUI) do
                 local option_title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
-                local option_width, option_height = dxGetTextWidth(option_title, 1, loginUI.phases[1].optionsUI.font) + 5, loginUI.phases[1].optionsUI.height
+                local option_width, option_height = dxGetTextWidth(option_title, 1, loginUI.phases[1].optionsUI.font) + 5, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.height
                 local options_offsetX, options_offsetY = loginUI.phases[1].optionsUI.startX - (option_width*0.5), j.startY
                 local isOptionHovered = isMouseOnPosition(options_offsetX, options_offsetY, option_width, option_height)
                 if isOptionHovered then
@@ -734,10 +731,10 @@ local function renderUI(renderData)
                     end
                 end
                 j.animAlphaPercent = j.animAlphaPercent or 0
-                j.animAlphaPercent = ((j.hoverStatus == "forward") and imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")) or imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")
-                imports.dxDrawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(unpackColor(loginUI.phases[1].optionsUI.fontColor)), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
-                imports.dxDrawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(loginUI.phases[1].optionsUI.hoverfontColor[1], loginUI.phases[1].optionsUI.hoverfontColor[2], loginUI.phases[1].optionsUI.hoverfontColor[3], loginUI.phases[1].optionsUI.hoverfontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
-                imports.dxDrawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, loginUI.phases[1].optionsUI.embedLineSize, tocolor(unpackColor(loginUI.phases[1].optionsUI.embedLineColor)), false)
+                j.animAlphaPercent = ((j.hoverStatus == "forward") and imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")) or imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")
+                imports.dxDrawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.fontColor)), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
+                imports.dxDrawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[1], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[2], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[3], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
+                imports.dxDrawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineSize, tocolor(unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineColor)), false)
             end
         elseif loginUI.phase == 2 then
             --Draws Character UI
@@ -836,9 +833,9 @@ local function renderUI(renderData)
                     end
                     if not j.embedLineAlphaPercent then j.embedLineAlphaPercent = 0 end
                     if j.hoverAnimStatus == "forward" then
-                        j.embedLineAlphaPercent = imports.interpolateBetween(j.embedLineAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.option.editbox.hoverAnimDuration), "Linear")
+                        j.embedLineAlphaPercent = imports.interpolateBetween(j.embedLineAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.option.editbox.hoverDuration), "Linear")
                     elseif j.hoverAnimStatus == "backward" then
-                        j.embedLineAlphaPercent = imports.interpolateBetween(j.embedLineAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.option.editbox.hoverAnimDuration), "Linear")
+                        j.embedLineAlphaPercent = imports.interpolateBetween(j.embedLineAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.option.editbox.hoverDuration), "Linear")
                     end
                 end
                 imports.dxDrawRectangle(option_offsetX, option_offsetY, option_width, option_height, tocolor(unpackColor(loginUI.phases[2].customizerui.option.bgColor)), false)
@@ -1071,9 +1068,9 @@ local function renderUI(renderData)
                 end
                 if not j.hoverAnimAlphaPercent then j.hoverAnimAlphaPercent = 0 end
                 if j.hoverAnimStatus == "forward" then
-                    j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.switcher.hoverAnimDuration), "Linear")
+                    j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.switcher.hoverDuration), "Linear")
                 elseif j.hoverAnimStatus == "backward" then
-                    j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.switcher.hoverAnimDuration), "Linear")
+                    j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.switcher.hoverDuration), "Linear")
                 end
                 imports.dxDrawImage(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height, loginUI.phases[2].customizerui.switcher.bgTexture, 0, 0, 0, tocolor(unpackColor(loginUI.phases[2].customizerui.switcher.bgColor)), false)
                 imports.dxDrawImage(switcher_offsetX, switcher_offsetY, switcher_width, switcher_height, loginUI.phases[2].customizerui.switcher.bgTexture, 0, 0, 0, tocolor(loginUI.phases[2].customizerui.switcher.hoverBGColor[1], loginUI.phases[2].customizerui.switcher.hoverBGColor[2], loginUI.phases[2].customizerui.switcher.hoverBGColor[3], loginUI.phases[2].customizerui.switcher.hoverBGColor[4]*j.hoverAnimAlphaPercent), false)
@@ -1106,9 +1103,9 @@ local function renderUI(renderData)
                 end
                 if not j.hoverAnimAlphaPercent then j.hoverAnimAlphaPercent = 0 end
                 if j.hoverAnimStatus == "forward" then
-                    j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.button.hoverAnimDuration), "Linear")
+                    j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.button.hoverDuration), "Linear")
                 elseif j.hoverAnimStatus == "backward" then
-                    j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.button.hoverAnimDuration), "Linear")
+                    j.hoverAnimAlphaPercent = imports.interpolateBetween(j.hoverAnimAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[2].customizerui.button.hoverDuration), "Linear")
                 end
                 imports.dxDrawRectangle(button_offsetX + button_height, button_offsetY, button_width - (button_height*2), button_height, tocolor(unpackColor(loginUI.phases[2].customizerui.button.bgColor)), false)
                 imports.dxDrawImage(button_offsetX, button_offsetY, button_height, button_height, loginUI.phases[2].customizerui.button.leftCurvedEdgePath, 0, 0, 0, tocolor(unpackColor(loginUI.phases[2].customizerui.button.bgColor)), false)
@@ -1155,7 +1152,7 @@ local function renderUI(renderData)
                 end
             end
             loginUI.phases[3].navigator.animAlphaPercent = loginUI.phases[3].navigator.animAlphaPercent or 0.25
-            loginUI.phases[3].navigator.animAlphaPercent = ((loginUI.phases[3].navigator.hoverStatus == "forward") and imports.interpolateBetween(loginUI.phases[3].navigator.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].navigator.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")) or imports.interpolateBetween(loginUI.phases[3].navigator.animAlphaPercent, 0, 0, 0.25, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].navigator.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")
+            loginUI.phases[3].navigator.animAlphaPercent = ((loginUI.phases[3].navigator.hoverStatus == "forward") and imports.interpolateBetween(loginUI.phases[3].navigator.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].navigator.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")) or imports.interpolateBetween(loginUI.phases[3].navigator.animAlphaPercent, 0, 0, 0.25, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].navigator.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")
             imports.dxDrawText(navigator_title, navigator_offsetX, navigator_offsetY, navigator_offsetX + navigator_width, navigator_offsetY + navigator_height, tocolor(loginUI.phases[3].navigator.fontColor[1], loginUI.phases[3].navigator.fontColor[2], loginUI.phases[3].navigator.fontColor[3], loginUI.phases[3].navigator.fontColor[4]*loginUI.phases[3].navigator.animAlphaPercent), 1, loginUI.phases[3].navigator.font, "center", "center", true, false, false)
         end
     end
