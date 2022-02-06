@@ -287,7 +287,7 @@ local loginUI = {
             font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits)),
             scrollAnimTickCounter = CLIENT_CURRENT_TICK,
             scrollDelayDuration = FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration - 1000,
-            scrollDuration = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.scrollDuration
+            scrollDuration = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.scrollDuration,
             navigator = {
                 startX = -15, startY = 15,
                 width = 0, height = 25,
