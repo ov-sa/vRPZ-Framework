@@ -796,10 +796,8 @@ end)
 ------------------------------
 
 local function renderUI(renderData)
-
     if not loginUI.state or CPlayer.isInitialized(localPlayer) then return false end
-    local currentPhase = getLoginUIPhase()
-    if not currentPhase then return false end
+    if not loginUI.phase then return false end
 
     if renderData.renderType == "input" then
         loginUI.cache.keys.mouse = isMouseClicked()
