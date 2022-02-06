@@ -667,8 +667,8 @@ setLoginUIPhase = function(phaseID)
     end, loadingUI.fadeOutDuration + loadingUI.fadeDelayDuration - (loadingUI.animFadeInDuration + 250), 1)
     return true
 end
-imports.addEvent("onClientSetLoginUIPhase", true)
-imports.addEventHandler("onClientSetLoginUIPhase", root, setLoginUIPhase)
+imports.addEvent("Client:onSetLoginUIPhase", true)
+imports.addEventHandler("Client:onSetLoginUIPhase", root, setLoginUIPhase)
 
 
 ----------------------------------------------
