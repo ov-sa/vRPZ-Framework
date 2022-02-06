@@ -724,9 +724,7 @@ local function renderUI(renderData)
                 if isOptionHovered then
                     if isLMBClicked then
                         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false)
-                        imports.setTimer(function()
-                            j.execFunc()
-                        end, 1, 1)
+                        imports.setTimer(function() j.execFunc() end, 1, 1)
                     end
                     if j.hoverStatus ~= "forward" then
                         j.hoverStatus = "forward"
@@ -738,13 +736,8 @@ local function renderUI(renderData)
                         j.hoverAnimTick = CLIENT_CURRENT_TICK
                     end
                 end
-                if not j.animAlphaPercent then j.animAlphaPercent = 0 end
-                if j.hoverStatus == "forward" then
-                    j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")
-                else
-                    j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")
-                end
-
+                j.animAlphaPercent = j.animAlphaPercent or 0
+                j.animAlphaPercent = ((j.hoverStatus == "forward") and imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")) or imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")
                 imports.dxDrawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(unpack(loginUI.phases[1].optionsUI.fontColor)), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
                 imports.dxDrawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(loginUI.phases[1].optionsUI.hoverfontColor[1], loginUI.phases[1].optionsUI.hoverfontColor[2], loginUI.phases[1].optionsUI.hoverfontColor[3], loginUI.phases[1].optionsUI.hoverfontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
                 imports.dxDrawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, loginUI.phases[1].optionsUI.embedLineSize, tocolor(unpack(loginUI.phases[1].optionsUI.embedLineColor)), false)
@@ -1165,7 +1158,7 @@ local function renderUI(renderData)
                     loginUI.phases[3].back_navigator.hoverAnimTick = CLIENT_CURRENT_TICK
                 end
             end
-            if not loginUI.phases[3].back_navigator.animAlphaPercent then loginUI.phases[3].back_navigator.animAlphaPercent = 0.75 end
+            loginUI.phases[3].back_navigator.animAlphaPercent = loginUI.phases[3].back_navigator.animAlphaPercent = 0.75
             loginUI.phases[3].back_navigator.animAlphaPercent = ((loginUI.phases[3].back_navigator.hoverStatus == "forward") and imports.interpolateBetween(loginUI.phases[3].back_navigator.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].back_navigator.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")) or imports.interpolateBetween(loginUI.phases[3].back_navigator.animAlphaPercent, 0, 0, 0.75, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].back_navigator.hoverAnimTick, loginUI.phases[1].optionsUI.hoverAnimDuration), "Linear")
             imports.dxDrawRectangle(back_navigator_offsetX + back_navigator_height, back_navigator_offsetY, back_navigator_width - (back_navigator_height*2), back_navigator_height, tocolor(loginUI.phases[3].back_navigator.bgColor[1], loginUI.phases[3].back_navigator.bgColor[2], loginUI.phases[3].back_navigator.bgColor[3], loginUI.phases[3].back_navigator.bgColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), false)
             imports.dxDrawImage(back_navigator_offsetX, back_navigator_offsetY, back_navigator_height, back_navigator_height, loginUI.phases[3].back_navigator.leftEdgePath, 0, 0, 0, tocolor(loginUI.phases[3].back_navigator.bgColor[1], loginUI.phases[3].back_navigator.bgColor[2], loginUI.phases[3].back_navigator.bgColor[3], loginUI.phases[3].back_navigator.bgColor[4]*loginUI.phases[3].back_navigator.animAlphaPercent), false)
