@@ -650,12 +650,12 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
     return true
 end)
 
+imports.addEvent("Client:onEnableLoginUI", true)
 imports.addEventHandler("Client:onEnableLoginUI", root, function(state, isForced)
     if loginUI.cache.timers.uiEnabler and imports.isTimer(loginUI.cache.timers.uiEnabler) then
         imports.killTimer(loginUI.cache.timers.uiEnabler)
         loginUI.cache.timers.uiEnabler = nil
     end
-    outputChatBox(tostring(state))
     if isForced then
         loginUI.isForcedDisabled = not state
     else
@@ -1130,9 +1130,7 @@ local function renderUI(renderData)
             local credits_offsetY = -loginUI.phases[3].view.contentHeight - (view_height/2)
             if (CLIENT_CURRENT_TICK - loginUI.phases[3].view.scrollAnimTickCounter) >= loginUI.phases[3].view.scrollDelayDuration then
                 credits_offsetY = view_offsetY + imports.interpolateBetween(credits_offsetY, 0, 0, view_height*1.5, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].view.scrollAnimTickCounter + loginUI.phases[3].view.scrollDelayDuration, loginUI.phases[3].view.scrollDuration), "Linear")
-                outputChatBox(tostring(loginUI.isEnabled))
                 if (imports.math.round(credits_offsetY, 2) >= imports.math.round(view_height*1.5)) and loginUI.isEnabled then
-                    outputChatBox("MATCHED")
                     imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false)
                     imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1)
                 end

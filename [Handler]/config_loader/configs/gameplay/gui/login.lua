@@ -91,14 +91,14 @@ configVars["UI"]["Login"] = {
             },
 
             ["Contributors"] = {
-                "ov | Mario",
-                "ov | Buddy",
-                "ov | Aviril",
-                "ov | April",
-                "ov | Tron",
-                "ov | Neor",
-                "ov | Skann",
-                "ov | Mazvis"
+                "ov | Mario (Developer)",
+                "ov | Buddy (Modeler)",
+                "ov | Aviril (Graphics Developer)",
+                "ov | April (Designer)",
+                "ov | Tron (Developer)",
+                "ov | Neor (Developer)",
+                "ov | Skann (Modeler)",
+                "ov | Mazvis (Developer)"
             }
         }
     }
