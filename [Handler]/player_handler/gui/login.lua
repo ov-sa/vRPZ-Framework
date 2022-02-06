@@ -532,7 +532,7 @@ manageCharacter = function(manageType)
             return false
         end
         local clientNameCounter = 0
-        local clientAgeCounter = imports.tonumberloginUI.phases[2].customizerui.option[2].placeDataValue) or 0
+        local clientAgeCounter = imports.tonumber(loginUI.phases[2].customizerui.option[2].placeDataValue) or 0
         for _ in string.gmatch(loginUI.phases[2].customizerui.option[1].placeDataValue, "(%w+)%s*") do clientNameCounter = clientNameCounter + 1 end
         if clientNameCounter < FRAMEWORK_CONFIGS["UI"]["Login"].minimumCharacterNameWordCount then
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (true)
@@ -612,11 +612,15 @@ function getLoginUIPhase() return loginUI.phase end
 
 imports.addEvent("Client:onSetLoginUIPhase", true)
 imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
-    phaseID = imports.tonumberphaseID)
+    phaseID = imports.tonumber(phaseID)
     if not phaseID or not loginUI.phases[1].optionsUI[phaseID] or (loginUI.phase and loginUI.phase == phaseID) then return false end
-    if loginUI.cache.timers.phaseChanger and loginUI.cache.timers.phaseChanger:isValid() then loginUI.cache.timers.phaseChanger:destroy(); loginUI.cache.timers.phaseChanger = false end
-    if loginUI.cache.timers.uiEnabler and loginUI.cache.timers.uiEnabler:isValid() then loginUI.cache.timers.uiEnabler:destroy(); loginUI.cache.timers.uiEnabler = false end
 
+    for i, j in imports.pairs(loginUI.cache.timers) do
+        if j and imports.isTimer(j) then
+            imports.killTimer(j)
+            loginUI.cache.timers = nil
+        end
+    end
     imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
     loginUI.cache.timers.phaseChanger = imports.setTimer(function()
         if phaseID == 1 then
@@ -710,7 +714,7 @@ end)
 imports.addEvent("onClientLoadCharacterID", true)
 imports.addEventHandler("onClientLoadCharacterID", root, function(character, characterID, characterData)
 
-    character = imports.tonumbercharacter); characterID = imports.tonumbercharacterID);
+    character = imports.tonumber(character); characterID = imports.tonumber(characterID);
     if not character or not characterID or not characterData then return false end
 
     loginUI._unsavedCharacters[character] = nil
