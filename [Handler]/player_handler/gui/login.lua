@@ -703,25 +703,6 @@ imports.addEventHandler("Client:onLoadCharacterID", root, function(character, ch
 end)
 
 
------------------------------------------
---[[ Events: On Client Character/Key ]]--
------------------------------------------
-
-imports.addEventHandler("onClientCharacter", root, function(character)
-
-    if GuiElement.isMTAWindowActive() or not isLoginUIVisible() or getLoginUIPhase() ~= 2 or not loginUI.isEnabled or loginUI.isForcedDisabled then return false end
-
-    if _currentKeyCheck then
-        _currentKeyCheck = false
-        if character == " " then
-            character = "space"
-        end
-        _currentPressedKey = character
-    end
-
-end)
-
-
 ------------------------------
 --[[ Function: Renders UI ]]--
 ------------------------------
@@ -1325,6 +1306,21 @@ end)
 
 --[[
 --TODO: NO NEED OF THIS SOON ANYMORE :0
+
+imports.addEventHandler("onClientCharacter", root, function(character)
+
+    if GuiElement.isMTAWindowActive() or not isLoginUIVisible() or getLoginUIPhase() ~= 2 or not loginUI.isEnabled or loginUI.isForcedDisabled then return false end
+
+    if _currentKeyCheck then
+        _currentKeyCheck = false
+        if character == " " then
+            character = "space"
+        end
+        _currentPressedKey = character
+    end
+
+end)
+
 imports.addEventHandler("onClientKey", root, function(button, press)
 
     if GuiElement.isMTAWindowActive() or not isLoginUIVisible() or getLoginUIPhase() ~= 2 or not loginUI.isEnabled or loginUI.isForcedDisabled then return false end
