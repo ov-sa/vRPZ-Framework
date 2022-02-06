@@ -25,7 +25,7 @@ FRAMEWORK_LANGUAGE = "EN"
 FRAMEWORK_FONTS = {
     [1] = imports.dxCreateFont(":beautify_library/files/assets/fonts/teko_medium.rw", 23),
     [2] = imports.dxCreateFont(":beautify_library/files/assets/fonts/teko_medium.rw", 30),
-    [3] = imports.dxCreateFont(":beautify_library/files/assets/fonts/teko_medium.rw", 23),
+    [3] = imports.dxCreateFont(":beautify_library/files/assets/fonts/teko_medium.rw", 30, true),
 
 
     --TODO: ALL THIS NEEDS TO BE MODIFIED TOO

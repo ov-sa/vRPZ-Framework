@@ -82,14 +82,14 @@ configVars["UI"]["Login"] = {
             },
 
             ["Contributors"] = {
-                "ᴏᴠ | Mario",
-                "ᴏᴠ | Buddy",
-                "ᴏᴠ | Aviril",
-                "ᴏᴠ | April",
-                "ᴏᴠ | Tron",
-                "ᴏᴠ | Neor",
-                "ᴏᴠ | Skann",
-                "ᴏᴠ | Mazvis"
+                "ov | Mario",
+                "ov | Buddy",
+                "ov | Aviril",
+                "ov | April",
+                "ov | Tron",
+                "ov | Neor",
+                "ov | Skann",
+                "ov | Mazvis"
             }
         }
     }
