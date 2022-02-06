@@ -522,7 +522,7 @@ manageCharacter = function(manageType)
             imports.triggerEvent("Client:onNotification", localPlayer, "Please enter a valid age! ["..FRAMEWORK_CONFIGS["UI"]["Login"].minimumCharacterAge.."+]", {255, 80, 80, 255})
             return false
         end
-        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, false)
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
         imports.triggerEvent("Client:onNotification", localPlayer, "◴ Saving..", {175, 175, 175, 255})
         local characterData = {}
         for i, j in imports.ipairs(loginUI.phases[2].customizerui.option) do
@@ -566,7 +566,7 @@ manageCharacter = function(manageType)
                 return false
             end
         end
-        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, false)
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
         imports.triggerEvent("Client:onNotification", localPlayer, "◴ Processing..", {175, 175, 175, 255})
         imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
         imports.setTimer(function()
@@ -650,17 +650,18 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
     return true
 end)
 
-imports.addEventHandler("onClientLoginUIEnable", root, function(state, forcedState)
+imports.addEventHandler("Client:onEnableLoginUI", root, function(state, isForced)
     if loginUI.cache.timers.uiEnabler and imports.isTimer(loginUI.cache.timers.uiEnabler) then
         imports.killTimer(loginUI.cache.timers.uiEnabler)
         loginUI.cache.timers.uiEnabler = nil
     end
-    if forcedState ~= nil then
-        loginUI.isForcedDisabled = not forcedState
-        loginUI.isEnabled = forcedState
+    outputChatBox(tostring(state))
+    if isForced then
+        loginUI.isForcedDisabled = not state
     else
         loginUI.isEnabled = state
     end
+    loginUI.isEnabled = state
     return true
 end)
 
@@ -1129,7 +1130,9 @@ local function renderUI(renderData)
             local credits_offsetY = -loginUI.phases[3].view.contentHeight - (view_height/2)
             if (CLIENT_CURRENT_TICK - loginUI.phases[3].view.scrollAnimTickCounter) >= loginUI.phases[3].view.scrollDelayDuration then
                 credits_offsetY = view_offsetY + imports.interpolateBetween(credits_offsetY, 0, 0, view_height*1.5, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].view.scrollAnimTickCounter + loginUI.phases[3].view.scrollDelayDuration, loginUI.phases[3].view.scrollDuration), "Linear")
-                if (imports.math.round(credits_offsetY, 2) == imports.math.round(view_height*1.5)) and loginUI.isEnabled then
+                outputChatBox(tostring(loginUI.isEnabled))
+                if (imports.math.round(credits_offsetY, 2) >= imports.math.round(view_height*1.5)) and loginUI.isEnabled then
+                    outputChatBox("MATCHED")
                     imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false)
                     imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1)
                 end
@@ -1229,7 +1232,6 @@ imports.addEventHandler("Client:onToggleLoginUI", root, function(state, Args)
         imports.setElementPosition(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.x, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.y, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.z)
         imports.setElementDimension(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true, true)
-
         imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
         imports.setTimer(function()
             toggleUI(state, Args)
