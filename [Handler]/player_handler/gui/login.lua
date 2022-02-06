@@ -603,9 +603,9 @@ manageCharacter = function(manageType)
 end
 
 
-----------------------------------
---[[ Function: UI Controllers ]]--
-----------------------------------
+------------------------------
+--[[ Function: UI Helpers ]]--
+------------------------------
 
 function isLoginUIVisible() return loginUI.state end
 function getLoginUIPhase() return loginUI.phase end
@@ -684,26 +684,17 @@ imports.addEventHandler("onClientLoginUIEnable", root, function(state, forcedSta
     return true
 end)
 
-
--------------------------------------------------------
---[[ Event: On Client Recieve Character Save State ]]--
--------------------------------------------------------
-
-imports.addEvent("onClientRecieveCharacterSaveState", true)
-imports.addEventHandler("onClientRecieveCharacterSaveState", root, function(state, errorMessage, character)
-
+imports.addEvent("Client:onSaveCharacter", true)
+imports.addEventHandler("Client:onSaveCharacter", root, function(state, errorMessage, character)
     if state then
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully saved the character!", {80, 255, 80, 255})
     else
         if errorMessage then
-            if character then
-                loginUI._charactersUnderProcess[character] = nil
-            end
+            if character then loginUI._charactersUnderProcess[character] = nil end
             imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
         end
     end
     imports.triggerEvent("Client:onEnableLoginUI", localPlayer, (true, true)
-
 end)
 
 

@@ -53,7 +53,7 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(characterID, ch
             for k, v in imports.pairs(characterCache) do
                 if v.identity["name"] == characters[i]["name"] then
                     imports.triggerClientEvent(source, "onClientLoginUIEnable", source, true, true)
-                    imports.triggerClientEvent(source, "onClientRecieveCharacterSaveState", source, false, "Unfortunately, '"..characters[i]["name"].."' is already registered!", i)
+                    imports.triggerClientEvent(source, "Client:onSaveCharacter", source, false, "Unfortunately, '"..characters[i]["name"].."' is already registered!", i)
                     return false
                 end
             end
@@ -66,7 +66,7 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(characterID, ch
         end
     end
     CPlayer.setData(serial, {"character", characterID})
-    imports.triggerClientEvent(source, "onClientRecieveCharacterSaveState", source, true)
+    imports.triggerClientEvent(source, "Client:onSaveCharacter", source, true)
 end)
 
 
