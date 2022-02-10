@@ -17,6 +17,8 @@ local imports = {
     type = type,
     pairs = pairs,
     md5 = md5,
+    encodeString = encodeString,
+    decodeString = decodeString,
     split = split,
     gettok = gettok,
     tonumber = tonumber,
@@ -37,21 +39,10 @@ local imports = {
     engineReplaceModel = engineReplaceModel,
     engineReplaceCOL = engineReplaceCOL,
     dxCreateTexture = dxCreateTexture,
-    file = {
-        read = file.read
-    },
-    table = {
-        clone = table.clone
-    },
-    string = {
-        byte = string.byte,
-        lower = string.lower,
-        gsub = string.gsub
-    },
-    math = {
-        min = math.min,
-        max = math.max
-    }
+    file = file,
+    table = table,
+    string = string,
+    math = math
 }
 
 
@@ -106,21 +97,21 @@ if localPlayer then
             if modelID then
                 imports.engineSetModelLODDistance(modelID, 300)
                 if not rwCache.dff[(rwPaths.dff)] and imports.fileExists(rwPaths.dff) then
-                    rwCache.dff[(rwPaths.dff)] = imports.engineLoadDFF(rwPaths.dff)
+                    rwCache.dff[(rwPaths.dff)] = imports.engineLoadDFF((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(rwPaths.dff), {key = assetManifest.encryptKey})) or rwPaths.dff)
                 end
                 if not rwCache.dff[(rwPaths.dff)] then
                     imports.engineFreeModel(modelID)
                     return false
                 else
                     if not rwCache.col[(rwPaths.col)] and imports.fileExists(rwPaths.col) then
-                        rwCache.col[(rwPaths.col)] = imports.engineLoadCOL(rwPaths.col)
+                        rwCache.col[(rwPaths.col)] = imports.engineLoadCOL((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(rwPaths.col), {key = assetManifest.encryptKey})) or rwPaths.col)
                     end
                 end
             end
         end
         local loadState = false
         if not rwCache.txd[(rwPaths.txd)] and imports.fileExists(rwPaths.txd) then
-            rwCache.txd[(rwPaths.txd)] = imports.engineLoadTXD(rwPaths.txd)
+            rwCache.txd[(rwPaths.txd)] = imports.engineLoadTXD((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(rwPaths.txd), {key = assetManifest.encryptKey})) or rwPaths.txd)
         end
         if rwCache.txd[(rwPaths.txd)] then
             imports.engineImportTXD(rwCache.txd[(rwPaths.txd)], modelID)
@@ -160,14 +151,14 @@ if localPlayer then
         return true
     end
 
-    function asset:refreshShaderPack(assetType, assetName, shaderPack, mapType, rwCache, state)
-        if not assetType or not assetName or not shaderPack or not rwCache then return false end
+    function asset:refreshShaderPack(assetType, assetName, shaderPack, mapType, rwCache, assetManifest, state)
+        if not assetType or not assetName or not shaderPack or not rwCache or not assetManifest then return false end
         for i, j in imports.pairs(shaderPack) do
             if not mapType then
                 if state then
                     rwCache[i] = {}
                 end
-                asset:refreshShaderPack(assetType, assetName, j, i, rwCache, state)
+                asset:refreshShaderPack(assetType, assetName, j, i, rwCache, assetManifest, state)
             else
                 for k, v in imports.pairs(shaderPack) do
                     if state then
@@ -175,7 +166,7 @@ if localPlayer then
                             rwCache[mapType][k] = {}
                             if mapType == "bump" then
                                 if v.map and imports.fileExists(v.map) then
-                                    local createdMap = imports.dxCreateTexture(v.map, "dxt5", true)
+                                    local createdMap = imports.dxCreateTexture((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(v.map), {key = assetManifest.encryptKey})) or v.map, "dxt5", true)
                                     local createdBumpMap = exports.graphify_library:createBumpMap(k, "world", createdMap)
                                     rwCache[mapType][k] = {map = createdMap, shader = createdBumpMap}
                                 end
@@ -189,9 +180,9 @@ if localPlayer then
                                     end
                                 end
                                 if isControlValid then
-                                    local redControl = imports.dxCreateTexture(v.red.map, "dxt5", true)
-                                    local greenControl = imports.dxCreateTexture(v.green.map, "dxt5", true)
-                                    local blueControl = imports.dxCreateTexture(v.blue.map, "dxt5", true)
+                                    local redControl = imports.dxCreateTexture((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(v.red.map), {key = assetManifest.encryptKey})) or v.red.map, "dxt5", true)
+                                    local greenControl = imports.dxCreateTexture((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(v.green.map), {key = assetManifest.encryptKey})) or v.green.map, "dxt5", true)
+                                    local blueControl = imports.dxCreateTexture((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(v.blue.map), {key = assetManifest.encryptKey})) or v.blue.map, "dxt5", true)
                                     local createdControlMap = exports.graphify_library:createControlMap(k, "world", {
                                         red = {texture = redControl, scale = v.red.scale},
                                         green = {texture = greenControl, scale = v.green.scale},
@@ -231,27 +222,27 @@ if localPlayer then
         return true
     end
 else
-    function asset:buildFile(filePath, filePointer)
+    function asset:buildFile(filePath, filePointer, encryptKey)
         if not filePath or not filePointer then return false end
         if not filePointer[filePath] then
             local builtFileData = imports.file.read(filePath)
             if builtFileData then
                 filePointer[filePath] = true
-                filePointer.fileData[filePath] = builtFileData
-                filePointer.fileHash[filePath] = imports.md5(builtFileData)
+                filePointer.fileData[filePath] = (encryptKey and imports.encodeString("tea", builtFileData, {key = encryptKey})) or builtFileData
+                filePointer.fileHash[filePath] = imports.md5(filePointer.fileData[filePath])
             end
         end
         return true
     end
 
-    function asset:buildShader(assetPath, shaderPack, assetFiles)
+    function asset:buildShader(assetPath, shaderPack, assetFiles, encryptKey)
         for i, j in imports.pairs(shaderPack) do
             if j and (imports.type(j) == "table") then
-                asset:buildShader(assetPath, j, assetFiles)
+                asset:buildShader(assetPath, j, assetFiles, encryptKey)
             else
                 if i == "map" then
                     shaderPack[i] = assetPath.."map/"..j
-                    asset:buildFile(shaderPack[i], assetFiles)
+                    asset:buildFile(shaderPack[i], assetFiles, encryptKey)
                 end
             end
             thread.pause()
@@ -277,6 +268,7 @@ else
                     if not assetManifestData then
                         cAssetPack.rwDatas[assetPath] = false
                     else
+                        assetManifestData.encryptKey = (assetManifestData.encryptKey and imports.md5(imports.tostring(assetManifestData.encryptKey))) or false
                         cAssetPack.rwDatas[assetReference] = {
                             synced = {
                                 manifestData = assetManifestData
@@ -303,24 +295,24 @@ else
                             local sceneIPLPath = assetPath..(asset.references.scene)..".ipl"
                             local sceneManifestData = imports.file.read(sceneIPLPath)
                             if sceneManifestData then
-                                asset:buildFile(sceneIPLPath, cAssetPack.rwDatas[assetReference].unSynced)
-                                asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetReference].unSynced)
+                                asset:buildFile(sceneIPLPath, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
                                 local unparsedDatas = imports.split(sceneManifestData, "\n")
                                 for k = 1, #unparsedDatas, 1 do
                                     local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedDatas[k], 2, asset.separators.IPL)), " ", "")
-                                    asset:buildFile(assetPath.."dff/"..childName..".dff", cAssetPack.rwDatas[assetReference].unSynced)
-                                    asset:buildFile(assetPath.."col/"..childName..".col", cAssetPack.rwDatas[assetReference].unSynced)
+                                    asset:buildFile(assetPath.."dff/"..childName..".dff", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                    asset:buildFile(assetPath.."col/"..childName..".col", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
                                     thread.pause()
                                 end
                             end
                         else
-                            asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetReference].unSynced)
-                            asset:buildFile(assetPath..(asset.references.asset)..".dff", cAssetPack.rwDatas[assetReference].unSynced)
-                            asset:buildFile(assetPath..(asset.references.asset)..".col", cAssetPack.rwDatas[assetReference].unSynced)
+                            asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                            asset:buildFile(assetPath..(asset.references.asset)..".dff", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                            asset:buildFile(assetPath..(asset.references.asset)..".col", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
                             thread.pause()
                         end
                         if assetManifestData.shaderMaps then
-                            asset:buildShader(assetPath, assetManifestData.shaderMaps, cAssetPack.rwDatas[assetReference].unSynced)
+                            asset:buildShader(assetPath, assetManifestData.shaderMaps, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
                         end
                     end
                 end
