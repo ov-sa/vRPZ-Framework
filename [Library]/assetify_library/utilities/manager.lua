@@ -54,15 +54,12 @@ function manager:getData(assetType, assetName)
     return false
 end
 
-function manager:getID(assetType, assetName)
+function manager:getID(assetType, assetName, assetClump)
     if not manager:isLoaded(assetType, assetName) then return false end
     local packReference = availableAssetPacks[assetType]
     local assetReference = packReference.rwDatas[assetName]
-    if assetReference.unsyncedData then
-        if assetReference.unsyncedData.cAsset then
-        end
-    end
     if (imports.type(assetReference.unsyncedData) ~= "table") or not assetReference.unsyncedData.assetCache.cAsset then return false end
+    --TODO: ADD HERE CMP SUPPORT
     return assetReference.unsyncedData.assetCache.cAsset.syncedData.modelID or false
 end
 
