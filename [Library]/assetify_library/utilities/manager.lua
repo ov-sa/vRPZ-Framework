@@ -129,6 +129,8 @@ function manager:load(assetType, assetName)
                     frames = 1
                 })
                 return true
+            elseif assetReference.manifestData.assetClumps then
+                print("LOAD...")
             else
                 return asset:create(assetType, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache, {
                     txd = assetPath..(asset.references.asset)..".txd",
