@@ -130,7 +130,13 @@ function manager:load(assetType, assetName)
                 })
                 return true
             elseif assetReference.manifestData.assetClumps then
-                print("LOAD...")
+                for i, j in imports.pairs(assetReference.manifestData.assetClumps) do
+                    asset:create(assetType, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache[i], {
+                        txd = assetPath..(asset.references.asset)..".txd",
+                        dff = assetPath.."clump/"..j..".dff",
+                        col = assetPath..(asset.references.asset)..".col"
+                    })
+                end
             else
                 return asset:create(assetType, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache, {
                     txd = assetPath..(asset.references.asset)..".txd",
