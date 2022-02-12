@@ -92,9 +92,6 @@ if localPlayer then
         if not self or (self == asset) then return false end
         if not assetType or not assetPack or not assetPack.assetType or not rwCache or not assetManifest or not assetData or not rwPaths then return false end
         local modelID = false
-        if assetType == "character" then
-            print(toJSON(rwPaths)) --TODO: REMOVE
-        end
         if rwPaths.dff then
             modelID = imports.engineRequestModel(assetPack.assetType, (assetManifest.assetBase and (imports.type(assetManifest.assetBase) == "number") and assetManifest.assetBase) or assetPack.assetBase or nil)
             if modelID then

@@ -131,6 +131,7 @@ function manager:load(assetType, assetName)
                 return true
             elseif assetReference.manifestData.assetClumps then
                 for i, j in imports.pairs(assetReference.manifestData.assetClumps) do
+                    assetReference.unsyncedData.assetCache[i] = {}
                     asset:create(assetType, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache[i], {
                         txd = assetPath..(asset.references.asset)..".txd",
                         dff = assetPath.."clump/"..j..".dff",
