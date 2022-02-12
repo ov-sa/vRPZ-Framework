@@ -190,8 +190,22 @@ function manager:unload(assetType, assetName)
                     executions = downloadSettings.buildRate,
                     frames = 1
                 })
+            elseif assetReference.manifestData.assetClumps then
+                thread:create(function(cThread)
+                    for i, j in imports.pairs(assetReference.unsyncedData.assetCache) do
+                        if j.cAsset then
+                            j.cAsset:destroy(assetReference.unsyncedData.rwCache)
+                        end
+                        thread.pause()
+                    end
+                end):resume({
+                    executions = downloadSettings.buildRate,
+                    frames = 1
+                })
             else
-                assetReference.cAsset:destroy()
+                if assetReference.cAsset then
+                    assetReference.cAsset:destroy(assetReference.unsyncedData.rwCache)
+                end
             end
         end
     end
