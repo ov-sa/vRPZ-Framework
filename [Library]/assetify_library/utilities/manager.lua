@@ -177,12 +177,6 @@ function manager:unload(assetType, assetName)
                         end
                         thread.pause()
                     end
-                    for i, j in imports.pairs(assetReference.unsyncedData.rwCache) do
-                        if j and imports.isElement(j) then
-                            imports.destroyElement(j)
-                        end
-                        thread.pause()
-                    end
                     asset:refreshShaderPack(assetType, assetName, assetReference.manifestData.shaderMaps, nil, assetReference.unsyncedData.rwCache.map, assetReference.manifestData, false)
                     assetReference.unsyncedData = nil
                     imports.collectgarbage()
@@ -198,6 +192,8 @@ function manager:unload(assetType, assetName)
                         end
                         thread.pause()
                     end
+                    assetReference.unsyncedData = nil
+                    imports.collectgarbage()
                 end):resume({
                     executions = downloadSettings.buildRate,
                     frames = 1
@@ -205,6 +201,8 @@ function manager:unload(assetType, assetName)
             else
                 if assetReference.cAsset then
                     assetReference.cAsset:destroy(assetReference.unsyncedData.rwCache)
+                    assetReference.unsyncedData = nil
+                    imports.collectgarbage()
                 end
             end
         end
