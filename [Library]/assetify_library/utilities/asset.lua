@@ -305,6 +305,16 @@ else
                                     thread.pause()
                                 end
                             end
+                        elseif assetType == "character" then
+                            asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                            if assetManifestData.assetClumps and (imports.type(assetManifestData.assetClumps) == "table") then
+                                for i, j in imports.pairs(assetManifestData.assetClumps) do
+                                    asset:buildFile(assetPath.."clump/"..j..".dff", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                end
+                            else
+                                asset:buildFile(assetPath..(asset.references.asset)..".dff", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                            end
+                            thread.pause()
                         else
                             asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
                             asset:buildFile(assetPath..(asset.references.asset)..".dff", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
