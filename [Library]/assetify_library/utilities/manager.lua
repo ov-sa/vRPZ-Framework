@@ -58,9 +58,12 @@ function manager:getID(assetType, assetName, assetClump)
     if not manager:isLoaded(assetType, assetName) then return false end
     local packReference = availableAssetPacks[assetType]
     local assetReference = packReference.rwDatas[assetName]
-    if (imports.type(assetReference.unsyncedData) ~= "table") or not assetReference.unsyncedData.assetCache.cAsset then return false end
-    --TODO: ADD HERE CMP SUPPORT
-    return assetReference.unsyncedData.assetCache.cAsset.syncedData.modelID or false
+    if imports.type(assetReference.unsyncedData) ~= "table" then return false end
+    if assetReference.manifestData.assetClumps then
+        return (assetClump and assetReference.manifestData.assetClumps[assetClump] and assetReference.unsyncedData.assetCache[assetClump] and assetReference.unsyncedData.assetCache[assetClump].cAsset and assetReference.unsyncedData.assetCache[assetClump].cAsset.syncedData.modelID) or false
+    else
+        return (assetReference.unsyncedData.assetCache.cAsset and assetReference.unsyncedData.assetCache.cAsset.syncedData.modelID) or false
+    end
 end
 
 function manager:isLoaded(assetType, assetName)
@@ -130,14 +133,20 @@ function manager:load(assetType, assetName)
                 })
                 return true
             elseif assetReference.manifestData.assetClumps then
-                for i, j in imports.pairs(assetReference.manifestData.assetClumps) do
-                    assetReference.unsyncedData.assetCache[i] = {}
-                    asset:create(assetType, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache[i], {
-                        txd = assetPath..(asset.references.asset)..".txd",
-                        dff = assetPath.."clump/"..j..".dff",
-                        col = assetPath..(asset.references.asset)..".col"
-                    })
-                end
+                thread:create(function(cThread)
+                    for i, j in imports.pairs(assetReference.manifestData.assetClumps) do
+                        assetReference.unsyncedData.assetCache[i] = {}
+                        asset:create(assetType, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache[i], {
+                            txd = assetPath..(asset.references.asset)..".txd",
+                            dff = assetPath.."clump/"..j..".dff",
+                            col = assetPath..(asset.references.asset)..".col"
+                        })
+                        thread.pause()
+                    end
+                end):resume({
+                    executions = downloadSettings.buildRate,
+                    frames = 1
+                })
             else
                 return asset:create(assetType, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache, {
                     txd = assetPath..(asset.references.asset)..".txd",
