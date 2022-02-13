@@ -19,6 +19,27 @@ configVars["Character"] = {
         "armor",
         "thirst",
         "hunger"
+    },
+
+    ["Clothing"] = {
+        ["Gender"] = {
+            ["Male"] = {
+                ["EN"] = "Male",
+                ["TR"] = "Erkek"
+            },
+            ["Female"] = {
+                ["EN"] = "Female",
+                ["TR"] = "Dişi"
+            }
+        }
+
+        ["Male"] = {
+            asset = "vRPZ_Male"
+        },
+
+        ["Female"] = {
+            asset = "vRPZ_Female"
+        }
     }
 
 }
