@@ -35,8 +35,8 @@ local notifUI = {
     startX = 50, startY = 15, paddingY = 5, offsetY = 0,
     slideTopTickCounter = CLIENT_CURRENT_TICK,
     font = FRAMEWORK_FONTS[8],
-    leftCurvedEdgePath = imports.beautify.assets["images"]["curved_square/regular/left.rw"],
-    rightCurvedEdgePath = imports.beautify.assets["images"]["curved_square/regular/right.rw"]
+    leftEdgeTexture = imports.beautify.assets["images"]["curved_square/regular/left.rw"],
+    rightEdgeTexture = imports.beautify.assets["images"]["curved_square/regular/right.rw"]
 }
 
 
@@ -69,8 +69,8 @@ imports.beautify.render.create(function()
             notifAlphaPercent = imports.interpolateBetween(1, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.tickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideOutDuration), "Linear")
         end
         imports.beautify.native.drawRectangle(notif_offsetX, notif_offsetY, notif_width, notif_height, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[1], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[2], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[3], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[4]*notifAlphaPercent), false)
-        imports.beautify.native.drawImage(notif_offsetX - notif_height, notif_offsetY, notif_height, notif_height, notifUI.leftCurvedEdgePath, 0, 0, 0, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[1], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[2], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[3], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[4]*notifAlphaPercent), false)
-        imports.beautify.native.drawImage(notif_offsetX + notif_width, notif_offsetY, notif_height, notif_height, notifUI.rightCurvedEdgePath, 0, 0, 0, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[1], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[2], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[3], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[4]*notifAlphaPercent), false)
+        imports.beautify.native.drawImage(notif_offsetX - notif_height, notif_offsetY, notif_height, notif_height, notifUI.leftEdgeTexture, 0, 0, 0, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[1], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[2], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[3], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[4]*notifAlphaPercent), false)
+        imports.beautify.native.drawImage(notif_offsetX + notif_width, notif_offsetY, notif_height, notif_height, notifUI.rightEdgeTexture, 0, 0, 0, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[1], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[2], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[3], FRAMEWORK_CONFIGS["UI"]["Notification"].bgColor[4]*notifAlphaPercent), false)
         imports.beautify.native.drawText(j.text, notif_offsetX, notif_offsetY, notif_offsetX + notif_width, notif_offsetY + notif_height, imports.tocolor(notifFontColor[1], notifFontColor[2], notifFontColor[3], notifFontColor[4]*notifAlphaPercent), 1, notifUI.font, "center", "center", true, false, false, false, true)
         if j.slideStatus == "backward" then
             if imports.math.round(notifAlphaPercent, 2) == 0 then
