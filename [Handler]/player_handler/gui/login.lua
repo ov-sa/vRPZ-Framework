@@ -34,6 +34,7 @@ local imports = {
     fadeCamera = fadeCamera,
     showChat = showChat,
     showCursor = showCursor,
+    table = table,
     math = math,
     string = string,
     beautify = beautify
@@ -86,31 +87,21 @@ local loginUI = {
                             startY = 30,
                             paddingY = -10,
                             height = 30,
-                            identifier = "tone",
-                            content = {
-                                "Military",
-                                "Criminal"
-                            }
+                            identifier = "tone"
                         },
                         gender = {
                             isSelector = true,
                             startY = 90,
                             height = 30,
                             identifier = "gender",
-                            content = {
-                                "Male",
-                                "Female"
-                            }
+                            content = {}
                         },
                         faction = {
                             isSelector = true,
                             startY = 150,
                             height = 30,
                             identifier = "faction",
-                            content = {
-                                "Military",
-                                "Criminal"
-                            }
+                            content = {}
                         }
                     }
                 },
@@ -193,12 +184,16 @@ end
 loginUI.phases[3].width, loginUI.phases[3].height = loginUI.phases[3].width + (CLIENT_MTA_RESOLUTION[1] - loginUI.phases[3].startX), loginUI.phases[3].height + (CLIENT_MTA_RESOLUTION[2] - loginUI.phases[3].startY)
 loginUI.phases[3].contentWidth, loginUI.phases[3].contentHeight = imports.beautify.native.getTextSize (loginUI.phases[3].contentText, loginUI.phases[3].width, 1, loginUI.phases[3].font, false)
 loginUI.phases[3].scrollDuration = imports.math.max(1, imports.math.ceil((loginUI.phases[3].contentHeight + loginUI.phases[3].height)/loginUI.phases[3].height))*loginUI.phases[3].scrollDuration
---[[
-for i, j in imports.ipairs(playerClothes["Gender"]) do
-    table.insert(loginUI.phases[2].customizerui.option[3].placeDataTable, j.modelType)
+
+FRAMEWORK_CONFIGS["Character"]["Gender"] = {}
+loginUI.phases[2].categories[1].contents.gender.content = {}
+
+
+for i, j in imports.ipairs(FRAMEWORK_CONFIGS["Character"]["Gender"]) do
+    imports.table.insert(loginUI.phases[2].customizerui.option[3].placeDataTable, j.modelType)
 end
 for i, j in pairs(playerSpawnPoints) do
-    table.insert(loginUI.phases[2].customizerui.option[10].placeDataTable, i)
+    imports.table.insert(loginUI.phases[2].customizerui.option[10].placeDataTable, i)
 end
 ]]--
 
@@ -275,10 +270,10 @@ function updateLoginPreviewCharacter()
                         local generatedDataTable = {}
                         for k, v in imports.ipairs(playerClothes[selectedGender.modelType][j.clothingCategoryIndex]) do
                             if v.isAvailableForCharacterCreation then
-                                local copiedTable = table.copy(v, true)
-                                copiedTable.isAvailableForCharacterCreation = nil
-                                copiedTable.__dataIndex = k
-                                table.insert(generatedDataTable, copiedTable)
+                                local copiedTable = imports.table.copy(v, true)
+                                copiedimports.table.isAvailableForCharacterCreation = nil
+                                copiedimports.table.__dataIndex = k
+                                imports.table.insert(generatedDataTable, copiedTable)
                             end
                         end
                         j.placeDataTable = generatedDataTable
@@ -315,7 +310,7 @@ manageCharacter = function(manageType)
         local characterData = {
             isUnverified = true
         }
-        table.insert(loginUI.characters, characterData)
+        imports.table.insert(loginUI.characters, characterData)
         loginUI._selectedCharacter = #loginUI.characters
         loginUI._unsavedCharacters[loginUI._selectedCharacter] = true
         loadLoginPreviewCharacter(true)
@@ -338,7 +333,7 @@ manageCharacter = function(manageType)
                 imports.triggerServerEvent("Player:onDeleteCharacter", localPlayer, loginUI.characters[loginUI._selectedCharacter]._id)
             end
         end
-        table.remove(loginUI.characters, loginUI._selectedCharacter)
+        imports.table.remove(loginUI.characters, loginUI._selectedCharacter)
         loginUI._unsavedCharacters[loginUI._selectedCharacter] = nil
         loginUI._selectedCharacter = imports.math.max(0, loginUI._selectedCharacter - 1)
         loadLoginPreviewCharacter()
@@ -396,7 +391,7 @@ manageCharacter = function(manageType)
         end
         local character = loginUI.character
         local charactersPendingToBeSaved = {}
-        local charactersToBeSaved = table.copy(loginUI.characters, true)
+        local charactersToBeSaved = imports.table.copy(loginUI.characters, true)
         for i, j in imports.ipairs(charactersToBeSaved) do
             if j.isUnverified then
                 charactersToBeSaved[i] = nil
@@ -476,12 +471,12 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
         local unverifiedCharacters = {}
         for i, j in imports.ipairs(loginUI.characters) do
             if j.isUnverified then
-                table.insert(unverifiedCharacters, i)
+                imports.table.insert(unverifiedCharacters, i)
             end
         end
         for i, j in imports.ipairs(loginUI.characters) do
             if j.isUnverified then
-                table.remove(loginUI.characters, i)
+                imports.table.remove(loginUI.characters, i)
                 loginUI._unsavedCharacters[i] = nil
             end
         end
