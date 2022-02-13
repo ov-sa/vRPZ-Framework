@@ -15,7 +15,7 @@
 local imports = {
     tonumber = tonumber,
     tostring = tostring,
-    tocolor = tocolor,
+    tocolor = imports.tocolor,
     pairs = pairs,
     ipairs = ipairs,
     isElement = isElement,
@@ -56,93 +56,115 @@ local loginUI = {
             optionsUI = {
                 startX = CLIENT_MTA_RESOLUTION[1]*0.5, startY = -15, paddingY = 10,
                 font = FRAMEWORK_FONTS[2],
-                {
-                    identifier = "play",
-                    execFunc = function() manageCharacter("play") end
-                },
-                {
-                    identifier = "characters",
-                    execFunc = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 2) end
-                },
-                {
-                    identifier = "credits",
-                    execFunc = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 3) end
-                }
+                {identifier = "play", execFunc = function() manageCharacter("play") end},
+                {identifier = "characters", execFunc = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 2) end},
+                {identifier = "credits", execFunc = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 3) end}
             }
         },
-        [2] = {
-            customizerui = {
-                switcher = {
-                    --[[
-                    startX = -7,
-                    startY = 0,
-                    width = 30,
-                    height = 30,
-                    paddingX = 7,
-                    paddingY = 7,
-                    bgTexture = imports.beautify.native.createTexture("files/images/hud/curved_square/square.png", "dxt5", true, "clamp"),
-                    font = FRAMEWORK_FONTS[6],
-                    outlineWeight = 0.1,
-                    fontColor = {255, 80, 80, 255},
-                    bgColor = {0, 0, 0, 255},
-                    hoverfontColor = {0, 0, 0, 255},
-                    hoverBGColor = {255, 80, 80, 255},
-                    hoverDuration = 2500,
-                    ]]
-                    {
-                        title = "❮",
-                        execFunc = function() manageCharacter("switch_prev") end
-                    },
-                    {
-                        title = "❯",
-                        execFunc = function() manageCharacter("switch_next") end
-                    },
-                    {
-                        title = "X",
-                        execFunc = function() manageCharacter("delete") end
-                    },
-                    {
-                        title = "✎",
-                        execFunc = function() manageCharacter("create") end
+        [2] = customizerUI = {
+            startX = 5, startY = 5,
+            width = 325, height = 610,
+            titleBar = {
+                paddingY = 2,
+                height = 35,
+                text = "Character",
+                font = FRAMEWORK_FONTS[3],
+                fontColor = imports.tocolor(170, 35, 35, 255),
+                bgColor = imports.tocolor(0, 0, 0, 255),
+                shadowColor = imports.tocolor(50, 50, 50, 255),
+            },
+            categories = {
+                paddingX = 20, paddingY = 5,
+                height = 30,
+                font = FRAMEWORK_FONTS[4],
+                fontColor = imports.tocolor(200, 200, 200, 255),
+                bgColor = imports.tocolor(0, 0, 0, 235),
+                {
+                    height = 185,
+                    identifier = "identity",
+                    contents = {
+                        tone = {
+                            isSlider = true,
+                            startY = 30,
+                            paddingY = -10,
+                            height = 30,
+                            identifier = "tone",
+                            content = {
+                                "Military",
+                                "Criminal"
+                            }
+                        },
+                        gender = {
+                            isSelector = true,
+                            startY = 90,
+                            height = 30,
+                            identifier = "gender",
+                            content = {
+                                "Male",
+                                "Female"
+                            }
+                        },
+                        faction = {
+                            isSelector = true,
+                            startY = 150,
+                            height = 30,
+                            identifier = "faction",
+                            content = {
+                                "Military",
+                                "Criminal"
+                            }
+                        }
                     }
                 },
-                button = {
-                    --[[
-                    startX = 0,
-                    startY = 5,
-                    width = 103,
-                    height = 30,
-                    paddingX = 7,
-                    paddingY = 0,
-                    font = FRAMEWORK_FONTS[7],
-                    outlineWeight = 0.25,
-                    fontColor = {170, 35, 35, 235},
-                    bgColor = {0, 0, 0, 235},
-                    hoverfontColor = {175, 175, 175, 255},
-                    hoverBGColor = {0, 0, 0, 255},
-                    hoverDuration = 2500,
-                    ]]
-                    --leftCurvedEdgePath = imports.beautify.native.createTexture("files/images/hud/curved_square/left.png", "dxt5", true, "clamp"),
-                    --rightCurvedEdgePath = imports.beautify.native.createTexture("files/images/hud/curved_square/right.png", "dxt5", true, "clamp"),
-                    {
-                        title = "B A C K",
-                        execFunc = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end
-                    },
-                    {
-                        title = "S A V E",
-                        execFunc = function() manageCharacter("save") end
-                    },
-                    {
-                        title = "P I C K",
-                        execFunc = function() manageCharacter("pick") end
+                {
+                    height = 65,
+                    identifier = "facial",
+                    contents = {
+                        hair = {
+                            isSelector = true,
+                            startY = 30,
+                            height = 30,
+                            identifier = "hair",
+                            content = {
+                                "None",
+                                "Casual"
+                            }
+                        }
+                    }
+                },
+                {
+                    isSoloSelector = true,
+                    height = 50,
+                    identifier = "upper",
+                    content = {
+                        "T-Shirt (Red)",
+                        "Hoody (Blue)"
+                    }
+                },
+                {
+                    isSoloSelector = true,
+                    height = 50,
+                    identifier = "lower",
+                    content = {
+                        "Pant (Red)",
+                        "Trouser (Blue)"
+                    }
+                },
+                {
+                    isSoloSelector = true,
+                    height = 50,
+                    identifier = "shoes",
+                    content = {
+                        "Sneakers (Red)",
+                        "Boots (Blue)"
                     }
                 }
-            }
+            }        
         },
         [3] = {
             startX = 0, startY = 15,
             width = 0, height = -15,
-            font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.fontColor)),
+            font = FRAMEWORK_FONTS[5], fontColor = imports.tocolor(unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.fontColor)),
             scrollAnimTickCounter = CLIENT_CURRENT_TICK,
             scrollDelayDuration = FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration - 1000,
             scrollDuration = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.scrollDuration,
@@ -708,3 +730,74 @@ imports.addEventHandler("onClientResourceStart", resource, function()
     imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
     imports.triggerServerEvent("Player:onToggleLoginUI", localPlayer)
 end)
+
+
+
+
+
+
+--[[
+    --TODO: OLD..
+                switcher = {
+                    startX = -7,
+                    startY = 0,
+                    width = 30,
+                    height = 30,
+                    paddingX = 7,
+                    paddingY = 7,
+                    bgTexture = imports.beautify.native.createTexture("files/images/hud/curved_square/square.png", "dxt5", true, "clamp"),
+                    font = FRAMEWORK_FONTS[6],
+                    outlineWeight = 0.1,
+                    fontColor = {255, 80, 80, 255},
+                    bgColor = {0, 0, 0, 255},
+                    hoverfontColor = {0, 0, 0, 255},
+                    hoverBGColor = {255, 80, 80, 255},
+                    hoverDuration = 2500,
+                    {
+                        title = "❮",
+                        execFunc = function() manageCharacter("switch_prev") end
+                    },
+                    {
+                        title = "❯",
+                        execFunc = function() manageCharacter("switch_next") end
+                    },
+                    {
+                        title = "X",
+                        execFunc = function() manageCharacter("delete") end
+                    },
+                    {
+                        title = "✎",
+                        execFunc = function() manageCharacter("create") end
+                    }
+                },
+                button = {
+                    startX = 0,
+                    startY = 5,
+                    width = 103,
+                    height = 30,
+                    paddingX = 7,
+                    paddingY = 0,
+                    font = FRAMEWORK_FONTS[7],
+                    outlineWeight = 0.25,
+                    fontColor = {170, 35, 35, 235},
+                    bgColor = {0, 0, 0, 235},
+                    hoverfontColor = {175, 175, 175, 255},
+                    hoverBGColor = {0, 0, 0, 255},
+                    hoverDuration = 2500,
+                    --leftCurvedEdgePath = imports.beautify.native.createTexture("files/images/hud/curved_square/left.png", "dxt5", true, "clamp"),
+                    --rightCurvedEdgePath = imports.beautify.native.createTexture("files/images/hud/curved_square/right.png", "dxt5", true, "clamp"),
+                    {
+                        title = "B A C K",
+                        execFunc = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end
+                    },
+                    {
+                        title = "S A V E",
+                        execFunc = function() manageCharacter("save") end
+                    },
+                    {
+                        title = "P I C K",
+                        execFunc = function() manageCharacter("pick") end
+                    }
+                }
+            }
+]]
