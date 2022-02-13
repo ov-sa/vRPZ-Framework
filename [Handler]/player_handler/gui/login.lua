@@ -56,7 +56,7 @@ local loginUI = {
             bgTexture = imports.beautify.native.createTexture(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.bgPath, "dxt5", true, "clamp"),
             optionsUI = {
                 startX = CLIENT_MTA_RESOLUTION[1]*0.5, startY = -15, paddingY = 10,
-                font = FRAMEWORK_FONTS[2],
+                font = FRAMEWORK_FONTS[2], fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.fontColor)),
                 {identifier = "play", exec = function() manageCharacter("play") end},
                 {identifier = "characters", exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 2) end},
                 {identifier = "credits", exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 3) end}
@@ -64,21 +64,19 @@ local loginUI = {
         },
         [2] = {
             startX = 5, startY = 5,
-            width = 325, height = 610,
+            width = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.width, height = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.height,
             titlebar = {
                 paddingY = 2,
                 height = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.height,
-                font = FRAMEWORK_FONTS[3],
-                fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.fontColor)),
+                font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.fontColor)),
                 bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.bgColor)),
                 shadowColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.shadowColor)),
             },
             categories = {
                 paddingX = 20, paddingY = 5,
                 height = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.height,
-                font = FRAMEWORK_FONTS[4],
-                fontColor = imports.tocolor(200, 200, 200, 255),
-                bgColor = imports.tocolor(0, 0, 0, 235),
+                font = FRAMEWORK_FONTS[4], fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor)),
+                bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.bgColor)),
                 {
                     height = 185,
                     identifier = "identity",
@@ -594,7 +592,7 @@ local function renderUI(renderData)
                 end
                 j.animAlphaPercent = j.animAlphaPercent or 0
                 j.animAlphaPercent = ((j.hoverStatus == "forward") and imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")) or imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")
-                imports.beautify.native.drawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.fontColor)), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
+                imports.beautify.native.drawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.fontColor, 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
                 imports.beautify.native.drawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[1], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[2], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[3], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
                 imports.beautify.native.drawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineSize, tocolor(unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineColor)), false)
             end

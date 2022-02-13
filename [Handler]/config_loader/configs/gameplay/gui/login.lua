@@ -79,6 +79,9 @@ configVars["UI"]["Login"] = {
         },
 
         characters = {
+            width = 325,
+            height = 610,
+
             ["Titles"] = {
                 ["EN"] = "Characters",
                 ["TR"] = "karakterler"
