@@ -34,11 +34,11 @@ configVars["Character"] = {
         }
 
         ["Male"] = {
-            assetPack = "vRPZ_Male"
+            assetName = "vRPZ_Male"
         },
 
         ["Female"] = {
-            assetPack = "vRPZ_Female"
+            assetName = "vRPZ_Female"
         }
     }
 
