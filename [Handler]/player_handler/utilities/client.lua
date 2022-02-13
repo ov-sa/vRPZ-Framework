@@ -14,6 +14,7 @@
 
 loadstring(exports.beautify_library:fetchImports())()
 local imports = {
+    pairs = pairs,
     tonumber = tonumber,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
