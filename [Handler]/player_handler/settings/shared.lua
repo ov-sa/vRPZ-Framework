@@ -15,6 +15,7 @@
 resource = getResourceRootElement(getThisResource())
 
 FRAMEWORK_CONFIGS = {
+    ["Templates"] = exports.config_loader:getConfig("Templates"),
     ["Game"] = exports.config_loader:getConfig("Game"),
     ["UI"] = exports.config_loader:getConfig("UI"),
     ["Player"] = exports.config_loader:getConfig("Player"),
