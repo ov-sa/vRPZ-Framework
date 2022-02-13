@@ -15,7 +15,7 @@
 local imports = {
     tonumber = tonumber,
     tostring = tostring,
-    tocolor = imports.tocolor,
+    tocolor = tocolor,
     pairs = pairs,
     ipairs = ipairs,
     isElement = isElement,
