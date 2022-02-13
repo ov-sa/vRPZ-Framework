@@ -1,2 +1,3 @@
 *.csv
-*[Test]*
+control_map_test/
+shader_loader/
