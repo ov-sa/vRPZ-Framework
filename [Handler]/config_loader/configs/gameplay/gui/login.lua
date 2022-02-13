@@ -114,13 +114,13 @@ configVars["UI"]["Login"] = {
                 ["TR"] = "Kredi"
             },
 
-            ["Navigator"] = {
+            navigator = {
                 ["Titles"] = {
                     ["EN"] = "Back",
                     ["TR"] = "Geri"
                 }
             },
-            ["Contributors"] = {
+            contributors = {
                 "ov | Mario (Developer)",
                 "ov | Buddy (Modeler)",
                 "ov | Aviril (Graphics Developer)",

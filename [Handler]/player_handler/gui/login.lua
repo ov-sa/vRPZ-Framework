@@ -186,8 +186,8 @@ for i = 1, #loginUI.phases[1].optionsUI, 1 do
     j.hoverAnimTick = CLIENT_CURRENT_TICK
 end
 loginUI.phases[3].contentText = ""
-for i = 1, #FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Contributors"] do
-    local j = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Contributors"][i]
+for i = 1, #FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.contributors do
+    local j = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.contributors[i]
     loginUI.phases[3].contentText = ((i == 1) and j) or loginUI.phases[3].contentText.."\n\n"..j
 end
 loginUI.phases[3].width, loginUI.phases[3].height = loginUI.phases[3].width + (CLIENT_MTA_RESOLUTION[1] - loginUI.phases[3].startX), loginUI.phases[3].height + (CLIENT_MTA_RESOLUTION[2] - loginUI.phases[3].startY)
@@ -613,7 +613,7 @@ local function renderUI(renderData)
                 end
             end
             imports.beautify.native.drawText(loginUI.phases[3].contentText, view_offsetX, credits_offsetY, view_offsetX + view_width, credits_offsetY + loginUI.phases[3].contentHeight, loginUI.phases[3].fontColor, 1, loginUI.phases[3].font, "center", "center", true, false, false, false, true)
-            local navigator_title = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits["Navigator"]["Titles"][FRAMEWORK_LANGUAGE]
+            local navigator_title = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator["Titles"][FRAMEWORK_LANGUAGE]
             local navigator_width, navigator_height = loginUI.phases[3].navigator.width + imports.beautify.native.getTextWidth(navigator_title, 1, loginUI.phases[3].navigator.font), loginUI.phases[3].navigator.height
             local navigator_offsetX, navigator_offsetY = loginUI.phases[3].navigator.startX + (CLIENT_MTA_RESOLUTION[1] - navigator_width), loginUI.phases[3].navigator.startY
             local isNavigatorHovered = isMouseOnPosition(navigator_offsetX, navigator_offsetY, navigator_width, navigator_height)
