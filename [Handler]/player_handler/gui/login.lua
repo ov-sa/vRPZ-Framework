@@ -61,7 +61,7 @@ local loginUI = {
                 {identifier = "credits", execFunc = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 3) end}
             }
         },
-        [2] = customizerUI = {
+        [2] = {
             startX = 5, startY = 5,
             width = 325, height = 610,
             titleBar = {
