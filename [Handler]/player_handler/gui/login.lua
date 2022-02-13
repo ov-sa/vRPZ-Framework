@@ -64,14 +64,13 @@ local loginUI = {
         [2] = {
             startX = 5, startY = 5,
             width = 325, height = 610,
-            titleBar = {
+            titlebar = {
                 paddingY = 2,
-                height = 35,
-                text = "Character",
+                height = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.height,
                 font = FRAMEWORK_FONTS[3],
-                fontColor = imports.tocolor(170, 35, 35, 255),
-                bgColor = imports.tocolor(0, 0, 0, 255),
-                shadowColor = imports.tocolor(50, 50, 50, 255),
+                fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.fontColor)),
+                bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.bgColor)),
+                shadowColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.shadowColor)),
             },
             categories = {
                 paddingX = 20, paddingY = 5,
