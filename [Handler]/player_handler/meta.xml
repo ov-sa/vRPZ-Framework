@@ -103,10 +103,6 @@
     <script src="handlers/resumer.lua" type="server"/>
     <script src="handlers/wasted.lua" type="server"/>
 
-    <!-- Files: Fonts -->
-    <file src="files/fonts/courgette.ttf"/>
-    <file src="files/fonts/signika_semibold.ttf"/>
-
     <!-- Files: Shaders -->
     <file src="files/shaders/texreplace.fx"/>
 
