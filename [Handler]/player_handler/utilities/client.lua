@@ -27,7 +27,8 @@ local imports = {
     toggleControl = toggleControl,
     setTrafficLightState = setTrafficLightState,
     setPedTargetingMarkerEnabled = setPedTargetingMarkerEnabled,
-    setPlayerHudComponentVisible = setPlayerHudComponentVisible
+    setPlayerHudComponentVisible = setPlayerHudComponentVisible,
+    beautify = beautify
 }
 
 
@@ -214,4 +215,8 @@ imports.addEventHandler("onClientResourceStart", resource, function()
     imports.setPedTargetingMarkerEnabled(false)
     imports.setPlayerHudComponentVisible("all", false)
     imports.setPlayerHudComponentVisible("crosshair", true)
+
+    for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Beautify"]) do
+        imports.beautify.setUITemplate(i, j)
+    end
 end)
