@@ -7,8 +7,8 @@
     <script src="exports/shared.lua" type="shared" cache="false"/>
 
     <!-- Configurations -->
-    <script src="configs/templates/index.lua" type="shared" cache="false"/>
     <script src="configs/gameplay/index.lua" type="shared" cache="false"/>
+    <script src="configs/templates/index.lua" type="shared" cache="false"/>
     <script src="configs/gameplay/gui/loading.lua" type="shared" cache="false"/>
     <script src="configs/gameplay/gui/notification.lua" type="shared" cache="false"/>
     <script src="configs/gameplay/gui/login.lua" type="shared" cache="false"/>
