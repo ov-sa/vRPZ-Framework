@@ -75,7 +75,7 @@ local loginUI = {
             },
             categories = {
                 paddingX = 20, paddingY = 5,
-                height = 30,
+                height = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.height,
                 font = FRAMEWORK_FONTS[4],
                 fontColor = imports.tocolor(200, 200, 200, 255),
                 bgColor = imports.tocolor(0, 0, 0, 235),

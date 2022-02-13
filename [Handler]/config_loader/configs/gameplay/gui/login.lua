@@ -83,6 +83,7 @@ configVars["UI"]["Login"] = {
                 ["EN"] = "Characters",
                 ["TR"] = "karakterler"
             },
+
             titlebar = {
                 ["Titles"] = {
                     ["EN"] = "Character",
@@ -95,7 +96,9 @@ configVars["UI"]["Login"] = {
                 shadowColor = {50, 50, 50, 255},
             },
             categories = {
-                
+                height = 30,
+                fontColor = {200, 200, 200, 255},
+                bgColor = {0, 0, 0, 235},
             }
         },
 
@@ -114,7 +117,6 @@ configVars["UI"]["Login"] = {
                     ["TR"] = "Geri"
                 }
             },
-
             ["Contributors"] = {
                 "ov | Mario (Developer)",
                 "ov | Buddy (Modeler)",
