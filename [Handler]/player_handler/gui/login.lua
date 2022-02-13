@@ -702,7 +702,7 @@ local function renderUI(renderData)
             --Draws Options UI
             imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[loginUI.phase].bgTexture, 0, 0, 0, -1, false)
             for i, j in imports.ipairs(loginUI.phases[1].optionsUI) do
-                local option_title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
+                local option_title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE], "  "))
                 local option_width, option_height = imports.beautify.native.getTextWidth(option_title, 1, loginUI.phases[1].optionsUI.font) + 5, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.height
                 local options_offsetX, options_offsetY = loginUI.phases[1].optionsUI.startX - (option_width*0.5), j.startY
                 local isOptionHovered = isMouseOnPosition(options_offsetX, options_offsetY, option_width, option_height)
