@@ -13,11 +13,12 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
+    ipairs = ipairs,
     tonumber = tonumber,
     tostring = tostring,
     tocolor = tocolor,
-    pairs = pairs,
-    ipairs = ipairs,
+    unpackColor = unpackColor,
     isElement = isElement,
     setElementPosition = setElementPosition,
     setElementDimension = setElementDimension,

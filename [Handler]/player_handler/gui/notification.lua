@@ -14,8 +14,8 @@
 
 local imports = {
     type = type,
-    tocolor = tocolor,
     ipairs = ipairs,
+    tocolor = tocolor,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     interpolateBetween = interpolateBetween,
