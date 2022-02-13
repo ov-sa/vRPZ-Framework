@@ -111,52 +111,6 @@
     <file src="files/images/login/background.png"/>
     <file src="files/images/loading/loader.png"/>
 
-    <!-- Files: Images: Characters: Male -->
-    <file src="files/images/character/male/races/caucasian/body.png"/>
-    <file src="files/images/character/male/races/caucasian/hair.png"/>
-    <file src="files/images/character/male/races/hispanic/body.png"/>
-    <file src="files/images/character/male/races/hispanic/hair.png"/>
-    <file src="files/images/character/male/races/african_american/body.png"/>
-    <file src="files/images/character/male/races/african_american/hair.png"/>
-    <file src="files/images/character/male/races/asian/body.png"/>
-    <file src="files/images/character/male/races/asian/hair.png"/>
-    <file src="files/images/character/male/shirts/1.png"/>
-    <file src="files/images/character/male/shirts/2.png"/>
-    <file src="files/images/character/male/shirts/3.png"/>
-    <file src="files/images/character/male/shirts/4.png"/>
-    <file src="files/images/character/male/shirts/5.png"/>
-    <file src="files/images/character/male/shirts/6.png"/>
-    <file src="files/images/character/male/shirts/7.png"/>
-    <file src="files/images/character/male/trousers/1.png"/>
-    <file src="files/images/character/male/trousers/2.png"/>
-    <file src="files/images/character/male/trousers/3.png"/>
-    <file src="files/images/character/male/trousers/4.png"/>
-    <file src="files/images/character/male/shoes/1.png"/>
-    <file src="files/images/character/male/shoes/2.png"/>
-
-    <!-- Files: Images: Characters: Female -->
-    <file src="files/images/character/female/races/caucasian/body.png"/>
-    <file src="files/images/character/female/races/caucasian/hair.png"/>
-    <file src="files/images/character/female/races/hispanic/body.png"/>
-    <file src="files/images/character/female/races/hispanic/hair.png"/>
-    <file src="files/images/character/female/races/african_american/body.png"/>
-    <file src="files/images/character/female/races/african_american/hair.png"/>
-    <file src="files/images/character/female/races/asian/body.png"/>
-    <file src="files/images/character/female/races/asian/hair.png"/>
-    <file src="files/images/character/female/shirts/1.png"/>
-    <file src="files/images/character/female/shirts/2.png"/>
-    <file src="files/images/character/female/shirts/3.png"/>
-    <file src="files/images/character/female/shirts/4.png"/>
-    <file src="files/images/character/female/shirts/5.png"/>
-    <file src="files/images/character/female/shirts/6.png"/>
-    <file src="files/images/character/female/shirts/7.png"/>
-    <file src="files/images/character/female/trousers/1.png"/>
-    <file src="files/images/character/female/trousers/2.png"/>
-    <file src="files/images/character/female/trousers/3.png"/>
-    <file src="files/images/character/female/trousers/4.png"/>
-    <file src="files/images/character/female/shoes/1.png"/>
-    <file src="files/images/character/female/shoes/2.png"/>
-
     <!-- Files: Images: HUD -->
     <file src="files/images/hud/vignette.png"/>
     <file src="files/images/hud/lock/locked.png"/>
