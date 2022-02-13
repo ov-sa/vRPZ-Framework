@@ -128,7 +128,7 @@ configVars["UI"]["Login"] = {
                 "ov | Tron (Developer)",
                 "ov | Neor (Developer)",
                 "ov | Skann (Modeler)",
-                "ov | Mazvis (Developer)"
+                "ov | Mazvis (Contributor)"
             }
         }
     }
