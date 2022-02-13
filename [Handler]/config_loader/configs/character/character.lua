@@ -24,22 +24,22 @@ configVars["Character"] = {
     ["Clothing"] = {
         identity = {
             gender = {
-                ["Male"] = {
+                {
                     ["EN"] = "Male",
                     ["TR"] = "Erkek"
                 },
-                ["Female"] = {
+                {
                     ["EN"] = "Female",
                     ["TR"] = "Dişi"
                 }
             },
 
             faction = {
-                ["Military"] = {
+                {
                     ["EN"] = "Military",
                     ["TR"] = "Askeri"
                 },
-                ["Criminal"] = {
+                {
                     ["EN"] = "Criminal",
                     ["TR"] = "Adli"
                 }
