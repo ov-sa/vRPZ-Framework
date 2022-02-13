@@ -110,6 +110,9 @@
     <!-- Files: Shaders -->
     <file src="files/shaders/texreplace.fx"/>
 
+    <!-- Files: Templates -->
+    <script src="files/templates/beautify.lua" type="client" cache="false"/>
+
     <!-- Files: Images: GUIs -->
     <file src="files/images/login/login.png"/>
     <file src="files/images/login/background.png"/>
