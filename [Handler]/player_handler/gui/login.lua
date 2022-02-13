@@ -56,9 +56,9 @@ local loginUI = {
             optionsUI = {
                 startX = CLIENT_MTA_RESOLUTION[1]*0.5, startY = -15, paddingY = 10,
                 font = FRAMEWORK_FONTS[2],
-                {identifier = "play", execFunc = function() manageCharacter("play") end},
-                {identifier = "characters", execFunc = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 2) end},
-                {identifier = "credits", execFunc = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 3) end}
+                {identifier = "play", exec = function() manageCharacter("play") end},
+                {identifier = "characters", exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 2) end},
+                {identifier = "credits", exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 3) end}
             }
         },
         [2] = {
@@ -175,7 +175,7 @@ local loginUI = {
                 hoverStatus = "backward",
                 hoverAnimTick = CLIENT_CURRENT_TICK,
                 hoverDuration = 1500,
-                execFunc = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end
+                exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end
             }
         }
     }
@@ -580,7 +580,7 @@ local function renderUI(renderData)
                 if isOptionHovered then
                     if isLMBClicked then
                         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false)
-                        imports.setTimer(function() j.execFunc() end, 1, 1)
+                        imports.setTimer(function() j.exec() end, 1, 1)
                     end
                     if j.hoverStatus ~= "forward" then
                         j.hoverStatus = "forward"
@@ -622,7 +622,7 @@ local function renderUI(renderData)
             if isNavigatorHovered then
                 if isLMBClicked then
                     imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false)
-                    imports.setTimer(function() loginUI.phases[3].navigator.execFunc() end, 1, 1)
+                    imports.setTimer(function() loginUI.phases[3].navigator.exec() end, 1, 1)
                 end
                 if loginUI.phases[3].navigator.hoverStatus ~= "forward" then
                     loginUI.phases[3].navigator.hoverStatus = "forward"
@@ -755,19 +755,19 @@ end)
                     hoverDuration = 2500,
                     {
                         title = "❮",
-                        execFunc = function() manageCharacter("switch_prev") end
+                        exec = function() manageCharacter("switch_prev") end
                     },
                     {
                         title = "❯",
-                        execFunc = function() manageCharacter("switch_next") end
+                        exec = function() manageCharacter("switch_next") end
                     },
                     {
                         title = "X",
-                        execFunc = function() manageCharacter("delete") end
+                        exec = function() manageCharacter("delete") end
                     },
                     {
                         title = "✎",
-                        execFunc = function() manageCharacter("create") end
+                        exec = function() manageCharacter("create") end
                     }
                 },
                 button = {
@@ -788,15 +788,15 @@ end)
                     --rightCurvedEdgePath = imports.beautify.native.createTexture("files/images/hud/curved_square/right.png", "dxt5", true, "clamp"),
                     {
                         title = "B A C K",
-                        execFunc = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end
+                        exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end
                     },
                     {
                         title = "S A V E",
-                        execFunc = function() manageCharacter("save") end
+                        exec = function() manageCharacter("save") end
                     },
                     {
                         title = "P I C K",
-                        execFunc = function() manageCharacter("pick") end
+                        exec = function() manageCharacter("pick") end
                     }
                 }
             }
