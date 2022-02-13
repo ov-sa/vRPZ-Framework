@@ -14,7 +14,8 @@
 
 local imports = {
     setTimer = setTimer,
-    dxCreateTexture = dxCreateTexture
+    dxCreateTexture = dxCreateTexture,
+    beautify = beautify
 }
 
 
@@ -41,7 +42,7 @@ local function hideRespawnScreen()
 
     if not respawnerUI.state then return false end
 
-    beautify.render.remove(renderRespawnScreen)
+    imports.beautify.render.remove(renderRespawnScreen)
     respawnerUI.mode = false
     respawnerUI.state = false
     return true
@@ -119,7 +120,7 @@ addEventHandler("onPlayerGenerateRespawnPoint", root, function()
         wastedPoint = localPlayer:getPosition()
     }
     respawnerUI.state = true
-    beautify.render.create(renderRespawnScreen)
+    imports.beautify.render.create(renderRespawnScreen)
 end)
 
 
@@ -138,5 +139,5 @@ addEventHandler("Client:onRespawn", root, function()
         animAlphaPercent = 0
     }
     respawnerUI.state = true
-    beautify.render.create(renderRespawnScreen)
+    imports.beautify.render.create(renderRespawnScreen)
 end)

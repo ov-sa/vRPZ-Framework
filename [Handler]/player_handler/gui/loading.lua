@@ -23,7 +23,8 @@ local imports = {
     dxDrawText = dxDrawText,
     interpolateBetween = interpolateBetween,
     getInterpolationProgress = getInterpolationProgress,
-    math = math
+    math = math,
+    beautify = beautify
 }
 
 
@@ -55,7 +56,7 @@ loadingUI.loader.startY = loadingUI.loader.startY + ((CLIENT_MTA_RESOLUTION[2] -
 --[[ Function: Renders UI ]]--
 ------------------------------
 
-beautify.render.create(function()
+imports.beautify.render.create(function()
     if ((loadingUI.animStatus == "forward") or (loadingUI.animStatus == "reverse_backward")) then
         loadingUI.fadeAnimPercent = imports.interpolateBetween(loadingUI.fadeAnimPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loadingUI.tickCounter, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration), "Linear")
         if (loadingUI.animStatus == "reverse_backward") and (imports.math.round(loadingUI.fadeAnimPercent, 2) == 1) then

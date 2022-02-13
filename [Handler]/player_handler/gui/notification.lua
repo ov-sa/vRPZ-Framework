@@ -25,7 +25,8 @@ local imports = {
     interpolateBetween = interpolateBetween,
     getInterpolationProgress = getInterpolationProgress,
     table = table,
-    math = math
+    math = math,
+    beautify = beautify
 }
 
 
@@ -38,8 +39,8 @@ local notifUI = {
     startX = 50, startY = 15, paddingY = 5, offsetY = 0,
     slideTopTickCounter = CLIENT_CURRENT_TICK,
     font = FRAMEWORK_FONTS[8],
-    leftCurvedEdgePath = beautify.assets["images"]["curved_square/regular/left.rw"],
-    rightCurvedEdgePath = beautify.assets["images"]["curved_square/regular/right.rw"]
+    leftCurvedEdgePath = imports.beautify.assets["images"]["curved_square/regular/left.rw"],
+    rightCurvedEdgePath = imports.beautify.assets["images"]["curved_square/regular/right.rw"]
 }
 
 
@@ -47,7 +48,7 @@ local notifUI = {
 --[[ Function: Renders UI ]]--
 ------------------------------
 
-beautify.render.create(function()
+imports.beautify.render.create(function()
     if #notifUI.buffer <= 0 then return false end
 
     local offsetY = imports.interpolateBetween(notifUI.offsetY, 0, 0, 0, 0, 0, imports.getInterpolationProgress(notifUI.slideTopTickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideTopDuration), "OutBack")

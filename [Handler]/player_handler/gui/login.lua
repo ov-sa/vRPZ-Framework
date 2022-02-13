@@ -42,6 +42,7 @@ local imports = {
     showCursor = showCursor,
     math = math,
     string = string,
+    beautify = beautify
 }
 
 
@@ -110,7 +111,7 @@ local loginUI = {
                     bgColor = {7, 7, 7, 253},
                     arrowBGColor = {175, 175, 175, 100},
                     arrowHoveredBGColor = {255, 80, 80, 255},
-                    arrowbgTexture = beautify.assets["images"]["arrow/left.rw"],
+                    arrowbgTexture = imports.beautify.assets["images"]["arrow/left.rw"],
                     arrowAnimDuration = 5000,
                     editbox = {
                         startX = 5,
@@ -1168,14 +1169,14 @@ toggleUI = function(state, Args)
         loginUI.state = true
         loginUI.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
         imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1)
-        beautify.render.create(renderUI)
-        beautify.render.create(renderUI, {renderType = "input"})
+        imports.beautify.render.create(renderUI)
+        imports.beautify.render.create(renderUI, {renderType = "input"})
         imports.triggerEvent("Sound:onToggleLogin", localPlayer, state, {
             shuffleMusic = (Args and Args.shuffleMusic and true) or false
         })
     else
-        beautify.render.remove(renderUI)
-        beautify.render.remove(renderUI, {renderType = "input"})
+        imports.beautify.render.remove(renderUI)
+        imports.beautify.render.remove(renderUI, {renderType = "input"})
         exports.cinecam_handler:stopCinemation()
         if loginUI.character and imports.isElement(loginUI.character) then loginUI.character:destroy() end
         for i, j in imports.pairs(loginUI.cache.keys) do
