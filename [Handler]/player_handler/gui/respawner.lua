@@ -28,7 +28,7 @@ local respawnerUI = {
     flashInterval = 2000,
     flashTerminationDuration = 10000,
     flashColor = {0, 0, 0, 255},
-    vignetteTexture = imports.beautify.native.createTexture("files/images/hud/vignette.png", "argb", true, "clamp")
+    vignetteTexture = imports.beautify.native.createTexture("files/images/hud/vignette.png", "dxt5", true, "clamp")
 }
 
 

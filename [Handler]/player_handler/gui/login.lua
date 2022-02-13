@@ -49,10 +49,10 @@ local loginUI = {
         keys = {},
         timers = {}
     },
-    bgTexture = imports.beautify.native.createTexture(FRAMEWORK_CONFIGS["UI"]["Login"].bgPath, "argb", true, "clamp"),
+    bgTexture = imports.beautify.native.createTexture(FRAMEWORK_CONFIGS["UI"]["Login"].bgPath, "dxt5", true, "clamp"),
     phases = {
         [1] = {
-            bgTexture = imports.beautify.native.createTexture(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.bgPath, "argb", true, "clamp"),
+            bgTexture = imports.beautify.native.createTexture(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.bgPath, "dxt5", true, "clamp"),
             optionsUI = {
                 startX = CLIENT_MTA_RESOLUTION[1]*0.5, startY = -15, paddingY = 10,
                 font = FRAMEWORK_FONTS[2],
@@ -84,8 +84,8 @@ local loginUI = {
                     fontColor = {170, 35, 35, 255},
                     dividerColor = {0, 0, 0, 75},
                     bgColor = {0, 0, 0, 255},
-                    leftCurvedEdgePath = imports.beautify.native.createTexture("files/images/hud/curved_square/top_left.png", "argb", true, "clamp"),
-                    rightCurvedEdgePath = imports.beautify.native.createTexture("files/images/hud/curved_square/top_right.png", "argb", true, "clamp")
+                    leftCurvedEdgePath = imports.beautify.native.createTexture("files/images/hud/curved_square/top_left.png", "dxt5", true, "clamp"),
+                    rightCurvedEdgePath = imports.beautify.native.createTexture("files/images/hud/curved_square/top_right.png", "dxt5", true, "clamp")
                 },
                 option = {
                     paddingY = 6,
@@ -213,7 +213,7 @@ local loginUI = {
                     height = 30,
                     paddingX = 7,
                     paddingY = 7,
-                    bgTexture = imports.beautify.native.createTexture("files/images/hud/curved_square/square.png", "argb", true, "clamp"),
+                    bgTexture = imports.beautify.native.createTexture("files/images/hud/curved_square/square.png", "dxt5", true, "clamp"),
                     font = FRAMEWORK_FONTS[6],
                     outlineWeight = 0.1,
                     fontColor = {255, 80, 80, 255},
@@ -252,8 +252,8 @@ local loginUI = {
                     hoverfontColor = {175, 175, 175, 255},
                     hoverBGColor = {0, 0, 0, 255},
                     hoverDuration = 2500,
-                    leftCurvedEdgePath = imports.beautify.native.createTexture("files/images/hud/curved_square/left.png", "argb", true, "clamp"),
-                    rightCurvedEdgePath = imports.beautify.native.createTexture("files/images/hud/curved_square/right.png", "argb", true, "clamp"),
+                    leftCurvedEdgePath = imports.beautify.native.createTexture("files/images/hud/curved_square/left.png", "dxt5", true, "clamp"),
+                    rightCurvedEdgePath = imports.beautify.native.createTexture("files/images/hud/curved_square/right.png", "dxt5", true, "clamp"),
                     {
                         title = "B A C K",
                         execFunc = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end

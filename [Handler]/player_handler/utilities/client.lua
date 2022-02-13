@@ -123,8 +123,8 @@ end
 --[[
 local progressBarDatas = {
     edgePaths = {
-        DxTexture("files/images/hud/curved_square/left.png", "argb", true, "clamp"),
-        DxTexture("files/images/hud/curved_square/right.png", "argb", true, "clamp")
+        DxTexture("files/images/hud/curved_square/left.png", "dxt5", true, "clamp"),
+        DxTexture("files/images/hud/curved_square/right.png", "dxt5", true, "clamp")
     },
     borderAnimTickCounter = CLIENT_CURRENT_TICK,
     borderAnimDuration = 2500
