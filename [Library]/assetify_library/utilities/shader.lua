@@ -29,10 +29,16 @@ local imports = {
 -----------------------
 
 shader = {
-    rwCache = {},
-    preLoaded = {
-        ["Assetify_TextureClearer"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureClearer"], 1000, 0, false, "all")
+    defaultData = {
+        shaderPriority = 10000,
+        shaderDistance = 0
     }
+    defaultPriority = 10000,
+    defaultDistance
+    rwCache = {}
+}
+shader.preLoaded = {
+    ["Assetify_TextureClearer"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureClearer"], shader.defaultData.shaderPriority, shader.defaultData.shaderDistance, false, "all")
 }
 shader.__index = shader
 
@@ -54,7 +60,9 @@ function shader:load(shaderName, textureName, textureElement, shaderPriority, sh
     if not self or (self == shader) then return false end
     if not shaderName or not shader.rwCache[shaderName] or not textureName or not textureElement or not imports.isElement(textureElement) then return false end
     self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
-    self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName], imports.tonumber(shaderPriority) or 10000, imports.tonumber(shaderDistance) or 0, false, "all")
+    shaderPriority = imports.tonumber(shaderPriority) or shader.defaultData.shaderPriority
+    shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
+    self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName], shaderPriority, shaderDistance, false, "all")
     self.shaderData = {
         shaderName = shaderName,
         textureName = textureName,
