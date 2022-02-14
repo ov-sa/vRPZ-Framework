@@ -179,8 +179,8 @@ loginUI.phases[2].updateUILang = function()
     for i, j in imports.pairs(loginUI.phases[2].categories[1].contents) do
         if j.isSelector then
             j.content = {}
-            for k = 1, #FRAMEWORK_CONFIGS["Character"]["Identity"][(J.identifier)], 1 do
-                imports.table.insert(j.content, imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["Character"]["Identity"][(J.identifier)][k][FRAMEWORK_LANGUAGE])))
+            for k = 1, #FRAMEWORK_CONFIGS["Character"]["Identity"][(j.identifier)], 1 do
+                imports.table.insert(j.content, imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["Character"]["Identity"][(j.identifier)][k][FRAMEWORK_LANGUAGE])))
             end
         end
     end
@@ -515,12 +515,15 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
         if phaseID == 1 then
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.cinemationPoint, true, true, loginUI.cinemationData.cinemationFOV, true, true, true, false)
         elseif phaseID == 2 then
+            loginUI.phases[2].toggleUI(true)
+            --[[
             if loginUI.character and imports.isElement(loginUI.character) then loginUI.character:destroy(); loginUI.character = false end
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.characterCinemationPoint, true, true, loginUI.cinemationData.characterCinemationFOV, true, true, true, false)
             loginUI.character = Ped(0, loginUI.cinemationData.characterPoint.x, loginUI.cinemationData.characterPoint.y, loginUI.cinemationData.characterPoint.z, loginUI.cinemationData.characterPoint.rotation)
             loginUI.character:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
             loginUI.character:setFrozen(true)
             loadLoginPreviewCharacter()
+            ]]
         else
             exports.cinecam_handler:stopCinemation()
             if phaseID == 3 then
