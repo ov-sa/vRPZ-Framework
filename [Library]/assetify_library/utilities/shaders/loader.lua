@@ -24,20 +24,14 @@ local imports = {
 }
 
 
--------------------
---[[ Variables ]]--
--------------------
-
-CShaders = {}
-
-
 -----------------------
 --[[ Class: Shader ]]--
 -----------------------
 
 shader = {
+    rwCache = {},
     preLoaded = {
-        ["Assetify_TextureClearer"] = imports.dxCreateShader(CShaders["Assetify_TextureClearer"], 1000, 0, false, "all")
+        ["Assetify_TextureClearer"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureClearer"], 1000, 0, false, "all")
     }
 }
 shader.__index = shader
@@ -58,9 +52,9 @@ end
 
 function shader:load(shaderName, textureName, textureElement, shaderPriority, shaderDistance)
     if not self or (self == shader) then return false end
-    if not shaderName or not CShaders[shaderName] or not textureName or not textureElement or not imports.isElement(textureElement) then return false end
+    if not shaderName or not shader.rwCache[shaderName] or not textureName or not textureElement or not imports.isElement(textureElement) then return false end
     self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
-    self.cShader = shader.preLoaded[shaderName] or imports.dxCreateShader(CShaders[shaderName], imports.tonumber(shaderPriority) or 10000, imports.tonumber(shaderDistance) or 0, false, "all")
+    self.cShader = shader.preLoaded[shaderName] or imports.dxCreateShader(shader.rwCache[shaderName], imports.tonumber(shaderPriority) or 10000, imports.tonumber(shaderDistance) or 0, false, "all")
     imports.engineApplyShaderToWorldTexture(self.cShader, textureName, textureElement)
     return true
 end

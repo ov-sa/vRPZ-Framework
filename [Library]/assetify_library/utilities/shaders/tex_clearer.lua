@@ -37,7 +37,7 @@ end
 --[[ Shader ]]--
 ----------------
 
-CShaders["Assetify_TextureClearer"] = depDatas..[[
+shader.rwCache["Assetify_TextureClearer"] = depDatas..[[
 /*----------------
 -->> Handlers <<--
 ------------------*/
