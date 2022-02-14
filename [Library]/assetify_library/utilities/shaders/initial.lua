@@ -15,6 +15,10 @@
 
 local imports = {
     pairs = pairs,
+    tonumber = tonumber,
+    isElement = isElement,
+    destroyElement = destroyElement,
+    setmetatable = setmetatable,
     dxCreateShader = dxCreateShader
 }
 
@@ -23,6 +27,46 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-Assetify_Shaders, Assetify_CShaders = {}, {}
+CShaders = {}, {
+    ["Assetify_TextureClearer"] = imports.dxCreateShader(CShaders["Assetify_TextureClearer"], 1000, 0, false, "all"),
+    ["Assetify_TextureChanger"] = {}
+}
 
-Assetify_CShaders["Assetify_TextureClearer"] = imports.dxCreateShader(Assetify_Shaders["Assetify_TextureClearer"], 1000, 0, false, "all")
+
+-----------------------
+--[[ Class: Shader ]]--
+-----------------------
+
+shader = {}
+shader.__index = shader
+
+function shader:create(...)
+    local cShader = imports.setmetatable({}, {__index = self})
+    if not cShader:load(...) then
+        cShader = nil
+        return false
+    end
+    return cShader
+end
+
+function shader:destroy(...)
+    if not self or (self == shader) then return false end
+    return self:unload(...)
+end
+
+function shader:load(shaderName, element, priority, distance)
+    if not self or (self == shader) then return false end
+    if not shaderName or not CShaders[shaderName] or not element or not imports.isElement(element) then return false end
+    cAsset.cScene = self
+    self.cShader = imports.dxCreateShader(CShaders[shaderName], imports.tonumber(priority) or 10000, imports.tonumber(distance) or 0, false, "all")
+    return true
+end
+
+function shader:unload()
+    if not self or (self == shader) then return false end
+    if imports.isElement(self.cShader) then
+        imports.destroyElement(self.cShader)
+    end
+    self = nil
+    return true
+end

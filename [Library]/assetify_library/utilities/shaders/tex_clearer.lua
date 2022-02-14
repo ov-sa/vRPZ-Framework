@@ -37,7 +37,7 @@ end
 --[[ Shader ]]--
 ----------------
 
-Assetify_Shaders["Assetify_TextureClearer"] = depDatas..[[
+CShaders["Assetify_TextureClearer"] = depDatas..[[
 /*----------------
 -->> Handlers <<--
 ------------------*/

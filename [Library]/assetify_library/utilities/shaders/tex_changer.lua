@@ -37,7 +37,7 @@ end
 --[[ Shader ]]--
 ----------------
 
-Assetify_Shaders["Assetify_TextureChanger"] = depDatas..[[
+CShaders["Assetify_TextureChanger"] = depDatas..[[
 /*-----------------
 -->> Variables <<--
 -------------------*/
