@@ -180,8 +180,7 @@ loginUI.phases[2].updateUILang = function()
         if j.isSelector then
             j.content = {}
             for k = 1, #FRAMEWORK_CONFIGS["Character"]["Identity"][(J.identifier)], 1 do
-                local v = FRAMEWORK_CONFIGS["Character"]["Identity"][(J.identifier)][k]
-                imports.table.insert(j.content, imports.string.upper(imports.string.spaceChars(v[FRAMEWORK_LANGUAGE])))
+                imports.table.insert(j.content, imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["Character"]["Identity"][(J.identifier)][k][FRAMEWORK_LANGUAGE])))
             end
         end
     end
