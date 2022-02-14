@@ -189,7 +189,7 @@ loginUI.phases[2].toggleUI = function(state)
     if state then
         if loginUI.phases[2].element or imports.isElement(loginUI.phases[2].element) then return false end
         loginUI.phases[2].updateUILang()
-        local panel_offsetY = loginUI.phases[2].titleBar.height + loginUI.phases[2].titleBar.paddingY
+        local panel_offsetY = loginUI.phases[2].titlebar.height + loginUI.phases[2].titlebar.paddingY
         loginUI.phases[2].element = imports.beautify.card.create(loginUI.phases[2].startX, loginUI.phases[2].startY, loginUI.phases[2].width, loginUI.phases[2].height, nil, false)
         imports.beautify.setUIVisible(loginUI.phases[2].element, true)
         for i = 1, #loginUI.phases[2].categories, 1 do
@@ -220,21 +220,21 @@ loginUI.phases[2].toggleUI = function(state)
             end
         end
         imports.beautify.render.create(function()
-            imports.beautify.native.drawRectangle(0, 0, loginUI.phases[2].width, loginUI.phases[2].titleBar.height, loginUI.phases[2].titleBar.bgColor)
-            imports.beautify.native.drawText(string.upper(string.spaceChars(loginUI.phases[2].titleBar.text)), 0, 0, loginUI.phases[2].width, loginUI.phases[2].titleBar.height, loginUI.phases[2].titleBar.fontColor, 1, loginUI.phases[2].titleBar.font, "center", "center", true, false, false)
-            imports.beautify.native.drawRectangle(0, loginUI.phases[2].titleBar.height, loginUI.phases[2].width, loginUI.phases[2].titleBar.paddingY, loginUI.phases[2].titleBar.shadowColor)
+            imports.beautify.native.drawRectangle(0, 0, loginUI.phases[2].width, loginUI.phases[2].titlebar.height, loginUI.phases[2].titlebar.bgColor)
+            imports.beautify.native.drawText(string.upper(string.spaceChars(loginUI.phases[2].titlebar.text)), 0, 0, loginUI.phases[2].width, loginUI.phases[2].titlebar.height, loginUI.phases[2].titlebar.fontColor, 1, loginUI.phases[2].titlebar.font, "center", "center", true, false, false)
+            imports.beautify.native.drawRectangle(0, loginUI.phases[2].titlebar.height, loginUI.phases[2].width, loginUI.phases[2].titlebar.paddingY, loginUI.phases[2].titlebar.shadowColor)
             for i = 1, #loginUI.phases[2].categories, 1 do
                 local j = loginUI.phases[2].categories[i]
                 local category_offsetY = j.offsetY + loginUI.phases[2].categories.height
-                imports.beautify.native.drawRectangle(0, j.offsetY, loginUI.phases[2].width, loginUI.phases[2].categories.height, loginUI.phases[2].titleBar.bgColor)
+                imports.beautify.native.drawRectangle(0, j.offsetY, loginUI.phases[2].width, loginUI.phases[2].categories.height, loginUI.phases[2].titlebar.bgColor)
                 imports.beautify.native.drawText(string.upper(string.spaceChars(j.identifier)), 0, j.offsetY, loginUI.phases[2].width, category_offsetY, loginUI.phases[2].categories.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
                 imports.beautify.native.drawRectangle(0, category_offsetY, loginUI.phases[2].width, j.height, loginUI.phases[2].categories.bgColor)
                 if j.contents then
                     for k, v in imports.pairs(j.contents) do
                         local title_height = loginUI.phases[2].categories.height
                         local title_offsetY = category_offsetY + v.startY - title_height
-                        imports.beautify.native.drawRectangle(0, title_offsetY, loginUI.phases[2].width, title_height, loginUI.phases[2].titleBar.bgColor)
-                        imports.beautify.native.drawText(string.upper(string.spaceChars(v.identifier)), 0, title_offsetY, loginUI.phases[2].width, title_offsetY + title_height, loginUI.phases[2].titleBar.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
+                        imports.beautify.native.drawRectangle(0, title_offsetY, loginUI.phases[2].width, title_height, loginUI.phases[2].titlebar.bgColor)
+                        imports.beautify.native.drawText(string.upper(string.spaceChars(v.identifier)), 0, title_offsetY, loginUI.phases[2].width, title_offsetY + title_height, loginUI.phases[2].titlebar.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
                     end
                 end
             end
