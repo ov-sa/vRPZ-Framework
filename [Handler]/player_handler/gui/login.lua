@@ -143,7 +143,7 @@ local loginUI = {
             navigator = {
                 startX = -5, startY = 5,
                 width = 0, height = 25,
-                font = FRAMEWORK_FONTS[1], fontColor = {200, 200, 200, 255},
+                font = FRAMEWORK_FONTS[3], fontColor = {200, 200, 200, 255},
                 hoverStatus = "backward",
                 hoverAnimTick = CLIENT_CURRENT_TICK,
                 exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end
