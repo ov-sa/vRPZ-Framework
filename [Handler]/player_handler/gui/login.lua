@@ -575,7 +575,6 @@ local function renderUI(renderData)
         end
 
         if loginUI.phase == 1 then
-            --Draws Options UI
             imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[loginUI.phase].bgTexture, 0, 0, 0, -1, false)
             for i, j in imports.ipairs(loginUI.phases[1].optionsUI) do
                 local option_title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE], "  "))
@@ -602,12 +601,8 @@ local function renderUI(renderData)
                 imports.beautify.native.drawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, loginUI.phases[1].optionsUI.fontColor, 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
                 imports.beautify.native.drawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[1], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[2], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[3], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
                 imports.beautify.native.drawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineSize, tocolor(unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineColor)), false)
-            end
-        elseif loginUI.phase == 2 then
-            --Draws Character UI
-            
+            end            
         elseif loginUI.phase == 3 then
-            --Draws Credits UI
             imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, tocolor(unpackColor(loginUI.phases[3].bgColor)), false)
             local view_offsetX, view_offsetY = loginUI.phases[3].startX, loginUI.phases[3].startY
             local view_width, view_height = loginUI.phases[3].width, loginUI.phases[3].height
