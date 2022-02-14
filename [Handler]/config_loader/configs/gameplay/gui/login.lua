@@ -64,26 +64,23 @@ configVars["UI"]["Login"] = {
 
     ["Options"] = {
         play = {
+            ["Titles"] = {["EN"] = "Play", ["TR"] = "Oyna"},
             height = 35,
             embedLineSize = 3,
             fontColor = {150, 150, 150, 25},
             hoverfontColor = {170, 35, 35, 255},
             embedLineColor = {170, 35, 35, 50},
             hoverDuration = 2500,
-            bgPath = "files/images/login/login.png",
-
-            ["Titles"] = {["EN"] = "Play", ["TR"] = "Oyna"}
+            bgPath = "files/images/login/login.png"
         },
 
         characters = {
+            ["Titles"] = {["EN"] = "Characters", ["TR"] = "karakterler"},
             width = 325,
             height = 610,
 
-            ["Titles"] = {["EN"] = "Characters", ["TR"] = "karakterler"},
-
             titlebar = {
                 ["Titles"] = {["EN"] = "Character", ["TR"] = "Karakter"},
-
                 height = 35,
                 fontColor = {170, 35, 35, 255},
                 bgColor = {0, 0, 0, 255},
@@ -96,7 +93,6 @@ configVars["UI"]["Login"] = {
 
                 ["Identity"] = {
                     ["Titles"] = {["EN"] = "Identity", ["TR"] = "Kimlik"},
-
                     tone = {
                         ["Titles"] = {["EN"] = "Skin Tone", ["TR"] = "Cilt tonu"}
                     },
@@ -111,10 +107,9 @@ configVars["UI"]["Login"] = {
         },
 
         credits = {
+            ["Titles"] = {["EN"] = "Credits", ["TR"] = "Kredi"},
             fontColor = {170, 35, 35, 255},
             scrollDuration = 6500,
-
-            ["Titles"] = {["EN"] = "Credits", ["TR"] = "Kredi"},
 
             navigator = {
                 ["Titles"] = {["EN"] = "Back", ["TR"] = "Geri"}
