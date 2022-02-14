@@ -44,30 +44,30 @@ configVars["Character"] = {
         },
         ["Upper"] = {
             ["Male"] = {
-                {["EN"] = "T-Shirt (Red)", ["TR"] = "Hiçbiri"},
-                {["EN"] = "Hoody (Blue)", ["TR"] = "Gündelik"}
+                {["EN"] = "T-Shirt (Red)", ["TR"] = "Tişört (Kırmızı)"},
+                {["EN"] = "Hoody (Blue)", ["TR"] = "Kapüşonlu (Mavi)"}
             },
             ["Female"] = {
-                {["EN"] = "T-Shirt (Red)", ["TR"] = "Hiçbiri"},
-                {["EN"] = "Hoody (Blue)", ["TR"] = "Gündelik"}
+                {["EN"] = "T-Shirt (Red)", ["TR"] = "Tişört (Kırmızı)"},
+                {["EN"] = "Hoody (Blue)", ["TR"] = "Kapüşonlu (Mavi)"}
             }
         },
         ["Lower"] = {
             ["Male"] = {
-                {["EN"] = "Pant (Red)", ["TR"] = "Hiçbiri"},
-                {["EN"] = "Trouser (Blue)", ["TR"] = "Gündelik"}
+                {["EN"] = "Pant (Red)", ["TR"] = "Pantolon (Kırmızı)"},
+                {["EN"] = "Trouser (Blue)", ["TR"] = "Pantolon (Mavi)"}
             },
             ["Female"] = {
-                {["EN"] = "Pant (Red)", ["TR"] = "Hiçbiri"},
-                {["EN"] = "Trouser (Blue)", ["TR"] = "Gündelik"}
+                {["EN"] = "Pant (Red)", ["TR"] = "Pantolon (Kırmızı)"},
+                {["EN"] = "Trouser (Blue)", ["TR"] = "Pantolon (Mavi)"}
             }
         },
         ["Shoes"] = {
             ["Male"] = {
-                {["EN"] = "Sneakers (Red)", ["TR"] = "Hiçbiri"}
+                {["EN"] = "Sneakers (Red)", ["TR"] = "Spor Ayakkabı (Kırmızı)"}
             },
             ["Female"] = {
-                {["EN"] = "Sneakers (Red)", ["TR"] = "Hiçbiri"}
+                {["EN"] = "Sneakers (Red)", ["TR"] = "Spor Ayakkabı (Kırmızı)"}
             }
         }
     }
