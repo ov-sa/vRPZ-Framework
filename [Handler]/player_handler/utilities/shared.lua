@@ -332,33 +332,3 @@ function hasVehicleUpgrade(vehicle, upgradeID)
 	return false
 
 end
-
-
---------------------------------------
---[[ Functions: Reads/Writes File ]]--
---------------------------------------
-
-function readFile(filePath)
-
-    if not filePath or type(filePath) ~= "string" or not File.exists(filePath) then return false end
-    local file = File(filePath)
-    if not file then return false end
-
-    local fileSize = file:getSize()
-    local fileData = file:read(fileSize)
-    file:close()
-    return fileData
-
-end
-
-function writeFile(filePath, fileData)
-
-    if not filePath or not fileData or type(filePath) ~= "string" then return false end
-    if File.exists(filePath) then File.delete(filePath) end
-
-    local file = File.new(filePath)  
-    file:write(fileData)
-    file:close()
-    return true
-
-end
