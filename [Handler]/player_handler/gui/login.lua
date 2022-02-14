@@ -196,8 +196,7 @@ loginUI.phases[2].toggleUI = function(state)
             local j = loginUI.phases[2].categories[i]
             j.offsetY = (loginUI.phases[2].categories[(i - 1)] and (loginUI.phases[2].categories[(i - 1)].offsetY + loginUI.phases[2].categories.height + loginUI.phases[2].categories[(i - 1)].height + loginUI.phases[2].categories.paddingY)) or panel_offsetY
             if j.contents then
-                for k = 1, #j.contents, 1 do
-                    local v = j.contents[k]
+                for k, v in imports.pairs(j.contents) do
                     if v.isSlider then
                         v.element = imports.beautify.slider.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height + v.startY + v.paddingY, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), v.height, "horizontal", loginUI.phases[2].element, false)
                         imports.beautify.setUIVisible(v.element, true)
