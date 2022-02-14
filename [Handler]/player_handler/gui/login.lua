@@ -192,6 +192,7 @@ loginUI.phases[2].updateCharacter = function()
     local shoes = loginUI.phases[2].categories[5].contentIndex[imports.beautify.selector.getSelection(loginUI.phases[2].categories[5].element)]
     local shoesData = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Shoes"]["Datas"][gender][shoes]
     exports.assetify_library:setCharacterAsset(loginUI.phases[2].character, genderData.assetName, (upperData.clumpName)..(lowerData.clumpName)..(shoesData.clumpName))
+    print("UPDATE CHARACTER: "..(upperData.clumpName)..(lowerData.clumpName)..(shoesData.clumpName))
 end
 loginUI.phases[2].toggleUI = function(state)
     if state then
@@ -208,16 +209,22 @@ loginUI.phases[2].toggleUI = function(state)
                     if v.isSlider then
                         v.element = imports.beautify.slider.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height + v.startY + v.paddingY, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), v.height, "horizontal", loginUI.phases[2].element, false)
                         imports.beautify.setUIVisible(v.element, true)
+                        --TODO: ADD TRACKER FOR THIS IN BEAUTIFY'S SLIDER..
+                        imports.addEventHandler("onClientUISliderAltered", v.element, function()
+                            print("Update 1")
+                        end)
                     elseif v.isSelector then
                         v.element = imports.beautify.selector.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height + v.startY, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), v.height, "horizontal", loginUI.phases[2].element, false)
                         imports.beautify.selector.setDataList(v.element, v.content)
                         imports.beautify.setUIVisible(v.element, true)
+                        imports.addEventHandler("onClientUISelectionAltered", v.element, loginUI.phases[2].updateCharacter)
                     end
                 end
             elseif j.isSelector then
                 j.element = imports.beautify.selector.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), j.height, "horizontal", loginUI.phases[2].element, false)
                 imports.beautify.selector.setDataList(j.element, j.content)
                 imports.beautify.setUIVisible(j.element, true)
+                imports.addEventHandler("onClientUISelectionAltered", j.element, loginUI.phases[2].updateCharacter)
             end
         end
         imports.beautify.render.create(function()
