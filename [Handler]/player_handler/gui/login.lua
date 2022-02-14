@@ -184,7 +184,13 @@ end
 loginUI.phases[2].updateCharacter = function()
     local gender = loginUI.phases[2].categories[1].contents.gender.contentIndex[imports.beautify.selector.getSelection(loginUI.phases[2].categories[1].contents.gender.element)]
     local genderData = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender["Datas"][gender]
-    exports.assetify_library:setCharacterAsset(loginUI.character, genderData.assetName, "H1P1")    
+    local upper = loginUI.phases[2].categories[3].contentIndex[imports.beautify.selector.getSelection(loginUI.phases[2].categories[3].element)]
+    local upperData = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Upper"]["Datas"][gender][upper]
+    local lower = loginUI.phases[2].categories[4].contentIndex[imports.beautify.selector.getSelection(loginUI.phases[2].categories[4].element)]
+    local lowerData = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Lower"]["Datas"][gender][lower]
+    local shoes = loginUI.phases[2].categories[5].contentIndex[imports.beautify.selector.getSelection(loginUI.phases[2].categories[5].element)]
+    local shoesData = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Shoes"]["Datas"][gender][shoes]
+    exports.assetify_library:setCharacterAsset(loginUI.character, genderData.assetName, (upperData.clumpName)..(lowerData.clumpName)..(shoesData.clumpName))
 end
 loginUI.phases[2].toggleUI = function(state)
     if state then
