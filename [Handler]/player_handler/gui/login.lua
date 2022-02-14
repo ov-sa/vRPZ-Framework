@@ -110,6 +110,7 @@ local loginUI = {
                     contents = {
                         hair = {
                             isSelector = true,
+                            isClothing = true,
                             startY = 30,
                             height = 30,
                             identifier = "hair",
@@ -122,6 +123,7 @@ local loginUI = {
                 },
                 {
                     isSoloSelector = true,
+                    isClothing = true,
                     height = 50,
                     identifier = "upper",
                     content = {
@@ -131,6 +133,7 @@ local loginUI = {
                 },
                 {
                     isSoloSelector = true,
+                    isClothing = true,
                     height = 50,
                     identifier = "lower",
                     content = {
@@ -140,6 +143,7 @@ local loginUI = {
                 },
                 {
                     isSoloSelector = true,
+                    isClothing = true,
                     height = 50,
                     identifier = "shoes",
                     content = {
@@ -179,9 +183,8 @@ loginUI.phases[2].updateUILang = function()
     for i = 1, #loginUI.phases[2].categories, 1 do
         local j = loginUI.phases[2].categories[i]
         if j.contents then
-            if j.identifier == "Identity" then
-                print("WOT YES")
-                for k, v in imports.pairs(j.contents) do
+            for k, v in imports.pairs(j.contents) do
+                if not v.isClothing then
                     v.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["Character"][(j.identifier)][(v.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
                     if v.isSelector then
                         v.content = {}
