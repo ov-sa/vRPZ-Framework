@@ -22,35 +22,28 @@ configVars["Character"] = {
     },
 
     ["Identity"] = {
-        tone = {},
-        gender = {
-            {["EN"] = "Male", ["TR"] = "Erkek"},
-            {["EN"] = "Female", ["TR"] = "Dişi"}
+        ["Models"] = 
+        ["Tone"] = {},
+        ["Gender"] = {
+            {assetName = "vRPZ_Male", ["EN"] = "Male", ["TR"] = "Erkek"},
+            {assetName = "vRPZ_Female", ["EN"] = "Female", ["TR"] = "Dişi"}
         },
-        faction = {
+        ["Faction"] = {
             {["EN"] = "Military", ["TR"] = "Askeri"},
             {["EN"] = "Criminal", ["TR"] = "Adli"}
         }
     },
 
     ["Clothing"] = {
-        {
-            assetName = "vRPZ_Male",
+        ["Facial"] = {
             hair = {
-                {
-                    ["EN"] = "None",
-                    ["TR"] = "Hiçbiri"
-                },
-                {
-                    ["EN"] = "Casual",
-                    ["TR"] = "Gündelik"
-                }
+                {["EN"] = "None", ["TR"] = "Hiçbiri"},
+                {["EN"] = "Casual", ["TR"] = "Gündelik"}
             }
         },
-
-        {
-            assetName = "vRPZ_Female"
-        }
+        ["Upper"] = {},
+        ["Lower"] = {},
+        ["Shoes"] = {}
     }
 
 }

@@ -94,29 +94,36 @@ configVars["UI"]["Login"] = {
                 ["Identity"] = {
                     ["Titles"] = {["EN"] = "Identity", ["TR"] = "Kimlik"},
                     tone = {
-                        ["Titles"] = {["EN"] = "Skin Tone", ["TR"] = "Cilt tonu"}
+                        ["Titles"] = {["EN"] = "Skin Tone", ["TR"] = "Cilt tonu"},
+                        ["Datas"] = configVars["Character"]["Identity"]["Tone"]
                     },
                     gender = {
-                        ["Titles"] = {["EN"] = "Gender", ["TR"] = "Cinsiyet"}
+                        ["Titles"] = {["EN"] = "Gender", ["TR"] = "Cinsiyet"},
+                        ["Datas"] = configVars["Character"]["Identity"]["Gender"]
                     },
                     faction = {
-                        ["Titles"] = {["EN"] = "Faction", ["TR"] = "Hizip"}
+                        ["Titles"] = {["EN"] = "Faction", ["TR"] = "Hizip"},
+                        ["Datas"] = configVars["Character"]["Identity"]["Faction"]
                     }
                 },
                 ["Facial"] = {
                     ["Titles"] = {["EN"] = "Facial", ["TR"] = "Yüz"},
                     hair = {
-                        ["Titles"] = {["EN"] = "Hair", ["TR"] = "Saç"}
+                        ["Titles"] = {["EN"] = "Hair", ["TR"] = "Saç"},
+                        ["Datas"] = configVars["Character"]["Clothing"]["Facial"]
                     }
                 },
                 ["Upper"] = {
-                    ["Titles"] = {["EN"] = "Upper", ["TR"] = "Üst"}
+                    ["Titles"] = {["EN"] = "Upper", ["TR"] = "Üst"},
+                    ["Datas"] = configVars["Character"]["Clothing"]["Upper"]
                 },
                 ["Lower"] = {
-                    ["Titles"] = {["EN"] = "Lower", ["TR"] = "Daha düşük"}
+                    ["Titles"] = {["EN"] = "Lower", ["TR"] = "Daha düşük"},
+                    ["Datas"] = configVars["Character"]["Clothing"]["Lower"]
                 },
                 ["Shoes"] = {
-                    ["Titles"] = {["EN"] = "Shoes", ["TR"] = "Ayakkabı"}
+                    ["Titles"] = {["EN"] = "Shoes", ["TR"] = "Ayakkabı"},
+                    ["Datas"] = configVars["Character"]["Clothing"]["Shoes"]
                 }
             }
         },
