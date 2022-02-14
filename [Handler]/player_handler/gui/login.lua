@@ -184,8 +184,10 @@ loginUI.phases[2].updateUILang = function()
                 if not v.isClothing then
                     if v.isSelector then
                         v.content = {}
-                        for k = 1, #FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Datas"], 1 do
-                            imports.table.insert(v.content, imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Datas"][k][FRAMEWORK_LANGUAGE])))
+                        v.contentIndex = {}
+                        for k, v in imports.pairs(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Datas"]) do
+                            imports.table.insert(v.content, imports.string.upper(imports.string.spaceChars(v[FRAMEWORK_LANGUAGE])))
+                            imports.table.insert(v.contentIndex, k)
                         end
                     end
                 end
