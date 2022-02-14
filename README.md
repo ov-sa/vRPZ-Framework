@@ -16,16 +16,16 @@
 * [Cinecam Handler](https://github.com/ov-sa/MTA-Cinecam_Handler) Integration
 * Completely Performance-Friendly
 
-## ━ Developers
+## ━ Credits
 
-* **Mario**
-* **Buddy**
-* **Aviril**
-* **April**
-* **Tron**
-* **Neor**
-* **Skann**
-* **Mazvis**
+* **ov | Mario (Developer)**
+* **ov | Buddy (Modeler)**
+* **ov | Aviril (Graphics Developer)**
+* **ov | April (Designer)**
+* **ov | Tron (Developer)**
+* **ov | Neor (Developer)**
+* **ov | Skann (Modeler)**
+* **ov | Mazvis (Contributor)**
 
 ## ━ Third Party
 
