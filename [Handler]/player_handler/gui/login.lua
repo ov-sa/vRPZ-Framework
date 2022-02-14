@@ -218,13 +218,14 @@ loginUI.phases[2].loadCharacter = function(loadDefault)
                     if v.slider then
                         imports.beautify.slider.setPercent(v.element, 0)
                     elseif v.isSelector then
-                        imports.beautify.selector.getSelection(v.element, 1)
+                        imports.beautify.selector.setSelection(v.element, 1)
                     end
                 end
             elseif j.isSelector then
-                imports.beautify.selector.getSelection(j.element, 1)
+                imports.beautify.selector.setSelection(j.element, 1)
             end
         end
+        loginUI.phases[2].updateUILang(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default)
     else
         --TODO: ...WIP
         --[[
