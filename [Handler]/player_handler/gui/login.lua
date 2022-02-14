@@ -85,8 +85,7 @@ local loginUI = {
                     contents = {
                         tone = {
                             isSlider = true,
-                            startY = 30,
-                            paddingY = -10,
+                            startY = 30, paddingY = -10,
                             height = 30,
                             identifier = "tone"
                         },
@@ -109,8 +108,7 @@ local loginUI = {
                     identifier = "Facial",
                     contents = {
                         hair = {
-                            isSelector = true,
-                            isClothing = true,
+                            isSelector = true, isClothing = true,
                             startY = 30,
                             height = 30,
                             identifier = "hair",
@@ -122,8 +120,7 @@ local loginUI = {
                     }
                 },
                 {
-                    isSoloSelector = true,
-                    isClothing = true,
+                    isSoloSelector = true, isClothing = true,
                     height = 50,
                     identifier = "Upper",
                     content = {
@@ -132,8 +129,7 @@ local loginUI = {
                     }
                 },
                 {
-                    isSoloSelector = true,
-                    isClothing = true,
+                    isSoloSelector = true, isClothing = true,
                     height = 50,
                     identifier = "Lower",
                     content = {
@@ -142,8 +138,7 @@ local loginUI = {
                     }
                 },
                 {
-                    isSoloSelector = true,
-                    isClothing = true,
+                    isSoloSelector = true, isClothing = true,
                     height = 50,
                     identifier = "Shoes",
                     content = {
@@ -151,7 +146,7 @@ local loginUI = {
                         "Boots (Blue)"
                     }
                 }
-            }        
+            }
         },
         [3] = {
             startX = 0, startY = 15,
