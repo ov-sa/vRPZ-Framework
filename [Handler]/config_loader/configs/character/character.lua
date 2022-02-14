@@ -22,7 +22,6 @@ configVars["Character"] = {
     },
 
     ["Identity"] = {
-        ["Models"] = 
         ["Tone"] = {},
         ["Gender"] = {
             {assetName = "vRPZ_Male", ["EN"] = "Male", ["TR"] = "Erkek"},
