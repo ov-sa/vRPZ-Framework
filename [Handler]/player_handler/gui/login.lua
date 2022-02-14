@@ -120,17 +120,17 @@ local loginUI = {
                 {
                     identifier = "Upper",
                     isSelector = true, isClothing = true,
-                    height = 50
+                    height = 40
                 },
                 {
                     identifier = "Lower",
                     isSelector = true, isClothing = true,
-                    height = 50
+                    height = 40
                 },
                 {
                     identifier = "Shoes",
                     isSelector = true, isClothing = true,
-                    height = 50
+                    height = 40
                 }
             }
         },
