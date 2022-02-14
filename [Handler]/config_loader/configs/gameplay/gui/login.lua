@@ -104,7 +104,10 @@ configVars["UI"]["Login"] = {
                     }
                 },
                 ["Facial"] = {
-                    ["Titles"] = {["EN"] = "Facial", ["TR"] = "Yüz"}
+                    ["Titles"] = {["EN"] = "Facial", ["TR"] = "Yüz"},
+                    hair = {
+                        ["Titles"] = {["EN"] = "Hair", ["TR"] = "Saç"}
+                    }
                 },
                 ["Upper"] = {
                     ["Titles"] = {["EN"] = "Upper", ["TR"] = "Üst"}

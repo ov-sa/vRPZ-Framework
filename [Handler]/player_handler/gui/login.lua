@@ -185,9 +185,8 @@ loginUI.phases[2].updateUILang = function()
         j.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
         if j.contents then
             for k, v in imports.pairs(j.contents) do
+                v.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
                 if not v.isClothing then
-                    --TODO: ...CONNECT ALL OTHER TEXTS TOO..
-                    v.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
                     if v.isSelector then
                         v.content = {}
                         for k = 1, #FRAMEWORK_CONFIGS["Character"][(j.identifier)][(v.identifier)], 1 do
