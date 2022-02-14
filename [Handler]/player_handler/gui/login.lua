@@ -81,7 +81,7 @@ local loginUI = {
                 bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.bgColor)),
                 {
                     height = 185,
-                    identifier = "identity",
+                    identifier = "Identity",
                     contents = {
                         tone = {
                             isSlider = true,
@@ -176,11 +176,20 @@ for i = 1, #loginUI.phases[1].optionsUI, 1 do
     j.hoverAnimTick = CLIENT_CURRENT_TICK
 end
 loginUI.phases[2].updateUILang = function()
-    for i, j in imports.pairs(loginUI.phases[2].categories[1].contents) do
-        if j.isSelector then
-            j.content = {}
-            for k = 1, #FRAMEWORK_CONFIGS["Character"]["Identity"][(j.identifier)], 1 do
-                imports.table.insert(j.content, imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["Character"]["Identity"][(j.identifier)][k][FRAMEWORK_LANGUAGE])))
+    for i = 1, #loginUI.phases[2].categories, 1 do
+        local j = loginUI.phases[2].categories[i]
+        if j.contents then
+            if j.identifier == "Identity" then
+                print("WOT YES")
+                for k, v in imports.pairs(j.contents) do
+                    v.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["Character"][(j.identifier)][(v.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
+                    if v.isSelector then
+                        v.content = {}
+                        for k = 1, #FRAMEWORK_CONFIGS["Character"][(j.identifier)][(v.identifier)], 1 do
+                            imports.table.insert(v.content, imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["Character"][(j.identifier)][(v.identifier)][k][FRAMEWORK_LANGUAGE])))
+                        end
+                    end
+                end
             end
         end
     end
@@ -233,7 +242,7 @@ loginUI.phases[2].toggleUI = function(state)
                         local title_height = loginUI.phases[2].categories.height
                         local title_offsetY = category_offsetY + v.startY - title_height
                         imports.beautify.native.drawRectangle(0, title_offsetY, loginUI.phases[2].width, title_height, loginUI.phases[2].titlebar.bgColor)
-                        imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(v.identifier)), 0, title_offsetY, loginUI.phases[2].width, title_offsetY + title_height, loginUI.phases[2].titlebar.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
+                        imports.beautify.native.drawText(v.title, 0, title_offsetY, loginUI.phases[2].width, title_offsetY + title_height, loginUI.phases[2].titlebar.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
                     end
                 end
             end

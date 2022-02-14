@@ -22,7 +22,19 @@ configVars["Character"] = {
     },
 
     ["Identity"] = {
+        tone = {
+            ["Titles"] = {
+                ["EN"] = "Skin Tone",
+                ["TR"] = "Cilt tonu"
+            }
+        },
+
         gender = {
+            ["Titles"] = {
+                ["EN"] = "Gender",
+                ["TR"] = "Cinsiyet"
+            },
+
             {
                 ["EN"] = "Male",
                 ["TR"] = "Erkek"
@@ -34,6 +46,11 @@ configVars["Character"] = {
         },
 
         faction = {
+            ["Titles"] = {
+                ["EN"] = "Faction",
+                ["TR"] = "Hizip"
+            },
+
             {
                 ["EN"] = "Military",
                 ["TR"] = "Askeri"
