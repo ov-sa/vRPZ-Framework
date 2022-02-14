@@ -21,31 +21,31 @@ configVars["Character"] = {
         "hunger"
     },
 
-    ["Clothing"] = {
-        identity = {
-            gender = {
-                {
-                    ["EN"] = "Male",
-                    ["TR"] = "Erkek"
-                },
-                {
-                    ["EN"] = "Female",
-                    ["TR"] = "Dişi"
-                }
+    ["Identity"] = {
+        gender = {
+            {
+                ["EN"] = "Male",
+                ["TR"] = "Erkek"
             },
+            {
+                ["EN"] = "Female",
+                ["TR"] = "Dişi"
+            }
+        },
 
-            faction = {
-                {
-                    ["EN"] = "Military",
-                    ["TR"] = "Askeri"
-                },
-                {
-                    ["EN"] = "Criminal",
-                    ["TR"] = "Adli"
-                }
+        faction = {
+            {
+                ["EN"] = "Military",
+                ["TR"] = "Askeri"
+            },
+            {
+                ["EN"] = "Criminal",
+                ["TR"] = "Adli"
             }
         }
+    },
 
+    ["Clothing"] = {
         ["Male"] = {
             assetName = "vRPZ_Male"
         },

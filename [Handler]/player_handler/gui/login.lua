@@ -174,6 +174,17 @@ for i = 1, #loginUI.phases[1].optionsUI, 1 do
     j.hoverStatus = "backward"
     j.hoverAnimTick = CLIENT_CURRENT_TICK
 end
+loginUI.phases[2].updateUI = function()
+    for i, j in imports.pairs(loginUI.phases[2].categories[1].contents) do
+        if j.isSelector then
+            j.content, j.contentIndex = {}, {}
+            for k, v in imports.pairs(FRAMEWORK_CONFIGS["Character"]["Identity"][(J.identifier)]) do
+                imports.table.insert(j.content, v[FRAMEWORK_LANGUAGE])
+                imports.table.insert(j.contentIndex, k)
+            end
+        end
+    end
+end
 loginUI.phases[3].contentText = ""
 for i = 1, #FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.contributors do
     local j = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.contributors[i]
@@ -182,16 +193,6 @@ end
 loginUI.phases[3].width, loginUI.phases[3].height = loginUI.phases[3].width + (CLIENT_MTA_RESOLUTION[1] - loginUI.phases[3].startX), loginUI.phases[3].height + (CLIENT_MTA_RESOLUTION[2] - loginUI.phases[3].startY)
 loginUI.phases[3].contentWidth, loginUI.phases[3].contentHeight = imports.beautify.native.getTextSize (loginUI.phases[3].contentText, loginUI.phases[3].width, 1, loginUI.phases[3].font, false)
 loginUI.phases[3].scrollDuration = imports.math.max(1, imports.math.ceil((loginUI.phases[3].contentHeight + loginUI.phases[3].height)/loginUI.phases[3].height))*loginUI.phases[3].scrollDuration
-loginUI.phases[2].updateUI()
-    for i, j in imports.pairs(loginUI.phases[2].categories[1].contents) do
-        if j.isSelector then
-            j.content = {}
-            for k = 1, #FRAMEWORK_CONFIGS["Character"].identity[(J.identifier)], 1 do
-                imports.table.insert(j.content, FRAMEWORK_CONFIGS["Character"].identity[(J.identifier)][k][FRAMEWORK_LANGUAGE])
-            end
-        end
-    end
-end
 
 
 ------------------------------------------------------------------
