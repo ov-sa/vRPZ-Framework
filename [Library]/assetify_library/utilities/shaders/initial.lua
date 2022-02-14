@@ -57,7 +57,6 @@ end
 function shader:load(shaderName, element, priority, distance)
     if not self or (self == shader) then return false end
     if not shaderName or not CShaders[shaderName] or not element or not imports.isElement(element) then return false end
-    cAsset.cScene = self
     self.cShader = imports.dxCreateShader(CShaders[shaderName], imports.tonumber(priority) or 10000, imports.tonumber(distance) or 0, false, "all")
     return true
 end
