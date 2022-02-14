@@ -178,10 +178,10 @@ end
 loginUI.phases[2].updateUILang = function()
     for i, j in imports.pairs(loginUI.phases[2].categories[1].contents) do
         if j.isSelector then
-            j.content, j.contentIndex = {}, {}
-            for k, v in imports.pairs(FRAMEWORK_CONFIGS["Character"]["Identity"][(J.identifier)]) do
-                imports.table.insert(j.content, imports.string.upper(imports.string.spaceChars(v["Titles"][FRAMEWORK_LANGUAGE])))
-                imports.table.insert(j.contentIndex, k)
+            j.content = {}
+            for k = 1, #FRAMEWORK_CONFIGS["Character"]["Identity"][(J.identifier)], 1 do
+                local v = FRAMEWORK_CONFIGS["Character"]["Identity"][(J.identifier)][k]
+                imports.table.insert(j.content, imports.string.upper(imports.string.spaceChars(v[FRAMEWORK_LANGUAGE])))
             end
         end
     end
