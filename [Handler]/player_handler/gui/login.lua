@@ -179,7 +179,7 @@ loginUI.phases[2].updateUILang = function()
         if j.isSelector then
             j.content, j.contentIndex = {}, {}
             for k, v in imports.pairs(FRAMEWORK_CONFIGS["Character"]["Identity"][(J.identifier)]) do
-                imports.table.insert(j.content, v["Titles"][FRAMEWORK_LANGUAGE])
+                imports.table.insert(j.content, imports.string.upper(imports.string.spaceChars(v["Titles"][FRAMEWORK_LANGUAGE])))
                 imports.table.insert(j.contentIndex, k)
             end
         end
@@ -200,9 +200,6 @@ loginUI.phases[2].createUI = function()
                     v.element = imports.beautify.slider.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height + v.startY + v.paddingY, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), v.height, "horizontal", loginUI.phases[2].element, false)
                     imports.beautify.setUIVisible(v.element, true)
                 elseif v.isSelector then
-                    for m, n in ipairs(v.content) do
-                        v.content[m] = string.upper(string.spaceChars(n))
-                    end
                     v.element = imports.beautify.selector.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height + v.startY, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), v.height, "horizontal", loginUI.phases[2].element, false)
                     imports.beautify.selector.setDataList(v.element, v.content)
                     imports.beautify.setUIVisible(v.element, true)
@@ -210,10 +207,12 @@ loginUI.phases[2].createUI = function()
             end
         elseif j.isSoloSelector then
             j.element = imports.beautify.selector.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), j.height, "horizontal", loginUI.phases[2].element, false)
+            --[[
             for k = 1, #j.content, 1 do
                 local v = j.content[k]
                 j.content[k] = string.upper(string.spaceChars(v))
             end
+            ]]--
             imports.beautify.selector.setDataList(j.element, j.content)
             imports.beautify.setUIVisible(j.element, true)
         end
@@ -222,14 +221,14 @@ loginUI.phases[2].createUI = function()
         imports.beautify.native.drawRectangle(0, 0, loginUI.phases[2].width, loginUI.phases[2].titleBar.height, loginUI.phases[2].titleBar.bgColor)
         imports.beautify.native.drawText(string.upper(string.spaceChars(loginUI.phases[2].titleBar.text)), 0, 0, loginUI.phases[2].width, loginUI.phases[2].titleBar.height, loginUI.phases[2].titleBar.fontColor, 1, loginUI.phases[2].titleBar.font, "center", "center", true, false, false)
         imports.beautify.native.drawRectangle(0, loginUI.phases[2].titleBar.height, loginUI.phases[2].width, loginUI.phases[2].titleBar.paddingY, loginUI.phases[2].titleBar.shadowColor)
-        for i, j in ipairs(loginUI.phases[2].categories) do
+        for i = 1, #loginUI.phases[2].categories, 1 do
+            local j = loginUI.phases[2].categories[i]
             local category_offsetY = j.offsetY + loginUI.phases[2].categories.height
             imports.beautify.native.drawRectangle(0, j.offsetY, loginUI.phases[2].width, loginUI.phases[2].categories.height, loginUI.phases[2].titleBar.bgColor)
             imports.beautify.native.drawText(string.upper(string.spaceChars(j.identifier)), 0, j.offsetY, loginUI.phases[2].width, category_offsetY, loginUI.phases[2].categories.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
             imports.beautify.native.drawRectangle(0, category_offsetY, loginUI.phases[2].width, j.height, loginUI.phases[2].categories.bgColor)
-        
             if j.contents then
-                for k, v in pairs(j.contents) do
+                for k, v in imports.pairs(j.contents) do
                     local title_height = loginUI.phases[2].categories.height
                     local title_offsetY = category_offsetY + v.startY - title_height
                     imports.beautify.native.drawRectangle(0, title_offsetY, loginUI.phases[2].width, title_height, loginUI.phases[2].titleBar.bgColor)
