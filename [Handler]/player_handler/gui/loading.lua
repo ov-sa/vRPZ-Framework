@@ -91,5 +91,4 @@ imports.addEventHandler("Client:onToggleLoadingUI", root, function(state, args)
     loadingUI.tickCounter = CLIENT_CURRENT_TICK
     loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
     imports.triggerEvent("Sound:onToggleLoading", localPlayer, state)
-    return true
 end)

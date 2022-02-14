@@ -209,7 +209,6 @@ loginUI.phases[2].loadCharacter = function(loadDefault)
             loadDefault = true
         end
     end
-
     if loadDefault then
         for i = 1, #loginUI.phases[2].categories, 1 do
             local j = loginUI.phases[2].categories[i]
@@ -462,7 +461,6 @@ end
 ------------------------------
 
 function isLoginUIVisible() return loginUI.state end
-function getLoginUIPhase() return loginUI.phase end
 
 imports.addEvent("Client:onSetLoginUIPhase", true)
 imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
@@ -524,7 +522,6 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
         loginUI.cache.timers.uiEnabler = false
     end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration - (FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + 250), 1)
-    return true
 end)
 
 imports.addEvent("Client:onEnableLoginUI", true)
@@ -539,7 +536,6 @@ imports.addEventHandler("Client:onEnableLoginUI", root, function(state, isForced
         loginUI.isEnabled = state
     end
     loginUI.isEnabled = state
-    return true
 end)
 
 imports.addEvent("Client:onSaveCharacter", true)
@@ -653,7 +649,6 @@ local function renderUI(renderData)
             imports.beautify.native.drawText(navigator_title, navigator_offsetX, navigator_offsetY, navigator_offsetX + navigator_width, navigator_offsetY + navigator_height, tocolor(loginUI.phases[3].navigator.fontColor[1], loginUI.phases[3].navigator.fontColor[2], loginUI.phases[3].navigator.fontColor[3], loginUI.phases[3].navigator.fontColor[4]*loginUI.phases[3].navigator.animAlphaPercent), 1, loginUI.phases[3].navigator.font, "center", "center", true, false, false)
         end
     end
-
 end
 
 
