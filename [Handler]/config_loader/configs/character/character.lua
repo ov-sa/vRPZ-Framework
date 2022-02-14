@@ -29,6 +29,7 @@ configVars["Character"] = {
                     ["TR"] = "Erkek"
                 }
             },
+
             ["Female"] = {
                 ["Titles"] = {
                     ["EN"] = "Female",
@@ -44,6 +45,7 @@ configVars["Character"] = {
                     ["TR"] = "Askeri"
                 }
             },
+
             ["Criminal"] = {
                 ["Titles"] = {
                     ["EN"] = "Criminal",
