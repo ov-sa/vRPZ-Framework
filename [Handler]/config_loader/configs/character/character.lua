@@ -46,9 +46,9 @@ configVars["Character"] = {
     },
 
     ["Clothing"] = {
-        ["Male"] = {
+        {
             assetName = "vRPZ_Male",
-            ["Hair"] = {
+            hair = {
                 {
                     ["EN"] = "None",
                     ["TR"] = "Hiçbiri"
@@ -60,7 +60,7 @@ configVars["Character"] = {
             }
         },
 
-        ["Female"] = {
+        {
             assetName = "vRPZ_Female"
         }
     }
