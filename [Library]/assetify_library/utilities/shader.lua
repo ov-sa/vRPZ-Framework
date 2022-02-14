@@ -20,7 +20,8 @@ local imports = {
     destroyElement = destroyElement,
     setmetatable = setmetatable,
     dxCreateShader = dxCreateShader,
-    engineApplyShaderToWorldTexture = engineApplyShaderToWorldTexture
+    engineApplyShaderToWorldTexture = engineApplyShaderToWorldTexture,
+    engineRemoveShaderFromWorldTexture = engineRemoveShaderFromWorldTexture
 }
 
 
