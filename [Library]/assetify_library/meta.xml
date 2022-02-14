@@ -7,8 +7,10 @@
     <!--TODO: IDK HOW GRAPHIFY WORKS FOR NOW-->
     <!--include resource="graphify_library"/-->
 
-    <!-- Exports,Settings & Utilities -->
+    <!-- Exports, Settings & Utilities -->
     <script src="utilities/shared.lua" type="shared"/>
+    <script src="utilities/shaders/initial.lua" type="client"/>
+    <script src="utilities/shaders/tex_changer.lua" type="client"/>
     <script src="exports/shared.lua" type="shared"/>
     <script src="exports/client.lua" type="client"/>
     <script src="utilities/thread.lua" type="shared"/>
