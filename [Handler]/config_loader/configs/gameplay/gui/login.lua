@@ -94,7 +94,7 @@ configVars["UI"]["Login"] = {
                 ["Identity"] = {
                     ["Titles"] = {["EN"] = "Identity", ["TR"] = "Kimlik"},
                     tone = {
-                        ["Titles"] = {["EN"] = "Skin Tone", ["TR"] = "Cilt tonu"},
+                        ["Titles"] = {["EN"] = "Tone", ["TR"] = "Tonu"},
                         ["Datas"] = configVars["Character"]["Identity"]["Tone"]
                     },
                     gender = {
