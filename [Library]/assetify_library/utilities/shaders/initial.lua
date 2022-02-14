@@ -9,8 +9,20 @@
 ----------------------------------------------------------------
 
 
+-----------------
+--[[ Imports ]]--
+-----------------
+
+local imports = {
+    pairs = pairs,
+    dxCreateShader = dxCreateShader
+}
+
+
 -------------------
 --[[ Variables ]]--
 -------------------
 
-Assetify_Shaders = {}
+Assetify_Shaders, Assetify_CShaders = {}, {}
+
+Assetify_CShaders["Assetify_TextureClearer"] = imports.dxCreateShader(Assetify_Shaders["Assetify_TextureClearer"], 1000, 0, false, "all")
