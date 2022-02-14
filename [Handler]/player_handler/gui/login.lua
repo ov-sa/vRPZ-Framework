@@ -111,7 +111,7 @@ local loginUI = {
                             identifier = "hair",
                             isSelector = true, isClothing = true,
                             startY = 30,
-                            height = 30,
+                            height = 30
                         }
                     }
                 },
@@ -165,13 +165,11 @@ loginUI.phases[2].updateUILang = function(gender)
         if j.contents then
             for k, v in imports.pairs(j.contents) do
                 v.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
-                if not v.isClothing then
-                    if v.isSelector then
-                        v.contentIndex, v.content = {}, {}
-                        for m, n in imports.pairs(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Datas"]) do
-                            imports.table.insert(v.contentIndex, m)
-                            imports.table.insert(v.content, imports.string.upper(imports.string.spaceChars(n[FRAMEWORK_LANGUAGE])))
-                        end
+                if v.isSelector then
+                    v.contentIndex, v.content = {}, {}
+                    for m, n in imports.pairs((v.isClothing and FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Datas"][gender]) or FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Datas"]) do
+                        imports.table.insert(v.contentIndex, m)
+                        imports.table.insert(v.content, imports.string.upper(imports.string.spaceChars(n[FRAMEWORK_LANGUAGE])))
                     end
                 end
             end
