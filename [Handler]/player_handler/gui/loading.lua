@@ -35,7 +35,6 @@ local loadingUI = {
     loader = {
         startX = 0, startY = (CLIENT_MTA_RESOLUTION[2]/768)*-15,
         tickCounter = CLIENT_CURRENT_TICK,
-        rotationValue = 0,
         bgTexture = imports.beautify.native.createTexture(FRAMEWORK_CONFIGS["UI"]["Loading"].loader.bgPath, "dxt5", true, "clamp")
     },
     hint = {
