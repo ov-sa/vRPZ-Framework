@@ -58,10 +58,10 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(characterID, ch
                 end
             end
             ]]
-            local characterID = CCharacter.create(serial, function(characterID, Args)
+            local characterID = CCharacter.create(serial, function(characterID, args)
                 CCharacter.setData(characterID, "identity", imports.toJSON(characters[i]))
                 characterCache[characterID].identity = imports.fromJSON(characterCache[characterID].identity)
-                imports.triggerClientEvent(Args[1], "Client:onLoadCharacterID", Args[1], i, characterID, characters[i])
+                imports.triggerClientEvent(args[1], "Client:onLoadCharacterID", args[1], i, characterID, characters[i])
             end, source)
         end
     end
@@ -79,28 +79,28 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
     imports.setElementFrozen(source, true)
     imports.setPlayerName(source, CPlayer.generateNick())
 
-    CPlayer.fetch(CPlayer.getSerial(source), function(result, Args)
+    CPlayer.fetch(CPlayer.getSerial(source), function(result, args)
         result.character = result.character or 0
         result.characters = (result.characters and imports.fromJSON(result.characters)) or {}
         result.premimum = (result.premimum and true) or false
 
         if (#result.characters > 0) then
-            CCharacter.fetch(result.characters, function(result, Args)
-                Args[2].characters = result
-                for i = 1, #Args[2].characters, 1 do
-                    local j = Args[2].characters[i]
+            CCharacter.fetch(result.characters, function(result, args)
+                args[2].characters = result
+                for i = 1, #args[2].characters, 1 do
+                    local j = args[2].characters[i]
                     j.identity = imports.fromJSON(j.identity)
                 end
-                if not Args[2].characters[(Args[2].character)] then Args[2].character = 0 end
-                imports.triggerClientEvent(Args[1], "Client:onToggleLoginUI", Args[1], true, {
-                    character = Args[2].character,
-                    characters = Args[2].characters,
-                    premium = Args[2].premimum
+                if not args[2].characters[(args[2].character)] then args[2].character = 0 end
+                imports.triggerClientEvent(args[1], "Client:onToggleLoginUI", args[1], true, {
+                    character = args[2].character,
+                    characters = args[2].characters,
+                    premium = args[2].premimum
                 })
-            end, Args[1], result)
+            end, args[1], result)
         else
             result.character = 0
-            imports.triggerClientEvent(Args[1], "Client:onToggleLoginUI", Args[1], true, {
+            imports.triggerClientEvent(args[1], "Client:onToggleLoginUI", args[1], true, {
                 character = result.character,
                 characters = result.characters,
                 premium = result.premimum

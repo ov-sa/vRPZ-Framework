@@ -691,7 +691,7 @@ end
 --[[ Function: Toggles UI ]]--
 ------------------------------
 
-toggleUI = function(state, Args)
+toggleUI = function(state, args)
     if (((state ~= true) and (state ~= false)) or (state == loginUI.state)) then return false end
 
     if state then
@@ -701,7 +701,7 @@ toggleUI = function(state, Args)
         imports.beautify.render.create(renderUI)
         imports.beautify.render.create(renderUI, {renderType = "input"})
         imports.triggerEvent("Sound:onToggleLogin", localPlayer, state, {
-            shuffleMusic = (Args and Args.shuffleMusic and true) or false
+            shuffleMusic = (args and args.shuffleMusic and true) or false
         })
     else
         imports.beautify.render.remove(renderUI)
@@ -739,28 +739,28 @@ end
 ------------------------------------
 
 imports.addEvent("Client:onToggleLoginUI", true)
-imports.addEventHandler("Client:onToggleLoginUI", root, function(state, Args)
+imports.addEventHandler("Client:onToggleLoginUI", root, function(state, args)
     if state then
-        for i, j in imports.pairs(Args.characters) do
+        for i, j in imports.pairs(args.characters) do
             j.__isPreLoaded = true
         end
-        loginUI.character = Args.character
+        loginUI.character = args.character
         loginUI._selectedCharacter = loginUI.character
-        loginUI.characters = Args.characters
+        loginUI.characters = args.characters
         loginUI._unsavedCharacters = {}
         loginUI._charactersUnderProcess = {}
-        loginUI.premium = Args.premium
+        loginUI.premium = args.premium
         imports.setElementPosition(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.x, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.y, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.z)
         imports.setElementDimension(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true, true)
         imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
         imports.setTimer(function()
-            toggleUI(state, Args)
+            toggleUI(state, args)
             imports.fadeCamera(true)
             imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, false)
         end, FRAMEWORK_CONFIGS["UI"]["Login"].fadeDelay, 1)
     else
-        toggleUI(state, Args)
+        toggleUI(state, args)
     end
 end)
 
