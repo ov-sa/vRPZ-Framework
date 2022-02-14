@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
 --[[ Resource: Assetify Library
-     Script: utilities: shaders: loader.lua
+     Script: utilities: shader.lua
      Server: -
      Author: OvileAmriam
      Developer(s): Aviril, Tron
      DOC: 19/10/2021 (OvileAmriam)
-     Desc: Shader Loader ]]--
+     Desc: Shader Utilities ]]--
 ----------------------------------------------------------------
 
 
