@@ -54,7 +54,7 @@ function shader:load(shaderName, textureName, textureElement, shaderPriority, sh
     if not self or (self == shader) then return false end
     if not shaderName or not shader.rwCache[shaderName] or not textureName or not textureElement or not imports.isElement(textureElement) then return false end
     self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
-    self.cShader = shader.preLoaded[shaderName] or imports.dxCreateShader(shader.rwCache[shaderName], imports.tonumber(shaderPriority) or 10000, imports.tonumber(shaderDistance) or 0, false, "all")
+    self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName], imports.tonumber(shaderPriority) or 10000, imports.tonumber(shaderDistance) or 0, false, "all")
     imports.engineApplyShaderToWorldTexture(self.cShader, textureName, textureElement)
     return true
 end
