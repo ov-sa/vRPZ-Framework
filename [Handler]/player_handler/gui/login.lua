@@ -209,19 +209,19 @@ loginUI.phases[2].toggleUI = function(state)
                     if v.isSlider then
                         v.element = imports.beautify.slider.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height + v.startY + v.paddingY, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), v.height, "horizontal", loginUI.phases[2].element, false)
                         imports.beautify.setUIVisible(v.element, true)
-                        imports.addEventHandler("onClientUISliderAltered", v.element, function() loginUI.phases[2].updateCharacter end)
+                        imports.addEventHandler("onClientUISliderAltered", v.element, function() loginUI.phases[2].updateCharacter() end)
                     elseif v.isSelector then
                         v.element = imports.beautify.selector.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height + v.startY, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), v.height, "horizontal", loginUI.phases[2].element, false)
                         imports.beautify.selector.setDataList(v.element, v.content)
                         imports.beautify.setUIVisible(v.element, true)
-                        imports.addEventHandler("onClientUISelectionAltered", v.element, function() loginUI.phases[2].updateCharacter end)
+                        imports.addEventHandler("onClientUISelectionAltered", v.element, function() loginUI.phases[2].updateCharacter() end)
                     end
                 end
             elseif j.isSelector then
                 j.element = imports.beautify.selector.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), j.height, "horizontal", loginUI.phases[2].element, false)
                 imports.beautify.selector.setDataList(j.element, j.content)
                 imports.beautify.setUIVisible(j.element, true)
-                imports.addEventHandler("onClientUISelectionAltered", j.element, function() loginUI.phases[2].updateCharacter end)
+                imports.addEventHandler("onClientUISelectionAltered", j.element, function() loginUI.phases[2].updateCharacter() end)
             end
         end
         imports.beautify.render.create(function()
