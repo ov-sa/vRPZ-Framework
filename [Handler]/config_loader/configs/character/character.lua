@@ -36,21 +36,39 @@ configVars["Character"] = {
     ["Clothing"] = {
         ["Facial"] = {
             ["Hair"] = {
-                {["EN"] = "None", ["TR"] = "Hiçbiri"},
-                {["EN"] = "Casual", ["TR"] = "Gündelik"}
+                ["Male"] = {
+                    {["EN"] = "None", ["TR"] = "Hiçbiri"},
+                    {["EN"] = "Casual", ["TR"] = "Gündelik"}
+                }
             }
         },
         ["Upper"] = {
-            ["Male"] = {},
-            ["Female"] = {}
+            ["Male"] = {
+                {["EN"] = "T-Shirt (Red)", ["TR"] = "Hiçbiri"},
+                {["EN"] = "Hoody (Blue)", ["TR"] = "Gündelik"}
+            },
+            ["Female"] = {
+                {["EN"] = "T-Shirt (Red)", ["TR"] = "Hiçbiri"},
+                {["EN"] = "Hoody (Blue)", ["TR"] = "Gündelik"}
+            }
         },
         ["Lower"] = {
-            ["Male"] = {},
-            ["Female"] = {}
+            ["Male"] = {
+                {["EN"] = "Pant (Red)", ["TR"] = "Hiçbiri"},
+                {["EN"] = "Trouser (Blue)", ["TR"] = "Gündelik"}
+            },
+            ["Female"] = {
+                {["EN"] = "Pant (Red)", ["TR"] = "Hiçbiri"},
+                {["EN"] = "Trouser (Blue)", ["TR"] = "Gündelik"}
+            }
         },
         ["Shoes"] = {
-            ["Male"] = {},
-            ["Female"] = {}
+            ["Male"] = {
+                {["EN"] = "Sneakers (Red)", ["TR"] = "Hiçbiri"}
+            },
+            ["Female"] = {
+                {["EN"] = "Sneakers (Red)", ["TR"] = "Hiçbiri"}
+            }
         }
     }
 

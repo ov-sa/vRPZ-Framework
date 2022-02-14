@@ -80,71 +80,55 @@ local loginUI = {
                 font = FRAMEWORK_FONTS[4], fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor)),
                 bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.bgColor)),
                 {
-                    height = 185,
                     identifier = "Identity",
+                    height = 185,
                     contents = {
                         tone = {
+                            identifier = "tone",
                             isSlider = true,
                             startY = 30, paddingY = -10,
                             height = 30,
-                            identifier = "tone"
                         },
                         gender = {
+                            identifier = "gender",
                             isSelector = true,
                             startY = 90,
                             height = 30,
-                            identifier = "gender"
                         },
                         faction = {
+                            identifier = "faction",
                             isSelector = true,
                             startY = 150,
                             height = 30,
-                            identifier = "faction"
                         }
                     }
                 },
                 {
-                    height = 65,
                     identifier = "Facial",
+                    height = 65,
                     contents = {
                         hair = {
+                            identifier = "hair",
                             isSelector = true, isClothing = true,
                             startY = 30,
                             height = 30,
-                            identifier = "hair",
-                            content = {
-                                "None",
-                                "Casual"
-                            }
                         }
                     }
                 },
                 {
-                    isSelector = true, isClothing = true,
-                    height = 50,
                     identifier = "Upper",
-                    content = {
-                        "T-Shirt (Red)",
-                        "Hoody (Blue)"
-                    }
+                    isSelector = true, isClothing = true,
+                    height = 50
                 },
                 {
-                    isSelector = true, isClothing = true,
-                    height = 50,
                     identifier = "Lower",
-                    content = {
-                        "Pant (Red)",
-                        "Trouser (Blue)"
-                    }
+                    isSelector = true, isClothing = true,
+                    height = 50
                 },
                 {
-                    isSelector = true, isClothing = true,
-                    height = 50,
                     identifier = "Shoes",
-                    content = {
-                        "Sneakers (Red)",
-                        "Boots (Blue)"
-                    }
+                    isSelector = true, isClothing = true,
+                    height = 50
                 }
             }
         },
