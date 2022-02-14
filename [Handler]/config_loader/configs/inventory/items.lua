@@ -2,7 +2,7 @@
 --[[ Resource: Config Loader
      Script: configs: inventory: items.lua
      Author: vStudio
-     Developer(s): Tron
+     Developer(s): Mario, Tron, Aviril
      DOC: 31/01/2022
      Desc: Inventory Items Configns ]]--
 ----------------------------------------------------------------
