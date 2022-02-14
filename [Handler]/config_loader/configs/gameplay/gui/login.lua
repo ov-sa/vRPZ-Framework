@@ -104,16 +104,16 @@ configVars["UI"]["Login"] = {
                     }
                 },
                 ["Facial"] = {
-                    ["Titles"] = {["EN"] = "Facial", ["TR"] = "Kimlik"},
+                    ["Titles"] = {["EN"] = "Facial", ["TR"] = "Yüz"}
                 },
                 ["Upper"] = {
-                    ["Titles"] = {["EN"] = "Upper", ["TR"] = "Kimlik"},
+                    ["Titles"] = {["EN"] = "Upper", ["TR"] = "Üst"}
                 },
                 ["Lower"] = {
-                    ["Titles"] = {["EN"] = "Lower", ["TR"] = "Kimlik"},
+                    ["Titles"] = {["EN"] = "Lower", ["TR"] = "Daha düşük"}
                 },
                 ["Shoes"] = {
-                    ["Titles"] = {["EN"] = "Shoes", ["TR"] = "Kimlik"},
+                    ["Titles"] = {["EN"] = "Shoes", ["TR"] = "Ayakkabı"}
                 }
             }
         },
