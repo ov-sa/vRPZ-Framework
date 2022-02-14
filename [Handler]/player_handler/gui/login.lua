@@ -14,12 +14,13 @@
 
 local imports = {
     pairs = pairs,
-    ipairs = ipairs,
+    ipairs = ipairs, --TODO: REMOVE...
     tonumber = tonumber,
     tostring = tostring,
     tocolor = tocolor,
     unpackColor = unpackColor,
     isElement = isElement,
+    destroyElement = destroyElement,
     setElementPosition = setElementPosition,
     setElementDimension = setElementDimension,
     addEvent = addEvent,
@@ -185,61 +186,68 @@ loginUI.phases[2].updateUILang = function()
         end
     end
 end
-loginUI.phases[2].createUI = function()
-    loginUI.phases[2].updateUILang()
-    local panel_offsetY = loginUI.phases[2].titleBar.height + loginUI.phases[2].titleBar.paddingY
-    loginUI.phases[2].element = imports.beautify.card.create(loginUI.phases[2].startX, loginUI.phases[2].startY, loginUI.phases[2].width, loginUI.phases[2].height, nil, false)
-    imports.beautify.setUIVisible(loginUI.phases[2].element, true)
-    for i = 1, #loginUI.phases[2].categories, 1 do
-        local j = loginUI.phases[2].categories[i]
-        j.offsetY = (loginUI.phases[2].categories[(i - 1)] and (loginUI.phases[2].categories[(i - 1)].offsetY + loginUI.phases[2].categories.height + loginUI.phases[2].categories[(i - 1)].height + loginUI.phases[2].categories.paddingY)) or panel_offsetY
-        if j.contents then
-            for k = 1, #j.contents, 1 do
-                local v = j.contents[k]
-                if v.isSlider then
-                    v.element = imports.beautify.slider.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height + v.startY + v.paddingY, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), v.height, "horizontal", loginUI.phases[2].element, false)
-                    imports.beautify.setUIVisible(v.element, true)
-                elseif v.isSelector then
-                    v.element = imports.beautify.selector.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height + v.startY, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), v.height, "horizontal", loginUI.phases[2].element, false)
-                    imports.beautify.selector.setDataList(v.element, v.content)
-                    imports.beautify.setUIVisible(v.element, true)
-                end
-            end
-        elseif j.isSoloSelector then
-            j.element = imports.beautify.selector.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), j.height, "horizontal", loginUI.phases[2].element, false)
-            --[[
-            for k = 1, #j.content, 1 do
-                local v = j.content[k]
-                j.content[k] = string.upper(string.spaceChars(v))
-            end
-            ]]--
-            imports.beautify.selector.setDataList(j.element, j.content)
-            imports.beautify.setUIVisible(j.element, true)
-        end
-    end
-    imports.beautify.render.create(function()
-        imports.beautify.native.drawRectangle(0, 0, loginUI.phases[2].width, loginUI.phases[2].titleBar.height, loginUI.phases[2].titleBar.bgColor)
-        imports.beautify.native.drawText(string.upper(string.spaceChars(loginUI.phases[2].titleBar.text)), 0, 0, loginUI.phases[2].width, loginUI.phases[2].titleBar.height, loginUI.phases[2].titleBar.fontColor, 1, loginUI.phases[2].titleBar.font, "center", "center", true, false, false)
-        imports.beautify.native.drawRectangle(0, loginUI.phases[2].titleBar.height, loginUI.phases[2].width, loginUI.phases[2].titleBar.paddingY, loginUI.phases[2].titleBar.shadowColor)
+loginUI.phases[2].toggleUI = function(state)
+    if state then
+        if loginUI.phases[2].element or imports.isElement(loginUI.phases[2].element) then return false end
+        loginUI.phases[2].updateUILang()
+        local panel_offsetY = loginUI.phases[2].titleBar.height + loginUI.phases[2].titleBar.paddingY
+        loginUI.phases[2].element = imports.beautify.card.create(loginUI.phases[2].startX, loginUI.phases[2].startY, loginUI.phases[2].width, loginUI.phases[2].height, nil, false)
+        imports.beautify.setUIVisible(loginUI.phases[2].element, true)
         for i = 1, #loginUI.phases[2].categories, 1 do
             local j = loginUI.phases[2].categories[i]
-            local category_offsetY = j.offsetY + loginUI.phases[2].categories.height
-            imports.beautify.native.drawRectangle(0, j.offsetY, loginUI.phases[2].width, loginUI.phases[2].categories.height, loginUI.phases[2].titleBar.bgColor)
-            imports.beautify.native.drawText(string.upper(string.spaceChars(j.identifier)), 0, j.offsetY, loginUI.phases[2].width, category_offsetY, loginUI.phases[2].categories.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
-            imports.beautify.native.drawRectangle(0, category_offsetY, loginUI.phases[2].width, j.height, loginUI.phases[2].categories.bgColor)
+            j.offsetY = (loginUI.phases[2].categories[(i - 1)] and (loginUI.phases[2].categories[(i - 1)].offsetY + loginUI.phases[2].categories.height + loginUI.phases[2].categories[(i - 1)].height + loginUI.phases[2].categories.paddingY)) or panel_offsetY
             if j.contents then
-                for k, v in imports.pairs(j.contents) do
-                    local title_height = loginUI.phases[2].categories.height
-                    local title_offsetY = category_offsetY + v.startY - title_height
-                    imports.beautify.native.drawRectangle(0, title_offsetY, loginUI.phases[2].width, title_height, loginUI.phases[2].titleBar.bgColor)
-                    imports.beautify.native.drawText(string.upper(string.spaceChars(v.identifier)), 0, title_offsetY, loginUI.phases[2].width, title_offsetY + title_height, loginUI.phases[2].titleBar.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
+                for k = 1, #j.contents, 1 do
+                    local v = j.contents[k]
+                    if v.isSlider then
+                        v.element = imports.beautify.slider.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height + v.startY + v.paddingY, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), v.height, "horizontal", loginUI.phases[2].element, false)
+                        imports.beautify.setUIVisible(v.element, true)
+                    elseif v.isSelector then
+                        v.element = imports.beautify.selector.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height + v.startY, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), v.height, "horizontal", loginUI.phases[2].element, false)
+                        imports.beautify.selector.setDataList(v.element, v.content)
+                        imports.beautify.setUIVisible(v.element, true)
+                    end
                 end
+            elseif j.isSoloSelector then
+                j.element = imports.beautify.selector.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), j.height, "horizontal", loginUI.phases[2].element, false)
+                --[[
+                for k = 1, #j.content, 1 do
+                    local v = j.content[k]
+                    j.content[k] = string.upper(string.spaceChars(v))
+                end
+                ]]--
+                imports.beautify.selector.setDataList(j.element, j.content)
+                imports.beautify.setUIVisible(j.element, true)
             end
         end
-    end, {
-        elementReference = loginUI.phases[2].element,
-        renderType = "preViewRTRender"
-    })
+        imports.beautify.render.create(function()
+            imports.beautify.native.drawRectangle(0, 0, loginUI.phases[2].width, loginUI.phases[2].titleBar.height, loginUI.phases[2].titleBar.bgColor)
+            imports.beautify.native.drawText(string.upper(string.spaceChars(loginUI.phases[2].titleBar.text)), 0, 0, loginUI.phases[2].width, loginUI.phases[2].titleBar.height, loginUI.phases[2].titleBar.fontColor, 1, loginUI.phases[2].titleBar.font, "center", "center", true, false, false)
+            imports.beautify.native.drawRectangle(0, loginUI.phases[2].titleBar.height, loginUI.phases[2].width, loginUI.phases[2].titleBar.paddingY, loginUI.phases[2].titleBar.shadowColor)
+            for i = 1, #loginUI.phases[2].categories, 1 do
+                local j = loginUI.phases[2].categories[i]
+                local category_offsetY = j.offsetY + loginUI.phases[2].categories.height
+                imports.beautify.native.drawRectangle(0, j.offsetY, loginUI.phases[2].width, loginUI.phases[2].categories.height, loginUI.phases[2].titleBar.bgColor)
+                imports.beautify.native.drawText(string.upper(string.spaceChars(j.identifier)), 0, j.offsetY, loginUI.phases[2].width, category_offsetY, loginUI.phases[2].categories.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
+                imports.beautify.native.drawRectangle(0, category_offsetY, loginUI.phases[2].width, j.height, loginUI.phases[2].categories.bgColor)
+                if j.contents then
+                    for k, v in imports.pairs(j.contents) do
+                        local title_height = loginUI.phases[2].categories.height
+                        local title_offsetY = category_offsetY + v.startY - title_height
+                        imports.beautify.native.drawRectangle(0, title_offsetY, loginUI.phases[2].width, title_height, loginUI.phases[2].titleBar.bgColor)
+                        imports.beautify.native.drawText(string.upper(string.spaceChars(v.identifier)), 0, title_offsetY, loginUI.phases[2].width, title_offsetY + title_height, loginUI.phases[2].titleBar.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
+                    end
+                end
+            end
+        end, {
+            elementReference = loginUI.phases[2].element,
+            renderType = "preViewRTRender"
+        })
+    else
+        if not loginUI.phases[2].element or not imports.isElement(loginUI.phases[2].element) then return false end
+        imports.destroyElement(loginUI.phases[2].element)
+    end
+    return true
 end
 loginUI.phases[3].contentText = ""
 for i = 1, #FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.contributors do
