@@ -20,6 +20,7 @@ local imports = {
     tocolor = tocolor,
     unpackColor = unpackColor,
     isElement = isElement,
+    createPed = createPed,
     destroyElement = destroyElement,
     setElementPosition = setElementPosition,
     setElementDimension = setElementDimension,
@@ -190,7 +191,7 @@ loginUI.phases[2].updateCharacter = function()
     local lowerData = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Lower"]["Datas"][gender][lower]
     local shoes = loginUI.phases[2].categories[5].contentIndex[imports.beautify.selector.getSelection(loginUI.phases[2].categories[5].element)]
     local shoesData = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Shoes"]["Datas"][gender][shoes]
-    exports.assetify_library:setCharacterAsset(loginUI.character, genderData.assetName, (upperData.clumpName)..(lowerData.clumpName)..(shoesData.clumpName))
+    exports.assetify_library:setCharacterAsset(loginUI.phases[2].character, genderData.assetName, (upperData.clumpName)..(lowerData.clumpName)..(shoesData.clumpName))
 end
 loginUI.phases[2].toggleUI = function(state)
     if state then
@@ -461,11 +462,11 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
         if phaseID == 1 then
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.cinemationPoint, true, true, loginUI.cinemationData.cinemationFOV, true, true, true, false)
         elseif phaseID == 2 then
-            if loginUI.character and imports.isElement(loginUI.character) then loginUI.character:destroy(); loginUI.character = false end
+            if loginUI.phases[2].character and imports.isElement(loginUI.phases[2].character) then loginUI.phases[2].character:destroy(); loginUI.phases[2].character = nil end
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.characterCinemationPoint, true, true, loginUI.cinemationData.characterCinemationFOV, true, true, true, false)
-            loginUI.character = Ped(0, loginUI.cinemationData.characterPoint.x, loginUI.cinemationData.characterPoint.y, loginUI.cinemationData.characterPoint.z, loginUI.cinemationData.characterPoint.rotation)
-            loginUI.character:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
-            loginUI.character:setFrozen(true)
+            loginUI.phases[2].character = imports.createPed(0, loginUI.cinemationData.characterPoint.x, loginUI.cinemationData.characterPoint.y, loginUI.cinemationData.characterPoint.z, loginUI.cinemationData.characterPoint.rotation)
+            loginUI.phases[2].character:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
+            loginUI.phases[2].character:setFrozen(true)
             loginUI.phases[2].toggleUI(true)
             loadLoginPreviewCharacter()
         else
@@ -663,7 +664,7 @@ toggleUI = function(state, args)
         imports.beautify.render.remove(renderUI)
         imports.beautify.render.remove(renderUI, {renderType = "input"})
         exports.cinecam_handler:stopCinemation()
-        if loginUI.character and imports.isElement(loginUI.character) then loginUI.character:destroy() end
+        if loginUI.phases[2].character and imports.isElement(loginUI.phases[2].character) then loginUI.phases[2].character:destroy(); loginUI.phases[2].character = nil end
         for i, j in imports.pairs(loginUI.cache.keys) do
             j = false
         end
@@ -676,7 +677,6 @@ toggleUI = function(state, args)
         end
         loginUI.phase = false
         loginUI.cinemationData = false
-        loginUI.character = false
         loginUI.character = 0
         loginUI._selectedCharacter = false
         loginUI.characters = {}
