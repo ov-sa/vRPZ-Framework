@@ -110,7 +110,7 @@ configVars["UI"]["Login"] = {
                     ["Titles"] = {["EN"] = "Facial", ["TR"] = "Yüz"},
                     hair = {
                         ["Titles"] = {["EN"] = "Hair", ["TR"] = "Saç"},
-                        ["Datas"] = configVars["Character"]["Clothing"]["Facial"]
+                        ["Datas"] = configVars["Character"]["Clothing"]["Facial"]["Hair"]
                     }
                 },
                 ["Upper"] = {

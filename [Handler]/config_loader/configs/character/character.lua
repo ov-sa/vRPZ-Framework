@@ -35,7 +35,7 @@ configVars["Character"] = {
 
     ["Clothing"] = {
         ["Facial"] = {
-            hair = {
+            ["Hair"] = {
                 {["EN"] = "None", ["TR"] = "Hiçbiri"},
                 {["EN"] = "Casual", ["TR"] = "Gündelik"}
             }
