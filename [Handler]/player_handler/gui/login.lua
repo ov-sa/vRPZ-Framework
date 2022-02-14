@@ -182,17 +182,23 @@ loginUI.phases[2].updateUILang = function(gender)
         end
     end
 end
-loginUI.phases[2].updateCharacter = function()
+loginUI.phases[2].fetchSelection = function()
+    local tone = imports.beautify.slider.getPercent(loginUI.phases[2].categories[1].contents.tone.element)
     local gender = loginUI.phases[2].categories[1].contents.gender.contentIndex[imports.beautify.selector.getSelection(loginUI.phases[2].categories[1].contents.gender.element)]
-    local genderData = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender["Datas"][gender]
     local upper = loginUI.phases[2].categories[3].contentIndex[imports.beautify.selector.getSelection(loginUI.phases[2].categories[3].element)]
-    local upperData = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Upper"]["Datas"][gender][upper]
     local lower = loginUI.phases[2].categories[4].contentIndex[imports.beautify.selector.getSelection(loginUI.phases[2].categories[4].element)]
-    local lowerData = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Lower"]["Datas"][gender][lower]
     local shoes = loginUI.phases[2].categories[5].contentIndex[imports.beautify.selector.getSelection(loginUI.phases[2].categories[5].element)]
-    local shoesData = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Shoes"]["Datas"][gender][shoes]
-    exports.assetify_library:setCharacterAsset(loginUI.phases[2].character, genderData.assetName, (upperData.clumpName)..(lowerData.clumpName)..(shoesData.clumpName))
-    print("UPDATE CHARACTER: "..(upperData.clumpName)..(lowerData.clumpName)..(shoesData.clumpName))
+    return {
+        tone = tone,
+        gender = {gender, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender["Datas"][gender]},
+        upper = {upper, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Upper"]["Datas"][gender][upper]},
+        lower = {lower, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Lower"]["Datas"][gender][lower]},
+        shoes = {shoes, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Shoes"]["Datas"][gender][shoes]},
+    }
+end
+loginUI.phases[2].updateCharacter = function()
+    local selectionData = loginUI.phases[2].fetchSelection()
+    exports.assetify_library:setCharacterAsset(loginUI.phases[2].character, selectionData.gender[2].assetName, (selectionData.upper[2].clumpName)..(selectionData.lower[2].clumpName)..(selectionData.shoes[2].clumpName))
 end
 loginUI.phases[2].toggleUI = function(state)
     if state then
