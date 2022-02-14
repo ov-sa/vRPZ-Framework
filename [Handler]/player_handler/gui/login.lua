@@ -183,6 +183,7 @@ loginUI.phases[2].updateUILang = function()
     for i = 1, #loginUI.phases[2].categories, 1 do
         local j = loginUI.phases[2].categories[i]
         if j.contents then
+            j.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["Character"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
             for k, v in imports.pairs(j.contents) do
                 if not v.isClothing then
                     v.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["Character"][(j.identifier)][(v.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
@@ -238,7 +239,7 @@ loginUI.phases[2].toggleUI = function(state)
                 local j = loginUI.phases[2].categories[i]
                 local category_offsetY = j.offsetY + loginUI.phases[2].categories.height
                 imports.beautify.native.drawRectangle(0, j.offsetY, loginUI.phases[2].width, loginUI.phases[2].categories.height, loginUI.phases[2].titlebar.bgColor)
-                imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(j.identifier)), 0, j.offsetY, loginUI.phases[2].width, category_offsetY, loginUI.phases[2].categories.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
+                imports.beautify.native.drawText(j.title, 0, j.offsetY, loginUI.phases[2].width, category_offsetY, loginUI.phases[2].categories.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
                 imports.beautify.native.drawRectangle(0, category_offsetY, loginUI.phases[2].width, j.height, loginUI.phases[2].categories.bgColor)
                 if j.contents then
                     for k, v in imports.pairs(j.contents) do

@@ -22,6 +22,11 @@ configVars["Character"] = {
     },
 
     ["Identity"] = {
+        ["Titles"] = {
+            ["EN"] = "Identity",
+            ["TR"] = "Kimlik"
+        },
+
         tone = {
             ["Titles"] = {
                 ["EN"] = "Skin Tone",
