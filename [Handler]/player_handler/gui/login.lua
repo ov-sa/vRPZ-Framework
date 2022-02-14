@@ -182,7 +182,9 @@ loginUI.phases[2].updateUILang = function(gender)
     end
 end
 loginUI.phases[2].updateCharacter = function()
-    print("Updating Character")
+    local gender = loginUI.phases[2].categories[1].contents.gender.contentIndex[imports.beautify.selector.getSelection(loginUI.phases[2].categories[1].contents.gender.element)]
+    --TODO: .... :)
+    print(gender)
 end
 loginUI.phases[2].toggleUI = function(state)
     if state then
