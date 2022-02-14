@@ -38,7 +38,8 @@ local imports = {
     table = table,
     math = math,
     string = string,
-    beautify = beautify
+    beautify = beautify,
+    assetify = assetify
 }
 
 
@@ -183,7 +184,8 @@ loginUI.phases[2].updateUILang = function(gender)
 end
 loginUI.phases[2].updateCharacter = function()
     local gender = loginUI.phases[2].categories[1].contents.gender.contentIndex[imports.beautify.selector.getSelection(loginUI.phases[2].categories[1].contents.gender.element)]
-    --TODO: .... :)
+    local genderData = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender["Datas"][gender]
+    exports.assetify_library:setCharacterAsset(loginUI.character, genderData.assetName, "H1P1")
     print(gender)
 end
 loginUI.phases[2].toggleUI = function(state)
