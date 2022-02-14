@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
 --[[ Resource: Assetify Library
-     Script: utilities: shaders: tex_clear.lua
+     Script: utilities: shaders: tex_clearer.lua
      Server: -
      Author: OvileAmriam
      Developer(s): Aviril, Tron
@@ -23,7 +23,7 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-local identifier = "Assetify_TextureChanger"
+local identifier = "Assetify_TextureClearer"
 local depDatas, dependencies = "", {}
 for i, j in imports.pairs(dependencies) do
     local depData = imports.file.read(j.filePath)
@@ -38,11 +38,13 @@ end
 ----------------
 
 Assetify_Shaders["Assetify_TextureChanger"] = depDatas..[[
-/*-----------------
--->> Variables <<--
--------------------*/
+/*----------------
+-->> Handlers <<--
+------------------*/
 
-texture baseTexture;
+float4 PixelShaderFunction() : COLOR0 {
+    return 0;
+}
 
 
 /*------------------
@@ -51,9 +53,9 @@ texture baseTexture;
 
 technique ]]..identifier..[[
 {
-    pass P0
-    {
-        Texture[0] = baseTexture;
+    pass P0 {
+        AlphaBlendEnable = TRUE;
+        PixelShader = compile ps_2_0 PixelShaderFunction();
     }
 }
 

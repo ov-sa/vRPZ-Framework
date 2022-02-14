@@ -23,6 +23,7 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
+local identifier = "Assetify_TextureChanger"
 local depDatas, dependencies = "", {}
 for i, j in imports.pairs(dependencies) do
     local depData = imports.file.read(j.filePath)
@@ -36,7 +37,7 @@ end
 --[[ Shader ]]--
 ----------------
 
-Assetify_Shaders["Texture_Changer"] = depDatas..[[
+Assetify_Shaders["Assetify_TextureChanger"] = depDatas..[[
 /*-----------------
 -->> Variables <<--
 -------------------*/
@@ -48,7 +49,7 @@ texture baseTexture;
 -->> Techniques <<--
 --------------------*/
 
-technique Assetify_TextureChanger
+technique ]]..identifier..[[
 {
     pass P0
     {
