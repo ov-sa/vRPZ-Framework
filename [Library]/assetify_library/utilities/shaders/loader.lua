@@ -19,7 +19,8 @@ local imports = {
     isElement = isElement,
     destroyElement = destroyElement,
     setmetatable = setmetatable,
-    dxCreateShader = dxCreateShader
+    dxCreateShader = dxCreateShader,
+    engineApplyShaderToWorldTexture = engineApplyShaderToWorldTexture
 }
 
 
@@ -54,10 +55,11 @@ function shader:destroy(...)
     return self:unload(...)
 end
 
-function shader:load(shaderName, element, priority, distance)
+function shader:load(shaderName, textureName, textureElement, shaderPriority, shaderDistance)
     if not self or (self == shader) then return false end
-    if not shaderName or not CShaders[shaderName] or not element or not imports.isElement(element) then return false end
-    self.cShader = imports.dxCreateShader(CShaders[shaderName], imports.tonumber(priority) or 10000, imports.tonumber(distance) or 0, false, "all")
+    if not shaderName or not CShaders[shaderName] or not textureName or not textureElement or not imports.isElement(textureElement) then return false end
+    self.cShader = imports.dxCreateShader(CShaders[shaderName], imports.tonumber(shaderPriority) or 10000, imports.tonumber(shaderDistance) or 0, false, "all")
+    imports.engineApplyShaderToWorldTexture(self.cShader, textureName, textureElement)
     return true
 end
 
