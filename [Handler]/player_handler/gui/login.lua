@@ -82,12 +82,12 @@ local loginUI = {
                 bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.bgColor)),
                 {
                     identifier = "Identity",
-                    height = 185,
+                    height = 180,
                     contents = {
                         tone = {
                             identifier = "tone",
                             isSlider = true,
-                            startY = 30, paddingY = -10,
+                            startY = 30, paddingY = -8,
                             height = 30,
                         },
                         gender = {
@@ -106,7 +106,7 @@ local loginUI = {
                 },
                 {
                     identifier = "Facial",
-                    height = 65,
+                    height = 60,
                     contents = {
                         hair = {
                             identifier = "hair",
