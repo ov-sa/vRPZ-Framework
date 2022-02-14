@@ -72,26 +72,17 @@ configVars["UI"]["Login"] = {
             hoverDuration = 2500,
             bgPath = "files/images/login/login.png",
 
-            ["Titles"] = {
-                ["EN"] = "Play",
-                ["TR"] = "Oyna"
-            }
+            ["Titles"] = {["EN"] = "Play", ["TR"] = "Oyna"}
         },
 
         characters = {
             width = 325,
             height = 610,
 
-            ["Titles"] = {
-                ["EN"] = "Characters",
-                ["TR"] = "karakterler"
-            },
+            ["Titles"] = {["EN"] = "Characters", ["TR"] = "karakterler"},
 
             titlebar = {
-                ["Titles"] = {
-                    ["EN"] = "Character",
-                    ["TR"] = "Karakter"
-                },
+                ["Titles"] = {["EN"] = "Character", ["TR"] = "Karakter"},
 
                 height = 35,
                 fontColor = {170, 35, 35, 255},
@@ -102,6 +93,20 @@ configVars["UI"]["Login"] = {
                 height = 30,
                 fontColor = {200, 200, 200, 255},
                 bgColor = {0, 0, 0, 235},
+
+                ["Identity"] = {
+                    ["Titles"] = {["EN"] = "Identity", ["TR"] = "Kimlik"},
+
+                    tone = {
+                        ["Titles"] = {["EN"] = "Skin Tone", ["TR"] = "Cilt tonu"}
+                    },
+                    gender = {
+                        ["Titles"] = {["EN"] = "Gender", ["TR"] = "Cinsiyet"}
+                    },
+                    faction = {
+                        ["Titles"] = {["EN"] = "Faction", ["TR"] = "Hizip"}
+                    }
+                }
             }
         },
 
@@ -109,16 +114,10 @@ configVars["UI"]["Login"] = {
             fontColor = {170, 35, 35, 255},
             scrollDuration = 6500,
 
-            ["Titles"] = {
-                ["EN"] = "Credits",
-                ["TR"] = "Kredi"
-            },
+            ["Titles"] = {["EN"] = "Credits", ["TR"] = "Kredi"},
 
             navigator = {
-                ["Titles"] = {
-                    ["EN"] = "Back",
-                    ["TR"] = "Geri"
-                }
+                ["Titles"] = {["EN"] = "Back", ["TR"] = "Geri"}
             },
             contributors = {
                 "ov | Mario (Developer)",

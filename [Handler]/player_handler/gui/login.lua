@@ -182,8 +182,8 @@ end
 loginUI.phases[2].updateUILang = function()
     for i = 1, #loginUI.phases[2].categories, 1 do
         local j = loginUI.phases[2].categories[i]
+        j.title = ((j.identifier == "Identity") and imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["Character"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))) or "WIP.."
         if j.contents then
-            j.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["Character"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
             for k, v in imports.pairs(j.contents) do
                 if not v.isClothing then
                     v.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["Character"][(j.identifier)][(v.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))

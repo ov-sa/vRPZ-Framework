@@ -22,48 +22,14 @@ configVars["Character"] = {
     },
 
     ["Identity"] = {
-        ["Titles"] = {
-            ["EN"] = "Identity",
-            ["TR"] = "Kimlik"
-        },
-
-        tone = {
-            ["Titles"] = {
-                ["EN"] = "Skin Tone",
-                ["TR"] = "Cilt tonu"
-            }
-        },
-
+        tone = {},
         gender = {
-            ["Titles"] = {
-                ["EN"] = "Gender",
-                ["TR"] = "Cinsiyet"
-            },
-
-            {
-                ["EN"] = "Male",
-                ["TR"] = "Erkek"
-            },
-            {
-                ["EN"] = "Female",
-                ["TR"] = "Dişi"
-            }
+            {["EN"] = "Male", ["TR"] = "Erkek"},
+            {["EN"] = "Female", ["TR"] = "Dişi"}
         },
-
         faction = {
-            ["Titles"] = {
-                ["EN"] = "Faction",
-                ["TR"] = "Hizip"
-            },
-
-            {
-                ["EN"] = "Military",
-                ["TR"] = "Askeri"
-            },
-            {
-                ["EN"] = "Criminal",
-                ["TR"] = "Adli"
-            }
+            {["EN"] = "Military", ["TR"] = "Askeri"},
+            {["EN"] = "Criminal", ["TR"] = "Adli"}
         }
     },
 
