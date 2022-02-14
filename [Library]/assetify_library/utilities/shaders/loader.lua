@@ -55,14 +55,25 @@ function shader:load(shaderName, textureName, textureElement, shaderPriority, sh
     if not shaderName or not shader.rwCache[shaderName] or not textureName or not textureElement or not imports.isElement(textureElement) then return false end
     self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
     self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName], imports.tonumber(shaderPriority) or 10000, imports.tonumber(shaderDistance) or 0, false, "all")
+    self.shaderData = {
+        shaderName = shaderName,
+        textureName = textureName,
+        textureElement = textureElement,
+        shaderPriority = shaderPriority,
+        shaderDistance = shaderDistance
+    }
     imports.engineApplyShaderToWorldTexture(self.cShader, textureName, textureElement)
     return true
 end
 
 function shader:unload()
     if not self or (self == shader) then return false end
-    if not self.preLoaded and imports.isElement(self.cShader) then
-        imports.destroyElement(self.cShader)
+    if not self.preLoaded then
+        if imports.isElement(self.cShader) then
+            imports.destroyElement(self.cShader)
+        end
+    else
+        imports.engineRemoveShaderFromWorldTexture(self.cShader, self.shaderData.textureName, self.shaderData.textureElement)
     end
     self = nil
     return true
