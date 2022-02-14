@@ -212,7 +212,7 @@ loginUI.phases[2].toggleUI = function(state)
                 --[[
                 for k = 1, #j.content, 1 do
                     local v = j.content[k]
-                    j.content[k] = string.upper(string.spaceChars(v))
+                    j.content[k] = imports.string.upper(imports.string.spaceChars(v))
                 end
                 ]]--
                 imports.beautify.selector.setDataList(j.element, j.content)
@@ -221,20 +221,20 @@ loginUI.phases[2].toggleUI = function(state)
         end
         imports.beautify.render.create(function()
             imports.beautify.native.drawRectangle(0, 0, loginUI.phases[2].width, loginUI.phases[2].titlebar.height, loginUI.phases[2].titlebar.bgColor)
-            imports.beautify.native.drawText(string.upper(string.spaceChars(loginUI.phases[2].titlebar.text)), 0, 0, loginUI.phases[2].width, loginUI.phases[2].titlebar.height, loginUI.phases[2].titlebar.fontColor, 1, loginUI.phases[2].titlebar.font, "center", "center", true, false, false)
+            imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(loginUI.phases[2].titlebar.text)), 0, 0, loginUI.phases[2].width, loginUI.phases[2].titlebar.height, loginUI.phases[2].titlebar.fontColor, 1, loginUI.phases[2].titlebar.font, "center", "center", true, false, false)
             imports.beautify.native.drawRectangle(0, loginUI.phases[2].titlebar.height, loginUI.phases[2].width, loginUI.phases[2].titlebar.paddingY, loginUI.phases[2].titlebar.shadowColor)
             for i = 1, #loginUI.phases[2].categories, 1 do
                 local j = loginUI.phases[2].categories[i]
                 local category_offsetY = j.offsetY + loginUI.phases[2].categories.height
                 imports.beautify.native.drawRectangle(0, j.offsetY, loginUI.phases[2].width, loginUI.phases[2].categories.height, loginUI.phases[2].titlebar.bgColor)
-                imports.beautify.native.drawText(string.upper(string.spaceChars(j.identifier)), 0, j.offsetY, loginUI.phases[2].width, category_offsetY, loginUI.phases[2].categories.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
+                imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(j.identifier)), 0, j.offsetY, loginUI.phases[2].width, category_offsetY, loginUI.phases[2].categories.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
                 imports.beautify.native.drawRectangle(0, category_offsetY, loginUI.phases[2].width, j.height, loginUI.phases[2].categories.bgColor)
                 if j.contents then
                     for k, v in imports.pairs(j.contents) do
                         local title_height = loginUI.phases[2].categories.height
                         local title_offsetY = category_offsetY + v.startY - title_height
                         imports.beautify.native.drawRectangle(0, title_offsetY, loginUI.phases[2].width, title_height, loginUI.phases[2].titlebar.bgColor)
-                        imports.beautify.native.drawText(string.upper(string.spaceChars(v.identifier)), 0, title_offsetY, loginUI.phases[2].width, title_offsetY + title_height, loginUI.phases[2].titlebar.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
+                        imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(v.identifier)), 0, title_offsetY, loginUI.phases[2].width, title_offsetY + title_height, loginUI.phases[2].titlebar.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
                     end
                 end
             end
