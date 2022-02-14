@@ -185,7 +185,7 @@ end
 loginUI.phases[2].toggleUI = function(state)
     if state then
         if loginUI.phases[2].element or imports.isElement(loginUI.phases[2].element) then return false end
-        loginUI.phases[2].updateUILang("Male")
+        loginUI.phases[2].updateUILang(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default)
         local panel_offsetY = loginUI.phases[2].titlebar.height + loginUI.phases[2].titlebar.paddingY
         loginUI.phases[2].element = imports.beautify.card.create(loginUI.phases[2].startX, loginUI.phases[2].startY, loginUI.phases[2].width, loginUI.phases[2].height, nil, false)
         imports.beautify.setUIVisible(loginUI.phases[2].element, true)
@@ -244,7 +244,7 @@ for i = 1, #FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.contributors do
     loginUI.phases[3].contentText = ((i == 1) and j) or loginUI.phases[3].contentText.."\n\n"..j
 end
 loginUI.phases[3].width, loginUI.phases[3].height = loginUI.phases[3].width + (CLIENT_MTA_RESOLUTION[1] - loginUI.phases[3].startX), loginUI.phases[3].height + (CLIENT_MTA_RESOLUTION[2] - loginUI.phases[3].startY)
-loginUI.phases[3].contentWidth, loginUI.phases[3].contentHeight = imports.beautify.native.getTextSize (loginUI.phases[3].contentText, loginUI.phases[3].width, 1, loginUI.phases[3].font, false)
+loginUI.phases[3].contentWidth, loginUI.phases[3].contentHeight = imports.beautify.native.getTextSize(loginUI.phases[3].contentText, loginUI.phases[3].width, 1, loginUI.phases[3].font, false)
 loginUI.phases[3].scrollDuration = imports.math.max(1, imports.math.ceil((loginUI.phases[3].contentHeight + loginUI.phases[3].height)/loginUI.phases[3].height))*loginUI.phases[3].scrollDuration
 
 

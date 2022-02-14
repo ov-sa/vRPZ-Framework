@@ -98,6 +98,7 @@ configVars["UI"]["Login"] = {
                         ["Datas"] = configVars["Character"]["Identity"]["Tone"]
                     },
                     gender = {
+                        default = "Male",
                         ["Titles"] = {["EN"] = "Gender", ["TR"] = "Cinsiyet"},
                         ["Datas"] = configVars["Character"]["Identity"]["Gender"]
                     },
