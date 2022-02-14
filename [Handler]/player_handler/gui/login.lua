@@ -14,7 +14,6 @@
 
 local imports = {
     pairs = pairs,
-    ipairs = ipairs, --TODO: REMOVE...
     tonumber = tonumber,
     tostring = tostring,
     tocolor = tocolor,
@@ -400,6 +399,7 @@ manageCharacter = function(manageType)
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
         imports.triggerEvent("Client:onNotification", localPlayer, "◴ Saving..", {175, 175, 175, 255})
         local characterData = {}
+        --[[
         for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].option) do
             if j.isEditBox then
                 characterData[j.optionType] = j.placeDataValue
@@ -413,9 +413,11 @@ manageCharacter = function(manageType)
                 end
             end
         end
+        ]]
         local character = loginUI.character
         local charactersPendingToBeSaved = {}
         local charactersToBeSaved = imports.table.copy(loginUI.characters, true)
+        --[[
         for i, j in imports.ipairs(charactersToBeSaved) do
             if j.isUnverified then
                 charactersToBeSaved[i] = nil
@@ -425,6 +427,7 @@ manageCharacter = function(manageType)
             character = 1
             loginUI._selectedCharacter = character
         end
+        ]]
         charactersPendingToBeSaved[loginUI._selectedCharacter] = true
         charactersToBeSaved[loginUI._selectedCharacter] = characterData
         loginUI._charactersUnderProcess[loginUI._selectedCharacter] = true
@@ -493,18 +496,21 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
         end
         loginUI.phase = phaseID
         local unverifiedCharacters = {}
-        for i, j in imports.ipairs(loginUI.characters) do
+        for i = 1, #loginUI.characters, 1 do
+            local j = loginUI.characters[i]
             if j.isUnverified then
                 imports.table.insert(unverifiedCharacters, i)
             end
         end
-        for i, j in imports.ipairs(loginUI.characters) do
+        for i = 1, #loginUI.characters, 1 do
+            local j = loginUI.characters[i]
             if j.isUnverified then
                 imports.table.remove(loginUI.characters, i)
                 loginUI._unsavedCharacters[i] = nil
             end
         end
-        for i, j in imports.ipairs(unverifiedCharacters) do
+        for i = 1, #unverifiedCharacters, 1 do
+            local j = unverifiedCharacters[i]
             if loginUI.character == j then
                 loginUI.character = 0
                 loginUI._selectedCharacter = 0
@@ -586,7 +592,8 @@ loginUI.renderUI = function(renderData)
 
         if loginUI.phase == 1 then
             imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[loginUI.phase].bgTexture, 0, 0, 0, -1, false)
-            for i, j in imports.ipairs(loginUI.phases[1].optionsUI) do
+            for i = 1, #loginUI.phases[1].optionsUI, 1 do
+                local j = loginUI.phases[1].optionsUI[i]
                 local option_title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE], "  "))
                 local option_width, option_height = imports.beautify.native.getTextWidth(option_title, 1, loginUI.phases[1].optionsUI.font) + 5, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.height
                 local options_offsetX, options_offsetY = loginUI.phases[1].optionsUI.startX - (option_width*0.5), j.startY
