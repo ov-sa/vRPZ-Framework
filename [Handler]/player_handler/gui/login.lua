@@ -139,7 +139,6 @@ local loginUI = {
             font = FRAMEWORK_FONTS[5], fontColor = imports.tocolor(unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.fontColor)),
             scrollAnimTickCounter = CLIENT_CURRENT_TICK,
             scrollDelayDuration = FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration - 1000,
-            scrollDuration = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.scrollDuration,
             navigator = {
                 startX = -15, startY = 15,
                 width = 0, height = 25,
@@ -251,7 +250,7 @@ for i = 1, #FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.contributors do
 end
 loginUI.phases[3].width, loginUI.phases[3].height = loginUI.phases[3].width + (CLIENT_MTA_RESOLUTION[1] - loginUI.phases[3].startX), loginUI.phases[3].height + (CLIENT_MTA_RESOLUTION[2] - loginUI.phases[3].startY)
 loginUI.phases[3].contentWidth, loginUI.phases[3].contentHeight = imports.beautify.native.getTextSize(loginUI.phases[3].contentText, loginUI.phases[3].width, 1, loginUI.phases[3].font, false)
-loginUI.phases[3].scrollDuration = imports.math.max(1, imports.math.ceil((loginUI.phases[3].contentHeight + loginUI.phases[3].height)/loginUI.phases[3].height))*loginUI.phases[3].scrollDuration
+loginUI.phases[3].scrollDuration = imports.math.max(1, imports.math.ceil((loginUI.phases[3].contentHeight + loginUI.phases[3].height)/loginUI.phases[3].height))*FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.scrollDuration
 
 
 ------------------------------------------------------------------
@@ -335,10 +334,6 @@ function updateLoginPreviewCharacter()
                         j.placeDataTable = generatedDataTable
                     end
                 end
-            end
-            if j.clothingCategoryIndex == "Race" then
-                loginUI.phases[2].loginUI.phases[2].option[5].placeDataTable = (j.placeDataTable[j.placeDataValue] and j.placeDataTable[j.placeDataValue]["Hair"]) or {}
-                loginUI.phases[2].loginUI.phases[2].option[6].placeDataTable = (j.placeDataTable[j.placeDataValue] and j.placeDataTable[j.placeDataValue]["Hair_Color"]) or {}
             end
             if not j.placeDataTable[j.placeDataValue] then j.placeDataValue = 1 end
             if j.placeDataTable[j.placeDataValue] then
