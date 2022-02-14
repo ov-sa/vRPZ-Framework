@@ -118,5 +118,4 @@ function loadPlayerDefaultDatas(player)
     end
     ]]--
     return true
-
 end

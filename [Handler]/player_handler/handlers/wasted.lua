@@ -62,8 +62,8 @@ local function destroyPedLoot(ped, marker)
     return true
 end
 
-addEvent("Player:onDeath", true)
-addEventHandler("Player:onDeath", root, function(killer, headshot, weapon, bodypart)
+imports.addEvent("Player:onDeath", true)
+imports.addEventHandler("Player:onDeath", root, function(killer, headshot, weapon, bodypart)
     if not CPlayer.isInitialized(source) then return false end
 
     local characterID = source:getData("Character:ID")
