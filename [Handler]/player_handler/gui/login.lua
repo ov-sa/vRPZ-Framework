@@ -512,14 +512,12 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.cinemationPoint, true, true, loginUI.cinemationData.cinemationFOV, true, true, true, false)
         elseif phaseID == 2 then
             loginUI.phases[2].toggleUI(true)
-            --[[
             if loginUI.character and imports.isElement(loginUI.character) then loginUI.character:destroy(); loginUI.character = false end
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.characterCinemationPoint, true, true, loginUI.cinemationData.characterCinemationFOV, true, true, true, false)
             loginUI.character = Ped(0, loginUI.cinemationData.characterPoint.x, loginUI.cinemationData.characterPoint.y, loginUI.cinemationData.characterPoint.z, loginUI.cinemationData.characterPoint.rotation)
             loginUI.character:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
             loginUI.character:setFrozen(true)
-            loadLoginPreviewCharacter()
-            ]]
+            --loadLoginPreviewCharacter()
         else
             exports.cinecam_handler:stopCinemation()
             if phaseID == 3 then
