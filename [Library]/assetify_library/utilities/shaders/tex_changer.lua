@@ -9,37 +9,34 @@
 ----------------------------------------------------------------
 
 
--------------------
---[[ Variables ]]--
--------------------
+-----------------
+--[[ Imports ]]--
+-----------------
 
-local identifier, dependencies = "Texture_Changer", {}
 local imports = {
     pairs = pairs,
     file = file
 }
 
 
+-------------------
+--[[ Variables ]]--
+-------------------
+
+local depDatas, dependencies = "", {}
+for i, j in imports.pairs(dependencies) do
+    local depData = imports.file.read(j.filePath)
+    if depData then
+        depDatas = depDatas.."\n"..depData
+    end
+end
+
+
 ----------------
 --[[ Shader ]]--
 ----------------
 
-local depData = ""
-for i, j in imports.pairs(dependencies) do
-    local fileData = imports.file.read(j.filePath)
-    if fileData then
-        depData = depData.."\n"..fileData
-    end
-end
-
-Assetify_Shaders[identifier] = [[
-/*---------------
--->> Imports <<--
------------------*/
-
-]]..depData..[[
-
-
+Assetify_Shaders["Texture_Changer"] = depDatas..[[
 /*-----------------
 -->> Variables <<--
 -------------------*/
