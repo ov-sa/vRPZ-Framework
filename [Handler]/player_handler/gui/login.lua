@@ -185,8 +185,7 @@ end
 loginUI.phases[2].updateCharacter = function()
     local gender = loginUI.phases[2].categories[1].contents.gender.contentIndex[imports.beautify.selector.getSelection(loginUI.phases[2].categories[1].contents.gender.element)]
     local genderData = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender["Datas"][gender]
-    exports.assetify_library:setCharacterAsset(loginUI.character, genderData.assetName, "H1P1")
-    print(gender)
+    exports.assetify_library:setCharacterAsset(loginUI.character, genderData.assetName, "H1P1")    
 end
 loginUI.phases[2].toggleUI = function(state)
     if state then
@@ -512,12 +511,12 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
         if phaseID == 1 then
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.cinemationPoint, true, true, loginUI.cinemationData.cinemationFOV, true, true, true, false)
         elseif phaseID == 2 then
-            loginUI.phases[2].toggleUI(true)
             if loginUI.character and imports.isElement(loginUI.character) then loginUI.character:destroy(); loginUI.character = false end
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.characterCinemationPoint, true, true, loginUI.cinemationData.characterCinemationFOV, true, true, true, false)
             loginUI.character = Ped(0, loginUI.cinemationData.characterPoint.x, loginUI.cinemationData.characterPoint.y, loginUI.cinemationData.characterPoint.z, loginUI.cinemationData.characterPoint.rotation)
             loginUI.character:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
             loginUI.character:setFrozen(true)
+            loginUI.phases[2].toggleUI(true)
             --loadLoginPreviewCharacter()
         else
             exports.cinecam_handler:stopCinemation()
