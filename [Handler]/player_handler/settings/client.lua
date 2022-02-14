@@ -27,5 +27,6 @@ FRAMEWORK_FONTS = {
     [2] = imports.beautify.native.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 30),
     [3] = imports.beautify.native.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 19),
     [4] = imports.beautify.native.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 16),
-    [5] = imports.beautify.native.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 30)
+    [5] = imports.beautify.native.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 30),
+    [6] = imports.beautify.native.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 17)
 }

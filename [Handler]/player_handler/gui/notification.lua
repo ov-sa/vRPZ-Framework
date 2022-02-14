@@ -34,7 +34,7 @@ local notifUI = {
     buffer = {},
     startX = 50, startY = 15, paddingY = 5, offsetY = 0,
     slideTopTickCounter = CLIENT_CURRENT_TICK,
-    font = FRAMEWORK_FONTS[8],
+    font = FRAMEWORK_FONTS[6],
     leftEdgeTexture = imports.beautify.assets["images"]["curved_square/regular/left.rw"],
     rightEdgeTexture = imports.beautify.assets["images"]["curved_square/regular/right.rw"]
 }
