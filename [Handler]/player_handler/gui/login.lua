@@ -158,7 +158,7 @@ for i = 1, #loginUI.phases[1].optionsUI, 1 do
     j.hoverStatus = "backward"
     j.hoverAnimTick = CLIENT_CURRENT_TICK
 end
-loginUI.phases[2].updateUILang = function()
+loginUI.phases[2].updateUILang = function(gender)
     for i = 1, #loginUI.phases[2].categories, 1 do
         local j = loginUI.phases[2].categories[i]
         j.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
@@ -177,7 +177,7 @@ loginUI.phases[2].updateUILang = function()
             end
         elseif j.isSelector then
             j.contentIndex, j.content = {}, {}
-            for k, v in imports.pairs(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)]["Datas"]) do
+            for k, v in imports.pairs(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)]["Datas"][gender]) do
                 imports.table.insert(j.contentIndex, k)
                 imports.table.insert(j.content, imports.string.upper(imports.string.spaceChars(v[FRAMEWORK_LANGUAGE])))
             end
@@ -187,7 +187,7 @@ end
 loginUI.phases[2].toggleUI = function(state)
     if state then
         if loginUI.phases[2].element or imports.isElement(loginUI.phases[2].element) then return false end
-        loginUI.phases[2].updateUILang()
+        loginUI.phases[2].updateUILang("Male")
         local panel_offsetY = loginUI.phases[2].titlebar.height + loginUI.phases[2].titlebar.paddingY
         loginUI.phases[2].element = imports.beautify.card.create(loginUI.phases[2].startX, loginUI.phases[2].startY, loginUI.phases[2].width, loginUI.phases[2].height, nil, false)
         imports.beautify.setUIVisible(loginUI.phases[2].element, true)
