@@ -141,7 +141,7 @@ local loginUI = {
             scrollAnimTickCounter = CLIENT_CURRENT_TICK,
             scrollDelayDuration = FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration - 1000,
             navigator = {
-                startX = -15, startY = 15,
+                startX = -5, startY = 5,
                 width = 0, height = 25,
                 font = FRAMEWORK_FONTS[1], fontColor = {200, 200, 200, 255},
                 hoverStatus = "backward",
