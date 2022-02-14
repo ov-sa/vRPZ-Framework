@@ -174,7 +174,7 @@ for i = 1, #loginUI.phases[1].optionsUI, 1 do
     j.hoverStatus = "backward"
     j.hoverAnimTick = CLIENT_CURRENT_TICK
 end
-loginUI.phases[2].updateUI = function()
+loginUI.phases[2].updateUILang = function()
     for i, j in imports.pairs(loginUI.phases[2].categories[1].contents) do
         if j.isSelector then
             j.content, j.contentIndex = {}, {}
@@ -184,6 +184,63 @@ loginUI.phases[2].updateUI = function()
             end
         end
     end
+end
+loginUI.phases[2].createUI = function()
+    loginUI.phases[2].updateUILang()
+    local panel_offsetY = loginUI.phases[2].titleBar.height + loginUI.phases[2].titleBar.paddingY
+    loginUI.phases[2].element = imports.beautify.card.create(loginUI.phases[2].startX, loginUI.phases[2].startY, loginUI.phases[2].width, loginUI.phases[2].height, nil, false)
+    imports.beautify.setUIVisible(loginUI.phases[2].element, true)
+    for i = 1, #loginUI.phases[2].categories, 1 do
+        local j = loginUI.phases[2].categories[i]
+        j.offsetY = (loginUI.phases[2].categories[(i - 1)] and (loginUI.phases[2].categories[(i - 1)].offsetY + loginUI.phases[2].categories.height + loginUI.phases[2].categories[(i - 1)].height + loginUI.phases[2].categories.paddingY)) or panel_offsetY
+        if j.contents then
+            for k = 1, #j.contents, 1 do
+                local v = j.contents[k]
+                if v.isSlider then
+                    v.element = imports.beautify.slider.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height + v.startY + v.paddingY, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), v.height, "horizontal", loginUI.phases[2].element, false)
+                    imports.beautify.setUIVisible(v.element, true)
+                elseif v.isSelector then
+                    for m, n in ipairs(v.content) do
+                        v.content[m] = string.upper(string.spaceChars(n))
+                    end
+                    v.element = imports.beautify.selector.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height + v.startY, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), v.height, "horizontal", loginUI.phases[2].element, false)
+                    imports.beautify.selector.setDataList(v.element, v.content)
+                    imports.beautify.setUIVisible(v.element, true)
+                end
+            end
+        elseif j.isSoloSelector then
+            j.element = imports.beautify.selector.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), j.height, "horizontal", loginUI.phases[2].element, false)
+            for k = 1, #j.content, 1 do
+                local v = j.content[k]
+                j.content[k] = string.upper(string.spaceChars(v))
+            end
+            imports.beautify.selector.setDataList(j.element, j.content)
+            imports.beautify.setUIVisible(j.element, true)
+        end
+    end
+    imports.beautify.render.create(function()
+        imports.beautify.native.drawRectangle(0, 0, loginUI.phases[2].width, loginUI.phases[2].titleBar.height, loginUI.phases[2].titleBar.bgColor)
+        imports.beautify.native.drawText(string.upper(string.spaceChars(loginUI.phases[2].titleBar.text)), 0, 0, loginUI.phases[2].width, loginUI.phases[2].titleBar.height, loginUI.phases[2].titleBar.fontColor, 1, loginUI.phases[2].titleBar.font, "center", "center", true, false, false)
+        imports.beautify.native.drawRectangle(0, loginUI.phases[2].titleBar.height, loginUI.phases[2].width, loginUI.phases[2].titleBar.paddingY, loginUI.phases[2].titleBar.shadowColor)
+        for i, j in ipairs(loginUI.phases[2].categories) do
+            local category_offsetY = j.offsetY + loginUI.phases[2].categories.height
+            imports.beautify.native.drawRectangle(0, j.offsetY, loginUI.phases[2].width, loginUI.phases[2].categories.height, loginUI.phases[2].titleBar.bgColor)
+            imports.beautify.native.drawText(string.upper(string.spaceChars(j.identifier)), 0, j.offsetY, loginUI.phases[2].width, category_offsetY, loginUI.phases[2].categories.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
+            imports.beautify.native.drawRectangle(0, category_offsetY, loginUI.phases[2].width, j.height, loginUI.phases[2].categories.bgColor)
+        
+            if j.contents then
+                for k, v in pairs(j.contents) do
+                    local title_height = loginUI.phases[2].categories.height
+                    local title_offsetY = category_offsetY + v.startY - title_height
+                    imports.beautify.native.drawRectangle(0, title_offsetY, loginUI.phases[2].width, title_height, loginUI.phases[2].titleBar.bgColor)
+                    imports.beautify.native.drawText(string.upper(string.spaceChars(v.identifier)), 0, title_offsetY, loginUI.phases[2].width, title_offsetY + title_height, loginUI.phases[2].titleBar.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
+                end
+            end
+        end
+    end, {
+        elementReference = loginUI.phases[2].element,
+        renderType = "preViewRTRender"
+    })
 end
 loginUI.phases[3].contentText = ""
 for i = 1, #FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.contributors do
@@ -212,7 +269,7 @@ local function loadLoginPreviewCharacter(loadDefault)
 
     if loadDefault then
         --[[
-        for i, j in imports.ipairs(loginUI.phases[2].customizerui.option) do
+        for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].option) do
             if j.isEditBox then
                 j.placeDataValue = ""
             else
@@ -222,7 +279,7 @@ local function loadLoginPreviewCharacter(loadDefault)
         ]]
     else
         --[[
-        for i, j in imports.ipairs(loginUI.phases[2].customizerui.option) do
+        for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].option) do
             if j.isEditBox then
                 j.placeDataValue = loginUI.characters[loginUI._selectedCharacter][j.optionType] or ""
             else
@@ -252,10 +309,10 @@ function updateLoginPreviewCharacter()
     if not loginUI.character or not imports.isElement(loginUI.character) then return false end
 
     local disabledTextures = {}
-    local selectedGender, selectedClothing = playerClothes["Gender"][(loginUI.phases[2].customizerui.option[3].placeDataValue)], {}
+    local selectedGender, selectedClothing = playerClothes["Gender"][(loginUI.phases[2].loginUI.phases[2].option[3].placeDataValue)], {}
     loginUI.character:setModel(selectedGender.modelSkin)
-    selectedClothing["gender"] = loginUI.phases[2].customizerui.option[3].placeDataValue
-    for i, j in imports.ipairs(loginUI.phases[2].customizerui.option) do
+    selectedClothing["gender"] = loginUI.phases[2].loginUI.phases[2].option[3].placeDataValue
+    for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].option) do
         if not j.isEditBox and j.clothingCategoryIndex then
             if j.clothingCategoryIndex == "Race" then
                 j.placeDataTable = playerClothes[selectedGender.modelType][j.clothingCategoryIndex]
@@ -278,8 +335,8 @@ function updateLoginPreviewCharacter()
                 end
             end
             if j.clothingCategoryIndex == "Race" then
-                loginUI.phases[2].customizerui.option[5].placeDataTable = (j.placeDataTable[j.placeDataValue] and j.placeDataTable[j.placeDataValue]["Hair"]) or {}
-                loginUI.phases[2].customizerui.option[6].placeDataTable = (j.placeDataTable[j.placeDataValue] and j.placeDataTable[j.placeDataValue]["Hair_Color"]) or {}
+                loginUI.phases[2].loginUI.phases[2].option[5].placeDataTable = (j.placeDataTable[j.placeDataValue] and j.placeDataTable[j.placeDataValue]["Hair"]) or {}
+                loginUI.phases[2].loginUI.phases[2].option[6].placeDataTable = (j.placeDataTable[j.placeDataValue] and j.placeDataTable[j.placeDataValue]["Hair_Color"]) or {}
             end
             if not j.placeDataTable[j.placeDataValue] then j.placeDataValue = 1 end
             if j.placeDataTable[j.placeDataValue] then
@@ -373,7 +430,7 @@ manageCharacter = function(manageType)
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
         imports.triggerEvent("Client:onNotification", localPlayer, "◴ Saving..", {175, 175, 175, 255})
         local characterData = {}
-        for i, j in imports.ipairs(loginUI.phases[2].customizerui.option) do
+        for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].option) do
             if j.isEditBox then
                 characterData[j.optionType] = j.placeDataValue
             else
