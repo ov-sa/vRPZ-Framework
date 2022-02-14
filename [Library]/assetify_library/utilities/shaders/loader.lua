@@ -28,17 +28,18 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-CShaders = {}, {
-    ["Assetify_TextureClearer"] = imports.dxCreateShader(CShaders["Assetify_TextureClearer"], 1000, 0, false, "all"),
-    ["Assetify_TextureChanger"] = {}
-}
+CShaders = {}
 
 
 -----------------------
 --[[ Class: Shader ]]--
 -----------------------
 
-shader = {}
+shader = {
+    preLoaded = {
+        ["Assetify_TextureClearer"] = imports.dxCreateShader(CShaders["Assetify_TextureClearer"], 1000, 0, false, "all")
+    }
+}
 shader.__index = shader
 
 function shader:create(...)
@@ -58,14 +59,15 @@ end
 function shader:load(shaderName, textureName, textureElement, shaderPriority, shaderDistance)
     if not self or (self == shader) then return false end
     if not shaderName or not CShaders[shaderName] or not textureName or not textureElement or not imports.isElement(textureElement) then return false end
-    self.cShader = imports.dxCreateShader(CShaders[shaderName], imports.tonumber(shaderPriority) or 10000, imports.tonumber(shaderDistance) or 0, false, "all")
+    self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
+    self.cShader = shader.preLoaded[shaderName] or imports.dxCreateShader(CShaders[shaderName], imports.tonumber(shaderPriority) or 10000, imports.tonumber(shaderDistance) or 0, false, "all")
     imports.engineApplyShaderToWorldTexture(self.cShader, textureName, textureElement)
     return true
 end
 
 function shader:unload()
     if not self or (self == shader) then return false end
-    if imports.isElement(self.cShader) then
+    if not self.preLoaded and imports.isElement(self.cShader) then
         imports.destroyElement(self.cShader)
     end
     self = nil
