@@ -37,7 +37,7 @@ end
 --[[ Shader ]]--
 ----------------
 
-shader.rwCache["Assetify_TextureChanger"] = depDatas..[[
+shaderRW["Assetify_TextureChanger"] = depDatas..[[
 /*-----------------
 -->> Variables <<--
 -------------------*/

@@ -34,8 +34,9 @@ shader = {
         shaderPriority = 10000,
         shaderDistance = 0
     },
-    rwCache = {}
+    rwCache = shaderRW
 }
+shaderRW = nil
 shader.preLoaded = {
     ["Assetify_TextureClearer"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureClearer"], shader.defaultData.shaderPriority, shader.defaultData.shaderDistance, false, "all")
 }
