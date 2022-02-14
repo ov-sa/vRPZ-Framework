@@ -205,12 +205,6 @@ loginUI.phases[2].toggleUI = function(state)
                 end
             elseif j.isSelector then
                 j.element = imports.beautify.selector.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), j.height, "horizontal", loginUI.phases[2].element, false)
-                --[[
-                for k = 1, #j.content, 1 do
-                    local v = j.content[k]
-                    j.content[k] = imports.string.upper(imports.string.spaceChars(v))
-                end
-                ]]--
                 imports.beautify.selector.setDataList(j.element, j.content)
                 imports.beautify.setUIVisible(j.element, true)
             end
