@@ -24,12 +24,12 @@ configVars["Character"] = {
     ["Identity"] = {
         ["Tone"] = {},
         ["Gender"] = {
-            {assetName = "vRPZ_Male", ["EN"] = "Male", ["TR"] = "Erkek"},
-            {assetName = "vRPZ_Female", ["EN"] = "Female", ["TR"] = "Dişi"}
+            ["Male"] = {assetName = "vRPZ_Male", ["EN"] = "Male", ["TR"] = "Erkek"},
+            ["Female"] = {assetName = "vRPZ_Female", ["EN"] = "Female", ["TR"] = "Dişi"}
         },
         ["Faction"] = {
-            {["EN"] = "Military", ["TR"] = "Askeri"},
-            {["EN"] = "Criminal", ["TR"] = "Adli"}
+            ["Military"] = {["EN"] = "Military", ["TR"] = "Askeri"},
+            ["Criminal"] = {["EN"] = "Criminal", ["TR"] = "Adli"}
         }
     },
 
@@ -40,9 +40,18 @@ configVars["Character"] = {
                 {["EN"] = "Casual", ["TR"] = "Gündelik"}
             }
         },
-        ["Upper"] = {},
-        ["Lower"] = {},
-        ["Shoes"] = {}
+        ["Upper"] = {
+            ["Male"] = {},
+            ["Female"] = {}
+        },
+        ["Lower"] = {
+            ["Male"] = {},
+            ["Female"] = {}
+        },
+        ["Shoes"] = {
+            ["Male"] = {},
+            ["Female"] = {}
+        }
     }
 
 }
