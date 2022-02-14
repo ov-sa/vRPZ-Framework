@@ -179,7 +179,7 @@ loginUI.phases[2].updateUI = function()
         if j.isSelector then
             j.content, j.contentIndex = {}, {}
             for k, v in imports.pairs(FRAMEWORK_CONFIGS["Character"]["Identity"][(J.identifier)]) do
-                imports.table.insert(j.content, v[FRAMEWORK_LANGUAGE])
+                imports.table.insert(j.content, v["Titles"][FRAMEWORK_LANGUAGE])
                 imports.table.insert(j.contentIndex, k)
             end
         end
