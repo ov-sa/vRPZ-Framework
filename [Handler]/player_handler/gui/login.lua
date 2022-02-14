@@ -200,6 +200,53 @@ loginUI.phases[2].updateCharacter = function()
     local selectionData = loginUI.phases[2].fetchSelection()
     exports.assetify_library:setCharacterAsset(loginUI.phases[2].character, selectionData.gender[2].assetName, (selectionData.upper[2].clumpName)..(selectionData.lower[2].clumpName)..(selectionData.shoes[2].clumpName))
 end
+loginUI.phases[2].loadCharacter = function(loadDefault)
+    if not loadDefault and not loginUI.characters[loginUI._selectedCharacter] then
+        if #loginUI.characters > 0 then
+            loginUI.character = 1
+            loginUI._selectedCharacter = loginUI.character
+        else
+            loadDefault = true
+        end
+    end
+
+    if loadDefault then
+        for i = 1, #loginUI.phases[2].categories, 1 do
+            local j = loginUI.phases[2].categories[i]
+            if j.contents then
+                for k, v in imports.pairs(j.contents) do
+                    if v.slider then
+                        imports.beautify.slider.setPercent(v.element, 0)
+                    elseif v.isSelector then
+                        imports.beautify.selector.getSelection(v.element, 1)
+                    end
+                end
+            elseif j.isSelector then
+                imports.beautify.selector.getSelection(j.element, 1)
+            end
+        end
+    else
+        --TODO: ...WIP
+        --[[
+        for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].option) do
+                local matchedDataIndex = false
+                if j.optionType == "gender" or j.clothingCategoryIndex then
+                    matchedDataIndex = loginUI.characters[loginUI._selectedCharacter][j.optionType]
+                else
+                    for k, v in imports.ipairs(j.placeDataTable) do
+                        if loginUI.characters[loginUI._selectedCharacter][j.optionType] == v then
+                            matchedDataIndex = k
+                            break
+                        end
+                    end
+                end
+                j.placeDataValue = matchedDataIndex or 1
+        end
+        ]]
+    end
+    loginUI.phases[2].updateCharacter()
+    return true
+end
 loginUI.phases[2].toggleUI = function(state)
     if state then
         if loginUI.phases[2].element or imports.isElement(loginUI.phases[2].element) then return false end
@@ -273,46 +320,6 @@ loginUI.phases[3].scrollDuration = imports.math.max(1, imports.math.ceil((loginU
 --[[ Functions: Loads/Updates/Manages Login Preview Character ]]--
 ------------------------------------------------------------------
 
-local function loadLoginPreviewCharacter(loadDefault)
-
-    if not loadDefault and not loginUI.characters[loginUI._selectedCharacter] then
-        if #loginUI.characters > 0 then
-            loginUI.character = 1
-            loginUI._selectedCharacter = loginUI.character
-        else
-            loadDefault = true
-        end
-    end
-
-    if loadDefault then
-        --[[
-        for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].option) do
-            j.placeDataValue = 1
-        end
-        ]]
-    else
-        --[[
-        for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].option) do
-                local matchedDataIndex = false
-                if j.optionType == "gender" or j.clothingCategoryIndex then
-                    matchedDataIndex = loginUI.characters[loginUI._selectedCharacter][j.optionType]
-                else
-                    for k, v in imports.ipairs(j.placeDataTable) do
-                        if loginUI.characters[loginUI._selectedCharacter][j.optionType] == v then
-                            matchedDataIndex = k
-                            break
-                        end
-                    end
-                end
-                j.placeDataValue = matchedDataIndex or 1
-        end
-        ]]
-    end
-    loginUI.phases[2].updateCharacter()
-    return true
-
-end
-
 manageCharacter = function(manageType)
     if not manageType then return false end
 
@@ -330,7 +337,7 @@ manageCharacter = function(manageType)
         imports.table.insert(loginUI.characters, characterData)
         loginUI._selectedCharacter = #loginUI.characters
         loginUI._unsavedCharacters[loginUI._selectedCharacter] = true
-        loadLoginPreviewCharacter(true)
+        loginUI.phases[2].loadCharacter(true)
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully created a character!", {80, 255, 80, 255})
     elseif manageType == "delete" then
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
@@ -353,7 +360,7 @@ manageCharacter = function(manageType)
         imports.table.remove(loginUI.characters, loginUI._selectedCharacter)
         loginUI._unsavedCharacters[loginUI._selectedCharacter] = nil
         loginUI._selectedCharacter = imports.math.max(0, loginUI._selectedCharacter - 1)
-        loadLoginPreviewCharacter()
+        loginUI.phases[2].loadCharacter()
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully deleted the character!", {80, 255, 80, 255})
     elseif (manageType == "switch_prev") or (manageType == "switch_next") then
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
@@ -364,12 +371,12 @@ manageCharacter = function(manageType)
         if manageType == "switch_prev" then
             if loginUI._selectedCharacter > 1 then
                 loginUI._selectedCharacter = loginUI._selectedCharacter - 1
-                loadLoginPreviewCharacter()
+                loginUI.phases[2].loadCharacter()
             end
         elseif manageType == "switch_next" then
             if loginUI._selectedCharacter < #loginUI.characters then
                 loginUI._selectedCharacter = loginUI._selectedCharacter + 1
-                loadLoginPreviewCharacter()
+                loginUI.phases[2].loadCharacter()
             end
         end
     elseif manageType == "pick" then
@@ -478,7 +485,7 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
             loginUI.phases[2].character:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
             loginUI.phases[2].character:setFrozen(true)
             loginUI.phases[2].toggleUI(true)
-            loadLoginPreviewCharacter()
+            loginUI.phases[2].loadCharacter()
         else
             exports.cinecam_handler:stopCinemation()
             if phaseID == 3 then
