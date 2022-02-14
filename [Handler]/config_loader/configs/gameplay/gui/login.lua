@@ -135,7 +135,8 @@ configVars["UI"]["Login"] = {
             scrollDuration = 6500,
 
             navigator = {
-                ["Titles"] = {["EN"] = "Back", ["TR"] = "Geri"}
+                ["Titles"] = {["EN"] = "Back", ["TR"] = "Geri"},
+                hoverDuration = 2500
             },
             contributors = {
                 "ov | Mario (Developer)",
