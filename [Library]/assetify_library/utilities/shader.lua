@@ -32,9 +32,7 @@ shader = {
     defaultData = {
         shaderPriority = 10000,
         shaderDistance = 0
-    }
-    defaultPriority = 10000,
-    defaultDistance
+    },
     rwCache = {}
 }
 shader.preLoaded = {
