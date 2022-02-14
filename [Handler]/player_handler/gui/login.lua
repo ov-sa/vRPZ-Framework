@@ -567,7 +567,7 @@ end)
 --[[ Function: Renders UI ]]--
 ------------------------------
 
-local function renderUI(renderData)
+loginUI.renderUI = function(renderData)
     if not loginUI.state or CPlayer.isInitialized(localPlayer) then return false end
     if not loginUI.phase then return false end
 
@@ -663,14 +663,14 @@ loginUI.toggleUI = function(state, args)
         loginUI.state = true
         loginUI.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
         imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1)
-        imports.beautify.render.create(renderUI)
-        imports.beautify.render.create(renderUI, {renderType = "input"})
+        imports.beautify.render.create(loginUI.renderUI)
+        imports.beautify.render.create(loginUI.renderUI, {renderType = "input"})
         imports.triggerEvent("Sound:onToggleLogin", localPlayer, state, {
             shuffleMusic = (args and args.shuffleMusic and true) or false
         })
     else
-        imports.beautify.render.remove(renderUI)
-        imports.beautify.render.remove(renderUI, {renderType = "input"})
+        imports.beautify.render.remove(loginUI.renderUI)
+        imports.beautify.render.remove(loginUI.renderUI, {renderType = "input"})
         exports.cinecam_handler:stopCinemation()
         if loginUI.phases[2].character and imports.isElement(loginUI.phases[2].character) then loginUI.phases[2].character:destroy(); loginUI.phases[2].character = nil end
         for i, j in imports.pairs(loginUI.cache.keys) do
