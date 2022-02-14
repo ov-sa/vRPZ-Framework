@@ -25,7 +25,7 @@ configVars["Character"] = {
         ["Tone"] = {},
         ["Gender"] = {
             ["Male"] = {assetName = "vRPZ_Male", ["EN"] = "Male", ["TR"] = "Erkek"},
-            ["Female"] = {assetName = "vRPZ_Female", ["EN"] = "Female", ["TR"] = "Dişi"}
+            --["Female"] = {assetName = "vRPZ_Female", ["EN"] = "Female", ["TR"] = "Dişi"}
         },
         ["Faction"] = {
             ["Military"] = {["EN"] = "Military", ["TR"] = "Askeri"},
