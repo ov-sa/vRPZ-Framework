@@ -120,7 +120,7 @@ local loginUI = {
                     }
                 },
                 {
-                    isSoloSelector = true, isClothing = true,
+                    isSelector = true, isClothing = true,
                     height = 50,
                     identifier = "Upper",
                     content = {
@@ -129,7 +129,7 @@ local loginUI = {
                     }
                 },
                 {
-                    isSoloSelector = true, isClothing = true,
+                    isSelector = true, isClothing = true,
                     height = 50,
                     identifier = "Lower",
                     content = {
@@ -138,7 +138,7 @@ local loginUI = {
                     }
                 },
                 {
-                    isSoloSelector = true, isClothing = true,
+                    isSelector = true, isClothing = true,
                     height = 50,
                     identifier = "Shoes",
                     content = {
@@ -191,6 +191,12 @@ loginUI.phases[2].updateUILang = function()
                     end
                 end
             end
+        elseif j.isSelector then
+            j.contentIndex, j.content = {}, {}
+            for k, v in imports.pairs(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)]["Datas"]) do
+                imports.table.insert(j.contentIndex, k)
+                imports.table.insert(j.content, imports.string.upper(imports.string.spaceChars(v[FRAMEWORK_LANGUAGE])))
+            end
         end
     end
 end
@@ -215,7 +221,7 @@ loginUI.phases[2].toggleUI = function(state)
                         imports.beautify.setUIVisible(v.element, true)
                     end
                 end
-            elseif j.isSoloSelector then
+            elseif j.isSelector then
                 j.element = imports.beautify.selector.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), j.height, "horizontal", loginUI.phases[2].element, false)
                 --[[
                 for k = 1, #j.content, 1 do
