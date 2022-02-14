@@ -102,6 +102,18 @@ configVars["UI"]["Login"] = {
                     faction = {
                         ["Titles"] = {["EN"] = "Faction", ["TR"] = "Hizip"}
                     }
+                },
+                ["Facial"] = {
+                    ["Titles"] = {["EN"] = "Facial", ["TR"] = "Kimlik"},
+                },
+                ["Upper"] = {
+                    ["Titles"] = {["EN"] = "Upper", ["TR"] = "Kimlik"},
+                },
+                ["Lower"] = {
+                    ["Titles"] = {["EN"] = "Lower", ["TR"] = "Kimlik"},
+                },
+                ["Shoes"] = {
+                    ["Titles"] = {["EN"] = "Shoes", ["TR"] = "Kimlik"},
                 }
             }
         },

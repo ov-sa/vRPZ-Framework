@@ -106,7 +106,7 @@ local loginUI = {
                 },
                 {
                     height = 65,
-                    identifier = "facial",
+                    identifier = "Facial",
                     contents = {
                         hair = {
                             isSelector = true,
@@ -125,7 +125,7 @@ local loginUI = {
                     isSoloSelector = true,
                     isClothing = true,
                     height = 50,
-                    identifier = "upper",
+                    identifier = "Upper",
                     content = {
                         "T-Shirt (Red)",
                         "Hoody (Blue)"
@@ -135,7 +135,7 @@ local loginUI = {
                     isSoloSelector = true,
                     isClothing = true,
                     height = 50,
-                    identifier = "lower",
+                    identifier = "Lower",
                     content = {
                         "Pant (Red)",
                         "Trouser (Blue)"
@@ -145,7 +145,7 @@ local loginUI = {
                     isSoloSelector = true,
                     isClothing = true,
                     height = 50,
-                    identifier = "shoes",
+                    identifier = "Shoes",
                     content = {
                         "Sneakers (Red)",
                         "Boots (Blue)"
@@ -182,10 +182,11 @@ end
 loginUI.phases[2].updateUILang = function()
     for i = 1, #loginUI.phases[2].categories, 1 do
         local j = loginUI.phases[2].categories[i]
-        j.title = ((j.identifier == "Identity") and imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))) or "WIP.."
+        j.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
         if j.contents then
             for k, v in imports.pairs(j.contents) do
                 if not v.isClothing then
+                    --TODO: ...CONNECT ALL OTHER TEXTS TOO..
                     v.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
                     if v.isSelector then
                         v.content = {}
