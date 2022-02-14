@@ -32,7 +32,7 @@ local imports = {
 
 local notifUI = {
     buffer = {},
-    startX = -5, startY = 15, paddingY = 5, offsetY = 0,
+    startX = -5, startY = 5, paddingY = 5, offsetY = 0,
     slideTopTickCounter = CLIENT_CURRENT_TICK,
     font = FRAMEWORK_FONTS[6],
     leftEdgeTexture = imports.beautify.assets["images"]["curved_square/regular/left.rw"],
