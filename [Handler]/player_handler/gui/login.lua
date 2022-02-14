@@ -219,7 +219,6 @@ loginUI.phases[2].toggleUI = function(state)
                 imports.beautify.setUIVisible(j.element, true)
             end
         end
-        loginUI.phases[2].updateCharacter()
         imports.beautify.render.create(function()
             imports.beautify.native.drawRectangle(0, 0, loginUI.phases[2].width, loginUI.phases[2].titlebar.height, loginUI.phases[2].titlebar.bgColor)
             imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar["Titles"][FRAMEWORK_LANGUAGE])), 0, 0, loginUI.phases[2].width, loginUI.phases[2].titlebar.height, loginUI.phases[2].titlebar.fontColor, 1, loginUI.phases[2].titlebar.font, "center", "center", true, false, false)
@@ -277,19 +276,12 @@ local function loadLoginPreviewCharacter(loadDefault)
     if loadDefault then
         --[[
         for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].option) do
-            if j.isEditBox then
-                j.placeDataValue = ""
-            else
-                j.placeDataValue = 1
-            end
+            j.placeDataValue = 1
         end
         ]]
     else
         --[[
         for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].option) do
-            if j.isEditBox then
-                j.placeDataValue = loginUI.characters[loginUI._selectedCharacter][j.optionType] or ""
-            else
                 local matchedDataIndex = false
                 if j.optionType == "gender" or j.clothingCategoryIndex then
                     matchedDataIndex = loginUI.characters[loginUI._selectedCharacter][j.optionType]
@@ -302,58 +294,15 @@ local function loadLoginPreviewCharacter(loadDefault)
                     end
                 end
                 j.placeDataValue = matchedDataIndex or 1
-            end
         end
         ]]
     end
-    updateLoginPreviewCharacter()
-    return true
-
-end
-
-function updateLoginPreviewCharacter()
-
-    if not loginUI.character or not imports.isElement(loginUI.character) then return false end
-
-    local disabledTextures = {}
-    local selectedGender, selectedClothing = playerClothes["Gender"][(loginUI.phases[2].loginUI.phases[2].option[3].placeDataValue)], {}
-    loginUI.character:setModel(selectedGender.modelSkin)
-    selectedClothing["gender"] = loginUI.phases[2].loginUI.phases[2].option[3].placeDataValue
-    for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].option) do
-        if not j.isEditBox and j.clothingCategoryIndex then
-            if j.clothingCategoryIndex == "Race" then
-                j.placeDataTable = playerClothes[selectedGender.modelType][j.clothingCategoryIndex]
-            else
-                if j.clothingCategoryIndex ~= "Hair" and j.clothingCategoryIndex ~= "Hair_Color" then
-                    if loginUI.characters[loginUI._selectedCharacter] and loginUI.characters[loginUI._selectedCharacter].__isPreLoaded then
-                        j.placeDataTable = playerClothes[selectedGender.modelType][j.clothingCategoryIndex]
-                    else
-                        local generatedDataTable = {}
-                        for k, v in imports.ipairs(playerClothes[selectedGender.modelType][j.clothingCategoryIndex]) do
-                            if v.isAvailableForCharacterCreation then
-                                local copiedTable = imports.table.copy(v, true)
-                                copiedimports.table.isAvailableForCharacterCreation = nil
-                                copiedimports.table.__dataIndex = k
-                                imports.table.insert(generatedDataTable, copiedTable)
-                            end
-                        end
-                        j.placeDataTable = generatedDataTable
-                    end
-                end
-            end
-            if not j.placeDataTable[j.placeDataValue] then j.placeDataValue = 1 end
-            if j.placeDataTable[j.placeDataValue] then
-                selectedClothing[j.optionType] = j.placeDataTable[j.placeDataValue].__dataIndex or j.placeDataValue
-            end
-        end
-    end
-    imports.triggerEvent("Player:onSyncPedClothes", root, loginUI.character, selectedClothing)
+    loginUI.phases[2].updateCharacter()
     return true
 
 end
 
 manageCharacter = function(manageType)
-
     if not manageType then return false end
 
     if manageType == "create" then
@@ -518,7 +467,7 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
             loginUI.character:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
             loginUI.character:setFrozen(true)
             loginUI.phases[2].toggleUI(true)
-            --loadLoginPreviewCharacter()
+            loadLoginPreviewCharacter()
         else
             exports.cinecam_handler:stopCinemation()
             if phaseID == 3 then
