@@ -132,6 +132,7 @@ function shader:load(element, shaderCategory, shaderName, textureName, shaderTex
     if not element or not imports.isElement(element) or not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures then return false end
     shaderPriority = imports.tonumber(shaderPriority) or shader.defaultData.shaderPriority
     shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
+    --TODO: MOVE TO ASSET LOADER..
     shader.buffer.asset[assetType] = shader.buffer.asset[assetType] or {}
     shader.buffer.asset[assetType][assetName] = shader.buffer.asset[assetType][assetName] or {
         shader = {},
