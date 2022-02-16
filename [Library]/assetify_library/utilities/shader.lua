@@ -68,23 +68,23 @@ end
 
 function shader:clearElementBuffer(targetElement, shaderCategory)
     if self or (self ~= shader) then return false end
-    if not targetElement or not imports.isElement(targetElement) or not buffer.element[targetElement] or (shaderCategory and not buffer.element[targetElement][shaderCategory]) then return false end
+    if not targetElement or not imports.isElement(targetElement) or not shader.buffer.element[targetElement] or (shaderCategory and not shader.buffer.element[targetElement][shaderCategory]) then return false end
     if shaderCategory then
-        for i, j in imports.pairs(buffer.element[targetElement]) do
+        for i, j in imports.pairs(shader.buffer.element[targetElement]) do
             for k, v in imports.pairs(j) do
                 if v and imports.isElement(v) then
                     v:destroy()
                 end
             end
         end
-        buffer.element[targetElement] = nil
+        shader.buffer.element[targetElement] = nil
     else
-        for i, j in imports.pairs(buffer.element[targetElement][shaderCategory]) do
+        for i, j in imports.pairs(shader.buffer.element[targetElement][shaderCategory]) do
             if j and imports.isElement(j) then
                 j:destroy()
             end
         end
-        buffer.element[targetElement][shaderCategory] = nil
+        shader.buffer.element[targetElement][shaderCategory] = nil
     end
     return true
 end
@@ -97,13 +97,13 @@ function shader:load(shaderCategory, shaderName, textureName, shaderTextures, ta
     shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
     self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName], shaderPriority, shaderDistance, false, "all")
     for i, j in imports.pairs(shaderTextures) do
-        buffer.texture[i] = buffer.texture[i] or {
+        shader.buffer.texture[i] = shader.buffer.texture[i] or {
             textureElement = imports.dxCreateTexture(shaderTextures[i]),
             count = 0
         }
-        buffer.texture[i] = buffer.texture[i].count + 1
+        shader.buffer.texture[i] = shader.buffer.texture[i].count + 1
         ---TODO: REDUCE COUNT WHEN SHADER SHARE IS DESTROYED AND DELETE ON 0
-        imports.dxSetShaderValue(self.cShader, i, buffer.texture[i].textureElement)
+        imports.dxSetShaderValue(self.cShader, i, shader.buffer.texture[i].textureElement)
     end
     self.shaderData = {
         shaderCategory = shaderCategory,
@@ -114,9 +114,9 @@ function shader:load(shaderCategory, shaderName, textureName, shaderTextures, ta
         shaderPriority = shaderPriority,
         shaderDistance = shaderDistance
     }
-    buffer.element[targetElement] = buffer.element[targetElement] or {}
-    buffer.element[targetElement][shaderCategory] = buffer.element[targetElement][shaderCategory] or {}
-    buffer.element[targetElement][shaderCategory][textureName] = self
+    shader.buffer.element[targetElement] = shader.buffer.element[targetElement] or {}
+    shader.buffer.element[targetElement][shaderCategory] = shader.buffer.element[targetElement][shaderCategory] or {}
+    shader.buffer.element[targetElement][shaderCategory][textureName] = self
     imports.engineApplyShaderToWorldTexture(self.cShader, textureName, targetElement)
     return true
 end
@@ -130,7 +130,7 @@ function shader:unload()
     else
         imports.engineRemoveShaderFromWorldTexture(self.cShader, self.shaderData.textureName, self.shaderData.targetElement)
     end
-    buffer.element[(self.shaderData.targetElement)][(self.shaderData.shaderCategory)][(self.shaderData.textureName)] = nil
+    shader.buffer.element[(self.shaderData.targetElement)][(self.shaderData.shaderCategory)][(self.shaderData.textureName)] = nil
     self = nil
     return true
 end
