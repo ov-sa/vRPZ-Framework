@@ -5,5 +5,22 @@
         "H1T1": "H1T1",
         "TS1P1": "TS1P1",
         "TS1T1": "TS1T1"
+    },
+    "shaderMaps": {
+        "clump": {
+            "cj_tshrt_1": [
+                "clump/upper/tshirt/1.png",
+                "clump/upper/tshirt/2.png"
+            ],
+            "cj_hdy_1": [
+                "clump/upper/hoody/1.png"
+            ],
+            "cj_trsr_1": [
+                "clump/lower/trouser/1.png"
+            ],
+            "cj_pnt_1": [
+                "clump/lower/pant/1.png"
+            ]
+        }
     }
 }
