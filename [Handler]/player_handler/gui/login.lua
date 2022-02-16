@@ -197,7 +197,12 @@ loginUI.phases[2].fetchSelection = function()
 end
 loginUI.phases[2].updateCharacter = function()
     local selectionData = loginUI.phases[2].fetchSelection()
-    exports.assetify_library:setCharacterAsset(loginUI.phases[2].character, selectionData.gender[2].assetName, (selectionData.upper[2].clumpName)..(selectionData.lower[2].clumpName)..(selectionData.shoes[2].clumpName))
+    local clumpTextures = {
+        [(selectionData.upper[2].clumpTexture[1])] = selectionData.upper[2].clumpTexture[2],
+        [(selectionData.lower[2].clumpTexture[1])] = selectionData.lower[2].clumpTexture[2],
+        [(selectionData.shoes[2].clumpTexture[1])] = selectionData.shoes[2].clumpTexture[2]
+    }
+    exports.assetify_library:setCharacterAsset(loginUI.phases[2].character, selectionData.gender[2].assetName, (selectionData.upper[2].clumpName)..(selectionData.lower[2].clumpName)..(selectionData.shoes[2].clumpName), clumpTextures)
 end
 loginUI.phases[2].loadCharacter = function(loadDefault)
     if not loadDefault and not loginUI.characters[loginUI._selectedCharacter] then
