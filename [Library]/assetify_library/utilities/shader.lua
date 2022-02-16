@@ -84,6 +84,18 @@ function shader:destroy(...)
     return self:unload(...)
 end
 
+function shader:clearAssetBuffer(assetType, assetName)
+    local textureReference = (shader.buffer.texture[assetType] and shader.buffer.texture[assetType][assetName]) or false
+    if textureReference then
+        for i, j in imports.pairs(textureReference) do
+            if j and imports.isElement(j) then
+                imports.destroyElement(shader.buffer.texture[j].textureElement)
+            end
+        end
+    end
+    return true
+end
+
 function shader:clearElementBuffer(element, shaderCategory)
     if not element or not imports.isElement(element) or not shader.buffer.element[element] or (shaderCategory and not shader.buffer.element[element][shaderCategory]) then return false end
     if not shaderCategory then
@@ -116,12 +128,10 @@ function shader:load(element, shaderCategory, shaderName, textureName, shaderTex
     self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName], shaderPriority, shaderDistance, false, "all")
     for i, j in imports.pairs(shaderTextures) do
         if j and imports.file.exists(j) then
-            shader.buffer.texture[i] = shader.buffer.texture[i] or {
-                textureElement = imports.dxCreateCustomTexture(j, encryptKey, "dxt5", true),
-                streamCount = 0
+            shader.buffer.texture[j] = shader.buffer.texture[j] or {
+                textureElement = imports.dxCreateCustomTexture(j, encryptKey, "dxt5", true)
             }
-            shader.buffer.texture[i].streamCount = shader.buffer.texture[i].streamCount + 1
-            imports.dxSetShaderValue(self.cShader, i, shader.buffer.texture[i].textureElement)
+            imports.dxSetShaderValue(self.cShader, i, shader.buffer.texture[j].textureElement)
         end
     end
     self.shaderData = {
@@ -148,15 +158,6 @@ function shader:unload()
         end
     else
         imports.engineRemoveShaderFromWorldTexture(self.cShader, self.shaderData.textureName, self.shaderData.element)
-    end
-    for i, j in imports.pairs(self.shaderData.shaderTextures) do
-        if shader.buffer.texture[i] then
-            shader.buffer.texture[i].streamCount = shader.buffer.texture[i].streamCount - 1
-            if shader.buffer.texture[i].streamCount <= 0 then
-                imports.destroyElement(shader.buffer.texture[i].textureElement)
-                shader.buffer.texture[i] = nil
-            end
-        end
     end
     shader.buffer.element[(self.shaderData.element)][(self.shaderData.shaderCategory)][(self.shaderData.textureName)] = nil
     self = nil

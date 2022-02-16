@@ -21,7 +21,6 @@ local imports = {
     gettok = gettok,
     tonumber = tonumber,
     tostring = tostring,
-    isElement = isElement,
     destroyElement = destroyElement,
     collectgarbage = collectgarbage,
     setTimer = setTimer,
@@ -180,6 +179,7 @@ function manager:unload(assetType, assetName)
                     end
                     --TODO:..
                     --asset:refreshShaderPack(assetType, assetName, assetReference.manifestData.shaderMaps, nil, assetReference.unsyncedData.rwCache.map, assetReference.manifestData, false)
+                    shader:clearAssetBuffer(assetType, assetName)
                     assetReference.unsyncedData = nil
                     imports.collectgarbage()
                 end):resume({
@@ -194,6 +194,7 @@ function manager:unload(assetType, assetName)
                         end
                         thread.pause()
                     end
+                    shader:clearAssetBuffer(assetType, assetName)
                     assetReference.unsyncedData = nil
                     imports.collectgarbage()
                 end):resume({
@@ -203,6 +204,7 @@ function manager:unload(assetType, assetName)
             else
                 if assetReference.cAsset then
                     assetReference.cAsset:destroy(assetReference.unsyncedData.rwCache)
+                    shader:clearAssetBuffer(assetType, assetName)
                     assetReference.unsyncedData = nil
                     imports.collectgarbage()
                 end
