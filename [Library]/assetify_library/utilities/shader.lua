@@ -40,7 +40,7 @@ shader = {
         invisibleMap = imports.dxCreateTexture(2, 2, "dxt5", "clamp")
     },
     buffer = {
-        textures = {},
+        texture = {},
         element = {}
     },
     rwCache = shaderRW
@@ -89,19 +89,28 @@ function shader:clearElementBuffer(targetElement, shaderCategory)
     return true
 end
 
-function shader:load(shaderCategory, shaderName, textureName, targetElement, shaderData, shaderPriority, shaderDistance)
+function shader:load(shaderCategory, shaderName, textureName, shaderTextures, targetElement, shaderPriority, shaderDistance)
     if not self or (self == shader) then return false end
-    if not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not targetElement or not imports.isElement(targetElement) or not shaderData then return false end
+    if not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures or not targetElement or not imports.isElement(targetElement) then return false end
     self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
     shaderPriority = imports.tonumber(shaderPriority) or shader.defaultData.shaderPriority
     shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
     self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName], shaderPriority, shaderDistance, false, "all")
+    for i, j in imports.pairs(shaderTextures) do
+        buffer.texture[i] = buffer.texture[i] or {
+            textureElement = imports.dxCreateTexture(shaderTextures[i]),
+            count = 0
+        }
+        buffer.texture[i] = buffer.texture[i].count + 1
+        ---TODO: REDUCE COUNT WHEN SHADER SHARE IS DESTROYED AND DELETE ON 0
+        imports.dxSetShaderValue(self.cShader, i, buffer.texture[i].textureElement)
+    end
     self.shaderData = {
         shaderCategory = shaderCategory,
         shaderName = shaderName,
         textureName = textureName,
         targetElement = targetElement,
-        shaderData = shaderData,
+        shaderTextures = shaderTextures,
         shaderPriority = shaderPriority,
         shaderDistance = shaderDistance
     }
