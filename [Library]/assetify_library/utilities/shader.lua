@@ -97,12 +97,12 @@ function shader:load(shaderCategory, shaderName, textureName, shaderTextures, ta
     shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
     self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName], shaderPriority, shaderDistance, false, "all")
     for i, j in imports.pairs(shaderTextures) do
+        --TODO: CHECK IF FILE PATH EXISTS..
         shader.buffer.texture[i] = shader.buffer.texture[i] or {
-            textureElement = imports.dxCreateTexture(shaderTextures[i]),
-            count = 0
+            textureElement = imports.dxCreateTexture(shaderTextures[i]), --TODO: DECODE...
+            streamCount = 0
         }
-        shader.buffer.texture[i] = shader.buffer.texture[i].count + 1
-        ---TODO: REDUCE COUNT WHEN SHADER SHARE IS DESTROYED AND DELETE ON 0
+        shader.buffer.texture[i] = shader.buffer.texture[i].streamCount + 1
         imports.dxSetShaderValue(self.cShader, i, shader.buffer.texture[i].textureElement)
     end
     self.shaderData = {
@@ -129,6 +129,15 @@ function shader:unload()
         end
     else
         imports.engineRemoveShaderFromWorldTexture(self.cShader, self.shaderData.textureName, self.shaderData.targetElement)
+    end
+    for i, j in imports.pairs(self.shaderData.shaderTextures) do
+        if shader.buffer.texture[i] then
+            shader.buffer.texture[i].streamCount = shader.buffer.texture[i].streamCount - 1
+            if shader.buffer.texture[i].streamCount <= 0 then
+                imports.destroyElement(shader.buffer.texture[i].textureElement)
+                shader.buffer.texture[i] = nil
+            end
+        end
     end
     shader.buffer.element[(self.shaderData.targetElement)][(self.shaderData.shaderCategory)][(self.shaderData.textureName)] = nil
     self = nil
