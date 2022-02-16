@@ -125,8 +125,7 @@ function manager:load(assetType, assetName)
                             end)
                             thread.pause()
                         end
-                        --TODO:..
-                        --asset:refreshShaderPack(assetType, assetName, assetReference.manifestData.shaderMaps, nil, assetReference.unsyncedData.rwCache.map, assetReference.manifestData, true)
+                        --TODO: EMBED NEW SHADER PIPELINE
                     end
                 end):resume({
                     executions = downloadSettings.buildRate,
