@@ -69,7 +69,7 @@ end
 function shader:clearElementBuffer(element, shaderCategory)
     if self or (self ~= shader) then return false end
     if not element or not imports.isElement(element) or not buffer.element[element] or (shaderCategory and not buffer.element[element][shaderCategory]) then return false end
-    if shaderCategory then    
+    if shaderCategory then
         for i, j in imports.pairs(buffer.element[element]) do
             for k, v in imports.pairs(j) do
                 if v and imports.isElement(v) then
