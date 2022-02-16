@@ -58,7 +58,7 @@ shader = {
         invisibleMap = imports.dxCreateTexture(2, 2, "dxt5", "clamp")
     },
     buffer = {
-        texture = {},
+        asset = {},
         element = {}
     },
     rwCache = shaderRW
@@ -85,13 +85,21 @@ function shader:destroy(...)
 end
 
 function shader:clearAssetBuffer(assetType, assetName)
-    local textureReference = (shader.buffer.texture[assetType] and shader.buffer.texture[assetType][assetName]) or false
-    if textureReference then
-        for i, j in imports.pairs(textureReference) do
+    local bufferReference = (shader.buffer.asset[assetType] and shader.buffer.asset[assetType][assetName]) or false
+    if bufferReference then
+        for i, j in imports.pairs(bufferReference.shader) do
             if j and imports.isElement(j) then
-                imports.destroyElement(shader.buffer.texture[j].textureElement)
+                imports.destroyElement(j)
+                print("DESTROYED TEXTURES")
             end
         end
+        for i, j in imports.pairs(bufferReference.texture) do
+            if j and imports.isElement(j) then
+                imports.destroyElement(j)
+                print("DESTROYED SHADERS")
+            end
+        end
+        shader.buffer.asset[assetType] = nil
     end
     return true
 end
@@ -124,14 +132,17 @@ function shader:load(element, shaderCategory, shaderName, textureName, shaderTex
     if not element or not imports.isElement(element) or not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures then return false end
     shaderPriority = imports.tonumber(shaderPriority) or shader.defaultData.shaderPriority
     shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
+    shader.buffer.asset[assetType] = shader.buffer.asset[assetType] or {
+        shader = {}
+        texture = {}
+    }
     self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
     self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName], shaderPriority, shaderDistance, false, "all")
+    if not self.isPreLoaded then shader.buffer.asset[assetType].shader[shaderName] = self.cShader end
     for i, j in imports.pairs(shaderTextures) do
         if j and imports.file.exists(j) then
-            shader.buffer.texture[j] = shader.buffer.texture[j] or {
-                textureElement = imports.dxCreateCustomTexture(j, encryptKey, "dxt5", true)
-            }
-            imports.dxSetShaderValue(self.cShader, i, shader.buffer.texture[j].textureElement)
+            shader.buffer.asset[assetType].texture[j] = shader.buffer.asset[assetType].texture[j] or imports.dxCreateCustomTexture(j, encryptKey, "dxt5", true)
+            imports.dxSetShaderValue(self.cShader, i, shader.buffer.asset[assetType].texture[j])
         end
     end
     self.shaderData = {
