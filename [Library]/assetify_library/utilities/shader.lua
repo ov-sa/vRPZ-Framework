@@ -18,6 +18,7 @@ local imports = {
     tonumber = tonumber,
     isElement = isElement,
     destroyElement = destroyElement,
+    addEventHandler = addEventHandler,
     setmetatable = setmetatable,
     dxCreateShader = dxCreateShader,
     dxCreateTexture = dxCreateTexture,
@@ -89,6 +90,7 @@ function shader:clearElementBuffer(element, shaderCategory)
     end
     return true
 end
+imports.addEventHandler("onClientElementDestroy", reourceRoot, function() shader:clearElementBuffer(source) end)
 
 function shader:load(element, shaderCategory, shaderName, textureName, shaderTextures, shaderPriority, shaderDistance)
     if not self or (self == shader) then return false end
