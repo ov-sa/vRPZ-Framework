@@ -38,13 +38,11 @@ end
 ----------------
 
 shaderRW["Assetify_TextureClearer"] = depDatas..[[
-/*----------------
--->> Handlers <<--
-------------------*/
+/*-----------------
+-->> Variables <<--
+-------------------*/
 
-float4 PixelShaderFunction() : COLOR0 {
-    return 0;
-}
+float4 baseTexture = float4(0, 0, 0, 0);
 
 
 /*------------------
@@ -54,8 +52,8 @@ float4 PixelShaderFunction() : COLOR0 {
 technique ]]..identifier..[[
 {
     pass P0 {
-        AlphaBlendEnable = TRUE;
-        PixelShader = compile ps_2_0 PixelShaderFunction();
+        AlphaBlendEnable = true;
+        Texture[0] = baseTexture;
     }
 }
 
