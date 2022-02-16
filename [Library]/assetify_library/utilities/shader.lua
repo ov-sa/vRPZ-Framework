@@ -85,9 +85,8 @@ function shader:destroy(...)
 end
 
 function shader:clearElementBuffer(element, shaderCategory)
-    if self or (self ~= shader) then return false end
     if not element or not imports.isElement(element) or not shader.buffer.element[element] or (shaderCategory and not shader.buffer.element[element][shaderCategory]) then return false end
-    if shaderCategory then
+    if not shaderCategory then
         for i, j in imports.pairs(shader.buffer.element[element]) do
             for k, v in imports.pairs(j) do
                 if v and imports.isElement(v) then
@@ -98,7 +97,7 @@ function shader:clearElementBuffer(element, shaderCategory)
         shader.buffer.element[element] = nil
     else
         for i, j in imports.pairs(shader.buffer.element[element][shaderCategory]) do
-            if j and imports.isElement(j) then
+            if j then
                 j:destroy()
             end
         end
@@ -106,7 +105,7 @@ function shader:clearElementBuffer(element, shaderCategory)
     end
     return true
 end
-imports.addEventHandler("onClientElementDestroy", reourceRoot, function() shader:clearElementBuffer(source) end)
+imports.addEventHandler("onClientElementDestroy", resourceRoot, function() shader:clearElementBuffer(source) end)
 
 function shader:load(element, shaderCategory, shaderName, textureName, shaderTextures, encryptKey, shaderPriority, shaderDistance)
     if not self or (self == shader) then return false end
