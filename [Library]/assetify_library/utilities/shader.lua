@@ -105,6 +105,9 @@ function shader:load(shaderCategory, shaderName, textureName, targetElement, sha
         shaderPriority = shaderPriority,
         shaderDistance = shaderDistance
     }
+    buffer.element[targetElement] = buffer.element[targetElement] or {}
+    buffer.element[targetElement][shaderCategory] = buffer.element[targetElement][shaderCategory] or {}
+    buffer.element[targetElement][shaderCategory][textureName] = self
     imports.engineApplyShaderToWorldTexture(self.cShader, textureName, targetElement)
     return true
 end
