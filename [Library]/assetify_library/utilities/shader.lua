@@ -40,6 +40,7 @@ shader = {
         invisibleMap = imports.dxCreateTexture(2, 2, "dxt5", "clamp")
     },
     buffer = {
+        textures = {},
         element = {}
     },
     rwCache = shaderRW
