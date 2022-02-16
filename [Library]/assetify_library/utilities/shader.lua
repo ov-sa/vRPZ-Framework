@@ -89,14 +89,15 @@ function shader:clearElementBuffer(element, shaderCategory)
     return true
 end
 
-function shader:load(shaderName, textureName, targetElement, shaderData, shaderPriority, shaderDistance)
+function shader:load(shaderCategory, shaderName, textureName, targetElement, shaderData, shaderPriority, shaderDistance)
     if not self or (self == shader) then return false end
-    if not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not targetElement or not imports.isElement(targetElement) or not shaderData then return false end
+    if not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not targetElement or not imports.isElement(targetElement) or not shaderData then return false end
     self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
     shaderPriority = imports.tonumber(shaderPriority) or shader.defaultData.shaderPriority
     shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
     self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName], shaderPriority, shaderDistance, false, "all")
     self.shaderData = {
+        shaderCategory = shaderCategory,
         shaderName = shaderName,
         textureName = textureName,
         targetElement = targetElement,
