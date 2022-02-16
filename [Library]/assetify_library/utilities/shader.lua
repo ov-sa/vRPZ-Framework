@@ -29,21 +29,6 @@ local imports = {
     file = file
 }
 
-imports.dxCreateCustomTexture = function(texturePath, encryptKey, ...)
-    if not texturePath then return false end
-    if encryptKey then
-        local cTexturePath = texturePath..".tmp"
-        if imports.file.write(cTexturePath, imports.decodeString("tea", imports.file.read(texturePath), {key = encryptKey})) then
-            local cTexture = imports.dxCreateTexture(cTexturePath, ...)
-            imports.file.delete(cTexturePath)
-            return cTexture
-        end
-    else
-        return imports.dxCreateTexture(texturePath, ...)
-    end
-    return false
-end
-
 
 -----------------------
 --[[ Class: Shader ]]--
@@ -77,6 +62,21 @@ function shader:create(...)
         return false
     end
     return cShader
+end
+
+function shader:createTex(texturePath, encryptKey, ...)
+    if not texturePath then return false end
+    if encryptKey then
+        local cTexturePath = texturePath..".tmp"
+        if imports.file.write(cTexturePath, imports.decodeString("tea", imports.file.read(texturePath), {key = encryptKey})) then
+            local cTexture = imports.dxCreateTexture(cTexturePath, ...)
+            imports.file.delete(cTexturePath)
+            return cTexture
+        end
+    else
+        return imports.dxCreateTexture(texturePath, ...)
+    end
+    return false
 end
 
 function shader:destroy(...)
@@ -142,7 +142,7 @@ function shader:load(assetType, assetName, element, shaderCategory, shaderName, 
     if not self.isPreLoaded then bufferReference.shader[shaderName] = self.cShader end
     for i, j in imports.pairs(shaderTextures) do
         if j and imports.file.exists(j) then
-            bufferReference.texture[j] = bufferReference.texture[j] or imports.dxCreateCustomTexture(j, encryptKey, "dxt5", true)
+            bufferReference.texture[j] = bufferReference.texture[j] or imports.shader:createTex(j, encryptKey, "dxt5", true)
             imports.dxSetShaderValue(self.cShader, i, bufferReference.texture[j])
         end
     end
