@@ -102,7 +102,7 @@ if localPlayer then
                     imports.engineFreeModel(modelID)
                     return false
                 else
-                    if not rwCache.col[(rwPaths.col)] and imports.fileExists(rwPaths.col) then
+                    if not rwCache.col[(rwPaths.col)] and imports.file.exists(rwPaths.col) then
                         rwCache.col[(rwPaths.col)] = imports.engineLoadCOL((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(rwPaths.col), {key = assetManifest.encryptKey})) or rwPaths.col)
                     end
                 end
