@@ -154,8 +154,9 @@ if localPlayer then
         if modelID then
             shader:clearElementBuffer(element, "clump")
             if clumpMaps then
-                --TODO: DELETE ALL SHADERS AND RECREATE IT...
-                print("yes do it...")
+                for i, j in imports.pairs(clumpMaps) do
+                    shader:create("clump", "Assetify_TextureChanger", i, {baseTexture = j}, element)
+                end
             end
             imports.setElementModel(element, modelID)
         end
