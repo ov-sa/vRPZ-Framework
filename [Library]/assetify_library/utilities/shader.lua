@@ -121,6 +121,7 @@ function shader:unload()
     else
         imports.engineRemoveShaderFromWorldTexture(self.cShader, self.shaderData.textureName, self.shaderData.targetElement)
     end
+    buffer.element[(self.shaderData.targetElement)][(self.shaderData.shaderCategory)][(self.shaderData.textureName)] = nil
     self = nil
     return true
 end
