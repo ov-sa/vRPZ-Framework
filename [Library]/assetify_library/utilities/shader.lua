@@ -29,6 +29,21 @@ local imports = {
     file = file
 }
 
+imports.dxCreateCustomTexture = function(texturePath, encryptKey, ...)
+    if not texturePath then return false end
+    if encryptKey then
+        local cTexturePath = texturePath..".tmp"
+        if imports.file.write(cTexturePath, imports.decodeString("tea", imports.file.read(texturePath), {key = encryptKey})) then
+            local cTexture = imports.dxCreateTexture(cTexturePath, ...)
+            imports.file.delete(cTexturePath)
+            return cTexture
+        end
+    else
+        return imports.dxCreateTexture(texturePath, ...)
+    end
+    return false
+end
+
 
 -----------------------
 --[[ Class: Shader ]]--
@@ -103,7 +118,7 @@ function shader:load(element, shaderCategory, shaderName, textureName, shaderTex
     for i, j in imports.pairs(shaderTextures) do
         if j and imports.file.exists(j) then
             shader.buffer.texture[i] = shader.buffer.texture[i] or {
-                textureElement = imports.dxCreateTexture((encryptKey and imports.decodeString("tea", imports.file.read(j), {key = encryptKey})) or j)
+                textureElement = imports.dxCreateCustomTexture(j, encryptKey, "dxt5", true),
                 streamCount = 0
             }
             shader.buffer.texture[i].streamCount = shader.buffer.texture[i].streamCount + 1
