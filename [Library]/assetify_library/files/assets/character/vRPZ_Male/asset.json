@@ -20,6 +20,10 @@
             ],
             "cj_pnt_1": [
                 "clump/lower/pant/1.png"
+            ],
+            "cj_shoe_1": [
+                "clump/shoes/sneakers/1.png",
+                "clump/shoes/sneakers/2.png"
             ]
         }
     }

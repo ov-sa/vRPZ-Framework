@@ -66,10 +66,10 @@ configVars["Character"] = {
         },
         ["Shoes"] = {
             ["Male"] = {
-                {clumpName = "", clumpTexture = {"wip", 1}, ["EN"] = "Sneakers (Black)", ["TR"] = "Spor Ayakkabı (Siyah)"}
+                {clumpName = "", clumpTexture = {"cj_shoe_1", 1}, ["EN"] = "Sneakers (Black)", ["TR"] = "Spor Ayakkabı (Siyah)"}
             },
             ["Female"] = {
-                {clumpName = "", clumpTexture = {"wip", 1}, ["EN"] = "Sneakers (Black)", ["TR"] = "Spor Ayakkabı (Siyah)"}
+                {clumpName = "", clumpTexture = {"cj_shoe_1", 1}, ["EN"] = "Sneakers (Black)", ["TR"] = "Spor Ayakkabı (Siyah)"}
             }
         }
     }
