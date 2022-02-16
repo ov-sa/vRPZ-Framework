@@ -67,32 +67,32 @@ function shader:destroy(...)
     return self:unload(...)
 end
 
-function shader:clearElementBuffer(targetElement, shaderCategory)
+function shader:clearElementBuffer(element, shaderCategory)
     if self or (self ~= shader) then return false end
-    if not targetElement or not imports.isElement(targetElement) or not shader.buffer.element[targetElement] or (shaderCategory and not shader.buffer.element[targetElement][shaderCategory]) then return false end
+    if not element or not imports.isElement(element) or not shader.buffer.element[element] or (shaderCategory and not shader.buffer.element[element][shaderCategory]) then return false end
     if shaderCategory then
-        for i, j in imports.pairs(shader.buffer.element[targetElement]) do
+        for i, j in imports.pairs(shader.buffer.element[element]) do
             for k, v in imports.pairs(j) do
                 if v and imports.isElement(v) then
                     v:destroy()
                 end
             end
         end
-        shader.buffer.element[targetElement] = nil
+        shader.buffer.element[element] = nil
     else
-        for i, j in imports.pairs(shader.buffer.element[targetElement][shaderCategory]) do
+        for i, j in imports.pairs(shader.buffer.element[element][shaderCategory]) do
             if j and imports.isElement(j) then
                 j:destroy()
             end
         end
-        shader.buffer.element[targetElement][shaderCategory] = nil
+        shader.buffer.element[element][shaderCategory] = nil
     end
     return true
 end
 
-function shader:load(shaderCategory, shaderName, textureName, shaderTextures, targetElement, shaderPriority, shaderDistance)
+function shader:load(element, shaderCategory, shaderName, textureName, shaderTextures, shaderPriority, shaderDistance)
     if not self or (self == shader) then return false end
-    if not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures or not targetElement or not imports.isElement(targetElement) then return false end
+    if not element or not imports.isElement(element) or not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures then return false end
     shaderPriority = imports.tonumber(shaderPriority) or shader.defaultData.shaderPriority
     shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
     self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
@@ -108,18 +108,18 @@ function shader:load(shaderCategory, shaderName, textureName, shaderTextures, ta
         end
     end
     self.shaderData = {
+        element = element,
         shaderCategory = shaderCategory,
         shaderName = shaderName,
         textureName = textureName,
-        targetElement = targetElement,
         shaderTextures = shaderTextures,
         shaderPriority = shaderPriority,
         shaderDistance = shaderDistance
     }
-    shader.buffer.element[targetElement] = shader.buffer.element[targetElement] or {}
-    shader.buffer.element[targetElement][shaderCategory] = shader.buffer.element[targetElement][shaderCategory] or {}
-    shader.buffer.element[targetElement][shaderCategory][textureName] = self
-    imports.engineApplyShaderToWorldTexture(self.cShader, textureName, targetElement)
+    shader.buffer.element[element] = shader.buffer.element[element] or {}
+    shader.buffer.element[element][shaderCategory] = shader.buffer.element[element][shaderCategory] or {}
+    shader.buffer.element[element][shaderCategory][textureName] = self
+    imports.engineApplyShaderToWorldTexture(self.cShader, textureName, element)
     return true
 end
 
@@ -130,7 +130,7 @@ function shader:unload()
             imports.destroyElement(self.cShader)
         end
     else
-        imports.engineRemoveShaderFromWorldTexture(self.cShader, self.shaderData.textureName, self.shaderData.targetElement)
+        imports.engineRemoveShaderFromWorldTexture(self.cShader, self.shaderData.textureName, self.shaderData.element)
     end
     for i, j in imports.pairs(self.shaderData.shaderTextures) do
         if shader.buffer.texture[i] then
@@ -141,7 +141,7 @@ function shader:unload()
             end
         end
     end
-    shader.buffer.element[(self.shaderData.targetElement)][(self.shaderData.shaderCategory)][(self.shaderData.textureName)] = nil
+    shader.buffer.element[(self.shaderData.element)][(self.shaderData.shaderCategory)][(self.shaderData.textureName)] = nil
     self = nil
     return true
 end
