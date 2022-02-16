@@ -584,7 +584,8 @@ loginUI.renderUI = function(renderData)
 
     if renderData.renderType == "input" then
         loginUI.cache.keys.mouse = isMouseClicked()
-        imports.triggerEvent("Player:onSyncWeather", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].weather, FRAMEWORK_CONFIGS["UI"]["Login"].time)
+        --TODO: MAKE IT DIFFERENT FOR CHARACTER AND LOBBY UI
+        --imports.triggerEvent("Player:onSyncWeather", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].weather, FRAMEWORK_CONFIGS["UI"]["Login"].time)
     elseif renderData.renderType == "render" then
         local isLMBClicked = loginUI.cache.keys.mouse == "mouse1"
         local currentRatio = (CLIENT_MTA_RESOLUTION[1]/CLIENT_MTA_RESOLUTION[2])/(1366/768)
