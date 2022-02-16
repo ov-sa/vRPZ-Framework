@@ -73,7 +73,7 @@ function shader:clearElementBuffer(element, shaderCategory)
         for i, j in imports.pairs(buffer.element[element]) do
             for k, v in imports.pairs(j) do
                 if v and imports.isElement(v) then
-                    imports.destroyElement(v)
+                    v:destroy()
                 end
             end
         end
@@ -81,7 +81,7 @@ function shader:clearElementBuffer(element, shaderCategory)
     else
         for i, j in imports.pairs(buffer.element[element][shaderCategory]) do
             if j and imports.isElement(j) then
-                imports.destroyElement(j)
+                j:destroy()
             end
         end
         buffer.element[element][shaderCategory] = nil
