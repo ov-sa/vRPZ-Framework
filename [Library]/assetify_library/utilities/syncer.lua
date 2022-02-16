@@ -154,8 +154,13 @@ if localPlayer then
         if modelID then
             shader:clearElementBuffer(element, "clump")
             if clumpMaps then
-                for i, j in imports.pairs(clumpMaps) do
-                    shader:create(element, "clump", "Assetify_TextureChanger", i, {baseTexture = j})
+                local assetReference = manager:getData(assetType, assetName)
+                if assetReference and assetReference.manifestData.shaderMaps and assetReference.manifestData.shaderMaps.clump then
+                    for i, j in imports.pairs(clumpMaps) do
+                        if assetReference.manifestData.shaderMaps.clump[i] and assetReference.manifestData.shaderMaps.clump[i][j] then
+                            shader:create(element, "clump", "Assetify_TextureChanger", i, {baseTexture = assetReference.manifestData.shaderMaps.clump[i][j]})
+                        end
+                    end
                 end
             end
             imports.setElementModel(element, modelID)

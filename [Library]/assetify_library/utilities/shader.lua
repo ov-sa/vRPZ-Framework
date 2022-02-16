@@ -105,7 +105,7 @@ function shader:load(element, shaderCategory, shaderName, textureName, shaderTex
                 textureElement = imports.dxCreateTexture(shaderTextures[i]), --TODO: DECODE...
                 streamCount = 0
             }
-            shader.buffer.texture[i] = shader.buffer.texture[i].streamCount + 1
+            shader.buffer.texture[i].streamCount = shader.buffer.texture[i].streamCount + 1
             imports.dxSetShaderValue(self.cShader, i, shader.buffer.texture[i].textureElement)
         end
     end
