@@ -23,7 +23,8 @@ local imports = {
     dxCreateTexture = dxCreateTexture,
     dxSetShaderValue = dxSetShaderValue,
     engineApplyShaderToWorldTexture = engineApplyShaderToWorldTexture,
-    engineRemoveShaderFromWorldTexture = engineRemoveShaderFromWorldTexture
+    engineRemoveShaderFromWorldTexture = engineRemoveShaderFromWorldTexture,
+    file = file
 }
 
 
@@ -97,13 +98,14 @@ function shader:load(shaderCategory, shaderName, textureName, shaderTextures, ta
     shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
     self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName], shaderPriority, shaderDistance, false, "all")
     for i, j in imports.pairs(shaderTextures) do
-        --TODO: CHECK IF FILE PATH EXISTS..
-        shader.buffer.texture[i] = shader.buffer.texture[i] or {
-            textureElement = imports.dxCreateTexture(shaderTextures[i]), --TODO: DECODE...
-            streamCount = 0
-        }
-        shader.buffer.texture[i] = shader.buffer.texture[i].streamCount + 1
-        imports.dxSetShaderValue(self.cShader, i, shader.buffer.texture[i].textureElement)
+        if j and imports.file.exists(j) then
+            shader.buffer.texture[i] = shader.buffer.texture[i] or {
+                textureElement = imports.dxCreateTexture(shaderTextures[i]), --TODO: DECODE...
+                streamCount = 0
+            }
+            shader.buffer.texture[i] = shader.buffer.texture[i].streamCount + 1
+            imports.dxSetShaderValue(self.cShader, i, shader.buffer.texture[i].textureElement)
+        end
     end
     self.shaderData = {
         shaderCategory = shaderCategory,
@@ -124,7 +126,7 @@ end
 function shader:unload()
     if not self or (self == shader) then return false end
     if not self.preLoaded then
-        if imports.isElement(self.cShader) then
+        if self.cShader and imports.isElement(self.cShader) then
             imports.destroyElement(self.cShader)
         end
     else

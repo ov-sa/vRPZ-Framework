@@ -28,7 +28,6 @@ local imports = {
     destroyElement = destroyElement,
     setmetatable = setmetatable,
     setTimer = setTimer,
-    fileExists = fileExists,
     engineRequestModel = engineRequestModel,
     engineSetModelLODDistance = engineSetModelLODDistance,
     engineFreeModel = engineFreeModel,
@@ -96,7 +95,7 @@ if localPlayer then
             modelID = imports.engineRequestModel(assetPack.assetType, (assetManifest.assetBase and (imports.type(assetManifest.assetBase) == "number") and assetManifest.assetBase) or assetPack.assetBase or nil)
             if modelID then
                 imports.engineSetModelLODDistance(modelID, 300)
-                if not rwCache.dff[(rwPaths.dff)] and imports.fileExists(rwPaths.dff) then
+                if not rwCache.dff[(rwPaths.dff)] and imports.file.exists(rwPaths.dff) then
                     rwCache.dff[(rwPaths.dff)] = imports.engineLoadDFF((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(rwPaths.dff), {key = assetManifest.encryptKey})) or rwPaths.dff)
                 end
                 if not rwCache.dff[(rwPaths.dff)] then
