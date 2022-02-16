@@ -66,25 +66,25 @@ function shader:destroy(...)
     return self:unload(...)
 end
 
-function shader:clearElementBuffer(element, shaderCategory)
+function shader:clearElementBuffer(targetElement, shaderCategory)
     if self or (self ~= shader) then return false end
-    if not element or not imports.isElement(element) or not buffer.element[element] or (shaderCategory and not buffer.element[element][shaderCategory]) then return false end
+    if not targetElement or not imports.isElement(targetElement) or not buffer.element[targetElement] or (shaderCategory and not buffer.element[targetElement][shaderCategory]) then return false end
     if shaderCategory then
-        for i, j in imports.pairs(buffer.element[element]) do
+        for i, j in imports.pairs(buffer.element[targetElement]) do
             for k, v in imports.pairs(j) do
                 if v and imports.isElement(v) then
                     v:destroy()
                 end
             end
         end
-        buffer.element[element] = nil
+        buffer.element[targetElement] = nil
     else
-        for i, j in imports.pairs(buffer.element[element][shaderCategory]) do
+        for i, j in imports.pairs(buffer.element[targetElement][shaderCategory]) do
             if j and imports.isElement(j) then
                 j:destroy()
             end
         end
-        buffer.element[element][shaderCategory] = nil
+        buffer.element[targetElement][shaderCategory] = nil
     end
     return true
 end
