@@ -43,7 +43,6 @@ shader = {
         invisibleMap = imports.dxCreateTexture(2, 2, "dxt5", "clamp")
     },
     buffer = {
-        asset = {},
         element = {}
     },
     rwCache = shaderRW
@@ -64,19 +63,29 @@ function shader:create(...)
     return cShader
 end
 
-function shader:createTex(texturePath, encryptKey, ...)
-    if not texturePath then return false end
-    if encryptKey then
-        local cTexturePath = texturePath..".tmp"
-        if imports.file.write(cTexturePath, imports.decodeString("tea", imports.file.read(texturePath), {key = encryptKey})) then
-            local cTexture = imports.dxCreateTexture(cTexturePath, ...)
-            imports.file.delete(cTexturePath)
-            return cTexture
+function shader:createTex(shaderMaps, rwCache, encryptKey)
+    if not shaderMaps or not rwCache then return false end
+    rwCache.shader = {}
+    rwCache.texture = {}
+    for i, j in imports.pairs(shaderMaps) do
+        if i == "clump" then
+            for k, v in imports.pairs(j) do
+                for m = 1, #v, 1 do
+                    local n = v[m]
+                    if encryptKey then
+                        local cTexturePath = n..".tmp"
+                        if imports.file.write(cTexturePath, imports.decodeString("tea", imports.file.read(n), {key = encryptKey})) then
+                            rwCache.texture[(n)] = imports.dxCreateTexture(cTexturePath, "dxt5", true)
+                            imports.file.delete(cTexturePath)
+                        end
+                    else
+                        rwCache.texture[(n)] = imports.dxCreateTexture(n, "dxt5", true)
+                    end
+                end
+            end
         end
-    else
-        return imports.dxCreateTexture(texturePath, ...)
     end
-    return false
+    return true
 end
 
 function shader:destroy(...)
@@ -84,20 +93,17 @@ function shader:destroy(...)
     return self:unload(...)
 end
 
-function shader:clearAssetBuffer(assetType, assetName)
-    local bufferReference = (shader.buffer.asset[assetType] and shader.buffer.asset[assetType][assetName]) or false
-    if bufferReference then
-        for i, j in imports.pairs(bufferReference.shader) do
-            if j and imports.isElement(j) then
-                imports.destroyElement(j)
-            end
+function shader:clearAssetBuffer(rwCache)
+    if not rwCache then return false end
+    for i, j in imports.pairs(rwCache.shader) do
+        if j and imports.isElement(j) then
+            imports.destroyElement(j)
         end
-        for i, j in imports.pairs(bufferReference.texture) do
-            if j and imports.isElement(j) then
-                imports.destroyElement(j)
-            end
+    end
+    for i, j in imports.pairs(rwCache.texture) do
+        if j and imports.isElement(j) then
+            imports.destroyElement(j)
         end
-        shader.buffer.asset[assetType] = nil
     end
     return true
 end
@@ -125,25 +131,17 @@ function shader:clearElementBuffer(element, shaderCategory)
 end
 imports.addEventHandler("onClientElementDestroy", resourceRoot, function() shader:clearElementBuffer(source) end)
 
-function shader:load(assetType, assetName, element, shaderCategory, shaderName, textureName, shaderTextures, encryptKey, shaderPriority, shaderDistance)
+function shader:load(element, shaderCategory, shaderName, textureName, shaderTextures, rwCache, encryptKey, shaderPriority, shaderDistance)
     if not self or (self == shader) then return false end
-    if not assetType or not assetName or not element or not imports.isElement(element) or not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures then return false end
+    if not element or not imports.isElement(element) or not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures or not rwCache then return false end
     shaderPriority = imports.tonumber(shaderPriority) or shader.defaultData.shaderPriority
     shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
-    --TODO: MOVE TO ASSET LOADER..
-    shader.buffer.asset[assetType] = shader.buffer.asset[assetType] or {}
-    shader.buffer.asset[assetType][assetName] = shader.buffer.asset[assetType][assetName] or {
-        shader = {},
-        texture = {}
-    }
-    local bufferReference = shader.buffer.asset[assetType][assetName]
     self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
     self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName], shaderPriority, shaderDistance, false, "all")
-    if not self.isPreLoaded then bufferReference.shader[shaderName] = self.cShader end
+    if not self.isPreLoaded then rwCache.shader[shaderName] = self.cShader end
     for i, j in imports.pairs(shaderTextures) do
-        if j and imports.file.exists(j) then
-            bufferReference.texture[j] = bufferReference.texture[j] or imports.shader:createTex(j, encryptKey, "dxt5", true)
-            imports.dxSetShaderValue(self.cShader, i, bufferReference.texture[j])
+        if j and imports.isElement(rwCache.texture[j]) then
+            imports.dxSetShaderValue(self.cShader, i, rwCache.texture[j])
         end
     end
     self.shaderData = {
