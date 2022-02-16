@@ -153,7 +153,6 @@ if localPlayer then
     --[[
     function asset:refreshShaderPack(assetType, assetName, shaderPack, mapType, rwCache, assetManifest, state)
         if not assetType or not assetName or not shaderPack or not rwCache or not assetManifest then return false end
-        print(assetType)
         for i, j in imports.pairs(shaderPack) do
             if not mapType then
                 if state then
@@ -199,8 +198,6 @@ if localPlayer then
                             end
                         end
                     else
-                        print(mapType)
-                        print(k)
                         if rwCache[mapType][k] then
                             for m, n in imports.pairs(rwCache[mapType][k]) do
                                 if n and imports.isElement(n) then

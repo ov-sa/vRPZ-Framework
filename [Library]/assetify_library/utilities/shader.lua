@@ -90,13 +90,11 @@ function shader:clearAssetBuffer(assetType, assetName)
         for i, j in imports.pairs(bufferReference.shader) do
             if j and imports.isElement(j) then
                 imports.destroyElement(j)
-                print("DESTROYED TEXTURES")
             end
         end
         for i, j in imports.pairs(bufferReference.texture) do
             if j and imports.isElement(j) then
                 imports.destroyElement(j)
-                print("DESTROYED SHADERS")
             end
         end
         shader.buffer.asset[assetType] = nil
