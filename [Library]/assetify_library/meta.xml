@@ -1,9 +1,11 @@
 <meta>
 
-    <info author="OvileAmriam" name="Assetify Library" type="Library" version="1.0.7"/>
+    <info author="OvileAmriam" name="Assetify Library" type="Library" version="1.0.8"/>
     <min_mta_version server="1.5.9" client="1.5.9"/>
 
     <!-- Exports, Settings & Utilities -->
+    <file src="utilities/rw/dict.rw"/>
+    <file src="utilities/rw/buffer.rw"/>
     <script src="utilities/shared.lua" type="shared"/>
     <script src="utilities/shaders/index.lua" type="client"/>
     <script src="utilities/shaders/tex_changer.lua" type="client"/>
@@ -14,6 +16,7 @@
     <script src="utilities/syncer.lua" type="shared"/>
     <script src="utilities/shader.lua" type="client"/>
     <script src="utilities/scene.lua" type="client"/>
+    <script src="utilities/streamer.lua" type="client"/>
     <script src="utilities/manager.lua" type="client"/>
     <script src="settings/shared.lua" type="shared"/>
     <script src="settings/server.lua" type="server"/>

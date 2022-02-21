@@ -18,10 +18,11 @@ local imports = {
     pairs = pairs,
     tonumber = tonumber,
     isElement = isElement,
+    attachElements = attachElements,
     destroyElement = destroyElement,
-    addEventHandler = addEventHandler,
     setmetatable = setmetatable,
     createObject = createObject,
+    setElementAlpha = setElementAlpha,
     setElementDoubleSided = setElementDoubleSided,
     setElementDimension = setElementDimension,
     setElementInterior = setElementInterior
@@ -52,23 +53,19 @@ end
 function scene:load(cAsset, sceneManifest, sceneData)
     if not self or (self == scene) then return false end
     if not cAsset or not sceneManifest or not sceneData then return false end
-    self.cObject = imports.createObject(cAsset.syncedData.modelID, sceneData.position.x + ((sceneManifest.sceneOffset and sceneManifest.sceneOffset.x) or 0), sceneData.position.y + ((sceneManifest.sceneOffset and sceneManifest.sceneOffset.y) or 0), sceneData.position.z + ((sceneManifest.sceneOffset and sceneManifest.sceneOffset.z) or 0), sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z)
-    imports.setElementDoubleSided(self.cObject, true)
-    imports.setElementDimension(self.cObject, sceneManifest.sceneDimension)
-    imports.setElementInterior(self.cObject, sceneManifest.sceneInterior)
-    if sceneManifest.defaultLODs then
-        imports.addEventHandler("onClientElementStreamIn", self.cObject, function()
-            if not self.cLODObject or not imports.isElement(self.cLODObject) then return false end
-            imports.destroyElement(self.cLODObject)
-        end)
-        imports.addEventHandler("onClientElementStreamOut", self.cObject, function()
-            if self.cLODObject and imports.isElement(self.cLODObject) then return false end
-            local sceneManifest, sceneData = sceneManifest, sceneData 
-            self.cLODObject = imports.createObject(cAsset.syncedData.modelID, sceneData.position.x + ((sceneManifest.sceneOffset and sceneManifest.sceneOffset.x) or 0), sceneData.position.y + ((sceneManifest.sceneOffset and sceneManifest.sceneOffset.y) or 0), sceneData.position.z + ((sceneManifest.sceneOffset and sceneManifest.sceneOffset.z) or 0), sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z, true)
-            imports.setElementDoubleSided(self.cLODObject, true)
-            imports.setElementDimension(self.cLODObject, sceneManifest.sceneDimension)
-            imports.setElementInterior(self.cLODObject, sceneManifest.sceneInterior)
-        end)
+    local instanceCoords = {sceneData.position.x + ((sceneManifest.sceneOffset and sceneManifest.sceneOffset.x) or 0), sceneData.position.y + ((sceneManifest.sceneOffset and sceneManifest.sceneOffset.y) or 0), sceneData.position.z + ((sceneManifest.sceneOffset and sceneManifest.sceneOffset.z) or 0), sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z}
+    self.cModelInstance = imports.createObject(cAsset.syncedData.modelID, instanceCoords[1], instanceCoords[2], instanceCoords[3], instanceCoords[4], instanceCoords[5], instanceCoords[6], true)
+    imports.setElementDoubleSided(self.cModelInstance, true)
+    imports.setElementDimension(self.cModelInstance, sceneManifest.sceneDimension)
+    imports.setElementInterior(self.cModelInstance, sceneManifest.sceneInterior)
+    if cAsset.syncedData.collisionID then
+        self.cCollisionInstance = imports.createObject(cAsset.syncedData.collisionID, instanceCoords[1], instanceCoords[2], instanceCoords[3], instanceCoords[4], instanceCoords[5], instanceCoords[6])
+        self.cStreamerInstance = imports.createObject(cAsset.syncedData.collisionID, instanceCoords[1], instanceCoords[2], instanceCoords[3], instanceCoords[4], instanceCoords[5], instanceCoords[6], true)
+        imports.setElementAlpha(self.cCollisionInstance, 0)
+        imports.attachElements(self.cModelInstance, self.cCollisionInstance)
+        imports.setElementDimension(self.cCollisionInstance, sceneManifest.sceneDimension)
+        imports.setElementInterior(self.cCollisionInstance, sceneManifest.sceneInterior)
+        self.cStreamer = streamer:create(self.cStreamerInstance, "scene", {self.cCollisionInstance, self.cModelInstance})
     end
     cAsset.cScene = self
     return true
@@ -76,11 +73,17 @@ end
 
 function scene:unload()
     if not self or (self == scene) then return false end
-    if self.cObject and imports.isElement(self.cObject) then
-        imports.destroyElement(self.cObject)
+    if self.cStreamer then
+        self.cStreamer:destroy()
     end
-    if self.cLODObject and imports.isElement(self.cLODObject) then
-        imports.destroyElement(self.cLODObject)
+    if self.cModelInstance and imports.isElement(self.cModelInstance) then
+        imports.destroyElement(self.cModelInstance)
+    end
+    if self.cStreamerInstance and imports.isElement(self.cStreamerInstance) then
+        imports.destroyElement(self.cStreamerInstance)
+    end
+    if self.cCollisionInstance and imports.isElement(self.cCollisionInstance) then
+        imports.destroyElement(self.cCollisionInstance)
     end
     self = nil
     return true
