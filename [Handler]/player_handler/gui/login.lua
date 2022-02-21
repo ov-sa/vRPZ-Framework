@@ -82,7 +82,7 @@ local loginUI = {
                 bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.bgColor)),
                 {
                     identifier = "Identity",
-                    height = 150,
+                    height = 120,
                     contents = {
                         tone = {
                             identifier = "tone",
