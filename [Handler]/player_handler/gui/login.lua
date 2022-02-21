@@ -744,6 +744,7 @@ end)
 imports.addEventHandler("onClientResourceStart", resource, function()
     imports.fadeCamera(false)
     imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
+    --TODO: MAKE EXPORT IN LIBRARY TO CHECK IF ITS ALREADY LOADED
     imports.addEventHandler("onAssetifyLoad", root, function()
         imports.triggerServerEvent("Player:onToggleLoginUI", localPlayer)
     end)
