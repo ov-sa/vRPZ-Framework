@@ -10,7 +10,9 @@
         "clump": {
             "cj_tshrt_1": [
                 "clump/upper/tshirt/1.png",
-                "clump/upper/tshirt/2.png"
+                "clump/upper/tshirt/2.png",
+                "clump/upper/tshirt/3.png",
+                "clump/upper/tshirt/4.png"
             ],
             "cj_hdy_1": [
                 "clump/upper/hoody/1.png"
