@@ -82,10 +82,6 @@ configVars["UI"]["Login"] = {
                         default = "Male",
                         ["Titles"] = {["EN"] = "Gender", ["TR"] = "Cinsiyet"},
                         ["Datas"] = configVars["Character"]["Identity"]["Gender"]
-                    },
-                    faction = {
-                        ["Titles"] = {["EN"] = "Faction", ["TR"] = "Hizip"},
-                        ["Datas"] = configVars["Character"]["Identity"]["Faction"]
                     }
                 },
                 ["Facial"] = {

@@ -55,12 +55,12 @@ configVars["UI"]["Loading"] = {
                 ["TR"] = "Her zaman dikkatli olmalısın, asla kimseye güvenmemelisin!"
             },
             {
-                ["EN"] = "Revive your faction/group members to gain more reputation!",
-                ["TR"] = "Daha fazla itibar kazanmak için faction/grup üyelerinizi canlandırın!"
+                ["EN"] = "Revive your group members to gain more reputation!",
+                ["TR"] = "Daha fazla itibar kazanmak için grup üyelerinizi canlandırın!"
             },
             {
-                ["EN"] = "Killing your faction/group members will reduce your reputation!",
-                ["TR"] = "Faction/grup üyelerinizi öldürmek itibarınızı düşürür!"
+                ["EN"] = "Killing your group members will reduce your reputation!",
+                ["TR"] = "Grup üyelerinizi öldürmek itibarınızı düşürür!"
             },
             {
                 ["EN"] = "Maintain higher reputation to unlock high tier loots!",
