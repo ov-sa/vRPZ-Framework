@@ -16,7 +16,7 @@ configVars["UI"]["Login"] = {
 
     weather = 9,
     time = {12, 0},
-    dimension = 100,
+    dimension = 1,
     fadeDelay = 7000,
     clientPoint = {x = 0, y = 0, z = 0},
     bgPath = "files/images/login/background.png",
