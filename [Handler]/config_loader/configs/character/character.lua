@@ -44,10 +44,16 @@ configVars["Character"] = {
         },
         ["Upper"] = {
             ["Male"] = {
-                {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 1}, ["EN"] = "T-Shirt (LS)", ["TR"] = "Tişört (LS)"},
-                {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 2}, ["EN"] = "T-Shirt (U)", ["TR"] = "Tişört (U)"},
-                {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 3}, ["EN"] = "T-Shirt (ZM#1)", ["TR"] = "Tişört (ZM#1)"},
-                {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 4}, ["EN"] = "T-Shirt (ZM#2)", ["TR"] = "Tişört (ZM#2)"},
+                {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 1}, ["EN"] = "T-Shirt (VRPZ#1)", ["TR"] = "Tişört (VRPZ#1)"},
+                {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 2}, ["EN"] = "T-Shirt (VRPZ#2)", ["TR"] = "Tişört (VRPZ#2)"},
+                {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 3}, ["EN"] = "T-Shirt (VRPZ#3)", ["TR"] = "Tişört (VRPZ#3)"},
+                {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 4}, ["EN"] = "T-Shirt (VRPZ#4)", ["TR"] = "Tişört (VRPZ#4)"},
+                {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 5}, ["EN"] = "T-Shirt (VRPZ#5)", ["TR"] = "Tişört (VRPZ#5)"},
+                {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 6}, ["EN"] = "T-Shirt (VRPZ#6)", ["TR"] = "Tişört (VRPZ#6)"},
+                {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 7}, ["EN"] = "T-Shirt (Camo#1)", ["TR"] = "Tişört (Camo#1)"},
+                {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 8}, ["EN"] = "T-Shirt (Camo#2)", ["TR"] = "Tişört (Camo#2)"},
+                {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 9}, ["EN"] = "T-Shirt (ZM#1)", ["TR"] = "Tişört (ZM#1)"},
+                {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 10}, ["EN"] = "T-Shirt (ZM#2)", ["TR"] = "Tişört (ZM#2)"},
                 {clumpName = "H1", clumpTexture = {"cj_hdy_1", 1}, ["EN"] = "Hoody (Green)", ["TR"] = "Kapüşonlu (Yeşil)"}
             },
             ["Female"] = {
