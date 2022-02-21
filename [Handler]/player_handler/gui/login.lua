@@ -744,7 +744,9 @@ end)
 imports.addEventHandler("onClientResourceStart", resource, function()
     imports.fadeCamera(false)
     imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
-    imports.triggerServerEvent("Player:onToggleLoginUI", localPlayer)
+    imports.addEventHandler("onAssetifyLoad", root, function()
+        imports.triggerServerEvent("Player:onToggleLoginUI", localPlayer)
+    end)
 end)
 
 
