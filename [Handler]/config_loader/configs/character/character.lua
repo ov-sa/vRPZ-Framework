@@ -46,6 +46,8 @@ configVars["Character"] = {
             ["Male"] = {
                 {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 1}, ["EN"] = "T-Shirt (LS)", ["TR"] = "Tişört (LS)"},
                 {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 2}, ["EN"] = "T-Shirt (U)", ["TR"] = "Tişört (U)"},
+                {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 3}, ["EN"] = "T-Shirt (ZM#1)", ["TR"] = "Tişört (ZM#1)"},
+                {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 4}, ["EN"] = "T-Shirt (ZM#2)", ["TR"] = "Tişört (ZM#2)"},
                 {clumpName = "H1", clumpTexture = {"cj_hdy_1", 1}, ["EN"] = "Hoody (Green)", ["TR"] = "Kapüşonlu (Yeşil)"}
             },
             ["Female"] = {
