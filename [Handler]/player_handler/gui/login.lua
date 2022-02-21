@@ -82,25 +82,19 @@ local loginUI = {
                 bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.bgColor)),
                 {
                     identifier = "Identity",
-                    height = 180,
+                    height = 150,
                     contents = {
                         tone = {
                             identifier = "tone",
                             isSlider = true,
                             startY = 30, paddingY = -8,
-                            height = 30,
+                            height = 30
                         },
                         gender = {
                             identifier = "gender",
                             isSelector = true,
                             startY = 90,
-                            height = 30,
-                        },
-                        faction = {
-                            identifier = "faction",
-                            isSelector = true,
-                            startY = 150,
-                            height = 30,
+                            height = 30
                         }
                     }
                 },
