@@ -9,19 +9,19 @@
     "shaderMaps": {
         "clump": {
             "cj_tshrt_1": [
-                "clump/upper/tshirt/1.png",
-                "clump/upper/tshirt/2.png",
-                "clump/upper/tshirt/3.png",
-                "clump/upper/tshirt/4.png",
-                "clump/upper/tshirt/5.png",
-                "clump/upper/tshirt/6.png",
-                "clump/upper/tshirt/7.png",
-                "clump/upper/tshirt/8.png",
-                "clump/upper/tshirt/9.png",
-                "clump/upper/tshirt/10.png",
-                "clump/upper/tshirt/11.png",
-                "clump/upper/tshirt/12.png",
-                "clump/upper/tshirt/13.png"
+                "clump/upper/tshirt/1.jpg",
+                "clump/upper/tshirt/2.jpg",
+                "clump/upper/tshirt/3.jpg",
+                "clump/upper/tshirt/4.jpg",
+                "clump/upper/tshirt/5.jpg",
+                "clump/upper/tshirt/6.jpg",
+                "clump/upper/tshirt/7.jpg",
+                "clump/upper/tshirt/8.jpg",
+                "clump/upper/tshirt/9.jpg",
+                "clump/upper/tshirt/10.jpg",
+                "clump/upper/tshirt/11.jpg",
+                "clump/upper/tshirt/12.jpg",
+                "clump/upper/tshirt/13.jpg"
             ],
             "cj_hdy_1": [
                 "clump/upper/hoody/1.png"
