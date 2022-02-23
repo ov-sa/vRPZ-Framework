@@ -4,5 +4,7 @@ shader_loader/
 mod_loader/
 graphify_library/
 vRPZ_Terrain/
+vRPZ_Terrain_A/
 map_loader/
+tex_names/
 
