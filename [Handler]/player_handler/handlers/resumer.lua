@@ -48,10 +48,15 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(characterID, ch
     for i, j in imports.pairs(unsavedCharacters) do
         if characters[i] then
             local characterID = CCharacter.create(serial, function(characterID, args)
-                CCharacter.setData(characterID, "identity", imports.toJSON(characters[i]))
-                CCharacter.CBuffer[characterID].identity = imports.fromJSON(CCharacter.CBuffer[characterID].identity)
-                imports.triggerClientEvent(args[1], "Client:onLoadCharacterID", args[1], i, characterID, characters[i])
-            end, source)
+                CCharacter.setData(characterID, {
+                    {"identity", imports.toJSON(args[4])}
+                }, function(result, args)
+                    if result then
+                        CCharacter.CBuffer[(args[3])].identity = args[4]
+                        imports.triggerClientEvent(args[1], "Client:onLoadCharacterID", args[1], args[2], args[3], args[4])
+                    end
+                end, args[1], args[2], args[3], args[4])
+            end, source, i, characterID, characters[i])
         end
     end
     CPlayer.setData(serial, {"character", characterID})
