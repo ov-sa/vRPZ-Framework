@@ -319,10 +319,6 @@ loginUI.phases[2].manageCharacter = function(action)
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully deleted the character!", {80, 255, 80, 255})
     elseif (action == "previous") or (action == "next") then
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
-        if #loginUI.characters <= 1 then
-            imports.triggerEvent("Client:onNotification", localPlayer, "Unfortunately, you don't have enough characters!", {255, 80, 80, 255})
-            return false
-        end
         if action == "previous" then
             if loginUI.selectedCharacter > 1 then
                 loginUI.selectedCharacter = loginUI.selectedCharacter - 1
