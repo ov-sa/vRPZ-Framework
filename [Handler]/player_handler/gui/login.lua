@@ -84,21 +84,18 @@ local loginUI = {
                 bgTexture = imports.beautify.assets["images"]["curved_square/regular/square.rw"], bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.bgColor)),
                 {
                     bgTexture = imports.beautify.assets["images"]["arrow/left.rw"]
-                    --TODO: FIX ALL THESE..
-                    --exec = function() manageCharacter("switch_prev") end
+                    exec = function() manageCharacter("previous") end
                 },
                 {
                     bgTexture = imports.beautify.assets["images"]["arrow/right.rw"]
-                    --exec = function() manageCharacter("switch_next") end
+                    exec = function() manageCharacter("next") end
                 },
                 --[[
                 {
-                    title = "✎",
-                    --exec = function() manageCharacter("create") end
+                    exec = function() manageCharacter("create") end
                 },
                 {
-                    title = "X",
-                    --exec = function() manageCharacter("delete") end
+                    exec = function() manageCharacter("delete") end
                 }
                 ]]
             },
@@ -396,18 +393,18 @@ manageCharacter = function(manageType)
         loginUI._selectedCharacter = imports.math.max(0, loginUI._selectedCharacter - 1)
         loginUI.phases[2].loadCharacter()
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully deleted the character!", {80, 255, 80, 255})
-    elseif (manageType == "switch_prev") or (manageType == "switch_next") then
+    elseif (manageType == "previous") or (manageType == "next") then
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
         if #loginUI.characters <= 1 then
             imports.triggerEvent("Client:onNotification", localPlayer, "Unfortunately, you don't have enough characters to switch!", {255, 80, 80, 255})
             return false
         end
-        if manageType == "switch_prev" then
+        if manageType == "previous" then
             if loginUI._selectedCharacter > 1 then
                 loginUI._selectedCharacter = loginUI._selectedCharacter - 1
                 loginUI.phases[2].loadCharacter()
             end
-        elseif manageType == "switch_next" then
+        elseif manageType == "next" then
             if loginUI._selectedCharacter < #loginUI.characters then
                 loginUI._selectedCharacter = loginUI._selectedCharacter + 1
                 loginUI.phases[2].loadCharacter()
@@ -661,8 +658,8 @@ loginUI.renderUI = function(renderData)
                 local isOptionHovered = isMouseOnPosition(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size)
                 if isOptionHovered then
                     if isLMBClicked then
-                        --imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false)
-                        --imports.setTimer(function() j.exec() end, 1, 1)
+                        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false)
+                        imports.setTimer(function() j.exec() end, 1, 1)
                     end
                     if j.hoverStatus ~= "forward" then
                         j.hoverStatus = "forward"
