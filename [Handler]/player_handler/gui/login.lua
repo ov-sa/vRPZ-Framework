@@ -231,10 +231,10 @@ loginUI.phases[2].updateCharacter = function()
     exports.assetify_library:setCharacterAsset(loginUI.phases[2].character, selectionData.gender[2].assetName, (selectionData.upper[2].clumpName)..(selectionData.lower[2].clumpName)..(selectionData.shoes[2].clumpName), clumpTextures)
 end
 loginUI.phases[2].loadCharacter = function(loadDefault)
-    if not loadDefault and not loginUI.characters[loginUI._selectedCharacter] then
+    if not loadDefault and not loginUI.characters[(loginUI.selectedCharacter)] then
         if #loginUI.characters > 0 then
             loginUI.character = 1
-            loginUI._selectedCharacter = loginUI.character
+            loginUI.selectedCharacter = loginUI.character
         else
             loadDefault = true
         end
@@ -261,10 +261,10 @@ loginUI.phases[2].loadCharacter = function(loadDefault)
         for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].options) do
                 local matchedDataIndex = false
                 if j.optionType == "gender" or j.clothingCategoryIndex then
-                    matchedDataIndex = loginUI.characters[loginUI._selectedCharacter][j.optionType]
+                    matchedDataIndex = loginUI.characters[(loginUI.selectedCharacter)][j.optionType]
                 else
                     for k, v in imports.ipairs(j.placeDataTable) do
-                        if loginUI.characters[loginUI._selectedCharacter][j.optionType] == v then
+                        if loginUI.characters[(loginUI.selectedCharacter)][j.optionType] == v then
                             matchedDataIndex = k
                             break
                         end
@@ -293,8 +293,8 @@ loginUI.phases[2].manageCharacter = function(action)
             isUnverified = true
         }
         imports.table.insert(loginUI.characters, characterData)
-        loginUI._selectedCharacter = #loginUI.characters
-        loginUI._unsavedCharacters[loginUI._selectedCharacter] = true
+        loginUI.selectedCharacter = #loginUI.characters
+        loginUI._unsavedCharacters[(loginUI.selectedCharacter)] = true
         loginUI.phases[2].loadCharacter(true)
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully created a character!", {80, 255, 80, 255})
     elseif action == "delete" then
@@ -303,21 +303,21 @@ loginUI.phases[2].manageCharacter = function(action)
             imports.triggerEvent("Client:onNotification", localPlayer, "Unfortunately, you don't have enough characters to delete!", {255, 80, 80, 255})
             return false
         end
-        if not loginUI.characters[loginUI._selectedCharacter] then
+        if not loginUI.characters[(loginUI.selectedCharacter)] then
             imports.triggerEvent("Client:onNotification", localPlayer, "You must select a character inorder to delete!", {255, 80, 80, 255})
             return false
         end
-        if not loginUI.characters[loginUI._selectedCharacter].isUnverified or loginUI._charactersUnderProcess[loginUI._selectedCharacter] then
-            if not loginUI.characters[loginUI._selectedCharacter]._id or loginUI._charactersUnderProcess[loginUI._selectedCharacter] then
+        if not loginUI.characters[(loginUI.selectedCharacter)].isUnverified or loginUI._charactersUnderProcess[(loginUI.selectedCharacter)] then
+            if not loginUI.characters[(loginUI.selectedCharacter)]._id or loginUI._charactersUnderProcess[(loginUI.selectedCharacter)] then
                 imports.triggerEvent("Client:onNotification", localPlayer, "You must wait until the character processing is done!", {255, 80, 80, 255})
                 return false
             else
-                imports.triggerServerEvent("Player:onDeleteCharacter", localPlayer, loginUI.characters[loginUI._selectedCharacter]._id)
+                imports.triggerServerEvent("Player:onDeleteCharacter", localPlayer, loginUI.characters[(loginUI.selectedCharacter)]._id)
             end
         end
-        imports.table.remove(loginUI.characters, loginUI._selectedCharacter)
-        loginUI._unsavedCharacters[loginUI._selectedCharacter] = nil
-        loginUI._selectedCharacter = imports.math.max(0, loginUI._selectedCharacter - 1)
+        imports.table.remove(loginUI.characters, loginUI.selectedCharacter)
+        loginUI._unsavedCharacters[(loginUI.selectedCharacter)] = nil
+        loginUI.selectedCharacter = imports.math.max(0, loginUI.selectedCharacter - 1)
         loginUI.phases[2].loadCharacter()
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully deleted the character!", {80, 255, 80, 255})
     elseif (action == "previous") or (action == "next") then
@@ -327,30 +327,30 @@ loginUI.phases[2].manageCharacter = function(action)
             return false
         end
         if action == "previous" then
-            if loginUI._selectedCharacter > 1 then
-                loginUI._selectedCharacter = loginUI._selectedCharacter - 1
+            if loginUI.selectedCharacter > 1 then
+                loginUI.selectedCharacter = loginUI.selectedCharacter - 1
                 loginUI.phases[2].loadCharacter()
             end
         elseif action == "next" then
-            if loginUI._selectedCharacter < #loginUI.characters then
-                loginUI._selectedCharacter = loginUI._selectedCharacter + 1
+            if loginUI.selectedCharacter < #loginUI.characters then
+                loginUI.selectedCharacter = loginUI.selectedCharacter + 1
                 loginUI.phases[2].loadCharacter()
             end
         end
     elseif action == "pick" then
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
-        if (loginUI._selectedCharacter ~= 0) and (loginUI.character == loginUI._selectedCharacter) then
+        if (loginUI.selectedCharacter ~= 0) and (loginUI.character == loginUI.selectedCharacter) then
             imports.triggerEvent("Client:onNotification", localPlayer, "You've already picked the specified character!", {255, 80, 80, 255})
             return false
         end
-        if (not loginUI.characters[loginUI._selectedCharacter]) or loginUI.characters[loginUI._selectedCharacter].isUnverified then
+        if (not loginUI.characters[(loginUI.selectedCharacter)]) or loginUI.characters[(loginUI.selectedCharacter)].isUnverified then
             imports.triggerEvent("Client:onNotification", localPlayer, "You must save the character inorder to pick!", {255, 80, 80, 255})
             return false
         end
-        loginUI.character = loginUI._selectedCharacter
+        loginUI.character = loginUI.selectedCharacter
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully picked the character!", {80, 255, 80, 255})
     elseif action == "save" then
-        if #loginUI.characters > 0 and not loginUI.characters[loginUI._selectedCharacter].isUnverified then
+        if #loginUI.characters > 0 and not loginUI.characters[(loginUI.selectedCharacter)].isUnverified then
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
             imports.triggerEvent("Client:onNotification", localPlayer, "Your character is already saved!", {255, 80, 80, 255})
             return false
@@ -384,20 +384,19 @@ loginUI.phases[2].manageCharacter = function(action)
         end
         if #loginUI.characters <= 0 then
             character = 1
-            loginUI._selectedCharacter = character
+            loginUI.selectedCharacter = character
         end
         ]]
-        charactersPendingToBeSaved[loginUI._selectedCharacter] = true
-        charactersToBeSaved[loginUI._selectedCharacter] = characterData
-        loginUI._charactersUnderProcess[loginUI._selectedCharacter] = true
+        charactersPendingToBeSaved[(loginUI.selectedCharacter)] = true
+        charactersToBeSaved[(loginUI.selectedCharacter)] = characterData
+        loginUI._charactersUnderProcess[(loginUI.selectedCharacter)] = true
         imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, character, charactersToBeSaved, charactersPendingToBeSaved)
     elseif action == "play" then
         if #loginUI.characters <= 0 then
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
             imports.triggerEvent("Client:onNotification", localPlayer, "You must create a character to play!", {255, 80, 80, 255})
             return false
-        else
-            if not loginUI.characters[loginUI.character] then
+        elseif not loginUI.characters[loginUI.character] then
                 imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
                 imports.triggerEvent("Client:onNotification", localPlayer, "You must pick a character to play!", {255, 80, 80, 255})
                 return false
@@ -406,12 +405,12 @@ loginUI.phases[2].manageCharacter = function(action)
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
         imports.triggerEvent("Client:onNotification", localPlayer, "◴ Processing..", {175, 175, 175, 255})
         imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
+        imports.setTimer(function(character, characters)
+            imports.triggerServerEvent("Player:onResumeCharacter", localPlayer, character, characters)
+        end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration, 1, loginUI.character, loginUI.characters)
         imports.setTimer(function()
             loginUI.toggleUI(false)
         end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + 250, 1)
-        imports.setTimer(function(character, characters)
-            imports.triggerServerEvent("onPlayerResumeGame", localPlayer, character, characters)
-        end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration, 1, loginUI.character, loginUI.characters)
     end
     return true
 end
@@ -538,11 +537,11 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
             local j = unverifiedCharacters[i]
             if loginUI.character == j then
                 loginUI.character = 0
-                loginUI._selectedCharacter = 0
+                loginUI.selectedCharacter = 0
                 break
             else
-                if loginUI._selectedCharacter == j then
-                    loginUI._selectedCharacter = 0
+                if loginUI.selectedCharacter == j then
+                    loginUI.selectedCharacter = 0
                 end
             end
         end
@@ -743,7 +742,7 @@ loginUI.toggleUI = function(state, args)
         loginUI.phase = false
         loginUI.cinemationData = false
         loginUI.character = 0
-        loginUI._selectedCharacter = false
+        loginUI.selectedCharacter = false
         loginUI.characters = {}
         loginUI.isPremium = false
         loginUI.state = false
@@ -761,7 +760,7 @@ imports.addEventHandler("Client:onToggleLoginUI", root, function(state, args)
             j.isPreLoaded = true
         end
         loginUI.character = args.character
-        loginUI._selectedCharacter = loginUI.character
+        loginUI.selectedCharacter = loginUI.character
         loginUI.characters = args.characters
         loginUI._unsavedCharacters = {}
         loginUI._charactersUnderProcess = {}
