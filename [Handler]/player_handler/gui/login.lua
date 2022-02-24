@@ -291,7 +291,7 @@ loginUI.phases[2].manageCharacter = function(action)
             isUnverified = true
         })
         loginUI.selectedCharacter = #loginUI.characters
-        loginUI._unsavedCharacters[(loginUI.selectedCharacter)] = true
+        loginUI.unsavedCharacters[(loginUI.selectedCharacter)] = true
         loginUI.phases[2].loadCharacter(true)
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully created a character!", {80, 255, 80, 255})
     elseif action == "delete" then
@@ -299,7 +299,7 @@ loginUI.phases[2].manageCharacter = function(action)
         if #loginUI.characters <= 0 then
             errorMessage = "Unfortunately, you don't have enough characters!"
         end
-        if (not loginUI.characters[(loginUI.selectedCharacter)].isUnverified or loginUI._charactersUnderProcess[(loginUI.selectedCharacter)]) and (not loginUI.characters[(loginUI.selectedCharacter)]._id or loginUI._charactersUnderProcess[(loginUI.selectedCharacter)]) then
+        if (not loginUI.characters[(loginUI.selectedCharacter)].isUnverified or loginUI.processCharacters[(loginUI.selectedCharacter)]) and (not loginUI.characters[(loginUI.selectedCharacter)]._id or loginUI.processCharacters[(loginUI.selectedCharacter)]) then
             errorMessage = "You must wait until the character processing is done!"
         end
         if errorMessage then
@@ -309,7 +309,7 @@ loginUI.phases[2].manageCharacter = function(action)
         else
             imports.triggerServerEvent("Player:onDeleteCharacter", localPlayer, loginUI.characters[(loginUI.selectedCharacter)]._id)
             imports.table.remove(loginUI.characters, loginUI.selectedCharacter)
-            loginUI._unsavedCharacters[(loginUI.selectedCharacter)] = nil
+            loginUI.unsavedCharacters[(loginUI.selectedCharacter)] = nil
             loginUI.selectedCharacter = imports.math.max(0, loginUI.selectedCharacter - 1)
             loginUI.phases[2].loadCharacter()
             imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully deleted the character!", {80, 255, 80, 255})
@@ -381,7 +381,7 @@ loginUI.phases[2].manageCharacter = function(action)
         ]]
         charactersPendingToBeSaved[(loginUI.selectedCharacter)] = true
         charactersToBeSaved[(loginUI.selectedCharacter)] = characterData
-        loginUI._charactersUnderProcess[(loginUI.selectedCharacter)] = true
+        loginUI.processCharacters[(loginUI.selectedCharacter)] = true
         imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, character, charactersToBeSaved, charactersPendingToBeSaved)
     elseif action == "play" then
         local errorMessage = false
@@ -525,7 +525,7 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
             local j = loginUI.characters[i]
             if j.isUnverified then
                 imports.table.remove(loginUI.characters, i)
-                loginUI._unsavedCharacters[i] = nil
+                loginUI.unsavedCharacters[i] = nil
             end
         end
         for i = 1, #unverifiedCharacters, 1 do
@@ -569,7 +569,7 @@ imports.addEventHandler("Client:onSaveCharacter", root, function(state, errorMes
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully saved the character!", {80, 255, 80, 255})
     else
         if errorMessage then
-            if character then loginUI._charactersUnderProcess[character] = nil end
+            if character then loginUI.processCharacters[character] = nil end
             imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
         end
     end
@@ -581,8 +581,8 @@ imports.addEventHandler("Client:onLoadCharacterID", root, function(character, ch
     character = imports.tonumber(character); characterID = imports.tonumber(characterID);
     if not character or not characterID or not characterData then return false end
 
-    loginUI._unsavedCharacters[character] = nil
-    loginUI._charactersUnderProcess[character] = nil
+    loginUI.unsavedCharacters[character] = nil
+    loginUI.processCharacters[character] = nil
     loginUI.characters[character] = characterData
     loginUI.characters[character]._id = characterID
 end)
@@ -756,10 +756,8 @@ imports.addEventHandler("Client:onToggleLoginUI", root, function(state, args)
         end
         loginUI.character = args.character
         loginUI.selectedCharacter = loginUI.character
-        loginUI.characters = args.characters
-        loginUI._unsavedCharacters = {}
-        loginUI._charactersUnderProcess = {}
-        loginUI.premium = args.premium
+        loginUI.characters, loginUI.unsavedCharacters, loginUI.processCharacters = args.characters, {}, {}
+        loginUI.vip = args.vip
         imports.setElementPosition(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.x, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.y, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.z)
         imports.setElementDimension(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true, true)
