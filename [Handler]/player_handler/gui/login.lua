@@ -250,15 +250,15 @@ loginUI.phases[2].loadCharacter = function(loadDefault)
     else
         for i = 1, #loginUI.phases[2].categories[1].contents.gender.contentIndex, 1 do
             local j = loginUI.phases[2].categories[1].contents.gender.contentIndex[i]
-            if j == loginUI.characters[(loginUI.selectedCharacter)].gender then
+            if j == (loginUI.characters[(loginUI.selectedCharacter)].gender or FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default) then
                 imports.beautify.selector.setSelection(loginUI.phases[2].categories[3].element, i)
                 break
             end
         end
-        imports.beautify.slider.getPercent(loginUI.phases[2].categories[1].contents.tone.element, loginUI.characters[(loginUI.selectedCharacter)].tone)
-        imports.beautify.selector.setSelection(loginUI.phases[2].categories[3].element, loginUI.characters[(loginUI.selectedCharacter)].upper)
-        imports.beautify.selector.setSelection(loginUI.phases[2].categories[4].element, loginUI.characters[(loginUI.selectedCharacter)].lower)
-        imports.beautify.selector.setSelection(loginUI.phases[2].categories[5].element, loginUI.characters[(loginUI.selectedCharacter)].shoes)
+        imports.beautify.slider.getPercent(loginUI.phases[2].categories[1].contents.tone.element, loginUI.characters[(loginUI.selectedCharacter)].tone or 0)
+        imports.beautify.selector.setSelection(loginUI.phases[2].categories[3].element, loginUI.characters[(loginUI.selectedCharacter)].upper or 1)
+        imports.beautify.selector.setSelection(loginUI.phases[2].categories[4].element, loginUI.characters[(loginUI.selectedCharacter)].lower or 1)
+        imports.beautify.selector.setSelection(loginUI.phases[2].categories[5].element, loginUI.characters[(loginUI.selectedCharacter)].shoes or 1)
     end
     loginUI.phases[2].updateCharacter()
     return true
