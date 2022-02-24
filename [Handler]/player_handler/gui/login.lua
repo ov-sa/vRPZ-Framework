@@ -277,10 +277,10 @@ loginUI.phases[2].loadCharacter = function(loadDefault)
     loginUI.phases[2].updateCharacter()
     return true
 end
---TODO: ....
 loginUI.phases[2].manageCharacter = function(action)
     if not action then return false end
     if action == "create" then
+        --TODO: ....
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
         local characterLimit = playerCharacterLimit
         if loginUI.isPremium then characterLimit = playerPremiumCharacterLimit end
@@ -297,6 +297,7 @@ loginUI.phases[2].manageCharacter = function(action)
         loginUI.phases[2].loadCharacter(true)
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully created a character!", {80, 255, 80, 255})
     elseif action == "delete" then
+        --TODO: ....
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
         if #loginUI.characters <= 0 then
             imports.triggerEvent("Client:onNotification", localPlayer, "Unfortunately, you don't have enough characters to delete!", {255, 80, 80, 255})
@@ -349,6 +350,7 @@ loginUI.phases[2].manageCharacter = function(action)
         loginUI.character = loginUI.selectedCharacter
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully picked the character!", {80, 255, 80, 255})
     elseif action == "save" then
+        --TODO: ....
         if #loginUI.characters > 0 and not loginUI.characters[(loginUI.selectedCharacter)].isUnverified then
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
             imports.triggerEvent("Client:onNotification", localPlayer, "Your character is already saved!", {255, 80, 80, 255})
