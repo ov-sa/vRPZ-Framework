@@ -84,11 +84,11 @@ loginUI = {
                 bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.bgColor)),
                 {iconTexture = imports.beautify.assets["images"]["arrow/left.rw"], exec = function() loginUI.phases[2].manageCharacter("previous") end},
                 {iconTexture = imports.beautify.assets["images"]["arrow/right.rw"], exec = function() loginUI.phases[2].manageCharacter("next") end},
-                {iconTexture = imports.beautify.assets["images"]["canvas/minus.rw"], exec = function() loginUI.phases[2].manageCharacter("pick") end},
+                {iconTexture = imports.beautify.assets["images"]["canvas/pick.rw"], exec = function() loginUI.phases[2].manageCharacter("pick") end},
                 {iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"], exec = function() loginUI.phases[2].manageCharacter("create") end},
                 {iconTexture = imports.beautify.assets["images"]["canvas/minus.rw"], exec = function() loginUI.phases[2].manageCharacter("delete") end},
-                {iconTexture = imports.beautify.assets["images"]["canvas/minus.rw"], exec = function() loginUI.phases[2].manageCharacter("save") end},
-                {iconTexture = imports.beautify.assets["images"]["canvas/minus.rw"], exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end}
+                {iconTexture = imports.beautify.assets["images"]["canvas/save.rw"], exec = function() loginUI.phases[2].manageCharacter("save") end},
+                {iconTexture = imports.beautify.assets["images"]["canvas/back.rw"], exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end}
             },
             categories = {
                 paddingX = 20, paddingY = 5,
@@ -330,7 +330,7 @@ loginUI.phases[2].manageCharacter = function(action)
             local characters, unsavedCharacters = imports.table.copy(loginUI.characters, true), {}
             local selectionData = loginUI.phases[2].fetchSelection()
             local characterData = {
-                tone = selectionData.tone
+                tone = selectionData.tone,
                 gender = selectionData.gender[1],
                 upper = selectionData.upper[1],
                 lower = selectionData.lower[1],
