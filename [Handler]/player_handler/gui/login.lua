@@ -82,22 +82,13 @@ loginUI = {
                 size = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.size, iconSize = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconSize,
                 iconColor = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconColor,
                 bgTexture = imports.beautify.assets["images"]["curved_square/regular/square.rw"], bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.bgColor)),
-                {
-                    bgTexture = imports.beautify.assets["images"]["arrow/left.rw"],
-                    exec = function() loginUI.phases[2].manageCharacter("previous") end
-                },
-                {
-                    bgTexture = imports.beautify.assets["images"]["arrow/right.rw"],
-                    exec = function() loginUI.phases[2].manageCharacter("next") end
-                },
-                {
-                    bgTexture = imports.beautify.assets["images"]["canvas/plus.rw"],
-                    exec = function() loginUI.phases[2].manageCharacter("create") end
-                },
-                {
-                    bgTexture = imports.beautify.assets["images"]["canvas/minus.rw"],
-                    exec = function() loginUI.phases[2].manageCharacter("delete") end
-                }
+                {iconTexture = imports.beautify.assets["images"]["arrow/left.rw"], exec = function() loginUI.phases[2].manageCharacter("previous") end},
+                {iconTexture = imports.beautify.assets["images"]["arrow/right.rw"], exec = function() loginUI.phases[2].manageCharacter("next") end},
+                {iconTexture = imports.beautify.assets["images"]["canvas/minus.rw"], exec = function() loginUI.phases[2].manageCharacter("pick") end},
+                {iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"], exec = function() loginUI.phases[2].manageCharacter("create") end},
+                {iconTexture = imports.beautify.assets["images"]["canvas/minus.rw"], exec = function() loginUI.phases[2].manageCharacter("delete") end},
+                {iconTexture = imports.beautify.assets["images"]["canvas/minus.rw"], exec = function() loginUI.phases[2].manageCharacter("save") end},
+                {iconTexture = imports.beautify.assets["images"]["canvas/minus.rw"], exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end}}
             },
             categories = {
                 paddingX = 20, paddingY = 5,
@@ -652,7 +643,7 @@ loginUI.renderUI = function(renderData)
                 j.animAlphaPercent = j.animAlphaPercent or 0.35
                 j.animAlphaPercent = ((j.hoverStatus == "forward") and imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")) or imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0.35, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
                 imports.beautify.native.drawImage(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, loginUI.phases[2].options.bgTexture, 0, 0, 0, loginUI.phases[2].options.bgColor, false)
-                imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.bgTexture, 0, 0, 0, imports.tocolor(loginUI.phases[2].options.iconColor[1], loginUI.phases[2].options.iconColor[2], loginUI.phases[2].options.iconColor[3], loginUI.phases[2].options.iconColor[4]*j.animAlphaPercent), false)
+                imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.iconTexture, 0, 0, 0, imports.tocolor(loginUI.phases[2].options.iconColor[1], loginUI.phases[2].options.iconColor[2], loginUI.phases[2].options.iconColor[3], loginUI.phases[2].options.iconColor[4]*j.animAlphaPercent), false)
             end
         elseif loginUI.phase == 3 then
             imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, imports.tocolor(imports.unpackColor(loginUI.phases[3].bgColor)), false)
@@ -783,42 +774,3 @@ imports.addEventHandler("onClientResourceStart", resource, function()
         imports.addEventHandler("onAssetifyLoad", root, booterWrapper)
     end
 end)
-
-
-
-
-
-
---[[
-    --TODO: OLD..
-                button = {
-                    startX = 0,
-                    startY = 5,
-                    width = 103,
-                    height = 30,
-                    paddingX = 7,
-                    paddingY = 0,
-                    font = FRAMEWORK_FONTS[7],
-                    outlineWeight = 0.25,
-                    fontColor = {170, 35, 35, 235},
-                    bgColor = {0, 0, 0, 235},
-                    hoverfontColor = {175, 175, 175, 255},
-                    hoverBGColor = {0, 0, 0, 255},
-                    hoverDuration = 2500,
-                    --leftCurvedEdgePath = imports.beautify.native.createTexture("files/images/hud/curved_square/left.png", "dxt5", true, "clamp"),
-                    --rightCurvedEdgePath = imports.beautify.native.createTexture("files/images/hud/curved_square/right.png", "dxt5", true, "clamp"),
-                    {
-                        title = "B A C K",
-                        exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end
-                    },
-                    {
-                        title = "S A V E",
-                        exec = function() loginUI.phases[2].manageCharacter("save") end
-                    },
-                    {
-                        title = "P I C K",
-                        exec = function() loginUI.phases[2].manageCharacter("pick") end
-                    }
-                }
-            }
-]]
