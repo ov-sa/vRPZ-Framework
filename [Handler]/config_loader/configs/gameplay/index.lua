@@ -19,6 +19,7 @@ configVars = {
         ["Sync_Rate"] = 50,
         ["Draw_Distance_Limit"] = {500, 1000},
         ["Fog_Distance_Limit"] = {5, 50},
+        ["Character_Limit"] = {default = 3, vip = 5},
         ["Aircraft_Max_Height"] = 1000000,
         ["Jetpack_Max_Height"] = 10000,
         ["Minute_Duration"] = 60000,

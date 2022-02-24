@@ -280,18 +280,15 @@ end
 loginUI.phases[2].manageCharacter = function(action)
     if not action then return false end
     if action == "create" then
-        --TODO: ....
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
-        local characterLimit = playerCharacterLimit
-        if loginUI.isPremium then characterLimit = playerPremiumCharacterLimit end
+        local characterLimit = (loginUI.isVIP and FRAMEWORK_CONFIGS["Game"]["Character_Limit"].vip) or FRAMEWORK_CONFIGS["Game"]["Character_Limit"].default
         if #loginUI.characters >= characterLimit then
             imports.triggerEvent("Client:onNotification", localPlayer, "Unfortunately, you have reached the character creation limit!", {255, 80, 80, 255})
             return false
         end
-        local characterData = {
+        imports.table.insert(loginUI.characters, {
             isUnverified = true
-        }
-        imports.table.insert(loginUI.characters, characterData)
+        })
         loginUI.selectedCharacter = #loginUI.characters
         loginUI._unsavedCharacters[(loginUI.selectedCharacter)] = true
         loginUI.phases[2].loadCharacter(true)
@@ -745,7 +742,7 @@ loginUI.toggleUI = function(state, args)
         loginUI.character = 0
         loginUI.selectedCharacter = false
         loginUI.characters = {}
-        loginUI.isPremium = false
+        loginUI.isVIP = false
         loginUI.state = false
         imports.triggerEvent("Sound:onToggleLogin", localPlayer, state)
     end
