@@ -90,7 +90,6 @@ local loginUI = {
                     bgTexture = imports.beautify.assets["images"]["arrow/right.rw"],
                     exec = function() manageCharacter("next") end
                 },
-                --[[
                 {
                     bgTexture = imports.beautify.assets["images"]["arrow/right.rw"],
                     exec = function() manageCharacter("create") end
@@ -99,7 +98,6 @@ local loginUI = {
                     bgTexture = imports.beautify.assets["images"]["arrow/right.rw"],
                     exec = function() manageCharacter("delete") end
                 }
-                ]]
             },
             categories = {
                 paddingX = 20, paddingY = 5,
