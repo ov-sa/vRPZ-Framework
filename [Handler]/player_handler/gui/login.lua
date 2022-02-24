@@ -48,7 +48,8 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-local loginUI = {
+local loginUI = nil
+loginUI = {
     cache = {
         keys = {},
         timers = {}
