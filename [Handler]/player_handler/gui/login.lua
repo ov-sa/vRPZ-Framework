@@ -88,7 +88,7 @@ loginUI = {
                 {iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"], exec = function() loginUI.phases[2].manageCharacter("create") end},
                 {iconTexture = imports.beautify.assets["images"]["canvas/minus.rw"], exec = function() loginUI.phases[2].manageCharacter("delete") end},
                 {iconTexture = imports.beautify.assets["images"]["canvas/minus.rw"], exec = function() loginUI.phases[2].manageCharacter("save") end},
-                {iconTexture = imports.beautify.assets["images"]["canvas/minus.rw"], exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end}}
+                {iconTexture = imports.beautify.assets["images"]["canvas/minus.rw"], exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end}
             },
             categories = {
                 paddingX = 20, paddingY = 5,
