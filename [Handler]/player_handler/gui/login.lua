@@ -295,29 +295,25 @@ loginUI.phases[2].manageCharacter = function(action)
         loginUI.phases[2].loadCharacter(true)
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully created a character!", {80, 255, 80, 255})
     elseif action == "delete" then
-        --TODO: ....
-        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
+        local errorMessage = false
         if #loginUI.characters <= 0 then
-            imports.triggerEvent("Client:onNotification", localPlayer, "Unfortunately, you don't have enough characters!", {255, 80, 80, 255})
+            errorMessage = "Unfortunately, you don't have enough characters!"
+        end
+        if (not loginUI.characters[(loginUI.selectedCharacter)].isUnverified or loginUI._charactersUnderProcess[(loginUI.selectedCharacter)]) and (not loginUI.characters[(loginUI.selectedCharacter)]._id or loginUI._charactersUnderProcess[(loginUI.selectedCharacter)]) then
+            errorMessage = "You must wait until the character processing is done!"
+        end
+        if errorMessage then
+            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
+            imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
             return false
+        else
+            imports.triggerServerEvent("Player:onDeleteCharacter", localPlayer, loginUI.characters[(loginUI.selectedCharacter)]._id)
+            imports.table.remove(loginUI.characters, loginUI.selectedCharacter)
+            loginUI._unsavedCharacters[(loginUI.selectedCharacter)] = nil
+            loginUI.selectedCharacter = imports.math.max(0, loginUI.selectedCharacter - 1)
+            loginUI.phases[2].loadCharacter()
+            imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully deleted the character!", {80, 255, 80, 255})
         end
-        if not loginUI.characters[(loginUI.selectedCharacter)] then
-            imports.triggerEvent("Client:onNotification", localPlayer, "You must select a character inorder to delete!", {255, 80, 80, 255})
-            return false
-        end
-        if not loginUI.characters[(loginUI.selectedCharacter)].isUnverified or loginUI._charactersUnderProcess[(loginUI.selectedCharacter)] then
-            if not loginUI.characters[(loginUI.selectedCharacter)]._id or loginUI._charactersUnderProcess[(loginUI.selectedCharacter)] then
-                imports.triggerEvent("Client:onNotification", localPlayer, "You must wait until the character processing is done!", {255, 80, 80, 255})
-                return false
-            else
-                imports.triggerServerEvent("Player:onDeleteCharacter", localPlayer, loginUI.characters[(loginUI.selectedCharacter)]._id)
-            end
-        end
-        imports.table.remove(loginUI.characters, loginUI.selectedCharacter)
-        loginUI._unsavedCharacters[(loginUI.selectedCharacter)] = nil
-        loginUI.selectedCharacter = imports.math.max(0, loginUI.selectedCharacter - 1)
-        loginUI.phases[2].loadCharacter()
-        imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully deleted the character!", {80, 255, 80, 255})
     elseif (action == "previous") or (action == "next") then
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
         if action == "previous" then
