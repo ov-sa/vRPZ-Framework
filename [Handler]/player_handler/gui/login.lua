@@ -334,7 +334,7 @@ loginUI.phases[2].manageCharacter = function(action)
                 gender = selectionData.gender[1],
                 upper = selectionData.upper[1],
                 lower = selectionData.lower[1],
-                shoes = selectionData.shoes[1],
+                shoes = selectionData.shoes[1]
             }
             for i = 1, #characters, 1 do
                 local j = characters[i]
