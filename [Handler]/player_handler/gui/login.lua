@@ -248,23 +248,16 @@ loginUI.phases[2].loadCharacter = function(loadDefault)
         end
         loginUI.phases[2].updateUILang(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default)
     else
-        --TODO: ...WIP
-        --[[
-        for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].options) do
-                local matchedDataIndex = false
-                if j.optionType == "gender" or j.clothingCategoryIndex then
-                    matchedDataIndex = loginUI.characters[(loginUI.selectedCharacter)][j.optionType]
-                else
-                    for k, v in imports.ipairs(j.placeDataTable) do
-                        if loginUI.characters[(loginUI.selectedCharacter)][j.optionType] == v then
-                            matchedDataIndex = k
-                            break
-                        end
-                    end
-                end
-                j.placeDataValue = matchedDataIndex or 1
+        for i = 1, #loginUI.phases[2].categories[1].contents.gender.contentIndex, 1 do
+            local j = loginUI.phases[2].categories[1].contents.gender.contentIndex[i]
+            if j == loginUI.characters[(loginUI.selectedCharacter)].gender then
+                imports.beautify.selector.setSelection(loginUI.phases[2].categories[3].element, i)
+                break
+            end
         end
-        ]]
+        imports.beautify.selector.setSelection(loginUI.phases[2].categories[3].element, loginUI.characters[(loginUI.selectedCharacter)].upper)
+        imports.beautify.selector.setSelection(loginUI.phases[2].categories[4].element, loginUI.characters[(loginUI.selectedCharacter)].lower)
+        imports.beautify.selector.setSelection(loginUI.phases[2].categories[5].element, loginUI.characters[(loginUI.selectedCharacter)].shoes)
     end
     loginUI.phases[2].updateCharacter()
     return true
