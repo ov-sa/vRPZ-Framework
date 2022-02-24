@@ -79,18 +79,19 @@ local loginUI = {
             options = {
                 startX = 5, startY = 5,
                 paddingX = 5, paddingY = 5,
-                size = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.height,
-                font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.fontColor)),
+                size = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.height, iconSize = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.height*0.5,
+                iconColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.fontColor)),
                 bgTexture = imports.beautify.assets["images"]["curved_square/regular/square.rw"], bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.bgColor)),
                 {
-                    title = "❮",
+                    bgTexture = imports.beautify.assets["images"]["arrow/left.rw"]
                     --TODO: FIX ALL THESE..
                     --exec = function() manageCharacter("switch_prev") end
                 },
                 {
-                    title = "❯",
+                    bgTexture = imports.beautify.assets["images"]["arrow/right.rw"]
                     --exec = function() manageCharacter("switch_next") end
                 },
+                --[[
                 {
                     title = "✎",
                     --exec = function() manageCharacter("create") end
@@ -99,6 +100,7 @@ local loginUI = {
                     title = "X",
                     --exec = function() manageCharacter("delete") end
                 }
+                ]]
             },
             categories = {
                 paddingX = 20, paddingY = 5,
@@ -180,6 +182,7 @@ loginUI.phases[2].options.startX = loginUI.phases[2].startX + loginUI.phases[2].
 for i = 1, #loginUI.phases[2].options, 1 do
     local j = loginUI.phases[2].options[i]
     j.startY = loginUI.phases[2].startY + loginUI.phases[2].options.startY + ((loginUI.phases[2].options.size + loginUI.phases[2].options.paddingY)*(i - 1))
+    j.iconY = j.startY + ((loginUI.phases[2].options.size - loginUI.phases[2].options.iconSize)*0.5)
 end
 loginUI.phases[2].updateUILang = function(gender)
     for i = 1, #loginUI.phases[2].categories, 1 do
@@ -653,7 +656,7 @@ loginUI.renderUI = function(renderData)
             for i = 1, #loginUI.phases[2].options, 1 do
                 local j = loginUI.phases[2].options[i]
                 imports.beautify.native.drawImage(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, loginUI.phases[2].options.bgTexture, 0, 0, 0, loginUI.phases[2].options.bgColor, false)
-                imports.beautify.native.drawText(j.title, loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.startX + loginUI.phases[2].options.size, j.startY + loginUI.phases[2].options.size, loginUI.phases[2].options.fontColor, 1, loginUI.phases[2].options.font, "center", "center", true, false, false)
+                imports.beautify.native.drawImage(loginUI.phases[2].options.startX, j.iconY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, j.bgTexture, 0, 0, 0, loginUI.phases[2].options.iconColor, false)
             end
         elseif loginUI.phase == 3 then
             imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, tocolor(unpackColor(loginUI.phases[3].bgColor)), false)
