@@ -394,11 +394,11 @@ loginUI.phases[2].manageCharacter = function(action)
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
             imports.triggerEvent("Client:onNotification", localPlayer, "You must create a character to play!", {255, 80, 80, 255})
             return false
-        elseif not loginUI.characters[loginUI.character] then
-                imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
-                imports.triggerEvent("Client:onNotification", localPlayer, "You must pick a character to play!", {255, 80, 80, 255})
-                return false
-            end
+        end
+        if not loginUI.characters[loginUI.character] then
+            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
+            imports.triggerEvent("Client:onNotification", localPlayer, "You must pick a character to play!", {255, 80, 80, 255})
+            return false
         end
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
         imports.triggerEvent("Client:onNotification", localPlayer, "◴ Processing..", {175, 175, 175, 255})
