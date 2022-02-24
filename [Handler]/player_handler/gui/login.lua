@@ -48,7 +48,6 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-local manageCharacter = nil
 local loginUI = {
     cache = {
         keys = {},
@@ -61,7 +60,7 @@ local loginUI = {
             optionsUI = {
                 startX = CLIENT_MTA_RESOLUTION[1]*0.5, startY = -15, paddingY = 10,
                 font = FRAMEWORK_FONTS[2], fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.fontColor)),
-                {identifier = "play", exec = function() manageCharacter("play") end},
+                {identifier = "play", exec = function() loginUI.phases[2].manageCharacter("play") end},
                 {identifier = "characters", exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 2) end},
                 {identifier = "credits", exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 3) end}
             }
@@ -84,19 +83,19 @@ local loginUI = {
                 bgTexture = imports.beautify.assets["images"]["curved_square/regular/square.rw"], bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.bgColor)),
                 {
                     bgTexture = imports.beautify.assets["images"]["arrow/left.rw"],
-                    exec = function() manageCharacter("previous") end
+                    exec = function() loginUI.phases[2].manageCharacter("previous") end
                 },
                 {
                     bgTexture = imports.beautify.assets["images"]["arrow/right.rw"],
-                    exec = function() manageCharacter("next") end
+                    exec = function() loginUI.phases[2].manageCharacter("next") end
                 },
                 {
                     bgTexture = imports.beautify.assets["images"]["canvas/plus.rw"],
-                    exec = function() manageCharacter("create") end
+                    exec = function() loginUI.phases[2].manageCharacter("create") end
                 },
                 {
                     bgTexture = imports.beautify.assets["images"]["canvas/minus.rw"],
-                    exec = function() manageCharacter("delete") end
+                    exec = function() loginUI.phases[2].manageCharacter("delete") end
                 }
             },
             categories = {
@@ -278,6 +277,144 @@ loginUI.phases[2].loadCharacter = function(loadDefault)
     loginUI.phases[2].updateCharacter()
     return true
 end
+
+--TODO: ....
+loginUI.phases[2].manageCharacter = function(action)
+    if not action then return false end
+    if action == "create" then
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
+        local characterLimit = playerCharacterLimit
+        if loginUI.isPremium then characterLimit = playerPremiumCharacterLimit end
+        if #loginUI.characters >= characterLimit then
+            imports.triggerEvent("Client:onNotification", localPlayer, "Unfortunately, you have reached the character creation limit!", {255, 80, 80, 255})
+            return false
+        end
+        local characterData = {
+            isUnverified = true
+        }
+        imports.table.insert(loginUI.characters, characterData)
+        loginUI._selectedCharacter = #loginUI.characters
+        loginUI._unsavedCharacters[loginUI._selectedCharacter] = true
+        loginUI.phases[2].loadCharacter(true)
+        imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully created a character!", {80, 255, 80, 255})
+    elseif action == "delete" then
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
+        if #loginUI.characters <= 0 then
+            imports.triggerEvent("Client:onNotification", localPlayer, "Unfortunately, you don't have enough characters to delete!", {255, 80, 80, 255})
+            return false
+        end
+        if not loginUI.characters[loginUI._selectedCharacter] then
+            imports.triggerEvent("Client:onNotification", localPlayer, "You must select a character inorder to delete!", {255, 80, 80, 255})
+            return false
+        end
+        if not loginUI.characters[loginUI._selectedCharacter].isUnverified or loginUI._charactersUnderProcess[loginUI._selectedCharacter] then
+            if not loginUI.characters[loginUI._selectedCharacter]._id or loginUI._charactersUnderProcess[loginUI._selectedCharacter] then
+                imports.triggerEvent("Client:onNotification", localPlayer, "You must wait until the character processing is done!", {255, 80, 80, 255})
+                return false
+            else
+                imports.triggerServerEvent("Player:onDeleteCharacter", localPlayer, loginUI.characters[loginUI._selectedCharacter]._id)
+            end
+        end
+        imports.table.remove(loginUI.characters, loginUI._selectedCharacter)
+        loginUI._unsavedCharacters[loginUI._selectedCharacter] = nil
+        loginUI._selectedCharacter = imports.math.max(0, loginUI._selectedCharacter - 1)
+        loginUI.phases[2].loadCharacter()
+        imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully deleted the character!", {80, 255, 80, 255})
+    elseif (action == "previous") or (action == "next") then
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
+        if #loginUI.characters <= 1 then
+            imports.triggerEvent("Client:onNotification", localPlayer, "Unfortunately, you don't have enough characters to switch!", {255, 80, 80, 255})
+            return false
+        end
+        if action == "previous" then
+            if loginUI._selectedCharacter > 1 then
+                loginUI._selectedCharacter = loginUI._selectedCharacter - 1
+                loginUI.phases[2].loadCharacter()
+            end
+        elseif action == "next" then
+            if loginUI._selectedCharacter < #loginUI.characters then
+                loginUI._selectedCharacter = loginUI._selectedCharacter + 1
+                loginUI.phases[2].loadCharacter()
+            end
+        end
+    elseif action == "pick" then
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
+        if (loginUI._selectedCharacter ~= 0) and (loginUI.character == loginUI._selectedCharacter) then
+            imports.triggerEvent("Client:onNotification", localPlayer, "You've already picked the specified character!", {255, 80, 80, 255})
+            return false
+        end
+        if (not loginUI.characters[loginUI._selectedCharacter]) or loginUI.characters[loginUI._selectedCharacter].isUnverified then
+            imports.triggerEvent("Client:onNotification", localPlayer, "You must save the character inorder to pick!", {255, 80, 80, 255})
+            return false
+        end
+        loginUI.character = loginUI._selectedCharacter
+        imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully picked the character!", {80, 255, 80, 255})
+    elseif action == "save" then
+        if #loginUI.characters > 0 and not loginUI.characters[loginUI._selectedCharacter].isUnverified then
+            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
+            imports.triggerEvent("Client:onNotification", localPlayer, "Your character is already saved!", {255, 80, 80, 255})
+            return false
+        end
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
+        imports.triggerEvent("Client:onNotification", localPlayer, "◴ Saving..", {175, 175, 175, 255})
+        local characterData = {}
+        --[[
+        for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].options) do
+            if j.isEditBox then
+                characterData[j.optionType] = j.placeDataValue
+            else
+                if j.optionType == "gender" or j.clothingCategoryIndex then
+                    if j.placeDataTable[j.placeDataValue] then
+                        characterData[j.optionType] = j.placeDataTable[j.placeDataValue].__dataIndex or j.placeDataValue
+                    end
+                else
+                    characterData[j.optionType] = j.placeDataTable[j.placeDataValue]
+                end
+            end
+        end
+        ]]
+        local character = loginUI.character
+        local charactersPendingToBeSaved = {}
+        local charactersToBeSaved = imports.table.copy(loginUI.characters, true)
+        --[[
+        for i, j in imports.ipairs(charactersToBeSaved) do
+            if j.isUnverified then
+                charactersToBeSaved[i] = nil
+            end
+        end
+        if #loginUI.characters <= 0 then
+            character = 1
+            loginUI._selectedCharacter = character
+        end
+        ]]
+        charactersPendingToBeSaved[loginUI._selectedCharacter] = true
+        charactersToBeSaved[loginUI._selectedCharacter] = characterData
+        loginUI._charactersUnderProcess[loginUI._selectedCharacter] = true
+        imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, character, charactersToBeSaved, charactersPendingToBeSaved)
+    elseif action == "play" then
+        if #loginUI.characters <= 0 then
+            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
+            imports.triggerEvent("Client:onNotification", localPlayer, "You must create a character to play!", {255, 80, 80, 255})
+            return false
+        else
+            if not loginUI.characters[loginUI.character] then
+                imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
+                imports.triggerEvent("Client:onNotification", localPlayer, "You must pick a character to play!", {255, 80, 80, 255})
+                return false
+            end
+        end
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
+        imports.triggerEvent("Client:onNotification", localPlayer, "◴ Processing..", {175, 175, 175, 255})
+        imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
+        imports.setTimer(function()
+            loginUI.toggleUI(false)
+        end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + 250, 1)
+        imports.setTimer(function(character, characters)
+            imports.triggerServerEvent("onPlayerResumeGame", localPlayer, character, characters)
+        end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration, 1, loginUI.character, loginUI.characters)
+    end
+    return true
+end
 loginUI.phases[2].toggleUI = function(state)
     if state then
         if loginUI.phases[2].element or imports.isElement(loginUI.phases[2].element) then return false end
@@ -345,150 +482,6 @@ end
 loginUI.phases[3].width, loginUI.phases[3].height = loginUI.phases[3].width + (CLIENT_MTA_RESOLUTION[1] - loginUI.phases[3].startX), loginUI.phases[3].height + (CLIENT_MTA_RESOLUTION[2] - loginUI.phases[3].startY)
 loginUI.phases[3].contentWidth, loginUI.phases[3].contentHeight = imports.beautify.native.getTextSize(loginUI.phases[3].contentText, loginUI.phases[3].width, 1, loginUI.phases[3].font, false)
 loginUI.phases[3].scrollDuration = imports.math.max(1, imports.math.ceil((loginUI.phases[3].contentHeight + loginUI.phases[3].height)/loginUI.phases[3].height))*FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.scrollDuration
-
-
-------------------------------------------------------------------
---[[ Functions: Loads/Updates/Manages Login Preview Character ]]--
-------------------------------------------------------------------
-
-manageCharacter = function(manageType)
-    if not manageType then return false end
-
-    if manageType == "create" then
-        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
-        local characterLimit = playerCharacterLimit
-        if loginUI.isPremium then characterLimit = playerPremiumCharacterLimit end
-        if #loginUI.characters >= characterLimit then
-            imports.triggerEvent("Client:onNotification", localPlayer, "Unfortunately, you have reached the character creation limit!", {255, 80, 80, 255})
-            return false
-        end
-        local characterData = {
-            isUnverified = true
-        }
-        imports.table.insert(loginUI.characters, characterData)
-        loginUI._selectedCharacter = #loginUI.characters
-        loginUI._unsavedCharacters[loginUI._selectedCharacter] = true
-        loginUI.phases[2].loadCharacter(true)
-        imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully created a character!", {80, 255, 80, 255})
-    elseif manageType == "delete" then
-        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
-        if #loginUI.characters <= 0 then
-            imports.triggerEvent("Client:onNotification", localPlayer, "Unfortunately, you don't have enough characters to delete!", {255, 80, 80, 255})
-            return false
-        end
-        if not loginUI.characters[loginUI._selectedCharacter] then
-            imports.triggerEvent("Client:onNotification", localPlayer, "You must select a character inorder to delete!", {255, 80, 80, 255})
-            return false
-        end
-        if not loginUI.characters[loginUI._selectedCharacter].isUnverified or loginUI._charactersUnderProcess[loginUI._selectedCharacter] then
-            if not loginUI.characters[loginUI._selectedCharacter]._id or loginUI._charactersUnderProcess[loginUI._selectedCharacter] then
-                imports.triggerEvent("Client:onNotification", localPlayer, "You must wait until the character processing is done!", {255, 80, 80, 255})
-                return false
-            else
-                imports.triggerServerEvent("Player:onDeleteCharacter", localPlayer, loginUI.characters[loginUI._selectedCharacter]._id)
-            end
-        end
-        imports.table.remove(loginUI.characters, loginUI._selectedCharacter)
-        loginUI._unsavedCharacters[loginUI._selectedCharacter] = nil
-        loginUI._selectedCharacter = imports.math.max(0, loginUI._selectedCharacter - 1)
-        loginUI.phases[2].loadCharacter()
-        imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully deleted the character!", {80, 255, 80, 255})
-    elseif (manageType == "previous") or (manageType == "next") then
-        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
-        if #loginUI.characters <= 1 then
-            imports.triggerEvent("Client:onNotification", localPlayer, "Unfortunately, you don't have enough characters to switch!", {255, 80, 80, 255})
-            return false
-        end
-        if manageType == "previous" then
-            if loginUI._selectedCharacter > 1 then
-                loginUI._selectedCharacter = loginUI._selectedCharacter - 1
-                loginUI.phases[2].loadCharacter()
-            end
-        elseif manageType == "next" then
-            if loginUI._selectedCharacter < #loginUI.characters then
-                loginUI._selectedCharacter = loginUI._selectedCharacter + 1
-                loginUI.phases[2].loadCharacter()
-            end
-        end
-    elseif manageType == "pick" then
-        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
-        if (loginUI._selectedCharacter ~= 0) and (loginUI.character == loginUI._selectedCharacter) then
-            imports.triggerEvent("Client:onNotification", localPlayer, "You've already picked the specified character!", {255, 80, 80, 255})
-            return false
-        end
-        if (not loginUI.characters[loginUI._selectedCharacter]) or loginUI.characters[loginUI._selectedCharacter].isUnverified then
-            imports.triggerEvent("Client:onNotification", localPlayer, "You must save the character inorder to pick!", {255, 80, 80, 255})
-            return false
-        end
-        loginUI.character = loginUI._selectedCharacter
-        imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully picked the character!", {80, 255, 80, 255})
-    elseif manageType == "save" then
-        if #loginUI.characters > 0 and not loginUI.characters[loginUI._selectedCharacter].isUnverified then
-            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
-            imports.triggerEvent("Client:onNotification", localPlayer, "Your character is already saved!", {255, 80, 80, 255})
-            return false
-        end
-        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
-        imports.triggerEvent("Client:onNotification", localPlayer, "◴ Saving..", {175, 175, 175, 255})
-        local characterData = {}
-        --[[
-        for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].options) do
-            if j.isEditBox then
-                characterData[j.optionType] = j.placeDataValue
-            else
-                if j.optionType == "gender" or j.clothingCategoryIndex then
-                    if j.placeDataTable[j.placeDataValue] then
-                        characterData[j.optionType] = j.placeDataTable[j.placeDataValue].__dataIndex or j.placeDataValue
-                    end
-                else
-                    characterData[j.optionType] = j.placeDataTable[j.placeDataValue]
-                end
-            end
-        end
-        ]]
-        local character = loginUI.character
-        local charactersPendingToBeSaved = {}
-        local charactersToBeSaved = imports.table.copy(loginUI.characters, true)
-        --[[
-        for i, j in imports.ipairs(charactersToBeSaved) do
-            if j.isUnverified then
-                charactersToBeSaved[i] = nil
-            end
-        end
-        if #loginUI.characters <= 0 then
-            character = 1
-            loginUI._selectedCharacter = character
-        end
-        ]]
-        charactersPendingToBeSaved[loginUI._selectedCharacter] = true
-        charactersToBeSaved[loginUI._selectedCharacter] = characterData
-        loginUI._charactersUnderProcess[loginUI._selectedCharacter] = true
-        imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, character, charactersToBeSaved, charactersPendingToBeSaved)
-    elseif manageType == "play" then
-        if #loginUI.characters <= 0 then
-            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
-            imports.triggerEvent("Client:onNotification", localPlayer, "You must create a character to play!", {255, 80, 80, 255})
-            return false
-        else
-            if not loginUI.characters[loginUI.character] then
-                imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
-                imports.triggerEvent("Client:onNotification", localPlayer, "You must pick a character to play!", {255, 80, 80, 255})
-                return false
-            end
-        end
-        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
-        imports.triggerEvent("Client:onNotification", localPlayer, "◴ Processing..", {175, 175, 175, 255})
-        imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
-        imports.setTimer(function()
-            loginUI.toggleUI(false)
-        end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + 250, 1)
-        imports.setTimer(function(character, characters)
-            imports.triggerServerEvent("onPlayerResumeGame", localPlayer, character, characters)
-        end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration, 1, loginUI.character, loginUI.characters)
-    end
-    return true
-
-end
 
 
 ------------------------------
@@ -837,11 +830,11 @@ end)
                     },
                     {
                         title = "S A V E",
-                        exec = function() manageCharacter("save") end
+                        exec = function() loginUI.phases[2].manageCharacter("save") end
                     },
                     {
                         title = "P I C K",
-                        exec = function() manageCharacter("pick") end
+                        exec = function() loginUI.phases[2].manageCharacter("pick") end
                     }
                 }
             }
