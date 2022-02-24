@@ -361,7 +361,6 @@ loginUI.phases[2].manageCharacter = function(action)
             return false
         else
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
-            imports.triggerEvent("Client:onNotification", localPlayer, "◴ Processing..", {175, 175, 175, 255})
             imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
             imports.setTimer(function(character, characters)
                 imports.triggerServerEvent("Player:onResumeCharacter", localPlayer, character, characters)
