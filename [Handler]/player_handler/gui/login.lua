@@ -79,9 +79,9 @@ local loginUI = {
             options = {
                 startX = 5, startY = 5,
                 paddingX = 5, paddingY = 5,
-                size = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.height, iconSize = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.height*0.5,
-                iconColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.fontColor)),
-                bgTexture = imports.beautify.assets["images"]["curved_square/regular/square.rw"], bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.bgColor)),
+                size = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.size, iconSize = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconSize,
+                iconColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconColor)),
+                bgTexture = imports.beautify.assets["images"]["curved_square/regular/square.rw"], bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.bgColor)),
                 {
                     bgTexture = imports.beautify.assets["images"]["arrow/left.rw"]
                     --TODO: FIX ALL THESE..

@@ -67,6 +67,12 @@ configVars["UI"]["Login"] = {
                 bgColor = {0, 0, 0, 255},
                 shadowColor = {50, 50, 50, 255},
             },
+            options = {
+                size = 30,
+                iconSize = 25,
+                iconColor = {200, 200, 200, 255},
+                bgColor = {0, 0, 0, 255}
+            },
             categories = {
                 height = 30,
                 fontColor = {200, 200, 200, 255},
