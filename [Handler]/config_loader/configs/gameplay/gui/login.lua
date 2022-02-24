@@ -73,7 +73,8 @@ configVars["UI"]["Login"] = {
                 size = 30,
                 iconSize = 13,
                 iconColor = {200, 200, 200, 255},
-                bgColor = {0, 0, 0, 255}
+                bgColor = {0, 0, 0, 255},
+                hoverDuration = 2750,
             },
             categories = {
                 height = 30,
@@ -131,7 +132,8 @@ configVars["UI"]["Login"] = {
                 "ov | Tron (Developer)",
                 "ov | Neor (Developer)",
                 "ov | Skann (Modeler)",
-                "ov | Mazvis (Contributor)"
+                "ov | Mazvis (Contributor)",
+                "ov | Drew (Contributor)"
             }
         }
     }
