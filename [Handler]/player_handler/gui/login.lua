@@ -281,27 +281,25 @@ end
 loginUI.phases[2].manageCharacter = function(action)
     if not action then return false end
     if action == "create" then
-        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
+        local errorMessage = false
         local characterLimit = (loginUI.isVIP and FRAMEWORK_CONFIGS["Game"]["Character_Limit"].vip) or FRAMEWORK_CONFIGS["Game"]["Character_Limit"].default
-        if #loginUI.characters >= characterLimit then
-            imports.triggerEvent("Client:onNotification", localPlayer, "Unfortunately, you have reached the character creation limit!", {255, 80, 80, 255})
+        if #loginUI.characters >= characterLimit then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][3][FRAMEWORK_LANGUAGE] end
+        if errorMessage then
+            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
+            imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
             return false
+        else
+            imports.table.insert(loginUI.characters, {
+                isUnverified = true
+            })
+            loginUI.selectedCharacter = #loginUI.characters
+            loginUI.unsavedCharacters[(loginUI.selectedCharacter)] = true
+            loginUI.phases[2].loadCharacter(true)
+            imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][4][FRAMEWORK_LANGUAGE], {80, 255, 80, 255})
         end
-        imports.table.insert(loginUI.characters, {
-            isUnverified = true
-        })
-        loginUI.selectedCharacter = #loginUI.characters
-        loginUI.unsavedCharacters[(loginUI.selectedCharacter)] = true
-        loginUI.phases[2].loadCharacter(true)
-        imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully created a character!", {80, 255, 80, 255})
     elseif action == "delete" then
         local errorMessage = false
-        if #loginUI.characters <= 0 then
-            errorMessage = "Unfortunately, you don't have enough characters!"
-        end
-        if (not loginUI.characters[(loginUI.selectedCharacter)].isUnverified or loginUI.processCharacters[(loginUI.selectedCharacter)]) and (not loginUI.characters[(loginUI.selectedCharacter)]._id or loginUI.processCharacters[(loginUI.selectedCharacter)]) then
-            errorMessage = "You must wait until the character processing is done!"
-        end
+        if #loginUI.characters <= 0 then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][5][FRAMEWORK_LANGUAGE] end
         if errorMessage then
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
             imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
@@ -312,7 +310,7 @@ loginUI.phases[2].manageCharacter = function(action)
             loginUI.unsavedCharacters[(loginUI.selectedCharacter)] = nil
             loginUI.selectedCharacter = imports.math.max(0, loginUI.selectedCharacter - 1)
             loginUI.phases[2].loadCharacter()
-            imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully deleted the character!", {80, 255, 80, 255})
+            imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][6][FRAMEWORK_LANGUAGE], {80, 255, 80, 255})
         end
     elseif (action == "previous") or (action == "next") then
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
@@ -329,9 +327,7 @@ loginUI.phases[2].manageCharacter = function(action)
         end
     elseif action == "pick" then
         local errorMessage = false
-        if (not loginUI.characters[(loginUI.selectedCharacter)]) or loginUI.characters[(loginUI.selectedCharacter)].isUnverified then
-            errorMessage = "You must save the character inorder to pick!"
-        end
+        if (not loginUI.characters[(loginUI.selectedCharacter)]) or loginUI.characters[(loginUI.selectedCharacter)].isUnverified then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][7][FRAMEWORK_LANGUAGE] end
         if errorMessage then
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
             imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
@@ -385,12 +381,8 @@ loginUI.phases[2].manageCharacter = function(action)
         imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, character, charactersToBeSaved, charactersPendingToBeSaved)
     elseif action == "play" then
         local errorMessage = false
-        if #loginUI.characters <= 0 then
-            errorMessage = "You must create a character to play!"
-        end
-        if not loginUI.characters[loginUI.character] then
-            errorMessage = "You must pick a character to play!"
-        end
+        if #loginUI.characters <= 0 then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][1][FRAMEWORK_LANGUAGE] end
+        if not loginUI.characters[loginUI.character] then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][2][FRAMEWORK_LANGUAGE] end
         if errorMessage then
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
             imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})

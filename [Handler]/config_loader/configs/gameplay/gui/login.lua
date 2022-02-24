@@ -45,6 +45,16 @@ configVars["UI"]["Login"] = {
         }
     },
 
+    ["Notifications"] = {
+        [1] = {["EN"] = "You must create a character inorder to play!", ["TR"] = "karakterler"},
+        [2] = {["EN"] = "You must pick a character inorder to play!", ["TR"] = "karakterler"},
+        [3] = {["EN"] = "Unfortunately, you have exceeded character limit!", ["TR"] = "karakterler"},
+        [4] = {["EN"] = "You've successfully created a character!", ["TR"] = "karakterler"},
+        [5] = {["EN"] = "Unfortunately, you don't have enough characters!", ["TR"] = "karakterler"},
+        [6] = {["EN"] = "You've successfully deleted the character!", ["TR"] = "karakterler"},
+        [7] = {["EN"] = "You must save the character inorder to pick!", ["TR"] = "karakterler"},
+    },
+
     ["Options"] = {
         play = {
             ["Titles"] = {["EN"] = "Play", ["TR"] = "Oyna"},
