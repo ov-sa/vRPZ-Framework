@@ -78,8 +78,10 @@ local loginUI = {
             },
             options = {
                 startX = 5, startY = 5,
-                paddingX = 5, paddingY = 10,
-                size = 30, --TODO: MOVE TO CONFIG LATER
+                paddingX = 5, paddingY = 5,
+                size = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.height,
+                font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.fontColor)),
+                bgTexture = imports.beautify.assets["images"]["curved_square/regular/square.rw"], bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.bgColor)),
                 {
                     title = "❮",
                     --TODO: FIX ALL THESE..
@@ -648,10 +650,10 @@ loginUI.renderUI = function(renderData)
                 imports.beautify.native.drawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineSize, tocolor(unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineColor)), false)
             end
         elseif loginUI.phase == 2 then
-            --TODO: WIP..
             for i = 1, #loginUI.phases[2].options, 1 do
                 local j = loginUI.phases[2].options[i]
-                imports.beautify.native.drawRectangle(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, -1)
+                imports.beautify.native.drawImage(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, loginUI.phases[2].options.bgTexture, 0, 0, 0, loginUI.phases[2].options.bgColor, false)
+                imports.beautify.native.drawText(j.title, loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.startX + loginUI.phases[2].options.size, j.startY + loginUI.phases[2].options.size, loginUI.phases[2].options.fontColor, 1, loginUI.phases[2].options.font, "center", "center", true, false, false)
             end
         elseif loginUI.phase == 3 then
             imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, tocolor(unpackColor(loginUI.phases[3].bgColor)), false)
