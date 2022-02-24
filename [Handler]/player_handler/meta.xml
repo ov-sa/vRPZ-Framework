@@ -109,6 +109,8 @@
     <!-- Files: Images: GUIs -->
     <file src="files/images/login/login.png"/>
     <file src="files/images/login/background.png"/>
+    <file src="files/images/login/character/create.png"/>
+    <file src="files/images/login/character/delete.png"/>
     <file src="files/images/loading/loader.png"/>
 
     <!-- Files: Images: HUD -->

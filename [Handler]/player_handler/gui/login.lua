@@ -91,11 +91,11 @@ local loginUI = {
                     exec = function() manageCharacter("next") end
                 },
                 {
-                    bgTexture = imports.beautify.assets["images"]["arrow/right.rw"],
+                    bgTexture = "files/images/login/character/create.png",
                     exec = function() manageCharacter("create") end
                 },
                 {
-                    bgTexture = imports.beautify.assets["images"]["arrow/right.rw"],
+                    bgTexture = "files/images/login/character/delete.png",
                     exec = function() manageCharacter("delete") end
                 }
             },
