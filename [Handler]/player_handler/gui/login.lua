@@ -336,9 +336,6 @@ loginUI.phases[2].manageCharacter = function(action)
         end
     elseif action == "pick" then
         local errorMessage = false
-        if (loginUI.selectedCharacter ~= 0) and (loginUI.character == loginUI.selectedCharacter) then
-            errorMessage = "You've already picked the specified character!"
-        end
         if (not loginUI.characters[(loginUI.selectedCharacter)]) or loginUI.characters[(loginUI.selectedCharacter)].isUnverified then
             errorMessage = "You must save the character inorder to pick!"
         end
