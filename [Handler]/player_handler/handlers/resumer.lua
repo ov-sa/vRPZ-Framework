@@ -40,13 +40,13 @@ end)
 -----------------------------------
 
 imports.addEvent("Player:onSaveCharacter", true)
-imports.addEventHandler("Player:onSaveCharacter", root, function(characterID, characters, unsavedChars)
+imports.addEventHandler("Player:onSaveCharacter", root, function(characterID, characters, unsavedCharacters)
     characterID = tonumber(characterID)
-    if not characterID or not characterID or not unsavedChars then return false end
+    if not characterID or not characterID or not unsavedCharacters then return false end
 
     local serial = CPlayer.getSerial(source)
     --TODO: NEEDS REFACTOR LATER MAYBE
-    for i, j in imports.pairs(unsavedChars) do
+    for i, j in imports.pairs(unsavedCharacters) do
         if characters[i] then
             --[[
             for k, v in imports.pairs(characterCache) do
