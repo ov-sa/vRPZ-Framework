@@ -80,7 +80,7 @@ local loginUI = {
                 startX = 5, startY = 5,
                 paddingX = 5, paddingY = 5,
                 size = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.size, iconSize = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconSize,
-                iconColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconColor)),
+                iconColor = imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconColor),
                 bgTexture = imports.beautify.assets["images"]["curved_square/regular/square.rw"], bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.bgColor)),
                 {
                     bgTexture = imports.beautify.assets["images"]["arrow/left.rw"]
@@ -184,6 +184,8 @@ for i = 1, #loginUI.phases[2].options, 1 do
     local j = loginUI.phases[2].options[i]
     j.startY = loginUI.phases[2].startY + loginUI.phases[2].options.startY + ((loginUI.phases[2].options.size + loginUI.phases[2].options.paddingY)*(i - 1))
     j.iconY = j.startY + ((loginUI.phases[2].options.size - loginUI.phases[2].options.iconSize)*0.5)
+    j.hoverStatus = "backward"
+    j.hoverAnimTick = CLIENT_CURRENT_TICK
 end
 loginUI.phases[2].updateUILang = function(gender)
     for i = 1, #loginUI.phases[2].categories, 1 do
@@ -650,17 +652,17 @@ loginUI.renderUI = function(renderData)
                 j.animAlphaPercent = j.animAlphaPercent or 0
                 j.animAlphaPercent = ((j.hoverStatus == "forward") and imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")) or imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")
                 imports.beautify.native.drawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, loginUI.phases[1].optionsUI.fontColor, 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
-                imports.beautify.native.drawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[1], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[2], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[3], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
-                imports.beautify.native.drawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineSize, tocolor(unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineColor)), false)
+                imports.beautify.native.drawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[1], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[2], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[3], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
+                imports.beautify.native.drawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineSize, imports.tocolor(unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineColor)), false)
             end
         elseif loginUI.phase == 2 then
             for i = 1, #loginUI.phases[2].options, 1 do
                 local j = loginUI.phases[2].options[i]
                 imports.beautify.native.drawImage(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, loginUI.phases[2].options.bgTexture, 0, 0, 0, loginUI.phases[2].options.bgColor, false)
-                imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.bgTexture, 0, 0, 0, loginUI.phases[2].options.iconColor, false)
+                imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.bgTexture, 0, 0, 0, imports.tocolor(unpackColor(loginUI.phases[2].options.iconColor)), false)
             end
         elseif loginUI.phase == 3 then
-            imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, tocolor(unpackColor(loginUI.phases[3].bgColor)), false)
+            imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, imports.tocolor(unpackColor(loginUI.phases[3].bgColor)), false)
             local view_offsetX, view_offsetY = loginUI.phases[3].startX, loginUI.phases[3].startY
             local view_width, view_height = loginUI.phases[3].width, loginUI.phases[3].height
             local credits_offsetY = -loginUI.phases[3].contentHeight - (view_height/2)
@@ -693,7 +695,7 @@ loginUI.renderUI = function(renderData)
             end
             loginUI.phases[3].navigator.animAlphaPercent = loginUI.phases[3].navigator.animAlphaPercent or 0.25
             loginUI.phases[3].navigator.animAlphaPercent = ((loginUI.phases[3].navigator.hoverStatus == "forward") and imports.interpolateBetween(loginUI.phases[3].navigator.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].navigator.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator.hoverDuration), "Linear")) or imports.interpolateBetween(loginUI.phases[3].navigator.animAlphaPercent, 0, 0, 0.25, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].navigator.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator.hoverDuration), "Linear")
-            imports.beautify.native.drawText(navigator_title, navigator_offsetX, navigator_offsetY, navigator_offsetX + navigator_width, navigator_offsetY + navigator_height, tocolor(loginUI.phases[3].navigator.fontColor[1], loginUI.phases[3].navigator.fontColor[2], loginUI.phases[3].navigator.fontColor[3], loginUI.phases[3].navigator.fontColor[4]*loginUI.phases[3].navigator.animAlphaPercent), 1, loginUI.phases[3].navigator.font, "center", "center", true, false, false)
+            imports.beautify.native.drawText(navigator_title, navigator_offsetX, navigator_offsetY, navigator_offsetX + navigator_width, navigator_offsetY + navigator_height, imports.tocolor(loginUI.phases[3].navigator.fontColor[1], loginUI.phases[3].navigator.fontColor[2], loginUI.phases[3].navigator.fontColor[3], loginUI.phases[3].navigator.fontColor[4]*loginUI.phases[3].navigator.animAlphaPercent), 1, loginUI.phases[3].navigator.font, "center", "center", true, false, false)
         end
     end
 end
@@ -798,22 +800,6 @@ end)
 
 --[[
     --TODO: OLD..
-                switcher = {
-                    startX = -7,
-                    startY = 0,
-                    width = 30,
-                    height = 30,
-                    paddingX = 7,
-                    paddingY = 7,
-                    bgTexture = imports.beautify.native.createTexture("files/images/hud/curved_square/square.png", "dxt5", true, "clamp"),
-                    font = FRAMEWORK_FONTS[6],
-                    outlineWeight = 0.1,
-                    fontColor = {255, 80, 80, 255},
-                    bgColor = {0, 0, 0, 255},
-                    hoverfontColor = {0, 0, 0, 255},
-                    hoverBGColor = {255, 80, 80, 255},
-                    hoverDuration = 2500,
-                },
                 button = {
                     startX = 0,
                     startY = 5,
