@@ -46,13 +46,13 @@ configVars["UI"]["Login"] = {
     },
 
     ["Notifications"] = {
-        [1] = {["EN"] = "You must create a character inorder to play!", ["TR"] = "karakterler"},
-        [2] = {["EN"] = "You must pick a character inorder to play!", ["TR"] = "karakterler"},
-        [3] = {["EN"] = "Unfortunately, you have exceeded character limit!", ["TR"] = "karakterler"},
-        [4] = {["EN"] = "You've successfully created a character!", ["TR"] = "karakterler"},
-        [5] = {["EN"] = "Unfortunately, you don't have enough characters!", ["TR"] = "karakterler"},
-        [6] = {["EN"] = "You've successfully deleted the character!", ["TR"] = "karakterler"},
-        [7] = {["EN"] = "You must save the character inorder to pick!", ["TR"] = "karakterler"},
+        [1] = {["EN"] = "You must create a character inorder to play..", ["TR"] = "Oynamak için bir karakter yaratmalısın.."},
+        [2] = {["EN"] = "You must pick a character inorder to play..", ["TR"] = "Oynamak için bir karakter seçmelisiniz.."},
+        [3] = {["EN"] = "You have exceeded character limit..", ["TR"] = "Karakter sınırını aştınız.."},
+        [4] = {["EN"] = "You've successfully created a character!", ["TR"] = "Başarıyla bir karakter yarattınız!.."},
+        [5] = {["EN"] = "You don't have enough characters..", ["TR"] = "Yeterli karakteriniz yok.."},
+        [6] = {["EN"] = "You've successfully deleted the character!", ["TR"] = "Karakteri başarıyla sildiniz!"},
+        [7] = {["EN"] = "You must save the character prior to picking..", ["TR"] = "Seçmeden önce karakteri kaydetmelisiniz.."},
     },
 
     ["Options"] = {
