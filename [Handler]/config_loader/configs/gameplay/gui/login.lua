@@ -14,8 +14,10 @@
 
 configVars["UI"]["Login"] = {
 
-    weather = 9,
-    time = {12, 0},
+    weathers = {
+        {weather = 9, time = {12, 0}},
+        {weather = 13, time = {6, 0}}
+    },
     dimension = 1,
     fadeDelay = 7000,
     clientPoint = {x = 0, y = 0, z = 0},
