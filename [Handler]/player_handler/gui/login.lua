@@ -83,18 +83,20 @@ local loginUI = {
                 iconColor = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconColor,
                 bgTexture = imports.beautify.assets["images"]["curved_square/regular/square.rw"], bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.bgColor)),
                 {
-                    bgTexture = imports.beautify.assets["images"]["arrow/left.rw"]
+                    bgTexture = imports.beautify.assets["images"]["arrow/left.rw"],
                     exec = function() manageCharacter("previous") end
                 },
                 {
-                    bgTexture = imports.beautify.assets["images"]["arrow/right.rw"]
+                    bgTexture = imports.beautify.assets["images"]["arrow/right.rw"],
                     exec = function() manageCharacter("next") end
                 },
                 --[[
                 {
+                    bgTexture = imports.beautify.assets["images"]["arrow/right.rw"],
                     exec = function() manageCharacter("create") end
                 },
                 {
+                    bgTexture = imports.beautify.assets["images"]["arrow/right.rw"],
                     exec = function() manageCharacter("delete") end
                 }
                 ]]
