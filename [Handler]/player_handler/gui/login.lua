@@ -255,6 +255,7 @@ loginUI.phases[2].loadCharacter = function(loadDefault)
                 break
             end
         end
+        imports.beautify.slider.getPercent(loginUI.phases[2].categories[1].contents.tone.element, loginUI.characters[(loginUI.selectedCharacter)].tone)
         imports.beautify.selector.setSelection(loginUI.phases[2].categories[3].element, loginUI.characters[(loginUI.selectedCharacter)].upper)
         imports.beautify.selector.setSelection(loginUI.phases[2].categories[4].element, loginUI.characters[(loginUI.selectedCharacter)].lower)
         imports.beautify.selector.setSelection(loginUI.phases[2].categories[5].element, loginUI.characters[(loginUI.selectedCharacter)].shoes)
