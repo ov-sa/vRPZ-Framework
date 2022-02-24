@@ -48,7 +48,6 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(characterID, ch
     --TODO: NEEDS REFACTOR LATER MAYBE
     for i, j in imports.pairs(unsavedChars) do
         if characters[i] then
-            --TODO: ADD CHECK TO PREVENT USING SAME NICK LATER
             --[[
             for k, v in imports.pairs(characterCache) do
                 if v.identity["name"] == characters[i]["name"] then

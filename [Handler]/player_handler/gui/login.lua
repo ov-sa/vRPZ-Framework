@@ -321,48 +321,35 @@ loginUI.phases[2].manageCharacter = function(action)
             imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully picked the character!", {80, 255, 80, 255})
         end
     elseif action == "save" then
-        --TODO: ....
-        if #loginUI.characters > 0 and not loginUI.characters[(loginUI.selectedCharacter)].isUnverified then
+        if (#loginUI.characters > 0) and (not loginUI.characters[(loginUI.selectedCharacter)].isUnverified) then
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
-            imports.triggerEvent("Client:onNotification", localPlayer, "Your character is already saved!", {255, 80, 80, 255})
-            return false
-        end
-        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
-        imports.triggerEvent("Client:onNotification", localPlayer, "◴ Saving..", {175, 175, 175, 255})
-        local characterData = {}
-        --[[
-        for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].options) do
-            if j.isEditBox then
-                characterData[j.optionType] = j.placeDataValue
-            else
-                if j.optionType == "gender" or j.clothingCategoryIndex then
-                    if j.placeDataTable[j.placeDataValue] then
-                        characterData[j.optionType] = j.placeDataTable[j.placeDataValue].__dataIndex or j.placeDataValue
-                    end
-                else
-                    characterData[j.optionType] = j.placeDataTable[j.placeDataValue]
+        else
+            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
+            local character = loginUI.character
+            local characters, unsavedCharacters = imports.table.copy(loginUI.characters, true), {}
+            local selectionData = loginUI.phases[2].fetchSelection()
+            local characterData = {
+                tone = selectionData.tone
+                gender = selectionData.gender[1],
+                upper = selectionData.upper[1],
+                lower = selectionData.lower[1],
+                shoes = selectionData.shoes[1],
+            }
+            for i = 1, #characters, 1 do
+                local j = characters[i]
+                if j.isUnverified then
+                    characters[i] = nil
                 end
             end
-        end
-        ]]
-        local character = loginUI.character
-        local charactersPendingToBeSaved = {}
-        local charactersToBeSaved = imports.table.copy(loginUI.characters, true)
-        --[[
-        for i, j in imports.ipairs(charactersToBeSaved) do
-            if j.isUnverified then
-                charactersToBeSaved[i] = nil
+            if #loginUI.characters <= 0 then
+                character = 1
+                loginUI.selectedCharacter = character
             end
+            unsavedCharacters[(loginUI.selectedCharacter)] = true
+            characters[(loginUI.selectedCharacter)] = characterData
+            loginUI.processCharacters[(loginUI.selectedCharacter)] = true
+            imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, character, characters, unsavedCharacters)
         end
-        if #loginUI.characters <= 0 then
-            character = 1
-            loginUI.selectedCharacter = character
-        end
-        ]]
-        charactersPendingToBeSaved[(loginUI.selectedCharacter)] = true
-        charactersToBeSaved[(loginUI.selectedCharacter)] = characterData
-        loginUI.processCharacters[(loginUI.selectedCharacter)] = true
-        imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, character, charactersToBeSaved, charactersPendingToBeSaved)
     elseif action == "play" then
         local errorMessage = false
         if #loginUI.characters <= 0 then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][1][FRAMEWORK_LANGUAGE] end
