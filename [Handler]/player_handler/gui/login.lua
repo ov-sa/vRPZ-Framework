@@ -179,6 +179,7 @@ for i = 1, #loginUI.phases[1].optionsUI, 1 do
     j.hoverAnimTick = CLIENT_CURRENT_TICK
 end
 loginUI.phases[2].options.startX = loginUI.phases[2].startX + loginUI.phases[2].width + loginUI.phases[2].options.startX + loginUI.phases[2].options.paddingX
+loginUI.phases[2].options.iconX = loginUI.phases[2].options.startX + ((loginUI.phases[2].options.size - loginUI.phases[2].options.iconSize)*0.5)
 for i = 1, #loginUI.phases[2].options, 1 do
     local j = loginUI.phases[2].options[i]
     j.startY = loginUI.phases[2].startY + loginUI.phases[2].options.startY + ((loginUI.phases[2].options.size + loginUI.phases[2].options.paddingY)*(i - 1))
@@ -656,7 +657,7 @@ loginUI.renderUI = function(renderData)
             for i = 1, #loginUI.phases[2].options, 1 do
                 local j = loginUI.phases[2].options[i]
                 imports.beautify.native.drawImage(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, loginUI.phases[2].options.bgTexture, 0, 0, 0, loginUI.phases[2].options.bgColor, false)
-                imports.beautify.native.drawImage(loginUI.phases[2].options.startX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.bgTexture, 0, 0, 0, loginUI.phases[2].options.iconColor, false)
+                imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.bgTexture, 0, 0, 0, loginUI.phases[2].options.iconColor, false)
             end
         elseif loginUI.phase == 3 then
             imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, tocolor(unpackColor(loginUI.phases[3].bgColor)), false)
