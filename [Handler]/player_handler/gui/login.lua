@@ -25,6 +25,7 @@ local imports = {
     setElementDimension = setElementDimension,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
+    removeEventHandler = removeEventHandler,
     triggerEvent = triggerEvent,
     triggerServerEvent = triggerServerEvent,
     isTimer = isTimer,
@@ -74,6 +75,28 @@ local loginUI = {
                 font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.fontColor)),
                 bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.bgColor)),
                 shadowColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.shadowColor)),
+            },
+            options = {
+                startX = 5, startY = 5,
+                paddingX = 5, paddingY = 10,
+                size = 30, --TODO: MOVE TO CONFIG LATER
+                {
+                    title = "❮",
+                    --TODO: FIX ALL THESE..
+                    --exec = function() manageCharacter("switch_prev") end
+                },
+                {
+                    title = "❯",
+                    --exec = function() manageCharacter("switch_next") end
+                },
+                {
+                    title = "✎",
+                    --exec = function() manageCharacter("create") end
+                },
+                {
+                    title = "X",
+                    --exec = function() manageCharacter("delete") end
+                }
             },
             categories = {
                 paddingX = 20, paddingY = 5,
@@ -151,6 +174,11 @@ for i = 1, #loginUI.phases[1].optionsUI, 1 do
     j.hoverStatus = "backward"
     j.hoverAnimTick = CLIENT_CURRENT_TICK
 end
+loginUI.phases[2].options.startX = loginUI.phases[2].startX + loginUI.phases[2].width + loginUI.phases[2].options.startX + loginUI.phases[2].options.paddingX
+for i = 1, #loginUI.phases[2].options, 1 do
+    local j = loginUI.phases[2].options[i]
+    j.startY = loginUI.phases[2].startY + loginUI.phases[2].options.startY + ((loginUI.phases[2].options.size + loginUI.phases[2].options.paddingY)*(i - 1))
+end
 loginUI.phases[2].updateUILang = function(gender)
     for i = 1, #loginUI.phases[2].categories, 1 do
         local j = loginUI.phases[2].categories[i]
@@ -226,7 +254,7 @@ loginUI.phases[2].loadCharacter = function(loadDefault)
     else
         --TODO: ...WIP
         --[[
-        for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].option) do
+        for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].options) do
                 local matchedDataIndex = false
                 if j.optionType == "gender" or j.clothingCategoryIndex then
                     matchedDataIndex = loginUI.characters[loginUI._selectedCharacter][j.optionType]
@@ -399,7 +427,7 @@ manageCharacter = function(manageType)
         imports.triggerEvent("Client:onNotification", localPlayer, "◴ Saving..", {175, 175, 175, 255})
         local characterData = {}
         --[[
-        for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].option) do
+        for i, j in imports.ipairs(loginUI.phases[2].loginUI.phases[2].options) do
             if j.isEditBox then
                 characterData[j.optionType] = j.placeDataValue
             else
@@ -618,7 +646,13 @@ loginUI.renderUI = function(renderData)
                 imports.beautify.native.drawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, loginUI.phases[1].optionsUI.fontColor, 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
                 imports.beautify.native.drawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, tocolor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[1], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[2], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[3], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
                 imports.beautify.native.drawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineSize, tocolor(unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineColor)), false)
-            end            
+            end
+        elseif loginUI.phase == 2 then
+            --TODO: WIP..
+            for i = 1, #loginUI.phases[2].options, 1 do
+                local j = loginUI.phases[2].options[i]
+                imports.beautify.native.drawRectangle(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, -1)
+            end
         elseif loginUI.phase == 3 then
             imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, tocolor(unpackColor(loginUI.phases[3].bgColor)), false)
             local view_offsetX, view_offsetY = loginUI.phases[3].startX, loginUI.phases[3].startY
@@ -738,10 +772,17 @@ end)
 imports.addEventHandler("onClientResourceStart", resource, function()
     imports.fadeCamera(false)
     imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
-    --TODO: MAKE EXPORT IN LIBRARY TO CHECK IF ITS ALREADY LOADED
-    imports.addEventHandler("onAssetifyLoad", root, function()
-        imports.triggerServerEvent("Player:onToggleLoginUI", localPlayer)
-    end)
+    local booter = function() imports.triggerServerEvent("Player:onToggleLoginUI", localPlayer) end
+    if exports.assetify_library:isLibraryLoaded() then
+        booter()
+    else
+        local booterWrapper = nil
+        booterWrapper = function()
+            booter()
+            imports.removeEventHandler("onAssetifyLoad", root, booterWrapper)
+        end
+        imports.addEventHandler("onAssetifyLoad", root, booterWrapper)
+    end
 end)
 
 
@@ -766,22 +807,6 @@ end)
                     hoverfontColor = {0, 0, 0, 255},
                     hoverBGColor = {255, 80, 80, 255},
                     hoverDuration = 2500,
-                    {
-                        title = "❮",
-                        exec = function() manageCharacter("switch_prev") end
-                    },
-                    {
-                        title = "❯",
-                        exec = function() manageCharacter("switch_next") end
-                    },
-                    {
-                        title = "X",
-                        exec = function() manageCharacter("delete") end
-                    },
-                    {
-                        title = "✎",
-                        exec = function() manageCharacter("create") end
-                    }
                 },
                 button = {
                     startX = 0,
