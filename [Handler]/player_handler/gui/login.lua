@@ -604,12 +604,11 @@ loginUI.renderUI = function(renderData)
         local isLMBClicked = loginUI.cache.keys.mouse == "mouse1"
         local currentRatio = (CLIENT_MTA_RESOLUTION[1]/CLIENT_MTA_RESOLUTION[2])/(1366/768)
         local background_width, background_height = CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2]*currentRatio
-        local background_offsetX, background_offsetY = 0, -(background_height - CLIENT_MTA_RESOLUTION[2])/2
+        local background_offsetX, background_offsetY = 0, -(background_height - CLIENT_MTA_RESOLUTION[2])*0.5
         if background_offsetY > 0 then
             background_width, background_height = CLIENT_MTA_RESOLUTION[1]/currentRatio, CLIENT_MTA_RESOLUTION[2]
-            background_offsetX, background_offsetY = -(background_width - CLIENT_MTA_RESOLUTION[1])/2, 0
+            background_offsetX, background_offsetY = -(background_width - CLIENT_MTA_RESOLUTION[1])*0.5, 0
         end
-
         if loginUI.phase == 1 then
             imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[loginUI.phase].bgTexture, 0, 0, 0, -1, false)
             for i = 1, #loginUI.phases[1].optionsUI, 1 do
@@ -667,7 +666,7 @@ loginUI.renderUI = function(renderData)
             imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, imports.tocolor(imports.unpackColor(loginUI.phases[3].bgColor)), false)
             local view_offsetX, view_offsetY = loginUI.phases[3].startX, loginUI.phases[3].startY
             local view_width, view_height = loginUI.phases[3].width, loginUI.phases[3].height
-            local credits_offsetY = -loginUI.phases[3].contentHeight - (view_height/2)
+            local credits_offsetY = -loginUI.phases[3].contentHeight - (view_height*0.5)
             if (CLIENT_CURRENT_TICK - loginUI.phases[3].scrollAnimTickCounter) >= loginUI.phases[3].scrollDelayDuration then
                 credits_offsetY = view_offsetY + imports.interpolateBetween(credits_offsetY, 0, 0, view_height*1.5, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].scrollAnimTickCounter + loginUI.phases[3].scrollDelayDuration, loginUI.phases[3].scrollDuration), "Linear")
                 if (imports.math.round(credits_offsetY, 2) >= imports.math.round(view_height*1.5)) and loginUI.isEnabled then
