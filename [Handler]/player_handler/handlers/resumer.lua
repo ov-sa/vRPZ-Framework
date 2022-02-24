@@ -45,21 +45,11 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(characterID, ch
     if not characterID or not characterID or not unsavedCharacters then return false end
 
     local serial = CPlayer.getSerial(source)
-    --TODO: NEEDS REFACTOR LATER MAYBE
     for i, j in imports.pairs(unsavedCharacters) do
         if characters[i] then
-            --[[
-            for k, v in imports.pairs(characterCache) do
-                if v.identity["name"] == characters[i]["name"] then
-                    imports.triggerClientEvent(source, "onClientLoginUIEnable", source, true, true)
-                    imports.triggerClientEvent(source, "Client:onSaveCharacter", source, false, "Unfortunately, '"..characters[i]["name"].."' is already registered!", i)
-                    return false
-                end
-            end
-            ]]
             local characterID = CCharacter.create(serial, function(characterID, args)
                 CCharacter.setData(characterID, "identity", imports.toJSON(characters[i]))
-                characterCache[characterID].identity = imports.fromJSON(characterCache[characterID].identity)
+                CCharacter.CBuffer[characterID].identity = imports.fromJSON(CCharacter.CBuffer[characterID].identity)
                 imports.triggerClientEvent(args[1], "Client:onLoadCharacterID", args[1], i, characterID, characters[i])
             end, source)
         end
@@ -81,7 +71,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
     CPlayer.fetch(CPlayer.getSerial(source), function(result, args)
         result.character = result.character or 0
         result.characters = (result.characters and imports.fromJSON(result.characters)) or {}
-        result.premimum = (result.premimum and true) or false
+        result.vip = (result.vip and true) or false
 
         if (#result.characters > 0) then
             CCharacter.fetch(result.characters, function(result, args)
@@ -91,6 +81,8 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                     j.identity = imports.fromJSON(j.identity)
                 end
                 if not args[2].characters[(args[2].character)] then args[2].character = 0 end
+                --TODO: NOT FETCHING....
+                print(toJSON(args[2].characters))
                 imports.triggerClientEvent(args[1], "Client:onToggleLoginUI", args[1], true, {
                     character = args[2].character,
                     characters = args[2].characters,
@@ -98,11 +90,12 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                 })
             end, args[1], result)
         else
+            print("DOESNT EXIST..")
             result.character = 0
             imports.triggerClientEvent(args[1], "Client:onToggleLoginUI", args[1], true, {
                 character = result.character,
                 characters = result.characters,
-                vip = result.premimum
+                vip = result.vip
             })
         end
     end, source)
