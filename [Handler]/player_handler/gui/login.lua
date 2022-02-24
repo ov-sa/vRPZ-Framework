@@ -81,7 +81,7 @@ loginUI = {
                 paddingX = 5, paddingY = 5,
                 size = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.size, iconSize = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconSize,
                 iconColor = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconColor,
-                bgTexture = imports.beautify.assets["images"]["curved_square/regular/square.rw"], bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.bgColor)),
+                bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.bgColor)),
                 {iconTexture = imports.beautify.assets["images"]["arrow/left.rw"], exec = function() loginUI.phases[2].manageCharacter("previous") end},
                 {iconTexture = imports.beautify.assets["images"]["arrow/right.rw"], exec = function() loginUI.phases[2].manageCharacter("next") end},
                 {iconTexture = imports.beautify.assets["images"]["canvas/minus.rw"], exec = function() loginUI.phases[2].manageCharacter("pick") end},
@@ -642,7 +642,7 @@ loginUI.renderUI = function(renderData)
                 end
                 j.animAlphaPercent = j.animAlphaPercent or 0.35
                 j.animAlphaPercent = ((j.hoverStatus == "forward") and imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")) or imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0.35, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
-                imports.beautify.native.drawImage(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, loginUI.phases[2].options.bgTexture, 0, 0, 0, loginUI.phases[2].options.bgColor, false)
+                imports.beautify.native.drawRectangle(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, loginUI.phases[2].options.bgColor)
                 imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.iconTexture, 0, 0, 0, imports.tocolor(loginUI.phases[2].options.iconColor[1], loginUI.phases[2].options.iconColor[2], loginUI.phases[2].options.iconColor[3], loginUI.phases[2].options.iconColor[4]*j.animAlphaPercent), false)
             end
         elseif loginUI.phase == 3 then

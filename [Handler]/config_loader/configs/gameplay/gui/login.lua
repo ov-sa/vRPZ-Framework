@@ -81,7 +81,7 @@ configVars["UI"]["Login"] = {
             },
             options = {
                 size = 30,
-                iconSize = 13,
+                iconSize = 14,
                 iconColor = {255, 255, 255, 255},
                 bgColor = {0, 0, 0, 255},
                 hoverDuration = 2750,
