@@ -335,17 +335,21 @@ loginUI.phases[2].manageCharacter = function(action)
             end
         end
     elseif action == "pick" then
-        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
+        local errorMessage = false
         if (loginUI.selectedCharacter ~= 0) and (loginUI.character == loginUI.selectedCharacter) then
-            imports.triggerEvent("Client:onNotification", localPlayer, "You've already picked the specified character!", {255, 80, 80, 255})
-            return false
+            errorMessage = "You've already picked the specified character!"
         end
         if (not loginUI.characters[(loginUI.selectedCharacter)]) or loginUI.characters[(loginUI.selectedCharacter)].isUnverified then
-            imports.triggerEvent("Client:onNotification", localPlayer, "You must save the character inorder to pick!", {255, 80, 80, 255})
-            return false
+            errorMessage = "You must save the character inorder to pick!"
         end
-        loginUI.character = loginUI.selectedCharacter
-        imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully picked the character!", {80, 255, 80, 255})
+        if errorMessage then
+            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
+            imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
+            return false
+        else
+            loginUI.character = loginUI.selectedCharacter
+            imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully picked the character!", {80, 255, 80, 255})
+        end
     elseif action == "save" then
         --TODO: ....
         if #loginUI.characters > 0 and not loginUI.characters[(loginUI.selectedCharacter)].isUnverified then
@@ -390,25 +394,28 @@ loginUI.phases[2].manageCharacter = function(action)
         loginUI._charactersUnderProcess[(loginUI.selectedCharacter)] = true
         imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, character, charactersToBeSaved, charactersPendingToBeSaved)
     elseif action == "play" then
+        local errorMessage = false
         if #loginUI.characters <= 0 then
-            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
-            imports.triggerEvent("Client:onNotification", localPlayer, "You must create a character to play!", {255, 80, 80, 255})
-            return false
+            errorMessage = "You must create a character to play!"
         end
         if not loginUI.characters[loginUI.character] then
-            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
-            imports.triggerEvent("Client:onNotification", localPlayer, "You must pick a character to play!", {255, 80, 80, 255})
-            return false
+            errorMessage = "You must pick a character to play!"
         end
-        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
-        imports.triggerEvent("Client:onNotification", localPlayer, "◴ Processing..", {175, 175, 175, 255})
-        imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
-        imports.setTimer(function(character, characters)
-            imports.triggerServerEvent("Player:onResumeCharacter", localPlayer, character, characters)
-        end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration, 1, loginUI.character, loginUI.characters)
-        imports.setTimer(function()
-            loginUI.toggleUI(false)
-        end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + 250, 1)
+        if errorMessage then
+            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
+            imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
+            return false
+        else
+            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
+            imports.triggerEvent("Client:onNotification", localPlayer, "◴ Processing..", {175, 175, 175, 255})
+            imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
+            imports.setTimer(function(character, characters)
+                imports.triggerServerEvent("Player:onResumeCharacter", localPlayer, character, characters)
+            end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration, 1, loginUI.character, loginUI.characters)
+            imports.setTimer(function()
+                loginUI.toggleUI(false)
+            end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + 250, 1)
+        end
     end
     return true
 end
