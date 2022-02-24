@@ -80,7 +80,7 @@ local loginUI = {
                 startX = 5, startY = 5,
                 paddingX = 5, paddingY = 5,
                 size = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.size, iconSize = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconSize,
-                iconColor = imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconColor),
+                iconColor = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconColor,
                 bgTexture = imports.beautify.assets["images"]["curved_square/regular/square.rw"], bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.bgColor)),
                 {
                     bgTexture = imports.beautify.assets["images"]["arrow/left.rw"]
@@ -658,8 +658,26 @@ loginUI.renderUI = function(renderData)
         elseif loginUI.phase == 2 then
             for i = 1, #loginUI.phases[2].options, 1 do
                 local j = loginUI.phases[2].options[i]
+                local isOptionHovered = isMouseOnPosition(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size)
+                if isOptionHovered then
+                    if isLMBClicked then
+                        --imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false)
+                        --imports.setTimer(function() j.exec() end, 1, 1)
+                    end
+                    if j.hoverStatus ~= "forward" then
+                        j.hoverStatus = "forward"
+                        j.hoverAnimTick = CLIENT_CURRENT_TICK
+                    end
+                else
+                    if j.hoverStatus ~= "backward" then
+                        j.hoverStatus = "backward"
+                        j.hoverAnimTick = CLIENT_CURRENT_TICK
+                    end
+                end
+                j.animAlphaPercent = j.animAlphaPercent or 0.25
+                j.animAlphaPercent = ((j.hoverStatus == "forward") and imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")) or imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0.25, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")
                 imports.beautify.native.drawImage(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, loginUI.phases[2].options.bgTexture, 0, 0, 0, loginUI.phases[2].options.bgColor, false)
-                imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.bgTexture, 0, 0, 0, imports.tocolor(unpackColor(loginUI.phases[2].options.iconColor)), false)
+                imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.bgTexture, 0, 0, 0, imports.tocolor(loginUI.phases[2].options.iconColor[1], loginUI.phases[2].options.iconColor[2], loginUI.phases[2].options.iconColor[3], loginUI.phases[2].options.iconColor[4]*j.animAlphaPercent), false)
             end
         elseif loginUI.phase == 3 then
             imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, imports.tocolor(unpackColor(loginUI.phases[3].bgColor)), false)
