@@ -67,7 +67,7 @@ loginUI = {
             }
         },
         [2] = {
-            startX = 5, startY = 5,
+            startX = 0, startY = 0,
             width = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.width, height = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.height,
             titlebar = {
                 paddingY = 2,
