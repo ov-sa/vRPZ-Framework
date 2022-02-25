@@ -49,14 +49,14 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(character, char
         if characters[i] then
             CCharacter.create(serial, function(characterID, args)
                 CCharacter.setData(characterID, {
-                    {"identity", imports.toJSON(args[4])}
+                    {"identity", imports.toJSON(args[3])}
                 }, function(result, args)
                     if result then
                         CCharacter.CBuffer[(args[1])].identity = args[4]
-                        imports.triggerClientEvent(args[2], "Client:onLoadCharacterID", args[2], args[3], args[4], args[5])
+                        imports.triggerClientEvent(args[2], "Client:onLoadCharacterID", args[2], args[3], args[1], args[4])
                     end
-                end, characterID, args[1], args[2], args[3], args[4])
-            end, source, i, character, characters[i].identity)
+                end, characterID, args[1], args[2], args[3])
+            end, source, i, characters[i].identity)
         end
     end
     --TODO: SAVE IT

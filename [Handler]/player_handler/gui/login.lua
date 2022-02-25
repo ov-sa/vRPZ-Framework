@@ -542,8 +542,9 @@ imports.addEventHandler("Client:onLoadCharacterID", root, function(character, ch
     if not character or not characterID or not characterData then return false end
 
     loginUI.processCharacters[character] = nil
-    loginUI.characters[character] = characterData
-    loginUI.characters[character]._id = characterID
+    loginUI.characters[character] = loginUI.characters[character] or {}
+    loginUI.characters[character].id = characterID
+    loginUI.characters[character].identity = characterData
 end)
 
 
