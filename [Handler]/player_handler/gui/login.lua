@@ -223,13 +223,16 @@ loginUI.phases[2].updateCharacter = function()
     exports.assetify_library:setCharacterAsset(loginUI.phases[2].character, selectionData.gender[2].assetName, (selectionData.upper[2].clumpName)..(selectionData.lower[2].clumpName)..(selectionData.shoes[2].clumpName), clumpTextures)
 end
 loginUI.phases[2].loadCharacter = function(loadDefault)
-    if not loadDefault and not loginUI.characters[(loginUI.selectedCharacter)] then
-        if #loginUI.characters > 0 then
-            loginUI.character = 1
-            loginUI.selectedCharacter = loginUI.character
-        else
-            loadDefault = true
+    if not loadDefault then
+        if not loginUI.characters[(loginUI.selectedCharacter)] then
+            if #loginUI.characters > 0 then
+                loginUI.character = 1
+                loginUI.selectedCharacter = loginUI.character
+            else
+                loadDefault = true
+            end
         end
+        if not loadDefault and not loginUI.characters[(loginUI.selectedCharacter)].identity then loadDefault = true end
     end
     if loadDefault then
         for i = 1, #loginUI.phases[2].categories, 1 do
