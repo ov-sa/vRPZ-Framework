@@ -25,7 +25,7 @@ configVars["UI"]["Login"] = {
 
     spawnLocations = {
         {
-            cinemationFOV = 50,
+            cinemationFOV = 30,
             characterCinemationFOV = 85,
             characterPoint = {x = 3.823265075683594, y = 5.68226146697998, z = 1.617531418800354, rotation = -80},
             characterCinemationPoint = {
@@ -33,7 +33,7 @@ configVars["UI"]["Login"] = {
                 cameraStartLook = {x = 5.117425918579102, y = 5.936816692352295, z = 2.060261249542236},
                 cameraEnd = {x = 5.582699775695801, y = 6.822999954223633, z = 2.206700086593628},
                 cameraEndLook = {x = 5.052437305450439, y = 5.990044116973877, z = 2.048564910888672},
-                cinemationDuration = 7000
+                cinemationDuration = 14000
             },
             cinemationPoint = {
                 cameraStart = {x = 763.5717163085938, y = 463.2174987792969, z = 151.6784057617188},
