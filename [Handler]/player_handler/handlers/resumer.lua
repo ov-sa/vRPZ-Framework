@@ -83,12 +83,13 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
         print(toJSON(result.characters))
         if (#result.characters > 0) then
             CCharacter.fetch(result.characters, function(result, args)
-                --[[args[2].characters = result
+                args[2].characters = result
                 for i = 1, #args[2].characters, 1 do
                     local j = args[2].characters[i]
                     j.identity = imports.fromJSON(j.identity)
+                    CCharacter.CBuffer[(j[(dbify.character.__connection__.keyColumn)])] = j
+                    CCharacter.CBuffer[(j[(dbify.character.__connection__.keyColumn)])][(dbify.character.__connection__.keyColumn)] = nil
                 end
-                ]]
                 if not args[2].characters[(args[2].character)] then args[2].character = 0 end
                 imports.triggerClientEvent(args[1], "Client:onToggleLoginUI", args[1], true, {
                     character = args[2].character,
