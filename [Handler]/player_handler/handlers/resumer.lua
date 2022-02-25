@@ -60,7 +60,7 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(character, char
         end
     end
     --TODO: SAVE IT
-    CPlayer.setData(serial, {"character", characterID})
+    --CPlayer.setData(serial, {"character", characterID})
     imports.triggerClientEvent(source, "Client:onSaveCharacter", source, true)
 end)
 
@@ -79,16 +79,17 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
         result.characters = (result.characters and imports.fromJSON(result.characters)) or {}
         result.vip = (result.vip and true) or false
 
+        --TODO: DEBUG..
+        print(toJSON(result.characters))
         if (#result.characters > 0) then
             CCharacter.fetch(result.characters, function(result, args)
-                args[2].characters = result
+                --[[args[2].characters = result
                 for i = 1, #args[2].characters, 1 do
                     local j = args[2].characters[i]
                     j.identity = imports.fromJSON(j.identity)
                 end
+                ]]
                 if not args[2].characters[(args[2].character)] then args[2].character = 0 end
-                --TODO: NOT FETCHING....
-                print(toJSON(args[2].characters))
                 imports.triggerClientEvent(args[1], "Client:onToggleLoginUI", args[1], true, {
                     character = args[2].character,
                     characters = args[2].characters,
@@ -96,7 +97,6 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                 })
             end, args[1], result)
         else
-            print("DOESNT EXIST..")
             result.character = 0
             imports.triggerClientEvent(args[1], "Client:onToggleLoginUI", args[1], true, {
                 character = result.character,
