@@ -52,7 +52,6 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(character, char
             if result then
                 CCharacter.CBuffer[(args[1])].identity = args[4]
                 imports.triggerClientEvent(args[2], "Client:onLoadCharacterID", args[2], args[3], args[1], args[4])
-                imports.triggerClientEvent(args[2], "Client:onSaveCharacter", args[2], true, args[3])
                 --TODO: SAVE IT
                 --CPlayer.setData(serial, {"character", characterID})
             end
