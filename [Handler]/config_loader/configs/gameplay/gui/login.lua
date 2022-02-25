@@ -25,7 +25,7 @@ configVars["UI"]["Login"] = {
 
     spawnLocations = {
         {
-            cinemationFOV = 150,
+            cinemationFOV = 50,
             characterCinemationFOV = 85,
             characterPoint = {x = 3.823265075683594, y = 5.68226146697998, z = 1.617531418800354, rotation = -80},
             characterCinemationPoint = {
