@@ -274,9 +274,7 @@ loginUI.phases[2].manageCharacter = function(action)
             imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
             return false
         else
-            imports.table.insert(loginUI.characters, {
-                isUnverified = true
-            })
+            imports.table.insert(loginUI.characters, {})
             loginUI.selectedCharacter = #loginUI.characters
             loginUI.unsavedCharacters[(loginUI.selectedCharacter)] = true
             loginUI.phases[2].loadCharacter(true)
@@ -312,7 +310,7 @@ loginUI.phases[2].manageCharacter = function(action)
         end
     elseif action == "pick" then
         local errorMessage = false
-        if (not loginUI.characters[(loginUI.selectedCharacter)]) or loginUI.characters[(loginUI.selectedCharacter)].isUnverified then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][7][FRAMEWORK_LANGUAGE] end
+        if (not loginUI.characters[(loginUI.selectedCharacter)]) or not loginUI.characters[(loginUI.selectedCharacter)].id then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][7][FRAMEWORK_LANGUAGE] end
         if errorMessage then
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
             imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
@@ -322,7 +320,7 @@ loginUI.phases[2].manageCharacter = function(action)
             imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully picked the character!", {80, 255, 80, 255})
         end
     elseif action == "save" then
-        if (#loginUI.characters > 0) and (not loginUI.characters[(loginUI.selectedCharacter)].isUnverified) then
+        if (#loginUI.characters > 0) and loginUI.characters[(loginUI.selectedCharacter)].id then
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
         else
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
@@ -338,9 +336,7 @@ loginUI.phases[2].manageCharacter = function(action)
             }
             for i = 1, #characters, 1 do
                 local j = characters[i]
-                if j.isUnverified then
-                    characters[i] = nil
-                end
+                if not j.id then characters[i] = nil end
             end
             if #loginUI.characters <= 0 then
                 character = 1
@@ -477,22 +473,22 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
             end
         end
         loginUI.phase = phaseID
-        local unverifiedCharacters = {}
+        local unsavedCharacters = {}
         for i = 1, #loginUI.characters, 1 do
             local j = loginUI.characters[i]
-            if j.isUnverified then
-                imports.table.insert(unverifiedCharacters, i)
+            if not j.id then
+                imports.table.insert(unsavedCharacters, i)
             end
         end
         for i = 1, #loginUI.characters, 1 do
             local j = loginUI.characters[i]
-            if j.isUnverified then
+            if not j.id then
                 imports.table.remove(loginUI.characters, i)
                 loginUI.unsavedCharacters[i] = nil
             end
         end
-        for i = 1, #unverifiedCharacters, 1 do
-            local j = unverifiedCharacters[i]
+        for i = 1, #unsavedCharacters, 1 do
+            local j = unsavedCharacters[i]
             if loginUI.character == j then
                 loginUI.character = 0
                 loginUI.selectedCharacter = 0
