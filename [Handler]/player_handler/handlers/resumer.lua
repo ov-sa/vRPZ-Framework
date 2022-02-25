@@ -14,6 +14,7 @@
 
 local imports = {
     pairs = pairs,
+    tonumber = tonumber,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     triggerClientEvent = triggerClientEvent,
@@ -41,7 +42,7 @@ end)
 
 imports.addEvent("Player:onSaveCharacter", true)
 imports.addEventHandler("Player:onSaveCharacter", root, function(character, characters)
-    character = tonumber(character)
+    character = imports.tonumber(character)
     if not character or not characters or not characters[character] then return false end
 
     local serial = CPlayer.getSerial(source)
