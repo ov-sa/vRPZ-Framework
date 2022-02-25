@@ -325,7 +325,7 @@ loginUI.phases[2].manageCharacter = function(action)
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
         else
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
-            local character = loginUI.character
+            local character = loginUI.selectedCharacter
             local characters, unsavedCharacters = imports.table.clone(loginUI.characters, true), {}
             local selectionData = loginUI.phases[2].fetchSelection()
             local characterData = {
@@ -343,10 +343,10 @@ loginUI.phases[2].manageCharacter = function(action)
                 character = 1
                 loginUI.selectedCharacter = character
             end
-            loginUI.processCharacters[(loginUI.selectedCharacter)] = true
-            unsavedCharacters[(loginUI.selectedCharacter)] = true
-            characters[(loginUI.selectedCharacter)] = characters[(loginUI.selectedCharacter)] or {}
-            characters[(loginUI.selectedCharacter)].identity = characterData
+            loginUI.processCharacters[character] = true
+            unsavedCharacters[character] = true
+            characters[character] = characters[character] or {}
+            characters[character].identity = characterData
             imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, character, characters, unsavedCharacters)
         end
     elseif action == "play" then
