@@ -326,7 +326,7 @@ loginUI.phases[2].manageCharacter = function(action)
         else
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
             local character = loginUI.selectedCharacter
-            local characters, unsavedCharacters = imports.table.clone(loginUI.characters, true), {}
+            local characters, unsavedCharacters = imports.table.clone(loginUI.characters, true), {} --TODO: MAKE UNSAVED CHARACTERS SOLO ONLYN ON CHAR WHEN SWITCHCED REMOVE IT
             local selectionData = loginUI.phases[2].fetchSelection()
             local characterData = {
                 tone = selectionData.tone,
@@ -347,7 +347,7 @@ loginUI.phases[2].manageCharacter = function(action)
             unsavedCharacters[character] = true
             characters[character] = characters[character] or {}
             characters[character].identity = characterData
-            imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, character, characters, unsavedCharacters)
+            imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, character, characters)
         end
     elseif action == "play" then
         local errorMessage = false
@@ -524,14 +524,12 @@ imports.addEventHandler("Client:onEnableLoginUI", root, function(state, isForced
 end)
 
 imports.addEvent("Client:onSaveCharacter", true)
-imports.addEventHandler("Client:onSaveCharacter", root, function(state, errorMessage, character)
+imports.addEventHandler("Client:onSaveCharacter", root, function(state, character)
+    loginUI.processCharacters[character] = nil
     if state then
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully saved the character!", {80, 255, 80, 255})
     else
-        if errorMessage then
-            if character then loginUI.processCharacters[character] = nil end
-            imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
-        end
+        imports.triggerEvent("Client:onNotification", localPlayer, "failed to save character....", {255, 80, 80, 255})
     end
     imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true, true)
 end)
@@ -544,7 +542,6 @@ imports.addEventHandler("Client:onLoadCharacterID", root, function(character, ch
     loginUI.characters[character] = loginUI.characters[character] or {}
     loginUI.characters[character].id = characterID
     loginUI.characters[character].identity = characterData
-    loginUI.processCharacters[character] = nil
 end)
 
 

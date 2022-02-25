@@ -40,28 +40,25 @@ end)
 -----------------------------------
 
 imports.addEvent("Player:onSaveCharacter", true)
-imports.addEventHandler("Player:onSaveCharacter", root, function(character, characters, unsavedCharacters)
+imports.addEventHandler("Player:onSaveCharacter", root, function(character, characters)
     character = tonumber(character)
-    if not character or not characters or not unsavedCharacters then return false end
+    if not character or not characters or not characters[character] then return false end
 
     local serial = CPlayer.getSerial(source)
-    for i, j in imports.pairs(unsavedCharacters) do
-        if characters[i] then
-            CCharacter.create(serial, function(characterID, args)
-                CCharacter.setData(characterID, {
-                    {"identity", imports.toJSON(args[3])}
-                }, function(result, args)
-                    if result then
-                        CCharacter.CBuffer[(args[1])].identity = args[4]
-                        imports.triggerClientEvent(args[2], "Client:onLoadCharacterID", args[2], args[3], args[1], args[4])
-                    end
-                end, characterID, args[1], args[2], args[3])
-            end, source, i, characters[i].identity)
-        end
-    end
-    --TODO: SAVE IT
-    --CPlayer.setData(serial, {"character", characterID})
-    imports.triggerClientEvent(source, "Client:onSaveCharacter", source, true)
+    CCharacter.create(serial, function(characterID, args)
+        CCharacter.setData(characterID, {
+            {"identity", imports.toJSON(args[3])}
+        }, function(result, args)
+            if result then
+                CCharacter.CBuffer[(args[1])].identity = args[4]
+                imports.triggerClientEvent(args[2], "Client:onLoadCharacterID", args[2], args[3], args[1], args[4])
+                imports.triggerClientEvent(args[2], "Client:onSaveCharacter", args[2], true, args[3])
+                --TODO: SAVE IT
+                --CPlayer.setData(serial, {"character", characterID})
+            end
+            imports.triggerClientEvent(args[2], "Client:onSaveCharacter", args[2], (result and true) or false, args[3])
+        end, characterID, args[1], args[2], args[3])
+    end, source, i, characters[character].identity)
 end)
 
 
