@@ -103,9 +103,6 @@
     <script src="handlers/resumer.lua" type="server"/>
     <script src="handlers/wasted.lua" type="server"/>
 
-    <!-- Files: Shaders -->
-    <file src="files/shaders/texreplace.fx"/>
-
     <!-- Files: Images: GUIs -->
     <file src="files/images/login/login.png"/>
     <file src="files/images/login/background.png"/>
