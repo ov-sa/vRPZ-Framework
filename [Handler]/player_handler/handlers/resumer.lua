@@ -40,25 +40,26 @@ end)
 -----------------------------------
 
 imports.addEvent("Player:onSaveCharacter", true)
-imports.addEventHandler("Player:onSaveCharacter", root, function(characterID, characters, unsavedCharacters)
-    characterID = tonumber(characterID)
-    if not characterID or not characterID or not unsavedCharacters then return false end
+imports.addEventHandler("Player:onSaveCharacter", root, function(character, characters, unsavedCharacters)
+    character = tonumber(character)
+    if not character or not characters or not unsavedCharacters then return false end
 
     local serial = CPlayer.getSerial(source)
     for i, j in imports.pairs(unsavedCharacters) do
         if characters[i] then
-            local characterID = CCharacter.create(serial, function(characterID, args)
+            CCharacter.create(serial, function(characterID, args)
                 CCharacter.setData(characterID, {
                     {"identity", imports.toJSON(args[4])}
                 }, function(result, args)
                     if result then
-                        CCharacter.CBuffer[(args[3])].identity = args[4]
-                        imports.triggerClientEvent(args[1], "Client:onLoadCharacterID", args[1], args[2], args[3], args[4])
+                        CCharacter.CBuffer[(args[1])].identity = args[4]
+                        imports.triggerClientEvent(args[2], "Client:onLoadCharacterID", args[2], args[3], args[4], args[5])
                     end
-                end, args[1], args[2], args[3], args[4])
-            end, source, i, characterID, characters[i])
+                end, characterID, args[1], args[2], args[3], args[4])
+            end, source, i, character, characters[i])
         end
     end
+    --TODO: SAVE IT
     CPlayer.setData(serial, {"character", characterID})
     imports.triggerClientEvent(source, "Client:onSaveCharacter", source, true)
 end)

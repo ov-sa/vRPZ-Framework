@@ -327,7 +327,7 @@ loginUI.phases[2].manageCharacter = function(action)
         else
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
             local character = loginUI.character
-            local characters, unsavedCharacters = imports.table.copy(loginUI.characters, true), {}
+            local characters, unsavedCharacters = imports.table.clone(loginUI.characters, true), {}
             local selectionData = loginUI.phases[2].fetchSelection()
             local characterData = {
                 tone = selectionData.tone,
