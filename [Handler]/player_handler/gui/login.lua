@@ -276,7 +276,6 @@ loginUI.phases[2].manageCharacter = function(action)
         else
             imports.table.insert(loginUI.characters, {})
             loginUI.selectedCharacter = #loginUI.characters
-            loginUI.unsavedCharacters[(loginUI.selectedCharacter)] = true
             loginUI.phases[2].loadCharacter(true)
             imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][4][FRAMEWORK_LANGUAGE], {80, 255, 80, 255})
         end
@@ -290,7 +289,6 @@ loginUI.phases[2].manageCharacter = function(action)
         else
             imports.triggerServerEvent("Player:onDeleteCharacter", localPlayer, loginUI.characters[(loginUI.selectedCharacter)].id)
             imports.table.remove(loginUI.characters, loginUI.selectedCharacter)
-            loginUI.unsavedCharacters[(loginUI.selectedCharacter)] = nil
             loginUI.selectedCharacter = imports.math.max(0, loginUI.selectedCharacter - 1)
             loginUI.phases[2].loadCharacter()
             imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][6][FRAMEWORK_LANGUAGE], {80, 255, 80, 255})
@@ -485,7 +483,6 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
             local j = loginUI.characters[i]
             if not j.id then
                 imports.table.remove(loginUI.characters, i)
-                loginUI.unsavedCharacters[i] = nil
             end
         end
         for i = 1, #unsavedCharacters, 1 do
@@ -541,7 +538,7 @@ imports.addEventHandler("Client:onLoadCharacterID", root, function(character, ch
     character = imports.tonumber(character); characterID = imports.tonumber(characterID);
     if not character or not characterID or not characterData then return false end
 
-    loginUI.unsavedCharacters[character], loginUI.processCharacters[character] = nil, nil
+    loginUI.processCharacters[character] = nil
     loginUI.characters[character] = characterData
     loginUI.characters[character]._id = characterID
 end)
@@ -714,7 +711,7 @@ imports.addEventHandler("Client:onToggleLoginUI", root, function(state, args)
         end
         loginUI.character = args.character
         loginUI.selectedCharacter = loginUI.character
-        loginUI.characters, loginUI.unsavedCharacters, loginUI.processCharacters = args.characters, {}, {}
+        loginUI.characters, loginUI.processCharacters = args.characters, {}
         loginUI.vip = args.vip
         imports.setElementPosition(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.x, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.y, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.z)
         imports.setElementDimension(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
