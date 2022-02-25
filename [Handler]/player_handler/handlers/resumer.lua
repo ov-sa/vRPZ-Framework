@@ -56,7 +56,7 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(character, char
                         imports.triggerClientEvent(args[2], "Client:onLoadCharacterID", args[2], args[3], args[4], args[5])
                     end
                 end, characterID, args[1], args[2], args[3], args[4])
-            end, source, i, character, characters[i])
+            end, source, i, character, characters[i].identity)
         end
     end
     --TODO: SAVE IT
