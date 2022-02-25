@@ -342,9 +342,10 @@ loginUI.phases[2].manageCharacter = function(action)
                 character = 1
                 loginUI.selectedCharacter = character
             end
-            unsavedCharacters[(loginUI.selectedCharacter)] = true
-            characters[(loginUI.selectedCharacter)].identity = characterData
             loginUI.processCharacters[(loginUI.selectedCharacter)] = true
+            unsavedCharacters[(loginUI.selectedCharacter)] = true
+            characters[(loginUI.selectedCharacter)] = characters[(loginUI.selectedCharacter)] or {}
+            characters[(loginUI.selectedCharacter)].identity = characterData
             imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, character, characters, unsavedCharacters)
         end
     elseif action == "play" then
