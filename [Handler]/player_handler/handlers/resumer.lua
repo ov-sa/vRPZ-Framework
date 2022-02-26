@@ -116,7 +116,6 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                         if value then value = imports.tonumber(value) or value end
                         CCharacter.CBuffer[(j.id)][v] = value
                     end
-                    CCharacter.CBuffer[(j.id)].dead = (CCharacter.CBuffer[(j.id)].dead == "true" and true) or false
                     CCharacter.CBuffer[(j.id)].location = (CCharacter.CBuffer[(j.id)].location and imports.fromJSON(CCharacter.CBuffer[(j.id)].location)) or false
                 end
                 if not args[3].characters[(args[3].character)] then args[3].character = 0 end

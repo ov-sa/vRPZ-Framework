@@ -87,7 +87,6 @@ imports.addEventHandler("Player:onDeath", root, function(killer, headshot, weapo
     if not CPlayer.isInitialized(source) then return false end
 
     local characterID = source:getData("Character:ID")
-    CCharacter.setData(characterID, "dead", true)
     imports.setElementCollisionsEnabled(source, false)
     imports.setElementAlpha(source, 0)
     local posVector = source:getPosition()
@@ -185,17 +184,10 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
     end
     if resetProgress then CCharacter.loadProgress(source) end
 
-    if (CCharacter.getHealth(source) <= 0) or CCharacter.CBuffer[characterID]["dead"] then
-        CCharacter.setHealth(source, 0)
-        CCharacter.setData(characterID, {
-            {"dead", true}
-        })
+    if (CCharacter.getHealth(source) <= 0) then
         --TODO: NEEDS TO BE IMPLEMENTED..
         --imports.triggerEvent("Player:onDeath", source, nil, false, nil, 3)
     else
-        CCharacter.setData(characterID, {
-            {"dead", true}
-        })
         imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false)
         imports.showChat(source, true)
     end
