@@ -21,10 +21,12 @@ local imports = {
     getElementsByType = getElementsByType,
     getTickCount = getTickCount,
     addEventHandler = addEventHandler,
+    cancelEvent = cancelEvent,
     triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent,
     getElementPosition = getElementPosition,
     getPlayerSerial = getPlayerSerial,
+    getPlayerName = getPlayerName,
     setTimer = setTimer,
     outputChatBox = outputChatBox,
     setFPSLimit = setFPSLimit,
@@ -94,7 +96,7 @@ imports.addEventHandler("onResourceStart", resource, function()
         for i = 1, #disabledCMDs, 1 do
             local j = FRAMEWORK_CONFIGS.Game["Disabled_CMDS"][i]
             if j == command then
-                cancelEvent()
+                imports.cancelEvent()
                 if command == "logout" then
                     if CPlayer.isInitialized(source) then
                         local cooldownETA, prevResumeTick = false, getResumeTick(source)
@@ -105,12 +107,9 @@ imports.addEventHandler("onResourceStart", resource, function()
                         if cooldownETA then
                             imports.triggerClientEvent(source, "Client:onNotification", source, "Please wait "..imports.math.ceil(cooldownETA/1000).."s before logging out!", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
                         else
-                            local posVector = imports.getElementPosition(source)
-                            local characterID = source:getData("Character:ID")
-                            local characterIdentity = CCharacter.getData(characterID, "identity")
                             CCharacter.saveProgress(source)
                             imports.triggerEvent("Player:onToggleLoginUI", source)
-                            imports.outputChatBox("#FFFFFF- #5050FF"..characterIdentity.name.."#FFFFFF left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)    
+                            imports.outputChatBox("#FFFFFF- #5050FF"..imports.getPlayerName(source).."#FFFFFF left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)    
                         end
                     end
                 end

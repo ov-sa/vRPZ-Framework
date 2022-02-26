@@ -80,10 +80,21 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
     local serial = CPlayer.getSerial(source)
     CPlayer.fetch(serial, function(result, args)
         CCharacter.fetchOwned(args[2], function(result, args)
-            CPlayer.CBuffer[(args[2])] = args[3] --TODO: LATER MERGE THIS W/ BEAUTIFY'S SHARED APIS
-            args[3] = imports.table.clone(args[3], true)
+            CPlayer.CBuffer[(args[2])] = args[3]
+            args[3] = imports.table.clone(args[3], true) --TODO: LATER MERGE THIS W/ BEAUTIFY'S SHARED APIS
             args[3].character = args[3].character or 0
             args[3].vip = (args[3].vip and true) or false
+            --TODO: ..
+            --[[
+            if tostring(data) == "nil" then data = nil end
+            if tostring(data) == "false" then data = false end
+            if data then
+                local isNum = tonumber(data)
+                if isNum then data = isNum else data = tostring(data) end
+                source:setData("Player:"..j, data)
+            end
+            ]]--
+        
             if (result and (#result > 0)) then
                 args[3].characters, isCharacterSelected = {}, false
                 for i = 1, #result, 1 do
@@ -128,7 +139,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     local serial = CPlayer.getSerial(source)
     local serverWeather, serverTime = CGame.getNativeWeather()
     local characterID = characters[character].id
-    local characterIdentity = CCharacter.CBuffer[characterID]["identity"]
+    local characterIdentity = CCharacter.CBuffer[characterID].identity
     imports.setElementData(source, "Character:ID", characterID)
     imports.setElementData(source, "Character:Identity", characterIdentity)
     imports.setElementData(source, "Player:Initialized", true)
@@ -145,25 +156,6 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         slots = {}
     }
     ]]
-
-        --[[
-        for i, j in ipairs(playerDatas) do
-            local data = exports.serials_library:getSerialData(serial, j)
-            if tostring(data) == "nil" then data = nil end
-            if tostring(data) == "false" then data = false end
-            if data then
-                local isNum = tonumber(data)
-                if isNum then data = isNum else data = tostring(data) end
-                source:setData("Player:"..j, data)
-            end
-        end
-        for i, j in ipairs(characterDatas) do
-            local data = getCharacterData(characterID, j)
-            if data then
-                source:setData("Character:"..j, data)
-            end
-        end
-        ]]
     CCharacter.setHealth(source, 10000) --TODO: REMOVE LATER..
     cache.resumeBuffer[source] = imports.getTickCount()
     --triggerClientEvent(source, "onClientInventorySyncSlots", source, playerInventorySlots[source])

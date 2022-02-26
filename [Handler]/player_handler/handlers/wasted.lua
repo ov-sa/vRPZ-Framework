@@ -162,11 +162,10 @@ end)
 --------------------------
 
 imports.addEvent("Player:onSpawn", true)
-imports.addEventHandler("Player:onSpawn", root, function(spawnpoint)
+imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, loadDatas)
     spawnpoint = spawnpoint or CGame.generateSpawn()
-
     local characterID = source:getData("Character:ID")
-    local characterIdentity = CCharacter.CBuffer[characterID]["identity"]
+    local characterIdentity = CCharacter.CBuffer[characterID].identity
     imports.spawnPlayer(source, characterLocation.position[1], characterLocation.position[2], characterLocation.position[3] + 1, characterLocation.rotation[3])
     imports.setElementAlpha(255)
     imports.setElementDimension(source, 0)
@@ -175,6 +174,17 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint)
     imports.setCameraTarget(source, source)
     CCharacter.loadProgress(source)
     CCharacter.setData(characterID, "dead", false)
+
+    if loadDatas then
+        for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
+            local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
+            imports.setElementData(player, "Player:"..j, CPlayer.CBuffer[j])
+        end
+        for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
+            local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
+            imports.setElementData(player, "Character:"..j, CCharacter.CBuffer[j])
+        end
+    end
     --TODO: APPEND FUNCTION TO RETRIEVE CHARACTER'S CURRENT CLOTHES..
     --imports.triggerClientEvent("Player:onSyncPedClothes", source, source, getPlayerClothes(source))
     --imports.triggerClientEvent(source, "Client:onRespawn", source)
