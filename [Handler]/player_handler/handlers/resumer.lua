@@ -179,7 +179,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     --triggerClientEvent("onSyncPedClothes", source, source, getPlayerClothes(source))
     imports.triggerClientEvent(source, "Player:onSyncWeather", source, serverWeather, serverTime)
     --triggerClientEvent(source, "onClientInventorySyncSlots", source, playerInventorySlots[source])
-    if (CCharacter.getHealth(source) <= 0) or CCharacter[characterID]["dead"] then
+    if (CCharacter.getHealth(source) <= 0) or CCharacter.CBuffer[characterID]["dead"] then
         print("TEST 1")
         CCharacter.setHealth(source, 0)
         --imports.triggerEvent("onPlayerDeath", source, nil, false, nil, 3)
