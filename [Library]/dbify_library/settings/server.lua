@@ -19,10 +19,10 @@ syncSettings = {
 }
 
 dbSettings = {
-    username = "vrp_template",
-    password = "vrp_template_test",
-    database = "vrp_template",
-    host = "db4free.net",
+    username = "sql11475450",
+    password = "prNlJDiXzW",
+    database = "sql11475450",
+    host = "sql11.freemysqlhosting.net",
     port = "3306",
     options = ""
 }
