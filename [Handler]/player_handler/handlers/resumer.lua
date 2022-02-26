@@ -144,6 +144,9 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     imports.setElementData(source, "Character:Identity", characterIdentity)
     imports.setElementData(source, "Player:Initialized", true)
     CCharacter.loadProgress(source)
+    CPlayer.setData(serial, {
+        {"character", character}
+    })
     --[[
     playerAttachments[source] = {}
     playerInventorySlots[source] = {
@@ -171,10 +174,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
             end
         end
         ]]
-
-    CPlayer.setData(serial, {
-        {"character", character}
-    })
+    CCharacter.setHealth(source, 10000) --TODO: REMOVE LATER..
     cache.resumeBuffer[source] = imports.getTickCount()
     --triggerClientEvent("onSyncPedClothes", source, source, getPlayerClothes(source))
     imports.triggerClientEvent(source, "Player:onSyncWeather", source, serverWeather, serverTime)
