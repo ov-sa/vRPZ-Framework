@@ -94,7 +94,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                 if value then value = imports.tonumber(value) or value end
                 CPlayer.CBuffer[(args[2])][j] = value
             end
-            args[3] = imports.table.clone(args[3], true) --TODO: LATER MERGE THIS W/ BEAUTIFY'S SHARED APIS
+            args[3] = imports.table.clone(args[3], true)
             args[3].character = args[3].character or 0
             args[3].characters = {}
             args[3].vip = (args[3].vip and true) or false

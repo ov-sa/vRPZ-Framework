@@ -12,6 +12,10 @@
 --[[ Imports ]]--
 -----------------
 
+local imports = {
+    type = type,
+    pairs = pairs
+}
 --TODO:NEEDS TO BE OPTIMIZED....
 loadstring(exports.assetify_library:fetchImports())()
 
@@ -48,19 +52,16 @@ end
 
 
 function table.clone(recievedTable, isRecursiveMode)
-
-    if not recievedTable or type(recievedTable) ~= "table" then return false end
-
+    if not recievedTable or (imports.type(recievedTable) ~= "table") then return false end
     local clonedTable = {}
-    for i, j in pairs(recievedTable) do
-        if type(j) == "table" and isRecursiveMode then
+    for i, j in imports.pairs(recievedTable) do
+        if (imports.type(j) == "table") and isRecursiveMode then
             clonedTable[i] = table.clone(j, true)
         else
             clonedTable[i] = j
         end
     end
     return clonedTable
-
 end
 
 
