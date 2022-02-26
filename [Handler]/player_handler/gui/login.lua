@@ -224,15 +224,15 @@ loginUI.phases[2].updateCharacter = function()
 end
 loginUI.phases[2].loadCharacter = function(loadDefault)
     if not loadDefault then
-        if not loginUI.characters[(loginUI.selectedCharacter)] then
+        if not loginUI.characters[(loginUI.previewCharacter)] then
             if #loginUI.characters > 0 then
                 loginUI.character = 1
-                loginUI.selectedCharacter = loginUI.character
+                loginUI.previewCharacter = loginUI.character
             else
                 loadDefault = true
             end
         end
-        if not loadDefault and not loginUI.characters[(loginUI.selectedCharacter)].identity then loadDefault = true end
+        if not loadDefault and not loginUI.characters[(loginUI.previewCharacter)].identity then loadDefault = true end
     end
     if loadDefault then
         for i = 1, #loginUI.phases[2].categories, 1 do
@@ -253,15 +253,15 @@ loginUI.phases[2].loadCharacter = function(loadDefault)
     else
         for i = 1, #loginUI.phases[2].categories[1].contents.gender.contentIndex, 1 do
             local j = loginUI.phases[2].categories[1].contents.gender.contentIndex[i]
-            if j == (loginUI.characters[(loginUI.selectedCharacter)].identity.gender or FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default) then
+            if j == (loginUI.characters[(loginUI.previewCharacter)].identity.gender or FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default) then
                 imports.beautify.selector.setSelection(loginUI.phases[2].categories[3].element, i)
                 break
             end
         end
-        imports.beautify.slider.getPercent(loginUI.phases[2].categories[1].contents.tone.element, loginUI.characters[(loginUI.selectedCharacter)].identity.tone or 0)
-        imports.beautify.selector.setSelection(loginUI.phases[2].categories[3].element, loginUI.characters[(loginUI.selectedCharacter)].identity.upper or 1)
-        imports.beautify.selector.setSelection(loginUI.phases[2].categories[4].element, loginUI.characters[(loginUI.selectedCharacter)].identity.lower or 1)
-        imports.beautify.selector.setSelection(loginUI.phases[2].categories[5].element, loginUI.characters[(loginUI.selectedCharacter)].identity.shoes or 1)
+        imports.beautify.slider.getPercent(loginUI.phases[2].categories[1].contents.tone.element, loginUI.characters[(loginUI.previewCharacter)].identity.tone or 0)
+        imports.beautify.selector.setSelection(loginUI.phases[2].categories[3].element, loginUI.characters[(loginUI.previewCharacter)].identity.upper or 1)
+        imports.beautify.selector.setSelection(loginUI.phases[2].categories[4].element, loginUI.characters[(loginUI.previewCharacter)].identity.lower or 1)
+        imports.beautify.selector.setSelection(loginUI.phases[2].categories[5].element, loginUI.characters[(loginUI.previewCharacter)].identity.shoes or 1)
     end
     loginUI.phases[2].updateCharacter()
     return true
@@ -278,7 +278,7 @@ loginUI.phases[2].manageCharacter = function(action)
             return false
         else
             imports.table.insert(loginUI.characters, {})
-            loginUI.selectedCharacter = #loginUI.characters
+            loginUI.previewCharacter = #loginUI.characters
             loginUI.phases[2].loadCharacter(true)
             imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][4][FRAMEWORK_LANGUAGE], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
         end
@@ -290,43 +290,43 @@ loginUI.phases[2].manageCharacter = function(action)
             imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
             return false
         else
-            if loginUI.characters[(loginUI.selectedCharacter)].id then imports.triggerServerEvent("Player:onDeleteCharacter", localPlayer, loginUI.characters[(loginUI.selectedCharacter)].id) end
-            imports.table.remove(loginUI.characters, loginUI.selectedCharacter)
-            loginUI.selectedCharacter = imports.math.max(0, loginUI.selectedCharacter - 1)
+            if loginUI.characters[(loginUI.previewCharacter)].id then imports.triggerServerEvent("Player:onDeleteCharacter", localPlayer, loginUI.characters[(loginUI.previewCharacter)].id) end
+            imports.table.remove(loginUI.characters, loginUI.previewCharacter)
+            loginUI.previewCharacter = imports.math.max(0, loginUI.previewCharacter - 1)
             loginUI.phases[2].loadCharacter()
             imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][6][FRAMEWORK_LANGUAGE], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
         end
     elseif (action == "previous") or (action == "next") then
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
-        if loginUI.characters[(loginUI.selectedCharacter)] and not loginUI.characters[(loginUI.selectedCharacter)].id then
+        if loginUI.characters[(loginUI.previewCharacter)] and not loginUI.characters[(loginUI.previewCharacter)].id then
             imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][11][FRAMEWORK_LANGUAGE], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
             return false
         else
             if action == "previous" then
-                if loginUI.selectedCharacter > 1 then
-                    loginUI.selectedCharacter = loginUI.selectedCharacter - 1
+                if loginUI.previewCharacter > 1 then
+                    loginUI.previewCharacter = loginUI.previewCharacter - 1
                     loginUI.phases[2].loadCharacter()
                 end
             elseif action == "next" then
-                if loginUI.selectedCharacter < #loginUI.characters then
-                    loginUI.selectedCharacter = loginUI.selectedCharacter + 1
+                if loginUI.previewCharacter < #loginUI.characters then
+                    loginUI.previewCharacter = loginUI.previewCharacter + 1
                     loginUI.phases[2].loadCharacter()
                 end
             end
         end
     elseif action == "pick" then
         local errorMessage = false
-        if (not loginUI.characters[(loginUI.selectedCharacter)]) or not loginUI.characters[(loginUI.selectedCharacter)].id then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][7][FRAMEWORK_LANGUAGE] end
+        if (not loginUI.characters[(loginUI.previewCharacter)]) or not loginUI.characters[(loginUI.previewCharacter)].id then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][7][FRAMEWORK_LANGUAGE] end
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
         if errorMessage then
             imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
             return false
         else
-            loginUI.character = loginUI.selectedCharacter
+            loginUI.character = loginUI.previewCharacter
             imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][8][FRAMEWORK_LANGUAGE], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
         end
     elseif action == "save" then
-        if (#loginUI.characters > 0) and loginUI.characters[(loginUI.selectedCharacter)].id then
+        if (#loginUI.characters > 0) and loginUI.characters[(loginUI.previewCharacter)].id then
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
             return false
         else
@@ -339,11 +339,11 @@ loginUI.phases[2].manageCharacter = function(action)
                 lower = selectionData.lower[1],
                 shoes = selectionData.shoes[1]
             }
-            if #loginUI.characters <= 0 then loginUI.selectedCharacter = 1 end
-            loginUI.processCharacters[(loginUI.selectedCharacter)] = true
-            loginUI.characters[(loginUI.selectedCharacter)] = loginUI.characters[(loginUI.selectedCharacter)] or {}
-            loginUI.characters[(loginUI.selectedCharacter)].identity = characterData
-            imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, loginUI.selectedCharacter, loginUI.characters)
+            if #loginUI.characters <= 0 then loginUI.previewCharacter = 1 end
+            loginUI.processCharacters[(loginUI.previewCharacter)] = true
+            loginUI.characters[(loginUI.previewCharacter)] = loginUI.characters[(loginUI.previewCharacter)] or {}
+            loginUI.characters[(loginUI.previewCharacter)].identity = characterData
+            imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, loginUI.previewCharacter, loginUI.characters)
         end
     elseif action == "play" then
         local errorMessage = false
@@ -560,7 +560,7 @@ loginUI.renderUI = function(renderData)
                 imports.beautify.native.drawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineSize, imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineColor)), false) --TODO: SAVE AND CACHE THIS..
             end
         elseif loginUI.phase == 2 then
-            imports.beautify.setUIDisabled(loginUI.phases[2].element, not isUIEnabled or (loginUI.characters[(loginUI.selectedCharacter)] and loginUI.characters[(loginUI.selectedCharacter)].id))
+            imports.beautify.setUIDisabled(loginUI.phases[2].element, not isUIEnabled or (loginUI.characters[(loginUI.previewCharacter)] and loginUI.characters[(loginUI.previewCharacter)].id))
             for i = 1, #loginUI.phases[2].options, 1 do
                 local j = loginUI.phases[2].options[i]
                 local isOptionHovered = imports.isMouseOnPosition(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size)
@@ -658,7 +658,7 @@ loginUI.toggleUI = function(state, args)
         loginUI.phase = false
         loginUI.cinemationData = false
         loginUI.character = 0
-        loginUI.selectedCharacter = false
+        loginUI.previewCharacter = false
         loginUI.characters = {}
         loginUI.isVIP = false
         loginUI.state = false
@@ -673,7 +673,7 @@ imports.addEvent("Client:onToggleLoginUI", true)
 imports.addEventHandler("Client:onToggleLoginUI", root, function(state, args)
     if state then
         loginUI.character = args.character
-        loginUI.selectedCharacter = loginUI.character
+        loginUI.previewCharacter = loginUI.character
         loginUI.characters, loginUI.processCharacters = args.characters, {}
         loginUI.vip = args.vip
         imports.setElementPosition(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.x, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.y, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.z)
