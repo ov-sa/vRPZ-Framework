@@ -325,8 +325,6 @@ loginUI.phases[2].manageCharacter = function(action)
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
         else
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
-            local character = loginUI.selectedCharacter
-            local characters, unsavedCharacters = imports.table.clone(loginUI.characters, true), {} --TODO: MAKE UNSAVED CHARACTERS SOLO ONLYN ON CHAR WHEN SWITCHCED REMOVE IT
             local selectionData = loginUI.phases[2].fetchSelection()
             local characterData = {
                 tone = selectionData.tone,
@@ -335,19 +333,12 @@ loginUI.phases[2].manageCharacter = function(action)
                 lower = selectionData.lower[1],
                 shoes = selectionData.shoes[1]
             }
-            for i = 1, #characters, 1 do
-                local j = characters[i]
-                if not j.id then characters[i] = nil end
-            end
-            if #loginUI.characters <= 0 then
-                character = 1
-                loginUI.selectedCharacter = character
-            end
-            loginUI.processCharacters[character] = true
-            unsavedCharacters[character] = true
-            characters[character] = characters[character] or {}
-            characters[character].identity = characterData
-            imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, character, characters)
+            if #loginUI.characters <= 0 then loginUI.selectedCharacter = 1 end
+            loginUI.processCharacters[(loginUI.selectedCharacter)] = true
+            unsavedCharacters[(loginUI.selectedCharacter)] = true
+            loginUI.characters[(loginUI.selectedCharacter)] = loginUI.characters[(loginUI.selectedCharacter)] or {}
+            loginUI.characters[(loginUI.selectedCharacter)].identity = characterData
+            imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, loginUI.selectedCharacter, loginUI.characters)
         end
     elseif action == "play" then
         local errorMessage = false
