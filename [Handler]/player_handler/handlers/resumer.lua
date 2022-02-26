@@ -28,6 +28,15 @@ local imports = {
 }
 
 
+-------------------
+--[[ Variables ]]--
+-------------------
+
+local cache = {
+    resumeBuffer = {}
+}
+
+
 ------------------------------------------
 --[[ Player: On Delete/Save Character ]]--
 ------------------------------------------
@@ -164,11 +173,13 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     end
     ]]--
 
+    CPlayer.setData(serial, {
+        {"character", character}
+    })
+    cache.resumeBuffer[source] = getTickCount()
     --[[
-    loginTickCache[source] = getTickCount()
-    exports.serials_library:setSerialData(serial, "character", character)
     triggerClientEvent("onSyncPedClothes", source, source, getPlayerClothes(source))
-    triggerClientEvent(source, "onPlayerSyncServerWeather", source, serverWeather, serverTime)
+    imports.triggerClientEvent(source, "Player:onSyncWeather", source, serverWeather, serverTime)
     triggerClientEvent(source, "onClientInventorySyncSlots", source, playerInventorySlots[source])
     if getPlayerHealth(source) <= 0 or getCharacterData(characterID, "dead") then
         source:setData("Character:blood", 0)
