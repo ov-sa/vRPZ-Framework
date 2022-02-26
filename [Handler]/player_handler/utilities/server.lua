@@ -27,6 +27,7 @@ local imports = {
     getElementPosition = getElementPosition,
     getPlayerSerial = getPlayerSerial,
     getPlayerName = getPlayerName,
+    setElementData = setElementData,
     setTimer = setTimer,
     outputChatBox = outputChatBox,
     setFPSLimit = setFPSLimit,
@@ -59,7 +60,7 @@ end
 imports.addEventHandler("onResourceStart", resource, function()
     imports.setTimer(function(tickSyncer)
         if tickSyncer and imports.isElement(tickSyncer) then
-            tickSyncer:setData("Server:TickSyncer", imports.getTickCount())
+            imports.setElementData(tickSyncer, "Server:TickSyncer", imports.getTickCount())
         end
     end, FRAMEWORK_CONFIGS.Game["Sync_Rate"], 0, imports.createElement("Server:TickSyncer"))
     --[[
