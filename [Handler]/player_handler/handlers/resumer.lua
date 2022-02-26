@@ -96,10 +96,10 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
             end
             args[3] = imports.table.clone(args[3], true) --TODO: LATER MERGE THIS W/ BEAUTIFY'S SHARED APIS
             args[3].character = args[3].character or 0
+            args[3].characters = {}
             args[3].vip = (args[3].vip and true) or false
 
             if (result and (#result > 0)) then
-                args[3].characters = {}
                 for i = 1, #result, 1 do
                     local j = result[i]
                     j.identity = imports.fromJSON(j.identity)
@@ -116,11 +116,12 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                         if value then value = imports.tonumber(value) or value end
                         CCharacter.CBuffer[(j.id)][v] = value
                     end
+                    CCharacter.CBuffer[(j.id)].dead = (CCharacter.CBuffer[(j.id)].dead == "true" and true) or false
+                    CCharacter.CBuffer[(j.id)].location = (CCharacter.CBuffer[(j.id)].location and imports.fromJSON(CCharacter.CBuffer[(j.id)].location)) or false
                 end
                 if not args[3].characters[(args[3].character)] then args[3].character = 0 end
             else
                 args[3].character = 0
-                args[3].characters = {}
             end
             imports.triggerClientEvent(args[1], "Client:onToggleLoginUI", args[1], true, {
                 character = args[3].character,
@@ -145,8 +146,8 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         return false
     end
 
-    local serial = CPlayer.getSerial(source)
     local serverWeather, serverTime = CGame.getNativeWeather()
+    local serial = CPlayer.getSerial(source)
     local characterID = characters[character].id
     local characterIdentity = CCharacter.CBuffer[characterID].identity
     imports.setElementData(source, "Character:ID", characterID)
@@ -166,5 +167,5 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     ]]
     cache.resumeBuffer[source] = imports.getTickCount()
     imports.triggerClientEvent(source, "Player:onSyncWeather", source, serverWeather, serverTime)
-    imports.triggerEvent("Player:onSpawn", source, (CCharacter.CBuffer[characterID]["location"] and imports.fromJSON(CCharacter.CBuffer[characterID]["location"])) or nil, true)
+    imports.triggerEvent("Player:onSpawn", source, (CCharacter.CBuffer[characterID].location, true)
 end)
