@@ -80,7 +80,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
             end
             imports.triggerClientEvent(args[1], "Client:onToggleLoginUI", args[1], true, {
                 character = args[3].character,
-                characters = {},
+                characters = args[3].characters,
                 vip = args[3].vip
             })
         end, args[1], args[2], result)
