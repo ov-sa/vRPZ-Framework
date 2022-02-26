@@ -524,24 +524,15 @@ imports.addEventHandler("Client:onEnableLoginUI", root, function(state, isForced
 end)
 
 imports.addEvent("Client:onSaveCharacter", true)
-imports.addEventHandler("Client:onSaveCharacter", root, function(state, character)
-    loginUI.processCharacters[character] = nil
+imports.addEventHandler("Client:onSaveCharacter", root, function(state, character, characterData)
     if state then
+        loginUI.characters[character] = characterData
         imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully saved the character!", {80, 255, 80, 255})
     else
         imports.triggerEvent("Client:onNotification", localPlayer, "failed to save character....", {255, 80, 80, 255})
     end
+    loginUI.processCharacters[character] = nil
     imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true, true)
-end)
-
-imports.addEvent("Client:onLoadCharacterID", true)
-imports.addEventHandler("Client:onLoadCharacterID", root, function(character, characterID, characterData)
-    character = imports.tonumber(character); characterID = imports.tonumber(characterID);
-    if not character or not characterID or not characterData then return false end
-
-    loginUI.characters[character] = loginUI.characters[character] or {}
-    loginUI.characters[character].id = characterID
-    loginUI.characters[character].identity = characterData
 end)
 
 
