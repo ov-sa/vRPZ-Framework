@@ -14,7 +14,6 @@
 
 local imports = {
     type = type,
-    ipairs = ipairs,
     tocolor = tocolor,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
@@ -48,7 +47,8 @@ imports.beautify.render.create(function()
     if #notifUI.buffer <= 0 then return false end
 
     local offsetY = imports.interpolateBetween(notifUI.offsetY, 0, 0, 0, 0, 0, imports.getInterpolationProgress(notifUI.slideTopTickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideTopDuration), "OutBack")
-    for i, j in imports.ipairs(notifUI.buffer) do
+    for i = 1, #notifUI.buffer, 1 do
+        local j = notifUI.buffer[i]
         local notifFontColor = j.fontColor or FRAMEWORK_CONFIGS["UI"]["Notification"].fontColor
         local notif_width, notif_height = imports.beautify.native.getTextWidth(j.text, 1, notifUI.font), FRAMEWORK_CONFIGS["UI"]["Notification"].height
         local notif_offsetX, notif_offsetY = 0, 0
