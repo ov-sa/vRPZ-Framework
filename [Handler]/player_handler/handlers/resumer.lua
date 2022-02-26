@@ -167,5 +167,5 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     ]]
     cache.resumeBuffer[source] = imports.getTickCount()
     imports.triggerClientEvent(source, "Player:onSyncWeather", source, serverWeather, serverTime)
-    imports.triggerEvent("Player:onSpawn", source, (CCharacter.CBuffer[characterID].location, true)
+    imports.triggerEvent("Player:onSpawn", source, CCharacter.CBuffer[characterID].location, true)
 end)
