@@ -190,15 +190,15 @@ else
     end
 
     --TODO: MODIFY TO SUPPORT ASSET CLUMP + CLUMP MAP SYNC
-    function syncer:syncElementModel(element, assetType, assetName, targetPlayer, skipCaching)
+    function syncer:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, targetPlayer, skipCaching)
         if not skipCaching then
             if not element or not imports.isElement(element) or not availableAssetPacks[assetType] or not availableAssetPacks[assetType].assetPack.rwDatas[assetName] then return false end
-            syncer.syncedElements[element] = {type = assetType, name = assetName}
+            syncer.syncedElements[element] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps}
         end
         if not targetPlayer then
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncElementModel(element, assetType, assetName, i, true)
+                    syncer:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, i, true)
                     thread.pause()
                 end
             end):resume({
@@ -206,7 +206,7 @@ else
                 frames = 1
             })
         else
-            imports.triggerClientEvent(targetPlayer, "Assetify:onRecieveElementModel", targetPlayer, element, assetType, assetName)
+            imports.triggerClientEvent(targetPlayer, "Assetify:onRecieveElementModel", targetPlayer, element, assetType, assetName, assetClump, clumpMaps)
         end
         return true
     end
@@ -265,7 +265,7 @@ else
         thread:create(function(cThread)
             for i, j in imports.pairs(syncer.syncedElements) do
                 if j then
-                    syncer:syncElementModel(i, j.type, j.name, source)
+                    syncer:syncElementModel(i, j.type, j.name, j.clump, j.clumpMaps, source)
                 end
                 thread.pause()
             end
