@@ -140,24 +140,6 @@ end
 ]]
 
 
----------------------------------------
---[[ Function: Draws Bordered Text ]]--
----------------------------------------
---TODO: NEEEDS TO BE MOVED
-function dxDrawBorderedText(outlineWeight, outlineColor, text, left, top, right, bottom, color, scale, font, alignX, alignY, clip, wordBreak, postGUI, colorCoded, subPixelPositioning, fRotation, fRotationCenterX, fRotationCenterY)
-    outlineWeight = imports.tonumber(outlineWeight); left = imports.tonumber(left); top = imports.tonumber(top); right = imports.tonumber(right); bottom = imports.tonumber(bottom); scale = imports.tonumber(scale);
-    if not outlineWeight or not outlineColor or not left or not top or not right or not bottom  or not color or not scale or not font then return false end
-
-    for oX = (outlineWeight * -1), outlineWeight do
-        for oY = (outlineWeight * -1), outlineWeight do
-            dxDrawText(text, left + oX, top + oY, right + oX, bottom + oY, tocolor(unpack(outlineColor)), scale, font, alignX, alignY, clip, wordBreak, postGUI, colorCoded, subPixelPositioning, fRotation, fRotationCenterX, fRotationCenterY)
-        end
-    end
-    dxDrawText(text, left, top, right, bottom, color, scale, font, alignX, alignY, clip, wordBreak, postGUI, colorCoded, subPixelPositioning, fRotation, fRotationCenterX, fRotationCenterY)
-    return true
-end
-
-
 --------------------------------
 --[[ Event: On Sync Weather ]]--
 --------------------------------
