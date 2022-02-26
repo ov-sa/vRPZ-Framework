@@ -34,7 +34,6 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
         imports.setElementData(player, "Player:Initialized", nil)
         imports.setElementData(player, "Character:ID", nil)
     end
-
     if CPlayer.CAttachments[player] then
         for i, j in imports.pairs(CPlayer.CAttachments[player]) do
             if j and imports.isElement(j) then
@@ -43,8 +42,7 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
         end
     end
     CPlayer.CAttachments[player] = nil
-    playerInventorySlots[player] = nil
-
+    --playerInventorySlots[player] = nil --TODO: ...
     local dataBuffer = {
         player = {},
         character = {},
@@ -85,7 +83,6 @@ end
 
 CCharacter.loadProgress = function(player)
     if CPlayer.isInitialized(player) then return false end
-
     local characterID = imports.getElementData(player, "Character:ID")
     CCharacter.resetProgress(player, false, {
         characterID = characterID
@@ -95,7 +92,6 @@ end
 
 CCharacter.saveProgress = function(player)
     if not CPlayer.isInitialized(player) then return false end
-
     local serial = imports.getPlayerSerial(player)
     local characterID = imports.getElementData(player, "Character:ID")
     local inventoryID = imports.getElementData(player, "Inventory:ID")
