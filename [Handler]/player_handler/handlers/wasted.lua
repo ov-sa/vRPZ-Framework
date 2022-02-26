@@ -183,15 +183,18 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
         if not isNewCharacter then resetProgress = false end
     end
     if resetProgress then CCharacter.loadProgress(source) end
-    CCharacter.setData(characterID, {
-        {"dead", false}
-    })
 
     if (CCharacter.getHealth(source) <= 0) or CCharacter.CBuffer[characterID]["dead"] then
         CCharacter.setHealth(source, 0)
+        CCharacter.setData(characterID, {
+            {"dead", true}
+        })
         --TODO: NEEDS TO BE IMPLEMENTED..
         --imports.triggerEvent("Player:onDeath", source, nil, false, nil, 3)
     else
+        CCharacter.setData(characterID, {
+            {"dead", true}
+        })
         imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false)
         imports.showChat(source, true)
     end
