@@ -150,7 +150,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     }
     ]]
     if characterLocation then
-        source:spawn(characterLocation.x, characterLocation.y, characterLocation.z + 1, characterLocation.rotation)
+        source:spawn(characterLocation.position[1], characterLocation.position[2], characterLocation.position[3] + 1, characterLocation.rotation[3])
         --[[
         for i, j in ipairs(playerDatas) do
             local data = exports.serials_library:getSerialData(serial, j)
