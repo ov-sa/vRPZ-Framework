@@ -25,6 +25,7 @@ local imports = {
     setWeather = setWeather,
     setTime = setTime,
     showChat = showChat,
+    showCursor = showCursor,
     toggleControl = toggleControl,
     setTrafficLightState = setTrafficLightState,
     setPedTargetingMarkerEnabled = setPedTargetingMarkerEnabled,
@@ -39,6 +40,9 @@ local imports = {
 
 function showChat(bool, isForced)
     return ((isForced or not bool or not CGame.isUIVisible()) and imports.showChat(bool)) or false
+end
+function showCursor(bool, isForced)
+    return ((isForced or bool or not CGame.isUIVisible()) and imports.showCursor(bool)) or false
 end
 imports.addEvent("Player:onToggleChat", true)
 imports.addEventHandler("Player:onToggleChat", root, showChat)
