@@ -26,6 +26,8 @@ local imports = {
     setTime = setTime,
     showChat = showChat,
     showCursor = showCursor,
+    setPedStat = setPedStat,
+    setPlayerBlurLevel = setPlayerBlurLevel,
     toggleControl = toggleControl,
     setTrafficLightState = setTrafficLightState,
     setPedTargetingMarkerEnabled = setPedTargetingMarkerEnabled,
@@ -190,6 +192,10 @@ end)
 -----------------------------------------
 
 imports.addEventHandler("onClientResourceStart", resource, function()
+    for i = 69, 79, 1 do
+        imports.setPedStat(i, 1000)
+    end
+    imports.setPlayerBlurLevel(0)
     imports.toggleControl("fire", true)
     imports.toggleControl("action", false)
     imports.toggleControl("radar", false)

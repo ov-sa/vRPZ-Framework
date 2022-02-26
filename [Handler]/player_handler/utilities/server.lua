@@ -27,7 +27,6 @@ local imports = {
     triggerClientEvent = triggerClientEvent,
     getPlayerSerial = getPlayerSerial,
     setTimer = setTimer,
-    setPlayerBlurLevel = setPlayerBlurLevel,
     outputChatBox = outputChatBox,
     setFPSLimit = setFPSLimit,
     setFarClipDistance = setFarClipDistance,
@@ -90,11 +89,6 @@ imports.addEventHandler("onResourceStart", resource, function()
     imports.setMinuteDuration(FRAMEWORK_CONFIGS.Game["Minute_Duration"])
     imports.setGameType(FRAMEWORK_CONFIGS.Game["Game_imports.type"])
     imports.setMapName(FRAMEWORK_CONFIGS.Game["Game_Map"])
-    for i, j in imports.ipairs(imports.getElementsByType("player")) do
-        if CPlayer.isInitialized(j) then
-            imports.setPlayerBlurLevel(0)
-        end
-    end
 
     imports.addEventHandler("onPlayerCommand", root, function(command)
         for i, j in imports.ipairs(FRAMEWORK_CONFIGS.Game["Disabled_CMDS"]) do
