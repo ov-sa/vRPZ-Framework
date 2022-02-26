@@ -44,13 +44,6 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-local initialDatas = {
-    {name = "Character:hunger", amount = 100},
-    {name = "Character:thirst", amount = 100},
-    {name = "Character:armor", amount = 0}
-    {name = "Character:blood", amount = nil}
-}
-
 local deathAnimations = {
     default = {"PED", "KO_skid_front"},
     [9] = {"PED", "KO_shot_face"},
@@ -70,8 +63,8 @@ local deathAnimations = {
 CCharacter.loadProgress = function(player)
     if not CPlayer.isInitialized(player) then return false end
     imports.loadProgress(player)
-    for i = 1, #initialDatas, 1 do
-        local j = initialDatas[i]
+    for i = 1, #FRAMEWORK_CONFIGS["Spawns"]["Datas"].generic, 1 do
+        local j = FRAMEWORK_CONFIGS["Spawns"]["Datas"].generic[i]
         local value = j.amount
         if j.name == "Character:blood" then
             value = CCharacter.getMaxHealth(player)
