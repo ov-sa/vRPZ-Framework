@@ -17,6 +17,7 @@ local imports = {
     tostring = tostring,
     isElement = isElement,
     destroyElement = destroyElement,
+    collectgarbage = collectgarbage,
     getPlayerSerial = getPlayerSerial,
     getElementData = getElementData,
     setElementData = setElementData,
@@ -76,6 +77,7 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
         CPlayer.setData(depDatas.serial, dataBuffer.player)
         CCharacter.setData(depDatas.characterID, dataBuffer.character)
         CPlayer.CBuffer[(depDatas.serial)], CCharacter.CBuffer[(depDatas.characterID)] = nil, nil
+        imports.collectgarbage()
     end
     return true
 end
