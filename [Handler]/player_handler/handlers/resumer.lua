@@ -60,7 +60,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
         CCharacter.fetchOwned(args[2], function(result, args)
             args[3].character = args[3].character or 0
             args[3].vip = (args[3].vip and true) or false
-            if (#result > 0) then
+            if (result and (#result > 0)) then
                 args[3].characters, isCharacterSelected = {}, false
                 for i = 1, #result, 1 do
                     local j = result[i]
