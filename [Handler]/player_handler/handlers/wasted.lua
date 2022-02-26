@@ -186,11 +186,10 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
     CCharacter.setData(characterID, {"dead", false})
 
     if (CCharacter.getHealth(source) <= 0) or CCharacter.CBuffer[characterID]["dead"] then
-        print("TEST 1")
         CCharacter.setHealth(source, 0)
+        --TODO: NEEDS TO BE IMPLEMENTED..
         --imports.triggerEvent("Player:onDeath", source, nil, false, nil, 3)
     else
-        print("TEST 2")
         imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false)
         imports.showChat(source, true)
     end
