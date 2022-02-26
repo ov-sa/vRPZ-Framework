@@ -96,7 +96,7 @@ imports.addEventHandler("onResourceStart", resource, function()
                 cancelEvent()
                 if command == "logout" then
                     if CPlayer.isInitialized(source) then
-                        local logoutCoolDown, prevResumeTick = false, getPlayerResumeTick(source)
+                        local logoutCoolDown, prevResumeTick = false, getResumeTick(source)
                         if prevResumeTick then
                             local elapsedDuration = imports.getTickCount() - prevResumeTick
                             logoutCoolDown = ((elapsedDuration < serverLogoutCoolDownDuration) and (serverLogoutCoolDownDuration - elapsedDuration)) or false

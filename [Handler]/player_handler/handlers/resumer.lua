@@ -71,10 +71,6 @@ end)
 --[[ Player: On Toggle Login UI ]]--
 ------------------------------------
 
-function getPlayerResumeTick(player)
-    return cache.resumeBuffer[player] or false
-end
-
 imports.addEvent("Player:onToggleLoginUI", true)
 imports.addEventHandler("Player:onToggleLoginUI", root, function()
     for i = 69, 79, 1 do
@@ -119,6 +115,8 @@ end)
 ---------------------------
 --[[ Player: On Resume ]]--
 ---------------------------
+
+function getResumeTick(player) return cache.resumeBuffer[player] or false end
 
 imports.addEvent("Player:onResume", true)
 imports.addEventHandler("Player:onResume", root, function(character, characters)
