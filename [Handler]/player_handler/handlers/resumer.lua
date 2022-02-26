@@ -23,6 +23,8 @@ local imports = {
     setElementFrozen = setElementFrozen,
     setElementData = setElementData,
     setPedStat = setPedStat,
+    setPlayerNametagShowing = setPlayerNametagShowing,
+    setCameraTarget = setCameraTarget,
     toJSON = toJSON,
     fromJSON = fromJSON
 }
@@ -62,8 +64,13 @@ end)
 
 imports.addEvent("Player:onToggleLoginUI", true)
 imports.addEventHandler("Player:onToggleLoginUI", root, function()
-    local serial = CPlayer.getSerial(source)
+    for i = 69, 79, 1 do
+        imports.setPedStat(source, i, 1000)
+    end
+    imports.setPlayerNametagShowing(source, false)
     imports.setElementFrozen(source, true)
+
+    local serial = CPlayer.getSerial(source)
     CPlayer.fetch(serial, function(result, args)
         CCharacter.fetchOwned(args[2], function(result, args)
             args[3].character = args[3].character or 0
@@ -115,12 +122,9 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     characterLocation = (characterLocation and imports.fromJSON(characterLocation)) or false
 
     print("RESUMING...")
-    for i = 69, 79, 1 do
-        imports.setPedStat(source, i, 1000)
-    end
     imports.setElementDimension(source, 0)
-    setCameraTarget(source, source)
     imports.setElementFrozen(source, false)
+    imports.setCameraTarget(source, source)
     --source:setCollisionsEnabled(true)
     source:setData("Character:ID", characterID)
     source:setData("Character:Identity", characterIdentity, false)
