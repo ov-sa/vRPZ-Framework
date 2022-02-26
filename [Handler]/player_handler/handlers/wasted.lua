@@ -161,7 +161,7 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
     spawnpoint = spawnpoint or CGame.generateSpawn()
     local characterID = source:getData("Character:ID")
     local characterIdentity = CCharacter.CBuffer[characterID].identity
-    imports.spawnPlayer(source, characterLocation.position[1], characterLocation.position[2], characterLocation.position[3] + 1, characterLocation.rotation[3])
+    imports.spawnPlayer(source, spawnpoint.position[1], spawnpoint.position[2], spawnpoint.position[3] + 1, spawnpoint.rotation[3])
     imports.setElementAlpha(255)
     imports.setElementDimension(source, 0)
     imports.setElementFrozen(source, false)
@@ -173,11 +173,11 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
     if reloadBuffer then
         for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
-            imports.setElementData(player, "Player:"..j, CPlayer.CBuffer[j])
+            imports.setElementData(source, "Player:"..j, CPlayer.CBuffer[j])
         end
         for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
-            imports.setElementData(player, "Character:"..j, CCharacter.CBuffer[j])
+            imports.setElementData(source, "Character:"..j, CCharacter.CBuffer[j])
         end
     end
     if (CCharacter.getHealth(source) <= 0) or CCharacter.CBuffer[characterID]["dead"] then
