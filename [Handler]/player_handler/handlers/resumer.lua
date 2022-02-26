@@ -84,6 +84,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
     CPlayer.fetch(serial, function(result, args)
         result = result[1]
         CCharacter.fetchOwned(args[2], function(result, args)
+            args[3].character = imports.tonumber(args[3].character)
             CPlayer.CBuffer[(args[2])] = args[3]
             for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
                 local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
