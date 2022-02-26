@@ -80,6 +80,7 @@ local function destroyPedLoot(ped, marker)
     return true
 end
 
+--[[
 imports.addEvent("Player:onDeath", true)
 imports.addEventHandler("Player:onDeath", root, function(killer, headshot, weapon, bodypart)
     if not CPlayer.isInitialized(source) then return false end
@@ -148,6 +149,7 @@ imports.addEventHandler("Player:onDeath", root, function(killer, headshot, weapo
         destroyPedLoot(ped, marker)
     end, playerDeadLootDuration, 1, ped, marker)
 end)
+]]--
 
 
 --------------------------
@@ -181,7 +183,7 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
     if (CCharacter.getHealth(source) <= 0) or CCharacter.CBuffer[characterID]["dead"] then
         print("TEST 1")
         CCharacter.setHealth(source, 0)
-        --imports.triggerEvent("onPlayerDeath", source, nil, false, nil, 3)
+        --imports.triggerEvent("Player:onDeath", source, nil, false, nil, 3)
     else
         print("TEST 2")
         imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false)
