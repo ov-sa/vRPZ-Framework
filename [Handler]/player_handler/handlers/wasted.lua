@@ -168,9 +168,8 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
     imports.setElementFrozen(source, false)
     imports.setElementCollisionsEnabled(source, true)
     imports.setCameraTarget(source, source)
-    CCharacter.loadProgress(source)
-    CCharacter.setData(characterID, "dead", false)
 
+    local resetProgress = true
     if reloadBuffer then
         for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
@@ -180,7 +179,11 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
             local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
             imports.setElementData(source, "Character:"..j, CCharacter.CBuffer[j])
         end
+        if spawnpoint then resetProgress = false end
     end
+    if resetProgress then CCharacter.loadProgress(source) print("RESETTING") end
+    CCharacter.setData(characterID, "dead", false)
+    
     if (CCharacter.getHealth(source) <= 0) or CCharacter.CBuffer[characterID]["dead"] then
         print("TEST 1")
         CCharacter.setHealth(source, 0)
