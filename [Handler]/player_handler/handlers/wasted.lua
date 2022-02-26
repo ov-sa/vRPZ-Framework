@@ -22,8 +22,10 @@ local imports = {
     addEventHandler = addEventHandler,
     triggerClientEvent = triggerClientEvent,
     setElementAlpha = setElementAlpha,
+    setElementFrozen = setElementFrozen,
     setElementCollisionsEnabled = setElementCollisionsEnabled,
     setElementData = setElementData,
+    setElementDimension = setElementDimension,
     setCameraTarget = setCameraTarget,
     setPedAnimation = setPedAnimation,
     setElementHealth = setElementHealth,
@@ -155,25 +157,27 @@ imports.addEventHandler("Player:onDeath", root, function(killer, headshot, weapo
 end)
 
 
-----------------------------
---[[ Player: On Respawn ]]--
-----------------------------
+--------------------------
+--[[ Player: On Spawn ]]--
+--------------------------
 
-imports.addEvent("Player:onRespawn", true)
-imports.addEventHandler("Player:onRespawn", root, function(spawnPoint)
-    if not spawnPoint then return false end
+imports.addEvent("Player:onSpawn", true)
+imports.addEventHandler("Player:onSpawn", root, function(spawnpoint)
+    spawnpoint = spawnpoint or CGame.generateSpawn()
 
     local characterID = source:getData("Character:ID")
-    local characterIdentity = CCharacter.getData(characterID, "identity")
-    imports.spawnPlayer(source, spawnPoint.x, spawnPoint.y, spawnPoint.z + 1, 0, playerClothes["Gender"][(characterIdentity["gender"])].modelSkin)
+    local characterIdentity = CCharacter.CBuffer[characterID]["identity"]
+    imports.spawnPlayer(source, characterLocation.position[1], characterLocation.position[2], characterLocation.position[3] + 1, characterLocation.rotation[3])
     imports.setElementAlpha(255)
+    imports.setElementDimension(source, 0)
+    imports.setElementFrozen(source, false)
     imports.setElementCollisionsEnabled(source, true)
     imports.setCameraTarget(source, source)
-    loadPlayerDefaultDatas(source)
+    CCharacter.loadProgress(source)
     CCharacter.setData(characterID, "dead", false)
     --TODO: APPEND FUNCTION TO RETRIEVE CHARACTER'S CURRENT CLOTHES..
-    imports.triggerClientEvent("Player:onSyncPedClothes", source, source, getPlayerClothes(source))
-    imports.triggerClientEvent(source, "Client:onRespawn", source)
-    imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, true)
+    --imports.triggerClientEvent("Player:onSyncPedClothes", source, source, getPlayerClothes(source))
+    --imports.triggerClientEvent(source, "Client:onRespawn", source)
+    --imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, true)
     imports.showChat(source, true)
 end)

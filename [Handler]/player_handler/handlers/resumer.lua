@@ -17,14 +17,10 @@ local imports = {
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     triggerClientEvent = triggerClientEvent,
-    setElementPosition = setElementPosition,
-    setElementDimension = setElementDimension,
     setElementFrozen = setElementFrozen,
     setElementData = setElementData,
     setPedStat = setPedStat,
     setPlayerNametagShowing = setPlayerNametagShowing,
-    setElementCollisionsEnabled = setElementCollisionsEnabled,
-    setCameraTarget = setCameraTarget,
     toJSON = toJSON,
     fromJSON = fromJSON,
     showChat = showChat,
@@ -133,21 +129,15 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     local serverWeather, serverTime = CGame.getNativeWeather()
     local characterID = characters[character].id
     local characterIdentity = CCharacter.CBuffer[characterID]["identity"]
-    local characterLocation = CCharacter.CBuffer[characterID]["location"]
-    characterLocation = (characterLocation and imports.fromJSON(characterLocation)) or CGame.generateSpawn()
-
     imports.setElementData(source, "Character:ID", characterID)
     imports.setElementData(source, "Character:Identity", characterIdentity)
     imports.setElementData(source, "Player:Initialized", true)
-
-    imports.setElementDimension(source, 0)
-    imports.setElementFrozen(source, false)
-    imports.setCameraTarget(source, source)
-    imports.setElementCollisionsEnabled(source, true)
-    CCharacter.loadProgress(source)
     CPlayer.setData(serial, {
         {"character", character}
     })
+
+    imports.triggerClientEvent(source, "Player:onSyncWeather", source, serverWeather, serverTime)
+    imports.triggerEvent("Player:onSpawn", source, (CCharacter.CBuffer[characterID]["location"] and imports.fromJSON(CCharacter.CBuffer[characterID]["location"])) or nil)
     --[[
     playerAttachments[source] = {}
     playerInventorySlots[source] = {
@@ -156,7 +146,6 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     }
     ]]
 
-    source:spawn(characterLocation.position[1], characterLocation.position[2], characterLocation.position[3] + 1, characterLocation.rotation[3])
         --[[
         for i, j in ipairs(playerDatas) do
             local data = exports.serials_library:getSerialData(serial, j)
@@ -177,8 +166,6 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         ]]
     CCharacter.setHealth(source, 10000) --TODO: REMOVE LATER..
     cache.resumeBuffer[source] = imports.getTickCount()
-    --triggerClientEvent("onSyncPedClothes", source, source, getPlayerClothes(source))
-    imports.triggerClientEvent(source, "Player:onSyncWeather", source, serverWeather, serverTime)
     --triggerClientEvent(source, "onClientInventorySyncSlots", source, playerInventorySlots[source])
     if (CCharacter.getHealth(source) <= 0) or CCharacter.CBuffer[characterID]["dead"] then
         print("TEST 1")
