@@ -94,7 +94,9 @@ CCharacter.saveProgress = function(player)
     local serial = imports.getPlayerSerial(player)
     local characterID = imports.getElementData(player, "Character:ID")
     local inventoryID = imports.getElementData(player, "Inventory:ID")
-    CCharacter.setData(characterID, {"location", imports.toJSON(CCharacter.getLocation(player))})
+    CCharacter.setData(characterID, {
+        {"location", imports.toJSON(CCharacter.getLocation(player))}
+    })
     CCharacter.resetProgress(player, true, {
         serial = serial,
         characterID = characterID,

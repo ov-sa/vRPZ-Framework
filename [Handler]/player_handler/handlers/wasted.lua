@@ -183,7 +183,9 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
         if not isNewCharacter then resetProgress = false end
     end
     if resetProgress then CCharacter.loadProgress(source) end
-    CCharacter.setData(characterID, {"dead", false})
+    CCharacter.setData(characterID, {
+        {"dead", false}
+    })
 
     if (CCharacter.getHealth(source) <= 0) or CCharacter.CBuffer[characterID]["dead"] then
         CCharacter.setHealth(source, 0)
