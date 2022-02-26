@@ -516,11 +516,7 @@ imports.addEventHandler("Client:onEnableLoginUI", root, function(state, isForced
         imports.killTimer(loginUI.cache.timers.uiEnabler)
         loginUI.cache.timers.uiEnabler = nil
     end
-    if isForced then
-        loginUI.isForcedDisabled = not state
-    else
-        loginUI.isEnabled = state
-    end
+    if isForced then loginUI.isForcedDisabled = not state end
     loginUI.isEnabled = state
 end)
 
@@ -550,7 +546,8 @@ loginUI.renderUI = function(renderData)
         local weatherData = FRAMEWORK_CONFIGS["UI"]["Login"].weathers[(loginUI.phase)] or FRAMEWORK_CONFIGS["UI"]["Login"].weathers[1]
         imports.triggerEvent("Player:onSyncWeather", localPlayer, weatherData.weather, weatherData.time)
     elseif renderData.renderType == "render" then
-        local isLMBClicked = loginUI.cache.keys.mouse == "mouse1"
+        local isUIEnabled = (loginUI.isEnabled and not loginUI.isForcedDisabled)
+        local isLMBClicked = (loginUI.cache.keys.mouse == "mouse1") and isUIEnabled
         local currentRatio = (CLIENT_MTA_RESOLUTION[1]/CLIENT_MTA_RESOLUTION[2])/(1366/768)
         local background_width, background_height = CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2]*currentRatio
         local background_offsetX, background_offsetY = 0, -(background_height - CLIENT_MTA_RESOLUTION[2])*0.5
