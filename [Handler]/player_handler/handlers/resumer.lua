@@ -97,11 +97,10 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
             args[3].vip = (args[3].vip and true) or false
 
             if (result and (#result > 0)) then
-                args[3].characters, isCharacterSelected = {}, false
+                args[3].characters = {}
                 for i = 1, #result, 1 do
                     local j = result[i]
                     j.identity = imports.fromJSON(j.identity)
-                    if not isCharacterSelected and (j.id == args[3].character) then isCharacterSelected = true end
                     args[3].characters[i] = {
                         id = j.id,
                         identity = j.identity
@@ -116,7 +115,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                         CCharacter.CBuffer[(j.id)][v] = value
                     end
                 end
-                if not isCharacterSelected then args[3].character = 0 end
+                if not args[3].characters[(args[3].character)] then args[3].character = 0 end
             else
                 args[3].character = 0
                 args[3].characters = {}
