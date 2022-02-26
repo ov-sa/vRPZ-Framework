@@ -427,6 +427,7 @@ loginUI.phases[2].toggleUI = function(state)
     else
         if not loginUI.phases[2].element or not imports.isElement(loginUI.phases[2].element) then return false end
         imports.destroyElement(loginUI.phases[2].element)
+        loginUI.phases[2].element = nil
     end
     return true
 end
