@@ -156,7 +156,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     })
 
     imports.triggerClientEvent(source, "Player:onSyncWeather", source, serverWeather, serverTime)
-    imports.triggerEvent("Player:onSpawn", source, (CCharacter.CBuffer[characterID]["location"] and imports.fromJSON(CCharacter.CBuffer[characterID]["location"])) or nil)
+    imports.triggerEvent("Player:onSpawn", source, (CCharacter.CBuffer[characterID]["location"] and imports.fromJSON(CCharacter.CBuffer[characterID]["location"])) or nil, true)
     --[[
     playerAttachments[source] = {}
     playerInventorySlots[source] = {
