@@ -24,13 +24,13 @@ local imports = {
     guiSetInputMode = guiSetInputMode,
     setWeather = setWeather,
     setTime = setTime,
-    showChat = showChat,
-    showCursor = showCursor,
     setBlurLevel  = setBlurLevel,
     toggleControl = toggleControl,
     setTrafficLightState = setTrafficLightState,
     setPedTargetingMarkerEnabled = setPedTargetingMarkerEnabled,
     setPlayerHudComponentVisible = setPlayerHudComponentVisible,
+    showChat = showChat,
+    showCursor = showCursor,
     beautify = beautify
 }
 

@@ -26,6 +26,7 @@ local imports = {
     setCameraTarget = setCameraTarget,
     toJSON = toJSON,
     fromJSON = fromJSON,
+    showChat = showChat,
     math = math
 }
 
@@ -168,13 +169,10 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         end
         ]]
     else
-        if playerSpawnPoints and type(playerSpawnPoints) == "table" then
-            local spawnpoint = playerSpawnPoint[imports.math.random(1, #playerSpawnPoint)]
-            source:spawn(spawnpoint.x, spawnpoint.y, spawnpoint.z + 1, imports.math.random(0, 360), playerClothes["Gender"][(characterIdentity["gender"])].modelSkin)
-            loadPlayerDefaultDatas(source)
-        end
+        local spawnpoint = FRAMEWORK_CONFIGS["Spawns"][(imports.math.random(1, #FRAMEWORK_CONFIGS["Spawns"]))]
+        source:spawn(spawnpoint.x, spawnpoint.y, spawnpoint.z + 1, imports.math.random(0, 360))
+        --loadPlayerDefaultDatas(source)
     end
-    ]]--
 
     CPlayer.setData(serial, {
         {"character", character}
@@ -182,14 +180,14 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     cache.resumeBuffer[source] = imports.getTickCount()
     --[[
     triggerClientEvent("onSyncPedClothes", source, source, getPlayerClothes(source))
+    ]]
     imports.triggerClientEvent(source, "Player:onSyncWeather", source, serverWeather, serverTime)
     triggerClientEvent(source, "onClientInventorySyncSlots", source, playerInventorySlots[source])
     if getPlayerHealth(source) <= 0 or getCharacterData(characterID, "dead") then
-        source:setData("Character:blood", 0)
-        triggerEvent("onPlayerDeath", source, nil, false, nil, 3)
+        --source:setData("Character:blood", 0)
+        --triggerEvent("onPlayerDeath", source, nil, false, nil, 3)
     else
-        triggerClientEvent(source, "onPlayerHideLoadingScreen", source)
-        showChat(source, true)
+        imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false)
+        imports.showChat(source, true)
     end
-    ]]
 end)
