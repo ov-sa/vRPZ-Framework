@@ -19,20 +19,18 @@ local imports = {}
 --[[ Module ]]--
 ----------------
 
-CGame = {
-    isUIVisible = function()
-        local uiStates = {
-            not isPlayerInitialized(localPlayer),
-            isLoginUIVisible()
-        }
-        local state = true
-        for i = 1, #uiStates, 1 do
-            local j = uiStates[i]
-            if j then
-                state = false
-                break
-            end
+CGame.isUIVisible = function()
+    local uiStates = {
+        not isPlayerInitialized(localPlayer),
+        isLoginUIVisible()
+    }
+    local state = true
+    for i = 1, #uiStates, 1 do
+        local j = uiStates[i]
+        if j then
+            state = false
+            break
         end
-        return state
     end
-}
+    return state
+end
