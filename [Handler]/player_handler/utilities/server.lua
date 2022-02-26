@@ -96,13 +96,13 @@ imports.addEventHandler("onResourceStart", resource, function()
                 cancelEvent()
                 if command == "logout" then
                     if CPlayer.isInitialized(source) then
-                        local logoutCoolDown, prevResumeTick = false, getResumeTick(source)
+                        local cooldownETA, prevResumeTick = false, getResumeTick(source)
                         if prevResumeTick then
                             local elapsedDuration = imports.getTickCount() - prevResumeTick
-                            logoutCoolDown = ((elapsedDuration < serverLogoutCoolDownDuration) and (serverLogoutCoolDownDuration - elapsedDuration)) or false
+                            cooldownETA = ((elapsedDuration < FRAMEWORK_CONFIGS["Game"]["Logout_CoolDown_Duration"]) and (FRAMEWORK_CONFIGS["Game"]["Logout_CoolDown_Duration"] - elapsedDuration)) or false
                         end
-                        if logoutCoolDown then
-                            imports.triggerClientEvent(source, "Client:onNotification", source, "Please wait "..imports.math.ceil(logoutCoolDown/1000).."s before logging out!", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
+                        if cooldownETA then
+                            imports.triggerClientEvent(source, "Client:onNotification", source, "Please wait "..imports.math.ceil(cooldownETA/1000).."s before logging out!", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
                         else
                             local posVector = imports.getElementPosition(source)
                             local characterID = source:getData("Character:ID")

@@ -23,6 +23,7 @@ configVars = {
         ["Aircraft_Max_Height"] = 1000000,
         ["Jetpack_Max_Height"] = 10000,
         ["Minute_Duration"] = 60000,
+        ["Logout_CoolDown_Duration"] = 120000,
         ["Game_Type"] = "vRPZ",
         ["Game_Map"] = "vRPZ : SA",
         ["Disabled_CMDS"] = {"register", "logout"},
