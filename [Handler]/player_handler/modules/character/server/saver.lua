@@ -48,12 +48,12 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
         character = {}
     }
     if isForceReset then
-        imports.setElementData(player, "Character:Identity", nil)
         for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
             dataBuffer.player[i] = {j, imports.getElementData(player, "Player:"..j)}
             imports.setElementData(player, "Player:"..j, nil)
         end
+        imports.setElementData(player, "Character:Identity", nil)
     end
     for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
         local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
