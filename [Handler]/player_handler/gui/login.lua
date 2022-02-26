@@ -542,7 +542,7 @@ loginUI.renderUI = function(renderData)
                 local option_title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE], "  "))
                 local option_width, option_height = imports.beautify.native.getTextWidth(option_title, 1, loginUI.phases[1].optionsUI.font) + 5, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.height
                 local options_offsetX, options_offsetY = loginUI.phases[1].optionsUI.startX - (option_width*0.5), j.startY
-                local isOptionHovered = imports.isMouseOnPosition(options_offsetX, options_offsetY, option_width, option_height)
+                local isOptionHovered = imports.isMouseOnPosition(options_offsetX, options_offsetY, option_width, option_height) and isUIEnabled
                 if isOptionHovered then
                     if isLMBClicked then
                         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false)
@@ -568,7 +568,7 @@ loginUI.renderUI = function(renderData)
             imports.beautify.setUIDisabled(loginUI.phases[2].element, not isUIEnabled or (loginUI.characters[(loginUI.previewCharacter)] and loginUI.characters[(loginUI.previewCharacter)].id and true) or false)
             for i = 1, #loginUI.phases[2].options, 1 do
                 local j = loginUI.phases[2].options[i]
-                local isOptionHovered = imports.isMouseOnPosition(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size)
+                local isOptionHovered = imports.isMouseOnPosition(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size) and isUIEnabled
                 if isOptionHovered then
                     if isLMBClicked then
                         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false)
@@ -605,7 +605,7 @@ loginUI.renderUI = function(renderData)
             local navigator_title = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator["Titles"][FRAMEWORK_LANGUAGE]
             local navigator_width, navigator_height = loginUI.phases[3].navigator.width + imports.beautify.native.getTextWidth(navigator_title, 1, loginUI.phases[3].navigator.font), loginUI.phases[3].navigator.height
             local navigator_offsetX, navigator_offsetY = loginUI.phases[3].navigator.startX + (CLIENT_MTA_RESOLUTION[1] - navigator_width), loginUI.phases[3].navigator.startY
-            local isNavigatorHovered = imports.isMouseOnPosition(navigator_offsetX, navigator_offsetY, navigator_width, navigator_height)
+            local isNavigatorHovered = imports.isMouseOnPosition(navigator_offsetX, navigator_offsetY, navigator_width, navigator_height) and isUIEnabled
             if isNavigatorHovered then
                 if isLMBClicked then
                     imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false)
