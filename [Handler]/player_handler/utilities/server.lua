@@ -96,22 +96,19 @@ imports.addEventHandler("onResourceStart", resource, function()
                 cancelEvent()
                 if command == "logout" then
                     if CPlayer.isInitialized(source) then
-                        local isLogoutVerified = false
-                        local prevResumeTick = getPlayerResumeTick(source)
+                        local logoutCoolDown, prevResumeTick = false, getPlayerResumeTick(source)
                         if prevResumeTick then
                             local elapsedDuration = imports.getTickCount() - prevResumeTick
-                            if elapsedDuration < serverLogoutCoolDownDuration then --TODO: ADD COOLDOWN DURATION
-                                isLogoutVerified = serverLogoutCoolDownDuration - elapsedDuration
-                            end
+                            logoutCoolDown = ((elapsedDuration < serverLogoutCoolDownDuration) and (serverLogoutCoolDownDuration - elapsedDuration)) or false
                         end
-                        if isLogoutVerified then
-                            imports.triggerClientEvent(source, "Client:onNotification", source, "Please wait "..imports.math.ceil(isLogoutVerified/1000).."s before logging out!", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
+                        if logoutCoolDown then
+                            imports.triggerClientEvent(source, "Client:onNotification", source, "Please wait "..imports.math.ceil(logoutCoolDown/1000).."s before logging out!", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
                         else
                             local posVector = imports.getElementPosition(source)
                             local characterID = source:getData("Character:ID")
                             local characterIdentity = CCharacter.getData(characterID, "identity")
                             CCharacter.saveProgress(source)
-                            imports.triggerEvent("Player:onRequestShowLoginScreen", source)
+                            imports.triggerEvent("Player:onToggleLoginUI", source)
                             imports.outputChatBox("#FFFFFF- #5050FF"..characterIdentity.name.."#FFFFFF left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)    
                         end
                     end
