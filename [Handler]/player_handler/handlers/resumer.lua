@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    getTickCount = getTickCount,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     triggerClientEvent = triggerClientEvent,
@@ -24,7 +25,8 @@ local imports = {
     setPlayerNametagShowing = setPlayerNametagShowing,
     setCameraTarget = setCameraTarget,
     toJSON = toJSON,
-    fromJSON = fromJSON
+    fromJSON = fromJSON,
+    math = math
 }
 
 
@@ -68,6 +70,10 @@ end)
 ------------------------------------
 --[[ Player: On Toggle Login UI ]]--
 ------------------------------------
+
+function getPlayerResumeTick(player)
+    return cache.resumeBuffer[player] or false
+end
 
 imports.addEvent("Player:onToggleLoginUI", true)
 imports.addEventHandler("Player:onToggleLoginUI", root, function()
@@ -142,8 +148,10 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         maxSlots = maximumInventorySlots,
         slots = {}
     }
-    if characterLocation and characterLocation.x and characterLocation.y and characterLocation.z and characterLocation.rotation then
-        source:spawn(characterLocation.x, characterLocation.y, characterLocation.z + 1, characterLocation.rotation, playerClothes["Gender"][(characterIdentity["gender"])].modelSkin)
+    ]]
+    if characterLocation then
+        source:spawn(characterLocation.x, characterLocation.y, characterLocation.z + 1, characterLocation.rotation)
+        --[[
         for i, j in ipairs(playerDatas) do
             local data = exports.serials_library:getSerialData(serial, j)
             if tostring(data) == "nil" then data = nil end
@@ -160,14 +168,11 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
                 source:setData("Character:"..j, data)
             end
         end
+        ]]
     else
         if playerSpawnPoints and type(playerSpawnPoints) == "table" then
-            local playerSpawnPoint = playerSpawnPoints[(characters[character].spawn)]
-            if not playerSpawnPoint or type(playerSpawnPoint) ~= "table" or #playerSpawnPoint <= 0 then
-                playerSpawnPoint = playerSpawnPoints["East"]
-            end
-            local generatedSpawnPoint = playerSpawnPoint[math.random(1, #playerSpawnPoint)]
-            source:spawn(generatedSpawnPoint.x, generatedSpawnPoint.y, generatedSpawnPoint.z + 1, math.random(0, 360), playerClothes["Gender"][(characterIdentity["gender"])].modelSkin)
+            local spawnpoint = playerSpawnPoint[imports.math.random(1, #playerSpawnPoint)]
+            source:spawn(spawnpoint.x, spawnpoint.y, spawnpoint.z + 1, imports.math.random(0, 360), playerClothes["Gender"][(characterIdentity["gender"])].modelSkin)
             loadPlayerDefaultDatas(source)
         end
     end
@@ -176,7 +181,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     CPlayer.setData(serial, {
         {"character", character}
     })
-    cache.resumeBuffer[source] = getTickCount()
+    cache.resumeBuffer[source] = imports.getTickCount()
     --[[
     triggerClientEvent("onSyncPedClothes", source, source, getPlayerClothes(source))
     imports.triggerClientEvent(source, "Player:onSyncWeather", source, serverWeather, serverTime)

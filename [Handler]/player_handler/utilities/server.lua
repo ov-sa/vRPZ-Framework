@@ -20,11 +20,11 @@ local imports = {
     createElement = createElement,
     getElementType = getElementType,
     getElementsByType = getElementsByType,
-    getElementPosition = getElementPosition,
     getTickCount = getTickCount,
     addEventHandler = addEventHandler,
     triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent,
+    getElementPosition = getElementPosition,
     getPlayerSerial = getPlayerSerial,
     setTimer = setTimer,
     outputChatBox = outputChatBox,
@@ -96,16 +96,16 @@ imports.addEventHandler("onResourceStart", resource, function()
                 cancelEvent()
                 if command == "logout" then
                     if CPlayer.isInitialized(source) then
-                        local isPlayerOnLogoutCoolDown = false
-                        local playerLoginTick = getPlayerLoginTick(source)
-                        if playerLoginTick then
-                            local elapsedDuration = imports.getTickCount() - playerLoginTick
-                            if elapsedDuration < serverLogoutCoolDownDuration then
-                                isPlayerOnLogoutCoolDown = serverLogoutCoolDownDuration - elapsedDuration
+                        local isLogoutVerified = false
+                        local prevResumeTick = getPlayerResumeTick(source)
+                        if prevResumeTick then
+                            local elapsedDuration = imports.getTickCount() - prevResumeTick
+                            if elapsedDuration < serverLogoutCoolDownDuration then --TODO: ADD COOLDOWN DURATION
+                                isLogoutVerified = serverLogoutCoolDownDuration - elapsedDuration
                             end
                         end
-                        if isPlayerOnLogoutCoolDown then
-                            imports.triggerClientEvent(source, "Client:onNotification", source, "Please wait "..math.ceil(isPlayerOnLogoutCoolDown/1000).."s before logging out!", {255, 35, 35, 255})
+                        if isLogoutVerified then
+                            imports.triggerClientEvent(source, "Client:onNotification", source, "Please wait "..imports.math.ceil(isLogoutVerified/1000).."s before logging out!", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
                         else
                             local posVector = imports.getElementPosition(source)
                             local characterID = source:getData("Character:ID")
