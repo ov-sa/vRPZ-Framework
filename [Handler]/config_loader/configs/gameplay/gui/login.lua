@@ -53,6 +53,8 @@ configVars["UI"]["Login"] = {
         [5] = {["EN"] = "You don't have enough characters..", ["TR"] = "Yeterli karakteriniz yok.."},
         [6] = {["EN"] = "You've successfully deleted the character!", ["TR"] = "Karakteri başarıyla sildiniz!"},
         [7] = {["EN"] = "You must save the character prior to picking..", ["TR"] = "Seçmeden önce karakteri kaydetmelisiniz.."},
+        [8] = {["EN"] = "You've successfully saved the character!", ["TR"] = "Karakteri başarıyla kaydettiniz!"},
+        [9] = {["EN"] = "Failed to save your character..", ["TR"] = "Karakteriniz kaydedilemedi.."}
     },
 
     ["Options"] = {

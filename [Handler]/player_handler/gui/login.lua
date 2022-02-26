@@ -527,9 +527,9 @@ imports.addEvent("Client:onSaveCharacter", true)
 imports.addEventHandler("Client:onSaveCharacter", root, function(state, character, characterData)
     if state then
         loginUI.characters[character] = characterData
-        imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully saved the character!", {80, 255, 80, 255})
+        imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][8][FRAMEWORK_LANGUAGE], {80, 255, 80, 255})
     else
-        imports.triggerEvent("Client:onNotification", localPlayer, "failed to save character....", {255, 80, 80, 255})
+        imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][9][FRAMEWORK_LANGUAGE], {255, 80, 80, 255})
     end
     loginUI.processCharacters[character] = nil
     imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true, true)
