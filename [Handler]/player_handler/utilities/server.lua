@@ -92,6 +92,7 @@ imports.addEventHandler("onResourceStart", resource, function()
     imports.setGameType(FRAMEWORK_CONFIGS.Game["Game_imports.type"])
     imports.setMapName(FRAMEWORK_CONFIGS.Game["Game_Map"])
 
+    imports.addEventHandler("onPlayerChangeNick", root, function() imports.cancelEvent() end)
     imports.addEventHandler("onPlayerCommand", root, function(command)
         local disabledCMDs = FRAMEWORK_CONFIGS.Game["Disabled_CMDS"]
         for i = 1, #disabledCMDs, 1 do
