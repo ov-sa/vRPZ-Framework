@@ -155,25 +155,15 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         {"character", character}
     })
 
-    imports.triggerClientEvent(source, "Player:onSyncWeather", source, serverWeather, serverTime)
-    imports.triggerEvent("Player:onSpawn", source, (CCharacter.CBuffer[characterID]["location"] and imports.fromJSON(CCharacter.CBuffer[characterID]["location"])) or nil, true)
     --[[
+    --TODO: INIT ALL THIS
     playerAttachments[source] = {}
     playerInventorySlots[source] = {
         maxSlots = maximumInventorySlots,
         slots = {}
     }
     ]]
-    CCharacter.setHealth(source, 10000) --TODO: REMOVE LATER..
     cache.resumeBuffer[source] = imports.getTickCount()
-    --triggerClientEvent(source, "onClientInventorySyncSlots", source, playerInventorySlots[source])
-    if (CCharacter.getHealth(source) <= 0) or CCharacter.CBuffer[characterID]["dead"] then
-        print("TEST 1")
-        CCharacter.setHealth(source, 0)
-        --imports.triggerEvent("onPlayerDeath", source, nil, false, nil, 3)
-    else
-        print("TEST 2")
-        imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false)
-        imports.showChat(source, true)
-    end
+    imports.triggerClientEvent(source, "Player:onSyncWeather", source, serverWeather, serverTime)
+    imports.triggerEvent("Player:onSpawn", source, (CCharacter.CBuffer[characterID]["location"] and imports.fromJSON(CCharacter.CBuffer[characterID]["location"])) or nil, true)
 end)

@@ -178,9 +178,18 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
             imports.setElementData(player, "Character:"..j, CCharacter.CBuffer[j])
         end
     end
+    if (CCharacter.getHealth(source) <= 0) or CCharacter.CBuffer[characterID]["dead"] then
+        print("TEST 1")
+        CCharacter.setHealth(source, 0)
+        --imports.triggerEvent("onPlayerDeath", source, nil, false, nil, 3)
+    else
+        print("TEST 2")
+        imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false)
+        imports.showChat(source, true)
+    end
     --TODO: APPEND FUNCTION TO RETRIEVE CHARACTER'S CURRENT CLOTHES..
     --imports.triggerClientEvent("Player:onSyncPedClothes", source, source, getPlayerClothes(source))
+    --triggerClientEvent(source, "onClientInventorySyncSlots", source, playerInventorySlots[source])
     --imports.triggerClientEvent(source, "Client:onRespawn", source)
     --imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, true)
-    imports.showChat(source, true)
 end)
