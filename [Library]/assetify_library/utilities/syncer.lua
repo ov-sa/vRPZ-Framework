@@ -189,7 +189,6 @@ else
         return imports.triggerLatentClientEvent(player, "Assetify:onRecieveState", downloadSettings.speed, false, player, ...)
     end
 
-    --TODO: MODIFY TO SUPPORT ASSET CLUMP + CLUMP MAP SYNC
     function syncer:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, targetPlayer, skipCaching)
         if not skipCaching then
             if not element or not imports.isElement(element) or not availableAssetPacks[assetType] or not availableAssetPacks[assetType].assetPack.rwDatas[assetName] then return false end
