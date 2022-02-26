@@ -202,13 +202,15 @@ loginUI.phases[2].updateUILang = function(gender)
 end
 loginUI.phases[2].fetchSelection = function()
     local tone = imports.beautify.slider.getPercent(loginUI.phases[2].categories[1].contents.tone.element)
-    local gender = loginUI.phases[2].categories[1].contents.gender.contentIndex[imports.beautify.selector.getSelection(loginUI.phases[2].categories[1].contents.gender.element)]
-    local upper = loginUI.phases[2].categories[3].contentIndex[imports.beautify.selector.getSelection(loginUI.phases[2].categories[3].element)]
-    local lower = loginUI.phases[2].categories[4].contentIndex[imports.beautify.selector.getSelection(loginUI.phases[2].categories[4].element)]
-    local shoes = loginUI.phases[2].categories[5].contentIndex[imports.beautify.selector.getSelection(loginUI.phases[2].categories[5].element)]
+    local gender = loginUI.phases[2].categories[1].contents.gender.contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[1].contents.gender.element))]
+    local hair = loginUI.phases[2].categories[2].contents.hair.contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[2].contents.hair.element))]
+    local upper = loginUI.phases[2].categories[3].contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[3].element))]
+    local lower = loginUI.phases[2].categories[4].contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[4].element))]
+    local shoes = loginUI.phases[2].categories[5].contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[5].element))]
     return {
         tone = tone,
         gender = {gender, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender["Datas"][gender]},
+        hair = {hair, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Facial"].hair["Datas"][gender]},
         upper = {upper, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Upper"]["Datas"][gender][upper]},
         lower = {lower, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Lower"]["Datas"][gender][lower]},
         shoes = {shoes, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Shoes"]["Datas"][gender][shoes]},
@@ -260,6 +262,7 @@ loginUI.phases[2].loadCharacter = function(loadDefault)
             end
         end
         imports.beautify.slider.getPercent(loginUI.phases[2].categories[1].contents.tone.element, loginUI.characters[(loginUI.previewCharacter)].identity.tone or 0)
+        imports.beautify.selector.setSelection(loginUI.phases[2].categories[2].contents.hair.element, loginUI.characters[(loginUI.previewCharacter)].identity.hair or 1)
         imports.beautify.selector.setSelection(loginUI.phases[2].categories[3].element, loginUI.characters[(loginUI.previewCharacter)].identity.upper or 1)
         imports.beautify.selector.setSelection(loginUI.phases[2].categories[4].element, loginUI.characters[(loginUI.previewCharacter)].identity.lower or 1)
         imports.beautify.selector.setSelection(loginUI.phases[2].categories[5].element, loginUI.characters[(loginUI.previewCharacter)].identity.shoes or 1)
@@ -336,6 +339,7 @@ loginUI.phases[2].manageCharacter = function(action)
             local characterData = {
                 tone = selectionData.tone,
                 gender = selectionData.gender[1],
+                hair = selectionData.hair[1],
                 upper = selectionData.upper[1],
                 lower = selectionData.lower[1],
                 shoes = selectionData.shoes[1]
