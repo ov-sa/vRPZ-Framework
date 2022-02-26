@@ -31,9 +31,7 @@ local bundlerData = false
 -----------------------------------
 
 function fetchImports(recieveData)
-
-    if not syncer.isLibraryLoaded or not bundlerData then return false end
-
+    if not bundlerData then return false end
     if recieveData == true then
         return bundlerData
     else
@@ -44,7 +42,6 @@ function fetchImports(recieveData)
         end
         ]]
     end
-
 end
 
 
@@ -53,7 +50,6 @@ end
 -----------------------------------
 
 function onBundleLibrary()
-
     local importedModules = {
         bundler = [[
             assetify = {
@@ -104,9 +100,7 @@ function onBundleLibrary()
             end
         ]]
     }
-
     bundlerData = {}
     imports.table.insert(bundlerData, importedModules.bundler)
-
 end
 onBundleLibrary()
