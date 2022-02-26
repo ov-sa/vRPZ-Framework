@@ -299,7 +299,7 @@ loginUI.phases[2].manageCharacter = function(action)
     elseif (action == "previous") or (action == "next") then
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
         if loginUI.characters[(loginUI.selectedCharacter)] and not loginUI.characters[(loginUI.selectedCharacter)].id then
-            imports.triggerEvent("Client:onNotification", localPlayer, "PLEASE SAVE YOUR CHARACTER FIRST", {255, 80, 80, 255})
+            imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][11][FRAMEWORK_LANGUAGE], {255, 80, 80, 255})
             return false
         else
             if action == "previous" then
