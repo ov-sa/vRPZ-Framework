@@ -138,6 +138,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     imports.setElementFrozen(source, false)
     imports.setCameraTarget(source, source)
     --source:setCollisionsEnabled(true)
+    CCharacter.loadProgress(source, true)
     source:setData("Character:ID", characterID)
     source:setData("Character:Identity", characterIdentity)
     imports.setElementData(source, "Player:Initialized", true)
@@ -171,7 +172,6 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     else
         local spawnpoint = FRAMEWORK_CONFIGS["Spawns"][(imports.math.random(1, #FRAMEWORK_CONFIGS["Spawns"]))]
         source:spawn(spawnpoint.x, spawnpoint.y, spawnpoint.z + 1, imports.math.random(0, 360))
-        --loadPlayerDefaultDatas(source)
     end
 
     CPlayer.setData(serial, {

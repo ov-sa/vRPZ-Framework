@@ -29,7 +29,7 @@ local imports = {
 --[[ Module ]]--
 ----------------
 
-CCharacter.resetProgress = function(player, isForceReset, skipResetSync, saveProgress)
+CCharacter.resetProgress = function(player, isForceReset, saveProgress, loadProgress)
     if isForceReset then
         imports.setElementData(player, "Player:Initialized", nil)
         imports.setElementData(player, "Character:ID", nil)
@@ -45,40 +45,42 @@ CCharacter.resetProgress = function(player, isForceReset, skipResetSync, savePro
     CPlayer.CAttachments[player] = nil
     playerInventorySlots[player] = nil
 
-    if not skipResetSync then
-        if isForceReset then
-            for i, j in imports.pairs(characterIdentity) do
-                imports.setElementData(player, "Character:"..i, nil)
-            end
-            for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
-                local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
-                if saveProgress then
-                    CPlayer.setData(saveProgress.serial, {
-                        {j, imports.tostring(imports.getElementData(player, "Player:"..j))}
-                    })
-                end
-                imports.setElementData(player, "Player:"..j, nil)
-            end
+    local dataBuffer = {
+        player = {},
+        character = {},
+    }
+    if isForceReset then
+        --[[
+        for i, j in imports.pairs(characterIdentity) do --TODO:...
+            imports.setElementData(player, "Character:"..i, nil)
         end
-        for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
-            local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
-            if saveProgress then
-                CCharacter.setData(saveProgress.characterID, j, imports.tostring(imports.getElementData(player, "Character:"..j)))
-            end
-            imports.setElementData(player, "Character:"..j, nil)
+        ]]
+        for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
+            local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
+            dataBuffer.player[i] = {j, imports.tostring(imports.getElementData(player, "Player:"..j))}
+            imports.setElementData(player, "Player:"..j, nil)
         end
-        for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Slots"]) do
-            imports.setElementData(player, "Slot:"..i, nil)
-            imports.setElementData(player, "Slot:Object:"..i, nil)
+    end
+    for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
+        local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
+        dataBuffer.character[i] = {j, imports.tostring(imports.getElementData(player, "Character:"..j))}
+        imports.setElementData(player, "Character:"..j, nil)
+    end
+    for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Slots"]) do
+        imports.setElementData(player, "Slot:"..i, nil)
+        imports.setElementData(player, "Slot:Object:"..i, nil)
+    end
+    if saveProgress then
+        CPlayer.setData(saveProgress.serial, dataBuffer.player)
+        CCharacter.setData(saveProgress.characterID, dataBuffer.character)
+    end
+    for i, j in imports.pairs(CInventory.CItems) do
+        if saveProgress then
+            CInventory.setItemProperty(saveProgress.inventoryID, {i}, {
+                {dbify.Inventory.__connection__.itemFormat.counter, imports.max(0, imports.tonumber(imports.getElementData(player, "Item:"..i)) or 0)}
+            })
         end
-        for i, j in imports.pairs(CInventory.CItems) do
-            if saveProgress then
-                CInventory.setItemProperty(saveProgress.inventoryID, {i}, {
-                    {dbify.Inventory.__connection__.itemFormat.counter, imports.max(0, imports.tonumber(imports.getElementData(player, "Item:"..i)) or 0)}
-                })
-            end
-            imports.setElementData(player, "Item:"..i, nil)
-        end
+        imports.setElementData(player, "Item:"..i, (loadProgress and 0) or nil)
     end
     return true
 end
@@ -86,36 +88,18 @@ end
 CCharacter.loadProgress = function(player, isForceReset)
     if CPlayer.isInitialized(player) then return false end
 
-    CCharacter.resetProgress(player, isForceReset)
-    for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
-        local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
-        imports.setElementData(player, "Player:"..j, nil)
-    end
-    for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
-        local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
-        imports.setElementData(player, "Character:"..j, nil)
-    end
-    for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Slots"]) do
-        imports.setElementData(player, "Slot:"..i, nil)
-        imports.setElementData(player, "Slot:Object:"..i, nil)
-    end
-    for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
-        for k, v in imports.pairs(j) do
-            imports.setElementData(player, "Item:"..k, 0)
-        end
-    end
+    CCharacter.resetProgress(player, isForceReset, false, true)
     return true
 end
 
-CCharacter.saveProgress = function(player, skipResetSync)
+CCharacter.saveProgress = function(player)
     if not CPlayer.isInitialized(player) then return false end
 
     local serial = imports.getPlayerSerial(player)
     local characterID = imports.getElementData(player, "Character:ID")
     local inventoryID = imports.getElementData(player, "Inventory:ID")
-    local characterIdentity = CCharacter.getData(characterID, "identity") --TODO: IS THIS NEEDED??
     CCharacter.setData(characterID, "location", imports.toJSON(CCharacter.getLocation(player)))
-    CCharacter.resetProgress(player, true, skipResetSync, {
+    CCharacter.resetProgress(player, true, {
         serial = serial,
         characterID = characterID,
         inventoryID = inventoryID
