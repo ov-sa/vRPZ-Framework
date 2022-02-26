@@ -159,6 +159,7 @@ end)
 
 imports.addEvent("Player:onSpawn", true)
 imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffer)
+    local isNewCharacter = (reloadBuffer and not spawnpoint and true) or false
     spawnpoint = spawnpoint or CGame.generateSpawn()
     local characterID = imports.getElementData(source, "Character:ID")
     local characterIdentity = CCharacter.CBuffer[characterID].identity
@@ -179,7 +180,7 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
             local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
             imports.setElementData(source, "Character:"..j, CCharacter.CBuffer[j])
         end
-        if spawnpoint then resetProgress = false end
+        if not isNewCharacter then resetProgress = false end
     end
     if resetProgress then CCharacter.loadProgress(source) print("RESETTING") end
     CCharacter.setData(characterID, "dead", false)
