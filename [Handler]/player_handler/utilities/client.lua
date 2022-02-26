@@ -38,30 +38,7 @@ local imports = {
 ---------------------------------------
 
 function showChat(bool, isForced)
-    if isForced or (not bool) then
-        return imports.showChat(bool)
-    else
-        local conditionChecks = {
-            isPlayerInitialized(localPlayer),
-            not isLoginUIVisible(),
-            not isWastedScreenVisible(),
-            not isSpawnScreenVisible(),
-            not isDashboardVisible(),
-            not isMapOpened(),
-            not isMapOpened()
-        }
-        local isStateValid = true
-        for i, j in imports.ipairs(conditionChecks) do
-            if not j then
-                isStateValid = false
-                break
-            end
-        end
-        if isStateValid then
-            return imports.showChat(bool)
-        end
-    end
-    return false
+    return ((isForced or not bool or not CGame.isUIVisible()) and imports.showChat(bool)) or false
 end
 imports.addEvent("Player:onToggleChat", true)
 imports.addEventHandler("Player:onToggleChat", root, showChat)
