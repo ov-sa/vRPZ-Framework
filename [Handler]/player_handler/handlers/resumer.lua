@@ -33,6 +33,7 @@ end)
 imports.addEvent("Player:onSaveCharacter", true)
 imports.addEventHandler("Player:onSaveCharacter", root, function(character, characters)
     if not character or not characters or not characters[character] or characters[character].id then return false end
+
     local serial = CPlayer.getSerial(source)
     CCharacter.create(serial, function(characterID, args)
         CCharacter.setData(characterID, {
