@@ -12,12 +12,11 @@
 --[[ Imports ]]--
 -----------------
 
+loadstring(exports.assetify_library:fetchImports())()
 local imports = {
     type = type,
     pairs = pairs
 }
---TODO:NEEDS TO BE OPTIMIZED....
-loadstring(exports.assetify_library:fetchImports())()
 
 
 ----------------------------------------------

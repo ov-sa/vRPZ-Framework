@@ -58,7 +58,7 @@ function onBundleLibrary()
         bundler = [[
             assetify = {
                 imports = {
-                    resourceName = ]]..imports.resourceName..[[,
+                    resourceName = "]]..imports.resourceName..[[",
                     type = type,
                     call = call,
                     getResourceFromName = getResourceFromName
