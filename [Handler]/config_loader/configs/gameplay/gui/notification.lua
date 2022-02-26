@@ -20,6 +20,10 @@ configVars["UI"]["Notification"] = {
     slideTopDuration = 500,
     slideDelayDuration = 2000,
     fontColor = {175, 175, 175, 255},
-    bgColor = {3, 3, 3, 255}
+    bgColor = {3, 3, 3, 255},
+    presets = {
+        success = {80, 255, 80, 255},
+        error = {255, 80, 80, 255}
+    }
 
 }

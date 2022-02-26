@@ -274,32 +274,32 @@ loginUI.phases[2].manageCharacter = function(action)
         if #loginUI.characters >= characterLimit then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][3][FRAMEWORK_LANGUAGE] end
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
         if errorMessage then
-            imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
+            imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
             return false
         else
             imports.table.insert(loginUI.characters, {})
             loginUI.selectedCharacter = #loginUI.characters
             loginUI.phases[2].loadCharacter(true)
-            imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][4][FRAMEWORK_LANGUAGE], {80, 255, 80, 255})
+            imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][4][FRAMEWORK_LANGUAGE], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
         end
     elseif action == "delete" then
         local errorMessage = false
         if #loginUI.characters <= 0 then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][5][FRAMEWORK_LANGUAGE] end
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
         if errorMessage then
-            imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
+            imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
             return false
         else
             if loginUI.characters[(loginUI.selectedCharacter)].id then imports.triggerServerEvent("Player:onDeleteCharacter", localPlayer, loginUI.characters[(loginUI.selectedCharacter)].id) end
             imports.table.remove(loginUI.characters, loginUI.selectedCharacter)
             loginUI.selectedCharacter = imports.math.max(0, loginUI.selectedCharacter - 1)
             loginUI.phases[2].loadCharacter()
-            imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][6][FRAMEWORK_LANGUAGE], {80, 255, 80, 255})
+            imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][6][FRAMEWORK_LANGUAGE], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
         end
     elseif (action == "previous") or (action == "next") then
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
         if loginUI.characters[(loginUI.selectedCharacter)] and not loginUI.characters[(loginUI.selectedCharacter)].id then
-            imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][11][FRAMEWORK_LANGUAGE], {255, 80, 80, 255})
+            imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][11][FRAMEWORK_LANGUAGE], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
             return false
         else
             if action == "previous" then
@@ -319,11 +319,11 @@ loginUI.phases[2].manageCharacter = function(action)
         if (not loginUI.characters[(loginUI.selectedCharacter)]) or not loginUI.characters[(loginUI.selectedCharacter)].id then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][7][FRAMEWORK_LANGUAGE] end
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
         if errorMessage then
-            imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
+            imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
             return false
         else
             loginUI.character = loginUI.selectedCharacter
-            imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][8][FRAMEWORK_LANGUAGE], {80, 255, 80, 255})
+            imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][8][FRAMEWORK_LANGUAGE], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
         end
     elseif action == "save" then
         if (#loginUI.characters > 0) and loginUI.characters[(loginUI.selectedCharacter)].id then
@@ -351,7 +351,7 @@ loginUI.phases[2].manageCharacter = function(action)
         if not loginUI.characters[loginUI.character] then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][2][FRAMEWORK_LANGUAGE] end
         if errorMessage then
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
-            imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
+            imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
             return false
         else
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
@@ -499,9 +499,9 @@ imports.addEvent("Client:onSaveCharacter", true)
 imports.addEventHandler("Client:onSaveCharacter", root, function(state, character, characterData)
     if state then
         loginUI.characters[character] = characterData
-        imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][9][FRAMEWORK_LANGUAGE], {80, 255, 80, 255})
+        imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][9][FRAMEWORK_LANGUAGE], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
     else
-        imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][10][FRAMEWORK_LANGUAGE], {255, 80, 80, 255})
+        imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][10][FRAMEWORK_LANGUAGE], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
     end
     loginUI.processCharacters[character] = nil
     imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true, true)
@@ -557,7 +557,7 @@ loginUI.renderUI = function(renderData)
                 j.animAlphaPercent = ((j.hoverStatus == "forward") and imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")) or imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")
                 imports.beautify.native.drawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, loginUI.phases[1].optionsUI.fontColor, 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
                 imports.beautify.native.drawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[1], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[2], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[3], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
-                imports.beautify.native.drawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineSize, imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineColor)), false)
+                imports.beautify.native.drawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineSize, imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineColor)), false) --TODO: SAVE AND CACHE THIS..
             end
         elseif loginUI.phase == 2 then
             imports.beautify.setUIDisabled(loginUI.phases[2].element, not isUIEnabled or (loginUI.characters[(loginUI.selectedCharacter)] and loginUI.characters[(loginUI.selectedCharacter)].id))
@@ -585,7 +585,7 @@ loginUI.renderUI = function(renderData)
                 imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.iconTexture, 0, 0, 0, imports.tocolor(loginUI.phases[2].options.iconColor[1], loginUI.phases[2].options.iconColor[2], loginUI.phases[2].options.iconColor[3], loginUI.phases[2].options.iconColor[4]*j.animAlphaPercent), false)
             end
         elseif loginUI.phase == 3 then
-            imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, imports.tocolor(imports.unpackColor(loginUI.phases[3].bgColor)), false)
+            imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, imports.tocolor(imports.unpackColor(loginUI.phases[3].bgColor)), false) --TODO: CACHE THIS.//
             local view_offsetX, view_offsetY = loginUI.phases[3].startX, loginUI.phases[3].startY
             local view_width, view_height = loginUI.phases[3].width, loginUI.phases[3].height
             local credits_offsetY = -loginUI.phases[3].contentHeight - (view_height*0.5)
