@@ -18,6 +18,7 @@ local imports = {
     getTickCount = getTickCount,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
+    triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent,
     setElementFrozen = setElementFrozen,
     setElementData = setElementData,
