@@ -18,7 +18,7 @@ configVars["Spawns"] = {
         generic = {
             {name = "Character:hunger", amount = 100},
             {name = "Character:thirst", amount = 100},
-            {name = "Character:armor", amount = 0}
+            {name = "Character:armor", amount = 0},
             {name = "Character:blood", amount = nil}
         }
     },
