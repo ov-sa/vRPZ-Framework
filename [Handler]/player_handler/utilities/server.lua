@@ -15,7 +15,6 @@
 loadstring(exports.dbify_library:fetchImports())()
 local imports = {
     type = type,
-    ipairs = ipairs,
     isElement = isElement,
     createElement = createElement,
     getElementType = getElementType,
@@ -91,7 +90,9 @@ imports.addEventHandler("onResourceStart", resource, function()
     imports.setMapName(FRAMEWORK_CONFIGS.Game["Game_Map"])
 
     imports.addEventHandler("onPlayerCommand", root, function(command)
-        for i, j in imports.ipairs(FRAMEWORK_CONFIGS.Game["Disabled_CMDS"]) do
+        local disabledCMDs = FRAMEWORK_CONFIGS.Game["Disabled_CMDS"]
+        for i = 1, #disabledCMDs, 1 do
+            local j = FRAMEWORK_CONFIGS.Game["Disabled_CMDS"][i]
             if j == command then
                 cancelEvent()
                 if command == "logout" then
@@ -120,7 +121,9 @@ imports.addEventHandler("onResourceStart", resource, function()
 end)
 
 imports.addEventHandler("onResourceStop", resource, function()
-    for i, j in imports.ipairs(imports.getElementsByType("player")) do
+    local serverPlayers = imports.getElementsByType("player")
+    for i = 1, #serverPlayers, 1 do
+        local j = serverPlayers[i]
         CCharacter.saveProgress(j)
     end
 end)
