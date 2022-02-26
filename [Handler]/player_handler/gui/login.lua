@@ -373,7 +373,7 @@ loginUI.phases[2].manageCharacter = function(action)
 end
 loginUI.phases[2].toggleUI = function(state)
     if state then
-        if loginUI.phases[2].element or imports.isElement(loginUI.phases[2].element) then return false end
+        if loginUI.phases[2].element and imports.isElement(loginUI.phases[2].element) then return false end
         loginUI.phases[2].updateUILang(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default)
         local panel_offsetY = loginUI.phases[2].titlebar.height + loginUI.phases[2].titlebar.paddingY
         loginUI.phases[2].element = imports.beautify.card.create(loginUI.phases[2].startX, loginUI.phases[2].startY, loginUI.phases[2].width, loginUI.phases[2].height, nil, false)
