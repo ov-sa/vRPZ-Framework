@@ -105,15 +105,14 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                         id = j.id,
                         identity = j.identity
                     }
-                    CCharacter.CBuffer[(j[(dbify.character.__connection__.keyColumn)])] = j
-                    CCharacter.CBuffer[(j[(dbify.character.__connection__.keyColumn)])][(dbify.character.__connection__.keyColumn)] = nil
+                    CCharacter.CBuffer[(j.id)] = j
                     for k = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
                         local v = FRAMEWORK_CONFIGS["Character"]["Datas"][k]
-                        local value = CCharacter.CBuffer[(j[(dbify.character.__connection__.keyColumn)])][v]
+                        local value = CCharacter.CBuffer[(j.id)][v]
                         if imports.tostring(value) == "nil" then value = nil end
                         if imports.tostring(value) == "false" then value = false end
                         if value then value = imports.tonumber(value) or value end
-                        CCharacter.CBuffer[(j[(dbify.character.__connection__.keyColumn)])][v] = value
+                        CCharacter.CBuffer[(j.id)][v] = value
                     end
                 end
                 if not isCharacterSelected then args[3].character = 0 end
