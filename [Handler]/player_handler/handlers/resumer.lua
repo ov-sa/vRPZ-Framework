@@ -83,6 +83,8 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
     local serial = CPlayer.getSerial(source)
     CPlayer.fetch(serial, function(result, args)
         CCharacter.fetchOwned(args[2], function(result, args)
+            CPlayer.CBuffer[(args[2])] = args[3] --TODO: LATER MERGE THIS W/ BEAUTIFY'S SHARED APIS
+            args[3] = table.clone(args[3, true)
             args[3].character = args[3].character or 0
             args[3].vip = (args[3].vip and true) or false
             if (result and (#result > 0)) then
@@ -103,7 +105,6 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                 args[3].character = 0
                 args[3].characters = {}
             end
-            CPlayer.CBuffer[(args[2])] = args[3]
             imports.triggerClientEvent(args[1], "Client:onToggleLoginUI", args[1], true, {
                 character = args[3].character,
                 characters = args[3].characters,

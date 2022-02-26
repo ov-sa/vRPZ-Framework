@@ -66,10 +66,6 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
         imports.setElementData(player, "Slot:"..i, nil)
         imports.setElementData(player, "Slot:Object:"..i, nil)
     end
-    if saveProgress then
-        CPlayer.setData(depDatas.serial, dataBuffer.player)
-        CCharacter.setData(depDatas.characterID, dataBuffer.character)
-    end
     for i, j in imports.pairs(CInventory.CItems) do
         if saveProgress then
             CInventory.setItemProperty(depDatas.inventoryID, {i}, {
@@ -77,6 +73,11 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
             })
         end
         imports.setElementData(player, "Item:"..i, (loadProgress and 0) or nil)
+    end
+    if saveProgress then
+        CPlayer.setData(depDatas.serial, dataBuffer.player)
+        CCharacter.setData(depDatas.characterID, dataBuffer.character)
+        CPlayer.CBuffer[(depDatas.serial)], CCharacter.CBuffer[(depDatas.characterID)] = nil, nil
     end
     return true
 end

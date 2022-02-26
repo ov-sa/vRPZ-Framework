@@ -47,6 +47,23 @@ function getPositionFromElementOffset(element, offX, offY, offZ)
 end
 
 
+function table.clone(recievedTable, isRecursiveMode)
+
+    if not recievedTable or imports.type(recievedTable) ~= "table" then return false end
+
+    local clonedTable = {}
+    for i, j in imports.pairs(recievedTable) do
+        if imports.type(j) == "table" and isRecursiveMode then
+            clonedTable[i] = table.clone(j, true)
+        else
+            clonedTable[i] = j
+        end
+    end
+    return clonedTable
+
+end
+
+
 --------------------------------------------------
 --[[ Function: Finds Rotation b/w Coordinates ]]--
 --------------------------------------------------
