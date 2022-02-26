@@ -74,13 +74,13 @@ end)
 
 imports.addEvent("Player:onToggleLoginUI", true)
 imports.addEventHandler("Player:onToggleLoginUI", root, function()
+    local serial = CPlayer.getSerial(source)
     for i = 69, 79, 1 do
         imports.setPedStat(source, i, 1000)
     end
     imports.setPlayerNametagShowing(source, false)
     imports.setElementFrozen(source, true)
 
-    local serial = CPlayer.getSerial(source)
     CPlayer.fetch(serial, function(result, args)
         CCharacter.fetchOwned(args[2], function(result, args)
             CPlayer.CBuffer[(args[2])] = args[3]
