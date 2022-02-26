@@ -273,8 +273,8 @@ loginUI.phases[2].manageCharacter = function(action)
         local errorMessage = false
         local characterLimit = (loginUI.isVIP and FRAMEWORK_CONFIGS["Game"]["Character_Limit"].vip) or FRAMEWORK_CONFIGS["Game"]["Character_Limit"].default
         if #loginUI.characters >= characterLimit then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][3][FRAMEWORK_LANGUAGE] end
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
         if errorMessage then
-            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
             imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
             return false
         else
@@ -286,12 +286,12 @@ loginUI.phases[2].manageCharacter = function(action)
     elseif action == "delete" then
         local errorMessage = false
         if #loginUI.characters <= 0 then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][5][FRAMEWORK_LANGUAGE] end
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
         if errorMessage then
-            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
             imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
             return false
         else
-            imports.triggerServerEvent("Player:onDeleteCharacter", localPlayer, loginUI.characters[(loginUI.selectedCharacter)].id)
+            if loginUI.characters[(loginUI.selectedCharacter)].id then imports.triggerServerEvent("Player:onDeleteCharacter", localPlayer, loginUI.characters[(loginUI.selectedCharacter)].id) end
             imports.table.remove(loginUI.characters, loginUI.selectedCharacter)
             loginUI.selectedCharacter = imports.math.max(0, loginUI.selectedCharacter - 1)
             loginUI.phases[2].loadCharacter()
@@ -313,8 +313,8 @@ loginUI.phases[2].manageCharacter = function(action)
     elseif action == "pick" then
         local errorMessage = false
         if (not loginUI.characters[(loginUI.selectedCharacter)]) or not loginUI.characters[(loginUI.selectedCharacter)].id then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][7][FRAMEWORK_LANGUAGE] end
+        imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
         if errorMessage then
-            imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
             imports.triggerEvent("Client:onNotification", localPlayer, errorMessage, {255, 80, 80, 255})
             return false
         else
