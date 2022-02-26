@@ -103,6 +103,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                 args[3].character = 0
                 args[3].characters = {}
             end
+            CPlayer.CBuffer[(args[2])] = args[3]
             imports.triggerClientEvent(args[1], "Client:onToggleLoginUI", args[1], true, {
                 character = args[3].character,
                 characters = args[3].characters,
@@ -177,9 +178,11 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     imports.triggerClientEvent(source, "Player:onSyncWeather", source, serverWeather, serverTime)
     --triggerClientEvent(source, "onClientInventorySyncSlots", source, playerInventorySlots[source])
     if (CCharacter.getHealth(source) <= 0) or CCharacter[characterID]["dead"] then
+        print("TEST 1")
         CCharacter.setHealth(source, 0)
         --imports.triggerEvent("onPlayerDeath", source, nil, false, nil, 3)
     else
+        print("TEST 2")
         imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false)
         imports.showChat(source, true)
     end

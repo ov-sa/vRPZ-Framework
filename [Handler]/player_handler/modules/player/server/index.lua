@@ -24,14 +24,46 @@ local imports = {
 --[[ Module ]]--
 ----------------
 
+CPlayer.CBuffer = {}
+
 CPlayer.fetch = function(serial, ...)
     dbify.serial.fetchAll({
         {dbify.serial.__connection__.keyColumn, serial}
     }, ...)
     return true
 end
-CPlayer.setData = dbify.serial.setData
-CPlayer.getData = dbify.serial.getData
+
+CPlayer.setData = function(serial, serialDatas, callback, ...)
+    dbify.serial.setData(serial, serialDatas, function(result, args)
+        if result and CPlayer.CBuffer[serial] then
+            for i = 1, #serialDatas, 1 do
+                local j = serialDatas[i]
+                CPlayer.CBuffer[serial][(j[1])] = j[2]
+            end
+        end
+        local callbackReference = callback
+        if (callbackReference and (imports.type(callbackReference) == "function")) then
+            imports.table.remove(args, 1)
+            callbackReference(result, args)
+        end
+    end, serialDatas, ...)
+    return true
+end
+
+CPlayer.getData = function(serial, serialDatas, callback, ...)
+    dbify.serial.getData(serial, serialDatas, function(result, args)
+        local callbackReference = callback
+        if (callbackReference and (imports.type(callbackReference) == "function")) then
+            callbackReference(result, args)
+        end
+        if result and CPlayer.CBuffer[serial] then
+            for i, j in imports.pairs(serialDatas) do
+                CPlayer.CBuffer[serial][j] = result[j]
+            end
+        end
+    end, ...)
+    return true
+end
 
 CPlayer.getSerial = function(player)
     if (not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player")) then return false end
