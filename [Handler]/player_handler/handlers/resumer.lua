@@ -91,6 +91,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                 local value = CPlayer.CBuffer[(args[2])][j]
                 if imports.tostring(value) == "nil" then value = nil end
                 if imports.tostring(value) == "false" then value = false end
+                if imports.tostring(value) == "true" then value = true end
                 if value then value = imports.tonumber(value) or value end
                 CPlayer.CBuffer[(args[2])][j] = value
             end
@@ -113,6 +114,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                         local value = CCharacter.CBuffer[(j.id)][v]
                         if imports.tostring(value) == "nil" then value = nil end
                         if imports.tostring(value) == "false" then value = false end
+                        if imports.tostring(value) == "true" then value = true end
                         if value then value = imports.tonumber(value) or value end
                         CCharacter.CBuffer[(j.id)][v] = value
                     end
