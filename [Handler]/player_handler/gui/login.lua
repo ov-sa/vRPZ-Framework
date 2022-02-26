@@ -335,7 +335,6 @@ loginUI.phases[2].manageCharacter = function(action)
             }
             if #loginUI.characters <= 0 then loginUI.selectedCharacter = 1 end
             loginUI.processCharacters[(loginUI.selectedCharacter)] = true
-            unsavedCharacters[(loginUI.selectedCharacter)] = true
             loginUI.characters[(loginUI.selectedCharacter)] = loginUI.characters[(loginUI.selectedCharacter)] or {}
             loginUI.characters[(loginUI.selectedCharacter)].identity = characterData
             imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, loginUI.selectedCharacter, loginUI.characters)
@@ -448,6 +447,12 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
     end
     imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
     loginUI.cache.timers.phaseChanger = imports.setTimer(function()
+        for i = 1, #loginUI.characters, 1 do
+            local j = loginUI.characters[i]
+            if not j.id then
+                imports.table.remove(loginUI.characters, i)
+            end
+        end
         if phaseID == 1 then
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.cinemationPoint, true, true, loginUI.cinemationData.cinemationFOV, true, true, true, false)
         elseif phaseID == 2 then
@@ -465,31 +470,6 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
             end
         end
         loginUI.phase = phaseID
-        local unsavedCharacters = {}
-        for i = 1, #loginUI.characters, 1 do
-            local j = loginUI.characters[i]
-            if not j.id then
-                imports.table.insert(unsavedCharacters, i)
-            end
-        end
-        for i = 1, #loginUI.characters, 1 do
-            local j = loginUI.characters[i]
-            if not j.id then
-                imports.table.remove(loginUI.characters, i)
-            end
-        end
-        for i = 1, #unsavedCharacters, 1 do
-            local j = unsavedCharacters[i]
-            if loginUI.character == j then
-                loginUI.character = 0
-                loginUI.selectedCharacter = 0
-                break
-            else
-                if loginUI.selectedCharacter == j then
-                    loginUI.selectedCharacter = 0
-                end
-            end
-        end
         imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, false)
         loginUI.cache.timers.phaseChanger = false
     end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + 250, 1)
