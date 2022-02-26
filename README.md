@@ -29,8 +29,6 @@
 
 ## ━ Third Party
 
-* **admin**
-* **runcode**
 * **pAttach**
 * **parachute**
 
