@@ -13,14 +13,11 @@
 -----------------
 
 local imports = {
-    pairs = pairs,
-    tonumber = tonumber,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     triggerClientEvent = triggerClientEvent,
     toJSON = toJSON,
-    fromJSON = fromJSON,
-    table = table
+    fromJSON = fromJSON
 }
 
 
@@ -40,7 +37,6 @@ end)
 
 imports.addEvent("Player:onSaveCharacter", true)
 imports.addEventHandler("Player:onSaveCharacter", root, function(character, characters)
-    character = imports.tonumber(character)
     if not character or not characters or not characters[character] or characters[character].id then return false end
 
     local serial = CPlayer.getSerial(source)
@@ -69,39 +65,29 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
         CCharacter.fetchOwned(args[2], function(result, args)
             args[3].character = args[3].character or 0
             args[3].vip = (args[3].vip and true) or false
-            print(result)
-        end, args[1], args[2], result)
-        --TODO: DEBUG..
-        --[[
-        print(toJSON(result.characters))
-        if (#result.characters > 0) then
-            CCharacter.fetch(result.characters, function(result, args)
-                args[2].characters = {}
+            if (#result > 0) then
+                args[3].characters, isCharacterSelected = {}, false
                 for i = 1, #result, 1 do
                     local j = result[i]
                     j.identity = imports.fromJSON(j.identity)
-                    args[2].characters[i] = {
+                    if not isCharacterSelected and (j.id == args[3].character) then isCharacterSelected = true end
+                    args[3].characters[i] = {
                         id = j.id,
                         identity = j.identity
                     }
                     CCharacter.CBuffer[(j[(dbify.character.__connection__.keyColumn)])] = j
                     CCharacter.CBuffer[(j[(dbify.character.__connection__.keyColumn)])][(dbify.character.__connection__.keyColumn)] = nil
                 end
-                if not args[2].characters[(args[2].character)] then args[2].character = 0 end
-                imports.triggerClientEvent(args[1], "Client:onToggleLoginUI", args[1], true, {
-                    character = args[2].character,
-                    characters = args[2].characters,
-                    vip = args[2].vip
-                })
-            end, args[1], result)
-        else
-            result.character = 0
+                if not isCharacterSelected then args[3].character = 0 end
+            else
+                args[3].character = 0
+                args[3].characters = {}
+            end
             imports.triggerClientEvent(args[1], "Client:onToggleLoginUI", args[1], true, {
-                character = result.character,
-                characters = result.characters,
-                vip = result.vip
+                character = args[3].character,
+                characters = {},
+                vip = args[3].vip
             })
-        end
-        ]]--
+        end, args[1], args[2], result)
     end, source, serial)
 end)
