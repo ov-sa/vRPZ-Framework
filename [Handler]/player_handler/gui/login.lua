@@ -14,7 +14,6 @@
 
 local imports = {
     pairs = pairs,
-    tonumber = tonumber,
     tostring = tostring,
     tocolor = tocolor,
     unpackColor = unpackColor,
@@ -448,7 +447,6 @@ function isLoginUIVisible() return loginUI.state end
 
 imports.addEvent("Client:onSetLoginUIPhase", true)
 imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
-    phaseID = imports.tonumber(phaseID)
     if not phaseID or not loginUI.phases[1].optionsUI[phaseID] or (loginUI.phase and loginUI.phase == phaseID) then return false end
 
     for i, j in imports.pairs(loginUI.cache.timers) do
@@ -697,9 +695,6 @@ end
 imports.addEvent("Client:onToggleLoginUI", true)
 imports.addEventHandler("Client:onToggleLoginUI", root, function(state, args)
     if state then
-        for i, j in imports.pairs(args.characters) do
-            j.isPreLoaded = true
-        end
         loginUI.character = args.character
         loginUI.selectedCharacter = loginUI.character
         loginUI.characters, loginUI.processCharacters = args.characters, {}
