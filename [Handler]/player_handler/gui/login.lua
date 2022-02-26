@@ -61,6 +61,7 @@ loginUI = {
             optionsUI = {
                 startX = CLIENT_MTA_RESOLUTION[1]*0.5, startY = -15, paddingY = 10,
                 font = FRAMEWORK_FONTS[2], fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.fontColor)),
+                embedLineColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineColor)),
                 {identifier = "play", exec = function() loginUI.phases[2].manageCharacter("play") end},
                 {identifier = "characters", exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 2) end},
                 {identifier = "credits", exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 3) end}
@@ -397,20 +398,20 @@ loginUI.phases[2].toggleUI = function(state)
             end
         end
         imports.beautify.render.create(function()
-            imports.beautify.native.drawRectangle(0, 0, loginUI.phases[2].width, loginUI.phases[2].titlebar.height, loginUI.phases[2].titlebar.bgColor)
+            imports.beautify.native.drawRectangle(0, 0, loginUI.phases[2].width, loginUI.phases[2].titlebar.height, loginUI.phases[2].titlebar.bgColor, false)
             imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar["Titles"][FRAMEWORK_LANGUAGE])), 0, 0, loginUI.phases[2].width, loginUI.phases[2].titlebar.height, loginUI.phases[2].titlebar.fontColor, 1, loginUI.phases[2].titlebar.font, "center", "center", true, false, false)
-            imports.beautify.native.drawRectangle(0, loginUI.phases[2].titlebar.height, loginUI.phases[2].width, loginUI.phases[2].titlebar.paddingY, loginUI.phases[2].titlebar.shadowColor)
+            imports.beautify.native.drawRectangle(0, loginUI.phases[2].titlebar.height, loginUI.phases[2].width, loginUI.phases[2].titlebar.paddingY, loginUI.phases[2].titlebar.shadowColor, false)
             for i = 1, #loginUI.phases[2].categories, 1 do
                 local j = loginUI.phases[2].categories[i]
                 local category_offsetY = j.offsetY + loginUI.phases[2].categories.height
-                imports.beautify.native.drawRectangle(0, j.offsetY, loginUI.phases[2].width, loginUI.phases[2].categories.height, loginUI.phases[2].titlebar.bgColor)
+                imports.beautify.native.drawRectangle(0, j.offsetY, loginUI.phases[2].width, loginUI.phases[2].categories.height, loginUI.phases[2].titlebar.bgColor, false)
                 imports.beautify.native.drawText(j.title, 0, j.offsetY, loginUI.phases[2].width, category_offsetY, loginUI.phases[2].categories.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
-                imports.beautify.native.drawRectangle(0, category_offsetY, loginUI.phases[2].width, j.height, loginUI.phases[2].categories.bgColor)
+                imports.beautify.native.drawRectangle(0, category_offsetY, loginUI.phases[2].width, j.height, loginUI.phases[2].categories.bgColor, false)
                 if j.contents then
                     for k, v in imports.pairs(j.contents) do
                         local title_height = loginUI.phases[2].categories.height
                         local title_offsetY = category_offsetY + v.startY - title_height
-                        imports.beautify.native.drawRectangle(0, title_offsetY, loginUI.phases[2].width, title_height, loginUI.phases[2].titlebar.bgColor)
+                        imports.beautify.native.drawRectangle(0, title_offsetY, loginUI.phases[2].width, title_height, loginUI.phases[2].titlebar.bgColor, false)
                         imports.beautify.native.drawText(v.title, 0, title_offsetY, loginUI.phases[2].width, title_offsetY + title_height, loginUI.phases[2].titlebar.fontColor, 1, loginUI.phases[2].categories.font, "center", "center", true, false, false)
                     end
                 end
@@ -462,7 +463,7 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
         if phaseID == 1 then
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.cinemationPoint, true, true, loginUI.cinemationData.cinemationFOV, true, true, true, false)
         elseif phaseID == 2 then
-            if loginUI.phases[2].character and imports.isElement(loginUI.phases[2].character) then loginUI.phases[2].character:destroy(); loginUI.phases[2].character = nil end
+            if loginUI.phases[2].character and imports.isElement(loginUI.phases[2].character) then imports.destroyElement(loginUI.phases[2].character); loginUI.phases[2].character = nil end
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.characterCinemationPoint, true, true, loginUI.cinemationData.characterCinemationFOV, true, true, true, false)
             loginUI.phases[2].character = imports.createPed(0, loginUI.cinemationData.characterPoint.x, loginUI.cinemationData.characterPoint.y, loginUI.cinemationData.characterPoint.z, loginUI.cinemationData.characterPoint.rotation)
             loginUI.phases[2].character:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
@@ -557,7 +558,7 @@ loginUI.renderUI = function(renderData)
                 j.animAlphaPercent = ((j.hoverStatus == "forward") and imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")) or imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")
                 imports.beautify.native.drawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, loginUI.phases[1].optionsUI.fontColor, 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
                 imports.beautify.native.drawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[1], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[2], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[3], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
-                imports.beautify.native.drawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineSize, imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineColor)), false) --TODO: SAVE AND CACHE THIS..
+                imports.beautify.native.drawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineSize, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineColor, false)
             end
         elseif loginUI.phase == 2 then
             imports.beautify.setUIDisabled(loginUI.phases[2].element, not isUIEnabled or (loginUI.characters[(loginUI.previewCharacter)] and loginUI.characters[(loginUI.previewCharacter)].id))
@@ -581,11 +582,11 @@ loginUI.renderUI = function(renderData)
                 end
                 j.animAlphaPercent = j.animAlphaPercent or 0.35
                 j.animAlphaPercent = ((j.hoverStatus == "forward") and imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")) or imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0.35, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
-                imports.beautify.native.drawRectangle(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, loginUI.phases[2].options.bgColor)
+                imports.beautify.native.drawRectangle(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, loginUI.phases[2].options.bgColor, false)
                 imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.iconTexture, 0, 0, 0, imports.tocolor(loginUI.phases[2].options.iconColor[1], loginUI.phases[2].options.iconColor[2], loginUI.phases[2].options.iconColor[3], loginUI.phases[2].options.iconColor[4]*j.animAlphaPercent), false)
             end
         elseif loginUI.phase == 3 then
-            imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, imports.tocolor(imports.unpackColor(loginUI.phases[3].bgColor)), false) --TODO: CACHE THIS.//
+            imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, -1, false)
             local view_offsetX, view_offsetY = loginUI.phases[3].startX, loginUI.phases[3].startY
             local view_width, view_height = loginUI.phases[3].width, loginUI.phases[3].height
             local credits_offsetY = -loginUI.phases[3].contentHeight - (view_height*0.5)
