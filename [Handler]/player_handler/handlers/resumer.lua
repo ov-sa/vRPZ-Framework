@@ -135,7 +135,6 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     local characterLocation = CCharacter.CBuffer[characterID]["location"]
     characterLocation = (characterLocation and imports.fromJSON(characterLocation)) or CGame.generateSpawn()
 
-    CCharacter.loadProgress(source)
     imports.setElementDimension(source, 0)
     imports.setElementFrozen(source, false)
     imports.setCameraTarget(source, source)
@@ -143,6 +142,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     imports.setElementData(source, "Character:ID", characterID)
     imports.setElementData(source, "Character:Identity", characterIdentity)
     imports.setElementData(source, "Player:Initialized", true)
+    CCharacter.loadProgress(source)
     --[[
     playerAttachments[source] = {}
     playerInventorySlots[source] = {
