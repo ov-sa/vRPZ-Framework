@@ -109,8 +109,8 @@ imports.addEventHandler("onResourceStart", resource, function()
                             imports.triggerClientEvent(source, "Client:onNotification", source, "Please wait "..imports.math.ceil(cooldownETA/1000).."s before logging out!", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
                         else
                             CCharacter.saveProgress(source)
-                            imports.triggerClientEvent(source, "Player:onToggleLoadingUI", source, true)
-                            imports.triggerEvent("Player:onToggleLoadingUI", source)
+                            imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, true)
+                            imports.triggerEvent("Player:onToggleLoginUI", source)
                             imports.outputChatBox("#FFFFFF- #5050FF"..imports.getPlayerName(source).."#FFFFFF left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)    
                         end
                     end
