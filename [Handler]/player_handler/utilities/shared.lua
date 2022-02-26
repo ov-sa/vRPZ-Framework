@@ -62,28 +62,6 @@ function findRotation(x1, y1, x2, y2)
 end
 
 
--------------------------------------------
---[[ Function: Retrieves Copy Of Table ]]--
--------------------------------------------
-
---TODO: MAKE BEAUTIFY UTILS SHARED...
-function table.copy(recievedTable, recursive)
-
-    if not recievedTable or type(recievedTable) ~= "table" then return false end
-
-    local copiedTable = {}
-    for key, value in pairs(recievedTable) do
-        if type(value) == "table" and recursive then
-            copiedTable[key] = table.copy(value, true)
-        else
-            copiedTable[key] = value
-        end
-    end
-    return copiedTable
-
-end
-
-
 ------------------------------------------------------
 --[[ Function: Returns Percentage Value Of Amount ]]--
 ------------------------------------------------------
