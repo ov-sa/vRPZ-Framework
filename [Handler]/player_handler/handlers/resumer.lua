@@ -27,7 +27,8 @@ local imports = {
     setCameraTarget = setCameraTarget,
     toJSON = toJSON,
     fromJSON = fromJSON,
-    showChat = showChat
+    showChat = showChat,
+    table = table
 }
 
 
@@ -84,7 +85,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
     CPlayer.fetch(serial, function(result, args)
         CCharacter.fetchOwned(args[2], function(result, args)
             CPlayer.CBuffer[(args[2])] = args[3] --TODO: LATER MERGE THIS W/ BEAUTIFY'S SHARED APIS
-            args[3] = table.clone(args[3, true)
+            args[3] = imports.table.clone(args[3], true)
             args[3].character = args[3].character or 0
             args[3].vip = (args[3].vip and true) or false
             if (result and (#result > 0)) then
