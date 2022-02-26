@@ -29,8 +29,6 @@
 
 ## ━ Third Party
 
-* **admin**
-* **runcode**
 * **pAttach**
 * **parachute**
 
@@ -40,7 +38,6 @@
 2. Unpack it to your `YourMTAFolder\server\mods\deathmatch\resources` directory
 3. Add below mentioned to your `mtaserver.conf` 
 ```xml
-<resource src="admin" startup="1" protected="0"/>
 <resource src="dbify_library" startup="1" protected="0"/>
 <resource src="resource_loader" startup="1" protected="0"/>
 ```
