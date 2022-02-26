@@ -45,7 +45,7 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
     --playerInventorySlots[player] = nil --TODO: ...
     local dataBuffer = {
         player = {},
-        character = {},
+        character = {}
     }
     if isForceReset then
         imports.setElementData(player, "Character:Identity", nil)
