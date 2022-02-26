@@ -56,7 +56,7 @@ configVars["UI"]["Login"] = {
         [8] = {["EN"] = "You've successfully picked the character!", ["TR"] = "Karakteri başarıyla seçtiniz!"},
         [9] = {["EN"] = "You've successfully saved the character!", ["TR"] = "Karakteri başarıyla kaydettiniz!"},
         [10] = {["EN"] = "Failed to save your character..", ["TR"] = "Karakteriniz kaydedilemedi.."},
-        [11] = {["EN"] = "Delete or Save your character before switching..", ["TR"] = "Gezinmeden önce karakterinizi silmeli veya kaydetmelisiniz.."}
+        [11] = {["EN"] = "You must either save or delete your character before navigating..", ["TR"] = "Gezinmeden önce karakterinizi kaydetmeli veya silmelisiniz.."}
     },
 
     ["Options"] = {
