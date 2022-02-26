@@ -94,7 +94,7 @@ end)
 
 imports.addEvent("Player:onResume", true)
 imports.addEventHandler("Player:onResume", root, function(character, characters)
-    if not character or not characters or not characters[character] or not characters[character]._id then
+    if not character or not characters or not characters[character] or not characters[character].id then
         imports.triggerEvent("Player:onToggleLoginUI", source)
         return false
     end
@@ -104,7 +104,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     print(toJSON(characters))
     --[[
     local serial = source:getSerial()
-    local characterID = characters[character]._id
+    local characterID = characters[character].id
     local characterIdentity = getCharacterData(characterID, "identity")
     local characterName = characterIdentity.name:gsub(" ", "_")
     local characterLastLocation = getCharacterData(characterID, "location")
