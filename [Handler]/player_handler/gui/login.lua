@@ -463,6 +463,7 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
                 imports.table.remove(loginUI.characters, i)
             end
         end
+        loginUI.phases[2].toggleUI(false)
         if phaseID == 1 then
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.cinemationPoint, true, true, loginUI.cinemationData.cinemationFOV, true, true, true, false)
         elseif phaseID == 2 then
