@@ -136,13 +136,14 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     local characterLocation = CCharacter.CBuffer[characterID]["location"]
     characterLocation = (characterLocation and imports.fromJSON(characterLocation)) or CGame.generateSpawn()
 
+    imports.setElementData(source, "Character:ID", characterID)
+    imports.setElementData(source, "Character:Identity", characterIdentity)
+    imports.setElementData(source, "Player:Initialized", true)
+
     imports.setElementDimension(source, 0)
     imports.setElementFrozen(source, false)
     imports.setCameraTarget(source, source)
     imports.setElementCollisionsEnabled(source, true)
-    imports.setElementData(source, "Character:ID", characterID)
-    imports.setElementData(source, "Character:Identity", characterIdentity)
-    imports.setElementData(source, "Player:Initialized", true)
     CCharacter.loadProgress(source)
     CPlayer.setData(serial, {
         {"character", character}
