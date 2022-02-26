@@ -27,8 +27,7 @@ local imports = {
     setCameraTarget = setCameraTarget,
     toJSON = toJSON,
     fromJSON = fromJSON,
-    showChat = showChat,
-    math = math
+    showChat = showChat
 }
 
 
@@ -132,7 +131,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     local characterID = characters[character].id
     local characterIdentity = CCharacter.CBuffer[characterID]["identity"]
     local characterLocation = CCharacter.CBuffer[characterID]["location"]
-    characterLocation = (characterLocation and imports.fromJSON(characterLocation)) or false
+    characterLocation = (characterLocation and imports.fromJSON(characterLocation)) or CGame.generateSpawn()
 
     CCharacter.loadProgress(source)
     imports.setElementDimension(source, 0)
@@ -149,8 +148,8 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         slots = {}
     }
     ]]
-    if characterLocation then
-        source:spawn(characterLocation.position[1], characterLocation.position[2], characterLocation.position[3] + 1, characterLocation.rotation[3])
+
+    source:spawn(characterLocation.position[1], characterLocation.position[2], characterLocation.position[3] + 1, characterLocation.rotation[3])
         --[[
         for i, j in ipairs(playerDatas) do
             local data = exports.serials_library:getSerialData(serial, j)
@@ -169,10 +168,6 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
             end
         end
         ]]
-    else
-        local spawnpoint = FRAMEWORK_CONFIGS["Spawns"][(imports.math.random(1, #FRAMEWORK_CONFIGS["Spawns"]))]
-        source:spawn(spawnpoint.x, spawnpoint.y, spawnpoint.z + 1, imports.math.random(0, 360))
-    end
 
     CPlayer.setData(serial, {
         {"character", character}

@@ -61,5 +61,13 @@ CGame = {
         local hours = imports.math.floor(minutes/60)
         minutes = minutes%60
         return imports.string.format("%02d:%02d:%02d", hours, minutes, seconds)
-    end
+    end,
+
+    generateSpawn = function()
+        local point = FRAMEWORK_CONFIGS["Spawns"][(imports.math.random(1, #FRAMEWORK_CONFIGS["Spawns"]))]
+        return {
+            position = {point.x, point.y, point.z},
+            rotation = {0, 0, imports.math.random(0, 360)}
+        }
+    end,
 }

@@ -33,6 +33,7 @@
     <export function="getNativeWeather" type="shared"/>
     <export function="getTime" type="shared"/>
     <export function="formatMS" type="shared"/>
+    <export function="generateSpawn" type="shared"/>
     <export function="isUIVisible" type="client"/>
 
     <!-- Modules: Player -->
