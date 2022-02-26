@@ -19,7 +19,6 @@ local imports = {
     addEventHandler = addEventHandler,
     triggerClientEvent = triggerClientEvent,
     setElementFrozen = setElementFrozen,
-    setPlayerName = setPlayerName,
     toJSON = toJSON,
     fromJSON = fromJSON,
     table = table
@@ -71,7 +70,6 @@ end)
 imports.addEvent("Player:onToggleLoginUI", true)
 imports.addEventHandler("Player:onToggleLoginUI", root, function()
     imports.setElementFrozen(source, true)
-    imports.setPlayerName(source, CPlayer.generateNick())
 
     CPlayer.fetch(CPlayer.getSerial(source), function(result, args)
         result.character = result.character or 0
@@ -82,10 +80,14 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
         print(toJSON(result.characters))
         if (#result.characters > 0) then
             CCharacter.fetch(result.characters, function(result, args)
-                args[2].characters = result
-                for i = 1, #args[2].characters, 1 do
-                    local j = args[2].characters[i]
+                args[2].characters = {}
+                for i = 1, #result, 1 do
+                    local j = result[i]
                     j.identity = imports.fromJSON(j.identity)
+                    args[2].characters[i] = {
+                        id = j.id,
+                        identity = j.identity
+                    }
                     CCharacter.CBuffer[(j[(dbify.character.__connection__.keyColumn)])] = j
                     CCharacter.CBuffer[(j[(dbify.character.__connection__.keyColumn)])][(dbify.character.__connection__.keyColumn)] = nil
                 end

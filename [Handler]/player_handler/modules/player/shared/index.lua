@@ -15,10 +15,7 @@
 local imports = {
     isElement = isElement,
     getElementType = getElementType,
-    getElementsByType = getElementsByType,
-    getElementData = getElementData,
-    getPlayerFromName = getPlayerFromName,
-    math = math
+    getElementData = getElementData
 }
 
 
@@ -31,14 +28,6 @@ CPlayer = {
 
     isInitialized = function(player)
         if (not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player")) then return false end
-        return player:getData("Player:Initialized") or false
-    end,
-
-    generateNick = function()
-        local guestNick = nil
-        repeat
-            guestNick = "Guest_"..imports.math.random(1, 10000)
-        until(not imports.getPlayerFromName(guestNick))
-        return guestNick
+        return imports.getElementData(player, "Player:Initialized") or false
     end
 }
