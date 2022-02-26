@@ -650,7 +650,7 @@ loginUI.toggleUI = function(state, args)
         imports.beautify.render.remove(loginUI.renderUI)
         imports.beautify.render.remove(loginUI.renderUI, {renderType = "input"})
         exports.cinecam_handler:stopCinemation()
-        if loginUI.phases[2].character and imports.isElement(loginUI.phases[2].character) then loginUI.phases[2].character:destroy(); loginUI.phases[2].character = nil end
+        if loginUI.phases[2].character and imports.isElement(loginUI.phases[2].character) then imports.destroyElement(loginUI.phases[2].character); loginUI.phases[2].character = nil end
         for i, j in imports.pairs(loginUI.cache.keys) do
             j = false
         end
