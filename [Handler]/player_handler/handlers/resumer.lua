@@ -134,8 +134,8 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     imports.setCameraTarget(source, source)
     --source:setCollisionsEnabled(true)
     source:setData("Character:ID", characterID)
-    source:setData("Character:Identity", characterIdentity, false)
-    imports.setElementData(localPlayer, "Player:Initialized", true)
+    source:setData("Character:Identity", characterIdentity)
+    imports.setElementData(source, "Player:Initialized", true)
     --[[
     playerAttachments[source] = {}
     playerInventorySlots[source] = {
