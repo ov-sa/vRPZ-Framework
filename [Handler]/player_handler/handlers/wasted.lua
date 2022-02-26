@@ -23,6 +23,7 @@ local imports = {
     triggerClientEvent = triggerClientEvent,
     setElementAlpha = setElementAlpha,
     setElementCollisionsEnabled = setElementCollisionsEnabled,
+    setElementData = setElementData,
     setCameraTarget = setCameraTarget,
     setPedAnimation = setPedAnimation,
     setElementHealth = setElementHealth,
@@ -30,6 +31,7 @@ local imports = {
     createPed = createPed,
     createMarker = createMarker,
     spawnPlayer = spawnPlayer,
+    loadProgress = CCharacter.loadProgress
     killPed = killPed,
     setTimer = setTimer,
     showChat = showChat
@@ -39,6 +41,13 @@ local imports = {
 -------------------
 --[[ Variables ]]--
 -------------------
+
+local initialDatas = {
+    {name = "Character:hunger", amount = 100},
+    {name = "Character:thirst", amount = 100},
+    {name = "Character:armor", amount = 0}
+    {name = "Character:blood", amount = nil}
+}
 
 local deathAnimations = {
     default = {"PED", "KO_skid_front"},
@@ -55,6 +64,20 @@ local deathAnimations = {
 ---------------------------------
 --[[ Player: On Player Death ]]--
 ---------------------------------
+
+CCharacter.loadProgress = function(player)
+    if not CPlayer.isInitialized(player) then return false end
+    imports.loadProgress(player)
+    for i = 1, #initialDatas, 1 do
+        local j = initialDatas[i]
+        local value = j.amount
+        if j.name == "Character:blood" then
+            value = CCharacter.getMaxHealth(player)
+        end
+        imports.setElementData(player, j.name, value)
+    end
+    return true
+end
 
 local function destroyPedLoot(ped, marker)
     if ped and imports.isElement(ped) then imports.destroyElement(ped) end

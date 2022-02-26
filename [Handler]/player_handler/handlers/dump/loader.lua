@@ -7,33 +7,10 @@
      Desc: Saver Handler ]]--
 ----------------------------------------------------------------
 
---TODO: ... UPDATE
-
------------------
---[[ Imports ]]--
------------------
-
-local imports = {
-    addEvent = addEvent,
-    addEventHandler = addEventHandler,
-}
-
 
 -------------------
 --[[ Variables ]]--
 -------------------
-
-local initialPlayerDatas = {
-    {name = "Character:pain", amount = 0},
-    {name = "Character:cold", amount = 0},
-    {name = "Character:hunger", amount = 100},
-    {name = "Character:thirst", amount = 100},
-    {name = "Character:blood", amount = nil},
-    {name = "Character:bleeding", amount = 0},
-    {name = "Character:infection", amount = 0},
-    {name = "Character:brokenbone", amount = 0},
-    {name = "Character:temperature", amount = 38}
-}
 
 --[[
 local initialInventoryItems = {
@@ -73,23 +50,7 @@ local initialInventoryItems = {
 --[[ Function: Loads Default Player Datas ]]--
 ----------------------------------------------
 
-function loadPlayerDefaultDatas(player)
-    if not CPlayer.isInitialized(player) then return false end
-
-    CCharacter.loadProgress(player, true)
-    --[[
-    for i, j in ipairs(initialPlayerDatas) do
-        local amount = j.amount
-        if j.name == "Character:blood" then
-            amount = getCharacterMaximumHealth(player)
-        else
-            if amount and type(amount) == "function" then
-                amount = amount()
-            end
-        end
-        player:setData(j.name, amount)
-    end
-    ]]
+CCharacter.loadProgress = function(player)
     --[[
     for i, j in ipairs(initialInventoryItems.variable) do
         local currentAssignedItems = 0
