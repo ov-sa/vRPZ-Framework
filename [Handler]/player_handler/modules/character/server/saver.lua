@@ -48,9 +48,7 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
         character = {},
     }
     if isForceReset then
-        for i, j in imports.pairs(CCharacter.CBuffer[(depDatas.characterID)].identity) do
-            imports.setElementData(player, "Character:"..i, nil)
-        end
+        imports.setElementData(player, "Character:Identity", nil)
         for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
             dataBuffer.player[i] = {j, imports.tostring(imports.getElementData(player, "Player:"..j))}
