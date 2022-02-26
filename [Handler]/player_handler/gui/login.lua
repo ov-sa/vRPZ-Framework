@@ -19,6 +19,7 @@ local imports = {
     isElement = isElement,
     createPed = createPed,
     destroyElement = destroyElement,
+    setElementFrozen = setElementFrozen,
     setElementPosition = setElementPosition,
     setElementDimension = setElementDimension,
     addEvent = addEvent,
@@ -470,8 +471,8 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
             if loginUI.phases[2].character and imports.isElement(loginUI.phases[2].character) then imports.destroyElement(loginUI.phases[2].character); loginUI.phases[2].character = nil end
             exports.cinecam_handler:startCinemation(loginUI.cinemationData.characterCinemationPoint, true, true, loginUI.cinemationData.characterCinemationFOV, true, true, true, false)
             loginUI.phases[2].character = imports.createPed(0, loginUI.cinemationData.characterPoint.x, loginUI.cinemationData.characterPoint.y, loginUI.cinemationData.characterPoint.z, loginUI.cinemationData.characterPoint.rotation)
-            loginUI.phases[2].character:setDimension(FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
-            loginUI.phases[2].character:setFrozen(true)
+            imports.setElementDimension(loginUI.phases[2].character, FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
+            imports.setElementFrozen(loginUI.phases[2].character, true)
             loginUI.phases[2].toggleUI(true)
             loginUI.phases[2].loadCharacter()
         else
