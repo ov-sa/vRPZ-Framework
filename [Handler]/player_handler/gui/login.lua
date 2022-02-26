@@ -298,15 +298,20 @@ loginUI.phases[2].manageCharacter = function(action)
         end
     elseif (action == "previous") or (action == "next") then
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
-        if action == "previous" then
-            if loginUI.selectedCharacter > 1 then
-                loginUI.selectedCharacter = loginUI.selectedCharacter - 1
-                loginUI.phases[2].loadCharacter()
-            end
-        elseif action == "next" then
-            if loginUI.selectedCharacter < #loginUI.characters then
-                loginUI.selectedCharacter = loginUI.selectedCharacter + 1
-                loginUI.phases[2].loadCharacter()
+        if loginUI.characters[(loginUI.selectedCharacter)] and not loginUI.characters[(loginUI.selectedCharacter)].id then
+            imports.triggerEvent("Client:onNotification", localPlayer, "PLEASE SAVE YOUR CHARACTER FIRST", {255, 80, 80, 255})
+            return false
+        else
+            if action == "previous" then
+                if loginUI.selectedCharacter > 1 then
+                    loginUI.selectedCharacter = loginUI.selectedCharacter - 1
+                    loginUI.phases[2].loadCharacter()
+                end
+            elseif action == "next" then
+                if loginUI.selectedCharacter < #loginUI.characters then
+                    loginUI.selectedCharacter = loginUI.selectedCharacter + 1
+                    loginUI.phases[2].loadCharacter()
+                end
             end
         end
     elseif action == "pick" then
@@ -318,11 +323,12 @@ loginUI.phases[2].manageCharacter = function(action)
             return false
         else
             loginUI.character = loginUI.selectedCharacter
-            imports.triggerEvent("Client:onNotification", localPlayer, "You've successfully picked the character!", {80, 255, 80, 255})
+            imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][8][FRAMEWORK_LANGUAGE], {80, 255, 80, 255})
         end
     elseif action == "save" then
         if (#loginUI.characters > 0) and loginUI.characters[(loginUI.selectedCharacter)].id then
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true)
+            return false
         else
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
             local selectionData = loginUI.phases[2].fetchSelection()
@@ -493,9 +499,9 @@ imports.addEvent("Client:onSaveCharacter", true)
 imports.addEventHandler("Client:onSaveCharacter", root, function(state, character, characterData)
     if state then
         loginUI.characters[character] = characterData
-        imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][8][FRAMEWORK_LANGUAGE], {80, 255, 80, 255})
+        imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][9][FRAMEWORK_LANGUAGE], {80, 255, 80, 255})
     else
-        imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][9][FRAMEWORK_LANGUAGE], {255, 80, 80, 255})
+        imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][10][FRAMEWORK_LANGUAGE], {255, 80, 80, 255})
     end
     loginUI.processCharacters[character] = nil
     imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true, true)
