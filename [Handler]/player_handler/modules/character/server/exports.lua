@@ -13,6 +13,7 @@
 -----------------
 
 function fetchCharacter(...) return CCharacter.fetch(...) end
+function fetchCharactersOwned(...) return CCharacter.fetchOwned(...) end
 function createCharacter(...) return CCharacter.create(...) end
 function deleteCharacter(...) return CCharacter.delete(...) end
 function setCharacterData(...) return CCharacter.setData(...) end

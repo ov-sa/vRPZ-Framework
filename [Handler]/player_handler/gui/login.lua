@@ -23,6 +23,7 @@ local imports = {
     destroyElement = destroyElement,
     setElementPosition = setElementPosition,
     setElementDimension = setElementDimension,
+    setElementFrozen = setElementFrozen,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     removeEventHandler = removeEventHandler,
@@ -707,6 +708,7 @@ imports.addEventHandler("Client:onToggleLoginUI", root, function(state, args)
         loginUI.vip = args.vip
         imports.setElementPosition(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.x, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.y, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.z)
         imports.setElementDimension(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
+        imports.setElementFrozen(localPlayer, true)
         imports.triggerEvent("Client:onEnableLoginUI", localPlayer, true, true)
         imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
         imports.setTimer(function()

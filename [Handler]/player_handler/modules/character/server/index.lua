@@ -33,6 +33,13 @@ CCharacter = {
         return true
     end,
 
+    fetchOwned = function(serial, ...)
+        dbify.character.fetchAll({
+            {"owner", serial}
+        }, ...)
+        return true
+    end,
+
     create = function(serial, callback, ...)
         if (not serial or (imports.type(serial) ~= "string")) then return false end
         dbify.character.create(function(characterID, args)

@@ -18,7 +18,6 @@ local imports = {
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     triggerClientEvent = triggerClientEvent,
-    setElementFrozen = setElementFrozen,
     toJSON = toJSON,
     fromJSON = fromJSON,
     table = table
@@ -49,11 +48,7 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(character, char
         CCharacter.setData(characterID, {
             {"identity", imports.toJSON(args[3])}
         }, function(result, args)
-            if result then
-                CCharacter.CBuffer[(args[3].id)].identity = args[3].identity
-                --TODO: SAVE IT
-                --CPlayer.setData(serial, {"character", characterID})
-            end
+            if result then CCharacter.CBuffer[(args[3].id)].identity = args[3].identity end
             imports.triggerClientEvent(args[1], "Client:onSaveCharacter", args[1], (result and true) or false, args[2], (result and args[3]) or nil)
         end, args[1], args[2], {
             id = characterID,
@@ -69,14 +64,15 @@ end)
 
 imports.addEvent("Player:onToggleLoginUI", true)
 imports.addEventHandler("Player:onToggleLoginUI", root, function()
-    imports.setElementFrozen(source, true)
-
-    CPlayer.fetch(CPlayer.getSerial(source), function(result, args)
-        result.character = result.character or 0
-        result.characters = (result.characters and imports.fromJSON(result.characters)) or {}
-        result.vip = (result.vip and true) or false
-
+    local serial = CPlayer.getSerial(source)
+    CPlayer.fetch(serial, function(result, args)
+        CCharacter.fetchOwned(args[2], function(result, args)
+            args[3].character = args[3].character or 0
+            args[3].vip = (args[3].vip and true) or false
+            print(result)
+        end, args[1], args[2], result)
         --TODO: DEBUG..
+        --[[
         print(toJSON(result.characters))
         if (#result.characters > 0) then
             CCharacter.fetch(result.characters, function(result, args)
@@ -106,5 +102,6 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                 vip = result.vip
             })
         end
-    end, source)
+        ]]--
+    end, source, serial)
 end)

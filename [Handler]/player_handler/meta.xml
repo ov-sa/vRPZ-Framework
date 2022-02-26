@@ -62,6 +62,7 @@
     <export function="isCharacterKnocked" type="shared"/>
     <export function="isCharacterInLoot" type="shared"/>
     <export function="fetchCharacter" type="server"/>
+    <export function="fetchCharactersOwned" type="server"/>
     <export function="createCharacter" type="server"/>
     <export function="deleteCharacter" type="server"/>
     <export function="setCharacterData" type="server"/>
