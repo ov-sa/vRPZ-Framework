@@ -23,9 +23,7 @@ CGame = {
     isUIVisible = function()
         local uiStates = {
             not isPlayerInitialized(localPlayer),
-            isLoginUIVisible(),
-            isWastedScreenVisible(),
-            isSpawnScreenVisible()
+            isLoginUIVisible()
         }
         local state = true
         for i = 1, #uiStates, 1 do
