@@ -17,6 +17,7 @@ local imports = {
     isElement = isElement,
     getElementsByType = getElementsByType,
     getElementData = getElementData,
+    getWeather = getWeather,
     getTime = getTime,
     math = math,
     string = string
@@ -40,6 +41,10 @@ CGame = {
             currentTick = imports.tonumber(imports.getElementData(CGame.CTickSyncer, "Server:TickSyncer")) or 0
         end
         return currentTick
+    end,
+
+    getNativeWeather = function()
+        return imports.getWeather(), {imports.getTime()}
     end,
 
     getTime = function()

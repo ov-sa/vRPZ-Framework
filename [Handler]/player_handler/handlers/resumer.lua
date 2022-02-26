@@ -13,8 +13,6 @@
 -----------------
 
 local imports = {
-    getWeather = getWeather,
-    getTime = getTime,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     triggerClientEvent = triggerClientEvent,
@@ -115,7 +113,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     end
 
     local serial = CPlayer.getSerial(source)
-    local serverWeather, serverTime = imports.getWeather(), {imports.getTime()}
+    local serverWeather, serverTime = CGame.getNativeWeather()
     local characterID = characters[character].id
     local characterIdentity = CCharacter.CBuffer[characterID]["identity"]
     local characterLocation = CCharacter.CBuffer[characterID]["location"]

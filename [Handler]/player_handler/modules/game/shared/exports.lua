@@ -13,5 +13,6 @@
 -----------------
 
 function getServerTick(...) return CGame.getServerTick(...) end
+function getNativeWeather(...) return CGame.getNativeWeather(...) end
 function getTime(...) return CGame.getTime(...) end
 function formatMS(...) return CGame.formatMS(...) end
