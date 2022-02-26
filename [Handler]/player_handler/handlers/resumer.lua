@@ -115,6 +115,9 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     characterLocation = (characterLocation and imports.fromJSON(characterLocation)) or false
 
     print("RESUMING...")
+    for i = 69, 79, 1 do
+        imports.setPedStat(source, i, 1000)
+    end
     imports.setElementDimension(source, 0)
     setCameraTarget(source, source)
     imports.setElementFrozen(source, false)
