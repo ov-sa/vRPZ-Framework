@@ -14,7 +14,6 @@
 
 local imports = {
     pairs = pairs,
-    tostring = tostring,
     tocolor = tocolor,
     unpackColor = unpackColor,
     isElement = isElement,
