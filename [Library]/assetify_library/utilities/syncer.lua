@@ -193,7 +193,7 @@ else
         if not skipCaching then
             if not element or not imports.isElement(element) or not availableAssetPacks[assetType] then return false end
             local assetReference = availableAssetPacks[assetType].assetPack.rwDatas[assetName]
-            if not assetReference or (assetReference.manifestData.assetClumps and (not assetClump or not assetReference.manifestData.assetClumps[assetClump])) then return false end
+            if not assetReference or (assetReference.synced.manifestData.assetClumps and (not assetClump or not assetReference.synced.manifestData.assetClumps[assetClump])) then return false end
             syncer.syncedElements[element] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps}
         end
         if not targetPlayer then
