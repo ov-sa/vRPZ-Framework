@@ -13,6 +13,8 @@
 -----------------
 
 local imports = {
+    tonumber = tonumber,
+    tostring = tostring,
     getTickCount = getTickCount,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
@@ -81,20 +83,18 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
     CPlayer.fetch(serial, function(result, args)
         CCharacter.fetchOwned(args[2], function(result, args)
             CPlayer.CBuffer[(args[2])] = args[3]
+            for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
+                local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
+                local value = CPlayer.CBuffer[(args[2])][j]
+                if imports.tostring(value) == "nil" then value = nil end
+                if imports.tostring(value) == "false" then value = false end
+                if value then value = imports.tonumber(value) or value end
+                CPlayer.CBuffer[(args[2])][j] = value
+            end
             args[3] = imports.table.clone(args[3], true) --TODO: LATER MERGE THIS W/ BEAUTIFY'S SHARED APIS
             args[3].character = args[3].character or 0
             args[3].vip = (args[3].vip and true) or false
-            --TODO: ..
-            --[[
-            if tostring(data) == "nil" then data = nil end
-            if tostring(data) == "false" then data = false end
-            if data then
-                local isNum = tonumber(data)
-                if isNum then data = isNum else data = tostring(data) end
-                source:setData("Player:"..j, data)
-            end
-            ]]--
-        
+
             if (result and (#result > 0)) then
                 args[3].characters, isCharacterSelected = {}, false
                 for i = 1, #result, 1 do
