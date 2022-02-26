@@ -23,6 +23,7 @@ local imports = {
     setElementData = setElementData,
     setPedStat = setPedStat,
     setPlayerNametagShowing = setPlayerNametagShowing,
+    setElementCollisionsEnabled = setElementCollisionsEnabled,
     setCameraTarget = setCameraTarget,
     toJSON = toJSON,
     fromJSON = fromJSON,
@@ -133,14 +134,13 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     local characterLocation = CCharacter.CBuffer[characterID]["location"]
     characterLocation = (characterLocation and imports.fromJSON(characterLocation)) or false
 
-    print("RESUMING...")
+    CCharacter.loadProgress(source)
     imports.setElementDimension(source, 0)
     imports.setElementFrozen(source, false)
     imports.setCameraTarget(source, source)
-    --source:setCollisionsEnabled(true)
-    CCharacter.loadProgress(source, true)
-    source:setData("Character:ID", characterID)
-    source:setData("Character:Identity", characterIdentity)
+    imports.setElementCollisionsEnabled(source, true)
+    imports.setElementData(source, "Character:ID", characterID)
+    imports.setElementData(source, "Character:Identity", characterIdentity)
     imports.setElementData(source, "Player:Initialized", true)
     --[[
     playerAttachments[source] = {}
@@ -178,14 +178,12 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         {"character", character}
     })
     cache.resumeBuffer[source] = imports.getTickCount()
-    --[[
-    triggerClientEvent("onSyncPedClothes", source, source, getPlayerClothes(source))
-    ]]
+    --triggerClientEvent("onSyncPedClothes", source, source, getPlayerClothes(source))
     imports.triggerClientEvent(source, "Player:onSyncWeather", source, serverWeather, serverTime)
-    triggerClientEvent(source, "onClientInventorySyncSlots", source, playerInventorySlots[source])
-    if getPlayerHealth(source) <= 0 or getCharacterData(characterID, "dead") then
-        --source:setData("Character:blood", 0)
-        --triggerEvent("onPlayerDeath", source, nil, false, nil, 3)
+    --triggerClientEvent(source, "onClientInventorySyncSlots", source, playerInventorySlots[source])
+    if (CCharacter.getHealth(source) <= 0) or CCharacter[characterID]["dead"] then
+        CCharacter.setHealth(source, 0)
+        --imports.triggerEvent("onPlayerDeath", source, nil, false, nil, 3)
     else
         imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false)
         imports.showChat(source, true)

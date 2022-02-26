@@ -29,7 +29,7 @@ local imports = {
 --[[ Module ]]--
 ----------------
 
-CCharacter.resetProgress = function(player, isForceReset, saveProgress, loadProgress)
+CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress, loadProgress)
     if isForceReset then
         imports.setElementData(player, "Player:Initialized", nil)
         imports.setElementData(player, "Character:ID", nil)
@@ -50,11 +50,9 @@ CCharacter.resetProgress = function(player, isForceReset, saveProgress, loadProg
         character = {},
     }
     if isForceReset then
-        --[[
-        for i, j in imports.pairs(characterIdentity) do --TODO:...
+        for i, j in imports.pairs(CCharacter.CBuffer[(depDatas.characterID)].identity) do
             imports.setElementData(player, "Character:"..i, nil)
         end
-        ]]
         for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
             dataBuffer.player[i] = {j, imports.tostring(imports.getElementData(player, "Player:"..j))}
@@ -71,12 +69,12 @@ CCharacter.resetProgress = function(player, isForceReset, saveProgress, loadProg
         imports.setElementData(player, "Slot:Object:"..i, nil)
     end
     if saveProgress then
-        CPlayer.setData(saveProgress.serial, dataBuffer.player)
-        CCharacter.setData(saveProgress.characterID, dataBuffer.character)
+        CPlayer.setData(depDatas.serial, dataBuffer.player)
+        CCharacter.setData(depDatas.characterID, dataBuffer.character)
     end
     for i, j in imports.pairs(CInventory.CItems) do
         if saveProgress then
-            CInventory.setItemProperty(saveProgress.inventoryID, {i}, {
+            CInventory.setItemProperty(depDatas.inventoryID, {i}, {
                 {dbify.Inventory.__connection__.itemFormat.counter, imports.max(0, imports.tonumber(imports.getElementData(player, "Item:"..i)) or 0)}
             })
         end
@@ -85,10 +83,13 @@ CCharacter.resetProgress = function(player, isForceReset, saveProgress, loadProg
     return true
 end
 
-CCharacter.loadProgress = function(player, isForceReset)
+CCharacter.loadProgress = function(player)
     if CPlayer.isInitialized(player) then return false end
 
-    CCharacter.resetProgress(player, isForceReset, false, true)
+    local characterID = imports.getElementData(player, "Character:ID")
+    CCharacter.resetProgress(player, false, {
+        characterID = characterID
+    }, false, true)
     return true
 end
 
@@ -103,6 +104,6 @@ CCharacter.saveProgress = function(player)
         serial = serial,
         characterID = characterID,
         inventoryID = inventoryID
-    })
+    }, true)
     return true
 end

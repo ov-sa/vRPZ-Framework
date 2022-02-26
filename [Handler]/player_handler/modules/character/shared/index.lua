@@ -52,6 +52,12 @@ CCharacter = {
         }
     end,
 
+    setHealth = function(player, amount)
+        amount = imports.tonumber(amount)
+        if not CPlayer.isInitialized(player) or not amount then return false end
+        return imports.setElementData(player, "Character:blood", imports.math.max(0, imports.math.min(amount, CCharacter.getMaxHealth(player))))
+    end,
+
     getHealth = function(player)
         if not CPlayer.isInitialized(player) then return false end
         return imports.tonumber(imports.getElementData(player, "Character:blood")) or 0
