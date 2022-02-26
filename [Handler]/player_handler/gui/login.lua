@@ -561,7 +561,7 @@ loginUI.renderUI = function(renderData)
                 imports.beautify.native.drawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineSize, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineColor, false)
             end
         elseif loginUI.phase == 2 then
-            imports.beautify.setUIDisabled(loginUI.phases[2].element, not isUIEnabled or (loginUI.characters[(loginUI.previewCharacter)] and loginUI.characters[(loginUI.previewCharacter)].id))
+            imports.beautify.setUIDisabled(loginUI.phases[2].element, not isUIEnabled or (loginUI.characters[(loginUI.previewCharacter)] and loginUI.characters[(loginUI.previewCharacter)].id and true) or false)
             for i = 1, #loginUI.phases[2].options, 1 do
                 local j = loginUI.phases[2].options[i]
                 local isOptionHovered = imports.isMouseOnPosition(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size)
