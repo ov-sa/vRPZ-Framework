@@ -437,7 +437,6 @@ function isLoginUIVisible() return loginUI.state end
 imports.addEvent("Client:onSetLoginUIPhase", true)
 imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
     if not phaseID or not loginUI.phases[1].optionsUI[phaseID] or (loginUI.phase and loginUI.phase == phaseID) then return false end
-
     for i, j in imports.pairs(loginUI.cache.timers) do
         if j and imports.isTimer(j) then
             imports.killTimer(j)
