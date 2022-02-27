@@ -116,12 +116,15 @@
     <file src="files/images/login/background.png"/>
     <file src="files/images/loading/loader.png"/>
 
+    <!-- Files: Images: HUD -->
+    <file src="files/images/hud/overlays/vignette.png"/>
+
+
+
+
     <file src="files/images/hud/player/slotBG1.png"/>
     <file src="files/images/hud/player/slotBG2.png"/>
 
-
-    <!-- Files: Images: HUD -->
-    <file src="files/images/hud/overlays/vignette.png"/>
 
 
 
