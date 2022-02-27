@@ -104,7 +104,6 @@ imports.addEventHandler("Player:onDeath", root, function(killer, headshot, weapo
     marker:setData("Element:Parent", ped)
     marker:attach(ped, 0, 0, -0.1)
     source:attach(ped, 0, 0, -2)
-    imports.triggerClientEvent("Player:onSyncPedClothes", source, ped, getPlayerClothes(source))
     for i, j in imports.pairs(inventoryDatas) do
         if not j.saveOnWasted then
             for k, v in imports.ipairs(j) do
@@ -164,6 +163,7 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
     local serial = CPlayer.getSerial(source)
     local characterID = imports.getElementData(source, "Character:ID")
     local characterIdentity = CCharacter.CBuffer[characterID].identity
+    local characterClothing = {CCharacter.generateClothing(characterIdentity)}
     imports.spawnPlayer(source, spawnpoint.position[1], spawnpoint.position[2], spawnpoint.position[3] + 1, spawnpoint.rotation[3])
     imports.setElementAlpha(source, 255)
     imports.setElementDimension(source, 0)
@@ -192,20 +192,8 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
         imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false)
         imports.showChat(source, true)
     end
-    local selectionData = {
-        gender = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender["Datas"][(characterIdentity.gender)],
-        hair = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Facial"].hair["Datas"][(characterIdentity.gender)][(characterIdentity.hair)],
-        upper = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Upper"]["Datas"][(characterIdentity.gender)][((characterIdentity.upper)],
-        lower = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Lower"]["Datas"][(characterIdentity.gender)][((characterIdentity.lower)],
-        shoes = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Shoes"]["Datas"][(characterIdentity.gender)][((characterIdentity.shoes)],
-    }
-    imports.assetify.setCharacter(source, selectionData.gender[2].assetName, (selectionData.upper[2].clumpName)..(selectionData.lower[2].clumpName)..(selectionData.shoes[2].clumpName), {
-        [(selectionData.upper[2].clumpTexture[1])] = selectionData.upper[2].clumpTexture[2],
-        [(selectionData.lower[2].clumpTexture[1])] = selectionData.lower[2].clumpTexture[2],
-        [(selectionData.shoes[2].clumpTexture[1])] = selectionData.shoes[2].clumpTexture[2]
-    })
+    imports.assetify.setCharacter(source, characterClothing[1], characterClothing[2], characterClothing[3])
     --TODO: APPEND FUNCTION TO RETRIEVE CHARACTER'S CURRENT CLOTHES..
-    --imports.triggerClientEvent("Player:onSyncPedClothes", source, source, getPlayerClothes(source))
     --triggerClientEvent(source, "onClientInventorySyncSlots", source, playerInventorySlots[source])
     --imports.triggerClientEvent(source, "Client:onRespawn", source)
     --imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, true)

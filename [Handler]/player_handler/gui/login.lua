@@ -217,12 +217,8 @@ loginUI.phases[2].fetchSelection = function()
     }
 end
 loginUI.phases[2].updateCharacter = function()
-    local clothingData = CCharacter.generateClothing((loginUI.phases[2].fetchSelection()))
-    imports.assetify.setCharacter(loginUI.phases[2].character, clothingData.gender.assetName, (clothingData.upper.clumpName)..(clothingData.lower.clumpName)..(clothingData.shoes.clumpName), {
-        [(clothingData.upper.clumpTexture[1])] = clothingData.upper.clumpTexture[2],
-        [(clothingData.lower.clumpTexture[1])] = clothingData.lower.clumpTexture[2],
-        [(clothingData.shoes.clumpTexture[1])] = clothingData.shoes.clumpTexture[2]
-    })
+    local characterClothing = {CCharacter.generateClothing((loginUI.phases[2].fetchSelection()))}
+    imports.assetify.setCharacter(loginUI.phases[2].character, characterClothing[1], characterClothing[2], characterClothing[3])
 end
 loginUI.phases[2].loadCharacter = function(loadDefault)
     if not loadDefault then

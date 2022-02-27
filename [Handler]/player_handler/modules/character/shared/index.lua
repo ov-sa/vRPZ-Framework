@@ -54,12 +54,17 @@ CCharacter = {
 
     generateClothing = function(characterIdentity)
         if not characterIdentity then return false end
-        return {
+        local clothingData = {
             gender = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender["Datas"][(characterIdentity.gender)],
             hair = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Facial"].hair["Datas"][(characterIdentity.gender)][(characterIdentity.hair)],
             upper = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Upper"]["Datas"][(characterIdentity.gender)][((characterIdentity.upper)],
             lower = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Lower"]["Datas"][(characterIdentity.gender)][((characterIdentity.lower)],
             shoes = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Shoes"]["Datas"][(characterIdentity.gender)][((characterIdentity.shoes)]
+        }
+        return clothingData.gender.assetName, (clothingData.upper.clumpName)..(clothingData.lower.clumpName)..(clothingData.shoes.clumpName), {
+            [(clothingData.upper.clumpTexture[1])] = clothingData.upper.clumpTexture[2],
+            [(clothingData.lower.clumpTexture[1])] = clothingData.lower.clumpTexture[2],
+            [(clothingData.shoes.clumpTexture[1])] = clothingData.shoes.clumpTexture[2]
         }
     end,
 
