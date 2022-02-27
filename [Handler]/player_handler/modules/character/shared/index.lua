@@ -44,6 +44,17 @@ CCharacter = {
         return false
     end,
 
+    generateClothing = function(characterIdentity)
+        if not characterIdentity then return false end
+        return {
+            gender = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender["Datas"][(characterIdentity.gender)],
+            hair = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Facial"].hair["Datas"][(characterIdentity.gender)][(characterIdentity.hair)],
+            upper = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Upper"]["Datas"][(characterIdentity.gender)][((characterIdentity.upper)],
+            lower = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Lower"]["Datas"][(characterIdentity.gender)][((characterIdentity.lower)],
+            shoes = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Shoes"]["Datas"][(characterIdentity.gender)][((characterIdentity.shoes)]
+        }
+    end,
+
     getLocation = function(player)
         if not CPlayer.isInitialized(player) then return false end
         return {

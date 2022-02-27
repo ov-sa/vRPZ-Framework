@@ -209,19 +209,19 @@ loginUI.phases[2].fetchSelection = function()
     local shoes = loginUI.phases[2].categories[5].contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[5].element))]
     return {
         tone = tone,
-        gender = {gender, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender["Datas"][gender]},
-        hair = {hair, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Facial"].hair["Datas"][gender][hair]},
-        upper = {upper, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Upper"]["Datas"][gender][upper]},
-        lower = {lower, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Lower"]["Datas"][gender][lower]},
-        shoes = {shoes, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Shoes"]["Datas"][gender][shoes]},
+        gender = gender,
+        hair = hair,
+        upper = upper,
+        lower = lower,
+        shoes = shoes
     }
 end
 loginUI.phases[2].updateCharacter = function()
-    local selectionData = loginUI.phases[2].fetchSelection()
-    imports.assetify.setCharacter(loginUI.phases[2].character, selectionData.gender[2].assetName, (selectionData.upper[2].clumpName)..(selectionData.lower[2].clumpName)..(selectionData.shoes[2].clumpName), {
-        [(selectionData.upper[2].clumpTexture[1])] = selectionData.upper[2].clumpTexture[2],
-        [(selectionData.lower[2].clumpTexture[1])] = selectionData.lower[2].clumpTexture[2],
-        [(selectionData.shoes[2].clumpTexture[1])] = selectionData.shoes[2].clumpTexture[2]
+    local clothingData = CCharacter.generateClothing((loginUI.phases[2].fetchSelection()))
+    imports.assetify.setCharacter(loginUI.phases[2].character, clothingData.gender.assetName, (clothingData.upper.clumpName)..(clothingData.lower.clumpName)..(clothingData.shoes.clumpName), {
+        [(clothingData.upper.clumpTexture[1])] = clothingData.upper.clumpTexture[2],
+        [(clothingData.lower.clumpTexture[1])] = clothingData.lower.clumpTexture[2],
+        [(clothingData.shoes.clumpTexture[1])] = clothingData.shoes.clumpTexture[2]
     })
 end
 loginUI.phases[2].loadCharacter = function(loadDefault)
@@ -334,15 +334,7 @@ loginUI.phases[2].manageCharacter = function(action)
             return false
         else
             imports.triggerEvent("Client:onEnableLoginUI", localPlayer, false, true)
-            local selectionData = loginUI.phases[2].fetchSelection()
-            local characterData = {
-                tone = selectionData.tone,
-                gender = selectionData.gender[1],
-                hair = selectionData.hair[1],
-                upper = selectionData.upper[1],
-                lower = selectionData.lower[1],
-                shoes = selectionData.shoes[1]
-            }
+            local characterData = loginUI.phases[2].fetchSelection()
             if #loginUI.characters <= 0 then loginUI.previewCharacter = 1 end
             loginUI.processCharacters[(loginUI.previewCharacter)] = true
             loginUI.characters[(loginUI.previewCharacter)] = loginUI.characters[(loginUI.previewCharacter)] or {}
