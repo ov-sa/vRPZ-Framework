@@ -52,8 +52,12 @@ loadingUI.loader.startY = loadingUI.loader.startY + ((CLIENT_MTA_RESOLUTION[2] -
 ------------------------------
 
 imports.beautify.render.create(function()
+    local isVisible = false
     if ((loadingUI.animStatus == "forward") or (loadingUI.animStatus == "reverse_backward")) then
-        loadingUI.fadeAnimPercent = imports.interpolateBetween(loadingUI.fadeAnimPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loadingUI.tickCounter, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration), "Linear")
+        isVisible = true
+        if loadingUI.fadeAnimPercent < 1 then
+            loadingUI.fadeAnimPercent = imports.interpolateBetween(loadingUI.fadeAnimPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loadingUI.tickCounter, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration), "Linear")
+        end
         if (loadingUI.animStatus == "reverse_backward") and (imports.math.round(loadingUI.fadeAnimPercent, 2) == 1) then
             if ((CLIENT_CURRENT_TICK - loadingUI.tickCounter) >= (FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration)) then
                 loadingUI.animStatus = "backward"
@@ -61,10 +65,13 @@ imports.beautify.render.create(function()
             end
         end
     elseif loadingUI.animStatus == "backward" then
-        loadingUI.fadeAnimPercent = imports.interpolateBetween(loadingUI.fadeAnimPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(loadingUI.tickCounter, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration), "Linear")
+        if loadingUI.fadeAnimPercent > 0 then
+            isVisible = true
+            loadingUI.fadeAnimPercent = imports.interpolateBetween(loadingUI.fadeAnimPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(loadingUI.tickCounter, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration), "Linear")
+        end
     end
 
-    if loadingUI.fadeAnimPercent > 0 then
+    if isVisible then
         loadingUI.loader.rotationValue = imports.interpolateBetween(0, 0, 0, 360, 0, 0, imports.getInterpolationProgress(loadingUI.loader.tickCounter, FRAMEWORK_CONFIGS["UI"]["Loading"].loader.animDuration), "Linear")
         if imports.math.round(loadingUI.loader.rotationValue, 2) == 360 then
             loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
