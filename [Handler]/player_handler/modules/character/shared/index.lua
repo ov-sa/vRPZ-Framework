@@ -57,9 +57,9 @@ CCharacter = {
         local clothingData = {
             gender = FRAMEWORK_CONFIGS["Character"]["Identity"]["Gender"][(characterIdentity.gender)],
             hair = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Facial"]["Hair"][(characterIdentity.gender)][(characterIdentity.hair)],
-            upper = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Upper"][(characterIdentity.gender)][((characterIdentity.upper)],
-            lower = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Lower"][(characterIdentity.gender)][((characterIdentity.lower)],
-            shoes = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Shoes"][(characterIdentity.gender)][((characterIdentity.shoes)]
+            upper = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Upper"][(characterIdentity.gender)][(characterIdentity.upper)],
+            lower = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Lower"][(characterIdentity.gender)][(characterIdentity.lower)],
+            shoes = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Shoes"][(characterIdentity.gender)][(characterIdentity.shoes)]
         }
         return clothingData.gender.assetName, (clothingData.upper.clumpName)..(clothingData.lower.clumpName)..(clothingData.shoes.clumpName), {
             [(clothingData.upper.clumpTexture[1])] = clothingData.upper.clumpTexture[2],
