@@ -14,6 +14,7 @@
 
 function getPlayerFromCharacterID(...) return CCharacter.getPlayer(...) end
 function getCharacterLocation(...) return CCharacter.getLocation(...) end
+function generateCharacterClothing(...) return CCharacter.generateClothing(...) end
 function setCharacterHealth(...) return CCharacter.setHealth(...) end
 function getCharacterHealth(...) return CCharacter.getHealth(...) end
 function getCharacterMaximumHealth(...) return CCharacter.getMaxHealth(...) end
