@@ -21,7 +21,6 @@
     <script src="gui/loading.lua" type="client" cache="false"/>
     <script src="gui/notification.lua" type="client" cache="false"/>
     <script src="gui/login.lua" type="client" cache="false"/>
-    <script src="gui/respawner.lua" type="client" cache="false"/>
 
     <!-- Modules: Game -->
     <script src="modules/game/shared/index.lua" type="shared" cache="false"/>
