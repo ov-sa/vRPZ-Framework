@@ -644,9 +644,8 @@ loginUI.toggleUI = function(state, args)
         for i, j in imports.pairs(loginUI.cache.timers) do
             if j and imports.isTimer(j) then
                 imports.killTimer(j)
-                j = nil
             end
-            j = false
+            j = nil
         end
         loginUI.phase = false
         loginUI.cinemationData = false
