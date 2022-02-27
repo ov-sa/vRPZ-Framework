@@ -37,7 +37,8 @@ local imports = {
     loadProgress = CCharacter.loadProgress,
     killPed = killPed,
     setTimer = setTimer,
-    showChat = showChat
+    showChat = showChat,
+    assetify = assetify
 }
 
 
@@ -191,6 +192,18 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
         imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false)
         imports.showChat(source, true)
     end
+    local selectionData = {
+        gender = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender["Datas"][(characterIdentity.gender)],
+        hair = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Facial"].hair["Datas"][(characterIdentity.gender)][(characterIdentity.hair)],
+        upper = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Upper"]["Datas"][(characterIdentity.gender)][((characterIdentity.upper)],
+        lower = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Lower"]["Datas"][(characterIdentity.gender)][((characterIdentity.lower)],
+        shoes = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Shoes"]["Datas"][(characterIdentity.gender)][((characterIdentity.shoes)],
+    }
+    imports.assetify.setCharacter(source, selectionData.gender[2].assetName, (selectionData.upper[2].clumpName)..(selectionData.lower[2].clumpName)..(selectionData.shoes[2].clumpName), {
+        [(selectionData.upper[2].clumpTexture[1])] = selectionData.upper[2].clumpTexture[2],
+        [(selectionData.lower[2].clumpTexture[1])] = selectionData.lower[2].clumpTexture[2],
+        [(selectionData.shoes[2].clumpTexture[1])] = selectionData.shoes[2].clumpTexture[2]
+    })
     --TODO: APPEND FUNCTION TO RETRIEVE CHARACTER'S CURRENT CLOTHES..
     --imports.triggerClientEvent("Player:onSyncPedClothes", source, source, getPlayerClothes(source))
     --triggerClientEvent(source, "onClientInventorySyncSlots", source, playerInventorySlots[source])
