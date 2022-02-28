@@ -130,7 +130,7 @@ configVars["UI"]["Login"] = {
         },
 
         credits = {
-            ["Titles"] = {["EN"] = "Credits", ["TR"] = "Kredi"},
+            ["Titles"] = {["EN"] = "Credits", ["TR"] = "Yapımcılar"},
             fontColor = {170, 35, 35, 255},
             scrollDuration = 8500,
 
