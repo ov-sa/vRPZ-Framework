@@ -32,12 +32,18 @@ local cache = {
     bgTexture = imports.beautify.native.createTexture("files/images/hud/player/slotBG1.png", "dxt5", true, "clamp"),
     bgColor = tocolor(125, 125, 125, 150),
     primary = {
+        paddingX = 5, paddingY = 0,
         width = 175, height = 53,
+        font = FRAMEWORK_FONTS[7], fontColor = imports.tocolor(255, 255, 255, 255),
+        altfont = FRAMEWORK_FONTS[8], altfontColor = imports.tocolor(150, 150, 150, 255),
         bgTexture = imports.beautify.native.createTexture("files/images/hud/player/slotBG1.png", "dxt5", true, "clamp"),
     },
     secondary = {
+        paddingX = 5, paddingY = 0,
         width = 100*0.75,
         height = 50*0.75,
+        font = FRAMEWORK_FONTS[7], fontColor = imports.tocolor(255, 255, 255, 255),
+        altfont = FRAMEWORK_FONTS[8], altfontColor = imports.tocolor(150, 150, 150, 255),
         bgTexture = imports.beautify.native.createTexture("files/images/hud/player/slotBG2.png", "dxt5", true, "clamp")
     },
 
@@ -59,7 +65,15 @@ end, {
 beautify.render.create(function()
     --TODO: DRAW HUD HERE...
     imports.beautify.native.drawImage(cache.startX, cache.startY, cache.primary.width, cache.primary.height, cache.primary.bgTexture, 0, 0, 0, cache.bgColor, false)
-    imports.beautify.native.drawImage(cache.startX + cache.primary.width - cache.secondary.width, cache.startY - cache.secondary.height - 10, cache.secondary.width, cache.secondary.height, cache.secondary.bgTexture, 0, 0, 0, cache.bgColor, false)
+    imports.beautify.native.drawText("01", cache.startX, cache.startY, cache.startX + cache.primary.paddingX, cache.startY + cache.primary.height + cache.primary.paddingY, cache.primary.fontColor, 1, cache.primary.font, "right", "bottom", false, false, false)
+    imports.beautify.native.drawText("999", cache.startX + (cache.primary.paddingX*2), cache.startY, cache.startX + (cache.primary.paddingX*2), cache.startY + cache.primary.height + cache.primary.paddingY, cache.primary.altfontColor, 1, cache.primary.altfont, "left", "bottom", false, false, false)
+
+    local startX, startY = cache.startX + cache.primary.width - cache.secondary.width, cache.startY - cache.secondary.height - 10
+    local width, height = cache.secondary.width, cache.secondary.height
+    imports.beautify.native.drawImage(startX, startY, width, height, cache.secondary.bgTexture, 0, 0, 0, cache.bgColor, false)
+    imports.beautify.native.drawText("01", startX, startY, startX + cache.primary.paddingX, startY + height + cache.secondary.paddingY, cache.secondary.fontColor, 1, cache.secondary.font, "right", "bottom", false, false, false)
+    imports.beautify.native.drawText("999", startX + (cache.primary.paddingX*2), startY, startX + (cache.primary.paddingX*2), startY + height + cache.primary.paddingY, cache.primary.altfontColor, 1, cache.primary.altfont, "left", "bottom", false, false, false)
+
     --imports.beautify.native.drawRectangle(cache.startX + cache.width - cache.smallSlotWidth, cache.startY, cache.smallSlotWidth, cache.height, cache.bgColor, false)
     --imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, cache.bgTexture, 0, 0, 0, -1, false)
 end)
