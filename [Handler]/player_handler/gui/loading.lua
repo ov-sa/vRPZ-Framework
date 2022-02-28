@@ -88,11 +88,11 @@ end)
 --------------------------------------
 
 imports.addEvent("Client:onToggleLoadingUI", true)
-imports.addEventHandler("Client:onToggleLoadingUI", root, function(state)
+imports.addEventHandler("Client:onToggleLoadingUI", root, function(state, hint)
     if state then
         if (state and (loadingUI.animStatus == "forward")) then return false end
         loadingUI.animStatus = "forward"
-        loadingUI.hint.text = (FRAMEWORK_CONFIGS["UI"]["Loading"].hint["Titles"][imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"].hint["Titles"])] and FRAMEWORK_CONFIGS["UI"]["Loading"].hint["Titles"][imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"].hint["Titles"])][FRAMEWORK_LANGUAGE]) or loadingUI.hint.text
+        loadingUI.hint.text = hint or (FRAMEWORK_CONFIGS["UI"]["Loading"].hint["Titles"][imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"].hint["Titles"])] and FRAMEWORK_CONFIGS["UI"]["Loading"].hint["Titles"][imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"].hint["Titles"])][FRAMEWORK_LANGUAGE]) or loadingUI.hint.text
     else
         if ((loadingUI.animStatus == "backward") or (loadingUI.animStatus == "reverse_backward")) then return false end
         loadingUI.animStatus = "reverse_backward"
