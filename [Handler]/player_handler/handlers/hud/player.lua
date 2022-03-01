@@ -70,18 +70,18 @@ cache.secondary.ammo.mag.endX, cache.secondary.ammo.mag.endY = cache.secondary.a
 --------------------------------
 
 beautify.render.create(function()
-    if not CPlayer.isInitialized(localPlayer) then return false end
+    if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then return false end
     imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], cache.vignette.bgTexture, 0, 0, 0, cache.vignette.bgColor, false)
 end, {
     renderType = "input"
 })
 
 beautify.render.create(function()
+    if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then return false end
     --Primary Equipment--
     imports.beautify.native.drawImage(cache.primary.startX, cache.primary.startY, cache.primary.width, cache.primary.height, cache.primary.bgTexture, 0, 0, 0, cache.bgColor, false)
     imports.beautify.native.drawText("01", cache.primary.ammo.startX, cache.primary.ammo.startY, cache.primary.ammo.endX, cache.primary.ammo.endY, cache.primary.ammo.fontColor, 1, cache.primary.ammo.font, "right", "bottom", false, false, false)
     imports.beautify.native.drawText("999", cache.primary.ammo.mag.startX, cache.primary.ammo.mag.startY, cache.primary.ammo.mag.endX, cache.primary.ammo.mag.endY, cache.primary.ammo.mag.fontColor, 1, cache.primary.ammo.mag.font, "left", "bottom", false, false, false)
-    
     --Secondary Equipment--
     imports.beautify.native.drawImage(cache.secondary.startX, cache.secondary.startY, cache.secondary.width, cache.secondary.height, cache.secondary.bgTexture, 0, 0, 0, cache.bgColor, false)
     imports.beautify.native.drawText("01", cache.secondary.ammo.startX, cache.secondary.ammo.startY, cache.secondary.ammo.endX, cache.secondary.ammo.endY, cache.secondary.ammo.fontColor, 1, cache.secondary.ammo.font, "right", "bottom", false, false, false)
