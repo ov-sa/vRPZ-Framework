@@ -78,7 +78,7 @@ imports.beautify.render.create(function()
         end
         imports.beautify.native.drawRectangle(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Loading"].bgColor[1], FRAMEWORK_CONFIGS["UI"]["Loading"].bgColor[2], FRAMEWORK_CONFIGS["UI"]["Loading"].bgColor[3], FRAMEWORK_CONFIGS["UI"]["Loading"].bgColor[4]*loadingUI.fadeAnimPercent), true)
         imports.beautify.native.drawImage(loadingUI.loader.startX, loadingUI.loader.startY, FRAMEWORK_CONFIGS["UI"]["Loading"].loader.size, FRAMEWORK_CONFIGS["UI"]["Loading"].loader.size, loadingUI.loader.bgTexture, loadingUI.loader.rotationValue, 0, 0, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Loading"].loader.bgColor[1], FRAMEWORK_CONFIGS["UI"]["Loading"].loader.bgColor[2], FRAMEWORK_CONFIGS["UI"]["Loading"].loader.bgColor[3], FRAMEWORK_CONFIGS["UI"]["Loading"].loader.bgColor[4]*loadingUI.fadeAnimPercent), true)
-        imports.beautify.native.drawText(loadingUI.hint.text, loadingUI.hint.paddingX, loadingUI.loader.startY + FRAMEWORK_CONFIGS["UI"]["Loading"].loader.size + loadingUI.hint.paddingY, CLIENT_MTA_RESOLUTION[1] - loadingUI.hint.paddingX, CLIENT_MTA_RESOLUTION[2] - loadingUI.hint.paddingY, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Loading"].hint.fontColor[1], FRAMEWORK_CONFIGS["UI"]["Loading"].hint.fontColor[2], FRAMEWORK_CONFIGS["UI"]["Loading"].hint.fontColor[3], FRAMEWORK_CONFIGS["UI"]["Loading"].hint.fontColor[4]*loadingUI.fadeAnimPercent), 1, loadingUI.hint.font, "center", "top", true, true, true)
+        imports.beautify.native.drawText(loadingUI.hint.text, loadingUI.hint.paddingX, loadingUI.loader.startY + FRAMEWORK_CONFIGS["UI"]["Loading"].loader.size + loadingUI.hint.paddingY, CLIENT_MTA_RESOLUTION[1] - loadingUI.hint.paddingX, CLIENT_MTA_RESOLUTION[2] - loadingUI.hint.paddingY, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Loading"].hints.fontColor[1], FRAMEWORK_CONFIGS["UI"]["Loading"].hints.fontColor[2], FRAMEWORK_CONFIGS["UI"]["Loading"].hints.fontColor[3], FRAMEWORK_CONFIGS["UI"]["Loading"].hints.fontColor[4]*loadingUI.fadeAnimPercent), 1, loadingUI.hint.font, "center", "top", true, true, true)
     end
 end)
 
@@ -92,7 +92,7 @@ imports.addEventHandler("Client:onToggleLoadingUI", root, function(state, hint)
     if state then
         if (state and (loadingUI.animStatus == "forward")) then return false end
         loadingUI.animStatus = "forward"
-        loadingUI.hint.text = (hint and hint[FRAMEWORK_LANGUAGE]) or (FRAMEWORK_CONFIGS["UI"]["Loading"].hint["Titles"][imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"].hint["Titles"])] and FRAMEWORK_CONFIGS["UI"]["Loading"].hint["Titles"][imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"].hint["Titles"])][FRAMEWORK_LANGUAGE]) or loadingUI.hint.text
+        loadingUI.hint.text = (hint and hint[FRAMEWORK_LANGUAGE]) or (FRAMEWORK_CONFIGS["UI"]["Loading"].hints[(imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"].hints))][FRAMEWORK_LANGUAGE]) or loadingUI.hint.text
     else
         if ((loadingUI.animStatus == "backward") or (loadingUI.animStatus == "reverse_backward")) then return false end
         loadingUI.animStatus = "reverse_backward"

@@ -75,7 +75,6 @@ configVars["UI"]["Login"] = {
             ["Titles"] = {["EN"] = "Characters", ["TR"] = "karakterler"},
             width = 325,
             height = 510,
-
             titlebar = {
                 ["Titles"] = {["EN"] = "Character", ["TR"] = "Karakter"},
                 height = 35,
@@ -133,7 +132,6 @@ configVars["UI"]["Login"] = {
             ["Titles"] = {["EN"] = "Credits", ["TR"] = "Yapımcılar"},
             fontColor = {170, 35, 35, 255},
             scrollDuration = 8500,
-
             navigator = {
                 ["Titles"] = {["EN"] = "Back", ["TR"] = "Geri"},
                 hoverDuration = 2500
