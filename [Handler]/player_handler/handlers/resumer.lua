@@ -16,6 +16,7 @@ local imports = {
     tonumber = tonumber,
     tostring = tostring,
     getTickCount = getTickCount,
+    collectgarbage = collectgarbage,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     triggerEvent = triggerEvent,
@@ -166,6 +167,13 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         slots = {}
     }
     ]]
+    for i = 1, #characters, 1 do
+        if i ~= character then
+            local j = characters[i]
+            CCharacter.CBuffer[(j.id)] = nil
+        end
+    end
+    imports.collectgarbage()
     cache.resumeBuffer[source] = imports.getTickCount()
     imports.triggerClientEvent(source, "Player:onSyncWeather", source, serverWeather, serverTime)
     imports.triggerEvent("Player:onSpawn", source, CCharacter.CBuffer[characterID].location, true)
