@@ -34,6 +34,7 @@ local cache = {
         ammo = {
             font = FRAMEWORK_FONTS[7], fontColor = imports.tocolor(255, 255, 255, 255),
             mag = {
+                paddingX = 2,
                 font = FRAMEWORK_FONTS[8], fontColor = imports.tocolor(150, 150, 150, 255)
             }
         }
@@ -45,6 +46,7 @@ local cache = {
         ammo = {
             font = FRAMEWORK_FONTS[7], fontColor = imports.tocolor(255, 255, 255, 255),
             mag = {
+                paddingX = 2,
                 font = FRAMEWORK_FONTS[8], fontColor = imports.tocolor(150, 150, 150, 255)
             }
         }
@@ -55,11 +57,11 @@ cache.primary.startX, cache.primary.startY = CLIENT_MTA_RESOLUTION[1] - (cache.s
 cache.secondary.startX, cache.secondary.startY = cache.primary.startX + cache.primary.width - cache.secondary.width, cache.primary.startY - cache.secondary.height - cache.padding
 cache.primary.ammo.startX, cache.primary.ammo.startY = cache.primary.startX + cache.primary.paddingX, cache.primary.startY
 cache.primary.ammo.endX, cache.primary.ammo.endY = cache.primary.ammo.startX, cache.primary.startY + cache.primary.height + cache.primary.paddingY
-cache.primary.ammo.mag.startX, cache.primary.ammo.mag.startY = cache.primary.ammo.startX + cache.primary.paddingX, cache.primary.ammo.startY
+cache.primary.ammo.mag.startX, cache.primary.ammo.mag.startY = cache.primary.ammo.startX + cache.primary.ammo.mag.paddingX, cache.primary.ammo.startY
 cache.primary.ammo.mag.endX, cache.primary.ammo.mag.endY = cache.primary.ammo.mag.startX, cache.primary.ammo.endY
 cache.secondary.ammo.startX, cache.secondary.ammo.startY = cache.secondary.startX + cache.secondary.paddingX, cache.secondary.startY
 cache.secondary.ammo.endX, cache.secondary.ammo.endY = cache.secondary.ammo.startX, cache.secondary.startY + cache.secondary.height + cache.secondary.paddingY
-cache.secondary.ammo.mag.startX, cache.secondary.ammo.mag.startY = cache.secondary.ammo.startX + cache.primary.paddingX, cache.secondary.ammo.startY
+cache.secondary.ammo.mag.startX, cache.secondary.ammo.mag.startY = cache.secondary.ammo.startX + cache.secondary.ammo.mag.paddingX, cache.secondary.ammo.startY
 cache.secondary.ammo.mag.endX, cache.secondary.ammo.mag.endY = cache.secondary.ammo.mag.startX, cache.secondary.ammo.endY
 
 
