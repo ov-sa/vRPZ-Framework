@@ -188,7 +188,7 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
     if (CCharacter.getHealth(source) <= 0) then
         --TODO: NEEDS TO BE IMPLEMENTED..
         --imports.triggerEvent("Player:onDeath", source, nil, false, nil, 3)
-        imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false, "Respawning") --TODO: ...
+        imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false, FRAMEWORK_CONFIGS["Spawns"]["Hint"])
     else
         --triggerClientEvent(source, "onClientInventorySyncSlots", source, playerInventorySlots[source])
         imports.assetify.setCharacter(source, characterClothing[1], characterClothing[2], characterClothing[3])
