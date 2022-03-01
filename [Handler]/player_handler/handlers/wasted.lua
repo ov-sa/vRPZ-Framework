@@ -188,13 +188,11 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
     if (CCharacter.getHealth(source) <= 0) then
         --TODO: NEEDS TO BE IMPLEMENTED..
         --imports.triggerEvent("Player:onDeath", source, nil, false, nil, 3)
+        imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false, "Respawning") --TODO: ...
     else
+        --triggerClientEvent(source, "onClientInventorySyncSlots", source, playerInventorySlots[source])
+        imports.assetify.setCharacter(source, characterClothing[1], characterClothing[2], characterClothing[3])
         imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false)
         imports.showChat(source, true)
     end
-    imports.assetify.setCharacter(source, characterClothing[1], characterClothing[2], characterClothing[3])
-    --TODO: APPEND FUNCTION TO RETRIEVE CHARACTER'S CURRENT CLOTHES..
-    --triggerClientEvent(source, "onClientInventorySyncSlots", source, playerInventorySlots[source])
-    --imports.triggerClientEvent(source, "Client:onRespawn", source)
-    --imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, true)
 end)
