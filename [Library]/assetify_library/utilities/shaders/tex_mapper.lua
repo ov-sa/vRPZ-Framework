@@ -52,6 +52,12 @@ shaderRW[identifier] = function(shaderMaps)
             controlVars = controlVars..[[
                 texture controlTex_]]..i..[[_]]..v..[[;
                 texture controlScale_]]..i..[[_]]..v..[[;
+                sampler controlSampler_]]..i..[[_]]..v..[[ = sampler_state { 
+                    Texture = controlTex_]]..i..[[_]]..v..[[;
+                    MipFilter = Linear;
+                    MaxAnisotropy = maxAnisotropy*anisotropy;
+                    MinFilter = Anisotropic;
+                };
             ]]
             local sampler = [[
                 sampledTexel_]]..i..[[ = lerp(controlTexel_]]..i..[[, channelTexel_]]..i..[[_]]..v..[[, controlTexel_]]..i..[[.]]..imports.string.lower(v)..[[);
@@ -87,30 +93,6 @@ shaderRW[identifier] = function(shaderMaps)
         MipFilter = Linear;
         MaxAnisotropy = maxAnisotropy*anisotropy;
         MinFilter = Anisotropic;
-    };
-    sampler redControlSampler = sampler_state { 
-        Texture = (controlTex1_R);
-        MipFilter = Linear;
-        MaxAnisotropy = maxAnisotropy*anisotropy;
-        MinFilter = Anisotropic;
-    };
-    sampler greenControlSampler = sampler_state { 
-        Texture = (controlTex1_G);
-        MipFilter = Linear;
-        MaxAnisotropy = maxAnisotropy*anisotropy;
-        MinFilter = Anisotropic;
-    };
-    sampler blueControlSampler = sampler_state { 
-        Texture = (controlTex1_B);
-        MipFilter = Linear;
-        MaxAnisotropy = maxAnisotropy*anisotropy;
-        MinFilter = Anisotropic;
-    }; 
-    sampler bumpSampler = sampler_state {
-        Texture = (bumpTexture);
-        MinFilter = Linear;
-        MagFilter = Linear;
-        MipFilter = Linear;
     };
 
 
