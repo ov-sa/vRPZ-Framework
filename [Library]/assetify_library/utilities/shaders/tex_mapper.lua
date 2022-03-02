@@ -119,6 +119,7 @@ shaderRW[identifier] = function(shaderMaps)
     /*----------------
     -->> Handlers <<--
     ------------------*/
+    
     float4 PSHandler(PSInput PS) {
     ]]..handlerBody..handlerFooter..[[
     }
