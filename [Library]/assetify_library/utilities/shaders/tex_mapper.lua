@@ -46,8 +46,8 @@ shaderRW[identifier] = function(shaderMaps)
         for k = 1, #mapChannels, 1 do
             local v = mapChannels[k]
             controlVars = controlVars..[[
-                texture controlTex_]]..i..[[_]]..v;
-                texture controlScale_]]..i..[[_]]..v;
+                texture controlTex_]]..i..[[_]]..v..[[;
+                texture controlScale_]]..i..[[_]]..v..[[;
             ]]
             handlerVars = handlerVars..[[
 
