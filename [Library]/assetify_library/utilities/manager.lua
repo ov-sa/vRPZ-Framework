@@ -126,13 +126,14 @@ function manager:load(assetType, assetName)
                             thread.pause()
                         end
                         if  assetReference.manifestData.shaderMaps.control then
-                            --TODO: INVOKE SHADER CLASS
-                            print("TRYNNA CREATE CONTROLS")
-                            shader:create(nil, "control", "Assetify_TextureMapper", i, {
-                                baseTexture = assetReference.manifestData.shaderMaps.control[i]
-                            }, {
-                                
-                            }, assetReference.unsyncedData.rwCache.map, assetReference.manifestData.encryptKey)
+                            for k, v in imports.pairs(assetReference.manifestData.shaderMaps.control) do
+                                --TODO: DYNAMICALLY GNEERATE CONTROLS AND TEXTURE VARS ETC
+                                shader:create(nil, "control", "Assetify_TextureMapper", k, {
+                                    --baseTexture = assetReference.manifestData.shaderMaps.control[i]
+                                }, {
+                                    --TODO: ADD SCALE HERE..
+                                }, assetReference.unsyncedData.rwCache.map, assetReference.manifestData.encryptKey)
+                            end
                         end
                     end
                 end):resume({
