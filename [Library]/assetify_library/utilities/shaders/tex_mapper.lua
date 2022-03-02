@@ -48,7 +48,7 @@ shaderRW[identifier] = function(shaderMaps)
         sampler baseSampler = sampler_state {
             Texture = (gTexture0);
             MipFilter = Linear;
-            MaxAnisotropy = maxAnisotropy*anisotropy;
+            gMaxAnisotropy = gMaxAnisotropy*anisotropy;
             MinFilter = Anisotropic;
         };    
     ]], "", ""
@@ -63,7 +63,7 @@ shaderRW[identifier] = function(shaderMaps)
                 sampler controlSampler_]]..i..[[ = sampler_state { 
                     Texture = controlTex_]]..i..[[;
                     MipFilter = Linear;
-                    MaxAnisotropy = maxAnisotropy*anisotropy;
+                    gMaxAnisotropy = gMaxAnisotropy*anisotropy;
                     MinFilter = Anisotropic;
                 };
             ]]
@@ -79,7 +79,7 @@ shaderRW[identifier] = function(shaderMaps)
                 sampler controlSampler_]]..i..[[_]]..v..[[ = sampler_state { 
                     Texture = controlTex_]]..i..[[_]]..v..[[;
                     MipFilter = Linear;
-                    MaxAnisotropy = maxAnisotropy*anisotropy;
+                    gMaxAnisotropy = gMaxAnisotropy*anisotropy;
                     MinFilter = Anisotropic;
                 };
             ]]
@@ -113,7 +113,6 @@ shaderRW[identifier] = function(shaderMaps)
     -->> Variables <<--
     -------------------*/
 
-    int maxAnisotropy <string deviceCaps="MaxAnisotropy";>;
     float anisotropy = 1;
     ]]..controlVars..[[
     struct PSInput {

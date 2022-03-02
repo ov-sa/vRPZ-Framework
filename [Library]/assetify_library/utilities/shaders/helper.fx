@@ -88,6 +88,8 @@ float4 gLight4Ambient           <string lightState="4,Ambient";>;
 float3 gLight4Position          <string lightState="4,Position";>;
 float3 gLight4Direction         <string lightState="4,Direction";>;
 
+int gMaxAnisotropy <string deviceCaps="MaxAnisotropy";>;
+
 int CUSTOMFLAGS
 <
 #ifdef GENERATE_NORMALS
