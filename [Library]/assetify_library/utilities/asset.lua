@@ -201,26 +201,33 @@ else
                         for m = 1, #v, 1 do
                             local n = v[m]
                             if n.control then
+                                n.control = assetPath.."map/"..n.control
                                 asset:buildFile(n.control, assetFiles, encryptKey)
                             end
                             if n.bump then
                                 asset:buildFile(n.bump, assetFiles, encryptKey)
                             end
                             if n.red and n.red.map then
+                                n.red.map = assetPath.."map/"..n.red.map
                                 asset:buildFile(n.red.map, assetFiles, encryptKey)
                                 if n.red.bump then
+                                    n.red.bump = assetPath.."map/"..n.red.bump
                                     asset:buildFile(n.red.bump, assetFiles, encryptKey)
                                 end
                             end
                             if n.green and n.green.map then
+                                n.green.map = assetPath.."map/"..n.green.map
                                 asset:buildFile(n.green.map, assetFiles, encryptKey)
                                 if n.green.bump then
+                                    n.green.bump = assetPath.."map/"..n.green.bump
                                     asset:buildFile(n.green.bump, assetFiles, encryptKey)
                                 end
                             end
                             if n.blue and n.blue.map then
+                                n.blue.map = assetPath.."map/"..n.blue.map
                                 asset:buildFile(n.blue.map, assetFiles, encryptKey)
                                 if n.blue.bump then
+                                    n.blue.bump = assetPath.."map/"..n.blue.bump
                                     asset:buildFile(n.blue.bump, assetFiles, encryptKey)
                                 end
                             end
