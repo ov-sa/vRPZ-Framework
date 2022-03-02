@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
 --[[ Resource: Assetify Library
-     Script: utilities: shaders: tex_changer.lua
+     Script: utilities: shaders: tex_mapper.lua
      Server: -
      Author: OvileAmriam
      Developer(s): Aviril, Tron
@@ -23,7 +23,7 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-local identifier = "Assetify_TextureChanger"
+local identifier = "Assetify_TextureMapper"
 local depDatas, dependencies = "", {}
 for i, j in imports.pairs(dependencies) do
     local depData = imports.file.read(j.filePath)
