@@ -128,7 +128,11 @@ function manager:load(assetType, assetName)
                         if  assetReference.manifestData.shaderMaps.control then
                             --TODO: INVOKE SHADER CLASS
                             print("TRYNNA CREATE CONTROLS")
-                            shader:create(nil, "control", "Assetify_TextureMapper", i, {baseTexture = assetReference.manifestData.shaderMaps.control[i]}, {}, assetReference.unsyncedData.rwCache.map, assetReference.manifestData.encryptKey)
+                            shader:create(nil, "control", "Assetify_TextureMapper", i, {
+                                baseTexture = assetReference.manifestData.shaderMaps.control[i]
+                            }, {
+                                
+                            }, assetReference.unsyncedData.rwCache.map, assetReference.manifestData.encryptKey)
                         end
                     end
                 end):resume({
