@@ -25,7 +25,7 @@ local imports = {
 -------------------
 
 local identifier = "Assetify_TextureMapper"
-local mapChannels, samplingIteration = {"R", "G", "B"}, 3
+local samplingIteration = 3
 local depDatas, dependencies = "", {}
 for i, j in imports.pairs(dependencies) do
     local depData = imports.file.read(j.filePath)
@@ -69,8 +69,8 @@ shaderRW[identifier] = function(shaderMaps)
         handlerBody = handlerBody..[[
             float4 controlTexel_]]..i..[[ = ]]..(((j.control) and [[baseTexel]]) or [[tex2D(controlSampler_]]..i..[[, PS.TexCoord)]])..[[;
         ]]
-        for k = 1, #mapChannels, 1 do
-            local v = mapChannels[k]
+        for k = 1, #shader.defaultData.shaderChannels, 1 do
+            local v = shader.defaultData.shaderChannels[k]
             controlVars = controlVars..[[
                 texture controlTex_]]..i..[[_]]..v..[[;
                 float controlScale_]]..i..[[_]]..v..[[ = ]]..(j[v].scale)..[[;
