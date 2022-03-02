@@ -40,7 +40,7 @@ end
 ----------------
 
 shaderRW[identifier] = function(shaderMaps)
-    if not shaderMaps then return false end
+    if not shaderMaps or (#shaderMaps <= 0) then return false end
     local isSamplerInit = false
     local controlVars, handlerBody, handlerFooter = "", "", ""
     for i = #shaderMaps, 1, -1 do
@@ -114,7 +114,6 @@ shaderRW[identifier] = function(shaderMaps)
     float4 PSHandler(PSInput PS) {
     ]]..handlerBody..[[
         float4 controlTexel = tex2D(controlSampler, PS.TexCoord);
-        // LERP ALL TEXELS BY CONTROL'S ALPHA AND THEN RETURN...
     ]]..handlerFooter..[[
         return saturate(sampledTexel);
     }
