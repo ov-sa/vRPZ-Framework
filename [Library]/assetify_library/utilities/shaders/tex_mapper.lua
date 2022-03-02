@@ -39,28 +39,47 @@ end
 
 shaderRW[identifier] = function(shaderMaps)
     if not shaderMaps then return false end
+
+    local controlVars = ""
+    for i = 1, #shaderMaps, 1 do
+        local j = shaderMaps[i]
+        if j,red or j.blue or j.green then
+            if j.red then
+                controlVars = controlVars..[[
+                    texture controlTex_]]..i..[[_R;
+                    texture controlScale_]]..i..[[_R;
+                ]]
+            end
+            if j.green then
+                controlVars = controlVars..[[
+                    texture controlTex_]]..i..[[_G;
+                    texture controlScale_]]..i..[[_G;
+                ]]
+            end
+            if j.blue then
+                controlVars = controlVars..[[
+                    texture controlTex_]]..i..[[_B;
+                    texture controlScale_]]..i..[[_B;
+                ]]
+            end
+        end
+    end
+
     return depDatas..[[
-    int gCapsMaxAnisotropy <string deviceCaps="MaxAnisotropy";>;
     /*-----------------
     -->> Variables <<--
     -------------------*/
 
-    texture baseTexture;
-
+    int maxAnisotropy <string deviceCaps="MaxAnisotropy";>;
     bool enableBumpMap = false;
-    texture bumpTexture;
     float anisotropy = 1;
-    float redControlScale = 1;
-    float greenControlScale = 1;
-    float blueControlScale = 1;
-    texture redControlTexture;
-    texture greenControlTexture;
-    texture blueControlTexture;
+    ]]..controlVars..[[
     struct PSInput {
         float4 Position : POSITION0;
         float4 Diffuse : COLOR0;
         float2 TexCoord : TEXCOORD0;
     };
+
 
     /*----------------
     -->> Samplers <<--
@@ -69,25 +88,25 @@ shaderRW[identifier] = function(shaderMaps)
     sampler controlSampler = sampler_state {
         Texture = (gTexture0);
         MipFilter = Linear;
-        MaxAnisotropy = gCapsMaxAnisotropy*anisotropy;
+        MaxAnisotropy = maxAnisotropy*anisotropy;
         MinFilter = Anisotropic;
     };
     sampler redControlSampler = sampler_state { 
-        Texture = (redControlTexture);
+        Texture = (controlTex1_R);
         MipFilter = Linear;
-        MaxAnisotropy = gCapsMaxAnisotropy*anisotropy;
+        MaxAnisotropy = maxAnisotropy*anisotropy;
         MinFilter = Anisotropic;
     };
     sampler greenControlSampler = sampler_state { 
-        Texture = (greenControlTexture);
+        Texture = (controlTex1_G);
         MipFilter = Linear;
-        MaxAnisotropy = gCapsMaxAnisotropy*anisotropy;
+        MaxAnisotropy = maxAnisotropy*anisotropy;
         MinFilter = Anisotropic;
     };
     sampler blueControlSampler = sampler_state { 
-        Texture = (blueControlTexture);
+        Texture = (controlTex1_B);
         MipFilter = Linear;
-        MaxAnisotropy = gCapsMaxAnisotropy*anisotropy;
+        MaxAnisotropy = maxAnisotropy*anisotropy;
         MinFilter = Anisotropic;
     }; 
     sampler bumpSampler = sampler_state {
@@ -103,22 +122,19 @@ shaderRW[identifier] = function(shaderMaps)
     ------------------*/
     float4 PixelShaderFunction(PSInput PS) {
         float4 controlTexel = tex2D(controlSampler, PS.TexCoord);
-        float4 redTexel = tex2D(redControlSampler, PS.TexCoord*redControlScale);
-        float4 greenTexel = tex2D(greenControlSampler, PS.TexCoord*greenControlScale);
-        float4 blueTexel = tex2D(blueControlSampler, PS.TexCoord*blueControlScale);
+        float4 redTexel = tex2D(redControlSampler, PS.TexCoord*controlTex1_RScale);
+        float4 greenTexel = tex2D(greenControlSampler, PS.TexCoord*controlTex1_GScale);
+        float4 blueTexel = tex2D(blueControlSampler, PS.TexCoord*controlTex1_BScale);
         float4 sampledControlTexel = controlTexel;
         sampledControlTexel = lerp(controlTexel, redTexel, controlTexel.r); sampledControlTexel = lerp(controlTexel, redTexel, controlTexel.r); sampledControlTexel = lerp(controlTexel, redTexel, controlTexel.r);
         sampledControlTexel = lerp(sampledControlTexel, greenTexel, controlTexel.g); sampledControlTexel = lerp(sampledControlTexel, greenTexel, controlTexel.g); sampledControlTexel = lerp(sampledControlTexel, greenTexel, controlTexel.g);
         sampledControlTexel = lerp(sampledControlTexel, blueTexel, controlTexel.b); sampledControlTexel = lerp(sampledControlTexel, blueTexel, controlTexel.b); sampledControlTexel = lerp(sampledControlTexel, blueTexel, controlTexel.b);
         sampledControlTexel.rgb = sampledControlTexel.rgb*0.33333;
-        if (enableBumpMap) {
-            float4 bumpTexel = tex2D(bumpSampler, PS.TexCoord);
-            sampledControlTexel.rgb *= bumpTexel.rgb;
-        }
         sampledControlTexel.a = controlTexel.a;
         sampledControlTexel = saturate(sampledControlTexel);
         return sampledControlTexel;
     }
+
 
     /*------------------
     -->> Techniques <<--
@@ -139,3 +155,10 @@ shaderRW[identifier] = function(shaderMaps)
     }
     ]]
 end
+
+[[
+    if (enableBumpMap) {
+        float4 bumpTexel = tex2D(bumpSampler, PS.TexCoord);
+        sampledControlTexel.rgb *= bumpTexel.rgb;
+    }
+]]
