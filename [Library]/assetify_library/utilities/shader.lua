@@ -37,7 +37,8 @@ local imports = {
 shader = {
     defaultData = {
         shaderPriority = 10000,
-        shaderDistance = 0
+        shaderDistance = 0,
+        controlChannel = {"red", "blue", "green"}
     },
     preLoadedTex = {
         invisibleMap = imports.dxCreateTexture(2, 2, "dxt5", "clamp")
@@ -75,11 +76,32 @@ function shader:createTex(shaderMaps, rwCache, encryptKey)
                     if encryptKey then
                         local cTexturePath = n..".tmp"
                         if imports.file.write(cTexturePath, imports.decodeString("tea", imports.file.read(n), {key = encryptKey})) then
-                            rwCache.texture[(n)] = imports.dxCreateTexture(cTexturePath, "dxt5", true)
+                            rwCache.texture[n] = imports.dxCreateTexture(cTexturePath, "dxt5", true)
                             imports.file.delete(cTexturePath)
                         end
                     else
-                        rwCache.texture[(n)] = imports.dxCreateTexture(n, "dxt5", true)
+                        rwCache.texture[n] = imports.dxCreateTexture(n, "dxt5", true)
+                    end
+                end
+            end
+        elseif i == "control" then
+            for k, v in imports.pairs(j) do
+                for m = 1, #v, 1 do
+                    local n = v[m]
+                    for x = 1, #shader.defaultData.controlChannel, 1 do
+                        local y = n[(shader.defaultData.controlChannel[x])]
+                        if y then
+                            y = y.map
+                            if encryptKey then
+                                local cTexturePath = y..".tmp"
+                                if imports.file.write(cTexturePath, imports.decodeString("tea", imports.file.read(y), {key = encryptKey})) then
+                                    rwCache.texture[y] = imports.dxCreateTexture(cTexturePath, "dxt5", true)
+                                    imports.file.delete(cTexturePath)
+                                end
+                            else
+                                rwCache.texture[y] = imports.dxCreateTexture(n, "dxt5", true)
+                            end
+                        end
                     end
                 end
             end
