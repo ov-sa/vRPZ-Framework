@@ -41,7 +41,7 @@ end
 
 shaderRW[identifier] = function(shaderMaps)
     if not shaderMaps then return false end
-    local controlVars, handlerVars = "", ""
+    local controlVars, handlerVars, handlerFooter = "", "", ""
     for i = 1, #shaderMaps, 1 do
         local j = shaderMaps[i]
         handlerVars = handlerVars..[[
@@ -51,7 +51,7 @@ shaderRW[identifier] = function(shaderMaps)
             local v = mapChannels[k]
             controlVars = controlVars..[[
                 texture controlTex_]]..i..[[_]]..v..[[;
-                texture controlScale_]]..i..[[_]]..v..[[;
+                float controlScale_]]..i..[[_]]..v..[[ = ]]..(j[v].scale);
                 sampler controlSampler_]]..i..[[_]]..v..[[ = sampler_state { 
                     Texture = controlTex_]]..i..[[_]]..v..[[;
                     MipFilter = Linear;
@@ -60,6 +60,7 @@ shaderRW[identifier] = function(shaderMaps)
                 };
             ]]
             local sampler = [[
+                float4 channelTexel_]]..i..[[_]]..v..[[ = tex2D(controlSampler_]]..i..[[_]]..v..[[, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
                 sampledTexel_]]..i..[[ = lerp(controlTexel_]]..i..[[, channelTexel_]]..i..[[_]]..v..[[, controlTexel_]]..i..[[.]]..imports.string.lower(v)..[[);
             ]]
             handlerVars = sampler..sampler..sampler
@@ -102,10 +103,8 @@ shaderRW[identifier] = function(shaderMaps)
     float4 PSHandler(PSInput PS) {
     ]]..handlerVars..[[
         float4 controlTexel = tex2D(controlSampler, PS.TexCoord);
-        float4 redTexel = tex2D(redControlSampler, PS.TexCoord*controlTex1_RScale);
-        float4 greenTexel = tex2D(greenControlSampler, PS.TexCoord*controlTex1_GScale);
-        float4 blueTexel = tex2D(blueControlSampler, PS.TexCoord*controlTex1_BScale);
         // LERP ALL TEXELS BY CONTROL'S ALPHA AND THEN RETURN...
+    ]]..handlerFooter..[[
         return saturate(sampledTexel);
     }
 
