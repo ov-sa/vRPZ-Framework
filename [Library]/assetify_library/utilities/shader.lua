@@ -72,19 +72,20 @@ function shader:createTex(shaderMaps, rwCache, encryptKey)
         if i == "clump" then
             for k, v in imports.pairs(j) do
                 for m = 1, #v, 1 do
-                    local n = v[m]
-                    rwCache.texture[n] = shader:loadTex(n, encryptKey)
+                    rwCache.texture[(v[m])] = shader:loadTex(v[m], encryptKey)
                 end
             end
         elseif i == "control" then
             for k, v in imports.pairs(j) do
                 for m = 1, #v, 1 do
                     local n = v[m]
+                    if n.control then
+                        rwCache.texture[(n.control.map)] = shader:loadTex(n.control.map, encryptKey)
+                    end
                     for x = 1, #shader.defaultData.shaderChannels, 1 do
                         local y = n[(shader.defaultData.shaderChannels[x])]
                         if y then
-                            y = y.map
-                            rwCache.texture[y] = shader:loadTex(y, encryptKey)
+                            rwCache.texture[(y.map)] = shader:loadTex(y.map, encryptKey)
                         end
                     end
                 end
