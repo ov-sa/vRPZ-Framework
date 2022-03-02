@@ -127,12 +127,21 @@ function manager:load(assetType, assetName)
                         end
                         if  assetReference.manifestData.shaderMaps.control then
                             for k, v in imports.pairs(assetReference.manifestData.shaderMaps.control) do
-                                --TODO: DYNAMICALLY GNEERATE CONTROLS AND TEXTURE VARS ETC
-                                shader:create(nil, "control", "Assetify_TextureMapper", k, {
-                                    --baseTexture = assetReference.manifestData.shaderMaps.control[i]
-                                }, {
-                                    --TODO: ADD SCALE HERE..
-                                }, assetReference.unsyncedData.rwCache.map, assetReference.manifestData.encryptKey)
+                                local shaderTextures, shaderInputs = {}, {}
+                                for m = 1, #v, 1 do
+                                    local n = v[m]
+                                    if n.control then
+                                        shaderTextures["controlTex_"..m] = n.control.map
+                                    end
+                                    for x = 1, #shader.defaultData.controlChannel, 1 do
+                                        local y = shader.defaultData.controlChannel[x]
+                                        if n[y] then
+                                            shaderTextures["controlTex_"..m.."_"..y] = n[y].map
+                                            shaderInputs["controlScale_"..m.."_"..y] = n[y].scale
+                                        end
+                                    end
+                                end
+                                shader:create(nil, "control", "Assetify_TextureMapper", k, shaderTextures, shaderInputs, assetReference.unsyncedData.rwCache.map, assetReference.manifestData.encryptKey)
                             end
                         end
                     end
