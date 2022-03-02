@@ -39,8 +39,8 @@ end
 --[[ Shader ]]--
 ----------------
 
-shaderRW[identifier] = function(shaderInputs)
-    if not shaderInputs or (#shaderInputs <= 0) then return false end
+shaderRW[identifier] = function(shaderMaps)
+    if not shaderMaps or (#shaderMaps <= 0) then return false end
     local isSamplingStage = false
     local controlVars, handlerBody, handlerFooter = [[
         sampler baseSampler = sampler_state {
@@ -53,8 +53,8 @@ shaderRW[identifier] = function(shaderInputs)
     handlerBody = handlerBody..[[
         float4 baseTexel = tex2D(baseSampler, PS.TexCoord);
     ]]
-    for i = #shaderInputs, 1, -1 do
-        local j = shaderInputs[i]
+    for i = #shaderMaps, 1, -1 do
+        local j = shaderMaps[i]
         if j.control then
             controlVars = controlVars..[[
                 texture controlTex_]]..i..[[;
