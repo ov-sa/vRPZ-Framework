@@ -53,7 +53,7 @@ shaderRW[identifier] = function(shaderMaps)
     for i = #shaderMaps, 1, -1 do
         local j = shaderMaps[i]
         handlerBody = handlerBody..[[
-            float4 controlTexel_]]..i..[[ = tex2D(]]..(((j.control) and [[baseSampler]]) or controlSampler_]]..i..[[), PS.TexCoord);
+            float4 controlTexel_]]..i..[[ = tex2D(]]..(((j.control) and [[baseSampler]]) or [[controlSampler_]]..i)..[[), PS.TexCoord);
         ]]
         for k = 1, #mapChannels, 1 do
             local v = mapChannels[k]
