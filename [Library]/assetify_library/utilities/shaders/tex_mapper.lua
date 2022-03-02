@@ -128,7 +128,7 @@ shaderRW[identifier] = function(shaderMaps)
 
     float4 PSHandler(PSInput PS) {
         ]]..handlerBody..handlerFooter..[[
-        return sampledTexel;
+        return saturate(sampledTexel);
     }
 
 
