@@ -49,7 +49,7 @@ shader = {
 }
 shaderRW = nil
 shader.preLoaded = {
-    ["Assetify_TextureClearer"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureChanger"], shader.defaultData.shaderPriority, shader.defaultData.shaderDistance, false, "all")
+    ["Assetify_TextureClearer"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureChanger"](), shader.defaultData.shaderPriority, shader.defaultData.shaderDistance, false, "all")
 }
 imports.dxSetShaderValue(shader.preLoaded["Assetify_TextureClearer"], "baseTexture", shader.preLoadedTex.invisibleMap)
 shader.__index = shader
@@ -137,7 +137,7 @@ function shader:load(element, shaderCategory, shaderName, textureName, shaderTex
     shaderPriority = imports.tonumber(shaderPriority) or shader.defaultData.shaderPriority
     shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
     self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
-    self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName], shaderPriority, shaderDistance, false, "all")
+    self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName](), shaderPriority, shaderDistance, false, "all")
     if not self.isPreLoaded then rwCache.shader[shaderName] = self.cShader end
     for i, j in imports.pairs(shaderTextures) do
         if j and imports.isElement(rwCache.texture[j]) then

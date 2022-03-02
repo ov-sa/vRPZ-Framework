@@ -37,28 +37,30 @@ end
 --[[ Shader ]]--
 ----------------
 
-shaderRW["Assetify_TextureChanger"] = depDatas..[[
-/*-----------------
--->> Variables <<--
--------------------*/
+shaderRW["Assetify_TextureChanger"] = function()
+    return depDatas..[[
+    /*-----------------
+    -->> Variables <<--
+    -------------------*/
 
-texture baseTexture;
+    texture baseTexture;
 
 
-/*------------------
--->> Techniques <<--
---------------------*/
+    /*------------------
+    -->> Techniques <<--
+    --------------------*/
 
-technique ]]..identifier..[[
-{
-    pass P0
+    technique ]]..identifier..[[
     {
-        AlphaBlendEnable = true;
-        Texture[0] = baseTexture;
+        pass P0
+        {
+            AlphaBlendEnable = true;
+            Texture[0] = baseTexture;
+        }
     }
-}
 
-technique fallback {
-    pass P0 {}
-}
-]]
+    technique fallback {
+        pass P0 {}
+    }
+    ]]
+end
