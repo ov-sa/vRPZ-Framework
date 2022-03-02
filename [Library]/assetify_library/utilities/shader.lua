@@ -153,9 +153,9 @@ function shader:clearElementBuffer(element, shaderCategory)
 end
 imports.addEventHandler("onClientElementDestroy", resourceRoot, function() shader:clearElementBuffer(source) end)
 
-function shader:load(element, shaderCategory, shaderName, textureName, shaderTextures, rwCache, encryptKey, shaderPriority, shaderDistance)
+function shader:load(element, shaderCategory, shaderName, textureName, shaderTextures, shaderInputs, rwCache, encryptKey, shaderPriority, shaderDistance)
     if not self or (self == shader) then return false end
-    if not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures or not rwCache then return false end
+    if not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures or not shaderInputs or not rwCache then return false end
     element = ((element and imports.isElement(element)) and element) or false
     shaderPriority = imports.tonumber(shaderPriority) or shader.defaultData.shaderPriority
     shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
@@ -167,12 +167,16 @@ function shader:load(element, shaderCategory, shaderName, textureName, shaderTex
             imports.dxSetShaderValue(self.cShader, i, rwCache.texture[j])
         end
     end
+    for i, j in imports.pairs(shaderInputs) do
+        imports.dxSetShaderValue(self.cShader, i, j)
+    end
     self.shaderData = {
         element = element,
         shaderCategory = shaderCategory,
         shaderName = shaderName,
         textureName = textureName,
         shaderTextures = shaderTextures,
+        shaderInputs = shaderInputs,
         shaderPriority = shaderPriority,
         shaderDistance = shaderDistance
     }
