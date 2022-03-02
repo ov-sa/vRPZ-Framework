@@ -166,8 +166,6 @@ function shader:load(element, shaderCategory, shaderName, textureName, shaderTex
     shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
     self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
     self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName](shaderMaps), shaderPriority, shaderDistance, false, "all")
-    --TODO: REMOVE LATER
-    imports.file.write("test.fx", shader.rwCache[shaderName](shaderMaps))
     if not self.isPreLoaded then rwCache.shader[textureName] = self.cShader end
     for i, j in imports.pairs(shaderTextures) do
         if j and imports.isElement(rwCache.texture[j]) then
