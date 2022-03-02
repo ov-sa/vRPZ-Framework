@@ -109,18 +109,21 @@ shaderRW[identifier] = function(shaderMaps)
     -->> Handlers <<--
     ------------------*/
     float4 PSHandler(PSInput PS) {
+
         float4 controlTexel = tex2D(controlSampler, PS.TexCoord);
         float4 redTexel = tex2D(redControlSampler, PS.TexCoord*controlTex1_RScale);
         float4 greenTexel = tex2D(greenControlSampler, PS.TexCoord*controlTex1_GScale);
         float4 blueTexel = tex2D(blueControlSampler, PS.TexCoord*controlTex1_BScale);
-        float4 sampledControlTexel = controlTexel;
-        sampledControlTexel = lerp(controlTexel, redTexel, controlTexel.r); sampledControlTexel = lerp(controlTexel, redTexel, controlTexel.r); sampledControlTexel = lerp(controlTexel, redTexel, controlTexel.r);
-        sampledControlTexel = lerp(sampledControlTexel, greenTexel, controlTexel.g); sampledControlTexel = lerp(sampledControlTexel, greenTexel, controlTexel.g); sampledControlTexel = lerp(sampledControlTexel, greenTexel, controlTexel.g);
-        sampledControlTexel = lerp(sampledControlTexel, blueTexel, controlTexel.b); sampledControlTexel = lerp(sampledControlTexel, blueTexel, controlTexel.b); sampledControlTexel = lerp(sampledControlTexel, blueTexel, controlTexel.b);
-        sampledControlTexel.rgb = sampledControlTexel.rgb*0.33333;
-        sampledControlTexel.a = controlTexel.a;
-        sampledControlTexel = saturate(sampledControlTexel);
-        return sampledControlTexel;
+
+        float4 sampledTexel = controlTexel;
+        sampledTexel = lerp(controlTexel, redTexel, controlTexel.r); sampledTexel = lerp(controlTexel, redTexel, controlTexel.r); sampledTexel = lerp(controlTexel, redTexel, controlTexel.r);
+        sampledTexel = lerp(sampledTexel, greenTexel, controlTexel.g); sampledTexel = lerp(sampledTexel, greenTexel, controlTexel.g); sampledTexel = lerp(sampledTexel, greenTexel, controlTexel.g);
+        sampledTexel = lerp(sampledTexel, blueTexel, controlTexel.b); sampledTexel = lerp(sampledTexel, blueTexel, controlTexel.b); sampledTexel = lerp(sampledTexel, blueTexel, controlTexel.b);
+        sampledTexel.rgb = sampledTexel.rgb*0.33333;
+        sampledTexel.a = controlTexel.a;
+
+
+        return saturate(sampledTexel);
     }
 
 
