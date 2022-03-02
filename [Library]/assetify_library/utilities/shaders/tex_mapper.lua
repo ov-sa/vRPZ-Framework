@@ -41,7 +41,7 @@ end
 
 shaderRW[identifier] = function(shaderMaps)
     if not shaderMaps or (#shaderMaps <= 0) then return false end
-    local isSamplerInit = false
+    local isSamplingStage = false
     local controlVars, handlerBody, handlerFooter = [[
         sampler baseSampler = sampler_state {
             Texture = (gTexture0);
@@ -57,6 +57,9 @@ shaderRW[identifier] = function(shaderMaps)
                 float4 controlTexel_]]..i..[[ = tex2D(baseSampler, PS.TexCoord);
             ]]
         else
+            handlerBody = handlerBody..[[
+                float4 controlTexel_]]..i..[[ = tex2D(baseSampler, PS.TexCoord);
+            ]]
             --handlerBody = handlerBody..[[
               --  float4 sampledTexel_]]..i..[[ = controlTexel_]]..i..[[;
                -- float4 controlTexel = tex2D(baseSampler, PS.TexCoord);
@@ -87,8 +90,8 @@ shaderRW[identifier] = function(shaderMaps)
             sampledTexel_]]..i..[[.rgb = sampledTexel_]]..i..[[.rgb*0.33333;
             sampledTexel_]]..i..[[.a = controlTexel_]]..i..[[.a;
         ]]
-        if not isSamplerInit then
-            isSamplerInit = true
+        if not isSamplingStage then
+            isSamplingStage = true
             handlerFooter = handlerFooter..[[
                 float4 sampledControlTexel = sampledTexel_]]..i..[[;
             ]]
