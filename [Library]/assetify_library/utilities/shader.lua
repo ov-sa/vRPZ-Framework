@@ -180,7 +180,7 @@ function shader:load(element, shaderCategory, shaderName, textureName, shaderTex
     bufferCache = bufferCache or {}
     bufferCache[shaderCategory] = bufferCache[shaderCategory] or {}
     bufferCache[shaderCategory][textureName] = self
-    imports.engineApplyShaderToWorldTexture(self.cShader, textureName, element)
+    imports.engineApplyShaderToWorldTexture(self.cShader, textureName, element or nil)
     return true
 end
 
