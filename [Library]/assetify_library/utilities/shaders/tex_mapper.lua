@@ -73,6 +73,17 @@ shaderRW[identifier] = function(shaderMaps)
                             };
                         ]]
                     end
+                    if j.bump then
+                        controlVars = controlVars..[[
+                            texture controlTex_]]..i..[[_bump;
+                            sampler controlSampler_]]..i..[[_bump = sampler_state { 
+                                Texture = controlTex_]]..i..[[_bump;
+                                MinFilter = Linear;
+                                MagFilter = Linear;
+                                MipFilter = Linear;
+                            };
+                        ]]
+                    end
                     handlerBody = handlerBody..[[
                         float4 controlTexel_]]..i..[[ = ]]..(((j.control) and [[tex2D(controlSampler_]]..i..[[, PS.TexCoord)]]) or [[baseTexel]])..[[;
                     ]]
@@ -87,6 +98,17 @@ shaderRW[identifier] = function(shaderMaps)
                         MinFilter = Anisotropic;
                     };
                 ]]
+                if j[v].bump then
+                    controlVars = controlVars..[[
+                        texture controlTex_]]..i..[[_]]..v..[[_bump;
+                        sampler controlSampler_]]..i..[[_]]..v..[[_bump = sampler_state { 
+                            Texture = controlTex_]]..i..[[_]]..v..[[_bump;
+                            MinFilter = Linear;
+                            MagFilter = Linear;
+                            MipFilter = Linear;
+                        };
+                    ]]
+                end
                 handlerBody = handlerBody..[[
                     float4 controlTexel_]]..i..[[_]]..v..[[ = tex2D(controlSampler_]]..i..[[_]]..v..[[, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
                 ]]
