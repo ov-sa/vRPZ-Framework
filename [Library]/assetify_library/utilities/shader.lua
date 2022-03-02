@@ -160,7 +160,7 @@ function shader:load(element, reference, shaderCategory, shaderName, textureName
     local bufferIndex, bufferCache = false, false
     if self.shaderData.element then
         bufferIndex, bufferCache = self.shaderData.element, shader.buffer.element
-    elseif self.shaderData.reference then
+    else
         bufferIndex, bufferCache = self.shaderData.reference, shader.buffer.reference
     end
     bufferCache[bufferIndex] = bufferCache[bufferIndex] or {}
@@ -179,7 +179,11 @@ function shader:unload()
     else
         imports.engineRemoveShaderFromWorldTexture(self.cShader, self.shaderData.textureName, self.shaderData.element)
     end
-    shader.buffer.element[(self.shaderData.element)][(self.shaderData.shaderCategory)][(self.shaderData.textureName)] = nil
+    if self.shaderData.element then
+        shader.buffer.element[(self.shaderData.element)][(self.shaderData.shaderCategory)][(self.shaderData.textureName)] = nil
+    else
+        shader.buffer.reference[(self.shaderData.reference)][(self.shaderData.shaderCategory)][(self.shaderData.textureName)] = nil
+    end
     self = nil
     return true
 end
