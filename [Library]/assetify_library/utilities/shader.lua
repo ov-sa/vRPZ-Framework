@@ -131,9 +131,9 @@ function shader:clearElementBuffer(element, shaderCategory)
 end
 imports.addEventHandler("onClientElementDestroy", resourceRoot, function() shader:clearElementBuffer(source) end)
 
-function shader:load(element, shaderCategory, shaderName, textureName, shaderTextures, rwCache, encryptKey, shaderPriority, shaderDistance)
+function shader:load(element, reference, shaderCategory, shaderName, textureName, shaderTextures, rwCache, encryptKey, shaderPriority, shaderDistance)
     if not self or (self == shader) then return false end
-    if not element or not imports.isElement(element) or not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures or not rwCache then return false end
+    if ((not element or not imports.isElement(element)) and not reference) or not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures or not rwCache then return false end
     shaderPriority = imports.tonumber(shaderPriority) or shader.defaultData.shaderPriority
     shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
     self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
@@ -145,7 +145,8 @@ function shader:load(element, shaderCategory, shaderName, textureName, shaderTex
         end
     end
     self.shaderData = {
-        element = element,
+        element = (not reference and element) or false,
+        reference = reference,
         shaderCategory = shaderCategory,
         shaderName = shaderName,
         textureName = textureName,

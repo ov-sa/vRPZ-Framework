@@ -5,18 +5,11 @@
     "sceneOffset": {"x": 0, "y": 0, "z": -0.5},
     "shaderMaps": {
         "control": {
-            "textureName": [
+            "isld_lby1_ctrl": [
                 {
-                    "control": {"map": "sometexture.png"},
-                    "red": {"map": "control/grass.jpg", "scale": 70},
-                    "green": {"map": "control/hay.jpg", "scale": 100},
-                    "blue": {"map": "control/semi_grass.jpg", "scale": 100}
-                },
-                {
-                    "control": {"map": "sometexture.png"},
-                    "red": {"map": "control/grass.jpg", "scale": 70},
-                    "green": {"map": "control/hay.jpg", "scale": 100},
-                    "blue": {"map": "control/semi_grass.jpg", "scale": 100}
+                    "red": {"map": "control/sand.jpg", "scale": 11},
+                    "green": {"map": "control/grass.jpg", "scale": 11},
+                    "blue": {"map": "control/sand.jpg", "scale": 11}
                 }
             ]
         }
