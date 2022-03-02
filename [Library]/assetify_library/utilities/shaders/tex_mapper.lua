@@ -73,28 +73,30 @@ shaderRW[identifier] = function(shaderMaps)
         ]]
         for k = 1, #shader.defaultData.shaderChannels, 1 do
             local v, channel = shader.defaultData.shaderChannels[k].index, shader.defaultData.shaderChannels[k].channel
-            controlVars = controlVars..[[
-                texture controlTex_]]..i..[[_]]..v..[[;
-                float controlScale_]]..i..[[_]]..v..[[ = ]]..(j[v].scale)..[[;
-                sampler controlSampler_]]..i..[[_]]..v..[[ = sampler_state { 
-                    Texture = controlTex_]]..i..[[_]]..v..[[;
-                    MipFilter = Linear;
-                    MaxAnisotropy = gMaxAnisotropy*anisotropy;
-                    MinFilter = Anisotropic;
-                };
-            ]]
-            handlerBody = handlerBody..[[
-                float4 controlTexel_]]..i..[[_]]..v..[[ = tex2D(controlSampler_]]..i..[[_]]..v..[[, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
-            ]]
-            if k == 1 then
-                handlerBody = handlerBody..[[
-                    float4 sampledTexel_]]..i..[[ = controlTexel_]]..i..[[;
+            if j[v] then
+                controlVars = controlVars..[[
+                    texture controlTex_]]..i..[[_]]..v..[[;
+                    float controlScale_]]..i..[[_]]..v..[[ = ]]..(j[v].scale)..[[;
+                    sampler controlSampler_]]..i..[[_]]..v..[[ = sampler_state { 
+                        Texture = controlTex_]]..i..[[_]]..v..[[;
+                        MipFilter = Linear;
+                        MaxAnisotropy = gMaxAnisotropy*anisotropy;
+                        MinFilter = Anisotropic;
+                    };
                 ]]
-            end
-            for m = 1, samplingIteration, 1 do
                 handlerBody = handlerBody..[[
-                    sampledTexel_]]..i..[[ = lerp(sampledTexel_]]..i..[[, controlTexel_]]..i..[[_]]..v..[[, controlTexel_]]..i..[[.]]..channel..[[);
+                    float4 controlTexel_]]..i..[[_]]..v..[[ = tex2D(controlSampler_]]..i..[[_]]..v..[[, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
                 ]]
+                if k == 1 then
+                    handlerBody = handlerBody..[[
+                        float4 sampledTexel_]]..i..[[ = controlTexel_]]..i..[[;
+                    ]]
+                end
+                for m = 1, samplingIteration, 1 do
+                    handlerBody = handlerBody..[[
+                        sampledTexel_]]..i..[[ = lerp(sampledTexel_]]..i..[[, controlTexel_]]..i..[[_]]..v..[[, controlTexel_]]..i..[[.]]..channel..[[);
+                    ]]
+                end
             end
         end
         handlerBody = handlerBody..[[
@@ -104,7 +106,7 @@ shaderRW[identifier] = function(shaderMaps)
         handlerFooter = handlerFooter..((not isSamplingStage and [[
             float4 sampledTexel = sampledTexel_]]..i..[[;
         ]]) or [[
-            sampledTexel *= sampledTexel_]]..i..[[;
+            sampledTexel = lerp(sampledTexel, sampledTexel_]]..i..[[, sampledTexel_]]..i..[[.a);
         ]])
         isSamplingStage = true
     end
@@ -140,7 +142,6 @@ shaderRW[identifier] = function(shaderMaps)
     {
         pass P0
         {
-            AlphaBlendEnable = true;
             SRGBWriteEnable = false;
             PixelShader = compile ps_2_0 PSHandler();
         }
