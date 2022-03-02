@@ -58,7 +58,7 @@ shaderRW[identifier] = function(shaderMaps)
         controlVars = controlVars
         --TODO: SAME TEXEL COULD BE REUSED TO OPTIMIZE SHADER
         handlerBody = handlerBody..[[
-            float4 controlTexel_]]..i..[[ = tex2D(controlSampler_]]..i..[[), PS.TexCoord);
+            float4 controlTexel_]]..i..[[ = ]]..[[tex2D(controlSampler_]]..i..[[, PS.TexCoord);]]..
         ]]
         for k = 1, #mapChannels, 1 do
             local v = mapChannels[k]
