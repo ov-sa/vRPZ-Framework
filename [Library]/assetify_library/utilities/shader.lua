@@ -43,7 +43,8 @@ shader = {
         invisibleMap = imports.dxCreateTexture(2, 2, "dxt5", "clamp")
     },
     buffer = {
-        element = {}
+        element = {},
+        reference = {}
     },
     rwCache = shaderRW
 }
@@ -134,6 +135,7 @@ imports.addEventHandler("onClientElementDestroy", resourceRoot, function() shade
 function shader:load(element, reference, shaderCategory, shaderName, textureName, shaderTextures, rwCache, encryptKey, shaderPriority, shaderDistance)
     if not self or (self == shader) then return false end
     if ((not element or not imports.isElement(element)) and not reference) or not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures or not rwCache then return false end
+    reference = (not element and reference) or false
     shaderPriority = imports.tonumber(shaderPriority) or shader.defaultData.shaderPriority
     shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
     self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
@@ -145,7 +147,7 @@ function shader:load(element, reference, shaderCategory, shaderName, textureName
         end
     end
     self.shaderData = {
-        element = (not reference and element) or false,
+        element = element,
         reference = reference,
         shaderCategory = shaderCategory,
         shaderName = shaderName,
@@ -154,9 +156,16 @@ function shader:load(element, reference, shaderCategory, shaderName, textureName
         shaderPriority = shaderPriority,
         shaderDistance = shaderDistance
     }
-    shader.buffer.element[element] = shader.buffer.element[element] or {}
-    shader.buffer.element[element][shaderCategory] = shader.buffer.element[element][shaderCategory] or {}
-    shader.buffer.element[element][shaderCategory][textureName] = self
+
+    local bufferIndex, bufferCache = false, false
+    if self.shaderData.element then
+        bufferIndex, bufferCache = self.shaderData.element, shader.buffer.element
+    elseif self.shaderData.reference then
+        bufferIndex, bufferCache = self.shaderData.reference, shader.buffer.reference
+    end
+    bufferCache[bufferIndex] = bufferCache[bufferIndex] or {}
+    bufferCache[bufferIndex][shaderCategory] = bufferCache[bufferIndex][shaderCategory] or {}
+    bufferCache[bufferIndex][shaderCategory][textureName] = self
     imports.engineApplyShaderToWorldTexture(self.cShader, textureName, element)
     return true
 end
