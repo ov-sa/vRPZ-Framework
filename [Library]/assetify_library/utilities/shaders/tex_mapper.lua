@@ -24,6 +24,7 @@ local imports = {
 -------------------
 
 local identifier = "Assetify_TextureMapper"
+local mapChannels = {"R", "G", "B"}
 local depDatas, dependencies = "", {}
 for i, j in imports.pairs(dependencies) do
     local depData = imports.file.read(j.filePath)
@@ -39,37 +40,26 @@ end
 
 shaderRW[identifier] = function(shaderMaps)
     if not shaderMaps then return false end
-
-    local controlVars = ""
+    local controlVars, handlerVars = "", ""
     for i = 1, #shaderMaps, 1 do
         local j = shaderMaps[i]
-        if j.red then
+        for k = 1, #mapChannels, 1 do
+            local v = mapChannels[k]
             controlVars = controlVars..[[
-                texture controlTex_]]..i..[[_R;
-                texture controlScale_]]..i..[[_R;
+                texture controlTex_]]..i..[[_]]..v;
+                texture controlScale_]]..i..[[_]]..v;
             ]]
-        end
-        if j.green then
-            controlVars = controlVars..[[
-                texture controlTex_]]..i..[[_G;
-                texture controlScale_]]..i..[[_G;
-            ]]
-        end
-        if j.blue then
-            controlVars = controlVars..[[
-                texture controlTex_]]..i..[[_B;
-                texture controlScale_]]..i..[[_B;
+            handlerVars = handlerVars..[[
+
             ]]
         end
     end
-
     return depDatas..[[
     /*-----------------
     -->> Variables <<--
     -------------------*/
 
     int maxAnisotropy <string deviceCaps="MaxAnisotropy";>;
-    bool enableBumpMap = false;
     float anisotropy = 1;
     ]]..controlVars..[[
     struct PSInput {
@@ -118,7 +108,7 @@ shaderRW[identifier] = function(shaderMaps)
     /*----------------
     -->> Handlers <<--
     ------------------*/
-    float4 PixelShaderFunction(PSInput PS) {
+    float4 PSHandler(PSInput PS) {
         float4 controlTexel = tex2D(controlSampler, PS.TexCoord);
         float4 redTexel = tex2D(redControlSampler, PS.TexCoord*controlTex1_RScale);
         float4 greenTexel = tex2D(greenControlSampler, PS.TexCoord*controlTex1_GScale);
@@ -144,7 +134,7 @@ shaderRW[identifier] = function(shaderMaps)
         {
             AlphaBlendEnable = true;
             SRGBWriteEnable = false;
-            PixelShader = compile ps_2_0 PixelShaderFunction();
+            PixelShader = compile ps_2_0 PSHandler();
         }
     }
 
@@ -153,10 +143,3 @@ shaderRW[identifier] = function(shaderMaps)
     }
     ]]
 end
-
-[[
-    if (enableBumpMap) {
-        float4 bumpTexel = tex2D(bumpSampler, PS.TexCoord);
-        sampledControlTexel.rgb *= bumpTexel.rgb;
-    }
-]]
