@@ -110,6 +110,7 @@ function shader:clearAssetBuffer(rwCache)
 end
 
 function shader:clearElementBuffer(element, shaderCategory)
+    --TODO: ADD SUPPORT FOR REFERENCE...
     if not element or not imports.isElement(element) or not shader.buffer.element[element] or (shaderCategory and not shader.buffer.element[element][shaderCategory]) then return false end
     if not shaderCategory then
         for i, j in imports.pairs(shader.buffer.element[element]) do
