@@ -69,7 +69,7 @@ shaderRW[identifier] = function(shaderMaps)
             ]]
             controlVars = controlVars..[[
                 texture controlTex_]]..i..[[_]]..v..[[;
-                float controlScale_]]..i..[[_]]..v..[[ = ]]..(j[v].scale);
+                float controlScale_]]..i..[[_]]..v..[[ = ]]..(j[v].scale)..[[;
                 sampler controlSampler_]]..i..[[_]]..v..[[ = sampler_state { 
                     Texture = controlTex_]]..i..[[_]]..v..[[;
                     MipFilter = Linear;
