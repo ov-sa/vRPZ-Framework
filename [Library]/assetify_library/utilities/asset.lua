@@ -187,6 +187,7 @@ else
     end
 
     function asset:buildShader(assetPath, shaderPack, assetFiles, encryptKey)
+        --TODO: UDPATE DOWNLOADER TO SUPPORT NEW ASSETIFY UPDATE
         for i, j in imports.pairs(shaderPack) do
             if j and (imports.type(j) == "table") then
                 if i == "clump" then
