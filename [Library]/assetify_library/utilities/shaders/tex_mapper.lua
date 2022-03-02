@@ -70,7 +70,7 @@ shaderRW[identifier] = function(shaderMaps)
             float4 controlTexel_]]..i..[[ = ]]..(((j.control) and [[tex2D(controlSampler_]]..i..[[, PS.TexCoord)]]) or [[baseTexel]])..[[;
         ]]
         for k = 1, #shader.defaultData.shaderChannels, 1 do
-            local v = shader.defaultData.shaderChannels[k]
+            local v, channel = shader.defaultData.shaderChannels[k].index, shader.defaultData.shaderChannels[k].channel
             controlVars = controlVars..[[
                 texture controlTex_]]..i..[[_]]..v..[[;
                 float controlScale_]]..i..[[_]]..v..[[ = ]]..(j[v].scale)..[[;
@@ -82,16 +82,17 @@ shaderRW[identifier] = function(shaderMaps)
                 };
             ]]
             handlerBody = handlerBody..[[
-                float4 channelTexel_]]..i..[[_]]..v..[[ = tex2D(controlSampler_]]..i..[[_]]..v..[[, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
+                float4 controlTexel_]]..i..[[_]]..v..[[ = tex2D(controlSampler_]]..i..[[_]]..v..[[, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
+                float4 sampledTexel_]]..i..[[ = controlTexel_]]..i..[[_]]..v..[[;
             ]]
             for m = 1, samplingIteration, 1 do
                 handlerBody = handlerBody..[[
-                    sampledTexel_]]..i..[[ = lerp(controlTexel_]]..i..[[, channelTexel_]]..i..[[_]]..v..[[, controlTexel_]]..i..[[.]]..imports.string.lower(v)..[[);
+                    sampledTexel_]]..i..[[ = lerp(sampledTexel_]]..i..[[, controlTexel_]]..i..[[_]]..v..[[, controlTexel_]]..i..[[.]]..channel..[[);
                 ]]
             end
         end
         handlerBody = handlerBody..[[
-            channelTexel_]]..i..[[.rgb = sampledTexel_]]..i..[[.rgb*]]..(1/samplingIteration)..[[;
+            sampledTexel_]]..i..[[.rgb = sampledTexel_]]..i..[[.rgb*]]..(1/samplingIteration)..[[;
             sampledTexel_]]..i..[[.a = controlTexel_]]..i..[[.a;
         ]]
         if not isSamplingStage then
