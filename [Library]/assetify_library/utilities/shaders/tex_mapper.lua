@@ -41,6 +41,7 @@ end
 
 shaderRW[identifier] = function(shaderMaps)
     if not shaderMaps then return false end
+    local isSamplerInit = false
     local controlVars, handlerBody, handlerFooter = "", "", ""
     for i = 1, #shaderMaps, 1 do
         local j = shaderMaps[i]
@@ -69,9 +70,15 @@ shaderRW[identifier] = function(shaderMaps)
             sampledTexel_]]..i..[[.rgb = sampledTexel_]]..i..[[.rgb*0.33333;
             sampledTexel_]]..i..[[.a = controlTexel_]]..i..[[.a;
         ]]
-        handlerFooter = handlerFooter..[[
-            sampledTexel *= sampledTexel_]]..i..[[;
-        ]]
+        if not isSamplerInit then
+            handlerFooter = handlerFooter..[[
+                float4 sampledControlTexel = sampledTexel_]]..i..[[;
+            ]]
+        else
+            handlerFooter = handlerFooter..[[
+                sampledTexel *= sampledTexel_]]..i..[[;
+            ]]
+        end
     end
     return depDatas..[[
     /*-----------------
