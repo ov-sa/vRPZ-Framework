@@ -81,21 +81,23 @@ shaderRW[identifier] = function(shaderMaps)
                     MinFilter = Anisotropic;
                 };
             ]]
+            handlerBody = handlerBody..[[
+                float4 channelTexel_]]..i..[[_]]..v..[[ = tex2D(controlSampler_]]..i..[[_]]..v..[[, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
+            ]]
             for m = 1, samplingIteration, 1 do
                 handlerBody = handlerBody..[[
-                    float4 channelTexel_]]..i..[[_]]..v..[[ = tex2D(controlSampler_]]..i..[[_]]..v..[[, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
                     sampledTexel_]]..i..[[ = lerp(controlTexel_]]..i..[[, channelTexel_]]..i..[[_]]..v..[[, controlTexel_]]..i..[[.]]..imports.string.lower(v)..[[);
                 ]]
             end
         end
         handlerBody = handlerBody..[[
-            sampledTexel_]]..i..[[.rgb = sampledTexel_]]..i..[[.rgb*]]..(1/samplingIteration)..[[;
+            channelTexel_]]..i..[[.rgb = sampledTexel_]]..i..[[.rgb*]]..(1/samplingIteration)..[[;
             sampledTexel_]]..i..[[.a = controlTexel_]]..i..[[.a;
         ]]
         if not isSamplingStage then
             isSamplingStage = true
             handlerFooter = handlerFooter..[[
-                float4 sampledControlTexel = sampledTexel_]]..i..[[;
+                float4 sampledTexel = sampledTexel_]]..i..[[;
             ]]
         else
             handlerFooter = handlerFooter..[[
