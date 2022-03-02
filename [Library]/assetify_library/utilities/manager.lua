@@ -130,7 +130,6 @@ function manager:load(assetType, assetName)
                             print("TRYNNA CREATE CONTROLS")
                             --shader:create(nil, assetType..assetName, "control", "Assetify_TextureMapper", i, {baseTexture = assetReference.manifestData.shaderMaps.control[i]}, assetReference.unsyncedData.rwCache.map, assetReference.manifestData.encryptKey)
                         end
-                        --TODO: CLEAR REFERENCE BUFFER WHEN ITS UNLOADED..
                     end
                 end):resume({
                     executions = downloadSettings.buildRate,
