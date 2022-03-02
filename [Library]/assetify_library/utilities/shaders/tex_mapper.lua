@@ -52,19 +52,11 @@ shaderRW[identifier] = function(shaderMaps)
     ]], "", ""
     for i = #shaderMaps, 1, -1 do
         local j = shaderMaps[i]
-        if not j.control then
-            handlerBody = handlerBody..[[
-                float4 controlTexel_]]..i..[[ = tex2D(baseSampler, PS.TexCoord);
-            ]]
-        else
-            handlerBody = handlerBody..[[
-                float4 controlTexel_]]..i..[[ = tex2D(baseSampler, PS.TexCoord);
-            ]]
-            --handlerBody = handlerBody..[[
-              --  float4 sampledTexel_]]..i..[[ = controlTexel_]]..i..[[;
-               -- float4 controlTexel = tex2D(baseSampler, PS.TexCoord);
-            --]]
-        end
+        handlerBody = (j.control) and (handlerBody..[[
+            float4 controlTexel_]]..i..[[ = tex2D(baseSampler, PS.TexCoord);
+        ]]) or (handlerBody..[[
+            float4 controlTexel_]]..i..[[ = tex2D(controlSampler_]]..i..[[, PS.TexCoord);
+        ]])
         for k = 1, #mapChannels, 1 do
             local v = mapChannels[k]
             controlVars = controlVars..[[
