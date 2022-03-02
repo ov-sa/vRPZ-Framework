@@ -71,6 +71,7 @@ shaderRW[identifier] = function(shaderMaps)
         handlerBody = handlerBody..[[
             float4 controlTexel_]]..i..[[ = ]]..(((j.control) and [[tex2D(controlSampler_]]..i..[[, PS.TexCoord)]]) or [[baseTexel]])..[[;
         ]]
+        local isControlSampled = false
         for k = 1, #shader.defaultData.shaderChannels, 1 do
             local v, channel = shader.defaultData.shaderChannels[k].index, shader.defaultData.shaderChannels[k].channel
             if j[v] then
@@ -87,10 +88,11 @@ shaderRW[identifier] = function(shaderMaps)
                 handlerBody = handlerBody..[[
                     float4 controlTexel_]]..i..[[_]]..v..[[ = tex2D(controlSampler_]]..i..[[_]]..v..[[, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
                 ]]
-                if k == 1 then
+                if not isControlSampled then
                     handlerBody = handlerBody..[[
                         float4 sampledTexel_]]..i..[[ = controlTexel_]]..i..[[;
                     ]]
+                    isControlSampled = true
                 end
                 for m = 1, samplingIteration, 1 do
                     handlerBody = handlerBody..[[
@@ -103,12 +105,14 @@ shaderRW[identifier] = function(shaderMaps)
             sampledTexel_]]..i..[[.rgb = sampledTexel_]]..i..[[.rgb*]]..(1/samplingIteration)..[[;
             sampledTexel_]]..i..[[.a = controlTexel_]]..i..[[.a;
         ]]
-        handlerFooter = handlerFooter..((not isSamplingStage and [[
-            float4 sampledTexel = sampledTexel_]]..i..[[;
-        ]]) or [[
-            sampledTexel = lerp(sampledTexel, sampledTexel_]]..i..[[, sampledTexel_]]..i..[[.a);
-        ]])
-        isSamplingStage = true
+        if isControlSampled then
+            handlerFooter = handlerFooter..((not isSamplingStage and [[
+                float4 sampledTexel = sampledTexel_]]..i..[[;
+            ]]) or [[
+                sampledTexel = lerp(sampledTexel, sampledTexel_]]..i..[[, sampledTexel_]]..i..[[.a);
+            ]])
+            isSamplingStage = true
+        end
     end
     return depDatas..[[
     /*-----------------
