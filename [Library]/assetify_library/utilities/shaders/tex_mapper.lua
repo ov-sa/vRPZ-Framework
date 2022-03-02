@@ -42,14 +42,31 @@ end
 shaderRW[identifier] = function(shaderMaps)
     if not shaderMaps or (#shaderMaps <= 0) then return false end
     local isSamplerInit = false
-    local controlVars, handlerBody, handlerFooter = "", "", ""
+    local controlVars, handlerBody, handlerFooter = [[
+        sampler baseSampler = sampler_state {
+            Texture = (gTexture0);
+            MipFilter = Linear;
+            MaxAnisotropy = maxAnisotropy*anisotropy;
+            MinFilter = Anisotropic;
+        };    
+    ]], "", ""
     for i = #shaderMaps, 1, -1 do
         local j = shaderMaps[i]
-        handlerBody = handlerBody..[[
-            float4 sampledTexel_]]..i..[[ = controlTexel_]]..i..[[;
-        ]]
+        if not j.control then
+            handlerBody = handlerBody..[[
+                float4 controlTexel_]]..i..[[ = tex2D(baseSampler, PS.TexCoord);
+            ]]
+        else
+            --handlerBody = handlerBody..[[
+              --  float4 sampledTexel_]]..i..[[ = controlTexel_]]..i..[[;
+               -- float4 controlTexel = tex2D(baseSampler, PS.TexCoord);
+            --]]
+        end
         for k = 1, #mapChannels, 1 do
             local v = mapChannels[k]
+            controlVars = controlVars..[[
+                texture controlTex_]]..i..[[;
+            ]]
             controlVars = controlVars..[[
                 texture controlTex_]]..i..[[_]]..v..[[;
                 float controlScale_]]..i..[[_]]..v..[[ = ]]..(j[v].scale);
@@ -100,24 +117,10 @@ shaderRW[identifier] = function(shaderMaps)
 
 
     /*----------------
-    -->> Samplers <<--
-    ------------------*/
-
-    sampler controlSampler = sampler_state {
-        Texture = (gTexture0);
-        MipFilter = Linear;
-        MaxAnisotropy = maxAnisotropy*anisotropy;
-        MinFilter = Anisotropic;
-    };
-
-
-    /*----------------
     -->> Handlers <<--
     ------------------*/
     float4 PSHandler(PSInput PS) {
-    ]]..handlerBody..[[
-        float4 controlTexel = tex2D(controlSampler, PS.TexCoord);
-    ]]..handlerFooter..[[
+    ]]..handlerBody..handlerFooter..[[
     }
 
 

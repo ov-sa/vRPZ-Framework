@@ -14,7 +14,6 @@
                 },
                 {
                     "control": "sometexture.png",
-                    "useAlbedoMap": true,
                     "red": {"map": "control/grass.jpg", "scale": 70},
                     "green": {"map": "control/hay.jpg", "scale": 100},
                     "blue": {"map": "control/semi_grass.jpg", "scale": 100}
