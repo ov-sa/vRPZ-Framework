@@ -53,7 +53,7 @@ if localPlayer then
     }
     shader.buffer = {
         element = {}
-    },
+    }
     shader.rwCache = shaderRW
     shaderRW = nil
     shader.preLoaded = {

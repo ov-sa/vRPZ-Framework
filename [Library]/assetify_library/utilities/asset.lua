@@ -208,28 +208,15 @@ else
                                 n.bump = assetPath.."map/"..n.bump
                                 asset:buildFile(n.bump, assetFiles, encryptKey)
                             end
-                            if n.red and n.red.map then
-                                n.red.map = assetPath.."map/"..n.red.map
-                                asset:buildFile(n.red.map, assetFiles, encryptKey)
-                                if n.red.bump then
-                                    n.red.bump = assetPath.."map/"..n.red.bump
-                                    asset:buildFile(n.red.bump, assetFiles, encryptKey)
-                                end
-                            end
-                            if n.green and n.green.map then
-                                n.green.map = assetPath.."map/"..n.green.map
-                                asset:buildFile(n.green.map, assetFiles, encryptKey)
-                                if n.green.bump then
-                                    n.green.bump = assetPath.."map/"..n.green.bump
-                                    asset:buildFile(n.green.bump, assetFiles, encryptKey)
-                                end
-                            end
-                            if n.blue and n.blue.map then
-                                n.blue.map = assetPath.."map/"..n.blue.map
-                                asset:buildFile(n.blue.map, assetFiles, encryptKey)
-                                if n.blue.bump then
-                                    n.blue.bump = assetPath.."map/"..n.blue.bump
-                                    asset:buildFile(n.blue.bump, assetFiles, encryptKey)
+                            for x = 1, #shader.defaultData.shaderChannels, 1 do
+                                local y = shader.defaultData.shaderChannels[x].index
+                                if n[y] then
+                                    n[y].map = assetPath.."map/"..n[y].map
+                                    asset:buildFile(n[y].map, assetFiles, encryptKey)
+                                    if n[y].bump then
+                                        n[y].bump = assetPath.."map/"..n[y].bump
+                                        asset:buildFile(n[y].bump, assetFiles, encryptKey)
+                                    end
                                 end
                             end
                         end
