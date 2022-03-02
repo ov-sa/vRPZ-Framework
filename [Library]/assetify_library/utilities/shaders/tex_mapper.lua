@@ -37,7 +37,8 @@ end
 --[[ Shader ]]--
 ----------------
 
-shaderRW[identifier] = function()
+shaderRW[identifier] = function(shaderMaps)
+    if not shaderMaps then return false end
     return depDatas..[[
     int gCapsMaxAnisotropy <string deviceCaps="MaxAnisotropy";>;
     /*-----------------
