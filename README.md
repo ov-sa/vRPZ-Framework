@@ -10,6 +10,7 @@
 
 * Completely Open-Source
 * Config Loader
+* Designed w/ Internationalization
 * [DBify Library](https://github.com/ov-sa/DBify-Library) Integration
 * [Assetify Library](https://github.com/ov-sa/Assetify-Library) Integration
 * [Beautify Library](https://github.com/ov-sa/Beautify-Library) Integration
