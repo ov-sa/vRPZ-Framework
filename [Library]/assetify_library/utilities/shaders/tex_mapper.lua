@@ -73,6 +73,9 @@ shaderRW[identifier] = function(shaderMaps)
                             };
                         ]]
                     end
+                    handlerBody = handlerBody..[[
+                        float4 controlTexel_]]..i..[[ = ]]..(((j.control) and [[tex2D(controlSampler_]]..i..[[, PS.TexCoord)]]) or [[baseTexel]])..[[;
+                    ]]
                     if j.bump then
                         controlVars = controlVars..[[
                             texture controlTex_]]..i..[[_bump;
@@ -83,10 +86,10 @@ shaderRW[identifier] = function(shaderMaps)
                                 MipFilter = Linear;
                             };
                         ]]
+                        handlerBody = handlerBody..[[
+                            float4 controlTexel_]]..i..[[_bump = tex2D(controlSampler_]]..i..[[_bump, PS.TexCoord);
+                        ]]
                     end
-                    handlerBody = handlerBody..[[
-                        float4 controlTexel_]]..i..[[ = ]]..(((j.control) and [[tex2D(controlSampler_]]..i..[[, PS.TexCoord)]]) or [[baseTexel]])..[[;
-                    ]]
                 end
                 controlVars = controlVars..[[
                     texture controlTex_]]..i..[[_]]..v..[[;
@@ -139,10 +142,11 @@ shaderRW[identifier] = function(shaderMaps)
             handlerBody = handlerBody..[[
                 sampledTexel_]]..i..[[.rgb = sampledTexel_]]..i..[[.rgb*]]..(1/samplingIteration)..[[;
             ]]
-            --TODO: ...WIP
-            --handlerBody = handlerBody..[[
-                --sampledTexel_]]..i..[[.rgb *= controlTexel_]]..i..[[_]]..v..[[_bump.rgb;
-            --]]
+            if j.bump then
+                handlerBody = handlerBody..[[
+                    sampledTexel_]]..i..[[.rgb *= controlTexel_]]..i..[[_bump.rgb;
+                ]]
+            end
             handlerBody = handlerBody..[[
                 sampledTexel_]]..i..[[.a = controlTexel_]]..i..[[.a;
             ]]
