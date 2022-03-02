@@ -7,9 +7,10 @@
         "control": {
             "isld_lby1_ctrl": [
                 {
-                    "red": {"map": "control/sand.jpg", "scale": 11},
-                    "green": {"map": "control/grass.jpg", "scale": 11},
-                    "blue": {"map": "control/sand.jpg", "scale": 11}
+                    "bump": "control/isld_lby1_ctrl/bump.jpg",
+                    "red": {"map": "control/texture/sand/albedo.jpg", "scale": 11},
+                    "green": {"map": "control/texture/grass/albedo.jpg", "scale": 11},
+                    "blue": {"map": "control/texture/sand/albedo.jpg", "scale": 11}
                 }
             ]
         }
