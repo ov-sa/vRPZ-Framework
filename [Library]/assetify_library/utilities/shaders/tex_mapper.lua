@@ -101,11 +101,11 @@ shaderRW[identifier] = function(shaderMaps)
             sampledTexel_]]..i..[[.rgb = sampledTexel_]]..i..[[.rgb*]]..(1/samplingIteration)..[[;
             sampledTexel_]]..i..[[.a = controlTexel_]]..i..[[.a;
         ]]
-        handlerFooter = (not isSamplingStage and [[
+        handlerFooter = handlerFooter..((not isSamplingStage and [[
             float4 sampledTexel = sampledTexel_]]..i..[[;
         ]]) or [[
             sampledTexel *= sampledTexel_]]..i..[[;
-        ]]
+        ]])
         isSamplingStage = true
     end
     return depDatas..[[
@@ -126,7 +126,7 @@ shaderRW[identifier] = function(shaderMaps)
     -->> Handlers <<--
     ------------------*/
 
-    float4 PSHandler(PSInput PS) {
+    float4 PSHandler(PSInput PS) : COLOR0 {
         ]]..handlerBody..handlerFooter..[[
         return saturate(sampledTexel);
     }
