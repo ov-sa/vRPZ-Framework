@@ -205,6 +205,7 @@ else
                                 asset:buildFile(n.control, assetFiles, encryptKey)
                             end
                             if n.bump then
+                                n.bump = assetPath.."map/"..n.bump
                                 asset:buildFile(n.bump, assetFiles, encryptKey)
                             end
                             if n.red and n.red.map then
