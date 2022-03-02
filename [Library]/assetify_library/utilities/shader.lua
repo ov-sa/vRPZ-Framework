@@ -72,16 +72,7 @@ function shader:createTex(shaderMaps, rwCache, encryptKey)
         if i == "clump" then
             for k, v in imports.pairs(j) do
                 for m = 1, #v, 1 do
-                    local n = v[m]
-                    if encryptKey then
-                        local cTexturePath = n..".tmp"
-                        if imports.file.write(cTexturePath, imports.decodeString("tea", imports.file.read(n), {key = encryptKey})) then
-                            rwCache.texture[n] = imports.dxCreateTexture(cTexturePath, "dxt5", true)
-                            imports.file.delete(cTexturePath)
-                        end
-                    else
-                        rwCache.texture[n] = imports.dxCreateTexture(n, "dxt5", true)
-                    end
+                    rwCache.texture[n] = shader:loadTex(v[m], encryptKey)
                 end
             end
         elseif i == "control" then
@@ -91,16 +82,7 @@ function shader:createTex(shaderMaps, rwCache, encryptKey)
                     for x = 1, #shader.defaultData.controlChannel, 1 do
                         local y = n[(shader.defaultData.controlChannel[x])]
                         if y then
-                            y = y.map
-                            if encryptKey then
-                                local cTexturePath = y..".tmp"
-                                if imports.file.write(cTexturePath, imports.decodeString("tea", imports.file.read(y), {key = encryptKey})) then
-                                    rwCache.texture[y] = imports.dxCreateTexture(cTexturePath, "dxt5", true)
-                                    imports.file.delete(cTexturePath)
-                                end
-                            else
-                                rwCache.texture[y] = imports.dxCreateTexture(n, "dxt5", true)
-                            end
+                            rwCache.texture[n] = shader:loadTex(y.map, encryptKey)
                         end
                     end
                 end
@@ -152,6 +134,23 @@ function shader:clearElementBuffer(element, shaderCategory)
     return true
 end
 imports.addEventHandler("onClientElementDestroy", resourceRoot, function() shader:clearElementBuffer(source) end)
+
+function shader:loadTex(texturePath, encryptKey)
+    if texturePath then
+        if encryptKey then
+            local cTexturePath = texturePath..".tmp"
+            if imports.file.write(cTexturePath, imports.decodeString("tea", imports.file.read(texturePath), {key = encryptKey})) then
+                rwCache.texture[n] = imports.dxCreateTexture(cTexturePath, "dxt5", true)
+                local cTexture = imports.dxCreateTexture(cTexturePath, "dxt5", true)
+                imports.file.delete(cTexturePath)
+                return cTexture
+            end
+        else
+            return imports.dxCreateTexture(texturePath, "dxt5", true)
+        end
+    end
+    return false
+end
 
 function shader:load(element, shaderCategory, shaderName, textureName, shaderTextures, shaderInputs, rwCache, encryptKey, shaderPriority, shaderDistance)
     if not self or (self == shader) then return false end
