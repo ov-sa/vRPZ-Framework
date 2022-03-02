@@ -97,9 +97,6 @@ shaderRW[identifier] = function(shaderMaps)
                 sampledTexel *= sampledTexel_]]..i..[[;
             ]]
         end
-        handlerFooter = handlerFooter..[[
-            return saturate(sampledTexel);
-        ]]
     end
     return depDatas..[[
     /*-----------------
@@ -119,9 +116,10 @@ shaderRW[identifier] = function(shaderMaps)
     /*----------------
     -->> Handlers <<--
     ------------------*/
-    
+
     float4 PSHandler(PSInput PS) {
-    ]]..handlerBody..handlerFooter..[[
+        ]]..handlerBody..handlerFooter..[[
+        return saturate(sampledTexel);
     }
 
 
