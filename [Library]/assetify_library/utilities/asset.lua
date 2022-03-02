@@ -203,14 +203,26 @@ else
                             if n.control then
                                 asset:buildFile(n.control, assetFiles, encryptKey)
                             end
+                            if n.bump then
+                                asset:buildFile(n.bump, assetFiles, encryptKey)
+                            end
                             if n.red and n.red.map then
                                 asset:buildFile(n.red.map, assetFiles, encryptKey)
+                                if n.red.bump then
+                                    asset:buildFile(n.red.bump, assetFiles, encryptKey)
+                                end
                             end
                             if n.green and n.green.map then
                                 asset:buildFile(n.green.map, assetFiles, encryptKey)
+                                if n.green.bump then
+                                    asset:buildFile(n.green.bump, assetFiles, encryptKey)
+                                end
                             end
                             if n.blue and n.blue.map then
                                 asset:buildFile(n.blue.map, assetFiles, encryptKey)
+                                if n.blue.bump then
+                                    asset:buildFile(n.blue.bump, assetFiles, encryptKey)
+                                end
                             end
                         end
                     end
