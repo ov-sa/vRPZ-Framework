@@ -99,16 +99,12 @@ shaderRW[identifier] = function(shaderMaps)
             sampledTexel_]]..i..[[.rgb = sampledTexel_]]..i..[[.rgb*]]..(1/samplingIteration)..[[;
             sampledTexel_]]..i..[[.a = controlTexel_]]..i..[[.a;
         ]]
-        if not isSamplingStage then
-            isSamplingStage = true
-            handlerFooter = handlerFooter..[[
-                float4 sampledTexel = sampledTexel_]]..i..[[;
-            ]]
-        else
-            handlerFooter = handlerFooter..[[
-                sampledTexel *= sampledTexel_]]..i..[[;
-            ]]
-        end
+        handlerFooter = (not isSamplingStage and [[
+            float4 sampledTexel = sampledTexel_]]..i..[[;
+        ]]) or [[
+            sampledTexel *= sampledTexel_]]..i..[[;
+        ]]
+        isSamplingStage = true
     end
     return depDatas..[[
     /*-----------------
