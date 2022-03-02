@@ -46,7 +46,7 @@ configVars["UI"]["Login"] = {
     },
 
     ["Notifications"] = {
-        [1] = {["EN"] = "You must create a character inorder to play..", ["TR"] = "Oynamak için bir karakter yaratmalısın.."},
+        [1] = {["EN"] = "You must create a character inorder to play..", ["TR"] = "Oynamak için bir karakter seçmelisin.."},
         [2] = {["EN"] = "You must pick a character inorder to play..", ["TR"] = "Oynamak için bir karakter seçmelisiniz.."},
         [3] = {["EN"] = "You have exceeded character limit..", ["TR"] = "Karakter sınırını aştınız.."},
         [4] = {["EN"] = "You've successfully created a character!", ["TR"] = "Başarıyla bir karakter yarattınız!.."},
@@ -118,7 +118,7 @@ configVars["UI"]["Login"] = {
                     ["Datas"] = configVars["Character"]["Clothing"]["Upper"]
                 },
                 ["Lower"] = {
-                    ["Titles"] = {["EN"] = "Lower", ["TR"] = "Daha düşük"},
+                    ["Titles"] = {["EN"] = "Lower", ["TR"] = "Alt"},
                     ["Datas"] = configVars["Character"]["Clothing"]["Lower"]
                 },
                 ["Shoes"] = {

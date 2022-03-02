@@ -25,7 +25,7 @@ configVars["Spawns"] = {
 
     ["Hint"] = {
         ["EN"] = "You died. Respawning..",
-        ["TR"] = "Öldün. yeniden doğmak.."
+        ["TR"] = "Öldün. yeniden doğuyorsun.."
     },
 
     {x = 15.84037590026855, y = 321.1308288574219, z = 93.66236114501953},
