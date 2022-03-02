@@ -57,21 +57,26 @@ shaderRW[identifier] = function(shaderMaps)
     ]]
     for i = #shaderMaps, 1, -1 do
         local j = shaderMaps[i]
-        if j.control then
-            controlVars = controlVars..[[
-                texture controlTex_]]..i..[[;
-                sampler controlSampler_]]..i..[[ = sampler_state { 
-                    Texture = controlTex_]]..i..[[;
-                    MipFilter = Linear;
-                    MaxAnisotropy = gMaxAnisotropy*anisotropy;
-                    MinFilter = Anisotropic;
-                };
-            ]]
-        end
         local isControlSampled = false
         for k = 1, #shader.defaultData.shaderChannels, 1 do
             local v, channel = shader.defaultData.shaderChannels[k].index, shader.defaultData.shaderChannels[k].channel
             if j[v] then
+                if not isControlSampled then
+                    if j.control then
+                        controlVars = controlVars..[[
+                            texture controlTex_]]..i..[[;
+                            sampler controlSampler_]]..i..[[ = sampler_state { 
+                                Texture = controlTex_]]..i..[[;
+                                MipFilter = Linear;
+                                MaxAnisotropy = gMaxAnisotropy*anisotropy;
+                                MinFilter = Anisotropic;
+                            };
+                        ]]
+                    end
+                    handlerBody = handlerBody..[[
+                        float4 controlTexel_]]..i..[[ = ]]..(((j.control) and [[tex2D(controlSampler_]]..i..[[, PS.TexCoord)]]) or [[baseTexel]])..[[;
+                    ]]
+                end
                 controlVars = controlVars..[[
                     texture controlTex_]]..i..[[_]]..v..[[;
                     float controlScale_]]..i..[[_]]..v..[[ = ]]..(j[v].scale)..[[;
@@ -82,11 +87,6 @@ shaderRW[identifier] = function(shaderMaps)
                         MinFilter = Anisotropic;
                     };
                 ]]
-                if not isControlSampled then
-                    handlerBody = handlerBody..[[
-                        float4 controlTexel_]]..i..[[ = ]]..(((j.control) and [[tex2D(controlSampler_]]..i..[[, PS.TexCoord)]]) or [[baseTexel]])..[[;
-                    ]]
-                end
                 handlerBody = handlerBody..[[
                     float4 controlTexel_]]..i..[[_]]..v..[[ = tex2D(controlSampler_]]..i..[[_]]..v..[[, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
                 ]]
