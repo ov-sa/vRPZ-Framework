@@ -106,16 +106,11 @@ shaderRW[identifier] = function(shaderMaps)
         float4 redTexel = tex2D(redControlSampler, PS.TexCoord*redControlScale);
         float4 greenTexel = tex2D(greenControlSampler, PS.TexCoord*greenControlScale);
         float4 blueTexel = tex2D(blueControlSampler, PS.TexCoord*blueControlScale);
-        float4 sampledControlTexel = lerp(controlTexel, redTexel, controlTexel.r);
-        sampledControlTexel = lerp(controlTexel, redTexel, controlTexel.r);
-        sampledControlTexel = lerp(controlTexel, redTexel, controlTexel.r);
-        sampledControlTexel = lerp(sampledControlTexel, greenTexel, controlTexel.g);
-        sampledControlTexel = lerp(sampledControlTexel, greenTexel, controlTexel.g);
-        sampledControlTexel = lerp(sampledControlTexel, greenTexel, controlTexel.g);
-        sampledControlTexel = lerp(sampledControlTexel, blueTexel, controlTexel.b);
-        sampledControlTexel = lerp(sampledControlTexel, blueTexel, controlTexel.b);
-        sampledControlTexel = lerp(sampledControlTexel, blueTexel, controlTexel.b);
-        sampledControlTexel.rgb = sampledControlTexel.rgb/3;
+        float4 sampledControlTexel = controlTexel;
+        sampledControlTexel = lerp(controlTexel, redTexel, controlTexel.r); sampledControlTexel = lerp(controlTexel, redTexel, controlTexel.r); sampledControlTexel = lerp(controlTexel, redTexel, controlTexel.r);
+        sampledControlTexel = lerp(sampledControlTexel, greenTexel, controlTexel.g); sampledControlTexel = lerp(sampledControlTexel, greenTexel, controlTexel.g); sampledControlTexel = lerp(sampledControlTexel, greenTexel, controlTexel.g);
+        sampledControlTexel = lerp(sampledControlTexel, blueTexel, controlTexel.b); sampledControlTexel = lerp(sampledControlTexel, blueTexel, controlTexel.b); sampledControlTexel = lerp(sampledControlTexel, blueTexel, controlTexel.b);
+        sampledControlTexel.rgb = sampledControlTexel.rgb*0.33333;
         if (enableBumpMap) {
             float4 bumpTexel = tex2D(bumpSampler, PS.TexCoord);
             sampledControlTexel.rgb *= bumpTexel.rgb;
