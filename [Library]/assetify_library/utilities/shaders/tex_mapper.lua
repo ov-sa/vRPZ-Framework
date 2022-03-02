@@ -71,6 +71,7 @@ shaderRW[identifier] = function(shaderMaps)
             sampledTexel_]]..i..[[.a = controlTexel_]]..i..[[.a;
         ]]
         if not isSamplerInit then
+            isSamplerInit = true
             handlerFooter = handlerFooter..[[
                 float4 sampledControlTexel = sampledTexel_]]..i..[[;
             ]]
