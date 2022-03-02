@@ -43,7 +43,7 @@ shaderRW[identifier] = function(shaderMaps)
     if not shaderMaps then return false end
     local isSamplerInit = false
     local controlVars, handlerBody, handlerFooter = "", "", ""
-    for i = 1, #shaderMaps, 1 do
+    for i = #shaderMaps, 1, -1 do
         local j = shaderMaps[i]
         handlerBody = handlerBody..[[
             float4 sampledTexel_]]..i..[[ = controlTexel_]]..i..[[;
