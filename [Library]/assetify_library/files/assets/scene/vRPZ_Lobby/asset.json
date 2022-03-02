@@ -8,9 +8,9 @@
             "isld_lby1_ctrl": [
                 {
                     "bump": "control/isld_lby1_ctrl/bump.jpg",
-                    "red": {"map": "control/texture/sand/albedo.jpg", "scale": 11},
-                    "green": {"map": "control/texture/grass/albedo.jpg", "scale": 11},
-                    "blue": {"map": "control/texture/sand/albedo.jpg", "scale": 11}
+                    "red": {"map": "control/texture/sand/albedo.jpg", "bump": "control/texture/sand/bump.jpg", "scale": 11},
+                    "green": {"map": "control/texture/grass/albedo.jpg", "bump": "control/texture/grass/bump.jpg", "scale": 11},
+                    "blue": {"map": "control/texture/sand/albedo.jpg", "bump": "control/texture/grass/bump.jpg", "scale": 11}
                 }
             ]
         }

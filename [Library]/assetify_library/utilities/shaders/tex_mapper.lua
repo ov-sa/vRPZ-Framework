@@ -101,6 +101,9 @@ shaderRW[identifier] = function(shaderMaps)
                         MinFilter = Anisotropic;
                     };
                 ]]
+                handlerBody = handlerBody..[[
+                    float4 controlTexel_]]..i..[[_]]..v..[[ = tex2D(controlSampler_]]..i..[[_]]..v..[[, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
+                ]]
                 if j[v].bump then
                     controlVars = controlVars..[[
                         texture controlTex_]]..i..[[_]]..v..[[_bump;
@@ -111,11 +114,6 @@ shaderRW[identifier] = function(shaderMaps)
                             MipFilter = Linear;
                         };
                     ]]
-                end
-                handlerBody = handlerBody..[[
-                    float4 controlTexel_]]..i..[[_]]..v..[[ = tex2D(controlSampler_]]..i..[[_]]..v..[[, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
-                ]]
-                if j[v].bump then
                     handlerBody = handlerBody..[[
                         float4 controlTexel_]]..i..[[_]]..v..[[_bump = tex2D(controlSampler_]]..i..[[_]]..v..[[_bump, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
                     ]]

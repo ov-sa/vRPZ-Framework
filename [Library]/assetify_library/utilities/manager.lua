@@ -142,7 +142,7 @@ function manager:load(assetType, assetName)
                                             shaderTextures[("controlTex_"..m.."_"..(y.index))] = n[(y.index)].map
                                             shaderInputs[("controlScale_"..m.."_"..(y.index))] = n[(y.index)].scale
                                             if n[(y.index)].bump then
-                                                shaderTextures[("controlTex_"..m.."_bump")] = n[(y.index)].bump
+                                                shaderTextures[("controlTex_"..m.."_"..(y.index).."_bump")] = n[(y.index)].bump
                                             end
                                         end
                                     end
