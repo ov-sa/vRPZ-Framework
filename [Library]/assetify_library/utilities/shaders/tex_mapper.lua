@@ -55,14 +55,22 @@ shaderRW[identifier] = function(shaderMaps)
     ]]
     for i = #shaderMaps, 1, -1 do
         local j = shaderMaps[i]
+        if j.control then
+            controlVars = controlVars..[[
+                texture controlTex_]]..i..[[;
+                sampler controlSampler_]]..i..[[ = sampler_state { 
+                    Texture = controlTex_]]..i..[[;
+                    MipFilter = Linear;
+                    MaxAnisotropy = maxAnisotropy*anisotropy;
+                    MinFilter = Anisotropic;
+                };
+            ]]
+        end
         handlerBody = handlerBody..[[
-            float4 controlTexel_]]..i..[[ = ]]..(((j.control) and [[baseTexel]]) or [[tex2D(controlSampler_]]..i)..[[, PS.TexCoord);
+            float4 controlTexel_]]..i..[[ = ]]..((j.control) and [[baseTexel]]) or [[tex2D(controlSampler_]]..i..[[, PS.TexCoord);
         ]]
         for k = 1, #mapChannels, 1 do
             local v = mapChannels[k]
-            controlVars = controlVars..[[
-                texture controlTex_]]..i..[[;
-            ]]
             controlVars = controlVars..[[
                 texture controlTex_]]..i..[[_]]..v..[[;
                 float controlScale_]]..i..[[_]]..v..[[ = ]]..(j[v].scale)..[[;
