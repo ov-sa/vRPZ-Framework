@@ -72,7 +72,8 @@ function shader:createTex(shaderMaps, rwCache, encryptKey)
         if i == "clump" then
             for k, v in imports.pairs(j) do
                 for m = 1, #v, 1 do
-                    rwCache.texture[n] = shader:loadTex(v[m], encryptKey)
+                    local n = v[m]
+                    rwCache.texture[n] = shader:loadTex(n, encryptKey)
                 end
             end
         elseif i == "control" then
@@ -82,7 +83,8 @@ function shader:createTex(shaderMaps, rwCache, encryptKey)
                     for x = 1, #shader.defaultData.controlChannel, 1 do
                         local y = n[(shader.defaultData.controlChannel[x])]
                         if y then
-                            rwCache.texture[n] = shader:loadTex(y.map, encryptKey)
+                            y = y.map
+                            rwCache.texture[y] = shader:loadTex(y, encryptKey)
                         end
                     end
                 end
@@ -140,7 +142,6 @@ function shader:loadTex(texturePath, encryptKey)
         if encryptKey then
             local cTexturePath = texturePath..".tmp"
             if imports.file.write(cTexturePath, imports.decodeString("tea", imports.file.read(texturePath), {key = encryptKey})) then
-                rwCache.texture[n] = imports.dxCreateTexture(cTexturePath, "dxt5", true)
                 local cTexture = imports.dxCreateTexture(cTexturePath, "dxt5", true)
                 imports.file.delete(cTexturePath)
                 return cTexture
