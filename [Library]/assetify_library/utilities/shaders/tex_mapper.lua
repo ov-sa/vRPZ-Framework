@@ -83,8 +83,12 @@ shaderRW[identifier] = function(shaderMaps)
             ]]
             handlerBody = handlerBody..[[
                 float4 controlTexel_]]..i..[[_]]..v..[[ = tex2D(controlSampler_]]..i..[[_]]..v..[[, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
-                float4 sampledTexel_]]..i..[[ = controlTexel_]]..i..[[_]]..v..[[;
             ]]
+            if k == 1 then
+                handlerBody = handlerBody..[[
+                    float4 sampledTexel_]]..i..[[ = controlTexel_]]..i..[[;
+                ]]
+            end
             for m = 1, samplingIteration, 1 do
                 handlerBody = handlerBody..[[
                     sampledTexel_]]..i..[[ = lerp(sampledTexel_]]..i..[[, controlTexel_]]..i..[[_]]..v..[[, controlTexel_]]..i..[[.]]..channel..[[);
