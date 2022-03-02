@@ -176,11 +176,10 @@ function shader:load(element, shaderCategory, shaderName, textureName, shaderTex
         shaderPriority = shaderPriority,
         shaderDistance = shaderDistance
     }
-
-    local bufferIndex, bufferCache = self.shaderData.element, shader.buffer.element
-    bufferCache[bufferIndex] = bufferCache[bufferIndex] or {}
-    bufferCache[bufferIndex][shaderCategory] = bufferCache[bufferIndex][shaderCategory] or {}
-    bufferCache[bufferIndex][shaderCategory][textureName] = self
+    local bufferCache = shader.buffer.element[(self.shaderData.element)]
+    bufferCache = bufferCache or {}
+    bufferCache[shaderCategory] = bufferCache[shaderCategory] or {}
+    bufferCache[shaderCategory][textureName] = self
     imports.engineApplyShaderToWorldTexture(self.cShader, textureName, element)
     return true
 end
