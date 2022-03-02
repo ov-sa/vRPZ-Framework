@@ -84,7 +84,7 @@ function shader:createTex(shaderMaps, rwCache, encryptKey)
                 for m = 1, #v, 1 do
                     local n = v[m]
                     if n.control then
-                        rwCache.texture[(n.control.map)] = shader:loadTex(n.control.map, encryptKey)
+                        rwCache.texture[(n.control)] = shader:loadTex(n.control, encryptKey)
                     end
                     for x = 1, #shader.defaultData.shaderChannels, 1 do
                         local y = n[(shader.defaultData.shaderChannels[x].index)]

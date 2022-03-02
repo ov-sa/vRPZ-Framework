@@ -131,7 +131,7 @@ function manager:load(assetType, assetName)
                                 for m = 1, #v, 1 do
                                     local n = v[m]
                                     if n.control then
-                                        shaderTextures["controlTex_"..m] = n.control.map
+                                        shaderTextures["controlTex_"..m] = n.control
                                     end
                                     for x = 1, #shader.defaultData.shaderChannels, 1 do
                                         local y = shader.defaultData.shaderChannels[x]

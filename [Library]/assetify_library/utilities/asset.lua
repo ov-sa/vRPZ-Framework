@@ -196,13 +196,24 @@ else
                             asset:buildFile(v[m], assetFiles, encryptKey)
                         end
                     end
-                else
-                    asset:buildShader(assetPath, j, assetFiles, encryptKey)
-                end
-            else
-                if i == "map" then
-                    shaderPack[i] = assetPath.."map/"..j
-                    asset:buildFile(shaderPack[i], assetFiles, encryptKey)
+                elseif i == "control" then
+                    for k, v in imports.pairs(j) do
+                        for m = 1, #v, 1 do
+                            local n = v[m]
+                            if n.control then
+                                asset:buildFile(n.control, assetFiles, encryptKey)
+                            end
+                            if n.red and n.red.map then
+                                asset:buildFile(n.red.map, assetFiles, encryptKey)
+                            end
+                            if n.green and n.green.map then
+                                asset:buildFile(n.green.map, assetFiles, encryptKey)
+                            end
+                            if n.blue and n.blue.map then
+                                asset:buildFile(n.blue.map, assetFiles, encryptKey)
+                            end
+                        end
+                    end
                 end
             end
             thread.pause()
