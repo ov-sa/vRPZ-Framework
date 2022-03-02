@@ -68,9 +68,6 @@ shaderRW[identifier] = function(shaderMaps)
                 };
             ]]
         end
-        handlerBody = handlerBody..[[
-            float4 controlTexel_]]..i..[[ = ]]..(((j.control) and [[tex2D(controlSampler_]]..i..[[, PS.TexCoord)]]) or [[baseTexel]])..[[;
-        ]]
         local isControlSampled = false
         for k = 1, #shader.defaultData.shaderChannels, 1 do
             local v, channel = shader.defaultData.shaderChannels[k].index, shader.defaultData.shaderChannels[k].channel
@@ -85,6 +82,11 @@ shaderRW[identifier] = function(shaderMaps)
                         MinFilter = Anisotropic;
                     };
                 ]]
+                if not isControlSampled then
+                    handlerBody = handlerBody..[[
+                        float4 controlTexel_]]..i..[[ = ]]..(((j.control) and [[tex2D(controlSampler_]]..i..[[, PS.TexCoord)]]) or [[baseTexel]])..[[;
+                    ]]
+                end
                 handlerBody = handlerBody..[[
                     float4 controlTexel_]]..i..[[_]]..v..[[ = tex2D(controlSampler_]]..i..[[_]]..v..[[, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
                 ]]
