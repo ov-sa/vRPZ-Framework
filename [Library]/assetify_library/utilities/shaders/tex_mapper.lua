@@ -80,6 +80,9 @@ shaderRW[identifier] = function(shaderMaps)
                 sampledTexel *= sampledTexel_]]..i..[[;
             ]]
         end
+        handlerFooter = handlerFooter..[[
+            return saturate(sampledTexel);
+        ]]
     end
     return depDatas..[[
     /*-----------------
@@ -115,7 +118,6 @@ shaderRW[identifier] = function(shaderMaps)
     ]]..handlerBody..[[
         float4 controlTexel = tex2D(controlSampler, PS.TexCoord);
     ]]..handlerFooter..[[
-        return saturate(sampledTexel);
     }
 
 
