@@ -27,11 +27,6 @@
 * **ov | Skann (Modeler)**
 * **ov | Mazvis (Contributor)**
 
-## ━ Third Party
-
-* **pAttach**
-* **parachute**
-
 ## ━ Installation
 
 1. Download the latest release
@@ -48,3 +43,7 @@
 
 * [**Official Releases**](./)
 * [**Discord Community**](http://discord.gg/sVCnxPW)
+
+## ━ Servers Utilizing Framework
+
+* **vRiver-Dayz** (Roleplay-Dayz Transition)
