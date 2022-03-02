@@ -70,7 +70,7 @@ shaderRW[identifier] = function(shaderMaps)
             sampledTexel_]]..i..[[.a = controlTexel_]]..i..[[.a;
         ]]
         handlerFooter = handlerFooter..[[
-            sampledTexel_]]..i..[[
+            sampledTexel *= sampledTexel_]]..i..[[;
         ]]
     end
     return depDatas..[[
