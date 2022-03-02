@@ -41,10 +41,10 @@ end
 
 shaderRW[identifier] = function(shaderMaps)
     if not shaderMaps then return false end
-    local controlVars, handlerVars, handlerFooter = "", "", ""
+    local controlVars, handlerBody, handlerFooter = "", "", ""
     for i = 1, #shaderMaps, 1 do
         local j = shaderMaps[i]
-        handlerVars = handlerVars..[[
+        handlerBody = handlerBody..[[
             float4 sampledTexel_]]..i..[[ = controlTexel_]]..i..[[;
         ]]
         for k = 1, #mapChannels, 1 do
@@ -63,11 +63,14 @@ shaderRW[identifier] = function(shaderMaps)
                 float4 channelTexel_]]..i..[[_]]..v..[[ = tex2D(controlSampler_]]..i..[[_]]..v..[[, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
                 sampledTexel_]]..i..[[ = lerp(controlTexel_]]..i..[[, channelTexel_]]..i..[[_]]..v..[[, controlTexel_]]..i..[[.]]..imports.string.lower(v)..[[);
             ]]
-            handlerVars = sampler..sampler..sampler
+            handlerBody = sampler..sampler..sampler
         end
-        handlerVars = handlerVars..[[
+        handlerBody = handlerBody..[[
             sampledTexel_]]..i..[[.rgb = sampledTexel_]]..i..[[.rgb*0.33333;
             sampledTexel_]]..i..[[.a = controlTexel_]]..i..[[.a;
+        ]]
+        handlerFooter = handlerFooter..[[
+            sampledTexel_]]..i..[[
         ]]
     end
     return depDatas..[[
@@ -101,7 +104,7 @@ shaderRW[identifier] = function(shaderMaps)
     -->> Handlers <<--
     ------------------*/
     float4 PSHandler(PSInput PS) {
-    ]]..handlerVars..[[
+    ]]..handlerBody..[[
         float4 controlTexel = tex2D(controlSampler, PS.TexCoord);
         // LERP ALL TEXELS BY CONTROL'S ALPHA AND THEN RETURN...
     ]]..handlerFooter..[[
