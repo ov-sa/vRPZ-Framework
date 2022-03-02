@@ -153,14 +153,14 @@ function shader:loadTex(texturePath, encryptKey)
     return false
 end
 
-function shader:load(element, shaderCategory, shaderName, textureName, shaderTextures, shaderInputs, rwCache, encryptKey, shaderPriority, shaderDistance)
+function shader:load(element, shaderCategory, shaderName, textureName, shaderTextures, shaderInputs, rwCache, shaderMaps, encryptKey, shaderPriority, shaderDistance)
     if not self or (self == shader) then return false end
-    if not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures or not shaderInputs or not rwCache then return false end
+    if not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures or not shaderInputs or not rwCache or not shaderMaps then return false end
     element = ((element and imports.isElement(element)) and element) or false
     shaderPriority = imports.tonumber(shaderPriority) or shader.defaultData.shaderPriority
     shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
     self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
-    self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName](), shaderPriority, shaderDistance, false, "all")
+    self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName](shaderMaps), shaderPriority, shaderDistance, false, "all")
     if not self.isPreLoaded then rwCache.shader[textureName] = self.cShader end
     for i, j in imports.pairs(shaderTextures) do
         if j and imports.isElement(rwCache.texture[j]) then

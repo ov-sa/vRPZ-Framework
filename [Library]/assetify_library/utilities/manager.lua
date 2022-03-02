@@ -141,7 +141,7 @@ function manager:load(assetType, assetName)
                                         end
                                     end
                                 end
-                                shader:create(nil, "control", "Assetify_TextureMapper", k, shaderTextures, shaderInputs, assetReference.unsyncedData.rwCache.map, assetReference.manifestData.encryptKey, v)
+                                shader:create(nil, "control", "Assetify_TextureMapper", k, shaderTextures, shaderInputs, assetReference.unsyncedData.rwCache.map, v, assetReference.manifestData.encryptKey)
                             end
                         end
                     end
