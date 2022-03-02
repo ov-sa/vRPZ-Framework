@@ -43,8 +43,7 @@ shader = {
         invisibleMap = imports.dxCreateTexture(2, 2, "dxt5", "clamp")
     },
     buffer = {
-        element = {},
-        reference = {}
+        element = {}
     },
     rwCache = shaderRW
 }
@@ -132,10 +131,10 @@ function shader:clearElementBuffer(element, shaderCategory)
 end
 imports.addEventHandler("onClientElementDestroy", resourceRoot, function() shader:clearElementBuffer(source) end)
 
-function shader:load(element, reference, shaderCategory, shaderName, textureName, shaderTextures, rwCache, encryptKey, shaderPriority, shaderDistance)
+function shader:load(element, shaderCategory, shaderName, textureName, shaderTextures, rwCache, encryptKey, shaderPriority, shaderDistance)
     if not self or (self == shader) then return false end
-    if ((not element or not imports.isElement(element)) and not reference) or not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures or not rwCache then return false end
-    reference = (not element and reference) or false
+    if not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures or not rwCache then return false end
+    element = ((element and imports.isElement(element)) and element) or false
     shaderPriority = imports.tonumber(shaderPriority) or shader.defaultData.shaderPriority
     shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
     self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
@@ -148,7 +147,6 @@ function shader:load(element, reference, shaderCategory, shaderName, textureName
     end
     self.shaderData = {
         element = element,
-        reference = reference,
         shaderCategory = shaderCategory,
         shaderName = shaderName,
         textureName = textureName,
@@ -157,12 +155,7 @@ function shader:load(element, reference, shaderCategory, shaderName, textureName
         shaderDistance = shaderDistance
     }
 
-    local bufferIndex, bufferCache = false, false
-    if self.shaderData.element then
-        bufferIndex, bufferCache = self.shaderData.element, shader.buffer.element
-    else
-        bufferIndex, bufferCache = self.shaderData.reference, shader.buffer.reference
-    end
+    local bufferIndex, bufferCache = self.shaderData.element, shader.buffer.element
     bufferCache[bufferIndex] = bufferCache[bufferIndex] or {}
     bufferCache[bufferIndex][shaderCategory] = bufferCache[bufferIndex][shaderCategory] or {}
     bufferCache[bufferIndex][shaderCategory][textureName] = self
@@ -181,8 +174,6 @@ function shader:unload()
     end
     if self.shaderData.element then
         shader.buffer.element[(self.shaderData.element)][(self.shaderData.shaderCategory)][(self.shaderData.textureName)] = nil
-    else
-        shader.buffer.reference[(self.shaderData.reference)][(self.shaderData.shaderCategory)][(self.shaderData.textureName)] = nil
     end
     self = nil
     return true
