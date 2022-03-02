@@ -133,8 +133,8 @@ function manager:load(assetType, assetName)
                                     if n.control then
                                         shaderTextures["controlTex_"..m] = n.control.map
                                     end
-                                    for x = 1, #shader.defaultData.controlChannel, 1 do
-                                        local y = shader.defaultData.controlChannel[x]
+                                    for x = 1, #shader.defaultData.shaderChannels, 1 do
+                                        local y = shader.defaultData.shaderChannels[x]
                                         if n[y] then
                                             shaderTextures["controlTex_"..m.."_"..y] = n[y].map
                                             shaderInputs["controlScale_"..m.."_"..y] = n[y].scale

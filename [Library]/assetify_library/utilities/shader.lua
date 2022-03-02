@@ -38,7 +38,7 @@ shader = {
     defaultData = {
         shaderPriority = 10000,
         shaderDistance = 0,
-        controlChannel = {"red", "blue", "green"}
+        shaderChannels = {"red", "blue", "green"}
     },
     preLoadedTex = {
         invisibleMap = imports.dxCreateTexture(2, 2, "dxt5", "clamp")
@@ -80,8 +80,8 @@ function shader:createTex(shaderMaps, rwCache, encryptKey)
             for k, v in imports.pairs(j) do
                 for m = 1, #v, 1 do
                     local n = v[m]
-                    for x = 1, #shader.defaultData.controlChannel, 1 do
-                        local y = n[(shader.defaultData.controlChannel[x])]
+                    for x = 1, #shader.defaultData.shaderChannels, 1 do
+                        local y = n[(shader.defaultData.shaderChannels[x])]
                         if y then
                             y = y.map
                             rwCache.texture[y] = shader:loadTex(y, encryptKey)
