@@ -26,7 +26,7 @@ local imports = {
 local identifier = "Assetify_TextureChanger"
 local depDatas, dependencies = "", {}
 for i, j in imports.pairs(dependencies) do
-    local depData = imports.file.read(j.filePath)
+    local depData = imports.file.read(j)
     if depData then
         depDatas = depDatas.."\n"..depData
     end

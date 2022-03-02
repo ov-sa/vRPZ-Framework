@@ -26,9 +26,11 @@ local imports = {
 
 local identifier = "Assetify_TextureMapper"
 local samplingIteration = 3
-local depDatas, dependencies = "", {}
+local depDatas, dependencies = "", {
+    helper = "utilities/shaders/helper.fx"
+}
 for i, j in imports.pairs(dependencies) do
-    local depData = imports.file.read(j.filePath)
+    local depData = imports.file.read(j)
     if depData then
         depDatas = depDatas.."\n"..depData
     end
