@@ -112,6 +112,11 @@ shaderRW[identifier] = function(shaderMaps)
                 handlerBody = handlerBody..[[
                     float4 controlTexel_]]..i..[[_]]..v..[[ = tex2D(controlSampler_]]..i..[[_]]..v..[[, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
                 ]]
+                if j[v].bump then
+                    handlerBody = handlerBody..[[
+                        float4 controlTexel_]]..i..[[_]]..v..[[_bump = tex2D(controlSampler_]]..i..[[_]]..v..[[_bump, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
+                    ]]
+                end
                 if not isControlSampled then
                     handlerBody = handlerBody..[[
                         float4 sampledTexel_]]..i..[[ = controlTexel_]]..i..[[;
