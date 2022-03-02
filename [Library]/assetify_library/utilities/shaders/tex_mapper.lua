@@ -43,25 +43,23 @@ shaderRW[identifier] = function(shaderMaps)
     local controlVars = ""
     for i = 1, #shaderMaps, 1 do
         local j = shaderMaps[i]
-        if j,red or j.blue or j.green then
-            if j.red then
-                controlVars = controlVars..[[
-                    texture controlTex_]]..i..[[_R;
-                    texture controlScale_]]..i..[[_R;
-                ]]
-            end
-            if j.green then
-                controlVars = controlVars..[[
-                    texture controlTex_]]..i..[[_G;
-                    texture controlScale_]]..i..[[_G;
-                ]]
-            end
-            if j.blue then
-                controlVars = controlVars..[[
-                    texture controlTex_]]..i..[[_B;
-                    texture controlScale_]]..i..[[_B;
-                ]]
-            end
+        if j.red then
+            controlVars = controlVars..[[
+                texture controlTex_]]..i..[[_R;
+                texture controlScale_]]..i..[[_R;
+            ]]
+        end
+        if j.green then
+            controlVars = controlVars..[[
+                texture controlTex_]]..i..[[_G;
+                texture controlScale_]]..i..[[_G;
+            ]]
+        end
+        if j.blue then
+            controlVars = controlVars..[[
+                texture controlTex_]]..i..[[_B;
+                texture controlScale_]]..i..[[_B;
+            ]]
         end
     end
 
