@@ -88,10 +88,16 @@ if localPlayer then
                         if n.control then
                             rwCache.texture[(n.control)] = shader:loadTex(n.control, encryptKey)
                         end
+                        if n.bump then
+                            rwCache.texture[(n.bump)] = shader:loadTex(n.bump, encryptKey)
+                        end
                         for x = 1, #shader.defaultData.shaderChannels, 1 do
                             local y = n[(shader.defaultData.shaderChannels[x].index)]
-                            if y then
+                            if y and y.map then
                                 rwCache.texture[(y.map)] = shader:loadTex(y.map, encryptKey)
+                                if y.bump then
+                                    rwCache.texture[(y.bump)] = shader:loadTex(y.bump, encryptKey)
+                                end
                             end
                         end
                     end
