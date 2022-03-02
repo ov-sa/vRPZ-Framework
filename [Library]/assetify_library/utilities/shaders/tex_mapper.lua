@@ -128,11 +128,22 @@ shaderRW[identifier] = function(shaderMaps)
                         sampledTexel_]]..i..[[ = lerp(sampledTexel_]]..i..[[, controlTexel_]]..i..[[_]]..v..[[, controlTexel_]]..i..[[.]]..channel..[[);
                     ]]
                 end
+                if j[v].bump then
+                    handlerBody = handlerBody..[[
+                        sampledTexel_]]..i..[[.rgb *= controlTexel_]]..i..[[_]]..v..[[_bump.rgb;
+                    ]]
+                end
             end
         end
         if isControlSampled then
             handlerBody = handlerBody..[[
                 sampledTexel_]]..i..[[.rgb = sampledTexel_]]..i..[[.rgb*]]..(1/samplingIteration)..[[;
+            ]]
+            --TODO: ...WIP
+            --handlerBody = handlerBody..[[
+                --sampledTexel_]]..i..[[.rgb *= controlTexel_]]..i..[[_]]..v..[[_bump.rgb;
+            --]]
+            handlerBody = handlerBody..[[
                 sampledTexel_]]..i..[[.a = controlTexel_]]..i..[[.a;
             ]]
             handlerFooter = handlerFooter..((not isSamplingStage and [[
