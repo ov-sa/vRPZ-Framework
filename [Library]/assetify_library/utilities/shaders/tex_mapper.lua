@@ -25,7 +25,7 @@ local imports = {
 -------------------
 
 local identifier = "Assetify_TextureMapper"
-local mapChannels = {"R", "G", "B"}
+local mapChannels, samplingIteration = {"R", "G", "B"}, 3
 local depDatas, dependencies = "", {}
 for i, j in imports.pairs(dependencies) do
     local depData = imports.file.read(j.filePath)
@@ -81,14 +81,15 @@ shaderRW[identifier] = function(shaderMaps)
                     MinFilter = Anisotropic;
                 };
             ]]
-            local sampler = [[
-                float4 channelTexel_]]..i..[[_]]..v..[[ = tex2D(controlSampler_]]..i..[[_]]..v..[[, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
-                sampledTexel_]]..i..[[ = lerp(controlTexel_]]..i..[[, channelTexel_]]..i..[[_]]..v..[[, controlTexel_]]..i..[[.]]..imports.string.lower(v)..[[);
-            ]]
-            handlerBody = sampler..sampler..sampler
+            for m = 1, samplingIteration, 1 do
+                handlerBody = handlerBody..[[
+                    float4 channelTexel_]]..i..[[_]]..v..[[ = tex2D(controlSampler_]]..i..[[_]]..v..[[, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
+                    sampledTexel_]]..i..[[ = lerp(controlTexel_]]..i..[[, channelTexel_]]..i..[[_]]..v..[[, controlTexel_]]..i..[[.]]..imports.string.lower(v)..[[);
+                ]]
+            end
         end
         handlerBody = handlerBody..[[
-            sampledTexel_]]..i..[[.rgb = sampledTexel_]]..i..[[.rgb*0.33333;
+            sampledTexel_]]..i..[[.rgb = sampledTexel_]]..i..[[.rgb*]]..(1/samplingIteration)..[[;
             sampledTexel_]]..i..[[.a = controlTexel_]]..i..[[.a;
         ]]
         if not isSamplingStage then
