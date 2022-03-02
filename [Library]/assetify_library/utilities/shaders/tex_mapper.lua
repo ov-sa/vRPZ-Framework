@@ -48,7 +48,7 @@ shaderRW[identifier] = function(shaderMaps)
         sampler baseSampler = sampler_state {
             Texture = (gTexture0);
             MipFilter = Linear;
-            gMaxAnisotropy = gMaxAnisotropy*anisotropy;
+            MaxAnisotropy = gMaxAnisotropy*anisotropy;
             MinFilter = Anisotropic;
         };    
     ]], "", ""
@@ -63,7 +63,7 @@ shaderRW[identifier] = function(shaderMaps)
                 sampler controlSampler_]]..i..[[ = sampler_state { 
                     Texture = controlTex_]]..i..[[;
                     MipFilter = Linear;
-                    gMaxAnisotropy = gMaxAnisotropy*anisotropy;
+                    MaxAnisotropy = gMaxAnisotropy*anisotropy;
                     MinFilter = Anisotropic;
                 };
             ]]
@@ -79,7 +79,7 @@ shaderRW[identifier] = function(shaderMaps)
                 sampler controlSampler_]]..i..[[_]]..v..[[ = sampler_state { 
                     Texture = controlTex_]]..i..[[_]]..v..[[;
                     MipFilter = Linear;
-                    gMaxAnisotropy = gMaxAnisotropy*anisotropy;
+                    MaxAnisotropy = gMaxAnisotropy*anisotropy;
                     MinFilter = Anisotropic;
                 };
             ]]
@@ -128,7 +128,7 @@ shaderRW[identifier] = function(shaderMaps)
 
     float4 PSHandler(PSInput PS) {
         ]]..handlerBody..handlerFooter..[[
-        return saturate(sampledTexel);
+        return sampledTexel;
     }
 
 
