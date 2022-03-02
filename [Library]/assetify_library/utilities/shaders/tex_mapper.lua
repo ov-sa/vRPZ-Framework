@@ -15,7 +15,8 @@
 
 local imports = {
     pairs = pairs,
-    file = file
+    file = file,
+    string = string
 }
 
 
@@ -43,16 +44,24 @@ shaderRW[identifier] = function(shaderMaps)
     local controlVars, handlerVars = "", ""
     for i = 1, #shaderMaps, 1 do
         local j = shaderMaps[i]
+        handlerVars = handlerVars..[[
+            float4 sampledTexel_]]..i..[[ = controlTexel_]]..i..[[;
+        ]]
         for k = 1, #mapChannels, 1 do
             local v = mapChannels[k]
             controlVars = controlVars..[[
                 texture controlTex_]]..i..[[_]]..v..[[;
                 texture controlScale_]]..i..[[_]]..v..[[;
             ]]
-            handlerVars = handlerVars..[[
-
+            local sampler = [[
+                sampledTexel_]]..i..[[ = lerp(controlTexel_]]..i..[[, channelTexel_]]..i..[[_]]..v..[[, controlTexel_]]..i..[[.]]..imports.string.lower(v)..[[);
             ]]
+            handlerVars = sampler..sampler..sampler
         end
+        handlerVars = handlerVars..[[
+            sampledTexel_]]..i..[[.rgb = sampledTexel_]]..i..[[.rgb*0.33333;
+            sampledTexel_]]..i..[[.a = controlTexel_]]..i..[[.a;
+        ]]
     end
     return depDatas..[[
     /*-----------------
