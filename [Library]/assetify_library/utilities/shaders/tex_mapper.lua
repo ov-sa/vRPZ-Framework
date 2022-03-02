@@ -101,11 +101,11 @@ shaderRW[identifier] = function(shaderMaps)
                 end
             end
         end
-        handlerBody = handlerBody..[[
-            sampledTexel_]]..i..[[.rgb = sampledTexel_]]..i..[[.rgb*]]..(1/samplingIteration)..[[;
-            sampledTexel_]]..i..[[.a = controlTexel_]]..i..[[.a;
-        ]]
         if isControlSampled then
+            handlerBody = handlerBody..[[
+                sampledTexel_]]..i..[[.rgb = sampledTexel_]]..i..[[.rgb*]]..(1/samplingIteration)..[[;
+                sampledTexel_]]..i..[[.a = controlTexel_]]..i..[[.a;
+            ]]
             handlerFooter = handlerFooter..((not isSamplingStage and [[
                 float4 sampledTexel = sampledTexel_]]..i..[[;
             ]]) or [[
