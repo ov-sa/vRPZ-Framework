@@ -92,8 +92,10 @@ if localPlayer then
         if rwPaths.dff then
             modelID = imports.engineRequestModel(assetPack.assetType, (assetManifest.assetBase and (imports.type(assetManifest.assetBase) == "number") and assetManifest.assetBase) or assetPack.assetBase or nil)
             if modelID then
-                if assetType == "scene" then
-                    collisionID = imports.engineRequestModel(assetPack.assetType, assetPack.assetBase)
+                if assetManifest.enableLODs then
+                    if assetType == "scene" then
+                        collisionID = imports.engineRequestModel(assetPack.assetType, assetPack.assetBase)
+                    end
                 end
                 imports.engineSetModelLODDistance(modelID, 300)
                 if not rwCache.dff[(rwPaths.dff)] and imports.file.exists(rwPaths.dff) then
