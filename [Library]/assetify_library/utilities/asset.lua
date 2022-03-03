@@ -246,6 +246,7 @@ else
                     if not assetManifestData then
                         cAssetPack.rwDatas[assetPath] = false
                     else
+                        assetManifestData.enableLODs = (assetManifestData.enableLODs and true) or false
                         assetManifestData.encryptKey = (assetManifestData.encryptKey and imports.md5(imports.tostring(assetManifestData.encryptKey))) or false
                         assetManifestData.assetClumps = (assetManifestData.assetClumps and (imports.type(assetManifestData.assetClumps) == "table") and assetManifestData.assetClumps) or false
                         cAssetPack.rwDatas[assetReference] = {
