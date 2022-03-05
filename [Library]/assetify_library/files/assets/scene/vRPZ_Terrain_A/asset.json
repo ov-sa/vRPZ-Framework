@@ -13,9 +13,9 @@
                 },
                 {
                     "bump": "control/isld_1_trn/bump.jpg",
+                    "red": {"map": "control/texture/sand/1/albedo_50a.png", "scale": 600},
                     "green": {"map": "control/texture/grass/1/albedo.jpg", "bump": "control/texture/grass/1/bump.jpg", "scale": 600},
-                    "red": {"map": "control/texture/sand/50p.png", "scale": 600},
-                    "blue": {"map": "control/texture/sand/50p.png", "scale": 600}
+                    "blue": {"map": "control/texture/sand/1/albedo_50a.png", "scale": 600}
                 }
             ]
         }
