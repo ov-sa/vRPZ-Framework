@@ -173,7 +173,7 @@ end)
 -----------------------------------------
 
 imports.addEventHandler("onClientResourceStart", resource, function()
-    imports.setBlurLevel (0)
+    imports.setBlurLevel(0)
     imports.toggleControl("fire", true)
     imports.toggleControl("action", false)
     imports.toggleControl("radar", false)
