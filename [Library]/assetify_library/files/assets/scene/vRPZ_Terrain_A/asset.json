@@ -1,0 +1,23 @@
+{
+    "sceneDimension": 0,
+    "sceneInterior": 0,
+    "sceneOffset": {"x": 0, "y": 0, "z": 0},
+    "enableLODs": true,
+    "shaderMaps": {
+        "control": {
+            "isld_1_trn": [
+                {
+                    "control": "control/isld_1_trn/road/control.png",
+                    "bump": "control/isld_1_trn/road/bump.png",
+                    "red": {"map": "control/texture/grass2.jpg", "bump": "control/texture/grass2_bump.jpg", "scale": 600}
+                },
+                {
+                    "bump": "control/isld_1_trn/bump.jpg",
+                    "green": {"map": "control/texture/grass/albedo.jpg", "bump": "control/texture/grass/bump.jpg", "scale": 600},
+                    "red": {"map": "control/texture/sand/50p.png", "scale": 600},
+                    "blue": {"map": "control/texture/sand/50p.png", "scale": 600}
+                }
+            ]
+        }
+    }
+}
