@@ -60,14 +60,18 @@ function scene:load(cAsset, sceneManifest, sceneData)
     imports.setElementInterior(self.cModelInstance, sceneManifest.sceneInterior)
     if cAsset.syncedData.collisionID then
         self.cCollisionInstance = imports.createObject(cAsset.syncedData.collisionID, instanceCoords[1], instanceCoords[2], instanceCoords[3], instanceCoords[4], instanceCoords[5], instanceCoords[6])
-        self.cStreamerInstance = imports.createObject(cAsset.syncedData.collisionID, instanceCoords[1], instanceCoords[2], instanceCoords[3], instanceCoords[4], instanceCoords[5], instanceCoords[6], true)
         imports.setElementAlpha(self.cCollisionInstance, 0)
         imports.attachElements(self.cModelInstance, self.cCollisionInstance)
         imports.setElementDimension(self.cCollisionInstance, sceneManifest.sceneDimension)
         imports.setElementInterior(self.cCollisionInstance, sceneManifest.sceneInterior)
-        self.cStreamer = streamer:create(self.cStreamerInstance, "scene", {self.cCollisionInstance, self.cModelInstance})
-    else
-        self.cStreamer = streamer:create(self.cModelInstance, "scene", {self.cModelInstance})
+        if sceneManifest.enableLODs then
+            self.cStreamerInstance = imports.createObject(cAsset.syncedData.collisionID, instanceCoords[1], instanceCoords[2], instanceCoords[3], instanceCoords[4], instanceCoords[5], instanceCoords[6], true)
+            self.cStreamer = streamer:create(self.cStreamerInstance, "scene", {self.cCollisionInstance, self.cModelInstance})
+        else
+            print("YIKES...")
+            self.cStreamerInstance = self.cModelInstance
+            self.cStreamer = streamer:create(self.cStreamerInstance, "scene", {self.cCollisionInstance})
+        end
     end
     cAsset.cScene = self
     return true

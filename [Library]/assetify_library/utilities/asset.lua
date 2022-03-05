@@ -92,13 +92,11 @@ if localPlayer then
         if rwPaths.dff then
             modelID = imports.engineRequestModel(assetPack.assetType, (assetManifest.assetBase and (imports.type(assetManifest.assetBase) == "number") and assetManifest.assetBase) or assetPack.assetBase or nil)
             if modelID then
-                if assetManifest.enableLODs then
-                    if assetType == "scene" then
-                        collisionID = imports.engineRequestModel(assetPack.assetType, assetPack.assetBase)
-                    end
+                if assetType == "scene" then
+                    collisionID = imports.engineRequestModel(assetPack.assetType, assetPack.assetBase)
                 end
-                imports.engineSetModelLODDistance(modelID, 300)
                 if not rwCache.dff[(rwPaths.dff)] and imports.file.exists(rwPaths.dff) then
+                    imports.engineSetModelLODDistance(modelID, 170)
                     rwCache.dff[(rwPaths.dff)] = imports.engineLoadDFF((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(rwPaths.dff), {key = assetManifest.encryptKey})) or rwPaths.dff)
                 end
                 if not rwCache.dff[(rwPaths.dff)] then
@@ -110,6 +108,9 @@ if localPlayer then
                     return false
                 else
                     if not rwCache.col[(rwPaths.col)] and imports.file.exists(rwPaths.col) then
+                        if collisionID then
+                            imports.engineSetModelLODDistance(collisionID, 170)
+                        end
                         rwCache.col[(rwPaths.col)] = imports.engineLoadCOL((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(rwPaths.col), {key = assetManifest.encryptKey})) or rwPaths.col)
                     else
                         if collisionID then
