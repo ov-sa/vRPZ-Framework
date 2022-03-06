@@ -71,6 +71,7 @@ end
 
 function streamer:unload()
     if not self or (self == streamer) then return false end
+    local streamDimension, streamInterior = imports.getElementDimension(self.streamer), imports.getElementInterior(self.streamer)
     streamer.buffer[streamDimension][streamInterior][self] = nil
     self = nil
     return true
