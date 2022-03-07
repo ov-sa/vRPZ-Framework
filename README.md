@@ -48,3 +48,4 @@
 ## ━ Servers Utilizing Framework
 
 * [**vRiver-Dayz**](https://discord.gg/vPGW7QPFWX)
+* **Evanor.eu**
