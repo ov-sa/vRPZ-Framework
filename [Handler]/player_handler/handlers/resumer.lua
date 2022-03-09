@@ -27,7 +27,6 @@ local imports = {
     setPlayerNametagShowing = setPlayerNametagShowing,
     toJSON = toJSON,
     fromJSON = fromJSON,
-    showChat = showChat,
     table = table
 }
 

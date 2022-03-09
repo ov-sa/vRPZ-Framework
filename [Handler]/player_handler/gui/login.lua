@@ -656,8 +656,8 @@ loginUI.toggleUI = function(state, args)
         loginUI.state = false
         imports.triggerEvent("Sound:onToggleLogin", localPlayer, state)
     end
-    imports.showChat(not state)
-    imports.showCursor(state)
+    imports.showChat(false, true)
+    imports.showCursor(state, true)
     return true
 end
 
