@@ -20,6 +20,7 @@ local imports = {
     getElementType = getElementType,
     getElementsByType = getElementsByType,
     getTickCount = getTickCount,
+    addEvent = addEvent,
     addEventHandler = addEventHandler,
     cancelEvent = cancelEvent,
     triggerEvent = triggerEvent,
@@ -58,9 +59,12 @@ end
 ---------------------------------------
 
 imports.addEventHandler("onResourceStart", resource, function()
+    imports.addEvent("onServerRender", false)
     imports.setTimer(function(tickSyncer)
         if tickSyncer and imports.isElement(tickSyncer) then
-            imports.setElementData(tickSyncer, "Server:TickSyncer", imports.getTickCount())
+            local cTickCount = imports.getTickCount()
+            imports.setElementData(tickSyncer, "Server:TickSyncer", cTickCount)
+            imports.triggerEvent("onServerRender", tickSyncer, cTickCount)
         end
     end, FRAMEWORK_CONFIGS.Game["Sync_Rate"], 0, imports.createElement("Server:TickSyncer"))
     --[[
