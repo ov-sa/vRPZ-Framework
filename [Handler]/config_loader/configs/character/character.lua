@@ -49,23 +49,21 @@ configVars["Character"] = {
                 {clumpName = "H1", clumpTexture = {"cj_hdy_1", 5}, ["EN"] = "Hoody (Camo#5)", ["TR"] = "Kapüşonlu (Camo#5)"},
                 {clumpName = "H1", clumpTexture = {"cj_hdy_1", 6}, ["EN"] = "Hoody (Camo#6)", ["TR"] = "Kapüşonlu (Camo#6)"},
                 {clumpName = "H1", clumpTexture = {"cj_hdy_1", 7}, ["EN"] = "Hoody (Camo#7)", ["TR"] = "Kapüşonlu (Camo#7)"},
-                {clumpName = "H1", clumpTexture = {"cj_hdy_1", 8}, ["EN"] = "Hoody (Camo#8)", ["TR"] = "Kapüşonlu (Camo#8)"}
+                {clumpName = "H1", clumpTexture = {"cj_hdy_1", 8}, ["EN"] = "Hoody (Casual#1)", ["TR"] = "Kapüşonlu (Casual#1)"}
             },
             ["Female"] = {}
         },
         ["Lower"] = {
             ["Male"] = {
-                {clumpName = "P1", clumpTexture = {"cj_pnt_1", 1}, ["EN"] = "Jeans (Black)", ["TR"] = "Kot (Siyah)"},
-                {clumpName = "P1", clumpTexture = {"cj_pnt_1", 2}, ["EN"] = "Jeans (Red)", ["TR"] = "Kot (Kırmızı)"},
-                {clumpName = "P1", clumpTexture = {"cj_pnt_1", 3}, ["EN"] = "Jeans (Blue)", ["TR"] = "Kot (Mavi)"},
-                {clumpName = "P1", clumpTexture = {"cj_pnt_1", 4}, ["EN"] = "Jeans (Purple)", ["TR"] = "Kot (Mor)"},
-                {clumpName = "P1", clumpTexture = {"cj_pnt_1", 5}, ["EN"] = "Jeans (Green)", ["TR"] = "Kot (Yeşil)"},
-                {clumpName = "P1", clumpTexture = {"cj_pnt_1", 6}, ["EN"] = "Pant (Camo#1)", ["TR"] = "Pantolon (Camo#1)"},
-                {clumpName = "P1", clumpTexture = {"cj_pnt_1", 7}, ["EN"] = "Pant (Camo#2)", ["TR"] = "Pantolon (Camo#2)"},
-                {clumpName = "P1", clumpTexture = {"cj_pnt_1", 8}, ["EN"] = "Pant (Camo#3)", ["TR"] = "Pantolon (Camo#3)"},
-                {clumpName = "P1", clumpTexture = {"cj_pnt_1", 9}, ["EN"] = "Pant (Camo#4)", ["TR"] = "Pantolon (Camo#4)"},
-                {clumpName = "P1", clumpTexture = {"cj_pnt_1", 10}, ["EN"] = "Pant (Camo#5)", ["TR"] = "Pantolon (Camo#5)"},
-                {clumpName = "T1", clumpTexture = {"cj_trsr_1", 1}, ["EN"] = "Trouser (Green)", ["TR"] = "Pantolon (Yeşil)"}
+                {clumpName = "P1", clumpTexture = {"cj_pnt_1", 1}, ["EN"] = "Pant (Camo#1)", ["TR"] = "Pantolon (Camo#1)"},
+                {clumpName = "P1", clumpTexture = {"cj_pnt_1", 2}, ["EN"] = "Pant (Camo#2)", ["TR"] = "Pantolon (Camo#2)"},
+                {clumpName = "P1", clumpTexture = {"cj_pnt_1", 3}, ["EN"] = "Pant (Camo#3)", ["TR"] = "Pantolon (Camo#3)"},
+                {clumpName = "P1", clumpTexture = {"cj_pnt_1", 4}, ["EN"] = "Pant (Camo#4)", ["TR"] = "Pantolon (Camo#4)"},
+                {clumpName = "P1", clumpTexture = {"cj_pnt_1", 5}, ["EN"] = "Pant (Camo#5)", ["TR"] = "Pantolon (Camo#5)"},
+                {clumpName = "P1", clumpTexture = {"cj_pnt_1", 6}, ["EN"] = "Pant (Camo#6)", ["TR"] = "Pantolon (Camo#6)"},
+                {clumpName = "P1", clumpTexture = {"cj_pnt_1", 7}, ["EN"] = "Pant (Camo#7)", ["TR"] = "Pantolon (Camo#7)"},
+                {clumpName = "P1", clumpTexture = {"cj_pnt_1", 8}, ["EN"] = "Pant (Casual#1)", ["TR"] = "Pantolon (Casual#1)"},
+                {clumpName = "T1", clumpTexture = {"cj_trsr_1", 9}, ["EN"] = "Trouser (Green)", ["TR"] = "Pantolon (Yeşil)"}
             },
             ["Female"] = {}
         },
