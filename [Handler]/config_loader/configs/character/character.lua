@@ -63,7 +63,7 @@ configVars["Character"] = {
                 {clumpName = "P1", clumpTexture = {"cj_pnt_1", 6}, ["EN"] = "Pant (Camo#6)", ["TR"] = "Pantolon (Camo#6)"},
                 {clumpName = "P1", clumpTexture = {"cj_pnt_1", 7}, ["EN"] = "Pant (Camo#7)", ["TR"] = "Pantolon (Camo#7)"},
                 {clumpName = "P1", clumpTexture = {"cj_pnt_1", 8}, ["EN"] = "Pant (Casual#1)", ["TR"] = "Pantolon (Casual#1)"},
-                {clumpName = "T1", clumpTexture = {"cj_trsr_1", 9}, ["EN"] = "Trouser (Green)", ["TR"] = "Pantolon (Yeşil)"}
+                {clumpName = "T1", clumpTexture = {"cj_trsr_1", 1}, ["EN"] = "Trouser (Green)", ["TR"] = "Pantolon (Yeşil)"}
             },
             ["Female"] = {}
         },
