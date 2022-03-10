@@ -5,6 +5,16 @@
     "sceneOffset": {"x": 0, "y": 0, "z": 0},
     "shaderMaps": {
         "control": {
+            "isld_1_h2_1": [
+                {
+                    "bump": "control/isld_1_h2_1/bump.jpg"
+                }
+            ],
+            "isld_1_h2_2": [
+                {
+                    "bump": "control/isld_1_h2_2/bump.jpg"
+                }
+            ],
             "isld_1_h3_1": [
                 {
                     "bump": "control/isld_1_h3_1/bump.jpg"
