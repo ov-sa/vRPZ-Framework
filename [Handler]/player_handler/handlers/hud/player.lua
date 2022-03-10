@@ -40,10 +40,10 @@ local cache = {
             size = 27,
             bgTexture = imports.beautify.native.createTexture("files/images/hud/player/hunger.png", "dxt5", true, "clamp")
         },
-        health = {
+        blood = {
             paddingX = 79, paddingY = 5,
             size = 27,
-            bgTexture = imports.beautify.native.createTexture("files/images/hud/player/health.png", "dxt5", true, "clamp")
+            bgTexture = imports.beautify.native.createTexture("files/images/hud/player/blood.png", "dxt5", true, "clamp")
         },
         armor = {
             paddingX = 111, paddingY = 5,

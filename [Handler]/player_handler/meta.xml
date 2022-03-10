@@ -120,10 +120,12 @@
 
 
 
+    <file src="files/images/hud/player/armor.png"/>
+    <file src="files/images/hud/player/blood.png"/>
+    <file src="files/images/hud/player/hunger.png"/>
+    <file src="files/images/hud/player/thirst.png"/>
     <file src="files/images/hud/player/slotBG1.png"/>
     <file src="files/images/hud/player/slotBG2.png"/>
-    <file src="files/images/hud/player/health.png"/>
-
 
 
 
