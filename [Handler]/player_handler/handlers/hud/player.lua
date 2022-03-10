@@ -33,12 +33,12 @@ local cache = {
         thirst = {
             paddingX = 15, paddingY = 5,
             size = 27,
-            bgTexture = imports.beautify.native.createTexture("files/images/hud/player/health.png", "dxt5", true, "clamp")
+            bgTexture = imports.beautify.native.createTexture("files/images/hud/player/thirst.png", "dxt5", true, "clamp")
         },
         hunger = {
             paddingX = 47, paddingY = 5,
             size = 27,
-            bgTexture = imports.beautify.native.createTexture("files/images/hud/player/health.png", "dxt5", true, "clamp")
+            bgTexture = imports.beautify.native.createTexture("files/images/hud/player/hunger.png", "dxt5", true, "clamp")
         },
         health = {
             paddingX = 79, paddingY = 5,
@@ -48,7 +48,7 @@ local cache = {
         armor = {
             paddingX = 111, paddingY = 5,
             size = 27,
-            bgTexture = imports.beautify.native.createTexture("files/images/hud/player/health.png", "dxt5", true, "clamp")
+            bgTexture = imports.beautify.native.createTexture("files/images/hud/player/armor.png", "dxt5", true, "clamp")
         }
     },
     primary = {
