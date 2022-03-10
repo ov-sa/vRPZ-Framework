@@ -23,9 +23,14 @@ local imports = {
 -------------------
 
 local cache = {
-    startX = 5, startY = 50, padding = 10,
+    startX = 5, startY = 60, padding = 10,
     vignette = {
         bgTexture = imports.beautify.native.createTexture("files/images/hud/overlays/vignette.png", "dxt5", true, "clamp"), bgColor = imports.tocolor(0, 0, 0, 255)
+    },
+    health = {
+        paddingX = 0, paddingY = 0,
+        size = 50,
+        bgTexture = imports.beautify.native.createTexture("files/images/hud/player/health.png", "dxt5", true, "clamp")
     },
     primary = {
         paddingX = 5, paddingY = 0,
@@ -53,6 +58,7 @@ local cache = {
     }
 }
 
+cache.health.startX, cache.health.startY = CLIENT_MTA_RESOLUTION[1] - (cache.startX + cache.health.paddingX + cache.health.width), CLIENT_MTA_RESOLUTION[2] - (cache.startY - cache.health.paddingY)
 cache.primary.startX, cache.primary.startY = CLIENT_MTA_RESOLUTION[1] - (cache.startX + cache.primary.width), CLIENT_MTA_RESOLUTION[2] - (cache.startY + cache.primary.height)
 cache.secondary.startX, cache.secondary.startY = cache.primary.startX + cache.primary.width - cache.secondary.width, cache.primary.startY - cache.secondary.height - cache.padding
 cache.primary.ammo.startX, cache.primary.ammo.startY = cache.primary.startX + cache.primary.paddingX, cache.primary.startY
@@ -78,12 +84,14 @@ end, {
 
 beautify.render.create(function()
     if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then return false end
+    --Health--
+    imports.beautify.native.drawImageSection(cache.health.startX, cache.health.startY, cache.health.size, cache.health.size, 0, 0, cache.health.size, cache.health,size, cache.health.bgTexture, 0, 0, 0, -1, false)
     --Primary Equipment--
-    imports.beautify.native.drawImage(cache.primary.startX, cache.primary.startY, cache.primary.width, cache.primary.height, cache.primary.bgTexture, 0, 0, 0, cache.bgColor, false)
+    imports.beautify.native.drawImage(cache.primary.startX, cache.primary.startY, cache.primary.width, cache.primary.height, cache.primary.bgTexture, 0, 0, 0, -1, false)
     imports.beautify.native.drawText("01", cache.primary.ammo.startX, cache.primary.ammo.startY, cache.primary.ammo.endX, cache.primary.ammo.endY, cache.primary.ammo.fontColor, 1, cache.primary.ammo.font, "right", "bottom", false, false, false)
     imports.beautify.native.drawText("999", cache.primary.ammo.mag.startX, cache.primary.ammo.mag.startY, cache.primary.ammo.mag.endX, cache.primary.ammo.mag.endY, cache.primary.ammo.mag.fontColor, 1, cache.primary.ammo.mag.font, "left", "bottom", false, false, false)
     --Secondary Equipment--
-    imports.beautify.native.drawImage(cache.secondary.startX, cache.secondary.startY, cache.secondary.width, cache.secondary.height, cache.secondary.bgTexture, 0, 0, 0, cache.bgColor, false)
+    imports.beautify.native.drawImage(cache.secondary.startX, cache.secondary.startY, cache.secondary.width, cache.secondary.height, cache.secondary.bgTexture, 0, 0, 0, -1, false)
     imports.beautify.native.drawText("01", cache.secondary.ammo.startX, cache.secondary.ammo.startY, cache.secondary.ammo.endX, cache.secondary.ammo.endY, cache.secondary.ammo.fontColor, 1, cache.secondary.ammo.font, "right", "bottom", false, false, false)
     imports.beautify.native.drawText("999", cache.secondary.ammo.mag.startX, cache.secondary.ammo.mag.startY, cache.secondary.ammo.mag.endX, cache.secondary.ammo.mag.endY, cache.secondary.ammo.mag.fontColor, 1, cache.secondary.ammo.mag.font, "left", "bottom", false, false, false)
 end)
