@@ -58,7 +58,7 @@ local cache = {
     }
 }
 
-cache.health.startX, cache.health.startY = CLIENT_MTA_RESOLUTION[1] - (cache.startX + cache.health.paddingX + cache.health.width), CLIENT_MTA_RESOLUTION[2] - (cache.startY - cache.health.paddingY)
+cache.health.startX, cache.health.startY = CLIENT_MTA_RESOLUTION[1] - (cache.startX + cache.health.paddingX + cache.health.size), CLIENT_MTA_RESOLUTION[2] - (cache.startY - cache.health.paddingY)
 cache.primary.startX, cache.primary.startY = CLIENT_MTA_RESOLUTION[1] - (cache.startX + cache.primary.width), CLIENT_MTA_RESOLUTION[2] - (cache.startY + cache.primary.height)
 cache.secondary.startX, cache.secondary.startY = cache.primary.startX + cache.primary.width - cache.secondary.width, cache.primary.startY - cache.secondary.height - cache.padding
 cache.primary.ammo.startX, cache.primary.ammo.startY = cache.primary.startX + cache.primary.paddingX, cache.primary.startY
