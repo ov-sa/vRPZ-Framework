@@ -17,6 +17,10 @@ configVars = {
     ["Game"] = {
         ["FPS_Limit"] = 100,
         ["Sync_Rate"] = 50,
+        ["Camera_FOV"] = {
+            ["player"] = 40,
+            ["vehicle"] = 50
+        },
         ["Draw_Distance_Limit"] = {500, 1000},
         ["Fog_Distance_Limit"] = {5, 50},
         ["Character_Limit"] = {default = 2, vip = 4},
