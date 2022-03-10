@@ -28,7 +28,7 @@ local cache = {
         bgTexture = imports.beautify.native.createTexture("files/images/hud/overlays/vignette.png", "dxt5", true, "clamp"), bgColor = imports.tocolor(0, 0, 0, 255)
     },
     health = {
-        paddingX = 0, paddingY = 0,
+        paddingX = 0, paddingY = 5,
         size = 50,
         bgTexture = imports.beautify.native.createTexture("files/images/hud/player/health.png", "dxt5", true, "clamp")
     },
