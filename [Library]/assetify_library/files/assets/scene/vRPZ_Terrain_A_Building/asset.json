@@ -7,32 +7,32 @@
         "control": {
             "isld_1_h3_1": [
                 {
-                    "bump": "control/isld_1_h3_1/bump.png"
+                    "bump": "control/isld_1_h3_1/bump.jpg"
                 }
             ],
             "isld_1_h4_1": [
                 {
-                    "bump": "control/isld_1_h4_1/bump.png"
+                    "bump": "control/isld_1_h4_1/bump.jpg"
                 }
             ],
             "isld_1_h5_1": [
                 {
-                    "bump": "control/isld_1_h5_1/bump.png"
+                    "bump": "control/isld_1_h5_1/bump.jpg"
                 }
             ],
             "isld_1_h6_1": [
                 {
-                    "bump": "control/isld_1_h6_1/bump.png"
+                    "bump": "control/isld_1_h6_1/bump.jpg"
                 }
             ],
             "isld_1_t1_1": [
                 {
-                    "bump": "control/isld_1_t1_1/bump.png"
+                    "bump": "control/isld_1_t1_1/bump.jpg"
                 }
             ],
             "isld_1_w1_1": [
                 {
-                    "bump": "control/isld_1_w1_1/bump.png"
+                    "bump": "control/isld_1_w1_1/bump.jpg"
                 }
             ]
         }
