@@ -14,7 +14,9 @@
 
 configVars["Inventory"]["Items"] = {
 
-    ["Primary"] = {},
+    ["Primary"] = {
+        ["awm"] = {name = "AWM", weight = {horizontal = 3, vertical = 1}, itemObjectID = 2827, itemPickupDetails = {scale = 1, rotX = 90}, weaponID = 34, weaponDamage = 13000, weaponAmmo = "Sniper Ammo", magSize = 5, fireDelay = 1500}
+    },
 
     ["Secondary"] = {},
 
