@@ -85,7 +85,7 @@ end, {
 beautify.render.create(function()
     if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then return false end
     --Health--
-    imports.beautify.native.drawImageSection(cache.health.startX, cache.health.startY, cache.health.size, cache.health.size, 0, 0, cache.health.size, cache.health,size, cache.health.bgTexture, 0, 0, 0, -1, false)
+    imports.beautify.native.drawImageSection(cache.health.startX, cache.health.startY, cache.health.size, cache.health.size, 0, 0, cache.health.size, cache.health.size, cache.health.bgTexture, 0, 0, 0, -1, false)
     --Primary Equipment--
     imports.beautify.native.drawImage(cache.primary.startX, cache.primary.startY, cache.primary.width, cache.primary.height, cache.primary.bgTexture, 0, 0, 0, -1, false)
     imports.beautify.native.drawText("01", cache.primary.ammo.startX, cache.primary.ammo.startY, cache.primary.ammo.endX, cache.primary.ammo.endY, cache.primary.ammo.fontColor, 1, cache.primary.ammo.font, "right", "bottom", false, false, false)
