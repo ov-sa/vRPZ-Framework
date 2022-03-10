@@ -1,7 +1,7 @@
 {
     "streamRange": 170,
     "enableLODs": true,
-    "sceneDimension": 0,
+    "sceneDimension": -1,
     "sceneInterior": 0,
     "sceneOffset": {"x": 0, "y": 0, "z": 0},
     "shaderMaps": {
