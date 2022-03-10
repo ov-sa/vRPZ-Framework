@@ -13,7 +13,9 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
     tocolor = tocolor,
+    dxGetMaterialSize = dxGetMaterialSize,
     beautify = beautify
 }
 
@@ -27,10 +29,27 @@ local cache = {
     vignette = {
         bgTexture = imports.beautify.native.createTexture("files/images/hud/overlays/vignette.png", "dxt5", true, "clamp"), bgColor = imports.tocolor(0, 0, 0, 255)
     },
-    health = {
-        paddingX = 0, paddingY = 5,
-        size = 50,
-        bgTexture = imports.beautify.native.createTexture("files/images/hud/player/health.png", "dxt5", true, "clamp")
+    status = {
+        thirst = {
+            paddingX = 15, paddingY = 5,
+            size = 27,
+            bgTexture = imports.beautify.native.createTexture("files/images/hud/player/health.png", "dxt5", true, "clamp")
+        },
+        hunger = {
+            paddingX = 47, paddingY = 5,
+            size = 27,
+            bgTexture = imports.beautify.native.createTexture("files/images/hud/player/health.png", "dxt5", true, "clamp")
+        },
+        health = {
+            paddingX = 79, paddingY = 5,
+            size = 27,
+            bgTexture = imports.beautify.native.createTexture("files/images/hud/player/health.png", "dxt5", true, "clamp")
+        },
+        armor = {
+            paddingX = 111, paddingY = 5,
+            size = 27,
+            bgTexture = imports.beautify.native.createTexture("files/images/hud/player/health.png", "dxt5", true, "clamp")
+        }
     },
     primary = {
         paddingX = 5, paddingY = 0,
@@ -58,7 +77,10 @@ local cache = {
     }
 }
 
-cache.health.startX, cache.health.startY = CLIENT_MTA_RESOLUTION[1] - (cache.startX + cache.health.paddingX + cache.health.size), CLIENT_MTA_RESOLUTION[2] - (cache.startY - cache.health.paddingY)
+for i, j in imports.pairs(cache.status) do
+    j.startX, j.startY = CLIENT_MTA_RESOLUTION[1] - (cache.startX + j.paddingX + j.size), CLIENT_MTA_RESOLUTION[2] - (cache.startY - j.paddingY)
+    j.texWidth, j.texHeight = imports.beautify.native.getMaterialSize(j.bgTexture)
+end
 cache.primary.startX, cache.primary.startY = CLIENT_MTA_RESOLUTION[1] - (cache.startX + cache.primary.width), CLIENT_MTA_RESOLUTION[2] - (cache.startY + cache.primary.height)
 cache.secondary.startX, cache.secondary.startY = cache.primary.startX + cache.primary.width - cache.secondary.width, cache.primary.startY - cache.secondary.height - cache.padding
 cache.primary.ammo.startX, cache.primary.ammo.startY = cache.primary.startX + cache.primary.paddingX, cache.primary.startY
@@ -83,9 +105,13 @@ end, {
 })
 
 beautify.render.create(function()
-    if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then return false end
-    --Health--
-    imports.beautify.native.drawImageSection(cache.health.startX, cache.health.startY, cache.health.size, cache.health.size, 0, 0, cache.health.size, cache.health.size, cache.health.bgTexture, 0, 0, 0, -1, false)
+    --if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then return false end
+    --Status--
+    for i, j in imports.pairs(cache.status) do
+        local percent = 0.75
+        percent = 1 - percent
+        imports.beautify.native.drawImageSection(j.startX, j.startY + (j.size*percent), j.size, j.size, 0, j.texHeight*percent, j.texWidth, j.texHeight, j.bgTexture, 0, 0, 0, tocolor(125, 5, 5, 255), false)
+    end
     --Primary Equipment--
     imports.beautify.native.drawImage(cache.primary.startX, cache.primary.startY, cache.primary.width, cache.primary.height, cache.primary.bgTexture, 0, 0, 0, -1, false)
     imports.beautify.native.drawText("01", cache.primary.ammo.startX, cache.primary.ammo.startY, cache.primary.ammo.endX, cache.primary.ammo.endY, cache.primary.ammo.fontColor, 1, cache.primary.ammo.font, "right", "bottom", false, false, false)
