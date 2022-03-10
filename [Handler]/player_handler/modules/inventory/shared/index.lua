@@ -39,7 +39,7 @@ CInventory = {
 
     fetchItemName = function(item)
         local itemData = CInventory.fetchItem(item)
-        return (itemData and itemData.data and (itemData.data.name or item)) or false
+        return (itemData and itemData.data and itemData.data.name) or false
     end,
 
     fetchItemWeight = function(item)
@@ -55,12 +55,6 @@ CInventory = {
     fetchWeaponSlot = function(item)
         local itemData = CInventory.fetchItem(item)
         return (itemData and itemData.slot and CInventory.CSlots["Weapon"][(itemData.slot)]) or false
-    end,
-
-    fetchWeaponSlotID = function(item)
-        local itemData = CInventory.fetchItem(item)
-        local weaponSlot = CInventory.fetchWeaponSlot(item)
-        return (itemData and weaponSlot and imports.tonumber(itemData.data.slotID)) or false
     end,
 
     fetchWeaponID = function(item)
