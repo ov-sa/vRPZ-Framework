@@ -15,27 +15,27 @@
 configVars["Inventory"]["Slots"] = {
 
     ["Primary"] = {
-        slotIdentifier = "Weapon"
+        identifier = "Weapon"
     },
 
     ["Secondary"] = {
-        slotIdentifier = "Weapon"
+        identifier = "Weapon"
     },
 
     ["Tertiary"] = {
-        slotIdentifier = "Weapon"
+        identifier = "Weapon"
     },
 
     ["Helmet"] = {
-        slotIdentifier = "Helmet"
+        identifier = "Helmet"
     },
 
     ["Armor"] = {
-        slotIdentifier = "Armor"
+        identifier = "Armor"
     },
 
     ["Backpack"] = {
-        slotIdentifier = "Backpack"
+        identifier = "Backpack"
     }
 
 }

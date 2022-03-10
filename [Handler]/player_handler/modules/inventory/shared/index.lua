@@ -66,19 +66,19 @@ CInventory = {
     fetchWeaponID = function(item)
         local itemData = CInventory.fetchItem(item)
         local weaponSlot = CInventory.fetchWeaponSlot(item)
-        return (itemData and weaponSlot and imports.tonumber(itemData.data.weaponID)) or false
+        return (itemData and weaponSlot and itemData.data.weapon and imports.tonumber(itemData.data.weapon.id)) or false
     end,
 
     fetchWeaponAmmo = function(item)
         local itemData = CInventory.fetchItem(item)
         local weaponSlot = CInventory.fetchWeaponSlot(item)
-        return (itemData and weaponSlot and imports.tonumber(itemData.data.weaponAmmo)) or false
+        return (itemData and weaponSlot and itemData.data.weapon and imports.tonumber(itemData.data.weapon.ammo)) or false
     end,
 
     fetchWeaponMag = function(item)
         local itemData = CInventory.fetchItem(item)
         local weaponSlot = CInventory.fetchWeaponSlot(item)
-        return (itemData and weaponSlot and imports.tonumber(itemData.data.weaponMag)) or 0
+        return (itemData and weaponSlot and itemData.data.weapon and imports.tonumber(itemData.data.weapon.mag)) or 0
     end,
 
     fetchSlot = function(slot)
@@ -88,11 +88,11 @@ CInventory = {
 }
 
 for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
-    if FRAMEWORK_CONFIGS["Inventory"]["Slots"][i] and (FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].slotIdentifier == "Weapon") then
-        CInventory.CSlots[(FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].slotIdentifier)] = CInventory.CSlots[(FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].slotIdentifier)] or {}
-        CInventory.CSlots[(FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].slotIdentifier)][i] = FRAMEWORK_CONFIGS["Inventory"]["Slots"][i]
+    if FRAMEWORK_CONFIGS["Inventory"]["Slots"][i] and (FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].identifier == "Weapon") then
+        CInventory.CSlots[(FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].identifier)] = CInventory.CSlots[(FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].identifier)] or {}
+        CInventory.CSlots[(FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].identifier)][i] = FRAMEWORK_CONFIGS["Inventory"]["Slots"][i]
     else
-        CInventory.CSlots[(FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].slotIdentifier)] = FRAMEWORK_CONFIGS["Inventory"]["Slots"][i]
+        CInventory.CSlots[(FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].identifier)] = FRAMEWORK_CONFIGS["Inventory"]["Slots"][i]
     end
     for k, v in imports.pairs(j) do
         CInventory.CItems[k] = {slot = i, data = v}
