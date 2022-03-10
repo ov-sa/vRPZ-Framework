@@ -24,6 +24,16 @@
                 {
                     "bump": "control/isld_1_h6_1/bump.png"
                 }
+            ],
+            "isld_1_t1_1": [
+                {
+                    "bump": "control/isld_1_t1_1/bump.png"
+                }
+            ],
+            "isld_1_w1_1": [
+                {
+                    "bump": "control/isld_1_w1_1/bump.png"
+                }
             ]
         }
     }
