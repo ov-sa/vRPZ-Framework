@@ -54,7 +54,10 @@ CInventory = {
 
     fetchWeaponSlot = function(item)
         local itemData = CInventory.fetchItem(item)
-        return (itemData and itemData.slot and CInventory.CSlots["Weapon"][(itemData.slot)]) or false
+        if itemData and itemData.slot and CInventory.CSlots["Weapon"][(itemData.slot)] then
+            return itemData.slot, CInventory.CSlots["Weapon"][(itemData.slot)]
+        end
+        return false
     end,
 
     fetchWeaponID = function(item)
