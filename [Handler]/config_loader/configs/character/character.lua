@@ -16,9 +16,8 @@ configVars["Character"] = {
 
     ["Datas"] = {
         "blood",
-        "armor",
-        "thirst",
-        "hunger"
+        "hunger",
+        "thirst"
     },
 
     ["Identity"] = {
