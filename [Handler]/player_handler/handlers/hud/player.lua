@@ -27,28 +27,26 @@ local imports = {
 local cache = {
     startX = 5, startY = 60, padding = 10,
     vignette = {
-        bgTexture = imports.beautify.native.createTexture("files/images/hud/overlays/vignette.png", "dxt5", true, "clamp"), bgColor = imports.tocolor(0, 0, 0, 255)
+        bgTexture = imports.beautify.native.createTexture("files/images/hud/overlays/vignette.rw", "dxt5", true, "clamp"), bgColor = imports.tocolor(0, 0, 0, 255)
     },
     status = {
         thirst = {
-            paddingX = 15, paddingY = 5,
-            size = 27,
-            bgTexture = imports.beautify.native.createTexture("files/images/hud/player/thirst.png", "dxt5", true, "clamp")
+            paddingX = 15, paddingY = 10,
+            size = 32,
+            borderTexture = imports.beautify.native.createTexture("files/images/hud/player/thirst/border.rw", "dxt5", true, "clamp"),
+            iconTexture = imports.beautify.native.createTexture("files/images/hud/player/thirst/icon.rw", "dxt5", true, "clamp")
         },
         hunger = {
-            paddingX = 47, paddingY = 5,
-            size = 27,
-            bgTexture = imports.beautify.native.createTexture("files/images/hud/player/hunger.png", "dxt5", true, "clamp")
+            paddingX = 57, paddingY = 10,
+            size = 32,
+            borderTexture = imports.beautify.native.createTexture("files/images/hud/player/hunger/border.rw", "dxt5", true, "clamp"),
+            iconTexture = imports.beautify.native.createTexture("files/images/hud/player/hunger/icon.rw", "dxt5", true, "clamp")
         },
         blood = {
-            paddingX = 79, paddingY = 5,
-            size = 27,
-            bgTexture = imports.beautify.native.createTexture("files/images/hud/player/blood.png", "dxt5", true, "clamp")
-        },
-        armor = {
-            paddingX = 111, paddingY = 5,
-            size = 27,
-            bgTexture = imports.beautify.native.createTexture("files/images/hud/player/armor.png", "dxt5", true, "clamp")
+            paddingX = 99, paddingY = 10,
+            size = 32,
+            borderTexture = imports.beautify.native.createTexture("files/images/hud/player/blood/border.rw", "dxt5", true, "clamp"),
+            iconTexture = imports.beautify.native.createTexture("files/images/hud/player/blood/icon.rw", "dxt5", true, "clamp")
         }
     },
     primary = {
@@ -79,7 +77,7 @@ local cache = {
 
 for i, j in imports.pairs(cache.status) do
     j.startX, j.startY = CLIENT_MTA_RESOLUTION[1] - (cache.startX + j.paddingX + j.size), CLIENT_MTA_RESOLUTION[2] - (cache.startY - j.paddingY)
-    j.texWidth, j.texHeight = imports.beautify.native.getMaterialSize(j.bgTexture)
+    j.texWidth, j.texHeight = imports.beautify.native.getMaterialSize(j.borderTexture)
 end
 cache.primary.startX, cache.primary.startY = CLIENT_MTA_RESOLUTION[1] - (cache.startX + cache.primary.width), CLIENT_MTA_RESOLUTION[2] - (cache.startY + cache.primary.height)
 cache.secondary.startX, cache.secondary.startY = cache.primary.startX + cache.primary.width - cache.secondary.width, cache.primary.startY - cache.secondary.height - cache.padding
@@ -105,12 +103,14 @@ end, {
 })
 
 beautify.render.create(function()
-    --if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then return false end
+    if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then return false end
     --Status--
     for i, j in imports.pairs(cache.status) do
         local percent = 0.75
         percent = 1 - percent
-        imports.beautify.native.drawImageSection(j.startX, j.startY + (j.size*percent), j.size, j.size, 0, j.texHeight*percent, j.texWidth, j.texHeight, j.bgTexture, 0, 0, 0, tocolor(125, 5, 5, 255), false)
+        local iconSize, nativeSize = j.size*percent, j.texHeight*percent
+        imports.beautify.native.drawImage(j.startX, j.startY, j.size, j.size, j.borderTexture, 0, 0, 0, -1, false)
+        imports.beautify.native.drawImageSection(j.startX, j.startY + iconSize, j.size, j.size - iconSize, 0, nativeSize, j.texWidth, j.texHeight - nativeSize, j.iconTexture, 0, 0, 0, tocolor(200, 200, 200, 255), false)
     end
     --Primary Equipment--
     imports.beautify.native.drawImage(cache.primary.startX, cache.primary.startY, cache.primary.width, cache.primary.height, cache.primary.bgTexture, 0, 0, 0, -1, false)

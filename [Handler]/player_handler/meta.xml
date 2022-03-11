@@ -115,15 +115,14 @@
     <file src="files/images/loading/loader.png"/>
 
     <!-- Files: Images: HUD -->
-    <file src="files/images/hud/overlays/vignette.png"/>
+    <file src="files/images/hud/overlays/vignette.rw"/>
+    <file src="files/images/hud/player/blood/border.rw"/>
+    <file src="files/images/hud/player/blood/icon.rw"/>
+    <file src="files/images/hud/player/hunger/border.rw"/>
+    <file src="files/images/hud/player/hunger/icon.rw"/>
+    <file src="files/images/hud/player/thirst/border.rw"/>
+    <file src="files/images/hud/player/thirst/icon.rw"/>
 
-
-
-
-    <file src="files/images/hud/player/armor.png"/>
-    <file src="files/images/hud/player/blood.png"/>
-    <file src="files/images/hud/player/hunger.png"/>
-    <file src="files/images/hud/player/thirst.png"/>
     <file src="files/images/hud/player/slotBG1.png"/>
     <file src="files/images/hud/player/slotBG2.png"/>
 
