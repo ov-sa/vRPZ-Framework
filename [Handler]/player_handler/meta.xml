@@ -128,18 +128,10 @@
 
 
 
+
     <file src="files/images/hud/lock/locked.png"/>
     <file src="files/images/hud/lock/unlocked.png"/>
     <file src="files/images/hud/crosshair.png"/>
-    <file src="files/images/hud/status/blood.png"/>
-    <file src="files/images/hud/status/infection.png"/>
-    <file src="files/images/hud/status/bleeding.png"/>
-    <file src="files/images/hud/status/brokenbone.png"/>
-    <file src="files/images/hud/status/hunger.png"/>
-    <file src="files/images/hud/status/thirst.png"/>
-    <file src="files/images/hud/status/temperature.png"/>
-    <file src="files/images/hud/status/visibility.png"/>
-    <file src="files/images/hud/status/volume.png"/>
 
     <!-- Files: Images: Inventory: UI -->
     <file src="files/images/inventory/ui/equipment/body.png"/>
