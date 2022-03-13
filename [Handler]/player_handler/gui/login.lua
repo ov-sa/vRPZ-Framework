@@ -83,13 +83,13 @@ loginUI = {
                 size = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.size, iconSize = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconSize,
                 iconColor = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconColor,
                 bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.bgColor)),
-                {iconTexture = imports.beautify.assets["images"]["arrow/left.rw"], exec = function() loginUI.phases[2].manageCharacter("previous") end},
-                {iconTexture = imports.beautify.assets["images"]["arrow/right.rw"], exec = function() loginUI.phases[2].manageCharacter("next") end},
-                {iconTexture = imports.beautify.assets["images"]["canvas/pick.rw"], exec = function() loginUI.phases[2].manageCharacter("pick") end},
-                {iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"], exec = function() loginUI.phases[2].manageCharacter("create") end},
-                {iconTexture = imports.beautify.assets["images"]["canvas/minus.rw"], exec = function() loginUI.phases[2].manageCharacter("delete") end},
-                {iconTexture = imports.beautify.assets["images"]["canvas/save.rw"], exec = function() loginUI.phases[2].manageCharacter("save") end},
-                {iconTexture = imports.beautify.assets["images"]["canvas/back.rw"], exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end}
+                {iconTexture = imports.beautify.assets["images"]["arrow/left.rw"], hover = "Previous", exec = function() loginUI.phases[2].manageCharacter("previous") end},
+                {iconTexture = imports.beautify.assets["images"]["arrow/right.rw"], hover = "Next", exec = function() loginUI.phases[2].manageCharacter("next") end},
+                {iconTexture = imports.beautify.assets["images"]["canvas/pick.rw"], hover = "Pick", exec = function() loginUI.phases[2].manageCharacter("pick") end},
+                {iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"], hover = "Create", exec = function() loginUI.phases[2].manageCharacter("create") end},
+                {iconTexture = imports.beautify.assets["images"]["canvas/minus.rw"], hover = "Delete", exec = function() loginUI.phases[2].manageCharacter("delete") end},
+                {iconTexture = imports.beautify.assets["images"]["canvas/save.rw"], hover = "Save", exec = function() loginUI.phases[2].manageCharacter("save") end},
+                {iconTexture = imports.beautify.assets["images"]["canvas/back.rw"], hover = "Exit", exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end}
             },
             categories = {
                 paddingX = 20, paddingY = 5,
@@ -175,6 +175,10 @@ for i = 1, #loginUI.phases[2].options, 1 do
     j.iconY = j.startY + ((loginUI.phases[2].options.size - loginUI.phases[2].options.iconSize)*0.5)
     j.hoverStatus = "backward"
     j.hoverAnimTick = CLIENT_CURRENT_TICK
+    if (j.hover) then
+        local text = j.hover
+        j.hover = {text = text, width = imports.beautify.native.getTextWidth(text, 1, FRAMEWORK_FONTS[8]) + 20}
+    end
 end
 loginUI.phases[2].updateUILang = function(gender)
     for i = 1, #loginUI.phases[2].categories, 1 do
@@ -572,10 +576,27 @@ loginUI.renderUI = function(renderData)
                         j.hoverAnimTick = CLIENT_CURRENT_TICK
                     end
                 end
+
                 j.animAlphaPercent = j.animAlphaPercent or 0.35
-                j.animAlphaPercent = ((j.hoverStatus == "forward") and imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")) or imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0.35, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
+                if (j.hover) then
+                    j.hoverWidth = j.hoverWidth or 0
+
+                    if (j.hoverStatus == "forward") then
+                        j.animAlphaPercent, j.hoverWidth = imports.interpolateBetween(j.animAlphaPercent, j.hoverWidth, 0, 1, j.hover.width, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
+                    else
+                        j.animAlphaPercent, j.hoverWidth = imports.interpolateBetween(j.animAlphaPercent, j.hoverWidth, 0, 0.35, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
+                    end
+                else
+                    j.animAlphaPercent = ((j.hoverStatus == "forward") and imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")) or imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0.35, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
+                end
+
                 imports.beautify.native.drawRectangle(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, loginUI.phases[2].options.bgColor, false)
                 imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.iconTexture, 0, 0, 0, imports.tocolor(loginUI.phases[2].options.iconColor[1], loginUI.phases[2].options.iconColor[2], loginUI.phases[2].options.iconColor[3], loginUI.phases[2].options.iconColor[4]*j.animAlphaPercent), false)
+
+                if (j.hover and j.hoverWidth > 0) then
+                    imports.beautify.native.drawRectangle(loginUI.phases[2].options.startX + loginUI.phases[2].options.size + 5, j.startY, j.hoverWidth, loginUI.phases[2].options.size, loginUI.phases[2].options.bgColor, false)
+                    imports.beautify.native.drawText(j.hover.text, loginUI.phases[2].options.startX + loginUI.phases[2].options.size + 5, j.startY, loginUI.phases[2].options.startX + loginUI.phases[2].options.size + 5 + j.hoverWidth, j.startY + loginUI.phases[2].options.size, -1, 1, FRAMEWORK_FONTS[8], "center", "center", true)
+                end
             end
         elseif loginUI.phase == 3 then
             imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.bgTexture, 0, 0, 0, -1, false)
