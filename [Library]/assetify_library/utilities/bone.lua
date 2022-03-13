@@ -35,10 +35,10 @@ bone = {
         ped = {1, 2, 3, 4, 5, 6, 7, 8, 21, 22, 23, 24, 25, 26, 31, 32, 33, 34, 35, 36, 41, 42, 43, 44, 51, 52, 53, 54},
         vehicle = {}
     },
+    cache = {},
     buffer = {
         element = {}
     },
-    cache = {}
 }
 bone.__index = bone
 
@@ -99,8 +99,7 @@ end
 
 function self:update()
     if not self or (self == bone) then return false end
-    --bone.cache[(self.parent)] = bone.cache[(self.parent)] or {}
-    bone.cache[(self.parent)] = {}
+    bone.cache[(self.parent)] = bone.cache[(self.parent)] or {}
     bone.cache[(self.parent)][(self.boneData.id)] = bone.cache[(self.parent)][(self.boneData.id)] or imports.getElementBoneMatrix(parent, self.boneData.id)
     imports.setElementMatrix(self.element, imports.matrix.transform(bone.cache[(self.parent)][(self.boneData.id)], self.boneData.rotationMatrix, self.boneData.position.x, self.boneData.position.y, self.boneData.position.z))
 end

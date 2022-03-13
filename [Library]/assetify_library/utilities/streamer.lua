@@ -118,6 +118,7 @@ imports.addEventHandler("onAssetifyLoad", root, function()
                     end
                 end
             end
+            bone.cache = {}
         end
     end)
 end)
