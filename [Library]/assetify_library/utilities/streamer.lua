@@ -113,6 +113,9 @@ imports.addEventHandler("onAssetifyLoad", root, function()
                         end
                     end
                     imports.setElementDimension(i.streamer, (isStreamed and clientDimension) or streamerSettings.unsyncDimension)
+                    if i.streamType == "bone" then
+                        bone.buffer.element[(i.streamer)]:update()
+                    end
                 end
             end
         end
