@@ -22,6 +22,7 @@ local imports = {
     tonumber = tonumber,
     tostring = tostring,
     destroyElement = destroyElement,
+    addEventHandler = addEventHandler,
     collectgarbage = collectgarbage,
     setTimer = setTimer,
     file = file,

@@ -19,7 +19,6 @@ local imports = {
     tonumber = tonumber,
     isElement = isElement,
     destroyElement = destroyElement,
-    addEventHandler = addEventHandler,
     setmetatable = setmetatable,
     dxCreateShader = dxCreateShader,
     dxCreateTexture = dxCreateTexture,
