@@ -78,7 +78,7 @@ end
 
 function bone:load(element, parent, boneData)
     if not self or (self == bone) then return false end
-    if not element or not imports.isElement(element) or not parent or not imports.isElement(parent) or not boneData or bone.buffer.element[element] then return false end
+    if not element or not imports.isElement(element) or not parent or not imports.isElement(parent) or not boneData or (element == parent) or bone.buffer.element[element] then return false end
     self.element = element
     self.parent = parent
     if not self:refresh(boneData) then return false end
