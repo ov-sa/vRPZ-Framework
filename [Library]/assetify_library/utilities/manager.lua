@@ -237,7 +237,7 @@ function manager:unload(assetType, assetName)
     return false
 end
 
-imports.addEventHandler("onClientElementDestroy", resourceRoot, function()
+imports.addEventHandler("onClientElementDestroy", root, function()
     shader:clearElementBuffer(source)
     bone:clearElementBuffer(source)
 end)
