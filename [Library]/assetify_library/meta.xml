@@ -18,6 +18,7 @@
     <script src="utilities/syncer.lua" type="shared"/>
     <script src="utilities/shader.lua" type="shared"/>
     <script src="utilities/scene.lua" type="client"/>
+    <script src="utilities/bone.lua" type="client"/>
     <script src="utilities/streamer.lua" type="client"/>
     <script src="utilities/manager.lua" type="client"/>
     <script src="settings/shared.lua" type="shared"/>

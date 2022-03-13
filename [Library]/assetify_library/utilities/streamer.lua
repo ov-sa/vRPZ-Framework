@@ -59,7 +59,9 @@ function streamer:load(streamerInstance, streamType, occlusionInstances)
     self.occlusions = occlusionInstances
     local streamDimension, streamInterior = imports.getElementDimension(occlusionInstances[1]), imports.getElementInterior(occlusionInstances[1])
     if streamerInstance ~= occlusionInstances[1] then
-        imports.attachElements(streamerInstance, occlusionInstances[1])
+        if streamType ~= "bone" then
+            imports.attachElements(streamerInstance, occlusionInstances[1])
+        end
         imports.setElementDimension(streamerInstance, streamDimension)
         imports.setElementInterior(streamerInstance, streamInterior)
     end
