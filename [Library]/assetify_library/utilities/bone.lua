@@ -15,7 +15,9 @@
 
 local imports = {
     pairs = pairs,
+    tonumber = tonumber,
     isElement = isElement,
+    setmetatable = setmetatable,
     getElementType = getElementType,
     setElementMatrix = setElementMatrix,
     setElementPosition = setElementPosition,
@@ -103,7 +105,8 @@ end
 function bone:refresh(boneData)
     if not self or (self == bone) then return false end
     local parentType = imports.getElementType(self.parent)
-    if parentType or not bone.ids[parentType] then return false end
+    parentType = (parentType == "player" and "ped") or parentType
+    if not parentType or not bone.ids[parentType] then return false end
     boneData.id = imports.tonumber(boneData.id)
     if not boneData.id or not bone.ids[parentType][(boneData.id)] or not boneData.position or not boneData.rotation then return false end
     boneData.position.x, boneData.position.y, boneData.position.z = imports.tonumber(boneData.position.x) or 0, imports.tonumber(boneData.position.y) or 0, imports.tonumber(boneData.position.z) or 0
@@ -116,6 +119,6 @@ end
 function bone:update()
     if not self or (self == bone) then return false end
     bone.cache[(self.parent)] = bone.cache[(self.parent)] or {}
-    bone.cache[(self.parent)][(self.boneData.id)] = bone.cache[(self.parent)][(self.boneData.id)] or imports.getElementBoneMatrix(parent, self.boneData.id)
+    bone.cache[(self.parent)][(self.boneData.id)] = bone.cache[(self.parent)][(self.boneData.id)] or imports.getElementBoneMatrix(self.parent, self.boneData.id)
     imports.setElementMatrix(self.element, imports.matrix.transform(bone.cache[(self.parent)][(self.boneData.id)], self.boneData.rotationMatrix, self.boneData.position.x, self.boneData.position.y, self.boneData.position.z))
 end

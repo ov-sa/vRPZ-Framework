@@ -106,21 +106,21 @@ matrix = {
         if not elemMatrix or not rotMatrix or not posX or not posY or not posZ then return false end
         return {
             {
-                (elemMatrix[2][1]*rotMat[1][2]) + (elemMatrix[1][1]*rotMat[1][1]) + (rotMat[1][3]*elemMatrix[3][1]),
-                (elemMatrix[3][2]*rotMat[1][3]) + (elemMatrix[1][2]*rotMat[1][1]) + (elemMatrix[2][2]*rotMat[1][2]),
-                (elemMatrix[2][3]*rotMat[1][2]) + (elemMatrix[3][3]*rotMat[1][3]) + (rotMat[1][1]*elemMatrix[1][3]),
+                (elemMatrix[2][1]*rotMatrix[1][2]) + (elemMatrix[1][1]*rotMatrix[1][1]) + (rotMatrix[1][3]*elemMatrix[3][1]),
+                (elemMatrix[3][2]*rotMatrix[1][3]) + (elemMatrix[1][2]*rotMatrix[1][1]) + (elemMatrix[2][2]*rotMatrix[1][2]),
+                (elemMatrix[2][3]*rotMatrix[1][2]) + (elemMatrix[3][3]*rotMatrix[1][3]) + (rotMatrix[1][1]*elemMatrix[1][3]),
                 0
             },
             {
-                (rotMat[2][3]*elemMatrix[3][1]) + (elemMatrix[2][1]*rotMat[2][2]) + (rotMat[2][1]*elemMatrix[1][1]),
-                (elemMatrix[3][2]*rotMat[2][3]) + (elemMatrix[2][2]*rotMat[2][2]) + (elemMatrix[1][2]*rotMat[2][1]),
-                (rotMat[2][1]*elemMatrix[1][3]) + (elemMatrix[3][3]*rotMat[2][3]) + (elemMatrix[2][3]*rotMat[2][2]),
+                (rotMatrix[2][3]*elemMatrix[3][1]) + (elemMatrix[2][1]*rotMatrix[2][2]) + (rotMatrix[2][1]*elemMatrix[1][1]),
+                (elemMatrix[3][2]*rotMatrix[2][3]) + (elemMatrix[2][2]*rotMatrix[2][2]) + (elemMatrix[1][2]*rotMatrix[2][1]),
+                (rotMatrix[2][1]*elemMatrix[1][3]) + (elemMatrix[3][3]*rotMatrix[2][3]) + (elemMatrix[2][3]*rotMatrix[2][2]),
                 0
             },
             {
-                (elemMatrix[2][1]*rotMat[3][2]) + (rotMat[3][3]*elemMatrix[3][1]) + (rotMat[3][1]*elemMatrix[1][1]),
-                (elemMatrix[3][2]*rotMat[3][3]) + (elemMatrix[2][2]*rotMat[3][2]) + (rotMat[3][1]*elemMatrix[1][2]),
-                (rotMat[3][1]*elemMatrix[1][3]) + (elemMatrix[3][3]*rotMat[3][3]) + (elemMatrix[2][3]*rotMat[3][2]),
+                (elemMatrix[2][1]*rotMatrix[3][2]) + (rotMatrix[3][3]*elemMatrix[3][1]) + (rotMatrix[3][1]*elemMatrix[1][1]),
+                (elemMatrix[3][2]*rotMatrix[3][3]) + (elemMatrix[2][2]*rotMatrix[3][2]) + (rotMatrix[3][1]*elemMatrix[1][2]),
+                (rotMatrix[3][1]*elemMatrix[1][3]) + (elemMatrix[3][3]*rotMatrix[3][3]) + (elemMatrix[2][3]*rotMatrix[3][2]),
                 0
             },
             {
