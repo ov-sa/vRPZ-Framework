@@ -69,7 +69,7 @@ function bone:clearElementBuffer(element)
         bone.buffer.element[element]:destroy()
     elseif bone.buffer.parent[element] then
         for i, j in imports.pairs(bone.buffer.parent[element]) do
-            j:destroy()
+            i:destroy()
         end
     end
     bone.buffer.parent[element] = nil
@@ -85,6 +85,8 @@ function bone:load(element, parent, boneData)
     imports.setElementCollisionsEnabled(element, false)
     self.cStreamer = streamer:create(element, "bone", {parent})
     bone.buffer.element[element] = self
+    bone.buffer.parent[parent] = bone.buffer.parent[parent] or {}
+    bone.buffer.parent[parent][self] = true
     return true
 end
 
