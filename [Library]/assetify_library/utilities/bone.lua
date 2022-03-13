@@ -97,7 +97,5 @@ function self:update()
     --bone.cache[(self.parent)] = bone.cache[(self.parent)] or {}
     bone.cache[(self.parent)] = {}
     bone.cache[(self.parent)][(self.boneData.id)] = bone.cache[(self.parent)][(self.boneData.id)] or imports.getElementBoneMatrix(parent, self.boneData.id)
-    if bone.cache[(self.parent)][(self.boneData.id)] then
-        imports.setElementMatrix(self.entity, imports.matrix.transform(bone.cache[(self.parent)][(self.boneData.id)], self.boneData.rotationMatrix, self.boneData.position.x, self.boneData.position.y, self.boneData.position.z))
-    end
+    imports.setElementMatrix(self.entity, imports.matrix.transform(bone.cache[(self.parent)][(self.boneData.id)], self.boneData.rotationMatrix, self.boneData.position.x, self.boneData.position.y, self.boneData.position.z))
 end
