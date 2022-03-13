@@ -41,7 +41,7 @@ bone = {
     buffer = {
         element = {},
         parent = {}
-    },
+    }
 }
 bone.__index = bone
 
