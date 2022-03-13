@@ -37,7 +37,8 @@ bone = {
     },
     cache = {},
     buffer = {
-        element = {}
+        element = {},
+        parent = {}
     },
 }
 bone.__index = bone
@@ -62,9 +63,22 @@ function bone:destroy(...)
     return self:unload(...)
 end
 
+function bone:clearElementBuffer(element)
+    if not element or not imports.isElement(element) then return false end
+    if bone.buffer.element[element] then
+        bone.buffer.element[element]:destroy()
+    elseif bone.buffer.parent[element] then
+        for i, j in imports.pairs(bone.buffer.parent[element]) do
+            j:destroy()
+        end
+    end
+    bone.buffer.parent[element] = nil
+    return true
+end
+
 function bone:load(element, parent, boneData)
     if not self or (self == bone) then return false end
-    if not element or not imports.isElement(element) or not parent or not imports.isElement(parent) or not boneData then return false end
+    if not element or not imports.isElement(element) or not parent or not imports.isElement(parent) or not boneData or bone.buffer.element[element] then return false end
     self.element = element
     self.parent = parent
     if not self:refresh(boneData) then return false end
