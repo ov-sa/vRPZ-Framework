@@ -235,3 +235,7 @@ function manager:unload(assetType, assetName)
     end
     return false
 end
+
+imports.addEventHandler("onClientElementDestroy", resourceRoot, function()
+    shader:clearElementBuffer(source)
+end)

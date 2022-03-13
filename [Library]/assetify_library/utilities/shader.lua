@@ -148,7 +148,6 @@ if localPlayer then
         end
         return true
     end
-    imports.addEventHandler("onClientElementDestroy", resourceRoot, function() shader:clearElementBuffer(source) end)
 
     function shader:loadTex(texturePath, encryptKey)
         if texturePath then
