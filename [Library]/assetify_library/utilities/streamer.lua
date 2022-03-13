@@ -90,7 +90,7 @@ function streamer:update(clientDimension, clientInterior)
     if streamer.buffer[clientDimension] and streamer.buffer[clientDimension][clientInterior] then
         for i, j in imports.pairs(streamer.buffer[clientDimension][clientInterior]) do
             if j then
-                imports.setElementDimension(i.streamer, downloadSettings.streamer.syncDimension)
+                imports.setElementDimension(i.streamer, streamerSettings.unsyncDimension)
             end
         end
     end
@@ -99,7 +99,7 @@ end
 
 imports.addEventHandler("onAssetifyLoad", root, function()
     streamer:update(imports.getElementDimension(localPlayer))
-    imports.setTimer(function()
+    imports.addEventHandler("onClientPedsProcessed", root, function()
         local clientDimension, clientInterior = imports.getElementDimension(localPlayer), imports.getElementInterior(localPlayer)
         if streamer.buffer[clientDimension] and streamer.buffer[clientDimension][clientInterior] then
             for i, j in imports.pairs(streamer.buffer[clientDimension][clientInterior]) do
@@ -112,9 +112,9 @@ imports.addEventHandler("onAssetifyLoad", root, function()
                             break
                         end
                     end
-                    imports.setElementDimension(i.streamer, (isStreamed and clientDimension) or downloadSettings.streamer.syncDimension)
+                    imports.setElementDimension(i.streamer, (isStreamed and clientDimension) or streamerSettings.unsyncDimension)
                 end
             end
         end
-    end, downloadSettings.streamer.syncRate, 0)
+    end)
 end)

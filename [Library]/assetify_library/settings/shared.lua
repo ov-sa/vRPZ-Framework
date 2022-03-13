@@ -16,9 +16,9 @@
 downloadSettings = {
     speed = 1250000,
     syncRate = 50,
-    buildRate = 500,
-    streamer = {
-        syncRate = 250,
-        syncDimension = 65535
-    }
+    buildRate = 500
+}
+
+streamerSettings = {
+    unsyncDimension = 65535
 }
