@@ -36,3 +36,19 @@ function setVehicleAsset(vehicle, ...)
     local arguments = {...}
     return syncer:syncElementModel(vehicle, "vehicle", arguments[1], arguments[2], arguments[3], arguments[4])
 end
+
+if localPlayer then
+    function setBoneAttachment(...)
+        return bone:create(...)
+    end
+
+    function setBoneDetachment(element)
+        if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
+        return bone.buffer.element[element]:destroy()
+    end
+
+    function setBoneRefreshment(element, ...)
+        if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
+        return bone.buffer.element[element]:destroy(...)
+    end
+end

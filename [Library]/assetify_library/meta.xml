@@ -41,4 +41,8 @@
     <export function="loadAsset" type="client"/>
     <export function="unloadAsset" type="client"/>
 
+    <export function="setBoneAttachment" type="client"/>
+    <export function="setBoneDetachment" type="client"/>
+    <export function="setBoneRefreshment" type="client"/>
+
 </meta>

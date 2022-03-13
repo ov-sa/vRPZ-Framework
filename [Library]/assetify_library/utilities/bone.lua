@@ -113,7 +113,7 @@ function bone:refresh(boneData)
     return true
 end
 
-function self:update()
+function bone:update()
     if not self or (self == bone) then return false end
     bone.cache[(self.parent)] = bone.cache[(self.parent)] or {}
     bone.cache[(self.parent)][(self.boneData.id)] = bone.cache[(self.parent)][(self.boneData.id)] or imports.getElementBoneMatrix(parent, self.boneData.id)
