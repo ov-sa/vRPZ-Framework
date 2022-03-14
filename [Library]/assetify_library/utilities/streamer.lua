@@ -69,7 +69,9 @@ function streamer:load(streamerInstance, streamType, occlusionInstances)
     streamer.buffer[streamDimension] = streamer.buffer[streamDimension] or {}
     streamer.buffer[streamDimension][streamInterior] = streamer.buffer[streamDimension][streamInterior] or {}
     streamer.buffer[streamDimension][streamInterior][streamType] = streamer.buffer[streamDimension][streamInterior][streamType] or {}
-    streamer.buffer[streamDimension][streamInterior][streamType][self] = true
+    streamer.buffer[streamDimension][streamInterior][streamType][self] = {
+        isStreamed = false
+    }
     return true
 end
 
@@ -106,15 +108,15 @@ end
 local onEntityStream = function(streamBuffer)
     for i, j in imports.pairs(streamBuffer) do
         if j then
-            local isStreamed = false
+            j.isStreamed = false
             for k = 1, #i.occlusions, 1 do
                 local v = i.occlusions[k]
                 if imports.isElementOnScreen(v) then
-                    isStreamed = true
+                    j.isStreamed = true
                     break
                 end
             end
-            imports.setElementDimension(i.streamer, (isStreamed and clientDimension) or streamerSettings.unsyncDimension)
+            imports.setElementDimension(i.streamer, (j.isStreamed and clientDimension) or streamerSettings.unsyncDimension)
         end
     end
     return true
@@ -123,7 +125,7 @@ end
 local onBoneStream = function(streamBuffer)
     if not streamBuffer then return false end
     for i, j in imports.pairs(streamBuffer) do
-        if j then
+        if j and j.isStreamed then
             bone.buffer.element[(i.streamer)]:update()
         end
     end
