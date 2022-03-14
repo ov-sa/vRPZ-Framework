@@ -135,14 +135,19 @@ end
 
 imports.addEventHandler("onAssetifyLoad", root, function()
     streamer:update(imports.getElementDimension(localPlayer))
-    imports.setTimer(function()
+    imports.addEventHandler("onClientCursorMove", root, function()
+        outputChatBox("Nice")
         local clientDimension, clientInterior = streamer.cache.clientWorld.dimension, streamer.cache.clientWorld.interior
         if streamer.buffer[clientDimension] and streamer.buffer[clientDimension][clientInterior] then
             for i, j in imports.pairs(streamer.buffer[clientDimension][clientInterior]) do
                 onEntityStream(j)
             end
         end
+    end)
+    --[[
+    imports.setTimer(function()
     end, streamerSettings.syncRate, 0)
+    ]]
     imports.addEventHandler("onClientPedsProcessed", root, function()
         local clientDimension, clientInterior = streamer.cache.clientWorld.dimension, streamer.cache.clientWorld.interior
         if streamer.buffer[clientDimension] and streamer.buffer[clientDimension][clientInterior] then
