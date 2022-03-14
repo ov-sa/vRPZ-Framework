@@ -97,9 +97,10 @@ function streamer:update(clientDimension, clientInterior)
     return true
 end
 
+--TODO: Doesn;t trigger when no asset
 imports.addEventHandler("onAssetifyLoad", root, function()
     streamer:update(imports.getElementDimension(localPlayer))
-    imports.addEventHandler("onClientPedsProcessed", root, function()
+    imports.setTimer(function()
         local clientDimension, clientInterior = imports.getElementDimension(localPlayer), imports.getElementInterior(localPlayer)
         if streamer.buffer[clientDimension] and streamer.buffer[clientDimension][clientInterior] then
             for i, j in imports.pairs(streamer.buffer[clientDimension][clientInterior]) do
@@ -120,5 +121,5 @@ imports.addEventHandler("onAssetifyLoad", root, function()
             end
             bone.cache = {}
         end
-    end)
+    end, streamerSettings.syncRate, 0)
 end)

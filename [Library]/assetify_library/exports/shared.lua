@@ -51,4 +51,9 @@ if localPlayer then
         if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
         return bone.buffer.element[element]:destroy(...)
     end
+
+    function clearBoneAttachment(element, ...)
+        if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
+        return bone.buffer.element[element]:clearElementBuffer(...)
+    end
 end

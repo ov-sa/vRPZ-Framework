@@ -44,5 +44,6 @@
     <export function="setBoneAttachment" type="client"/>
     <export function="setBoneDetachment" type="client"/>
     <export function="setBoneRefreshment" type="client"/>
+    <export function="clearBoneAttachment" type="client"/>
 
 </meta>
