@@ -37,7 +37,9 @@ bone = {
         ped = {1, 2, 3, 4, 5, 6, 7, 8, 21, 22, 23, 24, 25, 26, 31, 32, 33, 34, 35, 36, 41, 42, 43, 44, 51, 52, 53, 54},
         vehicle = {}
     },
-    cache = {},
+    cache = {
+        element = {}
+    },
     buffer = {
         element = {},
         parent = {}
@@ -97,6 +99,7 @@ function bone:unload()
     if self.cStreamer then
         self.cStreamer:destroy()
     end
+    bone.cache.element[(self.element)] = nil
     bone.buffer.element[(self.element)] = nil
     self = nil
     return true
@@ -118,7 +121,8 @@ end
 
 function bone:update()
     if not self or (self == bone) then return false end
-    bone.cache[(self.parent)] = bone.cache[(self.parent)] or {}
-    bone.cache[(self.parent)][(self.boneData.id)] = bone.cache[(self.parent)][(self.boneData.id)] or imports.getElementBoneMatrix(self.parent, self.boneData.id)
-    imports.setElementMatrix(self.element, imports.matrix.transform(bone.cache[(self.parent)][(self.boneData.id)], self.boneData.rotationMatrix, self.boneData.position.x, self.boneData.position.y, self.boneData.position.z))
+    bone.cache.element[(self.parent)] = bone.cache.element[(self.parent)] or {}
+    bone.cache.element[(self.parent)][(self.boneData.id)] = ((bone.cache.element[(self.element)].streamTick == bone.cache.streamTick) and bone.cache.element[(self.parent)][(self.boneData.id)]) or imports.getElementBoneMatrix(self.parent, self.boneData.id)
+    bone.cache.element[(self.element)].streamTick = bone.cache.streamTick
+    imports.setElementMatrix(self.element, imports.matrix.transform(bone.cache.element[(self.parent)][(self.boneData.id)], self.boneData.rotationMatrix, self.boneData.position.x, self.boneData.position.y, self.boneData.position.z))
 end

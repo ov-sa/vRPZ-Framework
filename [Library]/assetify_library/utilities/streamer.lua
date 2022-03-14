@@ -19,6 +19,7 @@ local imports = {
     addEventHandler = addEventHandler,
     attachElements = attachElements,
     setmetatable = setmetatable,
+    getTickCount = getTickCount,
     setTimer = setTimer,
     isElementOnScreen = isElementOnScreen,
     getElementDimension = getElementDimension,
@@ -130,7 +131,7 @@ local onBoneStream = function(streamBuffer)
             bone.buffer.element[(i.streamer)]:update()
         end
     end
-    bone.cache = {}
+    bone.cache.streamTick = imports.getTickCount()
     return true
 end
 
