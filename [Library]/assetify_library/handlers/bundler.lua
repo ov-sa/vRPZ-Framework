@@ -107,12 +107,8 @@ function onBundleLibrary()
                 end
             end
 
-            assetify.setCharacter = function(...)
-                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setCharacterAsset", ...)
-            end
-
-            assetify.setVehicle = function(...)
-                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setVehicleAsset", ...)
+            assetify.setElementAsset = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setElementAsset", ...)
             end
         ]]
     }

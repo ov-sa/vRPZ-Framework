@@ -23,18 +23,13 @@ local imports = {
 --[[ Functions: APIs ]]--
 -------------------------
 
-function setCharacterAsset(ped, ...)
-    if not ped or not imports.isElement(ped) then return false end
-    local elementType = imports.getElementType(ped)
-    if (elementType ~= "ped") and (elementType ~= "player") then return false end
+function setElementAsset(element, ...)
+    if not element or not imports.isElement(element) then return false end
+    local elementType = imports.getElementType(element)
+    elementType = (((elementType == "ped") or (elementType == "player")) and "character") or elementType
+    if not availableAssetPacks[elementType] then return false end
     local arguments = {...}
-    return syncer:syncElementModel(ped, "character", arguments[1], arguments[2], arguments[3], arguments[4])
-end
-
-function setVehicleAsset(vehicle, ...)
-    if not vehicle or not imports.isElement(vehicle) or (imports.getElementType(vehicle) ~= "vehicle") then return false end
-    local arguments = {...}
-    return syncer:syncElementModel(vehicle, "vehicle", arguments[1], arguments[2], arguments[3], arguments[4])
+    return syncer:syncElementModel(element, elementType, arguments[1], arguments[2], arguments[3], arguments[4])
 end
 
 function setBoneAttachment(...)
