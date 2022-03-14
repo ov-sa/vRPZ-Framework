@@ -106,6 +106,7 @@ function streamer:update(clientDimension, clientInterior)
 end
 
 local onEntityStream = function(streamBuffer)
+    if not streamBuffer then return false end
     for i, j in imports.pairs(streamBuffer) do
         if j then
             j.isStreamed = false
@@ -116,7 +117,7 @@ local onEntityStream = function(streamBuffer)
                     break
                 end
             end
-            imports.setElementDimension(i.streamer, (j.isStreamed and clientDimension) or streamerSettings.unsyncDimension)
+            imports.setElementDimension(i.streamer, (j.isStreamed and streamer.cache.clientWorld.dimension) or streamerSettings.unsyncDimension)
         end
     end
     return true
@@ -135,19 +136,14 @@ end
 
 imports.addEventHandler("onAssetifyLoad", root, function()
     streamer:update(imports.getElementDimension(localPlayer))
-    imports.addEventHandler("onClientCursorMove", root, function()
-        outputChatBox("Nice")
+    imports.setTimer(function()
         local clientDimension, clientInterior = streamer.cache.clientWorld.dimension, streamer.cache.clientWorld.interior
         if streamer.buffer[clientDimension] and streamer.buffer[clientDimension][clientInterior] then
             for i, j in imports.pairs(streamer.buffer[clientDimension][clientInterior]) do
                 onEntityStream(j)
             end
         end
-    end)
-    --[[
-    imports.setTimer(function()
     end, streamerSettings.syncRate, 0)
-    ]]
     imports.addEventHandler("onClientPedsProcessed", root, function()
         local clientDimension, clientInterior = streamer.cache.clientWorld.dimension, streamer.cache.clientWorld.interior
         if streamer.buffer[clientDimension] and streamer.buffer[clientDimension][clientInterior] then
