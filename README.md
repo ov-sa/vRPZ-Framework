@@ -28,6 +28,7 @@
 * **ov | Neor (Developer)**
 * **ov | Skann (Modeler)**
 * **ov | Mazvis (Contributor)**
+* [Read More](credits.md)
 
 ## ━ Installation
 
@@ -46,7 +47,8 @@
 * [**Official Releases**](./)
 * [**Discord Community**](http://discord.gg/sVCnxPW)
 
-## ━ Servers Utilizing Framework
+## ━ Framework Servers
 
 * [**vRiver-Dayz**](https://discord.gg/vPGW7QPFWX)
 * **Evanor.eu**
+* [Read More](servers.md)
