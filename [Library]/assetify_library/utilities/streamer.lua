@@ -145,10 +145,15 @@ imports.addEventHandler("onAssetifyLoad", root, function()
             end
         end
     end, streamerSettings.syncRate, 0)
-    imports.addEventHandler("onClientPedsProcessed", root, function()
+    local onBoneUpdate = function()
         local clientDimension, clientInterior = streamer.cache.clientWorld.dimension, streamer.cache.clientWorld.interior
         if streamer.buffer[clientDimension] and streamer.buffer[clientDimension][clientInterior] then
             onBoneStream(streamer.buffer[clientDimension][clientInterior]["bone"])
         end
-    end)
+    end
+    if streamerSettings.boneSyncRate <= 0 then
+        imports.addEventHandler("onClientPedsProcessed", root, onBoneUpdate)
+    else
+        imports.setTimer(onBoneUpdate, streamerSettings.boneSyncRate, 0)
+    end
 end)
