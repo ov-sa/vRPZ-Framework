@@ -15,7 +15,9 @@
 
 local imports = {
     isElement = isElement,
-    getElementType = getElementType
+    getElementType = getElementType,
+    createObject = createObject,
+    setElementDoubleSided = setElementDoubleSided
 }
 
 
@@ -32,21 +34,15 @@ function setElementAsset(element, ...)
     return syncer:syncElementModel(element, elementType, arguments[1], arguments[2], arguments[3], arguments[4])
 end
 
-function setBoneAttachment(...)
-    return bone:create(...)
-end
-
-function setBoneDetachment(element)
-    if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
-    return bone.buffer.element[element]:destroy()
-end
-
-function setBoneRefreshment(element, ...)
-    if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
-    return bone.buffer.element[element]:destroy(...)
-end
-
-function clearBoneAttachment(element, ...)
-    if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
-    return bone.buffer.element[element]:clearElementBuffer(...)
+function createAssetObject(assetType, assetName, objectData)
+    if not assetType or not assetName or not availableAssetPacks[assetType] or not availableAssetPacks[assetType].rwDatas[assetName] then then return false end
+    local cAsset = availableAssetPacks[assetType].rwDatas[assetName].unsyncedData.assetCache[i].cAsset
+    local cModelInstance = imports.createObject(cAsset.syncedData.modelID, objectData.position.x, objectData.position.y, objectData.position.z, objectData.rotation.x, objectData.rotation.y, objectData.rotation.z)
+    imports.setElementDoubleSided(cModelInstance, true)
+    if cAsset.syncedData.collisionID then
+        local cCollisionInstance = imports.createObject(cAsset.syncedData.collisionID, objectData.position.x, objectData.position.y, objectData.position.z, objectData.rotation.x, objectData.rotation.y, objectData.rotation.z)
+        imports.setElementAlpha(cCollisionInstance, 0)
+        local cStreamer = streamer:create(cModelInstance, "object", {cCollisionInstance})
+    end
+    return cModelInstance
 end
