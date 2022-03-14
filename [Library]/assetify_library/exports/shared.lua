@@ -15,9 +15,7 @@
 
 local imports = {
     isElement = isElement,
-    getElementType = getElementType,
-    createObject = createObject,
-    setElementDoubleSided = setElementDoubleSided
+    getElementType = getElementType
 }
 
 
