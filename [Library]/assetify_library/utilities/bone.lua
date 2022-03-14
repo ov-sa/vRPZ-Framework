@@ -122,7 +122,7 @@ end
 function bone:update()
     if not self or (self == bone) then return false end
     bone.cache.element[(self.parent)] = bone.cache.element[(self.parent)] or {}
-    bone.cache.element[(self.parent)][(self.boneData.id)] = ((bone.cache.element[(self.element)].streamTick == bone.cache.streamTick) and bone.cache.element[(self.parent)][(self.boneData.id)]) or imports.getElementBoneMatrix(self.parent, self.boneData.id)
-    bone.cache.element[(self.element)].streamTick = bone.cache.streamTick
+    bone.cache.element[(self.parent)][(self.boneData.id)] = ((bone.cache.element[(self.parent)].streamTick == bone.cache.streamTick) and bone.cache.element[(self.parent)][(self.boneData.id)]) or imports.getElementBoneMatrix(self.parent, self.boneData.id)
+    bone.cache.element[(self.parent)].streamTick = bone.cache.streamTick
     imports.setElementMatrix(self.element, imports.matrix.transform(bone.cache.element[(self.parent)][(self.boneData.id)], self.boneData.rotationMatrix, self.boneData.position.x, self.boneData.position.y, self.boneData.position.z))
 end
