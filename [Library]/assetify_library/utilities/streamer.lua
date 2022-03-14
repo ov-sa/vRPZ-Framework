@@ -19,6 +19,7 @@ local imports = {
     addEventHandler = addEventHandler,
     attachElements = attachElements,
     setmetatable = setmetatable,
+    setTimer = setTimer,
     isElementOnScreen = isElementOnScreen,
     getElementDimension = getElementDimension,
     getElementInterior = getElementInterior,
@@ -32,7 +33,8 @@ local imports = {
 -------------------------
 
 streamer = {
-    buffer = {}
+    buffer = {},
+    cache = {}
 }
 streamer.__index = streamer
 
@@ -66,14 +68,16 @@ function streamer:load(streamerInstance, streamType, occlusionInstances)
     end
     streamer.buffer[streamDimension] = streamer.buffer[streamDimension] or {}
     streamer.buffer[streamDimension][streamInterior] = streamer.buffer[streamDimension][streamInterior] or {}
-    streamer.buffer[streamDimension][streamInterior][self] = true
+    streamer.buffer[streamDimension][streamInterior][streamType] = streamer.buffer[streamDimension][streamInterior][streamType] or {}
+    streamer.buffer[streamDimension][streamInterior][streamType][self] = true
     return true
 end
 
 function streamer:unload()
     if not self or (self == streamer) then return false end
+    local streamType = self.streamType
     local streamDimension, streamInterior = imports.getElementDimension(self.streamer), imports.getElementInterior(self.streamer)
-    streamer.buffer[streamDimension][streamInterior][self] = nil
+    streamer.buffer[(streamDimension)][streamInterior][streamType][self] = nil
     self = nil
     return true
 end
@@ -93,32 +97,54 @@ function streamer:update(clientDimension, clientInterior)
             end
         end
     end
+    streamer.cache.clientWorld = streamer.cache.clientWorld or {}
+    streamer.cache.clientWorld.dimension = currentDimension
+    streamer.cache.clientWorld.interior = currentInterior
     return true
 end
 
---TODO: Doesn;t trigger when no asset
+local onEntityStream = function(streamBuffer)
+    for i, j in imports.pairs(streamBuffer) do
+        if j then
+            local isStreamed = false
+            for k = 1, #i.occlusions, 1 do
+                local v = i.occlusions[k]
+                if imports.isElementOnScreen(v) then
+                    isStreamed = true
+                    break
+                end
+            end
+            imports.setElementDimension(i.streamer, (isStreamed and clientDimension) or streamerSettings.unsyncDimension)
+        end
+    end
+    return true
+end
+
+local onBoneStream = function(streamBuffer)
+    if not streamBuffer then return false end
+    for i, j in imports.pairs(streamBuffer) do
+        if j then
+            bone.buffer.element[(i.streamer)]:update()
+        end
+    end
+    bone.cache = {}
+    return true
+end
+
 imports.addEventHandler("onAssetifyLoad", root, function()
     streamer:update(imports.getElementDimension(localPlayer))
+    imports.setTimer(function()
+        local clientDimension, clientInterior = streamer.cache.clientWorld.dimension, streamer.cache.clientWorld.interior
+        if streamer.buffer[clientDimension] and streamer.buffer[clientDimension][clientInterior] then
+            for i, j in imports.pairs(streamer.buffer[clientDimension][clientInterior]) do
+                onEntityStream(j)
+            end
+        end
+    end, streamerSettings.syncRate, 0)
     imports.addEventHandler("onClientPedsProcessed", root, function()
         local clientDimension, clientInterior = imports.getElementDimension(localPlayer), imports.getElementInterior(localPlayer)
         if streamer.buffer[clientDimension] and streamer.buffer[clientDimension][clientInterior] then
-            for i, j in imports.pairs(streamer.buffer[clientDimension][clientInterior]) do
-                if j then
-                    local isStreamed = false
-                    for k = 1, #i.occlusions, 1 do
-                        local v = i.occlusions[k]
-                        if imports.isElementOnScreen(v) then
-                            isStreamed = true
-                            break
-                        end
-                    end
-                    imports.setElementDimension(i.streamer, (isStreamed and clientDimension) or streamerSettings.unsyncDimension)
-                    if i.streamType == "bone" then
-                        bone.buffer.element[(i.streamer)]:update()
-                    end
-                end
-            end
-            bone.cache = {}
+            onBoneStream(streamer.buffer[clientDimension][clientInterior]["bone"])
         end
     end)
 end)
