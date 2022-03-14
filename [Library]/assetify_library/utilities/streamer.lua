@@ -142,7 +142,7 @@ imports.addEventHandler("onAssetifyLoad", root, function()
         end
     end, streamerSettings.syncRate, 0)
     imports.addEventHandler("onClientPedsProcessed", root, function()
-        local clientDimension, clientInterior = imports.getElementDimension(localPlayer), imports.getElementInterior(localPlayer)
+        local clientDimension, clientInterior = streamer.cache.clientWorld.dimension, streamer.cache.clientWorld.interior
         if streamer.buffer[clientDimension] and streamer.buffer[clientDimension][clientInterior] then
             onBoneStream(streamer.buffer[clientDimension][clientInterior]["bone"])
         end
