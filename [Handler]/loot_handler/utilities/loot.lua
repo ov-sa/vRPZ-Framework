@@ -105,7 +105,7 @@ else
                     end
                 else
                     for i = 1, #FRAMEWORK_CONFIGS["Loots"][lootType], 1 do
-                        local cLoot loot:create(lootType, i)
+                        local cLoot = loot:create(lootType, i)
                         cLoot:refresh()
                         thread.pause()
                     end
