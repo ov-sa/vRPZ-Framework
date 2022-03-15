@@ -228,17 +228,15 @@ else
         return imports.triggerLatentClientEvent(player, "Assetify:onRecieveState", downloadSettings.speed, false, player, ...)
     end
 
-    function syncer:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, targetPlayer, skipCaching)
-        if not skipCaching then
+    function syncer:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, targetPlayer)
+        if not targetPlayer then
             if not element or not imports.isElement(element) or not availableAssetPacks[assetType] then return false end
             local assetReference = availableAssetPacks[assetType].assetPack.rwDatas[assetName]
             if not assetReference or (assetReference.synced.manifestData.assetClumps and (not assetClump or not assetReference.synced.manifestData.assetClumps[assetClump])) then return false end
             syncer.syncedElements[element] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps}
-        end
-        if not targetPlayer then
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, i, true)
+                    syncer:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, i)
                     thread.pause()
                 end
             end):resume({
