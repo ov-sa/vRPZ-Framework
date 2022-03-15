@@ -4,7 +4,7 @@
      Server: -
      Author: vStudio
      Developer: -
-     DOC: 14/12/2020 (vStudio)
+     DOC: 14/12/2020
      Desc: Ground Loot Handler ]]--
 ----------------------------------------------------------------
 

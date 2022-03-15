@@ -4,7 +4,7 @@
      Server: -
      Author: vStudio
      Developer: -
-     DOC: 01/02/2021 (vStudio)
+     DOC: 01/02/2021
      Desc: Deck's Renderer ]]--
 ----------------------------------------------------------------
 
