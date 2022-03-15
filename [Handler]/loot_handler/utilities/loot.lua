@@ -113,7 +113,7 @@ if localPlayer then
         loot.buffer.loot[source] = nil
     end)
 else
-    syncer.loadedClients = {}
+    loot.loadedClients = {}
 
     function loot:load(lootType, lootIndex)
         if not self or (self == loot) then return false end
