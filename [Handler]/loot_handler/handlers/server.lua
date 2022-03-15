@@ -16,6 +16,7 @@
 local imports = {
     type = type,
     pairs = pairs,
+    isElement = isElement,
     createMarker = createMarker,
     setElementData = setElementData,
     math = math
