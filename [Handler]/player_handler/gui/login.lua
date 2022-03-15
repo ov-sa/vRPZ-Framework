@@ -552,8 +552,16 @@ loginUI.renderUI = function(renderData)
                         j.hoverAnimTick = CLIENT_CURRENT_TICK
                     end
                 end
-                j.animAlphaPercent = j.animAlphaPercent or 0
-                j.animAlphaPercent = ((j.hoverStatus == "forward") and imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")) or imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")
+                j.animAlphaPercent = j.animAlphaPercent or 0                
+                if j.hoverStatus == "forward" then
+                    if j.animAlphaPercent < 1 then
+                        j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")
+                    end
+                else
+                    if j.animAlphaPercent > 0 then
+                        j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")
+                    end
+                end
                 imports.beautify.native.drawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, loginUI.phases[1].optionsUI.fontColor, 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
                 imports.beautify.native.drawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[1], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[2], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[3], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsUI.font, "center", "center", true, false, false)
                 imports.beautify.native.drawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineSize, loginUI.phases[1].optionsUI.embedLineColor, false)
@@ -582,8 +590,25 @@ loginUI.renderUI = function(renderData)
                 end
                 j.animAlphaPercent = j.animAlphaPercent or 0.35
                 j.tooltip.animPercent = j.tooltip.animPercent or 0
-                j.animAlphaPercent = ((j.hoverStatus == "forward") and imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")) or imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0.35, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
-                j.tooltip.animPercent = ((j.tooltip.hoverStatus == "forward") and imports.interpolateBetween(j.tooltip.animPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")) or imports.interpolateBetween(j.tooltip.animPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
+                j.animAlphaPercent = ((j.hoverStatus == "forward") and ) or 
+                if j.hoverStatus == "forward" then
+                    if j.animAlphaPercent < 1 then
+                        j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
+                    end
+                else
+                    if j.animAlphaPercent > 0.35 then
+                        j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0.35, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
+                    end
+                end
+                if j.tooltip.hoverStatus == "forward" then
+                    if j.tooltip.animPercent < 1 then
+                        j.tooltip.animPercent = imports.interpolateBetween(j.tooltip.animPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
+                    end
+                else
+                    if j.tooltip.animPercent > 0 then
+                        j.tooltip.animPercent = imports.interpolateBetween(j.tooltip.animPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
+                    end
+                end
                 imports.beautify.native.drawRectangle(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, loginUI.phases[2].options.bgColor, false)
                 imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.iconTexture, 0, 0, 0, imports.tocolor(loginUI.phases[2].options.iconColor[1], loginUI.phases[2].options.iconColor[2], loginUI.phases[2].options.iconColor[3], loginUI.phases[2].options.iconColor[4]*j.animAlphaPercent), false)
                 if (j.tooltip.animPercent > 0) then
@@ -626,7 +651,15 @@ loginUI.renderUI = function(renderData)
                 end
             end
             loginUI.phases[3].navigator.animAlphaPercent = loginUI.phases[3].navigator.animAlphaPercent or 0.25
-            loginUI.phases[3].navigator.animAlphaPercent = ((loginUI.phases[3].navigator.hoverStatus == "forward") and imports.interpolateBetween(loginUI.phases[3].navigator.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].navigator.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator.hoverDuration), "Linear")) or imports.interpolateBetween(loginUI.phases[3].navigator.animAlphaPercent, 0, 0, 0.25, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].navigator.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator.hoverDuration), "Linear")
+            if loginUI.phases[3].navigator.hoverStatus == "forward" then
+                if loginUI.phases[3].navigator.animAlphaPercent < 1 then
+                    loginUI.phases[3].navigator.animAlphaPercent = imports.interpolateBetween(loginUI.phases[3].navigator.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].navigator.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator.hoverDuration), "Linear"))
+                end
+            else
+                if loginUI.phases[3].navigator.animAlphaPercent > 0.25 then
+                    loginUI.phases[3].navigator.animAlphaPercent = imports.interpolateBetween(loginUI.phases[3].navigator.animAlphaPercent, 0, 0, 0.25, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].navigator.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator.hoverDuration), "Linear")
+                end
+            end
             imports.beautify.native.drawText(navigator_title, navigator_offsetX, navigator_offsetY, navigator_offsetX + navigator_width, navigator_offsetY + navigator_height, imports.tocolor(loginUI.phases[3].navigator.fontColor[1], loginUI.phases[3].navigator.fontColor[2], loginUI.phases[3].navigator.fontColor[3], loginUI.phases[3].navigator.fontColor[4]*loginUI.phases[3].navigator.animAlphaPercent), 1, loginUI.phases[3].navigator.font, "center", "center", true, false, false)
         end
     end
