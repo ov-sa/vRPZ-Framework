@@ -92,6 +92,13 @@ if localPlayer then
         loot.buffer.element[(self.lootInstance)] = self
         return self.lootInstance
     end
+
+    imports.addEventHandler("onClientElementDestroy", resourceRoot, function()
+        if loot.buffer.loot[source] then
+            loot.buffer.loot[source]:destroy()
+        end
+        loot.buffer.loot[source] = nil
+    end)
 else
     function loot:load(lootType, lootIndex)
         if not self or (self == loot) then return false end
