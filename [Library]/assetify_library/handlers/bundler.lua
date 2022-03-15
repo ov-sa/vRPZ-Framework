@@ -45,9 +45,8 @@ function fetchImports(recieveData)
     end
 end
 
-function fetchThreader(recieveData)
-    if not threaderData then return false end
-    return threaderData
+function fetchThreader()
+    return threaderData or false
 end
 
 
