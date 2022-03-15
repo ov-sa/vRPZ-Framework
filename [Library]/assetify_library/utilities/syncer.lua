@@ -290,6 +290,8 @@ else
 
     function syncer:syncBoneRefreshment(element, boneData, targetPlayer)
         if not targetPlayer then
+            if not element or not imports.isElement(element) or not boneData or not syncer.syncedBoneAttachments[element] then return false end
+            syncer.syncedBoneAttachments[element].boneData = boneData
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
                     syncer:syncBoneRefreshment(element, boneData, j)
@@ -307,6 +309,15 @@ else
 
     function syncer:syncClearBoneAttachment(element, targetPlayer)
         if not targetPlayer then
+            if not element or not imports.isElement(element) then return false end
+            if syncer.syncedBoneAttachments[element] then
+                syncer.syncedBoneAttachments[element] = nil                                
+            end
+            for i, j in imports.pairs(syncer.syncedBoneAttachments) do
+                if j and (j.parent == element) then
+                    syncer.syncedBoneAttachments[i] = nil
+                end
+            end
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
                     syncer:syncClearBoneAttachment(element, j)
