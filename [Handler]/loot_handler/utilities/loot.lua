@@ -16,10 +16,15 @@
 local imports = {
     pairs = pairs,
     isElement = isElement,
+    attachElements = attachElements,
     destroyElement = destroyElement,
+    addEvent = addEvent,
+    addEventHandler = addEventHandler,
     setmetatable = setmetatable,
     createMarker = createMarker,
     setElementData = setElementData,
+    getElementDimension = getElementDimension,
+    getElementInterior = getElementInterior,
     math = math
 }
 
@@ -70,6 +75,14 @@ function loot:unload()
 end
 
 if localPlayer then
+    imports.addEvent("Loot_Handler:onSyncLoot", true)
+    imports.addEventHandler("Loot_Handler:onSyncLoot", root, function(lootType, lootData, colInstance)
+        local cLoot = loot:create(lootType, lootData)
+        cLoot.colInstance = colInstance
+        loot.buffer.loot[(cLoot.colInstance)] = cLoot
+        imports.attachElements(cLoot.lootInstance, cLoot.colInstance)
+    end)
+
     function loot:load(lootType, lootData)
         if not self or (self == loot) then return false end
         if not lootType or not lootData then return false end
