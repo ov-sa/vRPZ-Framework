@@ -85,10 +85,10 @@ else
         if not FRAMEWORK_CONFIGS["Loots"][lootType] then return false end
         local lootData = FRAMEWORK_CONFIGS["Loots"][lootType][lootIndex]
         self.lootType, self.lootIndex = lootType, lootIndex
-        self.lootInstance = imports.createMarker(lootData.position.x, lootData.position.y, lootData.position.z, "cylinder", FRAMEWORK_CONFIGS["Loots"][lootType].lootSize, 0, 0, 0, 0)
+        self.lootInstance = imports.createMarker(lootData.position.x, lootData.position.y, lootData.position.z, "cylinder", FRAMEWORK_CONFIGS["Loots"][lootType].size, 0, 0, 0, 0)
         imports.setElementData(self.lootInstance, "Loot:Type", lootType)
-        imports.setElementData(self.lootInstance, "Loot:Name", FRAMEWORK_CONFIGS["Loots"][lootType].lootName)
-        imports.setElementData(self.lootInstance, "Loot:Lock", FRAMEWORK_CONFIGS["Loots"][lootType].lootLock)
+        imports.setElementData(self.lootInstance, "Loot:Name", FRAMEWORK_CONFIGS["Loots"][lootType].name)
+        imports.setElementData(self.lootInstance, "Loot:Lock", FRAMEWORK_CONFIGS["Loots"][lootType].lock)
         loot.buffer.element[(self.lootInstance)] = self
         loot.buffer.loot[lootType] = loot.buffer.loot[lootType] or {}
         loot.buffer.loot[lootType][self] = true
@@ -115,8 +115,6 @@ else
                 frames = 1
             })
         else
-            if not self.lootInstance or not lootItems then return false end
-            imports.setElementData(self.lootInstance, "Inventory:Slots", imports.math.random(FRAMEWORK_CONFIGS["Loots"][(self.lootType)].inventoryWeight[1], FRAMEWORK_CONFIGS["Loots"][(self.lootType)].inventoryWeight[2]))
             thread:create(function(cThread)
                 for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
                     for k, v in imports.pairs(j) do
@@ -125,8 +123,9 @@ else
                     end
                     thread.pause()
                 end
-                for i = 1, #FRAMEWORK_CONFIGS["Loots"][(self.lootType)].lootItems, 1 do
-                    local j = FRAMEWORK_CONFIGS["Loots"][(self.lootType)].lootItems[i]
+                imports.setElementData(self.lootInstance, "Inventory:Slots", imports.math.random(FRAMEWORK_CONFIGS["Loots"][(self.lootType)].inventoryWeight[1], FRAMEWORK_CONFIGS["Loots"][(self.lootType)].inventoryWeight[2]))
+                for i = 1, #FRAMEWORK_CONFIGS["Loots"][(self.lootType)].items, 1 do
+                    local j = FRAMEWORK_CONFIGS["Loots"][(self.lootType)].items[i]
                     if j.amount then
                         local itemData = exports.player_handler:fetchInventoryItem(j.item)
                         if itemData then
