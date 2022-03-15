@@ -87,7 +87,7 @@ else
         self.lootInstance = imports.createMarker(lootData.position.x, lootData.position.y, lootData.position.z, "cylinder", FRAMEWORK_CONFIGS["Loots"][lootType].lootSize, 0, 0, 0, 0)
         imports.setElementData(self.lootInstance, "Loot:Type", lootType)
         imports.setElementData(self.lootInstance, "Loot:Name", FRAMEWORK_CONFIGS["Loots"][lootType].lootName)
-        imports.setElementData(self.lootInstance, "Loot:Locked", FRAMEWORK_CONFIGS["Loots"][lootType].lootLock)
+        imports.setElementData(self.lootInstance, "Loot:Lock", FRAMEWORK_CONFIGS["Loots"][lootType].lootLock)
         loot.buffer.element[(self.lootInstance)] = self
         loot.buffer.loot[lootType] = loot.buffer.loot[lootType] or {}
         loot.buffer.loot[lootType][self] = true
