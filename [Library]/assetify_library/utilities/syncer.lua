@@ -425,5 +425,11 @@ else
         syncer.loadedClients[source] = nil
         syncer.scheduledClients[source] = nil
         syncer.syncedElements[source] = nil
+        syncer:syncClearBoneAttachment(source)
+        for i, j in imports.pairs(syncer.syncedBoneAttachments) do
+            if j and (j.parent == source) then
+                syncer:syncClearBoneAttachment(i)
+            end
+        end
     end)
 end
