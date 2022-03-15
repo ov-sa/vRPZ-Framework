@@ -46,10 +46,10 @@ function createAssetDummy(assetType, assetName, dummyData)
     return cModelInstance
 end
 
-function setBoneAttachment(element, ...)
-    if not element or not imports.isElement(element) then return false end
+function setBoneAttachment(element, parent, ...)
+    if not element or not imports.isElement(element) or not parent or not imports.isElement(parent) then return false end
     local arguments = {...}
-    return syncer:syncBoneAttachment(element, arguments[1], arguments[2])
+    return syncer:syncBoneAttachment(element, parent, arguments[1])
 end
 
 function setBoneDetachment(element)
