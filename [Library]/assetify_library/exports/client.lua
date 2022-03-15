@@ -9,17 +9,6 @@
 ----------------------------------------------------------------
 
 
------------------
---[[ Imports ]]--
------------------
-
-local imports = {
-    isElement = isElement,
-    createObject = createObject,
-    setElementDoubleSided = setElementDoubleSided
-}
-
-
 -------------------------
 --[[ Functions: APIs ]]--
 -------------------------

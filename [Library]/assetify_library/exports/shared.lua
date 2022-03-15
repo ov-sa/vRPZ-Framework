@@ -41,7 +41,7 @@ function createAssetDummy(assetType, assetName, dummyData)
     if cAsset.syncedData.collisionID then
         local cCollisionInstance = imports.createObject(cAsset.syncedData.collisionID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
         imports.setElementAlpha(cCollisionInstance, 0)
-        local cStreamer = streamer:create(cModelInstance, "object", {cCollisionInstance})
+        local cStreamer = streamer:create(cModelInstance, "dummy", {cCollisionInstance})
     end
     return cModelInstance
 end
