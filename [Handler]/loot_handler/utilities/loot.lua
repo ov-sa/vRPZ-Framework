@@ -127,14 +127,15 @@ else
                 end
                 for i = 1, #FRAMEWORK_CONFIGS["Loots"][(self.lootType)].lootItems, 1 do
                     local j = FRAMEWORK_CONFIGS["Loots"][(self.lootType)].lootItems[i]
-                    local itemDetails = exports.player_handler:getItem(j.item)
-                    if itemDetails then
-                    --TODO: NEED TO VERIFY IF THIS ITEM IS VALID OR NOT...
-                        imports.setElementData(self.lootInstance, "Item:"..j.item, imports.math.random(j.amount[1], j.amount[2]))
-                        if j.ammo then
-                            local weaponAmmo = exports.player_handler:fetchInventoryWeaponAmmo(j.item)
-                            if weaponAmmo then
-                                imports.setElementData(self.lootInstance, "Item:"..weaponAmmo, imports.math.random(j.ammo[1], j.ammo[2]))
+                    if j.amount then
+                        local itemData = exports.player_handler:fetchInventoryItem(j.item)
+                        if itemData then
+                            imports.setElementData(self.lootInstance, "Item:"..j.item, imports.math.random(j.amount[1], j.amount[2]))
+                            if j.ammo then
+                                local weaponAmmo = exports.player_handler:fetchInventoryWeaponAmmo(j.item)
+                                if weaponAmmo then
+                                    imports.setElementData(self.lootInstance, "Item:"..weaponAmmo, imports.math.random(j.ammo[1], j.ammo[2]))
+                                end
                             end
                         end
                     end
