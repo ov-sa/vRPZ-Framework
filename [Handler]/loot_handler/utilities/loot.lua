@@ -146,5 +146,6 @@ else
                 frames = 1
             })
         end
+        return true
     end
 end
