@@ -4,12 +4,13 @@
     <min_mta_version server="1.5.9" client="1.5.9"/>
 
     <!-- Settings & Utilities -->
-    <script src="utilities/shared.lua" type="shared" cache="false"/>
-    <script src="settings/shared.lua" type="shared" cache="false"/>
+    <script src="utilities/shared.lua" type="shared"/>
+    <script src="utilities/loot.lua" type="shared"/>
+    <script src="settings/shared.lua" type="shared"/>
 
     <!-- Handlers -->
     <script src="handlers/server.lua" type="server"/>
-    <script src="handlers/client.lua" type="client" cache="false"/>
+    <script src="handlers/client.lua" type="client"/>
 
     <!-- Params: refreshGroundLoot(lootType) | Returns Boolean -->
     <export function="refreshGroundLoot" type="server"/>
