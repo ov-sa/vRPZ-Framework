@@ -20,11 +20,10 @@ local imports = {
     destroyElement = destroyElement,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
+    triggerClientEvent = triggerClientEvent,
     setmetatable = setmetatable,
     createMarker = createMarker,
     setElementData = setElementData,
-    getElementDimension = getElementDimension,
-    getElementInterior = getElementInterior,
     math = math
 }
 
@@ -167,4 +166,23 @@ else
         end
         return true
     end
+
+    imports.addEventHandler("Loot_Handler:onRequestLoots", root, function()
+        thread:create(function(cThread)
+            for i, j in imports.pairs(loot.buffer.element) do
+                if i and j then
+                    imports.triggerClientEvent(source, "Loot_Handler:onRecieveLoot", source, j.lootType, FRAMEWORK_CONFIGS["Loots"][(j.lootType)][(j.lootIndex)], j.lootInstance)
+                end
+                thread.pause()
+            end
+        end):resume({
+            executions = syncSettings.syncRate,
+            frames = 1
+        })
+    end)
 end
+
+--TODO: HOOK THIS SOMEHOW..
+imports.addEventHandler("onAssetifyLoad", root, function()
+    imports.triggerServerEvent("Assetify:onRequestLoots", localPlayer)
+end)
