@@ -166,6 +166,29 @@ if localPlayer then
         end
     end)
 
+    imports.addEvent("Assetify:onRecieveBoneAttachment", true)
+    imports.addEventHandler("Assetify:onRecieveBoneAttachment", root, function(...)
+        bone:create(...)
+    end)
+
+    imports.addEvent("Assetify:onRecieveBoneDetachment", true)
+    imports.addEventHandler("Assetify:onRecieveBoneDetachment", root, function(element)
+        if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
+        bone.buffer.element[element]:destroy()
+    end)
+
+    imports.addEvent("Assetify:onRecieveBoneRefreshment", true)
+    imports.addEventHandler("Assetify:onRecieveBoneRefreshment", root, function(element, ...)
+        if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
+        bone.buffer.element[element]:refresh(...)
+    end)
+
+    imports.addEvent("Assetify:onRecieveClearBoneAttachment", true)
+    imports.addEventHandler("Assetify:onRecieveClearBoneAttachment", root, function(element, ...)
+        if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
+        bone.buffer.element[element]:clearElementBuffer(...)
+    end)
+
     imports.addEventHandler("onClientElementDimensionChange", localPlayer, function(dimension) streamer:update(dimension) end)
     imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(interior) streamer:update(_, interior) end)
 else
@@ -210,6 +233,22 @@ else
             imports.triggerClientEvent(targetPlayer, "Assetify:onRecieveElementModel", targetPlayer, element, assetType, assetName, assetClump, clumpMaps)
         end
         return true
+    end
+
+    function syncer:syncBoneAttachment(player, ...)
+        return imports.triggerClientEvent(player, "Assetify:onRecieveBoneAttachment", player, ...)
+    end
+
+    function syncer:syncBoneDetachment(player, ...)
+        return imports.triggerClientEvent(player, "Assetify:onRecieveBoneDetachment", player, ...)
+    end
+
+    function syncer:syncBoneRefreshment(player, ...)
+        return imports.triggerClientEvent(player, "Assetify:onRecieveBoneRefreshment", player, ...)
+    end
+
+    function syncer:syncClearBoneAttachment(player, ...)
+        return imports.triggerClientEvent(player, "Assetify:onRecieveClearBoneAttachment", player, ...)
     end
 
     function syncer:syncPack(player, assetDatas)

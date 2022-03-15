@@ -46,21 +46,22 @@ function createAssetDummy(assetType, assetName, dummyData)
     return cModelInstance
 end
 
-function setBoneAttachment(...)
-    return bone:create(...)
+function setBoneAttachment(element, ...)
+    if not element or not imports.isElement(element) then return false end
+    return syncer:syncBoneAttachment(element, ...)
 end
 
-function setBoneDetachment(element)
-    if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
-    return bone.buffer.element[element]:destroy()
+function setBoneDetachment(element, ...)
+    if not element or not imports.isElement(element) then return false end
+    return syncer:syncBoneDetachment(element, ...)
 end
 
 function setBoneRefreshment(element, ...)
-    if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
-    return bone.buffer.element[element]:destroy(...)
+    if not element or not imports.isElement(element) then return false end
+    return syncer:syncBoneRefreshment(element, ...)
 end
 
 function clearBoneAttachment(element, ...)
-    if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
-    return bone.buffer.element[element]:clearElementBuffer(...)
+    if not element or not imports.isElement(element) then return false end
+    return syncer:syncClearBoneAttachment(element, ...)
 end
