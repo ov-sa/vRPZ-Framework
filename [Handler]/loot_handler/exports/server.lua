@@ -21,3 +21,5 @@ function refreshLoot(element)
     if not element or not imports.isElement(element) or not loot.buffer.element[element] then return false end
     return loot.buffer.element[element]:refresh()
 end
+
+refreshLootType("LootCategory")

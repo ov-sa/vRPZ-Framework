@@ -19,6 +19,7 @@ configVars["Loots"] = {
         pack = "loot",
         lock = false,
         size = 2,
+        weight = {20, 30},
         items = {
             {item = "awm", amount = {0, 100}, ammo = {0, 100}},
             {item = "bandage", amount = {0, 100}}

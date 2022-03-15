@@ -165,7 +165,7 @@ else
                     end
                     thread.pause()
                 end
-                imports.setElementData(self.lootInstance, "Inventory:Slots", imports.math.random(FRAMEWORK_CONFIGS["Loots"][(self.lootType)].inventoryWeight[1], FRAMEWORK_CONFIGS["Loots"][(self.lootType)].inventoryWeight[2]))
+                imports.setElementData(self.lootInstance, "Inventory:Slots", imports.math.random(FRAMEWORK_CONFIGS["Loots"][(self.lootType)].weight[1], FRAMEWORK_CONFIGS["Loots"][(self.lootType)].weight[2]))
                 for i = 1, #FRAMEWORK_CONFIGS["Loots"][(self.lootType)].items, 1 do
                     local j = FRAMEWORK_CONFIGS["Loots"][(self.lootType)].items[i]
                     if j.amount then
