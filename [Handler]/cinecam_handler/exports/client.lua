@@ -2,9 +2,9 @@
 --[[ Resource: Cinematic Camera Handler
      Script: exports: client.lua
      Server: -
-     Author: OvileAmriam
+     Author: vStudio
      Developer: -
-     DOC: 13/10/2019 (OvileAmriam)
+     DOC: 13/10/2019 (vStudio)
      Desc: Client Sided Exports ]]--
 ----------------------------------------------------------------
 

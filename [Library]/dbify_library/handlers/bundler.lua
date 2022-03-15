@@ -2,9 +2,9 @@
 --[[ Resource: DBify Library
      Script: handlers: bundler.lua
      Server: -
-     Author: OvileAmriam
+     Author: vStudio
      Developer: Aviril
-     DOC: 09/10/2021 (OvileAmriam)
+     DOC: 09/10/2021 (vStudio)
      Desc: Bundler Handler ]]--
 ----------------------------------------------------------------
 
