@@ -24,7 +24,8 @@ local imports = {
     setmetatable = setmetatable,
     createMarker = createMarker,
     setElementData = setElementData,
-    math = math
+    math = math,
+    assetify = assetify
 }
 
 
@@ -86,7 +87,7 @@ if localPlayer then
         if not self or (self == loot) then return false end
         if not lootType or not lootData then return false end
         self.lootType = lootType
-        self.lootInstance = assetify.createDummy("object", lootType, lootData)
+        self.lootInstance = imports.assetify.createDummy("object", lootType, lootData)
         if not self.lootInstance then return false end
         loot.buffer.element[(self.lootInstance)] = self
         return self.lootInstance
