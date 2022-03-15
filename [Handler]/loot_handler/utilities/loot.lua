@@ -122,7 +122,7 @@ else
                 imports.setElementData(self.lootInstance, "Item:"..j.item, imports.math.random(j.amount[1], j.amount[2]))
                 if j.ammo then
                     local weaponAmmo = exports.player_handler:fetchInventoryWeaponAmmo(j.item)
-                    if ammo then
+                    if weaponAmmo then
                         imports.setElementData(self.lootInstance, "Item:"..weaponAmmo, imports.math.random(j.ammo[1], j.ammo[2]))
                     end
                 end
