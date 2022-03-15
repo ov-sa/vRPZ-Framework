@@ -89,14 +89,14 @@ function onBundleLibrary()
                 assetify.unloadAsset = function(...)
                     return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "loadAsset", ...)
                 end
+
+                assetify.createDummy = function(...)
+                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createAssetDummy", ...)
+                end
             end
 
             assetify.setElementAsset = function(...)
                 return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setElementAsset", ...)
-            end
-
-            assetify.createDummy = function(...)
-                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createAssetDummy", ...)
             end
 
             assetify.setBoneAttach = function(...)

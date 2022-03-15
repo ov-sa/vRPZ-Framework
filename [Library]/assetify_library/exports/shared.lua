@@ -32,10 +32,6 @@ function setElementAsset(element, ...)
     return syncer:syncElementModel(element, elementType, arguments[1], arguments[2], arguments[3], arguments[4])
 end
 
-function createAssetDummy(assetType, assetName, dummyData)
-    return dummy:load(...)
-end
-
 function setBoneAttachment(element, parent, ...)
     if not element or not imports.isElement(element) or not parent or not imports.isElement(parent) then return false end
     local arguments = {...}

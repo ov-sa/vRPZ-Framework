@@ -36,3 +36,7 @@ end
 function unloadAsset(...)
     return manager:unload(...)
 end
+
+function createAssetDummy(...)
+    return dummy:load(...)
+end
