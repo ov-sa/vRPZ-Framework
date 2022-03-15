@@ -92,6 +92,20 @@ if localPlayer then
         return self.lootInstance
     end
 
+    imports.addEventHandler("onClientResourceStart", resource, function()
+        local booter = function() imports.triggerServerEvent("Assetify:onRequestLoots", localPlayer) end
+        if imports.assetify.isLoaded() then
+            booter()
+        else
+            local booterWrapper = nil
+            booterWrapper = function()
+                booter()
+                imports.removeEventHandler("onAssetifyLoad", root, booterWrapper)
+            end
+            imports.addEventHandler("onAssetifyLoad", root, booterWrapper)
+        end
+    end)
+
     imports.addEventHandler("onClientElementDestroy", resourceRoot, function()
         if loot.buffer.loot[source] then
             loot.buffer.loot[source]:destroy()
@@ -181,8 +195,3 @@ else
         })
     end)
 end
-
---TODO: HOOK THIS SOMEHOW..
-imports.addEventHandler("onAssetifyLoad", root, function()
-    imports.triggerServerEvent("Assetify:onRequestLoots", localPlayer)
-end)

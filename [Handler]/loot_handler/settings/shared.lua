@@ -13,6 +13,8 @@
 --[[ Settings ]]--
 ------------------
 
+resource = getResourceRootElement(getThisResource())
+
 syncSettings = {
     syncRate = 500
 }
