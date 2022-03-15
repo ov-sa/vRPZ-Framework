@@ -17,11 +17,9 @@ local imports = {
     tostring = tostring,
     resourceName = getResourceName(getThisResource()),
     addEventHandler = addEventHandler,
-    fetchFileData = fetchFileData,
     dbConnect = dbConnect,
-    table = {
-        insert = table.insert
-    }
+    table = table,
+    file = file
 }
 
 
@@ -37,9 +35,7 @@ local bundlerData = false
 ---------------------------------------------
 
 function fetchImports(recieveData)
-
     if not bundlerData then return false end
-
     if recieveData == true then
         return bundlerData
     else
@@ -50,7 +46,6 @@ function fetchImports(recieveData)
         end
         ]]
     end
-
 end
 
 function fetchDatabase()
@@ -65,9 +60,7 @@ end
 -----------------------------------------
 
 imports.addEventHandler("onResourceStart", resourceRoot, function(resourceSource)
-
     dbSettings.instance = imports.dbConnect("mysql", "dbname="..dbSettings.database..";host="..dbSettings.host..";port="..dbSettings.port..";charset=utf8;", dbSettings.username, dbSettings.password, dbSettings.options) or false
-
     local importedModules = {
         bundler = [[
             dbify = {
@@ -92,23 +85,22 @@ imports.addEventHandler("onResourceStart", resourceRoot, function(resourceSource
             }
         ]],
         modules = {
-            mysql = imports.fetchFileData("files/modules/mysql.lua")..[[
+            mysql = imports.file.read("files/modules/mysql.lua")..[[
                 imports.resource = getResourceFromName("]]..imports.resourceName..[[")
                 dbify.mysql.__connection__.databaseName = "]]..dbSettings.database..[["
                 dbify.mysql.__connection__.instance()
             ]],
-            account = imports.fetchFileData("files/modules/account.lua")..[[
+            account = imports.file.read("files/modules/account.lua")..[[
                 dbify.account.__connection__.autoSync = ]]..imports.tostring(syncSettings.syncAccounts)..[[
             ]],
-            serial = imports.fetchFileData("files/modules/serial.lua")..[[
+            serial = imports.file.read("files/modules/serial.lua")..[[
                 dbify.serial.__connection__.autoSync = ]]..imports.tostring(syncSettings.syncSerials)..[[
             ]],
-            character = imports.fetchFileData("files/modules/character.lua"),
-            vehicle = imports.fetchFileData("files/modules/vehicle.lua"),
-            inventory = imports.fetchFileData("files/modules/inventory.lua")
+            character = imports.file.read("files/modules/character.lua"),
+            vehicle = imports.file.read("files/modules/vehicle.lua"),
+            inventory = imports.file.read("files/modules/inventory.lua")
         }
     }
-
     bundlerData = {}
     imports.table.insert(bundlerData, importedModules.bundler)
     imports.table.insert(bundlerData, importedModules.modules.mysql)
@@ -117,5 +109,4 @@ imports.addEventHandler("onResourceStart", resourceRoot, function(resourceSource
     imports.table.insert(bundlerData, importedModules.modules.character)
     imports.table.insert(bundlerData, importedModules.modules.vehicle)
     imports.table.insert(bundlerData, importedModules.modules.inventory)
-
 end)

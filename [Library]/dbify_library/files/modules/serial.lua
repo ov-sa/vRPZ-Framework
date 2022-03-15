@@ -96,7 +96,6 @@ dbify["serial"] = {
 -----------------------------------------------
 
 imports.addEventHandler("onResourceStart", resourceRoot, function()
-
     if not dbify.mysql.__connection__.instance then return false end
     imports.dbExec(dbify.mysql.__connection__.instance, "CREATE TABLE IF NOT EXISTS `??` (`??` VARCHAR(100) PRIMARY KEY)", dbify.serial.__connection__.table, dbify.serial.__connection__.keyColumn)
     if dbify.serial.__connection__.autoSync then
@@ -106,15 +105,12 @@ imports.addEventHandler("onResourceStart", resourceRoot, function()
             dbify.serial.create(playerSerial)
         end
     end
-
 end)
 
 imports.addEventHandler("onPlayerJoin", root, function(_, playerSerial)
-
     if not dbify.mysql.__connection__.instance then return false end
     if dbify.serial.__connection__.autoSync then
         local playerSerial = imports.getPlayerSerial(source)
         dbify.serial.create(playerSerial)
     end
-
 end)

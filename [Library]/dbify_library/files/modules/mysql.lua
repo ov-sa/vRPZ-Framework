@@ -22,9 +22,7 @@ local imports = {
     dbQuery = dbQuery,
     dbPoll = dbPoll,
     dbExec = dbExec,
-    table = {
-        insert = table.insert
-    }
+    table = table
 }
 
 

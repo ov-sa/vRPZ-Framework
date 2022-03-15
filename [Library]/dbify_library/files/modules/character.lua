@@ -92,8 +92,6 @@ dbify["character"] = {
 ----------------------------------
 
 imports.addEventHandler("onResourceStart", resourceRoot, function()
-
     if not dbify.mysql.__connection__.instance then return false end
     imports.dbExec(dbify.mysql.__connection__.instance, "CREATE TABLE IF NOT EXISTS `??` (`??` INT AUTO_INCREMENT PRIMARY KEY)", dbify.character.__connection__.table, dbify.character.__connection__.keyColumn)
-
 end)
