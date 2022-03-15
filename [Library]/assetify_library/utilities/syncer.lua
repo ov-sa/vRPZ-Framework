@@ -52,6 +52,22 @@ if localPlayer then
         return imports.triggerEvent("Assetify:onRecieveElementModel", localPlayer, ...)
     end
 
+    function syncer:syncBoneAttachment(...)
+        return imports.triggerEvent("Assetify:onRecieveBoneAttachment", localPlayer, ...)
+    end
+
+    function syncer:syncBoneDetachment(...)
+        return imports.triggerEvent("Assetify:onRecieveBoneDetachment", localPlayer, ...)
+    end
+
+    function syncer:syncBoneRefreshment(...)
+        return imports.triggerEvent("Assetify:onRecieveBoneRefreshment", localPlayer, ...)
+    end
+
+    function syncer:syncClearBoneAttachment(...)
+        return imports.triggerEvent("Assetify:onRecieveClearBoneAttachment", localPlayer, ...)
+    end
+
     imports.addEventHandler("onAssetifyLoad", root, function()
         imports.triggerServerEvent("Assetify:onRequestElementModels", localPlayer)
     end)
