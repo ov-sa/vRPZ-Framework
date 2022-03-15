@@ -31,3 +31,36 @@ function setElementAsset(element, ...)
     local arguments = {...}
     return syncer:syncElementModel(element, elementType, arguments[1], arguments[2], arguments[3], arguments[4])
 end
+
+function createAssetDummy(assetType, assetName, dummyData)
+    if not assetType or not assetName or not availableAssetPacks[assetType] or not availableAssetPacks[assetType].rwDatas[assetName] then then return false end
+    local cAsset = availableAssetPacks[assetType].rwDatas[assetName].unsyncedData.assetCache[i].cAsset
+    if not cAsset then return false end
+    local cModelInstance = imports.createObject(cAsset.syncedData.modelID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
+    imports.setElementDoubleSided(cModelInstance, true)
+    if cAsset.syncedData.collisionID then
+        local cCollisionInstance = imports.createObject(cAsset.syncedData.collisionID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
+        imports.setElementAlpha(cCollisionInstance, 0)
+        local cStreamer = streamer:create(cModelInstance, "object", {cCollisionInstance})
+    end
+    return cModelInstance
+end
+
+function setBoneAttachment(...)
+    return bone:create(...)
+end
+
+function setBoneDetachment(element)
+    if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
+    return bone.buffer.element[element]:destroy()
+end
+
+function setBoneRefreshment(element, ...)
+    if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
+    return bone.buffer.element[element]:destroy(...)
+end
+
+function clearBoneAttachment(element, ...)
+    if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
+    return bone.buffer.element[element]:clearElementBuffer(...)
+end

@@ -33,16 +33,16 @@
     <!-- Exports -->
     <export function="fetchImports" type="shared"/>
     <export function="setElementAsset" type="shared"/>
+    <export function="createAssetDummy" type="shared"/>
+    <export function="setBoneAttachment" type="shared"/>
+    <export function="setBoneDetachment" type="shared"/>
+    <export function="setBoneRefreshment" type="shared"/>
+    <export function="clearBoneAttachment" type="shared"/>
     <export function="isLibraryLoaded" type="client"/>
     <export function="getAssetData" type="client"/>
     <export function="getAssetID" type="client"/>
     <export function="isAssetLoaded" type="client"/>
     <export function="loadAsset" type="client"/>
     <export function="unloadAsset" type="client"/>
-    <export function="setBoneAttachment" type="client"/>
-    <export function="setBoneDetachment" type="client"/>
-    <export function="setBoneRefreshment" type="client"/>
-    <export function="clearBoneAttachment" type="client"/>
-    <export function="createAssetDummy" type="client"/>
 
 </meta>
