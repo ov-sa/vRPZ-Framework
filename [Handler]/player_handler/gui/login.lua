@@ -81,6 +81,7 @@ loginUI = {
                 startX = 5, startY = 5,
                 paddingX = 5, paddingY = 5,
                 size = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.size, iconSize = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconSize,
+                tooltipFont = FRAMEWORK_FONTS[8],
                 iconColor = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconColor,
                 bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.bgColor)),
                 {iconTexture = imports.beautify.assets["images"]["arrow/left.rw"], tooltip = {identifier = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.tooltips.previous}, exec = function() loginUI.phases[2].manageCharacter("previous") end},
@@ -180,8 +181,7 @@ end
 loginUI.phases[2].updateUILang = function(gender)
     for i = 1, #loginUI.phases[2].options, 1 do
         local j = loginUI.phases[2].options[i]
-        --TODO: UPDATE TOOLTIP FONT..
-        j.tooltip.width = imports.beautify.native.getTextWidth(j.tooltip.identifier[FRAMEWORK_LANGUAGE], 1, FRAMEWORK_FONTS[8]) + 20
+        j.tooltip.width = imports.beautify.native.getTextWidth(j.tooltip.identifier[FRAMEWORK_LANGUAGE], 1, loginUI.phases[2].options.tooltipFont) + loginUI.phases[2].options.size
     end
     for i = 1, #loginUI.phases[2].categories, 1 do
         local j = loginUI.phases[2].categories[i]
@@ -583,13 +583,12 @@ loginUI.renderUI = function(renderData)
                 j.animAlphaPercent = j.animAlphaPercent or 0.35
                 j.tooltip.animPercent = j.tooltip.animPercent or 0
                 j.animAlphaPercent = ((j.hoverStatus == "forward") and imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")) or imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0.35, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
-                --TODO: FLYFORKIN'S CONTIRBUTION UPDATE
                 j.tooltip.animPercent = ((j.tooltip.hoverStatus == "forward") and imports.interpolateBetween(j.tooltip.animPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")) or imports.interpolateBetween(j.tooltip.animPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
                 imports.beautify.native.drawRectangle(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, loginUI.phases[2].options.bgColor, false)
                 imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.iconTexture, 0, 0, 0, imports.tocolor(loginUI.phases[2].options.iconColor[1], loginUI.phases[2].options.iconColor[2], loginUI.phases[2].options.iconColor[3], loginUI.phases[2].options.iconColor[4]*j.animAlphaPercent), false)
                 if (j.tooltip.animPercent > 0) then
                     imports.beautify.native.drawRectangle(loginUI.phases[2].options.startX + loginUI.phases[2].options.size + 5, j.startY, j.tooltip.animPercent*j.tooltip.width, loginUI.phases[2].options.size, loginUI.phases[2].options.bgColor, false)
-                    imports.beautify.native.drawText(j.tooltip.identifier[FRAMEWORK_LANGUAGE], loginUI.phases[2].options.startX + loginUI.phases[2].options.size + 5, j.startY, loginUI.phases[2].options.startX + loginUI.phases[2].options.size + 5 + j.tooltip.animPercent, j.startY + loginUI.phases[2].options.size, -1, 1, FRAMEWORK_FONTS[8], "center", "center", true)
+                    imports.beautify.native.drawText(j.tooltip.identifier[FRAMEWORK_LANGUAGE], loginUI.phases[2].options.startX + loginUI.phases[2].options.size + 5, j.startY, loginUI.phases[2].options.startX + loginUI.phases[2].options.size + 5 + j.tooltip.animPercent, j.startY + loginUI.phases[2].options.size, -1, 1, loginUI.phases[2].options.tooltipFont, "center", "center", true)
                 end
             end
         elseif loginUI.phase == 3 then
