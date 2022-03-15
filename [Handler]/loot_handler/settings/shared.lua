@@ -17,4 +17,4 @@ librarySettings = {
     buildRate = 500
 }
 
-availableLootPoints = exports.config_loader:getConfigData("loot_spawnpoints")
+availableLoots = exports.config_loader:getConfigData("loot_spawnpoints")

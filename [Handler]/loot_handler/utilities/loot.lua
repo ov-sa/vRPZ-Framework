@@ -14,6 +14,7 @@
 -----------------
 
 local imports = {
+    isElement = isElement,
     setmetatable = setmetatable
 }
 
@@ -49,25 +50,14 @@ function loot:clearElementBuffer(element)
     return true
 end
 
-function loot:load(assetType, assetName, lootData)
+function loot:load(lootType, lootData)
     if not self or (self == loot) then return false end
-    if not assetType or not assetName or not lootData or not lootData.position or not lootData.rotation or not availableAssetPacks[assetType] or not availableAssetPacks[assetType].rwDatas[assetName] then return false end
-    local cAsset = availableAssetPacks[assetType].rwDatas[assetName].cAsset
-    if not cAsset then return false end
-    lootData.position.x, lootData.position.y, lootData.position.z = imports.tonumber(lootData.position.x) or 0, imports.tonumber(lootData.position.y) or 0, imports.tonumber(lootData.position.z) or 0
-    lootData.rotation.x, lootData.rotation.y, lootData.rotation.z = imports.tonumber(lootData.position.x) or 0, imports.tonumber(lootData.position.y) or 0, imports.tonumber(lootData.position.z) or 0
-    self.assetType, self.assetName = assetType, assetName
-    self.cModelInstance = imports.createObject(cAsset.syncedData.modelID, lootData.position.x, lootData.position.y, lootData.position.z, lootData.rotation.x, lootData.rotation.y, lootData.rotation.z)
-    imports.setElementDoubleSided(self.cModelInstance, true)
-    imports.setElementDimension(self.cModelInstance, imports.tonumber(lootData.dimension) or 0)
-    imports.setElementInterior(self.cModelInstance, imports.tonumber(lootData.interior) or 0)
-    if cAsset.syncedData.collisionID then
-        self.cCollisionInstance = imports.createObject(cAsset.syncedData.collisionID, lootData.position.x, lootData.position.y, lootData.position.z, lootData.rotation.x, lootData.rotation.y, lootData.rotation.z)
-        imports.setElementAlpha(self.cCollisionInstance, 0)
-        self.cStreamer = streamer:create(self.cModelInstance, "loot", {self.cCollisionInstance})
-    end
-    loot.buffer[(self.cModelInstance)] = self
-    return self.cModelInstance
+    if not lootType or not lootData then return false end
+    self.lootType = lootType
+    self.lootInstance = assetify.createDummy("object", lootType, lootData)
+    if not self.lootInstance then return false end
+    loot.buffer[(self.lootInstance)] = self
+    return self.lootInstance
 end
 
 function loot:unload()
