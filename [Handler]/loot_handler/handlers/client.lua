@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
---[[ Resource: Ground Loot Handler
+--[[ Resource: Loot Handler
      Script: handlers: client.lua
      Server: -
      Author: vStudio
      Developer: -
-     DOC: 14/12/2020
-     Desc: Ground Loot Handler ]]--
+     DOC: 15/03/2022
+     Desc: Loot Handler ]]--
 ----------------------------------------------------------------
 
 
@@ -13,7 +13,7 @@
 --[[ Variables ]]--
 -------------------
 
-local groundLoots = {}
+local buffer = {}
 
 
 ---------------------------------------
@@ -39,22 +39,22 @@ local function updateGroundLoot(lootMarker)
         end
     end
 
-    if not groundLoots[lootMarker] then
-        groundLoots[lootMarker] = {}
+    if not buffer[lootMarker] then
+        buffer[lootMarker] = {}
     else
-        for i, j in pairs(groundLoots[lootMarker]) do
+        for i, j in pairs(buffer[lootMarker]) do
             if i ~= "__isToBeUpdated" then
                 if not lootItemDatas[i] then
                     if j and isElement(j) then
                         j:destroy()
                     end
-                    groundLoots[lootMarker][i] = nil
+                    buffer[lootMarker][i] = nil
                 end
             end
         end
     end
     for i, j in pairs(lootItemDatas) do
-        if not groundLoots[lootMarker][i] and not isElement(groundLoots[lootMarker][i]) then
+        if not buffer[lootMarker][i] and not isElement(buffer[lootMarker][i]) then
             local itemDetails = exports.player_handler:getItemDetails(i)
             if itemDetails and itemDetails.itemPickupDetails then
                 local pickupData = itemDetails.itemPickupDetails
@@ -65,15 +65,15 @@ local function updateGroundLoot(lootMarker)
                     posVector.x = posVector.x + math.random(-0.5, 0.5) * math.cos(math.rad(math.random(0, 360) + 90))
                     posVector.y = posVector.y + math.random(-0.5, 0.5) * math.sin(math.rad(math.random(0, 360) + 90))
                     posVector.z = posVector.z + 0.1
-                    groundLoots[lootMarker][i] = Object(objectID, posVector.x, posVector.y, posVector.z + (tonumber(pickupData.offZ) or 0), tonumber(pickupData.rotX) or 0, 0, math.random(0, 360))    
-                    groundLoots[lootMarker][i]:setScale(tonumber(pickupData.scale) or 1)
-                    groundLoots[lootMarker][i]:setCollisionsEnabled(false)
-                    groundLoots[lootMarker][i]:setDoubleSided(true)
+                    buffer[lootMarker][i] = Object(objectID, posVector.x, posVector.y, posVector.z + (tonumber(pickupData.offZ) or 0), tonumber(pickupData.rotX) or 0, 0, math.random(0, 360))    
+                    buffer[lootMarker][i]:setScale(tonumber(pickupData.scale) or 1)
+                    buffer[lootMarker][i]:setCollisionsEnabled(false)
+                    buffer[lootMarker][i]:setDoubleSided(true)
                 end
             end
         end
     end
-    groundLoots[lootMarker].__isToBeUpdated = false
+    buffer[lootMarker].__isToBeUpdated = false
     return true
 
 end
@@ -83,8 +83,8 @@ addEventHandler("onClientElementDataChange", resourceRoot, function(key, oldValu
     if source:getType() ~= "marker" or not string.find(key, "Item:", 1) then return false end
 
     if not isElementStreamedIn(source) then
-        if groundLoots[source] then
-            groundLoots[source].__isToBeUpdated = true
+        if buffer[source] then
+            buffer[source].__isToBeUpdated = true
         end
     else
         updateGroundLoot(source)
@@ -94,8 +94,8 @@ end)
 
 addEventHandler("onClientElementStreamIn", resourceRoot, function()
 
-    if groundLoots[source] then
-        if groundLoots[source].__isToBeUpdated then
+    if buffer[source] then
+        if buffer[source].__isToBeUpdated then
             updateGroundLoot(source)
         end
     else
@@ -111,16 +111,16 @@ end)
 
 addEventHandler("onClientElementDestroy", resourceRoot, function()
 
-    if not groundLoots[source] then return false end
+    if not buffer[source] then return false end
 
-    for i, j in pairs(groundLoots[source]) do
+    for i, j in pairs(buffer[source]) do
         if i ~= "__isToBeUpdated" then
             if j and isElement(j) then
                 j:destroy()
             end
         end
     end
-    groundLoots[source] = nil
+    buffer[source] = nil
     return true
 
 end)

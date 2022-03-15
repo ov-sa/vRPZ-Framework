@@ -1,6 +1,6 @@
 <meta>
 
-    <info author="vStudio" name="Ground Loot Handler" type="Handler" version="1.0.0"/>
+    <info author="vStudio" name="Loot Handler" type="Handler" version="1.0.0"/>
     <oop>true</oop>
 
     <!-- Settings & Utilities -->

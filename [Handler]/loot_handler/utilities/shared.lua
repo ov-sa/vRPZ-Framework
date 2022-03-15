@@ -1,30 +1,37 @@
 ----------------------------------------------------------------
---[[ Resource: Ground Loot Handler
+--[[ Resource: Loot Handler
      Script: utilities: shared.lua
      Server: -
      Author: vStudio
      Developer: -
-     DOC: 14/12/2020
+     DOC: 15/03/2022
      Desc: Shared Utilities ]]--
 ----------------------------------------------------------------
 
 
--------------------------------------------
---[[ Function: Retrieves Copy Of Table ]]--
--------------------------------------------
+-----------------
+--[[ Imports ]]--
+-----------------
 
-function table.copy(recievedTable, recursive)
+local imports = {
+    type = type,
+    pairs = pairs
+}
 
-    if not recievedTable or type(recievedTable) ~= "table" then return false end
 
-    local copiedTable = {}
-    for key, value in pairs(recievedTable) do
-        if type(value) == "table" and recursive then
-            copiedTable[key] = table.copy(value, true)
+----------------------
+--[[ Class: Table ]]--
+----------------------
+
+function table.clone(baseTable, isRecursive)
+    if not baseTable or imports.type(baseTable) ~= "table" then return false end
+    local clonedTable = {}
+    for i, j in imports.pairs(baseTable) do
+        if imports.type(j) == "table" and isRecursive then
+            clonedTable[i] = table.clone(j, true)
         else
-            copiedTable[key] = value
+            clonedTable[i] = j
         end
     end
-    return copiedTable
-
+    return clonedTable
 end

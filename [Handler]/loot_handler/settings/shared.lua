@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
---[[ Resource: Ground Loot Handler
+--[[ Resource: Loot Handler
      Script: settings: shared.lua
      Server: -
      Author: vStudio
      Developer: -
-     DOC: 14/12/2020
+     DOC: 15/03/2022
      Desc: Shared Settings ]]--
 ----------------------------------------------------------------
 
