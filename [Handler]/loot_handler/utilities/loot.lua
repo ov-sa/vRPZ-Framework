@@ -193,8 +193,8 @@ else
     imports.addEvent("Loot_Handler:onRequestLoots", true)
     imports.addEventHandler("Loot_Handler:onRequestLoots", root, function()
         loot.loadedClients[source] = true
+        local player = source
         thread:create(function(cThread)
-            local player = source
             for i, j in imports.pairs(loot.buffer.element) do
                 if i and j then
                     imports.triggerClientEvent(player, "Loot_Handler:onRecieveLoot", player, j.lootPack, j.lootType, FRAMEWORK_CONFIGS["Loots"][(j.lootType)][(j.lootIndex)], j.lootInstance)
