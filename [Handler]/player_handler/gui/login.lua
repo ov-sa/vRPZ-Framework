@@ -174,11 +174,9 @@ for i = 1, #loginUI.phases[2].options, 1 do
     j.startY = loginUI.phases[2].startY + loginUI.phases[2].options.startY + ((loginUI.phases[2].options.size + loginUI.phases[2].options.paddingY)*(i - 1))
     j.iconY = j.startY + ((loginUI.phases[2].options.size - loginUI.phases[2].options.iconSize)*0.5)
     j.hoverStatus = "backward"
+    j.tooltipStatus = "backward"
     j.hoverAnimTick = CLIENT_CURRENT_TICK
-    if (j.hover) then
-        local text = j.hover
-        j.hover = {text = text, width = imports.beautify.native.getTextWidth(text, 1, FRAMEWORK_FONTS[8]) + 20}
-    end
+    j.tooltip = {text = j.tooltip, width = imports.beautify.native.getTextWidth(text, 1, FRAMEWORK_FONTS[8]) + 20}
 end
 loginUI.phases[2].updateUILang = function(gender)
     for i = 1, #loginUI.phases[2].categories, 1 do
@@ -586,8 +584,8 @@ loginUI.renderUI = function(renderData)
                 imports.beautify.native.drawRectangle(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, loginUI.phases[2].options.bgColor, false)
                 imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.iconTexture, 0, 0, 0, imports.tocolor(loginUI.phases[2].options.iconColor[1], loginUI.phases[2].options.iconColor[2], loginUI.phases[2].options.iconColor[3], loginUI.phases[2].options.iconColor[4]*j.animAlphaPercent), false)
                 if (j.animTooltipPercent > 0) then
-                    imports.beautify.native.drawRectangle(loginUI.phases[2].options.startX + loginUI.phases[2].options.size + 5, j.startY, j.animTooltipPercent*j.hover.width, loginUI.phases[2].options.size, loginUI.phases[2].options.bgColor, false)
-                    imports.beautify.native.drawText(j.hover.text, loginUI.phases[2].options.startX + loginUI.phases[2].options.size + 5, j.startY, loginUI.phases[2].options.startX + loginUI.phases[2].options.size + 5 + j.animTooltipPercent, j.startY + loginUI.phases[2].options.size, -1, 1, FRAMEWORK_FONTS[8], "center", "center", true)
+                    imports.beautify.native.drawRectangle(loginUI.phases[2].options.startX + loginUI.phases[2].options.size + 5, j.startY, j.animTooltipPercent*j.tooltip.width, loginUI.phases[2].options.size, loginUI.phases[2].options.bgColor, false)
+                    imports.beautify.native.drawText(j.tooltip.text, loginUI.phases[2].options.startX + loginUI.phases[2].options.size + 5, j.startY, loginUI.phases[2].options.startX + loginUI.phases[2].options.size + 5 + j.animTooltipPercent, j.startY + loginUI.phases[2].options.size, -1, 1, FRAMEWORK_FONTS[8], "center", "center", true)
                 end
             end
         elseif loginUI.phase == 3 then
