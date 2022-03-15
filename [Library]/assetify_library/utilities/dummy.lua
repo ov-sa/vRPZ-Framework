@@ -52,14 +52,25 @@ function dummy:clearElementBuffer(element)
     return true
 end
 
-function dummy:load(dummyData)
+function dummy:load(assetType, assetName, dummyData)
     if not self or (self == dummy) then return false end
-    if not dummyData then return false end
-    self.element = element
-    imports.setElementCollisionsEnabled(element, false)
-    self.cStreamer = streamer:create(element, "dummy", {parent})
-    dummy.buffer[element] = self
-    return true
+    if not assetType or not assetName or not dummyData or not dummyData.position or not dummyData.rotation then return false end
+    local assetReference = availableAssetPacks[assetType] or not availableAssetPacks[assetType].rwDatas[assetName]
+    if not assetReference then return false end
+    local cAsset = assetReference.cAsset
+    if not cAsset then return false end
+    dummyData.position.x, dummyData.position.y, dummyData.position.z = imports.tonumber(dummyData.position.x) or 0, imports.tonumber(dummyData.position.y) or 0, imports.tonumber(dummyData.position.z) or 0
+    dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z = imports.tonumber(dummyData.position.x) or 0, imports.tonumber(dummyData.position.y) or 0, imports.tonumber(dummyData.position.z) or 0
+    self.assetType, self.assetName = assetType, assetName
+    self.cModelInstance = imports.createObject(cAsset.syncedData.modelID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
+    imports.setElementDoubleSided(self.cModelInstance, true)
+    if cAsset.syncedData.collisionID then
+        self.cCollisionInstance = imports.createObject(cAsset.syncedData.collisionID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
+        imports.setElementAlpha(self.cCollisionInstance, 0)
+        self.cStreamer = streamer:create(self.cModelInstance, "dummy", {self.cCollisionInstance})
+    end
+    dummy.buffer[(self.cModelInstance)] = self
+    return self.cModelInstance
 end
 
 function dummy:unload()
@@ -67,7 +78,17 @@ function dummy:unload()
     if self.cStreamer then
         self.cStreamer:destroy()
     end
-    dummy.buffer[(self.element)] = nil
+    dummy.buffer[self] = nil
     self = nil
+    return true
+end
+
+function dummy:stream(dummyData)
+    if not self or (self == dummy) then return false end
+    if not dummyData then return false end
+    self.element = element
+    imports.setElementCollisionsEnabled(element, false)
+    self.cStreamer = streamer:create(element, "dummy", {parent})
+    dummy.buffer[element] = self
     return true
 end
