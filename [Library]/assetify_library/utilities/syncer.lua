@@ -302,11 +302,11 @@ else
         return true
     end
 
-    function syncer:syncClearBoneAttachment(targetPlayer, ...)
+    function syncer:syncClearBoneAttachment(element, targetPlayer)
         if not targetPlayer then
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncClearBoneAttachment(j, ...)
+                    syncer:syncClearBoneAttachment(element, j)
                     thread.pause()
                 end
             end):resume({
@@ -314,7 +314,7 @@ else
                 frames = 1
             })
         else
-            imports.triggerClientEvent(targetPlayer, "Assetify:onRecieveClearBoneAttachment", targetPlayer, ...)
+            imports.triggerClientEvent(targetPlayer, "Assetify:onRecieveClearBoneAttachment", targetPlayer, element)
         end
         return true
     end
