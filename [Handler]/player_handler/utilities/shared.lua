@@ -13,6 +13,7 @@
 -----------------
 
 loadstring(exports.assetify_library:fetchImports())()
+loadstring(exports.assetify_library:fetchThreader())()
 local imports = {
     type = type,
     pairs = pairs
