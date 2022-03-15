@@ -119,9 +119,9 @@ else
             imports.setElementData(self.lootInstance, "Inventory:Slots", imports.math.random(FRAMEWORK_CONFIGS["Loots"][(self.lootType)].inventoryWeight[1], FRAMEWORK_CONFIGS["Loots"][(self.lootType)].inventoryWeight[2]))
             for i = 1, #FRAMEWORK_CONFIGS["Loots"][(self.lootType)].lootItems, 1 do
                 local j = FRAMEWORK_CONFIGS["Loots"][(self.lootType)].lootItems[i]
-                imports.setElementData(self.lootInstance, "Item:"..j.name, imports.math.random(j.amount[1], j.amount[2]))
+                imports.setElementData(self.lootInstance, "Item:"..j.item, imports.math.random(j.amount[1], j.amount[2]))
                 if j.ammo then
-                    local weaponAmmo = exports.player_handler:fetchInventoryWeaponAmmo(j.name)
+                    local weaponAmmo = exports.player_handler:fetchInventoryWeaponAmmo(j.item)
                     if ammo then
                         imports.setElementData(self.lootInstance, "Item:"..weaponAmmo, imports.math.random(j.ammo[1], j.ammo[2]))
                     end
