@@ -79,9 +79,11 @@ if localPlayer then
     imports.addEvent("Loot_Handler:onRecieveLoot", true)
     imports.addEventHandler("Loot_Handler:onRecieveLoot", root, function(lootPack, lootType, lootData, colInstance)
         local cLoot = loot:create(lootPack, lootType, lootData)
-        cLoot.colInstance = colInstance
-        loot.buffer.loot[(cLoot.colInstance)] = cLoot
-        imports.attachElements(cLoot.lootInstance, cLoot.colInstance)
+        if cLoot then
+            cLoot.colInstance = colInstance
+            loot.buffer.loot[(cLoot.colInstance)] = cLoot
+            imports.attachElements(cLoot.lootInstance, cLoot.colInstance)
+        end
     end)
 
     function loot:load(lootPack, lootType, lootData)
@@ -143,12 +145,13 @@ else
                 else
                     for i = 1, #FRAMEWORK_CONFIGS["Loots"][lootType], 1 do
                         local cLoot = loot:create(lootType, i)
+                        cLoot:refresh()
                         for k, v in imports.pairs(loot.loadedClients) do
                             if k and v then
                                 imports.triggerClientEvent(k, "Loot_Handler:onRecieveLoot", k, cLoot.lootType, FRAMEWORK_CONFIGS["Loots"][(cLoot.lootType)][(cLoot.lootIndex)], cLoot.lootInstance)
                             end
+                            thread.pause()
                         end
-                        cLoot:refresh()
                         thread.pause()
                     end
                 end
