@@ -4,7 +4,6 @@
     <min_mta_version server="1.5.9" client="1.5.9"/>
 
     <!-- Settings & Utilities -->
-    <script src="utilities/async.lua" type="shared" cache="false"/>
     <script src="utilities/shared.lua" type="shared" cache="false"/>
     <script src="settings/shared.lua" type="shared" cache="false"/>
 

@@ -3,7 +3,7 @@
      Script: utilities: shared.lua
      Server: -
      Author: vStudio
-     Developer: -
+     Developer(s): Tron
      DOC: 15/03/2022
      Desc: Shared Utilities ]]--
 ----------------------------------------------------------------
