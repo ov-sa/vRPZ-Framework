@@ -32,7 +32,7 @@ configVars["UI"]["Login"] = {
                 cameraEnd = {x = 1.57449996471405, y = 8.598099708557129, z = 4.809100151062012},
                 cameraEndLook = {x = 1.33843719959259, y = 8.141613006591797, z = 3.951257228851318},
                 cinemationDuration = 10000 
-            }
+            },
             characterCinemationFOV = 85,
             characterPoint = {x = -257.4282531738281, y = -76.09749603271484, z = 67.12364196777344, rotation = 110},
             characterCinemationPoint = {
