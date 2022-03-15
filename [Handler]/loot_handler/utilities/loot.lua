@@ -118,15 +118,15 @@ else
             if not self.lootInstance or not lootItems then return false end
             imports.setElementData(self.lootInstance, "Inventory:Slots", imports.math.random(FRAMEWORK_CONFIGS["Loots"][(self.lootType)].inventoryWeight[1], FRAMEWORK_CONFIGS["Loots"][(self.lootType)].inventoryWeight[2]))
             thread:create(function(cThread)
-                for i = 1, #FRAMEWORK_CONFIGS["Loots"][(self.lootType)].lootItems, 1 do
-                    local j = FRAMEWORK_CONFIGS["Loots"][(self.lootType)].lootItems[i]
-                    for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
-                        for k, v in imports.pairs(j) do
-                            imports.setElementData(self.lootInstance, "Item:"..k, 0)
-                            thread.pause()
-                        end
+                for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
+                    for k, v in imports.pairs(j) do
+                        imports.setElementData(self.lootInstance, "Item:"..k, 0)
                         thread.pause()
                     end
+                    thread.pause()
+                end
+                for i = 1, #FRAMEWORK_CONFIGS["Loots"][(self.lootType)].lootItems, 1 do
+                    local j = FRAMEWORK_CONFIGS["Loots"][(self.lootType)].lootItems[i]
                     local itemDetails = exports.player_handler:getItem(j.item)
                     if itemDetails then
                     --TODO: NEED TO VERIFY IF THIS ITEM IS VALID OR NOT...
@@ -138,6 +138,7 @@ else
                             end
                         end
                     end
+                    thread.pause()
                 end
             end):resume({
                 executions = syncSettings.syncRate,
