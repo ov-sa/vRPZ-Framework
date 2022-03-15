@@ -33,17 +33,7 @@ function setElementAsset(element, ...)
 end
 
 function createAssetDummy(assetType, assetName, dummyData)
-    if not assetType or not assetName or not availableAssetPacks[assetType] or not availableAssetPacks[assetType].rwDatas[assetName] then return false end
-    local cAsset = availableAssetPacks[assetType].rwDatas[assetName].unsyncedData.assetCache[i].cAsset
-    if not cAsset then return false end
-    local cModelInstance = imports.createObject(cAsset.syncedData.modelID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
-    imports.setElementDoubleSided(cModelInstance, true)
-    if cAsset.syncedData.collisionID then
-        local cCollisionInstance = imports.createObject(cAsset.syncedData.collisionID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
-        imports.setElementAlpha(cCollisionInstance, 0)
-        local cStreamer = streamer:create(cModelInstance, "dummy", {cCollisionInstance})
-    end
-    return cModelInstance
+    return dummy:load(...)
 end
 
 function setBoneAttachment(element, parent, ...)
