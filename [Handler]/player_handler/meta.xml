@@ -4,25 +4,25 @@
     <min_mta_version server="1.5.9" client="1.5.9"/>
 
     <!-- Exports -->
-    <script src="exports/shared/main.lua" type="shared" cache="false"/>
+    <script src="exports/shared/main.lua" type="shared"/>
 
     <!-- Settings & Utilities -->
-    <script src="utilities/shared.lua" type="shared" cache="false"/>
-    <script src="settings/shared.lua" type="shared" cache="false"/>
-    <script src="utilities/client.lua" type="client" cache="false"/>
+    <script src="utilities/shared.lua" type="shared"/>
+    <script src="settings/shared.lua" type="shared"/>
+    <script src="utilities/client.lua" type="client"/>
     <script src="utilities/server.lua" type="server"/>
-    <script src="settings/client.lua" type="client" cache="false"/>
+    <script src="settings/client.lua" type="client"/>
 
     <!-- GUIs -->
-    <script src="gui/loading.lua" type="client" cache="false"/>
-    <script src="gui/notification.lua" type="client" cache="false"/>
-    <script src="gui/login.lua" type="client" cache="false"/>
+    <script src="gui/loading.lua" type="client"/>
+    <script src="gui/notification.lua" type="client"/>
+    <script src="gui/login.lua" type="client"/>
 
     <!-- Modules: Game -->
-    <script src="modules/game/shared/index.lua" type="shared" cache="false"/>
-    <script src="modules/game/shared/exports.lua" type="shared" cache="false"/>
-    <script src="modules/game/client/index.lua" type="client" cache="false"/>
-    <script src="modules/game/client/exports.lua" type="client" cache="false"/>
+    <script src="modules/game/shared/index.lua" type="shared"/>
+    <script src="modules/game/shared/exports.lua" type="shared"/>
+    <script src="modules/game/client/index.lua" type="client"/>
+    <script src="modules/game/client/exports.lua" type="client"/>
     <export function="getServerTick" type="shared"/>
     <export function="getNativeWeather" type="shared"/>
     <export function="getTime" type="shared"/>
@@ -31,8 +31,8 @@
     <export function="isUIVisible" type="client"/>
 
     <!-- Modules: Player -->
-    <script src="modules/player/shared/index.lua" type="shared" cache="false"/>
-    <script src="modules/player/shared/exports.lua" type="shared" cache="false"/>
+    <script src="modules/player/shared/index.lua" type="shared"/>
+    <script src="modules/player/shared/exports.lua" type="shared"/>
     <script src="modules/player/server/index.lua" type="server"/>
     <script src="modules/player/server/exports.lua" type="server"/>
     <export function="isPlayerInitialized" type="shared"/>
@@ -44,8 +44,8 @@
     <export function="getPlayerFromSerial" type="server"/>
 
     <!-- Modules: Character -->
-    <script src="modules/character/shared/index.lua" type="shared" cache="false"/>
-    <script src="modules/character/shared/exports.lua" type="shared" cache="false"/>
+    <script src="modules/character/shared/index.lua" type="shared"/>
+    <script src="modules/character/shared/exports.lua" type="shared"/>
     <script src="modules/character/server/index.lua" type="server"/>
     <script src="modules/character/server/exports.lua" type="server"/>
     <script src="modules/character/server/saver.lua" type="server"/>
@@ -73,8 +73,8 @@
     <export function="saveCharacterProgress" type="server"/>
 
     <!-- Modules: Inventory -->
-    <script src="modules/inventory/shared/index.lua" type="shared" cache="false"/>
-    <script src="modules/inventory/shared/exports.lua" type="shared" cache="false"/>
+    <script src="modules/inventory/shared/index.lua" type="shared"/>
+    <script src="modules/inventory/shared/exports.lua" type="shared"/>
     <script src="modules/inventory/server/index.lua" type="server"/>
     <script src="modules/inventory/server/exports.lua" type="server"/>
     <export function="fetchInventoryItem" type="shared"/>
@@ -101,7 +101,8 @@
     <export function="getInventoryItemData" type="server"/>
 
     <!-- Handlers -->
-    <script src="handlers/hud/player.lua" type="client" cache="false"/>
+    <!--script src="handlers/hud/chatbox.lua" type="server"/-->
+    <script src="handlers/hud/player.lua" type="client"/>
     <script src="handlers/resumer.lua" type="server"/>
     <script src="handlers/wasted.lua" type="server"/>
 
