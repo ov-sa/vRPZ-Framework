@@ -617,7 +617,7 @@ loginUI.renderUI = function(renderData)
                 imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.iconTexture, 0, 0, 0, imports.tocolor(loginUI.phases[2].options.iconColor[1], loginUI.phases[2].options.iconColor[2], loginUI.phases[2].options.iconColor[3], loginUI.phases[2].options.iconColor[4]*j.animAlphaPercent), false)
                 if isToolTipVisible then
                     local tooltip_offsetX = loginUI.phases[2].options.startX + loginUI.phases[2].options.size
-                    imports.beautify.native.drawText(j.tooltip.text, tooltip_offsetX, j.startY + loginUI.phases[2].options.size, tooltip_offsetX + tooltip_width, j.startY + loginUI.phases[2].options.size, loginUI.phases[2].options.tooltipFontColor, 1, loginUI.phases[2].options.tooltipFont, "center", "center", true)
+                    imports.beautify.native.drawText(j.tooltip.text, tooltip_offsetX, j.startY, tooltip_offsetX + tooltip_width, j.startY + loginUI.phases[2].options.size, loginUI.phases[2].options.tooltipFontColor, 1, loginUI.phases[2].options.tooltipFont, "center", "center", true)
                 end
             end
         elseif loginUI.phase == 3 then
