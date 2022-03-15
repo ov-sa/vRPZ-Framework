@@ -239,6 +239,6 @@ end
 
 imports.addEventHandler("onClientElementDestroy", root, function()
     shader:clearElementBuffer(source)
-    object:clearElementBuffer(source)
+    dummy:clearElementBuffer(source)
     bone:clearElementBuffer(source)
 end)
