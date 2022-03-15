@@ -93,4 +93,38 @@ else
         loot.buffer.loot[lootType][self] = true
         return self.lootInstance
     end
+
+    function loot:refresh(lootType)
+        if self == loot then
+            thread:create(function(cThread)
+                if loot.buffer.loot[lootType] then
+                    for i, j in imports.pairs(loot.buffer.loot[lootType]) do
+                        if j then i:refresh() end
+                        thread.pause()
+                    end
+                else
+                    for i = 1, #FRAMEWORK_CONFIGS["Loots"][lootType], 1 do
+                        local cLoot loot:create(lootType, i)
+                        cLoot:refresh()
+                        thread.pause()
+                    end
+                end
+            end):resume({
+                executions = syncSettings.syncRate,
+                frames = 1
+            })
+        else
+            --TODO: REFRESH ONLY INSTANCE
+            if not lootInstance or not lootItems then return false end
+            imports.setElementData(lootInstance, "Inventory:Slots", imports.math.random(FRAMEWORK_CONFIGS["Loots"][lootType].inventoryWeight[1], FRAMEWORK_CONFIGS["Loots"][lootType].inventoryWeight[2]))
+            for i = 1, #lootItems, 1 do
+                local j = lootItems[i]
+                imports.setElementData(lootInstance, "Item:"..j.name, imports.math.random(j.amount[1], j.amount[2]))
+                if j.ammo then --TODO: CHEKC IF ITS WEAPON..
+                    local ammoName = exports.player_handler:getammoName(j.name) --TODO: CHANE..
+                    imports.setElementData(lootInstance, "Item:"..ammoName, imports.math.random(j.ammo[1], j.ammo[2]))
+                end
+            end
+        end
+    end
 end

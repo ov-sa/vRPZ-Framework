@@ -9,7 +9,6 @@
     <script src="settings/shared.lua" type="shared"/>
 
     <!-- Handlers -->
-    <script src="handlers/server.lua" type="server"/>
     <script src="handlers/client.lua" type="client"/>
 
     <!-- Params: refreshGroundLoot(lootType) | Returns Boolean -->
