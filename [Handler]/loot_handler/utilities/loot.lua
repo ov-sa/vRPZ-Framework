@@ -75,18 +75,18 @@ end
 
 if localPlayer then
     imports.addEvent("Loot_Handler:onRecieveLoot", true)
-    imports.addEventHandler("Loot_Handler:onRecieveLoot", root, function(lootType, lootData, colInstance)
-        local cLoot = loot:create(lootType, lootData)
+    imports.addEventHandler("Loot_Handler:onRecieveLoot", root, function(lootPack, lootType, lootData, colInstance)
+        local cLoot = loot:create(lootPack, lootType, lootData)
         cLoot.colInstance = colInstance
         loot.buffer.loot[(cLoot.colInstance)] = cLoot
         imports.attachElements(cLoot.lootInstance, cLoot.colInstance)
     end)
 
-    function loot:load(lootType, lootData)
+    function loot:load(lootPack, lootType, lootData)
         if not self or (self == loot) then return false end
-        if not lootType or not lootData then return false end
+        if not lootPack or not lootType or not lootData then return false end
         self.lootType = lootType
-        self.lootInstance = assetify.createDummy("object", lootType, lootData)
+        self.lootInstance = assetify.createDummy(lootPack, lootType, lootData)
         if not self.lootInstance then return false end
         loot.buffer.element[(self.lootInstance)] = self
         return self.lootInstance
@@ -119,7 +119,7 @@ else
         if not self or (self == loot) then return false end
         if not FRAMEWORK_CONFIGS["Loots"][lootType] then return false end
         local lootData = FRAMEWORK_CONFIGS["Loots"][lootType][lootIndex]
-        self.lootType, self.lootIndex = lootType, lootIndex
+        self.lootPack, self.lootType, self.lootIndex = FRAMEWORK_CONFIGS["Loots"][lootType].pack, lootType, lootIndex
         self.lootInstance = imports.createMarker(lootData.position.x, lootData.position.y, lootData.position.z, "cylinder", FRAMEWORK_CONFIGS["Loots"][lootType].size, 0, 0, 0, 0)
         imports.setElementData(self.lootInstance, "Loot:Type", lootType)
         imports.setElementData(self.lootInstance, "Loot:Name", FRAMEWORK_CONFIGS["Loots"][lootType].name)
@@ -193,7 +193,7 @@ else
         thread:create(function(cThread)
             for i, j in imports.pairs(loot.buffer.element) do
                 if i and j then
-                    imports.triggerClientEvent(source, "Loot_Handler:onRecieveLoot", source, j.lootType, FRAMEWORK_CONFIGS["Loots"][(j.lootType)][(j.lootIndex)], j.lootInstance)
+                    imports.triggerClientEvent(source, "Loot_Handler:onRecieveLoot", source, j.lootPack, j.lootType, FRAMEWORK_CONFIGS["Loots"][(j.lootType)][(j.lootIndex)], j.lootInstance)
                 end
                 thread.pause()
             end
