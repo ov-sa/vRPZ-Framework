@@ -15,7 +15,9 @@
 
 local imports = {
     type = type,
-    pairs = pairs
+    pairs = pairs,
+    createMarker = createMarker,
+    math = math
 }
 
 
@@ -34,17 +36,16 @@ local function createGroundLoot(lootType)
 
     if not lootType or not availableLoots[lootType] then return false end
 
-    Async:setPriority("low")
     buffer[lootType] = {}
-    Async:foreach(availableLoots[lootType], function(j)
-        local marker = Marker(j.x, j.y, j.z, "cylinder", 2, 0, 0, 0, 0)
-        marker:setData("Loot:Type", "groundloot")
-        marker:setData("Loot:Name", tostring(availableLoots[lootType].lootName))
-        marker:setData("Loot:Locked", availableLoots[lootType].lockedStatus)
-        marker:setData("Inventory:Slots", math.random(1, 6))
+    for i = 1, #availableLoots[lootType], 1 do
+        local j = availableLoots[lootType][i]
+        local marker = imports.createMarker(j.x, j.y, j.z, "cylinder", availableLoots[lootType].lootSize, 0, 0, 0, 0)
+        marker:setData("Loot:Type", lootType)
+        marker:setData("Loot:Name", availableLoots[lootType].lootName)
+        marker:setData("Loot:Locked", availableLoots[lootType].lootLock)
+        marker:setData("Inventory:Slots", imports.math.random(availableLoots[lootType].inventorySize[1], availableLoots[lootType].inventorySize[2]))
         marker:setData("Element:Parent", marker)
-        table.insert(buffer[lootType], marker)
-
+        buffer[lootType][marker] = true
         local generatedItems = {}
         local itemsCount = math.random(1, 2)
         local tempList = table.copy(availableLoots[lootType].lootItems, true)
@@ -65,9 +66,7 @@ local function createGroundLoot(lootType)
                 end
             end
         end
-    end, function()
-        triggerEvent("onAsyncLoadGroundLoots", root, lootType)
-    end)
+    end
     return true
 
 end
