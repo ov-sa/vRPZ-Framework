@@ -81,7 +81,7 @@ loginUI = {
                 startX = 5, startY = 5,
                 paddingX = 5, paddingY = 5,
                 size = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.size, iconSize = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconSize,
-                tooltipFont = FRAMEWORK_FONTS[6], tooltipFontColor = imports.tocolor(imports.unpackColor(loginUI.phases[2].options.iconColor)),
+                tooltipFont = FRAMEWORK_FONTS[6], tooltipFontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconColor)),
                 iconColor = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconColor,
                 bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.bgColor)),
                 {iconTexture = imports.beautify.assets["images"]["arrow/left.rw"], tooltip = {identifier = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.tooltips.previous}, exec = function() loginUI.phases[2].manageCharacter("previous") end},
