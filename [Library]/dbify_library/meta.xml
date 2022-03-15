@@ -1,6 +1,6 @@
 <meta>
 
-    <info author="vStudio" name="DBify Library" type="Library" version="1.0.4"/>
+    <info author="vStudio" name="DBify Library" type="Library" version="1.0.5"/>
 
     <!-- Settings & Utilities -->
     <script src="utilities/server.lua" type="server"/>
