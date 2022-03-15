@@ -15,7 +15,8 @@
 
 local imports = {
     resourceName = getResourceName(getThisResource()),
-    table = table
+    table = table,
+    file = file
 }
 
 
@@ -23,7 +24,7 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-local bundlerData = false
+local bundlerData, threaderData = false, false
 
 
 -----------------------------------
@@ -44,12 +45,27 @@ function fetchImports(recieveData)
     end
 end
 
+function fetchThreader(recieveData)
+    if not bundlerData then return false end
+    if recieveData == true then
+        return bundlerData
+    else
+        return [[
+        local importList = call(getResourceFromName("]]..imports.resourceName..[["), "fetchImports", true)
+        for i = 1, #importList, 1 do
+            loadstring(importList[i])()
+        end
+        ]]
+    end
+end
+
 
 -----------------------------------
 --[[ Function: Bundles Library ]]--
 -----------------------------------
 
 function onBundleLibrary()
+    threaderData = imports.file.read("utilities/thread.lua")
     local importedModules = {
         bundler = [[
             assetify = {
