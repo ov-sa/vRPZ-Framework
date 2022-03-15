@@ -3,17 +3,18 @@
      Script: handlers: server.lua
      Server: -
      Author: vStudio
-     Developer: -
+     Developer(s): Tron
      DOC: 15/03/2022
      Desc: Loot Handler ]]--
 ----------------------------------------------------------------
+
 
 
 -------------------
 --[[ Variables ]]--
 -------------------
 
-local createdgroundLoots = {}
+local buffer = {}
 
 
 ---------------------------------------
