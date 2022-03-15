@@ -83,12 +83,9 @@ function dummy:unload()
     return true
 end
 
-function dummy:stream(dummyData)
+function dummy:stream()
     if not self or (self == dummy) then return false end
-    if not dummyData then return false end
-    self.element = element
-    imports.setElementCollisionsEnabled(element, false)
-    self.cStreamer = streamer:create(element, "dummy", {parent})
-    dummy.buffer[element] = self
+    if self.cStreamer or not self.cModelInstance or not self.cCollisionInstance then return false end
+    self.cStreamer = streamer:create(self.cModelInstance, "dummy", {self.cCollisionInstance})
     return true
 end
