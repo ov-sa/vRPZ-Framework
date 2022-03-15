@@ -655,7 +655,7 @@ loginUI.renderUI = function(renderData)
             loginUI.phases[3].navigator.animAlphaPercent = loginUI.phases[3].navigator.animAlphaPercent or 0.25
             if loginUI.phases[3].navigator.hoverStatus == "forward" then
                 if loginUI.phases[3].navigator.animAlphaPercent < 1 then
-                    loginUI.phases[3].navigator.animAlphaPercent = imports.interpolateBetween(loginUI.phases[3].navigator.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].navigator.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator.hoverDuration), "Linear"))
+                    loginUI.phases[3].navigator.animAlphaPercent = imports.interpolateBetween(loginUI.phases[3].navigator.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].navigator.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator.hoverDuration), "Linear")
                 end
             else
                 if loginUI.phases[3].navigator.animAlphaPercent > 0.25 then
