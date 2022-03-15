@@ -1,7 +1,6 @@
 <meta>
 
     <info author="vStudio" name="Resource Loader" type="Handler" version="1.0.0"/>
-    <oop>true</oop>
 
     <include resource="config_loader"/>
     <include resource="cinecam_handler"/>
