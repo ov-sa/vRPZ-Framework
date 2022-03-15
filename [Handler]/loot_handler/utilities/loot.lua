@@ -14,6 +14,7 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
     isElement = isElement,
     destroyElement = destroyElement,
     setmetatable = setmetatable,
