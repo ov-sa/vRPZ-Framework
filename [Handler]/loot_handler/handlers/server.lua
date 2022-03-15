@@ -9,6 +9,15 @@
 ----------------------------------------------------------------
 
 
+-----------------
+--[[ Imports ]]--
+-----------------
+
+local imports = {
+    type = type,
+    pairs = pairs
+}
+
 
 -------------------
 --[[ Variables ]]--
@@ -26,7 +35,7 @@ local function createGroundLoot(lootType)
     if not lootType or not availableLoots[lootType] then return false end
 
     Async:setPriority("low")
-    createdgroundLoots[lootType] = {}
+    buffer[lootType] = {}
     Async:foreach(availableLoots[lootType], function(j)
         local marker = Marker(j.x, j.y, j.z, "cylinder", 2, 0, 0, 0, 0)
         marker:setData("Loot:Type", "groundloot")
@@ -34,7 +43,7 @@ local function createGroundLoot(lootType)
         marker:setData("Loot:Locked", availableLoots[lootType].lockedStatus)
         marker:setData("Inventory:Slots", math.random(1, 6))
         marker:setData("Element:Parent", marker)
-        table.insert(createdgroundLoots[lootType], marker)
+        table.insert(buffer[lootType], marker)
 
         local generatedItems = {}
         local itemsCount = math.random(1, 2)
@@ -68,23 +77,15 @@ end
 --[[ Function: Refreshes Ground Loot ]]--
 -----------------------------------------
 
-function refreshGroundLoot(lootType)
-
+function refreshLoots(lootType)
     if not lootType or not availableLoots[lootType] then return false end
-
-    if createdgroundLoots[lootType] then
-        Async:setPriority("low")
-        Async:foreach(createdgroundLoots[lootType], function(j)
-            if j and isElement(j) then
-                j:destroy()
+    if buffer[lootType] then
+        for i, j in imports.pairs(buffer[lootType]) do
+            if i and imports.isElement(i) then
+                imports.destroyElement(i)
             end
-        end, function()
-            createdgroundLoots[lootType] = nil
-            createGroundLoot(lootType)
-        end)
-    else
-        createGroundLoot(lootType)
+        end
+        buffer[lootType] = nil
     end
     return true
-
 end
