@@ -36,7 +36,7 @@ local buffer = {}
 
 function refreshLoot(lootMarker, lootItems)
     if not lootMarker or not lootItems then return false end
-    imports.setElementData(lootMarker, "Inventory:Slots", imports.math.random(availableLoots[lootType].inventorySize[1], availableLoots[lootType].inventorySize[2]))
+    imports.setElementData(lootMarker, "Inventory:Slots", imports.math.random(FRAMEWORK_CONFIGS["Loots"][lootType].inventoryWeight[1], FRAMEWORK_CONFIGS["Loots"][lootType].inventoryWeight[2]))
     for i = 1, #lootItems, 1 do
         local j = lootItems[i]
         imports.setElementData(lootMarker, "Item:"..j.name, imports.math.random(j.amount[1], j.amount[2]))
@@ -48,25 +48,37 @@ function refreshLoot(lootMarker, lootItems)
 end
 
 function refreshLoots(lootType)
-    if not lootType or not availableLoots[lootType] then return false end
+    if not lootType or not FRAMEWORK_CONFIGS["Loots"][lootType] then return false end
     buffer[lootType] = buffer[lootType] or {}
     if buffer[lootType] then
-        for i, j in imports.pairs(buffer[lootType]) do
-            if i and imports.isElement(i) then
-                --TODO: RESET INVENTORY OF THE LOOT..
-                refreshLoot(lootMarker, availableLoots[lootType].lootItems)
+        thread:create(function(cThread)
+            for i, j in imports.pairs(buffer[lootType]) do
+                if i and imports.isElement(i) then
+                    --TODO: RESET INVENTORY OF THE LOOT..
+                    refreshLoot(lootMarker, FRAMEWORK_CONFIGS["Loots"][lootType].lootItems)
+                end
+                thread.pause()
             end
-        end
+        end):resume({
+            executions = syncSettings.syncRate,
+            frames = 1
+        })
     else
-        for i = 1, #availableLoots[lootType], 1 do
-            local j = availableLoots[lootType][i]
-            local lootMarker = imports.createMarker(j.x, j.y, j.z, "cylinder", availableLoots[lootType].lootSize, 0, 0, 0, 0)
-            imports.setElementData(lootMarker, "Loot:Type", lootType)
-            imports.setElementData(lootMarker, "Loot:Name", availableLoots[lootType].lootName)
-            imports.setElementData(lootMarker, "Loot:Locked", availableLoots[lootType].lootLock)
-            buffer[lootType][lootMarker] = true
-            refreshLoot(lootMarker, availableLoots[lootType].lootItems)
-        end
+        thread:create(function(cThread)
+            for i = 1, #FRAMEWORK_CONFIGS["Loots"][lootType], 1 do
+                local j = FRAMEWORK_CONFIGS["Loots"][lootType][i]
+                local lootMarker = imports.createMarker(j.x, j.y, j.z, "cylinder", FRAMEWORK_CONFIGS["Loots"][lootType].lootSize, 0, 0, 0, 0)
+                imports.setElementData(lootMarker, "Loot:Type", lootType)
+                imports.setElementData(lootMarker, "Loot:Name", FRAMEWORK_CONFIGS["Loots"][lootType].lootName)
+                imports.setElementData(lootMarker, "Loot:Locked", FRAMEWORK_CONFIGS["Loots"][lootType].lootLock)
+                buffer[lootType][lootMarker] = true
+                refreshLoot(lootMarker, FRAMEWORK_CONFIGS["Loots"][lootType].lootItems)
+                thread.pause()
+            end
+        end):resume({
+            executions = syncSettings.syncRate,
+            frames = 1
+        })
     end
     return true
 end

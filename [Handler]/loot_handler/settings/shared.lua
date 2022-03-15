@@ -13,8 +13,11 @@
 --[[ Settings ]]--
 ------------------
 
-librarySettings = {
-    buildRate = 500
+syncSettings = {
+    syncRate = 500
 }
 
-availableLoots = exports.config_loader:getConfigData("loot_spawnpoints")
+FRAMEWORK_CONFIGS = {
+    ["Loots"] = exports.config_loader:getConfig("Loots"),
+    ["Inventory"] = exports.config_loader:getConfig("Inventory")
+}
