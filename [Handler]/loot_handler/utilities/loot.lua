@@ -145,7 +145,7 @@ else
                         local cLoot = loot:create(lootType, i)
                         for k, v in imports.pairs(loot.loadedClients) do
                             if k and v then
-                                imports.triggerClientEvent(source, "Loot_Handler:onRecieveLoot", source, cLoot.lootType, FRAMEWORK_CONFIGS["Loots"][(cLoot.lootType)][(cLoot.lootIndex)], cLoot.lootInstance)
+                                imports.triggerClientEvent(k, "Loot_Handler:onRecieveLoot", k, cLoot.lootType, FRAMEWORK_CONFIGS["Loots"][(cLoot.lootType)][(cLoot.lootIndex)], cLoot.lootInstance)
                             end
                         end
                         cLoot:refresh()
@@ -194,9 +194,10 @@ else
     imports.addEventHandler("Loot_Handler:onRequestLoots", root, function()
         loot.loadedClients[source] = true
         thread:create(function(cThread)
+            local player = source
             for i, j in imports.pairs(loot.buffer.element) do
                 if i and j then
-                    imports.triggerClientEvent(source, "Loot_Handler:onRecieveLoot", source, j.lootPack, j.lootType, FRAMEWORK_CONFIGS["Loots"][(j.lootType)][(j.lootIndex)], j.lootInstance)
+                    imports.triggerClientEvent(player, "Loot_Handler:onRecieveLoot", player, j.lootPack, j.lootType, FRAMEWORK_CONFIGS["Loots"][(j.lootType)][(j.lootIndex)], j.lootInstance)
                 end
                 thread.pause()
             end
