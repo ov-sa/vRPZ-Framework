@@ -83,13 +83,13 @@ loginUI = {
                 size = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.size, iconSize = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconSize,
                 iconColor = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconColor,
                 bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.bgColor)),
-                {iconTexture = imports.beautify.assets["images"]["arrow/left.rw"], hover = "Previous", exec = function() loginUI.phases[2].manageCharacter("previous") end},
-                {iconTexture = imports.beautify.assets["images"]["arrow/right.rw"], hover = "Next", exec = function() loginUI.phases[2].manageCharacter("next") end},
-                {iconTexture = imports.beautify.assets["images"]["canvas/pick.rw"], hover = "Pick", exec = function() loginUI.phases[2].manageCharacter("pick") end},
-                {iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"], hover = "Create", exec = function() loginUI.phases[2].manageCharacter("create") end},
-                {iconTexture = imports.beautify.assets["images"]["canvas/minus.rw"], hover = "Delete", exec = function() loginUI.phases[2].manageCharacter("delete") end},
-                {iconTexture = imports.beautify.assets["images"]["canvas/save.rw"], hover = "Save", exec = function() loginUI.phases[2].manageCharacter("save") end},
-                {iconTexture = imports.beautify.assets["images"]["canvas/back.rw"], hover = "Exit", exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end}
+                {iconTexture = imports.beautify.assets["images"]["arrow/left.rw"], tooltip = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.tooltips.previous, exec = function() loginUI.phases[2].manageCharacter("previous") end},
+                {iconTexture = imports.beautify.assets["images"]["arrow/right.rw"], tooltip = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.tooltips.next, exec = function() loginUI.phases[2].manageCharacter("next") end},
+                {iconTexture = imports.beautify.assets["images"]["canvas/pick.rw"], tooltip = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.tooltips.pick, exec = function() loginUI.phases[2].manageCharacter("pick") end},
+                {iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"], tooltip = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.tooltips.create, exec = function() loginUI.phases[2].manageCharacter("create") end},
+                {iconTexture = imports.beautify.assets["images"]["canvas/minus.rw"], tooltip = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.tooltips.delete, exec = function() loginUI.phases[2].manageCharacter("delete") end},
+                {iconTexture = imports.beautify.assets["images"]["canvas/save.rw"], tooltip = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.tooltips.save, exec = function() loginUI.phases[2].manageCharacter("save") end},
+                {iconTexture = imports.beautify.assets["images"]["canvas/back.rw"], tooltip = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.tooltips.back, exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end}
             },
             categories = {
                 paddingX = 20, paddingY = 5,

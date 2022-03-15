@@ -88,6 +88,15 @@ configVars["UI"]["Login"] = {
                 iconColor = {255, 255, 255, 255},
                 bgColor = {0, 0, 0, 255},
                 hoverDuration = 2750,
+                tooltips = {
+                    previous = {["EN"] = "Previous", ["TR"] = "Öncesi"},
+                    next = {["EN"] = "Next", ["TR"] = "Sonraki"},
+                    pick = {["EN"] = "Pick", ["TR"] = "Seçmek"},
+                    create = {["EN"] = "Create", ["TR"] = "Yaratmak"},
+                    delete = {["EN"] = "Delete", ["TR"] = "Silmek"},
+                    save = {["EN"] = "Save", ["TR"] = "Kayıt etmek"},
+                    back = {["EN"] = "Back", ["TR"] = "Geri"}
+                }
             },
             categories = {
                 height = 30,
