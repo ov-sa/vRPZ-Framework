@@ -612,7 +612,7 @@ loginUI.renderUI = function(renderData)
                         j.tooltip.animPercent = imports.interpolateBetween(j.tooltip.animPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
                     end
                 end
-                local tooltip_width = (tooltip_width and (j.tooltip.animPercent*j.tooltip.width)) or 0
+                local tooltip_width = (isToolTipVisible and (j.tooltip.animPercent*j.tooltip.width)) or 0
                 imports.beautify.native.drawRectangle(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size + tooltip_width, loginUI.phases[2].options.size, loginUI.phases[2].options.bgColor, false)
                 imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.iconTexture, 0, 0, 0, imports.tocolor(loginUI.phases[2].options.iconColor[1], loginUI.phases[2].options.iconColor[2], loginUI.phases[2].options.iconColor[3], loginUI.phases[2].options.iconColor[4]*j.animAlphaPercent), false)
                 if isToolTipVisible then
