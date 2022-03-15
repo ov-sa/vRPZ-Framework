@@ -587,8 +587,10 @@ loginUI.renderUI = function(renderData)
                 imports.beautify.native.drawRectangle(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, loginUI.phases[2].options.bgColor, false)
                 imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.iconTexture, 0, 0, 0, imports.tocolor(loginUI.phases[2].options.iconColor[1], loginUI.phases[2].options.iconColor[2], loginUI.phases[2].options.iconColor[3], loginUI.phases[2].options.iconColor[4]*j.animAlphaPercent), false)
                 if (j.tooltip.animPercent > 0) then
-                    imports.beautify.native.drawRectangle(loginUI.phases[2].options.startX + loginUI.phases[2].options.size + 5, j.startY, j.tooltip.animPercent*j.tooltip.width, loginUI.phases[2].options.size, loginUI.phases[2].options.bgColor, false)
-                    imports.beautify.native.drawText(j.tooltip.identifier[FRAMEWORK_LANGUAGE], loginUI.phases[2].options.startX + loginUI.phases[2].options.size + 5, j.startY, loginUI.phases[2].options.startX + loginUI.phases[2].options.size + 5 + j.tooltip.animPercent, j.startY + loginUI.phases[2].options.size, loginUI.phases[2].options.tooltipFontColor, 1, loginUI.phases[2].options.tooltipFont, "center", "center", true)
+                    local tooltip_offsetX, tooltip_offsetY = loginUI.phases[2].options.startX + loginUI.phases[2].options.size + loginUI.phases[2].options.paddingX, j.startY
+                    local tooltip_width, tooltip_height = j.tooltip.animPercent*j.tooltip.width, loginUI.phases[2].options.size
+                    imports.beautify.native.drawRectangle(tooltip_offsetX, tooltip_offsetY, tooltip_width, tooltip_height, loginUI.phases[2].options.bgColor, false)
+                    imports.beautify.native.drawText(j.tooltip.identifier[FRAMEWORK_LANGUAGE], tooltip_offsetX, tooltip_offsetY, tooltip_offsetX + tooltip_width, tooltip_offsetY + tooltip_height, loginUI.phases[2].options.tooltipFontColor, 1, loginUI.phases[2].options.tooltipFont, "center", "center", true)
                 end
             end
         elseif loginUI.phase == 3 then
