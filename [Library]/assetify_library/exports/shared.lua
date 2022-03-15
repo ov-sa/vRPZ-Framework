@@ -49,7 +49,7 @@ end
 function setBoneAttachment(element, ...)
     if not element or not imports.isElement(element) then return false end
     local arguments = {...}
-    return syncer:syncBoneAttachment(arguments[1], arguments[2], arguments[3])
+    return syncer:syncBoneAttachment(element, arguments[1], arguments[2])
 end
 
 function setBoneDetachment(element)
@@ -59,10 +59,11 @@ end
 
 function setBoneRefreshment(element, ...)
     if not element or not imports.isElement(element) then return false end
-    return syncer:syncBoneRefreshment(element, ...)
+    local arguments = {...}
+    return syncer:syncBoneRefreshment(element, arguments[1])
 end
 
 function clearBoneAttachment(element, ...)
     if not element or not imports.isElement(element) then return false end
-    return syncer:syncClearBoneAttachment(element, ...)
+    return syncer:syncClearBoneAttachment(element)
 end

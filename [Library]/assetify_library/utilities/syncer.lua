@@ -285,11 +285,11 @@ else
         return true
     end
 
-    function syncer:syncBoneRefreshment(targetPlayer, ...)
+    function syncer:syncBoneRefreshment(element, boneData, targetPlayer)
         if not targetPlayer then
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncBoneRefreshment(j, ...)
+                    syncer:syncBoneRefreshment(element, boneData, j)
                     thread.pause()
                 end
             end):resume({
@@ -297,7 +297,7 @@ else
                 frames = 1
             })
         else
-            imports.triggerClientEvent(targetPlayer, "Assetify:onRecieveBoneRefreshment", targetPlayer, ...)
+            imports.triggerClientEvent(targetPlayer, "Assetify:onRecieveBoneRefreshment", targetPlayer, element, boneData)
         end
         return true
     end
