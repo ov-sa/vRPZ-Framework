@@ -20,6 +20,7 @@ local imports = {
     destroyElement = destroyElement,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
+    triggerServerEvent = triggerServerEvent,
     triggerClientEvent = triggerClientEvent,
     setmetatable = setmetatable,
     createMarker = createMarker,
