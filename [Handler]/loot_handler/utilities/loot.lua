@@ -75,8 +75,8 @@ function loot:unload()
 end
 
 if localPlayer then
-    imports.addEvent("Loot_Handler:onSyncLoot", true)
-    imports.addEventHandler("Loot_Handler:onSyncLoot", root, function(lootType, lootData, colInstance)
+    imports.addEvent("Loot_Handler:onRecieveLoot", true)
+    imports.addEventHandler("Loot_Handler:onRecieveLoot", root, function(lootType, lootData, colInstance)
         local cLoot = loot:create(lootType, lootData)
         cLoot.colInstance = colInstance
         loot.buffer.loot[(cLoot.colInstance)] = cLoot
