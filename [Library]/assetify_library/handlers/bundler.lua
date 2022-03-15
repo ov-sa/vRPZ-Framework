@@ -46,17 +46,8 @@ function fetchImports(recieveData)
 end
 
 function fetchThreader(recieveData)
-    if not bundlerData then return false end
-    if recieveData == true then
-        return bundlerData
-    else
-        return [[
-        local importList = call(getResourceFromName("]]..imports.resourceName..[["), "fetchImports", true)
-        for i = 1, #importList, 1 do
-            loadstring(importList[i])()
-        end
-        ]]
-    end
+    if not threaderData then return false end
+    return threaderData
 end
 
 
