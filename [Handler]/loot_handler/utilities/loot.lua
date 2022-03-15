@@ -113,6 +113,8 @@ if localPlayer then
         loot.buffer.loot[source] = nil
     end)
 else
+    syncer.loadedClients = {}
+
     function loot:load(lootType, lootIndex)
         if not self or (self == loot) then return false end
         if not FRAMEWORK_CONFIGS["Loots"][lootType] then return false end
@@ -139,6 +141,11 @@ else
                 else
                     for i = 1, #FRAMEWORK_CONFIGS["Loots"][lootType], 1 do
                         local cLoot = loot:create(lootType, i)
+                        for k, v in imports.pairs(loot.loadedClients) do
+                            if k and v then
+                                imports.triggerClientEvent(source, "Loot_Handler:onRecieveLoot", source, cLoot.lootType, FRAMEWORK_CONFIGS["Loots"][(cLoot.lootType)][(cLoot.lootIndex)], cLoot.lootInstance)
+                            end
+                        end
                         cLoot:refresh()
                         thread.pause()
                     end
@@ -182,6 +189,7 @@ else
     end
 
     imports.addEventHandler("Loot_Handler:onRequestLoots", root, function()
+        loot.loadedClients[source] = true
         thread:create(function(cThread)
             for i, j in imports.pairs(loot.buffer.element) do
                 if i and j then
@@ -193,5 +201,9 @@ else
             executions = syncSettings.syncRate,
             frames = 1
         })
+    end)
+
+    imports.addEventHandler("onPlayerQuit", root, function()
+        loot.loadedClients[source] = nil
     end)
 end
