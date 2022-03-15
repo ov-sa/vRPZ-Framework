@@ -568,11 +568,13 @@ loginUI.renderUI = function(renderData)
                     end
                     if j.hoverStatus ~= "forward" then
                         j.hoverStatus = "forward"
+                        j.tooltipStatus = "forward"
                         j.hoverAnimTick = CLIENT_CURRENT_TICK
                     end
                 else
                     if j.hoverStatus ~= "backward" then
                         j.hoverStatus = "backward"
+                        j.tooltipStatus = "backward"
                         j.hoverAnimTick = CLIENT_CURRENT_TICK
                     end
                 end
@@ -580,7 +582,7 @@ loginUI.renderUI = function(renderData)
                 j.animTooltipPercent = j.animTooltipPercent or 0
                 j.animAlphaPercent = ((j.hoverStatus == "forward") and imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")) or imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0.35, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
                 --TODO: FLYFORKIN'S CONTIRBUTION UPDATE
-                j.animTooltipPercent = ((j.hoverStatus == "forward") and imports.interpolateBetween(j.animTooltipPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")) or imports.interpolateBetween(j.animTooltipPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
+                j.animTooltipPercent = ((j.tooltipStatus == "forward") and imports.interpolateBetween(j.animTooltipPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")) or imports.interpolateBetween(j.animTooltipPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
                 imports.beautify.native.drawRectangle(loginUI.phases[2].options.startX, j.startY, loginUI.phases[2].options.size, loginUI.phases[2].options.size, loginUI.phases[2].options.bgColor, false)
                 imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.iconTexture, 0, 0, 0, imports.tocolor(loginUI.phases[2].options.iconColor[1], loginUI.phases[2].options.iconColor[2], loginUI.phases[2].options.iconColor[3], loginUI.phases[2].options.iconColor[4]*j.animAlphaPercent), false)
                 if (j.animTooltipPercent > 0) then
