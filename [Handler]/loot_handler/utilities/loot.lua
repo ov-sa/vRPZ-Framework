@@ -95,7 +95,7 @@ if localPlayer then
     end
 
     imports.addEventHandler("onClientResourceStart", resource, function()
-        local booter = function() imports.triggerServerEvent("Assetify:onRequestLoots", localPlayer) end
+        local booter = function() imports.triggerServerEvent("Loot_Handler:onRequestLoots", localPlayer) end
         if imports.assetify.isLoaded() then
             booter()
         else
@@ -190,6 +190,7 @@ else
         return true
     end
 
+    imports.addEvent("Loot_Handler:onRequestLoots", true)
     imports.addEventHandler("Loot_Handler:onRequestLoots", root, function()
         loot.loadedClients[source] = true
         thread:create(function(cThread)
