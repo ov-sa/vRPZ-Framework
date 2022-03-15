@@ -31,7 +31,7 @@ local buffer = {}
 
 
 -----------------------------------------
---[[ Function: Refreshes Ground Loot ]]--
+--[[ Functions: Refreshes Loot/Loots ]]--
 -----------------------------------------
 
 function refreshLoot(lootMarker, lootItems)
