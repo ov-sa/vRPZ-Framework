@@ -268,11 +268,11 @@ else
         return true
     end
 
-    function syncer:syncBoneDetachment(targetPlayer)
+    function syncer:syncBoneDetachment(element, targetPlayer)
         if not targetPlayer then
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncBoneDetachment(j, ...)
+                    syncer:syncBoneDetachment(element, j)
                     thread.pause()
                 end
             end):resume({
@@ -280,7 +280,7 @@ else
                 frames = 1
             })
         else
-            imports.triggerClientEvent(targetPlayer, "Assetify:onRecieveBoneDetachment", targetPlayer, ...)
+            imports.triggerClientEvent(targetPlayer, "Assetify:onRecieveBoneDetachment", targetPlayer, element)
         end
         return true
     end
