@@ -117,16 +117,32 @@ else
         else
             if not self.lootInstance or not lootItems then return false end
             imports.setElementData(self.lootInstance, "Inventory:Slots", imports.math.random(FRAMEWORK_CONFIGS["Loots"][(self.lootType)].inventoryWeight[1], FRAMEWORK_CONFIGS["Loots"][(self.lootType)].inventoryWeight[2]))
-            for i = 1, #FRAMEWORK_CONFIGS["Loots"][(self.lootType)].lootItems, 1 do
-                local j = FRAMEWORK_CONFIGS["Loots"][(self.lootType)].lootItems[i]
-                imports.setElementData(self.lootInstance, "Item:"..j.item, imports.math.random(j.amount[1], j.amount[2]))
-                if j.ammo then
-                    local weaponAmmo = exports.player_handler:fetchInventoryWeaponAmmo(j.item)
-                    if weaponAmmo then
-                        imports.setElementData(self.lootInstance, "Item:"..weaponAmmo, imports.math.random(j.ammo[1], j.ammo[2]))
+            thread:create(function(cThread)
+                for i = 1, #FRAMEWORK_CONFIGS["Loots"][(self.lootType)].lootItems, 1 do
+                    local j = FRAMEWORK_CONFIGS["Loots"][(self.lootType)].lootItems[i]
+                    for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
+                        for k, v in imports.pairs(j) do
+                            imports.setElementData(self.lootInstance, "Item:"..k, 0)
+                            thread.pause()
+                        end
+                        thread.pause()
+                    end
+                    local itemDetails = exports.player_handler:getItem(j.item)
+                    if itemDetails then
+                    --TODO: NEED TO VERIFY IF THIS ITEM IS VALID OR NOT...
+                        imports.setElementData(self.lootInstance, "Item:"..j.item, imports.math.random(j.amount[1], j.amount[2]))
+                        if j.ammo then
+                            local weaponAmmo = exports.player_handler:fetchInventoryWeaponAmmo(j.item)
+                            if weaponAmmo then
+                                imports.setElementData(self.lootInstance, "Item:"..weaponAmmo, imports.math.random(j.ammo[1], j.ammo[2]))
+                            end
+                        end
                     end
                 end
-            end
+            end):resume({
+                executions = syncSettings.syncRate,
+                frames = 1
+            })
         end
     end
 end
