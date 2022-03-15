@@ -176,6 +176,7 @@ for i = 1, #loginUI.phases[2].options, 1 do
     j.hoverStatus = "backward"
     j.tooltipStatus = "backward"
     j.hoverAnimTick = CLIENT_CURRENT_TICK
+    --TODO: THIS MUST UPDATE DYNNAMICALLY WHEN PLAYER CHANGES LANGUAGE..
     j.tooltip = {text = j.tooltip, width = imports.beautify.native.getTextWidth(text, 1, FRAMEWORK_FONTS[8]) + 20}
 end
 loginUI.phases[2].updateUILang = function(gender)
