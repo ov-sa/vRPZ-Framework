@@ -394,6 +394,12 @@ else
                 end
                 thread.pause()
             end
+            for i, j in imports.pairs(syncer.syncedBoneAttachments) do
+                if j then
+                    syncer:syncBoneAttachment(i, j.parent, j.boneData, source)
+                end
+                thread.pause()
+            end
         end):resume({
             executions = downloadSettings.syncRate,
             frames = 1
