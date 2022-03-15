@@ -19,7 +19,8 @@ local imports = {
     destroyElement = destroyElement,
     setmetatable = setmetatable,
     createMarker = createMarker,
-    setElementData = setElementData
+    setElementData = setElementData,
+    math = math
 }
 
 
@@ -114,15 +115,16 @@ else
                 frames = 1
             })
         else
-            --TODO: REFRESH ONLY INSTANCE
-            if not lootInstance or not lootItems then return false end
-            imports.setElementData(lootInstance, "Inventory:Slots", imports.math.random(FRAMEWORK_CONFIGS["Loots"][lootType].inventoryWeight[1], FRAMEWORK_CONFIGS["Loots"][lootType].inventoryWeight[2]))
-            for i = 1, #lootItems, 1 do
-                local j = lootItems[i]
-                imports.setElementData(lootInstance, "Item:"..j.name, imports.math.random(j.amount[1], j.amount[2]))
-                if j.ammo then --TODO: CHEKC IF ITS WEAPON..
-                    local ammoName = exports.player_handler:getammoName(j.name) --TODO: CHANE..
-                    imports.setElementData(lootInstance, "Item:"..ammoName, imports.math.random(j.ammo[1], j.ammo[2]))
+            if not self.lootInstance or not lootItems then return false end
+            imports.setElementData(self.lootInstance, "Inventory:Slots", imports.math.random(FRAMEWORK_CONFIGS["Loots"][(self.lootType)].inventoryWeight[1], FRAMEWORK_CONFIGS["Loots"][(self.lootType)].inventoryWeight[2]))
+            for i = 1, #FRAMEWORK_CONFIGS["Loots"][(self.lootType)].lootItems, 1 do
+                local j = FRAMEWORK_CONFIGS["Loots"][(self.lootType)].lootItems[i]
+                imports.setElementData(self.lootInstance, "Item:"..j.name, imports.math.random(j.amount[1], j.amount[2]))
+                if j.ammo then
+                    local weaponAmmo = exports.player_handler:fetchInventoryWeaponAmmo(j.name)
+                    if ammo then
+                        imports.setElementData(self.lootInstance, "Item:"..weaponAmmo, imports.math.random(j.ammo[1], j.ammo[2]))
+                    end
                 end
             end
         end
