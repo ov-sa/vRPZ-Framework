@@ -580,36 +580,31 @@ loginUI.renderUI = function(renderData)
                     end
                     if j.hoverStatus ~= "forward" then
                         j.hoverStatus = "forward"
-                        j.tooltip.hoverStatus = "forward"
                         j.hoverAnimTick = CLIENT_CURRENT_TICK
                     end
                 else
                     if j.hoverStatus ~= "backward" then
                         j.hoverStatus = "backward"
-                        j.tooltip.hoverStatus = "backward"
                         j.hoverAnimTick = CLIENT_CURRENT_TICK
                     end
                 end
                 j.animAlphaPercent = j.animAlphaPercent or 0.35
                 j.tooltip.animPercent = j.tooltip.animPercent or 0
                 if j.hoverStatus == "forward" then
+                    isToolTipVisible = true
                     if j.animAlphaPercent < 1 then
                         j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
+                    end
+                    if j.tooltip.animPercent < 1 then
+                        j.tooltip.animPercent = imports.interpolateBetween(j.tooltip.animPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration*0.5), "Linear")
                     end
                 else
                     if j.animAlphaPercent > 0.35 then
                         j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0.35, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
                     end
-                end
-                if j.tooltip.hoverStatus == "forward" then
-                    isToolTipVisible = true
-                    if j.tooltip.animPercent < 1 then
-                        j.tooltip.animPercent = imports.interpolateBetween(j.tooltip.animPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
-                    end
-                else
                     if j.tooltip.animPercent > 0 then
                         isToolTipVisible = true
-                        j.tooltip.animPercent = imports.interpolateBetween(j.tooltip.animPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration), "Linear")
+                        j.tooltip.animPercent = imports.interpolateBetween(j.tooltip.animPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.hoverDuration*0.5), "Linear")
                     end
                 end
                 local tooltip_width = (isToolTipVisible and (j.tooltip.animPercent*j.tooltip.width)) or 0
