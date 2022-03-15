@@ -16,6 +16,7 @@ configVars["Loots"] = {
 
     ["LootCategory"] = {
         name = "Loot Name",
+        pack = "loot",
         lock = false,
         size = 2,
         items = {
