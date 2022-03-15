@@ -176,10 +176,13 @@ for i = 1, #loginUI.phases[2].options, 1 do
     j.hoverStatus = "backward"
     j.tooltipStatus = "backward"
     j.hoverAnimTick = CLIENT_CURRENT_TICK
-    --TODO: THIS MUST UPDATE DYNNAMICALLY WHEN PLAYER CHANGES LANGUAGE..
-    j.tooltip = {text = j.tooltip, width = imports.beautify.native.getTextWidth(text, 1, FRAMEWORK_FONTS[8]) + 20}
 end
 loginUI.phases[2].updateUILang = function(gender)
+    for i = 1, #loginUI.phases[2].options, 1 do
+        local j = loginUI.phases[2].options[i]
+        --TODO: THIS MUST UPDATE DYNNAMICALLY WHEN PLAYER CHANGES LANGUAGE..
+        j.tooltip = {text = j.tooltip, width = imports.beautify.native.getTextWidth(text, 1, FRAMEWORK_FONTS[8]) + 20}
+    end
     for i = 1, #loginUI.phases[2].categories, 1 do
         local j = loginUI.phases[2].categories[i]
         j.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)]["Titles"][FRAMEWORK_LANGUAGE]))
