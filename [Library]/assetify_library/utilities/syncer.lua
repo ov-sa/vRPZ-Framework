@@ -211,6 +211,7 @@ else
     syncer.loadedClients = {}
     syncer.scheduledClients = {}
     syncer.syncedElements = {}
+    syncer.syncedBoneAttachments = {}
 
     function syncer:syncHash(player, ...)
         return imports.triggerLatentClientEvent(player, "Assetify:onRecieveHash", downloadSettings.speed, false, player, ...)
@@ -251,6 +252,8 @@ else
 
     function syncer:syncBoneAttachment(element, parent, boneData, targetPlayer)
         if not targetPlayer then
+            if not element or not imports.isElement(element) or not parent or not imports.isElement(parent) or not boneData then return false end
+            syncer.syncedBoneAttachments[element] = {parent = parent, boneData = boneData}
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
                     syncer:syncBoneAttachment(element, parent, boneData, j)
@@ -268,6 +271,8 @@ else
 
     function syncer:syncBoneDetachment(element, targetPlayer)
         if not targetPlayer then
+            if not element or not imports.isElement(element) or not syncer.syncedBoneAttachments[element] then return false end
+            syncer.syncedBoneAttachments[element] = nil
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
                     syncer:syncBoneDetachment(element, j)
