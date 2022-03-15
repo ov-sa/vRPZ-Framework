@@ -55,10 +55,8 @@ end
 
 function dummy:load(assetType, assetName, dummyData)
     if not self or (self == dummy) then return false end
-    if not assetType or not assetName or not dummyData or not dummyData.position or not dummyData.rotation then return false end
-    local assetReference = availableAssetPacks[assetType] or not availableAssetPacks[assetType].rwDatas[assetName]
-    if not assetReference then return false end
-    local cAsset = assetReference.cAsset
+    if not assetType or not assetName or not dummyData or not dummyData.position or not dummyData.rotation or not availableAssetPacks[assetType] or not availableAssetPacks[assetType].rwDatas[assetName] then return false end
+    local cAsset = availableAssetPacks[assetType].rwDatas[assetName].cAsset
     if not cAsset then return false end
     dummyData.position.x, dummyData.position.y, dummyData.position.z = imports.tonumber(dummyData.position.x) or 0, imports.tonumber(dummyData.position.y) or 0, imports.tonumber(dummyData.position.z) or 0
     dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z = imports.tonumber(dummyData.position.x) or 0, imports.tonumber(dummyData.position.y) or 0, imports.tonumber(dummyData.position.z) or 0
