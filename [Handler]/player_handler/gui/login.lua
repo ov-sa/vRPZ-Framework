@@ -181,7 +181,8 @@ end
 loginUI.phases[2].updateUILang = function(gender)
     for i = 1, #loginUI.phases[2].options, 1 do
         local j = loginUI.phases[2].options[i]
-        j.tooltip.width = imports.beautify.native.getTextWidth(j.tooltip.identifier[FRAMEWORK_LANGUAGE], 1, loginUI.phases[2].options.tooltipFont) + loginUI.phases[2].options.size
+        j.tooltip.text = imports.string.upper(imports.string.spaceChars(j.tooltip.identifier[FRAMEWORK_LANGUAGE]))
+        j.tooltip.width = imports.beautify.native.getTextWidth(j.tooltip.text, 1, loginUI.phases[2].options.tooltipFont) + loginUI.phases[2].options.size
     end
     for i = 1, #loginUI.phases[2].categories, 1 do
         local j = loginUI.phases[2].categories[i]
@@ -616,7 +617,7 @@ loginUI.renderUI = function(renderData)
                 imports.beautify.native.drawImage(loginUI.phases[2].options.iconX, j.iconY, loginUI.phases[2].options.iconSize, loginUI.phases[2].options.iconSize, j.iconTexture, 0, 0, 0, imports.tocolor(loginUI.phases[2].options.iconColor[1], loginUI.phases[2].options.iconColor[2], loginUI.phases[2].options.iconColor[3], loginUI.phases[2].options.iconColor[4]*j.animAlphaPercent), false)
                 if isToolTipVisible then
                     local tooltip_offsetX = loginUI.phases[2].options.startX + loginUI.phases[2].options.size
-                    imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(j.tooltip.identifier[FRAMEWORK_LANGUAGE])), tooltip_offsetX, j.startY + loginUI.phases[2].options.size, tooltip_offsetX + tooltip_width, j.startY + loginUI.phases[2].options.size, loginUI.phases[2].options.tooltipFontColor, 1, loginUI.phases[2].options.tooltipFont, "center", "center", true)
+                    imports.beautify.native.drawText(j.tooltip.text, tooltip_offsetX, j.startY + loginUI.phases[2].options.size, tooltip_offsetX + tooltip_width, j.startY + loginUI.phases[2].options.size, loginUI.phases[2].options.tooltipFontColor, 1, loginUI.phases[2].options.tooltipFont, "center", "center", true)
                 end
             end
         elseif loginUI.phase == 3 then
