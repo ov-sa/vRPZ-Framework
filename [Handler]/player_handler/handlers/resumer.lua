@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
     tonumber = tonumber,
     tostring = tostring,
     getTickCount = getTickCount,
@@ -23,6 +24,7 @@ local imports = {
     triggerClientEvent = triggerClientEvent,
     setElementFrozen = setElementFrozen,
     setElementData = setElementData,
+    bindKey = bindKey,
     setPedStat = setPedStat,
     setPlayerNametagShowing = setPlayerNametagShowing,
     toJSON = toJSON,
@@ -75,6 +77,11 @@ end)
 imports.addEvent("Player:onToggleLoginUI", true)
 imports.addEventHandler("Player:onToggleLoginUI", root, function()
     local serial = CPlayer.getSerial(source)
+    for i, j in imports.pairs(availableChatBox) do
+        if j and j.bindKey and j.cmd then
+            imports.bindKey(source, j.bind, "down", "chatbox", j.cmd)
+        end
+    end
     for i = 69, 79, 1 do
         imports.setPedStat(source, i, 1000)
     end

@@ -12,6 +12,7 @@
 
 local imports = {
     pairs = pairs,
+    isElement = isElement,
     unbindKey = unbindKey,
     bindKey = bindKey
 }
@@ -183,23 +184,3 @@ addCommandHandler(groupChatCMD, function(player, cmd, ...)
     outputServerLog("["..chatType.."] "..playerName..": "..message)
 
 end, false, false)
-
-
-----------------------------------------
---[[ Function: Binds Server's Chats ]]--
-----------------------------------------
-
-function bindServerChat(player)
-
-    if not player or not isElement(player) or player:getType() ~= "player" then return false end
-
-    for i, j in imports.pairs(availableChatBox) do
-        if j and j.bindKey and j.cmd then
-            imports.bindKey(player, j.bind, "down", "chatbox", j.cmd)
-            imports.bindKey(player, j.bind, "down", "chatbox", j.cmd)
-        end
-    end
-
-    return true
-
-end
