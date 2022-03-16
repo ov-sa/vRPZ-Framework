@@ -1,7 +1,6 @@
 <meta>
 
     <info author="vStudio" name="Config Loader" type="Handler" version="1.0.0"/>
-    <oop>true</oop>
 
     <!-- Exports -->
     <script src="exports/shared.lua" type="shared"/>
