@@ -9,9 +9,28 @@
 
 
 -----------------
+--[[ Imports ]]--
+-----------------
+
+local imports = {
+    addEvent = addEvent,
+    addEventHandler = addEventHandler
+}
+
+
+-----------------
 --[[ Exports ]]--
 -----------------
 
 function isPlayerInitialized(...) return CPlayer.isInitialized(...) end
 function getPlayerChannel(...) return CPlayer.getChannel(...) end
---TODO:  ADD EVENT TO RECIEVE SYNC FOR CHANNEL
+
+
+----------------
+--[[ Events ]]--
+----------------
+
+if localPlayer then
+    imports.addEvent("Client:onUpdateChannel", true)
+    imports.addEventHandler("Client:onUpdateChannel", root, function(...) CPlayer.setChannel(localPlayer, ...) end)
+end
