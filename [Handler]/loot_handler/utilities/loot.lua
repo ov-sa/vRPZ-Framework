@@ -68,10 +68,12 @@ end
 function loot:unload()
     if not self or (self == loot) then return false end
     if self.lootInstance then
+        loot.buffer.element[(self.lootInstance)] = nil
         imports.destroyElement(self.lootInstance)
     end
-    loot.buffer.element[self] = nil
-    loot.buffer.loot[(self.lootType)][self] = nil
+    if loot.buffer.loot[(self.lootType)] then
+        loot.buffer.loot[(self.lootType)][self] = nil
+    end
     self = nil
     return true
 end
@@ -82,7 +84,7 @@ if localPlayer then
         local cLoot = loot:create(lootPack, lootType, lootData)
         if cLoot then
             cLoot.colInstance = colInstance
-            loot.buffer.loot[(cLoot.colInstance)] = cLoot
+            loot.buffer.element[(cLoot.colInstance)] = cLoot
             imports.attachElements(cLoot.lootInstance, cLoot.colInstance)
         end
     end)
@@ -112,10 +114,9 @@ if localPlayer then
     end)
 
     imports.addEventHandler("onClientElementDestroy", resourceRoot, function()
-        if loot.buffer.loot[source] then
-            loot.buffer.loot[source]:destroy()
+        if loot.buffer.element[source] then
+            loot.buffer.element[source]:destroy()
         end
-        loot.buffer.loot[source] = nil
     end)
 else
     loot.loadedClients = {}
