@@ -27,9 +27,9 @@ local imports = {
 }
 
 
--------------------
---[[ Utilities ]]--
--------------------
+-------------------------------
+--[[ Event: On Player Chat ]]--
+-------------------------------
 
 imports.addEventHandler("onPlayerChat", root, function(message, messageType)
     imports.cancelEvent()
@@ -62,7 +62,12 @@ imports.addEventHandler("onPlayerChat", root, function(message, messageType)
     imports.outputServerLog("["..(channelData.name).."] "..playerName..": "..message)
 end)
 
-imports.bindKey(FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Channel_ShuffleKey"], "down", function(player)
+
+---------------------------------------------
+--[[ Function: Shuffles Player's Channel ]]--
+---------------------------------------------
+
+function shufflePlayerChannel(player)
     if CPlayer.isInitialized(player) then return false end
-    CPlayer.setChannel(source, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][(CPlayer.getChannel(source) + 1)] or 1)
-end)
+    return CPlayer.setChannel(source, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][(CPlayer.getChannel(source) + 1)] or 1)
+end
