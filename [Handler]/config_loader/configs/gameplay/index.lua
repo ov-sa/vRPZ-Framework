@@ -31,6 +31,20 @@ configVars = {
         ["Game_Type"] = "vRPZ",
         ["Game_Map"] = "vRPZ : SA",
         ["Disabled_CMDS"] = {"register", "logout"},
+
+        ["Chatbox"] = {
+            ["Chats"] = {
+                ["Global"] = {
+                    bind = "u"
+                },
+                ["Local"] = {
+                    isLocal = true
+                },
+                ["Group"] = {
+                    bind = "y"
+                }
+            }
+        },
     
         ["Character"] = {
             ["Max_Blood"] = 1000,
