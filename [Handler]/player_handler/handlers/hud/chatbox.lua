@@ -12,21 +12,7 @@
 
 local imports = {
     pairs = pairs,
-    isElement = isElement,
-    unbindKey = unbindKey,
-    bindKey = bindKey
-}
-
-local availableChatBox = {
-    ["Global"] = {
-        bind = "u"
-    },
-    ["Local"] = {
-        isLocal = true
-    },
-    ["Group"] = {
-        bind = "y",
-    }
+    isElement = isElement
 }
 
 
