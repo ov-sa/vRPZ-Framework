@@ -38,7 +38,7 @@ local imports = {
 -------------------
 
 local cache = {
-    resumeBuffer = {}
+    resumeTicks = {}
 }
 
 
@@ -145,7 +145,7 @@ end)
 --[[ Player: On Resume ]]--
 ---------------------------
 
-function getResumeTick(player) return cache.resumeBuffer[player] or false end
+function getResumeTick(player) return cache.resumeTicks[player] or false end
 
 imports.addEvent("Player:onResume", true)
 imports.addEventHandler("Player:onResume", root, function(character, characters)
@@ -180,7 +180,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         end
     end
     imports.collectgarbage()
-    cache.resumeBuffer[source] = imports.getTickCount()
+    cache.resumeTicks[source] = imports.getTickCount()
     imports.triggerClientEvent(source, "Player:onSyncWeather", source, serverWeather, serverTime)
     imports.triggerEvent("Player:onSpawn", source, CCharacter.CBuffer[characterID].location, true)
 end)
