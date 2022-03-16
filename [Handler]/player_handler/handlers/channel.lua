@@ -68,5 +68,10 @@ end)
 
 function shufflePlayerChannel(player)
     if CPlayer.isInitialized(player) then return false end
-    return CPlayer.setChannel(player, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][(CPlayer.getChannel(player) + 1)] or 1)
+    local channelIndex = FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][(CPlayer.getChannel(player) + 1)] or 1
+    if CPlayer.setChannel(player, channelIndex) then
+        imports.outputChatBox("━ Channel "..FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][channelIndex].name, player, 200, 200, 200)
+        return true
+    end
+    return false
 end
