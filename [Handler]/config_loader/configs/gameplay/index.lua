@@ -40,27 +40,27 @@ configVars = {
                 {
                     name = "Local",
                     tagColor = "#00FF00",
-                    messageColor = "#C8C8C8"
+                    messageColor = "#95FF95"
                 },
                 {
                     name = "Global",
                     tagColor = "#FFC800",
-                    messageColor = "#C8C8C8"
+                    messageColor = "#FAE38C"
                 },
                 {
                     name = "Group",
                     tagColor = "#FF7F27",
-                    messageColor = "#C8C8C8"
+                    messageColor = "#FF954F"
                 },
                 {
                     name = "Party",
                     tagColor = "#FF5050",
-                    messageColor = "#C8C8C8"
+                    messageColor = "#F77272"
                 },
                 {
                     name = "Regional",
                     tagColor = "#5050FF",
-                    messageColor = "#C8C8C8"
+                    messageColor = "#7272F7"
                 }
             }
         },
