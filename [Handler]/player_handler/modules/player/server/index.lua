@@ -13,10 +13,12 @@
 -----------------
 
 local imports = {
+    tonumber = tonumber,
     isElement = isElement,
     getElementType = getElementType,
     getElementsByType = getElementsByType,
     getPlayerSerial = getPlayerSerial,
+    triggerClientEvent = triggerClientEvent,
 }
 
 
