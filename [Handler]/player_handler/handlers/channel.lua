@@ -32,6 +32,7 @@ local imports = {
 
 imports.addEventHandler("onPlayerChat", root, function(message, messageType)
     imports.cancelEvent()
+    --TODO: ADD FUNCTION TO CHECK IF MESSAGE IS VALID///
     if not CPlayer.isInitialized(source) or not isValidMessage(message) or (messageType ~= 0) then return false end
     local channelIndex = CPlayer.getChannel(source)
     if not channelIndex then return false end
@@ -43,7 +44,7 @@ imports.addEventHandler("onPlayerChat", root, function(message, messageType)
     end
 
     local playerName = imports.getPlayerName(source)
-	local playerTagColor = RGBToHex(imports.getPlayerNametagColor(source))
+	local playerTagColor = RGBToHex(imports.getPlayerNametagColor(source)) --TODO: ADD FUNCTION TO CONVERT RGB TO HEX
     local playerList = false
     if channelIndex == 1 then
         playerList = imports.getElementsByType("player")

@@ -18,3 +18,4 @@ function getPlayerData(...) return CPlayer.getData(...) end
 function getPlayerSerial(...) return CPlayer.getSerial(...) end
 function getPlayerFromSerial(...) return CPlayer.getPlayer(...) end
 function setPlayerChannel(...) return CPlayer.setChannel(...) end
+--TODO:  ADD EVENT TO TRIGGER AND SYNC ON CLIENT 
