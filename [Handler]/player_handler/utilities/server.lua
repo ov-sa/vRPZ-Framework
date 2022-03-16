@@ -116,7 +116,7 @@ imports.addEventHandler("onResourceStart", resource, function()
                             CCharacter.saveProgress(source)
                             imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, true)
                             imports.triggerEvent("Player:onToggleLoginUI", source)
-                            imports.outputChatBox("#FFFFFF- #5050FF"..imports.getPlayerName(source).."#FFFFFF left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)    
+                            imports.outputChatBox("#C8C8C8- #5050FF"..imports.getPlayerName(source).."#C8C8C8 left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)    
                         end
                     end
                 end

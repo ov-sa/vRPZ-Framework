@@ -56,7 +56,7 @@ imports.addEventHandler("onPlayerChat", root, function(message, messageType)
         for i = 1, #syncPlayers, 1 do
             local j = syncPlayers[i]
             if CPlayer.isInitialized(j) then
-                imports.outputChatBox("#FFFFFF["..(channelData.tagColor)..(channelData.name).."#FFFFFF] ˧ "..playerTagColor..playerName..": "..(channelData.messageColor)..message, j, 255, 255, 255, true)
+                imports.outputChatBox("#C8C8C8["..(channelData.tagColor)..(channelData.name).."#C8C8C8] ˧ "..playerTagColor..playerName..": "..(channelData.messageColor)..message, j, 255, 255, 255, true)
             end
         end
     end
