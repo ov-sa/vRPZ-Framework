@@ -78,8 +78,8 @@ imports.addEvent("Player:onToggleLoginUI", true)
 imports.addEventHandler("Player:onToggleLoginUI", root, function()
     local serial = CPlayer.getSerial(source)
     for i, j in imports.pairs(availableChatBox) do
-        if j and j.bindKey and j.cmd then
-            imports.bindKey(source, j.bind, "down", "chatbox", j.cmd)
+        if j and j.bindKey then
+            imports.bindKey(source, j.bind, "down", "chatbox", i)
         end
     end
     for i = 69, 79, 1 do

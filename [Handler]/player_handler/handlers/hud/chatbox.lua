@@ -19,15 +19,13 @@ local imports = {
 
 local availableChatBox = {
     ["Global"] = {
-        bind = "i",
-        cmd = "global"
+        bind = "u"
     },
     ["Local"] = {
-        
+        isLocal = true
     },
     ["Group"] = {
         bind = "y",
-        cmd = "group"
     }
 }
 
