@@ -15,6 +15,7 @@
 * [Assetify Library](https://github.com/ov-sa/Assetify-Library) Integration
 * [Beautify Library](https://github.com/ov-sa/Beautify-Library) Integration
 * [Cinecam Handler](https://github.com/ov-sa/MTA-Cinecam_Handler) Integration
+* Scalable Loot Handler
 * Completely Performance-Friendly
 
 ## ━ Credits
