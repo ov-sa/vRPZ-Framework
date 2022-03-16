@@ -33,8 +33,7 @@ local imports = {
 
 imports.addEventHandler("onPlayerChat", root, function(message, messageType)
     imports.cancelEvent()
-    --TODO: ADD FUNCTION TO CHECK IF MESSAGE IS VALID///
-    if not CPlayer.isInitialized(source) or not isValidMessage(message) or (messageType ~= 0) then return false end
+    if not CPlayer.isInitialized(source) or (messageType ~= 0) then return false end
     local channelIndex = CPlayer.getChannel(source)
     if not channelIndex then return false end
     local channelData = FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][channelIndex]
