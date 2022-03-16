@@ -26,10 +26,4 @@ function setPlayerData(...) return CPlayer.setData(...) end
 function getPlayerData(...) return CPlayer.getData(...) end
 function getPlayerSerial(...) return CPlayer.getSerial(...) end
 function getPlayerFromSerial(...) return CPlayer.getPlayer(...) end
-function setPlayerChannel(player, channelIndex)
-    if CPlayer.setChannel(player, channelIndex) then
-        imports.triggerClientEvent(player, "Client:onUpdateChannel", player, channelIndex)
-        return true
-    end
-    return false
-end
+function setPlayerChannel(...) return CPlayer.setChannel(...) then
