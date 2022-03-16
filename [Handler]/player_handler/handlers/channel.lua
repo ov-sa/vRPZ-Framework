@@ -20,7 +20,6 @@ local imports = {
     getPlayerName = getPlayerName,
     getPlayerNametagColor = getPlayerNametagColor,
     isPlayerMuted = isPlayerMuted,
-    bindKey = bindKey,
     outputChatBox = outputChatBox,
     outputServerLog = outputServerLog,
     rgbToHex = rgbToHex
