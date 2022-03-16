@@ -17,9 +17,17 @@ local imports = {
 }
 
 local availableChatBox = {
-    ["Global"] = {},
-    ["Local"] = {},
-    ["Group"] = {}
+    ["Global"] = {
+        bind = "i",
+        cmd = "global"
+    },
+    ["Local"] = {
+        
+    },
+    ["Group"] = {
+        bind = "y",
+        cmd = "group"
+    }
 }
 
 
@@ -186,9 +194,9 @@ function bindServerChat(player)
     if not player or not isElement(player) or player:getType() ~= "player" then return false end
 
     for i, j in imports.pairs(availableChatBox) do
-        if j and j.bindKey then
-            imports.bindKey(player, globalChatBindKey, "down", "chatbox", globalChatCMD)
-            imports.bindKey(player, groupChatBindKey, "down", "chatbox", groupChatCMD)
+        if j and j.bindKey and j.cmd then
+            imports.bindKey(player, j.bind, "down", "chatbox", j.cmd)
+            imports.bindKey(player, j.bind, "down", "chatbox", j.cmd)
         end
     end
 
