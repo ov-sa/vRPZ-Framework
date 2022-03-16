@@ -83,3 +83,11 @@ CPlayer.getPlayer = function(serial)
     end
     return false
 end
+
+CPlayer.setChannel = function(player, channelIndex)
+    channelIndex = imports.tonumber(channelIndex)
+    if not CPlayer.isInitialized(player) or not channelIndex or not FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][channelIndex] then return false end
+    imports.triggerClientEvent(player, "Client:onUpdateChannel", player, channelIndex)
+    CPlayer.CChannel[player] = channelIndex
+    return true 
+end

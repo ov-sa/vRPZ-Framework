@@ -32,14 +32,6 @@ CPlayer = {
         return imports.getElementData(player, "Player:Initialized") or false
     end,
 
-    setChannel = function(player, channelIndex)
-        channelIndex = imports.tonumber(channelIndex)
-        if not CPlayer.isInitialized(player) or not channelIndex or not FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][channelIndex] then return false end
-        imports.triggerClientEvent(player, "Client:onUpdateChannel", player, channelIndex)
-        CPlayer.CChannel[player] = channelIndex
-        return true 
-    end,
-
     getChannel = function(player)
         if not CPlayer.isInitialized(player) then return false end
         return CPlayer.CChannel[player] or false
