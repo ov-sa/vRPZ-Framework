@@ -39,28 +39,28 @@ configVars = {
             ["Chats"] = {
                 {
                     name = "Local",
-                    tagColor = "#FFC800",
-                    messageColor = "#FFC800"
+                    tagColor = "#00FF00",
+                    messageColor = "#C8C8C8"
                 },
                 {
                     name = "Global",
                     tagColor = "#FFC800",
-                    messageColor = "#FFC800"
+                    messageColor = "#C8C8C8"
                 },
                 {
                     name = "Group",
-                    tagColor = "#FFC800",
-                    messageColor = "#FFC800"
+                    tagColor = "#FF7F27",
+                    messageColor = "#C8C8C8"
                 },
                 {
                     name = "Party",
-                    tagColor = "#FFC800",
-                    messageColor = "#FFC800"
+                    tagColor = "#FF5050",
+                    messageColor = "#C8C8C8"
                 },
                 {
                     name = "Regional",
-                    tagColor = "#FFC800",
-                    messageColor = "#FFC800"
+                    tagColor = "#5050FF",
+                    messageColor = "#C8C8C8"
                 }
             }
         },
