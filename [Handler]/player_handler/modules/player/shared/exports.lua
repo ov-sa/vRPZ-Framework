@@ -13,5 +13,4 @@
 -----------------
 
 function isPlayerInitialized(...) return CPlayer.isInitialized(...) end
-function setPlayerChannel(...) return CPlayer.setChannel(...) end
 function getPlayerChannel(...) return CPlayer.getChannel(...) end
