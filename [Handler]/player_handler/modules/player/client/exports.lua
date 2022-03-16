@@ -6,3 +6,21 @@
      DOC: 31/01/2022
      Desc: Player Module ]]--
 ----------------------------------------------------------------
+
+
+-----------------
+--[[ Imports ]]--
+-----------------
+
+local imports = {
+    addEvent = addEvent,
+    addEventHandler = addEventHandler
+}
+
+
+----------------
+--[[ Events ]]--
+----------------
+
+imports.addEvent("Client:onUpdateChannel", true)
+imports.addEventHandler("Client:onUpdateChannel", root, function(...) CPlayer.setChannel(localPlayer, ...) end)
