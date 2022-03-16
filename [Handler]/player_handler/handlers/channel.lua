@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
 --[[ Resource: Player Handler
-     Script: handlers: hud: chatbox.lua
+     Script: handlers: channel.lua
      Author: vStudio
      Developer(s): Mario, Tron, Aviril
      DOC: 31/01/2022
@@ -20,6 +20,7 @@ local imports = {
     getPlayerName = getPlayerName,
     getPlayerNametagColor = getPlayerNametagColor,
     isPlayerMuted = isPlayerMuted,
+    bindKey = bindKey,
     outputChatBox = outputChatBox,
     outputServerLog = outputServerLog
 }
