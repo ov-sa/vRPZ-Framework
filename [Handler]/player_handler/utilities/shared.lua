@@ -16,7 +16,9 @@ loadstring(exports.assetify_library:fetchImports())()
 loadstring(exports.assetify_library:fetchThreader())()
 local imports = {
     type = type,
-    pairs = pairs
+    pairs = pairs,
+    bindKey = bindKey,
+    unbindKey = unbindKey
 }
 
 
@@ -29,6 +31,16 @@ function isResourceRunning(resourceName)
     local serverResource = Resource.getFromName(resourceName)
     if not serverResource or serverResource:getState() ~= "running" then return false end
     return true
+end
+
+
+------------------------------
+--[[ Function: Key Binder ]]--
+------------------------------
+
+function bindKey(...)
+    imports.unbindKey(...)
+    return imports.bindKey(...)
 end
 
 

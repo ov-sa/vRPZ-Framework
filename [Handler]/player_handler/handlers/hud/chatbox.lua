@@ -9,6 +9,20 @@
 
 
 --TODO: ... WIP..
+
+local imports = {
+    pairs = pairs,
+    unbindKey = unbindKey,
+    bindKey = bindKey
+}
+
+local availableChatBox = {
+    ["Global"] = {},
+    ["Local"] = {},
+    ["Group"] = {}
+}
+
+
 -------------------
 --[[ Variables ]]--
 -------------------
@@ -171,10 +185,13 @@ function bindServerChat(player)
 
     if not player or not isElement(player) or player:getType() ~= "player" then return false end
 
-    unbindKey(player, globalChatBindKey, "down", "chatbox", globalChatCMD)
-    unbindKey(player, groupChatBindKey, "down", "chatbox", groupChatCMD)
-    bindKey(player, globalChatBindKey, "down", "chatbox", globalChatCMD)
-    bindKey(player, groupChatBindKey, "down", "chatbox", groupChatCMD)
+    for i, j in imports.pairs(availableChatBox) do
+        if j and j.bindKey then
+            imports.bindKey(player, globalChatBindKey, "down", "chatbox", globalChatCMD)
+            imports.bindKey(player, groupChatBindKey, "down", "chatbox", groupChatCMD)
+        end
+    end
+
     return true
 
 end
