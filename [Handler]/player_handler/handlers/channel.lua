@@ -45,10 +45,10 @@ imports.addEventHandler("onPlayerChat", root, function(message, messageType)
     local syncPlayers = false
     local playerName, playerTagColor = imports.getPlayerName(source), imports.rgbToHex(imports.getPlayerNametagColor(source))
     if channelIndex == 1 then
-        syncPlayers = imports.getElementsByType("player")
-    elseif channelIndex == 2 then
         local playerLocation = CCharacter.getLocation(source)
-        syncPlayers = imports.getElementsWithinRange(playerLocation.position[1], playerLocation.position[2], playerLocation.position[3], "player", FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Proximity_Range"])
+        syncPlayers = imports.getElementsWithinRange(playerLocation.position[1], playerLocation.position[2], playerLocation.position[3], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Proximity_Range"], "player")
+    elseif channelIndex == 2 then
+        syncPlayers = imports.getElementsByType("player")
     end
     if syncPlayers then
         for i = 1, #syncPlayers, 1 do
