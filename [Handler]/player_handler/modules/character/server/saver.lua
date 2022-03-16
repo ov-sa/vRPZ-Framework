@@ -42,6 +42,7 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
             end
         end
     end
+    CPlayer.CChannel[player] = nil
     CPlayer.CAttachments[player] = nil
     --playerInventorySlots[player] = nil --TODO: ...
     local dataBuffer = {

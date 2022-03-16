@@ -77,11 +77,6 @@ end)
 imports.addEvent("Player:onToggleLoginUI", true)
 imports.addEventHandler("Player:onToggleLoginUI", root, function()
     local serial = CPlayer.getSerial(source)
-    for i, j in imports.pairs(FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"]) do
-        if j and j.bindKey and not j.isLocal then
-            imports.bindKey(source, j.bind, "down", "chatbox", i)
-        end
-    end
     for i = 69, 79, 1 do
         imports.setPedStat(source, i, 1000)
     end

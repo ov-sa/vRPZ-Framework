@@ -24,6 +24,7 @@ local imports = {
 ----------------
 
 CPlayer = {
+    CChannel = {},
     CAttachments = {},
 
     isInitialized = function(player)

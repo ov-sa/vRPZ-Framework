@@ -33,16 +33,15 @@ configVars = {
         ["Disabled_CMDS"] = {"register", "logout"},
 
         ["Chatbox"] = {
+            ["Channel_ShuffleKey"] = ".",
+            ["Default_Channel"] = 2,
+            ["Proximity_Range"] = 10,
             ["Chats"] = {
-                ["Global"] = {
-                    bind = "u"
-                },
-                ["Local"] = {
-                    isLocal = true
-                },
-                ["Group"] = {
-                    bind = "y"
-                }
+                "Local",
+                "Global",
+                "Group",
+                "Party",
+                "Regional"
             }
         },
     
