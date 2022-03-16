@@ -100,7 +100,7 @@ imports.addEventHandler("Client:onToggleLoadingUI", root, function(state, hint)
     end
     loadingUI.tickCounter = CLIENT_CURRENT_TICK
     loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
-    if state and (not loadingUI.isVisible) then
+    if state and not loadingUI.isVisible then
         imports.beautify.render.create(loadingUI.renderUI)
     end
     imports.triggerEvent("Sound:onToggleLoading", localPlayer, state)
