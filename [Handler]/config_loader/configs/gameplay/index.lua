@@ -37,11 +37,31 @@ configVars = {
             ["Default_Channel"] = 2,
             ["Proximity_Range"] = 10,
             ["Chats"] = {
-                "Local",
-                "Global",
-                "Group",
-                "Party",
-                "Regional"
+                {
+                    name = "Local",
+                    tagColor = "#FFC800",
+                    messageColor = "#FFC800"
+                },
+                {
+                    name = "Global",
+                    tagColor = "#FFC800",
+                    messageColor = "#FFC800"
+                },
+                {
+                    name = "Group",
+                    tagColor = "#FFC800",
+                    messageColor = "#FFC800"
+                },
+                {
+                    name = "Party",
+                    tagColor = "#FFC800",
+                    messageColor = "#FFC800"
+                },
+                {
+                    name = "Regional",
+                    tagColor = "#FFC800",
+                    messageColor = "#FFC800"
+                }
             }
         },
     
