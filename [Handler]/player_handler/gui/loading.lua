@@ -51,7 +51,7 @@ loadingUI.loader.startY = loadingUI.loader.startY + ((CLIENT_MTA_RESOLUTION[2] -
 --[[ Function: Renders UI ]]--
 ------------------------------
 
-imports.beautify.render.create(function()
+loadingUI.renderUI = function()
     local isVisible = false
     if ((loadingUI.animStatus == "forward") or (loadingUI.animStatus == "reverse_backward")) then
         isVisible = true
@@ -71,7 +71,8 @@ imports.beautify.render.create(function()
         end
     end
 
-    if isVisible then
+    loadingUI.isVisible = isVisible
+    if loadingUI.isVisible then
         loadingUI.loader.rotationValue = imports.interpolateBetween(0, 0, 0, 360, 0, 0, imports.getInterpolationProgress(loadingUI.loader.tickCounter, FRAMEWORK_CONFIGS["UI"]["Loading"].loader.animDuration), "Linear")
         if imports.math.round(loadingUI.loader.rotationValue, 2) == 360 then
             loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
@@ -80,7 +81,7 @@ imports.beautify.render.create(function()
         imports.beautify.native.drawImage(loadingUI.loader.startX, loadingUI.loader.startY, FRAMEWORK_CONFIGS["UI"]["Loading"].loader.size, FRAMEWORK_CONFIGS["UI"]["Loading"].loader.size, loadingUI.loader.bgTexture, loadingUI.loader.rotationValue, 0, 0, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Loading"].loader.bgColor[1], FRAMEWORK_CONFIGS["UI"]["Loading"].loader.bgColor[2], FRAMEWORK_CONFIGS["UI"]["Loading"].loader.bgColor[3], FRAMEWORK_CONFIGS["UI"]["Loading"].loader.bgColor[4]*loadingUI.fadeAnimPercent), true)
         imports.beautify.native.drawText(loadingUI.hint.text, loadingUI.hint.paddingX, loadingUI.loader.startY + FRAMEWORK_CONFIGS["UI"]["Loading"].loader.size + loadingUI.hint.paddingY, CLIENT_MTA_RESOLUTION[1] - loadingUI.hint.paddingX, CLIENT_MTA_RESOLUTION[2] - loadingUI.hint.paddingY, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Loading"].hints.fontColor[1], FRAMEWORK_CONFIGS["UI"]["Loading"].hints.fontColor[2], FRAMEWORK_CONFIGS["UI"]["Loading"].hints.fontColor[3], FRAMEWORK_CONFIGS["UI"]["Loading"].hints.fontColor[4]*loadingUI.fadeAnimPercent), 1, loadingUI.hint.font, "center", "top", true, true, true)
     end
-end)
+end
 
 
 --------------------------------------
@@ -99,5 +100,8 @@ imports.addEventHandler("Client:onToggleLoadingUI", root, function(state, hint)
     end
     loadingUI.tickCounter = CLIENT_CURRENT_TICK
     loadingUI.loader.tickCounter = CLIENT_CURRENT_TICK
-    imports.triggerEvent("Sound:onToggleLoading", localPlayer, state)
+    if not loadingUI.isVisible then
+        imports.beautify.render.create(loadingUI.renderUI)
+        imports.triggerEvent("Sound:onToggleLoading", localPlayer, state)
+    end
 end)
