@@ -176,6 +176,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     end
     imports.collectgarbage()
     cache.resumeTicks[source] = imports.getTickCount()
+    CPlayer.setChannel(source, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"])
     imports.triggerClientEvent(source, "Player:onSyncWeather", source, serverWeather, serverTime)
     imports.triggerEvent("Player:onSpawn", source, CCharacter.CBuffer[characterID].location, true)
 end)

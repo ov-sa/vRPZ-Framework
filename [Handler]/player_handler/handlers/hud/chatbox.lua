@@ -63,6 +63,5 @@ end)
 
 imports.bindKey(FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Channel_ShuffleKey"], "down", function(player)
     if CPlayer.isInitialized(player) then return false end
-    CPlayer.CChannel[source] = (CPlayer.CChannel[source] or (FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"] - 1)) + 1
-    CPlayer.CChannel[source] = (FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][(CPlayer.CChannel[source])] and CPlayer.CChannel[source]) or 1
+    CPlayer.setChannel(source, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][(CPlayer.getChannel(source) + 1)] or 1)
 end)
