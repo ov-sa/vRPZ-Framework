@@ -16,6 +16,7 @@ local imports = {
     cancelEvent = cancelEvent,
     addEventHandler = addEventHandler,
     getElementsByType = getElementsByType,
+    getPlayersWithinRange = getElementsWithinRange,
     getPlayerName = getPlayerName,
     getPlayerNametagColor = getPlayerNametagColor,
     isPlayerMuted = isPlayerMuted,
@@ -46,7 +47,8 @@ imports.addEventHandler("onPlayerChat", root, function(message, messageType)
     if channelIndex == 1 then
         playerList = imports.getElementsByType("player")
     elseif channelIndex == 2 then
-        playerList = imports.getPlayersWithinRange(source, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Proximity_Range"])
+        local playerLocation = CCharacter.getLocation(source)
+        playerList = imports.getElementsWithinRange(playerLocation.position[1], playerLocation.position[2], playerLocation.position[3], "player", FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Proximity_Range"])
     end
     if playerList then
         for i = 1, #playerList, 1 do
