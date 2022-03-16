@@ -35,8 +35,8 @@
     <script src="modules/player/shared/exports.lua" type="shared"/>
     <script src="modules/player/server/index.lua" type="server"/>
     <script src="modules/player/server/exports.lua" type="server"/>
-    <script src="modules/player/server/index.lua" type="client"/>
-    <script src="modules/player/server/exports.lua" type="client"/>
+    <script src="modules/player/client/index.lua" type="client"/>
+    <script src="modules/player/client/exports.lua" type="client"/>
     <export function="isPlayerInitialized" type="shared"/>
     <export function="getPlayerChannel" type="shared"/>
     <export function="fetchPlayer" type="server"/>
