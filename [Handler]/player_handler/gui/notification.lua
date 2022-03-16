@@ -43,8 +43,10 @@ local notifUI = {
 --[[ Function: Renders UI ]]--
 ------------------------------
 
-imports.beautify.render.create(function()
-    if #notifUI.buffer <= 0 then return false end
+notifUI.renderUI = function()
+    if #notifUI.buffer <= 0 then
+        return imports.beautify.render.remove(notifUI.renderUI, {renderType = "input"})
+    end
 
     local offsetY = imports.interpolateBetween(notifUI.offsetY, 0, 0, 0, 0, 0, imports.getInterpolationProgress(notifUI.slideTopTickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideTopDuration), "OutBack")
     for i = 1, #notifUI.buffer, 1 do
@@ -80,9 +82,7 @@ imports.beautify.render.create(function()
             end
         end
     end
-end, {
-    renderType = "input"
-})
+end
 
 
 ---------------------------------
@@ -99,4 +99,7 @@ imports.addEventHandler("Client:onNotification", root, function(message, color)
         slideStatus = "forward",
         tickCounter = CLIENT_CURRENT_TICK
     })
+    if #notifUI.buffer <= 1 then
+        imports.beautify.render.create(notifUI.renderUI, {renderType = "input"})
+    end
 end)
