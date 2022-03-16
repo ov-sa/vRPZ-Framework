@@ -19,6 +19,8 @@ local imports = {
     pairs = pairs,
     tonumber = tonumber,
     string = string,
+    getResourceName = getResourceName,
+    getResourceState = getResourceState,
     bindKey = bindKey,
     unbindKey = unbindKey,
     math = math
@@ -31,8 +33,8 @@ local imports = {
 
 function isResourceRunning(resourceName)
     if not resourceName then return false end
-    local serverResource = Resource.getFromName(resourceName)
-    if not serverResource or serverResource:getState() ~= "running" then return false end
+    local resourceInstance = imports.getResourceName(resourceName)
+    if not resourceInstance or (imports.getResourceState(resourceInstance) ~= "running") then return false end
     return true
 end
 
