@@ -17,9 +17,11 @@ loadstring(exports.assetify_library:fetchThreader())()
 local imports = {
     type = type,
     pairs = pairs,
+    tonumber = tonumber,
     string = string,
     bindKey = bindKey,
-    unbindKey = unbindKey
+    unbindKey = unbindKey,
+    math = math
 }
 
 
@@ -50,7 +52,7 @@ end
 ---------------------------------------
 
 function rgbToHex(red, green, blue, alpha)
-    red, green, blue, alpha = tonumber(red), tonumber(green), tonumber(blue), tonumber(alpha)
+    red, green, blue, alpha = imports.tonumber(red), imports.tonumber(green), imports.tonumber(blue), imports.tonumber(alpha)
     if not red or not green or not blue then return false end
     red, green, blue, alpha = imports.math.min(255, imports.math.max(0, red)), imports.math.min(255, imports.math.max(0, green)), imports.math.min(255, imports.math.max(0, blue)), (alpha and imports.math.min(255, imports.math.max(0, alpha))) or false
     if alpha then
