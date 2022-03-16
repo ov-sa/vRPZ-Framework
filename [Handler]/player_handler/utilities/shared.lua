@@ -17,6 +17,7 @@ loadstring(exports.assetify_library:fetchThreader())()
 local imports = {
     type = type,
     pairs = pairs,
+    string = string,
     bindKey = bindKey,
     unbindKey = unbindKey
 }
@@ -41,6 +42,22 @@ end
 function bindKey(...)
     imports.unbindKey(...)
     return imports.bindKey(...)
+end
+
+
+---------------------------------------
+--[[ Function: Converts RGB to Hex ]]--
+---------------------------------------
+
+function rgbToHex(red, green, blue, alpha)
+    red, green, blue, alpha = tonumber(red), tonumber(green), tonumber(blue), tonumber(alpha)
+    if not red or not green or not blue then return false end
+    red, green, blue, alpha = imports.math.min(255, imports.math.max(0, red)), imports.math.min(255, imports.math.max(0, green)), imports.math.min(255, imports.math.max(0, blue)), (alpha and imports.math.min(255, imports.math.max(0, alpha))) or false
+    if alpha then
+		return imports.string.format("#%.2X%.2X%.2X%.2X", red, green, blue, alpha)
+	else
+		return imports.string.format("#%.2X%.2X%.2X", red, green, blue)
+	end
 end
 
 

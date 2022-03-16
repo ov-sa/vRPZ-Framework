@@ -22,7 +22,8 @@ local imports = {
     isPlayerMuted = isPlayerMuted,
     bindKey = bindKey,
     outputChatBox = outputChatBox,
-    outputServerLog = outputServerLog
+    outputServerLog = outputServerLog,
+    rgbToHex = rgbToHex
 }
 
 
@@ -44,7 +45,7 @@ imports.addEventHandler("onPlayerChat", root, function(message, messageType)
     end
 
     local playerName = imports.getPlayerName(source)
-	local playerTagColor = RGBToHex(imports.getPlayerNametagColor(source)) --TODO: ADD FUNCTION TO CONVERT RGB TO HEX
+	local playerTagColor = imports.rgbToHex(imports.getPlayerNametagColor(source))
     local playerList = false
     if channelIndex == 1 then
         playerList = imports.getElementsByType("player")
