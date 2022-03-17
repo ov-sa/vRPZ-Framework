@@ -24,10 +24,9 @@ imports.addEventHandler("Client:onEnableInventoryUI", root, function(state, isFo
 end)
 
 imports.addEvent("Client:onSyncInventorySlots", true)
-imports.addEventHandler("Client:onSyncInventorySlots", root, function(slotData)
-    inventoryUI.inventorySlots = slotData
-    inventoryUI.isUpdateScheduled = false
-    inventoryUI.isUpdated = true
+imports.addEventHandler("Client:onSyncInventorySlots", root, function(slots)
+    inventoryUI.slots = slots
+    inventoryUI.isUpdated, inventoryUI.isUpdateScheduled = true, false
 end)
 
 

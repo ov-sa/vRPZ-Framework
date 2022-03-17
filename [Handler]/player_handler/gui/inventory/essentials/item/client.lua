@@ -22,7 +22,7 @@ function moveItemInInventory(item, slotIndex, loot)
     if not itemDetails or itemAmountData <= 0 then return false end
 
     inventoryUI.isUpdated = false
-    inventoryUI.inventorySlots.slots[slotIndex] = {
+    inventoryUI.slots.slots[slotIndex] = {
         item = item,
         loot = loot,
         isOrdering = false,
@@ -42,7 +42,7 @@ function moveItemInLoot(item, slotIndex, loot)
     if not itemDetails or itemAmountData <= 0 then return false end
 
     inventoryUI.isUpdated = false
-    inventoryUI.inventorySlots.slots[slotIndex] = {
+    inventoryUI.slots.slots[slotIndex] = {
         item = item,
         loot = loot,
         movementType = "loot"
@@ -67,8 +67,8 @@ function orderItemInInventory(item, prevSlotIndex, newSlotIndex)
 
     inventoryUI.isUpdated = false
     inventoryUI.isUpdateScheduled = true
-    inventoryUI.inventorySlots.slots[prevSlotIndex] = nil
-    inventoryUI.inventorySlots.slots[newSlotIndex] = {
+    inventoryUI.slots.slots[prevSlotIndex] = nil
+    inventoryUI.slots.slots[newSlotIndex] = {
         item = item,
         isOrdering = true,
         movementType = "inventory"
@@ -88,20 +88,20 @@ function equipItemInInventory(item, prevSlotIndex, reservedSlotIndex, newSlotInd
 
     inventoryUI.isUpdated = false
     if loot == localPlayer then
-        inventoryUI.inventorySlots.slots[prevSlotIndex] = {
+        inventoryUI.slots.slots[prevSlotIndex] = {
             item = item,
             isAutoReserved = false,
             movementType = "equipment"
         }
     else
-        inventoryUI.inventorySlots.slots[reservedSlotIndex] = {
+        inventoryUI.slots.slots[reservedSlotIndex] = {
             item = item,
             loot = loot,
             isAutoReserved = true,
             movementType = "equipment"
         }
     end
-    inventoryUI.inventorySlots.slots[newSlotIndex] = item
+    inventoryUI.slots.slots[newSlotIndex] = item
     triggerServerEvent("onPlayerEquipItemInInventory", localPlayer, item, prevSlotIndex, reservedSlotIndex, newSlotIndex, loot)
     return true
 
@@ -116,7 +116,7 @@ function unequipItemInInventory(item, prevSlotIndex, newSlotIndex, loot, reserve
     if not itemDetails or itemAmountData <= 0 then return false end
     if not reservedSlotIndex then
         reservedSlotIndex = false
-        for i, j in pairs(inventoryUI.inventorySlots.slots) do
+        for i, j in pairs(inventoryUI.slots.slots) do
             if tonumber(i) then
                 if j.movementType and j.movementType == "equipment" and prevSlotIndex == j.equipmentIndex then
                     reservedSlotIndex = i
@@ -128,17 +128,17 @@ function unequipItemInInventory(item, prevSlotIndex, newSlotIndex, loot, reserve
     if not reservedSlotIndex then return false end
 
     inventoryUI.isUpdated = false
-    inventoryUI.inventorySlots.slots[prevSlotIndex] = nil
+    inventoryUI.slots.slots[prevSlotIndex] = nil
     if loot == localPlayer then
         inventoryUI.isUpdateScheduled = true
-        inventoryUI.inventorySlots.slots[reservedSlotIndex] = nil
-        inventoryUI.inventorySlots.slots[newSlotIndex] = {
+        inventoryUI.slots.slots[reservedSlotIndex] = nil
+        inventoryUI.slots.slots[newSlotIndex] = {
             item = item,
             isOrdering = true,
             movementType = "inventory"
         }
     else
-        inventoryUI.inventorySlots.slots[reservedSlotIndex] = {
+        inventoryUI.slots.slots[reservedSlotIndex] = {
             item = item,
             loot = loot,
             movementType = "loot"

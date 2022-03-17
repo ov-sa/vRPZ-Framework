@@ -23,13 +23,6 @@ local imports = {
 -------------------
 
 inventoryUI = {
-    state = false,
-    isEnabled = true,
-    isEnabled = false,
-    isUpdated = false,
-    isUpdateScheduled = false,
-    vicinity = nil,
-    inventorySlots = nil,
     attachedItemAnimDuration = 750,
     attachedItemOnCursor = nil,
     gui = {
@@ -414,8 +407,8 @@ function displayInventoryUI()
     dxDrawRectangle(inventoryUI.gui.equipment.startX, inventoryUI.gui.equipment.startY, inventoryUI.gui.equipment.width, inventoryUI.gui.equipment.titleBar.dividerSize, tocolor(inventoryUI.gui.equipment.titleBar.dividerColor[1], inventoryUI.gui.equipment.titleBar.dividerColor[2], inventoryUI.gui.equipment.titleBar.dividerColor[3], inventoryUI.gui.equipment.titleBar.dividerColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
     for i, j in pairs(inventoryUI.gui.equipment.grids) do
         local itemDetails, itemCategory = false, false
-        if inventoryUI.inventorySlots and inventoryUI.inventorySlots.slots[i] then
-            itemDetails, itemCategory = getItemDetails(inventoryUI.inventorySlots.slots[i])
+        if inventoryUI.slots and inventoryUI.slots.slots[i] then
+            itemDetails, itemCategory = getItemDetails(inventoryUI.slots.slots[i])
         end
         imports.beautify.native.drawImage(j.startX - j.borderSize, j.startY - j.borderSize, j.height/2 + j.borderSize, j.height/2 + j.borderSize, inventoryUI.gui.equipment.slotTopLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(j.borderColor[1], j.borderColor[2], j.borderColor[3], j.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
         imports.beautify.native.drawImage(j.startX + j.width - j.height/2, j.startY - j.borderSize, j.height/2 + j.borderSize, j.height/2 + j.borderSize, inventoryUI.gui.equipment.slotTopRightCurvedEdgeBGPath, 0, 0, 0, tocolor(j.borderColor[1], j.borderColor[2], j.borderColor[3], j.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
@@ -522,8 +515,8 @@ function displayInventoryUI()
                 local totalContentHeight = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, math.ceil(maxSlots/maximumInventoryRowSlots) - 1)*(template.contentWrapper.itemGrid.slot.size + template.contentWrapper.itemGrid.padding)) + template.contentWrapper.itemGrid.slot.size + template.contentWrapper.itemGrid.padding
                 local exceededContentHeight =  totalContentHeight - template.contentWrapper.height
                 dxSetRenderTarget(j.gui.renderTarget, true)
-                if inventoryUI.inventorySlots then
-                    for k, v in pairs(inventoryUI.inventorySlots.slots) do
+                if inventoryUI.slots then
+                    for k, v in pairs(inventoryUI.slots.slots) do
                         if tonumber(k) then
                             local isSlotToBeDrawn = true
                             if v.movementType and v.movementType ~= "inventory" then
@@ -640,8 +633,8 @@ function displayInventoryUI()
                             dxDrawRectangle(slot_offsetX, slot_offsetY, template.contentWrapper.itemGrid.slot.size, template.contentWrapper.itemGrid.slot.size, tocolor(unpack(template.contentWrapper.itemGrid.slot.bgColor)), false)
                         end
                     else
-                        if inventoryUI.inventorySlots.slots[k] and inventoryUI.inventorySlots.slots[k].movementType and inventoryUI.inventorySlots.slots[k].movementType == "equipment" then
-                            local itemDetails, itemCategory = getItemDetails(inventoryUI.inventorySlots.slots[k].item)
+                        if inventoryUI.slots.slots[k] and inventoryUI.slots.slots[k].movementType and inventoryUI.slots.slots[k].movementType == "equipment" then
+                            local itemDetails, itemCategory = getItemDetails(inventoryUI.slots.slots[k].item)
                             if itemDetails and itemCategory then
                                 local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
                                 local verticalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemVerticalSlots) or 1)
@@ -649,10 +642,10 @@ function displayInventoryUI()
                                 local slot_column = k - (math.max(0, slot_row - 1)*maximumInventoryRowSlots)
                                 local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_column - 1)*(template.contentWrapper.itemGrid.slot.size + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(template.contentWrapper.itemGrid.slot.size + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
                                 local slotWidth, slotHeight = horizontalSlotsToOccupy*template.contentWrapper.itemGrid.slot.size + ((horizontalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding), verticalSlotsToOccupy*template.contentWrapper.itemGrid.slot.size + ((verticalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding)
-                                local equippedIndex = inventoryUI.inventorySlots.slots[k].equipmentIndex
+                                local equippedIndex = inventoryUI.slots.slots[k].equipmentIndex
                                 if not equippedIndex then
                                     for m, n in pairs(inventoryUI.gui.equipment.grids) do
-                                        if inventoryUI.inventorySlots.slots[m] and inventoryUI.inventorySlots.slots[m] == inventoryUI.inventorySlots.slots[k].item then
+                                        if inventoryUI.slots.slots[m] and inventoryUI.slots.slots[m] == inventoryUI.slots.slots[k].item then
                                             equippedIndex = m
                                             break
                                         end
@@ -806,7 +799,7 @@ function displayInventoryUI()
                 local exceededContentHeight =  totalContentHeight - template.contentWrapper.height
                 if not j.__itemNameSlots then j.__itemNameSlots = {} end
                 if not inventoryUI.isUpdated then
-                    for k, v in pairs(inventoryUI.inventorySlots.slots) do
+                    for k, v in pairs(inventoryUI.slots.slots) do
                         if tonumber(k) and v.loot and v.loot == i then
                             if v.movementType then
                                 if v.movementType == "loot" and (tonumber(j.lootItems[v.item]) or 0) <= 0 then
@@ -1043,8 +1036,8 @@ function displayInventoryUI()
                     if inventoryUI.attachedItemOnCursor.isEquippedItem then
                         local reservedSlotIndex = false
                         inventoryUI.isUpdateScheduled = true
-                        inventoryUI.inventorySlots.slots[releaseIndex] = nil
-                        for i, j in pairs(inventoryUI.inventorySlots.slots) do
+                        inventoryUI.slots.slots[releaseIndex] = nil
+                        for i, j in pairs(inventoryUI.slots.slots) do
                             if tonumber(i) then
                                 if j.movementType and j.movementType == "equipment" and releaseIndex == j.equipmentIndex then
                                     reservedSlotIndex = i
@@ -1055,7 +1048,7 @@ function displayInventoryUI()
                         if reservedSlotIndex then
                             inventoryUI.attachedItemOnCursor.reservedSlotType = "equipment"
                             inventoryUI.attachedItemOnCursor.reservedSlot = reservedSlotIndex
-                            inventoryUI.inventorySlots.slots[reservedSlotIndex] = {
+                            inventoryUI.slots.slots[reservedSlotIndex] = {
                                 item = inventoryUI.attachedItemOnCursor.item,
                                 loot = isItemAvailableForDropping.loot,
                                 movementType = "loot"
@@ -1063,7 +1056,7 @@ function displayInventoryUI()
                         end
                     else
                         inventoryUI.isUpdateScheduled = true
-                        inventoryUI.inventorySlots.slots[releaseIndex] = {
+                        inventoryUI.slots.slots[releaseIndex] = {
                             item = inventoryUI.attachedItemOnCursor.item,
                             loot = isItemAvailableForDropping.loot,
                             movementType = "loot"
@@ -1086,13 +1079,13 @@ function displayInventoryUI()
                     inventoryUI.attachedItemOnCursor.reservedSlot = reservedSlot
                     if loot == localPlayer then
                         inventoryUI.isUpdateScheduled = true
-                        inventoryUI.inventorySlots.slots[reservedSlot] = {
+                        inventoryUI.slots.slots[reservedSlot] = {
                             item = inventoryUI.attachedItemOnCursor.item,
                             movementType = "equipment"
                         }
                     else
                         inventoryUI.isUpdateScheduled = true
-                        inventoryUI.inventorySlots.slots[reservedSlot] = {
+                        inventoryUI.slots.slots[reservedSlot] = {
                             item = inventoryUI.attachedItemOnCursor.item,
                             loot = isItemAvailableForEquipping.loot,
                             isAutoReserved = true,
