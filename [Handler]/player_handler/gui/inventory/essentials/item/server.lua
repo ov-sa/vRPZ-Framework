@@ -26,7 +26,7 @@ local whiteListedResources = {
 addEvent("onClientRequestSyncInventorySlots", true)
 addEventHandler("onClientRequestSyncInventorySlots", root, function()
 
-    if not client or not isPlayerInitialized(client) then return false end
+    if not client or not CPlayer.isInitialized(client) then return false end
 
     if playerInventorySlots[source] then
         triggerClientEvent(source, "onClientInventorySyncSlots", source, playerInventorySlots[source])
@@ -42,7 +42,7 @@ end)
 addEventHandler("onElementDataChange", root, function(key, oldValue, newValue)
 
     local sourceType = source:getType()
-    if sourceType == "player" and not isPlayerInitialized(source) then return false end
+    if sourceType == "player" and not CPlayer.isInitialized(source) then return false end
     if not string.find(key, "Item:", 1) then return false end
     if client then source:setData(key, oldValue) return false end
     if getResourceRootElement(sourceResource) ~= resource then
@@ -110,7 +110,7 @@ end)
 addEvent("onPlayerMoveItemInInventory", true)
 addEventHandler("onPlayerMoveItemInInventory", root, function(item, slotIndex, loot)
 
-    if not isPlayerInitialized(source) then return false end
+    if not CPlayer.isInitialized(source) then return false end
 
     slotIndex = tonumber(slotIndex)
     if item and slotIndex and loot and isElement(loot) and isPlayerSlotAvailableForOrdering(source, item, slotIndex) then
@@ -136,7 +136,7 @@ end)
 addEvent("onPlayerMoveItemInLoot", true)
 addEventHandler("onPlayerMoveItemInLoot", root, function(item, slotIndex, loot)
 
-    if not isPlayerInitialized(source) then return false end
+    if not CPlayer.isInitialized(source) then return false end
 
     slotIndex = tonumber(slotIndex)
     if item and slotIndex and loot and isElement(loot) and playerInventorySlots[source].slots[slotIndex] then
@@ -172,7 +172,7 @@ end)
 addEvent("onPlayerOrderItemInInventory", true)
 addEventHandler("onPlayerOrderItemInInventory", root, function(item, prevSlotIndex, newSlotIndex)
 
-    if not isPlayerInitialized(source) then return false end
+    if not CPlayer.isInitialized(source) then return false end
 
     prevSlotIndex, newSlotIndex = tonumber(prevSlotIndex), tonumber(newSlotIndex)
     if item and prevSlotIndex and newSlotIndex and isPlayerSlotAvailableForOrdering(source, item, newSlotIndex) then
@@ -192,7 +192,7 @@ end)
 addEvent("onPlayerEquipItemInInventory", true)
 addEventHandler("onPlayerEquipItemInInventory", root, function(item, prevSlotIndex, reservedSlotIndex, newSlotIndex, loot)
 
-    if not isPlayerInitialized(source) then return false end
+    if not CPlayer.isInitialized(source) then return false end
 
     prevSlotIndex, reservedSlotIndex = tonumber(prevSlotIndex), tonumber(reservedSlotIndex)
     if item and prevSlotIndex and reservedSlotIndex and newSlotIndex and characterSlots[newSlotIndex] and loot and isElement(loot) and isPlayerSlotAvailableForEquipping(source, item, newSlotIndex) then
@@ -229,7 +229,7 @@ end)
 addEvent("onPlayerUnequipItemInInventory", true)
 addEventHandler("onPlayerUnequipItemInInventory", root, function(item, prevSlotIndex, reservedSlotIndex, newSlotIndex, loot)
 
-    if not isPlayerInitialized(source) then return false end
+    if not CPlayer.isInitialized(source) then return false end
 
     reservedSlotIndex, newSlotIndex = tonumber(reservedSlotIndex), tonumber(newSlotIndex)
     if item and prevSlotIndex and characterSlots[prevSlotIndex] and reservedSlotIndex and newSlotIndex and loot and isElement(loot) and playerInventorySlots[source].slots[prevSlotIndex] then

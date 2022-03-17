@@ -16,7 +16,7 @@
 function getPlayerOccupiedSlots(player)
 
     if not player or not isElement(player) or player:getType() ~= "player" then return false end
-    if not isPlayerInitialized(player) then return false end
+    if not CPlayer.isInitialized(player) then return false end
 
     local totalSlots, assignedSlots = false, false
     if localPlayer then
@@ -81,7 +81,7 @@ function isPlayerSlotAvailableForOrdering(player, item, slotIndex, isEquippedIte
 
     slotIndex = tonumber(slotIndex)
     if not player or not isElement(player) or player:getType() ~= "player" or not item or not slotIndex then return false end
-    if not isPlayerInitialized(player) then return false end
+    if not CPlayer.isInitialized(player) then return false end
     local itemDetails = getItemDetails(item)
     if not itemDetails then return false end
 
@@ -130,7 +130,7 @@ end
 function isPlayerSlotAvailableForEquipping(player, item, slotIndex, viaClientInventory)
 
     if not player or not isElement(player) or player:getType() ~= "player" or not item or not slotIndex or not characterSlots[slotIndex] then return false end
-    if not isPlayerInitialized(player) then return false end
+    if not CPlayer.isInitialized(player) then return false end
     local itemDetails = getItemDetails(item)
     if not itemDetails then return false end
 
