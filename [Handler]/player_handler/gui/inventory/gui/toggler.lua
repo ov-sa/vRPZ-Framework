@@ -21,43 +21,22 @@ inventoryUI.isUIEnabled = function()
     return (inventoryUI.isSlotsUpdated and inventoryUI.isEnabled) or false
 end
 
-
-------------------------------------------------------------
---[[ Function: Enables/Disables Inventory Enabled State ]]--
-------------------------------------------------------------
-
-function enableInventory(state)
-
-    if state then
-        if not inventoryUI.isEnabled then
-            inventoryUI.isEnabled = true
-            if not isPlayerKnocked(localPlayer) then
-                toggleControl("enter_exit", true)
-            end
-        end
-    else
-        if inventoryUI.isEnabled then
-            inventoryUI.isEnabled = false
-            toggleControl("enter_exit", false)
-        end
-    end
-
-end
-addEvent("onClientEnableInventory", true)
-addEventHandler("onClientEnableInventory", root, enableInventory)
+imports.addEvent("Client:onEnableInventoryUI", true)
+imports.addEventHandler("Client:onEnableInventoryUI", root, function(state, isForced)
+    if isForced then loginUI.isForcedDisabled = not state end
+    inventoryUI.isEnabled = state
+end)
 
 
 -----------------------------------------------
 --[[ Event: On Client Inventory Sync Slots ]]--
 -----------------------------------------------
 
-addEvent("onClientInventorySyncSlots", true)
-addEventHandler("onClientInventorySyncSlots", root, function(slotData)
-
+addEvent("Client:onSyncInventorySlots", true)
+addEventHandler("Client:onSyncInventorySlots", root, function(slotData)
     inventoryUI.inventorySlots = slotData
     inventoryUI.isSlotsUpdatePending = false
     inventoryUI.isSlotsUpdated = true
-
 end)
 
 

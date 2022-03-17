@@ -190,7 +190,7 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
         --imports.triggerEvent("Player:onDeath", source, nil, false, nil, 3)
         imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false, FRAMEWORK_CONFIGS["Spawns"]["Hint"])
     else
-        --triggerClientEvent(source, "onClientInventorySyncSlots", source, playerInventorySlots[source])
+        --triggerClientEvent(source, ""Client:onSyncInventorySlots"", source, playerInventorySlots[source])
         imports.assetify.setElementAsset(source, characterClothing[1], characterClothing[2], characterClothing[3])
         imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false)
         imports.showChat(source, true)
