@@ -119,6 +119,7 @@ end
 
 
 
+--[[
 function inventoryUI.toggleUI(true)
 
     if not isPlayerInitialized(localPlayer) or getPlayerHealth(localPlayer) <= 0 then inventoryUI.toggleUI(false) return false end
@@ -158,6 +159,8 @@ function inventoryUI.toggleUI(false)
     showCursor(false)
 
 end
+]]
+
 
 imports.addEventHandler("onClientPlayerWasted", localPlayer, function() inventoryUI.toggleUI(false) end)
 
