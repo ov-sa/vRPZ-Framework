@@ -28,9 +28,9 @@ addEventHandler("onClientMarkerHit", root, function(hitElement, isDimensionMatch
     if not hitElement or not imports.isElement(hitElement) or (hitElement ~= localPlayer) or not isDimensionMatching or (localPlayer:getInterior() ~= source:getInterior()) or not isElementWithinMarker(localPlayer, source) then return false end
     if not isPlayerInitialized(localPlayer) or getPlayerHealth(localPlayer) <= 0 or localPlayer:getOccupiedVehicle() then return false end
 
-    local markerParent = source:getData("Element:Parent")
-    local lootType = source:getData("Loot:Type")
-    local lootName = source:getData("Loot:Name")
+    local markerParent = getElementData(source, "Element:Parent")
+    local lootType = getElementData(source, "Loot:Type")
+    local lootName = getElementData(source, "Loot:Name")
     local pedTask = tostring(getPedSimplestTask(localPlayer))
     if not markerParent or not isElement(markerParent) or not lootType or not lootName then return false end
     if markerParent == localPlayer then return false end
@@ -48,7 +48,7 @@ addEventHandler("onClientMarkerHit", root, function(hitElement, isDimensionMatch
     --[[
     --TODO: ADD LATER REVIVER
     if lootType == "reviver" then
-        if source:getData("Loot:Captured") or (#(getPlayersWithinMarker(source)) > 2) then
+        if getElementData(source, "Loot:Captured") or (#(getPlayersWithinMarker(source)) > 2) then
             return false
         end
     else
@@ -77,7 +77,7 @@ addEventHandler("onClientMarkerLeave", root, function(hitElement)
 
     if not hitElement or not isElement(hitElement) or (hitElement ~= localPlayer) then return false end
 
-    local markerParent = source:getData("Element:Parent")
+    local markerParent = getElementData(source, "Element:Parent")
     if not markerParent or not isElement(markerParent) then return false end
     if markerParent == localPlayer then return false end
 
@@ -133,7 +133,7 @@ addEventHandler("onClientVehicleStartEnter", root, checkVehicleEntrance)
 
 addEventHandler("onClientVehicleExplode", root, function()
 
-    local _marker = source:getData("Element:Parent")
+    local _marker = getElementData(source, "Element:Parent")
     if not _marker or not isElement(_marker) then return false end
 
     if lootExitTimers[_marker] and lootExitTimers[_marker]:isValid() then

@@ -25,13 +25,10 @@ local whiteListedResources = {
 
 addEvent("onClientRequestSyncInventorySlots", true)
 addEventHandler("onClientRequestSyncInventorySlots", root, function()
-
     if not client or not CPlayer.isInitialized(client) then return false end
-
     if playerInventorySlots[source] then
         triggerClientEvent(source, "onClientInventorySyncSlots", source, playerInventorySlots[source])
     end
-
 end)
 
 
@@ -44,7 +41,7 @@ addEventHandler("onElementDataChange", root, function(key, oldValue, newValue)
     local sourceType = source:getType()
     if sourceType == "player" and not CPlayer.isInitialized(source) then return false end
     if not string.find(key, "Item:", 1) then return false end
-    if client then source:setData(key, oldValue) return false end
+    if client then setElementData(source, key, oldValue) return false end
     if getResourceRootElement(sourceResource) ~= resource then
         local isResourceWhiteListed = false
         if sourceType ~= "player" then
@@ -56,7 +53,7 @@ addEventHandler("onElementDataChange", root, function(key, oldValue, newValue)
                 end
             end
         end
-        if not isResourceWhiteListed then source:setData(key, oldValue) return false end
+        if not isResourceWhiteListed then setElementData(source, key, oldValue) return false end
     end
     key = string.gsub(key, "Item:", "", 1)
 
@@ -64,7 +61,7 @@ addEventHandler("onElementDataChange", root, function(key, oldValue, newValue)
     if itemDetails then
         newValue = tonumber(newValue)
         if not newValue or newValue < 0 then
-            return source:setData("Item:"..key, 0)
+            return setElementData(source, "Item:"..key, 0)
         else
             oldValue = tonumber(oldValue) or 0
             if newValue > 0 then
@@ -75,12 +72,12 @@ addEventHandler("onElementDataChange", root, function(key, oldValue, newValue)
                     if newValue > oldValue then
                         local prev_usedSlots = usedSlots - ((newValue - oldValue)*itemWeight)
                         if prev_usedSlots > maxSlots then
-                            return source:setData("Item:"..key, 0)
+                            return setElementData(source, "Item:"..key, 0)
                         else
-                            return source:setData("Item:"..key, oldValue)
+                            return setElementData(source, "Item:"..key, oldValue)
                         end
                     else
-                        return source:setData("Item:"..key, 0)
+                        return setElementData(source, "Item:"..key, 0)
                     end
                 end
             end
@@ -122,7 +119,7 @@ addEventHandler("onPlayerMoveItemInInventory", root, function(item, slotIndex, l
                 item = item
             }
             loot:setData("Item:"..item, itemAmountData - itemAmount)
-            source:setData("Item:"..item, (tonumber(source:getData("Item:"..item)) or 0) + itemAmount)
+            setElementData(source, "Item:"..item, (tonumber(getElementData(source, "Item:"..item)) or 0) + itemAmount)
             if inventoryDatas[itemCategory].isAmmoCategory then
                 triggerEvent("onPlayerRefreshWeaponAmmo", source, item)
             end
@@ -141,7 +138,7 @@ addEventHandler("onPlayerMoveItemInLoot", root, function(item, slotIndex, loot)
     slotIndex = tonumber(slotIndex)
     if item and slotIndex and loot and isElement(loot) and playerInventorySlots[source].slots[slotIndex] then
         local itemDetails, itemCategory = getItemDetails(item)
-        local itemAmountData = tonumber(source:getData("Item:"..item)) or 0
+        local itemAmountData = tonumber(getElementData(source, "Item:"..item)) or 0
         if itemDetails and itemCategory and itemAmountData > 0 then
             local itemAmount = 1
             local itemWeight = getItemWeight(item)
@@ -152,7 +149,7 @@ addEventHandler("onPlayerMoveItemInLoot", root, function(item, slotIndex, loot)
             else
                 playerInventorySlots[source].slots[slotIndex] = nil
                 loot:setData("Item:"..item, (tonumber(loot:getData("Item:"..item)) or 0) + itemAmount)
-                source:setData("Item:"..item, itemAmountData - itemAmount)
+                setElementData(source, "Item:"..item, itemAmountData - itemAmount)
                 if inventoryDatas[itemCategory].isAmmoCategory then
                     triggerEvent("onPlayerRefreshWeaponAmmo", source, item)
                 end
@@ -177,7 +174,7 @@ addEventHandler("onPlayerOrderItemInInventory", root, function(item, prevSlotInd
     prevSlotIndex, newSlotIndex = tonumber(prevSlotIndex), tonumber(newSlotIndex)
     if item and prevSlotIndex and newSlotIndex and isPlayerSlotAvailableForOrdering(source, item, newSlotIndex) then
         local itemDetails = getItemDetails(item)
-        local itemAmountData = tonumber(source:getData("Item:"..item)) or 0
+        local itemAmountData = tonumber(getElementData(source, "Item:"..item)) or 0
         if itemDetails and itemAmountData > 0 then
             playerInventorySlots[source].slots[prevSlotIndex] = nil
             playerInventorySlots[source].slots[newSlotIndex] = {
@@ -217,7 +214,7 @@ addEventHandler("onPlayerEquipItemInInventory", root, function(item, prevSlotInd
                 playerInventorySlots[source].slots[newSlotIndex] = item
                 refreshPlayerEquipmentSlot(source, newSlotIndex)
                 loot:setData("Item:"..item, itemAmountData - itemAmount)
-                source:setData("Item:"..item, (tonumber(source:getData("Item:"..item)) or 0) + itemAmount)
+                setElementData(source, "Item:"..item, (tonumber(getElementData(source, "Item:"..item)) or 0) + itemAmount)
                 return true
             end
         end
@@ -234,7 +231,7 @@ addEventHandler("onPlayerUnequipItemInInventory", root, function(item, prevSlotI
     reservedSlotIndex, newSlotIndex = tonumber(reservedSlotIndex), tonumber(newSlotIndex)
     if item and prevSlotIndex and characterSlots[prevSlotIndex] and reservedSlotIndex and newSlotIndex and loot and isElement(loot) and playerInventorySlots[source].slots[prevSlotIndex] then
         local itemDetails = getItemDetails(item)
-        local itemAmountData = tonumber(source:getData("Item:"..item)) or 0
+        local itemAmountData = tonumber(getElementData(source, "Item:"..item)) or 0
         if itemDetails and itemAmountData > 0 then
             if loot == source then
                 playerInventorySlots[source].slots[prevSlotIndex] = nil
@@ -257,7 +254,7 @@ addEventHandler("onPlayerUnequipItemInInventory", root, function(item, prevSlotI
                     playerInventorySlots[source].slots[reservedSlotIndex] = nil
                     refreshPlayerEquipmentSlot(source, prevSlotIndex)
                     loot:setData("Item:"..item, (tonumber(loot:getData("Item:"..item)) or 0) + itemAmount)
-                    source:setData("Item:"..item, itemAmountData - itemAmount)
+                    setElementData(source, "Item:"..item, itemAmountData - itemAmount)
                     return true
                 end
             end

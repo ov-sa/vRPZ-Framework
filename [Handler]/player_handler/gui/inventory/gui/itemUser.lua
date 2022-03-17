@@ -92,7 +92,7 @@ function requestUseItem(item)
             if playerVehicle then return false end
             local playerModel = source:getModel()
             if itemDetails.dataName == "Survivor Suit" then
-                local gender = source:getData("Player:Gender")
+                local gender = getElementData(source, "Player:Gender")
                 if gender == playerClothes["Gender"][1] then
                     if playerModel == 0 then
                         return false

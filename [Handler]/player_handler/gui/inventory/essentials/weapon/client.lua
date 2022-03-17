@@ -34,17 +34,17 @@ imports.addEventHandler("onClientPlayerWeaponFire", root, function(_weapon, _amm
 
     if source == localPlayer then
         if weaponAmmoName ~= "Melee" then
-            local weaponAmmoValue = tonumber(source:getData("Item:"..weaponAmmoName)) or 0
+            local weaponAmmoValue = tonumber(getElementData(source, "Item:"..weaponAmmoName)) or 0
             if weaponAmmoValue <= 0 then
                 toggleControl("fire", false)
             else
                 weaponAmmoValue = weaponAmmoValue - 1
-                --source:setData("Item:"..weaponAmmoName, weaponAmmoValue)
+                --setElementData(source, "Item:"..weaponAmmoName, weaponAmmoValue)
                 if _ammo <= 1 then
                     toggleControl("fire", false)
-                    --source:setData("Item:"..weaponAmmoName, 0)
+                    --setElementData(source, "Item:"..weaponAmmoName, 0)
                 elseif (_ammoInClip == serverWeaponFakeAmmoAmount) and (_ammoInClip < _ammo) then
-                    source:setData("Character:ReloadingWeapon", true)
+                    setElementData(source, "Character:ReloadingWeapon", true)
                     toggleControl("fire", false)
                     toggleControl("aim_weapon", false)
                     triggerServerEvent("onPlayerWeaponReload", source)
@@ -64,7 +64,7 @@ imports.addEventHandler("onClientPlayerWeaponFire", root, function(_weapon, _amm
             local weaponSlotID = getWeaponSlotID(currentPlayerWeapon)
             if not weaponSlotID then return false end
             if weaponSlotID == 16 then
-                --source:setData("Item:Grenade", (tonumber(source:getData("Item:Grenade")) or 0) - 1)
+                --setElementData(source, "Item:Grenade", (tonumber(getElementData(source, "Item:Grenade")) or 0) - 1)
             end
         end        
     end

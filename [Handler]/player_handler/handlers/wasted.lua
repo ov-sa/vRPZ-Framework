@@ -87,7 +87,7 @@ imports.addEvent("Player:onDeath", true)
 imports.addEventHandler("Player:onDeath", root, function(killer, headshot, weapon, bodypart)
     if not CPlayer.isInitialized(source) then return false end
 
-    local characterID = source:getData("Character:ID")
+    local characterID = getElementData(source, "Character:ID")
     imports.setElementCollisionsEnabled(source, false)
     imports.setElementAlpha(source, 0)
     local posVector = source:getPosition()
@@ -107,7 +107,7 @@ imports.addEventHandler("Player:onDeath", root, function(killer, headshot, weapo
     for i, j in imports.pairs(inventoryDatas) do
         if not j.saveOnWasted then
             for k, v in imports.ipairs(j) do
-                local itemValue = imports.tonumber(source:getData("Item:"..v.dataName)) or 0
+                local itemValue = imports.tonumber(getElementData(source, "Item:"..v.dataName)) or 0
                 if itemValue > 0 then
                     local isItemToBeAdded = true
                     if i == "Helmet" or i == "Armor" then

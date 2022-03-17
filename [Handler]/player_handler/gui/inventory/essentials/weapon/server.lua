@@ -69,7 +69,7 @@ addEventHandler("onPlayerRefreshWeaponAmmo", root, function(item)
     if not itemDetails or not itemCategory or not inventoryDatas[itemCategory].isAmmoCategory then return false end
 
     for i, j in pairs(availableWeaponSlots) do
-        local weaponDataName = source:getData("Slot:"..i)
+        local weaponDataName = getElementData(source, "Slot:"..i)
         if weaponDataName then
             local weaponID = getWeaponID(weaponDataName)
             local weaponAmmoName = getWeaponAmmoName(weaponDataName)
@@ -89,7 +89,7 @@ addEventHandler("onPlayerRefreshWeapon", root, function()
 
     takeAllWeapons(source)
     for i, j in pairs(availableWeaponSlots) do
-        local weaponDataName = source:getData("Slot:"..i)
+        local weaponDataName = getElementData(source, "Slot:"..i)
         if weaponDataName then
             local weaponID = getWeaponID(weaponDataName)
             local weaponAmmoName = getWeaponAmmoName(weaponDataName)
@@ -128,7 +128,7 @@ addEventHandler("onPlayerWeaponReload", root, function()
         if weaponID and weaponAmmoName and weaponAmmoName ~= "Melee" then
             local itemDetails = getItemDetails(weaponAmmoName)
             if itemDetails then
-                local weaponAmmoValue = tonumber(source:getData("Item:"..weaponAmmoName)) or 0
+                local weaponAmmoValue = tonumber(getElementData(source, "Item:"..weaponAmmoName)) or 0
                 weaponAmmoValue = weaponAmmoValue*itemDetails.ammoAmount
                 local weaponClipAmmo = source:getAmmoInClip()
                 local weaponUnusedAmmo = source:getTotalAmmo() - weaponClipAmmo
@@ -157,7 +157,7 @@ addEventHandler("onPlayerWeaponReload", root, function()
     end
 
     if not reloadWeaponState then
-        source:setData("Character:ReloadingWeapon", nil)
+        setElementData(source, "Character:ReloadingWeapon", nil)
         --if isPlayerReadyForTask(source) then
             toggleControl(source, "fire", true)
             toggleControl(source, "aim_weapon", true)
