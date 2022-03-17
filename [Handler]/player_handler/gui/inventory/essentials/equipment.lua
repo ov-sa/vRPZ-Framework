@@ -82,21 +82,21 @@ function clearPlayerEquipmentSlot(player, slotIndex)
         if verifySlot then
             local shieldHealth = getPlayerShieldHealth(localPlayer, "helmet")
             if shieldHealth and shieldHealth < 100 then
-                localPlayer:setData("Item:"..inventoryCache.helmet, (tonumber(localPlayer:getData("Item:"..inventoryCache.helmet)) or 0) - 1)
+                setElementData(localPlayer, "Item:"..inventoryCache.helmet, (tonumber(getElementData(localPlayer, "Item:"..inventoryCache.helmet)) or 0) - 1)
                 triggerEvent("onClientInventoryUpdate", localPlayer)
             end
         end
-        localPlayer:setData("Slot:helmet", nil)
+        setElementData(localPlayer, "Slot:helmet", nil)
         inventoryCache.helmet = nil
     elseif slotIndex == "armor" then
         if verifySlot then
             local shieldHealth = getPlayerShieldHealth(localPlayer, "armor")
             if shieldHealth and shieldHealth < 100 then
-                localPlayer:setData("Item:"..inventoryCache.armor, (tonumber(localPlayer:getData("Item:"..inventoryCache.armor)) or 0) - 1)
+                setElementData(localPlayer, "Item:"..inventoryCache.armor, (tonumber(getElementData(localPlayer, "Item:"..inventoryCache.armor)) or 0) - 1)
                 triggerEvent("onClientInventoryUpdate", localPlayer)
             end
         end
-        localPlayer:setData("Slot:armor", nil)
+        setElementData(localPlayer, "Slot:armor", nil)
         inventoryCache.armor = nil
     elseif slotIndex == "backpack" then
         local player_usedSlots = getElementUsedSlots(localPlayer)
@@ -104,19 +104,19 @@ function clearPlayerEquipmentSlot(player, slotIndex)
             triggerEvent("displayClientInfo", localPlayer, "You can't remove this item.", {255, 0, 0})
             return false
         end
-        localPlayer:setData("Slot:backpack", nil)
+        setElementData(localPlayer, "Slot:backpack", nil)
         inventoryCache.backpack = nil
     elseif slotIndex == "primary" then
         triggerServerEvent("onPlayerRemoveWeapon", localPlayer, inventoryCache.primary)
-        localPlayer:setData("Slot:primary_weapon", nil)
+        setElementData(localPlayer, "Slot:primary_weapon", nil)
         inventoryCache.primary = nil
     elseif slotIndex == "secondary" then
         triggerServerEvent("onPlayerRemoveWeapon", localPlayer, inventoryCache.secondary)
-        localPlayer:setData("Slot:secondary_weapon", nil)
+        setElementData(localPlayer, "Slot:secondary_weapon", nil)
         inventoryCache.secondary = nil
     elseif slotIndex == "tertiary" then
         triggerServerEvent("onPlayerRemoveWeapon", localPlayer, inventoryCache.tertiary)
-        localPlayer:setData("Slot:special_weapon", nil)
+        setElementData(localPlayer, "Slot:special_weapon", nil)
         inventoryCache.tertiary = nil
     else
         return false

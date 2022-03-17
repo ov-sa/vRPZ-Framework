@@ -54,7 +54,7 @@ function displayInventoryUI()
     local isItemAvailableForDropping = false
     local isItemAvailableForEquipping = false
     local equipmentInformation = false
-    local playerName = localPlayer:getData("Character:name") or ""
+    local playerName = getElementData(localPlayer, "Character:name") or ""
     local playerMaxSlots = getElementMaxSlots(localPlayer)
     local playerUsedSlots = getElementUsedSlots(localPlayer)
     local equipmentInformationColor = inventoryCache.gui.equipment.description.fontColor

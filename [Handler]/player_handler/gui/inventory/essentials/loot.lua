@@ -42,7 +42,7 @@ addEventHandler("onClientMarkerHit", root, function(hitElement, isDimensionMatch
         lootExitTimers[source]:destroy()
         lootExitTimers[source] = nil
     end
-    local marker = localPlayer:getData("Loot:Marker")
+    local marker = getElementData(localPlayer, "Loot:Marker")
     if marker and isElement(marker) and marker == source then return false end
 
     --[[
@@ -63,8 +63,8 @@ addEventHandler("onClientMarkerHit", root, function(hitElement, isDimensionMatch
         ]]--
     --end
 
-    localPlayer:setData("Loot:Marker", source)
-    localPlayer:setData("Character:Looting", selectedLootConfig.lootStatus)
+    setElementData(localPlayer, "Loot:Marker", source)
+    setElementData(localPlayer, "Character:Looting", selectedLootConfig.lootStatus)
 
 end)
 
@@ -85,11 +85,11 @@ addEventHandler("onClientMarkerLeave", root, function(hitElement)
         lootExitTimers[source] = Timer(function(_marker)
             if _marker and isElement(_marker) then
                 lootExitTimers[_marker] = nil
-                local marker = localPlayer:getData("Loot:Marker")
+                local marker = getElementData(localPlayer, "Loot:Marker")
                 if marker and isElement(marker) and marker == _marker then
                     if not localPlayer:isWithinMarker(_marker) then
-                        localPlayer:setData("Loot:Marker", nil)
-                        localPlayer:setData("Character:Looting", nil)
+                        setElementData(localPlayer, "Loot:Marker", nil)
+                        setElementData(localPlayer, "Character:Looting", nil)
                         if isInventoryVisible() then
                             closeInventory()
                         end
@@ -113,10 +113,10 @@ local function checkVehicleEntrance(player, seat)
     --TODO: DISABLE LATER IF PLAYER IS TRYING TO ENTER VEHICLE WHILE ON REPAIR STATE
     --if exports.vehicle_handler:isVehicleOnRepair(source) then cancelEvent() return false end
 
-    local marker = localPlayer:getData("Loot:Marker")
+    local marker = getElementData(localPlayer, "Loot:Marker")
     if marker and isElement(marker) then
-        localPlayer:setData("Loot:Marker", nil)
-        localPlayer:setData("Character:Looting", nil)
+        setElementData(localPlayer, "Loot:Marker", nil)
+        setElementData(localPlayer, "Character:Looting", nil)
         if isInventoryVisible() then
             closeInventory()
         end
@@ -140,10 +140,10 @@ addEventHandler("onClientVehicleExplode", root, function()
         lootExitTimers[_marker]:destroy()
         lootExitTimers[_marker] = nil
     end
-    local marker = localPlayer:getData("Loot:Marker")
+    local marker = getElementData(localPlayer, "Loot:Marker")
     if marker and isElement(marker) and marker == _marker then
-        localPlayer:setData("Loot:Marker", nil)
-        localPlayer:setData("Character:Looting", nil)
+        setElementData(localPlayer, "Loot:Marker", nil)
+        setElementData(localPlayer, "Character:Looting", nil)
         if isInventoryVisible() then
             closeInventory()
         end
@@ -162,10 +162,10 @@ addEventHandler("onClientElementDestroy", root, function()
         lootExitTimers[source]:destroy()
         lootExitTimers[source] = nil
     end
-    local marker = localPlayer:getData("Loot:Marker")
+    local marker = getElementData(localPlayer, "Loot:Marker")
     if marker and isElement(marker) and marker == source then
-        localPlayer:setData("Loot:Marker", nil)
-        localPlayer:setData("Character:Looting", nil)
+        setElementData(localPlayer, "Loot:Marker", nil)
+        setElementData(localPlayer, "Character:Looting", nil)
         if isInventoryVisible() then
             closeInventory()
         end

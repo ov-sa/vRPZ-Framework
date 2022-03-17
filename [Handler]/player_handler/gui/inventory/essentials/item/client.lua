@@ -38,7 +38,7 @@ function moveItemInLoot(item, slotIndex, loot)
     slotIndex = tonumber(slotIndex)
     if not item or not slotIndex or not loot or not isElement(loot) then return false end
     local itemDetails = getItemDetails(item)
-    local itemAmountData = tonumber(localPlayer:getData("Item:"..item)) or 0
+    local itemAmountData = tonumber(getElementData(localPlayer, "Item:"..item)) or 0
     if not itemDetails or itemAmountData <= 0 then return false end
 
     inventoryCache.isSlotsUpdated = false
@@ -62,7 +62,7 @@ function orderItemInInventory(item, prevSlotIndex, newSlotIndex)
     prevSlotIndex, newSlotIndex = tonumber(prevSlotIndex), tonumber(newSlotIndex)
     if not item or not prevSlotIndex or not newSlotIndex then return false end
     local itemDetails = getItemDetails(item)
-    local itemAmountData = tonumber(localPlayer:getData("Item:"..item)) or 0
+    local itemAmountData = tonumber(getElementData(localPlayer, "Item:"..item)) or 0
     if not itemDetails or itemAmountData <= 0 then return false end
 
     inventoryCache.isSlotsUpdated = false
@@ -112,7 +112,7 @@ function unequipItemInInventory(item, prevSlotIndex, newSlotIndex, loot, reserve
     newSlotIndex, reservedSlotIndex = tonumber(newSlotIndex), tonumber(reservedSlotIndex)
     if not item or not prevSlotIndex or not characterSlots[prevSlotIndex] or not newSlotIndex or not loot or not isElement(loot) then return false end
     local itemDetails = getItemDetails(item)
-    local itemAmountData = tonumber(localPlayer:getData("Item:"..item)) or 0
+    local itemAmountData = tonumber(getElementData(localPlayer, "Item:"..item)) or 0
     if not itemDetails or itemAmountData <= 0 then return false end
     if not reservedSlotIndex then
         reservedSlotIndex = false
@@ -160,7 +160,7 @@ function moveItemOutOfInventory(item, loot)
     if loot and isElement(loot) then
         if itemAmount > itemAmountData then itemAmount = itemAmountData end
 
-        localPlayer:setData("Item:"..item, itemAmountData - itemAmount)
+        setElementData(localPlayer, "Item:"..item, itemAmountData - itemAmount)
         local posVector = localPlayer:getPosition()
         local itemData = {
             x = posVector.x + math.random(-1, 1) * math.cos(math.rad(math.random(0, 360) + 90)),
@@ -173,17 +173,17 @@ function moveItemOutOfInventory(item, loot)
     end
 
     if availableGoggles[item] then
-        if (tonumber(localPlayer:getData("Item:"..item)) or 0) <= 0 then
+        if (tonumber(getElementData(localPlayer, "Item:"..item)) or 0) <= 0 then
             triggerEvent("onPlayerResetVision", localPlayer)
         end
     end
 
     for i, _ in pairs(availableWeaponSlots) do
-        local playerSlotWeapon = localPlayer:getData("Slot:"..i)
+        local playerSlotWeapon = getElementData(localPlayer, "Slot:"..i)
         if playerSlotWeapon then
             if (playerSlotWeapon == item) and ((itemAmountData - itemAmount) <= 0) then
                 triggerServerEvent("onPlayerRemoveWeapon", localPlayer, item)
-                localPlayer:setData("Slot:"..i, nil)
+                setElementData(localPlayer, "Slot:"..i, nil)
             else
                 local weaponAmmo = getWeaponAmmoName(playerSlotWeapon)
                 if weaponAmmo and weaponAmmo == item then
