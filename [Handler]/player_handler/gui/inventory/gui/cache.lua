@@ -315,45 +315,12 @@ inventoryCache = {
         }
     }
 }
-
-
------------------------------------------------
---[[ Function: Handles Hot Bar Key Handler ]]--
------------------------------------------------
-
---[[
-function hotBarKey(key)
-
-    local n = tonumber(key)
-    if inventoryCache.hotBarTable[n] and not inventoryCache.locked and isPlayerInitialized(localPlayer) and getPlayerHealth(localPlayer) > 0 then
-        requestUseItem(inventoryCache.hotBarTable[n])
-    end
-
+inventoryCache.gui.equipment.description.startX = inventoryCache.gui.equipment.startX + inventoryCache.gui.equipment.description.startX
+inventoryCache.gui.equipment.description.startY = inventoryCache.gui.equipment.startY + inventoryCache.gui.equipment.description.startY
+for i, j in pairs(inventoryCache.gui.equipment.grids) do
+    j.startX = inventoryCache.gui.equipment.startX + j.startX
+    j.startY = inventoryCache.gui.equipment.startY + j.startY
 end
-]]--
-
-
------------------------------------------
---[[ Event: On Client Resource Start ]]--
------------------------------------------
-
-addEventHandler("onClientResourceStart", resource, function()
-
-    inventoryCache.gui.equipment.description.startX = inventoryCache.gui.equipment.startX + inventoryCache.gui.equipment.description.startX
-    inventoryCache.gui.equipment.description.startY = inventoryCache.gui.equipment.startY + inventoryCache.gui.equipment.description.startY
-    for i, j in pairs(inventoryCache.gui.equipment.grids) do
-        j.startX = inventoryCache.gui.equipment.startX + j.startX
-        j.startY = inventoryCache.gui.equipment.startY + j.startY
-    end
-    inventoryCache.gui.tranparencyAdjuster.startX = inventoryCache.gui.equipment.startX + inventoryCache.gui.tranparencyAdjuster.startX
-    inventoryCache.gui.tranparencyAdjuster.startY = inventoryCache.gui.equipment.startY + inventoryCache.gui.equipment.height - inventoryCache.gui.tranparencyAdjuster.height + inventoryCache.gui.tranparencyAdjuster.startY
-    inventoryCache.gui.tranparencyAdjuster.width = inventoryCache.gui.equipment.width + inventoryCache.gui.tranparencyAdjuster.width
-
-    --[[
-    --HotBar's Key Bounds
-    for i = 1, 6 do
-        bindKey(tostring(i), "down", hotBarKey)
-    end
-    ]]--
-
-end)
+inventoryCache.gui.tranparencyAdjuster.startX = inventoryCache.gui.equipment.startX + inventoryCache.gui.tranparencyAdjuster.startX
+inventoryCache.gui.tranparencyAdjuster.startY = inventoryCache.gui.equipment.startY + inventoryCache.gui.equipment.height - inventoryCache.gui.tranparencyAdjuster.height + inventoryCache.gui.tranparencyAdjuster.startY
+inventoryCache.gui.tranparencyAdjuster.width = inventoryCache.gui.equipment.width + inventoryCache.gui.tranparencyAdjuster.width
