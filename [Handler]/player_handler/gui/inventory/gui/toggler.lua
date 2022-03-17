@@ -112,6 +112,7 @@ inventoryUI.toggleUI = function(state)
         inventoryUI.element = nil
     end
     inventoryUI.isVisible = (state and true) or false
+    imports.showChat(not inventoryUI.isVisible)
     return true
 end
 imports.bindKey(FRAMEWORK_CONFIGS["Inventory"], "down", function() inventoryUI.toggleUI(not inventoryUI.isVisible) end)
