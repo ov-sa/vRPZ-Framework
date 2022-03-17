@@ -22,7 +22,7 @@ local reloadTimers = {}
 
 addEventHandler("onElementDataChange", root, function(key, oldValue, newValue)
 
-    if source:getType() == "player" and isPlayerInitialized(source) and key == "Character:ReloadingWeapon" then
+    if source:getType() == "player" and CPlayer.isInitialized(source) and key == "Character:ReloadingWeapon" then
         if not newValue then
             if reloadTimers[source] and reloadTimers[source]:isValid() then
                 reloadTimers[source]:destroy()
@@ -64,7 +64,7 @@ end
 addEvent("onPlayerRefreshWeaponAmmo", true)
 addEventHandler("onPlayerRefreshWeaponAmmo", root, function(item)
 
-    if not isPlayerInitialized(source) or not item then return false end
+    if not CPlayer.isInitialized(source) or not item then return false end
     local itemDetails, itemCategory = getItemDetails(item)
     if not itemDetails or not itemCategory or not inventoryDatas[itemCategory].isAmmoCategory then return false end
 
@@ -85,7 +85,7 @@ end)
 addEvent("onPlayerRefreshWeapon", true)
 addEventHandler("onPlayerRefreshWeapon", root, function()
 
-    if not isPlayerInitialized(source) then return false end
+    if not CPlayer.isInitialized(source) then return false end
 
     takeAllWeapons(source)
     for i, j in pairs(availableWeaponSlots) do
@@ -118,7 +118,7 @@ end)
 addEvent("onPlayerWeaponReload", true)
 addEventHandler("onPlayerWeaponReload", root, function()
 
-    if not isPlayerInitialized(source) then return false end
+    if not CPlayer.isInitialized(source) then return false end
 
     local reloadWeaponState = false
     local currentPlayerWeapon = getPlayerCurrentSlotItem(source, "weapon")
