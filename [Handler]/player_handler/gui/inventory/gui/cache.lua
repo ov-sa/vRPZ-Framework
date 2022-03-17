@@ -24,7 +24,8 @@ local imports = {
 
 inventoryUI = {
     state = false,
-    enabled = true,
+    isEnabled = true,
+    isEnabled = false,
     isSlotsUpdated = false,
     isSlotsUpdatePending = false,
     vicinity = nil,
@@ -308,6 +309,7 @@ inventoryUI = {
         }
     }
 }
+
 inventoryUI.gui.equipment.description.startX = inventoryUI.gui.equipment.startX + inventoryUI.gui.equipment.description.startX
 inventoryUI.gui.equipment.description.startY = inventoryUI.gui.equipment.startY + inventoryUI.gui.equipment.description.startY
 for i, j in pairs(inventoryUI.gui.equipment.grids) do
@@ -317,6 +319,9 @@ end
 inventoryUI.gui.tranparencyAdjuster.startX = inventoryUI.gui.equipment.startX + inventoryUI.gui.tranparencyAdjuster.startX
 inventoryUI.gui.tranparencyAdjuster.startY = inventoryUI.gui.equipment.startY + inventoryUI.gui.equipment.height - inventoryUI.gui.tranparencyAdjuster.height + inventoryUI.gui.tranparencyAdjuster.startY
 inventoryUI.gui.tranparencyAdjuster.width = inventoryUI.gui.equipment.width + inventoryUI.gui.tranparencyAdjuster.width
+
+
+
 
 
 -------------------
