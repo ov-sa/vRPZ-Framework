@@ -115,8 +115,8 @@ inventoryUI.toggleUI = function(state)
     inventoryUI.isVisible = (state and true) or false
     return true
 end
-
-
+imports.bindKey(FRAMEWORK_CONFIGS["Inventory"], "down", function() inventoryUI.toggleUI(not inventoryUI.isVisible) end)
+imports.addEventHandler("onClientPlayerWasted", localPlayer, function() inventoryUI.toggleUI(false) end)
 
 
 --[[
@@ -160,14 +160,3 @@ function inventoryUI.toggleUI(false)
 
 end
 ]]
-
-
-imports.addEventHandler("onClientPlayerWasted", localPlayer, function() inventoryUI.toggleUI(false) end)
-
-imports.bindKey("tab", "down", function()
-    if inventoryUI.isVisible then
-        inventoryUI.toggleUI(false)
-    else
-        inventoryUI.toggleUI(true)
-    end
-end)
