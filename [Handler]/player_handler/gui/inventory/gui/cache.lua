@@ -26,8 +26,8 @@ inventoryUI = {
     state = false,
     isEnabled = true,
     isEnabled = false,
-    isSlotsUpdated = false,
-    isSlotsUpdatePending = false,
+    isUpdated = false,
+    isUpdateScheduled = false,
     vicinity = nil,
     inventorySlots = nil,
     attachedItemAnimDuration = 750,
@@ -529,7 +529,7 @@ function displayInventoryUI()
                             if v.movementType and v.movementType ~= "inventory" then
                                 isSlotToBeDrawn = false
                             end
-                            if not inventoryUI.isSlotsUpdated then
+                            if not inventoryUI.isUpdated then
                                 if v.movementType == "equipment" and v.isAutoReserved then
                                     if (tonumber(j.lootItems[v.item]) or 0) <= 0 then
                                         if not sortedItems["__"..v.item] then
@@ -805,7 +805,7 @@ function displayInventoryUI()
                 local totalContentHeight = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*(#sortedItems))
                 local exceededContentHeight =  totalContentHeight - template.contentWrapper.height
                 if not j.__itemNameSlots then j.__itemNameSlots = {} end
-                if not inventoryUI.isSlotsUpdated then
+                if not inventoryUI.isUpdated then
                     for k, v in pairs(inventoryUI.inventorySlots.slots) do
                         if tonumber(k) and v.loot and v.loot == i then
                             if v.movementType then
@@ -1042,7 +1042,7 @@ function displayInventoryUI()
                     inventoryUI.attachedItemOnCursor.releaseIndex = releaseIndex
                     if inventoryUI.attachedItemOnCursor.isEquippedItem then
                         local reservedSlotIndex = false
-                        inventoryUI.isSlotsUpdatePending = true
+                        inventoryUI.isUpdateScheduled = true
                         inventoryUI.inventorySlots.slots[releaseIndex] = nil
                         for i, j in pairs(inventoryUI.inventorySlots.slots) do
                             if tonumber(i) then
@@ -1062,7 +1062,7 @@ function displayInventoryUI()
                             }
                         end
                     else
-                        inventoryUI.isSlotsUpdatePending = true
+                        inventoryUI.isUpdateScheduled = true
                         inventoryUI.inventorySlots.slots[releaseIndex] = {
                             item = inventoryUI.attachedItemOnCursor.item,
                             loot = isItemAvailableForDropping.loot,
@@ -1085,13 +1085,13 @@ function displayInventoryUI()
                     inventoryUI.attachedItemOnCursor.releaseIndex = releaseIndex
                     inventoryUI.attachedItemOnCursor.reservedSlot = reservedSlot
                     if loot == localPlayer then
-                        inventoryUI.isSlotsUpdatePending = true
+                        inventoryUI.isUpdateScheduled = true
                         inventoryUI.inventorySlots.slots[reservedSlot] = {
                             item = inventoryUI.attachedItemOnCursor.item,
                             movementType = "equipment"
                         }
                     else
-                        inventoryUI.isSlotsUpdatePending = true
+                        inventoryUI.isUpdateScheduled = true
                         inventoryUI.inventorySlots.slots[reservedSlot] = {
                             item = inventoryUI.attachedItemOnCursor.item,
                             loot = isItemAvailableForEquipping.loot,

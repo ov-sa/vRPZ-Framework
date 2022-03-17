@@ -435,9 +435,9 @@ loginUI.phases[3].contentWidth, loginUI.phases[3].contentHeight = imports.beauti
 loginUI.phases[3].scrollDuration = imports.math.max(1, imports.math.ceil((loginUI.phases[3].contentHeight + loginUI.phases[3].height)/loginUI.phases[3].height))*FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.scrollDuration
 
 
-------------------------------
---[[ Function: UI Helpers ]]--
-------------------------------
+-------------------------------
+--[[ Functions: UI Helpers ]]--
+-------------------------------
 
 function isLoginUIVisible() return loginUI.state end
 

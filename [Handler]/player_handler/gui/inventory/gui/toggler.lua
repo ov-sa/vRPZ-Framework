@@ -9,16 +9,12 @@
 ----------------------------------------------------------------
 
 
-----------------------------------------------------
---[[ Function: Retrieves Inventory's Visibility ]]--
-----------------------------------------------------
-
-isVisible = false
-isSlotsUpdated = false
-isEnabled = false
+-------------------------------
+--[[ Functions: UI Helpers ]]--
+-------------------------------
 
 inventoryUI.isUIEnabled = function()
-    return (inventoryUI.isSlotsUpdated and inventoryUI.isEnabled) or false
+    return (inventoryUI.isUpdated and inventoryUI.isEnabled) or false
 end
 
 imports.addEvent("Client:onEnableInventoryUI", true)
@@ -30,8 +26,8 @@ end)
 imports.addEvent("Client:onSyncInventorySlots", true)
 imports.addEventHandler("Client:onSyncInventorySlots", root, function(slotData)
     inventoryUI.inventorySlots = slotData
-    inventoryUI.isSlotsUpdatePending = false
-    inventoryUI.isSlotsUpdated = true
+    inventoryUI.isUpdateScheduled = false
+    inventoryUI.isUpdated = true
 end)
 
 
@@ -150,7 +146,7 @@ function inventoryUI.toggleUI(false)
 
     if not inventoryUI.isVisible then return false end
 
-    if inventoryUI.isSlotsUpdatePending then
+    if inventoryUI.isUpdateScheduled then
         triggerServerEvent("onClientRequestSyncInventorySlots", localPlayer)
     end
     detachInventoryItem(true)
