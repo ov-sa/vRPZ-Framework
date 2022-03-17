@@ -38,44 +38,44 @@ function requestUseItem(item)
             triggerEvent("onClientWeaponArmSound", localPlayer)
         end
         if weaponSlotName == "primary_weapon" then
-            inventoryCache.primary = itemDetails.dataName
+            inventoryUI.primary = itemDetails.dataName
         elseif weaponSlotName == "secondary_weapon" then
-            inventoryCache.secondary = itemDetails.dataName
+            inventoryUI.secondary = itemDetails.dataName
         elseif weaponSlotName == "special_weapon" then
-            inventoryCache.tertiary = itemDetails.dataName
+            inventoryUI.tertiary = itemDetails.dataName
         end
     elseif itemCategory == "Backpack" then
-        if not inventoryCache.backpack then
+        if not inventoryUI.backpack then
             setElementData(localPlayer, "Slot:backpack", itemDetails.dataName)
-            inventoryCache.backpack = itemDetails.dataName
+            inventoryUI.backpack = itemDetails.dataName
         else
             local usedSlots = getElementUsedSlots(localPlayer)
             if (usedSlots < itemDetails.backpackSlots) then
                 setElementData(localPlayer, "Slot:backpack", itemDetails.dataName)
-                inventoryCache.backpack = itemDetails.dataName
+                inventoryUI.backpack = itemDetails.dataName
             else
                 triggerEvent("displayClientInfo", localPlayer, "This backpack is too small.", {255, 0, 0})
             end
         end
     elseif itemCategory == "Helmet" then
-        if not inventoryCache.helmet then
+        if not inventoryUI.helmet then
             setElementData(localPlayer, "Slot:helmet", itemDetails.dataName)
         else
-            if inventoryCache.helmet ~= itemDetails.dataName then
+            if inventoryUI.helmet ~= itemDetails.dataName then
                 setElementData(localPlayer, "Slot:helmet", itemDetails.dataName)
             end
         end
-        inventoryCache.helmet = itemDetails.dataName
+        inventoryUI.helmet = itemDetails.dataName
     elseif itemCategory == "Armor" then
-        if not inventoryCache.armor then
+        if not inventoryUI.armor then
             setElementData(localPlayer, "Slot:armor", itemDetails.dataName)
         else
-            if inventoryCache.armor ~= itemDetails.dataName then
+            if inventoryUI.armor ~= itemDetails.dataName then
                 setElementData(localPlayer, "Slot:armor", itemDetails.dataName)
             end
         end
-        inventoryCache.armor = itemDetails.dataName
-    elseif isInventoryEnabled() then
+        inventoryUI.armor = itemDetails.dataName
+    elseif inventoryUI.isUIEnabled() then
         if itemCategory == "Nutrition" then
             if itemDetails.nutritionAction == "eat" then
                 if (tonumber(getElementData(localPlayer, "Player:hunger")) or 0) < 100 then

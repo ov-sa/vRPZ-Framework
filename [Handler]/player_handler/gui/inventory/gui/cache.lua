@@ -22,13 +22,12 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-local inventoryCache = {
+inventoryUI = {
     state = false,
     enabled = true,
     isSlotsUpdated = false,
     isSlotsUpdatePending = false,
     vicinity = nil,
-    hotBarTable = {},
     inventorySlots = nil,
     attachedItemAnimDuration = 750,
     attachedItemOnCursor = nil,
@@ -309,15 +308,15 @@ local inventoryCache = {
         }
     }
 }
-inventoryCache.gui.equipment.description.startX = inventoryCache.gui.equipment.startX + inventoryCache.gui.equipment.description.startX
-inventoryCache.gui.equipment.description.startY = inventoryCache.gui.equipment.startY + inventoryCache.gui.equipment.description.startY
-for i, j in pairs(inventoryCache.gui.equipment.grids) do
-    j.startX = inventoryCache.gui.equipment.startX + j.startX
-    j.startY = inventoryCache.gui.equipment.startY + j.startY
+inventoryUI.gui.equipment.description.startX = inventoryUI.gui.equipment.startX + inventoryUI.gui.equipment.description.startX
+inventoryUI.gui.equipment.description.startY = inventoryUI.gui.equipment.startY + inventoryUI.gui.equipment.description.startY
+for i, j in pairs(inventoryUI.gui.equipment.grids) do
+    j.startX = inventoryUI.gui.equipment.startX + j.startX
+    j.startY = inventoryUI.gui.equipment.startY + j.startY
 end
-inventoryCache.gui.tranparencyAdjuster.startX = inventoryCache.gui.equipment.startX + inventoryCache.gui.tranparencyAdjuster.startX
-inventoryCache.gui.tranparencyAdjuster.startY = inventoryCache.gui.equipment.startY + inventoryCache.gui.equipment.height - inventoryCache.gui.tranparencyAdjuster.height + inventoryCache.gui.tranparencyAdjuster.startY
-inventoryCache.gui.tranparencyAdjuster.width = inventoryCache.gui.equipment.width + inventoryCache.gui.tranparencyAdjuster.width
+inventoryUI.gui.tranparencyAdjuster.startX = inventoryUI.gui.equipment.startX + inventoryUI.gui.tranparencyAdjuster.startX
+inventoryUI.gui.tranparencyAdjuster.startY = inventoryUI.gui.equipment.startY + inventoryUI.gui.equipment.height - inventoryUI.gui.tranparencyAdjuster.height + inventoryUI.gui.tranparencyAdjuster.startY
+inventoryUI.gui.tranparencyAdjuster.width = inventoryUI.gui.equipment.width + inventoryUI.gui.tranparencyAdjuster.width
 
 
 -------------------
@@ -360,7 +359,7 @@ function displayInventoryUI()
     local isLMBClicked = false
     local isRMBClicked = false
     local isLMBDoubleClicked = false
-    local isInventoryEnabled = isInventoryEnabled()
+    local inventoryUI.isUIEnabled = inventoryUI.isUIEnabled()
     local isItemAvailableForOrdering = false
     local isItemAvailableForDropping = false
     local isItemAvailableForEquipping = false
@@ -368,11 +367,11 @@ function displayInventoryUI()
     local playerName = getElementData(localPlayer, "Character:name") or ""
     local playerMaxSlots = getElementMaxSlots(localPlayer)
     local playerUsedSlots = getElementUsedSlots(localPlayer)
-    local equipmentInformationColor = inventoryCache.gui.equipment.description.fontColor
-    local inventoryOpacityPercent = inventoryCache.gui.tranparencyAdjuster.minPercent + (1 - inventoryCache.gui.tranparencyAdjuster.minPercent)*inventoryCache.gui.tranparencyAdjuster.percent
+    local equipmentInformationColor = inventoryUI.gui.equipment.description.fontColor
+    local inventoryOpacityPercent = inventoryUI.gui.tranparencyAdjuster.minPercent + (1 - inventoryUI.gui.tranparencyAdjuster.minPercent)*inventoryUI.gui.tranparencyAdjuster.percent
     if not GuiElement.isMTAWindowActive() then
         if not prevLMBClickState then
-            if getKeyState("mouse1") and not inventoryCache.attachedItemOnCursor then
+            if getKeyState("mouse1") and not inventoryUI.attachedItemOnCursor then
                 isLMBClicked = true
                 prevLMBClickState = true
                 if prevLMBDoubleClickTick then
@@ -403,35 +402,35 @@ function displayInventoryUI()
 
     --Draws Equipment
     dxSetRenderTarget()
-    imports.beautify.native.drawImage(inventoryCache.gui.equipment.startX, inventoryCache.gui.equipment.startY - inventoryCache.gui.equipment.titleBar.height, inventoryCache.gui.equipment.titleBar.height, inventoryCache.gui.equipment.titleBar.height, inventoryCache.gui.equipment.titleBar.leftEdgePath, 0, 0, 0, tocolor(inventoryCache.gui.equipment.titleBar.bgColor[1], inventoryCache.gui.equipment.titleBar.bgColor[2], inventoryCache.gui.equipment.titleBar.bgColor[3], inventoryCache.gui.equipment.titleBar.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-    dxDrawRectangle(inventoryCache.gui.equipment.startX + inventoryCache.gui.equipment.titleBar.height, inventoryCache.gui.equipment.startY - inventoryCache.gui.equipment.titleBar.height, inventoryCache.gui.equipment.width - inventoryCache.gui.equipment.titleBar.height, inventoryCache.gui.equipment.titleBar.height, tocolor(inventoryCache.gui.equipment.titleBar.bgColor[1], inventoryCache.gui.equipment.titleBar.bgColor[2], inventoryCache.gui.equipment.titleBar.bgColor[3], inventoryCache.gui.equipment.titleBar.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-    imports.beautify.native.drawImage(inventoryCache.gui.equipment.startX, inventoryCache.gui.equipment.startY, inventoryCache.gui.equipment.width, inventoryCache.gui.equipment.height, inventoryCache.gui.equipment.bgPath, 0, 0, 0, tocolor(inventoryCache.gui.equipment.bgColor[1], inventoryCache.gui.equipment.bgColor[2], inventoryCache.gui.equipment.bgColor[3], inventoryCache.gui.equipment.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-    dxDrawBorderedText(inventoryCache.gui.equipment.titleBar.outlineWeight, inventoryCache.gui.equipment.titleBar.fontColor, string.upper(playerName.."'S EQUIPMENT   |   "..playerUsedSlots.."/"..playerMaxSlots), inventoryCache.gui.equipment.startX + inventoryCache.gui.equipment.titleBar.height, inventoryCache.gui.equipment.startY - inventoryCache.gui.equipment.titleBar.height, inventoryCache.gui.equipment.startX + inventoryCache.gui.equipment.width - inventoryCache.gui.equipment.titleBar.height, inventoryCache.gui.equipment.startY, tocolor(inventoryCache.gui.equipment.titleBar.fontColor[1], inventoryCache.gui.equipment.titleBar.fontColor[2], inventoryCache.gui.equipment.titleBar.fontColor[3], inventoryCache.gui.equipment.titleBar.fontColor[4]*inventoryOpacityPercent), 1, inventoryCache.gui.equipment.titleBar.font, "right", "center", true, false, inventoryCache.gui.postGUI)
-    dxDrawRectangle(inventoryCache.gui.equipment.startX, inventoryCache.gui.equipment.startY, inventoryCache.gui.equipment.width, inventoryCache.gui.equipment.titleBar.dividerSize, tocolor(inventoryCache.gui.equipment.titleBar.dividerColor[1], inventoryCache.gui.equipment.titleBar.dividerColor[2], inventoryCache.gui.equipment.titleBar.dividerColor[3], inventoryCache.gui.equipment.titleBar.dividerColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-    for i, j in pairs(inventoryCache.gui.equipment.grids) do
+    imports.beautify.native.drawImage(inventoryUI.gui.equipment.startX, inventoryUI.gui.equipment.startY - inventoryUI.gui.equipment.titleBar.height, inventoryUI.gui.equipment.titleBar.height, inventoryUI.gui.equipment.titleBar.height, inventoryUI.gui.equipment.titleBar.leftEdgePath, 0, 0, 0, tocolor(inventoryUI.gui.equipment.titleBar.bgColor[1], inventoryUI.gui.equipment.titleBar.bgColor[2], inventoryUI.gui.equipment.titleBar.bgColor[3], inventoryUI.gui.equipment.titleBar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+    dxDrawRectangle(inventoryUI.gui.equipment.startX + inventoryUI.gui.equipment.titleBar.height, inventoryUI.gui.equipment.startY - inventoryUI.gui.equipment.titleBar.height, inventoryUI.gui.equipment.width - inventoryUI.gui.equipment.titleBar.height, inventoryUI.gui.equipment.titleBar.height, tocolor(inventoryUI.gui.equipment.titleBar.bgColor[1], inventoryUI.gui.equipment.titleBar.bgColor[2], inventoryUI.gui.equipment.titleBar.bgColor[3], inventoryUI.gui.equipment.titleBar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+    imports.beautify.native.drawImage(inventoryUI.gui.equipment.startX, inventoryUI.gui.equipment.startY, inventoryUI.gui.equipment.width, inventoryUI.gui.equipment.height, inventoryUI.gui.equipment.bgPath, 0, 0, 0, tocolor(inventoryUI.gui.equipment.bgColor[1], inventoryUI.gui.equipment.bgColor[2], inventoryUI.gui.equipment.bgColor[3], inventoryUI.gui.equipment.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+    dxDrawBorderedText(inventoryUI.gui.equipment.titleBar.outlineWeight, inventoryUI.gui.equipment.titleBar.fontColor, string.upper(playerName.."'S EQUIPMENT   |   "..playerUsedSlots.."/"..playerMaxSlots), inventoryUI.gui.equipment.startX + inventoryUI.gui.equipment.titleBar.height, inventoryUI.gui.equipment.startY - inventoryUI.gui.equipment.titleBar.height, inventoryUI.gui.equipment.startX + inventoryUI.gui.equipment.width - inventoryUI.gui.equipment.titleBar.height, inventoryUI.gui.equipment.startY, tocolor(inventoryUI.gui.equipment.titleBar.fontColor[1], inventoryUI.gui.equipment.titleBar.fontColor[2], inventoryUI.gui.equipment.titleBar.fontColor[3], inventoryUI.gui.equipment.titleBar.fontColor[4]*inventoryOpacityPercent), 1, inventoryUI.gui.equipment.titleBar.font, "right", "center", true, false, inventoryUI.gui.postGUI)
+    dxDrawRectangle(inventoryUI.gui.equipment.startX, inventoryUI.gui.equipment.startY, inventoryUI.gui.equipment.width, inventoryUI.gui.equipment.titleBar.dividerSize, tocolor(inventoryUI.gui.equipment.titleBar.dividerColor[1], inventoryUI.gui.equipment.titleBar.dividerColor[2], inventoryUI.gui.equipment.titleBar.dividerColor[3], inventoryUI.gui.equipment.titleBar.dividerColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+    for i, j in pairs(inventoryUI.gui.equipment.grids) do
         local itemDetails, itemCategory = false, false
-        if inventoryCache.inventorySlots and inventoryCache.inventorySlots.slots[i] then
-            itemDetails, itemCategory = getItemDetails(inventoryCache.inventorySlots.slots[i])
+        if inventoryUI.inventorySlots and inventoryUI.inventorySlots.slots[i] then
+            itemDetails, itemCategory = getItemDetails(inventoryUI.inventorySlots.slots[i])
         end
-        imports.beautify.native.drawImage(j.startX - j.borderSize, j.startY - j.borderSize, j.height/2 + j.borderSize, j.height/2 + j.borderSize, inventoryCache.gui.equipment.slotTopLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(j.borderColor[1], j.borderColor[2], j.borderColor[3], j.borderColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-        imports.beautify.native.drawImage(j.startX + j.width - j.height/2, j.startY - j.borderSize, j.height/2 + j.borderSize, j.height/2 + j.borderSize, inventoryCache.gui.equipment.slotTopRightCurvedEdgeBGPath, 0, 0, 0, tocolor(j.borderColor[1], j.borderColor[2], j.borderColor[3], j.borderColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-        imports.beautify.native.drawImage(j.startX - j.borderSize, j.startY + j.height - j.height/2, j.height/2 + j.borderSize, j.height/2 + j.borderSize, inventoryCache.gui.equipment.slotBottomLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(j.borderColor[1], j.borderColor[2], j.borderColor[3], j.borderColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-        imports.beautify.native.drawImage(j.startX + j.width - j.height/2, j.startY + j.height - j.height/2, j.height/2 + j.borderSize, j.height/2 + j.borderSize, inventoryCache.gui.equipment.slotBottomRightCurvedEdgeBGPath, 0, 0, 0, tocolor(j.borderColor[1], j.borderColor[2], j.borderColor[3], j.borderColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
+        imports.beautify.native.drawImage(j.startX - j.borderSize, j.startY - j.borderSize, j.height/2 + j.borderSize, j.height/2 + j.borderSize, inventoryUI.gui.equipment.slotTopLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(j.borderColor[1], j.borderColor[2], j.borderColor[3], j.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+        imports.beautify.native.drawImage(j.startX + j.width - j.height/2, j.startY - j.borderSize, j.height/2 + j.borderSize, j.height/2 + j.borderSize, inventoryUI.gui.equipment.slotTopRightCurvedEdgeBGPath, 0, 0, 0, tocolor(j.borderColor[1], j.borderColor[2], j.borderColor[3], j.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+        imports.beautify.native.drawImage(j.startX - j.borderSize, j.startY + j.height - j.height/2, j.height/2 + j.borderSize, j.height/2 + j.borderSize, inventoryUI.gui.equipment.slotBottomLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(j.borderColor[1], j.borderColor[2], j.borderColor[3], j.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+        imports.beautify.native.drawImage(j.startX + j.width - j.height/2, j.startY + j.height - j.height/2, j.height/2 + j.borderSize, j.height/2 + j.borderSize, inventoryUI.gui.equipment.slotBottomRightCurvedEdgeBGPath, 0, 0, 0, tocolor(j.borderColor[1], j.borderColor[2], j.borderColor[3], j.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
         if j.width > j.height then
-            dxDrawRectangle(j.startX + j.height/2, j.startY - j.borderSize, j.width - j.height, j.height + (j.borderSize*2), tocolor(j.borderColor[1], j.borderColor[2], j.borderColor[3], j.borderColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
+            dxDrawRectangle(j.startX + j.height/2, j.startY - j.borderSize, j.width - j.height, j.height + (j.borderSize*2), tocolor(j.borderColor[1], j.borderColor[2], j.borderColor[3], j.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
         end
-        imports.beautify.native.drawImage(j.startX, j.startY, j.height/2, j.height/2, inventoryCache.gui.equipment.slotTopLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(j.bgColor[1], j.bgColor[2], j.bgColor[3], j.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-        imports.beautify.native.drawImage(j.startX + j.width - j.height/2, j.startY, j.height/2, j.height/2, inventoryCache.gui.equipment.slotTopRightCurvedEdgeBGPath, 0, 0, 0, tocolor(j.bgColor[1], j.bgColor[2], j.bgColor[3], j.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-        imports.beautify.native.drawImage(j.startX, j.startY + j.height - j.height/2, j.height/2, j.height/2, inventoryCache.gui.equipment.slotBottomLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(j.bgColor[1], j.bgColor[2], j.bgColor[3], j.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-        imports.beautify.native.drawImage(j.startX + j.width - j.height/2, j.startY + j.height - j.height/2, j.height/2, j.height/2, inventoryCache.gui.equipment.slotBottomRightCurvedEdgeBGPath, 0, 0, 0, tocolor(j.bgColor[1], j.bgColor[2], j.bgColor[3], j.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
+        imports.beautify.native.drawImage(j.startX, j.startY, j.height/2, j.height/2, inventoryUI.gui.equipment.slotTopLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(j.bgColor[1], j.bgColor[2], j.bgColor[3], j.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+        imports.beautify.native.drawImage(j.startX + j.width - j.height/2, j.startY, j.height/2, j.height/2, inventoryUI.gui.equipment.slotTopRightCurvedEdgeBGPath, 0, 0, 0, tocolor(j.bgColor[1], j.bgColor[2], j.bgColor[3], j.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+        imports.beautify.native.drawImage(j.startX, j.startY + j.height - j.height/2, j.height/2, j.height/2, inventoryUI.gui.equipment.slotBottomLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(j.bgColor[1], j.bgColor[2], j.bgColor[3], j.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+        imports.beautify.native.drawImage(j.startX + j.width - j.height/2, j.startY + j.height - j.height/2, j.height/2, j.height/2, inventoryUI.gui.equipment.slotBottomRightCurvedEdgeBGPath, 0, 0, 0, tocolor(j.bgColor[1], j.bgColor[2], j.bgColor[3], j.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
         if j.width > j.height then
-            dxDrawRectangle(j.startX + j.height/2, j.startY, j.width - j.height, j.height, tocolor(j.bgColor[1], j.bgColor[2], j.bgColor[3], j.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
+            dxDrawRectangle(j.startX + j.height/2, j.startY, j.width - j.height, j.height, tocolor(j.bgColor[1], j.bgColor[2], j.bgColor[3], j.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
         end
-        local isSlotHovered = isMouseOnPosition(j.startX, j.startY, j.width, j.height) and isInventoryEnabled
+        local isSlotHovered = isMouseOnPosition(j.startX, j.startY, j.width, j.height) and inventoryUI.isUIEnabled
         if itemDetails and itemCategory then
             if iconTextures[itemDetails.iconPath] then
-                if not inventoryCache.attachedItemOnCursor or (inventoryCache.attachedItemOnCursor.itemBox ~= localPlayer) or (inventoryCache.attachedItemOnCursor.prevSlotIndex ~= i) then                
-                    imports.beautify.native.drawImage(j.startX + (j.paddingX/2), j.startY + (j.paddingY/2), j.width - j.paddingX, j.height - j.paddingY, iconTextures[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255*inventoryOpacityPercent), inventoryCache.gui.postGUI)
+                if not inventoryUI.attachedItemOnCursor or (inventoryUI.attachedItemOnCursor.itemBox ~= localPlayer) or (inventoryUI.attachedItemOnCursor.prevSlotIndex ~= i) then                
+                    imports.beautify.native.drawImage(j.startX + (j.paddingX/2), j.startY + (j.paddingY/2), j.width - j.paddingX, j.height - j.paddingY, iconTextures[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                 end
                 if isSlotHovered then
                     equipmentInformation = itemDetails.itemName..":\n"..itemDetails.description
@@ -450,29 +449,29 @@ function displayInventoryUI()
             if j.bgImage then
                 local isPlaceHolderToBeShown = true
                 local placeHolderColor = {255, 255, 255, 255}
-                if inventoryCache.attachedItemOnCursor then
-                    if not inventoryCache.attachedItemOnCursor.animTickCounter then
-                        if isSlotHovered and isInventoryEnabled then
-                            local isSlotAvailable, slotIndex = isPlayerSlotAvailableForEquipping(localPlayer, inventoryCache.attachedItemOnCursor.item, i, inventoryCache.attachedItemOnCursor.itemBox == localPlayer)
+                if inventoryUI.attachedItemOnCursor then
+                    if not inventoryUI.attachedItemOnCursor.animTickCounter then
+                        if isSlotHovered and inventoryUI.isUIEnabled then
+                            local isSlotAvailable, slotIndex = isPlayerSlotAvailableForEquipping(localPlayer, inventoryUI.attachedItemOnCursor.item, i, inventoryUI.attachedItemOnCursor.itemBox == localPlayer)
                             if isSlotAvailable then
                                 isItemAvailableForEquipping = {
                                     slotIndex = i,
                                     reservedSlot = slotIndex,
                                     offsetX = j.startX + (j.paddingX/2),
                                     offsetY = j.startY + (j.paddingY/2),
-                                    loot = inventoryCache.attachedItemOnCursor.itemBox
+                                    loot = inventoryUI.attachedItemOnCursor.itemBox
                                 }
                             end
                             placeHolderColor = (isSlotAvailable and j.availableBGColor) or j.unavailableBGColor
                         end
                     else
-                        if inventoryCache.attachedItemOnCursor.releaseType and inventoryCache.attachedItemOnCursor.releaseType == "equipping" and inventoryCache.attachedItemOnCursor.prevSlotIndex == i then
+                        if inventoryUI.attachedItemOnCursor.releaseType and inventoryUI.attachedItemOnCursor.releaseType == "equipping" and inventoryUI.attachedItemOnCursor.prevSlotIndex == i then
                             isPlaceHolderToBeShown = false
                         end
                     end
                 end
                 if isPlaceHolderToBeShown then
-                    imports.beautify.native.drawImage(j.startX, j.startY, j.width, j.height, j.bgImage, 0, 0, 0, tocolor(placeHolderColor[1], placeHolderColor[2], placeHolderColor[3], placeHolderColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)	
+                    imports.beautify.native.drawImage(j.startX, j.startY, j.width, j.height, j.bgImage, 0, 0, 0, tocolor(placeHolderColor[1], placeHolderColor[2], placeHolderColor[3], placeHolderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)	
                 end
             end
         end
@@ -484,7 +483,7 @@ function displayInventoryUI()
             local maxSlots = getElementMaxSlots(i)
             local usedSlots = getElementUsedSlots(i)
             local sortedItems = {}
-            local template = inventoryCache.gui.itemBox.templates[j.gui.templateIndex]
+            local template = inventoryUI.gui.itemBox.templates[j.gui.templateIndex]
             if j.gui.templateIndex == 1 then
                 if not j.sortedCategories then
                     j.sortedCategories = {}
@@ -499,33 +498,33 @@ function displayInventoryUI()
                     end
                 end
                 sortedItems = j.sortedCategories
-                imports.beautify.native.drawImage(j.gui.startX - template.borderSize, j.gui.startY - template.borderSize, template.height/10 + template.borderSize, template.height/10 + template.borderSize, inventoryCache.gui.equipment.slotTopLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                imports.beautify.native.drawImage(j.gui.startX + template.width - template.height/10, j.gui.startY - template.borderSize, template.height/10 + template.borderSize, template.height/10 + template.borderSize, inventoryCache.gui.equipment.slotTopRightCurvedEdgeBGPath, 0, 0, 0, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                imports.beautify.native.drawImage(j.gui.startX - template.borderSize, j.gui.startY + template.height - template.height/10, template.height/10 + template.borderSize, template.height/10 + template.borderSize, inventoryCache.gui.equipment.slotBottomLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                imports.beautify.native.drawImage(j.gui.startX + template.width - template.height/10, j.gui.startY + template.height - template.height/10, template.height/10 + template.borderSize, template.height/10 + template.borderSize, inventoryCache.gui.equipment.slotBottomRightCurvedEdgeBGPath, 0, 0, 0, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                dxDrawRectangle(j.gui.startX - template.borderSize, j.gui.startY + template.height/10, template.height/10 + template.borderSize, template.height - template.height/5, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                dxDrawRectangle(j.gui.startX + template.width - template.height/10, j.gui.startY + template.height/10, template.height/10 + template.borderSize, template.height - template.height/5, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                dxDrawRectangle(j.gui.startX + template.height/10, j.gui.startY - template.borderSize, template.width - template.height/5, template.height + (template.borderSize*2), tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                imports.beautify.native.drawImage(j.gui.startX, j.gui.startY, template.height/10, template.height/10, inventoryCache.gui.equipment.slotTopLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                imports.beautify.native.drawImage(j.gui.startX + template.width - template.height/10, j.gui.startY, template.height/10, template.height/10, inventoryCache.gui.equipment.slotTopRightCurvedEdgeBGPath, 0, 0, 0, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                imports.beautify.native.drawImage(j.gui.startX, j.gui.startY + template.height - template.height/10, template.height/10, template.height/10, inventoryCache.gui.equipment.slotBottomLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                imports.beautify.native.drawImage(j.gui.startX + template.width - template.height/10, j.gui.startY + template.height - template.height/10, template.height/10, template.height/10, inventoryCache.gui.equipment.slotBottomRightCurvedEdgeBGPath, 0, 0, 0, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                dxDrawRectangle(j.gui.startX, j.gui.startY + template.height/10, template.height/10, template.height - template.height/5, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                dxDrawRectangle(j.gui.startX + template.width - template.height/10, j.gui.startY + template.height/10, template.height/10, template.height - template.height/5, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                dxDrawRectangle(j.gui.startX + template.height/10, j.gui.startY, template.width - template.height/5, template.height, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
+                imports.beautify.native.drawImage(j.gui.startX - template.borderSize, j.gui.startY - template.borderSize, template.height/10 + template.borderSize, template.height/10 + template.borderSize, inventoryUI.gui.equipment.slotTopLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                imports.beautify.native.drawImage(j.gui.startX + template.width - template.height/10, j.gui.startY - template.borderSize, template.height/10 + template.borderSize, template.height/10 + template.borderSize, inventoryUI.gui.equipment.slotTopRightCurvedEdgeBGPath, 0, 0, 0, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                imports.beautify.native.drawImage(j.gui.startX - template.borderSize, j.gui.startY + template.height - template.height/10, template.height/10 + template.borderSize, template.height/10 + template.borderSize, inventoryUI.gui.equipment.slotBottomLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                imports.beautify.native.drawImage(j.gui.startX + template.width - template.height/10, j.gui.startY + template.height - template.height/10, template.height/10 + template.borderSize, template.height/10 + template.borderSize, inventoryUI.gui.equipment.slotBottomRightCurvedEdgeBGPath, 0, 0, 0, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                dxDrawRectangle(j.gui.startX - template.borderSize, j.gui.startY + template.height/10, template.height/10 + template.borderSize, template.height - template.height/5, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                dxDrawRectangle(j.gui.startX + template.width - template.height/10, j.gui.startY + template.height/10, template.height/10 + template.borderSize, template.height - template.height/5, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                dxDrawRectangle(j.gui.startX + template.height/10, j.gui.startY - template.borderSize, template.width - template.height/5, template.height + (template.borderSize*2), tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                imports.beautify.native.drawImage(j.gui.startX, j.gui.startY, template.height/10, template.height/10, inventoryUI.gui.equipment.slotTopLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                imports.beautify.native.drawImage(j.gui.startX + template.width - template.height/10, j.gui.startY, template.height/10, template.height/10, inventoryUI.gui.equipment.slotTopRightCurvedEdgeBGPath, 0, 0, 0, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                imports.beautify.native.drawImage(j.gui.startX, j.gui.startY + template.height - template.height/10, template.height/10, template.height/10, inventoryUI.gui.equipment.slotBottomLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                imports.beautify.native.drawImage(j.gui.startX + template.width - template.height/10, j.gui.startY + template.height - template.height/10, template.height/10, template.height/10, inventoryUI.gui.equipment.slotBottomRightCurvedEdgeBGPath, 0, 0, 0, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                dxDrawRectangle(j.gui.startX, j.gui.startY + template.height/10, template.height/10, template.height - template.height/5, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                dxDrawRectangle(j.gui.startX + template.width - template.height/10, j.gui.startY + template.height/10, template.height/10, template.height - template.height/5, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                dxDrawRectangle(j.gui.startX + template.height/10, j.gui.startY, template.width - template.height/5, template.height, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                 dxSetRenderTarget(j.gui.renderTarget, true)
                 local totalSlots, assignedItems, occupiedSlots = math.min(maxSlots, math.max(maxSlots, #sortedItems)), {}, getPlayerOccupiedSlots(localPlayer) or {}
                 local totalContentHeight = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, math.ceil(maxSlots/maximumInventoryRowSlots) - 1)*(template.contentWrapper.itemGrid.slot.size + template.contentWrapper.itemGrid.padding)) + template.contentWrapper.itemGrid.slot.size + template.contentWrapper.itemGrid.padding
                 local exceededContentHeight =  totalContentHeight - template.contentWrapper.height
                 dxSetRenderTarget(j.gui.renderTarget, true)
-                if inventoryCache.inventorySlots then
-                    for k, v in pairs(inventoryCache.inventorySlots.slots) do
+                if inventoryUI.inventorySlots then
+                    for k, v in pairs(inventoryUI.inventorySlots.slots) do
                         if tonumber(k) then
                             local isSlotToBeDrawn = true
                             if v.movementType and v.movementType ~= "inventory" then
                                 isSlotToBeDrawn = false
                             end
-                            if not inventoryCache.isSlotsUpdated then
+                            if not inventoryUI.isSlotsUpdated then
                                 if v.movementType == "equipment" and v.isAutoReserved then
                                     if (tonumber(j.lootItems[v.item]) or 0) <= 0 then
                                         if not sortedItems["__"..v.item] then
@@ -550,7 +549,7 @@ function displayInventoryUI()
                                             local slot_column = slotIndex - (math.max(0, slot_row - 1)*maximumInventoryRowSlots)
                                             local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_column - 1)*(template.contentWrapper.itemGrid.slot.size + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(template.contentWrapper.itemGrid.slot.size + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
                                             local slotWidth, slotHeight = horizontalSlotsToOccupy*template.contentWrapper.itemGrid.slot.size + ((horizontalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding), verticalSlotsToOccupy*template.contentWrapper.itemGrid.slot.size + ((verticalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding)
-                                            if not inventoryCache.attachedItemOnCursor or (inventoryCache.attachedItemOnCursor.itemBox ~= i) or (inventoryCache.attachedItemOnCursor.prevSlotIndex ~= slotIndex) then
+                                            if not inventoryUI.attachedItemOnCursor or (inventoryUI.attachedItemOnCursor.itemBox ~= i) or (inventoryUI.attachedItemOnCursor.prevSlotIndex ~= slotIndex) then
                                                 imports.beautify.native.drawImage(slot_offsetX + ((slotWidth - iconWidth)/2), slot_offsetY + ((slotHeight - iconHeight)/2), iconWidth, iconHeight, iconTextures[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
                                             end
                                         end
@@ -584,15 +583,15 @@ function displayInventoryUI()
                             local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_column - 1)*(template.contentWrapper.itemGrid.slot.size + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(template.contentWrapper.itemGrid.slot.size + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
                             local slotWidth, slotHeight = horizontalSlotsToOccupy*template.contentWrapper.itemGrid.slot.size + ((horizontalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding), verticalSlotsToOccupy*template.contentWrapper.itemGrid.slot.size + ((verticalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding)
                             local isItemToBeDrawn = true
-                            if inventoryCache.attachedItemOnCursor and (inventoryCache.attachedItemOnCursor.itemBox == i) and (inventoryCache.attachedItemOnCursor.prevSlotIndex == slotIndex) then 
-                                if not inventoryCache.attachedItemOnCursor.reservedSlotType then
+                            if inventoryUI.attachedItemOnCursor and (inventoryUI.attachedItemOnCursor.itemBox == i) and (inventoryUI.attachedItemOnCursor.prevSlotIndex == slotIndex) then 
+                                if not inventoryUI.attachedItemOnCursor.reservedSlotType then
                                     isItemToBeDrawn = false
                                 end
                             end
                             if isItemToBeDrawn then
                                 imports.beautify.native.drawImage(slot_offsetX + ((slotWidth - iconWidth)/2), slot_offsetY + ((slotHeight - iconHeight)/2), iconWidth, iconHeight, iconTextures[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
                             end
-                            if not inventoryCache.attachedItemOnCursor and isInventoryEnabled then
+                            if not inventoryUI.attachedItemOnCursor and inventoryUI.isUIEnabled then
                                 if (slot_offsetY >= 0) and ((slot_offsetY + slotHeight) <= template.contentWrapper.height) then
                                     local isSlotHovered = isMouseOnPosition(j.gui.startX + template.contentWrapper.startX + slot_offsetX, j.gui.startY + template.contentWrapper.startY + slot_offsetY, slotWidth, slotHeight)
                                     if isSlotHovered then
@@ -616,11 +615,11 @@ function displayInventoryUI()
                         local slot_column = k - (math.max(0, slot_row - 1)*maximumInventoryRowSlots)
                         local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_column - 1)*(template.contentWrapper.itemGrid.slot.size + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(template.contentWrapper.itemGrid.slot.size + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
                         local isSlotToBeDrawn = true
-                        if inventoryCache.attachedItemOnCursor and inventoryCache.attachedItemOnCursor.itemBox and isElement(inventoryCache.attachedItemOnCursor.itemBox) and inventoryCache.attachedItemOnCursor.itemBox ~= localPlayer and inventoryCache.attachedItemOnCursor.animTickCounter and inventoryCache.attachedItemOnCursor.releaseType and inventoryCache.attachedItemOnCursor.releaseType == "ordering" then
+                        if inventoryUI.attachedItemOnCursor and inventoryUI.attachedItemOnCursor.itemBox and isElement(inventoryUI.attachedItemOnCursor.itemBox) and inventoryUI.attachedItemOnCursor.itemBox ~= localPlayer and inventoryUI.attachedItemOnCursor.animTickCounter and inventoryUI.attachedItemOnCursor.releaseType and inventoryUI.attachedItemOnCursor.releaseType == "ordering" then
                             local slotIndexesToOccupy = {}
-                            for m = inventoryCache.attachedItemOnCursor.prevSlotIndex, inventoryCache.attachedItemOnCursor.prevSlotIndex + (inventoryCache.attachedItemOnCursor.occupiedRowSlots - 1), 1 do
+                            for m = inventoryUI.attachedItemOnCursor.prevSlotIndex, inventoryUI.attachedItemOnCursor.prevSlotIndex + (inventoryUI.attachedItemOnCursor.occupiedRowSlots - 1), 1 do
                                 if m <= totalSlots then
-                                    for x = 1, inventoryCache.attachedItemOnCursor.occupiedColumnSlots, 1 do
+                                    for x = 1, inventoryUI.attachedItemOnCursor.occupiedColumnSlots, 1 do
                                         local succeedingColumnIndex = m + (maximumInventoryRowSlots*(x - 1))
                                         if succeedingColumnIndex <= totalSlots then
                                             if k == succeedingColumnIndex then
@@ -636,8 +635,8 @@ function displayInventoryUI()
                             dxDrawRectangle(slot_offsetX, slot_offsetY, template.contentWrapper.itemGrid.slot.size, template.contentWrapper.itemGrid.slot.size, tocolor(unpack(template.contentWrapper.itemGrid.slot.bgColor)), false)
                         end
                     else
-                        if inventoryCache.inventorySlots.slots[k] and inventoryCache.inventorySlots.slots[k].movementType and inventoryCache.inventorySlots.slots[k].movementType == "equipment" then
-                            local itemDetails, itemCategory = getItemDetails(inventoryCache.inventorySlots.slots[k].item)
+                        if inventoryUI.inventorySlots.slots[k] and inventoryUI.inventorySlots.slots[k].movementType and inventoryUI.inventorySlots.slots[k].movementType == "equipment" then
+                            local itemDetails, itemCategory = getItemDetails(inventoryUI.inventorySlots.slots[k].item)
                             if itemDetails and itemCategory then
                                 local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
                                 local verticalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemVerticalSlots) or 1)
@@ -645,10 +644,10 @@ function displayInventoryUI()
                                 local slot_column = k - (math.max(0, slot_row - 1)*maximumInventoryRowSlots)
                                 local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_column - 1)*(template.contentWrapper.itemGrid.slot.size + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(template.contentWrapper.itemGrid.slot.size + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
                                 local slotWidth, slotHeight = horizontalSlotsToOccupy*template.contentWrapper.itemGrid.slot.size + ((horizontalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding), verticalSlotsToOccupy*template.contentWrapper.itemGrid.slot.size + ((verticalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding)
-                                local equippedIndex = inventoryCache.inventorySlots.slots[k].equipmentIndex
+                                local equippedIndex = inventoryUI.inventorySlots.slots[k].equipmentIndex
                                 if not equippedIndex then
-                                    for m, n in pairs(inventoryCache.gui.equipment.grids) do
-                                        if inventoryCache.inventorySlots.slots[m] and inventoryCache.inventorySlots.slots[m] == inventoryCache.inventorySlots.slots[k].item then
+                                    for m, n in pairs(inventoryUI.gui.equipment.grids) do
+                                        if inventoryUI.inventorySlots.slots[m] and inventoryUI.inventorySlots.slots[m] == inventoryUI.inventorySlots.slots[k].item then
                                             equippedIndex = m
                                             break
                                         end
@@ -661,7 +660,7 @@ function displayInventoryUI()
                         end
                     end
                 end
-                if inventoryCache.attachedItemOnCursor and not inventoryCache.attachedItemOnCursor.animTickCounter then
+                if inventoryUI.attachedItemOnCursor and not inventoryUI.attachedItemOnCursor.animTickCounter then
                     for k = 1, totalSlots, 1 do
                         if not occupiedSlots[k] then
                             local slot_row = math.ceil(k/maximumInventoryRowSlots)
@@ -670,7 +669,7 @@ function displayInventoryUI()
                             if (slot_offsetY >= 0) and ((slot_offsetY + template.contentWrapper.itemGrid.slot.size) <= template.contentWrapper.height) then
                                 local isSlotHovered = isMouseOnPosition(j.gui.startX + template.contentWrapper.startX + slot_offsetX, j.gui.startY + template.contentWrapper.startY + slot_offsetY, template.contentWrapper.itemGrid.slot.size, template.contentWrapper.itemGrid.slot.size)
                                 if isSlotHovered then
-                                    local isSlotAvailable = isPlayerSlotAvailableForOrdering(localPlayer, inventoryCache.attachedItemOnCursor.item, k, inventoryCache.attachedItemOnCursor.isEquippedItem)
+                                    local isSlotAvailable = isPlayerSlotAvailableForOrdering(localPlayer, inventoryUI.attachedItemOnCursor.item, k, inventoryUI.attachedItemOnCursor.isEquippedItem)
                                     if isSlotAvailable then
                                         isItemAvailableForOrdering = {
                                             slotIndex = k,
@@ -678,8 +677,8 @@ function displayInventoryUI()
                                             offsetY = slot_offsetY
                                         }
                                     end
-                                    for m = k, k + (inventoryCache.attachedItemOnCursor.occupiedRowSlots - 1), 1 do
-                                        for x = 1, inventoryCache.attachedItemOnCursor.occupiedColumnSlots, 1 do
+                                    for m = k, k + (inventoryUI.attachedItemOnCursor.occupiedRowSlots - 1), 1 do
+                                        for x = 1, inventoryUI.attachedItemOnCursor.occupiedColumnSlots, 1 do
                                             local succeedingColumnIndex = m + (maximumInventoryRowSlots*(x - 1))
                                             if succeedingColumnIndex <= totalSlots and not occupiedSlots[succeedingColumnIndex] then
                                                 local _slot_row = math.ceil(succeedingColumnIndex/maximumInventoryRowSlots)
@@ -697,15 +696,15 @@ function displayInventoryUI()
                     end
                 end
                 dxSetRenderTarget()
-                imports.beautify.native.drawImage(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height, j.gui.renderTarget, 0, 0, 0, tocolor(255, 255, 255, 255*inventoryOpacityPercent), inventoryCache.gui.postGUI)
+                imports.beautify.native.drawImage(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height, j.gui.renderTarget, 0, 0, 0, tocolor(255, 255, 255, 255*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                 if exceededContentHeight > 0 then
                     local scrollOverlayStartX, scrollOverlayStartY = j.gui.startX + template.scrollBar.overlay.startX, j.gui.startY + template.scrollBar.overlay.startY
                     local scrollOverlayWidth, scrollOverlayHeight =  template.scrollBar.overlay.width, template.scrollBar.overlay.height
-                    dxDrawRectangle(scrollOverlayStartX, scrollOverlayStartY, scrollOverlayWidth, scrollOverlayHeight, tocolor(template.scrollBar.overlay.bgColor[1], template.scrollBar.overlay.bgColor[2], template.scrollBar.overlay.bgColor[3], template.scrollBar.overlay.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
+                    dxDrawRectangle(scrollOverlayStartX, scrollOverlayStartY, scrollOverlayWidth, scrollOverlayHeight, tocolor(template.scrollBar.overlay.bgColor[1], template.scrollBar.overlay.bgColor[2], template.scrollBar.overlay.bgColor[3], template.scrollBar.overlay.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                     local scrollBarWidth, scrollBarHeight =  scrollOverlayWidth, template.scrollBar.bar.height
                     local scrollBarStartX, scrollBarStartY = scrollOverlayStartX, scrollOverlayStartY + ((scrollOverlayHeight - scrollBarHeight)*j.gui.scroller.percent*0.01)
-                    dxDrawRectangle(scrollBarStartX, scrollBarStartY, scrollBarWidth, scrollBarHeight, tocolor(template.scrollBar.bar.bgColor[1], template.scrollBar.bar.bgColor[2], template.scrollBar.bar.bgColor[3], template.scrollBar.bar.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                    if prevScrollState and (not inventoryCache.attachedItemOnCursor or not inventoryCache.attachedItemOnCursor.animTickCounter) and (isMouseOnPosition(scrollOverlayStartX, scrollOverlayStartY, scrollOverlayWidth, scrollOverlayHeight) or isMouseOnPosition(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height)) then
+                    dxDrawRectangle(scrollBarStartX, scrollBarStartY, scrollBarWidth, scrollBarHeight, tocolor(template.scrollBar.bar.bgColor[1], template.scrollBar.bar.bgColor[2], template.scrollBar.bar.bgColor[3], template.scrollBar.bar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                    if prevScrollState and (not inventoryUI.attachedItemOnCursor or not inventoryUI.attachedItemOnCursor.animTickCounter) and (isMouseOnPosition(scrollOverlayStartX, scrollOverlayStartY, scrollOverlayWidth, scrollOverlayHeight) or isMouseOnPosition(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height)) then
                         if prevScrollState == "up" then
                             if j.gui.scroller.percent <= 0 then
                                 j.gui.scroller.percent = 0
@@ -762,19 +761,19 @@ function displayInventoryUI()
                     end
                 end
                 sortedItems = j.sortedCategories
-                imports.beautify.native.drawImage(j.gui.startX + template.width - inventoryCache.gui.equipment.titleBar.height, j.gui.startY - inventoryCache.gui.equipment.titleBar.height, inventoryCache.gui.equipment.titleBar.height, inventoryCache.gui.equipment.titleBar.height, inventoryCache.gui.equipment.titleBar.rightEdgePath, 0, 0, 0, tocolor(inventoryCache.gui.equipment.titleBar.bgColor[1], inventoryCache.gui.equipment.titleBar.bgColor[2], inventoryCache.gui.equipment.titleBar.bgColor[3], inventoryCache.gui.equipment.titleBar.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                dxDrawRectangle(j.gui.startX, j.gui.startY - inventoryCache.gui.equipment.titleBar.height, template.width - inventoryCache.gui.equipment.titleBar.height, inventoryCache.gui.equipment.titleBar.height, tocolor(inventoryCache.gui.equipment.titleBar.bgColor[1], inventoryCache.gui.equipment.titleBar.bgColor[2], inventoryCache.gui.equipment.titleBar.bgColor[3], inventoryCache.gui.equipment.titleBar.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                dxDrawBorderedText(inventoryCache.gui.equipment.titleBar.outlineWeight, inventoryCache.gui.equipment.titleBar.fontColor, string.upper(j.gui.title.."   |   "..usedSlots.."/"..maxSlots), j.gui.startX + inventoryCache.gui.equipment.titleBar.height, j.gui.startY - inventoryCache.gui.equipment.titleBar.height, inventoryCache.gui.equipment.startX + template.width - inventoryCache.gui.equipment.titleBar.height, inventoryCache.gui.equipment.startY, tocolor(inventoryCache.gui.equipment.titleBar.fontColor[1], inventoryCache.gui.equipment.titleBar.fontColor[2], inventoryCache.gui.equipment.titleBar.fontColor[3], inventoryCache.gui.equipment.titleBar.fontColor[4]*inventoryOpacityPercent), 1, inventoryCache.gui.equipment.titleBar.font, "left", "center", true, false, inventoryCache.gui.postGUI)
-                imports.beautify.native.drawImage(j.gui.startX, j.gui.startY + template.height, inventoryCache.gui.equipment.titleBar.height, inventoryCache.gui.equipment.titleBar.height, inventoryCache.gui.equipment.titleBar.invertedEdgePath, 0, 0, 0, tocolor(inventoryCache.gui.equipment.titleBar.bgColor[1], inventoryCache.gui.equipment.titleBar.bgColor[2], inventoryCache.gui.equipment.titleBar.bgColor[3], inventoryCache.gui.equipment.titleBar.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                dxDrawRectangle(j.gui.startX + inventoryCache.gui.equipment.titleBar.height, j.gui.startY + template.height, template.width - inventoryCache.gui.equipment.titleBar.height, inventoryCache.gui.equipment.titleBar.height, tocolor(inventoryCache.gui.equipment.titleBar.bgColor[1], inventoryCache.gui.equipment.titleBar.bgColor[2], inventoryCache.gui.equipment.titleBar.bgColor[3], inventoryCache.gui.equipment.titleBar.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
+                imports.beautify.native.drawImage(j.gui.startX + template.width - inventoryUI.gui.equipment.titleBar.height, j.gui.startY - inventoryUI.gui.equipment.titleBar.height, inventoryUI.gui.equipment.titleBar.height, inventoryUI.gui.equipment.titleBar.height, inventoryUI.gui.equipment.titleBar.rightEdgePath, 0, 0, 0, tocolor(inventoryUI.gui.equipment.titleBar.bgColor[1], inventoryUI.gui.equipment.titleBar.bgColor[2], inventoryUI.gui.equipment.titleBar.bgColor[3], inventoryUI.gui.equipment.titleBar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                dxDrawRectangle(j.gui.startX, j.gui.startY - inventoryUI.gui.equipment.titleBar.height, template.width - inventoryUI.gui.equipment.titleBar.height, inventoryUI.gui.equipment.titleBar.height, tocolor(inventoryUI.gui.equipment.titleBar.bgColor[1], inventoryUI.gui.equipment.titleBar.bgColor[2], inventoryUI.gui.equipment.titleBar.bgColor[3], inventoryUI.gui.equipment.titleBar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                dxDrawBorderedText(inventoryUI.gui.equipment.titleBar.outlineWeight, inventoryUI.gui.equipment.titleBar.fontColor, string.upper(j.gui.title.."   |   "..usedSlots.."/"..maxSlots), j.gui.startX + inventoryUI.gui.equipment.titleBar.height, j.gui.startY - inventoryUI.gui.equipment.titleBar.height, inventoryUI.gui.equipment.startX + template.width - inventoryUI.gui.equipment.titleBar.height, inventoryUI.gui.equipment.startY, tocolor(inventoryUI.gui.equipment.titleBar.fontColor[1], inventoryUI.gui.equipment.titleBar.fontColor[2], inventoryUI.gui.equipment.titleBar.fontColor[3], inventoryUI.gui.equipment.titleBar.fontColor[4]*inventoryOpacityPercent), 1, inventoryUI.gui.equipment.titleBar.font, "left", "center", true, false, inventoryUI.gui.postGUI)
+                imports.beautify.native.drawImage(j.gui.startX, j.gui.startY + template.height, inventoryUI.gui.equipment.titleBar.height, inventoryUI.gui.equipment.titleBar.height, inventoryUI.gui.equipment.titleBar.invertedEdgePath, 0, 0, 0, tocolor(inventoryUI.gui.equipment.titleBar.bgColor[1], inventoryUI.gui.equipment.titleBar.bgColor[2], inventoryUI.gui.equipment.titleBar.bgColor[3], inventoryUI.gui.equipment.titleBar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                dxDrawRectangle(j.gui.startX + inventoryUI.gui.equipment.titleBar.height, j.gui.startY + template.height, template.width - inventoryUI.gui.equipment.titleBar.height, inventoryUI.gui.equipment.titleBar.height, tocolor(inventoryUI.gui.equipment.titleBar.bgColor[1], inventoryUI.gui.equipment.titleBar.bgColor[2], inventoryUI.gui.equipment.titleBar.bgColor[3], inventoryUI.gui.equipment.titleBar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                 local templateBGColor = table.copy(template.bgColor, true)
-                if inventoryCache.attachedItemOnCursor and not inventoryCache.attachedItemOnCursor.animTickCounter and inventoryCache.attachedItemOnCursor.itemBox == localPlayer then
+                if inventoryUI.attachedItemOnCursor and not inventoryUI.attachedItemOnCursor.animTickCounter and inventoryUI.attachedItemOnCursor.itemBox == localPlayer then
                     local isLootHovered = isMouseOnPosition(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height) and not isItemAvailableForOrdering
                     if isLootHovered then
-                        if isLootSlotAvailableForDropping(i, inventoryCache.attachedItemOnCursor.item) then
+                        if isLootSlotAvailableForDropping(i, inventoryUI.attachedItemOnCursor.item) then
                             local itemSlotIndex = false
                             for k, v in ipairs(sortedItems) do
-                                if v.item == inventoryCache.attachedItemOnCursor.item then
+                                if v.item == inventoryUI.attachedItemOnCursor.item then
                                     itemSlotIndex = k
                                     break
                                 end
@@ -794,15 +793,15 @@ function displayInventoryUI()
                         end
                     end
                 end
-                imports.beautify.native.drawImage(j.gui.startX, j.gui.startY, template.width, template.height, template.bgImage, 0, 0, 0, tocolor(templateBGColor[1], templateBGColor[2], templateBGColor[3], templateBGColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                dxDrawRectangle(j.gui.startX, j.gui.startY, template.width, inventoryCache.gui.equipment.titleBar.dividerSize, tocolor(inventoryCache.gui.equipment.titleBar.dividerColor[1], inventoryCache.gui.equipment.titleBar.dividerColor[2], inventoryCache.gui.equipment.titleBar.dividerColor[3], inventoryCache.gui.equipment.titleBar.dividerColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-                dxDrawRectangle(j.gui.startX, j.gui.startY + template.height - inventoryCache.gui.equipment.titleBar.dividerSize, template.width, inventoryCache.gui.equipment.titleBar.dividerSize, tocolor(inventoryCache.gui.equipment.titleBar.dividerColor[1], inventoryCache.gui.equipment.titleBar.dividerColor[2], inventoryCache.gui.equipment.titleBar.dividerColor[3], inventoryCache.gui.equipment.titleBar.dividerColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
+                imports.beautify.native.drawImage(j.gui.startX, j.gui.startY, template.width, template.height, template.bgImage, 0, 0, 0, tocolor(templateBGColor[1], templateBGColor[2], templateBGColor[3], templateBGColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                dxDrawRectangle(j.gui.startX, j.gui.startY, template.width, inventoryUI.gui.equipment.titleBar.dividerSize, tocolor(inventoryUI.gui.equipment.titleBar.dividerColor[1], inventoryUI.gui.equipment.titleBar.dividerColor[2], inventoryUI.gui.equipment.titleBar.dividerColor[3], inventoryUI.gui.equipment.titleBar.dividerColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                dxDrawRectangle(j.gui.startX, j.gui.startY + template.height - inventoryUI.gui.equipment.titleBar.dividerSize, template.width, inventoryUI.gui.equipment.titleBar.dividerSize, tocolor(inventoryUI.gui.equipment.titleBar.dividerColor[1], inventoryUI.gui.equipment.titleBar.dividerColor[2], inventoryUI.gui.equipment.titleBar.dividerColor[3], inventoryUI.gui.equipment.titleBar.dividerColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                 dxSetRenderTarget(j.gui.renderTarget, true)
                 local totalContentHeight = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*(#sortedItems))
                 local exceededContentHeight =  totalContentHeight - template.contentWrapper.height
                 if not j.__itemNameSlots then j.__itemNameSlots = {} end
-                if not inventoryCache.isSlotsUpdated then
-                    for k, v in pairs(inventoryCache.inventorySlots.slots) do
+                if not inventoryUI.isSlotsUpdated then
+                    for k, v in pairs(inventoryUI.inventorySlots.slots) do
                         if tonumber(k) and v.loot and v.loot == i then
                             if v.movementType then
                                 if v.movementType == "loot" and (tonumber(j.lootItems[v.item]) or 0) <= 0 then
@@ -810,7 +809,7 @@ function displayInventoryUI()
                                         table.insert(sortedItems, {item = v.item, itemValue = 1})
                                         sortedItems["__"..v.item] = true
                                     end
-                                elseif not inventoryCache.attachedItemOnCursor then
+                                elseif not inventoryUI.attachedItemOnCursor then
                                     if (v.movementType == "inventory" and not v.isOrdering) or (v.movementType == "equipment" and v.isAutoReserved) then
                                         if not sortedItems["__"..v.item] then
                                             for m, n in ipairs(sortedItems) do
@@ -852,7 +851,7 @@ function displayInventoryUI()
                             local iconWidth, iconHeight = 0, template.contentWrapper.itemSlot.iconSlot.height
                             local originalWidth, originalHeight = iconDimensions[itemDetails.iconPath].width, iconDimensions[itemDetails.iconPath].height
                             iconWidth = (originalWidth / originalHeight)*iconHeight
-                            local isSlotHovered = isMouseOnPosition(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height) and isMouseOnPosition(j.gui.startX + template.contentWrapper.startX + slot_offsetX, j.gui.startY + template.contentWrapper.startY + slot_offsetY, slotWidth, slotHeight) and (slot_offsetY >= 0) and ((slot_offsetY + slotHeight) <= template.contentWrapper.height) and not inventoryCache.attachedItemOnCursor and isInventoryEnabled
+                            local isSlotHovered = isMouseOnPosition(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height) and isMouseOnPosition(j.gui.startX + template.contentWrapper.startX + slot_offsetX, j.gui.startY + template.contentWrapper.startY + slot_offsetY, slotWidth, slotHeight) and (slot_offsetY >= 0) and ((slot_offsetY + slotHeight) <= template.contentWrapper.height) and not inventoryUI.attachedItemOnCursor and inventoryUI.isUIEnabled
                             if isSlotHovered then
                                 equipmentInformation = itemDetails.itemName..":\n"..itemDetails.description
                                 if j.__itemNameSlots[itemDetails.dataName].hoverStatus ~= "forward" then
@@ -873,13 +872,13 @@ function displayInventoryUI()
                                 j.__itemNameSlots[itemDetails.dataName].hoverAlphaPercent = interpolateBetween(j.__itemNameSlots[itemDetails.dataName].hoverAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.__itemNameSlots[itemDetails.dataName].hoverAnimTickCounter, template.contentWrapper.itemSlot.itemName.hoverAnimDuration*0.5), "OutBounce")
                             end
                             local lootItemValue = v.itemValue
-                            if inventoryCache.attachedItemOnCursor then
-                                if inventoryCache.attachedItemOnCursor.itemBox == i then
-                                    if inventoryCache.attachedItemOnCursor.releaseIndex then
-                                        if inventoryCache.attachedItemOnCursor.releaseIndex == k then
+                            if inventoryUI.attachedItemOnCursor then
+                                if inventoryUI.attachedItemOnCursor.itemBox == i then
+                                    if inventoryUI.attachedItemOnCursor.releaseIndex then
+                                        if inventoryUI.attachedItemOnCursor.releaseIndex == k then
                                             lootItemValue = lootItemValue - 1
                                         end
-                                    elseif inventoryCache.attachedItemOnCursor.prevSlotIndex == k then
+                                    elseif inventoryUI.attachedItemOnCursor.prevSlotIndex == k then
                                         lootItemValue = lootItemValue - 1
                                     end
                                 end
@@ -907,14 +906,14 @@ function displayInventoryUI()
                     end
                 end
                 dxSetRenderTarget()
-                imports.beautify.native.drawImage(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height, j.gui.renderTarget, 0, 0, 0, tocolor(255, 255, 255, 255*inventoryOpacityPercent), inventoryCache.gui.postGUI)
+                imports.beautify.native.drawImage(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height, j.gui.renderTarget, 0, 0, 0, tocolor(255, 255, 255, 255*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                 if exceededContentHeight > 0 then
                     local scrollOverlayStartX, scrollOverlayStartY = j.gui.startX + template.scrollBar.overlay.startX, j.gui.startY + template.scrollBar.overlay.startY
                     local scrollOverlayWidth, scrollOverlayHeight =  template.scrollBar.overlay.width, template.scrollBar.overlay.height
-                    dxDrawRectangle(scrollOverlayStartX, scrollOverlayStartY, scrollOverlayWidth, scrollOverlayHeight, tocolor(template.scrollBar.overlay.bgColor[1], template.scrollBar.overlay.bgColor[2], template.scrollBar.overlay.bgColor[3], template.scrollBar.overlay.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
+                    dxDrawRectangle(scrollOverlayStartX, scrollOverlayStartY, scrollOverlayWidth, scrollOverlayHeight, tocolor(template.scrollBar.overlay.bgColor[1], template.scrollBar.overlay.bgColor[2], template.scrollBar.overlay.bgColor[3], template.scrollBar.overlay.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                     local scrollBarWidth, scrollBarHeight =  scrollOverlayWidth, template.scrollBar.bar.height
                     local scrollBarStartX, scrollBarStartY = scrollOverlayStartX, scrollOverlayStartY + ((scrollOverlayHeight - scrollBarHeight)*j.gui.scroller.percent*0.01)
-                    dxDrawRectangle(scrollBarStartX, scrollBarStartY, scrollBarWidth, scrollBarHeight, tocolor(template.scrollBar.bar.bgColor[1], template.scrollBar.bar.bgColor[2], template.scrollBar.bar.bgColor[3], template.scrollBar.bar.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
+                    dxDrawRectangle(scrollBarStartX, scrollBarStartY, scrollBarWidth, scrollBarHeight, tocolor(template.scrollBar.bar.bgColor[1], template.scrollBar.bar.bgColor[2], template.scrollBar.bar.bgColor[3], template.scrollBar.bar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                     if prevScrollState and (isMouseOnPosition(scrollOverlayStartX, scrollOverlayStartY, scrollOverlayWidth, scrollOverlayHeight) or isMouseOnPosition(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height)) then
                         if prevScrollState == "up" then
                             if j.gui.scroller.percent <= 0 then
@@ -948,58 +947,58 @@ function displayInventoryUI()
 
     --Draws Information
     dxSetRenderTarget()
-    imports.beautify.native.drawImage(inventoryCache.gui.equipment.description.startX, inventoryCache.gui.equipment.description.startY, inventoryCache.gui.equipment.description.height/2, inventoryCache.gui.equipment.description.height/2, inventoryCache.gui.equipment.slotTopLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(inventoryCache.gui.equipment.description.bgColor[1], inventoryCache.gui.equipment.description.bgColor[2], inventoryCache.gui.equipment.description.bgColor[3], inventoryCache.gui.equipment.description.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-    imports.beautify.native.drawImage(inventoryCache.gui.equipment.description.startX + inventoryCache.gui.equipment.description.width - inventoryCache.gui.equipment.description.height/2, inventoryCache.gui.equipment.description.startY, inventoryCache.gui.equipment.description.height/2, inventoryCache.gui.equipment.description.height/2, inventoryCache.gui.equipment.slotTopRightCurvedEdgeBGPath, 0, 0, 0, tocolor(inventoryCache.gui.equipment.description.bgColor[1], inventoryCache.gui.equipment.description.bgColor[2], inventoryCache.gui.equipment.description.bgColor[3], inventoryCache.gui.equipment.description.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-    imports.beautify.native.drawImage(inventoryCache.gui.equipment.description.startX, inventoryCache.gui.equipment.description.startY + inventoryCache.gui.equipment.description.height - inventoryCache.gui.equipment.description.height/2, inventoryCache.gui.equipment.description.height/2, inventoryCache.gui.equipment.description.height/2, inventoryCache.gui.equipment.slotBottomLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(inventoryCache.gui.equipment.description.bgColor[1], inventoryCache.gui.equipment.description.bgColor[2], inventoryCache.gui.equipment.description.bgColor[3], inventoryCache.gui.equipment.description.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-    imports.beautify.native.drawImage(inventoryCache.gui.equipment.description.startX + inventoryCache.gui.equipment.description.width - inventoryCache.gui.equipment.description.height/2, inventoryCache.gui.equipment.description.startY + inventoryCache.gui.equipment.description.height - inventoryCache.gui.equipment.description.height/2, inventoryCache.gui.equipment.description.height/2, inventoryCache.gui.equipment.description.height/2, inventoryCache.gui.equipment.slotBottomRightCurvedEdgeBGPath, 0, 0, 0, tocolor(inventoryCache.gui.equipment.description.bgColor[1], inventoryCache.gui.equipment.description.bgColor[2], inventoryCache.gui.equipment.description.bgColor[3], inventoryCache.gui.equipment.description.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-    dxDrawRectangle(inventoryCache.gui.equipment.description.startX + inventoryCache.gui.equipment.description.height/2, inventoryCache.gui.equipment.description.startY, inventoryCache.gui.equipment.description.width - inventoryCache.gui.equipment.description.height, inventoryCache.gui.equipment.description.height, tocolor(inventoryCache.gui.equipment.description.bgColor[1], inventoryCache.gui.equipment.description.bgColor[2], inventoryCache.gui.equipment.description.bgColor[3], inventoryCache.gui.equipment.description.bgColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
+    imports.beautify.native.drawImage(inventoryUI.gui.equipment.description.startX, inventoryUI.gui.equipment.description.startY, inventoryUI.gui.equipment.description.height/2, inventoryUI.gui.equipment.description.height/2, inventoryUI.gui.equipment.slotTopLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(inventoryUI.gui.equipment.description.bgColor[1], inventoryUI.gui.equipment.description.bgColor[2], inventoryUI.gui.equipment.description.bgColor[3], inventoryUI.gui.equipment.description.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+    imports.beautify.native.drawImage(inventoryUI.gui.equipment.description.startX + inventoryUI.gui.equipment.description.width - inventoryUI.gui.equipment.description.height/2, inventoryUI.gui.equipment.description.startY, inventoryUI.gui.equipment.description.height/2, inventoryUI.gui.equipment.description.height/2, inventoryUI.gui.equipment.slotTopRightCurvedEdgeBGPath, 0, 0, 0, tocolor(inventoryUI.gui.equipment.description.bgColor[1], inventoryUI.gui.equipment.description.bgColor[2], inventoryUI.gui.equipment.description.bgColor[3], inventoryUI.gui.equipment.description.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+    imports.beautify.native.drawImage(inventoryUI.gui.equipment.description.startX, inventoryUI.gui.equipment.description.startY + inventoryUI.gui.equipment.description.height - inventoryUI.gui.equipment.description.height/2, inventoryUI.gui.equipment.description.height/2, inventoryUI.gui.equipment.description.height/2, inventoryUI.gui.equipment.slotBottomLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(inventoryUI.gui.equipment.description.bgColor[1], inventoryUI.gui.equipment.description.bgColor[2], inventoryUI.gui.equipment.description.bgColor[3], inventoryUI.gui.equipment.description.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+    imports.beautify.native.drawImage(inventoryUI.gui.equipment.description.startX + inventoryUI.gui.equipment.description.width - inventoryUI.gui.equipment.description.height/2, inventoryUI.gui.equipment.description.startY + inventoryUI.gui.equipment.description.height - inventoryUI.gui.equipment.description.height/2, inventoryUI.gui.equipment.description.height/2, inventoryUI.gui.equipment.description.height/2, inventoryUI.gui.equipment.slotBottomRightCurvedEdgeBGPath, 0, 0, 0, tocolor(inventoryUI.gui.equipment.description.bgColor[1], inventoryUI.gui.equipment.description.bgColor[2], inventoryUI.gui.equipment.description.bgColor[3], inventoryUI.gui.equipment.description.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+    dxDrawRectangle(inventoryUI.gui.equipment.description.startX + inventoryUI.gui.equipment.description.height/2, inventoryUI.gui.equipment.description.startY, inventoryUI.gui.equipment.description.width - inventoryUI.gui.equipment.description.height, inventoryUI.gui.equipment.description.height, tocolor(inventoryUI.gui.equipment.description.bgColor[1], inventoryUI.gui.equipment.description.bgColor[2], inventoryUI.gui.equipment.description.bgColor[3], inventoryUI.gui.equipment.description.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
     if equipmentInformation then
-        dxDrawText(tostring(equipmentInformation), inventoryCache.gui.equipment.description.startX + inventoryCache.gui.equipment.description.padding, inventoryCache.gui.equipment.description.startY + inventoryCache.gui.equipment.description.padding, inventoryCache.gui.equipment.description.startX + inventoryCache.gui.equipment.description.width - inventoryCache.gui.equipment.description.padding, inventoryCache.gui.equipment.description.startY + inventoryCache.gui.equipment.description.height - inventoryCache.gui.equipment.description.padding, tocolor(equipmentInformationColor[1], equipmentInformationColor[2], equipmentInformationColor[3], equipmentInformationColor[4]*inventoryOpacityPercent), 1, inventoryCache.gui.equipment.description.font, "left", "top", true, true, inventoryCache.gui.postGUI)
+        dxDrawText(tostring(equipmentInformation), inventoryUI.gui.equipment.description.startX + inventoryUI.gui.equipment.description.padding, inventoryUI.gui.equipment.description.startY + inventoryUI.gui.equipment.description.padding, inventoryUI.gui.equipment.description.startX + inventoryUI.gui.equipment.description.width - inventoryUI.gui.equipment.description.padding, inventoryUI.gui.equipment.description.startY + inventoryUI.gui.equipment.description.height - inventoryUI.gui.equipment.description.padding, tocolor(equipmentInformationColor[1], equipmentInformationColor[2], equipmentInformationColor[3], equipmentInformationColor[4]*inventoryOpacityPercent), 1, inventoryUI.gui.equipment.description.font, "left", "top", true, true, inventoryUI.gui.postGUI)
     end
 
     --Draws Lock Stat
-    local lockStat_offsetX, lockStat_offsetY = inventoryCache.gui.lockStat.startX + (inventoryCache.gui.equipment.startX + inventoryCache.gui.equipment.width - inventoryCache.gui.lockStat.iconSize), inventoryCache.gui.equipment.startY + inventoryCache.gui.lockStat.startY
-    imports.beautify.native.drawImage(lockStat_offsetX, lockStat_offsetY, inventoryCache.gui.lockStat.iconSize, inventoryCache.gui.lockStat.iconSize, ((isInventoryEnabled and not inventoryCache.attachedItemOnCursor) and inventoryCache.gui.lockStat.unlockedIconPath) or inventoryCache.gui.lockStat.lockedIconPath, 0, 0, 0, tocolor(inventoryCache.gui.lockStat.iconColor[1], inventoryCache.gui.lockStat.iconColor[2], inventoryCache.gui.lockStat.iconColor[3], inventoryCache.gui.lockStat.iconColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
+    local lockStat_offsetX, lockStat_offsetY = inventoryUI.gui.lockStat.startX + (inventoryUI.gui.equipment.startX + inventoryUI.gui.equipment.width - inventoryUI.gui.lockStat.iconSize), inventoryUI.gui.equipment.startY + inventoryUI.gui.lockStat.startY
+    imports.beautify.native.drawImage(lockStat_offsetX, lockStat_offsetY, inventoryUI.gui.lockStat.iconSize, inventoryUI.gui.lockStat.iconSize, ((inventoryUI.isUIEnabled and not inventoryUI.attachedItemOnCursor) and inventoryUI.gui.lockStat.unlockedIconPath) or inventoryUI.gui.lockStat.lockedIconPath, 0, 0, 0, tocolor(inventoryUI.gui.lockStat.iconColor[1], inventoryUI.gui.lockStat.iconColor[2], inventoryUI.gui.lockStat.iconColor[3], inventoryUI.gui.lockStat.iconColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
 
     --Draws Transparency Adjuster
-    local thumb_offsetX, thumb_offsetY = inventoryCache.gui.tranparencyAdjuster.startX + ((inventoryCache.gui.tranparencyAdjuster.width - inventoryCache.gui.tranparencyAdjuster.thumbSize)*inventoryCache.gui.tranparencyAdjuster.percent), inventoryCache.gui.tranparencyAdjuster.startY + ((inventoryCache.gui.tranparencyAdjuster.height - inventoryCache.gui.tranparencyAdjuster.thumbSize)/2)
-    local isThumbHovered = isMouseOnPosition(thumb_offsetX, thumb_offsetY, inventoryCache.gui.tranparencyAdjuster.thumbSize, inventoryCache.gui.tranparencyAdjuster.thumbSize)
-    local isTransparencyAdjusterHovered = isMouseOnPosition(inventoryCache.gui.tranparencyAdjuster.startX - inventoryCache.gui.tranparencyAdjuster.slideRange, inventoryCache.gui.tranparencyAdjuster.startY - inventoryCache.gui.tranparencyAdjuster.slideRange, inventoryCache.gui.tranparencyAdjuster.width + (inventoryCache.gui.tranparencyAdjuster.slideRange*2), inventoryCache.gui.tranparencyAdjuster.height + (inventoryCache.gui.tranparencyAdjuster.slideRange*2))
+    local thumb_offsetX, thumb_offsetY = inventoryUI.gui.tranparencyAdjuster.startX + ((inventoryUI.gui.tranparencyAdjuster.width - inventoryUI.gui.tranparencyAdjuster.thumbSize)*inventoryUI.gui.tranparencyAdjuster.percent), inventoryUI.gui.tranparencyAdjuster.startY + ((inventoryUI.gui.tranparencyAdjuster.height - inventoryUI.gui.tranparencyAdjuster.thumbSize)/2)
+    local isThumbHovered = isMouseOnPosition(thumb_offsetX, thumb_offsetY, inventoryUI.gui.tranparencyAdjuster.thumbSize, inventoryUI.gui.tranparencyAdjuster.thumbSize)
+    local isTransparencyAdjusterHovered = isMouseOnPosition(inventoryUI.gui.tranparencyAdjuster.startX - inventoryUI.gui.tranparencyAdjuster.slideRange, inventoryUI.gui.tranparencyAdjuster.startY - inventoryUI.gui.tranparencyAdjuster.slideRange, inventoryUI.gui.tranparencyAdjuster.width + (inventoryUI.gui.tranparencyAdjuster.slideRange*2), inventoryUI.gui.tranparencyAdjuster.height + (inventoryUI.gui.tranparencyAdjuster.slideRange*2))
     if isTransparencyAdjusterHovered then
-        if getKeyState("mouse1") and not GuiElement.isMTAWindowActive() and not inventoryCache.attachedItemOnCursor then
-            local currentThumbOffsetX = getAbsoluteCursorPosition() - inventoryCache.gui.tranparencyAdjuster.startX + (inventoryCache.gui.tranparencyAdjuster.thumbSize/2)
-            inventoryCache.gui.tranparencyAdjuster.percent = math.min(100, math.max(0, math.floor((currentThumbOffsetX / inventoryCache.gui.tranparencyAdjuster.width)*100)))
-            inventoryCache.gui.tranparencyAdjuster.percent = inventoryCache.gui.tranparencyAdjuster.percent/100
+        if getKeyState("mouse1") and not GuiElement.isMTAWindowActive() and not inventoryUI.attachedItemOnCursor then
+            local currentThumbOffsetX = getAbsoluteCursorPosition() - inventoryUI.gui.tranparencyAdjuster.startX + (inventoryUI.gui.tranparencyAdjuster.thumbSize/2)
+            inventoryUI.gui.tranparencyAdjuster.percent = math.min(100, math.max(0, math.floor((currentThumbOffsetX / inventoryUI.gui.tranparencyAdjuster.width)*100)))
+            inventoryUI.gui.tranparencyAdjuster.percent = inventoryUI.gui.tranparencyAdjuster.percent/100
         end
     end
-    dxDrawRectangle(thumb_offsetX - inventoryCache.gui.tranparencyAdjuster.borderSize, thumb_offsetY - inventoryCache.gui.tranparencyAdjuster.borderSize, inventoryCache.gui.tranparencyAdjuster.thumbSize + (inventoryCache.gui.tranparencyAdjuster.borderSize*2), inventoryCache.gui.tranparencyAdjuster.thumbSize + (inventoryCache.gui.tranparencyAdjuster.borderSize*2), tocolor(inventoryCache.gui.tranparencyAdjuster.borderColor[1], inventoryCache.gui.tranparencyAdjuster.borderColor[2], inventoryCache.gui.tranparencyAdjuster.borderColor[3], inventoryCache.gui.tranparencyAdjuster.borderColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
-    dxDrawRectangle(thumb_offsetX, thumb_offsetY, inventoryCache.gui.tranparencyAdjuster.thumbSize, inventoryCache.gui.tranparencyAdjuster.thumbSize, tocolor(inventoryCache.gui.tranparencyAdjuster.thumbColor[1], inventoryCache.gui.tranparencyAdjuster.thumbColor[2], inventoryCache.gui.tranparencyAdjuster.thumbColor[3], inventoryCache.gui.tranparencyAdjuster.thumbColor[4]*inventoryOpacityPercent), inventoryCache.gui.postGUI)
+    dxDrawRectangle(thumb_offsetX - inventoryUI.gui.tranparencyAdjuster.borderSize, thumb_offsetY - inventoryUI.gui.tranparencyAdjuster.borderSize, inventoryUI.gui.tranparencyAdjuster.thumbSize + (inventoryUI.gui.tranparencyAdjuster.borderSize*2), inventoryUI.gui.tranparencyAdjuster.thumbSize + (inventoryUI.gui.tranparencyAdjuster.borderSize*2), tocolor(inventoryUI.gui.tranparencyAdjuster.borderColor[1], inventoryUI.gui.tranparencyAdjuster.borderColor[2], inventoryUI.gui.tranparencyAdjuster.borderColor[3], inventoryUI.gui.tranparencyAdjuster.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+    dxDrawRectangle(thumb_offsetX, thumb_offsetY, inventoryUI.gui.tranparencyAdjuster.thumbSize, inventoryUI.gui.tranparencyAdjuster.thumbSize, tocolor(inventoryUI.gui.tranparencyAdjuster.thumbColor[1], inventoryUI.gui.tranparencyAdjuster.thumbColor[2], inventoryUI.gui.tranparencyAdjuster.thumbColor[3], inventoryUI.gui.tranparencyAdjuster.thumbColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
 
-    if inventoryCache.attachedItemOnCursor then
-        local itemDetails = getItemDetails(inventoryCache.attachedItemOnCursor.item)
+    if inventoryUI.attachedItemOnCursor then
+        local itemDetails = getItemDetails(inventoryUI.attachedItemOnCursor.item)
         if not itemDetails then
             detachInventoryItem(true)
         else
-            local horizontalSlotsToOccupy = inventoryCache.attachedItemOnCursor.occupiedRowSlots
-            local verticalSlotsToOccupy = inventoryCache.attachedItemOnCursor.occupiedColumnSlots
-            local iconWidth, iconHeight = 0, inventoryCache.gui.itemBox.templates[1].contentWrapper.itemGrid.slot.size*verticalSlotsToOccupy
+            local horizontalSlotsToOccupy = inventoryUI.attachedItemOnCursor.occupiedRowSlots
+            local verticalSlotsToOccupy = inventoryUI.attachedItemOnCursor.occupiedColumnSlots
+            local iconWidth, iconHeight = 0, inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.slot.size*verticalSlotsToOccupy
             local originalWidth, originalHeight = iconDimensions[itemDetails.iconPath].width, iconDimensions[itemDetails.iconPath].height
             iconWidth = (originalWidth / originalHeight)*iconHeight
-            if (GuiElement.isMTAWindowActive() or not getKeyState("mouse1") or not isInventoryEnabled) and (not inventoryCache.attachedItemOnCursor.animTickCounter) then
+            if (GuiElement.isMTAWindowActive() or not getKeyState("mouse1") or not inventoryUI.isUIEnabled) and (not inventoryUI.attachedItemOnCursor.animTickCounter) then
                 prevScrollState = false
                 if isItemAvailableForOrdering then
-                    local slotWidth, slotHeight = horizontalSlotsToOccupy*inventoryCache.gui.itemBox.templates[1].contentWrapper.itemGrid.slot.size + ((horizontalSlotsToOccupy - 1)*inventoryCache.gui.itemBox.templates[1].contentWrapper.itemGrid.padding), verticalSlotsToOccupy*inventoryCache.gui.itemBox.templates[1].contentWrapper.itemGrid.slot.size + ((verticalSlotsToOccupy - 1)*inventoryCache.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)
-                    local releaseIndex = inventoryCache.attachedItemOnCursor.prevSlotIndex
-                    inventoryCache.attachedItemOnCursor.prevSlotIndex = isItemAvailableForOrdering.slotIndex
-                    inventoryCache.attachedItemOnCursor.prevPosX = itemBoxesCache[localPlayer].gui.startX + inventoryCache.gui.itemBox.templates[1].contentWrapper.startX + isItemAvailableForOrdering.offsetX + ((slotWidth - iconWidth)/2)
-                    inventoryCache.attachedItemOnCursor.prevPosY = itemBoxesCache[localPlayer].gui.startY + inventoryCache.gui.itemBox.templates[1].contentWrapper.startY + isItemAvailableForOrdering.offsetY + ((slotHeight - iconHeight)/2)
-                    inventoryCache.attachedItemOnCursor.releaseType = "ordering"
-                    inventoryCache.attachedItemOnCursor.releaseIndex = releaseIndex
-                    if inventoryCache.attachedItemOnCursor.itemBox == localPlayer then
-                        if inventoryCache.attachedItemOnCursor.isEquippedItem then
-                            unequipItemInInventory(inventoryCache.attachedItemOnCursor.item, releaseIndex, isItemAvailableForOrdering.slotIndex, localPlayer)
+                    local slotWidth, slotHeight = horizontalSlotsToOccupy*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.slot.size + ((horizontalSlotsToOccupy - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding), verticalSlotsToOccupy*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.slot.size + ((verticalSlotsToOccupy - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)
+                    local releaseIndex = inventoryUI.attachedItemOnCursor.prevSlotIndex
+                    inventoryUI.attachedItemOnCursor.prevSlotIndex = isItemAvailableForOrdering.slotIndex
+                    inventoryUI.attachedItemOnCursor.prevPosX = itemBoxesCache[localPlayer].gui.startX + inventoryUI.gui.itemBox.templates[1].contentWrapper.startX + isItemAvailableForOrdering.offsetX + ((slotWidth - iconWidth)/2)
+                    inventoryUI.attachedItemOnCursor.prevPosY = itemBoxesCache[localPlayer].gui.startY + inventoryUI.gui.itemBox.templates[1].contentWrapper.startY + isItemAvailableForOrdering.offsetY + ((slotHeight - iconHeight)/2)
+                    inventoryUI.attachedItemOnCursor.releaseType = "ordering"
+                    inventoryUI.attachedItemOnCursor.releaseIndex = releaseIndex
+                    if inventoryUI.attachedItemOnCursor.itemBox == localPlayer then
+                        if inventoryUI.attachedItemOnCursor.isEquippedItem then
+                            unequipItemInInventory(inventoryUI.attachedItemOnCursor.item, releaseIndex, isItemAvailableForOrdering.slotIndex, localPlayer)
                         else
-                            orderItemInInventory(inventoryCache.attachedItemOnCursor.item, releaseIndex, isItemAvailableForOrdering.slotIndex)
+                            orderItemInInventory(inventoryUI.attachedItemOnCursor.item, releaseIndex, isItemAvailableForOrdering.slotIndex)
                         end
                     end
                     triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
@@ -1008,7 +1007,7 @@ function displayInventoryUI()
                     for index, _ in pairs(itemBoxesCache[isItemAvailableForDropping.loot].lootItems) do
                         totalLootItems = totalLootItems + 1
                     end
-                    local template = inventoryCache.gui.itemBox.templates[(itemBoxesCache[isItemAvailableForDropping.loot].gui.templateIndex)]
+                    local template = inventoryUI.gui.itemBox.templates[(itemBoxesCache[isItemAvailableForDropping.loot].gui.templateIndex)]
                     local totalContentHeight = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*totalLootItems)
                     local exceededContentHeight =  totalContentHeight - template.contentWrapper.height
                     local slot_offsetY = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*(isItemAvailableForDropping.slotIndex - 1))
@@ -1019,28 +1018,28 @@ function displayInventoryUI()
                         if slot_offsetY < 0 then
                             local finalScrollPercent = itemBoxesCache[isItemAvailableForDropping.loot].gui.scroller.percent + (slot_offsetY/exceededContentHeight)*100
                             slot_offsetY = template.contentWrapper.itemSlot.paddingY
-                            inventoryCache.attachedItemOnCursor.__scrollItemBox = {initial = itemBoxesCache[isItemAvailableForDropping.loot].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
+                            inventoryUI.attachedItemOnCursor.__scrollItemBox = {initial = itemBoxesCache[isItemAvailableForDropping.loot].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
                         elseif (slot_offsetY + template.contentWrapper.itemSlot.height + template.contentWrapper.itemSlot.paddingY) > template.contentWrapper.height then
                             local finalScrollPercent = itemBoxesCache[isItemAvailableForDropping.loot].gui.scroller.percent + (((slot_offsetY + template.contentWrapper.itemSlot.height + template.contentWrapper.itemSlot.paddingY) - template.contentWrapper.height)/exceededContentHeight)*100
                             slot_offsetY = template.contentWrapper.height - (template.contentWrapper.itemSlot.height + template.contentWrapper.itemSlot.paddingY)
-                            inventoryCache.attachedItemOnCursor.__scrollItemBox = {initial = itemBoxesCache[isItemAvailableForDropping.loot].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
+                            inventoryUI.attachedItemOnCursor.__scrollItemBox = {initial = itemBoxesCache[isItemAvailableForDropping.loot].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
                         end
                     end
-                    local releaseIndex = inventoryCache.attachedItemOnCursor.prevSlotIndex
-                    inventoryCache.attachedItemOnCursor.__finalWidth, inventoryCache.attachedItemOnCursor.__finalHeight = slotWidth, slotHeight
-                    inventoryCache.attachedItemOnCursor.prevWidth, inventoryCache.attachedItemOnCursor.prevHeight = inventoryCache.attachedItemOnCursor.__width, inventoryCache.attachedItemOnCursor.__height
-                    inventoryCache.attachedItemOnCursor.sizeAnimTickCounter = getTickCount()
-                    inventoryCache.attachedItemOnCursor.prevSlotIndex = isItemAvailableForDropping.slotIndex
-                    inventoryCache.attachedItemOnCursor.prevPosX = itemBoxesCache[isItemAvailableForDropping.loot].gui.startX + template.contentWrapper.startX + template.contentWrapper.itemSlot.startX + template.contentWrapper.itemSlot.iconSlot.startX
-                    inventoryCache.attachedItemOnCursor.prevPosY = itemBoxesCache[isItemAvailableForDropping.loot].gui.startY + template.contentWrapper.startY + slot_offsetY
-                    inventoryCache.attachedItemOnCursor.releaseType = "dropping"
-                    inventoryCache.attachedItemOnCursor.releaseLoot = isItemAvailableForDropping.loot
-                    inventoryCache.attachedItemOnCursor.releaseIndex = releaseIndex
-                    if inventoryCache.attachedItemOnCursor.isEquippedItem then
+                    local releaseIndex = inventoryUI.attachedItemOnCursor.prevSlotIndex
+                    inventoryUI.attachedItemOnCursor.__finalWidth, inventoryUI.attachedItemOnCursor.__finalHeight = slotWidth, slotHeight
+                    inventoryUI.attachedItemOnCursor.prevWidth, inventoryUI.attachedItemOnCursor.prevHeight = inventoryUI.attachedItemOnCursor.__width, inventoryUI.attachedItemOnCursor.__height
+                    inventoryUI.attachedItemOnCursor.sizeAnimTickCounter = getTickCount()
+                    inventoryUI.attachedItemOnCursor.prevSlotIndex = isItemAvailableForDropping.slotIndex
+                    inventoryUI.attachedItemOnCursor.prevPosX = itemBoxesCache[isItemAvailableForDropping.loot].gui.startX + template.contentWrapper.startX + template.contentWrapper.itemSlot.startX + template.contentWrapper.itemSlot.iconSlot.startX
+                    inventoryUI.attachedItemOnCursor.prevPosY = itemBoxesCache[isItemAvailableForDropping.loot].gui.startY + template.contentWrapper.startY + slot_offsetY
+                    inventoryUI.attachedItemOnCursor.releaseType = "dropping"
+                    inventoryUI.attachedItemOnCursor.releaseLoot = isItemAvailableForDropping.loot
+                    inventoryUI.attachedItemOnCursor.releaseIndex = releaseIndex
+                    if inventoryUI.attachedItemOnCursor.isEquippedItem then
                         local reservedSlotIndex = false
-                        inventoryCache.isSlotsUpdatePending = true
-                        inventoryCache.inventorySlots.slots[releaseIndex] = nil
-                        for i, j in pairs(inventoryCache.inventorySlots.slots) do
+                        inventoryUI.isSlotsUpdatePending = true
+                        inventoryUI.inventorySlots.slots[releaseIndex] = nil
+                        for i, j in pairs(inventoryUI.inventorySlots.slots) do
                             if tonumber(i) then
                                 if j.movementType and j.movementType == "equipment" and releaseIndex == j.equipmentIndex then
                                     reservedSlotIndex = i
@@ -1049,47 +1048,47 @@ function displayInventoryUI()
                             end
                         end
                         if reservedSlotIndex then
-                            inventoryCache.attachedItemOnCursor.reservedSlotType = "equipment"
-                            inventoryCache.attachedItemOnCursor.reservedSlot = reservedSlotIndex
-                            inventoryCache.inventorySlots.slots[reservedSlotIndex] = {
-                                item = inventoryCache.attachedItemOnCursor.item,
+                            inventoryUI.attachedItemOnCursor.reservedSlotType = "equipment"
+                            inventoryUI.attachedItemOnCursor.reservedSlot = reservedSlotIndex
+                            inventoryUI.inventorySlots.slots[reservedSlotIndex] = {
+                                item = inventoryUI.attachedItemOnCursor.item,
                                 loot = isItemAvailableForDropping.loot,
                                 movementType = "loot"
                             }
                         end
                     else
-                        inventoryCache.isSlotsUpdatePending = true
-                        inventoryCache.inventorySlots.slots[releaseIndex] = {
-                            item = inventoryCache.attachedItemOnCursor.item,
+                        inventoryUI.isSlotsUpdatePending = true
+                        inventoryUI.inventorySlots.slots[releaseIndex] = {
+                            item = inventoryUI.attachedItemOnCursor.item,
                             loot = isItemAvailableForDropping.loot,
                             movementType = "loot"
                         }
                     end
                     triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                 elseif isItemAvailableForEquipping then
-                    local slotWidth, slotHeight = inventoryCache.gui.equipment.grids[isItemAvailableForEquipping.slotIndex].width - inventoryCache.gui.equipment.grids[isItemAvailableForEquipping.slotIndex].paddingX, inventoryCache.gui.equipment.grids[isItemAvailableForEquipping.slotIndex].height - inventoryCache.gui.equipment.grids[isItemAvailableForEquipping.slotIndex].paddingY
-                    local releaseIndex = inventoryCache.attachedItemOnCursor.prevSlotIndex
+                    local slotWidth, slotHeight = inventoryUI.gui.equipment.grids[isItemAvailableForEquipping.slotIndex].width - inventoryUI.gui.equipment.grids[isItemAvailableForEquipping.slotIndex].paddingX, inventoryUI.gui.equipment.grids[isItemAvailableForEquipping.slotIndex].height - inventoryUI.gui.equipment.grids[isItemAvailableForEquipping.slotIndex].paddingY
+                    local releaseIndex = inventoryUI.attachedItemOnCursor.prevSlotIndex
                     local reservedSlot = isItemAvailableForEquipping.reservedSlot or releaseIndex
-                    inventoryCache.attachedItemOnCursor.__finalWidth, inventoryCache.attachedItemOnCursor.__finalHeight = slotWidth, slotHeight
-                    inventoryCache.attachedItemOnCursor.prevWidth, inventoryCache.attachedItemOnCursor.prevHeight = inventoryCache.attachedItemOnCursor.__width, inventoryCache.attachedItemOnCursor.__height
-                    inventoryCache.attachedItemOnCursor.sizeAnimTickCounter = getTickCount()
-                    inventoryCache.attachedItemOnCursor.prevSlotIndex = isItemAvailableForEquipping.slotIndex
-                    inventoryCache.attachedItemOnCursor.prevPosX = isItemAvailableForEquipping.offsetX
-                    inventoryCache.attachedItemOnCursor.prevPosY = isItemAvailableForEquipping.offsetY
-                    inventoryCache.attachedItemOnCursor.releaseType = "equipping"
-                    inventoryCache.attachedItemOnCursor.releaseLoot = isItemAvailableForEquipping.loot
-                    inventoryCache.attachedItemOnCursor.releaseIndex = releaseIndex
-                    inventoryCache.attachedItemOnCursor.reservedSlot = reservedSlot
+                    inventoryUI.attachedItemOnCursor.__finalWidth, inventoryUI.attachedItemOnCursor.__finalHeight = slotWidth, slotHeight
+                    inventoryUI.attachedItemOnCursor.prevWidth, inventoryUI.attachedItemOnCursor.prevHeight = inventoryUI.attachedItemOnCursor.__width, inventoryUI.attachedItemOnCursor.__height
+                    inventoryUI.attachedItemOnCursor.sizeAnimTickCounter = getTickCount()
+                    inventoryUI.attachedItemOnCursor.prevSlotIndex = isItemAvailableForEquipping.slotIndex
+                    inventoryUI.attachedItemOnCursor.prevPosX = isItemAvailableForEquipping.offsetX
+                    inventoryUI.attachedItemOnCursor.prevPosY = isItemAvailableForEquipping.offsetY
+                    inventoryUI.attachedItemOnCursor.releaseType = "equipping"
+                    inventoryUI.attachedItemOnCursor.releaseLoot = isItemAvailableForEquipping.loot
+                    inventoryUI.attachedItemOnCursor.releaseIndex = releaseIndex
+                    inventoryUI.attachedItemOnCursor.reservedSlot = reservedSlot
                     if loot == localPlayer then
-                        inventoryCache.isSlotsUpdatePending = true
-                        inventoryCache.inventorySlots.slots[reservedSlot] = {
-                            item = inventoryCache.attachedItemOnCursor.item,
+                        inventoryUI.isSlotsUpdatePending = true
+                        inventoryUI.inventorySlots.slots[reservedSlot] = {
+                            item = inventoryUI.attachedItemOnCursor.item,
                             movementType = "equipment"
                         }
                     else
-                        inventoryCache.isSlotsUpdatePending = true
-                        inventoryCache.inventorySlots.slots[reservedSlot] = {
-                            item = inventoryCache.attachedItemOnCursor.item,
+                        inventoryUI.isSlotsUpdatePending = true
+                        inventoryUI.inventorySlots.slots[reservedSlot] = {
+                            item = inventoryUI.attachedItemOnCursor.item,
                             loot = isItemAvailableForEquipping.loot,
                             isAutoReserved = true,
                             movementType = "equipment"
@@ -1097,37 +1096,37 @@ function displayInventoryUI()
                     end
                     triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                 else
-                    if inventoryCache.attachedItemOnCursor.itemBox and isElement(inventoryCache.attachedItemOnCursor.itemBox) and itemBoxesCache[inventoryCache.attachedItemOnCursor.itemBox] then
-                        if inventoryCache.attachedItemOnCursor.itemBox == localPlayer then
-                            local maxSlots = getElementMaxSlots(inventoryCache.attachedItemOnCursor.itemBox)
-                            local totalContentHeight = inventoryCache.gui.itemBox.templates[1].contentWrapper.padding + inventoryCache.gui.itemBox.templates[1].contentWrapper.itemGrid.padding + (math.max(0, math.ceil(maxSlots/maximumInventoryRowSlots) - 1)*(inventoryCache.gui.itemBox.templates[1].contentWrapper.itemGrid.slot.size + inventoryCache.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)) + inventoryCache.gui.itemBox.templates[1].contentWrapper.itemGrid.slot.size + inventoryCache.gui.itemBox.templates[1].contentWrapper.itemGrid.padding
-                            local exceededContentHeight =  totalContentHeight - inventoryCache.gui.itemBox.templates[1].contentWrapper.height
+                    if inventoryUI.attachedItemOnCursor.itemBox and isElement(inventoryUI.attachedItemOnCursor.itemBox) and itemBoxesCache[inventoryUI.attachedItemOnCursor.itemBox] then
+                        if inventoryUI.attachedItemOnCursor.itemBox == localPlayer then
+                            local maxSlots = getElementMaxSlots(inventoryUI.attachedItemOnCursor.itemBox)
+                            local totalContentHeight = inventoryUI.gui.itemBox.templates[1].contentWrapper.padding + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding + (math.max(0, math.ceil(maxSlots/maximumInventoryRowSlots) - 1)*(inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.slot.size + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)) + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.slot.size + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding
+                            local exceededContentHeight =  totalContentHeight - inventoryUI.gui.itemBox.templates[1].contentWrapper.height
                             if exceededContentHeight > 0 then
-                                local slot_row = math.ceil(inventoryCache.attachedItemOnCursor.prevSlotIndex/maximumInventoryRowSlots)
-                                local slot_offsetY = inventoryCache.gui.itemBox.templates[1].contentWrapper.padding + inventoryCache.gui.itemBox.templates[1].contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(inventoryCache.gui.itemBox.templates[1].contentWrapper.itemGrid.slot.size + inventoryCache.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)) - (exceededContentHeight*itemBoxesCache[localPlayer].gui.scroller.percent*0.01)
-                                local slot_prevOffsetY = inventoryCache.attachedItemOnCursor.prevPosY - itemBoxesCache[localPlayer].gui.startY - inventoryCache.gui.itemBox.templates[1].contentWrapper.startY
+                                local slot_row = math.ceil(inventoryUI.attachedItemOnCursor.prevSlotIndex/maximumInventoryRowSlots)
+                                local slot_offsetY = inventoryUI.gui.itemBox.templates[1].contentWrapper.padding + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.slot.size + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)) - (exceededContentHeight*itemBoxesCache[localPlayer].gui.scroller.percent*0.01)
+                                local slot_prevOffsetY = inventoryUI.attachedItemOnCursor.prevPosY - itemBoxesCache[localPlayer].gui.startY - inventoryUI.gui.itemBox.templates[1].contentWrapper.startY
                                 if (math.round(slot_offsetY, 2) ~= math.round(slot_prevOffsetY, 2)) then
                                     local finalScrollPercent = itemBoxesCache[localPlayer].gui.scroller.percent + ((slot_offsetY - slot_prevOffsetY)/exceededContentHeight)*100
-                                    inventoryCache.attachedItemOnCursor.__scrollItemBox = {initial = itemBoxesCache[localPlayer].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
+                                    inventoryUI.attachedItemOnCursor.__scrollItemBox = {initial = itemBoxesCache[localPlayer].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
                                 end
                             end
                         else
                             local totalLootItems = 0
-                            for index, _ in pairs(itemBoxesCache[inventoryCache.attachedItemOnCursor.itemBox].lootItems) do
+                            for index, _ in pairs(itemBoxesCache[inventoryUI.attachedItemOnCursor.itemBox].lootItems) do
                                 totalLootItems = totalLootItems + 1
                             end
-                            local template = inventoryCache.gui.itemBox.templates[(itemBoxesCache[inventoryCache.attachedItemOnCursor.itemBox].gui.templateIndex)]
+                            local template = inventoryUI.gui.itemBox.templates[(itemBoxesCache[inventoryUI.attachedItemOnCursor.itemBox].gui.templateIndex)]
                             local totalContentHeight = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*totalLootItems)
                             local exceededContentHeight =  totalContentHeight - template.contentWrapper.height
-                            inventoryCache.attachedItemOnCursor.__finalWidth, inventoryCache.attachedItemOnCursor.__finalHeight = inventoryCache.attachedItemOnCursor.prevWidth, inventoryCache.attachedItemOnCursor.prevHeight
-                            inventoryCache.attachedItemOnCursor.prevWidth, inventoryCache.attachedItemOnCursor.prevHeight = inventoryCache.attachedItemOnCursor.__width, inventoryCache.attachedItemOnCursor.__height
-                            inventoryCache.attachedItemOnCursor.sizeAnimTickCounter = getTickCount()
+                            inventoryUI.attachedItemOnCursor.__finalWidth, inventoryUI.attachedItemOnCursor.__finalHeight = inventoryUI.attachedItemOnCursor.prevWidth, inventoryUI.attachedItemOnCursor.prevHeight
+                            inventoryUI.attachedItemOnCursor.prevWidth, inventoryUI.attachedItemOnCursor.prevHeight = inventoryUI.attachedItemOnCursor.__width, inventoryUI.attachedItemOnCursor.__height
+                            inventoryUI.attachedItemOnCursor.sizeAnimTickCounter = getTickCount()
                             if exceededContentHeight > 0 then
-                                local slot_offsetY = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*(inventoryCache.attachedItemOnCursor.prevSlotIndex - 1)) + template.contentWrapper.itemSlot.paddingY - (exceededContentHeight*itemBoxesCache[inventoryCache.attachedItemOnCursor.itemBox].gui.scroller.percent*0.01)
-                                local slot_prevOffsetY = inventoryCache.attachedItemOnCursor.prevPosY - itemBoxesCache[inventoryCache.attachedItemOnCursor.itemBox].gui.startY - template.contentWrapper.startY
+                                local slot_offsetY = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*(inventoryUI.attachedItemOnCursor.prevSlotIndex - 1)) + template.contentWrapper.itemSlot.paddingY - (exceededContentHeight*itemBoxesCache[inventoryUI.attachedItemOnCursor.itemBox].gui.scroller.percent*0.01)
+                                local slot_prevOffsetY = inventoryUI.attachedItemOnCursor.prevPosY - itemBoxesCache[inventoryUI.attachedItemOnCursor.itemBox].gui.startY - template.contentWrapper.startY
                                 if (math.round(slot_offsetY, 2) ~= math.round(slot_prevOffsetY, 2)) then
-                                    local finalScrollPercent = itemBoxesCache[inventoryCache.attachedItemOnCursor.itemBox].gui.scroller.percent + ((slot_offsetY - slot_prevOffsetY)/exceededContentHeight)*100
-                                    inventoryCache.attachedItemOnCursor.__scrollItemBox = {initial = itemBoxesCache[inventoryCache.attachedItemOnCursor.itemBox].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
+                                    local finalScrollPercent = itemBoxesCache[inventoryUI.attachedItemOnCursor.itemBox].gui.scroller.percent + ((slot_offsetY - slot_prevOffsetY)/exceededContentHeight)*100
+                                    inventoryUI.attachedItemOnCursor.__scrollItemBox = {initial = itemBoxesCache[inventoryUI.attachedItemOnCursor.itemBox].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
                                 end
                             end
                         end
@@ -1136,33 +1135,33 @@ function displayInventoryUI()
                 end
                 detachInventoryItem()
             end
-            if not inventoryCache.attachedItemOnCursor.__finalWidth or not inventoryCache.attachedItemOnCursor.__finalHeight then
-                inventoryCache.attachedItemOnCursor.__width, inventoryCache.attachedItemOnCursor.__height = interpolateBetween(inventoryCache.attachedItemOnCursor.prevWidth, inventoryCache.attachedItemOnCursor.prevHeight, 0, iconWidth, iconHeight, 0, getInterpolationProgress(inventoryCache.attachedItemOnCursor.sizeAnimTickCounter, inventoryCache.attachedItemAnimDuration/3), "OutBack")
+            if not inventoryUI.attachedItemOnCursor.__finalWidth or not inventoryUI.attachedItemOnCursor.__finalHeight then
+                inventoryUI.attachedItemOnCursor.__width, inventoryUI.attachedItemOnCursor.__height = interpolateBetween(inventoryUI.attachedItemOnCursor.prevWidth, inventoryUI.attachedItemOnCursor.prevHeight, 0, iconWidth, iconHeight, 0, getInterpolationProgress(inventoryUI.attachedItemOnCursor.sizeAnimTickCounter, inventoryUI.attachedItemAnimDuration/3), "OutBack")
             else
-                inventoryCache.attachedItemOnCursor.__width, inventoryCache.attachedItemOnCursor.__height = interpolateBetween(inventoryCache.attachedItemOnCursor.prevWidth, inventoryCache.attachedItemOnCursor.prevHeight, 0, inventoryCache.attachedItemOnCursor.__finalWidth, inventoryCache.attachedItemOnCursor.__finalHeight, 0, getInterpolationProgress(inventoryCache.attachedItemOnCursor.sizeAnimTickCounter, inventoryCache.attachedItemAnimDuration/3), "OutBack")
+                inventoryUI.attachedItemOnCursor.__width, inventoryUI.attachedItemOnCursor.__height = interpolateBetween(inventoryUI.attachedItemOnCursor.prevWidth, inventoryUI.attachedItemOnCursor.prevHeight, 0, inventoryUI.attachedItemOnCursor.__finalWidth, inventoryUI.attachedItemOnCursor.__finalHeight, 0, getInterpolationProgress(inventoryUI.attachedItemOnCursor.sizeAnimTickCounter, inventoryUI.attachedItemAnimDuration/3), "OutBack")
             end
-            if inventoryCache.attachedItemOnCursor.animTickCounter then
-                local icon_offsetX, icon_offsetY = interpolateBetween(inventoryCache.attachedItemOnCursor.__posX, inventoryCache.attachedItemOnCursor.__posY, 0, inventoryCache.attachedItemOnCursor.prevPosX, inventoryCache.attachedItemOnCursor.prevPosY, 0, getInterpolationProgress(inventoryCache.attachedItemOnCursor.animTickCounter, inventoryCache.attachedItemAnimDuration), "OutBounce")
-                if inventoryCache.attachedItemOnCursor.__scrollItemBox then
-                    itemBoxesCache[(inventoryCache.attachedItemOnCursor.releaseLoot or inventoryCache.attachedItemOnCursor.itemBox)].gui.scroller.percent = interpolateBetween(inventoryCache.attachedItemOnCursor.__scrollItemBox.initial, 0, 0, inventoryCache.attachedItemOnCursor.__scrollItemBox.final, 0, 0, getInterpolationProgress(inventoryCache.attachedItemOnCursor.__scrollItemBox.tickCounter, inventoryCache.attachedItemAnimDuration), "OutBounce")
+            if inventoryUI.attachedItemOnCursor.animTickCounter then
+                local icon_offsetX, icon_offsetY = interpolateBetween(inventoryUI.attachedItemOnCursor.__posX, inventoryUI.attachedItemOnCursor.__posY, 0, inventoryUI.attachedItemOnCursor.prevPosX, inventoryUI.attachedItemOnCursor.prevPosY, 0, getInterpolationProgress(inventoryUI.attachedItemOnCursor.animTickCounter, inventoryUI.attachedItemAnimDuration), "OutBounce")
+                if inventoryUI.attachedItemOnCursor.__scrollItemBox then
+                    itemBoxesCache[(inventoryUI.attachedItemOnCursor.releaseLoot or inventoryUI.attachedItemOnCursor.itemBox)].gui.scroller.percent = interpolateBetween(inventoryUI.attachedItemOnCursor.__scrollItemBox.initial, 0, 0, inventoryUI.attachedItemOnCursor.__scrollItemBox.final, 0, 0, getInterpolationProgress(inventoryUI.attachedItemOnCursor.__scrollItemBox.tickCounter, inventoryUI.attachedItemAnimDuration), "OutBounce")
                 end
-                imports.beautify.native.drawImage(icon_offsetX, icon_offsetY, inventoryCache.attachedItemOnCursor.__width, inventoryCache.attachedItemOnCursor.__height, iconTextures[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
-                if (math.round(icon_offsetX, 2) == math.round(inventoryCache.attachedItemOnCursor.prevPosX, 2)) and (math.round(icon_offsetY, 2) == math.round(inventoryCache.attachedItemOnCursor.prevPosY, 2)) then
-                    if inventoryCache.attachedItemOnCursor.releaseType and inventoryCache.attachedItemOnCursor.releaseType == "equipping" then
-                        equipItemInInventory(inventoryCache.attachedItemOnCursor.item, inventoryCache.attachedItemOnCursor.releaseIndex, inventoryCache.attachedItemOnCursor.reservedSlot, inventoryCache.attachedItemOnCursor.prevSlotIndex, inventoryCache.attachedItemOnCursor.itemBox)
+                imports.beautify.native.drawImage(icon_offsetX, icon_offsetY, inventoryUI.attachedItemOnCursor.__width, inventoryUI.attachedItemOnCursor.__height, iconTextures[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
+                if (math.round(icon_offsetX, 2) == math.round(inventoryUI.attachedItemOnCursor.prevPosX, 2)) and (math.round(icon_offsetY, 2) == math.round(inventoryUI.attachedItemOnCursor.prevPosY, 2)) then
+                    if inventoryUI.attachedItemOnCursor.releaseType and inventoryUI.attachedItemOnCursor.releaseType == "equipping" then
+                        equipItemInInventory(inventoryUI.attachedItemOnCursor.item, inventoryUI.attachedItemOnCursor.releaseIndex, inventoryUI.attachedItemOnCursor.reservedSlot, inventoryUI.attachedItemOnCursor.prevSlotIndex, inventoryUI.attachedItemOnCursor.itemBox)
                     else
-                        if inventoryCache.attachedItemOnCursor.itemBox ~= localPlayer then
-                            if inventoryCache.attachedItemOnCursor.releaseType and inventoryCache.attachedItemOnCursor.releaseType == "ordering" then
-                                if not inventoryCache.attachedItemOnCursor.isEquippedItem then
-                                    moveItemInInventory(inventoryCache.attachedItemOnCursor.item, inventoryCache.attachedItemOnCursor.prevSlotIndex, inventoryCache.attachedItemOnCursor.itemBox)
+                        if inventoryUI.attachedItemOnCursor.itemBox ~= localPlayer then
+                            if inventoryUI.attachedItemOnCursor.releaseType and inventoryUI.attachedItemOnCursor.releaseType == "ordering" then
+                                if not inventoryUI.attachedItemOnCursor.isEquippedItem then
+                                    moveItemInInventory(inventoryUI.attachedItemOnCursor.item, inventoryUI.attachedItemOnCursor.prevSlotIndex, inventoryUI.attachedItemOnCursor.itemBox)
                                 end
                             end
                         else
-                            if inventoryCache.attachedItemOnCursor.releaseType and inventoryCache.attachedItemOnCursor.releaseType == "dropping" then
-                                if inventoryCache.attachedItemOnCursor.isEquippedItem then
-                                    unequipItemInInventory(inventoryCache.attachedItemOnCursor.item, inventoryCache.attachedItemOnCursor.releaseIndex, inventoryCache.attachedItemOnCursor.prevSlotIndex, inventoryCache.attachedItemOnCursor.releaseLoot, inventoryCache.attachedItemOnCursor.reservedSlot)
+                            if inventoryUI.attachedItemOnCursor.releaseType and inventoryUI.attachedItemOnCursor.releaseType == "dropping" then
+                                if inventoryUI.attachedItemOnCursor.isEquippedItem then
+                                    unequipItemInInventory(inventoryUI.attachedItemOnCursor.item, inventoryUI.attachedItemOnCursor.releaseIndex, inventoryUI.attachedItemOnCursor.prevSlotIndex, inventoryUI.attachedItemOnCursor.releaseLoot, inventoryUI.attachedItemOnCursor.reservedSlot)
                                 else
-                                    moveItemInLoot(inventoryCache.attachedItemOnCursor.item, inventoryCache.attachedItemOnCursor.releaseIndex, inventoryCache.attachedItemOnCursor.releaseLoot)
+                                    moveItemInLoot(inventoryUI.attachedItemOnCursor.item, inventoryUI.attachedItemOnCursor.releaseIndex, inventoryUI.attachedItemOnCursor.releaseLoot)
                                 end
                             end
                         end
@@ -1171,7 +1170,7 @@ function displayInventoryUI()
                 end
             else
                 local cursor_offsetX, cursor_offsetY = getAbsoluteCursorPosition()
-                imports.beautify.native.drawImage(cursor_offsetX - inventoryCache.attachedItemOnCursor.offsetX, cursor_offsetY - inventoryCache.attachedItemOnCursor.offsetY, inventoryCache.attachedItemOnCursor.__width, inventoryCache.attachedItemOnCursor.__height, iconTextures[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
+                imports.beautify.native.drawImage(cursor_offsetX - inventoryUI.attachedItemOnCursor.offsetX, cursor_offsetY - inventoryUI.attachedItemOnCursor.offsetY, inventoryUI.attachedItemOnCursor.__width, inventoryUI.attachedItemOnCursor.__height, iconTextures[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
             end
         end
     end

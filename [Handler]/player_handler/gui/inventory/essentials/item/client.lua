@@ -21,8 +21,8 @@ function moveItemInInventory(item, slotIndex, loot)
     local itemAmountData = tonumber(loot:getData("Item:"..item)) or 0
     if not itemDetails or itemAmountData <= 0 then return false end
 
-    inventoryCache.isSlotsUpdated = false
-    inventoryCache.inventorySlots.slots[slotIndex] = {
+    inventoryUI.isSlotsUpdated = false
+    inventoryUI.inventorySlots.slots[slotIndex] = {
         item = item,
         loot = loot,
         isOrdering = false,
@@ -41,8 +41,8 @@ function moveItemInLoot(item, slotIndex, loot)
     local itemAmountData = tonumber(getElementData(localPlayer, "Item:"..item)) or 0
     if not itemDetails or itemAmountData <= 0 then return false end
 
-    inventoryCache.isSlotsUpdated = false
-    inventoryCache.inventorySlots.slots[slotIndex] = {
+    inventoryUI.isSlotsUpdated = false
+    inventoryUI.inventorySlots.slots[slotIndex] = {
         item = item,
         loot = loot,
         movementType = "loot"
@@ -65,10 +65,10 @@ function orderItemInInventory(item, prevSlotIndex, newSlotIndex)
     local itemAmountData = tonumber(getElementData(localPlayer, "Item:"..item)) or 0
     if not itemDetails or itemAmountData <= 0 then return false end
 
-    inventoryCache.isSlotsUpdated = false
-    inventoryCache.isSlotsUpdatePending = true
-    inventoryCache.inventorySlots.slots[prevSlotIndex] = nil
-    inventoryCache.inventorySlots.slots[newSlotIndex] = {
+    inventoryUI.isSlotsUpdated = false
+    inventoryUI.isSlotsUpdatePending = true
+    inventoryUI.inventorySlots.slots[prevSlotIndex] = nil
+    inventoryUI.inventorySlots.slots[newSlotIndex] = {
         item = item,
         isOrdering = true,
         movementType = "inventory"
@@ -86,22 +86,22 @@ function equipItemInInventory(item, prevSlotIndex, reservedSlotIndex, newSlotInd
     local itemAmountData = tonumber(loot:getData("Item:"..item)) or 0
     if not itemDetails or itemAmountData <= 0 then return false end
 
-    inventoryCache.isSlotsUpdated = false
+    inventoryUI.isSlotsUpdated = false
     if loot == localPlayer then
-        inventoryCache.inventorySlots.slots[prevSlotIndex] = {
+        inventoryUI.inventorySlots.slots[prevSlotIndex] = {
             item = item,
             isAutoReserved = false,
             movementType = "equipment"
         }
     else
-        inventoryCache.inventorySlots.slots[reservedSlotIndex] = {
+        inventoryUI.inventorySlots.slots[reservedSlotIndex] = {
             item = item,
             loot = loot,
             isAutoReserved = true,
             movementType = "equipment"
         }
     end
-    inventoryCache.inventorySlots.slots[newSlotIndex] = item
+    inventoryUI.inventorySlots.slots[newSlotIndex] = item
     triggerServerEvent("onPlayerEquipItemInInventory", localPlayer, item, prevSlotIndex, reservedSlotIndex, newSlotIndex, loot)
     return true
 
@@ -116,7 +116,7 @@ function unequipItemInInventory(item, prevSlotIndex, newSlotIndex, loot, reserve
     if not itemDetails or itemAmountData <= 0 then return false end
     if not reservedSlotIndex then
         reservedSlotIndex = false
-        for i, j in pairs(inventoryCache.inventorySlots.slots) do
+        for i, j in pairs(inventoryUI.inventorySlots.slots) do
             if tonumber(i) then
                 if j.movementType and j.movementType == "equipment" and prevSlotIndex == j.equipmentIndex then
                     reservedSlotIndex = i
@@ -127,18 +127,18 @@ function unequipItemInInventory(item, prevSlotIndex, newSlotIndex, loot, reserve
     end
     if not reservedSlotIndex then return false end
 
-    inventoryCache.isSlotsUpdated = false
-    inventoryCache.inventorySlots.slots[prevSlotIndex] = nil
+    inventoryUI.isSlotsUpdated = false
+    inventoryUI.inventorySlots.slots[prevSlotIndex] = nil
     if loot == localPlayer then
-        inventoryCache.isSlotsUpdatePending = true
-        inventoryCache.inventorySlots.slots[reservedSlotIndex] = nil
-        inventoryCache.inventorySlots.slots[newSlotIndex] = {
+        inventoryUI.isSlotsUpdatePending = true
+        inventoryUI.inventorySlots.slots[reservedSlotIndex] = nil
+        inventoryUI.inventorySlots.slots[newSlotIndex] = {
             item = item,
             isOrdering = true,
             movementType = "inventory"
         }
     else
-        inventoryCache.inventorySlots.slots[reservedSlotIndex] = {
+        inventoryUI.inventorySlots.slots[reservedSlotIndex] = {
             item = item,
             loot = loot,
             movementType = "loot"

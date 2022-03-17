@@ -90,7 +90,7 @@ addEventHandler("onClientMarkerLeave", root, function(hitElement)
                     if not localPlayer:isWithinMarker(_marker) then
                         setElementData(localPlayer, "Loot:Marker", nil)
                         setElementData(localPlayer, "Character:Looting", nil)
-                        if isInventoryVisible() then
+                        if inventoryUI.isVisible() then
                             closeInventory()
                         end
                     end
@@ -117,7 +117,7 @@ local function checkVehicleEntrance(player, seat)
     if marker and isElement(marker) then
         setElementData(localPlayer, "Loot:Marker", nil)
         setElementData(localPlayer, "Character:Looting", nil)
-        if isInventoryVisible() then
+        if inventoryUI.isVisible() then
             closeInventory()
         end
     end
@@ -144,7 +144,7 @@ addEventHandler("onClientVehicleExplode", root, function()
     if marker and isElement(marker) and marker == _marker then
         setElementData(localPlayer, "Loot:Marker", nil)
         setElementData(localPlayer, "Character:Looting", nil)
-        if isInventoryVisible() then
+        if inventoryUI.isVisible() then
             closeInventory()
         end
     end
@@ -166,7 +166,7 @@ addEventHandler("onClientElementDestroy", root, function()
     if marker and isElement(marker) and marker == source then
         setElementData(localPlayer, "Loot:Marker", nil)
         setElementData(localPlayer, "Character:Looting", nil)
-        if isInventoryVisible() then
+        if inventoryUI.isVisible() then
             closeInventory()
         end
         triggerServerEvent("onClientRequestSyncInventorySlots", source)

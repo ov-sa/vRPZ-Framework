@@ -82,22 +82,22 @@ function clearPlayerEquipmentSlot(player, slotIndex)
         if verifySlot then
             local shieldHealth = getPlayerShieldHealth(localPlayer, "helmet")
             if shieldHealth and shieldHealth < 100 then
-                setElementData(localPlayer, "Item:"..inventoryCache.helmet, (tonumber(getElementData(localPlayer, "Item:"..inventoryCache.helmet)) or 0) - 1)
+                setElementData(localPlayer, "Item:"..inventoryUI.helmet, (tonumber(getElementData(localPlayer, "Item:"..inventoryUI.helmet)) or 0) - 1)
                 triggerEvent("onClientInventoryUpdate", localPlayer)
             end
         end
         setElementData(localPlayer, "Slot:helmet", nil)
-        inventoryCache.helmet = nil
+        inventoryUI.helmet = nil
     elseif slotIndex == "armor" then
         if verifySlot then
             local shieldHealth = getPlayerShieldHealth(localPlayer, "armor")
             if shieldHealth and shieldHealth < 100 then
-                setElementData(localPlayer, "Item:"..inventoryCache.armor, (tonumber(getElementData(localPlayer, "Item:"..inventoryCache.armor)) or 0) - 1)
+                setElementData(localPlayer, "Item:"..inventoryUI.armor, (tonumber(getElementData(localPlayer, "Item:"..inventoryUI.armor)) or 0) - 1)
                 triggerEvent("onClientInventoryUpdate", localPlayer)
             end
         end
         setElementData(localPlayer, "Slot:armor", nil)
-        inventoryCache.armor = nil
+        inventoryUI.armor = nil
     elseif slotIndex == "backpack" then
         local player_usedSlots = getElementUsedSlots(localPlayer)
         if player_usedSlots and player_usedSlots > maximumInventorySlots then
@@ -105,19 +105,19 @@ function clearPlayerEquipmentSlot(player, slotIndex)
             return false
         end
         setElementData(localPlayer, "Slot:backpack", nil)
-        inventoryCache.backpack = nil
+        inventoryUI.backpack = nil
     elseif slotIndex == "primary" then
-        triggerServerEvent("onPlayerRemoveWeapon", localPlayer, inventoryCache.primary)
+        triggerServerEvent("onPlayerRemoveWeapon", localPlayer, inventoryUI.primary)
         setElementData(localPlayer, "Slot:primary_weapon", nil)
-        inventoryCache.primary = nil
+        inventoryUI.primary = nil
     elseif slotIndex == "secondary" then
-        triggerServerEvent("onPlayerRemoveWeapon", localPlayer, inventoryCache.secondary)
+        triggerServerEvent("onPlayerRemoveWeapon", localPlayer, inventoryUI.secondary)
         setElementData(localPlayer, "Slot:secondary_weapon", nil)
-        inventoryCache.secondary = nil
+        inventoryUI.secondary = nil
     elseif slotIndex == "tertiary" then
-        triggerServerEvent("onPlayerRemoveWeapon", localPlayer, inventoryCache.tertiary)
+        triggerServerEvent("onPlayerRemoveWeapon", localPlayer, inventoryUI.tertiary)
         setElementData(localPlayer, "Slot:special_weapon", nil)
-        inventoryCache.tertiary = nil
+        inventoryUI.tertiary = nil
     else
         return false
     end

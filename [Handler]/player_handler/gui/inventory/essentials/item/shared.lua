@@ -21,7 +21,7 @@ function getPlayerOccupiedSlots(player)
     local totalSlots, assignedSlots = false, false
     if localPlayer then
         totalSlots = getElementMaxSlots(player)
-        assignedSlots = inventoryCache.inventorySlots.slots
+        assignedSlots = inventoryUI.inventorySlots.slots
     else
         if playerInventorySlots[player] then
             totalSlots = playerInventorySlots[player].maxSlots
@@ -41,8 +41,8 @@ function getPlayerOccupiedSlots(player)
                             isSlotToBeConsidered = false
                         else
                             if j.movementType == "equipment" then
-                                if inventoryCache.attachedItemOnCursor and (inventoryCache.attachedItemOnCursor.itemBox == localPlayer) and (inventoryCache.attachedItemOnCursor.prevSlotIndex == j.equipmentIndex) then                
-                                    if not inventoryCache.attachedItemOnCursor.animTickCounter then
+                                if inventoryUI.attachedItemOnCursor and (inventoryUI.attachedItemOnCursor.itemBox == localPlayer) and (inventoryUI.attachedItemOnCursor.prevSlotIndex == j.equipmentIndex) then                
+                                    if not inventoryUI.attachedItemOnCursor.animTickCounter then
                                         isSlotToBeConsidered = false
                                     end
                                 end
@@ -88,7 +88,7 @@ function isPlayerSlotAvailableForOrdering(player, item, slotIndex, isEquippedIte
     local itemWeight = getItemWeight(item)
     local totalSlots, occupiedSlots = false, false
     if localPlayer then
-        if isInventoryEnabled() then
+        if inventoryUI.isUIEnabled() then
             totalSlots = getElementMaxSlots(player)
             occupiedSlots = getPlayerOccupiedSlots(player)
         end
@@ -135,8 +135,8 @@ function isPlayerSlotAvailableForEquipping(player, item, slotIndex, viaClientInv
     if not itemDetails then return false end
 
     if localPlayer then
-        if isInventoryEnabled() then
-            if inventoryCache.gui.equipment.grids[slotIndex] and not inventoryCache.inventorySlots.slots[slotIndex] and inventoryCache.gui.equipment.grids[slotIndex].slotCategory and inventoryCache.gui.equipment.grids[slotIndex].slotCategory == inventoryCache.attachedItemOnCursor.category then
+        if inventoryUI.isUIEnabled() then
+            if inventoryUI.gui.equipment.grids[slotIndex] and not inventoryUI.inventorySlots.slots[slotIndex] and inventoryUI.gui.equipment.grids[slotIndex].slotCategory and inventoryUI.gui.equipment.grids[slotIndex].slotCategory == inventoryUI.attachedItemOnCursor.category then
                 if not viaClientInventory then
                     local totalSlots = getElementMaxSlots(player)
                     if totalSlots then

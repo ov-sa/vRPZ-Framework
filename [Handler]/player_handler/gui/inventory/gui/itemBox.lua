@@ -23,7 +23,7 @@ itemBoxesCache = {}
 function createItemBox(startX, startY, templateIndex, inventoryParent, boxName)
 
     startX = tonumber(startX); startY = tonumber(startY); templateIndex = tonumber(templateIndex);
-    if not startX or not startY or not templateIndex or not inventoryCache.gui.itemBox.templates[templateIndex] or not inventoryParent or not isElement(inventoryParent) then return false end
+    if not startX or not startY or not templateIndex or not inventoryUI.gui.itemBox.templates[templateIndex] or not inventoryParent or not isElement(inventoryParent) then return false end
 
     if not itemBoxesCache[inventoryParent] then
         if not boxName then
@@ -41,7 +41,7 @@ function createItemBox(startX, startY, templateIndex, inventoryParent, boxName)
                 startY = startY,
                 title = boxName,
                 templateIndex = templateIndex,
-                renderTarget = DxRenderTarget(inventoryCache.gui.itemBox.templates[templateIndex].contentWrapper.width, inventoryCache.gui.itemBox.templates[templateIndex].contentWrapper.height, true),
+                renderTarget = DxRenderTarget(inventoryUI.gui.itemBox.templates[templateIndex].contentWrapper.width, inventoryUI.gui.itemBox.templates[templateIndex].contentWrapper.height, true),
                 scroller = {
                     percent = 0
                 }
@@ -120,10 +120,10 @@ end
 
 function attachInventoryItem(itemBox, item, category, prevSlotIndex, occupiedRowSlots, occupiedColumnSlots, prevPosX, prevPosY, prevWidth, prevHeight, offsetX, offsetY)
 
-    if inventoryCache.attachedItemOnCursor then return false end
+    if inventoryUI.attachedItemOnCursor then return false end
 
     if itemBox == localPlayer then
-        prevSlotIndex = (inventoryCache.gui.equipment.grids[prevSlotIndex] and prevSlotIndex) or tonumber(prevSlotIndex)
+        prevSlotIndex = (inventoryUI.gui.equipment.grids[prevSlotIndex] and prevSlotIndex) or tonumber(prevSlotIndex)
     else
         prevSlotIndex = tonumber(prevSlotIndex)
     end
@@ -134,11 +134,11 @@ function attachInventoryItem(itemBox, item, category, prevSlotIndex, occupiedRow
     offsetX = tonumber(offsetX); offsetY = tonumber(offsetY)
     if not itemBox or not isElement(itemBox) or not item or not category or not prevSlotIndex or not occupiedRowSlots or not occupiedColumnSlots or not prevPosX or not prevPosY or not prevWidth or not prevHeight or not offsetX or not offsetY then return false end
 
-    inventoryCache.attachedItemOnCursor = {
+    inventoryUI.attachedItemOnCursor = {
         itemBox = itemBox,
         item = item,
         category = category,
-        isEquippedItem = (inventoryCache.gui.equipment.grids[prevSlotIndex] and true) or false,
+        isEquippedItem = (inventoryUI.gui.equipment.grids[prevSlotIndex] and true) or false,
         prevSlotIndex = prevSlotIndex,
         occupiedRowSlots = occupiedRowSlots,
         occupiedColumnSlots = occupiedColumnSlots,
@@ -161,15 +161,15 @@ end
 
 function detachInventoryItem(forced)
 
-    if not inventoryCache.attachedItemOnCursor then return false end
+    if not inventoryUI.attachedItemOnCursor then return false end
 
     if not forced then
         local cursor_offsetX, cursor_offsetY = getAbsoluteCursorPosition()
-        inventoryCache.attachedItemOnCursor.__posX = cursor_offsetX - inventoryCache.attachedItemOnCursor.offsetX
-        inventoryCache.attachedItemOnCursor.__posY = cursor_offsetY - inventoryCache.attachedItemOnCursor.offsetY
-        inventoryCache.attachedItemOnCursor.animTickCounter = getTickCount()
+        inventoryUI.attachedItemOnCursor.__posX = cursor_offsetX - inventoryUI.attachedItemOnCursor.offsetX
+        inventoryUI.attachedItemOnCursor.__posY = cursor_offsetY - inventoryUI.attachedItemOnCursor.offsetY
+        inventoryUI.attachedItemOnCursor.animTickCounter = getTickCount()
     else
-        inventoryCache.attachedItemOnCursor = nil
+        inventoryUI.attachedItemOnCursor = nil
     end
 
 end

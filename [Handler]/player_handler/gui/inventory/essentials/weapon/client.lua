@@ -53,7 +53,7 @@ imports.addEventHandler("onClientPlayerWeaponFire", root, function(_weapon, _amm
                     if weaponDetails and weaponDetails.fireDelay and not isPlayerReloadingWeapon(source) then
                         toggleControl("fire", false)
                         Timer(function()
-                            if not isPlayerReloadingWeapon(source) and isInventoryEnabled() then
+                            if not isPlayerReloadingWeapon(source) and inventoryUI.isUIEnabled() then
                                 toggleControl("fire", true)
                             end
                         end, weaponDetails.fireDelay, 1)

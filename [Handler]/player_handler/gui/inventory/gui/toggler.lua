@@ -13,23 +13,12 @@
 --[[ Function: Retrieves Inventory's Visibility ]]--
 ----------------------------------------------------
 
-function isInventoryVisible()
+isVisible = false
+isSlotsUpdated = false
+isEnabled = false
 
-    return inventoryCache.state
-
-end
-
-
--------------------------------------------------------
---[[ Function: Retrieves Inventory's Enabled State ]]--
--------------------------------------------------------
-
-function isInventoryEnabled()
-
-    if not inventoryCache.isSlotsUpdated then return false end
-
-    return inventoryCache.enabled
-
+inventoryUI.isUIEnabled = function()
+    return (inventoryUI.isSlotsUpdated and inventoryUI.isEnabled) or false
 end
 
 
@@ -40,15 +29,15 @@ end
 function enableInventory(state)
 
     if state then
-        if not inventoryCache.enabled then
-            inventoryCache.enabled = true
+        if not inventoryUI.isEnabled then
+            inventoryUI.isEnabled = true
             if not isPlayerKnocked(localPlayer) then
                 toggleControl("enter_exit", true)
             end
         end
     else
-        if inventoryCache.enabled then
-            inventoryCache.enabled = false
+        if inventoryUI.isEnabled then
+            inventoryUI.isEnabled = false
             toggleControl("enter_exit", false)
         end
     end
@@ -65,9 +54,9 @@ addEventHandler("onClientEnableInventory", root, enableInventory)
 addEvent("onClientInventorySyncSlots", true)
 addEventHandler("onClientInventorySyncSlots", root, function(slotData)
 
-    inventoryCache.inventorySlots = slotData
-    inventoryCache.isSlotsUpdatePending = false
-    inventoryCache.isSlotsUpdated = true
+    inventoryUI.inventorySlots = slotData
+    inventoryUI.isSlotsUpdatePending = false
+    inventoryUI.isSlotsUpdated = true
 
 end)
 
@@ -78,9 +67,9 @@ end)
 
 local function inventoryUpdate()
 
-    inventoryCache.attachedItemOnCursor = nil
+    inventoryUI.attachedItemOnCursor = nil
     updateItemBox(localPlayer)
-    updateItemBox(inventoryCache.vicinity)
+    updateItemBox(inventoryUI.vicinity)
 
 end
 addEvent("onClientInventoryUpdate", true)
@@ -94,23 +83,23 @@ addEventHandler("onClientInventoryUpdate", root, inventoryUpdate)
 function showInventory()
 
     if not isPlayerInitialized(localPlayer) or getPlayerHealth(localPlayer) <= 0 then closeInventory() return false end
-    if inventoryCache.state then return false end
+    if inventoryUI.isVisible then return false end
     
-    createItemBox(inventoryCache.gui.equipment.startX + 250 + 50, inventoryCache.gui.equipment.startY + 25, 1, localPlayer, "Inventory")
-    inventoryCache.vicinity = isPlayerInLoot(localPlayer)
-    if inventoryCache.vicinity and isElement(inventoryCache.vicinity) then
-        local vicinityLockedStatus = inventoryCache.vicinity:getData("Loot:Locked")
+    createItemBox(inventoryUI.gui.equipment.startX + 250 + 50, inventoryUI.gui.equipment.startY + 25, 1, localPlayer, "Inventory")
+    inventoryUI.vicinity = isPlayerInLoot(localPlayer)
+    if inventoryUI.vicinity and isElement(inventoryUI.vicinity) then
+        local vicinityLockedStatus = inventoryUI.vicinity:getData("Loot:Locked")
         if vicinityLockedStatus then
-            inventoryCache.vicinity = false
+            inventoryUI.vicinity = false
             triggerEvent("onDisplayNotification", localPlayer, "Unfortunately, loot's inventory is locked!", {255, 80, 80, 255})
         else
-            createItemBox(inventoryCache.gui.equipment.startX - inventoryCache.gui.itemBox.templates[2].width - 15, inventoryCache.gui.equipment.startY, 2, inventoryCache.vicinity)
+            createItemBox(inventoryUI.gui.equipment.startX - inventoryUI.gui.itemBox.templates[2].width - 15, inventoryUI.gui.equipment.startY, 2, inventoryUI.vicinity)
         end
     end
 
     addEventHandler("onClientRender", root, displayInventoryUI)
     triggerEvent("onClientInventorySound", localPlayer, "inventory_open")
-    inventoryCache.state = true
+    inventoryUI.isVisible = true
     showChat(false)
     showCursor(true)
     inventoryUpdate()
@@ -119,38 +108,29 @@ end
 
 function closeInventory()
 
-    if not inventoryCache.state then return false end
+    if not inventoryUI.isVisible then return false end
 
-    if inventoryCache.isSlotsUpdatePending then
+    if inventoryUI.isSlotsUpdatePending then
         triggerServerEvent("onClientRequestSyncInventorySlots", localPlayer)
     end
     detachInventoryItem(true)
     destroyItemBox(localPlayer)
-    destroyItemBox(inventoryCache.vicinity)
+    destroyItemBox(inventoryUI.vicinity)
     removeEventHandler("onClientRender", root, displayInventoryUI)
-    inventoryCache.vicinity = nil
-    inventoryCache.attachedItemOnCursor = nil
-    inventoryCache.state = false
+    inventoryUI.vicinity = nil
+    inventoryUI.attachedItemOnCursor = nil
+    inventoryUI.isVisible = false
     showChat(true)
     showCursor(false)
 
 end
 
-bindKey("tab", "down", function()
-    if isInventoryVisible() then
+imports.addEventHandler("onClientPlayerWasted", localPlayer, function() closeInventory() end)
+
+imports.bindKey("tab", "down", function()
+    if inventoryUI.isVisible() then
         closeInventory()
     else
         showInventory()
     end
-end)
-
-
-----------------------------------------
---[[ Event: On Client Player Wasted ]]--
-----------------------------------------
-
-addEventHandler("onClientPlayerWasted", localPlayer, function()
-
-    closeInventory()
-
 end)
