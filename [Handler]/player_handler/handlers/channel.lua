@@ -49,8 +49,6 @@ imports.addEventHandler("onPlayerChat", root, function(message, messageType)
         syncPlayers = imports.getElementsWithinRange(playerLocation.position[1], playerLocation.position[2], playerLocation.position[3], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Proximity_Range"], "player")
     elseif channelIndex == 2 then
         syncPlayers = imports.getElementsByType("player")
-    else
-        syncPlayers = imports.getElementsByType("player")
     end
     if syncPlayers then
         for i = 1, #syncPlayers, 1 do
@@ -73,7 +71,7 @@ function shufflePlayerChannel(player)
     local channelIndex = CPlayer.getChannel(player) + 1
     channelIndex = (FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][channelIndex] and channelIndex) or 1
     if CPlayer.setChannel(player, channelIndex) then
-        imports.outputChatBox("━ Channel "..FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][channelIndex].name, player, 200, 200, 200)
+        imports.outputChatBox("━ Channel: "..FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][channelIndex].name, player, 200, 200, 200)
         return true
     end
     return false
