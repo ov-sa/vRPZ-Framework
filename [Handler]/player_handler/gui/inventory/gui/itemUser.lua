@@ -107,7 +107,7 @@ function requestUseItem(item)
                     return false
                 end
             end
-            closeInventory()
+            inventoryUI.toggleUI(false)
             enableInventory(false)
             triggerServerEvent("onPlayerRequestClothing", localPlayer, itemDetails.dataName)
         elseif itemCategory == "Tent" then

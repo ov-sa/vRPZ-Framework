@@ -27,13 +27,8 @@ imports.addEventHandler("Client:onEnableInventoryUI", root, function(state, isFo
     inventoryUI.isEnabled = state
 end)
 
-
------------------------------------------------
---[[ Event: On Client Inventory Sync Slots ]]--
------------------------------------------------
-
-addEvent("Client:onSyncInventorySlots", true)
-addEventHandler("Client:onSyncInventorySlots", root, function(slotData)
+imports.addEvent("Client:onSyncInventorySlots", true)
+imports.addEventHandler("Client:onSyncInventorySlots", root, function(slotData)
     inventoryUI.inventorySlots = slotData
     inventoryUI.isSlotsUpdatePending = false
     inventoryUI.isSlotsUpdated = true
@@ -61,7 +56,7 @@ addEventHandler("onClientInventoryUpdate", root, inventoryUpdate)
 
 function showInventory()
 
-    if not isPlayerInitialized(localPlayer) or getPlayerHealth(localPlayer) <= 0 then closeInventory() return false end
+    if not isPlayerInitialized(localPlayer) or getPlayerHealth(localPlayer) <= 0 then inventoryUI.toggleUI(false) return false end
     if inventoryUI.isVisible then return false end
     
     createItemBox(inventoryUI.gui.equipment.startX + 250 + 50, inventoryUI.gui.equipment.startY + 25, 1, localPlayer, "Inventory")
@@ -85,7 +80,7 @@ function showInventory()
 
 end
 
-function closeInventory()
+function inventoryUI.toggleUI(false)
 
     if not inventoryUI.isVisible then return false end
 
@@ -104,11 +99,11 @@ function closeInventory()
 
 end
 
-imports.addEventHandler("onClientPlayerWasted", localPlayer, function() closeInventory() end)
+imports.addEventHandler("onClientPlayerWasted", localPlayer, function() inventoryUI.toggleUI(false) end)
 
 imports.bindKey("tab", "down", function()
-    if inventoryUI.isVisible() then
-        closeInventory()
+    if inventoryUI.isVisible then
+        inventoryUI.toggleUI(false)
     else
         showInventory()
     end
