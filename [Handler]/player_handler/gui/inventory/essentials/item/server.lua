@@ -38,7 +38,7 @@ end)
 
 addEventHandler("onElementDataChange", root, function(key, oldValue, newValue)
 
-    local sourceType = source:getType()
+    local sourceType = getElementType(source)
     if sourceType == "player" and not CPlayer.isInitialized(source) then return false end
     if not string.find(key, "Item:", 1) then return false end
     if client then setElementData(source, key, oldValue) return false end

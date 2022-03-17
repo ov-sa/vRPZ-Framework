@@ -22,7 +22,7 @@ local reloadTimers = {}
 
 addEventHandler("onElementDataChange", root, function(key, oldValue, newValue)
 
-    if source:getType() == "player" and CPlayer.isInitialized(source) and key == "Character:ReloadingWeapon" then
+    if getElementType(source) == "player" and CPlayer.isInitialized(source) and key == "Character:ReloadingWeapon" then
         if not newValue then
             if reloadTimers[source] and reloadTimers[source]:isValid() then
                 reloadTimers[source]:destroy()
