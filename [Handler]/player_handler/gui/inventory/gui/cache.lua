@@ -89,21 +89,6 @@ local inventoryCache = {
                     unavailableBGColor = {255, 0, 0, 255},
                     bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/secondary_slot.png", "dxt5", true, "clamp")
                 },
-                tertiary = {
-                    startX = 200,
-                    startY = 115,
-                    width = 75,
-                    height = 75,
-                    paddingX = 10,
-                    paddingY = 10,
-                    slotCategory = "special_weapon",
-                    borderSize = 4,
-                    borderColor = {100, 100, 100, 25},
-                    bgColor = {0, 0, 0, 235},
-                    availableBGColor = {0, 255, 0, 255},
-                    unavailableBGColor = {255, 0, 0, 255},
-                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/tertiary_slot.png", "dxt5", true, "clamp")
-                },
                 shirt = {
                     startX = 25,
                     startY = 207,
@@ -333,12 +318,6 @@ end
 inventoryCache.gui.tranparencyAdjuster.startX = inventoryCache.gui.equipment.startX + inventoryCache.gui.tranparencyAdjuster.startX
 inventoryCache.gui.tranparencyAdjuster.startY = inventoryCache.gui.equipment.startY + inventoryCache.gui.equipment.height - inventoryCache.gui.tranparencyAdjuster.height + inventoryCache.gui.tranparencyAdjuster.startY
 inventoryCache.gui.tranparencyAdjuster.width = inventoryCache.gui.equipment.width + inventoryCache.gui.tranparencyAdjuster.width
-
-
-
-
-
-
 
 
 -------------------
