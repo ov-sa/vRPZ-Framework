@@ -24,11 +24,11 @@ CGame.isUIVisible = function()
         not isPlayerInitialized(localPlayer),
         isLoginUIVisible()
     }
-    local state = true
+    local state = false
     for i = 1, #uiStates, 1 do
         local j = uiStates[i]
         if j then
-            state = false
+            state = true
             break
         end
     end
