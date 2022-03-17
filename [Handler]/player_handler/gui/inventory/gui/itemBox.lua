@@ -1,0 +1,175 @@
+----------------------------------------------------------------
+--[[ Resource: Player Handler
+     Script: handlers: inventory: gui: itemBox.lua
+     Server: -
+     Author: OvileAmriam
+     Developer: -
+     DOC: 18/12/2020 (OvileAmriam)
+     Desc: Inventory Item Box Handler ]]--
+----------------------------------------------------------------
+
+
+-------------------
+--[[ Variables ]]--
+-------------------
+
+itemBoxesCache = {}
+
+
+------------------------------------
+--[[ Function: Creates Item Box ]]--
+------------------------------------
+
+function createItemBox(startX, startY, templateIndex, inventoryParent, boxName)
+
+    startX = tonumber(startX); startY = tonumber(startY); templateIndex = tonumber(templateIndex);
+    if not startX or not startY or not templateIndex or not inventoryCache.gui.itemBox.templates[templateIndex] or not inventoryParent or not isElement(inventoryParent) then return false end
+
+    if not itemBoxesCache[inventoryParent] then
+        if not boxName then
+            local lootType = inventoryParent:getData("Loot:Type")
+            if lootType then
+                boxName = inventoryParent:getData("Loot:Name")
+            end
+            if not boxName then
+                boxName = "??"
+            end
+        end
+        itemBoxesCache[inventoryParent] = {
+            gui = {
+                startX = startX,
+                startY = startY,
+                title = boxName,
+                templateIndex = templateIndex,
+                renderTarget = DxRenderTarget(inventoryCache.gui.itemBox.templates[templateIndex].contentWrapper.width, inventoryCache.gui.itemBox.templates[templateIndex].contentWrapper.height, true),
+                scroller = {
+                    percent = 0
+                }
+            },
+            lootItems = {}
+        }
+        updateItemBox(inventoryParent)
+    end
+    return true
+
+end
+
+
+-------------------------------------
+--[[ Function: Destroys Item Box ]]--
+-------------------------------------
+
+function destroyItemBox(inventoryParent)
+
+    if not inventoryParent or not isElement(inventoryParent) then return false end
+
+    if itemBoxesCache[inventoryParent] and itemBoxesCache[inventoryParent].gui then
+        if itemBoxesCache[inventoryParent].gui.renderTarget and isElement(itemBoxesCache[inventoryParent].gui.renderTarget) then
+            itemBoxesCache[inventoryParent].gui.renderTarget:destroy()
+        end
+    end
+    itemBoxesCache[inventoryParent] = nil
+    return true
+
+end
+
+
+-----------------------------------
+--[[ Function: Clears Item Box ]]--
+-----------------------------------
+
+function clearItemBox(inventoryParent)
+
+    if not inventoryParent or not isElement(inventoryParent) or not itemBoxesCache[inventoryParent] then return false end
+
+    itemBoxesCache[inventoryParent].lootItems = {}
+    itemBoxesCache[inventoryParent].__itemNameSlots = nil
+    return true
+
+end
+
+
+------------------------------------
+--[[ Function: Updates Item Box ]]--
+------------------------------------
+
+function updateItemBox(inventoryParent)
+
+    if not inventoryParent or not isElement(inventoryParent) or not itemBoxesCache[inventoryParent] then return false end
+
+    clearItemBox(inventoryParent)
+    for itemType, itemDatas in pairs(inventoryDatas) do
+        if itemDatas and type(itemDatas) == "table" then
+            for index, value in ipairs(itemDatas) do
+                local lootItemData = tonumber(inventoryParent:getData("Item:"..value.dataName)) or 0
+                if lootItemData > 0 then
+                    itemBoxesCache[inventoryParent].lootItems[value.dataName] = (tonumber(itemBoxesCache[inventoryParent].lootItems[value.dataName]) or 0) + lootItemData
+                end
+            end
+        end
+    end
+    itemBoxesCache[inventoryParent].sortedCategories = nil
+    return true
+
+end
+
+
+-------------------------------------------
+--[[ Function: Attaches Inventory Item ]]--
+-------------------------------------------
+
+function attachInventoryItem(itemBox, item, category, prevSlotIndex, occupiedRowSlots, occupiedColumnSlots, prevPosX, prevPosY, prevWidth, prevHeight, offsetX, offsetY)
+
+    if inventoryCache.attachedItemOnCursor then return false end
+
+    if itemBox == localPlayer then
+        prevSlotIndex = (inventoryCache.gui.equipment.grids[prevSlotIndex] and prevSlotIndex) or tonumber(prevSlotIndex)
+    else
+        prevSlotIndex = tonumber(prevSlotIndex)
+    end
+    occupiedRowSlots = tonumber(occupiedRowSlots)
+    occupiedColumnSlots = tonumber(occupiedColumnSlots)
+    prevPosX = tonumber(prevPosX); prevPosY = tonumber(prevPosY)
+    prevWidth = tonumber(prevWidth); prevHeight = tonumber(prevHeight)
+    offsetX = tonumber(offsetX); offsetY = tonumber(offsetY)
+    if not itemBox or not isElement(itemBox) or not item or not category or not prevSlotIndex or not occupiedRowSlots or not occupiedColumnSlots or not prevPosX or not prevPosY or not prevWidth or not prevHeight or not offsetX or not offsetY then return false end
+
+    inventoryCache.attachedItemOnCursor = {
+        itemBox = itemBox,
+        item = item,
+        category = category,
+        isEquippedItem = (inventoryCache.gui.equipment.grids[prevSlotIndex] and true) or false,
+        prevSlotIndex = prevSlotIndex,
+        occupiedRowSlots = occupiedRowSlots,
+        occupiedColumnSlots = occupiedColumnSlots,
+        prevPosX = prevPosX,
+        prevPosY = prevPosY,
+        prevWidth = prevWidth,
+        prevHeight = prevHeight,
+        offsetX = offsetX,
+        offsetY = offsetY,
+        sizeAnimTickCounter = getTickCount()
+    }
+    return true
+
+end
+
+
+-------------------------------------------
+--[[ Function: Detaches Inventory Item ]]--
+-------------------------------------------
+
+function detachInventoryItem(forced)
+
+    if not inventoryCache.attachedItemOnCursor then return false end
+
+    if not forced then
+        local cursor_offsetX, cursor_offsetY = getAbsoluteCursorPosition()
+        inventoryCache.attachedItemOnCursor.__posX = cursor_offsetX - inventoryCache.attachedItemOnCursor.offsetX
+        inventoryCache.attachedItemOnCursor.__posY = cursor_offsetY - inventoryCache.attachedItemOnCursor.offsetY
+        inventoryCache.attachedItemOnCursor.animTickCounter = getTickCount()
+    else
+        inventoryCache.attachedItemOnCursor = nil
+    end
+
+end

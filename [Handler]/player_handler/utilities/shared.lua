@@ -19,10 +19,13 @@ local imports = {
     pairs = pairs,
     tonumber = tonumber,
     string = string,
-    getResourceName = getResourceName,
-    getResourceState = getResourceState,
+    isElement = isElement,
     bindKey = bindKey,
     unbindKey = unbindKey,
+    getResourceName = getResourceName,
+    getResourceState = getResourceState,
+    isElementWithinMarker = isElementWithinMarker,
+    table = table,
     math = math
 }
 
@@ -217,38 +220,21 @@ function isPlayerWithinElementInteractionRange(player, element)
 end
 
 
---------------------------------------------------
---[[ Function: Verifies Player's Marker State ]]--
---------------------------------------------------
-
-function isPlayerWithinMarker(player, marker)
-        
-    if not CPlayer.isInitialized(player) or not marker or not isElement(marker) then return false end
-
-    local markerSize = marker:getSize()
-    local playerPosVector = player:getPosition()        
-    local markerPosVector = marker:getPosition()
-    return getDistanceBetweenPoints3D(playerPosVector.x, playerPosVector.y, playerPosVector.z, markerPosVector.x, markerPosVector.y, markerPosVector.z) <= (markerSize*2)
-
-end
-
-
 ---------------------------------------------------
 --[[ Function: Retrieves Players Within Marker ]]--
 ---------------------------------------------------
 
 function getPlayersWithinMarker(marker)
-
-    if not marker or not isElement(marker) then return false end
-
-    local players = {}
-    for i, j in ipairs(Element.getAllByType("player")) do
-        if CPlayer.isInitialized(j) and isPlayerWithinMarker(j, marker) then
-            table.insert(players, j)
+    if not marker or not imports.isElement(marker) then return false end
+    local rangedPlayers = {}
+    local playerList = Element.getAllByType("player")
+    for i = 1, #playerList, 1 do
+        local j = playerList[i]
+        if CPlayer.isInitialized(j) and imports.isElementWithinMarker(j, marker) then
+            imports.table.insert(rangedPlayers, j)
         end
     end
-    return players
-
+    return rangedPlayers
 end
 
 
