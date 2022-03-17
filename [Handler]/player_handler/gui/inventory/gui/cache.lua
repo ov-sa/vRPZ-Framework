@@ -31,11 +31,11 @@ inventoryCache = {
             width = 845,
             height = 485,
             bgColor = {255, 255, 255, 253},
-            bgPath = DxTexture("files/images/inventory/ui/equipment/body.png", "argb", true, "clamp"),
-            slotTopLeftCurvedEdgeBGPath = DxTexture("files/images/hud/curved_square/top_left.png", "argb", true, "clamp"),
-            slotTopRightCurvedEdgeBGPath = DxTexture("files/images/hud/curved_square/top_right.png", "argb", true, "clamp"),
-            slotBottomLeftCurvedEdgeBGPath = DxTexture("files/images/hud/curved_square/bottom_left.png", "argb", true, "clamp"),
-            slotBottomRightCurvedEdgeBGPath = DxTexture("files/images/hud/curved_square/bottom_right.png", "argb", true, "clamp"),
+            bgPath = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/body.png", "dxt5", true, "clamp"),
+            slotTopLeftCurvedEdgeBGPath = imports.beautify.native.createTexture("files/images/hud/curved_square/top_left.png", "dxt5", true, "clamp"),
+            slotTopRightCurvedEdgeBGPath = imports.beautify.native.createTexture("files/images/hud/curved_square/top_right.png", "dxt5", true, "clamp"),
+            slotBottomLeftCurvedEdgeBGPath = imports.beautify.native.createTexture("files/images/hud/curved_square/bottom_left.png", "dxt5", true, "clamp"),
+            slotBottomRightCurvedEdgeBGPath = imports.beautify.native.createTexture("files/images/hud/curved_square/bottom_right.png", "dxt5", true, "clamp"),
             titleBar = {
                 text = "E Q U I P M E N T",
                 height = 30,
@@ -45,9 +45,9 @@ inventoryCache = {
                 fontColor = {175, 175, 175, 255},
                 dividerColor = {0, 0, 0, 75},
                 bgColor = {0, 0, 0, 255},
-                leftEdgePath = DxTexture("files/images/hud/right_triangle/default.png", "argb", true, "clamp"),
-                rightEdgePath = DxTexture("files/images/hud/right_triangle/flipped.png", "argb", true, "clamp"),
-                invertedEdgePath = DxTexture("files/images/hud/right_triangle/inverted.png", "argb", true, "clamp")
+                leftEdgePath = imports.beautify.native.createTexture("files/images/hud/right_triangle/default.png", "dxt5", true, "clamp"),
+                rightEdgePath = imports.beautify.native.createTexture("files/images/hud/right_triangle/flipped.png", "dxt5", true, "clamp"),
+                invertedEdgePath = imports.beautify.native.createTexture("files/images/hud/right_triangle/inverted.png", "dxt5", true, "clamp")
             },
             grids = {
                 primary = {
@@ -63,7 +63,7 @@ inventoryCache = {
                     bgColor = {0, 0, 0, 235},
                     availableBGColor = {0, 255, 0, 255},
                     unavailableBGColor = {255, 0, 0, 255},
-                    bgImage = DxTexture("files/images/inventory/ui/primary_slot.png", "argb", true, "clamp")
+                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/primary_slot.png", "dxt5", true, "clamp")
                 },
                 secondary = {
                     startX = 25,
@@ -78,7 +78,7 @@ inventoryCache = {
                     bgColor = {0, 0, 0, 235},
                     availableBGColor = {0, 255, 0, 255},
                     unavailableBGColor = {255, 0, 0, 255},
-                    bgImage = DxTexture("files/images/inventory/ui/secondary_slot.png", "argb", true, "clamp")
+                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/secondary_slot.png", "dxt5", true, "clamp")
                 },
                 tertiary = {
                     startX = 200,
@@ -93,7 +93,7 @@ inventoryCache = {
                     bgColor = {0, 0, 0, 235},
                     availableBGColor = {0, 255, 0, 255},
                     unavailableBGColor = {255, 0, 0, 255},
-                    bgImage = DxTexture("files/images/inventory/ui/tertiary_slot.png", "argb", true, "clamp")
+                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/tertiary_slot.png", "dxt5", true, "clamp")
                 },
                 shirt = {
                     startX = 25,
@@ -108,7 +108,7 @@ inventoryCache = {
                     bgColor = {0, 0, 0, 235},
                     availableBGColor = {0, 255, 0, 255},
                     unavailableBGColor = {255, 0, 0, 255},
-                    bgImage = DxTexture("files/images/inventory/ui/shirt_slot.png", "argb", true, "clamp")
+                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/shirt_slot.png", "dxt5", true, "clamp")
                 },
                 helmet = {
                     startX = 112.5,
@@ -123,7 +123,7 @@ inventoryCache = {
                     bgColor = {0, 0, 0, 235},
                     availableBGColor = {0, 255, 0, 255},
                     unavailableBGColor = {255, 0, 0, 255},
-                    bgImage = DxTexture("files/images/inventory/ui/helmet_slot.png", "argb", true, "clamp")
+                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/helmet_slot.png", "dxt5", true, "clamp")
                 },
                 armor = {
                     startX = 200,
@@ -138,7 +138,7 @@ inventoryCache = {
                     bgColor = {0, 0, 0, 235},
                     availableBGColor = {0, 255, 0, 255},
                     unavailableBGColor = {255, 0, 0, 255},
-                    bgImage = DxTexture("files/images/inventory/ui/armor_slot.png", "argb", true, "clamp")
+                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/armor_slot.png", "dxt5", true, "clamp")
                 },
                 torso = {
                     startX = 25,
@@ -153,7 +153,7 @@ inventoryCache = {
                     bgColor = {0, 0, 0, 235},
                     availableBGColor = {0, 255, 0, 255},
                     unavailableBGColor = {255, 0, 0, 255},
-                    bgImage = DxTexture("files/images/inventory/ui/torso_slot.png", "argb", true, "clamp")
+                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/torso_slot.png", "dxt5", true, "clamp")
                 },
                 shoes = {
                     startX = 25,
@@ -168,7 +168,7 @@ inventoryCache = {
                     bgColor = {0, 0, 0, 235},
                     availableBGColor = {0, 255, 0, 255},
                     unavailableBGColor = {255, 0, 0, 255},
-                    bgImage = DxTexture("files/images/inventory/ui/shoes_slot.png", "argb", true, "clamp")
+                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/shoes_slot.png", "dxt5", true, "clamp")
                 },
                 backpack = {
                     startX = 115,
@@ -183,7 +183,7 @@ inventoryCache = {
                     bgColor = {0, 0, 0, 235},
                     availableBGColor = {0, 255, 0, 255},
                     unavailableBGColor = {255, 0, 0, 255},
-                    bgImage = DxTexture("files/images/inventory/ui/backpack_slot.png", "argb", true, "clamp")
+                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/backpack_slot.png", "dxt5", true, "clamp")
                 }
             },
             description = {
@@ -202,8 +202,8 @@ inventoryCache = {
             startY = 0,
             iconSize = 20,
             iconColor = {200, 200, 200, 255},
-            lockedIconPath = DxTexture("files/images/hud/lock/locked.png", "argb", true, "clamp"),
-            unlockedIconPath = DxTexture("files/images/hud/lock/unlocked.png", "argb", true, "clamp")
+            lockedIconPath = imports.beautify.native.createTexture("files/images/hud/lock/locked.png", "dxt5", true, "clamp"),
+            unlockedIconPath = imports.beautify.native.createTexture("files/images/hud/lock/unlocked.png", "dxt5", true, "clamp")
         },
         tranparencyAdjuster = {
             startX = 4,
@@ -262,7 +262,7 @@ inventoryCache = {
                     width = 310,
                     height = 455,
                     bgColor = {255, 255, 255, 253},
-                    bgImage = DxTexture("files/images/inventory/ui/equipment/itemBox/template_2.png", "argb", true, "clamp"),
+                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/itemBox/template_2.png", "dxt5", true, "clamp"),
                     contentWrapper = {
                         startX = 0,
                         startY = 3,
@@ -274,7 +274,7 @@ inventoryCache = {
                             width = 0,
                             height = 70,
                             paddingY = 5,
-                            bgImage = DxTexture("files/images/inventory/ui/equipment/itemBox/itemSlot.png", "argb", true, "clamp"),
+                            bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/itemBox/itemSlot.png", "dxt5", true, "clamp"),
                             availableBGColor = {0, 255, 0},
                             unavailableBGColor = {255, 0, 0},
                             iconSlot = {
@@ -293,7 +293,7 @@ inventoryCache = {
                                 font = fonts[12],
                                 fontColor = {255, 255, 255, 255},
                                 hoverAnimDuration = 5000,
-                                bgImage = DxTexture("files/images/inventory/ui/equipment/itemBox/itemNameSlot.png", "argb", true, "clamp")
+                                bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/itemBox/itemNameSlot.png", "dxt5", true, "clamp")
                             }
                         }
                     },
