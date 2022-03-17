@@ -152,6 +152,5 @@ end)
 addEventHandler("onClientPlayerWasted", localPlayer, function()
 
     closeInventory()
-    inventoryCache.hotBarTable = {}
 
 end)
