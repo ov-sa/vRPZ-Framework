@@ -39,7 +39,6 @@ inventoryUI = {
                 font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor))
             },
             slots = {
-                bgColor = tocolor(200, 200, 200, 50),
                 {
                     startX = 50, startY = 50,
                     width = 75, height = 75,
