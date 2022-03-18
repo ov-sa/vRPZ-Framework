@@ -26,7 +26,11 @@ local centerX, centerY = CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2]
 
 inventoryUI = {
     attachedItemAnimDuration = 750,
-    attachedItemOnCursor = nil,
+    clientInventory = {
+        startX = 291, startY = 206,
+        width = 845, height = 485,
+    },
+
     gui = {
         postGUI = false,
         equipment = {

@@ -29,16 +29,16 @@ inventoryUI.isUIEnabled = function()
     return (inventoryUI.isUpdated and inventoryUI.isEnabled) or false
 end
 
-imports.addEvent("Client:onEnableInventoryUI", true)
-imports.addEventHandler("Client:onEnableInventoryUI", root, function(state, isForced)
-    if isForced then loginUI.isForcedDisabled = not state end
-    inventoryUI.isEnabled = state
-end)
-
 imports.addEvent("Client:onSyncInventorySlots", true)
 imports.addEventHandler("Client:onSyncInventorySlots", root, function(slots)
     inventoryUI.slots = slots
     inventoryUI.isUpdated, inventoryUI.isUpdateScheduled = true, false
+end)
+
+imports.addEvent("Client:onEnableInventoryUI", true)
+imports.addEventHandler("Client:onEnableInventoryUI", root, function(state, isForced)
+    if isForced then loginUI.isForcedDisabled = not state end
+    inventoryUI.isEnabled = state
 end)
 
 imports.addEvent("Client:onUpdateInventoryUI", true)
@@ -56,30 +56,29 @@ end)
 
 inventoryUI.toggleUI = function(state)
     if state then
-        if inventoryUI.element and imports.isElement(inventoryUI.element) then return false end
-        outputChatBox("Toggling UI: ON")
+        if inventoryUI.clientInventory.element and imports.isElement(inventoryUI.clientInventory.element) then return false end
+        --local panel_offsetY = inventoryUI.titlebar.height + inventoryUI.titlebar.paddingY
+        inventoryUI.clientInventory.element = imports.beautify.card.create(inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height, nil, false)
+        imports.beautify.setUIVisible(inventoryUI.clientInventory.element, true)
         --[[
-        local panel_offsetY = inventoryUI.titlebar.height + inventoryUI.titlebar.paddingY
-        inventoryUI.element = imports.beautify.card.create(inventoryUI.startX, inventoryUI.startY, inventoryUI.width, inventoryUI.height, nil, false)
-        imports.beautify.setUIVisible(inventoryUI.element, true)
         for i = 1, #inventoryUI.categories, 1 do
             local j = inventoryUI.categories[i]
             j.offsetY = (inventoryUI.categories[(i - 1)] and (inventoryUI.categories[(i - 1)].offsetY + inventoryUI.categories.height + inventoryUI.categories[(i - 1)].height + inventoryUI.categories.paddingY)) or panel_offsetY
             if j.contents then
                 for k, v in imports.pairs(j.contents) do
                     if v.isSlider then
-                        v.element = imports.beautify.slider.create(inventoryUI.categories.paddingX, j.offsetY + inventoryUI.categories.height + v.startY + v.paddingY, inventoryUI.width - (inventoryUI.categories.paddingX*2), v.height, "horizontal", inventoryUI.element, false)
+                        v.element = imports.beautify.slider.create(inventoryUI.categories.paddingX, j.offsetY + inventoryUI.categories.height + v.startY + v.paddingY, inventoryUI.width - (inventoryUI.categories.paddingX*2), v.height, "horizontal", inventoryUI.clientInventory.element, false)
                         imports.beautify.setUIVisible(v.element, true)
                         imports.addEventHandler("onClientUISliderAltered", v.element, function() inventoryUI.updateCharacter() end)
                     elseif v.isSelector then
-                        v.element = imports.beautify.selector.create(inventoryUI.categories.paddingX, j.offsetY + inventoryUI.categories.height + v.startY, inventoryUI.width - (inventoryUI.categories.paddingX*2), v.height, "horizontal", inventoryUI.element, false)
+                        v.element = imports.beautify.selector.create(inventoryUI.categories.paddingX, j.offsetY + inventoryUI.categories.height + v.startY, inventoryUI.width - (inventoryUI.categories.paddingX*2), v.height, "horizontal", inventoryUI.clientInventory.element, false)
                         imports.beautify.selector.setDataList(v.element, v.content)
                         imports.beautify.setUIVisible(v.element, true)
                         imports.addEventHandler("onClientUISelectionAltered", v.element, function() inventoryUI.updateCharacter() end)
                     end
                 end
             elseif j.isSelector then
-                j.element = imports.beautify.selector.create(inventoryUI.categories.paddingX, j.offsetY + inventoryUI.categories.height, inventoryUI.width - (inventoryUI.categories.paddingX*2), j.height, "horizontal", inventoryUI.element, false)
+                j.element = imports.beautify.selector.create(inventoryUI.categories.paddingX, j.offsetY + inventoryUI.categories.height, inventoryUI.width - (inventoryUI.categories.paddingX*2), j.height, "horizontal", inventoryUI.clientInventory.element, false)
                 imports.beautify.selector.setDataList(j.element, j.content)
                 imports.beautify.setUIVisible(j.element, true)
                 imports.addEventHandler("onClientUISelectionAltered", j.element, function() inventoryUI.updateCharacter() end)
@@ -108,14 +107,13 @@ inventoryUI.toggleUI = function(state)
             end
             ]]
         end, {
-            elementReference = inventoryUI.element,
+            elementReference = inventoryUI.clientInventory.element,
             renderType = "preViewRTRender"
         })
     else
-        if not inventoryUI.element or not imports.isElement(inventoryUI.element) then return false end
-        outputChatBox("Toggling UI: OFF")
-        imports.destroyElement(inventoryUI.element)
-        inventoryUI.element = nil
+        if not inventoryUI.clientInventory.element or not imports.isElement(inventoryUI.clientInventory.element) then return false end
+        imports.destroyElement(inventoryUI.clientInventory.element)
+        inventoryUI.clientInventory.element = nil
     end
     inventoryUI.isVisible = (state and true) or false
     imports.showChat(not inventoryUI.isVisible)
