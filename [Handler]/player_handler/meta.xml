@@ -17,6 +17,8 @@
     <script src="gui/loading.lua" type="client"/>
     <script src="gui/notification.lua" type="client"/>
     <script src="gui/login.lua" type="client"/>
+    <script src="gui/inventory/cache.lua" type="client"/>
+    <script src="gui/inventory/toggler.lua" type="client"/>
 
     <!-- Modules: Game -->
     <script src="modules/game/shared/index.lua" type="shared"/>

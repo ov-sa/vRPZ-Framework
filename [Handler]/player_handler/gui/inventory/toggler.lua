@@ -29,20 +29,12 @@ imports.addEventHandler("Client:onSyncInventorySlots", root, function(slots)
     inventoryUI.isUpdated, inventoryUI.isUpdateScheduled = true, false
 end)
 
-
--------------------------------------------
---[[ Event: On Client Inventory Update ]]--
--------------------------------------------
-
-local function inventoryUpdate()
-
+imports.addEvent("Client:onUpdateInventoryUI", true)
+imports.addEventHandler("Client:onUpdateInventoryUI", root, function()
     inventoryUI.attachedItemOnCursor = nil
     updateItemBox(localPlayer)
     updateItemBox(inventoryUI.vicinity)
-
-end
-addEvent("onClientInventoryUpdate", true)
-addEventHandler("onClientInventoryUpdate", root, inventoryUpdate)
+end)
 
 
 ------------------------------------------
@@ -53,6 +45,7 @@ addEventHandler("onClientInventoryUpdate", root, inventoryUpdate)
 inventoryUI.toggleUI = function(state)
     if state then
         if inventoryUI.element and imports.isElement(inventoryUI.element) then return false end
+        outputChatBox("Toggling UI: ON")
         --[[
         local panel_offsetY = inventoryUI.titlebar.height + inventoryUI.titlebar.paddingY
         inventoryUI.element = imports.beautify.card.create(inventoryUI.startX, inventoryUI.startY, inventoryUI.width, inventoryUI.height, nil, false)
@@ -108,6 +101,7 @@ inventoryUI.toggleUI = function(state)
         })
     else
         if not inventoryUI.element or not imports.isElement(inventoryUI.element) then return false end
+        outputChatBox("Toggling UI: OFF")
         imports.destroyElement(inventoryUI.element)
         inventoryUI.element = nil
     end
@@ -140,6 +134,7 @@ function inventoryUI.toggleUI(true)
     triggerEvent("onClientInventorySound", localPlayer, "inventory_open")
     showChat(false)
     showCursor(true)
+    triggerEvent("Client:onUpdateInventoryUI", localPlayer)
     inventoryUpdate()
 
 end

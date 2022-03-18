@@ -22,6 +22,8 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
+local centerX, centerY = CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2]
+
 inventoryUI = {
     attachedItemAnimDuration = 750,
     attachedItemOnCursor = nil,
@@ -41,7 +43,7 @@ inventoryUI = {
             titleBar = {
                 text = "E Q U I P M E N T",
                 height = 30,
-                font = fonts[9],
+                font = FRAMEWORK_FONTS[9],
                 dividerSize = 2,
                 outlineWeight = 0.25,
                 fontColor = {175, 175, 175, 255},
@@ -179,7 +181,7 @@ inventoryUI = {
                 width = 520,
                 height = 70,
                 padding = 10,
-                font = fonts[10],
+                font = FRAMEWORK_FONTS[10],
                 fontColor = {175, 175, 175, 200},
                 bgColor = {5, 5, 5, 200}
             }
@@ -223,7 +225,7 @@ inventoryUI = {
                             padding = 15,
                             slot = {
                                 size = 68,
-                                font = fonts[13],
+                                font = FRAMEWORK_FONTS[13],
                                 fontColor = {175, 175, 175, 235},
                                 bgColor= {100, 100, 100, 100},
                                 availableBGColor = {0, 50, 0, 200},
@@ -272,12 +274,12 @@ inventoryUI = {
                             itemCounter = {
                                 paddingX = 5,
                                 paddingY = 5,
-                                font = fonts[11],
+                                font = FRAMEWORK_FONTS[11],
                                 fontColor = {200, 200, 200, 200}
                             },
                             itemName = {
                                 paddingX = 10,
-                                font = fonts[12],
+                                font = FRAMEWORK_FONTS[12],
                                 fontColor = {255, 255, 255, 255},
                                 hoverAnimDuration = 5000,
                                 bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/itemBox/itemNameSlot.png", "dxt5", true, "clamp")
@@ -357,7 +359,7 @@ function displayInventoryUI()
     local isLMBClicked = false
     local isRMBClicked = false
     local isLMBDoubleClicked = false
-    local inventoryUI.isUIEnabled = inventoryUI.isUIEnabled()
+    local isInventoryEnabled = inventoryUI.isUIEnabled()
     local isItemAvailableForOrdering = false
     local isItemAvailableForDropping = false
     local isItemAvailableForEquipping = false
@@ -424,7 +426,7 @@ function displayInventoryUI()
         if j.width > j.height then
             dxDrawRectangle(j.startX + j.height/2, j.startY, j.width - j.height, j.height, tocolor(j.bgColor[1], j.bgColor[2], j.bgColor[3], j.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
         end
-        local isSlotHovered = isMouseOnPosition(j.startX, j.startY, j.width, j.height) and inventoryUI.isUIEnabled
+        local isSlotHovered = isMouseOnPosition(j.startX, j.startY, j.width, j.height) and isInventoryEnabled
         if itemDetails and itemCategory then
             if iconTextures[itemDetails.iconPath] then
                 if not inventoryUI.attachedItemOnCursor or (inventoryUI.attachedItemOnCursor.itemBox ~= localPlayer) or (inventoryUI.attachedItemOnCursor.prevSlotIndex ~= i) then                
@@ -449,7 +451,7 @@ function displayInventoryUI()
                 local placeHolderColor = {255, 255, 255, 255}
                 if inventoryUI.attachedItemOnCursor then
                     if not inventoryUI.attachedItemOnCursor.animTickCounter then
-                        if isSlotHovered and inventoryUI.isUIEnabled then
+                        if isSlotHovered and isInventoryEnabled then
                             local isSlotAvailable, slotIndex = isPlayerSlotAvailableForEquipping(localPlayer, inventoryUI.attachedItemOnCursor.item, i, inventoryUI.attachedItemOnCursor.itemBox == localPlayer)
                             if isSlotAvailable then
                                 isItemAvailableForEquipping = {
@@ -589,7 +591,7 @@ function displayInventoryUI()
                             if isItemToBeDrawn then
                                 imports.beautify.native.drawImage(slot_offsetX + ((slotWidth - iconWidth)/2), slot_offsetY + ((slotHeight - iconHeight)/2), iconWidth, iconHeight, iconTextures[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
                             end
-                            if not inventoryUI.attachedItemOnCursor and inventoryUI.isUIEnabled then
+                            if not inventoryUI.attachedItemOnCursor and isInventoryEnabled then
                                 if (slot_offsetY >= 0) and ((slot_offsetY + slotHeight) <= template.contentWrapper.height) then
                                     local isSlotHovered = isMouseOnPosition(j.gui.startX + template.contentWrapper.startX + slot_offsetX, j.gui.startY + template.contentWrapper.startY + slot_offsetY, slotWidth, slotHeight)
                                     if isSlotHovered then
@@ -849,7 +851,7 @@ function displayInventoryUI()
                             local iconWidth, iconHeight = 0, template.contentWrapper.itemSlot.iconSlot.height
                             local originalWidth, originalHeight = iconDimensions[itemDetails.iconPath].width, iconDimensions[itemDetails.iconPath].height
                             iconWidth = (originalWidth / originalHeight)*iconHeight
-                            local isSlotHovered = isMouseOnPosition(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height) and isMouseOnPosition(j.gui.startX + template.contentWrapper.startX + slot_offsetX, j.gui.startY + template.contentWrapper.startY + slot_offsetY, slotWidth, slotHeight) and (slot_offsetY >= 0) and ((slot_offsetY + slotHeight) <= template.contentWrapper.height) and not inventoryUI.attachedItemOnCursor and inventoryUI.isUIEnabled
+                            local isSlotHovered = isMouseOnPosition(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height) and isMouseOnPosition(j.gui.startX + template.contentWrapper.startX + slot_offsetX, j.gui.startY + template.contentWrapper.startY + slot_offsetY, slotWidth, slotHeight) and (slot_offsetY >= 0) and ((slot_offsetY + slotHeight) <= template.contentWrapper.height) and not inventoryUI.attachedItemOnCursor and isInventoryEnabled
                             if isSlotHovered then
                                 equipmentInformation = itemDetails.itemName..":\n"..itemDetails.description
                                 if j.__itemNameSlots[itemDetails.dataName].hoverStatus ~= "forward" then
@@ -956,7 +958,7 @@ function displayInventoryUI()
 
     --Draws Lock Stat
     local lockStat_offsetX, lockStat_offsetY = inventoryUI.gui.lockStat.startX + (inventoryUI.gui.equipment.startX + inventoryUI.gui.equipment.width - inventoryUI.gui.lockStat.iconSize), inventoryUI.gui.equipment.startY + inventoryUI.gui.lockStat.startY
-    imports.beautify.native.drawImage(lockStat_offsetX, lockStat_offsetY, inventoryUI.gui.lockStat.iconSize, inventoryUI.gui.lockStat.iconSize, ((inventoryUI.isUIEnabled and not inventoryUI.attachedItemOnCursor) and inventoryUI.gui.lockStat.unlockedIconPath) or inventoryUI.gui.lockStat.lockedIconPath, 0, 0, 0, tocolor(inventoryUI.gui.lockStat.iconColor[1], inventoryUI.gui.lockStat.iconColor[2], inventoryUI.gui.lockStat.iconColor[3], inventoryUI.gui.lockStat.iconColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+    imports.beautify.native.drawImage(lockStat_offsetX, lockStat_offsetY, inventoryUI.gui.lockStat.iconSize, inventoryUI.gui.lockStat.iconSize, ((isInventoryEnabled and not inventoryUI.attachedItemOnCursor) and inventoryUI.gui.lockStat.unlockedIconPath) or inventoryUI.gui.lockStat.lockedIconPath, 0, 0, 0, tocolor(inventoryUI.gui.lockStat.iconColor[1], inventoryUI.gui.lockStat.iconColor[2], inventoryUI.gui.lockStat.iconColor[3], inventoryUI.gui.lockStat.iconColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
 
     --Draws Transparency Adjuster
     local thumb_offsetX, thumb_offsetY = inventoryUI.gui.tranparencyAdjuster.startX + ((inventoryUI.gui.tranparencyAdjuster.width - inventoryUI.gui.tranparencyAdjuster.thumbSize)*inventoryUI.gui.tranparencyAdjuster.percent), inventoryUI.gui.tranparencyAdjuster.startY + ((inventoryUI.gui.tranparencyAdjuster.height - inventoryUI.gui.tranparencyAdjuster.thumbSize)/2)
@@ -982,7 +984,7 @@ function displayInventoryUI()
             local iconWidth, iconHeight = 0, inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.slot.size*verticalSlotsToOccupy
             local originalWidth, originalHeight = iconDimensions[itemDetails.iconPath].width, iconDimensions[itemDetails.iconPath].height
             iconWidth = (originalWidth / originalHeight)*iconHeight
-            if (GuiElement.isMTAWindowActive() or not getKeyState("mouse1") or not inventoryUI.isUIEnabled) and (not inventoryUI.attachedItemOnCursor.animTickCounter) then
+            if (GuiElement.isMTAWindowActive() or not getKeyState("mouse1") or not isInventoryEnabled) and (not inventoryUI.attachedItemOnCursor.animTickCounter) then
                 prevScrollState = false
                 if isItemAvailableForOrdering then
                     local slotWidth, slotHeight = horizontalSlotsToOccupy*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.slot.size + ((horizontalSlotsToOccupy - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding), verticalSlotsToOccupy*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.slot.size + ((verticalSlotsToOccupy - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)
