@@ -87,7 +87,13 @@ inventoryUI = {
         },
         marginX = 5,
         width = 450,
-        bgColor = tocolor(0, 0, 0, 250)
+        bgColor = tocolor(0, 0, 0, 250),
+        grids = {
+            padding = 5,
+            rows = 12,
+            slotSize = 40,
+            columns = 10
+        }
     },
 
     gui = {

@@ -103,6 +103,15 @@ inventoryUI.toggleUI = function(state)
             imports.beautify.native.drawRectangle(inventoryUI.clientInventory.equipment.width + inventoryUI.clientInventory.marginX, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.clientInventory.width, inventoryUI.clientInventory.equipment.height, inventoryUI.clientInventory.equipment.bgColor, false)
             imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars("Inventory")), inventoryUI.clientInventory.equipment.width + inventoryUI.clientInventory.marginX, 0, inventoryUI.clientInventory.equipment.width + inventoryUI.clientInventory.marginX + inventoryUI.clientInventory.width, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.clientInventory.equipment.titlebar.fontColor, 1, inventoryUI.clientInventory.equipment.titlebar.font, "center", "center", true, false, false)
 
+            local gridStartX, gridStartY = inventoryUI.clientInventory.equipment.width + inventoryUI.clientInventory.marginX, inventoryUI.clientInventory.equipment.titlebar.height + inventoryUI.clientInventory.grids.slotSize
+            for i = 1, inventoryUI.clientInventory.grids.rows, 1 do
+                imports.beautify.native.drawRectangle(inventoryUI.clientInventory.equipment.width + inventoryUI.clientInventory.marginX + inventoryUI.clientInventory.grids.padding, gridStartY, inventoryUI.clientInventory.width - (inventoryUI.clientInventory.grids.padding*2), 1, tocolor(100, 100, 100, 50), false)
+                gridStartY = gridStartY + inventoryUI.clientInventory.grids.slotSize + inventoryUI.clientInventory.grids.padding
+            end
+            for i = 1, inventoryUI.clientInventory.grids.columns, 1 do
+                imports.beautify.native.drawRectangle(gridStartX, inventoryUI.clientInventory.equipment.titlebar.height + inventoryUI.clientInventory.grids.padding, 1, inventoryUI.clientInventory.equipment.height - (inventoryUI.clientInventory.grids.padding*2), tocolor(100, 100, 100, 50), false)
+                gridStartX = gridStartX + inventoryUI.clientInventory.grids.slotSize + inventoryUI.clientInventory.grids.padding
+            end
             --[[
             imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar["Titles"][FRAMEWORK_LANGUAGE])), 0, 0, inventoryUI.width, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.clientInventory.equipment.titlebar.fontColor, 1, inventoryUI.clientInventory.equipment.titlebar.font, "center", "center", true, false, false)
             imports.beautify.native.drawRectangle(0, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.width, inventoryUI.clientInventory.equipment.titlebar.paddingY, inventoryUI.clientInventory.equipment.titlebar.shadowColor, false)
