@@ -16,7 +16,8 @@
 local imports = {
     addEvent = addEvent,
     addEventHandler = addEventHandler,
-    bindKey = bindKey
+    bindKey = bindKey,
+    beautify = beautify
 }
 
 
