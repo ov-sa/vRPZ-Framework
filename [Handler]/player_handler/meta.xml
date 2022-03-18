@@ -136,20 +136,6 @@
     <file src="files/images/hud/lock/unlocked.png"/>
     <file src="files/images/hud/crosshair.png"/>
 
-    <!-- Files: Images: Inventory: UI -->
-    <file src="files/images/inventory/ui/equipment/itemBox/itemSlot.png"/>
-    <file src="files/images/inventory/ui/equipment/itemBox/itemNameSlot.png"/>
-    <file src="files/images/inventory/ui/equipment/itemBox/template_2.png"/>
-
-    <file src="files/images/inventory/ui/equipment/helmet.png"/>
-    <file src="files/images/inventory/ui/equipment/upper.png"/>
-    <file src="files/images/inventory/ui/equipment/lower.png"/>
-    <file src="files/images/inventory/ui/equipment/shoes.png"/>
-    <file src="files/images/inventory/ui/equipment/vest.png"/>
-    <file src="files/images/inventory/ui/equipment/backpack.png"/>
-    <file src="files/images/inventory/ui/equipment/primary.png"/>
-    <file src="files/images/inventory/ui/equipment/secondary.png"/>
-
     <!-- Files: Images: Inventory: Icons: Weapons -->
     <file src="files/images/inventory/icons/weapons/primary/awm.png"/>
     <file src="files/images/inventory/icons/weapons/primary/colt_model_733.png"/>
