@@ -92,11 +92,12 @@ inventoryUI.toggleUI = function(state)
         ]]
         imports.beautify.render.create(function()
             imports.beautify.native.drawRectangle(0, 0, inventoryUI.clientInventory.equipment.width, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.clientInventory.equipment.titlebar.bgColor, false)
-            imports.beautify.native.drawImage(0, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.clientInventory.equipment.width, inventoryUI.clientInventory.equipment.height, inventoryUI.clientInventory.equipment.bgTexture, 0, 0, 0, tocolor(255, 255, 255, 250), false)
+            imports.beautify.native.drawRectangle(0, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.clientInventory.equipment.width, inventoryUI.clientInventory.equipment.height, inventoryUI.clientInventory.equipment.bgColor, false)
             imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars("Equipment")), 0, 0, inventoryUI.clientInventory.equipment.width, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.clientInventory.equipment.titlebar.fontColor, 1, inventoryUI.clientInventory.equipment.titlebar.font, "center", "center", true, false, false)
-
             for i, j in ipairs(inventoryUI.clientInventory.equipment.slots) do
-                imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, inventoryUI.clientInventory.equipment.slots.bgColor, false)
+                if not j.isUsed then
+                    imports.beautify.native.drawImage(0, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.clientInventory.equipment.width, inventoryUI.clientInventory.equipment.height, j.bgTexture, 0, 0, 0, tocolor(255, 255, 255, 255), false)
+                end
             end
             imports.beautify.native.drawRectangle(inventoryUI.clientInventory.equipment.width + inventoryUI.clientInventory.marginX, 0, inventoryUI.clientInventory.width, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.clientInventory.equipment.titlebar.bgColor, false)
             imports.beautify.native.drawRectangle(inventoryUI.clientInventory.equipment.width + inventoryUI.clientInventory.marginX, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.clientInventory.width, inventoryUI.clientInventory.equipment.height, inventoryUI.clientInventory.equipment.bgColor, false)

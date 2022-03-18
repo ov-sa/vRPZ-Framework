@@ -33,7 +33,6 @@ inventoryUI = {
             startX = (1366-350)/2 - 50, startY = (768-600-30)/2,
             width = 350, height = 600,
             bgColor = tocolor(0, 0, 0, 250),
-            bgTexture = imports.beautify.native.createTexture("files/images/inventory/ui/test.png","dxt5", true, "clamp"),
             titlebar = {
                 height = 35,
                 bgColor = tocolor(0, 0, 0, 255),
@@ -43,38 +42,46 @@ inventoryUI = {
                 bgColor = tocolor(200, 200, 200, 50),
                 {
                     startX = 50, startY = 50,
-                    width = 75, height = 75
+                    width = 75, height = 75,
+                    bgTexture = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/helmet.png", "dxt5", true, "clamp")
                 },
                 {
                     startX = 25, startY = 130,
-                    width = 125, height = 125
+                    width = 125, height = 125,
+                    bgTexture = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/upper.png", "dxt5", true, "clamp")
                 },
                 {
                     startX = 25, startY = 260,
-                    width = 125, height = 125
+                    width = 125, height = 125,
+                    bgTexture = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/lower.png", "dxt5", true, "clamp")
                 },
                 {
                     startX = 50, startY = 390,
-                    width = 75, height = 75
+                    width = 75, height = 75,
+                    bgTexture = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/shoes.png", "dxt5", true, "clamp")
                 },
 
                 {
                     startX = 200, startY = 50,
-                    width = 125, height = 125
+                    width = 125, height = 125,
+                    bgTexture = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/backpack.png", "dxt5", true, "clamp")
                 },
                 {
                     startX = 200, startY = 180,
-                    width = 125, height = 125
+                    width = 125, height = 125,
+                    bgTexture = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/vest.png", "dxt5", true, "clamp")
                 },
 
                 {
                     startX = 225, startY = 405,
-                    width = 100, height = 100
+                    width = 100, height = 100,
+                    bgTexture = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/secondary.png", "dxt5", true, "clamp")
                 },
 
                 {
                     startX = 25, startY = 510,
-                    width = 300, height = 100
+                    width = 300, height = 100,
+                    bgTexture = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/primary.png", "dxt5", true, "clamp")
                 }
             }
         },
