@@ -1184,6 +1184,7 @@ end
 --[[ Event: On Client Resource Start ]]--
 -----------------------------------------
 
+--[[
 addEventHandler("onClientResourceStart", resource, function()
 
     for i, j in pairs(inventoryDatas) do
@@ -1195,3 +1196,4 @@ addEventHandler("onClientResourceStart", resource, function()
     end
 
 end)
+]]

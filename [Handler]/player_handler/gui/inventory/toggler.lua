@@ -9,6 +9,17 @@
 ----------------------------------------------------------------
 
 
+-----------------
+--[[ Imports ]]--
+-----------------
+
+local imports = {
+    addEvent = addEvent,
+    addEventHandler = addEventHandler,
+    bindKey = bindKey
+}
+
+
 -------------------------------
 --[[ Functions: UI Helpers ]]--
 -------------------------------
@@ -110,7 +121,7 @@ inventoryUI.toggleUI = function(state)
     imports.showCursor(inventoryUI.isVisible)
     return true
 end
-imports.bindKey(FRAMEWORK_CONFIGS["Inventory"], "down", function() inventoryUI.toggleUI(not inventoryUI.isVisible) end)
+imports.bindKey(FRAMEWORK_CONFIGS["Inventory"]["UI_ToggleKey"], "down", function() inventoryUI.toggleUI(not inventoryUI.isVisible) end)
 imports.addEventHandler("onClientPlayerWasted", localPlayer, function() inventoryUI.toggleUI(false) end)
 
 
