@@ -14,10 +14,15 @@
 -----------------
 
 local imports = {
+    isElement = isElement,
+    destroyElement = destroyElement,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     bindKey = bindKey,
-    beautify = beautify
+    showChat = showChat,
+    showCursor = showCursor,
+    beautify = beautify,
+    string = string,
 }
 
 
@@ -57,8 +62,8 @@ end)
 inventoryUI.toggleUI = function(state)
     if state then
         if inventoryUI.clientInventory.element and imports.isElement(inventoryUI.clientInventory.element) then return false end
-        --local panel_offsetY = inventoryUI.titlebar.height + inventoryUI.titlebar.paddingY
-        inventoryUI.clientInventory.element = imports.beautify.card.create(inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height, nil, false)
+        --local panel_offsetY = inventoryUI.clientInventory.equipment.titlebar.height + inventoryUI.clientInventory.equipment.titlebar.paddingY
+        inventoryUI.clientInventory.element = imports.beautify.card.create(inventoryUI.clientInventory.equipment.startX, inventoryUI.clientInventory.equipment.startY, inventoryUI.clientInventory.equipment.width + inventoryUI.clientInventory.width + inventoryUI.clientInventory.marginX, inventoryUI.clientInventory.equipment.height + inventoryUI.clientInventory.equipment.titlebar.height, nil, false)
         imports.beautify.setUIVisible(inventoryUI.clientInventory.element, true)
         --[[
         for i = 1, #inventoryUI.categories, 1 do
@@ -86,22 +91,32 @@ inventoryUI.toggleUI = function(state)
         end
         ]]
         imports.beautify.render.create(function()
+            imports.beautify.native.drawRectangle(0, 0, inventoryUI.clientInventory.equipment.width, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.clientInventory.equipment.titlebar.bgColor, false)
+            imports.beautify.native.drawImage(0, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.clientInventory.equipment.width, inventoryUI.clientInventory.equipment.height, inventoryUI.clientInventory.equipment.bgTexture, 0, 0, 0, tocolor(255, 255, 255, 250), false)
+            imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars("Equipment")), 0, 0, inventoryUI.clientInventory.equipment.width, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.clientInventory.equipment.titlebar.fontColor, 1, inventoryUI.clientInventory.equipment.titlebar.font, "center", "center", true, false, false)
+
+            for i, j in ipairs(inventoryUI.clientInventory.equipment.slots) do
+                imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, inventoryUI.clientInventory.equipment.slots.bgColor, false)
+            end
+            imports.beautify.native.drawRectangle(inventoryUI.clientInventory.equipment.width + inventoryUI.clientInventory.marginX, 0, inventoryUI.clientInventory.width, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.clientInventory.equipment.titlebar.bgColor, false)
+            imports.beautify.native.drawRectangle(inventoryUI.clientInventory.equipment.width + inventoryUI.clientInventory.marginX, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.clientInventory.width, inventoryUI.clientInventory.equipment.height, inventoryUI.clientInventory.equipment.bgColor, false)
+            imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars("Inventory")), inventoryUI.clientInventory.equipment.width + inventoryUI.clientInventory.marginX, 0, inventoryUI.clientInventory.equipment.width + inventoryUI.clientInventory.marginX + inventoryUI.clientInventory.width, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.clientInventory.equipment.titlebar.fontColor, 1, inventoryUI.clientInventory.equipment.titlebar.font, "center", "center", true, false, false)
+
             --[[
-            imports.beautify.native.drawRectangle(0, 0, inventoryUI.width, inventoryUI.titlebar.height, inventoryUI.titlebar.bgColor, false)
-            imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar["Titles"][FRAMEWORK_LANGUAGE])), 0, 0, inventoryUI.width, inventoryUI.titlebar.height, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
-            imports.beautify.native.drawRectangle(0, inventoryUI.titlebar.height, inventoryUI.width, inventoryUI.titlebar.paddingY, inventoryUI.titlebar.shadowColor, false)
+            imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar["Titles"][FRAMEWORK_LANGUAGE])), 0, 0, inventoryUI.width, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.clientInventory.equipment.titlebar.fontColor, 1, inventoryUI.clientInventory.equipment.titlebar.font, "center", "center", true, false, false)
+            imports.beautify.native.drawRectangle(0, inventoryUI.clientInventory.equipment.titlebar.height, inventoryUI.width, inventoryUI.clientInventory.equipment.titlebar.paddingY, inventoryUI.clientInventory.equipment.titlebar.shadowColor, false)
             for i = 1, #inventoryUI.categories, 1 do
                 local j = inventoryUI.categories[i]
                 local category_offsetY = j.offsetY + inventoryUI.categories.height
-                imports.beautify.native.drawRectangle(0, j.offsetY, inventoryUI.width, inventoryUI.categories.height, inventoryUI.titlebar.bgColor, false)
+                imports.beautify.native.drawRectangle(0, j.offsetY, inventoryUI.width, inventoryUI.categories.height, inventoryUI.clientInventory.equipment.titlebar.bgColor, false)
                 imports.beautify.native.drawText(j.title, 0, j.offsetY, inventoryUI.width, category_offsetY, inventoryUI.categories.fontColor, 1, inventoryUI.categories.font, "center", "center", true, false, false)
                 imports.beautify.native.drawRectangle(0, category_offsetY, inventoryUI.width, j.height, inventoryUI.categories.bgColor, false)
                 if j.contents then
                     for k, v in imports.pairs(j.contents) do
                         local title_height = inventoryUI.categories.height
                         local title_offsetY = category_offsetY + v.startY - title_height
-                        imports.beautify.native.drawRectangle(0, title_offsetY, inventoryUI.width, title_height, inventoryUI.titlebar.bgColor, false)
-                        imports.beautify.native.drawText(v.title, 0, title_offsetY, inventoryUI.width, title_offsetY + title_height, inventoryUI.titlebar.fontColor, 1, inventoryUI.categories.font, "center", "center", true, false, false)
+                        imports.beautify.native.drawRectangle(0, title_offsetY, inventoryUI.width, title_height, inventoryUI.clientInventory.equipment.titlebar.bgColor, false)
+                        imports.beautify.native.drawText(v.title, 0, title_offsetY, inventoryUI.width, title_offsetY + title_height, inventoryUI.clientInventory.equipment.titlebar.fontColor, 1, inventoryUI.categories.font, "center", "center", true, false, false)
                     end
                 end
             end
@@ -117,7 +132,7 @@ inventoryUI.toggleUI = function(state)
     end
     inventoryUI.isVisible = (state and true) or false
     imports.showChat(not inventoryUI.isVisible)
-    imports.showCursor(inventoryUI.isVisible)
+    imports.showCursor(inventoryUI.isVisible, true) --TODO: RMEOVE FORCED CHECK LATER
     return true
 end
 imports.bindKey(FRAMEWORK_CONFIGS["Inventory"]["UI_ToggleKey"], "down", function() inventoryUI.toggleUI(not inventoryUI.isVisible) end)

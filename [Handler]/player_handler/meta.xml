@@ -150,6 +150,7 @@
     <file src="files/images/inventory/ui/torso_slot.png"/>
     <file src="files/images/inventory/ui/shoes_slot.png"/>
     <file src="files/images/inventory/ui/backpack_slot.png"/>
+    <file src="files/images/inventory/ui/test.png"/>
 
     <!-- Files: Images: Inventory: Icons: Weapons -->
     <file src="files/images/inventory/icons/weapons/primary/awm.png"/>
