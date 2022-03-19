@@ -157,10 +157,12 @@ inventoryUI.createBGTexture = function(isRefresh)
             imports.beautify.native.drawRectangle(j.startX + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*k), j.startY, 1, j.height, inventoryUI.clientInventory.dividerColor, false)
         end
     end
-    local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
-    local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
-    imports.beautify.native.drawRectangle(vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_width, inventoryUI.titlebar.height, inventoryUI.titlebar.bgColor, false)
-    imports.beautify.native.drawRectangle(vicinity_startX, vicinity_startY, vicinity_width, vicinity_height, inventoryUI.clientInventory.bgColor, false)
+    if inventoryUI.vicinityInventory.vicinityElement then
+        local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
+        local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
+        imports.beautify.native.drawRectangle(vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_width, inventoryUI.titlebar.height, inventoryUI.titlebar.bgColor, false)
+        imports.beautify.native.drawRectangle(vicinity_startX, vicinity_startY, vicinity_width, vicinity_height, inventoryUI.clientInventory.bgColor, false)
+    end
     imports.beautify.native.drawRectangle(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, inventoryUI.titlebar.bgColor, false)
     imports.beautify.native.setRenderTarget()
     local rtPixels = imports.beautify.native.getTexturePixels(inventoryUI.bgRT)
@@ -227,6 +229,11 @@ inventoryUI.renderUI = function()
         local j = inventoryUI.clientInventory.equipment[i]
         imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font, "center", "center", true, false, false)
     end
+    if inventoryUI.vicinityInventory.vicinityElement then
+        local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
+        local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
+        imports.beautify.native.drawText(inventoryUI.vicinityInventory.name, vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_startX + vicinity_width, vicinity_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
+    end
     inventoryUI.isLangUpdated = nil
 end
 
@@ -251,12 +258,18 @@ inventoryUI.toggleUI = function(state)
             renderType = "preRender"
         })
         imports.beautify.setUIVisible(inventoryUI.opacityAdjuster.element, true)
+
+        --TODO: TEST
+        inventoryUI.vicinityInventory.vicinityElement = true
+        inventoryUI.vicinityInventory.name = "Test Loot"
     else
         if not inventoryUI.state then return false end
-        inventoryUI.clientInventory.name = nil
         if inventoryUI.opacityAdjuster.element and imports.isElement(inventoryUI.opacityAdjuster.element) then
             imports.destroyElement(inventoryUI.opacityAdjuster.element)
         end
+        inventoryUI.clientInventory.name = nil
+        inventoryUI.vicinityInventory.vicinityElement = nil
+        inventoryUI.vicinityInventory.name = nil
         inventoryUI.opacityAdjuster.element = nil
     end
     inventoryUI.state = (state and true) or false
