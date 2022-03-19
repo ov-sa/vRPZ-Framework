@@ -69,11 +69,11 @@ inventoryUI = {
     }
 }
 
-inventoryUI.clientInventory.width, inventoryUI.clientInventory.height = (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize) + (imports.math.max(0, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - 1)*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize), (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize) + (imports.math.max(0, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - 1)*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)
+inventoryUI.clientInventory.width, inventoryUI.clientInventory.height = CInventory.fetchSlotDimensions(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)
 inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY = inventoryUI.clientInventory.startX + ((CLIENT_MTA_RESOLUTION[1] - inventoryUI.clientInventory.width)*0.5) + (inventoryUI.clientInventory.width*0.5), ((CLIENT_MTA_RESOLUTION[2] + inventoryUI.clientInventory.startY - inventoryUI.clientInventory.height - inventoryUI.clientInventory.titlebar.height)*0.5)
 for i = 1, #inventoryUI.clientInventory.equipment, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
-    j.width, j.height = ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*j.slots.columns), ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*j.slots.rows)
+    j.width, j.height = CInventory.fetchSlotDimensions(j.slots.rows, j.slots.columns)
 end
 local equipment_prevX, equipment_prevY = -inventoryUI.clientInventory.padding, inventoryUI.clientInventory.titlebar.slot.height + inventoryUI.clientInventory.equipment[1].height + inventoryUI.clientInventory.padding
 for i = 5, 1, -1 do

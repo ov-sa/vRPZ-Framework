@@ -76,6 +76,8 @@
     <script src="modules/inventory/shared/exports.lua" type="shared"/>
     <script src="modules/inventory/server/index.lua" type="server"/>
     <script src="modules/inventory/server/exports.lua" type="server"/>
+    <script src="modules/inventory/client/index.lua" type="client"/>
+    <script src="modules/inventory/client/exports.lua" type="client"/>
     <export function="fetchInventoryItem" type="shared"/>
     <export function="fetchInventoryItemSlot" type="shared"/>
     <export function="fetchInventoryItemName" type="shared"/>
@@ -98,6 +100,7 @@
     <export function="getInventoryItemProperty" type="server"/>
     <export function="setInventoryItemData" type="server"/>
     <export function="getInventoryItemData" type="server"/>
+    <export function="fetchInventorySlotDimensions" type="client"/>
 
     <!-- GUIs -->
     <script src="gui/loading.lua" type="client"/>
