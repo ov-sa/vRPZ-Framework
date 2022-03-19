@@ -101,7 +101,7 @@ inventoryUI = {
             }
         },
         marginX = 1,
-        startX = 0, startY = 0,
+        startX = 0, startY = -90,
         width = 460, height = 552,
         bgColor = tocolor(0, 0, 0, 250),
         titlebar = {
@@ -118,7 +118,7 @@ inventoryUI = {
     }
 }
 
-inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY = inventoryUI.clientInventory.startX + ((CLIENT_MTA_RESOLUTION[1] - inventoryUI.clientInventory.width)*0.5), inventoryUI.clientInventory.startY + ((CLIENT_MTA_RESOLUTION[2] - inventoryUI.clientInventory.height)*0.5)
+inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY = inventoryUI.clientInventory.startX + ((CLIENT_MTA_RESOLUTION[1] - inventoryUI.clientInventory.width)*0.5), ((CLIENT_MTA_RESOLUTION[2] + inventoryUI.clientInventory.startY - inventoryUI.clientInventory.height - inventoryUI.clientInventory.titlebar.height)*0.5)
 
 
 ------------------------------
