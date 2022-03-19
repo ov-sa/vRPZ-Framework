@@ -229,9 +229,11 @@ loginUI.phases[2].updateUILang = function(gender)
     end
 end
 imports.addEventHandler("Client:onUpdateLanguage", root, function()
-    if not loginUI.phases[2].element or not imports.isElement(loginUI.phases[2].element) then return false end
-    local characterData = loginUI.phases[2].fetchSelection()
-    loginUI.phases[2].updateUILang(characterData.gender)
+    if not loginUI.state then return false end
+    if loginUI.phases[2].element and imports.isElement(loginUI.phases[2].element) then
+        local characterData = loginUI.phases[2].fetchSelection()
+        loginUI.phases[2].updateUILang(characterData.gender)
+    end
 end)
 loginUI.phases[2].fetchSelection = function()
     local tone = imports.beautify.slider.getPercent(loginUI.phases[2].categories[1].contents.tone.element)
