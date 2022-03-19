@@ -106,7 +106,7 @@ inventoryUI = {
         titlebar = {
             height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.height,
             bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.bgColor)),
-            font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.fontColor))
+            font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.fontColor)),
             slot = {
                 height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height,
                 bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.bgColor)),
@@ -152,25 +152,22 @@ inventoryUI.renderUI = function()
     for i, j in ipairs(inventoryUI.clientInventory.equipment.bottomTest) do
         local titleX, titleY = inventory_startX + j.startX, gridStartY + j.startY
         local titleWidth, titleHeight = j.width, j.height
-        local titlebarheigh = 20
-        imports.beautify.native.drawRectangle(titleX, titleY - titlebarheigh, j.width, titlebarheigh, inventoryUI.clientInventory.equipment.rightTest.bgColor, false)
-        imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(j.title)), titleX, titleY - titlebarheigh + 2, titleX + titleWidth, titleY, inventoryUI.clientInventory.equipment.rightTest.fontColor, 1, inventoryUI.clientInventory.equipment.rightTest.font, "center", "center", true, false, false)
+        imports.beautify.native.drawRectangle(titleX, titleY - inventoryUI.clientInventory.titlebar.slot.height, j.width, inventoryUI.clientInventory.titlebar.slot.height, inventoryUI.clientInventory.titlebar.slot.bgColor, false)
+        imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(j.title)), titleX, titleY - inventoryUI.clientInventory.titlebar.slot.height + 2, titleX + titleWidth, titleY, inventoryUI.clientInventory.titlebar.slot.fontColor, 1, inventoryUI.clientInventory.titlebar.slot.font, "center", "center", true, false, false)
         imports.beautify.native.drawRectangle(titleX, titleY, titleWidth, titleHeight, inventoryUI.clientInventory.bgColor, false)
     end
     for i, j in ipairs(inventoryUI.clientInventory.equipment.rightTest) do
         local titleX, titleY = inventory_startX - j.startX - j.width, inventory_startY + j.startY
         local titleWidth, titleHeight = j.width, j.height
-        local titlebarheigh = 20
-        imports.beautify.native.drawRectangle(titleX, titleY - titlebarheigh, j.width, titlebarheigh, inventoryUI.clientInventory.equipment.rightTest.bgColor, false)
-        imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(j.title)), titleX, titleY - titlebarheigh + 2, titleX + titleWidth, titleY, inventoryUI.clientInventory.equipment.rightTest.fontColor, 1, inventoryUI.clientInventory.equipment.rightTest.font, "center", "center", true, false, false)
+        imports.beautify.native.drawRectangle(titleX, titleY - inventoryUI.clientInventory.titlebar.slot.height, j.width, inventoryUI.clientInventory.titlebar.slot.height, inventoryUI.clientInventory.titlebar.slot.bgColor, false)
+        imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(j.title)), titleX, titleY - inventoryUI.clientInventory.titlebar.slot.height + 2, titleX + titleWidth, titleY, inventoryUI.clientInventory.titlebar.slot.fontColor, 1, inventoryUI.clientInventory.titlebar.slot.font, "center", "center", true, false, false)
         imports.beautify.native.drawRectangle(titleX, titleY, titleWidth, titleHeight, inventoryUI.clientInventory.bgColor, false)
     end
     for i, j in ipairs(inventoryUI.clientInventory.equipment.leftTest) do
-        local titlebarheigh = 20
         local titleX, titleY = inventory_startX + inventoryUI.clientInventory.width + j.startX, gridStartY - j.startY - j.height
         local titleWidth, titleHeight = j.width, j.height
-        imports.beautify.native.drawRectangle(titleX, titleY - titlebarheigh, j.width, titlebarheigh, inventoryUI.clientInventory.equipment.rightTest.bgColor, false)
-        imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(j.title)), titleX, titleY - titlebarheigh + 2, titleX + titleWidth, titleY, inventoryUI.clientInventory.equipment.rightTest.fontColor, 1, inventoryUI.clientInventory.equipment.rightTest.font, "center", "center", true, false, false)
+        imports.beautify.native.drawRectangle(titleX, titleY - inventoryUI.clientInventory.titlebar.slot.height, j.width, inventoryUI.clientInventory.titlebar.slot.height, inventoryUI.clientInventory.titlebar.slot.bgColor, false)
+        imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(j.title)), titleX, titleY - inventoryUI.clientInventory.titlebar.slot.height + 2, titleX + titleWidth, titleY, inventoryUI.clientInventory.titlebar.slot.fontColor, 1, inventoryUI.clientInventory.titlebar.slot.font, "center", "center", true, false, false)
         imports.beautify.native.drawRectangle(titleX, titleY, titleWidth, titleHeight, inventoryUI.clientInventory.bgColor, false)
     end
 end
