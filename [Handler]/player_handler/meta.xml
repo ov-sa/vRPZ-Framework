@@ -130,48 +130,9 @@
     <file src="files/images/hud/player/slotBG2.png"/>
 
 
-
-
     <file src="files/images/hud/lock/locked.png"/>
     <file src="files/images/hud/lock/unlocked.png"/>
     <file src="files/images/hud/crosshair.png"/>
-
-    <!-- Files: Images: Inventory: Icons: Weapons -->
-    <file src="files/images/inventory/icons/weapons/primary/awm.png"/>
-    <file src="files/images/inventory/icons/weapons/primary/colt_model_733.png"/>
-    <file src="files/images/inventory/icons/weapons/primary/double_barreled_shotgun.png"/>
-    <file src="files/images/inventory/icons/weapons/primary/fn_fal_g.png"/>
-    <file src="files/images/inventory/icons/weapons/primary/m60.png"/>
-    <file src="files/images/inventory/icons/weapons/primary/norinco_type_56.png"/>
-    <file src="files/images/inventory/icons/weapons/primary/remington_700.png"/>
-    <file src="files/images/inventory/icons/weapons/primary/mp5.png"/>
-    <file src="files/images/inventory/icons/weapons/secondary/desert_eagle.png"/>
-    <file src="files/images/inventory/icons/weapons/secondary/glock_17.png"/>
-    <file src="files/images/inventory/icons/weapons/secondary/glock_17_silenced.png"/>
-    <file src="files/images/inventory/icons/weapons/special/axe.png"/>
-
-    <!-- Files: Images: Inventory: Icons: Ammos -->
-    <file src="files/images/inventory/icons/ammos/pistol_ammo.png"/>
-    <file src="files/images/inventory/icons/ammos/assault_ammo.png"/>
-    <file src="files/images/inventory/icons/ammos/shotgun_ammo.png"/>
-    <file src="files/images/inventory/icons/ammos/sniper_ammo.png"/>
-    <file src="files/images/inventory/icons/ammos/smg_ammo.png"/>
-
-    <!-- Files: Images: Inventory: Icons: Medicals -->
-    <file src="files/images/inventory/icons/medicals/painkiller.png"/>
-    <file src="files/images/inventory/icons/medicals/morphine.png"/>
-    <file src="files/images/inventory/icons/medicals/firstaidkit.png"/>
-
-    <!-- Files: Images: Inventory: Icons: Backpacks -->
-    <file src="files/images/inventory/icons/backpacks/alice_backpack.png"/>
-    <file src="files/images/inventory/icons/backpacks/coyote_backpack.png"/>
-    <file src="files/images/inventory/icons/backpacks/small_backpack.png"/>
-
-    <!-- Files: Images: Inventory: Icons: Nutritions -->
-    <file src="files/images/inventory/icons/nutritions/beans_can.png"/>
-    <file src="files/images/inventory/icons/nutritions/pasta_can.png"/>
-    <file src="files/images/inventory/icons/nutritions/soda_can.png"/>
-    <file src="files/images/inventory/icons/nutritions/water_bottle.png"/>
 
     <!-- Exports: Shared: Main -->
     <export function="getElementMaxSlots" type="shared"/>
