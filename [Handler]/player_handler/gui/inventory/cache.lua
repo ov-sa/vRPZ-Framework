@@ -46,7 +46,7 @@ inventoryUI = {
                 startX = 1,
                 startY = 5 + 20,
                 width = 276, height = 92
-            }
+            },
             {
                 title = "Secondary",
                 startX = 278,
@@ -96,7 +96,7 @@ inventoryUI.clientInventory.width, inventoryUI.clientInventory.height = (FRAMEWO
 inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY = inventoryUI.clientInventory.startX + ((CLIENT_MTA_RESOLUTION[1] - inventoryUI.clientInventory.width)*0.5) + (inventoryUI.clientInventory.width*0.5), ((CLIENT_MTA_RESOLUTION[2] + inventoryUI.clientInventory.startY - inventoryUI.clientInventory.height - inventoryUI.clientInventory.titlebar.height)*0.5)
 for i = 1, #inventoryUI.clientInventory.equipment, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
-    j.startX, j.startY = inventoryUI.clientInventory.startX + j.startX, inventoryUI.clientInventory.startY + j,startY
+    j.startX, j.startY = inventoryUI.clientInventory.startX + j.startX, inventoryUI.clientInventory.startY + j.startY
 end
 
 
