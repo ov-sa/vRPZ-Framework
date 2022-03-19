@@ -62,13 +62,9 @@ inventoryUI = {
             {
                 identifier = "secondary", slots = {rows = 2, columns = 4}
             },
-            --[[
             {
-                identifier = "Backpack",
-                startX = 2, startY = 0,
-                width = 138, height = 138
+                identifier = "backpack", slots = {rows = 3, columns = 3}
             }
-            ]]
         }
     }
 }
@@ -89,9 +85,16 @@ equipment_prevY = nil
 for i = 6, 7, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.startX, j.startY = equipment_prevX, inventoryUI.clientInventory.equipment[5].startY
-    equipment_prevX = equipment_prevX + inventoryUI.clientInventory.padding + j.width
+    equipment_prevX = equipment_prevX + (inventoryUI.clientInventory.padding*2) - FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize + j.width
 end
 equipment_prevX = nil
+equipment_prevY = -inventoryUI.clientInventory.titlebar.slot.height - inventoryUI.clientInventory.padding
+for i = 8, 8, 1 do
+    local j = inventoryUI.clientInventory.equipment[i]
+    j.startX, j.startY = inventoryUI.clientInventory.width + (inventoryUI.clientInventory.padding*2), inventoryUI.clientInventory.equipment[5].startY - j.height + equipment_prevY
+    equipment_prevY = equipment_prevY - j.height - (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*0.5) - inventoryUI.clientInventory.titlebar.slot.height
+end
+equipment_prevY = nil
 for i = 1, #inventoryUI.clientInventory.equipment, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.startX, j.startY = inventoryUI.clientInventory.startX + j.startX, inventoryUI.clientInventory.startY + j.startY
