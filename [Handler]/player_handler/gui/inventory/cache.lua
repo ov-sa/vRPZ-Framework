@@ -100,14 +100,18 @@ inventoryUI = {
                 }
             }
         },
-        marginX = 1,
-        startX = 0, startY = -90 - 20,
+        startX = 0, startY = -90-20,
         width = 460, height = 552,
         bgColor = tocolor(0, 0, 0, 250),
         titlebar = {
-            height = 35,
-            bgColor = tocolor(0, 0, 0, 255),
-            font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor))
+            height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.height,
+            bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.bgColor)),
+            font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.fontColor))
+            slot = {
+                height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height,
+                bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.bgColor)),
+                font = FRAMEWORK_FONTS[6], fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.fontColor))
+            }
         },
         grids = {
             padding = 1,
