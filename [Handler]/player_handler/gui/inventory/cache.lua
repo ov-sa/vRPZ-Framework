@@ -43,33 +43,28 @@ inventoryUI = {
         equipment = {
             {
                 title = "Helmet",
-                startX = 2,
-                startY = 0 + 24,
-                width = 92, height = 92
+                startX = 5, startY = 0 + 24,
+                slots = {rows = 2, columns = 2}
             },
             {
                 title = "Vest",
-                startX = 2,
-                startY = 92 + 45 + 1 + 24,
-                width = 92, height = 92
+                startX = 5, startY = 92 + 45 + 1 + 24,
+                slots = {rows = 2, columns = 2}
             },
             {
                 title = "Upper",
-                startX = 2,
-                startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
-                width = 92, height = 92
+                startX = 5, startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
+                slots = {rows = 2, columns = 2}
             },
             {
                 title = "Lower",
-                startX = 2,
-                startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
-                width = 90, height = 92
+                startX = 5, startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
+                slots = {rows = 2, columns = 2}
             },
             {
                 title = "Shoes",
-                startX = 2,
-                startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
-                width = 92, height = 92
+                startX = 5, startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
+                slots = {rows = 2, columns = 2}
             },
             --[[
             {
@@ -96,11 +91,9 @@ inventoryUI = {
 
 inventoryUI.clientInventory.width, inventoryUI.clientInventory.height = (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize) + (imports.math.max(0, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - 1)*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize), (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize) + (imports.math.max(0, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - 1)*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)
 inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY = inventoryUI.clientInventory.startX + ((CLIENT_MTA_RESOLUTION[1] - inventoryUI.clientInventory.width)*0.5) + (inventoryUI.clientInventory.width*0.5), ((CLIENT_MTA_RESOLUTION[2] + inventoryUI.clientInventory.startY - inventoryUI.clientInventory.height - inventoryUI.clientInventory.titlebar.height)*0.5)
-inventoryUI.clientInventory.equipment[1].startX = inventoryUI.clientInventory.equipment[1].startX - inventoryUI.clientInventory.equipment[1].width
-inventoryUI.clientInventory.equipment[2].startX = inventoryUI.clientInventory.equipment[2].startX - inventoryUI.clientInventory.equipment[2].width
 for i = 1, 5, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
-    j.startX = j.startX - j.width
+    j.startX = j.startX - j.width - inventoryUI.clientInventory.padding
 end
 for i = 1, #inventoryUI.clientInventory.equipment, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
@@ -119,8 +112,7 @@ inventoryUI.renderUI = function()
     imports.beautify.native.drawRectangle(inventory_startX, inventory_startY, inventory_width, inventory_height, inventoryUI.clientInventory.bgColor, false)
     local playerName = getPlayerName(localPlayer)
     imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(playerName.."'s Inventory")), inventory_startX, inventory_startY - inventoryUI.clientInventory.titlebar.height, inventory_startX + inventory_width, inventory_startY, inventoryUI.clientInventory.titlebar.fontColor, 1, inventoryUI.clientInventory.titlebar.font, "center", "center", true, false, false)
-    
-    local gridStartX, gridStartY = inventory_startX + inventoryUI.clientInventory.padding + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize, inventory_startY + inventoryUI.clientInventory.padding + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize
+
     for i = 1, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - 1, 1 do
         imports.beautify.native.drawRectangle(inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY + inventoryUI.clientInventory.titlebar.height + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*i), inventoryUI.clientInventory.width, 1, inventoryUI.clientInventory.dividerColor, false)
     end
