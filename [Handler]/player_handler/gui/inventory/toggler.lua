@@ -11,9 +11,7 @@
 
 --[[
 function inventoryUI.toggleUI(true)
-
     if not isPlayerInitialized(localPlayer) or getPlayerHealth(localPlayer) <= 0 then inventoryUI.toggleUI(false) return false end
-    if inventoryUI.isVisible then return false end
     
     createItemBox(inventoryUI.gui.equipment.startX + 250 + 50, inventoryUI.gui.equipment.startY + 25, 1, localPlayer, "Inventory")
     inventoryUI.vicinity = isPlayerInLoot(localPlayer)
@@ -31,13 +29,9 @@ function inventoryUI.toggleUI(true)
     showCursor(true)
     triggerEvent("Client:onUpdateInventoryUI", localPlayer)
     inventoryUpdate()
-
 end
 
 function inventoryUI.toggleUI(false)
-
-    if not inventoryUI.isVisible then return false end
-
     if inventoryUI.isUpdateScheduled then
         triggerServerEvent("onClientRequestSyncInventorySlots", localPlayer)
     end
@@ -46,8 +40,5 @@ function inventoryUI.toggleUI(false)
     destroyItemBox(inventoryUI.vicinity)
     inventoryUI.vicinity = nil
     inventoryUI.attachedItemOnCursor = nil
-    showChat(true)
-    showCursor(false)
-
 end
 ]]
