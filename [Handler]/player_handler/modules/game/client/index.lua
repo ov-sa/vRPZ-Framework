@@ -12,12 +12,25 @@
 --[[ Imports ]]--
 -----------------
 
-local imports = {}
+local imports = {
+    beautify = beautify
+}
 
 
 ----------------
 --[[ Module ]]--
 ----------------
+
+CGame.CFont = {}
+
+CGame.createFont = function(path, size)
+    if CGame.CFont[path] and CGame.CFont[path][size] then return CGame.CFont[path][size] end
+    local cFont = imports.beautify.native.createFont(path, size)
+    if not cFont then return false end
+    CGame.CFont[path] = CGame.CFont[path] or {}
+    CGame.CFont[path][size] = cFont
+    return CGame.CFont[path][size]
+end
 
 CGame.isUIVisible = function()
     local uiStates = {

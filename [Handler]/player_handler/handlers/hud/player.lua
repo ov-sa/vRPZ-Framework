@@ -54,10 +54,10 @@ local cache = {
         width = 175, height = 53,
         bgTexture = imports.beautify.native.createTexture("files/images/hud/player/slotBG1.png", "dxt5", true, "clamp"),
         ammo = {
-            font = FRAMEWORK_FONTS[7], fontColor = imports.tocolor(255, 255, 255, 255),
+            font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 23), fontColor = imports.tocolor(255, 255, 255, 255),
             mag = {
                 paddingX = 2,
-                font = FRAMEWORK_FONTS[8], fontColor = imports.tocolor(150, 150, 150, 255)
+                font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 15), fontColor = imports.tocolor(150, 150, 150, 255)
             }
         }
     },
@@ -66,10 +66,10 @@ local cache = {
         width = 100*0.75, height = 50*0.75,
         bgTexture = imports.beautify.native.createTexture("files/images/hud/player/slotBG2.png", "dxt5", true, "clamp"),
         ammo = {
-            font = FRAMEWORK_FONTS[7], fontColor = imports.tocolor(255, 255, 255, 255),
+            font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 23), fontColor = imports.tocolor(255, 255, 255, 255),
             mag = {
                 paddingX = 2,
-                font = FRAMEWORK_FONTS[8], fontColor = imports.tocolor(150, 150, 150, 255)
+                font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 15), fontColor = imports.tocolor(150, 150, 150, 255)
             }
         }
     }

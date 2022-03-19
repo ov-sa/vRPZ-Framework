@@ -40,7 +40,7 @@ local loadingUI = {
     hint = {
         paddingX = 5, paddingY = 15,
         text = "",
-        font = FRAMEWORK_FONTS[1]
+        font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 23)
     }
 }
 

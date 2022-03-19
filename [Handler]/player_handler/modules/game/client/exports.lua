@@ -12,4 +12,5 @@
 --[[ Exports ]]--
 -----------------
 
+function createFont(...) return CGame.createFont(...) end
 function isUIVisible(...) return CGame.isUIVisible(...) end

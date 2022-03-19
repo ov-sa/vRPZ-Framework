@@ -13,13 +13,6 @@
     <script src="utilities/server.lua" type="server"/>
     <script src="settings/client.lua" type="client"/>
 
-    <!-- GUIs -->
-    <script src="gui/loading.lua" type="client"/>
-    <script src="gui/notification.lua" type="client"/>
-    <script src="gui/login.lua" type="client"/>
-    <script src="gui/inventory/cache.lua" type="client"/>
-    <script src="gui/inventory/toggler.lua" type="client"/>
-
     <!-- Modules: Game -->
     <script src="modules/game/shared/index.lua" type="shared"/>
     <script src="modules/game/shared/exports.lua" type="shared"/>
@@ -30,6 +23,7 @@
     <export function="getTime" type="shared"/>
     <export function="formatMS" type="shared"/>
     <export function="generateSpawn" type="shared"/>
+    <export function="createFont" type="client"/>
     <export function="isUIVisible" type="client"/>
 
     <!-- Modules: Player -->
@@ -104,6 +98,13 @@
     <export function="getInventoryItemProperty" type="server"/>
     <export function="setInventoryItemData" type="server"/>
     <export function="getInventoryItemData" type="server"/>
+
+    <!-- GUIs -->
+    <script src="gui/loading.lua" type="client"/>
+    <script src="gui/notification.lua" type="client"/>
+    <script src="gui/login.lua" type="client"/>
+    <script src="gui/inventory/cache.lua" type="client"/>
+    <script src="gui/inventory/toggler.lua" type="client"/>
 
     <!-- Handlers -->
     <!--script src="handlers/hud/chatbox.lua" type="server"/-->

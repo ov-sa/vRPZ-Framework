@@ -69,5 +69,5 @@ CGame = {
             position = {point.x, point.y, point.z},
             rotation = {0, 0, imports.math.random(0, 360)}
         }
-    end,
+    end
 }

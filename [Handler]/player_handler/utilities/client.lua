@@ -135,7 +135,7 @@ function drawProgressBar(percent, placeHolder)
     dxDrawImage(overlay_startX + overlay_width - overlay_height, overlay_startY, overlay_height, overlay_height, progressBarDatas.edgePaths[2], 0, 0, 0, barColor, false)
     dxDrawRectangle(overlay_startX + overlay_height, overlay_startY, overlay_width - (overlay_height*2), overlay_height, barColor, false)
     dxDrawRectangle(overlay_startX + barPadding, overlay_startY + barPadding, (overlay_width - (barPadding*2))*(percent/100), overlay_height - (barPadding*2), tocolor(unpack(percentageColor)), false)
-    dxDrawBorderedText(outlineWeight, outlineColor, placeHolder:gsub("."," %0"):sub(2), overlay_startX, overlay_startY - (borderSize*2), overlay_startX + overlay_width, overlay_startY - (borderSize*2), borderColor, 1, FRAMEWORK_FONTS[8], "center", "bottom", false, false, false)
+    dxDrawBorderedText(outlineWeight, outlineColor, placeHolder:gsub("."," %0"):sub(2), overlay_startX, overlay_startY - (borderSize*2), overlay_startX + overlay_width, overlay_startY - (borderSize*2), borderColor, 1, CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 15), "center", "bottom", false, false, false)
     return true
 
 end
