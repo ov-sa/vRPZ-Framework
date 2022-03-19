@@ -42,18 +42,6 @@ inventoryUI = {
         },
         equipment = {
             {
-                title = "Primary",
-                startX = 1,
-                startY = 5 + 20,
-                width = 276, height = 92
-            },
-            {
-                title = "Secondary",
-                startX = 278,
-                startY = 5 + 20,
-                width = 183, height = 92
-            },
-            {
                 title = "Helmet",
                 startX = 2,
                 startY = 0 + 24,
@@ -83,17 +71,37 @@ inventoryUI = {
                 startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
                 width = 92, height = 92
             },
+            --[[
+            {
+                title = "Primary",
+                startX = 1,
+                startY = 5 + 20,
+                width = 276, height = 92
+            },
+            {
+                title = "Secondary",
+                startX = 278,
+                startY = 5 + 20,
+                width = 183, height = 92
+            },
             {
                 title = "Backpack",
                 startX = 2, startY = 0,
                 width = 138, height = 138
             }
+            ]]
         }
     }
 }
 
 inventoryUI.clientInventory.width, inventoryUI.clientInventory.height = (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize) + (imports.math.max(0, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - 1)*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize), (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize) + (imports.math.max(0, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - 1)*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)
 inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY = inventoryUI.clientInventory.startX + ((CLIENT_MTA_RESOLUTION[1] - inventoryUI.clientInventory.width)*0.5) + (inventoryUI.clientInventory.width*0.5), ((CLIENT_MTA_RESOLUTION[2] + inventoryUI.clientInventory.startY - inventoryUI.clientInventory.height - inventoryUI.clientInventory.titlebar.height)*0.5)
+inventoryUI.clientInventory.equipment[1].startX = inventoryUI.clientInventory.equipment[1].startX - inventoryUI.clientInventory.equipment[1].width
+inventoryUI.clientInventory.equipment[2].startX = inventoryUI.clientInventory.equipment[2].startX - inventoryUI.clientInventory.equipment[2].width
+for i = 1, 5, 1 do
+    local j = inventoryUI.clientInventory.equipment[i]
+    j.startX = j.startX - j.width
+end
 for i = 1, #inventoryUI.clientInventory.equipment, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.startX, j.startY = inventoryUI.clientInventory.startX + j.startX, inventoryUI.clientInventory.startY + j.startY
