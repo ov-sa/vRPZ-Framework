@@ -34,15 +34,13 @@ inventoryUI = {
                     title = "Primary",
                     startX = 1,
                     startY = 5 + 20,
-                    width = 276,
-                    height = 92
+                    width = 276, height = 92
                 },
                 {
                     title = "Secondary",
                     startX = 278,
                     startY = 5 + 20,
-                    width = 183,
-                    height = 92
+                    width = 183, height = 92
                 }
             },
             rightTest = {
@@ -50,62 +48,53 @@ inventoryUI = {
                     title = "Helmet",
                     startX = 2,
                     startY = 0 + 24,
-                    width = 92,
-                    height = 92
+                    width = 92, height = 92
                 },
                 {
                     title = "Vest",
                     startX = 2,
                     startY = 92 + 45 + 1 + 24,
-                    width = 92,
-                    height = 92
+                    width = 92, height = 92
                 },
                 {
                     title = "Upper",
                     startX = 2,
                     startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
-                    width = 92,
-                    height = 92
+                    width = 92, height = 92
                 },
                 {
                     title = "Lower",
                     startX = 2,
                     startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
-                    width = 90,
-                    height = 92
+                    width = 90, height = 92
                 },
                 {
                     title = "Shoes",
                     startX = 2,
                     startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
-                    width = 92,
-                    height = 92
+                    width = 92, height = 92
                 },
             },
             leftTest = {
                 {
                     title = "Backpack",
-                    startX = 2,
-                    startY = 0,
-                    width = 138,
-                    height = 138
+                    startX = 2, startY = 0,
+                    width = 138, height = 138
                 }
             }
         },
-        startX = 0, startY = -110,
-        padding = 2,
-        bgColor = imports.tocolor(0, 0, 0, 250),
+        startX = 0, startY = -110, padding = 4,
+        bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor)), dividerColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor)),
         titlebar = {
             height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.height,
-            bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.bgColor)),
             font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 19), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.fontColor)),
+            bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.bgColor)),
             slot = {
                 height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height,
-                bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.bgColor)),
-                font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 16), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.fontColor))
+                font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 16), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.fontColor)),
+                bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.bgColor))
             }
-        },
-        dividerColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor))
+        }
     }
 }
 
