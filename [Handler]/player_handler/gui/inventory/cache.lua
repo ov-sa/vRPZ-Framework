@@ -43,27 +43,27 @@ inventoryUI = {
         equipment = {
             {
                 title = "Helmet",
-                startX = 5, startY = 0 + 24,
+                startX = -5, startY = 0 + 24,
                 slots = {rows = 2, columns = 2}
             },
             {
                 title = "Vest",
-                startX = 5, startY = 92 + 45 + 1 + 24,
+                startX = -5, startY = 92 + 45 + 1 + 24,
                 slots = {rows = 2, columns = 2}
             },
             {
                 title = "Upper",
-                startX = 5, startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
+                startX = -5, startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
                 slots = {rows = 2, columns = 2}
             },
             {
                 title = "Lower",
-                startX = 5, startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
+                startX = -5, startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
                 slots = {rows = 2, columns = 2}
             },
             {
                 title = "Shoes",
-                startX = 5, startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
+                startX = -5, startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
                 slots = {rows = 2, columns = 2}
             },
             --[[
