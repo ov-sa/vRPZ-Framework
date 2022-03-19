@@ -95,10 +95,14 @@ for i = 1, #inventoryUI.clientInventory.equipment, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.width, j.height = ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*j.slots.columns), ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*j.slots.rows)
 end
+local equipment_prevY = 0
 for i = 1, 5, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.startX = j.startX - j.width - inventoryUI.clientInventory.padding
+    j.startY = inventoryUI.clientInventory.startY + inventoryUI.clientInventory.height + inventoryUI.clientInventory.padding - j.height - equipment_prevY
+    equipment_prevY = j.height
 end
+equipment_prevY = nil
 for i = 1, #inventoryUI.clientInventory.equipment, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.startX, j.startY = inventoryUI.clientInventory.startX + j.startX, inventoryUI.clientInventory.startY + j.startY
