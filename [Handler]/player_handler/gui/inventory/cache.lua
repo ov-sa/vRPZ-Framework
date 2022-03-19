@@ -142,7 +142,7 @@ inventoryUI.createBGTexture = function(isRefresh)
     imports.beautify.native.setRenderTarget()
     local rtPixels = imports.beautify.native.getTexturePixels(inventoryUI.bgRT)
     if rtPixels then
-        inventoryUI.bgTexture = imports.beautfy.native.createTexture(rtPixels, "argb", false, "clamp")
+        inventoryUI.bgTexture = imports.beautify.native.createTexture(rtPixels, "argb", false, "clamp")
         imports.destroyElement(inventoryUI.bgRT)
         inventoryUI.bgRT = nil
     end
