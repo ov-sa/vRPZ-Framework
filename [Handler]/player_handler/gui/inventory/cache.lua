@@ -126,6 +126,12 @@ inventoryUI.renderUI = function()
         imports.beautify.native.drawRectangle(j.startX, title_startY, j.width, title_height, inventoryUI.clientInventory.titlebar.slot.bgColor, false)
         imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(j.identifier)), j.startX, title_startY + inventoryUI.clientInventory.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.clientInventory.titlebar.slot.fontColor, 1, inventoryUI.clientInventory.titlebar.slot.font, "center", "center", true, false, false)
         imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, inventoryUI.clientInventory.bgColor, false)
+        for k = 1, j.slots.rows - 1, 1 do
+            imports.beautify.native.drawRectangle(j.startX, j.startY + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*k), j.width, 1, inventoryUI.clientInventory.dividerColor, false)
+        end
+        for k = 1, j.slots.columns - 1, 1 do
+            imports.beautify.native.drawRectangle(j.startX + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*k), j.startY, 1, j.height, inventoryUI.clientInventory.dividerColor, false)
+        end
     end
 end
 
