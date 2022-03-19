@@ -28,7 +28,7 @@ local imports = {
 
 inventoryUI = {
     clientInventory = {
-        startX = 0, startY = -110, padding = 2,
+        startX = 0, startY = -110, padding = 4,
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor)), dividerColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor)),
         titlebar = {
             height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.height,
@@ -82,14 +82,14 @@ end
 local equipment_prevX, equipment_prevY = -inventoryUI.clientInventory.padding, inventoryUI.clientInventory.titlebar.slot.height + inventoryUI.clientInventory.equipment[1].height + inventoryUI.clientInventory.padding
 for i = 5, 1, -1 do
     local j = inventoryUI.clientInventory.equipment[i]
-    j.startX, j.startY = inventoryUI.clientInventory.padding - j.width, inventoryUI.clientInventory.startY + inventoryUI.clientInventory.height + inventoryUI.clientInventory.padding - j.height + equipment_prevY
+    j.startX, j.startY = (-inventoryUI.clientInventory.padding*2) - j.width, inventoryUI.clientInventory.startY + inventoryUI.clientInventory.height + inventoryUI.clientInventory.padding - j.height + equipment_prevY
     equipment_prevY = equipment_prevY - j.height - (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*0.5) - inventoryUI.clientInventory.titlebar.slot.height
 end
 equipment_prevY = nil
 for i = 6, 7, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.startX, j.startY = equipment_prevX, inventoryUI.clientInventory.equipment[5].startY
-    equipment_prevX = equipment_prevX + (inventoryUI.clientInventory.padding*2) + j.width
+    equipment_prevX = equipment_prevX + inventoryUI.clientInventory.padding + j.width
 end
 equipment_prevX = nil
 for i = 1, #inventoryUI.clientInventory.equipment, 1 do
