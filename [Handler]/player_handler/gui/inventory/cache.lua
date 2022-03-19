@@ -30,14 +30,86 @@ inventoryUI = {
     attachedItemAnimDuration = 750,
     clientInventory = {
         equipment = {
-            startX = (1366-350)/2 - 50, startY = (768-600-30)/2,
-            width = 350, height = 600,
+            startX = (1366-460)/2 - 50, startY = (768-600-30-90)/2,
+            width = 300, height = 552,
             bgColor = tocolor(0, 0, 0, 250),
             titlebar = {
                 height = 35,
                 bgColor = tocolor(0, 0, 0, 255),
                 font = FRAMEWORK_FONTS[3], fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor))
             },
+            bottomTest = {
+                font = FRAMEWORK_FONTS[6],
+                fontColor = imports.tocolor(0, 0, 0, 255),
+                bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor)),
+                {
+                    title = "Primary",
+                    startX = 1,
+                    startY = 5 + 20,
+                    width = 276,
+                    height = 90
+                },
+                {
+                    title = "Secondary",
+                    startX = 278,
+                    startY = 5 + 20,
+                    width = 183,
+                    height = 90
+                }
+            },
+            rightTest = {
+                font = FRAMEWORK_FONTS[6],
+                fontColor = imports.tocolor(0, 0, 0, 255),
+                bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor)),
+                {
+                    title = "Helmet",
+                    startX = 2,
+                    startY = 0 + 24,
+                    width = 92,
+                    height = 90
+                },
+                {
+                    title = "Vest",
+                    startX = 2,
+                    startY = 92 + 45 + 1 + 24,
+                    width = 92,
+                    height = 90
+                },
+                {
+                    title = "Upper",
+                    startX = 2,
+                    startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
+                    width = 92,
+                    height = 90
+                },
+                {
+                    title = "Lower",
+                    startX = 2,
+                    startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
+                    width = 92,
+                    height = 90
+                },
+                {
+                    title = "Shoes",
+                    startX = 2,
+                    startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
+                    width = 92,
+                    height = 90
+                },
+            },
+            leftTest = {
+                font = FRAMEWORK_FONTS[6],
+                fontColor = imports.tocolor(0, 0, 0, 255),
+                bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor)),
+                {
+                    title = "Backpack",
+                    startX = 2,
+                    startY = 0,
+                    width = 138,
+                    height = 138
+                }
+            },
+            --[[
             slots = {
                 {
                     startX = 50, startY = 50,
@@ -83,15 +155,16 @@ inventoryUI = {
                     bgTexture = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/primary.png", "dxt5", true, "clamp")
                 }
             }
+            ]]
         },
-        marginX = 5,
-        width = 450,
+        marginX = 1,
+        width = 460,
         bgColor = tocolor(0, 0, 0, 250),
         grids = {
-            padding = 5,
+            padding = 1,
             rows = 12,
-            slotSize = 40,
-            columns = 10
+            slotSize = 45,
+            columns = 11
         }
     },
 
