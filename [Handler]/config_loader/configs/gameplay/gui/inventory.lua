@@ -25,7 +25,14 @@ configVars["UI"]["Inventory"] = {
             bgColor = {100, 100, 100, 255},
             --shadowColor = {50, 50, 50, 255},
         }
+    },
+
+    inventory = {
+        rows = 12,
+        columns = 10,
+        slotSize = 45,
+        dividerSize = 1,
+        dividerColor = {100, 100, 100, 255}
     }
-    
 
 }
