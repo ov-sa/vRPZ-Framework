@@ -17,6 +17,7 @@ local imports = {
     tocolor = tocolor,
     unpackColor = unpackColor,
     beautify = beautify,
+    string = string,
     math = math
 }
 
@@ -120,7 +121,7 @@ inventoryUI.renderUI = function()
         local j = inventoryUI.clientInventory.equipment[i]
         local title_height = inventoryUI.clientInventory.titlebar.slot.height
         local title_startY = j.startY - inventoryUI.clientInventory.titlebar.slot.height
-        if inventoryUI.isLangUpdated then j.title = imports.string.upper(imports.string.spaceChars(j.identifier)) end
+        if not inventoryUI.isLangUpdated then j.title = imports.string.upper(imports.string.spaceChars(j.identifier)) end
         imports.beautify.native.drawRectangle(j.startX, title_startY, j.width, title_height, inventoryUI.clientInventory.titlebar.slot.bgColor, false)
         imports.beautify.native.drawText(j.title, j.startX, title_startY + inventoryUI.clientInventory.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.clientInventory.titlebar.slot.fontColor, 1, inventoryUI.clientInventory.titlebar.slot.font, "center", "center", true, false, false)
         imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, inventoryUI.clientInventory.bgColor, false)
@@ -131,7 +132,7 @@ inventoryUI.renderUI = function()
             imports.beautify.native.drawRectangle(j.startX + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*k), j.startY, 1, j.height, inventoryUI.clientInventory.dividerColor, false)
         end
     end
-    inventoryUI.isLangUpdated = nil
+    inventoryUI.isLangUpdated = true
 end
 
 
