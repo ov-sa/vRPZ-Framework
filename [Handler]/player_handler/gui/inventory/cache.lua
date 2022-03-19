@@ -16,6 +16,8 @@
 local imports = {
     tocolor = tocolor,
     unpackColor = unpackColor,
+    isElement = isElement,
+    destroyElement = destroyElement,
     addEventHandler = addEventHandler,
     beautify = beautify,
     string = string,
@@ -104,20 +106,18 @@ for i = 1, #inventoryUI.clientInventory.equipment, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.startX, j.startY = inventoryUI.clientInventory.startX + j.startX, inventoryUI.clientInventory.startY + j.startY
 end
-inventoryUI.updateUILang = function() inventoryUI.isLangUpdated = nil end
-imports.addEventHandler("Client:onUpdateLanguage", root, inventoryUI.updateUILang)
-
-
-------------------------------
---[[ Function: Renders UI ]]--
-------------------------------
-
-inventoryUI.renderUI = function()
+inventoryUI.createBGTexture = function(isRefresh)
+    if CLIENT_MTA_MINIMIZED then return false end
+    if isRefresh and inventoryUI.bgTexture and imports.isElement(inventoryUI.bgTexture) then
+        imports.destroyElement(inventoryUI.bgTexture)
+        inventoryUI.bgTexture = nil
+    end
+    inventoryUI.bgRT = imports.beautify.native.createRenderTarget(CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], true)
+    imports.beautify.native.setRenderTarget(inventoryUI.bgRT, true)
     local inventory_startX, inventory_startY = inventoryUI.clientInventory.startX - inventoryUI.clientInventory.padding, inventoryUI.clientInventory.startY + inventoryUI.clientInventory.titlebar.height - inventoryUI.clientInventory.padding
     local inventory_width, inventory_height = inventoryUI.clientInventory.width + (inventoryUI.clientInventory.padding*2), inventoryUI.clientInventory.height + (inventoryUI.clientInventory.padding*2)
     imports.beautify.native.drawRectangle(inventory_startX, inventory_startY - inventoryUI.clientInventory.titlebar.height, inventory_width, inventoryUI.clientInventory.titlebar.height, inventoryUI.clientInventory.titlebar.bgColor, false)
     imports.beautify.native.drawRectangle(inventory_startX, inventory_startY, inventory_width, inventory_height, inventoryUI.clientInventory.bgColor, false)
-    imports.beautify.native.drawText(inventoryUI.clientInventory.name, inventory_startX, inventory_startY - inventoryUI.clientInventory.titlebar.height, inventory_startX + inventory_width, inventory_startY, inventoryUI.clientInventory.titlebar.fontColor, 1, inventoryUI.clientInventory.titlebar.font, "center", "center", true, false, false)
     for i = 1, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - 1, 1 do
         imports.beautify.native.drawRectangle(inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY + inventoryUI.clientInventory.titlebar.height + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*i), inventoryUI.clientInventory.width, 1, inventoryUI.clientInventory.dividerColor, false)
     end
@@ -139,6 +139,54 @@ inventoryUI.renderUI = function()
             imports.beautify.native.drawRectangle(j.startX + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*k), j.startY, 1, j.height, inventoryUI.clientInventory.dividerColor, false)
         end
     end
+    imports.beautify.native.setRenderTarget()
+    local rtPixels = imports.beautify.native.getTexturePixels(inventoryUI.bgRT)
+    if rtPixels then
+        inventoryUI.bgTexture = imports.beautfy.native.createTexture(rtPixels, "argb", false, "clamp")
+        imports.destroyElement(inventoryUI.bgRT)
+        inventoryUI.bgRT = nil
+    end
+end
+inventoryUI.updateUILang = function() inventoryUI.isLangUpdated = nil end
+imports.addEventHandler("Client:onUpdateLanguage", root, inventoryUI.updateUILang)
+
+
+------------------------------
+--[[ Function: Renders UI ]]--
+------------------------------
+
+inventoryUI.renderUI = function()
+    if not inventoryUI.isLangUpdated or not inventoryUI.bgTexture then inventoryUI.createBGTexture(not inventoryUI.isLangUpdated) end
+    local inventory_startX, inventory_startY = inventoryUI.clientInventory.startX - inventoryUI.clientInventory.padding, inventoryUI.clientInventory.startY + inventoryUI.clientInventory.titlebar.height - inventoryUI.clientInventory.padding
+    local inventory_width, inventory_height = inventoryUI.clientInventory.width + (inventoryUI.clientInventory.padding*2), inventoryUI.clientInventory.height + (inventoryUI.clientInventory.padding*2)
+    --imports.beautify.native.drawRectangle(inventory_startX, inventory_startY - inventoryUI.clientInventory.titlebar.height, inventory_width, inventoryUI.clientInventory.titlebar.height, inventoryUI.clientInventory.titlebar.bgColor, false)
+    --imports.beautify.native.drawRectangle(inventory_startX, inventory_startY, inventory_width, inventory_height, inventoryUI.clientInventory.bgColor, false)
+    imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], inventoryUI.bgRT, 0, 0, 0, -1, false)
+    imports.beautify.native.drawText(inventoryUI.clientInventory.name, inventory_startX, inventory_startY - inventoryUI.clientInventory.titlebar.height, inventory_startX + inventory_width, inventory_startY, inventoryUI.clientInventory.titlebar.fontColor, 1, inventoryUI.clientInventory.titlebar.font, "center", "center", true, false, false)
+    
+    --[[
+    for i = 1, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - 1, 1 do
+        imports.beautify.native.drawRectangle(inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY + inventoryUI.clientInventory.titlebar.height + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*i), inventoryUI.clientInventory.width, 1, inventoryUI.clientInventory.dividerColor, false)
+    end
+    for i = 1, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - 1, 1 do
+        imports.beautify.native.drawRectangle(inventoryUI.clientInventory.startX + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*i), inventoryUI.clientInventory.startY + inventoryUI.clientInventory.titlebar.height, 1, inventoryUI.clientInventory.height, inventoryUI.clientInventory.dividerColor, false)
+    end
+    for i = 1, #inventoryUI.clientInventory.equipment, 1 do
+        local j = inventoryUI.clientInventory.equipment[i]
+        local title_height = inventoryUI.clientInventory.titlebar.slot.height
+        local title_startY = j.startY - inventoryUI.clientInventory.titlebar.slot.height
+        if not inventoryUI.isLangUpdated then j.title = imports.string.upper(imports.string.spaceChars(j.identifier)) end
+        imports.beautify.native.drawRectangle(j.startX, title_startY, j.width, title_height, inventoryUI.clientInventory.titlebar.slot.bgColor, false)
+        imports.beautify.native.drawText(j.title, j.startX, title_startY + inventoryUI.clientInventory.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.clientInventory.titlebar.slot.fontColor, 1, inventoryUI.clientInventory.titlebar.slot.font, "center", "center", true, false, false)
+        imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, inventoryUI.clientInventory.bgColor, false)
+        for k = 1, j.slots.rows - 1, 1 do
+            imports.beautify.native.drawRectangle(j.startX, j.startY + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*k), j.width, 1, inventoryUI.clientInventory.dividerColor, false)
+        end
+        for k = 1, j.slots.columns - 1, 1 do
+            imports.beautify.native.drawRectangle(j.startX + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*k), j.startY, 1, j.height, inventoryUI.clientInventory.dividerColor, false)
+        end
+    end
+    ]]
     inventoryUI.isLangUpdated = true
 end
 
