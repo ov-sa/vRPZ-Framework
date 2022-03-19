@@ -36,7 +36,7 @@ inventoryUI = {
             bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.bgColor)),
             slot = {
                 height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height,
-                font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 16), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.fontColor)),
+                fontPaddingY = 2, font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 16), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.fontColor)),
                 bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.bgColor))
             }
         },
@@ -95,12 +95,12 @@ for i = 1, #inventoryUI.clientInventory.equipment, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.width, j.height = ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*j.slots.columns), ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*j.slots.rows)
 end
-local equipment_prevY = 0
-for i = 1, 5, 1 do
+local equipment_prevY = inventoryUI.clientInventory.titlebar.slot.height + inventoryUI.clientInventory.equipment[1].height + inventoryUI.clientInventory.padding
+for i = 5, 1, -1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.startX = j.startX - j.width - inventoryUI.clientInventory.padding
-    j.startY = inventoryUI.clientInventory.startY + inventoryUI.clientInventory.height + inventoryUI.clientInventory.padding - j.height - equipment_prevY
-    equipment_prevY = j.height
+    j.startY = inventoryUI.clientInventory.startY + inventoryUI.clientInventory.height + inventoryUI.clientInventory.padding - j.height + equipment_prevY
+    equipment_prevY = equipment_prevY - j.height - (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*0.5) - inventoryUI.clientInventory.titlebar.slot.height
 end
 equipment_prevY = nil
 for i = 1, #inventoryUI.clientInventory.equipment, 1 do
@@ -129,10 +129,10 @@ inventoryUI.renderUI = function()
     end
     for i = 1, #inventoryUI.clientInventory.equipment, 1 do
         local j = inventoryUI.clientInventory.equipment[i]
-        --local titleX, titleY = inventory_startX + j.startX, gridStartY + j.startY
-        --local titleWidth, titleHeight = j.width, j.height
-        --imports.beautify.native.drawRectangle(titleX, titleY - inventoryUI.clientInventory.titlebar.slot.height, j.width, inventoryUI.clientInventory.titlebar.slot.height, inventoryUI.clientInventory.titlebar.slot.bgColor, false)
-        --imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(j.title)), titleX, titleY - inventoryUI.clientInventory.titlebar.slot.height + 2, titleX + titleWidth, titleY, inventoryUI.clientInventory.titlebar.slot.fontColor, 1, inventoryUI.clientInventory.titlebar.slot.font, "center", "center", true, false, false)
+        local title_height = inventoryUI.clientInventory.titlebar.slot.height
+        local title_startY = j.startY - inventoryUI.clientInventory.titlebar.slot.height
+        imports.beautify.native.drawRectangle(j.startX, title_startY, j.width, title_height, inventoryUI.clientInventory.titlebar.slot.bgColor, false)
+        imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(j.title)), j.startX, title_startY + inventoryUI.clientInventory.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.clientInventory.titlebar.slot.fontColor, 1, inventoryUI.clientInventory.titlebar.slot.font, "center", "center", true, false, false)
         imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, inventoryUI.clientInventory.bgColor, false)
     end
 end
