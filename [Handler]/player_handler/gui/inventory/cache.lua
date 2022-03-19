@@ -35,7 +35,7 @@ local imports = {
 -------------------
 
 local inventory_padding = 4
-local _, inventory_offsetY = CInventory.fetchSlotDimensions(2, 1)
+local inventory_offsetX, inventory_offsetY = CInventory.fetchSlotDimensions(2, 6)
 inventory_offsetY = inventory_offsetY + FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height + inventory_padding
 local inventoryUI = {
     clientInventory = {
@@ -78,13 +78,16 @@ local inventoryUI = {
             }
         }
     },
+    vicinityInventory = {
+        width = inventory_offsetX
+    },
     opacityAdjuster = {
         startX = 10, startY = 0,
         width = 27,
         range = {25, 100}
     }
 }
-inventory_padding, inventory_offsetY = nil, nil
+inventory_padding, inventory_offsetX, inventory_offsetY = nil, nil, nil
 
 inventoryUI.clientInventory.width, inventoryUI.clientInventory.height = CInventory.fetchSlotDimensions(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)
 inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY = inventoryUI.clientInventory.startX + ((CLIENT_MTA_RESOLUTION[1] - inventoryUI.clientInventory.width)*0.5) + (inventoryUI.clientInventory.width*0.5), ((CLIENT_MTA_RESOLUTION[2] + inventoryUI.clientInventory.startY - inventoryUI.clientInventory.height - inventoryUI.clientInventory.titlebar.height)*0.5)
