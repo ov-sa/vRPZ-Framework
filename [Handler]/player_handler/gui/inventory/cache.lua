@@ -24,10 +24,7 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-local centerX, centerY = CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2]
-
 inventoryUI = {
-    attachedItemAnimDuration = 750,
     clientInventory = {
         equipment = {
             startX = (1366-460)/2 - 50, startY = (768-600-30-90)/2,
@@ -108,54 +105,7 @@ inventoryUI = {
                     width = 138,
                     height = 138
                 }
-            },
-            --[[
-            slots = {
-                {
-                    startX = 50, startY = 50,
-                    width = 75, height = 75,
-                    bgTexture = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/helmet.png", "dxt5", true, "clamp")
-                },
-                {
-                    startX = 25, startY = 130,
-                    width = 125, height = 125,
-                    bgTexture = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/upper.png", "dxt5", true, "clamp")
-                },
-                {
-                    startX = 25, startY = 260,
-                    width = 125, height = 125,
-                    bgTexture = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/lower.png", "dxt5", true, "clamp")
-                },
-                {
-                    startX = 50, startY = 390,
-                    width = 75, height = 75,
-                    bgTexture = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/shoes.png", "dxt5", true, "clamp")
-                },
-
-                {
-                    startX = 200, startY = 50,
-                    width = 125, height = 125,
-                    bgTexture = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/backpack.png", "dxt5", true, "clamp")
-                },
-                {
-                    startX = 200, startY = 180,
-                    width = 125, height = 125,
-                    bgTexture = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/vest.png", "dxt5", true, "clamp")
-                },
-
-                {
-                    startX = 225, startY = 405,
-                    width = 100, height = 100,
-                    bgTexture = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/secondary.png", "dxt5", true, "clamp")
-                },
-
-                {
-                    startX = 25, startY = 510,
-                    width = 300, height = 100,
-                    bgTexture = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/primary.png", "dxt5", true, "clamp")
-                }
             }
-            ]]
         },
         marginX = 1,
         width = 460,
@@ -166,288 +116,9 @@ inventoryUI = {
             slotSize = 45,
             columns = 11
         }
-    },
-
-    gui = {
-        postGUI = false,
-        equipment = {
-            startX = centerX - (391/2) - 30,
-            startY = centerY - (508/3) - 25,
-            width = 845,
-            height = 485,
-            bgColor = {255, 255, 255, 253},
-            bgPath = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/body.png", "dxt5", true, "clamp"),
-            slotTopLeftCurvedEdgeBGPath = imports.beautify.native.createTexture("files/images/hud/curved_square/top_left.png", "dxt5", true, "clamp"),
-            slotTopRightCurvedEdgeBGPath = imports.beautify.native.createTexture("files/images/hud/curved_square/top_right.png", "dxt5", true, "clamp"),
-            slotBottomLeftCurvedEdgeBGPath = imports.beautify.native.createTexture("files/images/hud/curved_square/bottom_left.png", "dxt5", true, "clamp"),
-            slotBottomRightCurvedEdgeBGPath = imports.beautify.native.createTexture("files/images/hud/curved_square/bottom_right.png", "dxt5", true, "clamp"),
-            titlebar = {
-                text = "E Q U I P M E N T",
-                height = 30,
-                font = FRAMEWORK_FONTS[9],
-                dividerSize = 2,
-                outlineWeight = 0.25,
-                fontColor = {175, 175, 175, 255},
-                dividerColor = {0, 0, 0, 75},
-                bgColor = {0, 0, 0, 255},
-                leftEdgePath = imports.beautify.native.createTexture("files/images/hud/right_triangle/default.png", "dxt5", true, "clamp"),
-                rightEdgePath = imports.beautify.native.createTexture("files/images/hud/right_triangle/flipped.png", "dxt5", true, "clamp"),
-                invertedEdgePath = imports.beautify.native.createTexture("files/images/hud/right_triangle/inverted.png", "dxt5", true, "clamp")
-            },
-            grids = {
-                primary = {
-                    startX = 25,
-                    startY = 25,
-                    width = 250,
-                    height = 75,
-                    paddingX = 34,
-                    paddingY = 10,
-                    slotCategory = "primary_weapon",
-                    borderSize = 4,
-                    borderColor = {100, 100, 100, 25},
-                    bgColor = {0, 0, 0, 235},
-                    availableBGColor = {0, 255, 0, 255},
-                    unavailableBGColor = {255, 0, 0, 255},
-                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/primary_slot.png", "dxt5", true, "clamp")
-                },
-                secondary = {
-                    startX = 25,
-                    startY = 115,
-                    width = 165,
-                    height = 75,
-                    paddingX = 22,
-                    paddingY = 10,
-                    slotCategory = "secondary_weapon",
-                    borderSize = 4,
-                    borderColor = {100, 100, 100, 25},
-                    bgColor = {0, 0, 0, 235},
-                    availableBGColor = {0, 255, 0, 255},
-                    unavailableBGColor = {255, 0, 0, 255},
-                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/secondary_slot.png", "dxt5", true, "clamp")
-                },
-                shirt = {
-                    startX = 25,
-                    startY = 207,
-                    width = 75,
-                    height = 75,
-                    paddingX = 10,
-                    paddingY = 10,
-                    slotCategory = "Shirt",
-                    borderSize = 4,
-                    borderColor = {100, 100, 100, 25},
-                    bgColor = {0, 0, 0, 235},
-                    availableBGColor = {0, 255, 0, 255},
-                    unavailableBGColor = {255, 0, 0, 255},
-                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/shirt_slot.png", "dxt5", true, "clamp")
-                },
-                helmet = {
-                    startX = 112.5,
-                    startY = 207,
-                    width = 75,
-                    height = 75,
-                    paddingX = 10,
-                    paddingY = 10,
-                    slotCategory = "Helmet",
-                    borderSize = 4,
-                    borderColor = {100, 100, 100, 25},
-                    bgColor = {0, 0, 0, 235},
-                    availableBGColor = {0, 255, 0, 255},
-                    unavailableBGColor = {255, 0, 0, 255},
-                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/helmet_slot.png", "dxt5", true, "clamp")
-                },
-                armor = {
-                    startX = 200,
-                    startY = 207,
-                    width = 75,
-                    height = 75,
-                    paddingX = 10,
-                    paddingY = 10,
-                    slotCategory = "Armor",
-                    borderSize = 4,
-                    borderColor = {100, 100, 100, 25},
-                    bgColor = {0, 0, 0, 235},
-                    availableBGColor = {0, 255, 0, 255},
-                    unavailableBGColor = {255, 0, 0, 255},
-                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/armor_slot.png", "dxt5", true, "clamp")
-                },
-                torso = {
-                    startX = 25,
-                    startY = 300,
-                    width = 75,
-                    height = 75,
-                    paddingX = 10,
-                    paddingY = 10,
-                    slotCategory = "Torso",
-                    borderSize = 4,
-                    borderColor = {100, 100, 100, 25},
-                    bgColor = {0, 0, 0, 235},
-                    availableBGColor = {0, 255, 0, 255},
-                    unavailableBGColor = {255, 0, 0, 255},
-                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/torso_slot.png", "dxt5", true, "clamp")
-                },
-                shoes = {
-                    startX = 25,
-                    startY = 385,
-                    width = 75,
-                    height = 75,
-                    paddingX = 10,
-                    paddingY = 10,
-                    slotCategory = "Shoes",
-                    borderSize = 4,
-                    borderColor = {100, 100, 100, 25},
-                    bgColor = {0, 0, 0, 235},
-                    availableBGColor = {0, 255, 0, 255},
-                    unavailableBGColor = {255, 0, 0, 255},
-                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/shoes_slot.png", "dxt5", true, "clamp")
-                },
-                backpack = {
-                    startX = 115,
-                    startY = 300,
-                    width = 160,
-                    height = 160,
-                    paddingX = 15,
-                    paddingY = 15,
-                    slotCategory = "Backpack",
-                    borderSize = 4,
-                    borderColor = {100, 100, 100, 25},
-                    bgColor = {0, 0, 0, 235},
-                    availableBGColor = {0, 255, 0, 255},
-                    unavailableBGColor = {255, 0, 0, 255},
-                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/backpack_slot.png", "dxt5", true, "clamp")
-                }
-            },
-            description = {
-                startX = 300,
-                startY = 395,
-                width = 520,
-                height = 70,
-                padding = 10,
-                font = FRAMEWORK_FONTS[10],
-                fontColor = {175, 175, 175, 200},
-                bgColor = {5, 5, 5, 200}
-            }
-        },
-        lockStat = {
-            startX = -23,
-            startY = 0,
-            iconSize = 20,
-            iconColor = {200, 200, 200, 255},
-            lockedIconPath = imports.beautify.native.createTexture("files/images/hud/lock/locked.png", "dxt5", true, "clamp"),
-            unlockedIconPath = imports.beautify.native.createTexture("files/images/hud/lock/unlocked.png", "dxt5", true, "clamp")
-        },
-        tranparencyAdjuster = {
-            startX = 4,
-            startY = -3,
-            width = -8,
-            height = 10,
-            slideRange = 20,
-            percent = 1,
-            minPercent = 0.75,
-            thumbSize = 12,
-            borderSize = 2,
-            borderColor = {175, 175, 175, 255},
-            thumbColor = {0, 0, 0, 255}
-        },
-        itemBox = {
-            templates = {
-                {
-                    width = 520,
-                    height = 360,
-                    borderSize = 4,
-                    borderColor = {100, 100, 100, 25},
-                    bgColor = {0, 0, 0, 235},
-                    contentWrapper = {
-                        startX = 3,
-                        startY = 3,
-                        width = 514,
-                        height = 354,
-                        padding = 1,
-                        itemGrid = {
-                            padding = 15,
-                            slot = {
-                                size = 68,
-                                font = FRAMEWORK_FONTS[13],
-                                fontColor = {175, 175, 175, 235},
-                                bgColor= {100, 100, 100, 100},
-                                availableBGColor = {0, 50, 0, 200},
-                                unavailableBGColor = {50, 0, 0, 200}
-                            }
-                        }
-                    },
-                    scrollBar = {
-                        overlay = {
-                            startX = 514,
-                            startY = 3,
-                            width = 4,
-                            height = 354,
-                            bgColor = {15, 15, 15, 100}
-                        },
-                        bar = {
-                            height = 60,
-                            bgColor = {175, 175, 175, 200}
-                        }
-                    }
-                },
-                {
-                    width = 310,
-                    height = 455,
-                    bgColor = {255, 255, 255, 253},
-                    bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/itemBox/template_2.png", "dxt5", true, "clamp"),
-                    contentWrapper = {
-                        startX = 0,
-                        startY = 3,
-                        width = 306,
-                        height = 449,
-                        itemSlot = {
-                            startX = 0,
-                            startY = 5,
-                            width = 0,
-                            height = 70,
-                            paddingY = 5,
-                            bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/itemBox/itemSlot.png", "dxt5", true, "clamp"),
-                            availableBGColor = {0, 255, 0},
-                            unavailableBGColor = {255, 0, 0},
-                            iconSlot = {
-                                startX = 10,
-                                startY = 5,
-                                height = 60
-                            },
-                            itemCounter = {
-                                paddingX = 5,
-                                paddingY = 5,
-                                font = FRAMEWORK_FONTS[11],
-                                fontColor = {200, 200, 200, 200}
-                            },
-                            itemName = {
-                                paddingX = 10,
-                                font = FRAMEWORK_FONTS[12],
-                                fontColor = {255, 255, 255, 255},
-                                hoverAnimDuration = 5000,
-                                bgImage = imports.beautify.native.createTexture("files/images/inventory/ui/equipment/itemBox/itemNameSlot.png", "dxt5", true, "clamp")
-                            }
-                        }
-                    },
-                    scrollBar = {
-                        overlay = {
-                            startX = 305,
-                            startY = 3,
-                            width = 4,
-                            height = 449,
-                            bgColor = {15, 15, 15, 100}
-                        },
-                        bar = {
-                            height = 60,
-                            bgColor = {175, 175, 175, 200}
-                        }
-                    }
-                }
-            }
-        }
     }
 }
 
-inventoryUI.gui.equipment.description.startX = inventoryUI.gui.equipment.startX + inventoryUI.gui.equipment.description.startX
-inventoryUI.gui.equipment.description.startY = inventoryUI.gui.equipment.startY + inventoryUI.gui.equipment.description.startY
 for i, j in pairs(inventoryUI.gui.equipment.grids) do
     j.startX = inventoryUI.gui.equipment.startX + j.startX
     j.startY = inventoryUI.gui.equipment.startY + j.startY
@@ -455,7 +126,6 @@ end
 inventoryUI.gui.tranparencyAdjuster.startX = inventoryUI.gui.equipment.startX + inventoryUI.gui.tranparencyAdjuster.startX
 inventoryUI.gui.tranparencyAdjuster.startY = inventoryUI.gui.equipment.startY + inventoryUI.gui.equipment.height - inventoryUI.gui.tranparencyAdjuster.height + inventoryUI.gui.tranparencyAdjuster.startY
 inventoryUI.gui.tranparencyAdjuster.width = inventoryUI.gui.equipment.width + inventoryUI.gui.tranparencyAdjuster.width
-
 
 inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY = inventoryUI.clientInventory.equipment.startX + inventoryUI.clientInventory.equipment.width + inventoryUI.clientInventory.marginX, inventoryUI.clientInventory.startY
 
@@ -493,6 +163,7 @@ local sortedCategories = {
 --[[ Function: Displays Inventory ]]--
 --------------------------------------
 
+--[[
 function displayInventoryUI()
 
     if not isPlayerInitialized(localPlayer) or getPlayerHealth(localPlayer) <= 0 then return false end
@@ -1319,7 +990,7 @@ function displayInventoryUI()
     prevScrollState = false
 
 end
-
+]]--
 
 -----------------------------------------
 --[[ Event: On Client Resource Start ]]--
