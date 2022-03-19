@@ -42,45 +42,29 @@ inventoryUI = {
         },
         equipment = {
             {
-                title = "Helmet",
-                startX = -5, startY = 0 + 24,
-                slots = {rows = 2, columns = 2}
+                identifier = "helmet", startX = -5, slots = {rows = 2, columns = 2}
             },
             {
-                title = "Vest",
-                startX = -5, startY = 92 + 45 + 1 + 24,
-                slots = {rows = 2, columns = 2}
+                identifier = "vest", startX = -5, slots = {rows = 2, columns = 2}
             },
             {
-                title = "Upper",
-                startX = -5, startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
-                slots = {rows = 2, columns = 2}
+                identifier = "upper", startX = -5, slots = {rows = 2, columns = 2}
             },
             {
-                title = "Lower",
-                startX = -5, startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
-                slots = {rows = 2, columns = 2}
+                identifier = "lower", startX = -5, slots = {rows = 2, columns = 2}
             },
             {
-                title = "Shoes",
-                startX = -5, startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
-                slots = {rows = 2, columns = 2}
+                identifier = "shoes", startX = -5, slots = {rows = 2, columns = 2}
+            },
+            {
+                identifier = "primary", slots = {rows = 2, columns = 6}
+            },
+            {
+                identifier = "secondary", slots = {rows = 2, columns = 4}
             },
             --[[
             {
-                title = "Primary",
-                startX = 1,
-                startY = 5 + 20,
-                width = 276, height = 92
-            },
-            {
-                title = "Secondary",
-                startX = 278,
-                startY = 5 + 20,
-                width = 183, height = 92
-            },
-            {
-                title = "Backpack",
+                identifier = "Backpack",
                 startX = 2, startY = 0,
                 width = 138, height = 138
             }
@@ -95,14 +79,19 @@ for i = 1, #inventoryUI.clientInventory.equipment, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.width, j.height = ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*j.slots.columns), ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*j.slots.rows)
 end
-local equipment_prevY = inventoryUI.clientInventory.titlebar.slot.height + inventoryUI.clientInventory.equipment[1].height + inventoryUI.clientInventory.padding
+local equipment_prevX, equipment_prevY = -inventoryUI.clientInventory.padding, inventoryUI.clientInventory.titlebar.slot.height + inventoryUI.clientInventory.equipment[1].height + inventoryUI.clientInventory.padding
 for i = 5, 1, -1 do
     local j = inventoryUI.clientInventory.equipment[i]
-    j.startX = j.startX - j.width - inventoryUI.clientInventory.padding
-    j.startY = inventoryUI.clientInventory.startY + inventoryUI.clientInventory.height + inventoryUI.clientInventory.padding - j.height + equipment_prevY
+    j.startX, j.startY = j.startX - j.width - inventoryUI.clientInventory.padding, inventoryUI.clientInventory.startY + inventoryUI.clientInventory.height + inventoryUI.clientInventory.padding - j.height + equipment_prevY
     equipment_prevY = equipment_prevY - j.height - (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*0.5) - inventoryUI.clientInventory.titlebar.slot.height
 end
 equipment_prevY = nil
+for i = 6, 7, 1 do
+    local j = inventoryUI.clientInventory.equipment[i]
+    j.startX, j.startY = equipment_prevX, inventoryUI.clientInventory.equipment[5].startY
+    equipment_prevX = equipment_prevX + inventoryUI.clientInventory.padding + j.width
+end
+equipment_prevX = nil
 for i = 1, #inventoryUI.clientInventory.equipment, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.startX, j.startY = inventoryUI.clientInventory.startX + j.startX, inventoryUI.clientInventory.startY + j.startY
@@ -132,7 +121,7 @@ inventoryUI.renderUI = function()
         local title_height = inventoryUI.clientInventory.titlebar.slot.height
         local title_startY = j.startY - inventoryUI.clientInventory.titlebar.slot.height
         imports.beautify.native.drawRectangle(j.startX, title_startY, j.width, title_height, inventoryUI.clientInventory.titlebar.slot.bgColor, false)
-        imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(j.title)), j.startX, title_startY + inventoryUI.clientInventory.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.clientInventory.titlebar.slot.fontColor, 1, inventoryUI.clientInventory.titlebar.slot.font, "center", "center", true, false, false)
+        imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(j.identifier)), j.startX, title_startY + inventoryUI.clientInventory.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.clientInventory.titlebar.slot.fontColor, 1, inventoryUI.clientInventory.titlebar.slot.font, "center", "center", true, false, false)
         imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, inventoryUI.clientInventory.bgColor, false)
     end
 end
@@ -585,7 +574,7 @@ function displayInventoryUI()
                 sortedItems = j.sortedCategories
                 imports.beautify.native.drawImage(j.gui.startX + template.width - inventoryUI.gui.equipment.titlebar.height, j.gui.startY - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.rightEdgePath, 0, 0, 0, tocolor(inventoryUI.gui.equipment.titlebar.bgColor[1], inventoryUI.gui.equipment.titlebar.bgColor[2], inventoryUI.gui.equipment.titlebar.bgColor[3], inventoryUI.gui.equipment.titlebar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                 dxDrawRectangle(j.gui.startX, j.gui.startY - inventoryUI.gui.equipment.titlebar.height, template.width - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, tocolor(inventoryUI.gui.equipment.titlebar.bgColor[1], inventoryUI.gui.equipment.titlebar.bgColor[2], inventoryUI.gui.equipment.titlebar.bgColor[3], inventoryUI.gui.equipment.titlebar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                dxDrawBorderedText(inventoryUI.gui.equipment.titlebar.outlineWeight, inventoryUI.gui.equipment.titlebar.fontColor, string.upper(j.gui.title.."   |   "..usedSlots.."/"..maxSlots), j.gui.startX + inventoryUI.gui.equipment.titlebar.height, j.gui.startY - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.startX + template.width - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.startY, tocolor(inventoryUI.gui.equipment.titlebar.fontColor[1], inventoryUI.gui.equipment.titlebar.fontColor[2], inventoryUI.gui.equipment.titlebar.fontColor[3], inventoryUI.gui.equipment.titlebar.fontColor[4]*inventoryOpacityPercent), 1, inventoryUI.gui.equipment.titlebar.font, "left", "center", true, false, inventoryUI.gui.postGUI)
+                dxDrawBorderedText(inventoryUI.gui.equipment.titlebar.outlineWeight, inventoryUI.gui.equipment.titlebar.fontColor, string.upper(j.gui.identifier.."   |   "..usedSlots.."/"..maxSlots), j.gui.startX + inventoryUI.gui.equipment.titlebar.height, j.gui.startY - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.startX + template.width - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.startY, tocolor(inventoryUI.gui.equipment.titlebar.fontColor[1], inventoryUI.gui.equipment.titlebar.fontColor[2], inventoryUI.gui.equipment.titlebar.fontColor[3], inventoryUI.gui.equipment.titlebar.fontColor[4]*inventoryOpacityPercent), 1, inventoryUI.gui.equipment.titlebar.font, "left", "center", true, false, inventoryUI.gui.postGUI)
                 imports.beautify.native.drawImage(j.gui.startX, j.gui.startY + template.height, inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.invertedEdgePath, 0, 0, 0, tocolor(inventoryUI.gui.equipment.titlebar.bgColor[1], inventoryUI.gui.equipment.titlebar.bgColor[2], inventoryUI.gui.equipment.titlebar.bgColor[3], inventoryUI.gui.equipment.titlebar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                 dxDrawRectangle(j.gui.startX + inventoryUI.gui.equipment.titlebar.height, j.gui.startY + template.height, template.width - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, tocolor(inventoryUI.gui.equipment.titlebar.bgColor[1], inventoryUI.gui.equipment.titlebar.bgColor[2], inventoryUI.gui.equipment.titlebar.bgColor[3], inventoryUI.gui.equipment.titlebar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                 local templateBGColor = table.copy(template.bgColor, true)
