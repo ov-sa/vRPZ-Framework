@@ -131,28 +131,6 @@ function math.percent(percent, amount)
 end
 
 
-------------------------------------------
---[[ Function: Returns Percent Chance ]]--
-------------------------------------------
-
-function math.percentChance(percent, repeatTime)
-
-    percent = tonumber(percent)
-    repeatTime = tonumber(repeatTime)
-    if not percent or not repeatTime then return false end
-
-    local hits = 0
-    for i = 1, repeatTime do
-        local number = math.random(0, 200)/2
-        if number <= (percent or 0.28) then
-            hits = hits + 1
-        end
-    end
-    return hits
-
-end
-
-
 ---------------------------------------
 --[[ Function: Rounds Number Value ]]--
 ---------------------------------------

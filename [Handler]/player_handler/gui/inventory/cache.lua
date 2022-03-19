@@ -120,7 +120,7 @@ inventoryUI = {
     }
 }
 
-inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY = inventoryUI.clientInventory.equipment.startX + inventoryUI.clientInventory.equipment.width + inventoryUI.clientInventory.marginX, inventoryUI.clientInventory.startY
+inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY = inventoryUI.clientInventory.equipment.startX + inventoryUI.clientInventory.equipment.width + inventoryUI.clientInventory.marginX, (CLIENT_MTA_RESOLUTION[2] - inventoryUI.clientInventory.height)*0.5
 
 
 ------------------------------
