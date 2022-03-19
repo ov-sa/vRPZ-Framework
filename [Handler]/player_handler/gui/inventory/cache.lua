@@ -75,7 +75,7 @@ inventoryUI = {
     },
     opacityAdjuster = {
         startX = 10, startY = 0,
-        width = 35
+        width = 27
     }
 }
 inventory_padding, inventory_offsetY = nil, nil
@@ -110,8 +110,8 @@ for i = 1, #inventoryUI.clientInventory.equipment, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.startX, j.startY = inventoryUI.clientInventory.startX + j.startX, inventoryUI.clientInventory.startY + j.startY
 end
-inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY = inventoryUI.opacityAdjuster.startX + inventoryUI.clientInventory.startX + inventoryUI.clientInventory.width, inventoryUI.clientInventory.startY + inventoryUI.opacityAdjuster.startY
-inventoryUI.opacityAdjuster.height = inventoryUI.clientInventory.equipment[8].startY - inventoryUI.opacityAdjuster.startY
+inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY = inventoryUI.opacityAdjuster.startX + inventoryUI.clientInventory.startX + inventoryUI.clientInventory.width, inventoryUI.clientInventory.startY + inventoryUI.opacityAdjuster.startY - inventoryUI.clientInventory.padding
+inventoryUI.opacityAdjuster.height = inventoryUI.clientInventory.equipment[8].startY - inventoryUI.opacityAdjuster.startY - inventoryUI.clientInventory.padding - inventoryUI.clientInventory.titlebar.slot.height
 inventoryUI.createBGTexture = function(isRefresh)
     if CLIENT_MTA_MINIMIZED then return false end
     if isRefresh and inventoryUI.bgTexture and imports.isElement(inventoryUI.bgTexture) then
@@ -144,6 +144,7 @@ inventoryUI.createBGTexture = function(isRefresh)
             imports.beautify.native.drawRectangle(j.startX + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*k), j.startY, 1, j.height, inventoryUI.clientInventory.dividerColor, false)
         end
     end
+    imports.beautify.native.drawRectangle(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, inventoryUI.clientInventory.titlebar.bgColor, false)
     imports.beautify.native.setRenderTarget()
     local rtPixels = imports.beautify.native.getTexturePixels(inventoryUI.bgRT)
     if rtPixels then
@@ -164,7 +165,12 @@ inventoryUI.renderUI = function()
     if inventoryUI.isLangUpdated or not inventoryUI.bgTexture then inventoryUI.createBGTexture(inventoryUI.isLangUpdated) end
     local inventory_startX, inventory_startY = inventoryUI.clientInventory.startX - inventoryUI.clientInventory.padding, inventoryUI.clientInventory.startY + inventoryUI.clientInventory.titlebar.height - inventoryUI.clientInventory.padding
     local inventory_width, inventory_height = inventoryUI.clientInventory.width + (inventoryUI.clientInventory.padding*2), inventoryUI.clientInventory.height + (inventoryUI.clientInventory.padding*2)
-    imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], inventoryUI.bgTexture, 0, 0, 0, -1, false)
+    inventoryUI.opacityAdjuster.percent = imports.beautify.slider.getPercent(inventoryUI.opacityAdjuster.element)
+    if (inventoryUI.opacityAdjuster.percent ~= inventoryUI.opacityAdjuster.__percent) then
+        inventoryUI.opacityAdjuster.__percent = inventoryUI.opacityAdjuster.percent
+        inventoryUI.opacityAdjuster.bgColor = imports.tocolor(255, 255, 255, 255*inventoryUI.opacityAdjuster.percent*0.01)
+    end
+    imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], inventoryUI.bgTexture, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
     imports.beautify.native.drawText(inventoryUI.clientInventory.name, inventory_startX, inventory_startY - inventoryUI.clientInventory.titlebar.height, inventory_startX + inventory_width, inventory_startY, inventoryUI.clientInventory.titlebar.fontColor, 1, inventoryUI.clientInventory.titlebar.font, "center", "center", true, false, false)
     for i = 1, #inventoryUI.clientInventory.equipment, 1 do
         local j = inventoryUI.clientInventory.equipment[i]

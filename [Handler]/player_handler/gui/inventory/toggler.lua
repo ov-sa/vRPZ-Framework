@@ -14,6 +14,7 @@
 -----------------
 
 local imports = {
+    unpackColor = unpackColor,
     isElement = isElement,
     destroyElement = destroyElement,
     addEvent = addEvent,
@@ -64,13 +65,18 @@ inventoryUI.toggleUI = function(state)
         if inventoryUI.isVisible then return false end
         inventoryUI.clientInventory.name = imports.string.upper(imports.string.spaceChars(imports.getPlayerName(localPlayer).."'s Inventory"))
         inventoryUI.opacityAdjuster.element = imports.beautify.slider.create(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, "vertical", nil, false)
+        inventoryUI.opacityAdjuster.percent = inventoryUI.opacityAdjuster.percent or 100
+        imports.beautify.slider.setPercent(inventoryUI.opacityAdjuster.element, inventoryUI.opacityAdjuster.percent)
+        imports.beautify.slider.setText(inventoryUI.opacityAdjuster.element, "Opacity")
+        imports.beautify.slider.setTextColor(inventoryUI.opacityAdjuster.element, FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.fontColor)
+        imports.beautify.render.create(inventoryUI.renderUI, {
+            elementReference = inventoryUI.opacityAdjuster.element,
+            renderType = "preRender"
+        })
         imports.beautify.setUIVisible(inventoryUI.opacityAdjuster.element, true)
-        --imports.addEventHandler("onClientUISliderAltered", v.element, function() loginUI.phases[2].updateCharacter() end)
-        imports.beautify.render.create(inventoryUI.renderUI)
     else
         if not inventoryUI.isVisible then return false end
-        inventoryUI.clientInventory.nam = nil
-        imports.beautify.render.remove(inventoryUI.renderUI)
+        inventoryUI.clientInventory.name = nil
         if inventoryUI.opacityAdjuster.element and imports.isElement(inventoryUI.opacityAdjuster.element) then
             imports.destroyElement(inventoryUI.opacityAdjuster.element)
         end
