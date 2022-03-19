@@ -14,6 +14,7 @@
 
 local imports = {
     pairs = pairs,
+    tonumber = tonumber,
     tostring = tostring,
     isElement = isElement,
     destroyElement = destroyElement,
