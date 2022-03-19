@@ -27,9 +27,12 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
+local inventory_padding = 4
+local _, inventory_offsetY = CInventory.fetchSlotDimensions(2, 1)
+inventory_offsetY = inventory_offsetY + FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height + inventory_padding
 inventoryUI = {
     clientInventory = {
-        startX = 0, startY = -110, padding = 4,
+        startX = 0, startY = -inventory_offsetY, padding = inventory_padding,
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor)), dividerColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor)),
         titlebar = {
             height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.height,
@@ -69,6 +72,7 @@ inventoryUI = {
         }
     }
 }
+inventory_padding, inventory_offsetY = nil, nil
 
 inventoryUI.clientInventory.width, inventoryUI.clientInventory.height = CInventory.fetchSlotDimensions(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)
 inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY = inventoryUI.clientInventory.startX + ((CLIENT_MTA_RESOLUTION[1] - inventoryUI.clientInventory.width)*0.5) + (inventoryUI.clientInventory.width*0.5), ((CLIENT_MTA_RESOLUTION[2] + inventoryUI.clientInventory.startY - inventoryUI.clientInventory.height - inventoryUI.clientInventory.titlebar.height)*0.5)
