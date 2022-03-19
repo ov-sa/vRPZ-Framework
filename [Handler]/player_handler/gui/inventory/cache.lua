@@ -18,7 +18,12 @@ local imports = {
     unpackColor = unpackColor,
     isElement = isElement,
     destroyElement = destroyElement,
+    addEvent = addEvent,
     addEventHandler = addEventHandler,
+    bindKey = bindKey,
+    getPlayerName = getPlayerName,
+    showChat = showChat,
+    showCursor = showCursor,
     beautify = beautify,
     string = string,
     math = math
@@ -32,7 +37,7 @@ local imports = {
 local inventory_padding = 4
 local _, inventory_offsetY = CInventory.fetchSlotDimensions(2, 1)
 inventory_offsetY = inventory_offsetY + FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height + inventory_padding
-inventoryUI = {
+local inventoryUI = {
     clientInventory = {
         startX = 0, startY = -inventory_offsetY, padding = inventory_padding,
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor)), dividerColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor)),
@@ -158,6 +163,40 @@ inventoryUI.updateUILang = function() inventoryUI.isLangUpdated = true end
 imports.addEventHandler("Client:onUpdateLanguage", root, inventoryUI.updateUILang)
 
 
+-------------------------------
+--[[ Functions: UI Helpers ]]--
+-------------------------------
+
+inventoryUI.isUIEnabled = function()
+    return (inventoryUI.isUpdated and inventoryUI.isEnabled) or false
+end
+
+function isInventoryUIVisible() return inventoryUI.state end
+function isInventoryUIEnabled() return inventoryUI.isUIEnabled() end
+
+imports.addEvent("Client:onSyncInventorySlots", true)
+imports.addEventHandler("Client:onSyncInventorySlots", root, function(slots)
+    inventoryUI.slots = slots
+    inventoryUI.isUpdated, inventoryUI.isUpdateScheduled = true, false
+end)
+
+imports.addEvent("Client:onEnableInventoryUI", true)
+imports.addEventHandler("Client:onEnableInventoryUI", root, function(state, isForced)
+    if isForced then loginUI.isForcedDisabled = not state end
+    inventoryUI.isEnabled = state
+end)
+
+imports.addEvent("Client:onUpdateInventoryUI", true)
+imports.addEventHandler("Client:onUpdateInventoryUI", root, function()
+    --TODO: THIS AIN'T DONE..
+    --[[
+    inventoryUI.attachedItemOnCursor = nil
+    updateItemBox(localPlayer)
+    updateItemBox(inventoryUI.vicinity)
+    ]]
+end)
+
+
 ------------------------------
 --[[ Function: Renders UI ]]--
 ------------------------------
@@ -179,6 +218,46 @@ inventoryUI.renderUI = function()
     end
     inventoryUI.isLangUpdated = nil
 end
+
+
+----------------------------------------
+--[[ Client: On Toggle Inventory UI ]]--
+----------------------------------------
+
+inventoryUI.toggleUI = function(state)
+    if (((state ~= true) and (state ~= false)) or (state == inventoryUI.state)) then return false end
+
+    if state then
+        if inventoryUI.state then return false end
+        inventoryUI.clientInventory.name = imports.string.upper(imports.string.spaceChars(imports.getPlayerName(localPlayer).."'s Inventory"))
+        inventoryUI.opacityAdjuster.element = imports.beautify.slider.create(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, "vertical", nil, false)
+        inventoryUI.opacityAdjuster.percent = inventoryUI.opacityAdjuster.percent or 100
+        imports.beautify.slider.setPercent(inventoryUI.opacityAdjuster.element, inventoryUI.opacityAdjuster.percent)
+        imports.beautify.slider.setText(inventoryUI.opacityAdjuster.element, "Opacity")
+        imports.beautify.slider.setTextColor(inventoryUI.opacityAdjuster.element, FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.fontColor)
+        imports.beautify.render.create(inventoryUI.renderUI, {
+            elementReference = inventoryUI.opacityAdjuster.element,
+            renderType = "preRender"
+        })
+        imports.beautify.setUIVisible(inventoryUI.opacityAdjuster.element, true)
+    else
+        if not inventoryUI.state then return false end
+        inventoryUI.clientInventory.name = nil
+        if inventoryUI.opacityAdjuster.element and imports.isElement(inventoryUI.opacityAdjuster.element) then
+            imports.destroyElement(inventoryUI.opacityAdjuster.element)
+        end
+        inventoryUI.opacityAdjuster.element = nil
+    end
+    inventoryUI.state = (state and true) or false
+    imports.showChat(not inventoryUI.state)
+    imports.showCursor(inventoryUI.state, true) --TODO: RMEOVE FORCED CHECK LATER
+    return true
+end
+
+imports.addEvent("Client:onToggleInventoryUI", true)
+imports.addEventHandler("Client:onToggleInventoryUI", root, inventoryUI.toggleUI)
+imports.bindKey(FRAMEWORK_CONFIGS["Inventory"]["UI_ToggleKey"], "down", function() inventoryUI.toggleUI(not inventoryUI.state) end)
+imports.addEventHandler("onClientPlayerWasted", localPlayer, function() inventoryUI.toggleUI(false) end)
 
 
 -------------------
