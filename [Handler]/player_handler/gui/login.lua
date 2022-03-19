@@ -180,6 +180,7 @@ for i = 1, #loginUI.phases[2].options, 1 do
 end
 loginUI.phases[2].updateUILang = function(gender)
     if not loginUI.phases[2].element or not imports.isElement(loginUI.phases[2].element) then return false end
+    gender = gender or FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default
     for i = 1, #loginUI.phases[2].options, 1 do
         local j = loginUI.phases[2].options[i]
         j.tooltip.text = imports.string.upper(imports.string.spaceChars(j.tooltip.identifier[(CPlayer.CLanguage)]))
@@ -228,6 +229,9 @@ loginUI.phases[2].updateUILang = function(gender)
         end
     end
 end
+imports.addEventHandler("Client:onUpdateLanguage", root, function()
+    loginUI.phases[2].updateUILang()
+end)
 loginUI.phases[2].fetchSelection = function()
     local tone = imports.beautify.slider.getPercent(loginUI.phases[2].categories[1].contents.tone.element)
     local gender = loginUI.phases[2].categories[1].contents.gender.contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[1].contents.gender.element))]
@@ -275,7 +279,7 @@ loginUI.phases[2].loadCharacter = function(loadDefault)
                 imports.beautify.selector.setSelection(j.element, 1)
             end
         end
-        loginUI.phases[2].updateUILang(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default)
+        loginUI.phases[2].updateUILang()
     else
         for i = 1, #loginUI.phases[2].categories[1].contents.gender.contentIndex, 1 do
             local j = loginUI.phases[2].categories[1].contents.gender.contentIndex[i]
@@ -390,7 +394,7 @@ loginUI.phases[2].toggleUI = function(state)
     if state then
         if loginUI.phases[2].element and imports.isElement(loginUI.phases[2].element) then return false end
         loginUI.phases[2].element = imports.beautify.card.create(loginUI.phases[2].startX, loginUI.phases[2].startY, loginUI.phases[2].width, loginUI.phases[2].height, nil, false)
-        loginUI.phases[2].updateUILang(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default)
+        loginUI.phases[2].updateUILang()
         imports.beautify.setUIVisible(loginUI.phases[2].element, true)
         imports.beautify.render.create(function()
             imports.beautify.native.drawRectangle(0, 0, loginUI.phases[2].width, loginUI.phases[2].titlebar.height, loginUI.phases[2].titlebar.bgColor, false)
