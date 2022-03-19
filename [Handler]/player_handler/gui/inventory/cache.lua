@@ -100,7 +100,7 @@ inventoryUI = {
                 }
             }
         },
-        startX = 0, startY = -90-20,
+        startX = 0, startY = -110,
         width = 460, height = 552,
         bgColor = tocolor(0, 0, 0, 250),
         titlebar = {
