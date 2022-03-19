@@ -29,9 +29,6 @@ inventoryUI = {
     clientInventory = {
         equipment = {
             bottomTest = {
-                font = FRAMEWORK_FONTS[6],
-                fontColor = imports.tocolor(0, 0, 0, 255),
-                bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor)),
                 {
                     title = "Primary",
                     startX = 1,
@@ -48,9 +45,6 @@ inventoryUI = {
                 }
             },
             rightTest = {
-                font = FRAMEWORK_FONTS[6],
-                fontColor = imports.tocolor(0, 0, 0, 255),
-                bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor)),
                 {
                     title = "Helmet",
                     startX = 2,
@@ -88,9 +82,6 @@ inventoryUI = {
                 },
             },
             leftTest = {
-                font = FRAMEWORK_FONTS[6],
-                fontColor = imports.tocolor(0, 0, 0, 255),
-                bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor)),
                 {
                     title = "Backpack",
                     startX = 2,
@@ -110,7 +101,7 @@ inventoryUI = {
             slot = {
                 height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height,
                 bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.bgColor)),
-                font = FRAMEWORK_FONTS[6], fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.fontColor))
+                font = FRAMEWORK_FONTS[9], fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.fontColor))
             }
         },
         grids = {
