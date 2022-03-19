@@ -177,6 +177,7 @@ end
 --[[ Variables ]]--
 -------------------
 
+--[[
 local iconTextures = {}
 local iconDimensions = {}
 local prevScrollState = false
@@ -200,6 +201,7 @@ local sortedCategories = {
     "Build",
     "Utility"
 }
+]]
 
 
 --------------------------------------
