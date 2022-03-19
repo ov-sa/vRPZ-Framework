@@ -179,6 +179,7 @@ for i = 1, #loginUI.phases[2].options, 1 do
     j.hoverAnimTick = CLIENT_CURRENT_TICK
 end
 loginUI.phases[2].updateUILang = function(gender)
+    if not loginUI.phases[2].element or not imports.isElement(loginUI.phases[2].element) then return false end
     for i = 1, #loginUI.phases[2].options, 1 do
         local j = loginUI.phases[2].options[i]
         j.tooltip.text = imports.string.upper(imports.string.spaceChars(j.tooltip.identifier[(CPlayer.CLanguage)]))
@@ -186,24 +187,44 @@ loginUI.phases[2].updateUILang = function(gender)
     end
     for i = 1, #loginUI.phases[2].categories, 1 do
         local j = loginUI.phases[2].categories[i]
+        local panel_offsetY = loginUI.phases[2].titlebar.height + loginUI.phases[2].titlebar.paddingY
         j.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)]["Titles"][(CPlayer.CLanguage)]))
+        j.offsetY = (loginUI.phases[2].categories[(i - 1)] and (loginUI.phases[2].categories[(i - 1)].offsetY + loginUI.phases[2].categories.height + loginUI.phases[2].categories[(i - 1)].height + loginUI.phases[2].categories.paddingY)) or panel_offsetY
         if j.contents then
             for k, v in imports.pairs(j.contents) do
                 v.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Titles"][(CPlayer.CLanguage)]))
-                if v.isSelector then
+                if v.isSlider then
+                    if not v.element or not imports.isElement(v.element) then
+                        v.element = imports.beautify.slider.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height + v.startY + v.paddingY, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), v.height, "horizontal", loginUI.phases[2].element, false)
+                        imports.beautify.setUIVisible(v.element, true)
+                        imports.addEventHandler("onClientUISliderAltered", v.element, function() loginUI.phases[2].updateCharacter() end)
+                    end
+                elseif v.isSelector then
                     v.contentIndex, v.content = {}, {}
+                    if not v.element or not imports.isElement(v.element) then
+                        v.element = imports.beautify.selector.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height + v.startY, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), v.height, "horizontal", loginUI.phases[2].element, false)
+                        imports.beautify.setUIVisible(v.element, true)
+                        imports.addEventHandler("onClientUISelectionAltered", v.element, function() loginUI.phases[2].updateCharacter() end)
+                    end
                     for m, n in imports.pairs((v.isClothing and FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Datas"][gender]) or FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Datas"]) do
                         imports.table.insert(v.contentIndex, m)
                         imports.table.insert(v.content, imports.string.upper(imports.string.spaceChars(n[(CPlayer.CLanguage)])))
                     end
+                    imports.beautify.selector.setDataList(v.element, v.content)
                 end
             end
         elseif j.isSelector then
             j.contentIndex, j.content = {}, {}
+            if not j.element or not imports.isElement(j.element) then
+                j.element = imports.beautify.selector.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), j.height, "horizontal", loginUI.phases[2].element, false)
+                imports.beautify.setUIVisible(j.element, true)
+                imports.addEventHandler("onClientUISelectionAltered", j.element, function() loginUI.phases[2].updateCharacter() end)
+            end
             for k, v in imports.pairs(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)]["Datas"][gender]) do
                 imports.table.insert(j.contentIndex, k)
                 imports.table.insert(j.content, imports.string.upper(imports.string.spaceChars(v[(CPlayer.CLanguage)])))
             end
+            imports.beautify.selector.setDataList(j.element, j.content)
         end
     end
 end
@@ -368,33 +389,9 @@ end
 loginUI.phases[2].toggleUI = function(state)
     if state then
         if loginUI.phases[2].element and imports.isElement(loginUI.phases[2].element) then return false end
-        loginUI.phases[2].updateUILang(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default)
-        local panel_offsetY = loginUI.phases[2].titlebar.height + loginUI.phases[2].titlebar.paddingY
         loginUI.phases[2].element = imports.beautify.card.create(loginUI.phases[2].startX, loginUI.phases[2].startY, loginUI.phases[2].width, loginUI.phases[2].height, nil, false)
+        loginUI.phases[2].updateUILang(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default)
         imports.beautify.setUIVisible(loginUI.phases[2].element, true)
-        for i = 1, #loginUI.phases[2].categories, 1 do
-            local j = loginUI.phases[2].categories[i]
-            j.offsetY = (loginUI.phases[2].categories[(i - 1)] and (loginUI.phases[2].categories[(i - 1)].offsetY + loginUI.phases[2].categories.height + loginUI.phases[2].categories[(i - 1)].height + loginUI.phases[2].categories.paddingY)) or panel_offsetY
-            if j.contents then
-                for k, v in imports.pairs(j.contents) do
-                    if v.isSlider then
-                        v.element = imports.beautify.slider.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height + v.startY + v.paddingY, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), v.height, "horizontal", loginUI.phases[2].element, false)
-                        imports.beautify.setUIVisible(v.element, true)
-                        imports.addEventHandler("onClientUISliderAltered", v.element, function() loginUI.phases[2].updateCharacter() end)
-                    elseif v.isSelector then
-                        v.element = imports.beautify.selector.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height + v.startY, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), v.height, "horizontal", loginUI.phases[2].element, false)
-                        imports.beautify.selector.setDataList(v.element, v.content)
-                        imports.beautify.setUIVisible(v.element, true)
-                        imports.addEventHandler("onClientUISelectionAltered", v.element, function() loginUI.phases[2].updateCharacter() end)
-                    end
-                end
-            elseif j.isSelector then
-                j.element = imports.beautify.selector.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), j.height, "horizontal", loginUI.phases[2].element, false)
-                imports.beautify.selector.setDataList(j.element, j.content)
-                imports.beautify.setUIVisible(j.element, true)
-                imports.addEventHandler("onClientUISelectionAltered", j.element, function() loginUI.phases[2].updateCharacter() end)
-            end
-        end
         imports.beautify.render.create(function()
             imports.beautify.native.drawRectangle(0, 0, loginUI.phases[2].width, loginUI.phases[2].titlebar.height, loginUI.phases[2].titlebar.bgColor, false)
             imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar["Titles"][(CPlayer.CLanguage)])), 0, 0, loginUI.phases[2].width, loginUI.phases[2].titlebar.height, loginUI.phases[2].titlebar.fontColor, 1, loginUI.phases[2].titlebar.font, "center", "center", true, false, false)
