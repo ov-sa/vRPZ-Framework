@@ -17,7 +17,8 @@ local imports = {
     tocolor = tocolor,
     unpackColor = unpackColor,
     beautify = beautify,
-    string = string
+    string = string,
+    math = math
 }
 
 
@@ -92,8 +93,8 @@ inventoryUI = {
             }
         },
         startX = 0, startY = -110,
-        width = 460, height = 552,
-        bgColor = tocolor(0, 0, 0, 250),
+        paddingX = 0,
+        bgColor = imports.tocolor(0, 0, 0, 250),
         titlebar = {
             height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.height,
             bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.bgColor)),
@@ -104,15 +105,15 @@ inventoryUI = {
                 font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 16), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.fontColor))
             }
         },
-        grids = {
-            padding = 1,
-            rows = 12,
-            slotSize = 45,
-            columns = 11
-        }
+        rows = 12,
+        columns = 10,
+        slotSize = 45,
+        dividerSize = 1,
+        dividerColor = imports.tocolor(255, 255, 255, 255)
     }
 }
 
+inventoryUI.clientInventory.width, inventoryUI.clientInventory.height = (inventoryUI.clientInventory.columns*inventoryUI.clientInventory.slotSize) + (imports.math.max(0, inventoryUI.clientInventory.columns - 1)*inventoryUI.clientInventory.dividerSize), (inventoryUI.clientInventory.rows*inventoryUI.clientInventory.slotSize) + (imports.math.max(0, inventoryUI.clientInventory.rows - 1)*inventoryUI.clientInventory.dividerSize)
 inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY = inventoryUI.clientInventory.startX + ((CLIENT_MTA_RESOLUTION[1] - inventoryUI.clientInventory.width)*0.5) + (inventoryUI.clientInventory.width*0.5), ((CLIENT_MTA_RESOLUTION[2] + inventoryUI.clientInventory.startY - inventoryUI.clientInventory.height - inventoryUI.clientInventory.titlebar.height)*0.5)
 
 
@@ -127,17 +128,17 @@ inventoryUI.renderUI = function()
     local playerName = getPlayerName(localPlayer)
     imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(playerName.."'s Inventory")), inventory_startX, inventory_startY - inventoryUI.clientInventory.titlebar.height, inventory_startX + inventoryUI.clientInventory.width, inventory_startY, inventoryUI.clientInventory.titlebar.fontColor, 1, inventoryUI.clientInventory.titlebar.font, "center", "center", true, false, false)
     
-    local gridStartX, gridStartY = inventory_startX, inventory_startY + inventoryUI.clientInventory.grids.slotSize
+    local gridStartX, gridStartY = inventory_startX, inventory_startY + inventoryUI.clientInventory.slotSize
     local gridColor = tocolor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor[1], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor[2], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor[3], 50)
-    for i = 1, inventoryUI.clientInventory.grids.rows - 1, 1 do
-        imports.beautify.native.drawRectangle(inventory_startX + inventoryUI.clientInventory.grids.padding, gridStartY, inventoryUI.clientInventory.width - (inventoryUI.clientInventory.grids.padding*2), 1, gridColor, false)
-        gridStartY = gridStartY + inventoryUI.clientInventory.grids.slotSize + inventoryUI.clientInventory.grids.padding
+    for i = 1, inventoryUI.clientInventory.rows - 1, 1 do
+        imports.beautify.native.drawRectangle(inventory_startX + inventoryUI.clientInventory.dividerSize, gridStartY, inventoryUI.clientInventory.width - (inventoryUI.clientInventory.dividerSize*2), 1, gridColor, false)
+        gridStartY = gridStartY + inventoryUI.clientInventory.slotSize + inventoryUI.clientInventory.dividerSize
     end
-    for i = 1, inventoryUI.clientInventory.grids.columns - 1, 1 do
+    for i = 1, inventoryUI.clientInventory.columns - 1, 1 do
         if (i > 1) then
-            imports.beautify.native.drawRectangle(gridStartX, inventory_startY + inventoryUI.clientInventory.grids.padding, 1, inventoryUI.clientInventory.height - (inventoryUI.clientInventory.grids.padding*2), gridColor, false)
+            imports.beautify.native.drawRectangle(gridStartX, inventory_startY + inventoryUI.clientInventory.dividerSize, 1, inventoryUI.clientInventory.height - (inventoryUI.clientInventory.dividerSize*2), gridColor, false)
         end
-        gridStartX = gridStartX + inventoryUI.clientInventory.grids.slotSize + inventoryUI.clientInventory.grids.padding
+        gridStartX = gridStartX + inventoryUI.clientInventory.slotSize + inventoryUI.clientInventory.dividerSize
     end
 
     for i, j in ipairs(inventoryUI.clientInventory.equipment.bottomTest) do
@@ -255,7 +256,7 @@ function displayInventoryUI()
     imports.beautify.native.drawImage(inventoryUI.gui.equipment.startX, inventoryUI.gui.equipment.startY, inventoryUI.gui.equipment.width, inventoryUI.gui.equipment.height, inventoryUI.gui.equipment.bgPath, 0, 0, 0, tocolor(inventoryUI.gui.equipment.bgColor[1], inventoryUI.gui.equipment.bgColor[2], inventoryUI.gui.equipment.bgColor[3], inventoryUI.gui.equipment.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
     dxDrawBorderedText(inventoryUI.gui.equipment.titlebar.outlineWeight, inventoryUI.gui.equipment.titlebar.fontColor, string.upper(playerName.."'S EQUIPMENT   |   "..playerUsedSlots.."/"..playerMaxSlots), inventoryUI.gui.equipment.startX + inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.startY - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.startX + inventoryUI.gui.equipment.width - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.startY, tocolor(inventoryUI.gui.equipment.titlebar.fontColor[1], inventoryUI.gui.equipment.titlebar.fontColor[2], inventoryUI.gui.equipment.titlebar.fontColor[3], inventoryUI.gui.equipment.titlebar.fontColor[4]*inventoryOpacityPercent), 1, inventoryUI.gui.equipment.titlebar.font, "right", "center", true, false, inventoryUI.gui.postGUI)
     dxDrawRectangle(inventoryUI.gui.equipment.startX, inventoryUI.gui.equipment.startY, inventoryUI.gui.equipment.width, inventoryUI.gui.equipment.titlebar.dividerSize, tocolor(inventoryUI.gui.equipment.titlebar.dividerColor[1], inventoryUI.gui.equipment.titlebar.dividerColor[2], inventoryUI.gui.equipment.titlebar.dividerColor[3], inventoryUI.gui.equipment.titlebar.dividerColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-    for i, j in pairs(inventoryUI.gui.equipment.grids) do
+    for i, j in pairs(inventoryUI.gui.equipment.slot) do
         local itemDetails, itemCategory = false, false
         if inventoryUI.slots and inventoryUI.slots.slots[i] then
             itemDetails, itemCategory = getItemDetails(inventoryUI.slots.slots[i])
@@ -494,7 +495,7 @@ function displayInventoryUI()
                                 local slotWidth, slotHeight = horizontalSlotsToOccupy*template.contentWrapper.itemGrid.slot.size + ((horizontalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding), verticalSlotsToOccupy*template.contentWrapper.itemGrid.slot.size + ((verticalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding)
                                 local equippedIndex = inventoryUI.slots.slots[k].equipmentIndex
                                 if not equippedIndex then
-                                    for m, n in pairs(inventoryUI.gui.equipment.grids) do
+                                    for m, n in pairs(inventoryUI.gui.equipment.slot) do
                                         if inventoryUI.slots.slots[m] and inventoryUI.slots.slots[m] == inventoryUI.slots.slots[k].item then
                                             equippedIndex = m
                                             break
@@ -914,7 +915,7 @@ function displayInventoryUI()
                     end
                     triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                 elseif isItemAvailableForEquipping then
-                    local slotWidth, slotHeight = inventoryUI.gui.equipment.grids[isItemAvailableForEquipping.slotIndex].width - inventoryUI.gui.equipment.grids[isItemAvailableForEquipping.slotIndex].paddingX, inventoryUI.gui.equipment.grids[isItemAvailableForEquipping.slotIndex].height - inventoryUI.gui.equipment.grids[isItemAvailableForEquipping.slotIndex].paddingY
+                    local slotWidth, slotHeight = inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].width - inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].paddingX, inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].height - inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].paddingY
                     local releaseIndex = inventoryUI.attachedItemOnCursor.prevSlotIndex
                     local reservedSlot = isItemAvailableForEquipping.reservedSlot or releaseIndex
                     inventoryUI.attachedItemOnCursor.__finalWidth, inventoryUI.attachedItemOnCursor.__finalHeight = slotWidth, slotHeight
