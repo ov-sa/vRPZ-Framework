@@ -14,6 +14,8 @@
 -----------------
 
 local imports = {
+    isElement = isElement,
+    destroyElement = destroyElement,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     bindKey = bindKey,
@@ -61,11 +63,18 @@ inventoryUI.toggleUI = function(state)
     if state then
         if inventoryUI.isVisible then return false end
         inventoryUI.clientInventory.name = imports.string.upper(imports.string.spaceChars(imports.getPlayerName(localPlayer).."'s Inventory"))
+        inventoryUI.opacityAdjuster.element = imports.beautify.slider.create(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, "vertical", nil, false)
+        imports.beautify.setUIVisible(inventoryUI.opacityAdjuster.element, true)
+        --imports.addEventHandler("onClientUISliderAltered", v.element, function() loginUI.phases[2].updateCharacter() end)
         imports.beautify.render.create(inventoryUI.renderUI)
     else
         if not inventoryUI.isVisible then return false end
         inventoryUI.clientInventory.nam = nil
         imports.beautify.render.remove(inventoryUI.renderUI)
+        if inventoryUI.opacityAdjuster.element and imports.isElement(inventoryUI.opacityAdjuster.element) then
+            imports.destroyElement(inventoryUI.opacityAdjuster.element)
+        end
+        inventoryUI.opacityAdjuster.element = nil
     end
     inventoryUI.isVisible = (state and true) or false
     imports.showChat(not inventoryUI.isVisible)

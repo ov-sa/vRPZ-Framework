@@ -72,6 +72,10 @@ inventoryUI = {
                 identifier = "backpack", slots = {rows = 3, columns = 3}
             }
         }
+    },
+    opacityAdjuster = {
+        startX = 10, startY = 0,
+        width = 35
     }
 }
 inventory_padding, inventory_offsetY = nil, nil
@@ -106,8 +110,10 @@ for i = 1, #inventoryUI.clientInventory.equipment, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.startX, j.startY = inventoryUI.clientInventory.startX + j.startX, inventoryUI.clientInventory.startY + j.startY
 end
+inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY = inventoryUI.opacityAdjuster.startX + inventoryUI.clientInventory.startX + inventoryUI.clientInventory.width, inventoryUI.clientInventory.startY + inventoryUI.opacityAdjuster.startY
+inventoryUI.opacityAdjuster.height = inventoryUI.clientInventory.equipment[8].startY - inventoryUI.opacityAdjuster.startY
 inventoryUI.createBGTexture = function(isRefresh)
-    if CLIENT_MTA_MINIMIZED then outputChatBox("Yes minimized") return false end
+    if CLIENT_MTA_MINIMIZED then return false end
     if isRefresh and inventoryUI.bgTexture and imports.isElement(inventoryUI.bgTexture) then
         imports.destroyElement(inventoryUI.bgTexture)
         inventoryUI.bgTexture = nil
@@ -220,7 +226,7 @@ function displayInventoryUI()
     local playerMaxSlots = getElementMaxSlots(localPlayer)
     local playerUsedSlots = getElementUsedSlots(localPlayer)
     local equipmentInformationColor = inventoryUI.gui.equipment.description.fontColor
-    local inventoryOpacityPercent = inventoryUI.gui.tranparencyAdjuster.minPercent + (1 - inventoryUI.gui.tranparencyAdjuster.minPercent)*inventoryUI.gui.tranparencyAdjuster.percent
+    local inventoryOpacityPercent = inventoryUI.gui.opacityAdjuster.minPercent + (1 - inventoryUI.gui.opacityAdjuster.minPercent)*inventoryUI.gui.opacityAdjuster.percent
     if not GuiElement.isMTAWindowActive() then
         if not prevLMBClickState then
             if getKeyState("mouse1") and not inventoryUI.attachedItemOnCursor then
@@ -802,18 +808,18 @@ function displayInventoryUI()
     imports.beautify.native.drawImage(lockStat_offsetX, lockStat_offsetY, inventoryUI.gui.lockStat.iconSize, inventoryUI.gui.lockStat.iconSize, ((isInventoryEnabled and not inventoryUI.attachedItemOnCursor) and inventoryUI.gui.lockStat.unlockedIconPath) or inventoryUI.gui.lockStat.lockedIconPath, 0, 0, 0, tocolor(inventoryUI.gui.lockStat.iconColor[1], inventoryUI.gui.lockStat.iconColor[2], inventoryUI.gui.lockStat.iconColor[3], inventoryUI.gui.lockStat.iconColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
 
     --Draws Transparency Adjuster
-    local thumb_offsetX, thumb_offsetY = inventoryUI.gui.tranparencyAdjuster.startX + ((inventoryUI.gui.tranparencyAdjuster.width - inventoryUI.gui.tranparencyAdjuster.thumbSize)*inventoryUI.gui.tranparencyAdjuster.percent), inventoryUI.gui.tranparencyAdjuster.startY + ((inventoryUI.gui.tranparencyAdjuster.height - inventoryUI.gui.tranparencyAdjuster.thumbSize)/2)
-    local isThumbHovered = isMouseOnPosition(thumb_offsetX, thumb_offsetY, inventoryUI.gui.tranparencyAdjuster.thumbSize, inventoryUI.gui.tranparencyAdjuster.thumbSize)
-    local isTransparencyAdjusterHovered = isMouseOnPosition(inventoryUI.gui.tranparencyAdjuster.startX - inventoryUI.gui.tranparencyAdjuster.slideRange, inventoryUI.gui.tranparencyAdjuster.startY - inventoryUI.gui.tranparencyAdjuster.slideRange, inventoryUI.gui.tranparencyAdjuster.width + (inventoryUI.gui.tranparencyAdjuster.slideRange*2), inventoryUI.gui.tranparencyAdjuster.height + (inventoryUI.gui.tranparencyAdjuster.slideRange*2))
+    local thumb_offsetX, thumb_offsetY = inventoryUI.gui.opacityAdjuster.startX + ((inventoryUI.gui.opacityAdjuster.width - inventoryUI.gui.opacityAdjuster.thumbSize)*inventoryUI.gui.opacityAdjuster.percent), inventoryUI.gui.opacityAdjuster.startY + ((inventoryUI.gui.opacityAdjuster.height - inventoryUI.gui.opacityAdjuster.thumbSize)/2)
+    local isThumbHovered = isMouseOnPosition(thumb_offsetX, thumb_offsetY, inventoryUI.gui.opacityAdjuster.thumbSize, inventoryUI.gui.opacityAdjuster.thumbSize)
+    local isTransparencyAdjusterHovered = isMouseOnPosition(inventoryUI.gui.opacityAdjuster.startX - inventoryUI.gui.opacityAdjuster.slideRange, inventoryUI.gui.opacityAdjuster.startY - inventoryUI.gui.opacityAdjuster.slideRange, inventoryUI.gui.opacityAdjuster.width + (inventoryUI.gui.opacityAdjuster.slideRange*2), inventoryUI.gui.opacityAdjuster.height + (inventoryUI.gui.opacityAdjuster.slideRange*2))
     if isTransparencyAdjusterHovered then
         if getKeyState("mouse1") and not GuiElement.isMTAWindowActive() and not inventoryUI.attachedItemOnCursor then
-            local currentThumbOffsetX = getAbsoluteCursorPosition() - inventoryUI.gui.tranparencyAdjuster.startX + (inventoryUI.gui.tranparencyAdjuster.thumbSize/2)
-            inventoryUI.gui.tranparencyAdjuster.percent = math.min(100, math.max(0, math.floor((currentThumbOffsetX / inventoryUI.gui.tranparencyAdjuster.width)*100)))
-            inventoryUI.gui.tranparencyAdjuster.percent = inventoryUI.gui.tranparencyAdjuster.percent/100
+            local currentThumbOffsetX = getAbsoluteCursorPosition() - inventoryUI.gui.opacityAdjuster.startX + (inventoryUI.gui.opacityAdjuster.thumbSize/2)
+            inventoryUI.gui.opacityAdjuster.percent = math.min(100, math.max(0, math.floor((currentThumbOffsetX / inventoryUI.gui.opacityAdjuster.width)*100)))
+            inventoryUI.gui.opacityAdjuster.percent = inventoryUI.gui.opacityAdjuster.percent/100
         end
     end
-    dxDrawRectangle(thumb_offsetX - inventoryUI.gui.tranparencyAdjuster.borderSize, thumb_offsetY - inventoryUI.gui.tranparencyAdjuster.borderSize, inventoryUI.gui.tranparencyAdjuster.thumbSize + (inventoryUI.gui.tranparencyAdjuster.borderSize*2), inventoryUI.gui.tranparencyAdjuster.thumbSize + (inventoryUI.gui.tranparencyAdjuster.borderSize*2), tocolor(inventoryUI.gui.tranparencyAdjuster.borderColor[1], inventoryUI.gui.tranparencyAdjuster.borderColor[2], inventoryUI.gui.tranparencyAdjuster.borderColor[3], inventoryUI.gui.tranparencyAdjuster.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-    dxDrawRectangle(thumb_offsetX, thumb_offsetY, inventoryUI.gui.tranparencyAdjuster.thumbSize, inventoryUI.gui.tranparencyAdjuster.thumbSize, tocolor(inventoryUI.gui.tranparencyAdjuster.thumbColor[1], inventoryUI.gui.tranparencyAdjuster.thumbColor[2], inventoryUI.gui.tranparencyAdjuster.thumbColor[3], inventoryUI.gui.tranparencyAdjuster.thumbColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+    dxDrawRectangle(thumb_offsetX - inventoryUI.gui.opacityAdjuster.borderSize, thumb_offsetY - inventoryUI.gui.opacityAdjuster.borderSize, inventoryUI.gui.opacityAdjuster.thumbSize + (inventoryUI.gui.opacityAdjuster.borderSize*2), inventoryUI.gui.opacityAdjuster.thumbSize + (inventoryUI.gui.opacityAdjuster.borderSize*2), tocolor(inventoryUI.gui.opacityAdjuster.borderColor[1], inventoryUI.gui.opacityAdjuster.borderColor[2], inventoryUI.gui.opacityAdjuster.borderColor[3], inventoryUI.gui.opacityAdjuster.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+    dxDrawRectangle(thumb_offsetX, thumb_offsetY, inventoryUI.gui.opacityAdjuster.thumbSize, inventoryUI.gui.opacityAdjuster.thumbSize, tocolor(inventoryUI.gui.opacityAdjuster.thumbColor[1], inventoryUI.gui.opacityAdjuster.thumbColor[2], inventoryUI.gui.opacityAdjuster.thumbColor[3], inventoryUI.gui.opacityAdjuster.thumbColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
 
     if inventoryUI.attachedItemOnCursor then
         local itemDetails = getItemDetails(inventoryUI.attachedItemOnCursor.item)
