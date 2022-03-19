@@ -179,7 +179,6 @@ for i = 1, #loginUI.phases[2].options, 1 do
     j.hoverAnimTick = CLIENT_CURRENT_TICK
 end
 loginUI.phases[2].updateUILang = function(gender)
-    if not loginUI.phases[2].element or not imports.isElement(loginUI.phases[2].element) then return false end
     gender = gender or FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default
     for i = 1, #loginUI.phases[2].options, 1 do
         local j = loginUI.phases[2].options[i]
@@ -230,7 +229,9 @@ loginUI.phases[2].updateUILang = function(gender)
     end
 end
 imports.addEventHandler("Client:onUpdateLanguage", root, function()
-    loginUI.phases[2].updateUILang()
+    if not loginUI.phases[2].element or not imports.isElement(loginUI.phases[2].element) then return false end
+    local characterData = loginUI.phases[2].fetchSelection()
+    loginUI.phases[2].updateUILang(characterData.gender)
 end)
 loginUI.phases[2].fetchSelection = function()
     local tone = imports.beautify.slider.getPercent(loginUI.phases[2].categories[1].contents.tone.element)
@@ -285,6 +286,7 @@ loginUI.phases[2].loadCharacter = function(loadDefault)
             local j = loginUI.phases[2].categories[1].contents.gender.contentIndex[i]
             if j == (loginUI.characters[(loginUI.previewCharacter)].identity.gender or FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default) then
                 imports.beautify.selector.setSelection(loginUI.phases[2].categories[3].element, i)
+                loginUI.phases[2].updateUILang(j)
                 break
             end
         end
