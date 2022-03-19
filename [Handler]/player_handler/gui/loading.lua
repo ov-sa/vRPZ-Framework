@@ -43,6 +43,7 @@ local loadingUI = {
         font = FRAMEWORK_FONTS[1]
     }
 }
+
 loadingUI.loader.startX = loadingUI.loader.startX + ((CLIENT_MTA_RESOLUTION[1] - FRAMEWORK_CONFIGS["UI"]["Loading"].loader.size)*0.5)
 loadingUI.loader.startY = loadingUI.loader.startY + ((CLIENT_MTA_RESOLUTION[2] - FRAMEWORK_CONFIGS["UI"]["Loading"].loader.size)*0.5)
 
