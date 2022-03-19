@@ -13,7 +13,8 @@
 -----------------
 
 local imports = {
-    tonumber = tonumber
+    tonumber = tonumber,
+    triggerEvent = triggerEvent
 }
 
 
@@ -21,9 +22,19 @@ local imports = {
 --[[ Module ]]--
 ----------------
 
-CPlayer.setChannel = function(player, channelIndex)
+CPlayer.CLanguage = nil
+CPlayer.CChannel = nil
+
+CPlayer.setLanguage = function(language)
+    if not language then return false end
+    imports.triggerEvent("Client:onUpdateLanguage", localPlayer, language)
+    CPlayer.CLanguage = language
+    return true 
+end
+
+CPlayer.setChannel = function(channelIndex)
     channelIndex = imports.tonumber(channelIndex)
-    if not CPlayer.isInitialized(player) or not channelIndex or not FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][channelIndex] then return false end
-    CPlayer.CChannel[player] = channelIndex
+    if not CPlayer.isInitialized(localPlayer) or not channelIndex or not FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][channelIndex] then return false end
+    CPlayer.CChannel = channelIndex
     return true 
 end

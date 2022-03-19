@@ -95,7 +95,7 @@ imports.addEventHandler("Client:onToggleLoadingUI", root, function(state, hint)
     if state then
         if (state and (loadingUI.animStatus == "forward")) then return false end
         loadingUI.animStatus = "forward"
-        loadingUI.hint.text = (hint and hint[FRAMEWORK_LANGUAGE]) or (FRAMEWORK_CONFIGS["UI"]["Loading"].hints[(imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"].hints))][FRAMEWORK_LANGUAGE]) or loadingUI.hint.text
+        loadingUI.hint.text = (hint and hint[(CPlayer.CLanguage)]) or (FRAMEWORK_CONFIGS["UI"]["Loading"].hints[(imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Loading"].hints))][(CPlayer.CLanguage)]) or loadingUI.hint.text
     else
         if ((loadingUI.animStatus == "backward") or (loadingUI.animStatus == "reverse_backward")) then return false end
         loadingUI.animStatus = "reverse_backward"

@@ -16,6 +16,7 @@
 local imports = {
     tocolor = tocolor,
     unpackColor = unpackColor,
+    addEventHandler = addEventHandler,
     beautify = beautify,
     string = string,
     math = math
@@ -100,6 +101,7 @@ for i = 1, #inventoryUI.clientInventory.equipment, 1 do
     j.startX, j.startY = inventoryUI.clientInventory.startX + j.startX, inventoryUI.clientInventory.startY + j.startY
 end
 inventoryUI.updateUILang = function() inventoryUI.isLangUpdated = nil end
+imports.addEventHandler("Client:onUpdateLanguage", root, inventoryUI.updateUILang)
 
 
 ------------------------------

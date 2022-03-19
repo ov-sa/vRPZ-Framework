@@ -23,4 +23,4 @@ local imports = {
 ----------------
 
 imports.addEvent("Client:onUpdateChannel", true)
-imports.addEventHandler("Client:onUpdateChannel", root, function(...) CPlayer.setChannel(localPlayer, ...) end)
+imports.addEventHandler("Client:onUpdateChannel", root, function(...) CPlayer.setChannel(...) end)

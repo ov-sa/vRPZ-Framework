@@ -11,7 +11,6 @@
     <script src="settings/shared.lua" type="shared"/>
     <script src="utilities/client.lua" type="client"/>
     <script src="utilities/server.lua" type="server"/>
-    <script src="settings/client.lua" type="client"/>
 
     <!-- Modules: Game -->
     <script src="modules/game/shared/index.lua" type="shared"/>
