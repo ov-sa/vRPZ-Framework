@@ -17,8 +17,10 @@ local imports = {
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     bindKey = bindKey,
+    getPlayerName = getPlayerName,
     showChat = showChat,
     showCursor = showCursor,
+    string = string,
     beautify = beautify
 }
 
@@ -58,9 +60,11 @@ end)
 inventoryUI.toggleUI = function(state)
     if state then
         if inventoryUI.isVisible then return false end
+        inventoryUI.clientInventory.name = imports.string.upper(imports.string.spaceChars(imports.getPlayerName(localPlayer).."'s Inventory"))
         imports.beautify.render.create(inventoryUI.renderUI)
     else
         if not inventoryUI.isVisible then return false end
+        inventoryUI.clientInventory.nam = nil
         imports.beautify.render.remove(inventoryUI.renderUI)
     end
     inventoryUI.isVisible = (state and true) or false
