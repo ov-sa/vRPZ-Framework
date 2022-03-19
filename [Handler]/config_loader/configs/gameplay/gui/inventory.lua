@@ -18,12 +18,10 @@ configVars["UI"]["Inventory"] = {
         height = 35,
         fontColor = {170, 35, 35, 255},
         bgColor = {0, 0, 0, 255},
-        --shadowColor = {50, 50, 50, 255},
         slot = {
             height = 20,
             fontColor = {0, 0, 0, 255},
-            bgColor = {100, 100, 100, 255},
-            --shadowColor = {50, 50, 50, 255},
+            bgColor = {100, 100, 100, 255}
         }
     },
 
