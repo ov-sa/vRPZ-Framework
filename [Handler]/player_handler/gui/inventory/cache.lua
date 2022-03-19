@@ -37,14 +37,14 @@ inventoryUI = {
                     startX = 1,
                     startY = 5 + 20,
                     width = 276,
-                    height = 90
+                    height = 92
                 },
                 {
                     title = "Secondary",
                     startX = 278,
                     startY = 5 + 20,
                     width = 183,
-                    height = 90
+                    height = 92
                 }
             },
             rightTest = {
@@ -56,35 +56,35 @@ inventoryUI = {
                     startX = 2,
                     startY = 0 + 24,
                     width = 92,
-                    height = 90
+                    height = 92
                 },
                 {
                     title = "Vest",
                     startX = 2,
                     startY = 92 + 45 + 1 + 24,
                     width = 92,
-                    height = 90
+                    height = 92
                 },
                 {
                     title = "Upper",
                     startX = 2,
                     startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
                     width = 92,
-                    height = 90
+                    height = 92
                 },
                 {
                     title = "Lower",
                     startX = 2,
                     startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
-                    width = 92,
-                    height = 90
+                    width = 90,
+                    height = 92
                 },
                 {
                     title = "Shoes",
                     startX = 2,
                     startY = 92 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 45 + 1 + 24,
                     width = 92,
-                    height = 90
+                    height = 92
                 },
             },
             leftTest = {
@@ -118,7 +118,7 @@ inventoryUI = {
     }
 }
 
-inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY = inventoryUI.clientInventory.startX + ((CLIENT_MTA_RESOLUTION[1] - inventoryUI.clientInventory.width)*0.5), ((CLIENT_MTA_RESOLUTION[2] + inventoryUI.clientInventory.startY - inventoryUI.clientInventory.height - inventoryUI.clientInventory.titlebar.height)*0.5)
+inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY = inventoryUI.clientInventory.startX + ((CLIENT_MTA_RESOLUTION[1] - inventoryUI.clientInventory.width)*0.5) + (inventoryUI.clientInventory.width*0.5), ((CLIENT_MTA_RESOLUTION[2] + inventoryUI.clientInventory.startY - inventoryUI.clientInventory.height - inventoryUI.clientInventory.titlebar.height)*0.5)
 
 
 ------------------------------
