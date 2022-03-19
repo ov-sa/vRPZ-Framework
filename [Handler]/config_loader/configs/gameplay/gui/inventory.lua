@@ -32,7 +32,7 @@ configVars["UI"]["Inventory"] = {
         columns = 10,
         slotSize = 45,
         dividerSize = 1,
-        dividerColor = {100, 100, 100, 255}
+        dividerColor = {100, 100, 100, 50}
     }
 
 }
