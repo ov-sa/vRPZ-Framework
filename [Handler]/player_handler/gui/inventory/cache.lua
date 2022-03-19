@@ -34,12 +34,13 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-local inventory_padding = 4
+local inventory_margin = 4
 local inventory_offsetX, inventory_offsetY = CInventory.fetchSlotDimensions(2, 6)
-inventory_offsetY = inventory_offsetY + FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height + inventory_padding
+inventory_offsetY = inventory_offsetY + FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height + inventory_margin
 local inventoryUI = {
+    maring = inventory_margin,
     clientInventory = {
-        startX = 0, startY = -inventory_offsetY, padding = inventory_padding,
+        startX = 0, startY = -inventory_offsetY,
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor)), dividerColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor)),
         titlebar = {
             height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.height,
@@ -87,7 +88,7 @@ local inventoryUI = {
         range = {25, 100}
     }
 }
-inventory_padding, inventory_offsetX, inventory_offsetY = nil, nil, nil
+inventory_margin, inventory_offsetX, inventory_offsetY = nil, nil, nil
 
 inventoryUI.clientInventory.width, inventoryUI.clientInventory.height = CInventory.fetchSlotDimensions(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)
 inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY = inventoryUI.clientInventory.startX + ((CLIENT_MTA_RESOLUTION[1] - inventoryUI.clientInventory.width)*0.5) + (inventoryUI.clientInventory.width*0.5), ((CLIENT_MTA_RESOLUTION[2] + inventoryUI.clientInventory.startY - inventoryUI.clientInventory.height - inventoryUI.clientInventory.titlebar.height)*0.5)
@@ -95,23 +96,23 @@ for i = 1, #inventoryUI.clientInventory.equipment, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.width, j.height = CInventory.fetchSlotDimensions(j.slots.rows, j.slots.columns)
 end
-local equipment_prevX, equipment_prevY = -inventoryUI.clientInventory.padding, inventoryUI.clientInventory.titlebar.slot.height + inventoryUI.clientInventory.equipment[1].height + inventoryUI.clientInventory.padding
+local equipment_prevX, equipment_prevY = -inventoryUI.margin, inventoryUI.clientInventory.titlebar.slot.height + inventoryUI.clientInventory.equipment[1].height + inventoryUI.margin
 for i = 5, 1, -1 do
     local j = inventoryUI.clientInventory.equipment[i]
-    j.startX, j.startY = (-inventoryUI.clientInventory.padding*2) - j.width, inventoryUI.clientInventory.startY + inventoryUI.clientInventory.height + inventoryUI.clientInventory.padding - j.height + equipment_prevY
+    j.startX, j.startY = (-inventoryUI.margin*2) - j.width, inventoryUI.clientInventory.startY + inventoryUI.clientInventory.height + inventoryUI.margin - j.height + equipment_prevY
     equipment_prevY = equipment_prevY - j.height - (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*0.5) - inventoryUI.clientInventory.titlebar.slot.height
 end
 equipment_prevY = nil
 for i = 6, 7, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.startX, j.startY = equipment_prevX, inventoryUI.clientInventory.equipment[5].startY
-    equipment_prevX = equipment_prevX + (inventoryUI.clientInventory.padding*2) - FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize + j.width
+    equipment_prevX = equipment_prevX + (inventoryUI.margin*2) - FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize + j.width
 end
 equipment_prevX = nil
-equipment_prevY = -inventoryUI.clientInventory.titlebar.slot.height - inventoryUI.clientInventory.padding
+equipment_prevY = -inventoryUI.clientInventory.titlebar.slot.height - inventoryUI.margin
 for i = 8, 8, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
-    j.startX, j.startY = inventoryUI.clientInventory.width + (inventoryUI.clientInventory.padding*2), inventoryUI.clientInventory.equipment[5].startY - j.height + equipment_prevY
+    j.startX, j.startY = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.equipment[5].startY - j.height + equipment_prevY
     equipment_prevY = equipment_prevY - j.height - (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*0.5) - inventoryUI.clientInventory.titlebar.slot.height
 end
 equipment_prevY = nil
@@ -119,8 +120,11 @@ for i = 1, #inventoryUI.clientInventory.equipment, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.startX, j.startY = inventoryUI.clientInventory.startX + j.startX, inventoryUI.clientInventory.startY + j.startY
 end
-inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY = inventoryUI.opacityAdjuster.startX + inventoryUI.clientInventory.startX + inventoryUI.clientInventory.width, inventoryUI.clientInventory.startY + inventoryUI.opacityAdjuster.startY - inventoryUI.clientInventory.padding
-inventoryUI.opacityAdjuster.height = inventoryUI.clientInventory.equipment[8].startY - inventoryUI.opacityAdjuster.startY - inventoryUI.clientInventory.padding - inventoryUI.clientInventory.titlebar.slot.height
+
+inventoryUI.vicinityInventory.height = inventoryUI.clientInventory.height
+inventoryUI.vicinityInventory.startX, inventoryUI.vicinityInventory.startY = inventoryUI.clientInventory.equipment[1].startX - inventoryUI.vicinityInventory.width - inventoryUI.margin - FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize, inventoryUI.clientInventory.startY
+inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY = inventoryUI.opacityAdjuster.startX + inventoryUI.clientInventory.startX + inventoryUI.clientInventory.width, inventoryUI.clientInventory.startY + inventoryUI.opacityAdjuster.startY - inventoryUI.margin
+inventoryUI.opacityAdjuster.height = inventoryUI.clientInventory.equipment[8].startY - inventoryUI.opacityAdjuster.startY - inventoryUI.margin - inventoryUI.clientInventory.titlebar.slot.height
 inventoryUI.createBGTexture = function(isRefresh)
     if CLIENT_MTA_MINIMIZED then return false end
     if isRefresh and inventoryUI.bgTexture and imports.isElement(inventoryUI.bgTexture) then
@@ -129,8 +133,8 @@ inventoryUI.createBGTexture = function(isRefresh)
     end
     inventoryUI.bgRT = imports.beautify.native.createRenderTarget(CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], true)
     imports.beautify.native.setRenderTarget(inventoryUI.bgRT, true)
-    local inventory_startX, inventory_startY = inventoryUI.clientInventory.startX - inventoryUI.clientInventory.padding, inventoryUI.clientInventory.startY + inventoryUI.clientInventory.titlebar.height - inventoryUI.clientInventory.padding
-    local inventory_width, inventory_height = inventoryUI.clientInventory.width + (inventoryUI.clientInventory.padding*2), inventoryUI.clientInventory.height + (inventoryUI.clientInventory.padding*2)
+    local inventory_startX, inventory_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.clientInventory.titlebar.height - inventoryUI.margin
+    local inventory_width, inventory_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
     imports.beautify.native.drawRectangle(inventory_startX, inventory_startY - inventoryUI.clientInventory.titlebar.height, inventory_width, inventoryUI.clientInventory.titlebar.height, inventoryUI.clientInventory.titlebar.bgColor, false)
     imports.beautify.native.drawRectangle(inventory_startX, inventory_startY, inventory_width, inventory_height, inventoryUI.clientInventory.bgColor, false)
     for i = 1, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - 1, 1 do
@@ -153,6 +157,13 @@ inventoryUI.createBGTexture = function(isRefresh)
             imports.beautify.native.drawRectangle(j.startX + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*k), j.startY, 1, j.height, inventoryUI.clientInventory.dividerColor, false)
         end
     end
+
+    --TODO: WIP..
+    local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.clientInventory.titlebar.height - inventoryUI.margin
+    local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
+    imports.beautify.native.drawRectangle(vicinity_startX, vicinity_startY - inventoryUI.clientInventory.titlebar.height, vicinity_width, inventoryUI.clientInventory.titlebar.height, inventoryUI.clientInventory.titlebar.bgColor, false)
+    imports.beautify.native.drawRectangle(vicinity_startX, vicinity_startY, vicinity_width, vicinity_height, inventoryUI.clientInventory.bgColor, false)
+
     imports.beautify.native.drawRectangle(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, inventoryUI.clientInventory.titlebar.bgColor, false)
     imports.beautify.native.setRenderTarget()
     local rtPixels = imports.beautify.native.getTexturePixels(inventoryUI.bgRT)
@@ -206,8 +217,8 @@ end)
 
 inventoryUI.renderUI = function()
     if inventoryUI.isLangUpdated or not inventoryUI.bgTexture then inventoryUI.createBGTexture(inventoryUI.isLangUpdated) end
-    local inventory_startX, inventory_startY = inventoryUI.clientInventory.startX - inventoryUI.clientInventory.padding, inventoryUI.clientInventory.startY + inventoryUI.clientInventory.titlebar.height - inventoryUI.clientInventory.padding
-    local inventory_width, inventory_height = inventoryUI.clientInventory.width + (inventoryUI.clientInventory.padding*2), inventoryUI.clientInventory.height + (inventoryUI.clientInventory.padding*2)
+    local inventory_startX, inventory_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.clientInventory.titlebar.height - inventoryUI.margin
+    local inventory_width, inventory_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
     inventoryUI.opacityAdjuster.percent = imports.beautify.slider.getPercent(inventoryUI.opacityAdjuster.element)
     if inventoryUI.opacityAdjuster.percent ~= inventoryUI.opacityAdjuster.__percent then
         inventoryUI.opacityAdjuster.__percent = inventoryUI.opacityAdjuster.percent
