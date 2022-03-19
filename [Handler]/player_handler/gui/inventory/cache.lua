@@ -125,16 +125,12 @@ inventoryUI.renderUI = function()
     local playerName = getPlayerName(localPlayer)
     imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(playerName.."'s Inventory")), inventory_startX, inventory_startY - inventoryUI.clientInventory.titlebar.height, inventory_startX + inventory_width, inventory_startY, inventoryUI.clientInventory.titlebar.fontColor, 1, inventoryUI.clientInventory.titlebar.font, "center", "center", true, false, false)
     
-    local gridStartX, gridStartY = nil, nil
-    gridStartX, gridStartY = inventory_startX + inventoryUI.clientInventory.padding + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize, inventory_startY + inventoryUI.clientInventory.padding + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize
-    local gridColor = tocolor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor[1], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor[2], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor[3], 50)
+    local gridStartX, gridStartY = inventory_startX + inventoryUI.clientInventory.padding + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize, inventory_startY + inventoryUI.clientInventory.padding + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize
     for i = 1, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - 1, 1 do
-        imports.beautify.native.drawRectangle(inventory_startX + inventoryUI.clientInventory.padding + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize, gridStartY, inventoryUI.clientInventory.width, 1, gridColor, false)
-        gridStartY = gridStartY + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize
+        imports.beautify.native.drawRectangle(inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY + inventoryUI.clientInventory.titlebar.height + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*i), inventoryUI.clientInventory.width, 1, inventoryUI.clientInventory.dividerColor, false)
     end
     for i = 1, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - 1, 1 do
-        imports.beautify.native.drawRectangle(gridStartX, inventory_startY + inventoryUI.clientInventory.padding + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize, 1, inventoryUI.clientInventory.height, gridColor, false)
-        gridStartX = gridStartX + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize
+        imports.beautify.native.drawRectangle(inventoryUI.clientInventory.startX + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*i), inventoryUI.clientInventory.startY + inventoryUI.clientInventory.titlebar.height, 1, inventoryUI.clientInventory.height, inventoryUI.clientInventory.dividerColor, false)
     end
 
     for i, j in ipairs(inventoryUI.clientInventory.equipment.bottomTest) do
