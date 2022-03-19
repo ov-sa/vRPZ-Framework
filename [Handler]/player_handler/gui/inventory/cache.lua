@@ -99,6 +99,7 @@ for i = 1, #inventoryUI.clientInventory.equipment, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.startX, j.startY = inventoryUI.clientInventory.startX + j.startX, inventoryUI.clientInventory.startY + j.startY
 end
+inventoryUI.updateUILang = function() inventoryUI.isLangUpdated = nil end
 
 
 ------------------------------
