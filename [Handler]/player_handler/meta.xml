@@ -40,6 +40,7 @@
     <export function="getPlayerSerial" type="server"/>
     <export function="getPlayerFromSerial" type="server"/>
     <export function="setPlayerChannel" type="server"/>
+    <export function="setPlayerLanguage" type="client"/>
 
     <!-- Modules: Character -->
     <script src="modules/character/shared/index.lua" type="shared"/>

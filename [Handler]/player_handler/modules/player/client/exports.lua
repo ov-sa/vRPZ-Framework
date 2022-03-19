@@ -18,6 +18,13 @@ local imports = {
 }
 
 
+-----------------
+--[[ Exports ]]--
+-----------------
+
+function setPlayerLanguage(...) return CPlayer.setLanguage(...) end
+
+
 ----------------
 --[[ Events ]]--
 ----------------
