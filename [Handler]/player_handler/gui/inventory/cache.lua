@@ -309,6 +309,7 @@ inventoryUI.toggleUI = function(state)
         end
         inventoryUI.destroyBuffer(localPlayer)
         inventoryUI.destroyBuffer(inventoryUI.vicinityInventory.element)
+        inventoryUI.vicinityInventory.element = nil
         inventoryUI.opacityAdjuster.element = nil
     end
     inventoryUI.detachItem(true)
