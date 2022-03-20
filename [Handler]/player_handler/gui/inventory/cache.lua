@@ -281,7 +281,7 @@ inventoryUI.toggleUI = function(state)
             imports.destroyElement(inventoryUI.opacityAdjuster.element)
         end
         if inventoryUI.isUpdateScheduled then
-            imports.triggerServerEvent("onClientRequestSyncInventorySlots", localPlayer)
+            imports.triggerServerEvent("Player:onSyncInventorySlots", localPlayer)
         end
         inventoryUI.clientInventory.name = nil
         inventoryUI.vicinityInventory.vicinityElement = nil
