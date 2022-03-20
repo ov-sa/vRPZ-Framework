@@ -316,7 +316,6 @@ imports.addEventHandler("onClientPlayerWasted", localPlayer, function() inventor
 --[[
 local iconTextures = {}
 local iconDimensions = {}
-local prevScrollStreak = {state = false, tickCounter = false, streak = 1}
 local sortedCategories = {
     "primary_weapon",
     "secondary_weapon",
