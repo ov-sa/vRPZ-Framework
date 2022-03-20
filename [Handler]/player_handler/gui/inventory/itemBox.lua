@@ -2,11 +2,7 @@
 --[[ Function: Creates Item Box ]]--
 ------------------------------------
 
-function createItemBox(startX, startY, templateIndex, inventoryParent, boxName)
-
-    startX = tonumber(startX); startY = tonumber(startY); templateIndex = tonumber(templateIndex);
-    if not startX or not startY or not templateIndex or not inventoryUI.gui.itemBox.templates[templateIndex] or not inventoryParent or not isElement(inventoryParent) then return false end
-
+function createItemBox(inventoryParent, boxName)
     if not inventoryUI.buffer[inventoryParent] then
         if not boxName then
             local lootType = inventoryParent:getData("Loot:Type")
@@ -19,8 +15,6 @@ function createItemBox(startX, startY, templateIndex, inventoryParent, boxName)
         end
         inventoryUI.buffer[inventoryParent] = {
             gui = {
-                startX = startX,
-                startY = startY,
                 title = boxName,
                 templateIndex = templateIndex,
                 renderTarget = DxRenderTarget(inventoryUI.gui.itemBox.templates[templateIndex].contentWrapper.width, inventoryUI.gui.itemBox.templates[templateIndex].contentWrapper.height, true),
