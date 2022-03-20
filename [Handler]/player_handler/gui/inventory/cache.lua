@@ -257,6 +257,8 @@ inventoryUI.toggleUI = function(state)
 
     if state then
         if inventoryUI.state then return false end
+        --TODO: ENABLE LATER
+        --if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then inventoryUI.toggleUI(false) return false end
         inventoryUI.clientInventory.name = imports.string.upper(imports.string.spaceChars(imports.getPlayerName(localPlayer).."'s Inventory"))
         inventoryUI.opacityAdjuster.element = imports.beautify.slider.create(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, "vertical", nil, false)
         inventoryUI.opacityAdjuster.percent = inventoryUI.opacityAdjuster.percent or 100

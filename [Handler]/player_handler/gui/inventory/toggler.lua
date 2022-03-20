@@ -1,18 +1,5 @@
-----------------------------------------------------------------
---[[ Resource: Player Handler
-     Script: handlers: inventory: gui: toggler.lua
-     Server: -
-     Author: OvileAmriam
-     Developer: -
-     DOC: 18/12/2020 (OvileAmriam)
-     Desc: Inventory Toggler ]]--
-----------------------------------------------------------------
-
-
 --[[
-function inventoryUI.toggleUI(true)
-    if not isPlayerInitialized(localPlayer) or getPlayerHealth(localPlayer) <= 0 then inventoryUI.toggleUI(false) return false end
-    
+function inventoryUI.toggleUI(true)    
     createItemBox(inventoryUI.gui.equipment.startX + 250 + 50, inventoryUI.gui.equipment.startY + 25, 1, localPlayer, "Inventory")
     inventoryUI.vicinity = isPlayerInLoot(localPlayer)
     if inventoryUI.vicinity and isElement(inventoryUI.vicinity) then
@@ -39,6 +26,5 @@ function inventoryUI.toggleUI(false)
     destroyItemBox(localPlayer)
     destroyItemBox(inventoryUI.vicinity)
     inventoryUI.vicinity = nil
-    inventoryUI.attachedItem = nil
 end
 ]]
