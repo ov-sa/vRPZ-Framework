@@ -18,9 +18,9 @@ local imports = {
 }
 
 
---------------------
---[[ Loot Class ]]--
---------------------
+----------------------
+--[[ Module: Loot ]]--
+----------------------
 
 CLoot = {
     fetchType = function(parent)

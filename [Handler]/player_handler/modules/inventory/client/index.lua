@@ -18,9 +18,9 @@ local imports = {
 }
 
 
--------------------------
---[[ Inventory Class ]]--
--------------------------
+---------------------------
+--[[ Module: Inventory ]]--
+---------------------------
 
 CInventory.fetchSlotDimensions = function(rows, columns)
     rows, columns = imports.tonumber(rows), imports.tonumber(columns)

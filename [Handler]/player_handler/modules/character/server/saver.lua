@@ -27,9 +27,9 @@ local imports = {
 }
 
 
-----------------
---[[ Module ]]--
-----------------
+---------------------------
+--[[ Module: Character ]]--
+---------------------------
 
 CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress, loadProgress)
     if isForceReset then
