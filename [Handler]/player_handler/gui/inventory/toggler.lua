@@ -17,10 +17,4 @@ function inventoryUI.toggleUI(true)
     triggerEvent("Client:onUpdateInventoryUI", localPlayer)
     inventoryUpdate()
 end
-
-function inventoryUI.toggleUI(false)
-    detachInventoryItem(true)
-    destroyItemBox(localPlayer)
-    destroyItemBox(inventoryUI.vicinity)
-end
 ]]

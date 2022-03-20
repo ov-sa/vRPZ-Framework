@@ -176,7 +176,17 @@ inventoryUI.createBGTexture = function(isRefresh)
 end
 inventoryUI.updateUILang = function() inventoryUI.isLangUpdated = true end
 imports.addEventHandler("Client:onUpdateLanguage", root, inventoryUI.updateUILang)
-inventoryUI.detachUIItem = function(isForced)
+inventoryUI.destroyBuffer = function(parent)
+    if not parent or not imports.isElement(parent) then return false end
+    if inventoryUI.buffer[parent] and inventoryUI.buffer[parent] then
+        if inventoryUI.buffer[parent].renderTarget and imports.isElement(inventoryUI.buffer[parent].renderTarget) then
+            imports.destroyElement(inventoryUI.buffer[parent].renderTarget)
+        end
+    end
+    inventoryUI.buffer[parent] = nil
+    return true
+end
+inventoryUI.detachItem = function(isForced)
     if not inventoryUI.attachedItem then return false end
     if not isForced then
         inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY = CLIENT_CURSOR_OFFSET[1] - inventoryUI.attachedItem.offsetX, CLIENT_CURSOR_OFFSET[2] - inventoryUI.attachedItem.offsetY
@@ -288,12 +298,14 @@ inventoryUI.toggleUI = function(state)
         if inventoryUI.isUpdateScheduled then
             imports.triggerServerEvent("Player:onSyncInventorySlots", localPlayer)
         end
+        inventoryUI.destroyBuffer(localPlayer)
+        inventoryUI.destroyBuffer(inventoryUI.vicinityInventory.element)
         inventoryUI.clientInventory.name = nil
         inventoryUI.vicinityInventory.vicinityElement = nil
         inventoryUI.vicinityInventory.name = nil
         inventoryUI.opacityAdjuster.element = nil
     end
-    inventoryUI.detachUIItem(true)
+    inventoryUI.detachItem(true)
     inventoryUI.state = (state and true) or false
     imports.showChat(not inventoryUI.state)
     imports.showCursor(inventoryUI.state, true) --TODO: RMEOVE FORCED CHECK LATER

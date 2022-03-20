@@ -14,14 +14,12 @@ function createItemBox(inventoryParent, boxName)
             end
         end
         inventoryUI.buffer[inventoryParent] = {
-            gui = {
-                title = boxName,
-                templateIndex = templateIndex,
-                renderTarget = DxRenderTarget(inventoryUI.gui.itemBox.templates[templateIndex].contentWrapper.width, inventoryUI.gui.itemBox.templates[templateIndex].contentWrapper.height, true),
-                scroller = {
-                    percent = 0
-                }
-            },
+            title = boxName,
+            templateIndex = templateIndex,
+            renderTarget = DxRenderTarget(inventoryUI.ui.itemBox.templates[templateIndex].contentWrapper.width, inventoryUI.ui.itemBox.templates[templateIndex].contentWrapper.height, true),
+            scroller = {
+                percent = 0
+            }
             lootItems = {}
         }
         updateItemBox(inventoryParent)
@@ -30,24 +28,6 @@ function createItemBox(inventoryParent, boxName)
 
 end
 
-
--------------------------------------
---[[ Function: Destroys Item Box ]]--
--------------------------------------
-
-function destroyItemBox(inventoryParent)
-
-    if not inventoryParent or not isElement(inventoryParent) then return false end
-
-    if inventoryUI.buffer[inventoryParent] and inventoryUI.buffer[inventoryParent].gui then
-        if inventoryUI.buffer[inventoryParent].gui.renderTarget and isElement(inventoryUI.buffer[inventoryParent].gui.renderTarget) then
-            inventoryUI.buffer[inventoryParent].gui.renderTarget:destroy()
-        end
-    end
-    inventoryUI.buffer[inventoryParent] = nil
-    return true
-
-end
 
 
 -----------------------------------
@@ -99,7 +79,7 @@ function attachInventoryItem(itemBox, item, category, prevSlotIndex, occupiedRow
     if inventoryUI.attachedItem then return false end
 
     if itemBox == localPlayer then
-        prevSlotIndex = (inventoryUI.gui.equipment.grids[prevSlotIndex] and prevSlotIndex) or tonumber(prevSlotIndex)
+        prevSlotIndex = (inventoryUI.ui.equipment.grids[prevSlotIndex] and prevSlotIndex) or tonumber(prevSlotIndex)
     else
         prevSlotIndex = tonumber(prevSlotIndex)
     end
@@ -114,7 +94,7 @@ function attachInventoryItem(itemBox, item, category, prevSlotIndex, occupiedRow
         itemBox = itemBox,
         item = item,
         category = category,
-        isEquippedItem = (inventoryUI.gui.equipment.grids[prevSlotIndex] and true) or false,
+        isEquippedItem = (inventoryUI.ui.equipment.grids[prevSlotIndex] and true) or false,
         prevSlotIndex = prevSlotIndex,
         occupiedRowSlots = occupiedRowSlots,
         occupiedColumnSlots = occupiedColumnSlots,
