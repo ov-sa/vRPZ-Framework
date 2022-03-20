@@ -21,6 +21,7 @@ local imports = {
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     triggerServerEvent = triggerServerEvent,
+    triggerEvent = triggerEvent,
     bindKey = bindKey,
     getPlayerName = getPlayerName,
     showChat = showChat,
@@ -162,6 +163,11 @@ inventoryUI.updateUILang = function() inventoryUI.isLangUpdated = true end
 imports.addEventHandler("Client:onUpdateLanguage", root, inventoryUI.updateUILang)
 inventoryUI.createBuffer = function(parent, name)
     if not parent or not imports.isElement(parent) then return false end
+    if (parent ~= localPlayer) and CLoot.isLocked(parent) then
+        --TODO: ...UPDATE NOTIF.
+        imports.triggerEvent("onDisplayNotification", localPlayer, "Unfortunately, loot's inventory is locked!", {255, 80, 80, 255})
+        return false
+    end
     if not inventoryUI.buffer[parent] then
         inventoryUI.buffer[parent] = {
             name = imports.string.upper(imports.string.upper(imports.string.spaceChars(boxName or CLoot.fetchName(parent))),
@@ -249,7 +255,7 @@ inventoryUI.renderUI = function()
         local j = inventoryUI.clientInventory.equipment[i]
         imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font, "center", "center", true, false, false)
     end
-    if inventoryUI.vicinityInventory.element then
+    if inventoryUI.vicinityInventory.element and inventoryUI.buffer[(inventoryUI.vicinityInventory.element)] then
         local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
         local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
         imports.beautify.native.drawText(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].name, vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_startX + vicinity_width, vicinity_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)

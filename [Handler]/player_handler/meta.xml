@@ -107,6 +107,7 @@
     <script src="modules/loot/shared/exports.lua" type="shared"/>
     <export function="fetchLootType" type="shared"/>
     <export function="fetchLootName" type="shared"/>
+    <export function="isLootLocked" type="shared"/>
 
     <!-- GUIs -->
     <script src="gui/loading.lua" type="client"/>
