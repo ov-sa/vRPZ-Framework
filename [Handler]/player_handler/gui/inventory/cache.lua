@@ -236,12 +236,9 @@ end)
 
 imports.addEvent("Client:onUpdateInventoryUI", true)
 imports.addEventHandler("Client:onUpdateInventoryUI", root, function()
-    --TODO: THIS AIN'T DONE..
-    --[[
-    inventoryUI.attachedItem = nil
-    updateItemBox(localPlayer)
-    updateItemBox(inventoryUI.vicinity)
-    ]]
+    inventoryUI.detachItem(true)
+    inventoryUI.updateBuffer(localPlayer)
+    inventoryUI.updateBuffer(inventoryUI.vicinityInventory.element)
 end)
 
 
