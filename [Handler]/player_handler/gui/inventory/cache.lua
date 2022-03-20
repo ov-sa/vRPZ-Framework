@@ -457,8 +457,8 @@ function displayInventoryUI()
                     j.sortedCategories = {}
                     for k, v in pairs(inventoryDatas) do
                         for key, value in ipairs(v) do
-                            if j.lootItems[value.dataName] then
-                                for x = 1, j.lootItems[value.dataName], 1 do
+                            if j.inventory[value.dataName] then
+                                for x = 1, j.inventory[value.dataName], 1 do
                                     table.insert(j.sortedCategories, {item = value.dataName, itemValue = 1})
                                 end
                             end
@@ -494,7 +494,7 @@ function displayInventoryUI()
                             end
                             if not inventoryUI.isUpdated then
                                 if v.movementType == "equipment" and v.isAutoReserved then
-                                    if (tonumber(j.lootItems[v.item]) or 0) <= 0 then
+                                    if (tonumber(j.inventory[v.item]) or 0) <= 0 then
                                         if not sortedItems["__"..v.item] then
                                             table.insert(sortedItems, {item = v.item, itemValue = 1})
                                             sortedItems["__"..v.item] = true
@@ -705,8 +705,8 @@ function displayInventoryUI()
                     for k, v in ipairs(sortedCategories) do
                         if inventoryDatas[v] then
                             for key, value in ipairs(inventoryDatas[v]) do
-                                if j.lootItems[value.dataName] then
-                                    table.insert(j.sortedCategories, {item = value.dataName, itemValue = j.lootItems[value.dataName]})
+                                if j.inventory[value.dataName] then
+                                    table.insert(j.sortedCategories, {item = value.dataName, itemValue = j.inventory[value.dataName]})
                                 end
                             end
                         end
@@ -721,8 +721,8 @@ function displayInventoryUI()
                         end
                         if not isSortedCategory then
                             for key, value in ipairs(v) do
-                                if j.lootItems[value.dataName] then
-                                    table.insert(j.sortedCategories, {item = value.dataName, itemValue = j.lootItems[value.dataName]})
+                                if j.inventory[value.dataName] then
+                                    table.insert(j.sortedCategories, {item = value.dataName, itemValue = j.inventory[value.dataName]})
                                 end
                             end
                         end
@@ -772,7 +772,7 @@ function displayInventoryUI()
                     for k, v in pairs(inventoryUI.slots.slots) do
                         if tonumber(k) and v.loot and v.loot == i then
                             if v.movementType then
-                                if v.movementType == "loot" and (tonumber(j.lootItems[v.item]) or 0) <= 0 then
+                                if v.movementType == "loot" and (tonumber(j.inventory[v.item]) or 0) <= 0 then
                                     if not sortedItems["__"..v.item] then
                                         table.insert(sortedItems, {item = v.item, itemValue = 1})
                                         sortedItems["__"..v.item] = true
@@ -947,7 +947,7 @@ function displayInventoryUI()
                     triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                 elseif isItemAvailableForDropping then
                     local totalLootItems = 0
-                    for index, _ in pairs(inventoryUI.buffer[isItemAvailableForDropping.loot].lootItems) do
+                    for index, _ in pairs(inventoryUI.buffer[isItemAvailableForDropping.loot].inventory) do
                         totalLootItems = totalLootItems + 1
                     end
                     local template = inventoryUI.gui.itemBox.templates[(inventoryUI.buffer[isItemAvailableForDropping.loot].gui.templateIndex)]
@@ -1055,7 +1055,7 @@ function displayInventoryUI()
                             end
                         else
                             local totalLootItems = 0
-                            for index, _ in pairs(inventoryUI.buffer[inventoryUI.attachedItem.itemBox].lootItems) do
+                            for index, _ in pairs(inventoryUI.buffer[inventoryUI.attachedItem.itemBox].inventory) do
                                 totalLootItems = totalLootItems + 1
                             end
                             local template = inventoryUI.gui.itemBox.templates[(inventoryUI.buffer[inventoryUI.attachedItem.itemBox].gui.templateIndex)]

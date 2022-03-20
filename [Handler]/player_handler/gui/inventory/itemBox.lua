@@ -2,30 +2,30 @@
 --[[ Function: Creates Item Box ]]--
 ------------------------------------
 
-function createItemBox(inventoryParent, boxName)
-    if not inventoryUI.buffer[inventoryParent] then
+function createItemBox(parent, boxName)
+    if not parent or not imports.isElement(parent) then return false end
+    if not inventoryUI.buffer[parent] then
         if not boxName then
-            local lootType = inventoryParent:getData("Loot:Type")
+            local lootType = parent:getData("Loot:Type")
             if lootType then
-                boxName = inventoryParent:getData("Loot:Name")
+                boxName = parent:getData("Loot:Name")
             end
             if not boxName then
                 boxName = "??"
             end
         end
-        inventoryUI.buffer[inventoryParent] = {
+        inventoryUI.buffer[parent] = {
             title = boxName,
             templateIndex = templateIndex,
             renderTarget = DxRenderTarget(inventoryUI.ui.itemBox.templates[templateIndex].contentWrapper.width, inventoryUI.ui.itemBox.templates[templateIndex].contentWrapper.height, true),
             scroller = {
                 percent = 0
             }
-            lootItems = {}
+            inventory = {}
         }
-        updateItemBox(inventoryParent)
+        updateItemBox(parent)
     end
     return true
-
 end
 
 
@@ -34,12 +34,12 @@ end
 --[[ Function: Clears Item Box ]]--
 -----------------------------------
 
-function clearItemBox(inventoryParent)
+function clearItemBox(parent)
 
-    if not inventoryParent or not isElement(inventoryParent) or not inventoryUI.buffer[inventoryParent] then return false end
+    if not parent or not isElement(parent) or not inventoryUI.buffer[parent] then return false end
 
-    inventoryUI.buffer[inventoryParent].lootItems = {}
-    inventoryUI.buffer[inventoryParent].__itemNameSlots = nil
+    inventoryUI.buffer[parent].inventory = {}
+    inventoryUI.buffer[parent].__itemNameSlots = nil
     return true
 
 end
@@ -49,22 +49,22 @@ end
 --[[ Function: Updates Item Box ]]--
 ------------------------------------
 
-function updateItemBox(inventoryParent)
+function updateItemBox(parent)
 
-    if not inventoryParent or not isElement(inventoryParent) or not inventoryUI.buffer[inventoryParent] then return false end
+    if not parent or not isElement(parent) or not inventoryUI.buffer[parent] then return false end
 
-    clearItemBox(inventoryParent)
+    clearItemBox(parent)
     for itemType, itemDatas in pairs(inventoryDatas) do
         if itemDatas and type(itemDatas) == "table" then
             for index, value in ipairs(itemDatas) do
-                local lootItemData = tonumber(inventoryParent:getData("Item:"..value.dataName)) or 0
+                local lootItemData = tonumber(parent:getData("Item:"..value.dataName)) or 0
                 if lootItemData > 0 then
-                    inventoryUI.buffer[inventoryParent].lootItems[value.dataName] = (tonumber(inventoryUI.buffer[inventoryParent].lootItems[value.dataName]) or 0) + lootItemData
+                    inventoryUI.buffer[parent].inventory[value.dataName] = (tonumber(inventoryUI.buffer[parent].inventory[value.dataName]) or 0) + lootItemData
                 end
             end
         end
     end
-    inventoryUI.buffer[inventoryParent].sortedCategories = nil
+    inventoryUI.buffer[parent].sortedCategories = nil
     return true
 
 end
