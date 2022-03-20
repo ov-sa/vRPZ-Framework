@@ -271,7 +271,7 @@ inventoryUI.renderUI = function()
     if inventoryUI.vicinityInventory.element then
         local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
         local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
-        imports.beautify.native.drawText(inventoryUI.vicinityInventory.name, vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_startX + vicinity_width, vicinity_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
+        imports.beautify.native.drawText(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].name, vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_startX + vicinity_width, vicinity_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
     end
     inventoryUI.isLangUpdated = nil
 end
@@ -290,7 +290,6 @@ inventoryUI.toggleUI = function(state)
         --if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then inventoryUI.toggleUI(false) return false end
         --TODO: WIP...
         inventoryUI.vicinityInventory.element = true
-        inventoryUI.vicinityInventory.name = imports.string.upper(imports.string.spaceChars("Test Loot"))
         inventoryUI.createBuffer(localPlayer, imports.getPlayerName(localPlayer).."'s Inventory")
         inventoryUI.createBuffer(inventoryUI.vicinityInventory.element)
         inventoryUI.opacityAdjuster.element = imports.beautify.slider.create(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, "vertical", nil, false)
@@ -315,7 +314,6 @@ inventoryUI.toggleUI = function(state)
         inventoryUI.destroyBuffer(inventoryUI.vicinityInventory.element)
         inventoryUI.clientInventory.name = nil
         inventoryUI.vicinityInventory.element = nil
-        inventoryUI.vicinityInventory.name = nil
         inventoryUI.opacityAdjuster.element = nil
     end
     inventoryUI.detachItem(true)
