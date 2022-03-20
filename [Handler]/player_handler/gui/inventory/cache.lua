@@ -186,6 +186,20 @@ inventoryUI.destroyBuffer = function(parent)
     inventoryUI.buffer[parent] = nil
     return true
 end
+inventoryUI.updateBuffer = function(parent)
+    if not parent or not imports.isElement(parent) or not inventoryUI.buffer[parent] then return false end
+    inventoryUI.buffer[parent].inventory = {}
+    inventoryUI.buffer[parent].itemBuffer = nil
+    for i, j in imports.pairs(CInventory.CItems) do
+        local itemCount = CInventory.fetchItemCount(parent, i)
+        if itemCount > 0 then
+            inventoryUI.buffer[parent].inventory[value.dataName] = itemCount
+        end
+    end
+    --TODO: IDK IF THIS IS NECESSARY? MAYBE CAN USE SAME `inventoryUI.buffer[parent].itemBuffer`???
+    inventoryUI.buffer[parent].sortedItems = nil
+    return true
+end
 inventoryUI.detachItem = function(isForced)
     if not inventoryUI.attachedItem then return false end
     if not isForced then
