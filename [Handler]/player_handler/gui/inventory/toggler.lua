@@ -12,8 +12,6 @@ function inventoryUI.toggleUI(true)
         end
     end
     triggerEvent("onClientInventorySound", localPlayer, "inventory_open")
-    showChat(false)
-    showCursor(true)
     triggerEvent("Client:onUpdateInventoryUI", localPlayer)
     inventoryUpdate()
 end
