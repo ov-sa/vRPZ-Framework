@@ -177,9 +177,8 @@ imports.addEventHandler("Client:onUpdateLanguage", root, inventoryUI.updateUILan
 inventoryUI.detachUIItem = function(isForced)
     if not inventoryUI.attachedItem then return false end
     if not isForced then
-        local cursor_offsetX, cursor_offsetY = getAbsoluteCursorPosition()
-        inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY = cursor_offsetX - inventoryUI.attachedItem.offsetX, cursor_offsetY - inventoryUI.attachedItem.offsetY
-        inventoryUI.attachedItem.animTickCounter = getTickCount()
+        inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY = CLIENT_CURSOR_OFFSET[1] - inventoryUI.attachedItem.offsetX, CLIENT_CURSOR_OFFSET[2] - inventoryUI.attachedItem.offsetY
+        inventoryUI.attachedItem.animTickCounter = CLIENT_CURRENT_TICK
     else
         inventoryUI.attachedItem = nil
     end
@@ -416,10 +415,10 @@ function displayInventoryUI()
                     if isLMBClicked then
                         local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
                         local verticalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemVerticalSlots) or 1)
-                        local cursor_offsetX, cursor_offsetY = getAbsoluteCursorPosition()
+                        local CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = getAbsoluteCursorPosition()
                         local prev_offsetX, prev_offsetY = j.startX + (j.paddingX/2), j.startY + (j.paddingY/2)
                         local prev_width, prev_height = j.width - j.paddingX, j.height - j.paddingY
-                        local attached_offsetX, attached_offsetY = cursor_offsetX - prev_offsetX, cursor_offsetY - prev_offsetY
+                        local attached_offsetX, attached_offsetY = CLIENT_CURSOR_OFFSET[1] - prev_offsetX, CLIENT_CURSOR_OFFSET[2] - prev_offsetY
                         attachInventoryItem(localPlayer, itemDetails.dataName, itemCategory, i, horizontalSlotsToOccupy, verticalSlotsToOccupy, prev_offsetX, prev_offsetY, prev_width, prev_height, attached_offsetX, attached_offsetY)
                     end
                 end
@@ -576,10 +575,10 @@ function displayInventoryUI()
                                     if isSlotHovered then
                                         equipmentInformation = itemDetails.itemName..":\n"..itemDetails.description
                                         if isLMBClicked then
-                                            local cursor_offsetX, cursor_offsetY = getAbsoluteCursorPosition()
+                                            local CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = getAbsoluteCursorPosition()
                                             local prev_offsetX, prev_offsetY = j.gui.startX + template.contentWrapper.startX + slot_offsetX, j.gui.startY + template.contentWrapper.startY + slot_offsetY
                                             local prev_width, prev_height = iconWidth, iconHeight
-                                            local attached_offsetX, attached_offsetY = cursor_offsetX - prev_offsetX, cursor_offsetY - prev_offsetY
+                                            local attached_offsetX, attached_offsetY = CLIENT_CURSOR_OFFSET[1] - prev_offsetX, CLIENT_CURSOR_OFFSET[2] - prev_offsetY
                                             attachInventoryItem(i, v.item, itemCategory, slotIndex, horizontalSlotsToOccupy, verticalSlotsToOccupy, prev_offsetX, prev_offsetY, prev_width, prev_height, attached_offsetX, attached_offsetY)
                                         end
                                     end
@@ -872,10 +871,10 @@ function displayInventoryUI()
                                 if isLMBClicked then
                                     local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
                                     local verticalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemVerticalSlots) or 1)
-                                    local cursor_offsetX, cursor_offsetY = getAbsoluteCursorPosition()
+                                    local CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = getAbsoluteCursorPosition()
                                     local prev_offsetX, prev_offsetY = j.gui.startX + template.contentWrapper.startX + iconStartX, j.gui.startY + template.contentWrapper.startY + iconStartY
                                     local prev_width, prev_height = iconWidth, iconHeight
-                                    local attached_offsetX, attached_offsetY = cursor_offsetX - prev_offsetX, cursor_offsetY - prev_offsetY
+                                    local attached_offsetX, attached_offsetY = CLIENT_CURSOR_OFFSET[1] - prev_offsetX, CLIENT_CURSOR_OFFSET[2] - prev_offsetY
                                     attachInventoryItem(i, v.item, itemCategory, k, horizontalSlotsToOccupy, verticalSlotsToOccupy, prev_offsetX, prev_offsetY, prev_width, prev_height, attached_offsetX, attached_offsetY)
                                 elseif isRMBClicked then
                                     --TODO: ...
@@ -1123,8 +1122,8 @@ function displayInventoryUI()
                     detachInventoryItem(true)
                 end
             else
-                local cursor_offsetX, cursor_offsetY = getAbsoluteCursorPosition()
-                imports.beautify.native.drawImage(cursor_offsetX - inventoryUI.attachedItem.offsetX, cursor_offsetY - inventoryUI.attachedItem.offsetY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, iconTextures[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
+                local CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = getAbsoluteCursorPosition()
+                imports.beautify.native.drawImage(CLIENT_CURSOR_OFFSET[1] - inventoryUI.attachedItem.offsetX, CLIENT_CURSOR_OFFSET[2] - inventoryUI.attachedItem.offsetY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, iconTextures[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
             end
         end
     end
