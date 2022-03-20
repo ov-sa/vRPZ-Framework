@@ -162,20 +162,20 @@ end
 inventoryUI.updateUILang = function() inventoryUI.isLangUpdated = true end
 imports.addEventHandler("Client:onUpdateLanguage", root, inventoryUI.updateUILang)
 inventoryUI.createBuffer = function(parent, name)
-    if not parent or not imports.isElement(parent) then return false end
+    if not parent or not imports.isElement(parent) or inventoryUI.buffer[parent] then return false end
     if (parent ~= localPlayer) and CLoot.isLocked(parent) then
         imports.triggerEvent("Client:onNotification", localPlayer, "Loot is locked..", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
         return false
     end
-    if not inventoryUI.buffer[parent] then
-        inventoryUI.buffer[parent] = {
-            name = imports.string.upper(imports.string.upper(imports.string.spaceChars(boxName or CLoot.fetchName(parent))),
-            renderTarget = imports.beautify.native.createRenderTarget(rtDimensions[1], rtDimensions[2], true),
-            scroller = {percent = 0},
-            inventory = {}
-        }
-        inventoryUI.updateBuffer(parent)
-    end
+    local rtDimensions = {0, 0} --TODO: LINK RT DIMENSIONS..
+    inventoryUI.buffer[parent] = {
+        name = imports.string.upper(imports.string.upper(imports.string.spaceChars(boxName or CLoot.fetchName(parent))),
+        renderTarget = imports.beautify.native.createRenderTarget(rtDimensions[1], rtDimensions[2], true),
+        rtDimensions = rtDimensions
+        scroller = {percent = 0},
+        inventory = {}
+    }
+    inventoryUI.updateBuffer(parent)
     return true
 end
 inventoryUI.destroyBuffer = function(parent)
