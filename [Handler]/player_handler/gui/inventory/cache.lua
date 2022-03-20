@@ -159,7 +159,7 @@ inventoryUI.createBGTexture = function(isRefresh)
             imports.beautify.native.drawRectangle(j.startX + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*k), j.startY, 1, j.height, inventoryUI.clientInventory.dividerColor, false)
         end
     end
-    if inventoryUI.vicinityInventory.vicinityElement then
+    if inventoryUI.vicinityInventory.element then
         local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
         local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
         imports.beautify.native.drawRectangle(vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_width, inventoryUI.titlebar.height, inventoryUI.titlebar.bgColor, false)
@@ -268,7 +268,7 @@ inventoryUI.renderUI = function()
         local j = inventoryUI.clientInventory.equipment[i]
         imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font, "center", "center", true, false, false)
     end
-    if inventoryUI.vicinityInventory.vicinityElement then
+    if inventoryUI.vicinityInventory.element then
         local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
         local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
         imports.beautify.native.drawText(inventoryUI.vicinityInventory.name, vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_startX + vicinity_width, vicinity_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
@@ -289,10 +289,10 @@ inventoryUI.toggleUI = function(state)
         --TODO: ENABLE LATER
         --if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then inventoryUI.toggleUI(false) return false end
         --TODO: WIP...
-        inventoryUI.vicinityInventory.vicinityElement = true
+        inventoryUI.vicinityInventory.element = true
         inventoryUI.vicinityInventory.name = imports.string.upper(imports.string.spaceChars("Test Loot"))
         inventoryUI.createBuffer(localPlayer, imports.getPlayerName(localPlayer).."'s Inventory")
-        inventoryUI.createBuffer(inventoryUI.vicinityInventory.vicinityElement)
+        inventoryUI.createBuffer(inventoryUI.vicinityInventory.element)
         inventoryUI.opacityAdjuster.element = imports.beautify.slider.create(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, "vertical", nil, false)
         inventoryUI.opacityAdjuster.percent = inventoryUI.opacityAdjuster.percent or 100
         imports.beautify.slider.setPercent(inventoryUI.opacityAdjuster.element, inventoryUI.opacityAdjuster.percent)
@@ -314,7 +314,7 @@ inventoryUI.toggleUI = function(state)
         inventoryUI.destroyBuffer(localPlayer)
         inventoryUI.destroyBuffer(inventoryUI.vicinityInventory.element)
         inventoryUI.clientInventory.name = nil
-        inventoryUI.vicinityInventory.vicinityElement = nil
+        inventoryUI.vicinityInventory.element = nil
         inventoryUI.vicinityInventory.name = nil
         inventoryUI.opacityAdjuster.element = nil
     end
