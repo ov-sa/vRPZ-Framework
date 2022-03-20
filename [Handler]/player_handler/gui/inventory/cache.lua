@@ -168,6 +168,7 @@ inventoryUI.createBuffer = function(parent, name)
         imports.triggerEvent("Client:onNotification", localPlayer, "Loot is locked..", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
         return false
     end
+    name = "Test Loot" --TODO: REMOVE LATER
     inventoryUI.buffer[parent] = {
         name = imports.string.upper(imports.string.upper(imports.string.spaceChars(name or CLoot.fetchName(parent)))),
         bufferRT = imports.beautify.native.createRenderTarget(((parent == localPlayer) and inventoryUI.clientInventory.width) or inventoryUI.vicinityInventory.width, ((parent == localPlayer) and inventoryUI.clientInventory.height) or inventoryUI.vicinityInventory.height, true),
@@ -280,6 +281,7 @@ end
 --[[ Client: On Toggle Inventory UI ]]--
 ----------------------------------------
 
+local testPed = createPed(0, 0, 0, 0); setElementAlpha(test, 0) --TODO: REMOVE IT LATER
 inventoryUI.toggleUI = function(state)
     if (((state ~= true) and (state ~= false)) or (state == inventoryUI.state)) then return false end
 
@@ -287,8 +289,8 @@ inventoryUI.toggleUI = function(state)
         if inventoryUI.state then return false end
         --TODO: ENABLE LATER
         --if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then inventoryUI.toggleUI(false) return false end
-        --TODO: WIP...
-        inventoryUI.vicinityInventory.element = CCharacter.isInLoot(localPlayer)
+        --inventoryUI.vicinityInventory.element = CCharacter.isInLoot(localPlayer)
+        inventoryUI.vicinityInventory.element = testPed --TODO: REMOVE IT LATER AND ENABLE ^
         inventoryUI.createBuffer(localPlayer, imports.getPlayerName(localPlayer).."'s Inventory")
         inventoryUI.createBuffer(inventoryUI.vicinityInventory.element)
         inventoryUI.opacityAdjuster.element = imports.beautify.slider.create(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, "vertical", nil, false)
