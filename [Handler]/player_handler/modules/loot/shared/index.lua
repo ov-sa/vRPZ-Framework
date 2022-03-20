@@ -29,12 +29,12 @@ CLoot = {
     end,
 
     fetchName = function(parent)
-        if not CLoot.fetchLootType(parent) then return false end
+        if not CLoot.fetchType(parent) then return false end
         return imports.getElementData(parent, "Loot:Name") or "??"
     end,
 
     isLocked = function(parent)
-        if not CLoot.fetchLootType(parent) then return false end
+        if not CLoot.fetchType(parent) then return false end
         return (imports.getElementData(parent, "Loot:Locked") and true) or false
     end
 }
