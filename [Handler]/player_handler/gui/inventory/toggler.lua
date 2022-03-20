@@ -19,9 +19,6 @@ function inventoryUI.toggleUI(true)
 end
 
 function inventoryUI.toggleUI(false)
-    if inventoryUI.isUpdateScheduled then
-        triggerServerEvent("onClientRequestSyncInventorySlots", localPlayer)
-    end
     detachInventoryItem(true)
     destroyItemBox(localPlayer)
     destroyItemBox(inventoryUI.vicinity)

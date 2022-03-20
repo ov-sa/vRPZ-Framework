@@ -20,6 +20,7 @@ local imports = {
     destroyElement = destroyElement,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
+    triggerServerEvent = triggerServerEvent,
     bindKey = bindKey,
     getPlayerName = getPlayerName,
     showChat = showChat,
@@ -278,6 +279,9 @@ inventoryUI.toggleUI = function(state)
         if not inventoryUI.state then return false end
         if inventoryUI.opacityAdjuster.element and imports.isElement(inventoryUI.opacityAdjuster.element) then
             imports.destroyElement(inventoryUI.opacityAdjuster.element)
+        end
+        if inventoryUI.isUpdateScheduled then
+            imports.triggerServerEvent("onClientRequestSyncInventorySlots", localPlayer)
         end
         inventoryUI.clientInventory.name = nil
         inventoryUI.vicinityInventory.vicinityElement = nil
