@@ -1,6 +1,5 @@
---[[
 function inventoryUI.toggleUI(true)    
-    inventoryUI.vicinity = isPlayerInLoot(localPlayer)
+    inventoryUI.vicinity = CCharacter.isInLoot(localPlayer)
     if inventoryUI.vicinity and isElement(inventoryUI.vicinity) then
         local vicinityLockedStatus = inventoryUI.vicinity:getData("Loot:Locked")
         if vicinityLockedStatus then
@@ -12,4 +11,3 @@ function inventoryUI.toggleUI(true)
     end
     triggerEvent("onClientInventorySound", localPlayer, "inventory_open")
 end
-]]

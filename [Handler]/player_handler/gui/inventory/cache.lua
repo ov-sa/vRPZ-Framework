@@ -270,7 +270,7 @@ inventoryUI.toggleUI = function(state)
         --TODO: ENABLE LATER
         --if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then inventoryUI.toggleUI(false) return false end
         --TODO: WIP...
-        inventoryUI.vicinityInventory.element = true
+        inventoryUI.vicinityInventory.element = CCharacter.isInLoot(localPlayer)
         inventoryUI.createBuffer(localPlayer, imports.getPlayerName(localPlayer).."'s Inventory")
         inventoryUI.createBuffer(inventoryUI.vicinityInventory.element)
         inventoryUI.opacityAdjuster.element = imports.beautify.slider.create(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, "vertical", nil, false)
