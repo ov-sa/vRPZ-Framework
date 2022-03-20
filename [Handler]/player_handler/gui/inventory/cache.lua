@@ -167,11 +167,9 @@ inventoryUI.createBuffer = function(parent, name)
         imports.triggerEvent("Client:onNotification", localPlayer, "Loot is locked..", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
         return false
     end
-    local rtDimensions = {0, 0} --TODO: LINK RT DIMENSIONS..
     inventoryUI.buffer[parent] = {
         name = imports.string.upper(imports.string.upper(imports.string.spaceChars(boxName or CLoot.fetchName(parent))),
-        bufferRT = imports.beautify.native.createRenderTarget(rtDimensions[1], rtDimensions[2], true),
-        rtDimensions = rtDimensions,
+        bufferRT = imports.beautify.native.createRenderTarget(((parent == localPlayer) and inventoryUI.clientInventory.width) or inventoryUI.vicinityInventory.width, ((parent == localPlayer) and inventoryUI.clientInventory.height) or inventoryUI.vicinityInventory.height, true),
         scroller = {percent = 0},
         inventory = {}
     }
