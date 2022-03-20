@@ -180,7 +180,7 @@ inventoryUI.createBuffer = function(parent, name)
     if not parent or not imports.isElement(parent) then return false end
     if not inventoryUI.buffer[parent] then
         inventoryUI.buffer[parent] = {
-            name = boxName or CLoot.fetchName(parent),
+            name = imports.string.upper(imports.string.upper(imports.string.spaceChars(boxName or CLoot.fetchName(parent))),
             renderTarget = imports.beautify.native.createRenderTarget(rtDimensions[1], rtDimensions[2], true),
             scroller = {percent = 0},
             inventory = {}
@@ -263,7 +263,7 @@ inventoryUI.renderUI = function()
         inventoryUI.opacityAdjuster.bgColor = imports.tocolor(255, 255, 255, 255*0.01*(inventoryUI.opacityAdjuster.range[1] + ((inventoryUI.opacityAdjuster.range[2] - inventoryUI.opacityAdjuster.range[1])*inventoryUI.opacityAdjuster.percent*0.01)))
     end
     imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], inventoryUI.bgTexture, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
-    imports.beautify.native.drawText(inventoryUI.clientInventory.name, inventory_startX, inventory_startY - inventoryUI.titlebar.height, inventory_startX + inventory_width, inventory_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
+    imports.beautify.native.drawText(inventoryUI.buffer[localPlayer].name, inventory_startX, inventory_startY - inventoryUI.titlebar.height, inventory_startX + inventory_width, inventory_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
     for i = 1, #inventoryUI.clientInventory.equipment, 1 do
         local j = inventoryUI.clientInventory.equipment[i]
         imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font, "center", "center", true, false, false)
@@ -288,7 +288,8 @@ inventoryUI.toggleUI = function(state)
         if inventoryUI.state then return false end
         --TODO: ENABLE LATER
         --if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then inventoryUI.toggleUI(false) return false end
-        inventoryUI.clientInventory.name = imports.string.upper(imports.string.spaceChars(imports.getPlayerName(localPlayer).."'s Inventory"))
+        inventoryUI.createBuffer(localPlayer, imports.getPlayerName(localPlayer).."'s Inventory")
+        --inventoryUI.createBuffer(localPlayer)
         inventoryUI.opacityAdjuster.element = imports.beautify.slider.create(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, "vertical", nil, false)
         inventoryUI.opacityAdjuster.percent = inventoryUI.opacityAdjuster.percent or 100
         imports.beautify.slider.setPercent(inventoryUI.opacityAdjuster.element, inventoryUI.opacityAdjuster.percent)
