@@ -39,6 +39,7 @@ local inventory_margin = 4
 local inventory_offsetX, inventory_offsetY = CInventory.fetchSlotDimensions(2, 6)
 inventory_offsetY = inventory_offsetY + FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height + inventory_margin
 local inventoryUI = {
+    buffer = {},
     margin = inventory_margin,
     titlebar = {
         height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.height,
@@ -433,7 +434,7 @@ function displayInventoryUI()
     end
 
     --Draws ItemBoxes
-    for i, j in pairs(itemBoxesCache) do
+    for i, j in pairs(inventoryUI.buffer) do
         if i and isElement(i) and j then
             local maxSlots = getElementMaxSlots(i)
             local usedSlots = getElementUsedSlots(i)
@@ -920,8 +921,8 @@ function displayInventoryUI()
                     local slotWidth, slotHeight = horizontalSlotsToOccupy*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((horizontalSlotsToOccupy - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding), verticalSlotsToOccupy*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((verticalSlotsToOccupy - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)
                     local releaseIndex = inventoryUI.attachedItem.prevSlotIndex
                     inventoryUI.attachedItem.prevSlotIndex = isItemAvailableForOrdering.slotIndex
-                    inventoryUI.attachedItem.prevPosX = itemBoxesCache[localPlayer].gui.startX + inventoryUI.gui.itemBox.templates[1].contentWrapper.startX + isItemAvailableForOrdering.offsetX + ((slotWidth - iconWidth)/2)
-                    inventoryUI.attachedItem.prevPosY = itemBoxesCache[localPlayer].gui.startY + inventoryUI.gui.itemBox.templates[1].contentWrapper.startY + isItemAvailableForOrdering.offsetY + ((slotHeight - iconHeight)/2)
+                    inventoryUI.attachedItem.prevPosX = inventoryUI.buffer[localPlayer].gui.startX + inventoryUI.gui.itemBox.templates[1].contentWrapper.startX + isItemAvailableForOrdering.offsetX + ((slotWidth - iconWidth)/2)
+                    inventoryUI.attachedItem.prevPosY = inventoryUI.buffer[localPlayer].gui.startY + inventoryUI.gui.itemBox.templates[1].contentWrapper.startY + isItemAvailableForOrdering.offsetY + ((slotHeight - iconHeight)/2)
                     inventoryUI.attachedItem.releaseType = "ordering"
                     inventoryUI.attachedItem.releaseIndex = releaseIndex
                     if inventoryUI.attachedItem.itemBox == localPlayer then
@@ -934,25 +935,25 @@ function displayInventoryUI()
                     triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                 elseif isItemAvailableForDropping then
                     local totalLootItems = 0
-                    for index, _ in pairs(itemBoxesCache[isItemAvailableForDropping.loot].lootItems) do
+                    for index, _ in pairs(inventoryUI.buffer[isItemAvailableForDropping.loot].lootItems) do
                         totalLootItems = totalLootItems + 1
                     end
-                    local template = inventoryUI.gui.itemBox.templates[(itemBoxesCache[isItemAvailableForDropping.loot].gui.templateIndex)]
+                    local template = inventoryUI.gui.itemBox.templates[(inventoryUI.buffer[isItemAvailableForDropping.loot].gui.templateIndex)]
                     local totalContentHeight = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*totalLootItems)
                     local exceededContentHeight =  totalContentHeight - template.contentWrapper.height
                     local slot_offsetY = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*(isItemAvailableForDropping.slotIndex - 1))
                     local slotWidth, slotHeight = 0, template.contentWrapper.itemSlot.iconSlot.height
                     slotWidth = (originalWidth / originalHeight)*slotHeight
                     if exceededContentHeight > 0 then
-                        slot_offsetY = slot_offsetY - (exceededContentHeight*itemBoxesCache[isItemAvailableForDropping.loot].gui.scroller.percent*0.01)
+                        slot_offsetY = slot_offsetY - (exceededContentHeight*inventoryUI.buffer[isItemAvailableForDropping.loot].gui.scroller.percent*0.01)
                         if slot_offsetY < 0 then
-                            local finalScrollPercent = itemBoxesCache[isItemAvailableForDropping.loot].gui.scroller.percent + (slot_offsetY/exceededContentHeight)*100
+                            local finalScrollPercent = inventoryUI.buffer[isItemAvailableForDropping.loot].gui.scroller.percent + (slot_offsetY/exceededContentHeight)*100
                             slot_offsetY = template.contentWrapper.itemSlot.paddingY
-                            inventoryUI.attachedItem.__scrollItemBox = {initial = itemBoxesCache[isItemAvailableForDropping.loot].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
+                            inventoryUI.attachedItem.__scrollItemBox = {initial = inventoryUI.buffer[isItemAvailableForDropping.loot].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
                         elseif (slot_offsetY + template.contentWrapper.itemSlot.height + template.contentWrapper.itemSlot.paddingY) > template.contentWrapper.height then
-                            local finalScrollPercent = itemBoxesCache[isItemAvailableForDropping.loot].gui.scroller.percent + (((slot_offsetY + template.contentWrapper.itemSlot.height + template.contentWrapper.itemSlot.paddingY) - template.contentWrapper.height)/exceededContentHeight)*100
+                            local finalScrollPercent = inventoryUI.buffer[isItemAvailableForDropping.loot].gui.scroller.percent + (((slot_offsetY + template.contentWrapper.itemSlot.height + template.contentWrapper.itemSlot.paddingY) - template.contentWrapper.height)/exceededContentHeight)*100
                             slot_offsetY = template.contentWrapper.height - (template.contentWrapper.itemSlot.height + template.contentWrapper.itemSlot.paddingY)
-                            inventoryUI.attachedItem.__scrollItemBox = {initial = itemBoxesCache[isItemAvailableForDropping.loot].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
+                            inventoryUI.attachedItem.__scrollItemBox = {initial = inventoryUI.buffer[isItemAvailableForDropping.loot].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
                         end
                     end
                     local releaseIndex = inventoryUI.attachedItem.prevSlotIndex
@@ -960,8 +961,8 @@ function displayInventoryUI()
                     inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight = inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height
                     inventoryUI.attachedItem.sizeAnimTickCounter = getTickCount()
                     inventoryUI.attachedItem.prevSlotIndex = isItemAvailableForDropping.slotIndex
-                    inventoryUI.attachedItem.prevPosX = itemBoxesCache[isItemAvailableForDropping.loot].gui.startX + template.contentWrapper.startX + template.contentWrapper.itemSlot.startX + template.contentWrapper.itemSlot.iconSlot.startX
-                    inventoryUI.attachedItem.prevPosY = itemBoxesCache[isItemAvailableForDropping.loot].gui.startY + template.contentWrapper.startY + slot_offsetY
+                    inventoryUI.attachedItem.prevPosX = inventoryUI.buffer[isItemAvailableForDropping.loot].gui.startX + template.contentWrapper.startX + template.contentWrapper.itemSlot.startX + template.contentWrapper.itemSlot.iconSlot.startX
+                    inventoryUI.attachedItem.prevPosY = inventoryUI.buffer[isItemAvailableForDropping.loot].gui.startY + template.contentWrapper.startY + slot_offsetY
                     inventoryUI.attachedItem.releaseType = "dropping"
                     inventoryUI.attachedItem.releaseLoot = isItemAvailableForDropping.loot
                     inventoryUI.attachedItem.releaseIndex = releaseIndex
@@ -1026,37 +1027,37 @@ function displayInventoryUI()
                     end
                     triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                 else
-                    if inventoryUI.attachedItem.itemBox and isElement(inventoryUI.attachedItem.itemBox) and itemBoxesCache[inventoryUI.attachedItem.itemBox] then
+                    if inventoryUI.attachedItem.itemBox and isElement(inventoryUI.attachedItem.itemBox) and inventoryUI.buffer[inventoryUI.attachedItem.itemBox] then
                         if inventoryUI.attachedItem.itemBox == localPlayer then
                             local maxSlots = getElementMaxSlots(inventoryUI.attachedItem.itemBox)
                             local totalContentHeight = inventoryUI.gui.itemBox.templates[1].contentWrapper.padding + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding + (math.max(0, math.ceil(maxSlots/maximumInventoryRowSlots) - 1)*(inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)) + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding
                             local exceededContentHeight =  totalContentHeight - inventoryUI.gui.itemBox.templates[1].contentWrapper.height
                             if exceededContentHeight > 0 then
                                 local slot_row = math.ceil(inventoryUI.attachedItem.prevSlotIndex/maximumInventoryRowSlots)
-                                local slot_offsetY = inventoryUI.gui.itemBox.templates[1].contentWrapper.padding + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)) - (exceededContentHeight*itemBoxesCache[localPlayer].gui.scroller.percent*0.01)
-                                local slot_prevOffsetY = inventoryUI.attachedItem.prevPosY - itemBoxesCache[localPlayer].gui.startY - inventoryUI.gui.itemBox.templates[1].contentWrapper.startY
+                                local slot_offsetY = inventoryUI.gui.itemBox.templates[1].contentWrapper.padding + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)) - (exceededContentHeight*inventoryUI.buffer[localPlayer].gui.scroller.percent*0.01)
+                                local slot_prevOffsetY = inventoryUI.attachedItem.prevPosY - inventoryUI.buffer[localPlayer].gui.startY - inventoryUI.gui.itemBox.templates[1].contentWrapper.startY
                                 if (math.round(slot_offsetY, 2) ~= math.round(slot_prevOffsetY, 2)) then
-                                    local finalScrollPercent = itemBoxesCache[localPlayer].gui.scroller.percent + ((slot_offsetY - slot_prevOffsetY)/exceededContentHeight)*100
-                                    inventoryUI.attachedItem.__scrollItemBox = {initial = itemBoxesCache[localPlayer].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
+                                    local finalScrollPercent = inventoryUI.buffer[localPlayer].gui.scroller.percent + ((slot_offsetY - slot_prevOffsetY)/exceededContentHeight)*100
+                                    inventoryUI.attachedItem.__scrollItemBox = {initial = inventoryUI.buffer[localPlayer].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
                                 end
                             end
                         else
                             local totalLootItems = 0
-                            for index, _ in pairs(itemBoxesCache[inventoryUI.attachedItem.itemBox].lootItems) do
+                            for index, _ in pairs(inventoryUI.buffer[inventoryUI.attachedItem.itemBox].lootItems) do
                                 totalLootItems = totalLootItems + 1
                             end
-                            local template = inventoryUI.gui.itemBox.templates[(itemBoxesCache[inventoryUI.attachedItem.itemBox].gui.templateIndex)]
+                            local template = inventoryUI.gui.itemBox.templates[(inventoryUI.buffer[inventoryUI.attachedItem.itemBox].gui.templateIndex)]
                             local totalContentHeight = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*totalLootItems)
                             local exceededContentHeight =  totalContentHeight - template.contentWrapper.height
                             inventoryUI.attachedItem.__finalWidth, inventoryUI.attachedItem.__finalHeight = inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight
                             inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight = inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height
                             inventoryUI.attachedItem.sizeAnimTickCounter = getTickCount()
                             if exceededContentHeight > 0 then
-                                local slot_offsetY = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*(inventoryUI.attachedItem.prevSlotIndex - 1)) + template.contentWrapper.itemSlot.paddingY - (exceededContentHeight*itemBoxesCache[inventoryUI.attachedItem.itemBox].gui.scroller.percent*0.01)
-                                local slot_prevOffsetY = inventoryUI.attachedItem.prevPosY - itemBoxesCache[inventoryUI.attachedItem.itemBox].gui.startY - template.contentWrapper.startY
+                                local slot_offsetY = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*(inventoryUI.attachedItem.prevSlotIndex - 1)) + template.contentWrapper.itemSlot.paddingY - (exceededContentHeight*inventoryUI.buffer[inventoryUI.attachedItem.itemBox].gui.scroller.percent*0.01)
+                                local slot_prevOffsetY = inventoryUI.attachedItem.prevPosY - inventoryUI.buffer[inventoryUI.attachedItem.itemBox].gui.startY - template.contentWrapper.startY
                                 if (math.round(slot_offsetY, 2) ~= math.round(slot_prevOffsetY, 2)) then
-                                    local finalScrollPercent = itemBoxesCache[inventoryUI.attachedItem.itemBox].gui.scroller.percent + ((slot_offsetY - slot_prevOffsetY)/exceededContentHeight)*100
-                                    inventoryUI.attachedItem.__scrollItemBox = {initial = itemBoxesCache[inventoryUI.attachedItem.itemBox].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
+                                    local finalScrollPercent = inventoryUI.buffer[inventoryUI.attachedItem.itemBox].gui.scroller.percent + ((slot_offsetY - slot_prevOffsetY)/exceededContentHeight)*100
+                                    inventoryUI.attachedItem.__scrollItemBox = {initial = inventoryUI.buffer[inventoryUI.attachedItem.itemBox].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
                                 end
                             end
                         end
@@ -1073,7 +1074,7 @@ function displayInventoryUI()
             if inventoryUI.attachedItem.animTickCounter then
                 local icon_offsetX, icon_offsetY = interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevPosX, inventoryUI.attachedItem.prevPosY, 0, getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.attachedItemAnimDuration), "OutBounce")
                 if inventoryUI.attachedItem.__scrollItemBox then
-                    itemBoxesCache[(inventoryUI.attachedItem.releaseLoot or inventoryUI.attachedItem.itemBox)].gui.scroller.percent = interpolateBetween(inventoryUI.attachedItem.__scrollItemBox.initial, 0, 0, inventoryUI.attachedItem.__scrollItemBox.final, 0, 0, getInterpolationProgress(inventoryUI.attachedItem.__scrollItemBox.tickCounter, inventoryUI.attachedItemAnimDuration), "OutBounce")
+                    inventoryUI.buffer[(inventoryUI.attachedItem.releaseLoot or inventoryUI.attachedItem.itemBox)].gui.scroller.percent = interpolateBetween(inventoryUI.attachedItem.__scrollItemBox.initial, 0, 0, inventoryUI.attachedItem.__scrollItemBox.final, 0, 0, getInterpolationProgress(inventoryUI.attachedItem.__scrollItemBox.tickCounter, inventoryUI.attachedItemAnimDuration), "OutBounce")
                 end
                 imports.beautify.native.drawImage(icon_offsetX, icon_offsetY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, iconTextures[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
                 if (math.round(icon_offsetX, 2) == math.round(inventoryUI.attachedItem.prevPosX, 2)) and (math.round(icon_offsetY, 2) == math.round(inventoryUI.attachedItem.prevPosY, 2)) then

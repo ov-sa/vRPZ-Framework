@@ -13,7 +13,7 @@
 --[[ Variables ]]--
 -------------------
 
-itemBoxesCache = {}
+inventoryUI.buffer = {}
 
 
 ------------------------------------
@@ -25,7 +25,7 @@ function createItemBox(startX, startY, templateIndex, inventoryParent, boxName)
     startX = tonumber(startX); startY = tonumber(startY); templateIndex = tonumber(templateIndex);
     if not startX or not startY or not templateIndex or not inventoryUI.gui.itemBox.templates[templateIndex] or not inventoryParent or not isElement(inventoryParent) then return false end
 
-    if not itemBoxesCache[inventoryParent] then
+    if not inventoryUI.buffer[inventoryParent] then
         if not boxName then
             local lootType = inventoryParent:getData("Loot:Type")
             if lootType then
@@ -35,7 +35,7 @@ function createItemBox(startX, startY, templateIndex, inventoryParent, boxName)
                 boxName = "??"
             end
         end
-        itemBoxesCache[inventoryParent] = {
+        inventoryUI.buffer[inventoryParent] = {
             gui = {
                 startX = startX,
                 startY = startY,
@@ -63,12 +63,12 @@ function destroyItemBox(inventoryParent)
 
     if not inventoryParent or not isElement(inventoryParent) then return false end
 
-    if itemBoxesCache[inventoryParent] and itemBoxesCache[inventoryParent].gui then
-        if itemBoxesCache[inventoryParent].gui.renderTarget and isElement(itemBoxesCache[inventoryParent].gui.renderTarget) then
-            itemBoxesCache[inventoryParent].gui.renderTarget:destroy()
+    if inventoryUI.buffer[inventoryParent] and inventoryUI.buffer[inventoryParent].gui then
+        if inventoryUI.buffer[inventoryParent].gui.renderTarget and isElement(inventoryUI.buffer[inventoryParent].gui.renderTarget) then
+            inventoryUI.buffer[inventoryParent].gui.renderTarget:destroy()
         end
     end
-    itemBoxesCache[inventoryParent] = nil
+    inventoryUI.buffer[inventoryParent] = nil
     return true
 
 end
@@ -80,10 +80,10 @@ end
 
 function clearItemBox(inventoryParent)
 
-    if not inventoryParent or not isElement(inventoryParent) or not itemBoxesCache[inventoryParent] then return false end
+    if not inventoryParent or not isElement(inventoryParent) or not inventoryUI.buffer[inventoryParent] then return false end
 
-    itemBoxesCache[inventoryParent].lootItems = {}
-    itemBoxesCache[inventoryParent].__itemNameSlots = nil
+    inventoryUI.buffer[inventoryParent].lootItems = {}
+    inventoryUI.buffer[inventoryParent].__itemNameSlots = nil
     return true
 
 end
@@ -95,7 +95,7 @@ end
 
 function updateItemBox(inventoryParent)
 
-    if not inventoryParent or not isElement(inventoryParent) or not itemBoxesCache[inventoryParent] then return false end
+    if not inventoryParent or not isElement(inventoryParent) or not inventoryUI.buffer[inventoryParent] then return false end
 
     clearItemBox(inventoryParent)
     for itemType, itemDatas in pairs(inventoryDatas) do
@@ -103,12 +103,12 @@ function updateItemBox(inventoryParent)
             for index, value in ipairs(itemDatas) do
                 local lootItemData = tonumber(inventoryParent:getData("Item:"..value.dataName)) or 0
                 if lootItemData > 0 then
-                    itemBoxesCache[inventoryParent].lootItems[value.dataName] = (tonumber(itemBoxesCache[inventoryParent].lootItems[value.dataName]) or 0) + lootItemData
+                    inventoryUI.buffer[inventoryParent].lootItems[value.dataName] = (tonumber(inventoryUI.buffer[inventoryParent].lootItems[value.dataName]) or 0) + lootItemData
                 end
             end
         end
     end
-    itemBoxesCache[inventoryParent].sortedCategories = nil
+    inventoryUI.buffer[inventoryParent].sortedCategories = nil
     return true
 
 end
