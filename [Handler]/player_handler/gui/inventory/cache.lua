@@ -171,7 +171,7 @@ inventoryUI.createBuffer = function(parent, name)
     inventoryUI.buffer[parent] = {
         name = imports.string.upper(imports.string.upper(imports.string.spaceChars(boxName or CLoot.fetchName(parent))),
         renderTarget = imports.beautify.native.createRenderTarget(rtDimensions[1], rtDimensions[2], true),
-        rtDimensions = rtDimensions
+        rtDimensions = rtDimensions,
         scroller = {percent = 0},
         inventory = {}
     }
