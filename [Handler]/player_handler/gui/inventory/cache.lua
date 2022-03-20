@@ -164,8 +164,7 @@ imports.addEventHandler("Client:onUpdateLanguage", root, inventoryUI.updateUILan
 inventoryUI.createBuffer = function(parent, name)
     if not parent or not imports.isElement(parent) then return false end
     if (parent ~= localPlayer) and CLoot.isLocked(parent) then
-        --TODO: ...UPDATE NOTIF.
-        imports.triggerEvent("onDisplayNotification", localPlayer, "Unfortunately, loot's inventory is locked!", {255, 80, 80, 255})
+        imports.triggerEvent("Client:onNotification", localPlayer, "Loot is locked..", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
         return false
     end
     if not inventoryUI.buffer[parent] then
