@@ -176,6 +176,19 @@ inventoryUI.createBGTexture = function(isRefresh)
 end
 inventoryUI.updateUILang = function() inventoryUI.isLangUpdated = true end
 imports.addEventHandler("Client:onUpdateLanguage", root, inventoryUI.updateUILang)
+inventoryUI.createBuffer = function(parent, name)
+    if not parent or not imports.isElement(parent) then return false end
+    if not inventoryUI.buffer[parent] then
+        inventoryUI.buffer[parent] = {
+            name = boxName or parent:getData("Loot:Name") or "??",
+            renderTarget = imports.beautify.native.createRenderTarget(rtDimensions[1], rtDimensions[2], true),
+            scroller = {percent = 0},
+            inventory = {}
+        }
+        inventoryUI.updateBuffer(parent)
+    end
+    return true
+end
 inventoryUI.destroyBuffer = function(parent)
     if not parent or not imports.isElement(parent) then return false end
     if inventoryUI.buffer[parent] and inventoryUI.buffer[parent] then

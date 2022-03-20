@@ -1,34 +1,3 @@
-------------------------------------
---[[ Function: Creates Item Box ]]--
-------------------------------------
-
-function createItemBox(parent, boxName)
-    if not parent or not imports.isElement(parent) then return false end
-    if not inventoryUI.buffer[parent] then
-        if not boxName then
-            local lootType = parent:getData("Loot:Type")
-            if lootType then
-                boxName = parent:getData("Loot:Name")
-            end
-            if not boxName then
-                boxName = "??"
-            end
-        end
-        inventoryUI.buffer[parent] = {
-            title = boxName,
-            templateIndex = templateIndex,
-            renderTarget = DxRenderTarget(inventoryUI.ui.itemBox.templates[templateIndex].contentWrapper.width, inventoryUI.ui.itemBox.templates[templateIndex].contentWrapper.height, true),
-            scroller = {
-                percent = 0
-            }
-            inventory = {}
-        }
-        updateItemBox(parent)
-    end
-    return true
-end
-
-
 
 -----------------------------------
 --[[ Function: Clears Item Box ]]--
@@ -49,7 +18,7 @@ end
 --[[ Function: Updates Item Box ]]--
 ------------------------------------
 
-function updateItemBox(parent)
+function inventoryUI.updateBuffer(parent)
 
     if not parent or not isElement(parent) or not inventoryUI.buffer[parent] then return false end
 
