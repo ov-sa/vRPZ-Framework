@@ -55,30 +55,14 @@ local inventoryUI = {
         startX = 0, startY = -inventory_offsetY,
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor)), dividerColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor)),
         equipment = {
-            {
-                identifier = "helmet", slots = {rows = 2, columns = 2}
-            },
-            {
-                identifier = "vest", slots = {rows = 2, columns = 2}
-            },
-            {
-                identifier = "upper", slots = {rows = 2, columns = 2}
-            },
-            {
-                identifier = "lower", slots = {rows = 2, columns = 2}
-            },
-            {
-                identifier = "shoes", slots = {rows = 2, columns = 2}
-            },
-            {
-                identifier = "primary", slots = {rows = 2, columns = 6}
-            },
-            {
-                identifier = "secondary", slots = {rows = 2, columns = 4}
-            },
-            {
-                identifier = "backpack", slots = {rows = 3, columns = 3}
-            }
+            {identifier = "helmet", slots = {rows = 2, columns = 2}},
+            {identifier = "vest", slots = {rows = 2, columns = 2}},
+            {identifier = "upper", slots = {rows = 2, columns = 2}},
+            {identifier = "lower", slots = {rows = 2, columns = 2}},
+            {identifier = "shoes", slots = {rows = 2, columns = 2}},
+            {identifier = "primary", slots = {rows = 2, columns = 6}},
+            {identifier = "secondary", slots = {rows = 2, columns = 4}},
+            {identifier = "backpack", slots = {rows = 3, columns = 3}}
         }
     },
     vicinityInventory = {
