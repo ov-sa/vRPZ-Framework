@@ -22,6 +22,5 @@ function inventoryUI.toggleUI(false)
     detachInventoryItem(true)
     destroyItemBox(localPlayer)
     destroyItemBox(inventoryUI.vicinity)
-    inventoryUI.vicinity = nil
 end
 ]]
