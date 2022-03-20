@@ -32,6 +32,10 @@ CPlayer.setLanguage = function(language)
     return true 
 end
 
+CPlayer.getLanguage = function()
+    return CPlayer.CLanguage or false
+end
+
 CPlayer.setChannel = function(channelIndex)
     channelIndex = imports.tonumber(channelIndex)
     if not CPlayer.isInitialized(localPlayer) or not channelIndex or not FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][channelIndex] then return false end

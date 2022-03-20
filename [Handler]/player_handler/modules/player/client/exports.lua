@@ -23,6 +23,7 @@ local imports = {
 -----------------
 
 function setPlayerLanguage(...) return CPlayer.setLanguage(...) end
+function getPlayerLanguage(...) return CPlayer.getLanguage(...) end
 
 
 ----------------
