@@ -88,7 +88,6 @@
     <export function="fetchInventoryWeaponAmmo" type="shared"/>
     <export function="fetchInventoryWeaponMag" type="shared"/>
     <export function="fetchInventorySlot" type="shared"/>
-    <export function="fetchInventoryLootName" type="shared"/>
     <export function="fetchInventory" type="server"/>
     <export function="ensureInventoryItems" type="server"/>
     <export function="createInventory" type="server"/>
@@ -102,6 +101,12 @@
     <export function="setInventoryItemData" type="server"/>
     <export function="getInventoryItemData" type="server"/>
     <export function="fetchInventorySlotDimensions" type="client"/>
+
+    <!-- Modules: Loot -->
+    <script src="modules/loot/shared/index.lua" type="shared"/>
+    <script src="modules/loot/shared/exports.lua" type="shared"/>
+    <export function="fetchLootType" type="shared"/>
+    <export function="fetchLootName" type="shared"/>
 
     <!-- GUIs -->
     <script src="gui/loading.lua" type="client"/>

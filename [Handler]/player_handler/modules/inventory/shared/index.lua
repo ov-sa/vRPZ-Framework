@@ -15,8 +15,6 @@
 local imports = {
     tonumber = tonumber,
     pairs = pairs,
-    isElement = isElement,
-    getElementData = getElementData,
     math = math
 }
 
@@ -83,11 +81,6 @@ CInventory = {
     fetchSlot = function(slot)
         if not slot then return false end
         return FRAMEWORK_CONFIGS["Inventory"]["Slots"][slot] or false
-    end,
-
-    fetchLootName = function(parent)
-        if not parent or not imports.isElement(parent) then return false end
-        return imports.getElementData(parent, "Loot:Name") or "??"
     end
 }
 
