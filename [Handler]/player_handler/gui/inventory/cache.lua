@@ -124,7 +124,7 @@ end
 
 inventoryUI.vicinityInventory.height = inventoryUI.clientInventory.height
 inventoryUI.vicinityInventory.startX, inventoryUI.vicinityInventory.startY = inventoryUI.clientInventory.equipment[1].startX - inventoryUI.vicinityInventory.width - inventoryUI.margin - (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*0.5), inventoryUI.clientInventory.startY
-inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY = inventoryUI.opacityAdjuster.startX + inventoryUI.clientInventory.startX + inventoryUI.clientInventory.width, inventoryUI.clientInventory.startY + inventoryUI.opacityAdjuster.startY - inventoryUI.margin
+inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY = inventoryUI.opacityAdjuster.startX + inventoryUI.clientInventory.startX + inventoryUI.clientInventory.width - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.opacityAdjuster.startY - inventoryUI.margin
 inventoryUI.opacityAdjuster.height = inventoryUI.clientInventory.equipment[8].startY - inventoryUI.opacityAdjuster.startY - inventoryUI.margin - inventoryUI.titlebar.slot.height
 inventoryUI.createBGTexture = function(isRefresh)
     if CLIENT_MTA_MINIMIZED then return false end
@@ -262,7 +262,7 @@ inventoryUI.toggleUI = function(state)
 
         --TODO: TEST
         inventoryUI.vicinityInventory.vicinityElement = true
-        inventoryUI.vicinityInventory.name = "Test Loot"
+        inventoryUI.vicinityInventory.name = imports.string.upper(imports.string.spaceChars("Test Loot"))
     else
         if not inventoryUI.state then return false end
         if inventoryUI.opacityAdjuster.element and imports.isElement(inventoryUI.opacityAdjuster.element) then
