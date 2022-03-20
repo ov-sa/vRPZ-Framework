@@ -12,7 +12,5 @@ function inventoryUI.toggleUI(true)
         end
     end
     triggerEvent("onClientInventorySound", localPlayer, "inventory_open")
-    triggerEvent("Client:onUpdateInventory", localPlayer)
-    inventoryUpdate()
 end
 ]]
