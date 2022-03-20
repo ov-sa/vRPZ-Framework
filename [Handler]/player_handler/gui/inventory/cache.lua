@@ -180,7 +180,7 @@ inventoryUI.createBuffer = function(parent, name)
     if not parent or not imports.isElement(parent) then return false end
     if not inventoryUI.buffer[parent] then
         inventoryUI.buffer[parent] = {
-            name = boxName or parent:getData("Loot:Name") or "??",
+            name = boxName or CInventory.fetchLootName(parent),
             renderTarget = imports.beautify.native.createRenderTarget(rtDimensions[1], rtDimensions[2], true),
             scroller = {percent = 0},
             inventory = {}
