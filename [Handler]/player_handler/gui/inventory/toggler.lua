@@ -39,6 +39,6 @@ function inventoryUI.toggleUI(false)
     destroyItemBox(localPlayer)
     destroyItemBox(inventoryUI.vicinity)
     inventoryUI.vicinity = nil
-    inventoryUI.attachedItemOnCursor = nil
+    inventoryUI.attachedItem = nil
 end
 ]]

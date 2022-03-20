@@ -41,8 +41,8 @@ function getPlayerOccupiedSlots(player)
                             isSlotToBeConsidered = false
                         else
                             if j.movementType == "equipment" then
-                                if inventoryUI.attachedItemOnCursor and (inventoryUI.attachedItemOnCursor.itemBox == localPlayer) and (inventoryUI.attachedItemOnCursor.prevSlotIndex == j.equipmentIndex) then                
-                                    if not inventoryUI.attachedItemOnCursor.animTickCounter then
+                                if inventoryUI.attachedItem and (inventoryUI.attachedItem.itemBox == localPlayer) and (inventoryUI.attachedItem.prevSlotIndex == j.equipmentIndex) then                
+                                    if not inventoryUI.attachedItem.animTickCounter then
                                         isSlotToBeConsidered = false
                                     end
                                 end
@@ -136,7 +136,7 @@ function isPlayerSlotAvailableForEquipping(player, item, slotIndex, viaClientInv
 
     if localPlayer then
         if inventoryUI.isUIEnabled() then
-            if inventoryUI.gui.equipment.grids[slotIndex] and not inventoryUI.slots.slots[slotIndex] and inventoryUI.gui.equipment.grids[slotIndex].slotCategory and inventoryUI.gui.equipment.grids[slotIndex].slotCategory == inventoryUI.attachedItemOnCursor.category then
+            if inventoryUI.gui.equipment.grids[slotIndex] and not inventoryUI.slots.slots[slotIndex] and inventoryUI.gui.equipment.grids[slotIndex].slotCategory and inventoryUI.gui.equipment.grids[slotIndex].slotCategory == inventoryUI.attachedItem.category then
                 if not viaClientInventory then
                     local totalSlots = getElementMaxSlots(player)
                     if totalSlots then
