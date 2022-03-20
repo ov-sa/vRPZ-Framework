@@ -288,8 +288,11 @@ inventoryUI.toggleUI = function(state)
         if inventoryUI.state then return false end
         --TODO: ENABLE LATER
         --if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then inventoryUI.toggleUI(false) return false end
+        --TODO: WIP...
+        inventoryUI.vicinityInventory.vicinityElement = true
+        inventoryUI.vicinityInventory.name = imports.string.upper(imports.string.spaceChars("Test Loot"))
         inventoryUI.createBuffer(localPlayer, imports.getPlayerName(localPlayer).."'s Inventory")
-        --inventoryUI.createBuffer(localPlayer)
+        inventoryUI.createBuffer(inventoryUI.vicinityInventory.vicinityElement)
         inventoryUI.opacityAdjuster.element = imports.beautify.slider.create(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, "vertical", nil, false)
         inventoryUI.opacityAdjuster.percent = inventoryUI.opacityAdjuster.percent or 100
         imports.beautify.slider.setPercent(inventoryUI.opacityAdjuster.element, inventoryUI.opacityAdjuster.percent)
@@ -300,10 +303,6 @@ inventoryUI.toggleUI = function(state)
             renderType = "preRender"
         })
         imports.beautify.setUIVisible(inventoryUI.opacityAdjuster.element, true)
-
-        --TODO: TEST
-        inventoryUI.vicinityInventory.vicinityElement = true
-        inventoryUI.vicinityInventory.name = imports.string.upper(imports.string.spaceChars("Test Loot"))
     else
         if not inventoryUI.state then return false end
         if inventoryUI.opacityAdjuster.element and imports.isElement(inventoryUI.opacityAdjuster.element) then
