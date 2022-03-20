@@ -8,9 +8,9 @@
 * **ov | IAN (Developer)**
 * **ov | Neor (Developer)**
 * **ov | Skann (Modeler)**
-* **ov | Mazvis (Contributor)**
-
 
 ## ━ Contributors
 
+* **ov | Mazvis (Contributor)**
+* **ov | DREW (Contributor)**
 * **FlyingFork (Developer)**
