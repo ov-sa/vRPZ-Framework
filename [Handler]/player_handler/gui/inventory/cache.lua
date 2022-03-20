@@ -226,7 +226,11 @@ end)
 ------------------------------
 
 inventoryUI.renderUI = function()
+    --TODO: ENABLE LATER.
+    --if not inventoryUI.state or CPlayer.isInitialized(localPlayer) then return false end
     if inventoryUI.isLangUpdated or not inventoryUI.bgTexture then inventoryUI.createBGTexture(inventoryUI.isLangUpdated) end
+
+    local isInventoryEnabled = inventoryUI.isUIEnabled()
     local inventory_startX, inventory_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
     local inventory_width, inventory_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
     inventoryUI.opacityAdjuster.percent = imports.beautify.slider.getPercent(inventoryUI.opacityAdjuster.element)
@@ -341,9 +345,6 @@ function displayInventoryUI()
 
     if not isPlayerInitialized(localPlayer) or getPlayerHealth(localPlayer) <= 0 then return false end
 
-    local isLMBClicked = false
-    local isRMBClicked = false
-    local isLMBDoubleClicked = false
     local isInventoryEnabled = inventoryUI.isUIEnabled()
     local isItemAvailableForOrdering = false
     local isItemAvailableForDropping = false
@@ -353,36 +354,6 @@ function displayInventoryUI()
     local playerMaxSlots = getElementMaxSlots(localPlayer)
     local playerUsedSlots = getElementUsedSlots(localPlayer)
     local equipmentInformationColor = inventoryUI.gui.equipment.description.fontColor
-    if not GuiElement.isMTAWindowActive() then
-        if not prevLMBClickState then
-            if getKeyState("mouse1") and not inventoryUI.attachedItem then
-                isLMBClicked = true
-                prevLMBClickState = true
-                if prevLMBDoubleClickTick then
-                    if (getTickCount() - prevLMBDoubleClickTick) <= 200 then
-                        isLMBDoubleClicked = true
-                    end
-                    prevLMBDoubleClickTick = false
-                else
-                    prevLMBDoubleClickTick = getTickCount()
-                end
-            end
-        else
-            if not getKeyState("mouse1") then
-                prevLMBClickState = false
-            end
-        end
-        if not prevRMBClickState then
-            if getKeyState("mouse2") then
-                isRMBClicked = true
-                prevRMBClickState = true
-            end
-        else
-            if not getKeyState("mouse2") then
-                prevRMBClickState = false
-            end
-        end
-    end
 
     --Draws Equipment
     dxSetRenderTarget()
