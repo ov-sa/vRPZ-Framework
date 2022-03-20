@@ -319,7 +319,7 @@ imports.addEventHandler("onClientPlayerWasted", localPlayer, function() inventor
 --[[
 local iconTextures = {}
 local iconDimensions = {}
-local sortedCategories = {
+local sortedItems = {
     "primary_weapon",
     "secondary_weapon",
     "Ammo",
@@ -442,19 +442,19 @@ function displayInventoryUI()
             local sortedItems = {}
             local template = inventoryUI.gui.itemBox.templates[j.gui.templateIndex]
             if j.gui.templateIndex == 1 then
-                if not j.sortedCategories then
-                    j.sortedCategories = {}
+                if not j.sortedItems then
+                    j.sortedItems = {}
                     for k, v in pairs(inventoryDatas) do
                         for key, value in ipairs(v) do
                             if j.inventory[value.dataName] then
                                 for x = 1, j.inventory[value.dataName], 1 do
-                                    table.insert(j.sortedCategories, {item = value.dataName, itemValue = 1})
+                                    table.insert(j.sortedItems, {item = value.dataName, itemValue = 1})
                                 end
                             end
                         end
                     end
                 end
-                sortedItems = j.sortedCategories
+                sortedItems = j.sortedItems
                 imports.beautify.native.drawImage(j.gui.startX - template.borderSize, j.gui.startY - template.borderSize, template.height/10 + template.borderSize, template.height/10 + template.borderSize, inventoryUI.gui.equipment.slotTopLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                 imports.beautify.native.drawImage(j.gui.startX + template.width - template.height/10, j.gui.startY - template.borderSize, template.height/10 + template.borderSize, template.height/10 + template.borderSize, inventoryUI.gui.equipment.slotTopRightCurvedEdgeBGPath, 0, 0, 0, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                 imports.beautify.native.drawImage(j.gui.startX - template.borderSize, j.gui.startY + template.height - template.height/10, template.height/10 + template.borderSize, template.height/10 + template.borderSize, inventoryUI.gui.equipment.slotBottomLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
@@ -689,20 +689,20 @@ function displayInventoryUI()
                     end
                 end
             else
-                if not j.sortedCategories then
-                    j.sortedCategories = {}
-                    for k, v in ipairs(sortedCategories) do
+                if not j.sortedItems then
+                    j.sortedItems = {}
+                    for k, v in ipairs(sortedItems) do
                         if inventoryDatas[v] then
                             for key, value in ipairs(inventoryDatas[v]) do
                                 if j.inventory[value.dataName] then
-                                    table.insert(j.sortedCategories, {item = value.dataName, itemValue = j.inventory[value.dataName]})
+                                    table.insert(j.sortedItems, {item = value.dataName, itemValue = j.inventory[value.dataName]})
                                 end
                             end
                         end
                     end
                     for k, v in pairs(inventoryDatas) do
                         local isSortedCategory = false
-                        for m, n in ipairs(sortedCategories) do
+                        for m, n in ipairs(sortedItems) do
                             if k == n then
                                 isSortedCategory = true
                                 break
@@ -711,13 +711,13 @@ function displayInventoryUI()
                         if not isSortedCategory then
                             for key, value in ipairs(v) do
                                 if j.inventory[value.dataName] then
-                                    table.insert(j.sortedCategories, {item = value.dataName, itemValue = j.inventory[value.dataName]})
+                                    table.insert(j.sortedItems, {item = value.dataName, itemValue = j.inventory[value.dataName]})
                                 end
                             end
                         end
                     end
                 end
-                sortedItems = j.sortedCategories
+                sortedItems = j.sortedItems
                 imports.beautify.native.drawImage(j.gui.startX + template.width - inventoryUI.gui.equipment.titlebar.height, j.gui.startY - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.rightEdgePath, 0, 0, 0, tocolor(inventoryUI.gui.equipment.titlebar.bgColor[1], inventoryUI.gui.equipment.titlebar.bgColor[2], inventoryUI.gui.equipment.titlebar.bgColor[3], inventoryUI.gui.equipment.titlebar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                 dxDrawRectangle(j.gui.startX, j.gui.startY - inventoryUI.gui.equipment.titlebar.height, template.width - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, tocolor(inventoryUI.gui.equipment.titlebar.bgColor[1], inventoryUI.gui.equipment.titlebar.bgColor[2], inventoryUI.gui.equipment.titlebar.bgColor[3], inventoryUI.gui.equipment.titlebar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                 dxDrawBorderedText(inventoryUI.gui.equipment.titlebar.outlineWeight, inventoryUI.gui.equipment.titlebar.fontColor, string.upper(j.gui.identifier.."   |   "..usedSlots.."/"..maxSlots), j.gui.startX + inventoryUI.gui.equipment.titlebar.height, j.gui.startY - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.startX + template.width - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.startY, tocolor(inventoryUI.gui.equipment.titlebar.fontColor[1], inventoryUI.gui.equipment.titlebar.fontColor[2], inventoryUI.gui.equipment.titlebar.fontColor[3], inventoryUI.gui.equipment.titlebar.fontColor[4]*inventoryOpacityPercent), 1, inventoryUI.gui.equipment.titlebar.font, "left", "center", true, false, inventoryUI.gui.postGUI)
@@ -756,7 +756,7 @@ function displayInventoryUI()
                 dxSetRenderTarget(j.gui.bufferRT, true)
                 local totalContentHeight = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*(#sortedItems))
                 local exceededContentHeight =  totalContentHeight - template.contentWrapper.height
-                if not j.__itemNameSlots then j.__itemNameSlots = {} end
+                if not j.itemBuffer then j.itemBuffer = {} end
                 if not inventoryUI.isUpdated then
                     for k, v in pairs(inventoryUI.slots.slots) do
                         if tonumber(k) and v.loot and v.loot == i then
@@ -796,8 +796,8 @@ function displayInventoryUI()
                     local itemDetails, itemCategory = getItemDetails(v.item)
                     if itemDetails and itemCategory then
                         if iconTextures[itemDetails.iconPath] then
-                            if not j.__itemNameSlots[itemDetails.dataName] then
-                                j.__itemNameSlots[itemDetails.dataName] = {
+                            if not j.itemBuffer[itemDetails.dataName] then
+                                j.itemBuffer[itemDetails.dataName] = {
                                     hoverAnimPercent = 0,
                                     hoverAlphaPercent = 0,
                                     hoverStatus = "backward",
@@ -811,22 +811,22 @@ function displayInventoryUI()
                             local isSlotHovered = isMouseOnPosition(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height) and isMouseOnPosition(j.gui.startX + template.contentWrapper.startX + slot_offsetX, j.gui.startY + template.contentWrapper.startY + slot_offsetY, slotWidth, slotHeight) and (slot_offsetY >= 0) and ((slot_offsetY + slotHeight) <= template.contentWrapper.height) and not inventoryUI.attachedItem and isInventoryEnabled
                             if isSlotHovered then
                                 equipmentInformation = itemDetails.itemName..":\n"..itemDetails.description
-                                if j.__itemNameSlots[itemDetails.dataName].hoverStatus ~= "forward" then
-                                    j.__itemNameSlots[itemDetails.dataName].hoverStatus = "forward"
-                                    j.__itemNameSlots[itemDetails.dataName].hoverAnimTickCounter = getTickCount()
+                                if j.itemBuffer[itemDetails.dataName].hoverStatus ~= "forward" then
+                                    j.itemBuffer[itemDetails.dataName].hoverStatus = "forward"
+                                    j.itemBuffer[itemDetails.dataName].hoverAnimTickCounter = getTickCount()
                                 end
                             else
-                                if j.__itemNameSlots[itemDetails.dataName].hoverStatus ~= "backward" then
-                                    j.__itemNameSlots[itemDetails.dataName].hoverStatus = "backward"
-                                    j.__itemNameSlots[itemDetails.dataName].hoverAnimTickCounter = getTickCount()
+                                if j.itemBuffer[itemDetails.dataName].hoverStatus ~= "backward" then
+                                    j.itemBuffer[itemDetails.dataName].hoverStatus = "backward"
+                                    j.itemBuffer[itemDetails.dataName].hoverAnimTickCounter = getTickCount()
                                 end
                             end
-                            if j.__itemNameSlots[itemDetails.dataName].hoverStatus == "forward" then
-                                j.__itemNameSlots[itemDetails.dataName].hoverAnimPercent = interpolateBetween(j.__itemNameSlots[itemDetails.dataName].hoverAnimPercent, 0, 0, 1, 0, 0, getInterpolationProgress(j.__itemNameSlots[itemDetails.dataName].hoverAnimTickCounter, template.contentWrapper.itemSlot.itemName.hoverAnimDuration), "OutBounce")
-                                j.__itemNameSlots[itemDetails.dataName].hoverAlphaPercent = interpolateBetween(j.__itemNameSlots[itemDetails.dataName].hoverAlphaPercent, 0, 0, 1, 0, 0, getInterpolationProgress(j.__itemNameSlots[itemDetails.dataName].hoverAnimTickCounter, template.contentWrapper.itemSlot.itemName.hoverAnimDuration*2), "OutBounce")
+                            if j.itemBuffer[itemDetails.dataName].hoverStatus == "forward" then
+                                j.itemBuffer[itemDetails.dataName].hoverAnimPercent = interpolateBetween(j.itemBuffer[itemDetails.dataName].hoverAnimPercent, 0, 0, 1, 0, 0, getInterpolationProgress(j.itemBuffer[itemDetails.dataName].hoverAnimTickCounter, template.contentWrapper.itemSlot.itemName.hoverAnimDuration), "OutBounce")
+                                j.itemBuffer[itemDetails.dataName].hoverAlphaPercent = interpolateBetween(j.itemBuffer[itemDetails.dataName].hoverAlphaPercent, 0, 0, 1, 0, 0, getInterpolationProgress(j.itemBuffer[itemDetails.dataName].hoverAnimTickCounter, template.contentWrapper.itemSlot.itemName.hoverAnimDuration*2), "OutBounce")
                             else
-                                j.__itemNameSlots[itemDetails.dataName].hoverAnimPercent = interpolateBetween(j.__itemNameSlots[itemDetails.dataName].hoverAnimPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.__itemNameSlots[itemDetails.dataName].hoverAnimTickCounter, template.contentWrapper.itemSlot.itemName.hoverAnimDuration), "OutBounce")
-                                j.__itemNameSlots[itemDetails.dataName].hoverAlphaPercent = interpolateBetween(j.__itemNameSlots[itemDetails.dataName].hoverAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.__itemNameSlots[itemDetails.dataName].hoverAnimTickCounter, template.contentWrapper.itemSlot.itemName.hoverAnimDuration*0.5), "OutBounce")
+                                j.itemBuffer[itemDetails.dataName].hoverAnimPercent = interpolateBetween(j.itemBuffer[itemDetails.dataName].hoverAnimPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.itemBuffer[itemDetails.dataName].hoverAnimTickCounter, template.contentWrapper.itemSlot.itemName.hoverAnimDuration), "OutBounce")
+                                j.itemBuffer[itemDetails.dataName].hoverAlphaPercent = interpolateBetween(j.itemBuffer[itemDetails.dataName].hoverAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.itemBuffer[itemDetails.dataName].hoverAnimTickCounter, template.contentWrapper.itemSlot.itemName.hoverAnimDuration*0.5), "OutBounce")
                             end
                             local lootItemValue = v.itemValue
                             if inventoryUI.attachedItem then
@@ -844,8 +844,8 @@ function displayInventoryUI()
                                 imports.beautify.native.drawImage(iconStartX, iconStartY, iconWidth, iconHeight, iconTextures[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
                                 dxDrawText(tostring(lootItemValue), slot_offsetX, slot_offsetY, slot_offsetX + slotWidth - template.contentWrapper.itemSlot.itemCounter.paddingX, slot_offsetY + slotHeight - template.contentWrapper.itemSlot.itemCounter.paddingY, tocolor(unpack(template.contentWrapper.itemSlot.itemCounter.fontColor)), 1, template.contentWrapper.itemSlot.itemCounter.font, "right", "bottom", true, false, false)
                             end
-                            dxDrawImageSection(slot_offsetX, slot_offsetY, slotWidth, slotHeight, 0, 0, slotWidth*j.__itemNameSlots[itemDetails.dataName].hoverAnimPercent, slotHeight, template.contentWrapper.itemSlot.itemName.bgImage, 0, 0, 0, tocolor(255, 255, 255, 255), false)
-                            dxDrawText(string.upper(itemDetails.itemName), slot_offsetX, slot_offsetY, slot_offsetX + slotWidth - template.contentWrapper.itemSlot.itemName.paddingX, slot_offsetY + slotHeight, tocolor(template.contentWrapper.itemSlot.itemName.fontColor[1], template.contentWrapper.itemSlot.itemName.fontColor[2], template.contentWrapper.itemSlot.itemName.fontColor[3], template.contentWrapper.itemSlot.itemName.fontColor[4]*j.__itemNameSlots[itemDetails.dataName].hoverAlphaPercent), 1, template.contentWrapper.itemSlot.itemName.font, "right", "center", true, false, false)
+                            dxDrawImageSection(slot_offsetX, slot_offsetY, slotWidth, slotHeight, 0, 0, slotWidth*j.itemBuffer[itemDetails.dataName].hoverAnimPercent, slotHeight, template.contentWrapper.itemSlot.itemName.bgImage, 0, 0, 0, tocolor(255, 255, 255, 255), false)
+                            dxDrawText(string.upper(itemDetails.itemName), slot_offsetX, slot_offsetY, slot_offsetX + slotWidth - template.contentWrapper.itemSlot.itemName.paddingX, slot_offsetY + slotHeight, tocolor(template.contentWrapper.itemSlot.itemName.fontColor[1], template.contentWrapper.itemSlot.itemName.fontColor[2], template.contentWrapper.itemSlot.itemName.fontColor[3], template.contentWrapper.itemSlot.itemName.fontColor[4]*j.itemBuffer[itemDetails.dataName].hoverAlphaPercent), 1, template.contentWrapper.itemSlot.itemName.font, "right", "center", true, false, false)
                             if isSlotHovered then
                                 if isLMBClicked then
                                     local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)

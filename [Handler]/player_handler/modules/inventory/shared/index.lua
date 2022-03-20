@@ -15,6 +15,8 @@
 local imports = {
     tonumber = tonumber,
     pairs = pairs,
+    isElement = isElement,
+    getElementData = getElementData,
     math = math
 }
 
@@ -81,6 +83,11 @@ CInventory = {
     fetchSlot = function(slot)
         if not slot then return false end
         return FRAMEWORK_CONFIGS["Inventory"]["Slots"][slot] or false
+    end,
+
+    fetchItemCount = function(parent, item)
+        if not parent or not item or not imports.isElement(parent) or not CInventory.CItems[item] then return false end
+        return imports.math.max(0, imports.tonumber(imports.getElementData(parent, "Item:"..item)) or 0)
     end
 }
 

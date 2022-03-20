@@ -1,41 +1,17 @@
 
------------------------------------
---[[ Function: Clears Item Box ]]--
------------------------------------
 
-function clearItemBox(parent)
-
-    if not parent or not isElement(parent) or not inventoryUI.buffer[parent] then return false end
-
+inventoryUI.updateBuffer = function(parent)
+    if not parent or not imports.isElement(parent) or not inventoryUI.buffer[parent] then return false end
     inventoryUI.buffer[parent].inventory = {}
-    inventoryUI.buffer[parent].__itemNameSlots = nil
-    return true
-
-end
-
-
-------------------------------------
---[[ Function: Updates Item Box ]]--
-------------------------------------
-
-function inventoryUI.updateBuffer(parent)
-
-    if not parent or not isElement(parent) or not inventoryUI.buffer[parent] then return false end
-
-    clearItemBox(parent)
-    for itemType, itemDatas in pairs(inventoryDatas) do
-        if itemDatas and type(itemDatas) == "table" then
-            for index, value in ipairs(itemDatas) do
-                local lootItemData = tonumber(parent:getData("Item:"..value.dataName)) or 0
-                if lootItemData > 0 then
-                    inventoryUI.buffer[parent].inventory[value.dataName] = (tonumber(inventoryUI.buffer[parent].inventory[value.dataName]) or 0) + lootItemData
-                end
-            end
+    inventoryUI.buffer[parent].itemBuffer = nil
+    for i, j in imports.pairs(CInventory.CItems) do
+        local itemCount = CInventory.fetchItemCount(parent, i)
+        if itemCount > 0 then
+            inventoryUI.buffer[parent].inventory[value.dataName] = itemCount
         end
     end
-    inventoryUI.buffer[parent].sortedCategories = nil
+    inventoryUI.buffer[parent].sortedItems = nil
     return true
-
 end
 
 
