@@ -222,20 +222,20 @@ end
 function isInventoryUIVisible() return inventoryUI.state end
 function isInventoryUIEnabled() return inventoryUI.isUIEnabled() end
 
-imports.addEvent("Client:onSyncInventorySlots", true)
-imports.addEventHandler("Client:onSyncInventorySlots", root, function(slots)
-    inventoryUI.slots = slots
-    inventoryUI.isUpdated, inventoryUI.isUpdateScheduled = true, false
-end)
-
 imports.addEvent("Client:onEnableInventoryUI", true)
 imports.addEventHandler("Client:onEnableInventoryUI", root, function(state, isForced)
     if isForced then loginUI.isForcedDisabled = not state end
     inventoryUI.isEnabled = state
 end)
 
-imports.addEvent("Client:onUpdateInventoryUI", true)
-imports.addEventHandler("Client:onUpdateInventoryUI", root, function()
+imports.addEvent("Client:onSyncInventorySlots", true)
+imports.addEventHandler("Client:onSyncInventorySlots", root, function(slots)
+    inventoryUI.slots = slots
+    inventoryUI.isUpdated, inventoryUI.isUpdateScheduled = true, false
+end)
+
+imports.addEvent("Client:onUpdateInventory", true)
+imports.addEventHandler("Client:onUpdateInventory", root, function()
     inventoryUI.detachItem(true)
     inventoryUI.updateBuffer(localPlayer)
     inventoryUI.updateBuffer(inventoryUI.vicinityInventory.element)
