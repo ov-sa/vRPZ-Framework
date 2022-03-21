@@ -115,7 +115,7 @@
     <script src="gui/loading.lua" type="client"/>
     <script src="gui/notification.lua" type="client"/>
     <script src="gui/login.lua" type="client"/>
-    <script src="gui/inventory/cache.lua" type="client"/>
+    <script src="gui/inventory.lua" type="client"/>
 
     <!-- Handlers -->
     <!--script src="handlers/hud/chatbox.lua" type="server"/-->

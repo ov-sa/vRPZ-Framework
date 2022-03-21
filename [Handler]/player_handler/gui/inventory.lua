@@ -1,11 +1,10 @@
 ----------------------------------------------------------------
 --[[ Resource: Player Handler
-     Script: handlers: inventory: gui: cache.lua
-     Server: -
-     Author: OvileAmriam
-     Developer: -
-     DOC: 18/12/2020 (OvileAmriam)
-     Desc: Inventory Cache Handler ]]--
+     Script: gui: inventory.lua
+     Author: vStudio
+     Developer(s): Mario, Tron, Aviril
+     DOC: 31/01/2022
+     Desc: Inventory UI Handler ]]--
 ----------------------------------------------------------------
 
 
