@@ -46,7 +46,7 @@ CInventory = {
 
     fetchItemWeight = function(item)
         local itemData = CInventory.fetchItem(item)
-        return (itemData and itemData.data and itemData.data.weight and imports.math.max(0, itemData.data.weight.horizontal*itemData.data.weight.vertical)) or false
+        return (itemData and itemData.data and itemData.data.weight and imports.math.max(0, itemData.data.weight.rows*itemData.data.weight.columns)) or false
     end,
 
     fetchItemObjectID = function(item)
