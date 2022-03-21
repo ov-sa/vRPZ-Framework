@@ -525,6 +525,7 @@ inventoryUI.renderUI = function(renderData)
                 ]]--
                 inventoryUI.detachItem()
             end
+            local isDetachAttachment = false
             local attachment_posX, attachment_posY = nil, nil
             inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height = imports.interpolateBetween(inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight, 0, inventoryUI.attachedItem.finalWidth or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1], inventoryUI.attachedItem.finalHeight or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2], 0, imports.getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.animDuration*0.25), "OutBack")
             if inventoryUI.attachedItem.isOnTransition then
@@ -557,7 +558,7 @@ inventoryUI.renderUI = function(renderData)
                         end
                     end
                     ]]
-                    inventoryUI.detachItem(true)
+                    isDetachAttachment = true
                 end
             else
                 local cursorX, cursorY = imports.getAbsoluteCursorPosition()
@@ -565,6 +566,7 @@ inventoryUI.renderUI = function(renderData)
                 attachment_posX, attachment_posY = inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY
             end
             imports.beautify.native.drawImage(attachment_posX, attachment_posY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, CInventory.CItems[(inventoryUI.attachedItem.item)].icon, 0, 0, 0, -1, false)
+            if isDetachAttachment then inventoryUI.detachItem(true) end
         end
         inventoryUI.isLangUpdated = nil
     end
