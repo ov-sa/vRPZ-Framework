@@ -266,7 +266,8 @@ inventoryUI.renderUI = function()
     --if not inventoryUI.state or CPlayer.isInitialized(localPlayer) then return false end
     if inventoryUI.isLangUpdated or not inventoryUI.bgTexture then inventoryUI.createBGTexture(inventoryUI.isLangUpdated) end
 
-    local isInventoryEnabled = inventoryUI.isUIEnabled()
+    --local isInventoryEnabled = inventoryUI.isUIEnabled() --TODO: ENABLE LATER
+    local isInventoryEnabled = true --TODO: REMOVE
     local inventory_startX, inventory_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
     local inventory_width, inventory_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
     inventoryUI.opacityAdjuster.percent = imports.beautify.slider.getPercent(inventoryUI.opacityAdjuster.element)
@@ -282,7 +283,7 @@ inventoryUI.renderUI = function()
         imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font, "center", "center", true, false, false)
     end
     if inventoryUI.vicinityInventory.element and inventoryUI.buffer[(inventoryUI.vicinityInventory.element)] then
-        local vicinity_bufferCache, vicinity_hoveredSlot = nil, nil
+        local vicinity_bufferCache, vicinity_isHovered, vicinity_isSlotHovered = nil, nil, nil
         local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
         local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
         imports.beautify.native.setRenderTarget(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, true)
@@ -311,17 +312,18 @@ inventoryUI.renderUI = function()
             end
         end
         vicinity_bufferCache = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
+        vicinity_isHovered = imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height) and isInventoryEnabled
         for i = 1, #vicinity_bufferCache, 1 do
             local j = vicinity_bufferCache[i]
             local slot_offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1)
-            vicinity_hoveredSlot = vicinity_hoveredSlot or (imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + slot_offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and isInventoryEnabled and i)
+            vicinity_isSlotHovered = vicinity_isSlotHovered or (imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + slot_offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and vicinity_isHovered and i) or false
             if not j.isPositioned then
                 local native_width, native_height = CInventory.fetchSlotDimensions(CInventory.CItems[(j.item)].data.weight.rows, CInventory.CItems[(j.item)].data.weight.columns)
                 j.width, j.height = (native_width/native_height)*inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotSize
                 j.startX, j.startY = inventoryUI.vicinityInventory.width - j.width, 0
                 j.isPositioned = true
             end
-            imports.beautify.native.drawRectangle(0, slot_offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotColor, false)
+            imports.beautify.native.drawRectangle(0, slot_offsetY, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotColor, false)
             imports.beautify.native.drawImage(j.startX, slot_offsetY + j.startY, j.width, j.height, CInventory.CItems[(j.item)].iconTexture, 0, 0, 0, -1, false)
         end
         imports.beautify.native.setRenderTarget()
