@@ -172,7 +172,6 @@ inventoryUI.createBuffer = function(parent, name)
         imports.triggerEvent("Client:onNotification", localPlayer, "Loot is locked..", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
         return false
     end
-    name = "Test Loot" --TODO: REMOVE LATER
     inventoryUI.buffer[parent] = {
         name = imports.string.upper(imports.string.upper(imports.string.spaceChars(name or CLoot.fetchName(parent)))),
         bufferRT = imports.beautify.native.createRenderTarget(((parent == localPlayer) and inventoryUI.clientInventory.width) or inventoryUI.vicinityInventory.width, ((parent == localPlayer) and inventoryUI.clientInventory.height) or inventoryUI.vicinityInventory.height, true),
@@ -199,7 +198,7 @@ inventoryUI.updateBuffer = function(parent)
     for i, j in imports.pairs(CInventory.CItems) do
         local itemCount = CInventory.fetchItemCount(parent, i)
         if itemCount > 0 then
-            inventoryUI.buffer[parent].inventory[value.dataName] = itemCount
+            inventoryUI.buffer[parent].inventory[i] = itemCount
         end
     end
     return true
@@ -286,6 +285,9 @@ end
 ----------------------------------------
 
 local testPed = createPed(0, 0, 0, 0); setElementAlpha(testPed, 0) --TODO: REMOVE IT LATER
+setElementData(testPed, "Loot:Type", "something")
+setElementData(testPed, "Loot:Name", "Test Name")
+setElementData(testPed, "Item:awm", 1)
 inventoryUI.toggleUI = function(state)
     if (((state ~= true) and (state ~= false)) or (state == inventoryUI.state)) then return false end
 
