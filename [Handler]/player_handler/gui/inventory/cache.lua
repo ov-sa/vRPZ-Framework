@@ -286,9 +286,11 @@ inventoryUI.renderUI = function()
         imports.beautify.native.drawImage(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, 0, 0, 0, -1, false)
         if not inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache then
             vicinity_bufferCache = {}
+            local __orderedPriority = {}
             for i = 1, #orderedPriority, 1 do
                 local j = orderedPriority[i]
                 if FRAMEWORK_CONFIGS["Inventory"]["Items"][j] then
+                    __orderedPriority[j] = true
                     for k, v in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"][j]) do
                         if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
                             imports.table.insert(vicinity_bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
@@ -296,33 +298,15 @@ inventoryUI.renderUI = function()
                     end
                 end
             end
-            --[[
-            for k, v in ipairs(bufferCache) do
-                if inventoryDatas[v] then
-                    for key, value in ipairs(inventoryDatas[v]) do
-                        if j.inventory[value.dataName] then
-                            table.insert(vicinity_bufferCache, {item = value.dataName, amount = j.inventory[value.dataName]})
+            for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
+                if not __orderedPriority[i] then
+                    for k, v in imports.pairs(j) do
+                        if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
+                            imports.table.insert(vicinity_bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
                         end
                     end
                 end
             end
-            for k, v in pairs(inventoryDatas) do
-                local isSortedCategory = false
-                for m, n in ipairs(bufferCache) do
-                    if k == n then
-                        isSortedCategory = true
-                        break
-                    end
-                end
-                if not isSortedCategory then
-                    for key, value in ipairs(v) do
-                        if j.inventory[value.dataName] then
-                            table.insert(vicinity_bufferCache, {item = value.dataName, itemValue = j.inventory[value.dataName]})
-                        end
-                    end
-                end
-            end
-            ]]
         end
         vicinity_bufferCache = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
         --[[
