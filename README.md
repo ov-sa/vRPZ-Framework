@@ -30,6 +30,8 @@
 * **ov | Neor (Developer)**
 * **ov | Skann (Modeler)**
 * **ov | Mazvis (Contributor)**
+* **ov | DREW (Contributor)**
+* **FlyingFork (Developer)**
 * [Read More](credits.md)
 
 ## ━ Installation
