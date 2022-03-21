@@ -30,6 +30,7 @@ local imports = {
     isTimer = isTimer,
     setTimer = setTimer,
     killTimer = killTimer,
+    isMouseClicked = isMouseClicked,
     isMouseOnPosition = isMouseOnPosition,
     interpolateBetween = interpolateBetween,
     getInterpolationProgress = getInterpolationProgress,
@@ -50,10 +51,7 @@ local imports = {
 
 local loginUI = nil
 loginUI = {
-    cache = {
-        keys = {},
-        timers = {}
-    },
+    cache = {keys = {}, timers = {}},
     bgTexture = imports.beautify.native.createTexture(FRAMEWORK_CONFIGS["UI"]["Login"].bgPath, "dxt5", true, "clamp"),
     phases = {
         [1] = {
@@ -522,11 +520,11 @@ loginUI.renderUI = function(renderData)
     if not loginUI.phase then return false end
 
     if renderData.renderType == "input" then
-        loginUI.cache.keys.mouse = isMouseClicked()
+        loginUI.cache.keys.mouse = imports.isMouseClicked()
         local weatherData = FRAMEWORK_CONFIGS["UI"]["Login"].weathers[(loginUI.phase)] or FRAMEWORK_CONFIGS["UI"]["Login"].weathers[1]
         imports.triggerEvent("Player:onSyncWeather", localPlayer, weatherData.weather, weatherData.time)
     elseif renderData.renderType == "render" then
-        local isUIEnabled = (loginUI.isEnabled and not loginUI.isForcedDisabled)
+        local isUIEnabled = loginUI.isEnabled and not loginUI.isForcedDisabled
         local isLMBClicked = (loginUI.cache.keys.mouse == "mouse1") and isUIEnabled
         local currentRatio = (CLIENT_MTA_RESOLUTION[1]/CLIENT_MTA_RESOLUTION[2])/(1366/768)
         local background_width, background_height = CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2]*currentRatio
