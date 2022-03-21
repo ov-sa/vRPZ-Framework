@@ -336,8 +336,8 @@ inventoryUI.renderUI = function(renderData)
             vicinity_isHovered = imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height) and isUIEnabled
             for i = 1, #vicinity_bufferCache, 1 do
                 local j = vicinity_bufferCache[i]
-                local slot_offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1)
-                vicinity_isSlotHovered = (vicinity_isHovered and not inventoryUI.attachedItem and (vicinity_isSlotHovered or (imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + slot_offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and i))) or false
+                j.offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1)
+                vicinity_isSlotHovered = (vicinity_isHovered and not inventoryUI.attachedItem and (vicinity_isSlotHovered or (imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + j.offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and i))) or false
                 if not j.isPositioned then
                     --TODO: IMAGE SIZE MUST BE FETCHED AND PRESAVED WHEN OPENING INVENTRY...
                     local native_width, native_height = CInventory.fetchSlotDimensions(CInventory.CItems[(j.item)].data.weight.rows, CInventory.CItems[(j.item)].data.weight.columns)
@@ -346,14 +346,14 @@ inventoryUI.renderUI = function(renderData)
                     j.isPositioned = true
                 end
                 --TODO: MUST BAKE THIS BY DEFAULT ON CLIENT SIDE ON RESOURCE START TO PREVENT DOUBLE DX CALL
-                imports.beautify.native.drawRectangle(0, slot_offsetY, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotColor, false)
-                imports.beautify.native.drawImage(j.startX, slot_offsetY + j.startY, j.width, j.height, CInventory.CItems[(j.item)].icon, 0, 0, 0, -1, false)
+                imports.beautify.native.drawRectangle(0, j.offsetY, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotColor, false)
+                imports.beautify.native.drawImage(j.startX, j.offsetY + j.startY, j.width, j.height, CInventory.CItems[(j.item)].icon, 0, 0, 0, -1, false)
             end
             if vicinity_isSlotHovered then
                 if isLMBClicked then
                     if not inventoryUI.attachedItem then
                         local cursorX, cursorY = imports.getAbsoluteCursorPosition()
-                        local slot_prevX, slot_prevY = vicinity_startX + inventoryUI.margin + vicinity_bufferCache[vicinity_isSlotHovered].startX, vicinity_startY + inventoryUI.margin + vicinity_bufferCache[vicinity_isSlotHovered].startY
+                        local slot_prevX, slot_prevY = vicinity_startX + inventoryUI.margin + vicinity_bufferCache[vicinity_isSlotHovered].startX, vicinity_startY + inventoryUI.margin + vicinity_bufferCache[vicinity_isSlotHovered].startY + vicinity_bufferCache[vicinity_isSlotHovered].offsetY
                         inventoryUI.attachItem(inventoryUI.vicinityInventory.element, vicinity_bufferCache[vicinity_isSlotHovered].item, vicinity_isSlotHovered, slot_prevX, slot_prevY, vicinity_bufferCache[vicinity_isSlotHovered].width, vicinity_bufferCache[vicinity_isSlotHovered].height, cursorX - slot_prevX, cursorY - slot_prevY)
                     end
                 end
