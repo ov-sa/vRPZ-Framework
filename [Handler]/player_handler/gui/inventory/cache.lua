@@ -41,6 +41,7 @@ local imports = {
 
 local inventory_margin = 4
 local inventory_offsetX, inventory_offsetY = CInventory.fetchSlotDimensions(2, 6)
+local vicinity_slotSize = inventory_offsetY
 inventory_offsetY = inventory_offsetY + FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height + inventory_margin
 local inventoryUI = {
     buffer = {},
@@ -72,6 +73,7 @@ local inventoryUI = {
     },
     vicinityInventory = {
         width = inventory_offsetX,
+        slotSize = vicinity_slotSize, slotColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor)),
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor))
     },
     opacityAdjuster = {
@@ -80,7 +82,7 @@ local inventoryUI = {
         range = {30, 100}
     }
 }
-inventory_margin, inventory_offsetX, inventory_offsetY = nil, nil, nil
+inventory_margin, inventory_offsetX, inventory_offsetY, vicinity_slotSize = nil, nil, nil, nil
 
 for i, j in imports.pairs(CInventory.CItems) do
     j.iconTexture = imports.beautify.native.createTexture("files/images/inventory/items/"..(j.slot).."/"..i..".png", "dxt5", true, "clamp")
@@ -308,10 +310,9 @@ inventoryUI.renderUI = function()
             end
         end
         vicinity_bufferCache = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
-        local barSize = 80
         for i = 1, #vicinity_bufferCache, 1 do
             local j = vicinity_bufferCache[i]
-            imports.beautify.native.drawRectangle(0, (barSize + inventoryUI.padding)*(i - 1), vicinity_width, barSize, -1, false)
+            imports.beautify.native.drawRectangle(0, (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1), vicinity_width, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotColor, false)
         end
         imports.beautify.native.setRenderTarget()
         imports.beautify.native.drawText(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].name, vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_startX + vicinity_width, vicinity_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
