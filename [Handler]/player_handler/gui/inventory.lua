@@ -339,9 +339,7 @@ inventoryUI.renderUI = function(renderData)
                 j.offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1)
                 vicinity_isSlotHovered = (vicinity_isHovered and not inventoryUI.attachedItem and (vicinity_isSlotHovered or (imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + j.offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and i))) or false
                 if not j.isPositioned then
-                    --TODO: IMAGE SIZE MUST BE FETCHED AND PRESAVED WHEN OPENING INVENTRY...
-                    local native_width, native_height = CInventory.fetchSlotDimensions(CInventory.CItems[(j.item)].data.weight.rows, CInventory.CItems[(j.item)].data.weight.columns)
-                    j.width, j.height = (native_width/native_height)*inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotSize
+                    j.width, j.height = (CInventory.CItems[(j.item)].dimensions[1]/CInventory.CItems[(j.item)].dimensions[2])*inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotSize
                     j.startX, j.startY = inventoryUI.vicinityInventory.width - j.width, 0
                     j.isPositioned = true
                 end
