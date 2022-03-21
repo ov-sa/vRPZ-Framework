@@ -13,8 +13,8 @@
 -----------------
 
 local imports = {
-    tonumber = tonumber,
     pairs = pairs,
+    tonumber = tonumber,
     isElement = isElement,
     getElementData = getElementData,
     math = math

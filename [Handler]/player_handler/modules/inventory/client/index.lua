@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
     tonumber = tonumber,
     beautify = beautify,
     math = math
