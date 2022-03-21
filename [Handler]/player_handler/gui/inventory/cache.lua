@@ -285,7 +285,7 @@ end
 --[[ Client: On Toggle Inventory UI ]]--
 ----------------------------------------
 
-local testPed = createPed(0, 0, 0, 0); setElementAlpha(test, 0) --TODO: REMOVE IT LATER
+local testPed = createPed(0, 0, 0, 0); setElementAlpha(testPed, 0) --TODO: REMOVE IT LATER
 inventoryUI.toggleUI = function(state)
     if (((state ~= true) and (state ~= false)) or (state == inventoryUI.state)) then return false end
 
