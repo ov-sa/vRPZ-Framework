@@ -312,7 +312,15 @@ inventoryUI.renderUI = function()
         vicinity_bufferCache = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
         for i = 1, #vicinity_bufferCache, 1 do
             local j = vicinity_bufferCache[i]
-            imports.beautify.native.drawRectangle(0, (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1), vicinity_width, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotColor, false)
+            local slot_offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1)
+            if not j.isPositioned then
+                --TODO: ...
+                j.startX, j.startY = 0, 0
+                j.width, j.height = vicinity_width, inventoryUI.vicinityInventory.slotSize
+                j.isPositioned = true
+            end
+            imports.beautify.native.drawRectangle(0, slot_offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotColor, false)
+            imports.beautify.native.drawImage(j.startX, slot_offsetY + j.startY, j.width, j.height, CInventory.CItems[(j.item)].iconTexture, 0, 0, 0, -1, false)
         end
         imports.beautify.native.setRenderTarget()
         imports.beautify.native.drawText(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].name, vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_startX + vicinity_width, vicinity_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
