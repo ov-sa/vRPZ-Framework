@@ -282,10 +282,9 @@ inventoryUI.renderUI = function()
         local vicinity_bufferCache = nil
         local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
         local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
-        imports.beautify.native.drawText(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].name, vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_startX + vicinity_width, vicinity_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
-        imports.beautify.native.drawImage(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, 0, 0, 0, -1, false)
+        imports.beautify.native.setRenderTarget(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, true)
         if not inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache then
-            vicinity_bufferCache = {}
+            inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache = {}
             local __orderedPriority = {}
             for i = 1, #orderedPriority, 1 do
                 local j = orderedPriority[i]
@@ -293,7 +292,7 @@ inventoryUI.renderUI = function()
                     __orderedPriority[j] = true
                     for k, v in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"][j]) do
                         if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
-                            imports.table.insert(vicinity_bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
+                            imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
                         end
                     end
                 end
@@ -302,13 +301,21 @@ inventoryUI.renderUI = function()
                 if not __orderedPriority[i] then
                     for k, v in imports.pairs(j) do
                         if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
-                            imports.table.insert(vicinity_bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
+                            imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
                         end
                     end
                 end
             end
         end
         vicinity_bufferCache = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
+        local barSize, barPadding = 80, 5
+        for i = 1, #vicinity_bufferCache, 1 do
+            local j = vicinity_bufferCache[i]
+            imports.beautify.native.drawRectangle(0, (barSize + barPadding)*(i - 1), vicinity_width, barSize, -1, false)
+        end
+        imports.beautify.native.setRenderTarget()
+        imports.beautify.native.drawText(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].name, vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_startX + vicinity_width, vicinity_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
+        imports.beautify.native.drawImage(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, 0, 0, 0, -1, false)
         --[[
         imports.beautify.native.drawImage(j.gui.startX + template.width - inventoryUI.gui.equipment.titlebar.height, j.gui.startY - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.rightEdgePath, 0, 0, 0, tocolor(inventoryUI.gui.equipment.titlebar.bgColor[1], inventoryUI.gui.equipment.titlebar.bgColor[2], inventoryUI.gui.equipment.titlebar.bgColor[3], inventoryUI.gui.equipment.titlebar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
         dxDrawRectangle(j.gui.startX, j.gui.startY - inventoryUI.gui.equipment.titlebar.height, template.width - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, tocolor(inventoryUI.gui.equipment.titlebar.bgColor[1], inventoryUI.gui.equipment.titlebar.bgColor[2], inventoryUI.gui.equipment.titlebar.bgColor[3], inventoryUI.gui.equipment.titlebar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
@@ -343,6 +350,8 @@ inventoryUI.renderUI = function()
             end
         end
         ]]
+    else
+        imports.beautify.native.setRenderTarget()
     end
     inventoryUI.isLangUpdated = nil
 end
