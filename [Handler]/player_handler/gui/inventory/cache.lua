@@ -26,6 +26,7 @@ local imports = {
     triggerEvent = triggerEvent,
     bindKey = bindKey,
     getPlayerName = getPlayerName,
+    isMouseOnPosition = isMouseOnPosition,
     showChat = showChat,
     showCursor = showCursor,
     beautify = beautify,
@@ -281,7 +282,7 @@ inventoryUI.renderUI = function()
         imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font, "center", "center", true, false, false)
     end
     if inventoryUI.vicinityInventory.element and inventoryUI.buffer[(inventoryUI.vicinityInventory.element)] then
-        local vicinity_bufferCache = nil
+        local vicinity_bufferCache, vicinity_hoveredSlot = nil, nil
         local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
         local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
         imports.beautify.native.setRenderTarget(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, true)
@@ -313,11 +314,11 @@ inventoryUI.renderUI = function()
         for i = 1, #vicinity_bufferCache, 1 do
             local j = vicinity_bufferCache[i]
             local slot_offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1)
+            vicinity_hoveredSlot = vicinity_hoveredSlot or (imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + slot_offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and isInventoryEnabled and i)
             if not j.isPositioned then
-                --TODO: ...
                 local native_width, native_height = CInventory.fetchSlotDimensions(CInventory.CItems[(j.item)].data.weight.rows, CInventory.CItems[(j.item)].data.weight.columns)
-                j.startX, j.startY = 0, 0
-                j.width, j.height = vicinity_width, inventoryUI.vicinityInventory.slotSize
+                j.width, j.height = (native_width/native_height)*inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotSize
+                j.startX, j.startY = inventoryUI.vicinityInventory.width - j.width, 0
                 j.isPositioned = true
             end
             imports.beautify.native.drawRectangle(0, slot_offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotColor, false)
@@ -343,6 +344,7 @@ setElementData(testPed, "Loot:Name", "Test Name")
 setElementData(testPed, "Item:awm", 1)
 setElementData(testPed, "Item:colt_model_733", 1)
 setElementData(testPed, "Item:double_barreled_shotgun", 1)
+setElementData(testPed, "Item:fn_fal_g", 1)
 inventoryUI.toggleUI = function(state)
     if (((state ~= true) and (state ~= false)) or (state == inventoryUI.state)) then return false end
 
