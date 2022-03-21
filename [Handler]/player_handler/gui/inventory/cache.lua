@@ -365,6 +365,8 @@ local testPed = createPed(0, 0, 0, 0); setElementAlpha(testPed, 0) --TODO: REMOV
 setElementData(testPed, "Loot:Type", "something")
 setElementData(testPed, "Loot:Name", "Test Name")
 setElementData(testPed, "Item:awm", 1)
+setElementData(testPed, "Item:colt_model_733", 1)
+setElementData(testPed, "Item:double_barreled_shotgun", 1)
 inventoryUI.toggleUI = function(state)
     if (((state ~= true) and (state ~= false)) or (state == inventoryUI.state)) then return false end
 
