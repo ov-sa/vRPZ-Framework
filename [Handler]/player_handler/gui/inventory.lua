@@ -525,16 +525,16 @@ inventoryUI.renderUI = function(renderData)
                 ]]--
                 inventoryUI.detachItem()
             end
-            inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY = nil, nil
+            local attachment_posX, attachment_posY = nil, nil
             inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height = imports.interpolateBetween(inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight, 0, inventoryUI.attachedItem.finalWidth or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1], inventoryUI.attachedItem.finalHeight or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2], 0, imports.getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.animDuration*0.25), "OutBack")
             if inventoryUI.attachedItem.isOnTransition then
-                inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY = interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevPosX, inventoryUI.attachedItem.prevPosY, 0, getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.animDuration), "OutBounce")
+                attachment_posX, attachment_posY = interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevPosX, inventoryUI.attachedItem.prevPosY, 0, getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.animDuration), "OutBounce")
                 --[[
                 if inventoryUI.attachedItem.__scrollItemBox then
                     inventoryUI.buffer[(inventoryUI.attachedItem.releaseLoot or inventoryUI.attachedItem.itemBox)].gui.scroller.percent = interpolateBetween(inventoryUI.attachedItem.__scrollItemBox.initial, 0, 0, inventoryUI.attachedItem.__scrollItemBox.final, 0, 0, getInterpolationProgress(inventoryUI.attachedItem.__scrollItemBox.tickCounter, inventoryUI.animDuration), "OutBounce")
                 end
                 ]]
-                if (imports.math.round(inventoryUI.attachedItem.__posX, 2) == imports.math.round(inventoryUI.attachedItem.prevPosX, 2)) and (imports.math.round(inventoryUI.attachedItem.__posY, 2) == imports.math.round(inventoryUI.attachedItem.prevPosY, 2)) then
+                if (imports.math.round(attachment_posX, 2) == imports.math.round(inventoryUI.attachedItem.prevPosX, 2)) and (imports.math.round(attachment_posY, 2) == imports.math.round(inventoryUI.attachedItem.prevPosY, 2)) then
                     --TODO: WIP..
                     --[[
                     if inventoryUI.attachedItem.releaseType and inventoryUI.attachedItem.releaseType == "equipping" then
@@ -562,8 +562,9 @@ inventoryUI.renderUI = function(renderData)
             else
                 local cursorX, cursorY = imports.getAbsoluteCursorPosition()
                 inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY = cursorX - inventoryUI.attachedItem.offsetX, cursorY - inventoryUI.attachedItem.offsetY
+                attachment_posX, attachment_posY = inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY
             end
-            imports.beautify.native.drawImage(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, CInventory.CItems[(inventoryUI.attachedItem.item)].icon, 0, 0, 0, -1, false)
+            imports.beautify.native.drawImage(attachment_posX, attachment_posY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, CInventory.CItems[(inventoryUI.attachedItem.item)].icon, 0, 0, 0, -1, false)
         end
         inventoryUI.isLangUpdated = nil
     end
