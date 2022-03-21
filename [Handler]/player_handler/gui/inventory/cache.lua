@@ -81,7 +81,7 @@ local inventoryUI = {
 inventory_margin, inventory_offsetX, inventory_offsetY = nil, nil, nil
 
 for i, j in imports.pairs(CInventory.CItems) do
-    CInventory.CItems.iconTexture = imports.beautify.native.createTexture("files/images/inventory/items/"..(j.slot)..i..".png", "dxt5", true, "clamp")
+    CInventory.CItems.iconTexture = imports.beautify.native.createTexture("files/images/inventory/items/"..(j.slot).."/"..i..".png", "dxt5", true, "clamp")
 end
 inventoryUI.clientInventory.width, inventoryUI.clientInventory.height = CInventory.fetchSlotDimensions(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)
 inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY = inventoryUI.clientInventory.startX + ((CLIENT_MTA_RESOLUTION[1] - inventoryUI.clientInventory.width)*0.5) + (inventoryUI.clientInventory.width*0.5), ((CLIENT_MTA_RESOLUTION[2] + inventoryUI.clientInventory.startY - inventoryUI.clientInventory.height - inventoryUI.titlebar.height)*0.5)
