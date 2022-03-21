@@ -81,7 +81,7 @@ local inventoryUI = {
 inventory_margin, inventory_offsetX, inventory_offsetY = nil, nil, nil
 
 for i, j in imports.pairs(CInventory.CItems) do
-    inventoryUI.texBuffer[i] = imports.beautify.native.createTexture("files/images/inventory/items/"..i..".png", "dxt5", true, "clamp")
+    CInventory.CItems.iconTexture = imports.beautify.native.createTexture("files/images/inventory/items/"..(j.slot)..i..".png", "dxt5", true, "clamp")
 end
 inventoryUI.clientInventory.width, inventoryUI.clientInventory.height = CInventory.fetchSlotDimensions(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)
 inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY = inventoryUI.clientInventory.startX + ((CLIENT_MTA_RESOLUTION[1] - inventoryUI.clientInventory.width)*0.5) + (inventoryUI.clientInventory.width*0.5), ((CLIENT_MTA_RESOLUTION[2] + inventoryUI.clientInventory.startY - inventoryUI.clientInventory.height - inventoryUI.titlebar.height)*0.5)
@@ -338,7 +338,7 @@ imports.addEventHandler("onClientPlayerWasted", localPlayer, function() inventor
 -------------------
 
 --[[
-local inventoryUI.texBuffer = {}
+local CInventory.CItems = {}
 local iconDimensions = {}
 local bufferCache = {
     "primary_weapon",
@@ -406,9 +406,9 @@ function displayInventoryUI()
         end
         local isSlotHovered = isMouseOnPosition(j.startX, j.startY, j.width, j.height) and isInventoryEnabled
         if itemDetails and itemCategory then
-            if inventoryUI.texBuffer[itemDetails.iconPath] then
+            if CInventory.CItems[itemDetails.iconPath] then
                 if not inventoryUI.attachedItem or (inventoryUI.attachedItem.itemBox ~= localPlayer) or (inventoryUI.attachedItem.prevSlotIndex ~= i) then                
-                    imports.beautify.native.drawImage(j.startX + (j.paddingX/2), j.startY + (j.paddingY/2), j.width - j.paddingX, j.height - j.paddingY, inventoryUI.texBuffer[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                    imports.beautify.native.drawImage(j.startX + (j.paddingX/2), j.startY + (j.paddingY/2), j.width - j.paddingX, j.height - j.paddingY, CInventory.CItems[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                 end
                 if isSlotHovered then
                     equipmentInformation = itemDetails.itemName..":\n"..itemDetails.description
@@ -515,7 +515,7 @@ function displayInventoryUI()
                             if isSlotToBeDrawn then
                                 if v.movementType then
                                     local itemDetails, itemCategory = getItemDetails(v.item)
-                                    if itemDetails and itemCategory and inventoryUI.texBuffer[itemDetails.iconPath] then
+                                    if itemDetails and itemCategory and CInventory.CItems[itemDetails.iconPath] then
                                         local slotIndex = k
                                         if slotIndex then
                                             local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
@@ -528,7 +528,7 @@ function displayInventoryUI()
                                             local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_column - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
                                             local slotWidth, slotHeight = horizontalSlotsToOccupy*template.contentWrapper.itemGrid.inventory.slotSize + ((horizontalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding), verticalSlotsToOccupy*template.contentWrapper.itemGrid.inventory.slotSize + ((verticalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding)
                                             if not inventoryUI.attachedItem or (inventoryUI.attachedItem.itemBox ~= i) or (inventoryUI.attachedItem.prevSlotIndex ~= slotIndex) then
-                                                imports.beautify.native.drawImage(slot_offsetX + ((slotWidth - iconWidth)/2), slot_offsetY + ((slotHeight - iconHeight)/2), iconWidth, iconHeight, inventoryUI.texBuffer[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
+                                                imports.beautify.native.drawImage(slot_offsetX + ((slotWidth - iconWidth)/2), slot_offsetY + ((slotHeight - iconHeight)/2), iconWidth, iconHeight, CInventory.CItems[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
                                             end
                                         end
                                     end
@@ -548,7 +548,7 @@ function displayInventoryUI()
                 end
                 for k, v in ipairs(bufferCache) do
                     local itemDetails, itemCategory = getItemDetails(v.item)
-                    if itemDetails and itemCategory and inventoryUI.texBuffer[itemDetails.iconPath] then
+                    if itemDetails and itemCategory and CInventory.CItems[itemDetails.iconPath] then
                         local slotIndex = assignedItems[k] or false
                         if slotIndex then
                             local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
@@ -567,7 +567,7 @@ function displayInventoryUI()
                                 end
                             end
                             if isItemToBeDrawn then
-                                imports.beautify.native.drawImage(slot_offsetX + ((slotWidth - iconWidth)/2), slot_offsetY + ((slotHeight - iconHeight)/2), iconWidth, iconHeight, inventoryUI.texBuffer[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
+                                imports.beautify.native.drawImage(slot_offsetX + ((slotWidth - iconWidth)/2), slot_offsetY + ((slotHeight - iconHeight)/2), iconWidth, iconHeight, CInventory.CItems[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
                             end
                             if not inventoryUI.attachedItem and isInventoryEnabled then
                                 if (slot_offsetY >= 0) and ((slot_offsetY + slotHeight) <= template.contentWrapper.height) then
@@ -816,7 +816,7 @@ function displayInventoryUI()
                     imports.beautify.native.drawImage(slot_offsetX, slot_offsetY, slotWidth, slotHeight, template.contentWrapper.itemSlot.bgImage, 0, 0, 0, tocolor(255, 255, 255, 255), false)
                     local itemDetails, itemCategory = getItemDetails(v.item)
                     if itemDetails and itemCategory then
-                        if inventoryUI.texBuffer[itemDetails.iconPath] then
+                        if CInventory.CItems[itemDetails.iconPath] then
                             if not j.bufferCache[itemDetails.dataName] then
                                 j.bufferCache[itemDetails.dataName] = {
                                     hoverAnimPercent = 0,
@@ -862,7 +862,7 @@ function displayInventoryUI()
                                 end
                             end
                             if lootItemValue > 0 then
-                                imports.beautify.native.drawImage(iconStartX, iconStartY, iconWidth, iconHeight, inventoryUI.texBuffer[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
+                                imports.beautify.native.drawImage(iconStartX, iconStartY, iconWidth, iconHeight, CInventory.CItems[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
                                 dxDrawText(tostring(lootItemValue), slot_offsetX, slot_offsetY, slot_offsetX + slotWidth - template.contentWrapper.itemSlot.itemCounter.paddingX, slot_offsetY + slotHeight - template.contentWrapper.itemSlot.itemCounter.paddingY, tocolor(unpack(template.contentWrapper.itemSlot.itemCounter.fontColor)), 1, template.contentWrapper.itemSlot.itemCounter.font, "right", "bottom", true, false, false)
                             end
                             dxDrawImageSection(slot_offsetX, slot_offsetY, slotWidth, slotHeight, 0, 0, slotWidth*j.bufferCache[itemDetails.dataName].hoverAnimPercent, slotHeight, template.contentWrapper.itemSlot.itemName.bgImage, 0, 0, 0, tocolor(255, 255, 255, 255), false)
@@ -1098,7 +1098,7 @@ function displayInventoryUI()
                 if inventoryUI.attachedItem.__scrollItemBox then
                     inventoryUI.buffer[(inventoryUI.attachedItem.releaseLoot or inventoryUI.attachedItem.itemBox)].gui.scroller.percent = interpolateBetween(inventoryUI.attachedItem.__scrollItemBox.initial, 0, 0, inventoryUI.attachedItem.__scrollItemBox.final, 0, 0, getInterpolationProgress(inventoryUI.attachedItem.__scrollItemBox.tickCounter, inventoryUI.attachedItemAnimDuration), "OutBounce")
                 end
-                imports.beautify.native.drawImage(icon_offsetX, icon_offsetY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, inventoryUI.texBuffer[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
+                imports.beautify.native.drawImage(icon_offsetX, icon_offsetY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, CInventory.CItems[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
                 if (math.round(icon_offsetX, 2) == math.round(inventoryUI.attachedItem.prevPosX, 2)) and (math.round(icon_offsetY, 2) == math.round(inventoryUI.attachedItem.prevPosY, 2)) then
                     if inventoryUI.attachedItem.releaseType and inventoryUI.attachedItem.releaseType == "equipping" then
                         equipItemInInventory(inventoryUI.attachedItem.item, inventoryUI.attachedItem.releaseIndex, inventoryUI.attachedItem.reservedSlot, inventoryUI.attachedItem.prevSlotIndex, inventoryUI.attachedItem.itemBox)
@@ -1123,7 +1123,7 @@ function displayInventoryUI()
                 end
             else
                 local CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = getAbsoluteCursorPosition()
-                imports.beautify.native.drawImage(CLIENT_CURSOR_OFFSET[1] - inventoryUI.attachedItem.offsetX, CLIENT_CURSOR_OFFSET[2] - inventoryUI.attachedItem.offsetY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, inventoryUI.texBuffer[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
+                imports.beautify.native.drawImage(CLIENT_CURSOR_OFFSET[1] - inventoryUI.attachedItem.offsetX, CLIENT_CURSOR_OFFSET[2] - inventoryUI.attachedItem.offsetY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, CInventory.CItems[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
             end
         end
     end
