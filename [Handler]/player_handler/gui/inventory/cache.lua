@@ -271,7 +271,8 @@ inventoryUI.renderUI = function(renderData)
         inventoryUI.cache.isEnabled = true
     elseif renderData.renderType == "preRender" then
         if inventoryUI.isLangUpdated or not inventoryUI.bgTexture then inventoryUI.createBGTexture(inventoryUI.isLangUpdated) end
-        local isUIEnabled = inventoryUI.cache.isEnabled --TODO: ENABLE LATER
+        local isUIEnabled = inventoryUI.cache.isEnabled
+        local isLMBClicked = (loginUI.cache.keys.mouse == "mouse1") and isUIEnabled
         local inventory_startX, inventory_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
         local inventory_width, inventory_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
         inventoryUI.opacityAdjuster.percent = imports.beautify.slider.getPercent(inventoryUI.opacityAdjuster.element)
@@ -335,6 +336,7 @@ inventoryUI.renderUI = function(renderData)
             if vicinity_isSlotHovered then
                 if isLMBClicked then
                     if not inventoryUI.attachedItem then
+                        outputChatBox("clicked,,,attach it now..")
                         local prev_offsetX, prev_offsetY = vicinity_bufferCache[isSlotHovered].startX, vicinity_bufferCache[isSlotHovered].startY
                         local prev_width, prev_height = vicinity_bufferCache[isSlotHovered].width, vicinity_bufferCache[isSlotHovered].height
                         local attached_offsetX, attached_offsetY = CLIENT_CURSOR_OFFSET[1] - prev_offsetX, CLIENT_CURSOR_OFFSET[2] - prev_offsetY
