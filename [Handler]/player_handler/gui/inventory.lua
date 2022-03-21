@@ -120,8 +120,8 @@ for i = 1, #inventoryUI.clientInventory.equipment, 1 do
     local j = inventoryUI.clientInventory.equipment[i]
     j.startX, j.startY = inventoryUI.clientInventory.startX + j.startX, inventoryUI.clientInventory.startY + j.startY
 end
-inventoryUI.vicinityInventory.height = inventoryUI.clientInventory.height
-inventoryUI.vicinityInventory.startX, inventoryUI.vicinityInventory.startY = inventoryUI.clientInventory.equipment[1].startX - inventoryUI.vicinityInventory.width - inventoryUI.margin - (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*0.5), inventoryUI.clientInventory.startY
+inventoryUI.vicinityInventory.startX, inventoryUI.vicinityInventory.startY = inventoryUI.clientInventory.equipment[1].startX - inventoryUI.vicinityInventory.width - inventoryUI.margin - (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*0.75), inventoryUI.clientInventory.startY
+inventoryUI.vicinityInventory.height = inventoryUI.clientInventory.equipment[6].startY + inventoryUI.clientInventory.equipment[6].height - inventoryUI.vicinityInventory.startY - inventoryUI.titlebar.height - inventoryUI.margin
 inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY = inventoryUI.opacityAdjuster.startX + inventoryUI.clientInventory.startX + inventoryUI.clientInventory.width - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.opacityAdjuster.startY - inventoryUI.margin
 inventoryUI.opacityAdjuster.height = inventoryUI.clientInventory.equipment[8].startY - inventoryUI.opacityAdjuster.startY - inventoryUI.margin - inventoryUI.titlebar.slot.height
 inventoryUI.createBGTexture = function(isRefresh)
@@ -579,7 +579,7 @@ end
 
 local testPed = createPed(0, 0, 0, 0); setElementAlpha(testPed, 0) --TODO: REMOVE IT LATER
 setElementData(testPed, "Loot:Type", "something")
-setElementData(testPed, "Loot:Name", "Test Name")
+setElementData(testPed, "Loot:Name", "Test Loot")
 setElementData(testPed, "Item:awm", 1)
 setElementData(testPed, "Item:colt_model_733", 1)
 setElementData(testPed, "Item:double_barreled_shotgun", 1)
