@@ -528,13 +528,13 @@ inventoryUI.renderUI = function(renderData)
             local attachment_posX, attachment_posY = nil, nil
             inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height = imports.interpolateBetween(inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight, 0, inventoryUI.attachedItem.finalWidth or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1], inventoryUI.attachedItem.finalHeight or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2], 0, imports.getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.animDuration*0.25), "OutBack")
             if inventoryUI.attachedItem.isOnTransition then
-                attachment_posX, attachment_posY = interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevPosX, inventoryUI.attachedItem.prevPosY, 0, getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.animDuration), "OutBounce")
+                attachment_posX, attachment_posY = imports.interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY, 0, imports.getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.animDuration), "OutBounce")
                 --[[
                 if inventoryUI.attachedItem.__scrollItemBox then
                     inventoryUI.buffer[(inventoryUI.attachedItem.releaseLoot or inventoryUI.attachedItem.itemBox)].gui.scroller.percent = interpolateBetween(inventoryUI.attachedItem.__scrollItemBox.initial, 0, 0, inventoryUI.attachedItem.__scrollItemBox.final, 0, 0, getInterpolationProgress(inventoryUI.attachedItem.__scrollItemBox.tickCounter, inventoryUI.animDuration), "OutBounce")
                 end
                 ]]
-                if (imports.math.round(attachment_posX, 2) == imports.math.round(inventoryUI.attachedItem.prevPosX, 2)) and (imports.math.round(attachment_posY, 2) == imports.math.round(inventoryUI.attachedItem.prevPosY, 2)) then
+                if (imports.math.round(attachment_posX, 2) == imports.math.round(inventoryUI.attachedItem.prevX, 2)) and (imports.math.round(attachment_posY, 2) == imports.math.round(inventoryUI.attachedItem.prevY, 2)) then
                     --TODO: WIP..
                     --[[
                     if inventoryUI.attachedItem.releaseType and inventoryUI.attachedItem.releaseType == "equipping" then
