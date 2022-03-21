@@ -349,11 +349,8 @@ inventoryUI.renderUI = function(renderData)
             if vicinity_isSlotHovered then
                 if isLMBClicked then
                     if not inventoryUI.attachedItem then
-                        local prev_offsetX, prev_offsetY = vicinity_bufferCache[vicinity_isSlotHovered].startX, vicinity_bufferCache[vicinity_isSlotHovered].startY
-                        local prev_width, prev_height = vicinity_bufferCache[vicinity_isSlotHovered].width, vicinity_bufferCache[vicinity_isSlotHovered].height
-                        local attached_offsetX, attached_offsetY = CLIENT_CURSOR_OFFSET[1] - prev_offsetX, CLIENT_CURSOR_OFFSET[2] - prev_offsetY
-                        --TODO: ATTACH TO CURSOR..
-                        --attachInventoryItem(i, v.item, itemCategory, slotIndex, horizontalSlotsToOccupy, verticalSlotsToOccupy, prev_offsetX, prev_offsetY, prev_width, prev_height, attached_offsetX, attached_offsetY)
+                        local slot_prevX, slot_prevY = vicinity_bufferCache[vicinity_isSlotHovered].startX, vicinity_bufferCache[vicinity_isSlotHovered].startY
+                        inventoryUI.attachItem(inventoryUI.vicinityInventory.element, vicinity_bufferCache[vicinity_isSlotHovered].item, prevSlot, slot_prevX, slot_prevY, vicinity_bufferCache[vicinity_isSlotHovered].width, vicinity_bufferCache[vicinity_isSlotHovered].height, CLIENT_CURSOR_OFFSET[1] - slot_prevX, CLIENT_CURSOR_OFFSET[2] - slot_prevY)
                     end
                 end
             end
