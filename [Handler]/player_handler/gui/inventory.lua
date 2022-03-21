@@ -25,6 +25,7 @@ local imports = {
     triggerEvent = triggerEvent,
     bindKey = bindKey,
     getPlayerName = getPlayerName,
+    isKeyOnHold = isKeyOnHold,
     isMouseClicked = isMouseClicked,
     isMouseOnPosition = isMouseOnPosition,
     interpolateBetween = interpolateBetween,
@@ -372,8 +373,8 @@ inventoryUI.renderUI = function(renderData)
             local originalWidth, originalHeight = iconDimensions[itemDetails.iconPath].width, iconDimensions[itemDetails.iconPath].height
             iconWidth = (originalWidth / originalHeight)*iconHeight
             ]]
-            --[[
-            if (GuiElement.isMTAWindowActive() or not getKeyState("mouse1") or not isUIEnabled) and (not inventoryUI.attachedItem.animTickCounter) then
+            if not inventoryUI.attachedItem.isOnTransition and (CLIENT_MTA_WINDOW_ACTIVE or not imports.isKeyOnHold("mouse1") or not isUIEnabled) then
+                --[[
                 prevScrollState = false
                 if isItemAvailableForOrdering then
                     local slotWidth, slotHeight = horizontalSlotsToOccupy*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((horizontalSlotsToOccupy - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding), verticalSlotsToOccupy*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((verticalSlotsToOccupy - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)
@@ -522,18 +523,21 @@ inventoryUI.renderUI = function(renderData)
                         triggerEvent("onClientInventorySound", localPlayer, "inventory_rollback_item")
                     end
                 end
+                ]]--
                 detachInventoryItem()
             end
-            ]]--
+            inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY = nil, nil
             inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height = imports.interpolateBetween(inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight, 0, inventoryUI.attachedItem.finalWidth or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1], inventoryUI.attachedItem.finalHeight or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2], 0, imports.getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.animDuration*0.25), "OutBack")
             if inventoryUI.attachedItem.isOnTransition then
-                --local icon_offsetX, icon_offsetY = interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevPosX, inventoryUI.attachedItem.prevPosY, 0, getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.animDuration), "OutBounce")
+                inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY = interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevPosX, inventoryUI.attachedItem.prevPosY, 0, getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.animDuration), "OutBounce")
                 --[[
                 if inventoryUI.attachedItem.__scrollItemBox then
                     inventoryUI.buffer[(inventoryUI.attachedItem.releaseLoot or inventoryUI.attachedItem.itemBox)].gui.scroller.percent = interpolateBetween(inventoryUI.attachedItem.__scrollItemBox.initial, 0, 0, inventoryUI.attachedItem.__scrollItemBox.final, 0, 0, getInterpolationProgress(inventoryUI.attachedItem.__scrollItemBox.tickCounter, inventoryUI.animDuration), "OutBounce")
                 end
-                imports.beautify.native.drawImage(icon_offsetX, icon_offsetY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, CInventory.CItems[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
-                if (math.round(icon_offsetX, 2) == math.round(inventoryUI.attachedItem.prevPosX, 2)) and (math.round(icon_offsetY, 2) == math.round(inventoryUI.attachedItem.prevPosY, 2)) then
+                ]]
+                if (imports.math.round(inventoryUI.attachedItem.__posX, 2) == imports.math.round(inventoryUI.attachedItem.prevPosX, 2)) and (imports.math.round(inventoryUI.attachedItem.__posY, 2) == imports.math.round(inventoryUI.attachedItem.prevPosY, 2)) then
+                    --TODO: WIP..
+                    --[[
                     if inventoryUI.attachedItem.releaseType and inventoryUI.attachedItem.releaseType == "equipping" then
                         equipItemInInventory(inventoryUI.attachedItem.item, inventoryUI.attachedItem.releaseIndex, inventoryUI.attachedItem.reservedSlot, inventoryUI.attachedItem.prevSlotIndex, inventoryUI.attachedItem.itemBox)
                     else
@@ -553,13 +557,14 @@ inventoryUI.renderUI = function(renderData)
                             end
                         end
                     end
+                    ]]
                     detachInventoryItem(true)
                 end
-                ]]--
             else
                 local cursorX, cursorY = imports.getAbsoluteCursorPosition()
-                imports.beautify.native.drawImage(cursorX - inventoryUI.attachedItem.offsetX, cursorY - inventoryUI.attachedItem.offsetY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, CInventory.CItems[(inventoryUI.attachedItem.item)].icon, 0, 0, 0, -1, false)
+                inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY = cursorX - inventoryUI.attachedItem.offsetX, cursorY - inventoryUI.attachedItem.offsetY
             end
+            imports.beautify.native.drawImage(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, CInventory.CItems[(inventoryUI.attachedItem.item)].icon, 0, 0, 0, -1, false)
         end
         inventoryUI.isLangUpdated = nil
     end
