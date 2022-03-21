@@ -29,6 +29,7 @@ local imports = {
     isMouseOnPosition = isMouseOnPosition,
     interpolateBetween = interpolateBetween,
     getInterpolationProgress = getInterpolationProgress,
+    getAbsoluteCursorPosition = getAbsoluteCursorPosition,
     showChat = showChat,
     showCursor = showCursor,
     beautify = beautify,
@@ -50,6 +51,7 @@ local inventoryUI = {
     cache = {keys = {}},
     buffer = {},
     margin = inventory_margin,
+    animDuration = 2500, --TODO: LATER MERGE
     titlebar = {
         height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.height,
         font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 19), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.fontColor)),
@@ -225,7 +227,8 @@ end
 inventoryUI.detachItem = function(isForced)
     if not inventoryUI.attachedItem then return false end
     if not isForced then
-        inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY = CLIENT_CURSOR_OFFSET[1] - inventoryUI.attachedItem.offsetX, CLIENT_CURSOR_OFFSET[2] - inventoryUI.attachedItem.offsetY
+        local cursorX, cursorY = imports.getAbsoluteCursorPosition()
+        inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY = cursorX - inventoryUI.attachedItem.offsetX, cursorY - inventoryUI.attachedItem.offsetY
         inventoryUI.attachedItem.animTickCounter = CLIENT_CURRENT_TICK
     else
         inventoryUI.attachedItem = nil
@@ -349,8 +352,9 @@ inventoryUI.renderUI = function(renderData)
             if vicinity_isSlotHovered then
                 if isLMBClicked then
                     if not inventoryUI.attachedItem then
+                        local cursorX, cursorY = imports.getAbsoluteCursorPosition()
                         local slot_prevX, slot_prevY = vicinity_bufferCache[vicinity_isSlotHovered].startX, vicinity_bufferCache[vicinity_isSlotHovered].startY
-                        inventoryUI.attachItem(inventoryUI.vicinityInventory.element, vicinity_bufferCache[vicinity_isSlotHovered].item, prevSlot, slot_prevX, slot_prevY, vicinity_bufferCache[vicinity_isSlotHovered].width, vicinity_bufferCache[vicinity_isSlotHovered].height, CLIENT_CURSOR_OFFSET[1] - slot_prevX, CLIENT_CURSOR_OFFSET[2] - slot_prevY)
+                        inventoryUI.attachItem(inventoryUI.vicinityInventory.element, vicinity_bufferCache[vicinity_isSlotHovered].item, vicinity_isSlotHovered, slot_prevX, slot_prevY, vicinity_bufferCache[vicinity_isSlotHovered].width, vicinity_bufferCache[vicinity_isSlotHovered].height, cursorX - slot_prevX, cursorY - slot_prevY)
                     end
                 end
             end
@@ -523,12 +527,12 @@ inventoryUI.renderUI = function(renderData)
                 detachInventoryItem()
             end
             ]]--
-            inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height = imports.interpolateBetween(inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight, 0, inventoryUI.attachedItem.finalWidth or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1], inventoryUI.attachedItem.finalHeight or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2], 0, imports.getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.attachedItemAnimDuration/3), "OutBack")
+            inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height = imports.interpolateBetween(inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight, 0, inventoryUI.attachedItem.finalWidth or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1], inventoryUI.attachedItem.finalHeight or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2], 0, imports.getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.animDuration*0.25), "OutBack")
             if inventoryUI.attachedItem.isOnTransition then
-                --local icon_offsetX, icon_offsetY = interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevPosX, inventoryUI.attachedItem.prevPosY, 0, getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.attachedItemAnimDuration), "OutBounce")
+                --local icon_offsetX, icon_offsetY = interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevPosX, inventoryUI.attachedItem.prevPosY, 0, getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.animDuration), "OutBounce")
                 --[[
                 if inventoryUI.attachedItem.__scrollItemBox then
-                    inventoryUI.buffer[(inventoryUI.attachedItem.releaseLoot or inventoryUI.attachedItem.itemBox)].gui.scroller.percent = interpolateBetween(inventoryUI.attachedItem.__scrollItemBox.initial, 0, 0, inventoryUI.attachedItem.__scrollItemBox.final, 0, 0, getInterpolationProgress(inventoryUI.attachedItem.__scrollItemBox.tickCounter, inventoryUI.attachedItemAnimDuration), "OutBounce")
+                    inventoryUI.buffer[(inventoryUI.attachedItem.releaseLoot or inventoryUI.attachedItem.itemBox)].gui.scroller.percent = interpolateBetween(inventoryUI.attachedItem.__scrollItemBox.initial, 0, 0, inventoryUI.attachedItem.__scrollItemBox.final, 0, 0, getInterpolationProgress(inventoryUI.attachedItem.__scrollItemBox.tickCounter, inventoryUI.animDuration), "OutBounce")
                 end
                 imports.beautify.native.drawImage(icon_offsetX, icon_offsetY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, CInventory.CItems[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
                 if (math.round(icon_offsetX, 2) == math.round(inventoryUI.attachedItem.prevPosX, 2)) and (math.round(icon_offsetY, 2) == math.round(inventoryUI.attachedItem.prevPosY, 2)) then
@@ -555,7 +559,8 @@ inventoryUI.renderUI = function(renderData)
                 end
                 ]]--
             else
-                imports.beautify.native.drawImage(CLIENT_CURSOR_OFFSET[1] - inventoryUI.attachedItem.offsetX, CLIENT_CURSOR_OFFSET[2] - inventoryUI.attachedItem.offsetY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, CInventory.CItems[(inventoryUI.attachedItem.item)].icon, 0, 0, 0, -1, false)
+                local cursorX, cursorY = imports.getAbsoluteCursorPosition()
+                imports.beautify.native.drawImage(cursorX - inventoryUI.attachedItem.offsetX, cursorY - inventoryUI.attachedItem.offsetY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, CInventory.CItems[(inventoryUI.attachedItem.item)].icon, 0, 0, 0, -1, false)
             end
         end
         inventoryUI.isLangUpdated = nil
@@ -1372,14 +1377,14 @@ function displayInventoryUI()
                 detachInventoryItem()
             end
             if not inventoryUI.attachedItem.finalWidth or not inventoryUI.attachedItem.finalHeight then
-                inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height = interpolateBetween(inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight, 0, iconWidth, iconHeight, 0, getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.attachedItemAnimDuration/3), "OutBack")
+                inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height = interpolateBetween(inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight, 0, iconWidth, iconHeight, 0, getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.animDuration/3), "OutBack")
             else
-                inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height = interpolateBetween(inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight, 0, inventoryUI.attachedItem.finalWidth, inventoryUI.attachedItem.finalHeight, 0, getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.attachedItemAnimDuration/3), "OutBack")
+                inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height = interpolateBetween(inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight, 0, inventoryUI.attachedItem.finalWidth, inventoryUI.attachedItem.finalHeight, 0, getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.animDuration/3), "OutBack")
             end
             if inventoryUI.attachedItem.animTickCounter then
-                local icon_offsetX, icon_offsetY = interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevPosX, inventoryUI.attachedItem.prevPosY, 0, getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.attachedItemAnimDuration), "OutBounce")
+                local icon_offsetX, icon_offsetY = interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevPosX, inventoryUI.attachedItem.prevPosY, 0, getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.animDuration), "OutBounce")
                 if inventoryUI.attachedItem.__scrollItemBox then
-                    inventoryUI.buffer[(inventoryUI.attachedItem.releaseLoot or inventoryUI.attachedItem.itemBox)].gui.scroller.percent = interpolateBetween(inventoryUI.attachedItem.__scrollItemBox.initial, 0, 0, inventoryUI.attachedItem.__scrollItemBox.final, 0, 0, getInterpolationProgress(inventoryUI.attachedItem.__scrollItemBox.tickCounter, inventoryUI.attachedItemAnimDuration), "OutBounce")
+                    inventoryUI.buffer[(inventoryUI.attachedItem.releaseLoot or inventoryUI.attachedItem.itemBox)].gui.scroller.percent = interpolateBetween(inventoryUI.attachedItem.__scrollItemBox.initial, 0, 0, inventoryUI.attachedItem.__scrollItemBox.final, 0, 0, getInterpolationProgress(inventoryUI.attachedItem.__scrollItemBox.tickCounter, inventoryUI.animDuration), "OutBounce")
                 end
                 imports.beautify.native.drawImage(icon_offsetX, icon_offsetY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, CInventory.CItems[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
                 if (math.round(icon_offsetX, 2) == math.round(inventoryUI.attachedItem.prevPosX, 2)) and (math.round(icon_offsetY, 2) == math.round(inventoryUI.attachedItem.prevPosY, 2)) then
