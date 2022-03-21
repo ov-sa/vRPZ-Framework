@@ -228,8 +228,7 @@ end
 inventoryUI.detachItem = function(isForced)
     if not inventoryUI.attachedItem then return false end
     if not isForced then
-        local cursorX, cursorY = imports.getAbsoluteCursorPosition()
-        inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY = cursorX - inventoryUI.attachedItem.offsetX, cursorY - inventoryUI.attachedItem.offsetY
+        inventoryUI.attachedItem.isOnTransition = true
         inventoryUI.attachedItem.animTickCounter = CLIENT_CURRENT_TICK
     else
         inventoryUI.attachedItem = nil
@@ -524,7 +523,7 @@ inventoryUI.renderUI = function(renderData)
                     end
                 end
                 ]]--
-                detachInventoryItem()
+                inventoryUI.detachItem()
             end
             inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY = nil, nil
             inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height = imports.interpolateBetween(inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight, 0, inventoryUI.attachedItem.finalWidth or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1], inventoryUI.attachedItem.finalHeight or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2], 0, imports.getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, inventoryUI.animDuration*0.25), "OutBack")
@@ -558,7 +557,7 @@ inventoryUI.renderUI = function(renderData)
                         end
                     end
                     ]]
-                    detachInventoryItem(true)
+                    inventoryUI.detachItem(true)
                 end
             else
                 local cursorX, cursorY = imports.getAbsoluteCursorPosition()
