@@ -337,8 +337,8 @@ inventoryUI.renderUI = function(renderData)
                 if isLMBClicked then
                     if not inventoryUI.attachedItem then
                         outputChatBox("clicked,,,attach it now..")
-                        local prev_offsetX, prev_offsetY = vicinity_bufferCache[isSlotHovered].startX, vicinity_bufferCache[isSlotHovered].startY
-                        local prev_width, prev_height = vicinity_bufferCache[isSlotHovered].width, vicinity_bufferCache[isSlotHovered].height
+                        local prev_offsetX, prev_offsetY = vicinity_bufferCache[vicinity_isSlotHovered].startX, vicinity_bufferCache[vicinity_isSlotHovered].startY
+                        local prev_width, prev_height = vicinity_bufferCache[vicinity_isSlotHovered].width, vicinity_bufferCache[vicinity_isSlotHovered].height
                         local attached_offsetX, attached_offsetY = CLIENT_CURSOR_OFFSET[1] - prev_offsetX, CLIENT_CURSOR_OFFSET[2] - prev_offsetY
                         --attachInventoryItem(i, v.item, itemCategory, slotIndex, horizontalSlotsToOccupy, verticalSlotsToOccupy, prev_offsetX, prev_offsetY, prev_width, prev_height, attached_offsetX, attached_offsetY)
                     end
