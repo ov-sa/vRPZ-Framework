@@ -591,7 +591,7 @@ inventoryUI.toggleUI = function(state)
         inventoryUI.opacityAdjuster.element = imports.beautify.slider.create(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, "vertical", nil, false)
         inventoryUI.opacityAdjuster.percent = inventoryUI.opacityAdjuster.percent or 100
         imports.beautify.slider.setPercent(inventoryUI.opacityAdjuster.element, inventoryUI.opacityAdjuster.percent)
-        imports.beautify.slider.setText(inventoryUI.opacityAdjuster.element, "Opacity")
+        imports.beautify.slider.setText(inventoryUI.opacityAdjuster.element, imports.string.upper(imports.string.spaceChars("Opacity")))
         imports.beautify.slider.setTextColor(inventoryUI.opacityAdjuster.element, FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.fontColor)
         imports.beautify.render.create(inventoryUI.renderUI, {elementReference = inventoryUI.opacityAdjuster.element, renderType = "preRender"})
         imports.beautify.render.create(inventoryUI.renderUI, {renderType = "input"})
