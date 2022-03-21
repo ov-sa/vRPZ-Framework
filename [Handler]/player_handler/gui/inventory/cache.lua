@@ -26,6 +26,7 @@ local imports = {
     triggerEvent = triggerEvent,
     bindKey = bindKey,
     getPlayerName = getPlayerName,
+    isMouseClicked = isMouseClicked,
     isMouseOnPosition = isMouseOnPosition,
     showChat = showChat,
     showCursor = showCursor,
@@ -45,8 +46,8 @@ local inventory_offsetX, inventory_offsetY = CInventory.fetchSlotDimensions(2, 6
 local vicinity_slotSize = inventory_offsetY
 inventory_offsetY = inventory_offsetY + FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height + inventory_margin
 local inventoryUI = {
+    cache = {keys = {}},
     buffer = {},
-    texBuffer = {},
     margin = inventory_margin,
     titlebar = {
         height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.height,
@@ -225,7 +226,7 @@ end
 -------------------------------
 
 inventoryUI.isUIEnabled = function()
-    return (inventoryUI.isUpdated and inventoryUI.isEnabled) or false
+    return (inventoryUI.isUpdated and inventoryUI.isEnabled and not inventoryUI.isForcedDisabled) or false
 end
 
 function isInventoryUIVisible() return inventoryUI.state end
@@ -233,7 +234,7 @@ function isInventoryUIEnabled() return inventoryUI.isUIEnabled() end
 
 imports.addEvent("Client:onEnableInventoryUI", true)
 imports.addEventHandler("Client:onEnableInventoryUI", root, function(state, isForced)
-    if isForced then loginUI.isForcedDisabled = not state end
+    if isForced then inventoryUI.isForcedDisabled = not state end
     inventoryUI.isEnabled = state
 end)
 
@@ -261,80 +262,94 @@ local orderedPriority = {
     "Secondary"
 }
 
-inventoryUI.renderUI = function()
+inventoryUI.renderUI = function(renderData)
     --TODO: ENABLE LATER.
     --if not inventoryUI.state or CPlayer.isInitialized(localPlayer) then return false end
-    if inventoryUI.isLangUpdated or not inventoryUI.bgTexture then inventoryUI.createBGTexture(inventoryUI.isLangUpdated) end
-
-    --local isInventoryEnabled = inventoryUI.isUIEnabled() --TODO: ENABLE LATER
-    local isInventoryEnabled = true --TODO: REMOVE
-    local inventory_startX, inventory_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
-    local inventory_width, inventory_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
-    inventoryUI.opacityAdjuster.percent = imports.beautify.slider.getPercent(inventoryUI.opacityAdjuster.element)
-    if inventoryUI.opacityAdjuster.percent ~= inventoryUI.opacityAdjuster.__percent then
-        inventoryUI.opacityAdjuster.__percent = inventoryUI.opacityAdjuster.percent
-        inventoryUI.opacityAdjuster.bgColor = imports.tocolor(255, 255, 255, 255*0.01*(inventoryUI.opacityAdjuster.range[1] + ((inventoryUI.opacityAdjuster.range[2] - inventoryUI.opacityAdjuster.range[1])*inventoryUI.opacityAdjuster.percent*0.01)))
-    end
-    imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], inventoryUI.bgTexture, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
-    imports.beautify.native.drawText(inventoryUI.buffer[localPlayer].name, inventory_startX, inventory_startY - inventoryUI.titlebar.height, inventory_startX + inventory_width, inventory_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
-    imports.beautify.native.drawImage(inventory_startX + inventoryUI.margin, inventory_startY + inventoryUI.margin, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height, inventoryUI.buffer[localPlayer].bufferRT, 0, 0, 0, -1, false)
-    for i = 1, #inventoryUI.clientInventory.equipment, 1 do
-        local j = inventoryUI.clientInventory.equipment[i]
-        imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font, "center", "center", true, false, false)
-    end
-    if inventoryUI.vicinityInventory.element and inventoryUI.buffer[(inventoryUI.vicinityInventory.element)] then
-        local vicinity_bufferCache, vicinity_isHovered, vicinity_isSlotHovered = nil, nil, nil
-        local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
-        local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
-        imports.beautify.native.setRenderTarget(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, true)
-        if not inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache then
-            inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache = {}
-            local __orderedPriority = {}
-            for i = 1, #orderedPriority, 1 do
-                local j = orderedPriority[i]
-                if FRAMEWORK_CONFIGS["Inventory"]["Items"][j] then
-                    __orderedPriority[j] = true
-                    for k, v in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"][j]) do
-                        if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
-                            imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
+    if renderData.renderType == "input" then
+        inventoryUI.cache.keys.mouse = imports.isMouseClicked()
+        --inventoryUI.cache.isEnabled = inventoryUI.isUIEnabled() --TODO: ENABLE LATER
+        inventoryUI.cache.isEnabled = true
+    elseif renderData.renderType == "preRender" then
+        if inventoryUI.isLangUpdated or not inventoryUI.bgTexture then inventoryUI.createBGTexture(inventoryUI.isLangUpdated) end
+        local isUIEnabled = inventoryUI.cache.isEnabled --TODO: ENABLE LATER
+        local inventory_startX, inventory_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
+        local inventory_width, inventory_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
+        inventoryUI.opacityAdjuster.percent = imports.beautify.slider.getPercent(inventoryUI.opacityAdjuster.element)
+        if inventoryUI.opacityAdjuster.percent ~= inventoryUI.opacityAdjuster.__percent then
+            inventoryUI.opacityAdjuster.__percent = inventoryUI.opacityAdjuster.percent
+            inventoryUI.opacityAdjuster.bgColor = imports.tocolor(255, 255, 255, 255*0.01*(inventoryUI.opacityAdjuster.range[1] + ((inventoryUI.opacityAdjuster.range[2] - inventoryUI.opacityAdjuster.range[1])*inventoryUI.opacityAdjuster.percent*0.01)))
+        end
+        imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], inventoryUI.bgTexture, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
+        imports.beautify.native.drawText(inventoryUI.buffer[localPlayer].name, inventory_startX, inventory_startY - inventoryUI.titlebar.height, inventory_startX + inventory_width, inventory_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
+        imports.beautify.native.drawImage(inventory_startX + inventoryUI.margin, inventory_startY + inventoryUI.margin, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height, inventoryUI.buffer[localPlayer].bufferRT, 0, 0, 0, -1, false)
+        for i = 1, #inventoryUI.clientInventory.equipment, 1 do
+            local j = inventoryUI.clientInventory.equipment[i]
+            imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font, "center", "center", true, false, false)
+        end
+        if inventoryUI.vicinityInventory.element and inventoryUI.buffer[(inventoryUI.vicinityInventory.element)] then
+            local vicinity_bufferCache, vicinity_isHovered, vicinity_isSlotHovered = nil, nil, nil
+            local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
+            local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
+            imports.beautify.native.setRenderTarget(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, true)
+            if not inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache then
+                inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache = {}
+                local __orderedPriority = {}
+                for i = 1, #orderedPriority, 1 do
+                    local j = orderedPriority[i]
+                    if FRAMEWORK_CONFIGS["Inventory"]["Items"][j] then
+                        __orderedPriority[j] = true
+                        for k, v in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"][j]) do
+                            if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
+                                imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
+                            end
+                        end
+                    end
+                end
+                for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
+                    if not __orderedPriority[i] then
+                        for k, v in imports.pairs(j) do
+                            if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
+                                imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
+                            end
                         end
                     end
                 end
             end
-            for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
-                if not __orderedPriority[i] then
-                    for k, v in imports.pairs(j) do
-                        if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
-                            imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
-                        end
+            vicinity_bufferCache = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
+            vicinity_isHovered = imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height) and isUIEnabled
+            for i = 1, #vicinity_bufferCache, 1 do
+                local j = vicinity_bufferCache[i]
+                local slot_offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1)
+                vicinity_isSlotHovered = (vicinity_isHovered and not inventoryUI.attachedItem and (vicinity_isSlotHovered or (imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + slot_offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and i))) or false
+                if not j.isPositioned then
+                    --TODO: IMAGE SIZE MUST BE FETCHED AND PRESAVED WHEN OPENING INVENTRY...
+                    local native_width, native_height = CInventory.fetchSlotDimensions(CInventory.CItems[(j.item)].data.weight.rows, CInventory.CItems[(j.item)].data.weight.columns)
+                    j.width, j.height = (native_width/native_height)*inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotSize
+                    j.startX, j.startY = inventoryUI.vicinityInventory.width - j.width, 0
+                    j.isPositioned = true
+                end
+                --TODO: MUST BAKE THIS BY DEFAULT ON CLIENT SIDE ON RESOURCE START TO PREVENT DOUBLE DX CALL
+                imports.beautify.native.drawRectangle(0, slot_offsetY, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotColor, false)
+                imports.beautify.native.drawImage(j.startX, slot_offsetY + j.startY, j.width, j.height, CInventory.CItems[(j.item)].iconTexture, 0, 0, 0, -1, false)
+            end
+            if vicinity_isSlotHovered then
+                if isLMBClicked then
+                    if not inventoryUI.attachedItem then
+                        local prev_offsetX, prev_offsetY = vicinity_bufferCache[isSlotHovered].startX, vicinity_bufferCache[isSlotHovered].startY
+                        local prev_width, prev_height = vicinity_bufferCache[isSlotHovered].width, vicinity_bufferCache[isSlotHovered].height
+                        local attached_offsetX, attached_offsetY = CLIENT_CURSOR_OFFSET[1] - prev_offsetX, CLIENT_CURSOR_OFFSET[2] - prev_offsetY
+                        --attachInventoryItem(i, v.item, itemCategory, slotIndex, horizontalSlotsToOccupy, verticalSlotsToOccupy, prev_offsetX, prev_offsetY, prev_width, prev_height, attached_offsetX, attached_offsetY)
                     end
                 end
             end
+            imports.beautify.native.setRenderTarget()
+            imports.beautify.native.drawText(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].name, vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_startX + vicinity_width, vicinity_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
+            imports.beautify.native.drawImage(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, 0, 0, 0, -1, false)
+        else
+            imports.beautify.native.setRenderTarget()
         end
-        vicinity_bufferCache = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
-        vicinity_isHovered = imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height) and isInventoryEnabled
-        for i = 1, #vicinity_bufferCache, 1 do
-            local j = vicinity_bufferCache[i]
-            local slot_offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1)
-            vicinity_isSlotHovered = vicinity_isSlotHovered or (imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + slot_offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and vicinity_isHovered and i) or false
-            if not j.isPositioned then
-                --TODO: IMAGE SIZE MUST BE FETCHED AND PRESAVED WHEN OPENING INVENTRY...
-                local native_width, native_height = CInventory.fetchSlotDimensions(CInventory.CItems[(j.item)].data.weight.rows, CInventory.CItems[(j.item)].data.weight.columns)
-                j.width, j.height = (native_width/native_height)*inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotSize
-                j.startX, j.startY = inventoryUI.vicinityInventory.width - j.width, 0
-                j.isPositioned = true
-            end
-            --TODO: MUST BAKE THIS BY DEFAULT ON CLIENT SIDE ON RESOURCE START TO PREVENT DOUBLE DX CALL
-            imports.beautify.native.drawRectangle(0, slot_offsetY, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotColor, false)
-            imports.beautify.native.drawImage(j.startX, slot_offsetY + j.startY, j.width, j.height, CInventory.CItems[(j.item)].iconTexture, 0, 0, 0, -1, false)
-        end
-        imports.beautify.native.setRenderTarget()
-        imports.beautify.native.drawText(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].name, vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_startX + vicinity_width, vicinity_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
-        imports.beautify.native.drawImage(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, 0, 0, 0, -1, false)
-    else
-        imports.beautify.native.setRenderTarget()
+        inventoryUI.isLangUpdated = nil
     end
-    inventoryUI.isLangUpdated = nil
 end
 
 
@@ -365,15 +380,14 @@ inventoryUI.toggleUI = function(state)
         imports.beautify.slider.setPercent(inventoryUI.opacityAdjuster.element, inventoryUI.opacityAdjuster.percent)
         imports.beautify.slider.setText(inventoryUI.opacityAdjuster.element, "Opacity")
         imports.beautify.slider.setTextColor(inventoryUI.opacityAdjuster.element, FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.fontColor)
-        imports.beautify.render.create(inventoryUI.renderUI, {
-            elementReference = inventoryUI.opacityAdjuster.element,
-            renderType = "preRender"
-        })
+        imports.beautify.render.create(inventoryUI.renderUI, {elementReference = inventoryUI.opacityAdjuster.element, renderType = "preRender"})
+        imports.beautify.render.create(inventoryUI.renderUI, {renderType = "input"})
         imports.beautify.setUIVisible(inventoryUI.opacityAdjuster.element, true)
     else
         if not inventoryUI.state then return false end
         if inventoryUI.opacityAdjuster.element and imports.isElement(inventoryUI.opacityAdjuster.element) then
             imports.destroyElement(inventoryUI.opacityAdjuster.element)
+            imports.beautify.render.remove(inventoryUI.renderUI, {renderType = "input"})
         end
         if inventoryUI.isUpdateScheduled then
             imports.triggerServerEvent("Player:onSyncInventorySlots", localPlayer)
