@@ -315,6 +315,7 @@ inventoryUI.renderUI = function()
             local slot_offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1)
             if not j.isPositioned then
                 --TODO: ...
+                local native_width, native_height = CInventory.fetchSlotDimensions(CInventory.CItems[(j.item)].data.weight.rows, CInventory.CItems[(j.item)].data.weight.columns)
                 j.startX, j.startY = 0, 0
                 j.width, j.height = vicinity_width, inventoryUI.vicinityInventory.slotSize
                 j.isPositioned = true
