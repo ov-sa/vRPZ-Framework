@@ -272,7 +272,7 @@ inventoryUI.renderUI = function(renderData)
     elseif renderData.renderType == "preRender" then
         if inventoryUI.isLangUpdated or not inventoryUI.bgTexture then inventoryUI.createBGTexture(inventoryUI.isLangUpdated) end
         local isUIEnabled = inventoryUI.cache.isEnabled
-        local isLMBClicked = (loginUI.cache.keys.mouse == "mouse1") and isUIEnabled
+        local isLMBClicked = (inventoryUI.cache.keys.mouse == "mouse1") and isUIEnabled
         local inventory_startX, inventory_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
         local inventory_width, inventory_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
         inventoryUI.opacityAdjuster.percent = imports.beautify.slider.getPercent(inventoryUI.opacityAdjuster.element)
