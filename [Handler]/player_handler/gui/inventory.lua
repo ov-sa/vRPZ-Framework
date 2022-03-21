@@ -643,26 +643,13 @@ local bufferCache = {
     "Build",
     "Utility"
 }
-]]
 
-
---------------------------------------
---[[ Function: Displays Inventory ]]--
---------------------------------------
-
---[[
 function displayInventoryUI()
-
-    if not isPlayerInitialized(localPlayer) or getPlayerHealth(localPlayer) <= 0 then return false end
-
     local isItemAvailableForOrdering = false
     local isItemAvailableForDropping = false
     local isItemAvailableForEquipping = false
-    local equipmentInformation = false
-    local playerName = getElementData(localPlayer, "Character:name") or ""
     local playerMaxSlots = getElementMaxSlots(localPlayer)
     local playerUsedSlots = getElementUsedSlots(localPlayer)
-    local equipmentInformationColor = inventoryUI.gui.equipment.description.fontColor
 
     --Draws Equipment
     dxSetRenderTarget()
@@ -746,14 +733,13 @@ function displayInventoryUI()
         if i and isElement(i) and j then
             local maxSlots = getElementMaxSlots(i)
             local usedSlots = getElementUsedSlots(i)
-            local bufferCache = {}
-            local template = inventoryUI.gui.itemBox.templates[j.gui.templateIndex]
             if j.gui.templateIndex == 1 then
                 if not j.bufferCache then
                     j.bufferCache = {}
                     for k, v in pairs(inventoryDatas) do
                         for key, value in ipairs(v) do
                             if j.inventory[value.dataName] then
+                                --TODO: SAME THING BUT ADD MULTIPLE OF THEM BASED ON TOTAL COUNT
                                 for x = 1, j.inventory[value.dataName], 1 do
                                     table.insert(j.bufferCache, {item = value.dataName, itemValue = 1})
                                 end
@@ -996,74 +982,6 @@ function displayInventoryUI()
                     end
                 end
             else
-                if not j.bufferCache then
-                    j.bufferCache = {}
-                    for k, v in ipairs(bufferCache) do
-                        if inventoryDatas[v] then
-                            for key, value in ipairs(inventoryDatas[v]) do
-                                if j.inventory[value.dataName] then
-                                    table.insert(j.bufferCache, {item = value.dataName, itemValue = j.inventory[value.dataName]})
-                                end
-                            end
-                        end
-                    end
-                    for k, v in pairs(inventoryDatas) do
-                        local isSortedCategory = false
-                        for m, n in ipairs(bufferCache) do
-                            if k == n then
-                                isSortedCategory = true
-                                break
-                            end
-                        end
-                        if not isSortedCategory then
-                            for key, value in ipairs(v) do
-                                if j.inventory[value.dataName] then
-                                    table.insert(j.bufferCache, {item = value.dataName, itemValue = j.inventory[value.dataName]})
-                                end
-                            end
-                        end
-                    end
-                end
-                bufferCache = j.bufferCache
-                imports.beautify.native.drawImage(j.gui.startX + template.width - inventoryUI.gui.equipment.titlebar.height, j.gui.startY - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.rightEdgePath, 0, 0, 0, tocolor(inventoryUI.gui.equipment.titlebar.bgColor[1], inventoryUI.gui.equipment.titlebar.bgColor[2], inventoryUI.gui.equipment.titlebar.bgColor[3], inventoryUI.gui.equipment.titlebar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                dxDrawRectangle(j.gui.startX, j.gui.startY - inventoryUI.gui.equipment.titlebar.height, template.width - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, tocolor(inventoryUI.gui.equipment.titlebar.bgColor[1], inventoryUI.gui.equipment.titlebar.bgColor[2], inventoryUI.gui.equipment.titlebar.bgColor[3], inventoryUI.gui.equipment.titlebar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                dxDrawBorderedText(inventoryUI.gui.equipment.titlebar.outlineWeight, inventoryUI.gui.equipment.titlebar.fontColor, string.upper(j.gui.identifier.."   |   "..usedSlots.."/"..maxSlots), j.gui.startX + inventoryUI.gui.equipment.titlebar.height, j.gui.startY - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.startX + template.width - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.startY, tocolor(inventoryUI.gui.equipment.titlebar.fontColor[1], inventoryUI.gui.equipment.titlebar.fontColor[2], inventoryUI.gui.equipment.titlebar.fontColor[3], inventoryUI.gui.equipment.titlebar.fontColor[4]*inventoryOpacityPercent), 1, inventoryUI.gui.equipment.titlebar.font, "left", "center", true, false, inventoryUI.gui.postGUI)
-                imports.beautify.native.drawImage(j.gui.startX, j.gui.startY + template.height, inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.invertedEdgePath, 0, 0, 0, tocolor(inventoryUI.gui.equipment.titlebar.bgColor[1], inventoryUI.gui.equipment.titlebar.bgColor[2], inventoryUI.gui.equipment.titlebar.bgColor[3], inventoryUI.gui.equipment.titlebar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                dxDrawRectangle(j.gui.startX + inventoryUI.gui.equipment.titlebar.height, j.gui.startY + template.height, template.width - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, tocolor(inventoryUI.gui.equipment.titlebar.bgColor[1], inventoryUI.gui.equipment.titlebar.bgColor[2], inventoryUI.gui.equipment.titlebar.bgColor[3], inventoryUI.gui.equipment.titlebar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                local templateBGColor = table.copy(template.bgColor, true)
-                if inventoryUI.attachedItem and not inventoryUI.attachedItem.animTickCounter and inventoryUI.attachedItem.itemBox == localPlayer then
-                    local isLootHovered = isMouseOnPosition(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height) and not isItemAvailableForOrdering
-                    if isLootHovered then
-                        if isLootSlotAvailableForDropping(i, inventoryUI.attachedItem.item) then
-                            local itemSlotIndex = false
-                            for k, v in ipairs(bufferCache) do
-                                if v.item == inventoryUI.attachedItem.item then
-                                    itemSlotIndex = k
-                                    break
-                                end
-                            end
-                            if not itemSlotIndex then itemSlotIndex = (#bufferCache) + 1 end
-                            isItemAvailableForDropping = {
-                                slotIndex = itemSlotIndex,
-                                loot = i
-                            }
-                            templateBGColor[1] = template.contentWrapper.itemSlot.availableBGColor[1]
-                            templateBGColor[2] = template.contentWrapper.itemSlot.availableBGColor[2]
-                            templateBGColor[3] = template.contentWrapper.itemSlot.availableBGColor[3]
-                        else
-                            templateBGColor[1] = template.contentWrapper.itemSlot.unavailableBGColor[1]
-                            templateBGColor[2] = template.contentWrapper.itemSlot.unavailableBGColor[2]
-                            templateBGColor[3] = template.contentWrapper.itemSlot.unavailableBGColor[3]
-                        end
-                    end
-                end
-                imports.beautify.native.drawImage(j.gui.startX, j.gui.startY, template.width, template.height, template.bgImage, 0, 0, 0, tocolor(templateBGColor[1], templateBGColor[2], templateBGColor[3], templateBGColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                dxDrawRectangle(j.gui.startX, j.gui.startY, template.width, inventoryUI.gui.equipment.titlebar.dividerSize, tocolor(inventoryUI.gui.equipment.titlebar.dividerColor[1], inventoryUI.gui.equipment.titlebar.dividerColor[2], inventoryUI.gui.equipment.titlebar.dividerColor[3], inventoryUI.gui.equipment.titlebar.dividerColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                dxDrawRectangle(j.gui.startX, j.gui.startY + template.height - inventoryUI.gui.equipment.titlebar.dividerSize, template.width, inventoryUI.gui.equipment.titlebar.dividerSize, tocolor(inventoryUI.gui.equipment.titlebar.dividerColor[1], inventoryUI.gui.equipment.titlebar.dividerColor[2], inventoryUI.gui.equipment.titlebar.dividerColor[3], inventoryUI.gui.equipment.titlebar.dividerColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                dxSetRenderTarget(j.gui.bufferRT, true)
-                local totalContentHeight = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*(#bufferCache))
-                local exceededContentHeight =  totalContentHeight - template.contentWrapper.height
-                if not j.bufferCache then j.bufferCache = {} end
                 if not inventoryUI.isUpdated then
                     for k, v in pairs(inventoryUI.slots.slots) do
                         if tonumber(k) and v.loot and v.loot == i then
