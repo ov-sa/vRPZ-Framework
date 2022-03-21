@@ -308,10 +308,10 @@ inventoryUI.renderUI = function()
             end
         end
         vicinity_bufferCache = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
-        local barSize, barPadding = 80, 5
+        local barSize = 80
         for i = 1, #vicinity_bufferCache, 1 do
             local j = vicinity_bufferCache[i]
-            imports.beautify.native.drawRectangle(0, (barSize + barPadding)*(i - 1), vicinity_width, barSize, -1, false)
+            imports.beautify.native.drawRectangle(0, (barSize + inventoryUI.padding)*(i - 1), vicinity_width, barSize, -1, false)
         end
         imports.beautify.native.setRenderTarget()
         imports.beautify.native.drawText(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].name, vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_startX + vicinity_width, vicinity_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
