@@ -318,11 +318,13 @@ inventoryUI.renderUI = function()
             local slot_offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1)
             vicinity_isSlotHovered = vicinity_isSlotHovered or (imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + slot_offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and vicinity_isHovered and i) or false
             if not j.isPositioned then
+                --TODO: IMAGE SIZE MUST BE FETCHED AND PRESAVED WHEN OPENING INVENTRY...
                 local native_width, native_height = CInventory.fetchSlotDimensions(CInventory.CItems[(j.item)].data.weight.rows, CInventory.CItems[(j.item)].data.weight.columns)
                 j.width, j.height = (native_width/native_height)*inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotSize
                 j.startX, j.startY = inventoryUI.vicinityInventory.width - j.width, 0
                 j.isPositioned = true
             end
+            --TODO: MUST BAKE THIS BY DEFAULT ON CLIENT SIDE ON RESOURCE START TO PREVENT DOUBLE DX CALL
             imports.beautify.native.drawRectangle(0, slot_offsetY, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotColor, false)
             imports.beautify.native.drawImage(j.startX, slot_offsetY + j.startY, j.width, j.height, CInventory.CItems[(j.item)].iconTexture, 0, 0, 0, -1, false)
         end
