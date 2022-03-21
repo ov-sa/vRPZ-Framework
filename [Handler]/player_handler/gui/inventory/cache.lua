@@ -325,40 +325,6 @@ inventoryUI.renderUI = function()
         imports.beautify.native.setRenderTarget()
         imports.beautify.native.drawText(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].name, vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_startX + vicinity_width, vicinity_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
         imports.beautify.native.drawImage(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, 0, 0, 0, -1, false)
-        --[[
-        imports.beautify.native.drawImage(j.gui.startX + template.width - inventoryUI.gui.equipment.titlebar.height, j.gui.startY - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.rightEdgePath, 0, 0, 0, tocolor(inventoryUI.gui.equipment.titlebar.bgColor[1], inventoryUI.gui.equipment.titlebar.bgColor[2], inventoryUI.gui.equipment.titlebar.bgColor[3], inventoryUI.gui.equipment.titlebar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-        dxDrawRectangle(j.gui.startX, j.gui.startY - inventoryUI.gui.equipment.titlebar.height, template.width - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, tocolor(inventoryUI.gui.equipment.titlebar.bgColor[1], inventoryUI.gui.equipment.titlebar.bgColor[2], inventoryUI.gui.equipment.titlebar.bgColor[3], inventoryUI.gui.equipment.titlebar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-        dxDrawBorderedText(inventoryUI.gui.equipment.titlebar.outlineWeight, inventoryUI.gui.equipment.titlebar.fontColor, string.upper(j.gui.identifier.."   |   "..usedSlots.."/"..maxSlots), j.gui.startX + inventoryUI.gui.equipment.titlebar.height, j.gui.startY - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.startX + template.width - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.startY, tocolor(inventoryUI.gui.equipment.titlebar.fontColor[1], inventoryUI.gui.equipment.titlebar.fontColor[2], inventoryUI.gui.equipment.titlebar.fontColor[3], inventoryUI.gui.equipment.titlebar.fontColor[4]*inventoryOpacityPercent), 1, inventoryUI.gui.equipment.titlebar.font, "left", "center", true, false, inventoryUI.gui.postGUI)
-        imports.beautify.native.drawImage(j.gui.startX, j.gui.startY + template.height, inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.invertedEdgePath, 0, 0, 0, tocolor(inventoryUI.gui.equipment.titlebar.bgColor[1], inventoryUI.gui.equipment.titlebar.bgColor[2], inventoryUI.gui.equipment.titlebar.bgColor[3], inventoryUI.gui.equipment.titlebar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-        dxDrawRectangle(j.gui.startX + inventoryUI.gui.equipment.titlebar.height, j.gui.startY + template.height, template.width - inventoryUI.gui.equipment.titlebar.height, inventoryUI.gui.equipment.titlebar.height, tocolor(inventoryUI.gui.equipment.titlebar.bgColor[1], inventoryUI.gui.equipment.titlebar.bgColor[2], inventoryUI.gui.equipment.titlebar.bgColor[3], inventoryUI.gui.equipment.titlebar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-        local templateBGColor = table.copy(template.bgColor, true)
-        if inventoryUI.attachedItem and not inventoryUI.attachedItem.animTickCounter and inventoryUI.attachedItem.itemBox == localPlayer then
-            local isLootHovered = isMouseOnPosition(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height) and not isItemAvailableForOrdering
-            if isLootHovered then
-                if isLootSlotAvailableForDropping(i, inventoryUI.attachedItem.item) then
-                    local itemSlotIndex = false
-                    for k, v in ipairs(bufferCache) do
-                        if v.item == inventoryUI.attachedItem.item then
-                            itemSlotIndex = k
-                            break
-                        end
-                    end
-                    if not itemSlotIndex then itemSlotIndex = (#bufferCache) + 1 end
-                    isItemAvailableForDropping = {
-                        slotIndex = itemSlotIndex,
-                        loot = i
-                    }
-                    templateBGColor[1] = template.contentWrapper.itemSlot.availableBGColor[1]
-                    templateBGColor[2] = template.contentWrapper.itemSlot.availableBGColor[2]
-                    templateBGColor[3] = template.contentWrapper.itemSlot.availableBGColor[3]
-                else
-                    templateBGColor[1] = template.contentWrapper.itemSlot.unavailableBGColor[1]
-                    templateBGColor[2] = template.contentWrapper.itemSlot.unavailableBGColor[2]
-                    templateBGColor[3] = template.contentWrapper.itemSlot.unavailableBGColor[3]
-                end
-            end
-        end
-        ]]
     else
         imports.beautify.native.setRenderTarget()
     end
