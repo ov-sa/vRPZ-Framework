@@ -290,7 +290,9 @@ inventoryUI.renderUI = function()
                 local j = orderedPriority[i]
                 if FRAMEWORK_CONFIGS["Inventory"]["Items"][j] then
                     for k, v in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"][j]) do
-                        imports.table.insert(vicinity_bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
+                        if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
+                            imports.table.insert(vicinity_bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
+                        end
                     end
                 end
             end
