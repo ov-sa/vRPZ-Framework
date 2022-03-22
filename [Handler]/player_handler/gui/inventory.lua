@@ -781,20 +781,6 @@ function displayInventoryUI()
                     end
                 end
                 bufferCache = j.bufferCache
-                imports.beautify.native.drawImage(j.gui.startX - template.borderSize, j.gui.startY - template.borderSize, template.height/10 + template.borderSize, template.height/10 + template.borderSize, inventoryUI.gui.equipment.slotTopLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                imports.beautify.native.drawImage(j.gui.startX + template.width - template.height/10, j.gui.startY - template.borderSize, template.height/10 + template.borderSize, template.height/10 + template.borderSize, inventoryUI.gui.equipment.slotTopRightCurvedEdgeBGPath, 0, 0, 0, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                imports.beautify.native.drawImage(j.gui.startX - template.borderSize, j.gui.startY + template.height - template.height/10, template.height/10 + template.borderSize, template.height/10 + template.borderSize, inventoryUI.gui.equipment.slotBottomLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                imports.beautify.native.drawImage(j.gui.startX + template.width - template.height/10, j.gui.startY + template.height - template.height/10, template.height/10 + template.borderSize, template.height/10 + template.borderSize, inventoryUI.gui.equipment.slotBottomRightCurvedEdgeBGPath, 0, 0, 0, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                dxDrawRectangle(j.gui.startX - template.borderSize, j.gui.startY + template.height/10, template.height/10 + template.borderSize, template.height - template.height/5, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                dxDrawRectangle(j.gui.startX + template.width - template.height/10, j.gui.startY + template.height/10, template.height/10 + template.borderSize, template.height - template.height/5, tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                dxDrawRectangle(j.gui.startX + template.height/10, j.gui.startY - template.borderSize, template.width - template.height/5, template.height + (template.borderSize*2), tocolor(template.borderColor[1], template.borderColor[2], template.borderColor[3], template.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                imports.beautify.native.drawImage(j.gui.startX, j.gui.startY, template.height/10, template.height/10, inventoryUI.gui.equipment.slotTopLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                imports.beautify.native.drawImage(j.gui.startX + template.width - template.height/10, j.gui.startY, template.height/10, template.height/10, inventoryUI.gui.equipment.slotTopRightCurvedEdgeBGPath, 0, 0, 0, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                imports.beautify.native.drawImage(j.gui.startX, j.gui.startY + template.height - template.height/10, template.height/10, template.height/10, inventoryUI.gui.equipment.slotBottomLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                imports.beautify.native.drawImage(j.gui.startX + template.width - template.height/10, j.gui.startY + template.height - template.height/10, template.height/10, template.height/10, inventoryUI.gui.equipment.slotBottomRightCurvedEdgeBGPath, 0, 0, 0, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                dxDrawRectangle(j.gui.startX, j.gui.startY + template.height/10, template.height/10, template.height - template.height/5, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                dxDrawRectangle(j.gui.startX + template.width - template.height/10, j.gui.startY + template.height/10, template.height/10, template.height - template.height/5, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                dxDrawRectangle(j.gui.startX + template.height/10, j.gui.startY, template.width - template.height/5, template.height, tocolor(template.bgColor[1], template.bgColor[2], template.bgColor[3], template.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                 dxSetRenderTarget(j.gui.bufferRT, true)
                 local totalSlots, assignedItems, occupiedSlots = math.min(maxSlots, math.max(maxSlots, #bufferCache)), {}, getPlayerOccupiedSlots(localPlayer) or {}
                 local totalContentHeight = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, math.ceil(maxSlots/maximumInventoryRowSlots) - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) + template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding
@@ -1046,82 +1032,7 @@ function displayInventoryUI()
                         end
                     end
                 end
-                for k, v in ipairs(bufferCache) do
-                    local slot_offsetX, slot_offsetY = template.contentWrapper.itemSlot.startX, template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*(k - 1))
-                    local slotWidth, slotHeight = template.contentWrapper.width + template.contentWrapper.itemSlot.width, template.contentWrapper.itemSlot.height
-                    if exceededContentHeight > 0 then slot_offsetY = slot_offsetY - (exceededContentHeight*j.gui.scroller.percent*0.01) end
-                    imports.beautify.native.drawImage(slot_offsetX, slot_offsetY, slotWidth, slotHeight, template.contentWrapper.itemSlot.bgImage, 0, 0, 0, tocolor(255, 255, 255, 255), false)
-                    local itemDetails, itemCategory = getItemDetails(v.item)
-                    if itemDetails and itemCategory then
-                        if CInventory.CItems[itemDetails.iconPath] then
-                            if not j.bufferCache[itemDetails.dataName] then
-                                j.bufferCache[itemDetails.dataName] = {
-                                    hoverAnimPercent = 0,
-                                    hoverAlphaPercent = 0,
-                                    hoverStatus = "backward",
-                                    hoverAnimTickCounter = getTickCount() - template.contentWrapper.itemSlot.itemName.hoverAnimDuration
-                                }
-                            end
-                            local iconStartX, iconStartY = slot_offsetX + template.contentWrapper.itemSlot.iconSlot.startX, slot_offsetY + template.contentWrapper.itemSlot.iconSlot.startY
-                            local iconWidth, iconHeight = 0, template.contentWrapper.itemSlot.iconSlot.height
-                            local originalWidth, originalHeight = iconDimensions[itemDetails.iconPath].width, iconDimensions[itemDetails.iconPath].height
-                            iconWidth = (originalWidth / originalHeight)*iconHeight
-                            local isSlotHovered = isMouseOnPosition(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height) and isMouseOnPosition(j.gui.startX + template.contentWrapper.startX + slot_offsetX, j.gui.startY + template.contentWrapper.startY + slot_offsetY, slotWidth, slotHeight) and (slot_offsetY >= 0) and ((slot_offsetY + slotHeight) <= template.contentWrapper.height) and not inventoryUI.attachedItem and isUIEnabled
-                            if isSlotHovered then
-                                equipmentInformation = itemDetails.itemName..":\n"..itemDetails.description
-                                if j.bufferCache[itemDetails.dataName].hoverStatus ~= "forward" then
-                                    j.bufferCache[itemDetails.dataName].hoverStatus = "forward"
-                                    j.bufferCache[itemDetails.dataName].hoverAnimTickCounter = getTickCount()
-                                end
-                            else
-                                if j.bufferCache[itemDetails.dataName].hoverStatus ~= "backward" then
-                                    j.bufferCache[itemDetails.dataName].hoverStatus = "backward"
-                                    j.bufferCache[itemDetails.dataName].hoverAnimTickCounter = getTickCount()
-                                end
-                            end
-                            if j.bufferCache[itemDetails.dataName].hoverStatus == "forward" then
-                                j.bufferCache[itemDetails.dataName].hoverAnimPercent = interpolateBetween(j.bufferCache[itemDetails.dataName].hoverAnimPercent, 0, 0, 1, 0, 0, getInterpolationProgress(j.bufferCache[itemDetails.dataName].hoverAnimTickCounter, template.contentWrapper.itemSlot.itemName.hoverAnimDuration), "OutBounce")
-                                j.bufferCache[itemDetails.dataName].hoverAlphaPercent = interpolateBetween(j.bufferCache[itemDetails.dataName].hoverAlphaPercent, 0, 0, 1, 0, 0, getInterpolationProgress(j.bufferCache[itemDetails.dataName].hoverAnimTickCounter, template.contentWrapper.itemSlot.itemName.hoverAnimDuration*2), "OutBounce")
-                            else
-                                j.bufferCache[itemDetails.dataName].hoverAnimPercent = interpolateBetween(j.bufferCache[itemDetails.dataName].hoverAnimPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.bufferCache[itemDetails.dataName].hoverAnimTickCounter, template.contentWrapper.itemSlot.itemName.hoverAnimDuration), "OutBounce")
-                                j.bufferCache[itemDetails.dataName].hoverAlphaPercent = interpolateBetween(j.bufferCache[itemDetails.dataName].hoverAlphaPercent, 0, 0, 0, 0, 0, getInterpolationProgress(j.bufferCache[itemDetails.dataName].hoverAnimTickCounter, template.contentWrapper.itemSlot.itemName.hoverAnimDuration*0.5), "OutBounce")
-                            end
-                            local lootItemValue = v.itemValue
-                            if inventoryUI.attachedItem then
-                                if inventoryUI.attachedItem.itemBox == i then
-                                    if inventoryUI.attachedItem.releaseIndex then
-                                        if inventoryUI.attachedItem.releaseIndex == k then
-                                            lootItemValue = lootItemValue - 1
-                                        end
-                                    elseif inventoryUI.attachedItem.prevSlotIndex == k then
-                                        lootItemValue = lootItemValue - 1
-                                    end
-                                end
-                            end
-                            if lootItemValue > 0 then
-                                imports.beautify.native.drawImage(iconStartX, iconStartY, iconWidth, iconHeight, CInventory.CItems[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
-                                dxDrawText(tostring(lootItemValue), slot_offsetX, slot_offsetY, slot_offsetX + slotWidth - template.contentWrapper.itemSlot.itemCounter.paddingX, slot_offsetY + slotHeight - template.contentWrapper.itemSlot.itemCounter.paddingY, tocolor(unpack(template.contentWrapper.itemSlot.itemCounter.fontColor)), 1, template.contentWrapper.itemSlot.itemCounter.font, "right", "bottom", true, false, false)
-                            end
-                            dxDrawImageSection(slot_offsetX, slot_offsetY, slotWidth, slotHeight, 0, 0, slotWidth*j.bufferCache[itemDetails.dataName].hoverAnimPercent, slotHeight, template.contentWrapper.itemSlot.itemName.bgImage, 0, 0, 0, tocolor(255, 255, 255, 255), false)
-                            dxDrawText(string.upper(itemDetails.itemName), slot_offsetX, slot_offsetY, slot_offsetX + slotWidth - template.contentWrapper.itemSlot.itemName.paddingX, slot_offsetY + slotHeight, tocolor(template.contentWrapper.itemSlot.itemName.fontColor[1], template.contentWrapper.itemSlot.itemName.fontColor[2], template.contentWrapper.itemSlot.itemName.fontColor[3], template.contentWrapper.itemSlot.itemName.fontColor[4]*j.bufferCache[itemDetails.dataName].hoverAlphaPercent), 1, template.contentWrapper.itemSlot.itemName.font, "right", "center", true, false, false)
-                            if isSlotHovered then
-                                if isLMBClicked then
-                                    local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
-                                    local verticalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemVerticalSlots) or 1)
-                                    local CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = getAbsoluteCursorPosition()
-                                    local prev_offsetX, prev_offsetY = j.gui.startX + template.contentWrapper.startX + iconStartX, j.gui.startY + template.contentWrapper.startY + iconStartY
-                                    local prev_width, prev_height = iconWidth, iconHeight
-                                    local attached_offsetX, attached_offsetY = CLIENT_CURSOR_OFFSET[1] - prev_offsetX, CLIENT_CURSOR_OFFSET[2] - prev_offsetY
-                                    attachInventoryItem(i, v.item, itemCategory, k, horizontalSlotsToOccupy, verticalSlotsToOccupy, prev_offsetX, prev_offsetY, prev_width, prev_height, attached_offsetX, attached_offsetY)
-                                elseif isRMBClicked then
-                                    --TODO: ...
-                                end
-                            end
-                        end
-                    end
-                end
                 dxSetRenderTarget()
-                imports.beautify.native.drawImage(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height, j.gui.bufferRT, 0, 0, 0, tocolor(255, 255, 255, 255*inventoryOpacityPercent), inventoryUI.gui.postGUI)
                 if exceededContentHeight > 0 then
                     local scrollOverlayStartX, scrollOverlayStartY = j.gui.startX + template.scrollBar.overlay.startX, j.gui.startY + template.scrollBar.overlay.startY
                     local scrollOverlayWidth, scrollOverlayHeight =  template.scrollBar.overlay.width, template.scrollBar.overlay.height
