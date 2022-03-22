@@ -357,12 +357,12 @@ inventoryUI.renderUI = function(renderData)
                 j.animAlphaPercent = j.animAlphaPercent or 0
                 if j.hoverStatus == "forward" then
                     if j.animAlphaPercent < 1 then
-                        j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, 1000), "Linear")
+                        j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration*0.75), "OutQuad")
                         j.slotNameWidth = inventoryUI.vicinityInventory.width*j.animAlphaPercent
                     end
                 else
                     if j.animAlphaPercent > 0 then
-                        j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, 1000), "Linear")
+                        j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration*0.75), "OutQuad")
                         j.slotNameWidth = inventoryUI.vicinityInventory.width*j.animAlphaPercent
                     end
                 end
@@ -371,8 +371,7 @@ inventoryUI.renderUI = function(renderData)
                 if itemValue > 0 then
                     imports.beautify.native.drawImage(j.startX, j.offsetY + j.startY, j.width, j.height, CInventory.CItems[(j.item)].icon, 0, 0, 0, -1, false)
                 end
-                if inventoryUI.vicinityInventory.width > 0 then
-                    outputChatBox("Drawing..")
+                if j.slotNameWidth and (j.slotNameWidth > 0) then
                     imports.beautify.native.drawImageSection(0, j.offsetY, j.slotNameWidth, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.width - j.slotNameWidth, 0, j.slotNameWidth, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotNameTexture, 0, 0, 0, -1, false)
                 end
             end
