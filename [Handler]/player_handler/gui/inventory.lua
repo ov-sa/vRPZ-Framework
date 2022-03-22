@@ -414,7 +414,7 @@ inventoryUI.renderUI = function(renderData)
                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math.max(0, imports.math.min(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent + (inventoryUI.cache.keys.scroll.streak*(((inventoryUI.cache.keys.scroll.state == "up") and 1) or -1)), 100))
                     inventoryUI.cache.keys.scroll.state = false
                 end
-            --end
+            end
         else
             imports.beautify.native.setRenderTarget()
         end
