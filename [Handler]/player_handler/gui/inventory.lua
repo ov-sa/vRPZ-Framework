@@ -312,7 +312,7 @@ inventoryUI.renderUI = function(renderData)
             imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font, "center", "center", true, false, false)
         end
         if inventoryUI.vicinityInventory.element and inventoryUI.buffer[(inventoryUI.vicinityInventory.element)] then
-            local vicinity_bufferCache, vicinity_isHovered, vicinity_isSlotHovered = nil, nil, nil
+            local vicinity_bufferCache, vicinity_offsetY, vicinity_isHovered, vicinity_isSlotHovered = nil, 0, nil, nil
             local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
             local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
             imports.beautify.native.setRenderTarget(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, true)
@@ -342,9 +342,15 @@ inventoryUI.renderUI = function(renderData)
             end
             vicinity_bufferCache = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
             vicinity_isHovered = imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height) and isUIActionEnabled
+            local vicinity_overflowHeight =  imports.math.max(0, (inventoryUI.vicinityInventory.slotSize*#vicinity_bufferCache) + (inventoryUI.margin*imports.math.max(0, #vicinity_bufferCache - 1)) - inventoryUI.vicinityInventory.height)
+            if vicinity_overflowHeight > 0 then
+                vicinity_offsetY = vicinity_overflowHeight*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent*0.01
+                --local finalScrollPercent = inventoryUI.buffer[localPlayer].gui.scroller.percent + ((slot_offsetY - slot_prevOffsetY)/vicinity_overflowHeight)*100
+                --inventoryUI.attachedItem.__scrollItemBox = {initial = inventoryUI.buffer[localPlayer].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
+            end
             for i = 1, #vicinity_bufferCache, 1 do
                 local j = vicinity_bufferCache[i]
-                j.offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1)
+                j.offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1) - vicinity_offsetY
                 vicinity_isSlotHovered = (vicinity_isHovered and (vicinity_isSlotHovered or (imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + j.offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and i))) or false
                 if not j.isPositioned then
                     j.title = imports.string.upper(CInventory.CItems[(j.item)].data.name)
