@@ -58,7 +58,7 @@ local inventoryUI = {
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.bgColor)),
         slot = {
             height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height,
-            fontPaddingY = 2, font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 16), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.fontColor)),
+            fontPaddingY = 2, font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 16), nameFont = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 20), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.fontColor)),
             bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.bgColor))
         }
     },
@@ -339,6 +339,7 @@ inventoryUI.renderUI = function(renderData)
                 j.offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1)
                 vicinity_isSlotHovered = (vicinity_isHovered and (vicinity_isSlotHovered or (imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + j.offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and i))) or false
                 if not j.isPositioned then
+                    j.title = imports.string.upper(CInventory.CItems[(j.item)].data.name)
                     j.width, j.height = (CInventory.CItems[(j.item)].dimensions[1]/CInventory.CItems[(j.item)].dimensions[2])*inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotSize
                     j.startX, j.startY = inventoryUI.vicinityInventory.width - j.width, 0
                     j.isPositioned = true
@@ -373,6 +374,7 @@ inventoryUI.renderUI = function(renderData)
                 end
                 if j.slotNameWidth and (j.slotNameWidth > 0) then
                     imports.beautify.native.drawImageSection(0, j.offsetY, j.slotNameWidth, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.width - j.slotNameWidth, 0, j.slotNameWidth, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotNameTexture, 0, 0, 0, -1, false)
+                    imports.beautify.native.drawText(j.title, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*0.25, j.offsetY, j.slotNameWidth - FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize, j.offsetY + inventoryUI.vicinityInventory.slotSize, inventoryUI.titlebar.slot.bgColor, 1, inventoryUI.titlebar.slot.nameFont, "left", "center", true, false, false)
                 end
             end
             if vicinity_isSlotHovered then
