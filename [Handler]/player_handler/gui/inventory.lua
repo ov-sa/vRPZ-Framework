@@ -89,7 +89,7 @@ local inventoryUI = {
     opacityAdjuster = {
         startX = 10, startY = 0,
         width = 27,
-        range = {30, 100}
+        range = {50, 100}
     }
 }
 inventory_margin, inventory_offsetX, inventory_offsetY, vicinity_slotSize = nil, nil, nil, nil
