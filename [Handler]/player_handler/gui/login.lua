@@ -556,7 +556,7 @@ loginUI.renderUI = function(renderData)
                         j.hoverAnimTick = CLIENT_CURRENT_TICK
                     end
                 end
-                j.animAlphaPercent = j.animAlphaPercent or 0                
+                j.animAlphaPercent = j.animAlphaPercent or 0
                 if j.hoverStatus == "forward" then
                     if j.animAlphaPercent < 1 then
                         j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")
