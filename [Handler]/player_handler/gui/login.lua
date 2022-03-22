@@ -738,7 +738,6 @@ end)
 
 imports.addEventHandler("onClientResourceStart", resource, function()
     CPlayer.setLanguage("EN")
-    --[[
     imports.fadeCamera(false)
     imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
     local booter = function() imports.triggerServerEvent("Player:onToggleLoginUI", localPlayer) end
@@ -752,5 +751,4 @@ imports.addEventHandler("onClientResourceStart", resource, function()
         end
         imports.addEventHandler("onAssetifyLoad", root, booterWrapper)
     end
-    ]]
 end)
