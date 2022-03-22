@@ -209,12 +209,12 @@ inventoryUI.updateBuffer = function(parent)
     end
     return true
 end
-inventoryUI.attachItem = function(parent, item, prevSlot, prevX, prevY, prevWidth, prevHeight, offsetX, offsetY)
+inventoryUI.attachItem = function(parent, item, amount, prevSlot, prevX, prevY, prevWidth, prevHeight, offsetX, offsetY)
     if inventoryUI.attachedItem then return false end
-    if not parent or not imports.isElement(parent) or not item or not prevSlot or not prevX or not prevY or not prevWidth or not prevHeight or not offsetX or not offsetY then return false end
+    if not parent or not imports.isElement(parent) or not item or not amount or not prevSlot or not prevX or not prevY or not prevWidth or not prevHeight or not offsetX or not offsetY then return false end
     --if parent == localPlayer then revSlot = (inventoryUI.ui.equipment.grids[prevSlot] and prevSlot) or tonumber(prevSlot) end
     inventoryUI.attachedItem = {
-        parent = parent, item = item,
+        parent = parent, item = item, amount = amount,
         --TODO: REQUIRES A FINISH
         --isEquippedItem = (inventoryUI.ui.equipment.grids[prevSlot] and true) or false,
         prevSlot = prevSlot, prevX = prevX, prevY = prevY,
@@ -342,15 +342,17 @@ inventoryUI.renderUI = function(renderData)
                     j.startX, j.startY = inventoryUI.vicinityInventory.width - j.width, 0
                     j.isPositioned = true
                 end
-                --TODO: MUST BAKE THIS BY DEFAULT ON CLIENT SIDE ON RESOURCE START TO PREVENT DOUBLE DX CALL
+                local itemValue = (inventoryUI.attachedItem and (inventoryUI.attachedItem.parent == inventoryUI.vicinityInventory.element) and (inventoryUI.attachedItem.prevSlot == i) and (j.amount - inventoryUI.attachedItem.amount)) or j.amount
                 imports.beautify.native.drawRectangle(0, j.offsetY, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotColor, false)
-                imports.beautify.native.drawImage(j.startX, j.offsetY + j.startY, j.width, j.height, CInventory.CItems[(j.item)].icon, 0, 0, 0, -1, false)
+                if itemValue > 0 then
+                    imports.beautify.native.drawImage(j.startX, j.offsetY + j.startY, j.width, j.height, CInventory.CItems[(j.item)].icon, 0, 0, 0, -1, false)
+                end
             end
             if vicinity_isSlotHovered then
                 if isLMBClicked then
                     local cursorX, cursorY = imports.getAbsoluteCursorPosition()
                     local slot_prevX, slot_prevY = vicinity_startX + inventoryUI.margin + vicinity_bufferCache[vicinity_isSlotHovered].startX, vicinity_startY + inventoryUI.margin + vicinity_bufferCache[vicinity_isSlotHovered].startY + vicinity_bufferCache[vicinity_isSlotHovered].offsetY
-                    inventoryUI.attachItem(inventoryUI.vicinityInventory.element, vicinity_bufferCache[vicinity_isSlotHovered].item, vicinity_isSlotHovered, slot_prevX, slot_prevY, vicinity_bufferCache[vicinity_isSlotHovered].width, vicinity_bufferCache[vicinity_isSlotHovered].height, cursorX - slot_prevX, cursorY - slot_prevY)
+                    inventoryUI.attachItem(inventoryUI.vicinityInventory.element, vicinity_bufferCache[vicinity_isSlotHovered].item, 1, vicinity_isSlotHovered, slot_prevX, slot_prevY, vicinity_bufferCache[vicinity_isSlotHovered].width, vicinity_bufferCache[vicinity_isSlotHovered].height, cursorX - slot_prevX, cursorY - slot_prevY)
                 end
             end
             imports.beautify.native.setRenderTarget()
@@ -526,7 +528,7 @@ inventoryUI.renderUI = function(renderData)
             local attachment_posX, attachment_posY = nil, nil
             inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height = imports.interpolateBetween(inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight, 0, inventoryUI.attachedItem.finalWidth or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1], inventoryUI.attachedItem.finalHeight or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2], 0, imports.getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration*0.35), "OutBack")
             if inventoryUI.attachedItem.isOnTransition then
-                attachment_posX, attachment_posY = imports.interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY, 0, imports.getInterpolationProgress(inventoryUI.attachedItem.transitionTickCounter, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration), "OutBack")
+                attachment_posX, attachment_posY = imports.interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY, 0, imports.getInterpolationProgress(inventoryUI.attachedItem.transitionTickCounter, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration), "OutElastic")
                 --[[
                 if inventoryUI.attachedItem.__scrollItemBox then
                     inventoryUI.buffer[(inventoryUI.attachedItem.releaseLoot or inventoryUI.attachedItem.itemBox)].gui.scroller.percent = interpolateBetween(inventoryUI.attachedItem.__scrollItemBox.initial, 0, 0, inventoryUI.attachedItem.__scrollItemBox.final, 0, 0, getInterpolationProgress(inventoryUI.attachedItem.__scrollItemBox.tickCounter, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration), "OutBounce")
