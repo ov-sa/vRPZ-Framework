@@ -81,7 +81,7 @@ local inventoryUI = {
     },
     vicinityInventory = {
         width = inventory_offsetX,
-        slotNameTexture = imports.beautify.native.createTexture("files/images/inventory/ui/vicinity/slot_name.png", "argb", true, "clamp"),
+        slotNameTexture = imports.beautify.native.createTexture("files/images/inventory/ui/vicinity/slot_name.rw", "argb", true, "clamp"),
         slotNameFont = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 18), slotNameFontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotNameFontColor)),
         slotSize = vicinity_slotSize, slotColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor)),
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor))

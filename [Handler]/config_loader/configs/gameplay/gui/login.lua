@@ -21,7 +21,6 @@ configVars["UI"]["Login"] = {
     dimension = 1,
     fadeDelay = 7000,
     clientPoint = {x = 0, y = 0, z = 0},
-    bgPath = "files/images/login/background.png",
 
     spawnLocations = {
         {
@@ -67,8 +66,7 @@ configVars["UI"]["Login"] = {
             fontColor = {150, 150, 150, 25},
             hoverfontColor = {170, 35, 35, 255},
             embedLineColor = {170, 35, 35, 50},
-            hoverDuration = 2500,
-            bgPath = "files/images/login/login.png"
+            hoverDuration = 2500
         },
 
         characters = {
