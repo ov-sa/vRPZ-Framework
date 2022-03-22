@@ -63,6 +63,10 @@ local inventoryUI = {
             bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.bgColor))
         }
     },
+    scroller = {
+        bgColor = imports.tocolor(0, 0, 0, 255),
+        thumbColor = imports.tocolor(200, 200, 200, 255)
+    },
     clientInventory = {
         startX = 0, startY = -inventory_offsetY,
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor)), dividerColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor)),
@@ -402,17 +406,13 @@ inventoryUI.renderUI = function(renderData)
             imports.beautify.native.drawImage(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, 0, 0, 0, -1, false)
             if vicinity_overflowHeight > 0 then
                 if not inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.isPositioned then
+                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.thumbSize = 50
                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.width, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.height = 5, inventoryUI.vicinityInventory.height
                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startX, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startY = vicinity_startX + vicinity_width - inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.width, vicinity_startY + inventoryUI.margin
                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.isPositioned = true
                 end
-                imports.beautify.native.drawRectangle(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startX, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startY, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.width, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.height, -1, false)
-                --[[
-                local scrollBarWidth, scrollBarHeight =  scrollOverlayWidth, template.scrollBar.bar.height
-                local scrollBarStartX, scrollBarStartY = scrollOverlayStartX, scrollOverlayStartY + ((scrollOverlayHeight - scrollBarHeight)*j.gui.scroller.percent*0.01)
-                dxDrawRectangle(scrollBarStartX, scrollBarStartY, scrollBarWidth, scrollBarHeight, tocolor(template.scrollBar.bar.bgColor[1], template.scrollBar.bar.bgColor[2], template.scrollBar.bar.bgColor[3], template.scrollBar.bar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                ]]
-                --if (isMouseOnPosition(scrollOverlayStartX, scrollOverlayStartY, scrollOverlayWidth, scrollOverlayHeight) then
+                imports.beautify.native.drawRectangle(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startX, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startY, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.width, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.height, inventoryUI.scroller.bgColor, false)
+                imports.beautify.native.drawRectangle(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startX, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startY + ((inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.height - inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.thumbSize)*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent*0.01), inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.width, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.thumbSize, inventoryUI.scroller.thumbColor, false)
                 if inventoryUI.cache.keys.scroll.state and (not inventoryUI.attachedItem or not inventoryUI.attachedItem.isOnTransition) and vicinity_isHovered then
                     local vicinity_scrollPercent = imports.math.max(1, 100/(vicinity_overflowHeight/(inventoryUI.vicinityInventory.slotSize*0.5)))
                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math.max(0, imports.math.min(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent + (vicinity_scrollPercent*imports.math.max(1, inventoryUI.cache.keys.scroll.streak)*(((inventoryUI.cache.keys.scroll.state == "down") and 1) or -1)), 100))
