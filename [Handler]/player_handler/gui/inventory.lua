@@ -27,6 +27,7 @@ local imports = {
     getPlayerName = getPlayerName,
     isKeyOnHold = isKeyOnHold,
     isMouseClicked = isMouseClicked,
+    isMouseScrolled = isMouseScrolled,
     isMouseOnPosition = isMouseOnPosition,
     interpolateBetween = interpolateBetween,
     getInterpolationProgress = getInterpolationProgress,
@@ -49,7 +50,7 @@ local inventory_offsetX, inventory_offsetY = CInventory.fetchSlotDimensions(2, 6
 local vicinity_slotSize = inventory_offsetY
 inventory_offsetY = inventory_offsetY + FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height + inventory_margin
 local inventoryUI = {
-    cache = {keys = {}},
+    cache = {keys = {scroll = {}}},
     buffer = {},
     margin = inventory_margin,
     titlebar = {
@@ -289,6 +290,7 @@ inventoryUI.renderUI = function(renderData)
     --if not inventoryUI.state or CPlayer.isInitialized(localPlayer) then return false end
     if renderData.renderType == "input" then
         inventoryUI.cache.keys.mouse = imports.isMouseClicked()
+        inventoryUI.cache.keys.scroll.state, inventoryUI.cache.keys.scroll.streak  = imports.isMouseScrolled()
         --inventoryUI.cache.isEnabled = inventoryUI.isUIEnabled() --TODO: ENABLE LATER
         inventoryUI.cache.isEnabled = true --TODO: REMOVE LATER..
     elseif renderData.renderType == "preRender" then
@@ -312,7 +314,7 @@ inventoryUI.renderUI = function(renderData)
             imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font, "center", "center", true, false, false)
         end
         if inventoryUI.vicinityInventory.element and inventoryUI.buffer[(inventoryUI.vicinityInventory.element)] then
-            local vicinity_bufferCache, vicinity_offsetY, vicinity_isHovered, vicinity_isSlotHovered = nil, 0, nil, nil
+            local vicinity_bufferCache, vicinity_isHovered, vicinity_isSlotHovered = nil, nil, nil
             local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
             local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
             imports.beautify.native.setRenderTarget(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, true)
@@ -343,11 +345,7 @@ inventoryUI.renderUI = function(renderData)
             vicinity_bufferCache = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
             vicinity_isHovered = imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height) and isUIActionEnabled
             local vicinity_overflowHeight =  imports.math.max(0, (inventoryUI.vicinityInventory.slotSize*#vicinity_bufferCache) + (inventoryUI.margin*imports.math.max(0, #vicinity_bufferCache - 1)) - inventoryUI.vicinityInventory.height)
-            if vicinity_overflowHeight > 0 then
-                vicinity_offsetY = vicinity_overflowHeight*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent*0.01
-                --local finalScrollPercent = inventoryUI.buffer[localPlayer].gui.scroller.percent + ((slot_offsetY - slot_prevOffsetY)/vicinity_overflowHeight)*100
-                --inventoryUI.attachedItem.__scrollItemBox = {initial = inventoryUI.buffer[localPlayer].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
-            end
+            local vicinity_offsetY = vicinity_overflowHeight*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent*0.01
             for i = 1, #vicinity_bufferCache, 1 do
                 local j = vicinity_bufferCache[i]
                 j.offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1) - vicinity_offsetY
@@ -402,6 +400,21 @@ inventoryUI.renderUI = function(renderData)
             imports.beautify.native.setRenderTarget()
             imports.beautify.native.drawText(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].name, vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_startX + vicinity_width, vicinity_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
             imports.beautify.native.drawImage(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, 0, 0, 0, -1, false)
+            if vicinity_overflowHeight > 0 then
+                --[[
+                local scrollOverlayStartX, scrollOverlayStartY = j.gui.startX + template.scrollBar.overlay.startX, j.gui.startY + template.scrollBar.overlay.startY
+                local scrollOverlayWidth, scrollOverlayHeight =  template.scrollBar.overlay.width, template.scrollBar.overlay.height
+                dxDrawRectangle(scrollOverlayStartX, scrollOverlayStartY, scrollOverlayWidth, scrollOverlayHeight, tocolor(template.scrollBar.overlay.bgColor[1], template.scrollBar.overlay.bgColor[2], template.scrollBar.overlay.bgColor[3], template.scrollBar.overlay.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                local scrollBarWidth, scrollBarHeight =  scrollOverlayWidth, template.scrollBar.bar.height
+                local scrollBarStartX, scrollBarStartY = scrollOverlayStartX, scrollOverlayStartY + ((scrollOverlayHeight - scrollBarHeight)*j.gui.scroller.percent*0.01)
+                dxDrawRectangle(scrollBarStartX, scrollBarStartY, scrollBarWidth, scrollBarHeight, tocolor(template.scrollBar.bar.bgColor[1], template.scrollBar.bar.bgColor[2], template.scrollBar.bar.bgColor[3], template.scrollBar.bar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
+                ]]
+                --if prevScrollState and (not inventoryUI.attachedItem or not inventoryUI.attachedItem.animTickCounter) and (isMouseOnPosition(scrollOverlayStartX, scrollOverlayStartY, scrollOverlayWidth, scrollOverlayHeight) or isMouseOnPosition(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height)) then
+                if inventoryUI.cache.keys.scroll.state then
+                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math.max(0, imports.math.min(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent + (inventoryUI.cache.keys.scroll.streak*(((inventoryUI.cache.keys.scroll.state == "up") and 1) or -1)), 100))
+                    inventoryUI.cache.keys.scroll.state = false
+                end
+            --end
         else
             imports.beautify.native.setRenderTarget()
         end
