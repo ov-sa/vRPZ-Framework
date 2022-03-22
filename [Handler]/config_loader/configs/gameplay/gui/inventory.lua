@@ -25,6 +25,13 @@ configVars["UI"]["Inventory"] = {
         }
     },
 
+    scroller = {
+        width = 5,
+        thumbHeight = 30,
+        bgColor = {0, 0, 0, 255},
+        thumbColor = {200, 200, 200, 255}
+    },
+
     inventory = {
         animDuration = 950,
         rows = 12,
