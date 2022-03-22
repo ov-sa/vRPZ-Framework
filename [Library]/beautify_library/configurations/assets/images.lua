@@ -20,6 +20,8 @@ availableAssets["images"] = {
     "canvas/pick.rw",
     "canvas/save.rw",
     "canvas/back.rw",
+    "canvas/lock.rw",
+    "canvas/unlock.rw",
     "arrow/left.rw",
     "arrow/right.rw",
     "arrow/top.rw",

@@ -84,6 +84,8 @@
     <file src="files/assets/images/canvas/pick.rw"/>
     <file src="files/assets/images/canvas/save.rw"/>
     <file src="files/assets/images/canvas/back.rw"/>
+    <file src="files/assets/images/canvas/lock.rw"/>
+    <file src="files/assets/images/canvas/unlock.rw"/>
     <file src="files/assets/images/arrow/left.rw"/>
     <file src="files/assets/images/arrow/right.rw"/>
     <file src="files/assets/images/arrow/top.rw"/>
