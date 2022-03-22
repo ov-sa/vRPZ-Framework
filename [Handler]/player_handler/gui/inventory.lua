@@ -343,13 +343,13 @@ inventoryUI.renderUI = function(renderData)
                 end
             end
             vicinity_bufferCache = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
-            vicinity_isHovered = imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height) and isUIActionEnabled
+            vicinity_isHovered = imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height)
             local vicinity_overflowHeight =  imports.math.max(0, (inventoryUI.vicinityInventory.slotSize*#vicinity_bufferCache) + (inventoryUI.margin*imports.math.max(0, #vicinity_bufferCache - 1)) - inventoryUI.vicinityInventory.height)
             local vicinity_offsetY = vicinity_overflowHeight*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent*0.01
             for i = 1, #vicinity_bufferCache, 1 do
                 local j = vicinity_bufferCache[i]
                 j.offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1) - vicinity_offsetY
-                vicinity_isSlotHovered = (vicinity_isHovered and (vicinity_isSlotHovered or (imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + j.offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and i))) or false
+                vicinity_isSlotHovered = (vicinity_isHovered and isUIActionEnabled and (vicinity_isSlotHovered or (imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + j.offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and i))) or false
                 if not j.isPositioned then
                     j.title = imports.string.upper(CInventory.CItems[(j.item)].data.name)
                     j.width, j.height = (CInventory.CItems[(j.item)].dimensions[1]/CInventory.CItems[(j.item)].dimensions[2])*inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotSize
@@ -411,7 +411,7 @@ inventoryUI.renderUI = function(renderData)
                 ]]
                 --if (isMouseOnPosition(scrollOverlayStartX, scrollOverlayStartY, scrollOverlayWidth, scrollOverlayHeight) then
                 if inventoryUI.cache.keys.scroll.state and (not inventoryUI.attachedItem or not inventoryUI.attachedItem.isOnTransition) and vicinity_isHovered then
-                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math.max(0, imports.math.min(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent + (inventoryUI.cache.keys.scroll.streak*(((inventoryUI.cache.keys.scroll.state == "down") and 1) or -1)), 100))
+                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math.max(0, imports.math.min(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent + (inventoryUI.cache.keys.scroll.streak*10*(((inventoryUI.cache.keys.scroll.state == "down") and 1) or -1)), 100))
                     inventoryUI.cache.keys.scroll.state = false
                 end
             end
@@ -430,7 +430,6 @@ inventoryUI.renderUI = function(renderData)
             ]]
             if not inventoryUI.attachedItem.isOnTransition and (CLIENT_MTA_WINDOW_ACTIVE or not imports.isKeyOnHold("mouse1") or not isUIEnabled) then
                 --[[
-                prevScrollState = false
                 if isItemAvailableForOrdering then
                     local slotWidth, slotHeight = horizontalSlotsToOccupy*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((horizontalSlotsToOccupy - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding), verticalSlotsToOccupy*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((verticalSlotsToOccupy - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)
                     local releaseIndex = inventoryUI.attachedItem.prevSlotIndex
@@ -1062,48 +1061,8 @@ function displayInventoryUI()
                     end
                 end
                 dxSetRenderTarget()
-                if exceededContentHeight > 0 then
-                    local scrollOverlayStartX, scrollOverlayStartY = j.gui.startX + template.scrollBar.overlay.startX, j.gui.startY + template.scrollBar.overlay.startY
-                    local scrollOverlayWidth, scrollOverlayHeight =  template.scrollBar.overlay.width, template.scrollBar.overlay.height
-                    dxDrawRectangle(scrollOverlayStartX, scrollOverlayStartY, scrollOverlayWidth, scrollOverlayHeight, tocolor(template.scrollBar.overlay.bgColor[1], template.scrollBar.overlay.bgColor[2], template.scrollBar.overlay.bgColor[3], template.scrollBar.overlay.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                    local scrollBarWidth, scrollBarHeight =  scrollOverlayWidth, template.scrollBar.bar.height
-                    local scrollBarStartX, scrollBarStartY = scrollOverlayStartX, scrollOverlayStartY + ((scrollOverlayHeight - scrollBarHeight)*j.gui.scroller.percent*0.01)
-                    dxDrawRectangle(scrollBarStartX, scrollBarStartY, scrollBarWidth, scrollBarHeight, tocolor(template.scrollBar.bar.bgColor[1], template.scrollBar.bar.bgColor[2], template.scrollBar.bar.bgColor[3], template.scrollBar.bar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                    if prevScrollState and (isMouseOnPosition(scrollOverlayStartX, scrollOverlayStartY, scrollOverlayWidth, scrollOverlayHeight) or isMouseOnPosition(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height)) then
-                        if prevScrollState == "up" then
-                            if j.gui.scroller.percent <= 0 then
-                                j.gui.scroller.percent = 0
-                            else
-                                if exceededContentHeight < template.contentWrapper.height then
-                                    j.gui.scroller.percent = j.gui.scroller.percent - (10*prevScrollStreak.streak)
-                                else
-                                    j.gui.scroller.percent = j.gui.scroller.percent - (1*prevScrollStreak.streak)
-                                end
-                                if j.gui.scroller.percent <= 0 then j.gui.scroller.percent = 0 end
-                            end
-                        elseif prevScrollState == "down" then
-                            if j.gui.scroller.percent >= 100 then
-                                j.gui.scroller.percent = 100
-                            else
-                                if exceededContentHeight < template.contentWrapper.height then
-                                    j.gui.scroller.percent = j.gui.scroller.percent + (10*prevScrollStreak.streak)
-                                else
-                                    j.gui.scroller.percent = j.gui.scroller.percent + (1*prevScrollStreak.streak)
-                                end
-                                if j.gui.scroller.percent >= 100 then j.gui.scroller.percent = 100 end
-                            end
-                        end
-                        prevScrollState = false
-                    end
-                end
             end
         end
     end
-
-    --Draws Lock Stat
-    local lockStat_offsetX, lockStat_offsetY = inventoryUI.gui.lockStat.startX + (inventoryUI.gui.equipment.startX + inventoryUI.gui.equipment.width - inventoryUI.gui.lockStat.iconSize), inventoryUI.gui.equipment.startY + inventoryUI.gui.lockStat.startY
-    imports.beautify.native.drawImage(lockStat_offsetX, lockStat_offsetY, inventoryUI.gui.lockStat.iconSize, inventoryUI.gui.lockStat.iconSize, ((isUIEnabled and not inventoryUI.attachedItem) and inventoryUI.gui.lockStat.unlockedIconPath) or inventoryUI.gui.lockStat.lockedIconPath, 0, 0, 0, tocolor(inventoryUI.gui.lockStat.iconColor[1], inventoryUI.gui.lockStat.iconColor[2], inventoryUI.gui.lockStat.iconColor[3], inventoryUI.gui.lockStat.iconColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-    prevScrollState = false
-
 end
 ]]--
