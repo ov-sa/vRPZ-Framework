@@ -403,7 +403,7 @@ inventoryUI.renderUI = function(renderData)
             if vicinity_overflowHeight > 0 then
                 if not inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.isPositioned then
                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.width, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.height = 5, inventoryUI.vicinityInventory.height
-                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startX, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startY = vicinity_startX + inventoryUI.margin + inventoryUI.vicinityInventory.width - inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.width, vicinity_startY + inventoryUI.margin
+                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startX, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startY = vicinity_startX + vicinity_width - inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.width, vicinity_startY + inventoryUI.margin
                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.isPositioned = true
                 end
                 imports.beautify.native.drawRectangle(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startX, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startY, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.width, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.height, -1, false)
