@@ -52,7 +52,7 @@ local inventoryUI = {
     cache = {keys = {}},
     buffer = {},
     margin = inventory_margin,
-    animDuration = 500, --TODO: LATER MERGE
+    animDuration = 750, --TODO: LATER MERGE
     titlebar = {
         height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.height,
         font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 19), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.fontColor)),
