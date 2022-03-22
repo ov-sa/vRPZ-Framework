@@ -78,6 +78,7 @@ local inventoryUI = {
     },
     vicinityInventory = {
         width = inventory_offsetX,
+        slotNameTexture = imports.beautify.native.createTexture("files/images/inventory/ui/vicinity/slot_name.png", "argb", true, "clamp"),
         slotSize = vicinity_slotSize, slotColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor)),
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor))
     },
@@ -342,10 +343,37 @@ inventoryUI.renderUI = function(renderData)
                     j.startX, j.startY = inventoryUI.vicinityInventory.width - j.width, 0
                     j.isPositioned = true
                 end
+                if vicinity_isSlotHovered == i then
+                    if j.hoverStatus ~= "forward" then
+                        j.hoverStatus = "forward"
+                        j.hoverAnimTick = CLIENT_CURRENT_TICK
+                    end
+                else
+                    if j.hoverStatus ~= "backward" then
+                        j.hoverStatus = "backward"
+                        j.hoverAnimTick = CLIENT_CURRENT_TICK
+                    end
+                end
+                j.animAlphaPercent = j.animAlphaPercent or 0
+                if j.hoverStatus == "forward" then
+                    if j.animAlphaPercent < 1 then
+                        j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, 1000), "Linear")
+                        j.slotNameWidth = inventoryUI.vicinityInventory.width*j.animAlphaPercent
+                    end
+                else
+                    if j.animAlphaPercent > 0 then
+                        j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, 1000), "Linear")
+                        j.slotNameWidth = inventoryUI.vicinityInventory.width*j.animAlphaPercent
+                    end
+                end
                 local itemValue = (inventoryUI.attachedItem and (inventoryUI.attachedItem.parent == inventoryUI.vicinityInventory.element) and (inventoryUI.attachedItem.prevSlot == i) and (j.amount - inventoryUI.attachedItem.amount)) or j.amount
                 imports.beautify.native.drawRectangle(0, j.offsetY, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotColor, false)
                 if itemValue > 0 then
                     imports.beautify.native.drawImage(j.startX, j.offsetY + j.startY, j.width, j.height, CInventory.CItems[(j.item)].icon, 0, 0, 0, -1, false)
+                end
+                if inventoryUI.vicinityInventory.width > 0 then
+                    outputChatBox("Drawing..")
+                    imports.beautify.native.drawImageSection(0, j.offsetY, j.slotNameWidth, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.width - j.slotNameWidth, 0, j.slotNameWidth, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotNameTexture, 0, 0, 0, -1, false)
                 end
             end
             if vicinity_isSlotHovered then

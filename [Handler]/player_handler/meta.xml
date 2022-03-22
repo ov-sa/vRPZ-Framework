@@ -129,6 +129,8 @@
     <file src="files/images/login/background.png"/>
     <file src="files/images/loading/loader.png"/>
 
+    <file src="files/images/inventory/ui/vicinity/slot_name.png"/>
+
     <!-- Files: Images: HUD -->
     <file src="files/images/hud/overlays/vignette.rw"/>
     <file src="files/images/hud/player/blood/border.rw"/>
@@ -145,6 +147,7 @@
     <file src="files/images/hud/lock/locked.png"/>
     <file src="files/images/hud/lock/unlocked.png"/>
     <file src="files/images/hud/crosshair.png"/>
+
 
     <!-- Exports: Shared: Main -->
     <export function="getElementMaxSlots" type="shared"/>
