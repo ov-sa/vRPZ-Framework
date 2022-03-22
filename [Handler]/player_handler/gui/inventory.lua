@@ -617,10 +617,9 @@ end
 local testPed = createPed(0, 0, 0, 0); setElementAlpha(testPed, 0) --TODO: REMOVE IT LATER
 setElementData(testPed, "Loot:Type", "something")
 setElementData(testPed, "Loot:Name", "Test Loot")
-setElementData(testPed, "Item:awm", 1)
-setElementData(testPed, "Item:colt_model_733", 1)
-setElementData(testPed, "Item:double_barreled_shotgun", 1)
-setElementData(testPed, "Item:fn_fal_g", 1)
+for i, j in pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]["Primary"]) do
+    setElementData(testPed, "Item:"..i, 1)
+end
 inventoryUI.toggleUI = function(state)
     if (((state ~= true) and (state ~= false)) or (state == inventoryUI.state)) then return false end
 
