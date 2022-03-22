@@ -27,7 +27,7 @@ configVars["UI"]["Inventory"] = {
 
     scroller = {
         width = 5,
-        thumbHeight = 30,
+        thumbHeight = 100,
         bgColor = {0, 0, 0, 255},
         thumbColor = {200, 200, 200, 255}
     },
