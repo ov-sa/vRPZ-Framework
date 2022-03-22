@@ -26,6 +26,7 @@ configVars["UI"]["Inventory"] = {
     },
 
     inventory = {
+        animDuration = 750,
         rows = 12,
         columns = 10,
         slotSize = 45,
