@@ -33,6 +33,7 @@ configVars["UI"]["Inventory"] = {
         dividerSize = 1,
         bgColor = {0, 0, 0, 245},
         slotColor = {255, 255, 255, 75},
+        slotNameFontColor = {175, 175, 175, 255},
         dividerColor = {100, 100, 100, 50}
     }
 
