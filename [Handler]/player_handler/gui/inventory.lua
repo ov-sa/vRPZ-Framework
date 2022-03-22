@@ -52,7 +52,7 @@ local inventoryUI = {
     cache = {keys = {}},
     buffer = {},
     margin = inventory_margin,
-    animDuration = 850, --TODO: LATER MERGE
+    animDuration = 700, --TODO: LATER MERGE
     titlebar = {
         height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.height,
         font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 19), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.fontColor)),
@@ -288,7 +288,7 @@ inventoryUI.renderUI = function(renderData)
     elseif renderData.renderType == "preRender" then
         if inventoryUI.isLangUpdated or not inventoryUI.bgTexture then inventoryUI.createBGTexture(inventoryUI.isLangUpdated) end
         local isUIEnabled = inventoryUI.cache.isEnabled
-        local isLMBClicked = (inventoryUI.cache.keys.mouse == "mouse1") and isUIEnabled
+        local isLMBClicked = (inventoryUI.cache.keys.mouse == "mouse1") and isUIEnabled and not inventoryUI.attachedItem
         local inventory_startX, inventory_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
         local inventory_width, inventory_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
         inventoryUI.opacityAdjuster.percent = imports.beautify.slider.getPercent(inventoryUI.opacityAdjuster.element)
@@ -333,11 +333,11 @@ inventoryUI.renderUI = function(renderData)
                 end
             end
             vicinity_bufferCache = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
-            vicinity_isHovered = imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height) and isUIEnabled
+            vicinity_isHovered = imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height) and isUIEnabled and not inventoryUI.attachedItem
             for i = 1, #vicinity_bufferCache, 1 do
                 local j = vicinity_bufferCache[i]
                 j.offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1)
-                vicinity_isSlotHovered = (vicinity_isHovered and not inventoryUI.attachedItem and (vicinity_isSlotHovered or (imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + j.offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and i))) or false
+                vicinity_isSlotHovered = (vicinity_isHovered and and (vicinity_isSlotHovered or (imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + j.offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and i))) or false
                 if not j.isPositioned then
                     j.width, j.height = (CInventory.CItems[(j.item)].dimensions[1]/CInventory.CItems[(j.item)].dimensions[2])*inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotSize
                     j.startX, j.startY = inventoryUI.vicinityInventory.width - j.width, 0
@@ -349,11 +349,9 @@ inventoryUI.renderUI = function(renderData)
             end
             if vicinity_isSlotHovered then
                 if isLMBClicked then
-                    if not inventoryUI.attachedItem then
-                        local cursorX, cursorY = imports.getAbsoluteCursorPosition()
-                        local slot_prevX, slot_prevY = vicinity_startX + inventoryUI.margin + vicinity_bufferCache[vicinity_isSlotHovered].startX, vicinity_startY + inventoryUI.margin + vicinity_bufferCache[vicinity_isSlotHovered].startY + vicinity_bufferCache[vicinity_isSlotHovered].offsetY
-                        inventoryUI.attachItem(inventoryUI.vicinityInventory.element, vicinity_bufferCache[vicinity_isSlotHovered].item, vicinity_isSlotHovered, slot_prevX, slot_prevY, vicinity_bufferCache[vicinity_isSlotHovered].width, vicinity_bufferCache[vicinity_isSlotHovered].height, cursorX - slot_prevX, cursorY - slot_prevY)
-                    end
+                    local cursorX, cursorY = imports.getAbsoluteCursorPosition()
+                    local slot_prevX, slot_prevY = vicinity_startX + inventoryUI.margin + vicinity_bufferCache[vicinity_isSlotHovered].startX, vicinity_startY + inventoryUI.margin + vicinity_bufferCache[vicinity_isSlotHovered].startY + vicinity_bufferCache[vicinity_isSlotHovered].offsetY
+                    inventoryUI.attachItem(inventoryUI.vicinityInventory.element, vicinity_bufferCache[vicinity_isSlotHovered].item, vicinity_isSlotHovered, slot_prevX, slot_prevY, vicinity_bufferCache[vicinity_isSlotHovered].width, vicinity_bufferCache[vicinity_isSlotHovered].height, cursorX - slot_prevX, cursorY - slot_prevY)
                 end
             end
             imports.beautify.native.setRenderTarget()
