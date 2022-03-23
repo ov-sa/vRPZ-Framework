@@ -291,7 +291,7 @@ local orderedPriority = {
 }
 
 inventoryUI.renderUI = function(renderData)
-    if not inventoryUI.state or CPlayer.isInitialized(localPlayer) then return false end
+    if not inventoryUI.state or not CPlayer.isInitialized(localPlayer) then return false end
     if renderData.renderType == "input" then
         inventoryUI.cache.keys.mouse = imports.isMouseClicked()
         inventoryUI.cache.keys.scroll.state, inventoryUI.cache.keys.scroll.streak  = imports.isMouseScrolled()
