@@ -26,6 +26,7 @@ local imports = {
 ---------------------------
 
 CInventory = {
+    CBuffer = {},
     CSlots = {},
     CItems = {},
 

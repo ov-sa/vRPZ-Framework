@@ -47,7 +47,7 @@ CInventory.fetchParentMaxSlots = function(parent)
     if not parent or not imports.isElement(parent) then return false end
     if imports.getElementType(parent) == "player" then
         if not CPlayer.isInitialized(parent) then return false end
-        return imports.math.max(0, (playerInventorySlots[parent] and imports.tonumber(playerInventorySlots[parent].maxSlots)) or 0)
+        return imports.math.max(0, (CInventory.CBuffer[parent] and imports.tonumber(CInventory.CBuffer[parent].maxSlots)) or 0)
     end
     return imports.tonumber(imports.getElementData(parent, "Inventory:MaxSlots")) or 0
 end
