@@ -48,6 +48,7 @@ local cache = {
 
 imports.addEvent("Player:onDeleteCharacter", true)
 imports.addEventHandler("Player:onDeleteCharacter", root, function(characterID)
+    CInventory.delete(CCharacter.CBuffer[characterID].inventory)
     CCharacter.delete(characterID)
 end)
 
