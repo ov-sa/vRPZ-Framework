@@ -9,6 +9,7 @@
 💎**CONSIDER** [**SPONSORING**](https://ko-fi.com/ovStudio) **US TO SUPPORT THE DEVELOPMENT.**
 
 * Completely Open-Source
+* Modular Programming
 * Config Loader
 * Designed w/ Internationalization
 * [DBify Library](https://github.com/ov-sa/DBify-Library) Integration
