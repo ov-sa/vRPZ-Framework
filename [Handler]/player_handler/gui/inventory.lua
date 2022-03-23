@@ -301,9 +301,8 @@ inventoryUI.renderUI = function(renderData)
         inventoryUI.cache.isEnabled = true --TODO: REMOVE LATER..
     elseif renderData.renderType == "preRender" then
         if inventoryUI.isLangUpdated or not inventoryUI.bgTexture then inventoryUI.createBGTexture(inventoryUI.isLangUpdated) end
-        local isUIEnabled = inventoryUI.cache.isEnabled
+        local isUIEnabled, isUIAttachmentTask = inventoryUI.cache.isEnabled, false
         local isUIActionEnabled = isUIEnabled and not inventoryUI.attachedItem
-        local attachmentUITask = false
         local isLMBClicked = (inventoryUI.cache.keys.mouse == "mouse1") and isUIActionEnabled
         local client_bufferCache, client_isHovered, client_isSlotHovered = nil, nil, nil
         local client_startX, client_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
@@ -619,14 +618,14 @@ inventoryUI.renderUI = function(renderData)
             iconWidth = (originalWidth / originalHeight)*iconHeight
             ]]
             if not inventoryUI.attachedItem.isOnTransition and (CLIENT_MTA_WINDOW_ACTIVE or not imports.isKeyOnHold("mouse1") or not isUIEnabled) then
-                if attachmentUITask == "order" then
+                if isUIAttachmentTask == "order" then
                     --[[
                     local slotWidth, slotHeight = horizontalSlotsToOccupy*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((horizontalSlotsToOccupy - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding), verticalSlotsToOccupy*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((verticalSlotsToOccupy - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)
                     local releaseIndex = inventoryUI.attachedItem.prevSlotIndex
                     inventoryUI.attachedItem.prevSlotIndex = isItemAvailableForOrdering.slotIndex
                     inventoryUI.attachedItem.prevPosX = inventoryUI.buffer[localPlayer].gui.startX + inventoryUI.gui.itemBox.templates[1].contentWrapper.startX + isItemAvailableForOrdering.offsetX + ((slotWidth - iconWidth)/2)
                     inventoryUI.attachedItem.prevPosY = inventoryUI.buffer[localPlayer].gui.startY + inventoryUI.gui.itemBox.templates[1].contentWrapper.startY + isItemAvailableForOrdering.offsetY + ((slotHeight - iconHeight)/2)
-                    inventoryUI.attachedItem.releaseType = attachmentUITask
+                    inventoryUI.attachedItem.releaseType = isUIAttachmentTask
                     inventoryUI.attachedItem.releaseIndex = releaseIndex
                     if inventoryUI.attachedItem.parent == localPlayer then
                         if inventoryUI.attachedItem.isEquippedItem then
@@ -637,7 +636,7 @@ inventoryUI.renderUI = function(renderData)
                     end
                     triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                     ]]
-                elseif attachmentUITask == "drop" then
+                elseif isUIAttachmentTask == "drop" then
                     --[[
                     local totalLootItems = 0
                     for index, _ in pairs(inventoryUI.buffer[isItemAvailableForDropping.loot].inventory) do
@@ -668,7 +667,7 @@ inventoryUI.renderUI = function(renderData)
                     inventoryUI.attachedItem.prevSlotIndex = isItemAvailableForDropping.slotIndex
                     inventoryUI.attachedItem.prevPosX = inventoryUI.buffer[isItemAvailableForDropping.loot].gui.startX + template.contentWrapper.startX + template.contentWrapper.itemSlot.startX + template.contentWrapper.itemSlot.iconSlot.startX
                     inventoryUI.attachedItem.prevPosY = inventoryUI.buffer[isItemAvailableForDropping.loot].gui.startY + template.contentWrapper.startY + slot_offsetY
-                    inventoryUI.attachedItem.releaseType = attachmentUITask
+                    inventoryUI.attachedItem.releaseType = isUIAttachmentTask
                     inventoryUI.attachedItem.releaseLoot = isItemAvailableForDropping.loot
                     inventoryUI.attachedItem.releaseIndex = releaseIndex
                     if inventoryUI.attachedItem.isEquippedItem then
@@ -702,7 +701,7 @@ inventoryUI.renderUI = function(renderData)
                     end
                     triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                     ]]
-                elseif attachmentUITask == "equip" then
+                elseif isUIAttachmentTask == "equip" then
                     --[[
                     local slotWidth, slotHeight = inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].width - inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].paddingX, inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].height - inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].paddingY
                     local releaseIndex = inventoryUI.attachedItem.prevSlotIndex
@@ -713,7 +712,7 @@ inventoryUI.renderUI = function(renderData)
                     inventoryUI.attachedItem.prevSlotIndex = isItemAvailableForEquipping.slotIndex
                     inventoryUI.attachedItem.prevPosX = isItemAvailableForEquipping.offsetX
                     inventoryUI.attachedItem.prevPosY = isItemAvailableForEquipping.offsetY
-                    inventoryUI.attachedItem.releaseType = attachmentUITask
+                    inventoryUI.attachedItem.releaseType = isUIAttachmentTask
                     inventoryUI.attachedItem.releaseLoot = isItemAvailableForEquipping.loot
                     inventoryUI.attachedItem.releaseIndex = releaseIndex
                     inventoryUI.attachedItem.reservedSlot = reservedSlot
