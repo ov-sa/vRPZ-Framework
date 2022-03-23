@@ -267,7 +267,7 @@ end)
 
 imports.addEvent("Client:onSyncInventorySlots", true)
 imports.addEventHandler("Client:onSyncInventorySlots", root, function(slots)
-    inventoryUI.CBuffer = slots
+    CInventory.CBuffer = slots
     inventoryUI.isUpdated, inventoryUI.isUpdateScheduled = true, false
 end)
 
@@ -309,8 +309,8 @@ inventoryUI.renderUI = function(renderData)
         
         local maxSlots = 120
         local totalSlots, assignedItems, occupiedSlots = maxSlots, {}, getPlayerOccupiedSlots(localPlayer) or {}
-        if inventoryUI.CBuffer then
-            for k, v in pairs(inventoryUI.CBuffer.slots) do
+        if CInventory.CBuffer then
+            for k, v in pairs(CInventory.CBuffer.slots) do
                 if tonumber(k) then
                     if not inventoryUI.isUpdated then
                         if v.movementType == "equipment" and v.isAutoReserved then
@@ -423,8 +423,8 @@ inventoryUI.renderUI = function(renderData)
                     dxDrawRectangle(slot_offsetX, slot_offsetY, template.contentWrapper.itemGrid.inventory.slotSize, template.contentWrapper.itemGrid.inventory.slotSize, tocolor(unpack(template.contentWrapper.itemGrid.slot.bgColor)), false)
                 end
             else
-                if inventoryUI.CBuffer.slots[k] and inventoryUI.CBuffer.slots[k].movementType and inventoryUI.CBuffer.slots[k].movementType == "equipment" then
-                    local itemDetails, itemCategory = getItemDetails(inventoryUI.CBuffer.slots[k].item)
+                if CInventory.CBuffer.slots[k] and CInventory.CBuffer.slots[k].movementType and CInventory.CBuffer.slots[k].movementType == "equipment" then
+                    local itemDetails, itemCategory = getItemDetails(CInventory.CBuffer.slots[k].item)
                     if itemDetails and itemCategory then
                         local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
                         local verticalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemVerticalSlots) or 1)
@@ -432,10 +432,10 @@ inventoryUI.renderUI = function(renderData)
                         local slot_column = k - (math.max(0, slot_row - 1)*maximumInventoryRowSlots)
                         local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_column - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
                         local slotWidth, slotHeight = horizontalSlotsToOccupy*template.contentWrapper.itemGrid.inventory.slotSize + ((horizontalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding), verticalSlotsToOccupy*template.contentWrapper.itemGrid.inventory.slotSize + ((verticalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding)
-                        local equippedIndex = inventoryUI.CBuffer.slots[k].equipmentIndex
+                        local equippedIndex = CInventory.CBuffer.slots[k].equipmentIndex
                         if not equippedIndex then
                             for m, n in pairs(inventoryUI.gui.equipment.slot) do
-                                if inventoryUI.CBuffer.slots[m] and inventoryUI.CBuffer.slots[m] == inventoryUI.CBuffer.slots[k].item then
+                                if CInventory.CBuffer.slots[m] and CInventory.CBuffer.slots[m] == CInventory.CBuffer.slots[k].item then
                                     equippedIndex = m
                                     break
                                 end
@@ -671,8 +671,8 @@ inventoryUI.renderUI = function(renderData)
                     if inventoryUI.attachedItem.isEquippedItem then
                         local reservedSlotIndex = false
                         inventoryUI.isUpdateScheduled = true
-                        inventoryUI.CBuffer.slots[releaseIndex] = nil
-                        for i, j in pairs(inventoryUI.CBuffer.slots) do
+                        CInventory.CBuffer.slots[releaseIndex] = nil
+                        for i, j in pairs(CInventory.CBuffer.slots) do
                             if tonumber(i) then
                                 if j.movementType and j.movementType == "equipment" and releaseIndex == j.equipmentIndex then
                                     reservedSlotIndex = i
@@ -683,7 +683,7 @@ inventoryUI.renderUI = function(renderData)
                         if reservedSlotIndex then
                             inventoryUI.attachedItem.reservedSlotType = "equipment"
                             inventoryUI.attachedItem.reservedSlot = reservedSlotIndex
-                            inventoryUI.CBuffer.slots[reservedSlotIndex] = {
+                            CInventory.CBuffer.slots[reservedSlotIndex] = {
                                 item = inventoryUI.attachedItem.item,
                                 loot = isItemAvailableForDropping.loot,
                                 movementType = "loot"
@@ -691,7 +691,7 @@ inventoryUI.renderUI = function(renderData)
                         end
                     else
                         inventoryUI.isUpdateScheduled = true
-                        inventoryUI.CBuffer.slots[releaseIndex] = {
+                        CInventory.CBuffer.slots[releaseIndex] = {
                             item = inventoryUI.attachedItem.item,
                             loot = isItemAvailableForDropping.loot,
                             movementType = "loot"
@@ -716,13 +716,13 @@ inventoryUI.renderUI = function(renderData)
                     inventoryUI.attachedItem.reservedSlot = reservedSlot
                     if loot == localPlayer then
                         inventoryUI.isUpdateScheduled = true
-                        inventoryUI.CBuffer.slots[reservedSlot] = {
+                        CInventory.CBuffer.slots[reservedSlot] = {
                             item = inventoryUI.attachedItem.item,
                             movementType = "equipment"
                         }
                     else
                         inventoryUI.isUpdateScheduled = true
-                        inventoryUI.CBuffer.slots[reservedSlot] = {
+                        CInventory.CBuffer.slots[reservedSlot] = {
                             item = inventoryUI.attachedItem.item,
                             loot = isItemAvailableForEquipping.loot,
                             isAutoReserved = true,
@@ -899,8 +899,8 @@ function displayInventoryUI()
     dxDrawRectangle(inventoryUI.gui.equipment.startX, inventoryUI.gui.equipment.startY, inventoryUI.gui.equipment.width, inventoryUI.gui.equipment.titlebar.dividerSize, tocolor(inventoryUI.gui.equipment.titlebar.dividerColor[1], inventoryUI.gui.equipment.titlebar.dividerColor[2], inventoryUI.gui.equipment.titlebar.dividerColor[3], inventoryUI.gui.equipment.titlebar.dividerColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
     for i, j in pairs(inventoryUI.gui.equipment.slot) do
         local itemDetails, itemCategory = false, false
-        if inventoryUI.CBuffer and inventoryUI.CBuffer.slots[i] then
-            itemDetails, itemCategory = getItemDetails(inventoryUI.CBuffer.slots[i])
+        if CInventory.CBuffer and CInventory.CBuffer.slots[i] then
+            itemDetails, itemCategory = getItemDetails(CInventory.CBuffer.slots[i])
         end
         imports.beautify.native.drawImage(j.startX - j.borderSize, j.startY - j.borderSize, j.height/2 + j.borderSize, j.height/2 + j.borderSize, inventoryUI.gui.equipment.slotTopLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(j.borderColor[1], j.borderColor[2], j.borderColor[3], j.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
         imports.beautify.native.drawImage(j.startX + j.width - j.height/2, j.startY - j.borderSize, j.height/2 + j.borderSize, j.height/2 + j.borderSize, inventoryUI.gui.equipment.slotTopRightCurvedEdgeBGPath, 0, 0, 0, tocolor(j.borderColor[1], j.borderColor[2], j.borderColor[3], j.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
@@ -992,8 +992,8 @@ function displayInventoryUI()
                 local totalContentHeight = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, math.ceil(maxSlots/maximumInventoryRowSlots) - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) + template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding
                 local exceededContentHeight =  totalContentHeight - template.contentWrapper.height
                 dxSetRenderTarget(j.gui.bufferRT, true)
-                if inventoryUI.CBuffer then
-                    for k, v in pairs(inventoryUI.CBuffer.slots) do
+                if CInventory.CBuffer then
+                    for k, v in pairs(CInventory.CBuffer.slots) do
                         if tonumber(k) then
                             local isSlotToBeDrawn = true
                             if v.movementType and v.movementType ~= "inventory" then
@@ -1110,8 +1110,8 @@ function displayInventoryUI()
                             dxDrawRectangle(slot_offsetX, slot_offsetY, template.contentWrapper.itemGrid.inventory.slotSize, template.contentWrapper.itemGrid.inventory.slotSize, tocolor(unpack(template.contentWrapper.itemGrid.slot.bgColor)), false)
                         end
                     else
-                        if inventoryUI.CBuffer.slots[k] and inventoryUI.CBuffer.slots[k].movementType and inventoryUI.CBuffer.slots[k].movementType == "equipment" then
-                            local itemDetails, itemCategory = getItemDetails(inventoryUI.CBuffer.slots[k].item)
+                        if CInventory.CBuffer.slots[k] and CInventory.CBuffer.slots[k].movementType and CInventory.CBuffer.slots[k].movementType == "equipment" then
+                            local itemDetails, itemCategory = getItemDetails(CInventory.CBuffer.slots[k].item)
                             if itemDetails and itemCategory then
                                 local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
                                 local verticalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemVerticalSlots) or 1)
@@ -1119,10 +1119,10 @@ function displayInventoryUI()
                                 local slot_column = k - (math.max(0, slot_row - 1)*maximumInventoryRowSlots)
                                 local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_column - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
                                 local slotWidth, slotHeight = horizontalSlotsToOccupy*template.contentWrapper.itemGrid.inventory.slotSize + ((horizontalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding), verticalSlotsToOccupy*template.contentWrapper.itemGrid.inventory.slotSize + ((verticalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding)
-                                local equippedIndex = inventoryUI.CBuffer.slots[k].equipmentIndex
+                                local equippedIndex = CInventory.CBuffer.slots[k].equipmentIndex
                                 if not equippedIndex then
                                     for m, n in pairs(inventoryUI.gui.equipment.slot) do
-                                        if inventoryUI.CBuffer.slots[m] and inventoryUI.CBuffer.slots[m] == inventoryUI.CBuffer.slots[k].item then
+                                        if CInventory.CBuffer.slots[m] and CInventory.CBuffer.slots[m] == CInventory.CBuffer.slots[k].item then
                                             equippedIndex = m
                                             break
                                         end
@@ -1208,7 +1208,7 @@ function displayInventoryUI()
                 end
             else
                 if not inventoryUI.isUpdated then
-                    for k, v in pairs(inventoryUI.CBuffer.slots) do
+                    for k, v in pairs(CInventory.CBuffer.slots) do
                         if tonumber(k) and v.loot and v.loot == i then
                             if v.movementType then
                                 if v.movementType == "loot" and (tonumber(j.inventory[v.item]) or 0) <= 0 then
