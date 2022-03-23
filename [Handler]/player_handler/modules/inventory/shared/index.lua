@@ -110,7 +110,7 @@ CInventory = {
         local totalSlots, assignedSlots = false, false
         if localPlayer then
             totalSlots = CInventory.fetchParentMaxSlots(player)
-            assignedSlots = inventoryUI.slots.slots
+            assignedSlots = CInventory.CBuffer.slots
         else
             if CInventory.CBuffer[parent] then
                 totalSlots = CInventory.CBuffer[parent].maxSlots

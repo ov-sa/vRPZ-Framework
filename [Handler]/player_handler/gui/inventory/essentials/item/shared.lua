@@ -21,7 +21,7 @@ function CInventory.fetchParentUsedSlots(player)
     local totalSlots, assignedSlots = false, false
     if localPlayer then
         totalSlots = CInventory.fetchParentMaxSlots(player)
-        assignedSlots = inventoryUI.slots.slots
+        assignedSlots = CInventory.CBuffer.slots
     else
         if CInventory.CBuffer[parent] then
             totalSlots = CInventory.CBuffer[parent].maxSlots
@@ -136,7 +136,7 @@ function isPlayerSlotAvailableForEquipping(player, item, slotIndex, viaClientInv
 
     if localPlayer then
         if inventoryUI.isUIEnabled() then
-            if inventoryUI.gui.equipment.grids[slotIndex] and not inventoryUI.slots.slots[slotIndex] and inventoryUI.gui.equipment.grids[slotIndex].slotCategory and inventoryUI.gui.equipment.grids[slotIndex].slotCategory == inventoryUI.attachedItem.category then
+            if inventoryUI.gui.equipment.grids[slotIndex] and not CInventory.CBuffer.slots[slotIndex] and inventoryUI.gui.equipment.grids[slotIndex].slotCategory and inventoryUI.gui.equipment.grids[slotIndex].slotCategory == inventoryUI.attachedItem.category then
                 if not viaClientInventory then
                     local totalSlots = CInventory.fetchParentMaxSlots(player)
                     if totalSlots then
