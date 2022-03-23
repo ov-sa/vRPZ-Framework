@@ -116,7 +116,7 @@ CInventory = {
         for i, j in imports.pairs(assignedSlots) do
             local isValidSlot = true
             if localPlayer then
-                if CInventory.CSlots[(FRAMEWORK_CONFIGS["Inventory"]["Slots"][i] then
+                if FRAMEWORK_CONFIGS["Inventory"]["Slots"][i] then
                     isValidSlot = false
                 else
                     --TODO: WIP..
