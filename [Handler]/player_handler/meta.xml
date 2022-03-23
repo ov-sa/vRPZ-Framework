@@ -90,6 +90,7 @@
     <export function="fetchInventoryWeaponMag" type="shared"/>
     <export function="fetchInventorySlot" type="shared"/>
     <export function="fetchInventoryItemCount" type="shared"/>
+    <export function="fetchInventoryParentMaxSlots" type="shared"/>
     <export function="fetchInventory" type="server"/>
     <export function="ensureInventoryItems" type="server"/>
     <export function="createInventory" type="server"/>
@@ -147,7 +148,6 @@
 
 
     <!-- Exports: Shared: Main -->
-    <export function="getElementMaxSlots" type="shared"/>
     <export function="getElementUsedSlots" type="shared"/>
     <export function="getBackpackOffset" type="shared"/>
     <export function="getWeaponOffset" type="shared"/>

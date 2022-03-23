@@ -734,7 +734,7 @@ inventoryUI.renderUI = function(renderData)
                 else
                     if inventoryUI.attachedItem.parent == localPlayer then
                         --[[
-                        local maxSlots = getElementMaxSlots(inventoryUI.attachedItem.parent)
+                        local maxSlots = CInventory.fetchParentMaxSlots(inventoryUI.attachedItem.parent)
                         local totalContentHeight = inventoryUI.gui.itemBox.templates[1].contentWrapper.padding + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding + (math.max(0, math.ceil(maxSlots/maximumInventoryRowSlots) - 1)*(inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)) + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding
                         local exceededContentHeight =  totalContentHeight - inventoryUI.gui.itemBox.templates[1].contentWrapper.height
                         if exceededContentHeight > 0 then
@@ -887,7 +887,7 @@ function displayInventoryUI()
     local isItemAvailableForOrdering = false
     local isItemAvailableForDropping = false
     local isItemAvailableForEquipping = false
-    local playerMaxSlots = getElementMaxSlots(localPlayer)
+    local playerMaxSlots = CInventory.fetchParentMaxSlots(localPlayer)
     local playerUsedSlots = getElementUsedSlots(localPlayer)
 
     --Draws Equipment
@@ -970,7 +970,7 @@ function displayInventoryUI()
     --Draws ItemBoxes
     for i, j in pairs(inventoryUI.buffer) do
         if i and isElement(i) and j then
-            local maxSlots = getElementMaxSlots(i)
+            local maxSlots = CInventory.fetchParentMaxSlots(i)
             local usedSlots = getElementUsedSlots(i)
             if j.gui.templateIndex == 1 then
                 if not j.bufferCache then

@@ -67,7 +67,7 @@ addEventHandler("onElementDataChange", root, function(key, oldValue, newValue)
             if newValue > 0 then
                 local itemWeight = getItemWeight(key)
                 local usedSlots = getElementUsedSlots(source)
-                local maxSlots = getElementMaxSlots(source)
+                local maxSlots = CInventory.fetchParentMaxSlots(source)
                 if itemWeight and usedSlots and maxSlots and (usedSlots > maxSlots) then
                     if newValue > oldValue then
                         local prev_usedSlots = usedSlots - ((newValue - oldValue)*itemWeight)
@@ -143,7 +143,7 @@ addEventHandler("onPlayerMoveItemInLoot", root, function(item, slotIndex, loot)
             local itemAmount = 1
             local itemWeight = getItemWeight(item)
             local usedSlots = getElementUsedSlots(loot)
-            local maxSlots = getElementMaxSlots(loot)
+            local maxSlots = CInventory.fetchParentMaxSlots(loot)
             if (itemAmount*itemWeight) > (maxSlots - usedSlots) then
                 triggerClientEvent(source, "onDisplayNotification", source, "Unfortunately, Loot is full!", {255, 80, 80, 255})
             else
@@ -246,7 +246,7 @@ addEventHandler("onPlayerUnequipItemInInventory", root, function(item, prevSlotI
                 local itemAmount = 1
                 local itemWeight = getItemWeight(item)
                 local usedSlots = getElementUsedSlots(loot)
-                local maxSlots = getElementMaxSlots(loot)
+                local maxSlots = CInventory.fetchParentMaxSlots(loot)
                 if (itemAmount*itemWeight) > (maxSlots - usedSlots) then
                     triggerClientEvent(source, "onDisplayNotification", source, "Unfortunately, Loot is full!", {255, 80, 80, 255})
                 else

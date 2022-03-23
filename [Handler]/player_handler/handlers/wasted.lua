@@ -100,7 +100,7 @@ imports.addEventHandler("Player:onDeath", root, function(killer, headshot, weapo
     ped:setData("Element:Parent", marker)
     marker:setData("Loot:Type", "deadperson")
     marker:setData("Loot:Name", "Dead Body")
-    marker:setData("Inventory:Slots", getElementMaxSlots(source))
+    marker:setData("Inventory:MaxSlots", CInventory.fetchParentMaxSlots(source))
     marker:setData("Element:Parent", ped)
     marker:attach(ped, 0, 0, -0.1)
     source:attach(ped, 0, 0, -2)

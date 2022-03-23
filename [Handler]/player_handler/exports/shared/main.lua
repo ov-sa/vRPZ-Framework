@@ -25,11 +25,9 @@ local imports = {
 --[[ Functions: Retrieves Element's Max/Used Slots ]]--
 -------------------------------------------------------
 
-function getElementMaxSlots(element)
+function fetchParentMaxSlots(element)
 
-    if not element or not imports.isElement(element) then return false end
 
-    if element:getType() == "player" then
         if CPlayer.isInitialized(element) then
             if localPlayer then
                 if inventoryUI.slots then
@@ -42,8 +40,6 @@ function getElementMaxSlots(element)
             end
         end
         return 0
-    else
-        return imports.tonumber(element:getData("Inventory:Slots")) or 0
     end
 
 end

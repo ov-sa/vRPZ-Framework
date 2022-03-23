@@ -20,7 +20,7 @@ function getPlayerOccupiedSlots(player)
 
     local totalSlots, assignedSlots = false, false
     if localPlayer then
-        totalSlots = getElementMaxSlots(player)
+        totalSlots = CInventory.fetchParentMaxSlots(player)
         assignedSlots = inventoryUI.slots.slots
     else
         if playerInventorySlots[player] then
@@ -89,7 +89,7 @@ function isPlayerSlotAvailableForOrdering(player, item, slotIndex, isEquippedIte
     local totalSlots, occupiedSlots = false, false
     if localPlayer then
         if inventoryUI.isUIEnabled() then
-            totalSlots = getElementMaxSlots(player)
+            totalSlots = CInventory.fetchParentMaxSlots(player)
             occupiedSlots = getPlayerOccupiedSlots(player)
         end
     else
@@ -138,7 +138,7 @@ function isPlayerSlotAvailableForEquipping(player, item, slotIndex, viaClientInv
         if inventoryUI.isUIEnabled() then
             if inventoryUI.gui.equipment.grids[slotIndex] and not inventoryUI.slots.slots[slotIndex] and inventoryUI.gui.equipment.grids[slotIndex].slotCategory and inventoryUI.gui.equipment.grids[slotIndex].slotCategory == inventoryUI.attachedItem.category then
                 if not viaClientInventory then
-                    local totalSlots = getElementMaxSlots(player)
+                    local totalSlots = CInventory.fetchParentMaxSlots(player)
                     if totalSlots then
                         for i = 1, totalSlots, 1 do
                             if isPlayerSlotAvailableForOrdering(player, item, i) then
@@ -166,7 +166,7 @@ function isLootSlotAvailableForDropping(loot, item)
     local itemDetails = getItemDetails(item)
     if not itemDetails then return false end
     local usedSlots = getElementUsedSlots(loot)
-    local maxSlots = getElementMaxSlots(loot)
+    local maxSlots = CInventory.fetchParentMaxSlots(loot)
     if not usedSlots or not maxSlots then return false end
 
     local itemWeight = getItemWeight(item)
