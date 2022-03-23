@@ -113,6 +113,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
             if (result and (#result > 0)) then
                 for i = 1, #result, 1 do
                     local j = result[i]
+                    j.inventory = imports.tonumber(j.inventory)
                     j.identity = imports.fromJSON(j.identity)
                     args[3].characters[i] = {
                         id = j.id,
