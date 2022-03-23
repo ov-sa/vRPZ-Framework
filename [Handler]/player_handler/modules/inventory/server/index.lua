@@ -8,6 +8,19 @@
 ----------------------------------------------------------------
 
 
+-----------------
+--[[ Imports ]]--
+-----------------
+
+local imports = {
+    tonumber = tonumber,
+    isElement = isElement,
+    getElementType = getElementType,
+    getElementData = getElementData,
+    math = math
+}
+
+
 ---------------------------
 --[[ Module: Inventory ]]--
 ---------------------------
@@ -29,5 +42,14 @@ CInventory.setItemProperty = dbify.inventory.item.setProperty
 CInventory.getItemProperty = dbify.inventory.item.getProperty
 CInventory.setItemData = dbify.inventory.item.setData
 CInventory.getItemData = dbify.inventory.item.getData
+
+CInventory.fetchParentMaxSlots = function(parent)
+    if not parent or not imports.isElement(parent) then return false end
+    if imports.getElementType(parent) == "player" then
+        if not CPlayer.isInitialized(parent) then return false end
+        return imports.math.max(0, (playerInventorySlots[parent] and imports.tonumber(playerInventorySlots[parent].maxSlots)) or 0)
+    end
+    return imports.tonumber(imports.getElementData(parent, "Inventory:MaxSlots")) or 0
+end
 
 CInventory.ensureItems(CInventory.CItems)

@@ -16,7 +16,6 @@ local imports = {
     pairs = pairs,
     tonumber = tonumber,
     isElement = isElement,
-    getElementType = getElementType,
     getElementData = getElementData,
     math = math
 }
@@ -89,15 +88,6 @@ CInventory = {
     fetchItemCount = function(parent, item)
         if not parent or not item or not imports.isElement(parent) or not CInventory.CItems[item] then return false end
         return imports.math.max(0, imports.tonumber(imports.getElementData(parent, "Item:"..item)) or 0)
-    end,
-
-    fetchParentMaxSlots = function(parent)
-        if not parent or not item or not imports.isElement(parent) then return false end
-        if imports.getElementType(parent) == "player" then
-            if not CPlayer.isInitialized(parent) then return false end
-            return 0
-        end
-        return imports.tonumber(imports.getElementData(parent, "Inventory:MaxSlots")) or 0
     end
 }
 

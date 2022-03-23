@@ -30,6 +30,15 @@ CInventory.fetchSlotDimensions = function(rows, columns)
     return (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*imports.math.max(0, columns), (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*imports.math.max(0, rows)
 end
 
+CInventory.fetchParentMaxSlots = function(parent)
+    if not parent or not imports.isElement(parent) then return false end
+    if imports.getElementType(parent) == "player" then
+        if not CPlayer.isInitialized(parent) or (parent ~= localPlayer) then return false end
+        return imports.math.max(0, (inventoryUI.slots and imports.tonumber(inventoryUI.slots.maxSlots)) or 0)
+    end
+    return imports.tonumber(imports.getElementData(parent, "Inventory:MaxSlots")) or 0
+end
+
 for i, j in imports.pairs(CInventory.CItems) do
     j.icon = imports.beautify.native.createTexture("files/images/inventory/items/"..(j.slot).."/"..i..".png", "dxt5", true, "clamp")
     j.dimensions = {CInventory.fetchSlotDimensions(j.data.weight.rows, j.data.weight.columns)}
