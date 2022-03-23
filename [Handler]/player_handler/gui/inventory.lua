@@ -295,8 +295,7 @@ inventoryUI.renderUI = function(renderData)
     if renderData.renderType == "input" then
         inventoryUI.cache.keys.mouse = imports.isMouseClicked()
         inventoryUI.cache.keys.scroll.state, inventoryUI.cache.keys.scroll.streak  = imports.isMouseScrolled()
-        --inventoryUI.cache.isEnabled = inventoryUI.isUIEnabled() --TODO: ENABLE LATER
-        inventoryUI.cache.isEnabled = true --TODO: REMOVE LATER..
+        inventoryUI.cache.isEnabled = inventoryUI.isUIEnabled()
     elseif renderData.renderType == "preRender" then
         if inventoryUI.isLangUpdated or not inventoryUI.bgTexture then inventoryUI.createBGTexture(inventoryUI.isLangUpdated) end
         local isUIEnabled, isUIAttachmentTask = inventoryUI.cache.isEnabled, false

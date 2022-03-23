@@ -57,15 +57,18 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(character, char
 
     local serial = CPlayer.getSerial(source)
     CCharacter.create(serial, function(characterID, args)
-        CCharacter.setData(characterID, {
-            {"identity", imports.toJSON(args[3])}
-        }, function(result, args)
-            if result then CCharacter.CBuffer[(args[3].id)].identity = args[3].identity end
-            imports.triggerClientEvent(args[1], "Client:onSaveCharacter", args[1], (result and true) or false, args[2], (result and args[3]) or nil)
-        end, args[1], args[2], {
-            id = characterID,
-            identity = args[3]
-        })
+        CInventory.create(function(inventoryID, args)
+            CCharacter.setData(characterID, {
+                {"identity", imports.toJSON(args[3])},
+                {"inventory", inventoryID}
+            }, function(result, args)
+                if result then CCharacter.CBuffer[(args[3].id)].identity = args[3].identity end
+                imports.triggerClientEvent(args[1], "Client:onSaveCharacter", args[1], (result and true) or false, args[2], (result and args[3]) or nil)
+            end, args[1], args[2], {
+                id = characterID,
+                identity = args[3]
+            })
+        end, args[1], args[2], args[3])
     end, source, character, characters[character].identity)
 end)
 
