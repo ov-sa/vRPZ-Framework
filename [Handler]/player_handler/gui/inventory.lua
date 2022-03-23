@@ -211,8 +211,7 @@ inventoryUI.destroyBuffer = function(parent)
 end
 inventoryUI.updateBuffer = function(parent)
     if not parent or not imports.isElement(parent) or not inventoryUI.buffer[parent] then return false end
-    --inventoryUI.buffer[parent].maxSlots CInventory.fetchParentMaxSlots(parent) --TODO: ENABLE LATER
-    inventoryUI.buffer[parent].maxSlots CInventory.fetchMaxSlotsMultiplier() --TODO: REMOVE LATER
+    inventoryUI.buffer[parent].maxSlots CInventory.fetchParentMaxSlots(parent)
     inventoryUI.buffer[parent].inventory = {}
     inventoryUI.buffer[parent].bufferCache = nil
     for i, j in imports.pairs(CInventory.CItems) do
@@ -292,8 +291,7 @@ local orderedPriority = {
 }
 
 inventoryUI.renderUI = function(renderData)
-    --TODO: ENABLE LATER.
-    --if not inventoryUI.state or CPlayer.isInitialized(localPlayer) then return false end
+    if not inventoryUI.state or CPlayer.isInitialized(localPlayer) then return false end
     if renderData.renderType == "input" then
         inventoryUI.cache.keys.mouse = imports.isMouseClicked()
         inventoryUI.cache.keys.scroll.state, inventoryUI.cache.keys.scroll.streak  = imports.isMouseScrolled()
@@ -308,9 +306,9 @@ inventoryUI.renderUI = function(renderData)
         local client_startX, client_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
         local client_width, client_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
 
-        --[[
         local totalSlots, assignedItems, occupiedSlots = inventoryUI.buffer[localPlayer].maxSlots, {}, CInventory.fetchParentUsedSlots(localPlayer) or {}
         if CInventory.CBuffer then
+            --[[
             for k, v in pairs(CInventory.CBuffer.slots) do
                 if tonumber(k) then
                     if not inventoryUI.isUpdated then
@@ -355,8 +353,8 @@ inventoryUI.renderUI = function(renderData)
                     end
                 end
             end
+            ]]--
         end
-        ]]--
         client_bufferCache = inventoryUI.buffer[localPlayer].bufferCache
         --[[
         for k, v in ipairs(inventory_bufferCache) do
@@ -855,7 +853,7 @@ inventoryUI.toggleUI = function(state)
     inventoryUI.detachItem(true)
     inventoryUI.state = (state and true) or false
     imports.showChat(not inventoryUI.state)
-    imports.showCursor(inventoryUI.state, true) --TODO: RMEOVE FORCED CHECK LATER
+    imports.showCursor(inventoryUI.state)
     return true
 end
 
