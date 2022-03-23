@@ -152,8 +152,11 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     end
     imports.collectgarbage()
 
-    CInventory.fetch(CCharacter.CBuffer[(characters[character].id)].inventory, function(result, args)
-        result = result[1]
+    local orderedItems = {}
+    for i, j in imports.pairs(CInventory.CItems) do
+        imports.table.insert(orderedItems, i)
+    end
+    CInventory.getItemProperty(CCharacter.CBuffer[(characters[character].id)].inventory, orderedItems, {dbify.inventory.__connection__.itemFormat.counter}, function(result, args)
         if not result then
             imports.triggerEvent("Player:onToggleLoginUI", args[1])
             return false
@@ -175,6 +178,9 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
             slots = {}
         }
         ]]
+        for i, j in imports.pairs(result) do
+            imports.setElementData(args[1], "Item:"..i, imports.tonumber(j[(dbify.inventory.__connection__.itemFormat.counter)]) or 0)
+        end
         cache.resumeTicks[(args[1])] = imports.getTickCount()
         CPlayer.setChannel(args[1], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"])
         imports.bindKey(args[1], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Channel_ShuffleKey"], "down", shufflePlayerChannel)
