@@ -24,3 +24,4 @@ function fetchInventoryWeaponMag(...) return CInventory.fetchWeaponMag(...) end
 function fetchInventorySlot(...) return CInventory.fetchSlot(...) end
 function fetchInventoryItemCount(...) return CInventory.fetchItemCount(...) end
 function fetchInventoryMaxSlotsMultiplier(...) return CInventory.fetchMaxSlotsMultiplier(...) end
+function fetchInventoryParentMaxSlots(...) return CInventory.fetchParentMaxSlots(...) end

@@ -13,4 +13,3 @@
 -----------------
 
 function fetchInventorySlotDimensions(...) return CInventory.fetchSlotDimensions(...) end
-function fetchInventoryParentMaxSlots(...) return CInventory.fetchParentMaxSlots(...) end
