@@ -571,15 +571,10 @@ inventoryUI.renderUI = function(renderData)
                         inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight = inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height
                         inventoryUI.attachedItem.animTickCounter = getTickCount()
                         if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight > 0 then
-                            outputChatBox("YES SCROLL THE VICINITY..")
-                            --[[
-                            local slot_offsetY = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*(inventoryUI.attachedItem.prevSlotIndex - 1)) + template.contentWrapper.itemSlot.paddingY - (inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight*inventoryUI.buffer[inventoryUI.attachedItem.parent].gui.scroller.percent*0.01)
-                            local slot_prevOffsetY = inventoryUI.attachedItem.prevPosY - inventoryUI.buffer[inventoryUI.attachedItem.parent].gui.startY - template.contentWrapper.startY
-                            if (math.round(slot_offsetY, 2) ~= math.round(slot_prevOffsetY, 2)) then
-                                local finalScrollPercent = inventoryUI.buffer[inventoryUI.attachedItem.parent].gui.scroller.percent + ((slot_offsetY - slot_prevOffsetY)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100
-                                inventoryUI.attachedItem.__scrollItemBox = {initial = inventoryUI.buffer[inventoryUI.attachedItem.parent].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
+                            local slot_offsetY = inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + ((inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(inventoryUI.attachedItem.prevSlot - 1)) - (inventoryUI.buffer[(inventoryUI.attachedItem.parent)].bufferCache.overflowHeight*inventoryUI.buffer[(inventoryUI.attachedItem.parent)].scroller.percent*0.01)
+                            if imports.math.round(slot_offsetY, 2) ~= imports.math.round(inventoryUI.attachedItem.prevY, 2) then
+                                inventoryUI.buffer[(inventoryUI.attachedItem.parent)].scroller.percent = inventoryUI.buffer[(inventoryUI.attachedItem.parent)].scroller.percent + (((slot_offsetY - inventoryUI.attachedItem.prevY)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100)
                             end
-                            ]]
                         end
                     end
                     --triggerEvent("onClientInventorySound", localPlayer, "inventory_rollback_item")
