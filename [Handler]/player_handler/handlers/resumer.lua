@@ -123,9 +123,13 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                     for k = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
                         local v = FRAMEWORK_CONFIGS["Character"]["Datas"][k]
                         local value = CCharacter.CBuffer[(j.id)][v]
-                        if imports.tostring(value) == "nil" then value = nil end
-                        if imports.tostring(value) == "false" then value = false end
-                        if imports.tostring(value) == "true" then value = true end
+                        if imports.tostring(value) == "nil" then
+                            value = nil
+                        elseif imports.tostring(value) == "false" then
+                            value = false
+                        elseif imports.tostring(value) == "true" then
+                            value = true
+                        end
                         if value then value = imports.tonumber(value) or value end
                         CCharacter.CBuffer[(j.id)][v] = value
                     end
