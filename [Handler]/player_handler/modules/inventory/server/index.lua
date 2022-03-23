@@ -13,7 +13,7 @@
 ---------------------------
 
 CInventory.fetch = function(inventoryID, ...)
-    dbify.character.fetchAll({
+    dbify.inventory.fetchAll({
         {dbify.inventory.__connection__.keyColumn, inventoryID}
     }, ...)
     return true
