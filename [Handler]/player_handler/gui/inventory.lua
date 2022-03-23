@@ -358,7 +358,7 @@ inventoryUI.renderUI = function(renderData)
             end
         end
         ]]--
-        client_bufferCache = inventoryUI.buffer[(inventoryUI.clientInventory.element)].bufferCache
+        client_bufferCache = inventoryUI.buffer[localPlayer].bufferCache
         --[[
         for k, v in ipairs(inventory_bufferCache) do
             if CInventory.CItems[v.item] then
