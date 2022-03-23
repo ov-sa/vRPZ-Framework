@@ -303,12 +303,12 @@ inventoryUI.renderUI = function(renderData)
         local isUIActionEnabled = isUIEnabled and not inventoryUI.attachedItem
         local attachmentUITask = false
         local isLMBClicked = (inventoryUI.cache.keys.mouse == "mouse1") and isUIActionEnabled
-        local client_maxSlots = CInventory.fetchParentMaxSlots(localPlayer)
+        --local client_maxSlots = CInventory.fetchParentMaxSlots(localPlayer) --TODO: ENAB;E LATER
+        local client_maxSlots = CInventory.fetchMaxSlotsMultiplier() --TODO: RREMOVE LATER..
         local client_bufferCache, client_isHovered, client_isSlotHovered = nil, nil, nil
         local client_startX, client_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
         local client_width, client_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
-        
-        outputChatBox(client_maxSlots)
+
         --[[
         local totalSlots, assignedItems, occupiedSlots = client_maxSlots, {}, getPlayerOccupiedSlots(localPlayer) or {}
         if CInventory.CBuffer then
