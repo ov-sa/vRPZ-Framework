@@ -166,7 +166,6 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
 
     --[[
     --TODO: INIT ALL THIS
-    playerAttachments[source] = {}
     playerInventorySlots[source] = {
         maxSlots = maximumInventorySlots,
         slots = {}
