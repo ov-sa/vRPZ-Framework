@@ -301,6 +301,7 @@ inventoryUI.renderUI = function(renderData)
         if inventoryUI.isLangUpdated or not inventoryUI.bgTexture then inventoryUI.createBGTexture(inventoryUI.isLangUpdated) end
         local isUIEnabled = inventoryUI.cache.isEnabled
         local isUIActionEnabled = isUIEnabled and not inventoryUI.attachedItem
+        local attachmentUITask = false
         local isLMBClicked = (inventoryUI.cache.keys.mouse == "mouse1") and isUIActionEnabled
         local inventory_startX, inventory_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
         local inventory_width, inventory_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
@@ -435,14 +436,14 @@ inventoryUI.renderUI = function(renderData)
             iconWidth = (originalWidth / originalHeight)*iconHeight
             ]]
             if not inventoryUI.attachedItem.isOnTransition and (CLIENT_MTA_WINDOW_ACTIVE or not imports.isKeyOnHold("mouse1") or not isUIEnabled) then
-                if isItemAvailableForOrdering then
+                if attachmentUITask == "order" then
                     --[[
                     local slotWidth, slotHeight = horizontalSlotsToOccupy*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((horizontalSlotsToOccupy - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding), verticalSlotsToOccupy*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((verticalSlotsToOccupy - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)
                     local releaseIndex = inventoryUI.attachedItem.prevSlotIndex
                     inventoryUI.attachedItem.prevSlotIndex = isItemAvailableForOrdering.slotIndex
                     inventoryUI.attachedItem.prevPosX = inventoryUI.buffer[localPlayer].gui.startX + inventoryUI.gui.itemBox.templates[1].contentWrapper.startX + isItemAvailableForOrdering.offsetX + ((slotWidth - iconWidth)/2)
                     inventoryUI.attachedItem.prevPosY = inventoryUI.buffer[localPlayer].gui.startY + inventoryUI.gui.itemBox.templates[1].contentWrapper.startY + isItemAvailableForOrdering.offsetY + ((slotHeight - iconHeight)/2)
-                    inventoryUI.attachedItem.releaseType = "ordering"
+                    inventoryUI.attachedItem.releaseType = attachmentUITask
                     inventoryUI.attachedItem.releaseIndex = releaseIndex
                     if inventoryUI.attachedItem.parent == localPlayer then
                         if inventoryUI.attachedItem.isEquippedItem then
@@ -453,7 +454,7 @@ inventoryUI.renderUI = function(renderData)
                     end
                     triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                     ]]
-                elseif isItemAvailableForDropping then
+                elseif attachmentUITask = "drop" then
                     --[[
                     local totalLootItems = 0
                     for index, _ in pairs(inventoryUI.buffer[isItemAvailableForDropping.loot].inventory) do
@@ -484,7 +485,7 @@ inventoryUI.renderUI = function(renderData)
                     inventoryUI.attachedItem.prevSlotIndex = isItemAvailableForDropping.slotIndex
                     inventoryUI.attachedItem.prevPosX = inventoryUI.buffer[isItemAvailableForDropping.loot].gui.startX + template.contentWrapper.startX + template.contentWrapper.itemSlot.startX + template.contentWrapper.itemSlot.iconSlot.startX
                     inventoryUI.attachedItem.prevPosY = inventoryUI.buffer[isItemAvailableForDropping.loot].gui.startY + template.contentWrapper.startY + slot_offsetY
-                    inventoryUI.attachedItem.releaseType = "dropping"
+                    inventoryUI.attachedItem.releaseType = attachmentUITask
                     inventoryUI.attachedItem.releaseLoot = isItemAvailableForDropping.loot
                     inventoryUI.attachedItem.releaseIndex = releaseIndex
                     if inventoryUI.attachedItem.isEquippedItem then
@@ -518,7 +519,7 @@ inventoryUI.renderUI = function(renderData)
                     end
                     triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                     ]]
-                elseif isItemAvailableForEquipping then
+                elseif attachmentUITask == "equip" then
                     --[[
                     local slotWidth, slotHeight = inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].width - inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].paddingX, inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].height - inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].paddingY
                     local releaseIndex = inventoryUI.attachedItem.prevSlotIndex
@@ -529,7 +530,7 @@ inventoryUI.renderUI = function(renderData)
                     inventoryUI.attachedItem.prevSlotIndex = isItemAvailableForEquipping.slotIndex
                     inventoryUI.attachedItem.prevPosX = isItemAvailableForEquipping.offsetX
                     inventoryUI.attachedItem.prevPosY = isItemAvailableForEquipping.offsetY
-                    inventoryUI.attachedItem.releaseType = "equipping"
+                    inventoryUI.attachedItem.releaseType = attachmentUITask
                     inventoryUI.attachedItem.releaseLoot = isItemAvailableForEquipping.loot
                     inventoryUI.attachedItem.releaseIndex = releaseIndex
                     inventoryUI.attachedItem.reservedSlot = reservedSlot
@@ -577,6 +578,7 @@ inventoryUI.renderUI = function(renderData)
                             end
                         end
                     end
+                    --TODO: PLAY SOUND
                     --triggerEvent("onClientInventorySound", localPlayer, "inventory_rollback_item")
                 end
                 inventoryUI.detachItem()
@@ -702,9 +704,6 @@ local bufferCache = {
 }
 
 function displayInventoryUI()
-    local isItemAvailableForOrdering = false
-    local isItemAvailableForDropping = false
-    local isItemAvailableForEquipping = false
     local playerMaxSlots = getElementMaxSlots(localPlayer)
     local playerUsedSlots = getElementUsedSlots(localPlayer)
 
