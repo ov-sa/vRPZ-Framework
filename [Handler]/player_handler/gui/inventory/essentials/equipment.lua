@@ -22,10 +22,10 @@ playerAttachments = {}
 
 function refreshPlayerEquipmentSlot(player, slotIndex)
 
-    if not player or not isElement(player) or player:getType() ~= "player" or not isPlayerInitialized(player) or not slotIndex or not characterSlots[slotIndex] or not playerAttachments[player] or not playerInventorySlots[player] then return false end
+    if not player or not isElement(player) or player:getType() ~= "player" or not isPlayerInitialized(player) or not slotIndex or not characterSlots[slotIndex] or not playerAttachments[player] or not CInventory.CBuffer[parent] then return false end
 
-    if playerInventorySlots[player].slots[slotIndex] then
-        local itemDetails, itemCategory = getItemDetails(playerInventorySlots[player].slots[slotIndex])
+    if CInventory.CBuffer[parent].slots[slotIndex] then
+        local itemDetails, itemCategory = getItemDetails(CInventory.CBuffer[parent].slots[slotIndex])
         if itemDetails and itemCategory then
             local objectID, attachmentID, offsets = false, false, false
             if inventoryDatas[itemCategory].isWeaponCategory then
@@ -48,7 +48,7 @@ function refreshPlayerEquipmentSlot(player, slotIndex)
                 exports.bone_attach:attach(playerAttachments[player][slotIndex], player, attachmentID, offsets.offX, offsets.offY, offsets.offZ, offsets.rotX, offsets.rotY, offsets.rotZ)
             end
         end
-        player:setData("Slot:"..slotIndex, playerInventorySlots[player].slots[slotIndex])
+        player:setData("Slot:"..slotIndex, CInventory.CBuffer[parent].slots[slotIndex])
         player:setData("Slot:Object:"..slotIndex, playerAttachments[player][slotIndex])
     else
         if playerAttachments[player][slotIndex] and isElement(playerAttachments[player][slotIndex]) then
@@ -71,9 +71,9 @@ end
 
 function clearPlayerEquipmentSlot(player, slotIndex)
 
-    if not player or not isElement(player) or player:getType() ~= "player" or not isPlayerInitialized(player) or not slotIndex or not characterSlots[slotIndex] or not playerAttachments[player] or not playerInventorySlots[player] then return false end
+    if not player or not isElement(player) or player:getType() ~= "player" or not isPlayerInitialized(player) or not slotIndex or not characterSlots[slotIndex] or not playerAttachments[player] or not CInventory.CBuffer[parent] then return false end
 
-    playerInventorySlots[player].slots[slotIndex] = nil
+    CInventory.CBuffer[parent].slots[slotIndex] = nil
     refreshPlayerEquipmentSlot(player, slotIndex)
     return true
     --[[

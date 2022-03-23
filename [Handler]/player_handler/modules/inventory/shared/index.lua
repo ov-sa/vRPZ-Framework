@@ -105,18 +105,16 @@ CInventory = {
         return imports.tonumber(imports.getElementData(parent, "Inventory:MaxSlots")) or 0
     end,
 
-    CInventory.fetchParentUsedSlots = function CInventory.fetchParentUsedSlots(player)
-        if not player or not isElement(player) or player:getType() ~= "player" then return false end
+    CInventory.fetchParentUsedSlots = function(parent)
         if not CPlayer.isInitialized(player) then return false end
-    
         local totalSlots, assignedSlots = false, false
         if localPlayer then
             totalSlots = CInventory.fetchParentMaxSlots(player)
             assignedSlots = inventoryUI.slots.slots
         else
-            if playerInventorySlots[player] then
-                totalSlots = playerInventorySlots[player].maxSlots
-                assignedSlots = playerInventorySlots[player].slots
+            if CInventory.CBuffer[parent] then
+                totalSlots = CInventory.CBuffer[parent].maxSlots
+                assignedSlots = CInventory.CBuffer[parent].slots
             end
         end
         if totalSlots and assignedSlots then

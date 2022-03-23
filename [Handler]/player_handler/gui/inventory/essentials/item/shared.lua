@@ -23,9 +23,9 @@ function CInventory.fetchParentUsedSlots(player)
         totalSlots = CInventory.fetchParentMaxSlots(player)
         assignedSlots = inventoryUI.slots.slots
     else
-        if playerInventorySlots[player] then
-            totalSlots = playerInventorySlots[player].maxSlots
-            assignedSlots = playerInventorySlots[player].slots
+        if CInventory.CBuffer[parent] then
+            totalSlots = CInventory.CBuffer[parent].maxSlots
+            assignedSlots = CInventory.CBuffer[parent].slots
         end
     end
     if totalSlots and assignedSlots then
@@ -93,8 +93,8 @@ function isPlayerSlotAvailableForOrdering(player, item, slotIndex, isEquippedIte
             occupiedSlots = CInventory.fetchParentUsedSlots(player)
         end
     else
-        if playerInventorySlots[player] then
-            totalSlots = playerInventorySlots[player].maxSlots
+        if CInventory.CBuffer[parent] then
+            totalSlots = CInventory.CBuffer[parent].maxSlots
             occupiedSlots = CInventory.fetchParentUsedSlots(player)
         end
     end
@@ -152,7 +152,7 @@ function isPlayerSlotAvailableForEquipping(player, item, slotIndex, viaClientInv
             end
         end
     else
-        if playerInventorySlots[player] and not playerInventorySlots[player].slots[slotIndex] then
+        if CInventory.CBuffer[parent] and not CInventory.CBuffer[parent].slots[slotIndex] then
             return true
         end
     end
