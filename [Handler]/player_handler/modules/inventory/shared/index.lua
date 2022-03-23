@@ -107,50 +107,46 @@ CInventory = {
 
     fetchParentUsedSlots = function(parent)
         if not CPlayer.isInitialized(player) or (not localPlayer and not CInventory.CBuffer[parent]) then return false end
-        local totalSlots, assignedSlots = false, false
+        local maxSlots, assignedSlots, usedSlots = false, false, {}
         if localPlayer then
-            totalSlots, assignedSlots = CInventory.fetchParentMaxSlots(player), CInventory.CBuffer.slots
+            maxSlots, assignedSlots = CInventory.fetchParentMaxSlots(player), CInventory.CBuffer.slots
         else
-            totalSlots, assignedSlots = CInventory.CBuffer[parent].maxSlots, CInventory.CBuffer[parent].slots
+            maxSlots, assignedSlots = CInventory.CBuffer[parent].maxSlots, CInventory.CBuffer[parent].slots
         end
-        local occupiedSlots = {}
-        for i, j in pairs(assignedSlots) do
-            local isSlotToBeConsidered = true
+        for i, j in imports.pairs(assignedSlots) do
+            local isValidSlot = true
             if localPlayer then
-                if not tonumber(i) then
-                    isSlotToBeConsidered = false
+                if not imports.tonumber(i) then --TODO: MAKE MAKE A BETTER CHECK?
+                    isValidSlot = false
                 else
+                    --TODO: WIP..
+                    --[[
                     if j.movementType then
                         if j.movementType ~= "inventory" and j.movementType ~= "equipment" then
-                            isSlotToBeConsidered = false
+                            isValidSlot = false
                         else
                             if j.movementType == "equipment" then
                                 if inventoryUI.attachedItem and (inventoryUI.attachedItem.itemBox == localPlayer) and (inventoryUI.attachedItem.prevSlotIndex == j.equipmentIndex) then                
                                     if not inventoryUI.attachedItem.animTickCounter then
-                                        isSlotToBeConsidered = false
+                                        isValidSlot = false
                                     end
                                 end
                             end
                         end
                     end
+                    ]]
                 end
             end
-            if isSlotToBeConsidered then
-                local _itemDetails = getItemDetails(j.item)
-                if _itemDetails then
-                    occupiedSlots[i] = true
-                    local horizontalSlotsToOccupy = math.max(1, tonumber(_itemDetails.itemHorizontalSlots) or 1)
-                    local verticalSlotsToOccupy = math.max(1, tonumber(_itemDetails.itemVerticalSlots) or 1)
-                    for k = i, i + (horizontalSlotsToOccupy - 1), 1 do
-                        for m = 1, verticalSlotsToOccupy, 1 do
-                            local succeedingColumnIndex = k + (maximumInventoryRowSlots*(m - 1))
-                            occupiedSlots[succeedingColumnIndex] = true
-                        end
+            if isValidSlot then
+                usedSlots[i] = true
+                for k = i, i + (CInventory.CItems[(j.item)].data.weight.columns - 1), 1 do
+                    for m = 1, CInventory.CItems[(j.item)].data.weight.rows, 1 do
+                        usedSlots[(k + (maximumInventoryRowSlots*(m - 1)))] = true
                     end
                 end
             end
         end
-        return occupiedSlots
+        return usedSlots
     end
 }
 
