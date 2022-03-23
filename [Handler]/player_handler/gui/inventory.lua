@@ -211,7 +211,8 @@ inventoryUI.destroyBuffer = function(parent)
 end
 inventoryUI.updateBuffer = function(parent)
     if not parent or not imports.isElement(parent) or not inventoryUI.buffer[parent] then return false end
-    inventoryUI.buffer[parent].maxSlots CInventory.fetchParentMaxSlots(parent)
+    --inventoryUI.buffer[parent].maxSlots CInventory.fetchParentMaxSlots(parent) --TODO: ENABLE LATER
+    inventoryUI.buffer[parent].maxSlots CInventory.fetchMaxSlotsMultiplier() --TODO: REMOVE LATER
     inventoryUI.buffer[parent].inventory = {}
     inventoryUI.buffer[parent].bufferCache = nil
     for i, j in imports.pairs(CInventory.CItems) do
