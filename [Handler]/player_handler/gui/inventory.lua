@@ -211,7 +211,7 @@ inventoryUI.destroyBuffer = function(parent)
 end
 inventoryUI.updateBuffer = function(parent)
     if not parent or not imports.isElement(parent) or not inventoryUI.buffer[parent] then return false end
-    inventoryUI.buffer[parent].maxSlots = CInventory.fetchParentMaxSlots(parent)
+    inventoryUI.buffer[parent].maxSlots, inventoryUI.buffer[parent].assignedSlots, inventoryUI.buffer[parent].usedSlots = CInventory.fetchParentMaxSlots(parent), CInventory.fetchParentAssignedSlots(parent), CInventory.fetchParentUsedSlots(parent)
     inventoryUI.buffer[parent].inventory = {}
     inventoryUI.buffer[parent].bufferCache = nil
     for i, j in imports.pairs(CInventory.CItems) do
@@ -306,7 +306,7 @@ inventoryUI.renderUI = function(renderData)
         local client_startX, client_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
         local client_width, client_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
 
-        local totalSlots, assignedItems, occupiedSlots = inventoryUI.buffer[localPlayer].maxSlots, {}, CInventory.fetchParentUsedSlots(localPlayer) or {}
+        local maxSlots, assignedItems, usedSlots = inventoryUI.buffer[localPlayer].maxSlots, {}, inventoryUI.buffer[localPlayer].usedSlots
         if CInventory.CBuffer then
             --[[
             for k, v in pairs(CInventory.CBuffer.slots) do
@@ -397,8 +397,8 @@ inventoryUI.renderUI = function(renderData)
                 end
             end
         end
-        for k = 1, totalSlots, 1 do
-            if not occupiedSlots[k] then
+        for k = 1, maxSlots, 1 do
+            if not usedSlots[k] then
                 local slot_row = math.ceil(k/maximumInventoryRowSlots)
                 local slot_column = k - (math.max(0, slot_row - 1)*maximumInventoryRowSlots)
                 local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_column - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
@@ -406,10 +406,10 @@ inventoryUI.renderUI = function(renderData)
                 if inventoryUI.attachedItem and inventoryUI.attachedItem.parent and isElement(inventoryUI.attachedItem.parent) and inventoryUI.attachedItem.parent ~= localPlayer and inventoryUI.attachedItem.animTickCounter and inventoryUI.attachedItem.releaseType and inventoryUI.attachedItem.releaseType == "ordering" then
                     local slotIndexesToOccupy = {}
                     for m = inventoryUI.attachedItem.prevSlotIndex, inventoryUI.attachedItem.prevSlotIndex + (inventoryUI.attachedItem.occupiedRowSlots - 1), 1 do
-                        if m <= totalSlots then
+                        if m <= maxSlots then
                             for x = 1, inventoryUI.attachedItem.occupiedColumnSlots, 1 do
                                 local succeedingColumnIndex = m + (maximumInventoryRowSlots*(x - 1))
-                                if succeedingColumnIndex <= totalSlots then
+                                if succeedingColumnIndex <= maxSlots then
                                     if k == succeedingColumnIndex then
                                         isSlotToBeDrawn = false
                                         break
@@ -451,8 +451,8 @@ inventoryUI.renderUI = function(renderData)
         ]]
         if inventoryUI.attachedItem and not inventoryUI.attachedItem.animTickCounter then
             --[[
-            for k = 1, totalSlots, 1 do
-                if not occupiedSlots[k] then
+            for k = 1, maxSlots, 1 do
+                if not usedSlots[k] then
                     local slot_row = math.ceil(k/maximumInventoryRowSlots)
                     local slot_column = k - (math.max(0, slot_row - 1)*maximumInventoryRowSlots)
                     local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_column - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
@@ -470,7 +470,7 @@ inventoryUI.renderUI = function(renderData)
                             for m = k, k + (inventoryUI.attachedItem.occupiedRowSlots - 1), 1 do
                                 for x = 1, inventoryUI.attachedItem.occupiedColumnSlots, 1 do
                                     local succeedingColumnIndex = m + (maximumInventoryRowSlots*(x - 1))
-                                    if succeedingColumnIndex <= totalSlots and not occupiedSlots[succeedingColumnIndex] then
+                                    if succeedingColumnIndex <= maxSlots and not usedSlots[succeedingColumnIndex] then
                                         local _slot_row = math.ceil(succeedingColumnIndex/maximumInventoryRowSlots)
                                         local _slot_column = succeedingColumnIndex - (math.max(0, _slot_row - 1)*maximumInventoryRowSlots)
                                         local _slot_offsetX, _slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, _slot_column - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, _slot_row - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
@@ -988,7 +988,7 @@ function displayInventoryUI()
                 end
                 bufferCache = j.bufferCache
                 dxSetRenderTarget(j.gui.bufferRT, true)
-                local totalSlots, assignedItems, occupiedSlots = math.min(maxSlots, math.max(maxSlots, #bufferCache)), {}, CInventory.fetchParentUsedSlots(localPlayer) or {}
+                local maxSlots, assignedItems, usedSlots = math.min(maxSlots, math.max(maxSlots, #bufferCache)), {}, CInventory.fetchParentUsedSlots(localPlayer) or {}
                 local totalContentHeight = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, math.ceil(maxSlots/maximumInventoryRowSlots) - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) + template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding
                 local exceededContentHeight =  totalContentHeight - template.contentWrapper.height
                 dxSetRenderTarget(j.gui.bufferRT, true)
@@ -1084,8 +1084,8 @@ function displayInventoryUI()
                         end
                     end
                 end
-                for k = 1, totalSlots, 1 do
-                    if not occupiedSlots[k] then
+                for k = 1, maxSlots, 1 do
+                    if not usedSlots[k] then
                         local slot_row = math.ceil(k/maximumInventoryRowSlots)
                         local slot_column = k - (math.max(0, slot_row - 1)*maximumInventoryRowSlots)
                         local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_column - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
@@ -1093,10 +1093,10 @@ function displayInventoryUI()
                         if inventoryUI.attachedItem and inventoryUI.attachedItem.parent and isElement(inventoryUI.attachedItem.parent) and inventoryUI.attachedItem.parent ~= localPlayer and inventoryUI.attachedItem.animTickCounter and inventoryUI.attachedItem.releaseType and inventoryUI.attachedItem.releaseType == "ordering" then
                             local slotIndexesToOccupy = {}
                             for m = inventoryUI.attachedItem.prevSlotIndex, inventoryUI.attachedItem.prevSlotIndex + (inventoryUI.attachedItem.occupiedRowSlots - 1), 1 do
-                                if m <= totalSlots then
+                                if m <= maxSlots then
                                     for x = 1, inventoryUI.attachedItem.occupiedColumnSlots, 1 do
                                         local succeedingColumnIndex = m + (maximumInventoryRowSlots*(x - 1))
-                                        if succeedingColumnIndex <= totalSlots then
+                                        if succeedingColumnIndex <= maxSlots then
                                             if k == succeedingColumnIndex then
                                                 isSlotToBeDrawn = false
                                                 break
@@ -1136,8 +1136,8 @@ function displayInventoryUI()
                     end
                 end
                 if inventoryUI.attachedItem and not inventoryUI.attachedItem.animTickCounter then
-                    for k = 1, totalSlots, 1 do
-                        if not occupiedSlots[k] then
+                    for k = 1, maxSlots, 1 do
+                        if not usedSlots[k] then
                             local slot_row = math.ceil(k/maximumInventoryRowSlots)
                             local slot_column = k - (math.max(0, slot_row - 1)*maximumInventoryRowSlots)
                             local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_column - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
@@ -1155,7 +1155,7 @@ function displayInventoryUI()
                                     for m = k, k + (inventoryUI.attachedItem.occupiedRowSlots - 1), 1 do
                                         for x = 1, inventoryUI.attachedItem.occupiedColumnSlots, 1 do
                                             local succeedingColumnIndex = m + (maximumInventoryRowSlots*(x - 1))
-                                            if succeedingColumnIndex <= totalSlots and not occupiedSlots[succeedingColumnIndex] then
+                                            if succeedingColumnIndex <= maxSlots and not usedSlots[succeedingColumnIndex] then
                                                 local _slot_row = math.ceil(succeedingColumnIndex/maximumInventoryRowSlots)
                                                 local _slot_column = succeedingColumnIndex - (math.max(0, _slot_row - 1)*maximumInventoryRowSlots)
                                                 local _slot_offsetX, _slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, _slot_column - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, _slot_row - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
