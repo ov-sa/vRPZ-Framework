@@ -447,8 +447,8 @@ inventoryUI.renderUI = function(renderData)
                     end
                 end
             end
-            ]]
         end
+        ]]
         if inventoryUI.attachedItem and not inventoryUI.attachedItem.animTickCounter then
             --[[
             for k = 1, totalSlots, 1 do
