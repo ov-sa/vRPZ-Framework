@@ -309,7 +309,7 @@ inventoryUI.renderUI = function(renderData)
         local client_width, client_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
 
         --[[
-        local totalSlots, assignedItems, occupiedSlots = inventoryUI.buffer[localPlayer].maxSlots, {}, getPlayerOccupiedSlots(localPlayer) or {}
+        local totalSlots, assignedItems, occupiedSlots = inventoryUI.buffer[localPlayer].maxSlots, {}, CInventory.fetchParentUsedSlots(localPlayer) or {}
         if CInventory.CBuffer then
             for k, v in pairs(CInventory.CBuffer.slots) do
                 if tonumber(k) then
@@ -990,7 +990,7 @@ function displayInventoryUI()
                 end
                 bufferCache = j.bufferCache
                 dxSetRenderTarget(j.gui.bufferRT, true)
-                local totalSlots, assignedItems, occupiedSlots = math.min(maxSlots, math.max(maxSlots, #bufferCache)), {}, getPlayerOccupiedSlots(localPlayer) or {}
+                local totalSlots, assignedItems, occupiedSlots = math.min(maxSlots, math.max(maxSlots, #bufferCache)), {}, CInventory.fetchParentUsedSlots(localPlayer) or {}
                 local totalContentHeight = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, math.ceil(maxSlots/maximumInventoryRowSlots) - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) + template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding
                 local exceededContentHeight =  totalContentHeight - template.contentWrapper.height
                 dxSetRenderTarget(j.gui.bufferRT, true)

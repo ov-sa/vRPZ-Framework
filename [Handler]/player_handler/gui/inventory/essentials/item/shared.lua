@@ -13,7 +13,7 @@
 --[[ Function: Retrieves Player's Occupied Slots ]]--
 -----------------------------------------------------
 
-function getPlayerOccupiedSlots(player)
+function CInventory.fetchParentUsedSlots(player)
 
     if not player or not isElement(player) or player:getType() ~= "player" then return false end
     if not CPlayer.isInitialized(player) then return false end
@@ -90,12 +90,12 @@ function isPlayerSlotAvailableForOrdering(player, item, slotIndex, isEquippedIte
     if localPlayer then
         if inventoryUI.isUIEnabled() then
             totalSlots = CInventory.fetchParentMaxSlots(player)
-            occupiedSlots = getPlayerOccupiedSlots(player)
+            occupiedSlots = CInventory.fetchParentUsedSlots(player)
         end
     else
         if playerInventorySlots[player] then
             totalSlots = playerInventorySlots[player].maxSlots
-            occupiedSlots = getPlayerOccupiedSlots(player)
+            occupiedSlots = CInventory.fetchParentUsedSlots(player)
         end
     end
     if totalSlots and occupiedSlots and slotIndex <= totalSlots and not occupiedSlots[slotIndex] then

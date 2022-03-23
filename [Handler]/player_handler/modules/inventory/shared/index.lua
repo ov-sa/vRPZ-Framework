@@ -103,6 +103,63 @@ CInventory = {
             return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), (localPlayer and imports.tonumber(CInventory.CBuffer.maxSlots)) or (not localPlayer and CInventory.CBuffer[parent] and imports.tonumber(CInventory.CBuffer[parent].maxSlots)) or 0)
         end
         return imports.tonumber(imports.getElementData(parent, "Inventory:MaxSlots")) or 0
+    end,
+
+    CInventory.fetchParentUsedSlots = function CInventory.fetchParentUsedSlots(player)
+        if not player or not isElement(player) or player:getType() ~= "player" then return false end
+        if not CPlayer.isInitialized(player) then return false end
+    
+        local totalSlots, assignedSlots = false, false
+        if localPlayer then
+            totalSlots = CInventory.fetchParentMaxSlots(player)
+            assignedSlots = inventoryUI.slots.slots
+        else
+            if playerInventorySlots[player] then
+                totalSlots = playerInventorySlots[player].maxSlots
+                assignedSlots = playerInventorySlots[player].slots
+            end
+        end
+        if totalSlots and assignedSlots then
+            local occupiedSlots = {}
+            for i, j in pairs(assignedSlots) do
+                local isSlotToBeConsidered = true
+                if localPlayer then
+                    if not tonumber(i) then
+                        isSlotToBeConsidered = false
+                    else
+                        if j.movementType then
+                            if j.movementType ~= "inventory" and j.movementType ~= "equipment" then
+                                isSlotToBeConsidered = false
+                            else
+                                if j.movementType == "equipment" then
+                                    if inventoryUI.attachedItem and (inventoryUI.attachedItem.itemBox == localPlayer) and (inventoryUI.attachedItem.prevSlotIndex == j.equipmentIndex) then                
+                                        if not inventoryUI.attachedItem.animTickCounter then
+                                            isSlotToBeConsidered = false
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+                if isSlotToBeConsidered then
+                    local _itemDetails = getItemDetails(j.item)
+                    if _itemDetails then
+                        occupiedSlots[i] = true
+                        local horizontalSlotsToOccupy = math.max(1, tonumber(_itemDetails.itemHorizontalSlots) or 1)
+                        local verticalSlotsToOccupy = math.max(1, tonumber(_itemDetails.itemVerticalSlots) or 1)
+                        for k = i, i + (horizontalSlotsToOccupy - 1), 1 do
+                            for m = 1, verticalSlotsToOccupy, 1 do
+                                local succeedingColumnIndex = k + (maximumInventoryRowSlots*(m - 1))
+                                occupiedSlots[succeedingColumnIndex] = true
+                            end
+                        end
+                    end
+                end
+            end
+            return occupiedSlots
+        end
+        return false
     end
 }
 
