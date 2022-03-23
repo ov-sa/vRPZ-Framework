@@ -150,8 +150,15 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
             CCharacter.CBuffer[(j.id)] = nil
         end
     end
+    imports.collectgarbage()
+
     CInventory.fetch(CCharacter.CBuffer[(characters[character].id)].inventory, function(result, args)
         result = result[1]
+        if not result then
+            imports.triggerEvent("Player:onToggleLoginUI", args[1])
+            return false
+        end
+
         local serverWeather, serverTime = CGame.getNativeWeather()
         local serial = CPlayer.getSerial(args[1])
         local characterIdentity = CCharacter.CBuffer[(args[2])].identity
@@ -168,7 +175,6 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
             slots = {}
         }
         ]]
-        imports.collectgarbage()
         cache.resumeTicks[(args[1])] = imports.getTickCount()
         CPlayer.setChannel(args[1], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"])
         imports.bindKey(args[1], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Channel_ShuffleKey"], "down", shufflePlayerChannel)
