@@ -97,7 +97,7 @@ CCharacter.saveProgress = function(player)
     if not CPlayer.isInitialized(player) then return false end
     local serial = imports.getPlayerSerial(player)
     local characterID = imports.getElementData(player, "Character:ID")
-    local inventoryID = imports.getElementData(player, "Inventory:ID")
+    local inventoryID = CCharacter.CBuffer[characterID].inventory
     CCharacter.setData(characterID, {
         {"location", imports.toJSON(CCharacter.getLocation(player))}
     })
