@@ -57,14 +57,14 @@ dbify["inventory"] = {
 
     ensureItems = function(items, callback, ...)
         if not dbify.mysql.__connection__.instance then return false end
-        if not items or (imports.type(items) ~= "table") or not callback or (imports.type(callback) ~= "function") then return false end
+        if not items or (imports.type(items) ~= "table") then return false end
         imports.dbQuery(function(queryHandler, arguments)
             local callbackReference = callback
             local result = imports.dbPoll(queryHandler, 0)
             local itemsToBeAdded, itemsToBeDeleted = {}, {}
             if result and (#result > 0) then
                 for i, j in imports.ipairs(result) do
-                    local columnName = j["COLUMN_NAME"]
+                    local columnName = j["column_name"]
                     local itemIndex = imports.string.gsub(columnName, "item_", "", 1)
                     if not arguments[1].items[itemIndex] then
                         imports.table.insert(itemsToBeDeleted, columnName)
