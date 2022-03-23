@@ -106,58 +106,51 @@ CInventory = {
     end,
 
     fetchParentUsedSlots = function(parent)
-        if not CPlayer.isInitialized(player) then return false end
+        if not CPlayer.isInitialized(player) or (not localPlayer and not CInventory.CBuffer[parent]) then return false end
         local totalSlots, assignedSlots = false, false
         if localPlayer then
-            totalSlots = CInventory.fetchParentMaxSlots(player)
-            assignedSlots = CInventory.CBuffer.slots
+            totalSlots, assignedSlots = CInventory.fetchParentMaxSlots(player), CInventory.CBuffer.slots
         else
-            if CInventory.CBuffer[parent] then
-                totalSlots = CInventory.CBuffer[parent].maxSlots
-                assignedSlots = CInventory.CBuffer[parent].slots
-            end
+            totalSlots, assignedSlots = CInventory.CBuffer[parent].maxSlots, CInventory.CBuffer[parent].slots
         end
-        if totalSlots and assignedSlots then
-            local occupiedSlots = {}
-            for i, j in pairs(assignedSlots) do
-                local isSlotToBeConsidered = true
-                if localPlayer then
-                    if not tonumber(i) then
-                        isSlotToBeConsidered = false
-                    else
-                        if j.movementType then
-                            if j.movementType ~= "inventory" and j.movementType ~= "equipment" then
-                                isSlotToBeConsidered = false
-                            else
-                                if j.movementType == "equipment" then
-                                    if inventoryUI.attachedItem and (inventoryUI.attachedItem.itemBox == localPlayer) and (inventoryUI.attachedItem.prevSlotIndex == j.equipmentIndex) then                
-                                        if not inventoryUI.attachedItem.animTickCounter then
-                                            isSlotToBeConsidered = false
-                                        end
+        local occupiedSlots = {}
+        for i, j in pairs(assignedSlots) do
+            local isSlotToBeConsidered = true
+            if localPlayer then
+                if not tonumber(i) then
+                    isSlotToBeConsidered = false
+                else
+                    if j.movementType then
+                        if j.movementType ~= "inventory" and j.movementType ~= "equipment" then
+                            isSlotToBeConsidered = false
+                        else
+                            if j.movementType == "equipment" then
+                                if inventoryUI.attachedItem and (inventoryUI.attachedItem.itemBox == localPlayer) and (inventoryUI.attachedItem.prevSlotIndex == j.equipmentIndex) then                
+                                    if not inventoryUI.attachedItem.animTickCounter then
+                                        isSlotToBeConsidered = false
                                     end
                                 end
                             end
                         end
                     end
                 end
-                if isSlotToBeConsidered then
-                    local _itemDetails = getItemDetails(j.item)
-                    if _itemDetails then
-                        occupiedSlots[i] = true
-                        local horizontalSlotsToOccupy = math.max(1, tonumber(_itemDetails.itemHorizontalSlots) or 1)
-                        local verticalSlotsToOccupy = math.max(1, tonumber(_itemDetails.itemVerticalSlots) or 1)
-                        for k = i, i + (horizontalSlotsToOccupy - 1), 1 do
-                            for m = 1, verticalSlotsToOccupy, 1 do
-                                local succeedingColumnIndex = k + (maximumInventoryRowSlots*(m - 1))
-                                occupiedSlots[succeedingColumnIndex] = true
-                            end
+            end
+            if isSlotToBeConsidered then
+                local _itemDetails = getItemDetails(j.item)
+                if _itemDetails then
+                    occupiedSlots[i] = true
+                    local horizontalSlotsToOccupy = math.max(1, tonumber(_itemDetails.itemHorizontalSlots) or 1)
+                    local verticalSlotsToOccupy = math.max(1, tonumber(_itemDetails.itemVerticalSlots) or 1)
+                    for k = i, i + (horizontalSlotsToOccupy - 1), 1 do
+                        for m = 1, verticalSlotsToOccupy, 1 do
+                            local succeedingColumnIndex = k + (maximumInventoryRowSlots*(m - 1))
+                            occupiedSlots[succeedingColumnIndex] = true
                         end
                     end
                 end
             end
-            return occupiedSlots
         end
-        return false
+        return occupiedSlots
     end
 }
 
