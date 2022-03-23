@@ -19,10 +19,10 @@ syncSettings = {
 }
 
 dbSettings = {
-    username = "vrpz_template2",
-    password = "vrpz_template",
-    database = "vrpz_template2",
-    host = "db4free.net",
+    username = "sql10481057",
+    password = "2KKSPdZT9v",
+    database = "sql10481057",
+    host = "sql10.freemysqlhosting.net",
     port = "3306",
     options = ""
 }
