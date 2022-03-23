@@ -144,34 +144,35 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         return false
     end
 
-    local serverWeather, serverTime = CGame.getNativeWeather()
-    local serial = CPlayer.getSerial(source)
-    local characterID = characters[character].id
-    local characterIdentity = CCharacter.CBuffer[characterID].identity
-    imports.setElementData(source, "Character:ID", characterID)
-    imports.setElementData(source, "Character:Identity", characterIdentity)
-    imports.setElementData(source, "Player:Initialized", true)
-    CPlayer.setData(serial, {
-        {"character", character}
-    })
-
-    --[[
-    --TODO: INIT ALL THIS
-    playerInventorySlots[source] = {
-        maxSlots = maximumInventorySlots,
-        slots = {}
-    }
-    ]]
     for i = 1, #characters, 1 do
         if i ~= character then
             local j = characters[i]
             CCharacter.CBuffer[(j.id)] = nil
         end
     end
-    imports.collectgarbage()
-    cache.resumeTicks[source] = imports.getTickCount()
-    CPlayer.setChannel(source, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"])
-    imports.bindKey(source, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Channel_ShuffleKey"], "down", shufflePlayerChannel)
-    imports.triggerClientEvent(source, "Player:onSyncWeather", source, serverWeather, serverTime)
-    imports.triggerEvent("Player:onSpawn", source, CCharacter.CBuffer[characterID].location, true)
+    CInventory.fetch(CCharacter.CBuffer[(characters[character].id)].inventory, function(result, args)
+        result = result[1]
+        local serverWeather, serverTime = CGame.getNativeWeather()
+        local serial = CPlayer.getSerial(args[1])
+        local characterIdentity = CCharacter.CBuffer[(args[2])].identity
+        imports.setElementData(args[1], "Character:ID", args[2])
+        imports.setElementData(args[1], "Character:Identity", characterIdentity)
+        imports.setElementData(args[1], "Player:Initialized", true)
+        CPlayer.setData(serial, {
+            {"character", character}
+        })
+        --[[
+        --TODO: INIT ALL THIS
+        playerInventorySlots[source] = {
+            maxSlots = maximumInventorySlots,
+            slots = {}
+        }
+        ]]
+        imports.collectgarbage()
+        cache.resumeTicks[(args[1])] = imports.getTickCount()
+        CPlayer.setChannel(args[1], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"])
+        imports.bindKey(args[1], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Channel_ShuffleKey"], "down", shufflePlayerChannel)
+        imports.triggerClientEvent(args[1], "Player:onSyncWeather", args[1], serverWeather, serverTime)
+        imports.triggerEvent("Player:onSpawn", args[1], CCharacter.CBuffer[(args[2])].location, true)
+    end, source, characters[character].id)
 end)
