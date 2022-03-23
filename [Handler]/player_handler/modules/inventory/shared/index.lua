@@ -89,6 +89,10 @@ CInventory = {
     fetchItemCount = function(parent, item)
         if not parent or not item or not imports.isElement(parent) or not CInventory.CItems[item] then return false end
         return imports.math.max(0, imports.tonumber(imports.getElementData(parent, "Item:"..item)) or 0)
+    end,
+
+    fetchMaxSlotsMultiplier = function()
+        return FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns
     end
 }
 

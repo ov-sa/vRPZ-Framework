@@ -14,7 +14,6 @@
 
 configVars["Inventory"] = {
 
-    ["UI_ToggleKey"] = "j",
-    ["Max_Weight"] = 500
+    ["UI_ToggleKey"] = "j"
 
 }

@@ -90,6 +90,7 @@
     <export function="fetchInventoryWeaponMag" type="shared"/>
     <export function="fetchInventorySlot" type="shared"/>
     <export function="fetchInventoryItemCount" type="shared"/>
+    <export function="fetchInventoryMaxSlotsMultiplier" type="shared"/>
     <export function="fetchInventoryParentMaxSlots" type="shared"/>
     <export function="fetchInventory" type="server"/>
     <export function="ensureInventoryItems" type="server"/>
