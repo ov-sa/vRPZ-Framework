@@ -15,7 +15,6 @@
 local imports = {
     pairs = pairs,
     tonumber = tonumber,
-    tostring = tostring,
     getTickCount = getTickCount,
     collectgarbage = collectgarbage,
     addEvent = addEvent,
@@ -29,7 +28,8 @@ local imports = {
     setPlayerNametagShowing = setPlayerNametagShowing,
     toJSON = toJSON,
     fromJSON = fromJSON,
-    table = table
+    table = table,
+    string = string
 }
 
 
@@ -94,16 +94,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
             CPlayer.CBuffer[(args[2])] = args[3]
             for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
                 local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
-                local value = CPlayer.CBuffer[(args[2])][j]
-                if imports.tostring(value) == "nil" then
-                    value = nil
-                elseif imports.tostring(value) == "false" then
-                    value = false
-                elseif imports.tostring(value) == "true" then
-                    value = true
-                end
-                if value then value = imports.tonumber(value) or value end
-                CPlayer.CBuffer[(args[2])][j] = value
+                CPlayer.CBuffer[(args[2])][j] = imports.string.parse(CPlayer.CBuffer[(args[2])][j])
             end
             args[3] = imports.table.clone(args[3], true)
             args[3].character = args[3].character or 0
@@ -122,16 +113,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                     CCharacter.CBuffer[(j.id)] = j
                     for k = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
                         local v = FRAMEWORK_CONFIGS["Character"]["Datas"][k]
-                        local value = CCharacter.CBuffer[(j.id)][v]
-                        if imports.tostring(value) == "nil" then
-                            value = nil
-                        elseif imports.tostring(value) == "false" then
-                            value = false
-                        elseif imports.tostring(value) == "true" then
-                            value = true
-                        end
-                        if value then value = imports.tonumber(value) or value end
-                        CCharacter.CBuffer[(j.id)][v] = value
+                        CCharacter.CBuffer[(j.id)][v] = imports.string.parse(CCharacter.CBuffer[(j.id)][v])
                     end
                     CCharacter.CBuffer[(j.id)].location = (CCharacter.CBuffer[(j.id)].location and imports.fromJSON(CCharacter.CBuffer[(j.id)].location)) or false
                 end

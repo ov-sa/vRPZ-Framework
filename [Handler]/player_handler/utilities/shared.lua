@@ -17,6 +17,7 @@ loadstring(exports.assetify_library:fetchThreader())()
 local imports = {
     type = type,
     pairs = pairs,
+    tostring = tostring,
     tonumber = tonumber,
     string = string,
     isElement = isElement,
@@ -86,7 +87,6 @@ function getPositionFromElementOffset(element, offX, offY, offZ)
 
 end
 
-
 function table.clone(recievedTable, isRecursiveMode)
     if not recievedTable or (imports.type(recievedTable) ~= "table") then return false end
     local clonedTable = {}
@@ -98,6 +98,18 @@ function table.clone(recievedTable, isRecursiveMode)
         end
     end
     return clonedTable
+end
+
+function string.parse(rawString)
+    if not rawString then return false end
+    if imports.tostring(rawString) == "nil" then
+        rawString = nil
+    elseif imports.tostring(rawString) == "false" then
+        rawString = false
+    elseif imports.tostring(rawString) == "true" then
+        rawString = true
+    end
+    return imports.tonumber(rawString) or rawString
 end
 
 
@@ -213,24 +225,6 @@ function getPlayersWithinMarker(marker)
         end
     end
     return rangedPlayers
-end
-
-
----------------------------------
---[[ Function: Splits String ]]--
----------------------------------
-
-function string.split(string, separator)
-
-    if not string or type(string) ~= "string" then return false end
-
-    local t = {}
-    if separator == nil then separator = "%s" end
-    for str in string.gmatch(string, "([^"..separator.."]+)") do
-        table.insert(t, str)
-    end
-    return t
-
 end
 
 
