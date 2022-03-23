@@ -25,4 +25,5 @@ function fetchInventorySlot(...) return CInventory.fetchSlot(...) end
 function fetchInventoryItemCount(...) return CInventory.fetchItemCount(...) end
 function fetchInventoryMaxSlotsMultiplier(...) return CInventory.fetchMaxSlotsMultiplier(...) end
 function fetchInventoryParentMaxSlots(...) return CInventory.fetchParentMaxSlots(...) end
+function fetchInventoryParentAssignedSlots(...) return CInventory.fetchParentAssignedSlots(...) end
 function fetchInventoryParentUsedSlots(...) return CInventory.fetchParentUsedSlots(...) end
