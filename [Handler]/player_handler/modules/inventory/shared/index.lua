@@ -96,7 +96,7 @@ CInventory = {
         return FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns
     end,
 
-    CInventory.fetchParentMaxSlots = function(parent)
+    fetchParentMaxSlots = function(parent)
         if not parent or not imports.isElement(parent) then return false end
         if imports.getElementType(parent) == "player" then
             if not CPlayer.isInitialized(parent) or (localPlayer and (localPlayer ~= parent)) then return false end
@@ -105,7 +105,7 @@ CInventory = {
         return imports.tonumber(imports.getElementData(parent, "Inventory:MaxSlots")) or 0
     end,
 
-    CInventory.fetchParentUsedSlots = function(parent)
+    fetchParentUsedSlots = function(parent)
         if not CPlayer.isInitialized(player) then return false end
         local totalSlots, assignedSlots = false, false
         if localPlayer then
