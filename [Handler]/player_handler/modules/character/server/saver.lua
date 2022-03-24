@@ -23,6 +23,7 @@ local imports = {
     getElementData = getElementData,
     setElementData = setElementData,
     toJSON = toJSON,
+    table = table,
     math = math
 }
 
@@ -45,10 +46,10 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
     end
     CPlayer.CChannel[player] = nil
     CPlayer.CAttachments[player] = nil
-    CInventory.CBuffer[player] = nil
     local dataBuffer = {
         player = {},
-        character = {}
+        character = {},
+        inventory = {}
     }
     if isForceReset then
         for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
@@ -67,6 +68,8 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
         imports.setElementData(player, "Slot:"..i, nil)
         imports.setElementData(player, "Slot:Object:"..i, nil)
     end
+    imports.table.insert(dataBuffer.inventory, {"max_slots", CInventory.CBuffer[player].maxSlots})
+    imports.table.insert(dataBuffer.inventory, {"slots", imports.toJSON(CInventory.CBuffer[player].slots)})
     for i, j in imports.pairs(CInventory.CItems) do
         if saveProgress then
             CInventory.setItemProperty(depDatas.inventoryID, {i}, {
@@ -78,7 +81,8 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
     if saveProgress then
         CPlayer.setData(depDatas.serial, dataBuffer.player)
         CCharacter.setData(depDatas.characterID, dataBuffer.character)
-        CPlayer.CBuffer[(depDatas.serial)], CCharacter.CBuffer[(depDatas.characterID)] = nil, nil
+        CInventory.setData(depDatas.inventoryID, dataBuffer.inventory)
+        CPlayer.CBuffer[(depDatas.serial)], CCharacter.CBuffer[(depDatas.characterID)], CInventory.CBuffer[(depDatas.inventoryID)] = nil, nil, nil
         imports.collectgarbage()
     end
     return true
