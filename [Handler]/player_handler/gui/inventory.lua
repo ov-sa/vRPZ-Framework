@@ -184,6 +184,10 @@ inventoryUI.createBGTexture = function(isRefresh)
 end
 inventoryUI.updateUILang = function() inventoryUI.isLangUpdated = true end
 imports.addEventHandler("Client:onUpdateLanguage", root, inventoryUI.updateUILang)
+inventoryUI.fetchUIGridFromOffset = function(offsetX, offsetY)
+    --TODO: IF ITS MORE THAN THE LIMIT RETURN FALSE...
+    return imports.math.ceil(offsetX/(inventoryUI.clientInventory.width/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)), imports.math.ceil(offsetY/(inventoryUI.clientInventory.height/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows))
+end
 inventoryUI.createBuffer = function(parent, name)
     if not parent or not imports.isElement(parent) or inventoryUI.buffer[parent] then return false end
     if (parent ~= localPlayer) and CLoot.isLocked(parent) then
@@ -279,15 +283,6 @@ imports.addEventHandler("Client:onUpdateInventory", root, function()
     inventoryUI.updateBuffer(localPlayer)
     inventoryUI.updateBuffer(inventoryUI.vicinityInventory.element)
 end)
-
-
---TODO: TESTING
-local function getCursorSlot(cursorX, cursorY)
-    cursorX = cursorX - inventoryUI.clientInventory.startX
-    cursorY = cursorY - (inventoryUI.clientInventory.startY + inventoryUI.titlebar.height)
-    local slotSize = FRAMEWORK_CONFIGS["UI"]["Inventory"].slotSize
-    return math.floor(cursorX/inventoryUI.clientInventory.width), math.floor(cursorY/inventoryUI.clientInventory.height)
-end
 
 
 ------------------------------
@@ -460,8 +455,9 @@ inventoryUI.renderUI = function(renderData)
         ]]
         if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition then
             --TODO: CHECK IF GRID IS HOVERED OR NOT
-            local currentSlot = getCursorSlot(CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2])
-            outputChatBox(tostring(currentSlot))
+            local cursorX, cursorY = imports.getAbsoluteCursorPosition()
+            local rowSlot, columnSlot = inventoryUI.fetchUIGridFromOffset(cursorX - inventoryUI.clientInventory.startX, cursorY - (inventoryUI.clientInventory.startY + inventoryUI.titlebar.height))
+            outputChatBox(rowSlot.." : "..columnSlot)
             --[[
             for k = 1, inventoryUI.buffer[localPlayer].maxSlots, 1 do
                 if not inventoryUI.buffer[localPlayer].usedSlots[k] then
