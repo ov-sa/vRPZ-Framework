@@ -21,7 +21,7 @@ function moveItemInInventory(item, slotIndex, loot)
     local itemAmountData = tonumber(loot:getData("Item:"..item)) or 0
     if not itemDetails or itemAmountData <= 0 then return false end
 
-    inventoryUI.isUpdated = false
+    inventoryUI.isSynced = false
     CInventory.CBuffer.slots[slotIndex] = {
         item = item,
         loot = loot,
@@ -41,7 +41,7 @@ function moveItemInLoot(item, slotIndex, loot)
     local itemAmountData = tonumber(getElementData(localPlayer, "Item:"..item)) or 0
     if not itemDetails or itemAmountData <= 0 then return false end
 
-    inventoryUI.isUpdated = false
+    inventoryUI.isSynced = false
     CInventory.CBuffer.slots[slotIndex] = {
         item = item,
         loot = loot,
@@ -65,8 +65,8 @@ function orderItemInInventory(item, prevSlotIndex, newSlotIndex)
     local itemAmountData = tonumber(getElementData(localPlayer, "Item:"..item)) or 0
     if not itemDetails or itemAmountData <= 0 then return false end
 
-    inventoryUI.isUpdated = false
-    inventoryUI.isUpdateScheduled = true
+    inventoryUI.isSynced = false
+    inventoryUI.isSyncScheduled = true
     CInventory.CBuffer.slots[prevSlotIndex] = nil
     CInventory.CBuffer.slots[newSlotIndex] = {
         item = item,
@@ -86,7 +86,7 @@ function equipItemInInventory(item, prevSlotIndex, reservedSlotIndex, newSlotInd
     local itemAmountData = tonumber(loot:getData("Item:"..item)) or 0
     if not itemDetails or itemAmountData <= 0 then return false end
 
-    inventoryUI.isUpdated = false
+    inventoryUI.isSynced = false
     if loot == localPlayer then
         CInventory.CBuffer.slots[prevSlotIndex] = {
             item = item,
@@ -127,10 +127,10 @@ function unequipItemInInventory(item, prevSlotIndex, newSlotIndex, loot, reserve
     end
     if not reservedSlotIndex then return false end
 
-    inventoryUI.isUpdated = false
+    inventoryUI.isSynced = false
     CInventory.CBuffer.slots[prevSlotIndex] = nil
     if loot == localPlayer then
-        inventoryUI.isUpdateScheduled = true
+        inventoryUI.isSyncScheduled = true
         CInventory.CBuffer.slots[reservedSlotIndex] = nil
         CInventory.CBuffer.slots[newSlotIndex] = {
             item = item,

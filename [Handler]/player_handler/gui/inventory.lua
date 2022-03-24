@@ -254,7 +254,7 @@ end
 -------------------------------
 
 inventoryUI.isUIEnabled = function()
-    return (inventoryUI.isUpdated and inventoryUI.isEnabled and not inventoryUI.isForcedDisabled) or false
+    return (inventoryUI.isSynced and inventoryUI.isEnabled and not inventoryUI.isForcedDisabled) or false
 end
 
 function isInventoryUIVisible() return inventoryUI.state end
@@ -266,10 +266,11 @@ imports.addEventHandler("Client:onEnableInventoryUI", root, function(state, isFo
     inventoryUI.isEnabled = state
 end)
 
-imports.addEvent("Client:onSyncInventorySlots", true)
-imports.addEventHandler("Client:onSyncInventorySlots", root, function(slots)
-    CInventory.CBuffer = slots
-    inventoryUI.isUpdated, inventoryUI.isUpdateScheduled = true, false
+imports.addEvent("Client:onSyncInventoryBuffer", true)
+imports.addEventHandler("Client:onSyncInventoryBuffer", root, function(buffer)
+    print("WOW")
+    CInventory.CBuffer = buffer
+    inventoryUI.isSynced, inventoryUI.isSyncScheduled = true, false
 end)
 
 imports.addEvent("Client:onUpdateInventory", true)
@@ -310,7 +311,7 @@ inventoryUI.renderUI = function(renderData)
             --[[
             for k, v in pairs(CInventory.CBuffer.slots) do
                 if tonumber(k) then
-                    if not inventoryUI.isUpdated then
+                    if not inventoryUI.isSynced then
                         if v.movementType == "equipment" and v.isAutoReserved then
                             if (tonumber(j.inventory[v.item]) or 0) <= 0 then
                                 if not bufferCache["__"..v.item] then
@@ -671,7 +672,7 @@ inventoryUI.renderUI = function(renderData)
                     inventoryUI.attachedItem.releaseIndex = releaseIndex
                     if inventoryUI.attachedItem.isEquippedItem then
                         local reservedSlotIndex = false
-                        inventoryUI.isUpdateScheduled = true
+                        inventoryUI.isSyncScheduled = true
                         CInventory.CBuffer.slots[releaseIndex] = nil
                         for i, j in pairs(CInventory.CBuffer.slots) do
                             if tonumber(i) then
@@ -691,7 +692,7 @@ inventoryUI.renderUI = function(renderData)
                             }
                         end
                     else
-                        inventoryUI.isUpdateScheduled = true
+                        inventoryUI.isSyncScheduled = true
                         CInventory.CBuffer.slots[releaseIndex] = {
                             item = inventoryUI.attachedItem.item,
                             loot = isItemAvailableForDropping.loot,
@@ -716,13 +717,13 @@ inventoryUI.renderUI = function(renderData)
                     inventoryUI.attachedItem.releaseIndex = releaseIndex
                     inventoryUI.attachedItem.reservedSlot = reservedSlot
                     if loot == localPlayer then
-                        inventoryUI.isUpdateScheduled = true
+                        inventoryUI.isSyncScheduled = true
                         CInventory.CBuffer.slots[reservedSlot] = {
                             item = inventoryUI.attachedItem.item,
                             movementType = "equipment"
                         }
                     else
-                        inventoryUI.isUpdateScheduled = true
+                        inventoryUI.isSyncScheduled = true
                         CInventory.CBuffer.slots[reservedSlot] = {
                             item = inventoryUI.attachedItem.item,
                             loot = isItemAvailableForEquipping.loot,
@@ -842,7 +843,7 @@ inventoryUI.toggleUI = function(state)
             imports.destroyElement(inventoryUI.opacityAdjuster.element)
             imports.beautify.render.remove(inventoryUI.renderUI, {renderType = "input"})
         end
-        if inventoryUI.isUpdateScheduled then
+        if inventoryUI.isSyncScheduled then
             imports.triggerServerEvent("Player:onSyncInventorySlots", localPlayer)
         end
         inventoryUI.destroyBuffer(localPlayer)
@@ -1000,7 +1001,7 @@ function displayInventoryUI()
                             if v.movementType and v.movementType ~= "inventory" then
                                 isSlotToBeDrawn = false
                             end
-                            if not inventoryUI.isUpdated then
+                            if not inventoryUI.isSynced then
                                 if v.movementType == "equipment" and v.isAutoReserved then
                                     if (tonumber(j.inventory[v.item]) or 0) <= 0 then
                                         if not bufferCache["__"..v.item] then
@@ -1208,7 +1209,7 @@ function displayInventoryUI()
                     end
                 end
             else
-                if not inventoryUI.isUpdated then
+                if not inventoryUI.isSynced then
                     for k, v in pairs(CInventory.CBuffer.slots) do
                         if tonumber(k) and v.loot and v.loot == i then
                             if v.movementType then

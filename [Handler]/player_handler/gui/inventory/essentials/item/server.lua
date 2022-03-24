@@ -27,7 +27,7 @@ addEvent("onClientRequestSyncInventorySlots", true)
 addEventHandler("onClientRequestSyncInventorySlots", root, function()
     if not client or not CPlayer.isInitialized(client) then return false end
     if playerInventorySlots[source] then
-        triggerClientEvent(source, ""Client:onSyncInventorySlots"", source, playerInventorySlots[source])
+        triggerClientEvent(source, ""Client:onSyncInventoryBuffer"", source, playerInventorySlots[source])
     end
 end)
 
@@ -93,7 +93,7 @@ addEventHandler("onElementDataChange", root, function(key, oldValue, newValue)
             end
             ]]--
             triggerClientEvent(source, "onClientInventoryUpdate", source)
-            triggerClientEvent(source, ""Client:onSyncInventorySlots"", source, playerInventorySlots[source])
+            triggerClientEvent(source, ""Client:onSyncInventoryBuffer"", source, playerInventorySlots[source])
         end
     end
 
@@ -126,7 +126,7 @@ addEventHandler("onPlayerMoveItemInInventory", root, function(item, slotIndex, l
             return true
         end
     end
-    triggerClientEvent(source, ""Client:onSyncInventorySlots"", source, playerInventorySlots[source])
+    triggerClientEvent(source, ""Client:onSyncInventoryBuffer"", source, playerInventorySlots[source])
 
 end)
 
@@ -157,7 +157,7 @@ addEventHandler("onPlayerMoveItemInLoot", root, function(item, slotIndex, loot)
             end
         end
     end
-    triggerClientEvent(source, ""Client:onSyncInventorySlots"", source, playerInventorySlots[source])
+    triggerClientEvent(source, ""Client:onSyncInventoryBuffer"", source, playerInventorySlots[source])
 
 end)
 
@@ -182,7 +182,7 @@ addEventHandler("onPlayerOrderItemInInventory", root, function(item, prevSlotInd
             }
         end
     end
-    triggerClientEvent(source, ""Client:onSyncInventorySlots"", source, playerInventorySlots[source])
+    triggerClientEvent(source, ""Client:onSyncInventoryBuffer"", source, playerInventorySlots[source])
 
 end)
 
@@ -219,7 +219,7 @@ addEventHandler("onPlayerEquipItemInInventory", root, function(item, prevSlotInd
             end
         end
     end
-    triggerClientEvent(source, ""Client:onSyncInventorySlots"", source, playerInventorySlots[source])
+    triggerClientEvent(source, ""Client:onSyncInventoryBuffer"", source, playerInventorySlots[source])
 
 end)
 
@@ -260,6 +260,6 @@ addEventHandler("onPlayerUnequipItemInInventory", root, function(item, prevSlotI
             end
         end
     end
-    triggerClientEvent(source, ""Client:onSyncInventorySlots"", source, playerInventorySlots[source])
+    triggerClientEvent(source, ""Client:onSyncInventoryBuffer"", source, playerInventorySlots[source])
 
 end)

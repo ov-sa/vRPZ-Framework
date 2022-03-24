@@ -29,7 +29,8 @@ local imports = {
     toJSON = toJSON,
     fromJSON = fromJSON,
     table = table,
-    string = string
+    string = string,
+    math = math
 }
 
 
@@ -163,6 +164,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         end
 
         CInventory.getData(args[3], {"max_slots", "slots"}, function(result, args)
+            result = result or {}
             result.max_slots, result.slots = imports.math.max(CInventory.fetchMaxSlotsMultiplier(), imports.tonumber(result.max_slots) or 0), (result.slots and imports.fromJSON(result.slots)) or {}
             local serverWeather, serverTime = CGame.getNativeWeather()
             local serial = CPlayer.getSerial(args[1])
@@ -177,13 +179,13 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
                 maxSlots = result.max_slots,
                 slots = result.slots
             }
-            for i, j in imports.pairs(args[3]) do
+            for i, j in imports.pairs(args[4]) do
                 imports.setElementData(args[1], "Item:"..i, imports.tonumber(j[(dbify.inventory.__connection__.itemFormat.counter)]) or 0)
             end
             cache.resumeTicks[(args[1])] = imports.getTickCount()
             CPlayer.setChannel(args[1], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"])
             imports.bindKey(args[1], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Channel_ShuffleKey"], "down", shufflePlayerChannel)
-            imports.triggerClientEvent(args[1], "Client:onSyncInventorySlots", args[1], CInventory.CBuffer[(args[1])])
+            imports.triggerClientEvent(args[1], "Client:onSyncInventoryBuffer", args[1], CInventory.CBuffer[(args[1])])
             imports.triggerClientEvent(args[1], "Client:onSyncWeather", args[1], serverWeather, serverTime)
             imports.triggerEvent("Player:onSpawn", args[1], CCharacter.CBuffer[(args[2])].location, true)
         end, args[1], args[2], args[3], result)
