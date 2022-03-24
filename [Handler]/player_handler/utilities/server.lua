@@ -49,7 +49,7 @@ local imports = {
 
 function showChat(player, bool, isForced)
     if (not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player")) then return false end
-    imports.triggerClientEvent(player, "Player:onToggleChat", player, bool, isForced)
+    imports.triggerClientEvent(player, "Client:onToggleChat", player, bool, isForced)
     return true
 end
 

@@ -18,8 +18,6 @@ local imports = {
     tonumber = tonumber,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
-    triggerEvent = triggerEvent,
-    triggerServerEvent = triggerServerEvent,
     getElementType = getElementType,
     guiSetInputMode = guiSetInputMode,
     setWeather = setWeather,
@@ -47,8 +45,8 @@ end
 function showCursor(bool, isForced)
     return ((isForced or bool or not CGame.isUIVisible()) and imports.showCursor(bool)) or false
 end
-imports.addEvent("Player:onToggleChat", true)
-imports.addEventHandler("Player:onToggleChat", root, showChat)
+imports.addEvent("Client:onToggleChat", true)
+imports.addEventHandler("Client:onToggleChat", root, showChat)
 
 
 ------------------------------------------------
@@ -142,39 +140,12 @@ end
 ]]
 
 
---------------------------------
---[[ Event: On Sync Weather ]]--
---------------------------------
-
-imports.addEvent("Client:onSyncWeather", true)
-imports.addEventHandler("Client:onSyncWeather", root, function(serverWeather, serverTime)
-    serverWeather = imports.tonumber(serverWeather)
-    if not serverWeather or not serverTime then return false end
-    imports.setWeather(serverWeather)
-    imports.setTime(serverTime[1], serverTime[2])
-    return true
-end)
-
-
-------------------------------------
---[[ Event: On Client GUI Click ]]--
-------------------------------------
-
-imports.addEventHandler("onClientGUIClick", root, function()
-    local guiElement = imports.getElementType(source)
-    if ((guiElement == "gui-edit") or (guiElement == "gui-memo")) then
-        imports.guiSetInputMode("no_binds_when_editing")
-    else
-        imports.guiSetInputMode("allow_binds")
-    end
-end)
-
-
 -----------------------------------------
 --[[ Event: On Client Resource Start ]]--
 -----------------------------------------
 
 imports.addEventHandler("onClientResourceStart", resource, function()
+    showChat(false, true)
     imports.setBlurLevel(0)
     imports.toggleControl("fire", true)
     imports.toggleControl("action", false)
@@ -190,4 +161,22 @@ imports.addEventHandler("onClientResourceStart", resource, function()
     for i, j in imports.pairs(FRAMEWORK_CONFIGS["Game"]["Camera_FOV"]) do
         imports.setCameraFieldOfView(i, j)
     end
+
+    imports.addEventHandler("onClientGUIClick", root, function()
+        local guiElement = imports.getElementType(source)
+        if ((guiElement == "gui-edit") or (guiElement == "gui-memo")) then
+            imports.guiSetInputMode("no_binds_when_editing")
+        else
+            imports.guiSetInputMode("allow_binds")
+        end
+    end)
+
+    imports.addEvent("Client:onSyncWeather", true)
+    imports.addEventHandler("Client:onSyncWeather", root, function(serverWeather, serverTime)
+        serverWeather = imports.tonumber(serverWeather)
+        if not serverWeather or not serverTime then return false end
+        imports.setWeather(serverWeather)
+        imports.setTime(serverTime[1], serverTime[2])
+        return true
+    end)
 end)
