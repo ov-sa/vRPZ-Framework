@@ -268,7 +268,6 @@ end)
 
 imports.addEvent("Client:onSyncInventoryBuffer", true)
 imports.addEventHandler("Client:onSyncInventoryBuffer", root, function(buffer)
-    print("WOW")
     CInventory.CBuffer = buffer
     inventoryUI.isSynced, inventoryUI.isSyncScheduled = true, false
 end)
@@ -827,6 +826,7 @@ inventoryUI.toggleUI = function(state)
         --if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then inventoryUI.toggleUI(false) return false end
         --inventoryUI.vicinityInventory.element = CCharacter.isInLoot(localPlayer)
         inventoryUI.vicinityInventory.element = testPed --TODO: REMOVE IT LATER AND ENABLE ^
+        imports.triggerEvent("Client:onEnableInventoryUI", localPlayer, true)
         inventoryUI.createBuffer(localPlayer, imports.getPlayerName(localPlayer).."'s Inventory")
         inventoryUI.createBuffer(inventoryUI.vicinityInventory.element)
         inventoryUI.opacityAdjuster.element = imports.beautify.slider.create(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, "vertical", nil, false)
