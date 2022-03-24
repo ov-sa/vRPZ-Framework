@@ -185,8 +185,11 @@ end
 inventoryUI.updateUILang = function() inventoryUI.isLangUpdated = true end
 imports.addEventHandler("Client:onUpdateLanguage", root, inventoryUI.updateUILang)
 inventoryUI.fetchUIGridFromOffset = function(offsetX, offsetY)
-    --TODO: IF ITS MORE THAN THE LIMIT RETURN FALSE...
-    return imports.math.ceil(offsetX/(inventoryUI.clientInventory.width/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)), imports.math.ceil(offsetY/(inventoryUI.clientInventory.height/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows))
+    if not offsetX or not offsetY then return false end
+    local rowIndex, columnIndex = imports.math.ceil(offsetY/(inventoryUI.clientInventory.height/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows)), imports.math.ceil(offsetX/(inventoryUI.clientInventory.width/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns))
+    rowIndex, columnIndex = (((rowIndex >= 1) and (rowIndex <= FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows)) and rowIndex) or false, (((columnIndex >= 1) and (columnIndex <= FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)) and columnIndex) or false
+    if not rowIndex or not columnIndex then return false end
+    return rowIndex, columnIndex
 end
 inventoryUI.createBuffer = function(parent, name)
     if not parent or not imports.isElement(parent) or inventoryUI.buffer[parent] then return false end
@@ -457,7 +460,9 @@ inventoryUI.renderUI = function(renderData)
             --TODO: CHECK IF GRID IS HOVERED OR NOT
             local cursorX, cursorY = imports.getAbsoluteCursorPosition()
             local rowSlot, columnSlot = inventoryUI.fetchUIGridFromOffset(cursorX - inventoryUI.clientInventory.startX, cursorY - (inventoryUI.clientInventory.startY + inventoryUI.titlebar.height))
-            outputChatBox(rowSlot.." : "..columnSlot)
+            if rowSlot and columnSlot then
+                outputChatBox(rowSlot.." : "..columnSlot)
+            end
             --[[
             for k = 1, inventoryUI.buffer[localPlayer].maxSlots, 1 do
                 if not inventoryUI.buffer[localPlayer].usedSlots[k] then
