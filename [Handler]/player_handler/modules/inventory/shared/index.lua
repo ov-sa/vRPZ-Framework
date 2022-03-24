@@ -106,13 +106,14 @@ CInventory = {
     end,
 
     fetchParentAssignedSlots = function(parent)
-        if not CPlayer.isInitialized(player) or (not localPlayer and not CInventory.CBuffer[parent]) then return false end
-        return (localPlayer and CInventory.CBuffer.slots) or CInventory.CBuffer[parent].slots
+        if not CPlayer.isInitialized(parent) or (not localPlayer and not CInventory.CBuffer[parent]) then return false end
+        return (localPlayer and CInventory.CBuffer.slots) or (not localPlayer and CInventory.CBuffer[parent].slots)
     end,
 
     fetchParentUsedSlots = function(parent)
-        if not CPlayer.isInitialized(player) or (not localPlayer and not CInventory.CBuffer[parent]) then return false end
-        local maxSlots, assignedSlots, usedSlots = CInventory.fetchParentMaxSlots(player), CInventory.fetchParentAssignedSlots(player), {}
+        if not CPlayer.isInitialized(parent) or (not localPlayer and not CInventory.CBuffer[parent]) then return false end
+        local maxSlots, assignedSlots, usedSlots = CInventory.fetchParentMaxSlots(parent), CInventory.fetchParentAssignedSlots(parent), {}
+        if not maxSlots or not assignedSlots then return false end
         for i, j in imports.pairs(assignedSlots) do
             local isValidSlot = true
             if localPlayer then

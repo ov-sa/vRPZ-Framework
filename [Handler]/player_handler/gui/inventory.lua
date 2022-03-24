@@ -270,6 +270,7 @@ imports.addEvent("Client:onSyncInventoryBuffer", true)
 imports.addEventHandler("Client:onSyncInventoryBuffer", root, function(buffer)
     CInventory.CBuffer = buffer
     inventoryUI.isSynced, inventoryUI.isSyncScheduled = true, false
+    imports.triggerEvent("Client:onUpdateInventory", localPlayer)
 end)
 
 imports.addEvent("Client:onUpdateInventory", true)
