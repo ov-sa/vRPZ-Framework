@@ -281,6 +281,15 @@ imports.addEventHandler("Client:onUpdateInventory", root, function()
 end)
 
 
+--TODO: TESTING
+local function getCursorSlot(cursorX, cursorY)
+    cursorX = cursorX - inventoryUI.clientInventory.startX
+    cursorY = cursorY - (inventoryUI.clientInventory.startY + inventoryUI.titlebar.height)
+    local slotSize = FRAMEWORK_CONFIGS["UI"]["Inventory"].slotSize
+    return math.floor(cursorX/inventoryUI.clientInventory.width), math.floor(cursorY/inventoryUI.clientInventory.height)
+end
+
+
 ------------------------------
 --[[ Function: Renders UI ]]--
 ------------------------------
@@ -451,12 +460,14 @@ inventoryUI.renderUI = function(renderData)
         ]]
         if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition then
             --TODO: CHECK IF GRID IS HOVERED OR NOT
+            local currentSlot = getCursorSlot(CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2])
+            outputChatBox(tostring(currentSlot))
+            --[[
             for k = 1, inventoryUI.buffer[localPlayer].maxSlots, 1 do
                 if not inventoryUI.buffer[localPlayer].usedSlots[k] then
                     local slot_row = math.ceil(k/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)
                     local slot_column = k - (math.max(0, slot_row - 1)*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)
                     outputChatBox(k.." : "..slot_row.." : "..slot_column)
-                    --[[
                     local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_column - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
                     if (slot_offsetY >= 0) and ((slot_offsetY + template.contentWrapper.itemGrid.inventory.slotSize) <= template.contentWrapper.height) then
                         local isSlotHovered = isMouseOnPosition(j.gui.startX + template.contentWrapper.startX + slot_offsetX, j.gui.startY + template.contentWrapper.startY + slot_offsetY, template.contentWrapper.itemGrid.inventory.slotSize, template.contentWrapper.itemGrid.inventory.slotSize)
@@ -484,9 +495,9 @@ inventoryUI.renderUI = function(renderData)
                             end
                         end
                     end
-                    ]]
                 end
             end
+            ]]--
         end
         imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], inventoryUI.bgTexture, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
         imports.beautify.native.drawText(inventoryUI.buffer[localPlayer].name, client_startX, client_startY - inventoryUI.titlebar.height, client_startX + client_width, client_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font, "center", "center", true, false, false)
