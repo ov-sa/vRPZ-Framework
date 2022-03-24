@@ -156,7 +156,6 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         end
     end
     imports.collectgarbage()
-
     CInventory.getItemProperty(CCharacter.CBuffer[(characters[character].id)].inventory, cache.indexedItems, {dbify.inventory.__connection__.itemFormat.counter}, function(result, args)
         if not result then
             imports.triggerEvent("Player:onToggleLoginUI", args[1])
