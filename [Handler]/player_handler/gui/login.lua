@@ -522,7 +522,7 @@ loginUI.renderUI = function(renderData)
     if renderData.renderType == "input" then
         loginUI.cache.keys.mouse = imports.isMouseClicked()
         local weatherData = FRAMEWORK_CONFIGS["UI"]["Login"].weathers[(loginUI.phase)] or FRAMEWORK_CONFIGS["UI"]["Login"].weathers[1]
-        imports.triggerEvent("Player:onSyncWeather", localPlayer, weatherData.weather, weatherData.time)
+        imports.triggerEvent("Client:onSyncWeather", localPlayer, weatherData.weather, weatherData.time)
     elseif renderData.renderType == "render" then
         local isUIEnabled = loginUI.isEnabled and not loginUI.isForcedDisabled
         local isLMBClicked = (loginUI.cache.keys.mouse == "mouse1") and isUIEnabled

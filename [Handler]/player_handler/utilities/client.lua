@@ -146,8 +146,8 @@ end
 --[[ Event: On Sync Weather ]]--
 --------------------------------
 
-imports.addEvent("Player:onSyncWeather", true)
-imports.addEventHandler("Player:onSyncWeather", root, function(serverWeather, serverTime)
+imports.addEvent("Client:onSyncWeather", true)
+imports.addEventHandler("Client:onSyncWeather", root, function(serverWeather, serverTime)
     serverWeather = imports.tonumber(serverWeather)
     if not serverWeather or not serverTime then return false end
     imports.setWeather(serverWeather)
