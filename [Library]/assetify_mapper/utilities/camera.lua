@@ -27,8 +27,8 @@ local imports = {
 
 camera = {
     speed = 0, strafespeed = 0,
-    rotX = 0, rotY = 0,
-    velocityX = 0, velocityY = 0, velocityZ = 0,
+    rotation = {x = 0, y = 0},
+    velocity = {x = 0, y = 0, z = 0},
     options = {
         normalMaxSpeed = 2,
         slowMaxSpeed = 0.2,
@@ -49,7 +49,7 @@ camera = {
 camera.__index = camera
 
 local function freecamFrame ()
-    local freeModeAngleX, freeModeAngleY, freeModeAngleZ = imports.math.cos(camera.rotY)*imports.math.sin(camera.rotX), imports.math.cos(camera.rotY)*imports.math.cos(camera.rotX), imports.math.sin(camera.rotY)
+    local freeModeAngleX, freeModeAngleY, freeModeAngleZ = imports.math.cos(camera.rotation.y)*imports.math.sin(camera.rotation.x), imports.math.cos(camera.rotation.y)*imports.math.cos(camera.rotation.x), imports.math.sin(camera.rotation.y)
     local camPosX, camPosY, camPosZ = getCameraMatrix()
     local camTargetX, camTargetY, camTargetZ = camPosX + (freeModeAngleX*100), camPosY + (freeModeAngleY*100)
     local mspeed = (imports.getPedControlState(camera.options.key_fastMove) and camera.options.fastMaxSpeed) or (imports.getPedControlState(camera.options.key_slowMove) and camera.options.slowMaxSpeed) or camera.options.normalMaxSpeed
@@ -170,9 +170,9 @@ local function freecamFrame ()
     camPosZ = camPosZ + normalZ * camera.strafespeed
 
 	--Store the velocity
-	camera.velocityX = (freeModeAngleX * camera.speed) + (normalX * camera.strafespeed)
-	camera.velocityY = (freeModeAngleY * camera.speed) + (normalY * camera.strafespeed)
-	camera.velocityZ = (freeModeAngleZ * camera.speed) + (normalZ * camera.strafespeed)
+	camera.velocity.x = (freeModeAngleX * camera.speed) + (normalX * camera.strafespeed)
+	camera.velocity.y = (freeModeAngleY * camera.speed) + (normalY * camera.strafespeed)
+	camera.velocity.z = (freeModeAngleZ * camera.speed) + (normalZ * camera.strafespeed)
 
     -- Update the target based on the new camera position (again, otherwise the camera kind of sways as the target is out by a frame)
     camTargetX = camPosX + freeModeAngleX * 100
@@ -185,35 +185,39 @@ end
 camera.controlMouse = function(_, _, aX, aY)
     if CLIENT_MTA_WINDOW_ACTIVE or CLIENT_IS_CURSOR_SHOWING then return false end
     aX, aY = aX - CLIENT_MTA_RESOLUTION[1]*0.5, aY - CLIENT_MTA_RESOLUTION[2]*0.5
-    camera.rotX, camera.rotY = camera.rotX + (aX*0.05*0.01745), camera.rotY - (aY*0.05*0.01745)
+    camera.rotation.x, camera.rotation.y = camera.rotation.x + (aX*0.05*0.01745), camera.rotation.y - (aY*0.05*0.01745)
     local mulX, mulY = 2*imports.math.pi, imports.math.pi/2.05
-	if camera.rotX > imports.math.pi then
-        camera.rotX = camera.rotX - mulX
-	elseif camera.rotX < -imports.math.pi then
-        camera.rotX = camera.rotX + mulX
+	if camera.rotation.x > imports.math.pi then
+        camera.rotation.x = camera.rotation.x - mulX
+	elseif camera.rotation.x < -imports.math.pi then
+        camera.rotation.x = camera.rotation.x + mulX
 	end
-	if camera.rotY > imports.math.pi then
-        camera.rotY = camera.rotY - mulX
-	elseif camera.rotY < -imports.math.pi then
-        camera.rotY = camera.rotY + mulX
+	if camera.rotation.y > imports.math.pi then
+        camera.rotation.y = camera.rotation.y - mulX
+	elseif camera.rotation.y < -imports.math.pi then
+        camera.rotation.y = camera.rotation.y + mulX
 	end
-    if camera.rotY < -mulY then
-        camera.rotY = -mulY
-    elseif camera.rotY > mulY then
-        camera.rotY = mulY
+    if camera.rotation.y < -mulY then
+        camera.rotation.y = -mulY
+    elseif camera.rotation.y > mulY then
+        camera.rotation.y = mulY
     end
 end
 
 function camera:enable()
+    if camera.isEnabled then return false end
+    camera.speed, camera.strafespeed = 0, 0
+    camera.velocity.x, camera.velocity.y, camera.velocity.z = 0, 0, 0
 	imports.addEventHandler("onClientRender", root, freecamFrame)
 	imports.addEventHandler("onClientCursorMove", root, camera.controlMouse)
+    camera.isEnabled = true
 	return true
 end
 
 function camera:disable()
-	camera.speed, camera.strafespeed = 0, 0
-	camera.velocityX, camera.velocityY, camera.velocityZ = 0, 0, 0
+    if not camera.isEnabled then return false end
 	imports.removeEventHandler("onClientRender", root, freecamFrame)
     imports.removeEventHandler("onClientCursorMove", root, camera.controlMouse)
+    camera.isEnabled = false
 	return true
 end
