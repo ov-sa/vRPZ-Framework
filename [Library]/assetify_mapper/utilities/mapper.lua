@@ -15,7 +15,6 @@
 local imports = {
     setmetatable = setmetatable,
     addEventHandler = addEventHandler,
-    showCursor = showCursor,
     table = table,
     beautify = beautify
 }

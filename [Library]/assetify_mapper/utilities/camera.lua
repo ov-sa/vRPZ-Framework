@@ -19,6 +19,7 @@ local imports = {
     setCameraMatrix = setCameraMatrix,
     getKeyState = getKeyState,
     getPedControlState = getPedControlState,
+    showCursor = showCursor,
     math = math
 }
 
