@@ -34,12 +34,12 @@ mapper = {
 mapper.__index = mapper
 
 function mapper:create(...)
-    local cmapper = imports.setmetatable({}, {__index = self})
-    if not cmapper:load(...) then
-        cmapper = nil
+    local cMapper = imports.setmetatable({}, {__index = self})
+    if not cMapper:load(...) then
+        cMapper = nil
         return false
     end
-    return cmapper
+    return cMapper
 end
 
 function mapper:destroy(...)

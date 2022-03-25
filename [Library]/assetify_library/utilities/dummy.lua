@@ -58,10 +58,14 @@ function dummy:clearElementBuffer(element)
 end
 
 function dummy:load(assetType, assetName, dummyData)
+    print("LOD 1")
     if not self or (self == dummy) then return false end
+    print("LOD 2")
     if not assetType or not assetName or not dummyData or not dummyData.position or not dummyData.rotation or not availableAssetPacks[assetType] or not availableAssetPacks[assetType].rwDatas[assetName] then return false end
+    print("LOD 3")
     local cAsset = availableAssetPacks[assetType].rwDatas[assetName].cAsset
     if not cAsset then return false end
+    print("LOD 4")
     dummyData.position.x, dummyData.position.y, dummyData.position.z = imports.tonumber(dummyData.position.x) or 0, imports.tonumber(dummyData.position.y) or 0, imports.tonumber(dummyData.position.z) or 0
     dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z = imports.tonumber(dummyData.position.x) or 0, imports.tonumber(dummyData.position.y) or 0, imports.tonumber(dummyData.position.z) or 0
     self.assetType, self.assetName = assetType, assetName
