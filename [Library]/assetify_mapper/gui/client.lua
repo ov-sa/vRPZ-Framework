@@ -16,6 +16,7 @@ local imports = {
     addEventHandler = addEventHandler,
     removeEventHandler = removeEventHandler,
     setElementAlpha = setElementAlpha,
+    setElementFrozen = setElementFrozen,
     showChat = showChat,
     showCursor = showCursor,
     string = string,
@@ -48,16 +49,21 @@ mapper.ui = {
         width = 225, height = 360,
         propLst = {
             text = imports.string.upper(imports.string.spaceChars("Props")),
-            height = 300
+            height = 271
+        },
+        loadBtn = {
+            text = "Load Scene",
+            startY = 271 + 5,
+            height = 24
         },
         resetBtn = {
             text = "Reset Scene",
-            startY = 300 + 5,
+            startY = 271 + 5 + 24 + 5,
             height = 24
         },
         saveBtn = {
             text = "Save Scene",
-            startY = 300 + 5 + 24 + 5,
+            startY = 271 + 5 + 24 + 5 + 24 + 5,
             height = 24
         }
     }
@@ -87,6 +93,8 @@ mapper.ui.sceneWnd.createUI = function()
     mapper.ui.sceneWnd.propLst.element = imports.beautify.gridlist.create(0, 0, mapper.ui.sceneWnd.width, mapper.ui.sceneWnd.propLst.height, mapper.ui.sceneWnd.element, false)
     imports.beautify.setUIVisible(mapper.ui.sceneWnd.propLst.element, true)
     imports.beautify.gridlist.addColumn(mapper.ui.sceneWnd.propLst.element, mapper.ui.sceneWnd.propLst.text, mapper.ui.sceneWnd.width)
+    mapper.ui.sceneWnd.loadBtn.element = imports.beautify.button.create(mapper.ui.sceneWnd.loadBtn.text, 0, mapper.ui.sceneWnd.loadBtn.startY, "default", mapper.ui.sceneWnd.width, mapper.ui.sceneWnd.loadBtn.height, mapper.ui.sceneWnd.element, false)
+    imports.beautify.setUIVisible(mapper.ui.sceneWnd.loadBtn.element, true)
     mapper.ui.sceneWnd.resetBtn.element = imports.beautify.button.create(mapper.ui.sceneWnd.resetBtn.text, 0, mapper.ui.sceneWnd.resetBtn.startY, "default", mapper.ui.sceneWnd.width, mapper.ui.sceneWnd.resetBtn.height, mapper.ui.sceneWnd.element, false)
     imports.beautify.setUIVisible(mapper.ui.sceneWnd.resetBtn.element, true)
     mapper.ui.sceneWnd.saveBtn.element = imports.beautify.button.create(mapper.ui.sceneWnd.saveBtn.text, 0, mapper.ui.sceneWnd.saveBtn.startY, "default", mapper.ui.sceneWnd.width, mapper.ui.sceneWnd.saveBtn.height, mapper.ui.sceneWnd.element, false)
@@ -101,6 +109,7 @@ end
 mapper.ui.createUI = function()
     Assetify_Props = imports.assetify.getAssets(mapper.assetPack) or {}
     imports.setElementAlpha(localPlayer, 0)
+    imports.setElementFrozen(localPlayer, true)
     imports.showChat(false)
     imports.showCursor(true)
     mapper.ui.propWnd.createUI()
