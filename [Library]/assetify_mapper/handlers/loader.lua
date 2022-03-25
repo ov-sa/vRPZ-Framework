@@ -14,6 +14,7 @@
 
 local imports = {
     isElement = isElement,
+    addEventHandler = addEventHandler,
     table = table,
     beautify = beautify
 }
@@ -49,3 +50,4 @@ function destroyDummy(dummy)
     Assetify_Cache.instances[dummy] = nil
     return true
 end
+imports.addEventHandler("onClientElementDestroy", root, function() destroyDummy(source) end)
