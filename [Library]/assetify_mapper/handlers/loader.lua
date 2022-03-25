@@ -34,16 +34,23 @@ function mapper:toggle(state)
         camera:create()
         imports.bindKey("mouse_wheel_up", "down", camera.controlCursor)
         imports.bindKey("mouse_wheel_down", "down", camera.controlCursor)
+        imports.addEventHandler("onClientUIClick", mapper.ui.propWnd.spawnBtn.element, function()
+            local assetName = beautify.gridlist.getRowData(mapper.ui.propWnd.propLst.element, 1, 1)
+            if not assetName then return false end
+            mapper.isSpawningDummy = {assetName = assetName}
+        end)
     else
         mapper.ui.destroy()
         camera:destroy()
         imports.unbindKey("mouse_wheel_up", "down", camera.controlCursor)
         imports.unbindKey("mouse_wheel_down", "down", camera.controlCursor)
     end
-    imports.setElementAlpha(localPlayer, (state and 0) or 255)
-    imports.setElementFrozen(localPlayer, (state and true) or false)
-    imports.showChat((not state and true) or false)
-    camera.controlCursor(_, _, (not state and true) or false)
+    mapper.state = state
+    mapper.isSpawningDummy = false
+    imports.setElementAlpha(localPlayer, (mapper.state and 0) or 255)
+    imports.setElementFrozen(localPlayer, (mapper.state and true) or false)
+    imports.showChat((not mapper.state and true) or false)
+    camera.controlCursor(_, _, (not mapper.state and true) or false)
     return true
 end
 
