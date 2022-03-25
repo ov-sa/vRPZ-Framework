@@ -1,0 +1,4 @@
+<meta>
+    <script src="utilities/shared.lua" type="shared"/>
+    <script src="gui/client.lua" type="client"/>
+</meta>
