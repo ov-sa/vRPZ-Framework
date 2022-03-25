@@ -13,6 +13,8 @@
 -----------------
 
 local imports = {
+    isElement = isElement,
+    destroyElement = destroyElement,
     string = string,
     beautify = beautify
 }
@@ -95,11 +97,20 @@ mapper.ui.sceneWnd.createUI = function()
 end
 
 
-------------------------------
---[[ Function: Creates UI ]]--
-------------------------------
+----------------------------------------
+--[[ Functions: Creates/Destroys UI ]]--
+----------------------------------------
 
-mapper.ui.createUI = function()
+mapper.ui.create = function()
     mapper.ui.propWnd.createUI()
     mapper.ui.sceneWnd.createUI()
+end
+
+mapper.ui.destroy = function()
+    if mapper.ui.propWnd.element and imports.isElement(mapper.ui.propWnd.element) then
+        imports.destroyElement(mapper.ui.propWnd.element)
+    end
+    if mapper.ui.sceneWnd.element and imports.isElement(mapper.ui.sceneWnd.element) then
+        imports.destroyElement(mapper.ui.sceneWnd.element)
+    end
 end
