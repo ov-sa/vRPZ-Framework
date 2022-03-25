@@ -116,16 +116,3 @@ mapper.ui.createUI = function()
     mapper.ui.propWnd.createUI()
     mapper.ui.sceneWnd.createUI()
 end
-
-imports.addEventHandler("onClientResourceStart", resource, function()
-    if imports.assetify.isLoaded() then
-        mapper.ui.createUI()
-    else
-        local booterWrapper = nil
-        booterWrapper = function()
-            mapper.ui.createUI()
-            imports.removeEventHandler("onAssetifyLoad", root, booterWrapper)
-        end
-        imports.addEventHandler("onAssetifyLoad", root, booterWrapper)
-    end
-end)
