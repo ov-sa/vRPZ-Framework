@@ -96,7 +96,7 @@ end
 
 imports.addEventHandler("onClientResourceStart", resource, function()
     local booter = function()
-        Assetify_Props = assetify.getAssets("object") or {}
+        Assetify_Props = assetify.getAssets(mapper.assetPack) or {}
         showChat(false)
         --showCursor(true)
         mapper.ui.propWnd.createUI()

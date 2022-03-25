@@ -25,6 +25,7 @@ local imports = {
 -----------------------
 
 mapper = {
+    assetPack = "object",
     buffer = {
         index = {},
         element = {}
@@ -49,7 +50,7 @@ end
 
 function mapper:load(assetName, ...)
     if not self or (self == mapper) then return false end
-    local cDummy = assetify.createDummy("object", assetName, ...)
+    local cDummy = assetify.createDummy(mapper.assetPack, assetName, ...)
     if not cDummy then return false end
     self.id = #mapper.buffer.index + 1
     self.element = cDummy
