@@ -185,7 +185,7 @@ end
 camera.controlMouse = function(_, _, aX, aY)
     if CLIENT_MTA_WINDOW_ACTIVE or CLIENT_IS_CURSOR_SHOWING then return false end
     aX, aY = aX - CLIENT_MTA_RESOLUTION[1]*0.5, aY - CLIENT_MTA_RESOLUTION[2]*0.5
-    camera.rotX, camera.rotY = camera.rotX + (aX*0.01745), camera.rotY - (aY*0.01745)
+    camera.rotX, camera.rotY = camera.rotX + (aX*0.05*0.01745), camera.rotY - (aY*0.05*0.01745)
     local mulX, mulY = 2*imports.math.pi, imports.math.pi/2.05
 	if camera.rotX > imports.math.pi then
         camera.rotX = camera.rotX - mulX
