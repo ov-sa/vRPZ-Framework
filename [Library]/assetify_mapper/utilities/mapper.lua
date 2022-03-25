@@ -69,6 +69,7 @@ function mapper:unload()
     end
     imports.table.remove(mapper.buffer.index, self.id)
     mapper.buffer.element[(self.element)] = nil
+    imports.beautify.gridlist.removeRow(mapperUI.sceneWnd.propLst.element, self.id)
     self = nil
     return true
 end
