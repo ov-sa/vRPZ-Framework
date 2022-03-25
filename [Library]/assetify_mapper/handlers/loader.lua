@@ -13,43 +13,61 @@
 -----------------
 
 local imports = {
-    isElement = isElement,
+    setmetatable = setmetatable,
     addEventHandler = addEventHandler,
-    table = table,
     beautify = beautify
 }
 
 
--------------------
---[[ Variables ]]--
--------------------
+-----------------------
+--[[ Class: Mapper ]]--
+-----------------------
 
-Assetify_Cache = {
-    instances = {},
-    indexes = {}
+mapper = {
+    buffer = {
+        index = {},
+        element = {}
+    }
 }
+mapper.__index = mapper
 
-
----------------------------------
---[[ Function: Creates Dummy ]]--
----------------------------------
-
-function createDummy(assetName, ...)
-    local cDummy = assetify.createDummy("object", assetName, ...)
-    if cDummy then
-        imports.table.insert(Assetify_Cache.indexes, cDummy)
-        Assetify_Cache.instances[cDummy] = #cDummy
-        local rowIndex = imports.beautify.gridlist.addRow(mapperUI.sceneWnd.propLst.element)
-        imports.beautify.gridlist.setRowData(mapperUI.sceneWnd.propLst.element, imports.beautify.gridlist.addRow(mapperUI.sceneWnd.propLst.element), 1, "#"..(Assetify_Cache.instances[cDummy]).." ("..assetName..")")
-        return Assetify_Cache.instances[cDummy]
+function mapper:create(...)
+    local cmapper = imports.setmetatable({}, {__index = self})
+    if not cmapper:load(...) then
+        cmapper = nil
+        return false
     end
-    return false
+    return cmapper
 end
 
-function destroyDummy(dummy)
-    if not dummy or not imports.isElement(dummy) or not Assetify_Cache.instances[dummy] then return false end
-    imports.table.remove(Assetify_Cache.indexes, Assetify_Cache.instances[dummy])
-    Assetify_Cache.instances[dummy] = nil
+function mapper:destroy(...)
+    if not self or (self == mapper) then return false end
+    return self:unload(...)
+end
+
+
+function mapper:load(assetName, ...)
+    if not self or (self == mapper) then return false end
+    local cDummy = assetify.createDummy("object", assetName, ...)
+    if not cDummy then return false end
+    self.id = #mapper.buffer.index + 1
+    self.element = cDummy
+    self.assetName = assetName
+    mapper.buffer.index[(self.id)] = self
+    mapper.buffer.element[(self.element)] = self
+    imports.beautify.gridlist.setRowData(mapperUI.sceneWnd.propLst.element, imports.beautify.gridlist.addRow(mapperUI.sceneWnd.propLst.element), 1, "#"..(self.id).." ("..(self.assetName)..")")
     return true
 end
-imports.addEventHandler("onClientElementDestroy", root, function() destroyDummy(source) end)
+
+function mapper:unload()
+    if not self or (self == mapper) then return false end
+    mapper.buffer.index[(self.id)] = nil
+    mapper.buffer.element[(self.element)] = nil
+    self = nil
+    return true
+end
+
+imports.addEventHandler("onClientElementDestroy", root, function()
+    if not mapper.buffer.element[dummy] then return false end
+    mapper.buffer.element[dummy]:destroy()
+end)
