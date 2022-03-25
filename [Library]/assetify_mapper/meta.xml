@@ -1,4 +1,10 @@
 <meta>
+
+    <info author="vStudio" name="Assetify Library (Mapper)" type="Mapper (Library)" version="1.0.0"/>
+    <min_mta_version server="1.5.9" client="1.5.9"/>
+
+    <script src="settings/shared.lua" type="shared"/>
     <script src="utilities/shared.lua" type="shared"/>
     <script src="gui/client.lua" type="client"/>
+
 </meta>
