@@ -28,6 +28,7 @@ local imports = {
 -----------------------
 
 camera = {
+    fov = 45,
     speed = 0, strafespeed = 0,
     rotation = {x = 0, y = 0},
     options = {
@@ -50,8 +51,7 @@ local function freecamFrame ()
     local camTargetX, camTargetY, camTargetZ = camPosX + (freeModeAngleX*100), camPosY + (freeModeAngleY*100)
     local mspeed = (imports.getPedControlState(camera.options.key_fastMove) and camera.options.fastMaxSpeed) or (imports.getPedControlState(camera.options.key_slowMove) and camera.options.slowMaxSpeed) or camera.options.normalMaxSpeed
 
-    camera.speed = 0
-    camera.strafespeed = 0
+    camera.speed, camera.strafespeed = 0, 0
     if imports.getPedControlState(camera.options.key_forward) then
         camera.speed = mspeed
     elseif imports.getPedControlState(camera.options.key_backward) then
@@ -67,7 +67,7 @@ local function freecamFrame ()
     local normalX, normalY, normalZ = angleY/angleLength, -angleX/angleLength, 0
     camPosX, camPosY, camPosZ = camPosX + (freeModeAngleX*camera.speed) + (normalX*camera.strafespeed), camPosY + (freeModeAngleY*camera.speed) + (normalY*camera.strafespeed), camPosZ + (freeModeAngleZ*camera.speed) + (normalZ*camera.strafespeed)
     camTargetX, camTargetY, camTargetZ = camPosX + (freeModeAngleX*100), camPosY + (freeModeAngleY*100), camPosZ + (freeModeAngleZ*100)
-    imports.setCameraMatrix(camPosX, camPosY, camPosZ, camTargetX, camTargetY, camTargetZ, 0, 45)
+    imports.setCameraMatrix(camPosX, camPosY, camPosZ, camTargetX, camTargetY, camTargetZ, 0, camera.fov)
 end
 
 camera.controlMouse = function(_, _, aX, aY)
