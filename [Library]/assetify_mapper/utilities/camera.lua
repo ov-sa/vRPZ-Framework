@@ -86,6 +86,7 @@ camera.controlMouse = function(_, _, aX, aY)
 end
 
 camera.controlCursor = function(state)
+    if state == nil then state = not camera.isCursorVisible end
     camera.isCursorVisible = state
     imports.showCursor(camera.isCursorVisible)
     return true

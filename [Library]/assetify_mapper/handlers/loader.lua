@@ -17,6 +17,8 @@ local imports = {
     removeEventHandler = removeEventHandler,
     setElementAlpha = setElementAlpha,
     setElementFrozen = setElementFrozen,
+    bindKey = bindKey,
+    unbindKey = unbindKey,
     showChat = showChat,
     assetify = assetify
 }
@@ -30,9 +32,11 @@ function mapper:toggle(state)
     if state then
         mapper.ui.createUI()
         camera:create()
+        imports.bindKey("scrolldown", "down", camera.controlCursor)
     else
         mapper.ui.destroyUI()
         camera:destroy()
+        imports.unbindKey("scrolldown", "down", camera.controlCursor)
     end
     imports.setElementAlpha(localPlayer, (state and 0) or 255)
     imports.setElementFrozen(localPlayer, (state and true) or false)
