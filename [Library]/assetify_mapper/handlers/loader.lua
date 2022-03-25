@@ -43,7 +43,7 @@ function mapper:toggle(state)
     imports.setElementAlpha(localPlayer, (state and 0) or 255)
     imports.setElementFrozen(localPlayer, (state and true) or false)
     imports.showChat((state and true) or false)
-    camera.controlCursor((not state and true) or false)
+    camera.controlCursor(_, _, (not state and true) or false)
     return true
 end
 
