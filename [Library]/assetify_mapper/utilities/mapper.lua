@@ -61,7 +61,7 @@ function mapper:load(assetName, ...)
     imports.table.insert(mapper.buffer.index, self.id)
     mapper.buffer.index[(self.id)] = self
     mapper.buffer.element[(self.element)] = self
-    imports.beautify.gridlist.setRowData(mapperUI.sceneWnd.propLst.element, imports.beautify.gridlist.addRow(mapperUI.sceneWnd.propLst.element), 1, "#"..(self.id).." ("..(self.assetName)..")")
+    imports.beautify.gridlist.setRowData(mapper.ui.sceneWnd.propLst.element, imports.beautify.gridlist.addRow(mapper.ui.sceneWnd.propLst.element), 1, "#"..(self.id).." ("..(self.assetName)..")")
     return true
 end
 
@@ -72,7 +72,7 @@ function mapper:unload()
     end
     imports.table.remove(mapper.buffer.index, self.id)
     mapper.buffer.element[(self.element)] = nil
-    imports.beautify.gridlist.removeRow(mapperUI.sceneWnd.propLst.element, self.id)
+    imports.beautify.gridlist.removeRow(mapper.ui.sceneWnd.propLst.element, self.id)
     self = nil
     return true
 end
