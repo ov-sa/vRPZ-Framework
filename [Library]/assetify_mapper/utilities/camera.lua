@@ -85,7 +85,13 @@ camera.controlMouse = function(_, _, aX, aY)
     end
 end
 
-function camera:enable()
+camera.controlCursor = function(state)
+    camera.isCursorVisible = state
+    imports.showCursor(camera.isCursorVisible)
+    return true
+end
+
+function camera:create()
     if camera.isEnabled then return false end
     camera.speed.generic, camera.speed.strafe = 0, 0
 	imports.addEventHandler("onClientRender", root, camera.render)
@@ -94,7 +100,7 @@ function camera:enable()
 	return true
 end
 
-function camera:disable()
+function camera:destroy()
     if not camera.isEnabled then return false end
 	imports.removeEventHandler("onClientRender", root, camera.render)
     imports.removeEventHandler("onClientCursorMove", root, camera.controlMouse)

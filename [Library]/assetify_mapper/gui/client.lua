@@ -13,14 +13,7 @@
 -----------------
 
 local imports = {
-    addEventHandler = addEventHandler,
-    removeEventHandler = removeEventHandler,
-    setElementAlpha = setElementAlpha,
-    setElementFrozen = setElementFrozen,
-    showChat = showChat,
-    showCursor = showCursor,
     string = string,
-    assetify = assetify,
     beautify = beautify
 }
 
@@ -107,12 +100,6 @@ end
 ------------------------------
 
 mapper.ui.createUI = function()
-    Assetify_Props = imports.assetify.getAssets(mapper.assetPack) or {}
-    imports.setElementAlpha(localPlayer, 0)
-    imports.setElementFrozen(localPlayer, true)
-    camera:enable()
-    imports.showChat(false)
-    --imports.showCursor(true)
     mapper.ui.propWnd.createUI()
     mapper.ui.sceneWnd.createUI()
 end
