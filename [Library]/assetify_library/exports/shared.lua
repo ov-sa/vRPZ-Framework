@@ -14,8 +14,10 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
     isElement = isElement,
-    getElementType = getElementType
+    getElementType = getElementType,
+    table = table
 }
 
 
@@ -24,7 +26,12 @@ local imports = {
 -------------------------
 
 function getLibraryAssets(assetType)
-    
+    if not assetType or not availableAssetPacks[assetType] then return false end
+    local packAssets = {}
+    for i, j in imports.pairs(availableAssetPacks[assetType].assetPack.rwDatas) do
+        imports.table.insert(packAssets, i)
+    end
+    return packAssets
 end
 
 function setElementAsset(element, ...)
