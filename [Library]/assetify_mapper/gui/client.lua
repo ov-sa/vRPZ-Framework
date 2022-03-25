@@ -24,7 +24,7 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-local mapperUI = {
+mapperUI = {
     propWnd = {
         startX = 5, startY = 5,
         width = 225, height = 231,
@@ -83,11 +83,6 @@ mapperUI.sceneWnd.createUI = function()
     mapperUI.sceneWnd.propLst.element = imports.beautify.gridlist.create(0, 0, mapperUI.sceneWnd.width, mapperUI.sceneWnd.propLst.height, mapperUI.sceneWnd.element, false)
     imports.beautify.setUIVisible(mapperUI.sceneWnd.propLst.element, true)
     imports.beautify.gridlist.addColumn(mapperUI.sceneWnd.propLst.element, mapperUI.sceneWnd.propLst.text, mapperUI.sceneWnd.width)
-    for i = 1, #Assetify_Props, 1 do
-        local j = Assetify_Props[i]
-        local rowIndex = imports.beautify.gridlist.addRow(mapperUI.sceneWnd.propLst.element)
-        imports.beautify.gridlist.setRowData(mapperUI.sceneWnd.propLst.element, rowIndex, 1, "#"..i.." ("..j..")")
-    end
     mapperUI.sceneWnd.resetBtn.element = imports.beautify.button.create(mapperUI.sceneWnd.resetBtn.text, 0, mapperUI.sceneWnd.resetBtn.startY, "default", mapperUI.sceneWnd.width, mapperUI.sceneWnd.resetBtn.height, mapperUI.sceneWnd.element, false)
     imports.beautify.setUIVisible(mapperUI.sceneWnd.resetBtn.element, true)
     mapperUI.sceneWnd.saveBtn.element = imports.beautify.button.create(mapperUI.sceneWnd.saveBtn.text, 0, mapperUI.sceneWnd.saveBtn.startY, "default", mapperUI.sceneWnd.width, mapperUI.sceneWnd.saveBtn.height, mapperUI.sceneWnd.element, false)

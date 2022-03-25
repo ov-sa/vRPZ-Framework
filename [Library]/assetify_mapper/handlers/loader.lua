@@ -34,11 +34,13 @@ Assetify_Cache = {
 --[[ Function: Creates Dummy ]]--
 ---------------------------------
 
-function createDummy(...)
-    local cDummy = assetify.createDummy(...)
+function createDummy(assetName, ...)
+    local cDummy = assetify.createDummy("object", assetName, ...)
     if cDummy then
         imports.table.insert(Assetify_Cache.indexes, cDummy)
         Assetify_Cache.instances[cDummy] = #cDummy
+        local rowIndex = imports.beautify.gridlist.addRow(mapperUI.sceneWnd.propLst.element)
+        imports.beautify.gridlist.setRowData(mapperUI.sceneWnd.propLst.element, imports.beautify.gridlist.addRow(mapperUI.sceneWnd.propLst.element), 1, "#"..(Assetify_Cache.instances[cDummy]).." ("..assetName..")")
         return Assetify_Cache.instances[cDummy]
     end
     return false
