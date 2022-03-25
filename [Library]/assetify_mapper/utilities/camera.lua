@@ -207,10 +207,8 @@ local function freecamFrame ()
     camTargetX = camPosX + freeModeAngleX * 100
     camTargetY = camPosY + freeModeAngleY * 100
     camTargetZ = camPosZ + freeModeAngleZ * 100
-
-    outputChatBox("WOWO")
     -- Set the new camera position and target
-    setCameraMatrix ( camPosX, camPosY, camPosZ, camTargetX, camTargetY, camTargetZ )
+    setCameraMatrix ( camPosX, camPosY, camPosZ, camTargetX, camTargetY, camTargetZ, 0, 45)
 end
 
 local function freecamMouse (cX,cY,aX,aY)
