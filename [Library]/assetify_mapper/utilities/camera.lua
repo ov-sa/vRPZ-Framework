@@ -1,12 +1,37 @@
--- state variables
-local speed = 0
-local strafespeed = 0
-local rotX, rotY = 0,0
-local velocityX, velocityY, velocityZ
+----------------------------------------------------------------
+--[[ Resource: Assetify Mapper
+     Script: utilities: camera.lua
+     Author: vStudio
+     Developer(s): Tron
+     DOC: 25/03/2022
+     Desc: Camera Utilities ]]--
+----------------------------------------------------------------
 
--- configurable parameters
+
+-----------------
+--[[ Imports ]]--
+-----------------
+
+local imports = {
+    addEventHandler = addEventHandler,
+    removeEventHandler = removeEventHandler,
+    math = math
+}
+
+
+-----------------------
+--[[ Class: camera ]]--
+-----------------------
+
+camera = {
+    speed = 0, strafespeed = 0,
+    rotX = 0, rotY = 0,
+    velocityX = 0, velocityY = 0, velocityZ = 0
+}
+camera.__index = camera
+
+
 local options = {
-	invertMouseLook = false,
 	normalMaxSpeed = 2,
 	slowMaxSpeed = 0.2,
 	fastMaxSpeed = 12,
@@ -20,148 +45,94 @@ local options = {
 	key_forward = "forwards",
 	key_backward = "backwards",
 	key_left = "left",
-	key_right = "right",
-	key_forward_veh = "accelerate",
-	key_backward_veh = "brake_reverse",
-	key_left_veh = "vehicle_left",
-	key_right_veh = "vehicle_right"
+	key_right = "right"
 }
-
-local controlToKey = {
-	["forwards"] = "w",
-	["backwards"] = "s",
-	["left"] = "a",
-	["right"] = "d",
-	["accelerate"] = "w",
-	["brake_reverse"] = "s",
-	["vehicle_left"] = "a",
-	["vehicle_right"] = "d",
-}
-
-local mouseFrameDelay = 0
-
-local mta_getKeyState = getKeyState
-function getKeyState(key)
-	if isMTAWindowActive() then
-		return false
-	end
-	if key == "lshift" or key == "lalt" or key == "arrow_u" or key == "arrow_d" or key == "arrow_l" or key == "arrow_r" then
-		return mta_getKeyState(key)
-	end
-	if isPedDead(localPlayer) then
-		-- We must use getKeyState when dead we also have to hope they're using WASD
-		return mta_getKeyState(controlToKey[key])
-	else
-		-- We can use getControlState
-		return getPedControlState(key)
-	end
-end
-
--- PRIVATE
 
 local function freecamFrame ()
-    -- work out an angle in radians based on the number of pixels the cursor has moved (ever)
-    local cameraAngleX = rotX
-    local cameraAngleY = rotY
-
-    local freeModeAngleZ = math.sin(cameraAngleY)
-    local freeModeAngleY = math.cos(cameraAngleY) * math.cos(cameraAngleX)
-    local freeModeAngleX = math.cos(cameraAngleY) * math.sin(cameraAngleX)
+    local freeModeAngleX, freeModeAngleY, freeModeAngleZ = imports.math.cos(camera.rotY)*imports.math.sin(camera.rotX), imports.math.cos(camera.rotY)*imports.math.cos(camera.rotX), imports.math.sin(camera.rotY)
     local camPosX, camPosY, camPosZ = getCameraMatrix()
-
-    -- calculate a target based on the current position and an offset based on the angle
-    local camTargetX = camPosX + freeModeAngleX * 100
-    local camTargetY = camPosY + freeModeAngleY * 100
-    local camTargetZ
-
-	-- Calculate what the maximum speed that the camera should be able to move at.
-    local mspeed = options.normalMaxSpeed
-    if getKeyState ( options.key_fastMove ) then
-        mspeed = options.fastMaxSpeed
-	elseif getKeyState ( options.key_slowMove ) then
-		mspeed = options.slowMaxSpeed
-    end
+    local camTargetX, camTargetY, camTargetZ = camPosX + (freeModeAngleX*100), camPosY + (freeModeAngleY*100)
+    local mspeed = (getPedControlState(options.key_fastMove) and options.fastMaxSpeed) or (getPedControlState(options.key_slowMove) and options.slowMaxSpeed) or options.normalMaxSpeed
 
 	if options.smoothMovement then
-		local acceleration = options.acceleration
-		local decceleration = options.decceleration
+		local acceleration, decceleration = options.acceleration, options.decceleration
 
 	    -- Check to see if the forwards/backwards keys are pressed
 	    local speedKeyPressed = false
-	    if ( getKeyState ( options.key_forward ) or getKeyState ( options.key_forward_veh ) ) and not getKeyState("arrow_u") then
-			speed = speed + acceleration
+	    if getPedControlState(options.key_forward) and not getKeyState("arrow_u") then
+			camera.speed = camera.speed + acceleration
 	        speedKeyPressed = true
 	    end
-		if ( getKeyState ( options.key_backward ) or getPedControlState ( options.key_backward_veh ) ) and not getKeyState("arrow_d") then
-			speed = speed - acceleration
+		if getPedControlState(options.key_backward) and not getKeyState("arrow_d") then
+			camera.speed = camera.speed - acceleration
 	        speedKeyPressed = true
 	    end
 
 	    -- Check to see if the strafe keys are pressed
 	    local strafeSpeedKeyPressed = false
-		if ( getKeyState ( options.key_right ) or getKeyState ( options.key_right_veh ) ) and not getKeyState("arrow_r") then
-	        if strafespeed > 0 then -- for instance response
-	            strafespeed = 0
+		if getPedControlState(options.key_right) and not getKeyState("arrow_r") then
+	        if camera.strafespeed > 0 then -- for instance response
+	            camera.strafespeed = 0
 	        end
-	        strafespeed = strafespeed - acceleration / 2
+	        camera.strafespeed = camera.strafespeed - acceleration / 2
 	        strafeSpeedKeyPressed = true
 	    end
-		if ( getKeyState ( options.key_left ) or getKeyState ( options.key_left_veh ) ) and not getKeyState("arrow_l") then
-	        if strafespeed < 0 then -- for instance response
-	            strafespeed = 0
+		if getPedControlState(options.key_left) and not getKeyState("arrow_l") then
+	        if camera.strafespeed < 0 then -- for instance response
+	            camera.strafespeed = 0
 	        end
-	        strafespeed = strafespeed + acceleration / 2
+	        camera.strafespeed = camera.strafespeed + acceleration / 2
 	        strafeSpeedKeyPressed = true
 	    end
 
 	    -- If no forwards/backwards keys were pressed, then gradually slow down the movement towards 0
 	    if speedKeyPressed ~= true then
-			if speed > 0 then
-				speed = speed - decceleration
-			elseif speed < 0 then
-				speed = speed + decceleration
+			if camera.speed > 0 then
+				camera.speed = camera.speed - decceleration
+			elseif camera.speed < 0 then
+				camera.speed = camera.speed + decceleration
 			end
 	    end
 
 	    -- If no strafe keys were pressed, then gradually slow down the movement towards 0
 	    if strafeSpeedKeyPressed ~= true then
-			if strafespeed > 0 then
-				strafespeed = strafespeed - decceleration
-			elseif strafespeed < 0 then
-				strafespeed = strafespeed + decceleration
+			if camera.strafespeed > 0 then
+				camera.strafespeed = camera.strafespeed - decceleration
+			elseif camera.strafespeed < 0 then
+				camera.strafespeed = camera.strafespeed + decceleration
 			end
 	    end
 
-	    -- Check the ranges of values - set the speed to 0 if its very close to 0 (stops jittering), and limit to the maximum speed
-	    if speed > -decceleration and speed < decceleration then
-	        speed = 0
-	    elseif speed > mspeed then
-	        speed = mspeed
-	    elseif speed < -mspeed then
-	        speed = -mspeed
+	    -- Check the ranges of values - set the camera.speed to 0 if its very close to 0 (stops jittering), and limit to the maximum camera.speed
+	    if camera.speed > -decceleration and camera.speed < decceleration then
+	        camera.speed = 0
+	    elseif camera.speed > mspeed then
+	        camera.speed = mspeed
+	    elseif camera.speed < -mspeed then
+	        camera.speed = -mspeed
 	    end
 
-	    if strafespeed > -(acceleration / 2) and strafespeed < (acceleration / 2) then
-	        strafespeed = 0
-	    elseif strafespeed > mspeed then
-	        strafespeed = mspeed
-	    elseif strafespeed < -mspeed then
-	        strafespeed = -mspeed
+	    if camera.strafespeed > -(acceleration / 2) and camera.strafespeed < (acceleration / 2) then
+	        camera.strafespeed = 0
+	    elseif camera.strafespeed > mspeed then
+	        camera.strafespeed = mspeed
+	    elseif camera.strafespeed < -mspeed then
+	        camera.strafespeed = -mspeed
 	    end
 	else
-		speed = 0
-		strafespeed = 0
-		if getKeyState ( options.key_forward ) or getKeyState ( options.key_forward_veh ) then
-			speed = mspeed
+		camera.speed = 0
+		camera.strafespeed = 0
+		if getPedControlState(options.key_forward) then
+			camera.speed = mspeed
 		end
-		if getKeyState ( options.key_backward ) or getKeyState ( options.key_backward_veh ) then
-			speed = -mspeed
+		if getPedControlState(options.key_backward) then
+			camera.speed = -mspeed
 		end
-		if getKeyState ( options.key_left ) or getKeyState ( options.key_left_veh ) then
-			strafespeed = mspeed
+		if getPedControlState(options.key_left) then
+			camera.strafespeed = mspeed
 		end
-		if getKeyState ( options.key_right ) or getKeyState ( options.key_right_veh ) then
-			strafespeed = -mspeed
+		if getPedControlState(options.key_right) then
+			camera.strafespeed = -mspeed
 		end
 	end
 
@@ -171,7 +142,7 @@ local function freecamFrame ()
     local camAngleZ = 0 -- we ignore this otherwise our vertical angle affects how fast you can strafe
 
     -- Calulcate the length of the vector
-    local angleLength = math.sqrt(camAngleX*camAngleX+camAngleY*camAngleY+camAngleZ*camAngleZ)
+    local angleLength = imports.math.sqrt(camAngleX*camAngleX+camAngleY*camAngleY+camAngleZ*camAngleZ)
 
     -- Normalize the vector, ignoring the Z axis, as the camera is stuck to the XY plane (it can't roll)
     local camNormalizedAngleX = camAngleX / angleLength
@@ -188,92 +159,61 @@ local function freecamFrame ()
     local normalY = (camNormalizedAngleZ * normalAngleX - camNormalizedAngleX * normalAngleZ)
     local normalZ = (camNormalizedAngleX * normalAngleY - camNormalizedAngleY * normalAngleX)
 
-    -- Update the camera position based on the forwards/backwards speed
-    camPosX = camPosX + freeModeAngleX * speed
-    camPosY = camPosY + freeModeAngleY * speed
-    camPosZ = camPosZ + freeModeAngleZ * speed
+    -- Update the camera position based on the forwards/backwards camera.speed
+    camPosX = camPosX + freeModeAngleX * camera.speed
+    camPosY = camPosY + freeModeAngleY * camera.speed
+    camPosZ = camPosZ + freeModeAngleZ * camera.speed
 
-    -- Update the camera position based on the strafe speed
-    camPosX = camPosX + normalX * strafespeed
-    camPosY = camPosY + normalY * strafespeed
-    camPosZ = camPosZ + normalZ * strafespeed
+    -- Update the camera position based on the strafe camera.speed
+    camPosX = camPosX + normalX * camera.strafespeed
+    camPosY = camPosY + normalY * camera.strafespeed
+    camPosZ = camPosZ + normalZ * camera.strafespeed
 
 	--Store the velocity
-	velocityX = (freeModeAngleX * speed) + (normalX * strafespeed)
-	velocityY = (freeModeAngleY * speed) + (normalY * strafespeed)
-	velocityZ = (freeModeAngleZ * speed) + (normalZ * strafespeed)
+	camera.velocityX = (freeModeAngleX * camera.speed) + (normalX * camera.strafespeed)
+	camera.velocityY = (freeModeAngleY * camera.speed) + (normalY * camera.strafespeed)
+	camera.velocityZ = (freeModeAngleZ * camera.speed) + (normalZ * camera.strafespeed)
 
     -- Update the target based on the new camera position (again, otherwise the camera kind of sways as the target is out by a frame)
     camTargetX = camPosX + freeModeAngleX * 100
     camTargetY = camPosY + freeModeAngleY * 100
     camTargetZ = camPosZ + freeModeAngleZ * 100
     -- Set the new camera position and target
-    setCameraMatrix ( camPosX, camPosY, camPosZ, camTargetX, camTargetY, camTargetZ, 0, 45)
+    setCameraMatrix (camPosX, camPosY, camPosZ, camTargetX, camTargetY, camTargetZ, 0, 45)
 end
 
-local function freecamMouse (cX,cY,aX,aY)
-	--ignore mouse movement if the cursor or MTA window is on
-	--and do not resume it until at least 5 frames after it is toggled off
-	--(prevents cursor mousemove data from reaching this handler)
-	if isCursorShowing() or isMTAWindowActive() then
-		mouseFrameDelay = 5
-		return
-	elseif mouseFrameDelay > 0 then
-		mouseFrameDelay = mouseFrameDelay - 1
-		return
+camera.controlMouse = function(_, _, aX, aY)
+    if CLIENT_MTA_WINDOW_ACTIVE or CLIENT_IS_CURSOR_SHOWING then return false end
+    aX, aY = aX - CLIENT_MTA_RESOLUTION[1]*0.5, aY - CLIENT_MTA_RESOLUTION[2]*0.5
+    camera.rotX, camera.rotY = camera.rotX + (aX*0.01745), camera.rotY - (aY*0.01745)
+    local mulX, mulY = 2*imports.math.pi, imports.math.pi/2.05
+	if camera.rotX > imports.math.pi then
+        camera.rotX = camera.rotX - mulX
+	elseif camera.rotX < -imports.math.pi then
+        camera.rotX = camera.rotX + mulX
 	end
-
-	-- how far have we moved the mouse from the screen center?
-    local width, height = guiGetScreenSize()
-    aX = aX - width / 2
-    aY = aY - height / 2
-
-	--invert the mouse look if specified
-	if options.invertMouseLook then
-		aY = -aY
+	if camera.rotY > imports.math.pi then
+        camera.rotY = camera.rotY - mulX
+	elseif camera.rotY < -imports.math.pi then
+        camera.rotY = camera.rotY + mulX
 	end
-
-    rotX = rotX + aX * options.mouseSensitivity * 0.01745
-    rotY = rotY - aY * options.mouseSensitivity * 0.01745
-
-	local PI = math.pi
-	if rotX > PI then
-		rotX = rotX - 2 * PI
-	elseif rotX < -PI then
-		rotX = rotX + 2 * PI
-	end
-
-	if rotY > PI then
-		rotY = rotY - 2 * PI
-	elseif rotY < -PI then
-		rotY = rotY + 2 * PI
-	end
-    -- limit the camera to stop it going too far up or down - PI/2 is the limit, but we can't let it quite reach that or it will lock up
-	-- and strafeing will break entirely as the camera loses any concept of what is 'up'
-    if rotY < -PI / 2.05 then
-       rotY = -PI / 2.05
-    elseif rotY > PI / 2.05 then
-        rotY = PI / 2.05
+    if camera.rotY < -mulY then
+        camera.rotY = -mulY
+    elseif camera.rotY > mulY then
+        camera.rotY = mulY
     end
 end
 
-function setFreecamEnabled(x, y, z)
-	if x and y and z then
-	    setCameraMatrix(x, y, z)
-	end
-	addEventHandler("onClientRender", root, freecamFrame)
-	addEventHandler("onClientCursorMove", root, freecamMouse)
+function camera:enable()
+	imports.addEventHandler("onClientRender", root, freecamFrame)
+	imports.addEventHandler("onClientCursorMove", root, camera.controlMouse)
 	return true
 end
 
-function setFreecamDisabled()
-	if not isFreecamEnabled() then
-		return false
-	end
-	velocityX,velocityY,velocityZ = 0, 0, 0
-	speed = 0
-	strafespeed = 0
-	removeEventHandler("onClientRender", root, freecamFrame)
-	removeEventHandler("onClientCursorMove",root, freecamMouse)
+function camera:disable()
+	camera.speed, camera.strafespeed = 0, 0
+	camera.velocityX, camera.velocityY, camera.velocityZ = 0, 0, 0
+	imports.removeEventHandler("onClientRender", root, freecamFrame)
+    imports.removeEventHandler("onClientCursorMove", root, camera.controlMouse)
 	return true
 end

@@ -110,7 +110,7 @@ mapper.ui.createUI = function()
     Assetify_Props = imports.assetify.getAssets(mapper.assetPack) or {}
     imports.setElementAlpha(localPlayer, 0)
     imports.setElementFrozen(localPlayer, true)
-    setFreecamEnabled()
+    camera:enable()
     imports.showChat(false)
     --imports.showCursor(true)
     mapper.ui.propWnd.createUI()
