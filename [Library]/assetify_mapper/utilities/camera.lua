@@ -39,7 +39,7 @@ camera = {
 }
 camera.__index = camera
 
-local function freecamFrame ()
+camera.render = function()
     camera.speed.generic, camera.speed.strafe = 0, 0
     local camera_posX, camera_posY, camera_posZ = imports.getCameraMatrix()
     local view_angleX, view_angleY, view_angleZ = imports.math.cos(camera.rotation.y)*imports.math.sin(camera.rotation.x), imports.math.cos(camera.rotation.y)*imports.math.cos(camera.rotation.x), imports.math.sin(camera.rotation.y)
@@ -88,7 +88,7 @@ end
 function camera:enable()
     if camera.isEnabled then return false end
     camera.speed.generic, camera.speed.strafe = 0, 0
-	imports.addEventHandler("onClientRender", root, freecamFrame)
+	imports.addEventHandler("onClientRender", root, camera.render)
 	imports.addEventHandler("onClientCursorMove", root, camera.controlMouse)
     camera.isEnabled = true
 	return true
@@ -96,7 +96,7 @@ end
 
 function camera:disable()
     if not camera.isEnabled then return false end
-	imports.removeEventHandler("onClientRender", root, freecamFrame)
+	imports.removeEventHandler("onClientRender", root, camera.render)
     imports.removeEventHandler("onClientCursorMove", root, camera.controlMouse)
     camera.isEnabled = false
 	return true
