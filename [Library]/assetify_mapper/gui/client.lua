@@ -15,6 +15,9 @@
 local imports = {
     addEventHandler = addEventHandler,
     removeEventHandler = removeEventHandler,
+    setElementAlpha = setElementAlpha,
+    showChat = showChat,
+    showCursor = showCursor,
     string = string,
     assetify = assetify,
     beautify = beautify
@@ -91,25 +94,26 @@ mapper.ui.sceneWnd.createUI = function()
 end
 
 
------------------------------------------
---[[ Event: On Client Resource Start ]]--
------------------------------------------
+------------------------------
+--[[ Function: Creates UI ]]--
+------------------------------
+
+mapper.ui.createUI = function()
+    Assetify_Props = imports.assetify.getAssets(mapper.assetPack) or {}
+    imports.setElementAlpha(localPlayer, 0)
+    imports.showChat(false)
+    imports.showCursor(true)
+    mapper.ui.propWnd.createUI()
+    mapper.ui.sceneWnd.createUI()
+end
 
 imports.addEventHandler("onClientResourceStart", resource, function()
-    local booter = function()
-        Assetify_Props = imports.assetify.getAssets(mapper.assetPack) or {}
-        showChat(false)
-        --showCursor(true)
-        mapper.ui.propWnd.createUI()
-        mapper.ui.sceneWnd.createUI()
-    end
-
     if imports.assetify.isLoaded() then
-        booter()
+        mapper.ui.createUI()
     else
         local booterWrapper = nil
         booterWrapper = function()
-            booter()
+            mapper.ui.createUI()
             imports.removeEventHandler("onAssetifyLoad", root, booterWrapper)
         end
         imports.addEventHandler("onAssetifyLoad", root, booterWrapper)
