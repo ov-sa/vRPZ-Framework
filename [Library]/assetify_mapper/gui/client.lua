@@ -15,6 +15,7 @@
 local imports = {
     addEventHandler = addEventHandler,
     removeEventHandler = removeEventHandler,
+    string = string,
     assetify = assetify,
     beautify = beautify
 }
@@ -29,7 +30,7 @@ mapper.ui = {
         startX = 5, startY = 5,
         width = 225, height = 231,
         propLst = {
-            text = "ASSETS",
+            text = imports.string.upper(imports.string.spaceChars("Assets")),
             height = 200
         },
         spawnBtn = {
@@ -43,7 +44,7 @@ mapper.ui = {
         startX = 5, startY = 5 + 231 + 10 + 5,
         width = 225, height = 360,
         propLst = {
-            text = "PROPS",
+            text = imports.string.upper(imports.string.spaceChars("Props")),
             height = 300
         },
         resetBtn = {
