@@ -15,6 +15,8 @@
 local imports = {
     addEventHandler = addEventHandler,
     removeEventHandler = removeEventHandler,
+    getKeyState = getKeyState,
+    getPedControlState = getPedControlState,
     math = math
 }
 
@@ -26,58 +28,56 @@ local imports = {
 camera = {
     speed = 0, strafespeed = 0,
     rotX = 0, rotY = 0,
-    velocityX = 0, velocityY = 0, velocityZ = 0
+    velocityX = 0, velocityY = 0, velocityZ = 0,
+    options = {
+        normalMaxSpeed = 2,
+        slowMaxSpeed = 0.2,
+        fastMaxSpeed = 12,
+        smoothMovement = true,
+        acceleration = 0.3,
+        decceleration = 0.15,
+        mouseSensitivity = 0.3,
+        maxYAngle = 188,
+        key_fastMove = "lshift",
+        key_slowMove = "lalt",
+        key_forward = "forwards",
+        key_backward = "backwards",
+        key_left = "left",
+        key_right = "right"
+    }
 }
 camera.__index = camera
-
-
-local options = {
-	normalMaxSpeed = 2,
-	slowMaxSpeed = 0.2,
-	fastMaxSpeed = 12,
-	smoothMovement = true,
-	acceleration = 0.3,
-	decceleration = 0.15,
-	mouseSensitivity = 0.3,
-	maxYAngle = 188,
-	key_fastMove = "lshift",
-	key_slowMove = "lalt",
-	key_forward = "forwards",
-	key_backward = "backwards",
-	key_left = "left",
-	key_right = "right"
-}
 
 local function freecamFrame ()
     local freeModeAngleX, freeModeAngleY, freeModeAngleZ = imports.math.cos(camera.rotY)*imports.math.sin(camera.rotX), imports.math.cos(camera.rotY)*imports.math.cos(camera.rotX), imports.math.sin(camera.rotY)
     local camPosX, camPosY, camPosZ = getCameraMatrix()
     local camTargetX, camTargetY, camTargetZ = camPosX + (freeModeAngleX*100), camPosY + (freeModeAngleY*100)
-    local mspeed = (getPedControlState(options.key_fastMove) and options.fastMaxSpeed) or (getPedControlState(options.key_slowMove) and options.slowMaxSpeed) or options.normalMaxSpeed
+    local mspeed = (imports.getPedControlState(camera.options.key_fastMove) and camera.options.fastMaxSpeed) or (imports.getPedControlState(camera.options.key_slowMove) and camera.options.slowMaxSpeed) or camera.options.normalMaxSpeed
 
-	if options.smoothMovement then
-		local acceleration, decceleration = options.acceleration, options.decceleration
+	if camera.options.smoothMovement then
+		local acceleration, decceleration = camera.options.acceleration, camera.options.decceleration
 
 	    -- Check to see if the forwards/backwards keys are pressed
 	    local speedKeyPressed = false
-	    if getPedControlState(options.key_forward) and not getKeyState("arrow_u") then
+	    if imports.getPedControlState(camera.options.key_forward) and not imports.getKeyState("arrow_u") then
 			camera.speed = camera.speed + acceleration
 	        speedKeyPressed = true
 	    end
-		if getPedControlState(options.key_backward) and not getKeyState("arrow_d") then
+		if imports.getPedControlState(camera.options.key_backward) and not imports.getKeyState("arrow_d") then
 			camera.speed = camera.speed - acceleration
 	        speedKeyPressed = true
 	    end
 
 	    -- Check to see if the strafe keys are pressed
 	    local strafeSpeedKeyPressed = false
-		if getPedControlState(options.key_right) and not getKeyState("arrow_r") then
+		if imports.getPedControlState(camera.options.key_right) and not imports.getKeyState("arrow_r") then
 	        if camera.strafespeed > 0 then -- for instance response
 	            camera.strafespeed = 0
 	        end
 	        camera.strafespeed = camera.strafespeed - acceleration / 2
 	        strafeSpeedKeyPressed = true
 	    end
-		if getPedControlState(options.key_left) and not getKeyState("arrow_l") then
+		if imports.getPedControlState(camera.options.key_left) and not imports.getKeyState("arrow_l") then
 	        if camera.strafespeed < 0 then -- for instance response
 	            camera.strafespeed = 0
 	        end
@@ -122,16 +122,16 @@ local function freecamFrame ()
 	else
 		camera.speed = 0
 		camera.strafespeed = 0
-		if getPedControlState(options.key_forward) then
+		if imports.getPedControlState(camera.options.key_forward) then
 			camera.speed = mspeed
 		end
-		if getPedControlState(options.key_backward) then
+		if imports.getPedControlState(camera.options.key_backward) then
 			camera.speed = -mspeed
 		end
-		if getPedControlState(options.key_left) then
+		if imports.getPedControlState(camera.options.key_left) then
 			camera.strafespeed = mspeed
 		end
-		if getPedControlState(options.key_right) then
+		if imports.getPedControlState(camera.options.key_right) then
 			camera.strafespeed = -mspeed
 		end
 	end
