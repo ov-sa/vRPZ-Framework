@@ -23,6 +23,10 @@ local imports = {
 --[[ Functions: APIs ]]--
 -------------------------
 
+function getLibraryAssets(assetType)
+    
+end
+
 function setElementAsset(element, ...)
     if not element or not imports.isElement(element) then return false end
     local elementType = imports.getElementType(element)
