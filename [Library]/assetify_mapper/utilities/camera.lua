@@ -69,16 +69,16 @@ camera.controlMouse = function(_, _, aX, aY)
     aX, aY = aX - CLIENT_MTA_RESOLUTION[1]*0.5, aY - CLIENT_MTA_RESOLUTION[2]*0.5
     camera.rotation.x, camera.rotation.y = camera.rotation.x + (aX*0.05*0.01745), camera.rotation.y - (aY*0.05*0.01745)
     local mulX, mulY = 2*imports.math.pi, imports.math.pi/2.05
-	if camera.rotation.x > imports.math.pi then
+    if camera.rotation.x > imports.math.pi then
         camera.rotation.x = camera.rotation.x - mulX
-	elseif camera.rotation.x < -imports.math.pi then
+    elseif camera.rotation.x < -imports.math.pi then
         camera.rotation.x = camera.rotation.x + mulX
-	end
-	if camera.rotation.y > imports.math.pi then
+    end
+    if camera.rotation.y > imports.math.pi then
         camera.rotation.y = camera.rotation.y - mulX
-	elseif camera.rotation.y < -imports.math.pi then
+    elseif camera.rotation.y < -imports.math.pi then
         camera.rotation.y = camera.rotation.y + mulX
-	end
+    end
     if camera.rotation.y < -mulY then
         camera.rotation.y = -mulY
     elseif camera.rotation.y > mulY then
@@ -96,16 +96,16 @@ end
 function camera:create()
     if camera.isEnabled then return false end
     camera.speed.generic, camera.speed.strafe = 0, 0
-	imports.addEventHandler("onClientRender", root, camera.render)
-	imports.addEventHandler("onClientCursorMove", root, camera.controlMouse)
+    imports.addEventHandler("onClientRender", root, camera.render)
+    imports.addEventHandler("onClientCursorMove", root, camera.controlMouse)
     camera.isEnabled = true
-	return true
+    return true
 end
 
 function camera:destroy()
     if not camera.isEnabled then return false end
-	imports.removeEventHandler("onClientRender", root, camera.render)
+    imports.removeEventHandler("onClientRender", root, camera.render)
     imports.removeEventHandler("onClientCursorMove", root, camera.controlMouse)
     camera.isEnabled = false
-	return true
+    return true
 end

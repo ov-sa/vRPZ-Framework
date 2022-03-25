@@ -24,9 +24,9 @@ local imports = {
 }
 
 
---------------------------------
---[[ Function: Loads Mapper ]]--
---------------------------------
+----------------------------------
+--[[ Function: Toggles Mapper ]]--
+----------------------------------
 
 function mapper:toggle(state)
     if state then
