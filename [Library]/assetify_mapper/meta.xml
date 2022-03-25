@@ -5,7 +5,7 @@
 
     <script src="settings/shared.lua" type="shared"/>
     <script src="utilities/shared.lua" type="shared"/>
+    <script src="utilities/mapper.lua" type="client"/>
     <script src="gui/client.lua" type="client"/>
-    <script src="handlers/loader.lua" type="client"/>
 
 </meta>

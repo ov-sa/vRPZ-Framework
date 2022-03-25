@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
 --[[ Resource: Assetify Mapper
-     Script: handlers: loader.lua
+     Script: utilities: mapper.lua
      Author: vStudio
      Developer(s): Tron
      DOC: 25/03/2022
-     Desc: Mapper Loader ]]--
+     Desc: Mapper Utilities ]]--
 ----------------------------------------------------------------
 
 
