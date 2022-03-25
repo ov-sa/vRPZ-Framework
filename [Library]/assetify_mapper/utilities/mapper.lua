@@ -15,6 +15,7 @@
 local imports = {
     setmetatable = setmetatable,
     addEventHandler = addEventHandler,
+    table = table,
     beautify = beautify
 }
 
@@ -53,6 +54,7 @@ function mapper:load(assetName, ...)
     self.id = #mapper.buffer.index + 1
     self.element = cDummy
     self.assetName = assetName
+    imports.table.insert(mapper.buffer.index, self.id)
     mapper.buffer.index[(self.id)] = self
     mapper.buffer.element[(self.element)] = self
     imports.beautify.gridlist.setRowData(mapperUI.sceneWnd.propLst.element, imports.beautify.gridlist.addRow(mapperUI.sceneWnd.propLst.element), 1, "#"..(self.id).." ("..(self.assetName)..")")
@@ -61,7 +63,10 @@ end
 
 function mapper:unload()
     if not self or (self == mapper) then return false end
-    mapper.buffer.index[(self.id)] = nil
+    for i = self.id + 1, #mapper.buffer.index, 1 do
+        mapper.buffer.index[(self.id)].id = mapper.buffer.index[(self.id)].id - 1
+    end
+    imports.table.remove(mapper.buffer.index, self.id)
     mapper.buffer.element[(self.element)] = nil
     self = nil
     return true
