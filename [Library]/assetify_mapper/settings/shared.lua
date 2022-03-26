@@ -14,6 +14,7 @@
 
 resource = getResourceRootElement(getThisResource())
 
+availableControlSpeeds = {normal = 1, slow = 0.2, fast = 3}
 availableControls = {
     speedUp = "lshift",
     speedDown = "space",

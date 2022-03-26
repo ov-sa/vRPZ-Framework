@@ -34,6 +34,7 @@ mapper = {
         width = 15, length = 10,
         color = {x = imports.tocolor(255, 0, 0, 250), y = imports.tocolor(0, 255, 0, 250), z = imports.tocolor(0, 0, 255, 250)}
     },
+    speed = {range = availableControlSpeeds},
     controls = availableControls,
     buffer = {
         index = {},

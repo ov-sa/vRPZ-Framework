@@ -30,8 +30,8 @@ local imports = {
 
 camera = {
     fov = 45,
-    speed = {generic = 0, strafe = 0, range = {normal = 1, slow = 0.2, fast = 3}},
     rotation = {x = 0, y = 0},
+    speed = {generic = 0, strafe = 0, range = availableControlSpeeds},
     controls = availableControls
 }
 camera.__index = camera
