@@ -66,6 +66,7 @@ end
 
 camera.controlMouse = function(_, _, aX, aY)
     if CLIENT_MTA_WINDOW_ACTIVE or CLIENT_IS_CURSOR_SHOWING then return false end
+    if not camera.cursorTick or ((CLIENT_CURRENT_TICK - camera.cursorTick) <= 500) then return false end
     aX, aY = aX - CLIENT_MTA_RESOLUTION[1]*0.5, aY - CLIENT_MTA_RESOLUTION[2]*0.5
     camera.rotation.x, camera.rotation.y = camera.rotation.x + (aX*0.05*0.01745), camera.rotation.y - (aY*0.05*0.01745)
     local mulX, mulY = 2*imports.math.pi, imports.math.pi/2.05
@@ -88,6 +89,7 @@ end
 
 camera.controlCursor = function(_, _, state)
     if state == nil then state = not camera.isCursorVisible end
+    if not state then camera.cursorTick = CLIENT_CURRENT_TICK end
     camera.isCursorVisible = state
     imports.showCursor(camera.isCursorVisible)
     return true
