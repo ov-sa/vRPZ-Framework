@@ -79,8 +79,7 @@ function mapper:load(assetName, dummyData, retargetFocus)
     self.id = #mapper.buffer.index + 1
     self.element = cDummy
     self.assetName = assetName
-    imports.table.insert(mapper.buffer.index, self.id)
-    mapper.buffer.index[(self.id)] = self
+    imports.table.insert(mapper.buffer.index, self)
     mapper.buffer.element[(self.element)] = self
     imports.beautify.gridlist.setRowData(mapper.ui.sceneWnd.propLst.element, imports.beautify.gridlist.addRow(mapper.ui.sceneWnd.propLst.element), 1, "#"..(self.id).." ("..(self.assetName)..")")
     if retargetFocus then mapper.isTargettingDummy = self.element end
@@ -90,7 +89,7 @@ end
 function mapper:unload()
     if not self or (self == mapper) then return false end
     for i = self.id + 1, #mapper.buffer.index, 1 do
-        mapper.buffer.index[(self.id)].id = mapper.buffer.index[(self.id)].id - 1
+        mapper.buffer.index[i].id = mapper.buffer.index[i].id - 1
     end
     imports.table.remove(mapper.buffer.index, self.id)
     mapper.buffer.element[(self.element)] = nil
