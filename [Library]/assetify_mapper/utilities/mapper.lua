@@ -14,6 +14,7 @@
 
 local imports = {
     tocolor = tocolor,
+    destroyElement = destroyElement,
     setmetatable = setmetatable,
     addEventHandler = addEventHandler,
     getKeyState = getKeyState,
@@ -94,7 +95,7 @@ mapper.render = function()
         imports.beautify.native.drawLine3D(cPosition.x, cPosition.y, cPosition.z, vectorX.x, vectorX.y, vectorX.z, mapper.axis.color.x, mapper.axis.width)
         imports.beautify.native.drawLine3D(cPosition.x, cPosition.y, cPosition.z, vectorY.x, vectorY.y, vectorY.z, mapper.axis.color.y, mapper.axis.width)
         imports.beautify.native.drawLine3D(cPosition.x, cPosition.y, cPosition.z, vectorZ.x, vectorZ.y, vectorZ.z, mapper.axis.color.z, mapper.axis.width)
-        if camera.isCursorVisible then
+        if camera.isCursorVisible and not imports.getKeyState(mapper.controls.controlAction) then
             local isRotationMode = imports.getKeyState(mapper.controls.toggleRotation) or false
             local object_speed = ((imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal)*((isRotationMode and 1) or 0.1)
             if imports.getPedControlState(mapper.controls.moveForwards) then
@@ -142,13 +143,21 @@ end
 
 mapper.controlKey = function(button, state)
     if state then return false end
-    if button == mapper.controls.cloneObject then
-        if mapper.isTargettingDummy then
-            local cPosition, cRotation = mapper.isTargettingDummy.position, mapper.isTargettingDummy.rotation
-            mapper:create(mapper.buffer.element[(mapper.isTargettingDummy)].assetName, {
-                position = {x = cPosition.x, y = cPosition.y, z = cPosition.z},
-                rotation = {x = cRotation.x, y = cRotation.y, z = cRotation.z}
-            }, true)
+    if imports.getKeyState(mapper.controls.controlAction) then
+        if button == mapper.controls.deleteObject then
+            if mapper.isTargettingDummy then
+                imports.destroyElement(mapper.isTargettingDummy)
+            end
+        end
+    else
+        if button == mapper.controls.cloneObject then
+            if mapper.isTargettingDummy then
+                local cPosition, cRotation = mapper.isTargettingDummy.position, mapper.isTargettingDummy.rotation
+                mapper:create(mapper.buffer.element[(mapper.isTargettingDummy)].assetName, {
+                    position = {x = cPosition.x, y = cPosition.y, z = cPosition.z},
+                    rotation = {x = cRotation.x, y = cRotation.y, z = cRotation.z}
+                }, true)
+            end
         end
     end
 end
@@ -174,6 +183,7 @@ mapper.controlClick = function(button, state, _, _, worldX, worldY, worldZ, targ
 end
 
 imports.addEventHandler("onClientElementDestroy", root, function()
-    if mapper.isLibraryStopping or not mapper.buffer.element[dummy] then return false end
-    mapper.buffer.element[dummy]:destroy()
+    if mapper.isLibraryStopping or not mapper.buffer.element[source] then return false end
+    if mapper.isTargettingDummy == source then mapper.isTargettingDummy = false end
+    mapper.buffer.element[source]:destroy()
 end)
