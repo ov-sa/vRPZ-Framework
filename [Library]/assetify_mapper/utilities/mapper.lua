@@ -16,6 +16,7 @@ local imports = {
     tocolor = tocolor,
     setmetatable = setmetatable,
     addEventHandler = addEventHandler,
+    getKeyState = getKeyState,
     getPedControlState = getPedControlState,
     Vector3 = Vector3,
     table = table,
@@ -90,15 +91,16 @@ mapper.render = function()
         imports.beautify.native.drawLine3D(cPosition.x, cPosition.y, cPosition.z, vectorY.x, vectorY.y, vectorY.z, mapper.axis.color.y, mapper.axis.width)
         imports.beautify.native.drawLine3D(cPosition.x, cPosition.y, cPosition.z, vectorZ.x, vectorZ.y, vectorZ.z, mapper.axis.color.z, mapper.axis.width)
         if camera.isCursorVisible then
+            local object_speed = ((imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal)*0.1
             if imports.getPedControlState(mapper.controls.moveForwards) then
-                mapper.isTargettingDummy.position = cMatrix.position + cMatrix.forward*2
+                mapper.isTargettingDummy.position = cMatrix.position + (cMatrix.forward*multiplier)
             elseif imports.getPedControlState(mapper.controls.moveBackwards) then
-                mapper.isTargettingDummy.position = cMatrix.position - cMatrix.forward*2
+                mapper.isTargettingDummy.position = cMatrix.position - (cMatrix.forward*multiplier)
             end
             if imports.getPedControlState(mapper.controls.moveLeft) then
-                mapper.isTargettingDummy.position = cMatrix.position + cMatrix.right*2
+                mapper.isTargettingDummy.position = cMatrix.position + (cMatrix.right*multiplier)
             elseif imports.getPedControlState(mapper.controls.moveRight) then
-                mapper.isTargettingDummy.position = cMatrix.position - cMatrix.right*2
+                mapper.isTargettingDummy.position = cMatrix.position - (cMatrix.right*multiplier)
             end
         end
     end
