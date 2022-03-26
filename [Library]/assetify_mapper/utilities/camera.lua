@@ -40,6 +40,23 @@ camera = {
 }
 camera.__index = camera
 
+function camera:create()
+    if camera.isEnabled then return false end
+    camera.speed.generic, camera.speed.strafe = 0, 0
+    imports.addEventHandler("onClientRender", root, camera.render)
+    imports.addEventHandler("onClientCursorMove", root, camera.controlMouse)
+    camera.isEnabled = true
+    return true
+end
+
+function camera:destroy()
+    if not camera.isEnabled then return false end
+    imports.removeEventHandler("onClientRender", root, camera.render)
+    imports.removeEventHandler("onClientCursorMove", root, camera.controlMouse)
+    camera.isEnabled = false
+    return true
+end
+
 camera.render = function()
     camera.speed.generic, camera.speed.strafe = 0, 0
     local camera_posX, camera_posY, camera_posZ = imports.getCameraMatrix()
@@ -92,22 +109,5 @@ camera.controlCursor = function(_, _, state)
     if not state then camera.cursorTick = CLIENT_CURRENT_TICK end
     camera.isCursorVisible = state
     imports.showCursor(camera.isCursorVisible)
-    return true
-end
-
-function camera:create()
-    if camera.isEnabled then return false end
-    camera.speed.generic, camera.speed.strafe = 0, 0
-    imports.addEventHandler("onClientRender", root, camera.render)
-    imports.addEventHandler("onClientCursorMove", root, camera.controlMouse)
-    camera.isEnabled = true
-    return true
-end
-
-function camera:destroy()
-    if not camera.isEnabled then return false end
-    imports.removeEventHandler("onClientRender", root, camera.render)
-    imports.removeEventHandler("onClientCursorMove", root, camera.controlMouse)
-    camera.isEnabled = false
     return true
 end

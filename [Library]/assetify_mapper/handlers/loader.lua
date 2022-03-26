@@ -42,10 +42,14 @@ function mapper:toggle(state)
             if not assetName then return false end
             mapper.isSpawningDummy = {assetName = assetName}
         end)
+        imports.addEventHandler("onClientRender", root, mapper.render)
+        imports.addEventHandler("onClientClick", root, mapper.controlClick)
     else
+        imports.removeEventHandler("onClientClick", root, mapper.controlClick)
+        imports.removeEventHandler("onClientRender", root, mapper.render)
+        imports.unbindKey(camera.controls.toggleCursor, "down", camera.controlCursor)
         mapper.ui.destroy()
         camera:destroy()
-        imports.unbindKey(camera.controls.toggleCursor, "down", camera.controlCursor)
     end
     mapper.state = state
     mapper.isSpawningDummy = false
