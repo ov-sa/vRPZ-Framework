@@ -80,20 +80,20 @@ imports.addEventHandler("onClientRender", root, function()
     --mapper:attachObject()
 end)
 
-imports.addEventHandler("onClientClick", root, function(button, state)
+imports.addEventHandler("onClientClick", root, function(button, state, _, _, worldX, worldY, worldZ)
     if not mapper.state or (state == "down") then return false end
     if button == "left" then
         if mapper.isSpawningDummy then
             if not mapper.isSpawningDummy.isScheduled then
                 mapper.isSpawningDummy.isScheduled = true
             else
-                mapper.isSpawningDummy = false
                 mapper:create(mapper.isSpawningDummy.assetName, {
-                    position = {x = CLIENT_CURSOR_OFFSET[4], y = CLIENT_CURSOR_OFFSET[5], z = CLIENT_CURSOR_OFFSET[6]},
+                    position = {x = worldX, y = worldY, z = worldZ},
                     rotation = {x = 0, y = 0, z = 0},
                     dimension = 0,
                     interior = 0
                 })
+                mapper.isSpawningDummy = false
             end
         end
     end
