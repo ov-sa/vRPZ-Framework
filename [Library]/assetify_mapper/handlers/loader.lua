@@ -20,7 +20,8 @@ local imports = {
     bindKey = bindKey,
     unbindKey = unbindKey,
     showChat = showChat,
-    assetify = assetify
+    assetify = assetify,
+    beautify = beautify
 }
 
 
@@ -35,7 +36,7 @@ function mapper:toggle(state)
         imports.bindKey("mouse_wheel_up", "down", camera.controlCursor)
         imports.bindKey("mouse_wheel_down", "down", camera.controlCursor)
         imports.addEventHandler("onClientUIClick", mapper.ui.propWnd.spawnBtn.element, function()
-            local assetName = beautify.gridlist.getRowData(mapper.ui.propWnd.propLst.element, 1, 1)
+            local assetName = imports.beautify.gridlist.getRowData(mapper.ui.propWnd.propLst.element, imports.beautify.gridlist.getSelection(mapper.ui.propWnd.propLst.element), 1)
             if not assetName then return false end
             mapper.isSpawningDummy = {assetName = assetName}
         end)
