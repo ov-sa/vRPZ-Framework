@@ -40,6 +40,9 @@ function mapper:toggle(state)
             if not assetName then return false end
             mapper.isSpawningDummy = {assetName = assetName}
         end)
+        imports.addEventHandler("onClientUIClick", mapper.ui.sceneWnd.resetBtn.element, function()
+            mapper:reset()
+        end)
         imports.addEventHandler("onClientRender", root, mapper.render)
         imports.addEventHandler("onClientKey", root, mapper.controlKey)
         imports.addEventHandler("onClientClick", root, mapper.controlClick)
