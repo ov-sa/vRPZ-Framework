@@ -50,11 +50,8 @@ end
 
 function mapper:load(assetName, ...)
     if not self or (self == mapper) then return false end
-    print("TEST 1")
     local cDummy = assetify.createDummy(mapper.assetPack, assetName, ...)
-    print("TEST 2")
     if not cDummy then return false end
-    print("TEST 3")
     self.id = #mapper.buffer.index + 1
     self.element = cDummy
     self.assetName = assetName
@@ -89,7 +86,7 @@ imports.addEventHandler("onClientClick", root, function(button, state)
             if not mapper.isSpawningDummy.isScheduled then
                 mapper.isSpawningDummy.isScheduled = true
             else
-                mapper.isSpawningDummy.isScheduled = false
+                mapper.isSpawningDummy = false
                 mapper:create(mapper.isSpawningDummy.assetName, {
                     position = {x = CLIENT_CURSOR_OFFSET[4], y = CLIENT_CURSOR_OFFSET[5], z = CLIENT_CURSOR_OFFSET[6]},
                     rotation = {x = 0, y = 0, z = 0},
