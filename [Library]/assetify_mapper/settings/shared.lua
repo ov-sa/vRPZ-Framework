@@ -13,3 +13,13 @@
 ------------------
 
 resource = getResourceRootElement(getThisResource())
+
+availableControls = {
+    speedUp = "lshift",
+    speedDown = "space",
+    toggleCursor = "mouse2",
+    moveForwards = "forwards",
+    moveBackwards = "backwards",
+    moveLeft = "left",
+    moveRight = "right"
+}

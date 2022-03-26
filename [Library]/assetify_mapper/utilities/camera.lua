@@ -32,11 +32,7 @@ camera = {
     fov = 45,
     speed = {generic = 0, strafe = 0, range = {normal = 1, slow = 0.2, fast = 3}},
     rotation = {x = 0, y = 0},
-    controls = {
-        speedUp = "lshift", speedDown = "space", toggleCursor = "mouse2",
-        moveForwards = "forwards", moveBackwards = "backwards",
-        moveLeft = "left", moveRight = "right"
-    }
+    controls = availableControls
 }
 camera.__index = camera
 
@@ -62,16 +58,19 @@ camera.render = function()
     local camera_posX, camera_posY, camera_posZ = imports.getCameraMatrix()
     local view_angleX, view_angleY, view_angleZ = imports.math.cos(camera.rotation.y)*imports.math.sin(camera.rotation.x), imports.math.cos(camera.rotation.y)*imports.math.cos(camera.rotation.x), imports.math.sin(camera.rotation.y)
     local camera_targetX, camera_targetY, camera_targetZ = camera_posX + (view_angleX*100), camera_posY + (view_angleY*100), 0
-    local camera_speed = (imports.getKeyState(camera.controls.speedUp) and camera.speed.range.fast) or (imports.getKeyState(camera.controls.speedDown) and camera.speed.range.slow) or camera.speed.range.normal
-    if imports.getPedControlState(camera.controls.moveForwards) then
-        camera.speed.generic = camera_speed
-    elseif imports.getPedControlState(camera.controls.moveBackwards) then
-        camera.speed.generic = -camera_speed
-    end
-    if imports.getPedControlState(camera.controls.moveLeft) then
-        camera.speed.strafe = camera_speed
-    elseif imports.getPedControlState(camera.controls.moveRight) then
-        camera.speed.strafe = -camera_speed
+    local camera_speed = camera.speed.range.normal
+    if not camera.isCursorVisible then
+        camera_speed = (imports.getKeyState(camera.controls.speedUp) and camera.speed.range.fast) or (imports.getKeyState(camera.controls.speedDown) and camera.speed.range.slow) or camera_speed
+        if imports.getPedControlState(camera.controls.moveForwards) then
+            camera.speed.generic = camera_speed
+        elseif imports.getPedControlState(camera.controls.moveBackwards) then
+            camera.speed.generic = -camera_speed
+        end
+        if imports.getPedControlState(camera.controls.moveLeft) then
+            camera.speed.strafe = camera_speed
+        elseif imports.getPedControlState(camera.controls.moveRight) then
+            camera.speed.strafe = -camera_speed
+        end
     end
     local camera_angleX, camera_angleY, camera_angleZ = camera_posX - camera_targetX, camera_posY - camera_targetY, 0
     local camera_angleLength = imports.math.sqrt((camera_angleX*camera_angleX) + (camera_angleY*camera_angleY) + (camera_angleZ*camera_angleZ))
@@ -83,7 +82,7 @@ end
 
 camera.controlMouse = function(_, _, aX, aY)
     if CLIENT_MTA_WINDOW_ACTIVE or CLIENT_IS_CURSOR_SHOWING then return false end
-    if not camera.cursorTick or ((CLIENT_CURRENT_TICK - camera.cursorTick) <= 500) then return false end
+    if camera.isCursorVisible or not camera.cursorTick or ((CLIENT_CURRENT_TICK - camera.cursorTick) <= 500) then return false end
     aX, aY = aX - CLIENT_MTA_RESOLUTION[1]*0.5, aY - CLIENT_MTA_RESOLUTION[2]*0.5
     camera.rotation.x, camera.rotation.y = camera.rotation.x + (aX*0.05*0.01745), camera.rotation.y - (aY*0.05*0.01745)
     local mulX, mulY = 2*imports.math.pi, imports.math.pi/2.05
@@ -108,6 +107,6 @@ camera.controlCursor = function(_, _, state)
     if state == nil then state = not camera.isCursorVisible end
     if not state then camera.cursorTick = CLIENT_CURRENT_TICK end
     camera.isCursorVisible = state
-    imports.showCursor(camera.isCursorVisible)
+    imports.showCursor(camera.isCursorVisible, false)
     return true
 end

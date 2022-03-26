@@ -16,7 +16,8 @@ local imports = {
     tocolor = tocolor,
     setmetatable = setmetatable,
     addEventHandler = addEventHandler,
-    getElementPosition = getElementPosition,
+    getPedControlState = getPedControlState,
+    Vector3 = Vector3,
     table = table,
     beautify = beautify
 }
@@ -29,9 +30,10 @@ local imports = {
 mapper = {
     assetPack = "object",
     axis = {
-        width = 7, length = 7,
+        width = 15, length = 10,
         color = {x = imports.tocolor(255, 0, 0, 250), y = imports.tocolor(0, 255, 0, 250), z = imports.tocolor(0, 0, 255, 250)}
     },
+    controls = availableControls,
     buffer = {
         index = {},
         element = {}
@@ -82,11 +84,22 @@ end
 
 mapper.render = function()
     if mapper.isTargettingDummy then
-        local posX, posY, posZ = imports.getElementPosition(mapper.isTargettingDummy)
-        dxDrawLine3D(posX, posY, posZ, posX + imports.axis.length, posY, posZ, imports.axis.color.x, imports.axis.width)
-        dxDrawLine3D(posX, posY, posZ, posX, posY + imports.axis.length, posZ, imports.axis.color.y, imports.axis.width)
-        dxDrawLine3D(posX, posY, posZ, posX, posY, posZ + imports.axis.length, imports.axis.color.z, imports.axis.width)
+        local cMatrix, cPosition = mapper.isTargettingDummy.matrix, mapper.isTargettingDummy.position
+        local vectorX, vectorY, vectorZ = cMatrix:transformPosition(imports.Vector3(mapper.axis.length, 0, 0)), cMatrix:transformPosition(imports.Vector3(0, mapper.axis.length, 0)), cMatrix:transformPosition(imports.Vector3(0, 0, mapper.axis.length))
+        imports.beautify.native.drawLine3D(cPosition.x, cPosition.y, cPosition.z, vectorX.x, vectorX.y, vectorX.z, mapper.axis.color.x, mapper.axis.width)
+        imports.beautify.native.drawLine3D(cPosition.x, cPosition.y, cPosition.z, vectorY.x, vectorY.y, vectorY.z, mapper.axis.color.y, mapper.axis.width)
+        imports.beautify.native.drawLine3D(cPosition.x, cPosition.y, cPosition.z, vectorZ.x, vectorZ.y, vectorZ.z, mapper.axis.color.z, mapper.axis.width)
         if camera.isCursorVisible then
+            if imports.getPedControlState(mapper.controls.moveForwards) then
+                mapper.isTargettingDummy.position = cMatrix.position + cMatrix.forward*2
+            elseif imports.getPedControlState(mapper.controls.moveBackwards) then
+                mapper.isTargettingDummy.position = cMatrix.position - cMatrix.forward*2
+            end
+            if imports.getPedControlState(mapper.controls.moveLeft) then
+                mapper.isTargettingDummy.position = cMatrix.position + cMatrix.right*2
+            elseif imports.getPedControlState(mapper.controls.moveRight) then
+                mapper.isTargettingDummy.position = cMatrix.position - cMatrix.right*2
+            end
         end
     end
 end
