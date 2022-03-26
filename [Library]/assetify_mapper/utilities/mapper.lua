@@ -60,9 +60,9 @@ function mapper:destroy(...)
     return self:unload(...)
 end
 
-function mapper:load(assetName, ...)
+function mapper:load(assetName, dummyData, retargetFocus)
     if not self or (self == mapper) then return false end
-    local cDummy = assetify.createDummy(mapper.assetPack, assetName, ...)
+    local cDummy = assetify.createDummy(mapper.assetPack, assetName, dummyData)
     if not cDummy then return false end
     self.id = #mapper.buffer.index + 1
     self.element = cDummy
@@ -71,6 +71,7 @@ function mapper:load(assetName, ...)
     mapper.buffer.index[(self.id)] = self
     mapper.buffer.element[(self.element)] = self
     imports.beautify.gridlist.setRowData(mapper.ui.sceneWnd.propLst.element, imports.beautify.gridlist.addRow(mapper.ui.sceneWnd.propLst.element), 1, "#"..(self.id).." ("..(self.assetName)..")")
+    if retargetFocus then mapper.isTargettingDummy = self.element end
     return self.element
 end
 
@@ -144,11 +145,10 @@ mapper.controlKey = function(button, state)
     if button == mapper.controls.cloneObject then
         if mapper.isTargettingDummy then
             local cPosition, cRotation = mapper.isTargettingDummy.position, mapper.isTargettingDummy.rotation
-            local _, cInstance = mapper:create(mapper.buffer.element[(mapper.isTargettingDummy)].assetName, {
+            mapper:create(mapper.buffer.element[(mapper.isTargettingDummy)].assetName, {
                 position = {x = cPosition.x, y = cPosition.y, z = cPosition.z},
                 rotation = {x = cRotation.x, y = cRotation.y, z = cRotation.z}
-            })
-            mapper.isTargettingDummy = cInstance
+            }, true)
         end
     end
 end
@@ -161,11 +161,11 @@ mapper.controlClick = function(button, state, _, _, worldX, worldY, worldZ, targ
                 mapper.isSpawningDummy.isScheduled = true
                 mapper.isTargettingDummy = false
             else
-                local _, cInstance = mapper:create(mapper.isSpawningDummy.assetName, {
+                mapper:create(mapper.isSpawningDummy.assetName, {
                     position = {x = worldX, y = worldY, z = worldZ},
                     rotation = {x = 0, y = 0, z = 0}
-                })
-                mapper.isSpawningDummy, mapper.isTargettingDummy = false, cInstance
+                }, true)
+                mapper.isSpawningDummy = false
             end
         else
             mapper.isTargettingDummy = (targetElement and mapper.buffer.element[targetElement] and targetElement) or false
