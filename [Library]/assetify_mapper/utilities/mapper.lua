@@ -13,8 +13,10 @@
 -----------------
 
 local imports = {
+    tocolor = tocolor,
     setmetatable = setmetatable,
     addEventHandler = addEventHandler,
+    getElementPosition = getElementPosition,
     table = table,
     beautify = beautify
 }
@@ -26,6 +28,10 @@ local imports = {
 
 mapper = {
     assetPack = "object",
+    axis = {
+        width = 7, length = 7,
+        color = {x = imports.tocolor(255, 0, 0, 250), y = imports.tocolor(0, 255, 0, 250), z = imports.tocolor(0, 0, 255, 250)}
+    },
     buffer = {
         index = {},
         element = {}
@@ -76,8 +82,11 @@ end
 
 mapper.render = function()
     if mapper.isTargettingDummy then
+        local posX, posY, posZ = imports.getElementPosition(mapper.isTargettingDummy)
+        dxDrawLine3D(posX, posY, posZ, posX + imports.axis.length, posY, posZ, imports.axis.color.x, imports.axis.width)
+        dxDrawLine3D(posX, posY, posZ, posX, posY + imports.axis.length, posZ, imports.axis.color.y, imports.axis.width)
+        dxDrawLine3D(posX, posY, posZ, posX, posY, posZ + imports.axis.length, imports.axis.color.z, imports.axis.width)
         if camera.isCursorVisible then
-            outputChatBox("Targetted Dummy")
         end
     end
 end
