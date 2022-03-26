@@ -81,10 +81,11 @@ imports.addEventHandler("onClientRender", root, function()
     --mapper:attachObject()
 end)
 
-imports.addEventHandler("onClientClick", root, function(button, state, _, _, worldX, worldY, worldZ)
+imports.addEventHandler("onClientClick", root, function(button, state, _, _, worldX, worldY, worldZ, targetElement)
     if not mapper.state or (state == "down") then return false end
     if button == "left" then
         if mapper.isSpawningDummy then
+            mapper.isTargettingDummy = false
             if not mapper.isSpawningDummy.isScheduled then
                 mapper.isSpawningDummy.isScheduled = true
             else
@@ -96,6 +97,8 @@ imports.addEventHandler("onClientClick", root, function(button, state, _, _, wor
                 })
                 mapper.isSpawningDummy = false
             end
+        else
+            mapper.isTargettingDummy = (targetElement and mapper.buffer.element[targetElement] and targetElement) or false
         end
     end
 end)
