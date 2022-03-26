@@ -44,9 +44,11 @@ function mapper:toggle(state)
             mapper.isSpawningDummy = {assetName = assetName}
         end)
         imports.addEventHandler("onClientRender", root, mapper.render)
+        imports.addEventHandler("onClientKey", root, mapper.controlKey)
         imports.addEventHandler("onClientClick", root, mapper.controlClick)
     else
         imports.removeEventHandler("onClientClick", root, mapper.controlClick)
+        imports.removeEventHandler("onClientKey", root, mapper.controlKey)
         imports.removeEventHandler("onClientRender", root, mapper.render)
         imports.unbindKey(camera.controls.toggleCursor, "down", camera.controlCursor)
         mapper.ui.destroy()

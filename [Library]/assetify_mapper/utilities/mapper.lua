@@ -18,6 +18,8 @@ local imports = {
     addEventHandler = addEventHandler,
     getKeyState = getKeyState,
     getPedControlState = getPedControlState,
+    setElementPosition = setElementPosition,
+    setElementRotation = setElementRotation,
     Vector3 = Vector3,
     table = table,
     beautify = beautify
@@ -45,11 +47,12 @@ mapper.__index = mapper
 
 function mapper:create(...)
     local cMapper = imports.setmetatable({}, {__index = self})
-    if not cMapper:load(...) then
+    local cInstance = cMapper:load(...)
+    if not cInstance then
         cMapper = nil
         return false
     end
-    return cMapper
+    return cMapper, cInstance
 end
 
 function mapper:destroy(...)
@@ -66,10 +69,9 @@ function mapper:load(assetName, ...)
     self.assetName = assetName
     imports.table.insert(mapper.buffer.index, self.id)
     mapper.buffer.index[(self.id)] = self
-    print(self.element)
     mapper.buffer.element[(self.element)] = self
     imports.beautify.gridlist.setRowData(mapper.ui.sceneWnd.propLst.element, imports.beautify.gridlist.addRow(mapper.ui.sceneWnd.propLst.element), 1, "#"..(self.id).." ("..(self.assetName)..")")
-    return true
+    return self.element
 end
 
 function mapper:unload()
@@ -92,17 +94,61 @@ mapper.render = function()
         imports.beautify.native.drawLine3D(cPosition.x, cPosition.y, cPosition.z, vectorY.x, vectorY.y, vectorY.z, mapper.axis.color.y, mapper.axis.width)
         imports.beautify.native.drawLine3D(cPosition.x, cPosition.y, cPosition.z, vectorZ.x, vectorZ.y, vectorZ.z, mapper.axis.color.z, mapper.axis.width)
         if camera.isCursorVisible then
-            local object_speed = ((imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal)*0.1
+            local isRotationMode = imports.getKeyState(mapper.controls.toggleRotation) or false
+            local object_speed = ((imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal)*((isRotationMode and 1) or 0.1)
             if imports.getPedControlState(mapper.controls.moveForwards) then
-                mapper.isTargettingDummy.position = cMatrix.position + (cMatrix.forward*multiplier)
+                if isRotationMode then
+                    imports.setElementRotation(mapper.isTargettingDummy, cMatrix.rotation.x + object_speed, cMatrix.rotation.y, cMatrix.rotation.z)
+                else
+                    imports.setElementPosition(mapper.isTargettingDummy, cMatrix.position + (cMatrix.forward*object_speed))
+                end
             elseif imports.getPedControlState(mapper.controls.moveBackwards) then
-                mapper.isTargettingDummy.position = cMatrix.position - (cMatrix.forward*multiplier)
+                if isRotationMode then
+                    imports.setElementRotation(mapper.isTargettingDummy, cMatrix.rotation.x - object_speed, cMatrix.rotation.y, cMatrix.rotation.z)
+                else
+                    imports.setElementPosition(mapper.isTargettingDummy, cMatrix.position - (cMatrix.forward*object_speed))
+                end
             end
             if imports.getPedControlState(mapper.controls.moveLeft) then
-                mapper.isTargettingDummy.position = cMatrix.position + (cMatrix.right*multiplier)
+                if isRotationMode then
+                    imports.setElementRotation(mapper.isTargettingDummy, cMatrix.rotation.x, cMatrix.rotation.y, cMatrix.rotation.z + object_speed)
+                else
+                    imports.setElementPosition(mapper.isTargettingDummy, cMatrix.position + (cMatrix.right*object_speed))
+                end
             elseif imports.getPedControlState(mapper.controls.moveRight) then
-                mapper.isTargettingDummy.position = cMatrix.position - (cMatrix.right*multiplier)
+                if isRotationMode then
+                    imports.setElementRotation(mapper.isTargettingDummy, cMatrix.rotation.x, cMatrix.rotation.y, cMatrix.rotation.z - object_speed)
+                else
+                    imports.setElementPosition(mapper.isTargettingDummy, cMatrix.position - (cMatrix.right*object_speed))
+                end
             end
+            if imports.getKeyState(mapper.controls.moveUp) then
+                if isRotationMode then
+                    imports.setElementRotation(mapper.isTargettingDummy, cMatrix.rotation.x, cMatrix.rotation.y + object_speed, cMatrix.rotation.z)
+                else
+                    imports.setElementPosition(mapper.isTargettingDummy, cMatrix.position + (cMatrix.up*object_speed))
+                end
+            elseif imports.getKeyState(mapper.controls.moveDown) then
+                if isRotationMode then
+                    imports.setElementRotation(mapper.isTargettingDummy, cMatrix.rotation.x, cMatrix.rotation.y - object_speed, cMatrix.rotation.z)
+                else
+                    imports.setElementPosition(mapper.isTargettingDummy, cMatrix.position - (cMatrix.up*object_speed))
+                end
+            end
+        end
+    end
+end
+
+mapper.controlKey = function(button, state)
+    if state then return false end
+    if button == mapper.controls.cloneObject then
+        if mapper.isTargettingDummy then
+            local cPosition, cRotation = mapper.isTargettingDummy.position, mapper.isTargettingDummy.rotation
+            local _, cInstance = mapper:create(mapper.buffer.element[(mapper.isTargettingDummy)].assetName, {
+                position = {x = cPosition.x, y = cPosition.y, z = cPosition.z},
+                rotation = {x = cRotation.x, y = cRotation.y, z = cRotation.z}
+            })
+            mapper.isTargettingDummy = cInstance
         end
     end
 end
@@ -111,17 +157,15 @@ mapper.controlClick = function(button, state, _, _, worldX, worldY, worldZ, targ
     if state == "down" then return false end
     if button == "left" then
         if mapper.isSpawningDummy then
-            mapper.isTargettingDummy = false
             if not mapper.isSpawningDummy.isScheduled then
                 mapper.isSpawningDummy.isScheduled = true
+                mapper.isTargettingDummy = false
             else
-                mapper:create(mapper.isSpawningDummy.assetName, {
+                local _, cInstance = mapper:create(mapper.isSpawningDummy.assetName, {
                     position = {x = worldX, y = worldY, z = worldZ},
-                    rotation = {x = 0, y = 0, z = 0},
-                    dimension = 0,
-                    interior = 0
+                    rotation = {x = 0, y = 0, z = 0}
                 })
-                mapper.isSpawningDummy = false
+                mapper.isSpawningDummy, mapper.isTargettingDummy = false, cInstance
             end
         else
             mapper.isTargettingDummy = (targetElement and mapper.buffer.element[targetElement] and targetElement) or false
