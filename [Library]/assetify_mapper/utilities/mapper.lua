@@ -13,7 +13,9 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
     tocolor = tocolor,
+    isElement = isElement,
     destroyElement = destroyElement,
     setmetatable = setmetatable,
     addEventHandler = addEventHandler,
@@ -59,6 +61,15 @@ end
 function mapper:destroy(...)
     if not self or (self == mapper) then return false end
     return self:unload(...)
+end
+
+function mapper:reset()
+    for i, j in imports.pairs(mapper.buffer.element) do
+        if i and imports.isElement(i) then
+            imports.destroyElement(i)
+        end
+    end
+    return true
 end
 
 function mapper:load(assetName, dummyData, retargetFocus)
@@ -144,11 +155,6 @@ end
 mapper.controlKey = function(button, state)
     if state then return false end
     if imports.getKeyState(mapper.controls.controlAction) then
-        if button == mapper.controls.deleteObject then
-            if mapper.isTargettingDummy then
-                imports.destroyElement(mapper.isTargettingDummy)
-            end
-        end
     else
         if button == mapper.controls.cloneObject then
             if mapper.isTargettingDummy then
@@ -157,6 +163,10 @@ mapper.controlKey = function(button, state)
                     position = {x = cPosition.x, y = cPosition.y, z = cPosition.z},
                     rotation = {x = cRotation.x, y = cRotation.y, z = cRotation.z}
                 }, true)
+            end
+        elseif button == mapper.controls.deleteObject then
+            if mapper.isTargettingDummy then
+                imports.destroyElement(mapper.isTargettingDummy)
             end
         end
     end

@@ -13,9 +13,6 @@
 -----------------
 
 local imports = {
-    pairs = pairs,
-    isElement = isElement,
-    destroyElement = destroyElement,
     addEventHandler = addEventHandler,
     removeEventHandler = removeEventHandler,
     setElementAlpha = setElementAlpha,
@@ -85,9 +82,5 @@ end)
 
 imports.addEventHandler("onClientResourceStop", resource, function()
     mapper.isLibraryStopping = true
-    for i, j in imports.pairs(mapper.buffer.element) do
-        if i and imports.isElement(i) then
-            imports.destroyElement(i)
-        end
-    end
+    mapper:reset()
 end)
