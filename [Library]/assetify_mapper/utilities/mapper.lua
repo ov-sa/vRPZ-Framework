@@ -76,6 +76,7 @@ end
 
 imports.addEventHandler("onClientRender", root, function()
     if not mapper.state then return false end
+    --TODO: ...
     --mapper:attachObject()
 end)
 
