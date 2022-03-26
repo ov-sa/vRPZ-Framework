@@ -79,9 +79,7 @@ end)
 imports.addEventHandler("onClientResourceStop", resource, function()
     mapper.isLibraryStopping = true
     for i, j in imports.pairs(mapper.buffer.element) do
-        print("DESTROYING 1")
         if i and imports.isElement(i) then
-            print("DESTROYING 2")
             imports.destroyElement(i)
         end
     end
