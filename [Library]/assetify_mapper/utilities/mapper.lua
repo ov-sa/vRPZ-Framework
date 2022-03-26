@@ -47,32 +47,6 @@ function mapper:destroy(...)
     return self:unload(...)
 end
 
-mapper.render = function()
-
-end
-
-mapper.controlClick = function(button, state, _, _, worldX, worldY, worldZ, targetElement)
-    if state == "down" then return false end
-    if button == "left" then
-        if mapper.isSpawningDummy then
-            mapper.isTargettingDummy = false
-            if not mapper.isSpawningDummy.isScheduled then
-                mapper.isSpawningDummy.isScheduled = true
-            else
-                mapper:create(mapper.isSpawningDummy.assetName, {
-                    position = {x = worldX, y = worldY, z = worldZ},
-                    rotation = {x = 0, y = 0, z = 0},
-                    dimension = 0,
-                    interior = 0
-                })
-                mapper.isSpawningDummy = false
-            end
-        else
-            mapper.isTargettingDummy = (targetElement and mapper.buffer.element[targetElement] and targetElement) or false
-        end
-    end
-end
-
 function mapper:load(assetName, ...)
     if not self or (self == mapper) then return false end
     local cDummy = assetify.createDummy(mapper.assetPack, assetName, ...)
@@ -98,6 +72,34 @@ function mapper:unload()
     imports.beautify.gridlist.removeRow(mapper.ui.sceneWnd.propLst.element, self.id)
     self = nil
     return true
+end
+
+mapper.render = function()
+    if mapper.isTargettingDummy then
+        outputChatBox("Targetted Dummy")
+    end
+end
+
+mapper.controlClick = function(button, state, _, _, worldX, worldY, worldZ, targetElement)
+    if state == "down" then return false end
+    if button == "left" then
+        if mapper.isSpawningDummy then
+            mapper.isTargettingDummy = false
+            if not mapper.isSpawningDummy.isScheduled then
+                mapper.isSpawningDummy.isScheduled = true
+            else
+                mapper:create(mapper.isSpawningDummy.assetName, {
+                    position = {x = worldX, y = worldY, z = worldZ},
+                    rotation = {x = 0, y = 0, z = 0},
+                    dimension = 0,
+                    interior = 0
+                })
+                mapper.isSpawningDummy = false
+            end
+        else
+            mapper.isTargettingDummy = (targetElement and mapper.buffer.element[targetElement] and targetElement) or false
+        end
+    end
 end
 
 imports.addEventHandler("onClientElementDestroy", root, function()
