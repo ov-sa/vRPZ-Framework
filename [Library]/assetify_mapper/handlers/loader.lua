@@ -33,6 +33,7 @@ local imports = {
 ----------------------------------
 
 function mapper:toggle(state)
+    if mapper.state == state then return false end
     if state then
         mapper.ui.create()
         camera:create()

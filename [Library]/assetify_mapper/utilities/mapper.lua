@@ -76,7 +76,9 @@ end
 
 mapper.render = function()
     if mapper.isTargettingDummy then
-        outputChatBox("Targetted Dummy")
+        if camera.isCursorVisible then
+            outputChatBox("Targetted Dummy")
+        end
     end
 end
 
