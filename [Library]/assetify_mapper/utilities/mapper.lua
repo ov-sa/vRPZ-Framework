@@ -57,6 +57,7 @@ function mapper:load(assetName, ...)
     self.assetName = assetName
     imports.table.insert(mapper.buffer.index, self.id)
     mapper.buffer.index[(self.id)] = self
+    print(self.element)
     mapper.buffer.element[(self.element)] = self
     imports.beautify.gridlist.setRowData(mapper.ui.sceneWnd.propLst.element, imports.beautify.gridlist.addRow(mapper.ui.sceneWnd.propLst.element), 1, "#"..(self.id).." ("..(self.assetName)..")")
     return true
@@ -100,6 +101,6 @@ imports.addEventHandler("onClientClick", root, function(button, state, _, _, wor
 end)
 
 imports.addEventHandler("onClientElementDestroy", root, function()
-    if not mapper.buffer.element[dummy] then return false end
+    if mapper.isLibraryStopping or not mapper.buffer.element[dummy] then return false end
     mapper.buffer.element[dummy]:destroy()
 end)

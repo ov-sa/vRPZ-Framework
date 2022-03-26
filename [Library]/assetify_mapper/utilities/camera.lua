@@ -30,10 +30,10 @@ local imports = {
 
 camera = {
     fov = 45,
-    speed = {generic = 0, strafe = 0, range = {normal = 2, slow = 0.2, fast = 12}},
+    speed = {generic = 0, strafe = 0, range = {normal = 1, slow = 0.2, fast = 3}},
     rotation = {x = 0, y = 0},
     controls = {
-        speedUp = "lshift", speedDown = "lalt",
+        speedUp = "lshift", speedDown = "space", toggleCursor = "mouse2",
         moveForwards = "forwards", moveBackwards = "backwards",
         moveLeft = "left", moveRight = "right"
     }
@@ -45,7 +45,7 @@ camera.render = function()
     local camera_posX, camera_posY, camera_posZ = imports.getCameraMatrix()
     local view_angleX, view_angleY, view_angleZ = imports.math.cos(camera.rotation.y)*imports.math.sin(camera.rotation.x), imports.math.cos(camera.rotation.y)*imports.math.cos(camera.rotation.x), imports.math.sin(camera.rotation.y)
     local camera_targetX, camera_targetY, camera_targetZ = camera_posX + (view_angleX*100), camera_posY + (view_angleY*100), 0
-    local camera_speed = (imports.getPedControlState(camera.controls.speedUp) and camera.speed.range.fast) or (imports.getPedControlState(camera.controls.speedDown) and camera.speed.range.slow) or camera.speed.range.normal
+    local camera_speed = (imports.getKeyState(camera.controls.speedUp) and camera.speed.range.fast) or (imports.getKeyState(camera.controls.speedDown) and camera.speed.range.slow) or camera.speed.range.normal
     if imports.getPedControlState(camera.controls.moveForwards) then
         camera.speed.generic = camera_speed
     elseif imports.getPedControlState(camera.controls.moveBackwards) then
