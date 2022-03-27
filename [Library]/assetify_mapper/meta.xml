@@ -5,6 +5,7 @@
     <oop>true</oop>
 
     <script src="settings/shared.lua" type="shared"/>
+    <script src="settings/client.lua" type="client"/>
     <script src="utilities/shared.lua" type="shared"/>
     <script src="utilities/mapper.lua" type="client"/>
     <script src="utilities/camera.lua" type="client"/>
