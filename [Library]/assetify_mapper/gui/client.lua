@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    tocolor = tocolor,
     isElement = isElement,
     destroyElement = destroyElement,
     string = string,
@@ -25,40 +26,42 @@ local imports = {
 -------------------
 
 mapper.ui = {
+    margin = 5,
+    bgColor = imports.tocolor(6, 6, 6, 255),
     propWnd = {
-        startX = 5, startY = 5,
-        width = 225, height = 231,
+        startX = 0, startY = 0,
+        width = 265, height = 309,
         propLst = {
-            text = imports.string.upper(imports.string.spaceChars("Assets")),
-            height = 200
+            text = imports.string.upper("Assets"),
+            height = 270
         },
         spawnBtn = {
             text = "Spawn Asset",
-            startY = 200 + 5,
+            startY = 270 + 5,
             height = 24
         }
     },
 
     sceneWnd = {
-        startX = 5, startY = 5 + 231 + 10 + 5,
-        width = 225, height = 360,
+        startX = 0, startY = 309,
+        width = 265, height = 418,
         propLst = {
-            text = imports.string.upper(imports.string.spaceChars("Props")),
-            height = 271
+            text = imports.string.upper("Props"),
+            height = 321
         },
         loadBtn = {
             text = "Load Scene",
-            startY = 271 + 5,
+            startY = 321 + 5 + 5,
             height = 24
         },
         resetBtn = {
             text = "Reset Scene",
-            startY = 271 + 5 + 24 + 5,
+            startY = 321 + 5 + 5 + 24 + 5,
             height = 24
         },
         saveBtn = {
             text = "Save Scene",
-            startY = 271 + 5 + 24 + 5 + 24 + 5,
+            startY = 321 + 5 + 5 + 24 + 5 + 24 + 5,
             height = 24
         }
     }
@@ -68,32 +71,44 @@ mapper.ui.propWnd.createUI = function()
     mapper.ui.propWnd.element = imports.beautify.card.create(mapper.ui.propWnd.startX, mapper.ui.propWnd.startY, mapper.ui.propWnd.width, mapper.ui.propWnd.height)
     imports.beautify.setUIVisible(mapper.ui.propWnd.element, true)
     imports.beautify.setUIDraggable(mapper.ui.propWnd.element, true)
-    mapper.ui.propWnd.propLst.element = imports.beautify.gridlist.create(0, 0, mapper.ui.propWnd.width, mapper.ui.propWnd.propLst.height, mapper.ui.propWnd.element, false)
+    mapper.ui.propWnd.propLst.element = imports.beautify.gridlist.create(mapper.ui.margin, mapper.ui.margin, mapper.ui.propWnd.width - (mapper.ui.margin*2), mapper.ui.propWnd.propLst.height, mapper.ui.propWnd.element, false)
     imports.beautify.setUIVisible(mapper.ui.propWnd.propLst.element, true)
-    imports.beautify.gridlist.addColumn(mapper.ui.propWnd.propLst.element, mapper.ui.propWnd.propLst.text, mapper.ui.propWnd.width)
+    imports.beautify.gridlist.addColumn(mapper.ui.propWnd.propLst.element, mapper.ui.propWnd.propLst.text, mapper.ui.propWnd.width - 2 - (mapper.ui.margin*2))
     for i = 1, #Assetify_Props, 1 do
         local j = Assetify_Props[i]
         local rowIndex = imports.beautify.gridlist.addRow(mapper.ui.propWnd.propLst.element)
         imports.beautify.gridlist.setRowData(mapper.ui.propWnd.propLst.element, rowIndex, 1, j)
     end
     imports.beautify.gridlist.setSelection(mapper.ui.propWnd.propLst.element, 1)
-    mapper.ui.propWnd.spawnBtn.element = imports.beautify.button.create(mapper.ui.propWnd.spawnBtn.text, 0, mapper.ui.propWnd.spawnBtn.startY, "default", mapper.ui.propWnd.width, mapper.ui.propWnd.spawnBtn.height, mapper.ui.propWnd.element, false)
+    mapper.ui.propWnd.spawnBtn.element = imports.beautify.button.create(mapper.ui.propWnd.spawnBtn.text, mapper.ui.margin, mapper.ui.margin + mapper.ui.propWnd.spawnBtn.startY, "default", mapper.ui.propWnd.width - (mapper.ui.margin*2), mapper.ui.propWnd.spawnBtn.height, mapper.ui.propWnd.element, false)
     imports.beautify.setUIVisible(mapper.ui.propWnd.spawnBtn.element, true)
+    imports.beautify.render.create(function()
+        imports.beautify.native.drawRectangle(0, 0, mapper.ui.propWnd.width, mapper.ui.propWnd.height, mapper.ui.bgColor, false)
+    end, {
+        elementReference = mapper.ui.propWnd.element,
+        renderType = "preViewRTRender"
+    })
 end
 
 mapper.ui.sceneWnd.createUI = function()
     mapper.ui.sceneWnd.element = imports.beautify.card.create(mapper.ui.sceneWnd.startX, mapper.ui.sceneWnd.startY, mapper.ui.sceneWnd.width, mapper.ui.sceneWnd.height)
     imports.beautify.setUIVisible(mapper.ui.sceneWnd.element, true)
     imports.beautify.setUIDraggable(mapper.ui.sceneWnd.element, true)
-    mapper.ui.sceneWnd.propLst.element = imports.beautify.gridlist.create(0, 0, mapper.ui.sceneWnd.width, mapper.ui.sceneWnd.propLst.height, mapper.ui.sceneWnd.element, false)
+    mapper.ui.sceneWnd.propLst.element = imports.beautify.gridlist.create(mapper.ui.margin, mapper.ui.margin, mapper.ui.sceneWnd.width - (mapper.ui.margin*2), mapper.ui.sceneWnd.propLst.height, mapper.ui.sceneWnd.element, false)
     imports.beautify.setUIVisible(mapper.ui.sceneWnd.propLst.element, true)
-    imports.beautify.gridlist.addColumn(mapper.ui.sceneWnd.propLst.element, mapper.ui.sceneWnd.propLst.text, mapper.ui.sceneWnd.width)
-    mapper.ui.sceneWnd.loadBtn.element = imports.beautify.button.create(mapper.ui.sceneWnd.loadBtn.text, 0, mapper.ui.sceneWnd.loadBtn.startY, "default", mapper.ui.sceneWnd.width, mapper.ui.sceneWnd.loadBtn.height, mapper.ui.sceneWnd.element, false)
+    imports.beautify.gridlist.addColumn(mapper.ui.sceneWnd.propLst.element, mapper.ui.sceneWnd.propLst.text, mapper.ui.sceneWnd.width - 2 - (mapper.ui.margin*2))
+    mapper.ui.sceneWnd.loadBtn.element = imports.beautify.button.create(mapper.ui.sceneWnd.loadBtn.text, mapper.ui.margin, mapper.ui.sceneWnd.loadBtn.startY, "default", mapper.ui.sceneWnd.width - (mapper.ui.margin*2), mapper.ui.sceneWnd.loadBtn.height, mapper.ui.sceneWnd.element, false)
     imports.beautify.setUIVisible(mapper.ui.sceneWnd.loadBtn.element, true)
-    mapper.ui.sceneWnd.resetBtn.element = imports.beautify.button.create(mapper.ui.sceneWnd.resetBtn.text, 0, mapper.ui.sceneWnd.resetBtn.startY, "default", mapper.ui.sceneWnd.width, mapper.ui.sceneWnd.resetBtn.height, mapper.ui.sceneWnd.element, false)
+    mapper.ui.sceneWnd.resetBtn.element = imports.beautify.button.create(mapper.ui.sceneWnd.resetBtn.text, mapper.ui.margin, mapper.ui.sceneWnd.resetBtn.startY, "default", mapper.ui.sceneWnd.width - (mapper.ui.margin*2), mapper.ui.sceneWnd.resetBtn.height, mapper.ui.sceneWnd.element, false)
     imports.beautify.setUIVisible(mapper.ui.sceneWnd.resetBtn.element, true)
-    mapper.ui.sceneWnd.saveBtn.element = imports.beautify.button.create(mapper.ui.sceneWnd.saveBtn.text, 0, mapper.ui.sceneWnd.saveBtn.startY, "default", mapper.ui.sceneWnd.width, mapper.ui.sceneWnd.saveBtn.height, mapper.ui.sceneWnd.element, false)
+    mapper.ui.sceneWnd.saveBtn.element = imports.beautify.button.create(mapper.ui.sceneWnd.saveBtn.text, mapper.ui.margin, mapper.ui.sceneWnd.saveBtn.startY, "default", mapper.ui.sceneWnd.width - (mapper.ui.margin*2), mapper.ui.sceneWnd.saveBtn.height, mapper.ui.sceneWnd.element, false)
     imports.beautify.setUIVisible(mapper.ui.sceneWnd.saveBtn.element, true)
+    imports.beautify.render.create(function()
+        imports.beautify.native.drawRectangle(0, 0, mapper.ui.sceneWnd.width, mapper.ui.sceneWnd.height, mapper.ui.bgColor, false)
+    end, {
+        elementReference = mapper.ui.sceneWnd.element,
+        renderType = "preViewRTRender"
+    })
 end
 
 

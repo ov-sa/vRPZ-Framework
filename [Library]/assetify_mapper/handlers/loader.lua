@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
     addEventHandler = addEventHandler,
     removeEventHandler = removeEventHandler,
     setElementAlpha = setElementAlpha,
@@ -69,6 +70,9 @@ end
 -----------------------------------------------
 
 imports.addEventHandler("onClientResourceStart", resource, function()
+    for i, j in imports.pairs(availableTemplates) do
+        imports.beautify.setUITemplate(i, j)
+    end
     if imports.assetify.isLoaded() then
         Assetify_Props = imports.assetify.getAssets(mapper.assetPack) or {}
         mapper:toggle(true)
