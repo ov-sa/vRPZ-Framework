@@ -32,6 +32,7 @@ local imports = {
     engineReplaceCOL = engineReplaceCOL,
     createObject = createObject,
     setLowLODElement = setLowLODElement,
+    attachElements = attachElements,
     table = table,
     beautify = beautify
 }
@@ -46,9 +47,9 @@ mapper = {
     rwAssets = {},
     axis = {
         validAxes = {
-            x = {},
-            y = {},
-            z = {}
+            x = {rotation = {0, 0, 0}},
+            y = {rotation = {0, 90, 0}},
+            z = {rotation = {90, 0, 0}}
         },
         validAxesTypes = {"slate", "ring"},
         --color = {x = imports.tocolor(255, 0, 0, 250), y = imports.tocolor(0, 255, 0, 250), z = imports.tocolor(0, 0, 255, 250)},
@@ -76,15 +77,16 @@ imports.engineImportTXD(mapper.rwAssets.dict, mapper.rwAssets.ring)
 imports.engineReplaceCOL(mapper.rwAssets.collision, mapper.rwAssets.ring)
 imports.engineReplaceModel(mapper.rwAssets.buffer, mapper.rwAssets.ring, true)
 mapper.rwAssets.dict, mapper.rwAssets.buffer, mapper.rwAssets.collision = nil, nil, nil
-for i, j in imports.pairs(mapper.axis.validAxes) then
-    for k = 1, #mapper.axis.validAxesTypes, 1 do
-        local v = mapper.axis.validAxes[k]
-        mapper.axis[v] = mapper.axis[v] or {}
-        mapper.axis[v][i] = {
-            instance = imports.createObject(mapper.rwAssets[v], 0, 0, 0),
-            LODInstance = imports.createObject(mapper.rwAssets[v], 0, 0, 0, 0, 0, 0, true)
+for i = 1, #mapper.axis.validAxesTypes, 1 do
+    local j = mapper.axis.validAxesTypes[i]
+    mapper.axis[j] = {}
+    for k, v in imports.pairs(mapper.axis.validAxes) then
+        mapper.axis[j][k] = {
+            instance = imports.createObject(mapper.rwAssets[j], 0, 0, 0),
+            LODInstance = imports.createObject(mapper.rwAssets[j], 0, 0, 0, 0, 0, 0, true)
         }
-        imports.setLowLODElement(mapper.axis[v][i].instance, mapper.axis[v][i].LODInstance)
+        imports.setLowLODElement(mapper.axis[j][k].instance, mapper.axis[j][k].LODInstance)
+        imports.attachElements(mapper.axis[j][k].LODInstance, mapper.axis[j][k].instance)
     end
 end
 
@@ -141,11 +143,15 @@ end
 mapper.render = function()
     if mapper.isTargettingDummy then
         local posX, posY, posZ, rotX, rotY, rotZ = imports.getElementLocation(mapper.isTargettingDummy)
-        --imports.beautify.native.drawLine3D(posX, posY, posZ, posX + mapper.axis.length, posY, posZ, mapper.axis.color.x, mapper.axis.width)
-        --imports.beautify.native.drawLine3D(posX, posY, posZ, posX, posY + mapper.axis.length, posZ, mapper.axis.color.y, mapper.axis.width)
-        --imports.beautify.native.drawLine3D(posX, posY, posZ, posX, posY, posZ + mapper.axis.length, mapper.axis.color.z, mapper.axis.width)
+        local isRotationMode = imports.getKeyState(mapper.controls.toggleRotation) or false
+        for i = 1, #mapper.axis.validAxesTypes, 1 do
+            local j = mapper.axis.validAxesTypes[i]
+            for k, v in imports.pairs(mapper.axis.validAxes) then
+                imports.setElementLocation(mapper.axis[j][k].instance, posX, posY, posZ, v.rotation[1], v.rotation[2], v.rotation[3])
+            end
+        end
+        --[[
         if camera.isCursorVisible and not imports.getKeyState(mapper.controls.controlAction) then
-            local isRotationMode = imports.getKeyState(mapper.controls.toggleRotation) or false
             local object_speed = ((imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal)*((isRotationMode and 1) or 0.1)
             if imports.getPedControlState(mapper.controls.moveForwards) then
                 if isRotationMode then
@@ -187,6 +193,7 @@ mapper.render = function()
                 end
             end
         end
+        ]]
     end
 end
 
