@@ -157,7 +157,7 @@ mapper.render = function()
             local j = mapper.axis.validAxesTypes[i]
             local typeAlpha = (isRotationMode and (j ~= "ring") and 0) or (not isRotationMode and (j ~= "slate") and 0) or nil
             for k, v in imports.pairs(mapper.axis.validAxes) do
-                local axisAlpha = typeAlpha or ((selectedAxis == k) and 100) or 5
+                local axisAlpha = typeAlpha or ((selectedAxis == k) and 100) or 10
                 imports.setElementLocation(mapper.axis[j][k].instance, posX, posY, posZ, v.rotation[j][1], v.rotation[j][2], v.rotation[j][3])
                 imports.setElementAlpha(mapper.axis[j][k].instance, axisAlpha)
                 imports.setElementAlpha(mapper.axis[j][k].LODInstance, axisAlpha)
