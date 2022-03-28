@@ -3,12 +3,22 @@
     <info author="vStudio" name="Assetify Mapper" type="Library" version="1.0.0"/>
     <min_mta_version server="1.5.9" client="1.5.9"/>
 
+    <!-- Settings & Utilities -->
+    <file src="utilities/rw/axis/dict.rw"/>
+    <file src="utilities/rw/axis/slate/buffer.rw"/>
+    <file src="utilities/rw/axis/slate/collision.rw"/>
+    <file src="utilities/rw/axis/ring/buffer.rw"/>
+    <file src="utilities/rw/axis/ring/collision.rw"/>
     <script src="settings/shared.lua" type="shared"/>
     <script src="settings/client.lua" type="client"/>
     <script src="utilities/shared.lua" type="shared"/>
     <script src="utilities/mapper.lua" type="client"/>
     <script src="utilities/camera.lua" type="client"/>
+
+    <!-- GUIs -->
     <script src="gui/client.lua" type="client"/>
+
+    <!-- Handlers -->
     <script src="handlers/loader.lua" type="client"/>
 
 </meta>
