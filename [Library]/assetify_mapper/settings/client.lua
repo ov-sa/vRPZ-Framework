@@ -7,10 +7,22 @@
      Desc: Client Sided Settings ]]--
 ----------------------------------------------------------------
 
+-----------------
+--[[ Imports ]]--
+-----------------
+
+local imports = {
+    beautify = beautify
+}
+
 
 ------------------
 --[[ Settings ]]--
 ------------------
+
+availableFonts = {
+    [1] = imports.beautify.native.createFont(":beautify_library/files/assets/fonts/signika_semibold.rw", 10)
+}
 
 availableTemplates = {
     ["beautify_card"] = {

@@ -28,6 +28,10 @@ local imports = {
 mapper.ui = {
     margin = 5,
     bgColor = imports.tocolor(6, 6, 6, 255),
+    toolWnd = {
+        font = availableFonts[1], fontColor = imports.tocolor(175, 175, 175, 255)
+    },
+
     propWnd = {
         startX = 0, startY = 0,
         width = 265, height = 309,
@@ -109,6 +113,15 @@ mapper.ui.sceneWnd.createUI = function()
         elementReference = mapper.ui.sceneWnd.element,
         renderType = "preViewRTRender"
     })
+end
+
+
+-------------------------------------------
+--[[ Functions: Renders Tool Window UI ]]--
+-------------------------------------------
+
+mapper.ui.renderToolWnd = function()
+    imports.beautify.native.drawText("Selected Prop: "..(mapper.isTargettingDummy and imports.beautify.gridlist.getRowData(mapper.ui.sceneWnd.propLst.element, mapper.buffer.element[(mapper.isTargettingDummy)].id, 1) or "-").."\nTranslator Mode: "..((mapper.translationMode and mapper.translationMode.type) or "-").."\nTranslation Axis: "..((mapper.translationMode and mapper.translationMode.axis) or "-"), 0, mapper.ui.margin, CLIENT_MTA_RESOLUTION[1] - mapper.ui.margin, CLIENT_MTA_RESOLUTION[2], mapper.ui.toolWnd.fontColor, 1, mapper.ui.toolWnd.font, "right", "top", true, true, false)
 end
 
 
