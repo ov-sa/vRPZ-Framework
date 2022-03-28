@@ -46,6 +46,7 @@ mapper = {
     rwAssets = {},
     axis = {
         validAxes = {"x", "y", "z"},
+        validAxesTypes = {"slate", "ring"},
         width = 15, length = 10,
         color = {x = imports.tocolor(255, 0, 0, 250), y = imports.tocolor(0, 255, 0, 250), z = imports.tocolor(0, 0, 255, 250)},
     },
@@ -72,12 +73,17 @@ imports.engineImportTXD(mapper.rwAssets.dict, mapper.rwAssets.ring)
 imports.engineReplaceCOL(mapper.rwAssets.collision, mapper.rwAssets.ring)
 imports.engineReplaceModel(mapper.rwAssets.buffer, mapper.rwAssets.ring, true)
 mapper.rwAssets.dict, mapper.rwAssets.buffer, mapper.rwAssets.collision = nil, nil, nil
-mapper.axis.slate, mapper.axis.ring = {}, {}
-for i, j in imports.pairs(mapper.axis.validAxes) then
-    mapper.axis.slate[i] = imports.createObject(mapper.rwAssets.slate, 0, 0, 0)
-    imports.setLowLODElement(mapper.axis.slate[i], imports.createObject(mapper.rwAssets.slate, 0, 0, 0, 0, 0, 0, true))
-    mapper.axis.ring[i] = imports.createObject(mapper.rwAssets.ring, 0, 0, 0)
-    imports.setLowLODElement(mapper.axis.ring[i], imports.createObject(mapper.rwAssets.ring, 0, 0, 0, 0, 0, 0, true))
+for i = 1, #mapper.axis.validAxes, 1 then
+    local j = mapper.axis.validAxes[i]
+    for k = 1, #mapper.axis.validAxesTypes, 1 do
+        local v = mapper.axis.validAxes[k]
+        mapper.axis[v] = mapper.axis[v] or {}
+        mapper.axis[v][j] = {
+            instance = imports.createObject(mapper.rwAssets[v], 0, 0, 0),
+            LODInstance = imports.createObject(mapper.rwAssets[v], 0, 0, 0, 0, 0, 0, true)
+        }
+        imports.setLowLODElement(mapper.axis[v][j].instance, mapper.axis[v][j].LODInstance)
+    end
 end
 
 function mapper:create(...)
