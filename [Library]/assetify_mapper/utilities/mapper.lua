@@ -36,6 +36,7 @@ local imports = {
     createObject = createObject,
     setLowLODElement = setLowLODElement,
     attachElements = attachElements,
+    setElementCollisionsEnabled = setElementCollisionsEnabled,
     table = table,
     beautify = beautify
 }
@@ -152,60 +153,67 @@ mapper.render = function()
     mapper.ui.renderToolWnd()
     mapper.translationMode = (mapper.isTargettingDummy and (mapper.translationMode or {})) or false
     if mapper.translationMode then
+        mapper.translationMode.element = mapper.isTargettingDummy
         mapper.translationMode.type = (not CLIENT_MTA_WINDOW_ACTIVE and imports.getKeyState(mapper.controls.toggleRotation) and "Rotation") or "Position"
         mapper.translationMode.axis = "x"
-        local posX, posY, posZ, rotX, rotY, rotZ = imports.getElementLocation(mapper.isTargettingDummy)
+        mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = imports.getElementLocation(mapper.translationMode.element)
         local isPositionTranslation = mapper.translationMode.type == "Position"
-        for i = 1, #mapper.axis.validAxesTypes, 1 do
-            local j = mapper.axis.validAxesTypes[i]
-            local typeAlpha = (isPositionTranslation and (j ~= "slate") and 0) or (not isPositionTranslation and (j ~= "ring") and 0) or nil
-            for k, v in imports.pairs(mapper.axis.validAxes) do
-                local axisAlpha = typeAlpha or ((mapper.translationMode.axis == k) and 100) or 10
-                imports.setElementLocation(mapper.axis[j][k].instance, posX, posY, posZ, v.rotation[j][1], v.rotation[j][2], v.rotation[j][3])
-                imports.setElementAlpha(mapper.axis[j][k].instance, axisAlpha)
-                imports.setElementAlpha(mapper.axis[j][k].LODInstance, axisAlpha)
-            end
-        end
         if not CLIENT_MTA_WINDOW_ACTIVE and camera.isCursorVisible and not imports.getKeyState(mapper.controls.controlAction) then
             local object_speed = ((imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal)*((isPositionTranslation and 1) or 0.1)
             if imports.getPedControlState(mapper.controls.moveForwards) then
                 if not isPositionTranslation then
-                    imports.setElementLocation(mapper.isTargettingDummy, _, _, _, rotX + object_speed, rotY, rotZ)
+                    imports.setElementLocation(mapper.translationMode.element, _, _, _, mapper.translationMode.rotX + object_speed, mapper.translationMode.rotY, mapper.translationMode.rotZ)
                 else
-                    imports.setElementLocation(mapper.isTargettingDummy, posX + object_speed, posY, posZ)
+                    imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX + object_speed, mapper.translationMode.posY, mapper.translationMode.posZ)
                 end
             elseif imports.getPedControlState(mapper.controls.moveBackwards) then
                 if not isPositionTranslation then
-                    imports.setElementLocation(mapper.isTargettingDummy, _, _, _, rotX - object_speed, rotY, rotZ)
+                    imports.setElementLocation(mapper.translationMode.element, _, _, _, mapper.translationMode.rotX - object_speed, mapper.translationMode.rotY, mapper.translationMode.rotZ)
                 else
-                    imports.setElementLocation(mapper.isTargettingDummy, posX - object_speed, posY, posZ)
+                    imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX - object_speed, mapper.translationMode.posY, mapper.translationMode.posZ)
                 end
             end
             if imports.getPedControlState(mapper.controls.moveLeft) then
                 if not isPositionTranslation then
-                    imports.setElementLocation(mapper.isTargettingDummy, _, _, _, rotX, rotY, rotZ + object_speed)
+                    imports.setElementLocation(mapper.translationMode.element, _, _, _, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ + object_speed)
                 else
-                    imports.setElementLocation(mapper.isTargettingDummy, posX, posY + object_speed, posZ)
+                    imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY + object_speed, mapper.translationMode.posZ)
                 end
             elseif imports.getPedControlState(mapper.controls.moveRight) then
                 if not isPositionTranslation then
-                    imports.setElementLocation(mapper.isTargettingDummy, _, _, _, rotX, rotY, rotZ - object_speed)
+                    imports.setElementLocation(mapper.translationMode.element, _, _, _, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ - object_speed)
                 else
-                    imports.setElementLocation(mapper.isTargettingDummy, posX, posY - object_speed, posZ)
+                    imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY - object_speed, mapper.translationMode.posZ)
                 end
             end
             if imports.getKeyState(mapper.controls.moveUp) then
                 if not isPositionTranslation then
-                    imports.setElementLocation(mapper.isTargettingDummy, _, _, _, rotX, rotY + object_speed, rotZ)
+                    imports.setElementLocation(mapper.translationMode.element, _, _, _, mapper.translationMode.rotX, mapper.translationMode.rotY + object_speed, mapper.translationMode.rotZ)
                 else
-                    imports.setElementLocation(mapper.isTargettingDummy, posX, posY, posZ + object_speed)
+                    imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ + object_speed)
                 end
             elseif imports.getKeyState(mapper.controls.moveDown) then
                 if not isPositionTranslation then
-                    imports.setElementLocation(mapper.isTargettingDummy, _, _, _, rotX, rotY - object_speed, rotZ)
+                    imports.setElementLocation(mapper.translationMode.element, _, _, _, mapper.translationMode.rotX, mapper.translationMode.rotY - object_speed, mapper.translationMode.rotZ)
                 else
-                    imports.setElementLocation(mapper.isTargettingDummy, posX, posY, posZ - object_speed)
+                    imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ - object_speed)
                 end
+            end
+        end
+    end
+    for i = 1, #mapper.axis.validAxesTypes, 1 do
+        local j = mapper.axis.validAxesTypes[i]
+        local typeAlpha = (not mapper.translationMode and 0) or ((mapper.translationMode.type == "Position") and (j ~= "slate") and 0) or ((mapper.translationMode.type == "Rotation") and (j ~= "ring") and 0) or nil
+        for k, v in imports.pairs(mapper.axis.validAxes) do
+            local axisAlpha = typeAlpha or ((mapper.translationMode.axis == k) and 100) or 10
+            if mapper.translationMode and mapper.translationMode.element then
+                imports.setElementLocation(mapper.axis[j][k].instance, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, v.rotation[j][1], v.rotation[j][2], v.rotation[j][3])
+            end
+            imports.setElementAlpha(mapper.axis[j][k].instance, axisAlpha)
+            imports.setElementAlpha(mapper.axis[j][k].LODInstance, axisAlpha)
+            if axisAlpha <= 0 then
+                imports.setElementCollisionsEnabled(mapper.axis[j][k].instance, false)
+                imports.setElementCollisionsEnabled(mapper.axis[j][k].LODInstance, false)
             end
         end
     end
