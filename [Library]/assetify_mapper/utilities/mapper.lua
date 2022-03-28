@@ -32,6 +32,7 @@ local imports = {
     engineReplaceModel = engineReplaceModel,
     engineReplaceCOL = engineReplaceCOL,
     engineSetModelLODDistance = engineSetModelLODDistance,
+    engineApplyShaderToWorldTexture = engineApplyShaderToWorldTexture,
     createObject = createObject,
     setLowLODElement = setLowLODElement,
     attachElements = attachElements,
@@ -49,12 +50,11 @@ mapper = {
     rwAssets = {},
     axis = {
         validAxes = {
-            x = {rotation = {0, 0, 0}},
-            y = {rotation = {0, 90, 0}},
-            z = {rotation = {90, 0, 0}}
+            x = {color = {255, 0, 0}, rotation = {0, 0, 0}},
+            y = {color = {0, 255, 0}, rotation = {0, 90, 0}},
+            z = {color = {0, 0, 255}, rotation = {90, 0, 0}}
         },
-        validAxesTypes = {"slate", "ring"},
-        --color = {x = imports.tocolor(255, 0, 0, 250), y = imports.tocolor(0, 255, 0, 250), z = imports.tocolor(0, 0, 255, 250)},
+        validAxesTypes = {"slate", "ring"}
     },
     speed = {range = availableControlSpeeds},
     controls = availableControls,
@@ -87,10 +87,14 @@ for i = 1, #mapper.axis.validAxesTypes, 1 do
     for k, v in imports.pairs(mapper.axis.validAxes) do
         mapper.axis[j][k] = {
             instance = imports.createObject(mapper.rwAssets[j], 0, 0, 0),
-            LODInstance = imports.createObject(mapper.rwAssets[j], 0, 0, 0, 0, 0, 0, true)
+            LODInstance = imports.createObject(mapper.rwAssets[j], 0, 0, 0, 0, 0, 0, true),
+            shader = imports.beautify.native.createShader(shaderRW["Assetify_AxisMapper"](), 10001, 0, false, "all")
         }
         imports.setLowLODElement(mapper.axis[j][k].instance, mapper.axis[j][k].LODInstance)
         imports.attachElements(mapper.axis[j][k].LODInstance, mapper.axis[j][k].instance)
+        imports.beautify.native.setShaderValue(mapper.axis[j][k].shader, "baseColor", v.color[1], v.color[2], v.color[3], 255)
+        imports.engineApplyShaderToWorldTexture(mapper.axis[j][k].shader, "assetify_axis", mapper.axis[j][k].instance)
+        imports.engineApplyShaderToWorldTexture(mapper.axis[j][k].shader, "assetify_axis", mapper.axis[j][k].LODInstance)
     end
 end
 
@@ -147,17 +151,20 @@ end
 mapper.render = function()
     if mapper.isTargettingDummy then
         local posX, posY, posZ, rotX, rotY, rotZ = imports.getElementLocation(mapper.isTargettingDummy)
-        local isRotationMode = imports.getKeyState(mapper.controls.toggleRotation) or false
+        local isRotationMode = not CLIENT_MTA_WINDOW_ACTIVE and imports.getKeyState(mapper.controls.toggleRotation) or false
+        local selectedAxis = "x"
         for i = 1, #mapper.axis.validAxesTypes, 1 do
             local j = mapper.axis.validAxesTypes[i]
+            local typeAlpha = (isRotationMode and (j ~= "ring") and 0) or (not isRotationMode and (j ~= "slate") and 0) or nil
             for k, v in imports.pairs(mapper.axis.validAxes) do
+                local axisAlpha = typeAlpha or ((selectedAxis == k) and 100) or 5
                 imports.setElementLocation(mapper.axis[j][k].instance, posX, posY, posZ, v.rotation[1], v.rotation[2], v.rotation[3])
-                imports.setElementAlpha(mapper.axis[j][k].instance, 25)
-                imports.setElementAlpha(mapper.axis[j][k].LODInstance, 25)
+                imports.setElementAlpha(mapper.axis[j][k].instance, axisAlpha)
+                imports.setElementAlpha(mapper.axis[j][k].LODInstance, axisAlpha)
             end
         end
         --[[
-        if camera.isCursorVisible and not imports.getKeyState(mapper.controls.controlAction) then
+        if not CLIENT_MTA_WINDOW_ACTIVE and camera.isCursorVisible and not imports.getKeyState(mapper.controls.controlAction) then
             local object_speed = ((imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal)*((isRotationMode and 1) or 0.1)
             if imports.getPedControlState(mapper.controls.moveForwards) then
                 if isRotationMode then
@@ -204,7 +211,7 @@ mapper.render = function()
 end
 
 mapper.controlKey = function(button, state)
-    if state then return false end
+    if CLIENT_MTA_WINDOW_ACTIVE or state then return false end
     if imports.getKeyState(mapper.controls.controlAction) then
     else
         if button == mapper.controls.cloneObject then
