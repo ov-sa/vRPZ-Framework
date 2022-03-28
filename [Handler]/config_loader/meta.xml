@@ -16,6 +16,7 @@
     <script src="configs/gameplay/gui/inventory.lua" type="shared"/>
     <script src="configs/gameplay/spawns.lua" type="shared"/>
     <script src="configs/gameplay/loots.lua" type="shared"/>
+    <script src="configs/gameplay/party.lua" type="shared"/>
     <script src="configs/inventory/index.lua" type="shared"/>
     <script src="configs/inventory/slots.lua" type="shared"/>
     <script src="configs/inventory/items.lua" type="shared"/>

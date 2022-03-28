@@ -54,7 +54,7 @@ addCommandHandler("party", function(player, _, category, ...)
             return imports.outputChatBox("━━ Party: Party creation failed.", player, 255, 0, 0)
         end
     elseif category == "invite" then
-        local target = args[1]
+        local target = getPlayerFromPartialName(args[1])
         if not target then
             return imports.outputChatBox("━━ Syntax: /party invite player", player, 255, 255, 255)
         end
@@ -73,13 +73,17 @@ addCommandHandler("party", function(player, _, category, ...)
             return imports.outputChatBox("━━ Party: Player is already in a party.", player, 255, 0, 0)
         end
 
+        if #party.members > FRAMEWORK_CONFIGS["Party"]["Max_Members"] then
+            return imports.outputChatBox("━━ Party: The maximum amount of members are already in the party.", player, 255, 0, 0)
+        end
+
         imports.outputChatBox("━━ Party: Request has been sent to the player.", player, 0, 255, 0)
-        imports.outputChatBox("━━ Party: Type /party accept to join " .. imports.getPlayerName(player) .. "'s party. Invite expires after 10 seconds", target, 0, 255, 0)
+        imports.outputChatBox("━━ Party: Type /party accept to join " .. imports.getPlayerName(player) .. "'s party. Invite expires after " .. FRAMEWORK_CONFIGS["Party"]["Accept_Time"] .. " seconds", target, 0, 255, 0)
         local timer = imports.setTimer(function()
             if imports.getElementData(target, "party:request") then
                 imports.removeElementData(target, "party:request")
             end
-        end, 10000, 1)
+        end, FRAMEWORK_CONFIGS["Party"]["Accept_Time"] * 1000, 1)
         imports.setElementData(target, "party:request", {player, timer}, false)
     elseif category == "accept" then
         local request = imports.getElementData(player, "party:request")
@@ -105,7 +109,7 @@ addCommandHandler("party", function(player, _, category, ...)
             return imports.outputChatBox("━━ Party: You have left the party.", player, 0, 255, 0)
         end
     elseif category == "kick" then
-        local target = args[1]
+        local target = getPlayerFromPartialName(args[1])
         if not target then
             return imports.outputChatBox("━━ Syntax: /party invite player", player, 255, 255, 255)
         end
