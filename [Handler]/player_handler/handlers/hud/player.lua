@@ -15,6 +15,8 @@
 local imports = {
     pairs = pairs,
     tocolor = tocolor,
+    getPlayerName = getPlayerName,
+    addEventHandler = addEventHandler,
     dxGetMaterialSize = dxGetMaterialSize,
     beautify = beautify
 }
@@ -72,7 +74,8 @@ local cache = {
                 font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 15), fontColor = imports.tocolor(150, 150, 150, 255)
             }
         }
-    }
+    },
+    party = nil
 }
 
 for i, j in imports.pairs(cache.status) do
@@ -89,6 +92,33 @@ cache.secondary.ammo.startX, cache.secondary.ammo.startY = cache.secondary.start
 cache.secondary.ammo.endX, cache.secondary.ammo.endY = cache.secondary.ammo.startX, cache.secondary.startY + cache.secondary.height + cache.secondary.paddingY
 cache.secondary.ammo.mag.startX, cache.secondary.ammo.mag.startY = cache.secondary.ammo.startX + cache.secondary.ammo.mag.paddingX, cache.secondary.ammo.startY
 cache.secondary.ammo.mag.endX, cache.secondary.ammo.mag.endY = cache.secondary.ammo.mag.startX, cache.secondary.ammo.endY
+
+
+----------------------------------
+--[[ Functions: Party Handler ]]--
+----------------------------------
+
+
+imports.addEventHandler("Client:onPartyUpdate", localPlayer, function(partyData)
+    if partyData then
+        cache.party = {
+            startX = cache.primary.startX,
+            endX = cache.primary.startX + cache.primary.width,
+            startY = cache.secondary.startY + cache.secondary.height,
+            endY = cache.secondary.startY + (cache.secondary.height * 2),
+            font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 15),
+            names = {}
+        }
+        for i, j in imports.pairs(partyData.members) do
+            cache.party.names[i] = imports.getPlayerName(j)
+        end
+    else
+        if cache.party then
+            cache.party = nil
+            return
+        end
+    end
+end)
 
 
 --------------------------------
@@ -120,4 +150,12 @@ beautify.render.create(function()
     imports.beautify.native.drawImage(cache.secondary.startX, cache.secondary.startY, cache.secondary.width, cache.secondary.height, cache.secondary.bgTexture, 0, 0, 0, -1, false)
     imports.beautify.native.drawText("01", cache.secondary.ammo.startX, cache.secondary.ammo.startY, cache.secondary.ammo.endX, cache.secondary.ammo.endY, cache.secondary.ammo.fontColor, 1, cache.secondary.ammo.font, "right", "bottom", false, false, false)
     imports.beautify.native.drawText("999", cache.secondary.ammo.mag.startX, cache.secondary.ammo.mag.startY, cache.secondary.ammo.mag.endX, cache.secondary.ammo.mag.endY, cache.secondary.ammo.mag.fontColor, 1, cache.secondary.ammo.mag.font, "left", "bottom", false, false, false)
+    --Party List--
+    if cache.party then
+        for i = #cache.party.names, 1, -1 do
+            local j = cache.party.names[i]
+            if not j then break end
+            imports.beautify.native.drawText(j, cache.party.startX, cache.party.startY, cache.party.endX, cache.party.endY, -1, 1, cache.party.font, "right", "center", false, false, false)
+        end
+    end
 end)

@@ -24,6 +24,7 @@ local imports = {
 ----------------
 
 CPlayer = {
+    CParty = {},
     CChannel = {},
     CAttachments = {},
 
@@ -35,5 +36,10 @@ CPlayer = {
     getChannel = function(player)
         if not CPlayer.isInitialized(player) then return false end
         return CPlayer.CChannel[player] or false
+    end,
+
+    getParty = function(player)
+        if not CPlayer.isInitialized(player) then return false end
+        return CPlayer.CParty[player] or false
     end
 }

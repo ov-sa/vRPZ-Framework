@@ -49,6 +49,11 @@ imports.addEventHandler("onPlayerChat", root, function(message, messageType)
         syncPlayers = imports.getElementsWithinRange(playerLocation.position[1], playerLocation.position[2], playerLocation.position[3], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Proximity_Range"], "player")
     elseif channelIndex == 2 then
         syncPlayers = imports.getElementsByType("player")
+    elseif channelIndex == 4 then
+        local party = CPlayer.CParty[source]
+        if party then
+            syncPlayers = party.members
+        end
     end
     if syncPlayers then
         for i = 1, #syncPlayers, 1 do
