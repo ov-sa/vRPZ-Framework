@@ -9,9 +9,12 @@
     <file src="utilities/rw/axis/slate/collision.rw"/>
     <file src="utilities/rw/axis/ring/buffer.rw"/>
     <file src="utilities/rw/axis/ring/collision.rw"/>
+    <script src="utilities/shared.lua" type="shared"/>
+    <script src="utilities/shaders/index.lua" type="client"/>
+    <file src="utilities/shaders/helper.fx"/>
+    <script src="utilities/shaders/tex_changer.lua" type="client"/>
     <script src="settings/shared.lua" type="shared"/>
     <script src="settings/client.lua" type="client"/>
-    <script src="utilities/shared.lua" type="shared"/>
     <script src="utilities/mapper.lua" type="client"/>
     <script src="utilities/camera.lua" type="client"/>
 

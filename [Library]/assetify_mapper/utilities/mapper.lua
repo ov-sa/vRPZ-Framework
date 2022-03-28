@@ -23,6 +23,7 @@ local imports = {
     getPedControlState = getPedControlState,
     setElementLocation = setElementLocation,
     getElementLocation = getElementLocation,
+    setElementAlpha = setElementAlpha,
     engineRequestModel = engineRequestModel,
     engineLoadTXD = engineLoadTXD,
     engineLoadDFF = engineLoadDFF,
@@ -30,6 +31,7 @@ local imports = {
     engineImportTXD = engineImportTXD,
     engineReplaceModel = engineReplaceModel,
     engineReplaceCOL = engineReplaceCOL,
+    engineSetModelLODDistance = engineSetModelLODDistance,
     createObject = createObject,
     setLowLODElement = setLowLODElement,
     attachElements = attachElements,
@@ -70,17 +72,19 @@ mapper.rwAssets.slate = imports.engineRequestModel("object", 16754)
 imports.engineImportTXD(mapper.rwAssets.dict, mapper.rwAssets.slate)
 imports.engineReplaceCOL(mapper.rwAssets.collision, mapper.rwAssets.slate)
 imports.engineReplaceModel(mapper.rwAssets.buffer, mapper.rwAssets.slate, true)
+imports.engineSetModelLODDistance(mapper.rwAssets.slate, 300)
 mapper.rwAssets.buffer = imports.engineLoadDFF("utilities/rw/axis/ring/buffer.rw")
 mapper.rwAssets.collision = imports.engineLoadCOL("utilities/rw/axis/ring/collision.rw")
 mapper.rwAssets.ring = imports.engineRequestModel("object", 16754)
 imports.engineImportTXD(mapper.rwAssets.dict, mapper.rwAssets.ring)
 imports.engineReplaceCOL(mapper.rwAssets.collision, mapper.rwAssets.ring)
 imports.engineReplaceModel(mapper.rwAssets.buffer, mapper.rwAssets.ring, true)
+imports.engineSetModelLODDistance(mapper.rwAssets.ring, 300)
 mapper.rwAssets.dict, mapper.rwAssets.buffer, mapper.rwAssets.collision = nil, nil, nil
 for i = 1, #mapper.axis.validAxesTypes, 1 do
     local j = mapper.axis.validAxesTypes[i]
     mapper.axis[j] = {}
-    for k, v in imports.pairs(mapper.axis.validAxes) then
+    for k, v in imports.pairs(mapper.axis.validAxes) do
         mapper.axis[j][k] = {
             instance = imports.createObject(mapper.rwAssets[j], 0, 0, 0),
             LODInstance = imports.createObject(mapper.rwAssets[j], 0, 0, 0, 0, 0, 0, true)
@@ -146,8 +150,10 @@ mapper.render = function()
         local isRotationMode = imports.getKeyState(mapper.controls.toggleRotation) or false
         for i = 1, #mapper.axis.validAxesTypes, 1 do
             local j = mapper.axis.validAxesTypes[i]
-            for k, v in imports.pairs(mapper.axis.validAxes) then
+            for k, v in imports.pairs(mapper.axis.validAxes) do
                 imports.setElementLocation(mapper.axis[j][k].instance, posX, posY, posZ, v.rotation[1], v.rotation[2], v.rotation[3])
+                imports.setElementAlpha(mapper.axis[j][k].instance, 25)
+                imports.setElementAlpha(mapper.axis[j][k].LODInstance, 25)
             end
         end
         --[[
