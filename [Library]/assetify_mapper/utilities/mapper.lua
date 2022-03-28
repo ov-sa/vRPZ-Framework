@@ -23,6 +23,15 @@ local imports = {
     getPedControlState = getPedControlState,
     setElementLocation = setElementLocation,
     getElementLocation = getElementLocation,
+    engineRequestModel = engineRequestModel,
+    engineLoadTXD = engineLoadTXD,
+    engineLoadDFF = engineLoadDFF,
+    engineLoadCOL = engineLoadCOL,
+    engineImportTXD = engineImportTXD,
+    engineReplaceModel = engineReplaceModel,
+    engineReplaceCOL = engineReplaceCOL,
+    createObject = createObject,
+    setLowLODElement = setLowLODElement,
     table = table,
     beautify = beautify
 }
@@ -34,9 +43,11 @@ local imports = {
 
 mapper = {
     assetPack = "object",
+    rwAssets = {},
     axis = {
+        validAxes = {"x", "y", "z"},
         width = 15, length = 10,
-        color = {x = imports.tocolor(255, 0, 0, 250), y = imports.tocolor(0, 255, 0, 250), z = imports.tocolor(0, 0, 255, 250)}
+        color = {x = imports.tocolor(255, 0, 0, 250), y = imports.tocolor(0, 255, 0, 250), z = imports.tocolor(0, 0, 255, 250)},
     },
     speed = {range = availableControlSpeeds},
     controls = availableControls,
@@ -46,6 +57,28 @@ mapper = {
     }
 }
 mapper.__index = mapper
+
+mapper.rwAssets.dict = imports.engineLoadTXD("utilities/rw/axis/dict.rw")
+mapper.rwAssets.buffer = imports.engineLoadDFF("utilities/rw/axis/slate/buffer.rw")
+mapper.rwAssets.collision = imports.engineLoadCOL("utilities/rw/axis/slate/collision.rw")
+mapper.rwAssets.slate = imports.engineRequestModel("object", 16754)
+imports.engineImportTXD(mapper.rwAssets.dict, mapper.rwAssets.slate)
+imports.engineReplaceCOL(mapper.rwAssets.collision, mapper.rwAssets.slate)
+imports.engineReplaceModel(mapper.rwAssets.buffer, mapper.rwAssets.slate, true)
+mapper.rwAssets.buffer = imports.engineLoadDFF("utilities/rw/axis/ring/buffer.rw")
+mapper.rwAssets.collision = imports.engineLoadCOL("utilities/rw/axis/ring/collision.rw")
+mapper.rwAssets.ring = imports.engineRequestModel("object", 16754)
+imports.engineImportTXD(mapper.rwAssets.dict, mapper.rwAssets.ring)
+imports.engineReplaceCOL(mapper.rwAssets.collision, mapper.rwAssets.ring)
+imports.engineReplaceModel(mapper.rwAssets.buffer, mapper.rwAssets.ring, true)
+mapper.rwAssets.dict, mapper.rwAssets.buffer, mapper.rwAssets.collision = nil, nil, nil
+mapper.axis.slate, mapper.axis.ring = {}, {}
+for i, j in imports.pairs(mapper.axis.validAxes) then
+    mapper.axis.slate[i] = imports.createObject(mapper.rwAssets.slate, 0, 0, 0)
+    imports.setLowLODElement(mapper.axis.slate[i], imports.createObject(mapper.rwAssets.slate, 0, 0, 0, 0, 0, 0, true))
+    mapper.axis.ring[i] = imports.createObject(mapper.rwAssets.ring, 0, 0, 0)
+    imports.setLowLODElement(mapper.axis.ring[i], imports.createObject(mapper.rwAssets.ring, 0, 0, 0, 0, 0, 0, true))
+end
 
 function mapper:create(...)
     local cMapper = imports.setmetatable({}, {__index = self})
