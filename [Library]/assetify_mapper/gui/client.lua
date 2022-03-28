@@ -34,20 +34,20 @@ mapper.ui = {
 
     propWnd = {
         startX = 0, startY = 0,
-        width = 265, height = 309,
+        width = 265, height = 339,
         propLst = {
             text = imports.string.upper("Assets"),
-            height = 270
+            height = 300
         },
         spawnBtn = {
             text = "Spawn Asset",
-            startY = 270 + 5,
+            startY = 300 + 5,
             height = 24
         }
     },
 
     sceneWnd = {
-        startX = 0, startY = 309,
+        startX = 0, startY = 339,
         width = 265, height = 418,
         propLst = {
             text = imports.string.upper("Props"),
