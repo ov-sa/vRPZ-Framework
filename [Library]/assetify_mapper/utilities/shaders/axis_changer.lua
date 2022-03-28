@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
 --[[ Resource: Assetify Mapper
-     Script: utilities: shaders: tex_changer.lua
+     Script: utilities: shaders: axis_mapper.lua
      Author: vStudio
      Developer(s): Tron
      DOC: 25/03/2022
-     Desc: Texture Changer ]]--
+     Desc: Axis Changer ]]--
 ----------------------------------------------------------------
 
 
@@ -22,7 +22,7 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-local identifier = "Assetify_TextureChanger"
+local identifier = "Assetify_AxisMapper"
 local depDatas, dependencies = "", {
     "utilities/shaders/helper.fx"
 }

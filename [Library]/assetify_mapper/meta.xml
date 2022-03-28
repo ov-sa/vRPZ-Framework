@@ -12,7 +12,7 @@
     <script src="utilities/shared.lua" type="shared"/>
     <script src="utilities/shaders/index.lua" type="client"/>
     <file src="utilities/shaders/helper.fx"/>
-    <script src="utilities/shaders/tex_changer.lua" type="client"/>
+    <script src="utilities/shaders/axis_mapper.lua" type="client"/>
     <script src="settings/shared.lua" type="shared"/>
     <script src="settings/client.lua" type="client"/>
     <script src="utilities/mapper.lua" type="client"/>
