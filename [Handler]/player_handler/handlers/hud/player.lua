@@ -99,7 +99,7 @@ cache.secondary.ammo.mag.endX, cache.secondary.ammo.mag.endY = cache.secondary.a
 ----------------------------------
 
 
-imports.addEventHandler("Client:onPartyUpdate", localPlayer, function(partyData)
+imports.addEventHandler("Client:onPartyUpdate", root, function(partyData)
     if partyData then
         cache.party = {
             startX = cache.primary.startX,
@@ -118,7 +118,7 @@ imports.addEventHandler("Client:onPartyUpdate", localPlayer, function(partyData)
             return
         end
     end
-end)
+end, true, "low")
 
 
 --------------------------------
