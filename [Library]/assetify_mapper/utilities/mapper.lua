@@ -156,7 +156,7 @@ mapper.render = function()
     if mapper.translationMode then
         mapper.translationMode.element = mapper.isTargettingDummy
         mapper.translationMode.type = (not CLIENT_MTA_WINDOW_ACTIVE and imports.getKeyState(mapper.controls.toggleRotation) and "Rotation") or "Position"
-        mapper.translationMode.axis = "x"
+        mapper.translationMode.axis = mapper.translationMode.axis or "x"
         mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = imports.getElementLocation(mapper.translationMode.element)
         local isPositionTranslation = mapper.translationMode.type == "Position"
         if not CLIENT_MTA_WINDOW_ACTIVE and camera.isCursorVisible and not imports.getKeyState(mapper.controls.controlAction) then
@@ -207,15 +207,14 @@ mapper.render = function()
         local typeAlpha = (not mapper.translationMode and 0) or ((mapper.translationMode.type == "Position") and (j ~= "slate") and 0) or ((mapper.translationMode.type == "Rotation") and (j ~= "ring") and 0) or nil
         for k, v in imports.pairs(mapper.axis.validAxes) do
             local axisAlpha = typeAlpha or ((mapper.translationMode.axis == k) and 100) or 10
-            if mapper.translationMode and mapper.translationMode.element then
+            local isCollisionEnabled = axisAlpha > 0
+            if mapper.translationMode then
                 imports.setElementLocation(mapper.axis[j][k].instance, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, v.rotation[j][1], v.rotation[j][2], v.rotation[j][3])
             end
             imports.setElementAlpha(mapper.axis[j][k].instance, axisAlpha)
             imports.setElementAlpha(mapper.axis[j][k].LODInstance, axisAlpha)
-            if axisAlpha <= 0 then
-                imports.setElementCollisionsEnabled(mapper.axis[j][k].instance, false)
-                imports.setElementCollisionsEnabled(mapper.axis[j][k].LODInstance, false)
-            end
+            imports.setElementCollisionsEnabled(mapper.axis[j][k].instance, isCollisionEnabled)
+            imports.setElementCollisionsEnabled(mapper.axis[j][k].LODInstance, isCollisionEnabled)
         end
     end
 end
@@ -255,7 +254,23 @@ mapper.controlClick = function(button, state, _, _, worldX, worldY, worldZ, targ
                 mapper.isSpawningDummy = false
             end
         else
-            mapper.isTargettingDummy = (targetElement and mapper.buffer.element[targetElement] and targetElement) or false
+            local isAxisClicked = false
+            if mapper.translationMode then
+                for i = 1, #mapper.axis.validAxesTypes, 1 do
+                    local j = mapper.axis.validAxesTypes[i]
+                    for k, v in imports.pairs(mapper.axis.validAxes) do
+                        if (targetElement == mapper.axis[j][k].instance) or (targetElement == mapper.axis[j][k].LODInstance) then
+                            isAxisClicked = true
+                            mapper.translationMode.axis = k
+                            break
+                        end
+                    end
+                    if isAxisClicked then break end
+                end
+            end
+            if not isAxisClicked then
+                --mapper.isTargettingDummy = (targetElement and mapper.buffer.element[targetElement] and targetElement) or false
+            end
         end
     end
 end
