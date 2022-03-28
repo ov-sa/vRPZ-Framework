@@ -45,10 +45,13 @@ mapper = {
     assetPack = "object",
     rwAssets = {},
     axis = {
-        validAxes = {"x", "y", "z"},
+        validAxes = {
+            x = {},
+            y = {},
+            z = {}
+        },
         validAxesTypes = {"slate", "ring"},
-        width = 15, length = 10,
-        color = {x = imports.tocolor(255, 0, 0, 250), y = imports.tocolor(0, 255, 0, 250), z = imports.tocolor(0, 0, 255, 250)},
+        --color = {x = imports.tocolor(255, 0, 0, 250), y = imports.tocolor(0, 255, 0, 250), z = imports.tocolor(0, 0, 255, 250)},
     },
     speed = {range = availableControlSpeeds},
     controls = availableControls,
@@ -73,16 +76,15 @@ imports.engineImportTXD(mapper.rwAssets.dict, mapper.rwAssets.ring)
 imports.engineReplaceCOL(mapper.rwAssets.collision, mapper.rwAssets.ring)
 imports.engineReplaceModel(mapper.rwAssets.buffer, mapper.rwAssets.ring, true)
 mapper.rwAssets.dict, mapper.rwAssets.buffer, mapper.rwAssets.collision = nil, nil, nil
-for i = 1, #mapper.axis.validAxes, 1 then
-    local j = mapper.axis.validAxes[i]
+for i, j in imports.pairs(mapper.axis.validAxes) then
     for k = 1, #mapper.axis.validAxesTypes, 1 do
         local v = mapper.axis.validAxes[k]
         mapper.axis[v] = mapper.axis[v] or {}
-        mapper.axis[v][j] = {
+        mapper.axis[v][i] = {
             instance = imports.createObject(mapper.rwAssets[v], 0, 0, 0),
             LODInstance = imports.createObject(mapper.rwAssets[v], 0, 0, 0, 0, 0, 0, true)
         }
-        imports.setLowLODElement(mapper.axis[v][j].instance, mapper.axis[v][j].LODInstance)
+        imports.setLowLODElement(mapper.axis[v][i].instance, mapper.axis[v][i].LODInstance)
     end
 end
 
@@ -139,9 +141,9 @@ end
 mapper.render = function()
     if mapper.isTargettingDummy then
         local posX, posY, posZ, rotX, rotY, rotZ = imports.getElementLocation(mapper.isTargettingDummy)
-        imports.beautify.native.drawLine3D(posX, posY, posZ, posX + mapper.axis.length, posY, posZ, mapper.axis.color.x, mapper.axis.width)
-        imports.beautify.native.drawLine3D(posX, posY, posZ, posX, posY + mapper.axis.length, posZ, mapper.axis.color.y, mapper.axis.width)
-        imports.beautify.native.drawLine3D(posX, posY, posZ, posX, posY, posZ + mapper.axis.length, mapper.axis.color.z, mapper.axis.width)
+        --imports.beautify.native.drawLine3D(posX, posY, posZ, posX + mapper.axis.length, posY, posZ, mapper.axis.color.x, mapper.axis.width)
+        --imports.beautify.native.drawLine3D(posX, posY, posZ, posX, posY + mapper.axis.length, posZ, mapper.axis.color.y, mapper.axis.width)
+        --imports.beautify.native.drawLine3D(posX, posY, posZ, posX, posY, posZ + mapper.axis.length, mapper.axis.color.z, mapper.axis.width)
         if camera.isCursorVisible and not imports.getKeyState(mapper.controls.controlAction) then
             local isRotationMode = imports.getKeyState(mapper.controls.toggleRotation) or false
             local object_speed = ((imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal)*((isRotationMode and 1) or 0.1)
