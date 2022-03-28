@@ -49,12 +49,12 @@ mapper = {
     assetPack = "object",
     rwAssets = {},
     axis = {
+        validAxesTypes = {"slate", "ring"},
         validAxes = {
             x = {color = {255, 0, 0}, rotation = {slate = {0, 0, 90}, ring = {0, 0, 0}}},
             y = {color = {0, 255, 0}, rotation = {slate = {0, 0, 0}, ring = {0, 90, 0}}},
             z = {color = {0, 0, 255}, rotation = {slate = {90, 0, 0}, ring = {90, 0, 0}}}
-        },
-        validAxesTypes = {"slate", "ring"}
+        }
     },
     speed = {range = availableControlSpeeds},
     controls = availableControls,
