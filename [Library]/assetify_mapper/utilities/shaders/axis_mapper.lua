@@ -66,7 +66,8 @@ shaderRW[identifier] = function()
 
     float4 PSHandler(PSInput PS) : COLOR0 {
         float4 baseTexel = tex2D(baseSampler, PS.TexCoord);
-        float4 finalColor = baseTexel * PS.Diffuse * baseColor.rgb;
+        float4 finalColor = baseTexel * PS.Diffuse;
+        finalColor.rgb *= baseColor.rgb;
         return finalColor; 
     }
 
