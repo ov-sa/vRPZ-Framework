@@ -151,7 +151,8 @@ end
 
 mapper.render = function()
     mapper.ui.renderToolWnd()
-    mapper.translationMode = (mapper.isTargettingDummy and (mapper.translationMode or {})) or false
+    if mapper.translationMode and (mapper.translationMode.element ~= mapper.isTargettingDummy) then mapper.translationMode = false end
+    mapper.translationMode = (mapper.isTargettingDummy and (mapper.translationMode or {})) or false    
     if mapper.translationMode then
         mapper.translationMode.element = mapper.isTargettingDummy
         mapper.translationMode.type = (not CLIENT_MTA_WINDOW_ACTIVE and imports.getKeyState(mapper.controls.toggleRotation) and "Rotation") or "Position"
