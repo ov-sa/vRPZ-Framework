@@ -44,7 +44,31 @@ shaderRW[identifier] = function()
     -->> Variables <<--
     -------------------*/
 
-    texture baseTexture;
+    float3 baseColor = float4(1, 1, 1, 1);
+    struct PSInput {
+        float4 Diffuse : COLOR0;
+        float2 TexCoord : TEXCOORD0;
+    };
+
+
+    /*----------------
+    -->> Samplers <<--
+    ------------------*/
+    
+    sampler baseSampler = sampler_state {
+        Texture = (gTexture0);
+    };
+
+
+    /*----------------
+    -->> Handlers <<--
+    ------------------*/
+
+    float4 PSHandler(PSInput PS) : COLOR0 {
+        float4 baseTexel = tex2D(baseSampler, PS.TexCoord);
+        float4 finalColor = baseTexel * PS.Diffuse * baseColor.rgb;
+        return finalColor; 
+    }
 
 
     /*------------------
@@ -53,9 +77,8 @@ shaderRW[identifier] = function()
 
     technique ]]..identifier..[[
     {
-        pass P0
-        {
-            Texture[0] = baseTexture;
+        pass P0 {
+            PixelShader = compile ps_2_0 PSHandler();
         }
     }
 
