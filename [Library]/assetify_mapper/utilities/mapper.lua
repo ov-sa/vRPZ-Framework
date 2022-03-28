@@ -50,9 +50,9 @@ mapper = {
     rwAssets = {},
     axis = {
         validAxes = {
-            x = {color = {255, 0, 0}, rotation = {0, 0, 0}},
-            y = {color = {0, 255, 0}, rotation = {0, 90, 0}},
-            z = {color = {0, 0, 255}, rotation = {90, 0, 0}}
+            x = {color = {255, 0, 0}, rotation = {slate = {0, 0, 90}, ring = {0, 0, 0}}},
+            y = {color = {0, 255, 0}, rotation = {slate = {0, 0, 0}, ring = {0, 90, 0}}},
+            z = {color = {0, 0, 255}, rotation = {slate = {90, 0, 0}, ring = {90, 0, 0}}}
         },
         validAxesTypes = {"slate", "ring"}
     },
@@ -158,12 +158,11 @@ mapper.render = function()
             local typeAlpha = (isRotationMode and (j ~= "ring") and 0) or (not isRotationMode and (j ~= "slate") and 0) or nil
             for k, v in imports.pairs(mapper.axis.validAxes) do
                 local axisAlpha = typeAlpha or ((selectedAxis == k) and 100) or 5
-                imports.setElementLocation(mapper.axis[j][k].instance, posX, posY, posZ, v.rotation[1], v.rotation[2], v.rotation[3])
+                imports.setElementLocation(mapper.axis[j][k].instance, posX, posY, posZ, v.rotation[j][1], v.rotation[j][2], v.rotation[j][3])
                 imports.setElementAlpha(mapper.axis[j][k].instance, axisAlpha)
                 imports.setElementAlpha(mapper.axis[j][k].LODInstance, axisAlpha)
             end
         end
-        --[[
         if not CLIENT_MTA_WINDOW_ACTIVE and camera.isCursorVisible and not imports.getKeyState(mapper.controls.controlAction) then
             local object_speed = ((imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal)*((isRotationMode and 1) or 0.1)
             if imports.getPedControlState(mapper.controls.moveForwards) then
@@ -206,7 +205,6 @@ mapper.render = function()
                 end
             end
         end
-        ]]
     end
 end
 
