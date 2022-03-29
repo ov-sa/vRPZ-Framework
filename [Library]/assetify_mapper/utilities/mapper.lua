@@ -186,8 +186,13 @@ mapper.render = function(renderData)
                     if not isCursorTranslation then
                         mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + ((imports.getKeyState(mapper.controls.valueUp) and translationSpeed) or (imports.getKeyState(mapper.controls.valueDown) and -translationSpeed) or 0)
                     else
-                        mapper.translationMode[("__"..translationIndex)] = mapper.translationMode[("__"..translationIndex)] or mapper.translationMode[translationIndex]
-                        mapper.translationMode[translationIndex] = mapper.translationMode[("__"..translationIndex)] + (translationValue*translationSpeed)
+                        mapper.translationMode[("__"..translationIndex)] = mapper.translationMode[("__"..translationIndex)] or {
+                            native = mapper.translationMode[translationIndex],
+                            previous = 0,
+                            current = 0
+                        }
+                        mapper.translationMode[("__"..translationIndex)].current = (translationValue*translationSpeed)
+                        mapper.translationMode[translationIndex] = mapper.translationMode[("__"..translationIndex)].native + mapper.translationMode[("__"..translationIndex)].previous + mapper.translationMode[("__"..translationIndex)].current
                     end
                     imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ)
                 end
