@@ -19,7 +19,9 @@
     <script src="utilities/camera.lua" type="client"/>
 
     <!-- GUIs -->
-    <script src="gui/client.lua" type="client"/>
+    <script src="gui/scene.lua" type="client"/>
+    <script src="gui/tool.lua" type="client"/>
+    <script src="gui/notif.lua" type="client"/>
 
     <!-- Handlers -->
     <script src="handlers/loader.lua" type="client"/>
