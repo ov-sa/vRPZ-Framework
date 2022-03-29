@@ -177,14 +177,16 @@ mapper.render = function(renderData)
                             mapper.cache.prevCursorY = mapper.cache.prevCursorY or translationValue
                             translationValue = translationValue - mapper.cache.prevCursorY
                             if isSlateTranslation then
-                                translationValue = translationValue*CLIENT_MTA_RESOLUTION[2]
+                                translationValue = translationValue*CLIENT_MTA_RESOLUTION[2]*0.75
                             else
                                 translationValue = (translationValue*360)%360
                             end
                         end
                     end
                     if not isCursorTranslation then
-                        mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + ((imports.getKeyState(mapper.controls.valueUp) and translationSpeed) or (imports.getKeyState(mapper.controls.valueDown) and -translationSpeed) or 0)
+                        translationValue = ((imports.getKeyState(mapper.controls.valueUp) and translationSpeed) or (imports.getKeyState(mapper.controls.valueDown) and -translationSpeed) or 0)
+                        if isSlateTranslation then translationValue = translationValue*0.75 end
+                        mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + translationValue
                     else
                         mapper.translationMode[("__"..translationIndex)] = mapper.translationMode[("__"..translationIndex)] or {
                             native = mapper.translationMode[translationIndex], previous = 0, current = 0, offset = 0,
