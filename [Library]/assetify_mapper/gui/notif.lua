@@ -31,13 +31,10 @@ local imports = {
 
 mapper.ui.notif = {
     buffer = {},
-    startX = -5, startY = 75, paddingY = 5, offsetY = 0, height = 30,
+    startX = mapper.ui.margin, startY = 75, paddingY = 10, offsetY = 0, height = 15,
     slideTopTickCounter = CLIENT_CURRENT_TICK, slideTopDuration = 1500,
     slideInDuration = 1500, slideOutDuration = 2000, slideDelayDuration = 1500,
-    font = availableFonts[1],
-    --font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 17),
-    leftEdgeTexture = imports.beautify.assets["images"]["curved_square/regular/left.rw"],
-    rightEdgeTexture = imports.beautify.assets["images"]["curved_square/regular/right.rw"]
+    font = availableFonts[1]
 }
 
 
@@ -57,7 +54,7 @@ mapper.ui.notif.renderUI = function()
             local notif_offsetX, notif_offsetY = 0, 0
             local notifAlphaPercent = 0
             if j.slideStatus == "forward" then
-                notif_offsetX, notif_offsetY = imports.interpolateBetween(CLIENT_MTA_RESOLUTION[1], mapper.ui.notif.startY + ((i - 1)*(mapper.ui.notif.height + mapper.ui.notif.paddingY)) - mapper.ui.notif.height, 0, (CLIENT_MTA_RESOLUTION[1]) + mapper.ui.notif.startX - notif_width - notif_height, mapper.ui.notif.startY + ((i - 1)*(mapper.ui.notif.height + mapper.ui.notif.paddingY)) + offsetY, 0, imports.getInterpolationProgress(j.tickCounter, mapper.ui.notif.slideInDuration), "InOutBack")
+                notif_offsetX, notif_offsetY = imports.interpolateBetween(CLIENT_MTA_RESOLUTION[1], mapper.ui.notif.startY + ((i - 1)*(mapper.ui.notif.height + mapper.ui.notif.paddingY)) - mapper.ui.notif.height, 0, (CLIENT_MTA_RESOLUTION[1]) + mapper.ui.notif.startX - notif_width, mapper.ui.notif.startY + ((i - 1)*(mapper.ui.notif.height + mapper.ui.notif.paddingY)) + offsetY, 0, imports.getInterpolationProgress(j.tickCounter, mapper.ui.notif.slideInDuration), "InOutBack")
                 notifAlphaPercent = imports.interpolateBetween(0, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.tickCounter, mapper.ui.notif.slideInDuration), "Linear")
                 if imports.math.round(notifAlphaPercent, 2) == 1 then
                     if (CLIENT_CURRENT_TICK - j.tickCounter - mapper.ui.notif.slideInDuration) >= mapper.ui.notif.slideDelayDuration then
@@ -68,7 +65,7 @@ mapper.ui.notif.renderUI = function()
                     end
                 end
             else
-                notif_offsetX, notif_offsetY = imports.interpolateBetween((CLIENT_MTA_RESOLUTION[1]) + mapper.ui.notif.startX - notif_width - notif_height, mapper.ui.notif.startY + ((i - 1)*(mapper.ui.notif.height + mapper.ui.notif.paddingY)), 0, CLIENT_MTA_RESOLUTION[1], mapper.ui.notif.startY + ((i - 1)*(mapper.ui.notif.height + mapper.ui.notif.paddingY)) + (mapper.ui.notif.height*0.5) - offsetY, 0, imports.getInterpolationProgress(j.tickCounter, mapper.ui.notif.slideOutDuration), "InOutBack")
+                notif_offsetX, notif_offsetY = imports.interpolateBetween((CLIENT_MTA_RESOLUTION[1]) + mapper.ui.notif.startX - notif_width, mapper.ui.notif.startY + ((i - 1)*(mapper.ui.notif.height + mapper.ui.notif.paddingY)), 0, CLIENT_MTA_RESOLUTION[1], mapper.ui.notif.startY + ((i - 1)*(mapper.ui.notif.height + mapper.ui.notif.paddingY)) + (mapper.ui.notif.height*0.5) - offsetY, 0, imports.getInterpolationProgress(j.tickCounter, mapper.ui.notif.slideOutDuration), "InOutBack")
                 notifAlphaPercent = imports.interpolateBetween(1, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.tickCounter, mapper.ui.notif.slideOutDuration), "Linear")
             end
             imports.beautify.native.drawText(j.text, notif_offsetX, notif_offsetY, notif_offsetX + notif_width, notif_offsetY + notif_height, imports.tocolor(notifFontColor[1], notifFontColor[2], notifFontColor[3], notifFontColor[4]*notifAlphaPercent), 1, mapper.ui.notif.font, "center", "center", true, false, false, false, true)
@@ -101,4 +98,5 @@ end)
 
 bindKey("z", "down", function()
     triggerEvent("Assetify_Mapper:onNotification", root, "Testing Some random Assetify Notif", {175, 175, 175, 255})
+    triggerEvent("Assetify_Mapper:onNotification", root, "Testing Some random Assetify Notif Again xDDD", {255, 10, 10, 255})
 end)
