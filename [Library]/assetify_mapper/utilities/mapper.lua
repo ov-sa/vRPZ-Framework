@@ -154,13 +154,13 @@ mapper.render = function()
     mapper.translationMode = (mapper.isTargettingDummy and (mapper.translationMode or {})) or false    
     if mapper.translationMode then
         mapper.translationMode.element = mapper.isTargettingDummy
-        mapper.translationMode.type = (not CLIENT_MTA_WINDOW_ACTIVE and imports.getKeyState(mapper.controls.toggleRotation) and "Rotation") or "Position"
+        mapper.translationMode.type = mapper.translationMode.type or "slate"
         mapper.translationMode.axis = mapper.translationMode.axis or "x"
         mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = imports.getElementLocation(mapper.translationMode.element)
         if not CLIENT_MTA_WINDOW_ACTIVE then
-            local isPositionTranslation = mapper.translationMode.type == "Position"
+            local isSlateTranslation = mapper.translationMode.type == "slate"
             local translationSpeed = (imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal
-            local translationIndex = ((mapper.translationMode.axis == "x") and ((isPositionTranslation and "posX") or "rotX")) or ((mapper.translationMode.axis == "y") and ((isPositionTranslation and "posY") or "rotY")) or ((mapper.translationMode.axis == "z") and ((isPositionTranslation and "posZ") or "rotZ")) or false
+            local translationIndex = ((mapper.translationMode.axis == "x") and ((isSlateTranslation and "posX") or "rotX")) or ((mapper.translationMode.axis == "y") and ((isSlateTranslation and "posY") or "rotY")) or ((mapper.translationMode.axis == "z") and ((isSlateTranslation and "posZ") or "rotZ")) or false
             if translationIndex then
                 mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + ((imports.getKeyState(mapper.controls.valueUp) and translationSpeed) or (imports.getKeyState(mapper.controls.valueDown) and -translationSpeed) or 0)
                 imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ)
@@ -169,7 +169,7 @@ mapper.render = function()
     end
     for i = 1, #mapper.axis.validAxesTypes, 1 do
         local j = mapper.axis.validAxesTypes[i]
-        local typeAlpha = (not mapper.translationMode and 0) or ((mapper.translationMode.type == "Position") and (j ~= "slate") and 0) or ((mapper.translationMode.type == "Rotation") and (j ~= "ring") and 0) or nil
+        local typeAlpha = (not mapper.translationMode and 0) or ((mapper.translationMode.type ~= j) and 0) or nil
         for k, v in imports.pairs(mapper.axis.validAxes) do
             local axisAlpha = typeAlpha or ((mapper.translationMode.axis == k) and 100) or 10
             local isCollisionEnabled = axisAlpha > 0
@@ -186,7 +186,15 @@ end
 
 mapper.controlKey = function(button, state)
     if CLIENT_MTA_WINDOW_ACTIVE or state then return false end
-    if button == mapper.controls.switchKey then
+    if button == mapper.controls.switchTranslation then
+        local selectedMode = 0
+        for i, j in imports.pairs(mapper.axis.validAxesTypes) do
+            if mapper.translationMode.type == j then
+                selectedMode = i
+            end
+        end
+        mapper.translationMode.type = mapper.axis.validAxesTypes[(selectedMode + 1)] or mapper.axis.validAxesTypes[1]
+    elseif button == mapper.controls.switchAxis then
         if mapper.translationMode then
             local selectedAxis, validAxes = 0, {}
             for i, j in imports.pairs(mapper.axis.validAxes) do

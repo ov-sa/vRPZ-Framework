@@ -16,7 +16,7 @@ resource = getResourceRootElement(getThisResource())
 
 availableControlSpeeds = {normal = 1, slow = 0.2, fast = 3}
 availableControls = {
-    toggleCursor = "mouse2", toggleRotation = "r", switchKey = "tab",
+    toggleCursor = "mouse2", switchTranslation = "capslock", switchAxis = "tab",
     cloneObject = "c", deleteObject = "delete",
     speedUp = "lshift", speedDown = "space",
     valueUp = "num_add", valueDown = "num_sub",
