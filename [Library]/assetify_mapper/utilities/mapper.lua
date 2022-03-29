@@ -189,8 +189,7 @@ mapper.controlKey = function(button, state)
     if CLIENT_MTA_WINDOW_ACTIVE or state then return false end
     if button == mapper.controls.switchKey then
         if mapper.translationMode then
-            local validAxes = {}
-            local selectedAxis = 0
+            local selectedAxis, validAxes = 0, {}
             for i, j in imports.pairs(mapper.axis.validAxes) do
                 imports.table.insert(validAxes, i)
                 if mapper.translationMode.axis == i then
