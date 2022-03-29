@@ -159,16 +159,9 @@ mapper.render = function()
         mapper.translationMode.axis = mapper.translationMode.axis or "x"
         mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = imports.getElementLocation(mapper.translationMode.element)
         if not CLIENT_MTA_WINDOW_ACTIVE and camera.isCursorVisible and not imports.getKeyState(mapper.controls.controlAction) then
-            local translationIndex = false
             local isPositionTranslation = mapper.translationMode.type == "Position"
             local translationSpeed = ((imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal)*((isPositionTranslation and 1) or 0.1)
-            if mapper.translationMode.axis == "x" then
-                translationIndex = (isPositionTranslation and "posX") or "rotX"
-            elseif mapper.translationMode.axis == "y" then
-                translationIndex = (isPositionTranslation and "posY") or "rotY"
-            elseif mapper.translationMode.axis == "z" then
-                translationIndex = (isPositionTranslation and "posZ") or "rotZ"
-            end
+            local translationIndex = ((mapper.translationMode.axis == "x") and ((isPositionTranslation and "posX") or "rotX")) or ((mapper.translationMode.axis == "y") and ((isPositionTranslation and "posY") or "rotY")) or ((mapper.translationMode.axis == "z") and ((isPositionTranslation and "posZ") or "rotZ")) or false
             if translationIndex then
                 mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + ((imports.getKeyState(mapper.controls.valueUp) and translationSpeed) or (imports.getKeyState(mapper.controls.valueDown) and -translationSpeed) or 0)
                 imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ)
