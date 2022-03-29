@@ -39,9 +39,9 @@ mapper.ui.notif = {
 }
 
 
--------------------------------------
---[[ Functions: Renders Notif UI ]]--
--------------------------------------
+-------------------------------
+--[[ Functions: Renders UI ]]--
+-------------------------------
 
 mapper.ui.notif.renderUI = function()
     if #mapper.ui.renderNotif.buffer <= 0 then
