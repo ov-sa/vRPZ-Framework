@@ -47,7 +47,7 @@ function mapper:toggle(state)
         end)
         imports.addEventHandler("onClientUIClick", mapper.ui.sceneWnd.saveBtn.element, function()
             --TODO: SAVE THE SCENE
-            if #mapper.buffer.index <= 0 then imports.triggerEvent("Assetify_Mapper:onNotification", root, "Unfortunately, You can't export an empty scene...", {125, 0, 0, 255}) return false end
+            if #mapper.buffer.index <= 0 then imports.triggerEvent("Assetify_Mapper:onNotification", root, "Unfortunately, You can't export an empty scene...", {255, 50, 50, 255}) return false end
             outputChatBox("Trynna save the scene..")
         end)
         imports.beautify.render.create(mapper.render)

@@ -13,7 +13,6 @@
 -----------------
 
 local imports = {
-    type = type,
     tocolor = tocolor,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
@@ -31,9 +30,9 @@ local imports = {
 
 mapper.ui.notif = {
     buffer = {},
-    startX = -mapper.ui.margin, startY = 75, paddingY = 10, offsetY = 0, height = 15,
-    slideTopTickCounter = CLIENT_CURRENT_TICK, slideTopDuration = 1500,
-    slideInDuration = 1500, slideOutDuration = 2000, slideDelayDuration = 1500,
+    startX = -mapper.ui.margin, startY = 65, paddingY = 10, offsetY = 0, height = 15,
+    slideTopTickCounter = CLIENT_CURRENT_TICK, slideTopDuration = 750,
+    slideInDuration = 750, slideOutDuration = 750, slideDelayDuration = 750,
     font = availableFonts[1]
 }
 
