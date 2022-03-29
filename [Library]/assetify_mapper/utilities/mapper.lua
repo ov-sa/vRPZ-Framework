@@ -158,7 +158,7 @@ mapper.render = function()
         mapper.translationMode.type = (not CLIENT_MTA_WINDOW_ACTIVE and imports.getKeyState(mapper.controls.toggleRotation) and "Rotation") or "Position"
         mapper.translationMode.axis = mapper.translationMode.axis or "x"
         mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = imports.getElementLocation(mapper.translationMode.element)
-        if not CLIENT_MTA_WINDOW_ACTIVE and camera.isCursorVisible and not imports.getKeyState(mapper.controls.controlAction) then
+        if not CLIENT_MTA_WINDOW_ACTIVE and camera.isCursorVisible then
             local isPositionTranslation = mapper.translationMode.type == "Position"
             local translationSpeed = ((imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal)*((isPositionTranslation and 1) or 0.1)
             local translationIndex = ((mapper.translationMode.axis == "x") and ((isPositionTranslation and "posX") or "rotX")) or ((mapper.translationMode.axis == "y") and ((isPositionTranslation and "posY") or "rotY")) or ((mapper.translationMode.axis == "z") and ((isPositionTranslation and "posZ") or "rotZ")) or false
@@ -187,20 +187,29 @@ end
 
 mapper.controlKey = function(button, state)
     if CLIENT_MTA_WINDOW_ACTIVE or state then return false end
-    if imports.getKeyState(mapper.controls.controlAction) then
-    else
-        if button == mapper.controls.cloneObject then
-            if mapper.isTargettingDummy then
-                local posX, posY, posZ, rotX, rotY, rotZ = imports.getElementLocation(mapper.isTargettingDummy)
-                mapper:create(mapper.buffer.element[(mapper.isTargettingDummy)].assetName, {
-                    position = {x = posX, y = posY, z = posZ},
-                    rotation = {x = rotX, y = rotY, z = rotZ}
-                }, true)
+    if button == mapper.controls.switchKey then
+        if mapper.translationMode then
+            local validAxes = {}
+            local selectedAxis = 0
+            for i, j in imports.pairs(mapper.axis.validAxes) do
+                imports.table.insert(validAxes, i)
+                if mapper.translationMode.axis == i then
+                    selectedAxis = #validAxes
+                end
             end
-        elseif button == mapper.controls.deleteObject then
-            if mapper.isTargettingDummy then
-                imports.destroyElement(mapper.isTargettingDummy)
-            end
+            mapper.translationMode.axis = validAxes[(selectedAxis + 1)] or validAxes[1]
+        end
+    elseif button == mapper.controls.cloneObject then
+        if mapper.isTargettingDummy then
+            local posX, posY, posZ, rotX, rotY, rotZ = imports.getElementLocation(mapper.isTargettingDummy)
+            mapper:create(mapper.buffer.element[(mapper.isTargettingDummy)].assetName, {
+                position = {x = posX, y = posY, z = posZ},
+                rotation = {x = rotX, y = rotY, z = rotZ}
+            }, true)
+        end
+    elseif button == mapper.controls.deleteObject then
+        if mapper.isTargettingDummy then
+            imports.destroyElement(mapper.isTargettingDummy)
         end
     end
 end
