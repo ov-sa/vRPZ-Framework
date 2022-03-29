@@ -154,7 +154,6 @@ mapper.render = function(renderData)
     if renderData.renderType == "input" then
         mapper.cache.keys.mouse = imports.isMouseClicked()
         mapper.cache.keys.mouseLMBHold = (mapper.cache.keys.mouse ~= "mouse1") and imports.isKeyOnHold("mouse1")
-        --prevMouseKeyClickState = mapper.cache.keys.mouse
     elseif renderData.renderType == "render" then
         mapper.ui.renderToolWnd()
         mapper.translationMode = (mapper.isTargettingDummy and (mapper.translationMode or {})) or false
@@ -208,10 +207,8 @@ mapper.render = function(renderData)
         end
         mapper.isCursorTranslation = isCursorTranslation
         if not mapper.isCursorTranslation and mapper.prevCursorOffset then
-            mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ = mapper.translationMode.posX + (mapper.translationMode.__posX or 0), mapper.translationMode.posY + (mapper.translationMode.__posY or 0), mapper.translationMode.posZ + (mapper.translationMode.__posZ or 0)
-            mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = mapper.translationMode.rotX + (mapper.translationMode.__rotX or 0), mapper.translationMode.rotY + (mapper.translationMode.__rotY or 0), mapper.translationMode.rotZ + (mapper.translationMode.__rotZ or 0)
-            mapper.translationMode.__posX, mapper.translationMode.__posY, mapper.translationMode.__posZ = nil, nil, nil
-            mapper.translationMode.__rotX, mapper.translationMode.__rotY, mapper.translationMode.__rotZ = nil, nil, nil
+            mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = mapper.translationMode.posX + (mapper.translationMode.__posX or 0), mapper.translationMode.posY + (mapper.translationMode.__posY or 0), mapper.translationMode.posZ + (mapper.translationMode.__posZ or 0), mapper.translationMode.rotX + (mapper.translationMode.__rotX or 0), mapper.translationMode.rotY + (mapper.translationMode.__rotY or 0), mapper.translationMode.rotZ + (mapper.translationMode.__rotZ or 0)
+            mapper.translationMode.__posX, mapper.translationMode.__posY, mapper.translationMode.__posZ, mapper.translationMode.__rotX, mapper.translationMode.__rotY, mapper.translationMode.__rotZ = nil, nil, nil, nil, nil, nil
         end
         mapper.prevCursorOffset = (mapper.isCursorTranslation and mapper.prevCursorOffset) or false
     end
