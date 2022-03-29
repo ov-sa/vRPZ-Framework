@@ -174,8 +174,8 @@ mapper.render = function(renderData)
                         if mapper.cache.keys.mouseLMBHold then
                             isCursorTranslation = true
                             translationValue = CLIENT_CURSOR_OFFSET[2]
-                            mapper.cache.prevCursorY = translationValue
-                            translationValue = translationValue - mapper.cache.prevCursorY[2]
+                            mapper.cache.prevCursorY = mapper.cache.prevCursorY or translationValue
+                            translationValue = translationValue - mapper.cache.prevCursorY
                             if isSlateTranslation then
                                 translationValue = translationValue*CLIENT_MTA_RESOLUTION[2]
                             else
@@ -186,6 +186,7 @@ mapper.render = function(renderData)
                     if not isCursorTranslation then
                         mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + ((imports.getKeyState(mapper.controls.valueUp) and translationSpeed) or (imports.getKeyState(mapper.controls.valueDown) and -translationSpeed) or 0)
                     else
+                        outputChatBox(translationValue)
                         mapper.translationMode[("__"..translationIndex)] = mapper.translationMode[("__"..translationIndex)] or mapper.translationMode[translationIndex]
                         mapper.translationMode[translationIndex] = mapper.translationMode[("__"..translationIndex)] + (translationValue*translationSpeed)
                     end
@@ -209,10 +210,10 @@ mapper.render = function(renderData)
             end
         end
         mapper.isCursorTranslation = isCursorTranslation
-        if mapper.translationMode and not mapper.isCursorTranslation and mapper.cache.prevCursorY then
+        mapper.cache.prevCursorY = (mapper.isCursorTranslation and mapper.cache.prevCursorY) or false
+        if not mapper.isCursorTranslation then
             mapper.translationMode.__posX, mapper.translationMode.__posY, mapper.translationMode.__posZ, mapper.translationMode.__rotX, mapper.translationMode.__rotY, mapper.translationMode.__rotZ = nil, nil, nil, nil, nil, nil
         end
-        mapper.cache.prevCursorY = (mapper.isCursorTranslation and mapper.cache.prevCursorY) or false
     end
 end
 
