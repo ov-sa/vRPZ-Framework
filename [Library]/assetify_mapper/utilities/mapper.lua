@@ -169,12 +169,11 @@ mapper.render = function(renderData)
                 local translationIndex = ((mapper.translationMode.axis == "x") and ((isSlateTranslation and "posX") or "rotX")) or ((mapper.translationMode.axis == "y") and ((isSlateTranslation and "posY") or "rotY")) or ((mapper.translationMode.axis == "z") and ((isSlateTranslation and "posZ") or "rotZ")) or false
                 if translationIndex then
                     local translationSpeed = (imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal
+                    local cursorX, cursorY = CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2]
                     if camera.isCursorVisible then
                         if mapper.cache.keys.mouseLMBHold then
                             isCursorTranslation = true
-                            mapper.cursorOffsets = mapper.cursorOffsets or {}
-                            mapper.cursorOffsets[1], mapper.cursorOffsets[2] = CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2]
-                            mapper.prevCursorOffsets = mapper.prevCursorOffsets or {mapper.cursorOffsets[1], mapper.cursorOffsets[2]}
+                            mapper.prevCursorOffsets = mapper.prevCursorOffsets or {cursorX, cursorY}
                             CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = CLIENT_CURSOR_OFFSET[1] - mapper.prevCursorOffsets[1], CLIENT_CURSOR_OFFSET[2] - mapper.prevCursorOffsets[2]
                             if isSlateTranslation then
                                 CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = CLIENT_CURSOR_OFFSET[1]*CLIENT_MTA_RESOLUTION[1], CLIENT_CURSOR_OFFSET[2]*CLIENT_MTA_RESOLUTION[2]
@@ -186,9 +185,9 @@ mapper.render = function(renderData)
                     if not isCursorTranslation then
                         mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + ((imports.getKeyState(mapper.controls.valueUp) and translationSpeed) or (imports.getKeyState(mapper.controls.valueDown) and -translationSpeed) or 0)
                     else
-
+                        mapper.translationMode[("__"..translationIndex)] = cursorY*translationSpeed
                     end
-                    imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ)
+                    imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX + (mapper.translationMode.__posX or 0), mapper.translationMode.posY + (mapper.translationMode.__posY or 0), mapper.translationMode.posZ + (mapper.translationMode.__posZ or 0), mapper.translationMode.rotX + (mapper.translationMode.__rotX or 0), mapper.translationMode.rotY + (mapper.translationMode.__rotY or 0), mapper.translationMode.rotZ + (mapper.translationMode.__rotZ or 0))
                 end
             end
         end
