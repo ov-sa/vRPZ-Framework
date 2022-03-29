@@ -31,7 +31,7 @@ local imports = {
 
 mapper.ui.notif = {
     buffer = {},
-    startX = mapper.ui.margin, startY = 75, paddingY = 10, offsetY = 0, height = 15,
+    startX = -mapper.ui.margin, startY = 75, paddingY = 10, offsetY = 0, height = 15,
     slideTopTickCounter = CLIENT_CURRENT_TICK, slideTopDuration = 1500,
     slideInDuration = 1500, slideOutDuration = 2000, slideDelayDuration = 1500,
     font = availableFonts[1]
