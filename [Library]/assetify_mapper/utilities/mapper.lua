@@ -37,6 +37,7 @@ local imports = {
     setLowLODElement = setLowLODElement,
     attachElements = attachElements,
     setElementCollisionsEnabled = setElementCollisionsEnabled,
+    isMouseClicked = isMouseClicked,
     table = table,
     beautify = beautify
 }
@@ -149,38 +150,59 @@ function mapper:unload()
     return true
 end
 
-mapper.render = function()
-    mapper.ui.renderToolWnd()
-    mapper.translationMode = (mapper.isTargettingDummy and (mapper.translationMode or {})) or false    
-    if mapper.translationMode then
-        mapper.translationMode.element = mapper.isTargettingDummy
-        mapper.translationMode.type = mapper.translationMode.type or "slate"
-        mapper.translationMode.axis = mapper.translationMode.axis or "x"
-        mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = imports.getElementLocation(mapper.translationMode.element)
-        if not CLIENT_MTA_WINDOW_ACTIVE then
-            local isSlateTranslation = mapper.translationMode.type == "slate"
-            local translationSpeed = (imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal
-            local translationIndex = ((mapper.translationMode.axis == "x") and ((isSlateTranslation and "posX") or "rotX")) or ((mapper.translationMode.axis == "y") and ((isSlateTranslation and "posY") or "rotY")) or ((mapper.translationMode.axis == "z") and ((isSlateTranslation and "posZ") or "rotZ")) or false
-            if translationIndex then
-                mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + ((imports.getKeyState(mapper.controls.valueUp) and translationSpeed) or (imports.getKeyState(mapper.controls.valueDown) and -translationSpeed) or 0)
-                imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ)
+mapper.render = function(renderData)
+    if renderData.renderType == "input" then
+        mapper.cache.keys.mouse = imports.isMouseClicked()
+        mapper.cache.keys.mouseLMBHold = (mapper.cache.keys.mouse ~= "mouse1") and imports.isKeyOnHold("mouse1")
+        --prevMouseKeyClickState = mapper.cache.keys.mouse
+    elseif renderData.renderType == "render" then
+        mapper.ui.renderToolWnd()
+        mapper.translationMode = (mapper.isTargettingDummy and (mapper.translationMode or {})) or false
+        local isCursorTranslation = false
+        if mapper.translationMode then
+            mapper.translationMode.element = mapper.isTargettingDummy
+            mapper.translationMode.type = mapper.translationMode.type or "slate"
+            mapper.translationMode.axis = mapper.translationMode.axis or "x"
+            mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = imports.getElementLocation(mapper.translationMode.element)
+            if not CLIENT_MTA_WINDOW_ACTIVE then
+                local isSlateTranslation = mapper.translationMode.type == "slate"
+                local translationIndex = ((mapper.translationMode.axis == "x") and ((isSlateTranslation and "posX") or "rotX")) or ((mapper.translationMode.axis == "y") and ((isSlateTranslation and "posY") or "rotY")) or ((mapper.translationMode.axis == "z") and ((isSlateTranslation and "posZ") or "rotZ")) or false
+                if translationIndex then
+                    local translationSpeed = (imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal
+                    if camera.isCursorVisible then
+                        if mapper.cache.keys.mouseLMBHold then
+                            isCursorTranslation = true
+                            mapper.prevCursorOffsets = mapper.prevCursorOffsets or {CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2]}
+                            CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = CLIENT_CURSOR_OFFSET[1] - mapper.prevCursorOffsets[1], CLIENT_CURSOR_OFFSET[2] - mapper.prevCursorOffsets[2]
+                            if isSlateTranslation then
+                                CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = CLIENT_CURSOR_OFFSET[1]*CLIENT_MTA_RESOLUTION[1], CLIENT_CURSOR_OFFSET[2]*CLIENT_MTA_RESOLUTION[2]
+                            else
+                                CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = (CLIENT_CURSOR_OFFSET[1]*360)%360, (CLIENT_CURSOR_OFFSET[2]*360)%360
+                            end
+                        end
+                    end
+                    mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + ((imports.getKeyState(mapper.controls.valueUp) and translationSpeed) or (imports.getKeyState(mapper.controls.valueDown) and -translationSpeed) or 0)
+                    imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ)
+                end
             end
         end
-    end
-    for i = 1, #mapper.axis.validAxesTypes, 1 do
-        local j = mapper.axis.validAxesTypes[i]
-        local typeAlpha = (not mapper.translationMode and 0) or ((mapper.translationMode.type ~= j) and 0) or nil
-        for k, v in imports.pairs(mapper.axis.validAxes) do
-            local axisAlpha = typeAlpha or ((mapper.translationMode.axis == k) and 100) or 10
-            local isCollisionEnabled = axisAlpha > 0
-            if mapper.translationMode then
-                imports.setElementLocation(mapper.axis[j][k].instance, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, v.rotation[j][1], v.rotation[j][2], v.rotation[j][3])
+        for i = 1, #mapper.axis.validAxesTypes, 1 do
+            local j = mapper.axis.validAxesTypes[i]
+            local typeAlpha = (not mapper.translationMode and 0) or ((mapper.translationMode.type ~= j) and 0) or nil
+            for k, v in imports.pairs(mapper.axis.validAxes) do
+                local axisAlpha = typeAlpha or ((mapper.translationMode.axis == k) and 100) or 10
+                local isCollisionEnabled = axisAlpha > 0
+                if mapper.translationMode then
+                    imports.setElementLocation(mapper.axis[j][k].instance, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, v.rotation[j][1], v.rotation[j][2], v.rotation[j][3])
+                end
+                imports.setElementAlpha(mapper.axis[j][k].instance, axisAlpha)
+                imports.setElementAlpha(mapper.axis[j][k].LODInstance, axisAlpha)
+                imports.setElementCollisionsEnabled(mapper.axis[j][k].instance, isCollisionEnabled)
+                imports.setElementCollisionsEnabled(mapper.axis[j][k].LODInstance, isCollisionEnabled)
             end
-            imports.setElementAlpha(mapper.axis[j][k].instance, axisAlpha)
-            imports.setElementAlpha(mapper.axis[j][k].LODInstance, axisAlpha)
-            imports.setElementCollisionsEnabled(mapper.axis[j][k].instance, isCollisionEnabled)
-            imports.setElementCollisionsEnabled(mapper.axis[j][k].LODInstance, isCollisionEnabled)
         end
+        mapper.isCursorTranslation = isCursorTranslation
+        mapper.prevCursorOffsets = (mapper.isCursorTranslation and mapper.prevCursorOffsets) or false
     end
 end
 
