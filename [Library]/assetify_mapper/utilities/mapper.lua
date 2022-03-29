@@ -186,7 +186,6 @@ mapper.render = function(renderData)
                     if not isCursorTranslation then
                         mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + ((imports.getKeyState(mapper.controls.valueUp) and translationSpeed) or (imports.getKeyState(mapper.controls.valueDown) and -translationSpeed) or 0)
                     else
-                        outputChatBox(translationValue)
                         mapper.translationMode[("__"..translationIndex)] = mapper.translationMode[("__"..translationIndex)] or mapper.translationMode[translationIndex]
                         mapper.translationMode[translationIndex] = mapper.translationMode[("__"..translationIndex)] + (translationValue*translationSpeed)
                     end
