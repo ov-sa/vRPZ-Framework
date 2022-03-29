@@ -170,11 +170,7 @@ mapper.render = function()
                 translationIndex = (isPositionTranslation and "posZ") or "rotZ"
             end
             if translationIndex then
-                if imports.getKeyState(mapper.controls.valueUp) then
-                    mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + translationSpeed
-                elseif imports.getKeyState(mapper.controls.valueDown) then
-                    mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] - translationSpeed
-                end
+                mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + ((imports.getKeyState(mapper.controls.valueUp) and translationSpeed) or (imports.getKeyState(mapper.controls.valueDown) and -translationSpeed) or 0)
                 imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ)
             end
         end
