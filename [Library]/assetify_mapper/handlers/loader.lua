@@ -44,6 +44,11 @@ function mapper:toggle(state)
         imports.addEventHandler("onClientUIClick", mapper.ui.sceneWnd.resetBtn.element, function()
             mapper:reset()
         end)
+        imports.addEventHandler("onClientUIClick", mapper.ui.sceneWnd.saveBtn.element, function()
+            --TODO: SAVE THE SCENE
+            if #mapper.buffer.index <= 0 then outputChatBox("Your scene is empty..") return false end
+            outputChatBox("Trynna save the scene..")
+        end)
         imports.beautify.render.create(mapper.render)
         imports.beautify.render.create(mapper.render, {renderType = "input"})
         imports.addEventHandler("onClientKey", root, mapper.controlKey)
