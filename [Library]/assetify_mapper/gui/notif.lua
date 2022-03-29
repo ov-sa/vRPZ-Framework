@@ -35,6 +35,7 @@ mapper.ui.notif = {
     slideTopTickCounter = CLIENT_CURRENT_TICK, slideTopDuration = 1500,
     slideInDuration = 1500, slideOutDuration = 2000, slideDelayDuration = 1500,
     bgColor = {0, 0, 0, 250},
+    font = availableFonts[1],
     --font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 17),
     leftEdgeTexture = imports.beautify.assets["images"]["curved_square/regular/left.rw"],
     rightEdgeTexture = imports.beautify.assets["images"]["curved_square/regular/right.rw"]
