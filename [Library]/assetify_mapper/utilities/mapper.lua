@@ -172,7 +172,9 @@ mapper.render = function(renderData)
                     if camera.isCursorVisible then
                         if mapper.cache.keys.mouseLMBHold then
                             isCursorTranslation = true
-                            mapper.prevCursorOffsets = mapper.prevCursorOffsets or {CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2]}
+                            mapper.cursorOffsets = mapper.cursorOffsets or {}
+                            mapper.cursorOffsets[1], mapper.cursorOffsets[2] = CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2]
+                            mapper.prevCursorOffsets = mapper.prevCursorOffsets or {mapper.cursorOffsets[1], mapper.cursorOffsets[2]}
                             CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = CLIENT_CURSOR_OFFSET[1] - mapper.prevCursorOffsets[1], CLIENT_CURSOR_OFFSET[2] - mapper.prevCursorOffsets[2]
                             if isSlateTranslation then
                                 CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = CLIENT_CURSOR_OFFSET[1]*CLIENT_MTA_RESOLUTION[1], CLIENT_CURSOR_OFFSET[2]*CLIENT_MTA_RESOLUTION[2]
@@ -181,7 +183,11 @@ mapper.render = function(renderData)
                             end
                         end
                     end
-                    mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + ((imports.getKeyState(mapper.controls.valueUp) and translationSpeed) or (imports.getKeyState(mapper.controls.valueDown) and -translationSpeed) or 0)
+                    if not isCursorTranslation then
+                        mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + ((imports.getKeyState(mapper.controls.valueUp) and translationSpeed) or (imports.getKeyState(mapper.controls.valueDown) and -translationSpeed) or 0)
+                    else
+
+                    end
                     imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ)
                 end
             end
