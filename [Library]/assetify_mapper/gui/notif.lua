@@ -31,10 +31,9 @@ local imports = {
 
 mapper.ui.notif = {
     buffer = {},
-    startX = -5, startY = 5, paddingY = 5, offsetY = 0, height = 30,
+    startX = -5, startY = 75, paddingY = 5, offsetY = 0, height = 30,
     slideTopTickCounter = CLIENT_CURRENT_TICK, slideTopDuration = 1500,
     slideInDuration = 1500, slideOutDuration = 2000, slideDelayDuration = 1500,
-    bgColor = {0, 0, 0, 250},
     font = availableFonts[1],
     --font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 17),
     leftEdgeTexture = imports.beautify.assets["images"]["curved_square/regular/left.rw"],
@@ -72,9 +71,6 @@ mapper.ui.notif.renderUI = function()
                 notif_offsetX, notif_offsetY = imports.interpolateBetween((CLIENT_MTA_RESOLUTION[1]) + mapper.ui.notif.startX - notif_width - notif_height, mapper.ui.notif.startY + ((i - 1)*(mapper.ui.notif.height + mapper.ui.notif.paddingY)), 0, CLIENT_MTA_RESOLUTION[1], mapper.ui.notif.startY + ((i - 1)*(mapper.ui.notif.height + mapper.ui.notif.paddingY)) + (mapper.ui.notif.height*0.5) - offsetY, 0, imports.getInterpolationProgress(j.tickCounter, mapper.ui.notif.slideOutDuration), "InOutBack")
                 notifAlphaPercent = imports.interpolateBetween(1, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.tickCounter, mapper.ui.notif.slideOutDuration), "Linear")
             end
-            imports.beautify.native.drawRectangle(notif_offsetX, notif_offsetY, notif_width, notif_height, imports.tocolor(mapper.ui.notif.bgColor[1], mapper.ui.notif.bgColor[2], mapper.ui.notif.bgColor[3], mapper.ui.notif.bgColor[4]*notifAlphaPercent), false)
-            imports.beautify.native.drawImage(notif_offsetX - notif_height, notif_offsetY, notif_height, notif_height, mapper.ui.notif.leftEdgeTexture, 0, 0, 0, imports.tocolor(mapper.ui.notif.bgColor[1], mapper.ui.notif.bgColor[2], mapper.ui.notif.bgColor[3], mapper.ui.notif.bgColor[4]*notifAlphaPercent), false)
-            imports.beautify.native.drawImage(notif_offsetX + notif_width, notif_offsetY, notif_height, notif_height, mapper.ui.notif.rightEdgeTexture, 0, 0, 0, imports.tocolor(mapper.ui.notif.bgColor[1], mapper.ui.notif.bgColor[2], mapper.ui.notif.bgColor[3], mapper.ui.notif.bgColor[4]*notifAlphaPercent), false)
             imports.beautify.native.drawText(j.text, notif_offsetX, notif_offsetY, notif_offsetX + notif_width, notif_offsetY + notif_height, imports.tocolor(notifFontColor[1], notifFontColor[2], notifFontColor[3], notifFontColor[4]*notifAlphaPercent), 1, mapper.ui.notif.font, "center", "center", true, false, false, false, true)
             if j.slideStatus == "backward" then
                 if imports.math.round(notifAlphaPercent, 2) == 0 then
