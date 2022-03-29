@@ -162,11 +162,11 @@ mapper.render = function(renderData)
         local isCursorTranslation = false
         if mapper.translationMode then
             mapper.translationMode.element = mapper.isTargettingDummy
-            mapper.translationMode.type = mapper.translationMode.type or "slate"
+            mapper.translationMode.type = mapper.translationMode.type or 1
             mapper.translationMode.axis = mapper.translationMode.axis or "x"
             mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = imports.getElementLocation(mapper.translationMode.element)
             if not CLIENT_MTA_WINDOW_ACTIVE then
-                local isSlateTranslation = mapper.translationMode.type == "slate"
+                local isSlateTranslation = mapper.axis.validAxesTypes[(mapper.translationMode.type)] == "slate"
                 local translationIndex = ((mapper.translationMode.axis == "x") and ((isSlateTranslation and "posX") or "rotX")) or ((mapper.translationMode.axis == "y") and ((isSlateTranslation and "posY") or "rotY")) or ((mapper.translationMode.axis == "z") and ((isSlateTranslation and "posZ") or "rotZ")) or false
                 if translationIndex then
                     local translationSpeed, translationValue = (imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal, nil
@@ -207,7 +207,7 @@ mapper.render = function(renderData)
         end
         for i = 1, #mapper.axis.validAxesTypes, 1 do
             local j = mapper.axis.validAxesTypes[i]
-            local typeAlpha = (not mapper.translationMode and 0) or ((mapper.translationMode.type ~= j) and 0) or nil
+            local typeAlpha = (not mapper.translationMode and 0) or ((mapper.axis.validAxesTypes[(mapper.translationMode.type)] ~= j) and 0) or nil
             for k, v in imports.pairs(mapper.axis.validAxes) do
                 local axisAlpha = typeAlpha or ((mapper.translationMode.axis == k) and 100) or 10
                 local isCollisionEnabled = axisAlpha > 0
@@ -231,13 +231,8 @@ end
 mapper.controlKey = function(button, state)
     if CLIENT_MTA_WINDOW_ACTIVE or state then return false end
     if button == mapper.controls.switchTranslation then
-        local selectedMode = 0
-        for i, j in imports.pairs(mapper.axis.validAxesTypes) do
-            if mapper.translationMode.type == j then
-                selectedMode = i
-            end
-        end
-        mapper.translationMode.type = mapper.axis.validAxesTypes[(selectedMode + 1)] or mapper.axis.validAxesTypes[1]
+        local selectedMode = mapper.translationMode.type + 1
+        mapper.translationMode.type = (mapper.axis.validAxesTypes[selectedMode] and selectedMode) or 1
     elseif button == mapper.controls.switchAxis then
         if mapper.translationMode then
             local selectedAxis, validAxes = 0, {}
