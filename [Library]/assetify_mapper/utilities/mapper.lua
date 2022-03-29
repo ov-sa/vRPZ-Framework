@@ -173,8 +173,8 @@ mapper.render = function(renderData)
                     if camera.isCursorVisible then
                         if mapper.cache.keys.mouseLMBHold then
                             isCursorTranslation = true
-                            mapper.prevCursorOffsets = mapper.prevCursorOffsets or {cursorX, cursorY}
-                            CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = CLIENT_CURSOR_OFFSET[1] - mapper.prevCursorOffsets[1], CLIENT_CURSOR_OFFSET[2] - mapper.prevCursorOffsets[2]
+                            mapper.prevCursorOffset = mapper.prevCursorOffset or {cursorX, cursorY}
+                            CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = CLIENT_CURSOR_OFFSET[1] - mapper.prevCursorOffset[1], CLIENT_CURSOR_OFFSET[2] - mapper.prevCursorOffset[2]
                             if isSlateTranslation then
                                 CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = CLIENT_CURSOR_OFFSET[1]*CLIENT_MTA_RESOLUTION[1], CLIENT_CURSOR_OFFSET[2]*CLIENT_MTA_RESOLUTION[2]
                             else
@@ -207,7 +207,7 @@ mapper.render = function(renderData)
             end
         end
         mapper.isCursorTranslation = isCursorTranslation
-        mapper.prevCursorOffsets = (mapper.isCursorTranslation and mapper.prevCursorOffsets) or false
+        mapper.prevCursorOffset = (mapper.isCursorTranslation and mapper.prevCursorOffset) or false
     end
 end
 
