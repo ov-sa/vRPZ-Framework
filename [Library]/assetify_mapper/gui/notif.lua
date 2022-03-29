@@ -96,6 +96,7 @@ imports.addEventHandler("Assetify_Mapper:onNotification", root, function(message
     end
 end)
 
+--TODO: REMOVE LATER
 bindKey("z", "down", function()
     triggerEvent("Assetify_Mapper:onNotification", root, "Testing Some random Assetify Notif", {175, 175, 175, 255})
     triggerEvent("Assetify_Mapper:onNotification", root, "Testing Some random Assetify Notif Again xDDD", {255, 10, 10, 255})
