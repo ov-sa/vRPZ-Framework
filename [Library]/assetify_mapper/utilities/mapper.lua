@@ -151,7 +151,6 @@ end
 
 mapper.render = function()
     mapper.ui.renderToolWnd()
-    if mapper.translationMode and (mapper.translationMode.element ~= mapper.isTargettingDummy) then mapper.translationMode = false end
     mapper.translationMode = (mapper.isTargettingDummy and (mapper.translationMode or {})) or false    
     if mapper.translationMode then
         mapper.translationMode.element = mapper.isTargettingDummy
