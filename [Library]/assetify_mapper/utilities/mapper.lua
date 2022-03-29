@@ -210,7 +210,7 @@ mapper.render = function(renderData)
         end
         mapper.isCursorTranslation = isCursorTranslation
         mapper.cache.prevCursorY = (mapper.isCursorTranslation and mapper.cache.prevCursorY) or false
-        if not mapper.isCursorTranslation then
+        if mapper.translationMode and not mapper.isCursorTranslation then
             mapper.translationMode.__posX, mapper.translationMode.__posY, mapper.translationMode.__posZ, mapper.translationMode.__rotX, mapper.translationMode.__rotY, mapper.translationMode.__rotZ = nil, nil, nil, nil, nil, nil
         end
     end
