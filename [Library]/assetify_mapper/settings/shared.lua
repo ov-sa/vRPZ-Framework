@@ -19,7 +19,7 @@ availableControls = {
     toggleCursor = "mouse2", toggleRotation = "r", controlAction = "lctrl",
     cloneObject = "c", deleteObject = "delete",
     speedUp = "lshift", speedDown = "space",
-    moveUp = "z", moveDown = "x",
+    valueUp = "+", valueDown = "-",
     moveForwards = "forwards", moveBackwards = "backwards",
     moveLeft = "left", moveRight = "right"
 }

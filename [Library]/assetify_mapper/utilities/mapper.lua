@@ -158,47 +158,24 @@ mapper.render = function()
         mapper.translationMode.type = (not CLIENT_MTA_WINDOW_ACTIVE and imports.getKeyState(mapper.controls.toggleRotation) and "Rotation") or "Position"
         mapper.translationMode.axis = mapper.translationMode.axis or "x"
         mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = imports.getElementLocation(mapper.translationMode.element)
-        local isPositionTranslation = mapper.translationMode.type == "Position"
         if not CLIENT_MTA_WINDOW_ACTIVE and camera.isCursorVisible and not imports.getKeyState(mapper.controls.controlAction) then
-            local object_speed = ((imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal)*((isPositionTranslation and 1) or 0.1)
-            if imports.getPedControlState(mapper.controls.moveForwards) then
-                if not isPositionTranslation then
-                    imports.setElementLocation(mapper.translationMode.element, _, _, _, mapper.translationMode.rotX + object_speed, mapper.translationMode.rotY, mapper.translationMode.rotZ)
-                else
-                    imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX + object_speed, mapper.translationMode.posY, mapper.translationMode.posZ)
-                end
-            elseif imports.getPedControlState(mapper.controls.moveBackwards) then
-                if not isPositionTranslation then
-                    imports.setElementLocation(mapper.translationMode.element, _, _, _, mapper.translationMode.rotX - object_speed, mapper.translationMode.rotY, mapper.translationMode.rotZ)
-                else
-                    imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX - object_speed, mapper.translationMode.posY, mapper.translationMode.posZ)
-                end
+            local translationIndex = false
+            local isPositionTranslation = mapper.translationMode.type == "Position"
+            local translationSpeed = ((imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal)*((isPositionTranslation and 1) or 0.1)
+            if mapper.translationMode.axis == "x" then
+                translationIndex = (isPositionTranslation and "posX") or "rotX"
+            elseif mapper.translationMode.axis == "y" then
+                translationIndex = (isPositionTranslation and "posY") or "rotY"
+            elseif mapper.translationMode.axis == "z" then
+                translationIndex = (isPositionTranslation and "posZ") or "rotZ"
             end
-            if imports.getPedControlState(mapper.controls.moveLeft) then
-                if not isPositionTranslation then
-                    imports.setElementLocation(mapper.translationMode.element, _, _, _, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ + object_speed)
-                else
-                    imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY + object_speed, mapper.translationMode.posZ)
+            if translationIndex then
+                if imports.getKeyState(mapper.controls.valueUp) then
+                    mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + translationSpeed
+                elseif imports.getKeyState(mapper.controls.valueDown) then
+                    mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] - translationSpeed
                 end
-            elseif imports.getPedControlState(mapper.controls.moveRight) then
-                if not isPositionTranslation then
-                    imports.setElementLocation(mapper.translationMode.element, _, _, _, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ - object_speed)
-                else
-                    imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY - object_speed, mapper.translationMode.posZ)
-                end
-            end
-            if imports.getKeyState(mapper.controls.moveUp) then
-                if not isPositionTranslation then
-                    imports.setElementLocation(mapper.translationMode.element, _, _, _, mapper.translationMode.rotX, mapper.translationMode.rotY + object_speed, mapper.translationMode.rotZ)
-                else
-                    imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ + object_speed)
-                end
-            elseif imports.getKeyState(mapper.controls.moveDown) then
-                if not isPositionTranslation then
-                    imports.setElementLocation(mapper.translationMode.element, _, _, _, mapper.translationMode.rotX, mapper.translationMode.rotY - object_speed, mapper.translationMode.rotZ)
-                else
-                    imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ - object_speed)
-                end
+                imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ)
             end
         end
     end
@@ -269,7 +246,7 @@ mapper.controlClick = function(button, state, _, _, worldX, worldY, worldZ, targ
                 end
             end
             if not isAxisClicked then
-                --mapper.isTargettingDummy = (targetElement and mapper.buffer.element[targetElement] and targetElement) or false
+                mapper.isTargettingDummy = (targetElement and mapper.buffer.element[targetElement] and targetElement) or false
             end
         end
     end
