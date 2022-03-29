@@ -60,6 +60,7 @@ mapper = {
     },
     speed = {range = availableControlSpeeds},
     controls = availableControls,
+    cache = {keys = {}},
     buffer = {
         index = {},
         element = {}
@@ -172,8 +173,8 @@ mapper.render = function(renderData)
                     if camera.isCursorVisible then
                         if mapper.cache.keys.mouseLMBHold then
                             isCursorTranslation = true
-                            mapper.prevCursorOffset = mapper.prevCursorOffset or {cursorX, cursorY}
-                            CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = CLIENT_CURSOR_OFFSET[1] - mapper.prevCursorOffset[1], CLIENT_CURSOR_OFFSET[2] - mapper.prevCursorOffset[2]
+                            mapper.cache.prevCursorOffset = mapper.cache.prevCursorOffset or {cursorX, cursorY}
+                            CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = CLIENT_CURSOR_OFFSET[1] - mapper.cache.prevCursorOffset[1], CLIENT_CURSOR_OFFSET[2] - mapper.cache.prevCursorOffset[2]
                             if isSlateTranslation then
                                 CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = CLIENT_CURSOR_OFFSET[1]*CLIENT_MTA_RESOLUTION[1], CLIENT_CURSOR_OFFSET[2]*CLIENT_MTA_RESOLUTION[2]
                             else
@@ -206,11 +207,11 @@ mapper.render = function(renderData)
             end
         end
         mapper.isCursorTranslation = isCursorTranslation
-        if not mapper.isCursorTranslation and mapper.prevCursorOffset then
+        if not mapper.isCursorTranslation and mapper.cache.prevCursorOffset then
             mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = mapper.translationMode.posX + (mapper.translationMode.__posX or 0), mapper.translationMode.posY + (mapper.translationMode.__posY or 0), mapper.translationMode.posZ + (mapper.translationMode.__posZ or 0), mapper.translationMode.rotX + (mapper.translationMode.__rotX or 0), mapper.translationMode.rotY + (mapper.translationMode.__rotY or 0), mapper.translationMode.rotZ + (mapper.translationMode.__rotZ or 0)
             mapper.translationMode.__posX, mapper.translationMode.__posY, mapper.translationMode.__posZ, mapper.translationMode.__rotX, mapper.translationMode.__rotY, mapper.translationMode.__rotZ = nil, nil, nil, nil, nil, nil
         end
-        mapper.prevCursorOffset = (mapper.isCursorTranslation and mapper.prevCursorOffset) or false
+        mapper.cache.prevCursorOffset = (mapper.isCursorTranslation and mapper.cache.prevCursorOffset) or false
     end
 end
 
