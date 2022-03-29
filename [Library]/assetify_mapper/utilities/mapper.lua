@@ -189,15 +189,16 @@ mapper.render = function(renderData)
                         mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + translationValue
                     else
                         mapper.translationMode[("__"..translationIndex)] = mapper.translationMode[("__"..translationIndex)] or {
-                            native = mapper.translationMode[translationIndex], previous = 0, current = 0, offset = 0,
+                            native = mapper.translationMode[translationIndex],
+                            previous = 0, current = 0, offset = translationValue,
                             speed = translationSpeed
                         }
                         if mapper.translationMode[("__"..translationIndex)].speed ~= translationSpeed then
                             mapper.translationMode[("__"..translationIndex)].speed = translationSpeed
                             mapper.translationMode[("__"..translationIndex)].previous = mapper.translationMode[("__"..translationIndex)].previous + mapper.translationMode[("__"..translationIndex)].current
-                            mapper.translationMode[("__"..translationIndex)].offset = mapper.translationMode[("__"..translationIndex)].current
+                            mapper.translationMode[("__"..translationIndex)].offset = translationValue
                         end
-                        mapper.translationMode[("__"..translationIndex)].current = (translationValue*translationSpeed)
+                        mapper.translationMode[("__"..translationIndex)].current = (translationValue - mapper.translationMode[("__"..translationIndex)].offset)*translationSpeed
                         mapper.translationMode[translationIndex] = mapper.translationMode[("__"..translationIndex)].native + mapper.translationMode[("__"..translationIndex)].previous + mapper.translationMode[("__"..translationIndex)].current
                     end
                     imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ)
