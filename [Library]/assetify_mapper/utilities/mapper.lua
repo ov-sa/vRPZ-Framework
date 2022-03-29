@@ -158,6 +158,7 @@ mapper.render = function(renderData)
         mapper.cache.keys.mouseLMBHold = (mapper.cache.keys.mouse ~= "mouse1") and imports.isKeyOnHold("mouse1")
     elseif renderData.renderType == "render" then
         mapper.ui.renderToolWnd()
+        mapper.ui.renderNotif()
         mapper.translationMode = (mapper.isTargettingDummy and (mapper.translationMode or {})) or false
         local isCursorTranslation = false
         if mapper.translationMode then
