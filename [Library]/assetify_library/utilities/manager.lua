@@ -211,6 +211,7 @@ function manager:unload(assetType, assetName)
                     executions = downloadSettings.buildRate,
                     frames = 1
                 })
+                return true
             elseif assetReference.manifestData.assetClumps then
                 thread:create(function(cThread)
                     for i, j in imports.pairs(assetReference.unsyncedData.assetCache) do
@@ -226,12 +227,14 @@ function manager:unload(assetType, assetName)
                     executions = downloadSettings.buildRate,
                     frames = 1
                 })
+                return true
             else
                 if assetReference.cAsset then
                     assetReference.cAsset:destroy(assetReference.unsyncedData.rwCache)
                     shader:clearAssetBuffer(assetReference.unsyncedData.rwCache.map)
                     assetReference.unsyncedData = nil
                     imports.collectgarbage()
+                    return true
                 end
             end
         end
