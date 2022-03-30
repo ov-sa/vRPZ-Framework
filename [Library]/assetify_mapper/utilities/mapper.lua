@@ -319,18 +319,18 @@ if localPlayer then
         end
     end
 
-    imports.addEvent("Assetify:Mapper:onRecieveCacheManifest", true)
-    imports.addEventHandler("Assetify:Mapper:onRecieveCacheManifest", root, function(manifestData)
-        mapper.rwAssets[(mapper.cacheManifestPath)] = manifestData
-        mapper.ui.sceneListWnd.refreshUI()
-    end)
-
     imports.addEventHandler("Assetify:Mapper:onLoadScene", root, function(sceneName, sceneData)
         if not mapper.fetchSceneCache(sceneName) then return false end
         mapper.loadedScene = sceneName
         if sceneData then
             --TODO: READ AND CREATE CLIENT SIDE
         end
+    end)
+
+    imports.addEvent("Assetify:Mapper:onRecieveCacheManifest", true)
+    imports.addEventHandler("Assetify:Mapper:onRecieveCacheManifest", root, function(manifestData)
+        mapper.rwAssets[(mapper.cacheManifestPath)] = manifestData
+        mapper.ui.sceneListWnd.refreshUI()
     end)
 
     imports.addEventHandler("onClientElementDestroy", root, function()
