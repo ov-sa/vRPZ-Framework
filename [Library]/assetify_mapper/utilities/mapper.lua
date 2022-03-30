@@ -59,6 +59,7 @@ mapper = {
     cacheManifestPath = "files/cache/manifest.json",
     rwAssets = {}
 }
+mapper.assetPackPath = "files/assetify_library/"..(mapper.assetPack).."/"
 mapper.__index = mapper
 
 if localPlayer then
