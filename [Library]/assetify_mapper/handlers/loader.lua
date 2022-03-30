@@ -39,7 +39,7 @@ function mapper:toggle(state)
     if state then
         mapper.ui.create()
         camera:create()
-        imports.bindKey(camera.controls.toggleCursor, "down", camera.controlCursor)
+        imports.bindKey(availableControls.toggleCursor, "down", camera.controlCursor)
         imports.addEventHandler("onClientUIClick", mapper.ui.propWnd.spawnBtn.element, function()
             local assetName = imports.beautify.gridlist.getRowData(mapper.ui.propWnd.propLst.element, imports.beautify.gridlist.getSelection(mapper.ui.propWnd.propLst.element), 1)
             if not assetName then return false end
@@ -70,7 +70,7 @@ function mapper:toggle(state)
         imports.removeEventHandler("onClientKey", root, mapper.controlKey)
         imports.beautify.render.remove(mapper.render)
         imports.beautify.render.remove(mapper.render, {renderType = "input"})
-        imports.unbindKey(camera.controls.toggleCursor, "down", camera.controlCursor)
+        imports.unbindKey(availableControls.toggleCursor, "down", camera.controlCursor)
         mapper.ui.destroy()
         camera:destroy()
     end
