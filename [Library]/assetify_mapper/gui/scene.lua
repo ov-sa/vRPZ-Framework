@@ -75,7 +75,17 @@ mapper.ui = {
         },
         loadBtn = {
             text = "Load Scene",
-            startY = 321 + 5 + 5,
+            startY = 250 + 5,
+            height = 24
+        },
+        deleteBtn = {
+            text = "Delete Scene",
+            startY = 250 + 5 + 24 + 5,
+            height = 24
+        },
+        generateBtn = {
+            text = "Generate Scene",
+            startY = 250 + 5 + 24 + 5 + 25 + 5,
             height = 24
         }
     }
@@ -130,6 +140,12 @@ mapper.ui.sceneListWnd.createUI = function()
     mapper.ui.sceneListWnd.sceneLst.element = imports.beautify.gridlist.create(mapper.ui.margin, mapper.ui.margin, mapper.ui.sceneListWnd.width - (mapper.ui.margin*2), mapper.ui.sceneListWnd.sceneLst.height, mapper.ui.sceneListWnd.element, false)
     imports.beautify.setUIVisible(mapper.ui.sceneListWnd.sceneLst.element, true)
     imports.beautify.gridlist.addColumn(mapper.ui.sceneListWnd.sceneLst.element, mapper.ui.sceneListWnd.sceneLst.text, mapper.ui.sceneListWnd.width - (mapper.ui.margin*3))
+    mapper.ui.sceneListWnd.loadBtn.element = imports.beautify.button.create(mapper.ui.sceneListWnd.loadBtn.text, mapper.ui.margin, mapper.ui.margin + mapper.ui.sceneListWnd.loadBtn.startY, "default", mapper.ui.sceneListWnd.width - (mapper.ui.margin*2), mapper.ui.sceneListWnd.loadBtn.height, mapper.ui.sceneListWnd.element, false)
+    imports.beautify.setUIVisible(mapper.ui.sceneListWnd.loadBtn.element, true)
+    mapper.ui.sceneListWnd.deleteBtn.element = imports.beautify.button.create(mapper.ui.sceneListWnd.deleteBtn.text, mapper.ui.margin, mapper.ui.margin + mapper.ui.sceneListWnd.deleteBtn.startY, "default", mapper.ui.sceneListWnd.width - (mapper.ui.margin*2), mapper.ui.sceneListWnd.deleteBtn.height, mapper.ui.sceneListWnd.element, false)
+    imports.beautify.setUIVisible(mapper.ui.sceneListWnd.deleteBtn.element, true)
+    mapper.ui.sceneListWnd.generateBtn.element = imports.beautify.button.create(mapper.ui.sceneListWnd.generateBtn.text, mapper.ui.margin, mapper.ui.margin + mapper.ui.sceneListWnd.generateBtn.startY, "default", mapper.ui.sceneListWnd.width - (mapper.ui.margin*2), mapper.ui.sceneListWnd.generateBtn.height, mapper.ui.sceneListWnd.element, false)
+    imports.beautify.setUIVisible(mapper.ui.sceneListWnd.generateBtn.element, true)
     mapper.ui.sceneListWnd.refreshUI()
     imports.beautify.render.create(function()
         imports.beautify.native.drawRectangle(0, 0, mapper.ui.sceneListWnd.width, mapper.ui.sceneListWnd.height, mapper.ui.bgColor, false)
