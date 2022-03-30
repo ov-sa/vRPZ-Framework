@@ -54,8 +54,9 @@ local imports = {
 
 mapper = {
     assetPack = "object",
-    sceneManifestPath = "files/cache/manifest.json",
+    cacheDirectoryPath = "files/cache/",
     sceneDirectoryPath = "files/scenes/",
+    cacheManifestPath = "files/cache/manifest.json",
     rwAssets = {}
 }
 mapper.__index = mapper
@@ -308,15 +309,15 @@ if localPlayer then
         mapper.buffer.element[source]:destroy()
     end)
 else
-    mapper.rwAssets[(mapper.sceneManifestPath)] = imports.file.read(mapper.sceneManifestPath)
-    mapper.rwAssets[(mapper.sceneManifestPath)] = (mapper.rwAssets[(mapper.sceneManifestPath)] and imports.fromJSON(mapper.rwAssets[(mapper.sceneManifestPath)])) or {}
+    mapper.rwAssets[(mapper.cacheManifestPath)] = imports.file.read(mapper.cacheManifestPath)
+    mapper.rwAssets[(mapper.cacheManifestPath)] = (mapper.rwAssets[(mapper.cacheManifestPath)] and imports.fromJSON(mapper.rwAssets[(mapper.cacheManifestPath)])) or {}
     imports.addEvent("Assetify:Mapper:onSaveScene", true)
-    imports.addEventHandler("Assetify:Mapper:onSaveScene", root, function(sceneAssets, sceneIPL)
-        local sceneName, isNameValidated = #mapper.rwAssets[(mapper.sceneManifestPath)], false
+    imports.addEventHandler("Assetify:Mapper:onSaveScene", root, function(sceneIPL)
+        local sceneName, isNameValidated = #mapper.rwAssets[(mapper.cacheManifestPath)], false
         while (not isNameValidated) do
             local isValid = true
-            for i = 1, #mapper.rwAssets[(mapper.sceneManifestPath)], 1 do
-                local j = mapper.rwAssets[(mapper.sceneManifestPath)][i]
+            for i = 1, #mapper.rwAssets[(mapper.cacheManifestPath)], 1 do
+                local j = mapper.rwAssets[(mapper.cacheManifestPath)][i]
                 if j == sceneName then
                     isValid = false
                     break
@@ -325,8 +326,9 @@ else
             isNameValidated = isValid
             if not isNameValidated then sceneName = sceneName + 1 end
         end
-        imports.table.insert(mapper.rwAssets[(mapper.sceneManifestPath)], sceneName)
-        imports.file.write(mapper.sceneManifestPath, imports.toJSON(mapper.rwAssets[(mapper.sceneManifestPath)]))
-        --outputChatBox("Trynna save the scene..")
+        local sceneCachePath = mapper.cacheDirectoryPath.."/"..sceneName.."/"
+        imports.table.insert(mapper.rwAssets[(mapper.cacheManifestPath)], sceneName)
+        imports.file.write(mapper.cacheManifestPath, imports.toJSON(mapper.rwAssets[(mapper.cacheManifestPath)]))
+        imports.file.write(sceneCachePath.."scene.ipl", sceneIPL)
     end)
 end

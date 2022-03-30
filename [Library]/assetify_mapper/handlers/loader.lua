@@ -50,16 +50,15 @@ function mapper:toggle(state)
         end)
         imports.addEventHandler("onClientUIClick", mapper.ui.sceneWnd.saveBtn.element, function()
             if #mapper.buffer.index <= 0 then return imports.triggerEvent("Assetify:Mapper:onNotification", root, "Unfortunately, You can't save an empty scene...", availableColors.error) end
-            local sceneAssets, sceneIPL = {}, ""
+            local sceneIPL = ""
             for i = 1, #mapper.buffer.index, 1 do
                 local j = mapper.buffer.index[i]
                 local posX, posY, posZ, rotX, rotY, rotZ = imports.getElementLocation(j.element)
                 local rotW = 0
                 rotW, rotX, rotY, rotZ = imports.quat.fromEuler(rotX, rotY, rotZ)
-                sceneAssets[(j.assetName)] = true
                 sceneIPL = sceneIPL..(i - 1)..", "..(j.assetName)..", 0, "..posX..", "..posY..", "..posZ..", "..rotX..", "..rotY..", "..rotZ..", "..rotW..", -1\n"
             end
-            imports.triggerServerEvent("Assetify:Mapper:onSaveScene", localPlayer, sceneAssets, sceneIPL)
+            imports.triggerServerEvent("Assetify:Mapper:onSaveScene", localPlayer, sceneIPL)
         end)
         imports.beautify.render.create(mapper.render)
         imports.beautify.render.create(mapper.render, {renderType = "input"})
