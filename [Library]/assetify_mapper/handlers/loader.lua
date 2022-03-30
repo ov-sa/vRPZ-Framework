@@ -49,15 +49,21 @@ function mapper:toggle(state)
             mapper:reset()
         end)
         imports.addEventHandler("onClientUIClick", mapper.ui.sceneWnd.saveBtn.element, function()
-            local sceneIPL = ""
-            for i = 1, #mapper.buffer.index, 1 do
-                local j = mapper.buffer.index[i]
-                local posX, posY, posZ, rotX, rotY, rotZ = imports.getElementLocation(j.element)
-                local rotW = 0
-                rotW, rotX, rotY, rotZ = imports.quat.fromEuler(rotX, rotY, rotZ)
-                sceneIPL = sceneIPL..(i - 1)..", "..(j.assetName)..", 0, "..posX..", "..posY..", "..posZ..", "..rotX..", "..rotY..", "..rotZ..", "..rotW..", -1\n"
-            end
-            imports.triggerServerEvent("Assetify:Mapper:onSaveScene", localPlayer, _, sceneIPL)
+            thread:create(function(cThread)
+                local sceneIPL = ""
+                for i = 1, #mapper.buffer.index, 1 do
+                    local j = mapper.buffer.index[i]
+                    local posX, posY, posZ, rotX, rotY, rotZ = imports.getElementLocation(j.element)
+                    local rotW = 0
+                    rotW, rotX, rotY, rotZ = imports.quat.fromEuler(rotX, rotY, rotZ)
+                    sceneIPL = sceneIPL..(i - 1)..", "..(j.assetName)..", 0, "..posX..", "..posY..", "..posZ..", "..rotX..", "..rotY..", "..rotZ..", "..rotW..", -1\n"
+                    thread.pause()
+                end
+                imports.triggerServerEvent("Assetify:Mapper:onSaveScene", localPlayer, _, sceneIPL)
+            end):resume({
+                executions = downloadSettings.buildRate,
+                frames = 1
+            })
         end)
         imports.beautify.render.create(mapper.render)
         imports.beautify.render.create(mapper.render, {renderType = "input"})
