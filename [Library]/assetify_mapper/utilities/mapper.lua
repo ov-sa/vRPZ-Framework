@@ -49,8 +49,7 @@ local imports = {
 -----------------------
 
 mapper = {
-    assetPack = "object",
-    rwAssets = {}
+    assetPack = "object"
 }
 mapper.__index = mapper
 
@@ -63,6 +62,7 @@ if localPlayer then
             z = {color = {0, 0, 255}, rotation = {slate = {90, 0, 0}, ring = {90, 0, 0}}}
         }
     }
+    mapper.rwAssets = {}
     mapper.speed = {range = availableControlSpeeds}
     mapper.controls = availableControls
     mapper.cache = {keys = {}}
