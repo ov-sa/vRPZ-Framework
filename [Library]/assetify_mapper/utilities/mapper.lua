@@ -20,6 +20,7 @@ local imports = {
     setmetatable = setmetatable,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
+    triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent,
     getKeyState = getKeyState,
     getPedControlState = getPedControlState,
@@ -320,11 +321,13 @@ if localPlayer then
     end
 
     imports.addEventHandler("Assetify:Mapper:onLoadScene", root, function(sceneName, sceneData)
-        if not mapper.fetchSceneCache(sceneName) then return false end
         mapper.loadedScene = sceneName
         if sceneData then
             --TODO: READ AND CREATE CLIENT SIDE
         end
+        local sceneCache = mapper.fetchSceneCache(sceneName)
+        local sceneIPLPath = sceneCache.."scene.ipl"
+        imports.triggerEvent("Assetify:Mapper:onLoadScene", localPlayer, "Scene successfully loaded. ["..sceneIPLPath.."]", availableColors.success)
     end)
 
     imports.addEvent("Assetify:Mapper:onRecieveCacheManifest", true)
@@ -368,9 +371,6 @@ else
         if not mapper.loadScene(source, sceneName) then
             return imports.triggerClientEvent(source, "Assetify:Mapper:onLoadScene", source, "Scene failed to load. ["..sceneName.."]", availableColors.error)
         end
-        local sceneCache = mapper.fetchSceneCache(sceneName)
-        local sceneIPLPath = sceneCache.."scene.ipl"
-        imports.triggerClientEvent(source, "Assetify:Mapper:onLoadScene", source, "Scene successfully loaded. ["..sceneIPLPath.."]", availableColors.success)
     end)
 
     imports.addEventHandler("Assetify:Mapper:onSaveScene", root, function(sceneName, sceneIPL)
