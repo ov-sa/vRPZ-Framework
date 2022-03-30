@@ -314,6 +314,20 @@ else
     end
     imports.addEvent("Assetify:Mapper:onSaveScene", true)
     imports.addEventHandler("Assetify:Mapper:onSaveScene", root, function(sceneAssets, sceneIPL)
+        local sceneName, isNameValidated = #mapper.rwAssets[(mapper.sceneManifestPath)], false
+        while (not isNameValidated) do
+            local isValid = true
+            for i = 1, #mapper.rwAssets[(mapper.sceneManifestPath)], 1 do
+                local j = mapper.rwAssets[(mapper.sceneManifestPath)][i]
+                if j == sceneName then
+                    isValid = false
+                    break
+                end
+            end
+            isNameValidated = isValid
+            if not isNameValidated then sceneName = sceneName + 1 end
+        end
+        print(sceneName)
         --outputChatBox("Trynna save the scene..")
     end)
 end
