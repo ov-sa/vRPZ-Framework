@@ -352,7 +352,7 @@ else
             sceneCache = mapper.fetchSceneCache(sceneName)
             if not sceneCache then return false end
         else
-            sceneName, isNameValidated = #mapper.rwAssets[(mapper.cacheManifestPath)], false
+            sceneName, isNameValidated = #mapper.rwAssets[(mapper.cacheManifestPath)] + 1, false
             while (not isNameValidated) do
                 if not mapper.fetchSceneCache(sceneName) then
                     isNameValidated = true
