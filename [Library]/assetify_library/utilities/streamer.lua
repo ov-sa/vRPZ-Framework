@@ -144,6 +144,11 @@ imports.addEventHandler("onAssetifyLoad", root, function()
                 onEntityStream(j)
             end
         end
+        if streamer.buffer[-1] and streamer.buffer[-1][clientInterior] then
+            for i, j in imports.pairs(streamer.buffer[-1][clientInterior]) do
+                onEntityStream(j)
+            end
+        end
     end, streamerSettings.syncRate, 0)
     local onBoneUpdate = function()
         local clientDimension, clientInterior = streamer.cache.clientWorld.dimension, streamer.cache.clientWorld.interior
