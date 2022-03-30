@@ -31,8 +31,7 @@ local imports = {
 camera = {
     fov = 45,
     rotation = {x = 0, y = 0},
-    speed = {generic = 0, strafe = 0, range = availableControlSpeeds},
-    controls = availableControls
+    speed = {generic = 0, strafe = 0}
 }
 camera.__index = camera
 
@@ -58,17 +57,17 @@ camera.render = function()
     local camera_posX, camera_posY, camera_posZ = imports.getCameraMatrix()
     local view_angleX, view_angleY, view_angleZ = imports.math.cos(camera.rotation.y)*imports.math.sin(camera.rotation.x), imports.math.cos(camera.rotation.y)*imports.math.cos(camera.rotation.x), imports.math.sin(camera.rotation.y)
     local camera_targetX, camera_targetY, camera_targetZ = camera_posX + (view_angleX*100), camera_posY + (view_angleY*100), 0
-    local camera_speed = camera.speed.range.normal
+    local camera_speed = availableControlSpeeds.normal
     if not camera.isCursorVisible then
-        camera_speed = (imports.getKeyState(camera.controls.speedUp) and camera.speed.range.fast) or (imports.getKeyState(camera.controls.speedDown) and camera.speed.range.slow) or camera_speed
-        if imports.getPedControlState(camera.controls.moveForwards) then
+        camera_speed = (imports.getKeyState(availableControls.speedUp) and availableControlSpeeds.fast) or (imports.getKeyState(availableControls.speedDown) and availableControlSpeeds.slow) or camera_speed
+        if imports.getPedControlState(availableControls.moveForwards) then
             camera.speed.generic = camera_speed
-        elseif imports.getPedControlState(camera.controls.moveBackwards) then
+        elseif imports.getPedControlState(availableControls.moveBackwards) then
             camera.speed.generic = -camera_speed
         end
-        if imports.getPedControlState(camera.controls.moveLeft) then
+        if imports.getPedControlState(availableControls.moveLeft) then
             camera.speed.strafe = camera_speed
-        elseif imports.getPedControlState(camera.controls.moveRight) then
+        elseif imports.getPedControlState(availableControls.moveRight) then
             camera.speed.strafe = -camera_speed
         end
     end

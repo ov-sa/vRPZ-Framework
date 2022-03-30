@@ -63,8 +63,6 @@ if localPlayer then
         }
     }
     mapper.rwAssets = {}
-    mapper.speed = {range = availableControlSpeeds}
-    mapper.controls = availableControls
     mapper.cache = {keys = {}}
     mapper.buffer = {
         index = {},
@@ -171,7 +169,7 @@ if localPlayer then
                     local isSlateTranslation = mapper.axis.validAxesTypes[(mapper.translationMode.type)] == "slate"
                     local translationIndex = ((mapper.translationMode.axis == "x") and ((isSlateTranslation and "posX") or "rotX")) or ((mapper.translationMode.axis == "y") and ((isSlateTranslation and "posY") or "rotY")) or ((mapper.translationMode.axis == "z") and ((isSlateTranslation and "posZ") or "rotZ")) or false
                     if translationIndex then
-                        local translationSpeed, translationValue = (imports.getKeyState(mapper.controls.speedUp) and mapper.speed.range.fast) or (imports.getKeyState(mapper.controls.speedDown) and mapper.speed.range.slow) or mapper.speed.range.normal, nil
+                        local translationSpeed, translationValue = (imports.getKeyState(availableControls.speedUp) and availableControlSpeeds.fast) or (imports.getKeyState(availableControls.speedDown) and availableControlSpeeds.slow) or availableControlSpeeds.normal, nil
                         if camera.isCursorVisible then
                             if mapper.cache.keys.mouseLMBHold then
                                 isCursorTranslation = true
@@ -186,7 +184,7 @@ if localPlayer then
                             end
                         end
                         if not isCursorTranslation then
-                            translationValue = ((imports.getKeyState(mapper.controls.valueUp) and translationSpeed) or (imports.getKeyState(mapper.controls.valueDown) and -translationSpeed) or 0)
+                            translationValue = ((imports.getKeyState(availableControls.valueUp) and translationSpeed) or (imports.getKeyState(availableControls.valueDown) and -translationSpeed) or 0)
                             if isSlateTranslation then translationValue = translationValue*0.75 end
                             mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + translationValue
                         else
@@ -232,10 +230,10 @@ if localPlayer then
 
     mapper.controlKey = function(button, state)
         if CLIENT_MTA_WINDOW_ACTIVE or state then return false end
-        if button == mapper.controls.switchTranslation then
+        if button == availableControls.switchTranslation then
             local selectedMode = mapper.translationMode.type + 1
             mapper.translationMode.type = (mapper.axis.validAxesTypes[selectedMode] and selectedMode) or 1
-        elseif button == mapper.controls.switchAxis then
+        elseif button == availableControls.switchAxis then
             if mapper.translationMode then
                 local selectedAxis, validAxes = 0, {}
                 for i, j in imports.pairs(mapper.axis.validAxes) do
@@ -246,7 +244,7 @@ if localPlayer then
                 end
                 mapper.translationMode.axis = validAxes[(selectedAxis + 1)] or validAxes[1]
             end
-        elseif button == mapper.controls.cloneObject then
+        elseif button == availableControls.cloneObject then
             if mapper.isTargettingDummy then
                 local posX, posY, posZ, rotX, rotY, rotZ = imports.getElementLocation(mapper.isTargettingDummy)
                 mapper:create(mapper.buffer.element[(mapper.isTargettingDummy)].assetName, {
@@ -254,7 +252,7 @@ if localPlayer then
                     rotation = {x = rotX, y = rotY, z = rotZ}
                 }, true)
             end
-        elseif button == mapper.controls.deleteObject then
+        elseif button == availableControls.deleteObject then
             if mapper.isTargettingDummy then
                 imports.destroyElement(mapper.isTargettingDummy)
             end
