@@ -63,6 +63,18 @@ mapper = {
 mapper.assetPackPath = "files/assetify_library/"..(mapper.assetPack).."/"
 mapper.__index = mapper
 
+mapper.fetchSceneCache = function(sceneName)
+    local isCacheExsting = true
+    for i = 1, #mapper.rwAssets[(mapper.cacheManifestPath)], 1 do
+        local j = mapper.rwAssets[(mapper.cacheManifestPath)][i]
+        if j == sceneName then
+            isCacheExsting = false
+            break
+        end
+    end
+    return (isCacheExsting and (mapper.cacheDirectoryPath.."/"..sceneName.."/")) or false
+end
+
 if localPlayer then
     mapper.axis = {
         validAxesTypes = {"slate", "ring"},
@@ -305,7 +317,6 @@ if localPlayer then
         end
     end
 
-    
     imports.addEvent("Assetify:Mapper:onRecieveCacheManifest", true)
     imports.addEventHandler("Assetify:Mapper:onRecieveCacheManifest", root, function(manifestData)
         mapper.rwAssets[(mapper.cacheManifestPath)] = manifestData
@@ -325,18 +336,6 @@ else
 
     mapper.syncCacheManifest = function(player)
         return imports.triggerClientEvent(player, "Assetify:Mapper:onRecieveCacheManifest", player, mapper.rwAssets[(mapper.cacheManifestPath)])
-    end
-
-    mapper.fetchSceneCache = function(sceneName)
-        local isCacheExsting = true
-        for i = 1, #mapper.rwAssets[(mapper.cacheManifestPath)], 1 do
-            local j = mapper.rwAssets[(mapper.cacheManifestPath)][i]
-            if j == sceneName then
-                isCacheExsting = false
-                break
-            end
-        end
-        return (isCacheExsting and (mapper.cacheDirectoryPath.."/"..sceneName.."/")) or false
     end
 
     imports.addEventHandler("Assetify:Mapper:onLoadScene", root, function(sceneName)
