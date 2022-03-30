@@ -312,23 +312,34 @@ else
     mapper.rwAssets[(mapper.cacheManifestPath)] = imports.file.read(mapper.cacheManifestPath)
     mapper.rwAssets[(mapper.cacheManifestPath)] = (mapper.rwAssets[(mapper.cacheManifestPath)] and imports.fromJSON(mapper.rwAssets[(mapper.cacheManifestPath)])) or {}
     imports.addEvent("Assetify:Mapper:onSaveScene", true)
+    imports.addEvent("Assetify:Mapper:onGenerateScene", true)
+
+    mapper.fetchSceneCache = function(sceneName)
+        local isCacheExsting = true
+        for i = 1, #mapper.rwAssets[(mapper.cacheManifestPath)], 1 do
+            local j = mapper.rwAssets[(mapper.cacheManifestPath)][i]
+            if j == sceneName then
+                isCacheExsting = false
+                break
+            end
+        end
+        return (isCacheExsting and (mapper.cacheDirectoryPath.."/"..sceneName.."/")) or false
+    end
+
     imports.addEventHandler("Assetify:Mapper:onSaveScene", root, function(sceneIPL)
         local sceneName, isNameValidated = #mapper.rwAssets[(mapper.cacheManifestPath)], false
         while (not isNameValidated) do
-            local isValid = true
-            for i = 1, #mapper.rwAssets[(mapper.cacheManifestPath)], 1 do
-                local j = mapper.rwAssets[(mapper.cacheManifestPath)][i]
-                if j == sceneName then
-                    isValid = false
-                    break
-                end
-            end
-            isNameValidated = isValid
+            isNameValidated = mapper.fetchSceneCache(sceneName)
             if not isNameValidated then sceneName = sceneName + 1 end
         end
-        local sceneCachePath = mapper.cacheDirectoryPath.."/"..sceneName.."/"
         imports.table.insert(mapper.rwAssets[(mapper.cacheManifestPath)], sceneName)
+        local sceneCache = mapper.fetchSceneCache(sceneName)
         imports.file.write(mapper.cacheManifestPath, imports.toJSON(mapper.rwAssets[(mapper.cacheManifestPath)]))
-        imports.file.write(sceneCachePath.."scene.ipl", sceneIPL)
+        imports.file.write(sceneCache.."scene.ipl", sceneIPL)
+    end)
+
+    imports.addEventHandler("Assetify:Mapper:onGenerateScene", root, function(sceneName)
+        local sceneCache = mapper.fetchSceneCache(sceneName)
+        if not sceneCache then return false end
     end)
 end
