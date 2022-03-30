@@ -64,15 +64,15 @@ mapper.assetPackPath = "files/assetify_library/"..(mapper.assetPack).."/"
 mapper.__index = mapper
 
 mapper.fetchSceneCache = function(sceneName)
-    local isCacheExsting = true
+    local isCacheExsting = false
     for i = 1, #mapper.rwAssets[(mapper.cacheManifestPath)], 1 do
         local j = mapper.rwAssets[(mapper.cacheManifestPath)][i]
         if j == sceneName then
-            isCacheExsting = false
+            isCacheExsting = true
             break
         end
     end
-    return (isCacheExsting and (mapper.cacheDirectoryPath.."/"..sceneName.."/")) or false
+    return (isCacheExsting and (mapper.cacheDirectoryPath..sceneName.."/")) or false
 end
 
 if localPlayer then
@@ -354,15 +354,20 @@ else
         else
             sceneName, isNameValidated = #mapper.rwAssets[(mapper.cacheManifestPath)], false
             while (not isNameValidated) do
-                isNameValidated = mapper.fetchSceneCache(sceneName)
-                if not isNameValidated then sceneName = sceneName + 1 end
+                if not mapper.fetchSceneCache(sceneName) then
+                    isNameValidated = true
+                else
+                    sceneName = sceneName + 1
+                end
             end
             imports.table.insert(mapper.rwAssets[(mapper.cacheManifestPath)], sceneName)
             imports.file.write(mapper.cacheManifestPath, imports.toJSON(mapper.rwAssets[(mapper.cacheManifestPath)]))
             mapper.syncCacheManifest(source)
             sceneCache = mapper.fetchSceneCache(sceneName)
         end
-        imports.file.write(sceneCache.."scene.ipl", sceneIPL)
+        local sceneIPLPath = sceneCache.."scene.ipl"
+        imports.file.write(sceneIPLPath, sceneIPL)
+        imports.triggerClientEvent(source, "Assetify:Mapper:onNotification", source, "You've cene successfully saved. ["..sceneIPLPath.."]", availableColors.error)
     end)
 
     imports.addEventHandler("Assetify:Mapper:onGenerateScene", root, function(sceneName)
