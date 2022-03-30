@@ -200,7 +200,7 @@ mapper.ui.sceneListWnd.createUI = function()
         if not sceneSelection then return false end
         local sceneName = imports.beautify.gridlist.getRowData(mapper.ui.sceneListWnd.sceneLst.element, sceneSelection, 1)
         if not sceneName then return false end
-        print("Trynna load scene: "..sceneName)
+        imports.triggerServerEvent("Assetify:Mapper:onLoadScene", localPlayer, sceneName)
     end)
     imports.addEventHandler("onClientUIClick", mapper.ui.sceneListWnd.closeBtn.element, function()
         mapper.ui.sceneListWnd.destroyUI()
