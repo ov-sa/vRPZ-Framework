@@ -40,7 +40,9 @@ local imports = {
     setElementCollisionsEnabled = setElementCollisionsEnabled,
     isMouseClicked = isMouseClicked,
     isKeyOnHold = isKeyOnHold,
+    toJSON = toJSON,
     table = table,
+    file = file,
     beautify = beautify
 }
 
@@ -50,7 +52,10 @@ local imports = {
 -----------------------
 
 mapper = {
-    assetPack = "object"
+    assetPack = "object",
+    sceneManifestPath = "files/cache/manifest.json",
+    sceneDirectoryPath = "files/scenes/",
+    rwAssets = {}
 }
 mapper.__index = mapper
 
@@ -63,7 +68,6 @@ if localPlayer then
             z = {color = {0, 0, 255}, rotation = {slate = {90, 0, 0}, ring = {90, 0, 0}}}
         }
     }
-    mapper.rwAssets = {}
     mapper.cache = {keys = {}}
     mapper.buffer = {
         index = {},
@@ -303,8 +307,13 @@ if localPlayer then
         mapper.buffer.element[source]:destroy()
     end)
 else
+    mapper.rwAssets[(mapper.sceneManifestPath)] = imports.file.read(mapper.sceneManifestPath)
+    if not mapper.rwAssets[(mapper.sceneManifestPath)] then
+        mapper.rwAssets[(mapper.sceneManifestPath)] = {}
+        imports.file.write(mapper.sceneManifestPath, imports.toJSON(mapper.rwAssets[(mapper.sceneManifestPath)]))
+    end
     imports.addEvent("Assetify:Mapper:onSaveScene", true)
     imports.addEventHandler("Assetify:Mapper:onSaveScene", root, function(sceneAssets, sceneIPL)
-        outputChatBox("Trynna save the scene..")
+        --outputChatBox("Trynna save the scene..")
     end)
 end
