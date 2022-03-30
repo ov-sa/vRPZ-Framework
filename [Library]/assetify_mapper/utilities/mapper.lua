@@ -138,6 +138,7 @@ if localPlayer then
     end
 
     function mapper:reset()
+        mapper.loadedScene = false
         for i, j in imports.pairs(mapper.buffer.element) do
             if i and imports.isElement(i) then
                 imports.destroyElement(i)
