@@ -49,13 +49,13 @@ mapper.ui = {
             text = imports.string.upper("Props"),
             height = 321
         },
-        loadBtn = {
-            text = "Load Scene",
+        resetBtn = {
+            text = "Reset Scene",
             startY = 321 + 5 + 5,
             height = 24
         },
-        resetBtn = {
-            text = "Reset Scene",
+        loadBtn = {
+            text = "Load Scene",
             startY = 321 + 5 + 5 + 24 + 5,
             height = 24
         },
@@ -63,6 +63,14 @@ mapper.ui = {
             text = "Save Scene",
             startY = 321 + 5 + 5 + 24 + 5 + 24 + 5,
             height = 24
+        }
+    },
+
+    sceneListWnd = {
+        width = 265, height = 418,
+        sceneLst = {
+            text = imports.string.upper("Scenes"),
+            height = 321
         }
     }
 }
