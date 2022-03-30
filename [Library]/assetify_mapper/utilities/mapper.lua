@@ -41,6 +41,7 @@ local imports = {
     isMouseClicked = isMouseClicked,
     isKeyOnHold = isKeyOnHold,
     toJSON = toJSON,
+    fromJSON = fromJSON,
     table = table,
     file = file,
     beautify = beautify
@@ -308,10 +309,7 @@ if localPlayer then
     end)
 else
     mapper.rwAssets[(mapper.sceneManifestPath)] = imports.file.read(mapper.sceneManifestPath)
-    if not mapper.rwAssets[(mapper.sceneManifestPath)] then
-        mapper.rwAssets[(mapper.sceneManifestPath)] = {}
-        imports.file.write(mapper.sceneManifestPath, imports.toJSON(mapper.rwAssets[(mapper.sceneManifestPath)]))
-    end
+    mapper.rwAssets[(mapper.sceneManifestPath)] = (mapper.rwAssets[(mapper.sceneManifestPath)] and imports.fromJSON(mapper.rwAssets[(mapper.sceneManifestPath)])) or {}
     imports.addEvent("Assetify:Mapper:onSaveScene", true)
     imports.addEventHandler("Assetify:Mapper:onSaveScene", root, function(sceneAssets, sceneIPL)
         local sceneName, isNameValidated = #mapper.rwAssets[(mapper.sceneManifestPath)], false
@@ -327,6 +325,8 @@ else
             isNameValidated = isValid
             if not isNameValidated then sceneName = sceneName + 1 end
         end
+        imports.table.insert(mapper.rwAssets[(mapper.sceneManifestPath)], sceneName)
+        imports.file.write(mapper.sceneManifestPath, imports.toJSON(mapper.rwAssets[(mapper.sceneManifestPath)]))
         --outputChatBox("Trynna save the scene..")
     end)
 end
