@@ -17,6 +17,7 @@ local imports = {
     tocolor = tocolor,
     isElement = isElement,
     destroyElement = destroyElement,
+    addEventHandler = addEventHandler,
     string = string,
     beautify = beautify
 }
