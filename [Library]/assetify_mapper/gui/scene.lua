@@ -68,7 +68,7 @@ mapper.ui = {
     },
 
     sceneListWnd = {
-        width = 400, height = 400,
+        width = 400, height = 347,
         sceneLst = {
             text = imports.string.upper("Scenes"),
             height = 250
@@ -85,7 +85,7 @@ mapper.ui = {
         },
         generateBtn = {
             text = "Generate Scene",
-            startY = 250 + 5 + 24 + 5 + 25 + 5,
+            startY = 250 + 5 + 24 + 5 + 24 + 5,
             height = 24
         }
     }
