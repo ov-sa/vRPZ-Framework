@@ -319,3 +319,52 @@ function hasVehicleUpgrade(vehicle, upgradeID)
 	return false
 
 end
+
+---------------------------------------
+--[[ Function: Table Binary Search ]]--
+---------------------------------------
+
+local fcompf = function(a,b) return a < b end
+local fcompr = function(a,b) return a > b end
+local default_fcompval = function(value) return value end
+function binsearch(tbl,value,fcompval,reversed)
+    local fcompval = fcompval or default_fcompval
+    local fcomp = reversed and fcompr or fcompf
+    local iStart,iEnd,iMid = 1, #tbl, 0
+    while iStart <= iEnd do
+        iMid = math.floor((iStart+iEnd)/2)
+        local value2 = fcompval(tbl[iMid])
+
+        if value == value2 then
+            local tfound, num = {iMid,iMid}, iMid - 1
+            while value == fcompval(tbl[num]) do
+               tfound[1], num = num, num - 1
+            end
+            num = iMid + 1
+            while value == fcompval(tbl[num]) do
+               tfound[2], num = num, num + 1
+            end
+            return tfound
+        elseif fcomp(value, value2) then
+            iEnd = iMid - 1
+        else
+            iStart = iMid + 1
+        end
+    end
+end
+
+----------------------------------------------
+--[[ Function: Get Player By Partial Name ]]--
+----------------------------------------------
+
+function getPlayerFromPartialName(name)
+    local name = name and name:gsub("#%x%x%x%x%x%x", ""):lower() or nil
+    if name then
+        for _, player in ipairs(getElementsByType("player")) do
+            local name_ = getPlayerName(player):gsub("#%x%x%x%x%x%x", ""):lower()
+            if name_:find(name, 1, true) then
+                return player
+            end
+        end
+    end
+end

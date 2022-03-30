@@ -22,5 +22,6 @@ FRAMEWORK_CONFIGS = {
     ["Loots"] = exports.config_loader:getConfig("Loots"),
     ["Player"] = exports.config_loader:getConfig("Player"),
     ["Character"] = exports.config_loader:getConfig("Character"),
-    ["Inventory"] = exports.config_loader:getConfig("Inventory")
+    ["Inventory"] = exports.config_loader:getConfig("Inventory"),
+    ["Party"] = exports.config_loader:getConfig("Party")
 }

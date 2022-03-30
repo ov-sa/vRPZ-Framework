@@ -34,14 +34,26 @@
     <script src="modules/player/client/exports.lua" type="client"/>
     <export function="isPlayerInitialized" type="shared"/>
     <export function="getPlayerChannel" type="shared"/>
+    <export function="getPlayerParty" type="shared"/>
     <export function="fetchPlayer" type="server"/>
     <export function="setPlayerData" type="server"/>
     <export function="getPlayerData" type="server"/>
     <export function="getPlayerSerial" type="server"/>
     <export function="getPlayerFromSerial" type="server"/>
     <export function="setPlayerChannel" type="server"/>
+    <export function="setPlayerParty" type="server"/>
     <export function="setPlayerLanguage" type="client"/>
     <export function="getPlayerLanguage" type="client"/>
+
+    <!-- Modules: Party -->
+    <script src="modules/party/server/index.lua" type="server"/>
+    <script src="modules/party/server/exports.lua" type="server"/>
+    <export function="createParty" type="server"/>
+    <export function="destroyParty" type="server"/>
+    <export function="getPartyMembers" type="server"/>
+    <export function="getParty" type="server"/>
+    <export function="invitePartyMember" type="server"/>
+    <export function="removePartyMember" type="server"/>
 
     <!-- Modules: Character -->
     <script src="modules/character/shared/index.lua" type="shared"/>
@@ -127,6 +139,7 @@
     <script src="handlers/channel.lua" type="server"/>
     <script src="handlers/resumer.lua" type="server"/>
     <script src="handlers/wasted.lua" type="server"/>
+    <script src="handlers/party.lua" type="server"/>
 
     <!-- Files: Images: GUIs -->
     <file src="files/images/login/login.rw"/>

@@ -24,6 +24,7 @@ local imports = {
 
 CPlayer.CLanguage = nil
 CPlayer.CChannel = nil
+CPlayer.CParty = nil
 
 CPlayer.setLanguage = function(language)
     if not language then return false end
@@ -41,4 +42,10 @@ CPlayer.setChannel = function(channelIndex)
     if not CPlayer.isInitialized(localPlayer) or not channelIndex or not FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][channelIndex] then return false end
     CPlayer.CChannel = channelIndex
     return true 
+end
+
+CPlayer.setParty = function(partyData)
+    if not CPlayer.isInitialized(localPlayer) then return false end
+    CPlayer.CParty = partyData
+    return true
 end

@@ -9,15 +9,6 @@
 
 
 -----------------
---[[ Imports ]]--
------------------
-
-local imports = {
-    triggerClientEvent = triggerClientEvent
-}
-
-
------------------
 --[[ Exports ]]--
 -----------------
 
@@ -27,3 +18,4 @@ function getPlayerData(...) return CPlayer.getData(...) end
 function getPlayerSerial(...) return CPlayer.getSerial(...) end
 function getPlayerFromSerial(...) return CPlayer.getPlayer(...) end
 function setPlayerChannel(...) return CPlayer.setChannel(...) end
+function setPlayerParty(...) return CPlayer.setParty(...) end

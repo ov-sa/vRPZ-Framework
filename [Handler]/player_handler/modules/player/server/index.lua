@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    type = type,
     tonumber = tonumber,
     isElement = isElement,
     getElementType = getElementType,
@@ -92,4 +93,19 @@ CPlayer.setChannel = function(player, channelIndex)
     imports.triggerClientEvent(player, "Client:onUpdateChannel", player, channelIndex)
     CPlayer.CChannel[player] = channelIndex
     return true 
+end
+
+CPlayer.setParty = function(player, partyData)
+    if imports.type(player) == "table" then
+        imports.triggerClientEvent(player, "Client:onUpdateParty", player[1], partyData)
+        for i = 1, #player do
+            CPlayer.CParty[player[i]] = partyData
+        end
+        return true
+    else
+        if not CPlayer.isInitialized(player) then return false end
+        imports.triggerClientEvent(partyData.members, "Client:onUpdateParty", player, partyData)
+        CPlayer.CParty[player] = partyData
+        return true
+    end
 end
