@@ -28,3 +28,9 @@ availableColors = {
     success = {50, 255, 50, 255},
     error = {255, 50, 50, 255}
 }
+
+downloadSettings = {
+    speed = 1250000,
+    syncRate = 50,
+    buildRate = 500
+}
