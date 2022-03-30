@@ -27,9 +27,9 @@ mapper.ui.toolWnd = {
 }
 
 
--------------------------------
---[[ Functions: Renders UI ]]--
--------------------------------
+------------------------------
+--[[ Function: Renders UI ]]--
+------------------------------
 
 mapper.ui.toolWnd.renderUI = function()
     imports.beautify.gridlist.setSelection(mapper.ui.sceneWnd.propLst.element, (mapper.isTargettingDummy and mapper.buffer.element[(mapper.isTargettingDummy)].id) or 0)
