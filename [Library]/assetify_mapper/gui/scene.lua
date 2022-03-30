@@ -193,6 +193,10 @@ mapper.ui.sceneListWnd.createUI = function()
         renderType = "preViewRTRender"
     })
 
+    imports.addEventHandler("onClientUIClick", mapper.ui.sceneListWnd.loadBtn.element, function()
+        outputChatBox("Trynna load scene...")
+        --TODO: ...
+    end)
     imports.addEventHandler("onClientUIClick", mapper.ui.sceneListWnd.closeBtn.element, function()
         mapper.ui.sceneListWnd.destroyUI()
     end)
