@@ -20,6 +20,7 @@ local imports = {
     setmetatable = setmetatable,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
+    triggerClientEvent = triggerClientEvent,
     getKeyState = getKeyState,
     getPedControlState = getPedControlState,
     setElementLocation = setElementLocation,
@@ -304,6 +305,12 @@ if localPlayer then
         end
     end
 
+    
+    imports.addEvent("Assetify:Mapper:onRecieveCacheManifest", true)
+    imports.addEventHandler("Assetify:Mapper:onRecieveCacheManifest", root, function(manifestData)
+        mapper.rwAssets[(mapper.cacheManifestPath)] = manifestData
+    end)
+
     imports.addEventHandler("onClientElementDestroy", root, function()
         if mapper.isLibraryStopping or not mapper.buffer.element[source] then return false end
         if mapper.isTargettingDummy == source then mapper.isTargettingDummy = false end
@@ -315,6 +322,10 @@ else
     imports.addEvent("Assetify:Mapper:onLoadScene", true)
     imports.addEvent("Assetify:Mapper:onSaveScene", true)
     imports.addEvent("Assetify:Mapper:onGenerateScene", true)
+
+    mapper.syncCacheManifest = function(player)
+        return imports.triggerClientEvent(player, "Assetify:Mapper:onRecieveCacheManifest", player, mapper.rwAssets[(mapper.cacheManifestPath)])
+    end
 
     mapper.fetchSceneCache = function(sceneName)
         local isCacheExsting = true
@@ -331,8 +342,8 @@ else
     imports.addEventHandler("Assetify:Mapper:onLoadScene", root, function(sceneName)
         local sceneCache = mapper.fetchSceneCache(sceneName)
         if not sceneCache then return false end
-        local sceneIPL = imports.file.read(sceneCache.."scene.ipl")
-        if not sceneIPL then return false end
+        --local sceneIPL = imports.file.read(sceneCache.."scene.ipl")
+        --if not sceneIPL then return false end
         --TODO: SYNC W/ CLIENT
     end)
 
@@ -349,6 +360,7 @@ else
             end
             imports.table.insert(mapper.rwAssets[(mapper.cacheManifestPath)], sceneName)
             imports.file.write(mapper.cacheManifestPath, imports.toJSON(mapper.rwAssets[(mapper.cacheManifestPath)]))
+            mapper.syncCacheManifest(source)
             sceneCache = mapper.fetchSceneCache(sceneName)
         end
         imports.file.write(sceneCache.."scene.ipl", sceneIPL)
