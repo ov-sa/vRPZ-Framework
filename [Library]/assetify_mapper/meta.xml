@@ -15,7 +15,7 @@
     <script src="utilities/shaders/axis_mapper.lua" type="client"/>
     <script src="settings/shared.lua" type="shared"/>
     <script src="settings/client.lua" type="client"/>
-    <script src="utilities/mapper.lua" type="client"/>
+    <script src="utilities/mapper.lua" type="shared"/>
     <script src="utilities/camera.lua" type="client"/>
 
     <!-- GUIs -->
