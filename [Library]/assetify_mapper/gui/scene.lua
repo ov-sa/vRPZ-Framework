@@ -118,7 +118,7 @@ mapper.ui.sceneWnd.createUI = function()
 end
 
 mapper.ui.sceneListWnd.createUI = function()
-    mapper.ui.sceneListWnd.element = imports.beautify.card.create(mapper.ui.sceneListWnd.startX, mapper.ui.sceneListWnd.startY, mapper.ui.sceneListWnd.width, mapper.ui.sceneListWnd.height)
+    mapper.ui.sceneListWnd.element = imports.beautify.card.create((CLIENT_MTA_RESOLUTION[1] - mapper.ui.sceneListWnd.width)*0.5, (CLIENT_MTA_RESOLUTION[2] - mapper.ui.sceneListWnd.height)*0.5, mapper.ui.sceneListWnd.width, mapper.ui.sceneListWnd.height)
     imports.beautify.setUIVisible(mapper.ui.sceneListWnd.element, true)
 end
 
