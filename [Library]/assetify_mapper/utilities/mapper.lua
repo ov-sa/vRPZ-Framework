@@ -324,9 +324,12 @@ if localPlayer then
     imports.addEventHandler("Assetify:Mapper:onLoadScene", root, function(sceneName, sceneData)
         mapper.loadedScene = sceneName
         if sceneData then
-            --TODO: READ AND CREATE CLIENT SIDE
             local sceneCache = mapper.fetchSceneCache(sceneName)
             local sceneIPLPath = sceneCache.."scene.ipl"
+            if sceneData.ipl then
+            --TODO: PARSE AND CREATING DUMMIES HERE..
+                print("LOAD ALL DUMMIES AND SET LIBRARY ON COOLDOWN WHILE ITS BEING LOADED..")
+            end
             imports.triggerEvent("Assetify:Mapper:onLoadScene", localPlayer, "Scene successfully loaded. ["..sceneIPLPath.."]", availableColors.success)
         end
     end)
@@ -358,11 +361,8 @@ else
         local sceneData = false
         if not isActive then
             sceneData = {
-                ipl = false
+                ipl = imports.file.read(sceneCache.."scene.ipl")
             }
-            print("TRYING TO PASSIVE LOAD SCENE..")
-            --TODO: NEED TO READ IPL AND SEND ON THIS BLOCK..
-            --imports.triggerClientEvent(player, "Assetify:Mapper:onLoadScene", player, sceneName)
         end
         imports.triggerClientEvent(player, "Assetify:Mapper:onLoadScene", player, sceneName, sceneData)
         return true
