@@ -32,7 +32,7 @@ mapper.ui.notif = {
     buffer = {},
     startX = -mapper.ui.margin, startY = 65, paddingY = 10, offsetY = 0, height = 15,
     slideTopTickCounter = CLIENT_CURRENT_TICK,
-    slideInDuration = 850, slideOutDuration = 500, slideTopDuration = 500, slideDelayDuration = 2000,
+    slideInDuration = 1000, slideOutDuration = 1000, slideTopDuration = 1000, slideDelayDuration = 2500,
     font = availableFonts[1]
 }
 
