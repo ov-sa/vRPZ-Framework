@@ -311,6 +311,7 @@ if localPlayer then
 else
     mapper.rwAssets[(mapper.cacheManifestPath)] = imports.file.read(mapper.cacheManifestPath)
     mapper.rwAssets[(mapper.cacheManifestPath)] = (mapper.rwAssets[(mapper.cacheManifestPath)] and imports.fromJSON(mapper.rwAssets[(mapper.cacheManifestPath)])) or {}
+    imports.addEvent("Assetify:Mapper:onLoadScene", true)
     imports.addEvent("Assetify:Mapper:onSaveScene", true)
     imports.addEvent("Assetify:Mapper:onGenerateScene", true)
 
@@ -325,6 +326,14 @@ else
         end
         return (isCacheExsting and (mapper.cacheDirectoryPath.."/"..sceneName.."/")) or false
     end
+
+    imports.addEventHandler("Assetify:Mapper:onLoadScene", root, function(sceneName)
+        local sceneCache = mapper.fetchSceneCache(sceneName)
+        if not sceneCache then return false end
+        local sceneIPL = imports.file.read(sceneCache.."scene.ipl")
+        if not sceneIPL then return false end
+        --TODO: SYNC W/ CLIENT
+    end)
 
     imports.addEventHandler("Assetify:Mapper:onSaveScene", root, function(sceneName, sceneIPL)
         local sceneCache = false
