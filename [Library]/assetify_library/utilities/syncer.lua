@@ -47,8 +47,8 @@ if localPlayer then
     availableAssetPacks = {}
     imports.addEvent("onAssetifyLoad", true)
     imports.addEvent("onAssetifyUnLoad", false)
-    imports.addEvent("onAssetifyLoad", false)
-    imports.addEvent("onAssetifyUnLoad", false)
+    imports.addEvent("onAssetLoad", false)
+    imports.addEvent("onAssetUnLoad", false)
 
     function syncer:syncElementModel(...)        
         return imports.triggerEvent("Assetify:onRecieveElementModel", localPlayer, ...)
