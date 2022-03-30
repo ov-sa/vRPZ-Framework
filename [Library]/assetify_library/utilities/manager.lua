@@ -82,6 +82,7 @@ end
 function manager:load(assetType, assetName)
     if not syncer.isLibraryLoaded then return false end
     if not assetType or not assetName then return false end
+    if manager:isLoaded(assetType, assetName) then return false end
     local packReference = availableAssetPacks[assetType]
     if packReference and packReference.rwDatas then
         local assetReference = packReference.rwDatas[assetName]
@@ -172,6 +173,7 @@ function manager:load(assetType, assetName)
                     executions = downloadSettings.buildRate,
                     frames = 1
                 })
+                return true
             else
                 return asset:create(assetType, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache, {
                     txd = assetPath..(asset.references.asset)..".txd",
