@@ -70,29 +70,29 @@ mapper.ui = {
     },
 
     sceneListWnd = {
-        width = 400, height = 297,
+        width = 450, height = 297,
         sceneLst = {
             text = imports.string.upper("Scenes"),
             height = 171
         },
         loadBtn = {
             text = "Load Scene",
-            startY = 200 + 5,
+            startY = 171 + 5,
             height = 24
         },
         deleteBtn = {
             text = "Delete Scene",
-            startY = 200 + 5 + 24 + 5,
+            startY = 171 + 5 + 24 + 5,
             height = 24
         },
         generateBtn = {
             text = "Generate Scene",
-            startY = 200 + 5 + 24 + 5 + 24 + 5,
+            startY = 171 + 5 + 24 + 5 + 24 + 5,
             height = 24
         },
         closeBtn = {
             text = "Close",
-            startY = 200 + 5 + 24 + 5 + 24 + 5 + 24 + 5,
+            startY = 171 + 5 + 24 + 5 + 24 + 5 + 24 + 5,
             height = 24
         }
     }
@@ -183,6 +183,8 @@ mapper.ui.sceneListWnd.createUI = function()
     imports.beautify.setUIVisible(mapper.ui.sceneListWnd.deleteBtn.element, true)
     mapper.ui.sceneListWnd.generateBtn.element = imports.beautify.button.create(mapper.ui.sceneListWnd.generateBtn.text, mapper.ui.margin, mapper.ui.margin + mapper.ui.sceneListWnd.generateBtn.startY, "default", mapper.ui.sceneListWnd.width - (mapper.ui.margin*2), mapper.ui.sceneListWnd.generateBtn.height, mapper.ui.sceneListWnd.element, false)
     imports.beautify.setUIVisible(mapper.ui.sceneListWnd.generateBtn.element, true)
+    mapper.ui.sceneListWnd.closeBtn.element = imports.beautify.button.create(mapper.ui.sceneListWnd.closeBtn.text, mapper.ui.margin, mapper.ui.margin + mapper.ui.sceneListWnd.closeBtn.startY, "default", mapper.ui.sceneListWnd.width - (mapper.ui.margin*2), mapper.ui.sceneListWnd.closeBtn.height, mapper.ui.sceneListWnd.element, false)
+    imports.beautify.setUIVisible(mapper.ui.sceneListWnd.closeBtn.element, true)
     mapper.ui.sceneListWnd.refreshUI()
     imports.beautify.render.create(function()
         imports.beautify.native.drawRectangle(0, 0, mapper.ui.sceneListWnd.width, mapper.ui.sceneListWnd.height, mapper.ui.bgColor, false)
