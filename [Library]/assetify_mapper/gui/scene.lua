@@ -18,6 +18,7 @@ local imports = {
     isElement = isElement,
     destroyElement = destroyElement,
     addEventHandler = addEventHandler,
+    triggerServerEvent = triggerServerEvent,
     string = string,
     beautify = beautify
 }
