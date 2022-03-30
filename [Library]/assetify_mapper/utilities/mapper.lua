@@ -71,11 +71,14 @@ mapper.fetchSceneCache = function(sceneName)
     for i = 1, #mapper.rwAssets[(mapper.cacheManifestPath)], 1 do
         local j = mapper.rwAssets[(mapper.cacheManifestPath)][i]
         if j == sceneName then
-            isCacheExsting = true
+            isCacheExsting = i
             break
         end
     end
-    return (isCacheExsting and (mapper.cacheDirectoryPath..sceneName.."/")) or false
+    if isCacheExsting then
+        return mapper.cacheDirectoryPath..sceneName.."/", isCacheExsting
+    end
+    return false
 end
 
 if localPlayer then
@@ -322,9 +325,10 @@ if localPlayer then
     end
 
     imports.addEventHandler("Assetify:Mapper:onLoadScene", root, function(sceneName, sceneData)
-        mapper.loadedScene = sceneName
+        local sceneCache, sceneIndex = mapper.fetchSceneCache(sceneName)
+        mapper.loadedScene = sceneIndex
         if sceneData then
-            local sceneCache = mapper.fetchSceneCache(sceneName)
+            print(tostring(sceneCache))
             local sceneIPLPath = sceneCache.."scene.ipl"
             if sceneData.ipl then
             --TODO: PARSE AND CREATING DUMMIES HERE..
