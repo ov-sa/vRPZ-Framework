@@ -73,7 +73,7 @@ mapper.ui = {
         width = 400, height = 297,
         sceneLst = {
             text = imports.string.upper("Scenes"),
-            height = 200
+            height = 171
         },
         loadBtn = {
             text = "Load Scene",
@@ -88,6 +88,11 @@ mapper.ui = {
         generateBtn = {
             text = "Generate Scene",
             startY = 200 + 5 + 24 + 5 + 24 + 5,
+            height = 24
+        },
+        closeBtn = {
+            text = "Close",
+            startY = 200 + 5 + 24 + 5 + 24 + 5 + 24 + 5,
             height = 24
         }
     }
