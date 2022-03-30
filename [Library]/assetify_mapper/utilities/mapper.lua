@@ -325,6 +325,14 @@ if localPlayer then
         mapper.ui.sceneListWnd.refreshUI()
     end)
 
+    imports.addEventHandler("Assetify:Mapper:onLoadScene", root, function(sceneName, sceneIPL)
+        if not mapper.fetchSceneCache(sceneName) then return false end
+        mapper.loadedScene = sceneName
+        if sceneIPL then
+            --TODO: READ AND CREATE CLIENT SIDE
+        end
+    end)
+
     imports.addEventHandler("onClientElementDestroy", root, function()
         if mapper.isLibraryStopping or not mapper.buffer.element[source] then return false end
         if mapper.isTargettingDummy == source then mapper.isTargettingDummy = false end
@@ -340,12 +348,19 @@ else
         return imports.triggerClientEvent(player, "Assetify:Mapper:onRecieveCacheManifest", player, mapper.rwAssets[(mapper.cacheManifestPath)])
     end
 
-    imports.addEventHandler("Assetify:Mapper:onLoadScene", root, function(sceneName)
+    mapper.loadScene = function(player, sceneName)
         local sceneCache = mapper.fetchSceneCache(sceneName)
         if not sceneCache then return false end
-        --local sceneIPL = imports.file.read(sceneCache.."scene.ipl")
-        --if not sceneIPL then return false end
-        --TODO: SYNC W/ CLIENT
+        return imports.triggerClientEvent(player, "Assetify:Mapper:onLoadScene", player, sceneName)
+    end
+
+    imports.addEventHandler("Assetify:Mapper:onLoadScene", root, function(sceneName)
+        if not mapper.loadScene(source, sceneName) then
+            return imports.triggerClientEvent(source, "Assetify:Mapper:onLoadScene", source, "Scene failed to load. ["..sceneName.."]", availableColors.error)
+        end
+        local sceneCache = mapper.fetchSceneCache(sceneName)
+        local sceneIPLPath = sceneCache.."scene.ipl"
+        imports.triggerClientEvent(source, "Assetify:Mapper:onLoadScene", source, "Scene successfully loaded. ["..sceneIPLPath.."]", availableColors.success)
     end)
 
     imports.addEventHandler("Assetify:Mapper:onSaveScene", root, function(sceneName, sceneIPL)
@@ -365,6 +380,7 @@ else
             imports.table.insert(mapper.rwAssets[(mapper.cacheManifestPath)], sceneName)
             imports.file.write(mapper.cacheManifestPath, imports.toJSON(mapper.rwAssets[(mapper.cacheManifestPath)]))
             mapper.syncCacheManifest(source)
+            mapper.loadScene(source, sceneName, true)
             sceneCache = mapper.fetchSceneCache(sceneName)
         end
         local sceneIPLPath = sceneCache.."scene.ipl"
