@@ -327,7 +327,6 @@ else
             isNameValidated = isValid
             if not isNameValidated then sceneName = sceneName + 1 end
         end
-        print(sceneName)
         --outputChatBox("Trynna save the scene..")
     end)
 end
