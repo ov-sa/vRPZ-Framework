@@ -128,12 +128,23 @@ mapper.ui.sceneListWnd.createUI = function()
     mapper.ui.sceneListWnd.sceneLst.element = imports.beautify.gridlist.create(mapper.ui.margin, mapper.ui.margin, mapper.ui.sceneListWnd.width - (mapper.ui.margin*2), mapper.ui.sceneListWnd.sceneLst.height, mapper.ui.sceneListWnd.element, false)
     imports.beautify.setUIVisible(mapper.ui.sceneListWnd.sceneLst.element, true)
     imports.beautify.gridlist.addColumn(mapper.ui.sceneListWnd.sceneLst.element, mapper.ui.sceneListWnd.sceneLst.text, mapper.ui.sceneListWnd.width - (mapper.ui.margin*3))
+    mapper.ui.sceneListWnd.refreshUI()
     imports.beautify.render.create(function()
         imports.beautify.native.drawRectangle(0, 0, mapper.ui.sceneListWnd.width, mapper.ui.sceneListWnd.height, mapper.ui.bgColor, false)
     end, {
         elementReference = mapper.ui.sceneListWnd.element,
         renderType = "preViewRTRender"
     })
+end
+
+mapper.ui.sceneListWnd.refreshUI = function()
+    if mapper.rwAssets[(mapper.cacheManifestPath)] then
+        for i = 1, #mapper.rwAssets[(mapper.cacheManifestPath)], 1 do
+            local j = mapper.rwAssets[(mapper.cacheManifestPath)][i]
+            local rowIndex = imports.beautify.gridlist.addRow(mapper.ui.sceneListWnd.sceneLst.element)
+            imports.beautify.gridlist.setRowData(mapper.ui.sceneListWnd.sceneLst.element, rowIndex, 1, j)
+        end
+    end
 end
 
 mapper.ui.sceneListWnd.destroyUI = function()
