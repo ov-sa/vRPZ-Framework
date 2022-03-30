@@ -40,34 +40,6 @@ function mapper:toggle(state)
         mapper.ui.create()
         camera:create()
         imports.bindKey(availableControls.toggleCursor, "down", camera.controlCursor)
-        imports.addEventHandler("onClientUIClick", mapper.ui.propWnd.spawnBtn.element, function()
-            local assetName = imports.beautify.gridlist.getRowData(mapper.ui.propWnd.propLst.element, imports.beautify.gridlist.getSelection(mapper.ui.propWnd.propLst.element), 1)
-            if not assetName then return false end
-            mapper.isSpawningDummy = {assetName = assetName}
-        end)
-        imports.addEventHandler("onClientUIClick", mapper.ui.sceneWnd.viewBtn.element, function()
-            mapper.ui.sceneListWnd.createUI()
-        end)
-        imports.addEventHandler("onClientUIClick", mapper.ui.sceneWnd.resetBtn.element, function()
-            mapper:reset()
-        end)
-        imports.addEventHandler("onClientUIClick", mapper.ui.sceneWnd.saveBtn.element, function()
-            thread:create(function(cThread)
-                local sceneIPL = ""
-                for i = 1, #mapper.buffer.index, 1 do
-                    local j = mapper.buffer.index[i]
-                    local posX, posY, posZ, rotX, rotY, rotZ = imports.getElementLocation(j.element)
-                    local rotW = 0
-                    rotW, rotX, rotY, rotZ = imports.quat.fromEuler(rotX, rotY, rotZ)
-                    sceneIPL = sceneIPL..(i - 1)..", "..(j.assetName)..", 0, "..posX..", "..posY..", "..posZ..", "..rotX..", "..rotY..", "..rotZ..", "..rotW..", -1\n"
-                    thread.pause()
-                end
-                imports.triggerServerEvent("Assetify:Mapper:onSaveScene", localPlayer, _, sceneIPL)
-            end):resume({
-                executions = downloadSettings.buildRate,
-                frames = 1
-            })
-        end)
         imports.beautify.render.create(mapper.render)
         imports.beautify.render.create(mapper.render, {renderType = "input"})
         imports.addEventHandler("onClientKey", root, mapper.controlKey)
