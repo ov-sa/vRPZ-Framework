@@ -23,3 +23,7 @@ availableControls = {
     moveForwards = "forwards", moveBackwards = "backwards",
     moveLeft = "left", moveRight = "right"
 }
+
+availableColors = {
+    error = {255, 50, 50, 255}
+}
