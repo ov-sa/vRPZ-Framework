@@ -120,7 +120,9 @@ mapper.ui.propWnd.createUI = function()
     })
 
     imports.addEventHandler("onClientUIClick", mapper.ui.propWnd.spawnBtn.element, function()
-        local assetName = imports.beautify.gridlist.getRowData(mapper.ui.propWnd.propLst.element, imports.beautify.gridlist.getSelection(mapper.ui.propWnd.propLst.element), 1)
+        local assetSelection = imports.beautify.gridlist.getSelection(mapper.ui.propWnd.propLst.element)
+        if not assetSelection then return false end
+        local assetName = imports.beautify.gridlist.getRowData(mapper.ui.propWnd.propLst.element, assetSelection, 1)
         if not assetName then return false end
         mapper.isSpawningDummy = {assetName = assetName}
     end)
@@ -194,8 +196,11 @@ mapper.ui.sceneListWnd.createUI = function()
     })
 
     imports.addEventHandler("onClientUIClick", mapper.ui.sceneListWnd.loadBtn.element, function()
-        outputChatBox("Trynna load scene...")
-        --TODO: ...
+        local sceneSelection = imports.beautify.gridlist.getSelection(mapper.ui.sceneListWnd.sceneLst.element)
+        if not sceneSelection then return false end
+        local sceneName = imports.beautify.gridlist.getRowData(mapper.ui.sceneListWnd.sceneLst.element, sceneSelection, 1)
+        if not sceneName then return false end
+        print("Trynna load scene: "..sceneName)
     end)
     imports.addEventHandler("onClientUIClick", mapper.ui.sceneListWnd.closeBtn.element, function()
         mapper.ui.sceneListWnd.destroyUI()
