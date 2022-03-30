@@ -70,24 +70,24 @@ mapper.ui = {
     },
 
     sceneListWnd = {
-        width = 400, height = 347,
+        width = 400, height = 297,
         sceneLst = {
             text = imports.string.upper("Scenes"),
-            height = 250
+            height = 200
         },
         loadBtn = {
             text = "Load Scene",
-            startY = 250 + 5,
+            startY = 200 + 5,
             height = 24
         },
         deleteBtn = {
             text = "Delete Scene",
-            startY = 250 + 5 + 24 + 5,
+            startY = 200 + 5 + 24 + 5,
             height = 24
         },
         generateBtn = {
             text = "Generate Scene",
-            startY = 250 + 5 + 24 + 5 + 24 + 5,
+            startY = 200 + 5 + 24 + 5 + 24 + 5,
             height = 24
         }
     }
