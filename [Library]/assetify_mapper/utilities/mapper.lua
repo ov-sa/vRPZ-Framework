@@ -325,10 +325,10 @@ if localPlayer then
         mapper.ui.sceneListWnd.refreshUI()
     end)
 
-    imports.addEventHandler("Assetify:Mapper:onLoadScene", root, function(sceneName, sceneIPL)
+    imports.addEventHandler("Assetify:Mapper:onLoadScene", root, function(sceneName, sceneData)
         if not mapper.fetchSceneCache(sceneName) then return false end
         mapper.loadedScene = sceneName
-        if sceneIPL then
+        if sceneData then
             --TODO: READ AND CREATE CLIENT SIDE
         end
     end)
@@ -348,10 +348,18 @@ else
         return imports.triggerClientEvent(player, "Assetify:Mapper:onRecieveCacheManifest", player, mapper.rwAssets[(mapper.cacheManifestPath)])
     end
 
-    mapper.loadScene = function(player, sceneName)
+    mapper.loadScene = function(player, sceneName, isActive)
         local sceneCache = mapper.fetchSceneCache(sceneName)
         if not sceneCache then return false end
-        return imports.triggerClientEvent(player, "Assetify:Mapper:onLoadScene", player, sceneName)
+        local sceneData = false
+        if not isActive then
+            sceneData = {
+                ipl = false
+            }
+            --TODO: NEED TO READ IPL AND SEND ON THIS BLOCK..
+            --imports.triggerClientEvent(player, "Assetify:Mapper:onLoadScene", player, sceneName)
+        end
+        imports.triggerClientEvent(player, "Assetify:Mapper:onLoadScene", player, sceneName, sceneData)
     end
 
     imports.addEventHandler("Assetify:Mapper:onLoadScene", root, function(sceneName)
