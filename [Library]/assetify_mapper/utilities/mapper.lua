@@ -305,7 +305,6 @@ if localPlayer then
 else
     imports.addEvent("Assetify:Mapper:onSaveScene", true)
     imports.addEventHandler("Assetify:Mapper:onSaveScene", root, function(sceneAssets, sceneIPL)
-        --TODO: ...
         outputChatBox("Trynna save the scene..")
     end)
 end
