@@ -25,5 +25,6 @@ availableControls = {
 }
 
 availableColors = {
+    success = {50, 255, 50, 255},
     error = {255, 50, 50, 255}
 }
