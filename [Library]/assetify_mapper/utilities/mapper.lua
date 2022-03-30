@@ -324,10 +324,10 @@ if localPlayer then
         mapper.loadedScene = sceneName
         if sceneData then
             --TODO: READ AND CREATE CLIENT SIDE
+            local sceneCache = mapper.fetchSceneCache(sceneName)
+            local sceneIPLPath = sceneCache.."scene.ipl"
+            imports.triggerEvent("Assetify:Mapper:onLoadScene", localPlayer, "Scene successfully loaded. ["..sceneIPLPath.."]", availableColors.success)
         end
-        local sceneCache = mapper.fetchSceneCache(sceneName)
-        local sceneIPLPath = sceneCache.."scene.ipl"
-        imports.triggerEvent("Assetify:Mapper:onLoadScene", localPlayer, "Scene successfully loaded. ["..sceneIPLPath.."]", availableColors.success)
     end)
 
     imports.addEvent("Assetify:Mapper:onRecieveCacheManifest", true)
