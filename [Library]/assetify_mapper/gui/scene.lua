@@ -13,7 +13,6 @@
 -----------------
 
 local imports = {
-    tostring = tostring,
     tocolor = tocolor,
     isElement = isElement,
     destroyElement = destroyElement,
@@ -214,7 +213,7 @@ mapper.ui.sceneListWnd.refreshUI = function()
         for i = 1, #mapper.rwAssets[(mapper.cacheManifestPath)], 1 do
             local j = mapper.rwAssets[(mapper.cacheManifestPath)][i]
             local rowIndex = imports.beautify.gridlist.addRow(mapper.ui.sceneListWnd.sceneLst.element)
-            imports.beautify.gridlist.setRowData(mapper.ui.sceneListWnd.sceneLst.element, rowIndex, 1, imports.tostring(j))
+            imports.beautify.gridlist.setRowData(mapper.ui.sceneListWnd.sceneLst.element, rowIndex, 1, j)
         end
     end
 end

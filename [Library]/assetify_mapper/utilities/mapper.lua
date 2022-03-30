@@ -14,6 +14,7 @@
 
 local imports = {
     pairs = pairs,
+    tostring = tostring,
     tocolor = tocolor,
     isElement = isElement,
     destroyElement = destroyElement,
@@ -387,6 +388,7 @@ else
                     sceneName = sceneName + 1
                 end
             end
+            sceneName = imports.tostring(sceneName)
             imports.table.insert(mapper.rwAssets[(mapper.cacheManifestPath)], sceneName)
             imports.file.write(mapper.cacheManifestPath, imports.toJSON(mapper.rwAssets[(mapper.cacheManifestPath)]))
             mapper.syncCacheManifest(source)
