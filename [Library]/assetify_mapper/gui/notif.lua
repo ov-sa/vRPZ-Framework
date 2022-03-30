@@ -81,8 +81,8 @@ end
 --[[ Event: On Notification ]]--
 --------------------------------
 
-imports.addEvent("Assetify_Mapper:onNotification", true)
-imports.addEventHandler("Assetify_Mapper:onNotification", root, function(message, color)
+imports.addEvent("Assetify:Mapper:onNotification", true)
+imports.addEventHandler("Assetify:Mapper:onNotification", root, function(message, color)
     imports.table.insert(mapper.ui.notif.buffer, {
         text = message,
         fontColor = color,

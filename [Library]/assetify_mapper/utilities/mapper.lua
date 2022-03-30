@@ -18,6 +18,7 @@ local imports = {
     isElement = isElement,
     destroyElement = destroyElement,
     setmetatable = setmetatable,
+    addEvent = addEvent,
     addEventHandler = addEventHandler,
     getKeyState = getKeyState,
     getPedControlState = getPedControlState,
@@ -302,5 +303,9 @@ if localPlayer then
         mapper.buffer.element[source]:destroy()
     end)
 else
+    imports.addEvent("Assetify:Mapper:onSaveScene", true)
+    imports.addEventHandler("Assetify:Mapper:onSaveScene", root, function(sceneAssets, sceneIPL)
+        outputChatBox("Trynna save the scene..")
+    end)
     --TODO: ...
 end
