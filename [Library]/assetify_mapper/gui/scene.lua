@@ -120,6 +120,14 @@ end
 mapper.ui.sceneListWnd.createUI = function()
     mapper.ui.sceneListWnd.element = imports.beautify.card.create((CLIENT_MTA_RESOLUTION[1] - mapper.ui.sceneListWnd.width)*0.5, (CLIENT_MTA_RESOLUTION[2] - mapper.ui.sceneListWnd.height)*0.5, mapper.ui.sceneListWnd.width, mapper.ui.sceneListWnd.height)
     imports.beautify.setUIVisible(mapper.ui.sceneListWnd.element, true)
+    mapper.ui.sceneListWnd.sceneLst.element = imports.beautify.gridlist.create(mapper.ui.margin, mapper.ui.margin, mapper.ui.sceneListWnd.width - (mapper.ui.margin*2), mapper.ui.sceneListWnd.sceneLst.height, mapper.ui.sceneListWnd.element, false)
+    imports.beautify.setUIVisible(mapper.ui.sceneListWnd.sceneLst.element, true)
+    imports.beautify.render.create(function()
+        imports.beautify.native.drawRectangle(0, 0, mapper.ui.sceneListWnd.width, mapper.ui.sceneListWnd.height, mapper.ui.bgColor, false)
+    end, {
+        elementReference = mapper.ui.sceneListWnd.element,
+        renderType = "preViewRTRender"
+    })
 end
 
 mapper.ui.sceneListWnd.destroyUI = function()
