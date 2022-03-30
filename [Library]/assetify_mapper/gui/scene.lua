@@ -49,13 +49,13 @@ mapper.ui = {
             text = imports.string.upper("Props"),
             height = 321
         },
-        resetBtn = {
-            text = "Reset Scene",
+        viewBtn = {
+            text = "View Scenes",
             startY = 321 + 5 + 5,
             height = 24
         },
-        loadBtn = {
-            text = "Load Scene",
+        resetBtn = {
+            text = "Reset Scene",
             startY = 321 + 5 + 5 + 24 + 5,
             height = 24
         },
@@ -67,10 +67,15 @@ mapper.ui = {
     },
 
     sceneListWnd = {
-        width = 265, height = 418,
+        width = 400, height = 400,
         sceneLst = {
             text = imports.string.upper("Scenes"),
-            height = 321
+            height = 250
+        },
+        loadBtn = {
+            text = "Load Scene",
+            startY = 321 + 5 + 5,
+            height = 24
         }
     }
 }
@@ -80,7 +85,7 @@ mapper.ui.propWnd.createUI = function()
     imports.beautify.setUIVisible(mapper.ui.propWnd.element, true)
     mapper.ui.propWnd.propLst.element = imports.beautify.gridlist.create(mapper.ui.margin, mapper.ui.margin, mapper.ui.propWnd.width - (mapper.ui.margin*2), mapper.ui.propWnd.propLst.height, mapper.ui.propWnd.element, false)
     imports.beautify.setUIVisible(mapper.ui.propWnd.propLst.element, true)
-    imports.beautify.gridlist.addColumn(mapper.ui.propWnd.propLst.element, mapper.ui.propWnd.propLst.text, mapper.ui.propWnd.width - 2 - (mapper.ui.margin*2))
+    imports.beautify.gridlist.addColumn(mapper.ui.propWnd.propLst.element, mapper.ui.propWnd.propLst.text, mapper.ui.propWnd.width - (mapper.ui.margin*3))
     for i = 1, #Assetify_Props, 1 do
         local j = Assetify_Props[i]
         local rowIndex = imports.beautify.gridlist.addRow(mapper.ui.propWnd.propLst.element)
@@ -102,9 +107,9 @@ mapper.ui.sceneWnd.createUI = function()
     imports.beautify.setUIVisible(mapper.ui.sceneWnd.element, true)
     mapper.ui.sceneWnd.propLst.element = imports.beautify.gridlist.create(mapper.ui.margin, mapper.ui.margin, mapper.ui.sceneWnd.width - (mapper.ui.margin*2), mapper.ui.sceneWnd.propLst.height, mapper.ui.sceneWnd.element, false)
     imports.beautify.setUIVisible(mapper.ui.sceneWnd.propLst.element, true)
-    imports.beautify.gridlist.addColumn(mapper.ui.sceneWnd.propLst.element, mapper.ui.sceneWnd.propLst.text, mapper.ui.sceneWnd.width - 2 - (mapper.ui.margin*2))
-    mapper.ui.sceneWnd.loadBtn.element = imports.beautify.button.create(mapper.ui.sceneWnd.loadBtn.text, mapper.ui.margin, mapper.ui.sceneWnd.loadBtn.startY, "default", mapper.ui.sceneWnd.width - (mapper.ui.margin*2), mapper.ui.sceneWnd.loadBtn.height, mapper.ui.sceneWnd.element, false)
-    imports.beautify.setUIVisible(mapper.ui.sceneWnd.loadBtn.element, true)
+    imports.beautify.gridlist.addColumn(mapper.ui.sceneWnd.propLst.element, mapper.ui.sceneWnd.propLst.text, mapper.ui.sceneWnd.width - (mapper.ui.margin*3))
+    mapper.ui.sceneWnd.viewBtn.element = imports.beautify.button.create(mapper.ui.sceneWnd.viewBtn.text, mapper.ui.margin, mapper.ui.sceneWnd.viewBtn.startY, "default", mapper.ui.sceneWnd.width - (mapper.ui.margin*2), mapper.ui.sceneWnd.viewBtn.height, mapper.ui.sceneWnd.element, false)
+    imports.beautify.setUIVisible(mapper.ui.sceneWnd.viewBtn.element, true)
     mapper.ui.sceneWnd.resetBtn.element = imports.beautify.button.create(mapper.ui.sceneWnd.resetBtn.text, mapper.ui.margin, mapper.ui.sceneWnd.resetBtn.startY, "default", mapper.ui.sceneWnd.width - (mapper.ui.margin*2), mapper.ui.sceneWnd.resetBtn.height, mapper.ui.sceneWnd.element, false)
     imports.beautify.setUIVisible(mapper.ui.sceneWnd.resetBtn.element, true)
     mapper.ui.sceneWnd.saveBtn.element = imports.beautify.button.create(mapper.ui.sceneWnd.saveBtn.text, mapper.ui.margin, mapper.ui.sceneWnd.saveBtn.startY, "default", mapper.ui.sceneWnd.width - (mapper.ui.margin*2), mapper.ui.sceneWnd.saveBtn.height, mapper.ui.sceneWnd.element, false)
@@ -122,6 +127,7 @@ mapper.ui.sceneListWnd.createUI = function()
     imports.beautify.setUIVisible(mapper.ui.sceneListWnd.element, true)
     mapper.ui.sceneListWnd.sceneLst.element = imports.beautify.gridlist.create(mapper.ui.margin, mapper.ui.margin, mapper.ui.sceneListWnd.width - (mapper.ui.margin*2), mapper.ui.sceneListWnd.sceneLst.height, mapper.ui.sceneListWnd.element, false)
     imports.beautify.setUIVisible(mapper.ui.sceneListWnd.sceneLst.element, true)
+    imports.beautify.gridlist.addColumn(mapper.ui.sceneListWnd.sceneLst.element, mapper.ui.sceneListWnd.sceneLst.text, mapper.ui.sceneListWnd.width - (mapper.ui.margin*3))
     imports.beautify.render.create(function()
         imports.beautify.native.drawRectangle(0, 0, mapper.ui.sceneListWnd.width, mapper.ui.sceneListWnd.height, mapper.ui.bgColor, false)
     end, {
