@@ -356,10 +356,12 @@ else
             sceneData = {
                 ipl = false
             }
+            print("TRYING TO PASSIVE LOAD SCENE..")
             --TODO: NEED TO READ IPL AND SEND ON THIS BLOCK..
             --imports.triggerClientEvent(player, "Assetify:Mapper:onLoadScene", player, sceneName)
         end
         imports.triggerClientEvent(player, "Assetify:Mapper:onLoadScene", player, sceneName, sceneData)
+        return true
     end
 
     imports.addEventHandler("Assetify:Mapper:onLoadScene", root, function(sceneName)
