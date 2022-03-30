@@ -328,13 +328,12 @@ if localPlayer then
         local sceneCache, sceneIndex = mapper.fetchSceneCache(sceneName)
         mapper.loadedScene = sceneIndex
         if sceneData then
-            print(tostring(sceneCache))
             local sceneIPLPath = sceneCache.."scene.ipl"
             if sceneData.ipl then
-            --TODO: PARSE AND CREATING DUMMIES HERE..
+                --TODO: PARSE AND CREATING DUMMIES HERE..
                 print("LOAD ALL DUMMIES AND SET LIBRARY ON COOLDOWN WHILE ITS BEING LOADED..")
             end
-            imports.triggerEvent("Assetify:Mapper:onLoadScene", localPlayer, "Scene successfully loaded. ["..sceneIPLPath.."]", availableColors.success)
+            imports.triggerEvent("Assetify:Mapper:onNotification", localPlayer, "Scene successfully loaded. ["..sceneIPLPath.."]", availableColors.success)
         end
     end)
 
@@ -374,7 +373,7 @@ else
 
     imports.addEventHandler("Assetify:Mapper:onLoadScene", root, function(sceneName)
         if not mapper.loadScene(source, sceneName) then
-            return imports.triggerClientEvent(source, "Assetify:Mapper:onLoadScene", source, "Scene failed to load. ["..sceneName.."]", availableColors.error)
+            imports.triggerClientEvent(source, "Assetify:Mapper:onLoadScene", source, "Scene failed to load. ["..sceneName.."]", availableColors.error)
         end
     end)
 
