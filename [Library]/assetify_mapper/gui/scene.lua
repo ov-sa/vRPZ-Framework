@@ -192,6 +192,10 @@ mapper.ui.sceneListWnd.createUI = function()
         elementReference = mapper.ui.sceneListWnd.element,
         renderType = "preViewRTRender"
     })
+
+    imports.addEventHandler("onClientUIClick", mapper.ui.sceneListWnd.closeBtn.element, function()
+        mapper.ui.sceneListWnd.destroyUI()
+    end)
 end
 
 mapper.ui.sceneListWnd.refreshUI = function()
