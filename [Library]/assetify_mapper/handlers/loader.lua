@@ -58,7 +58,7 @@ function mapper:toggle(state)
                 rotW, rotX, rotY, rotZ = imports.quat.fromEuler(rotX, rotY, rotZ)
                 sceneIPL = sceneIPL..(i - 1)..", "..(j.assetName)..", 0, "..posX..", "..posY..", "..posZ..", "..rotX..", "..rotY..", "..rotZ..", "..rotW..", -1\n"
             end
-            imports.triggerServerEvent("Assetify:Mapper:onSaveScene", localPlayer, sceneIPL)
+            imports.triggerServerEvent("Assetify:Mapper:onSaveScene", localPlayer, _, sceneIPL)
         end)
         imports.beautify.render.create(mapper.render)
         imports.beautify.render.create(mapper.render, {renderType = "input"})
