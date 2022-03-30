@@ -78,7 +78,6 @@ mapper.ui = {
 mapper.ui.propWnd.createUI = function()
     mapper.ui.propWnd.element = imports.beautify.card.create(mapper.ui.propWnd.startX, mapper.ui.propWnd.startY, mapper.ui.propWnd.width, mapper.ui.propWnd.height)
     imports.beautify.setUIVisible(mapper.ui.propWnd.element, true)
-    imports.beautify.setUIDraggable(mapper.ui.propWnd.element, true)
     mapper.ui.propWnd.propLst.element = imports.beautify.gridlist.create(mapper.ui.margin, mapper.ui.margin, mapper.ui.propWnd.width - (mapper.ui.margin*2), mapper.ui.propWnd.propLst.height, mapper.ui.propWnd.element, false)
     imports.beautify.setUIVisible(mapper.ui.propWnd.propLst.element, true)
     imports.beautify.gridlist.addColumn(mapper.ui.propWnd.propLst.element, mapper.ui.propWnd.propLst.text, mapper.ui.propWnd.width - 2 - (mapper.ui.margin*2))
@@ -101,7 +100,6 @@ end
 mapper.ui.sceneWnd.createUI = function()
     mapper.ui.sceneWnd.element = imports.beautify.card.create(mapper.ui.sceneWnd.startX, mapper.ui.sceneWnd.startY, mapper.ui.sceneWnd.width, mapper.ui.sceneWnd.height)
     imports.beautify.setUIVisible(mapper.ui.sceneWnd.element, true)
-    imports.beautify.setUIDraggable(mapper.ui.sceneWnd.element, true)
     mapper.ui.sceneWnd.propLst.element = imports.beautify.gridlist.create(mapper.ui.margin, mapper.ui.margin, mapper.ui.sceneWnd.width - (mapper.ui.margin*2), mapper.ui.sceneWnd.propLst.height, mapper.ui.sceneWnd.element, false)
     imports.beautify.setUIVisible(mapper.ui.sceneWnd.propLst.element, true)
     imports.beautify.gridlist.addColumn(mapper.ui.sceneWnd.propLst.element, mapper.ui.sceneWnd.propLst.text, mapper.ui.sceneWnd.width - 2 - (mapper.ui.margin*2))
@@ -117,6 +115,17 @@ mapper.ui.sceneWnd.createUI = function()
         elementReference = mapper.ui.sceneWnd.element,
         renderType = "preViewRTRender"
     })
+end
+
+mapper.ui.sceneListWnd.createUI = function()
+    mapper.ui.sceneListWnd.element = imports.beautify.card.create(mapper.ui.sceneListWnd.startX, mapper.ui.sceneListWnd.startY, mapper.ui.sceneListWnd.width, mapper.ui.sceneListWnd.height)
+    imports.beautify.setUIVisible(mapper.ui.sceneListWnd.element, true)
+end
+
+mapper.ui.sceneListWnd.destroyUI = function()
+    if mapper.ui.sceneListWnd.element and imports.isElement(mapper.ui.sceneListWnd.element) then
+        imports.destroyElement(mapper.ui.sceneListWnd.element)
+    end
 end
 
 
@@ -136,4 +145,5 @@ mapper.ui.destroy = function()
     if mapper.ui.sceneWnd.element and imports.isElement(mapper.ui.sceneWnd.element) then
         imports.destroyElement(mapper.ui.sceneWnd.element)
     end
+    mapper.ui.sceneListWnd.destroyUI()
 end
