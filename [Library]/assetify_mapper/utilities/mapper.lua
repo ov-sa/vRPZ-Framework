@@ -320,6 +320,7 @@ if localPlayer then
     imports.addEvent("Assetify:Mapper:onRecieveCacheManifest", true)
     imports.addEventHandler("Assetify:Mapper:onRecieveCacheManifest", root, function(manifestData)
         mapper.rwAssets[(mapper.cacheManifestPath)] = manifestData
+        mapper.ui.sceneListWnd.refreshUI()
     end)
 
     imports.addEventHandler("onClientElementDestroy", root, function()

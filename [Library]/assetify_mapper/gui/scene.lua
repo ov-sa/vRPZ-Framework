@@ -140,6 +140,7 @@ mapper.ui.sceneListWnd.createUI = function()
 end
 
 mapper.ui.sceneListWnd.refreshUI = function()
+    if not mapper.ui.sceneListWnd.element or not imports.isElement(mapper.ui.sceneListWnd.element) then return false end
     imports.beautify.gridlist.clearRows(mapper.ui.sceneListWnd.sceneLst.element)
     if mapper.rwAssets[(mapper.cacheManifestPath)] then
         for i = 1, #mapper.rwAssets[(mapper.cacheManifestPath)], 1 do
@@ -162,6 +163,7 @@ end
 ----------------------------------------
 
 mapper.ui.create = function()
+    mapper.ui.destroy()
     mapper.ui.propWnd.createUI()
     mapper.ui.sceneWnd.createUI()
 end
