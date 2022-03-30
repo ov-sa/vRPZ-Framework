@@ -63,6 +63,7 @@ mapper = {
 mapper.assetPackPath = "files/assetify_library/"..(mapper.assetPack).."/"
 mapper.__index = mapper
 
+imports.addEvent("Assetify:Mapper:onLoadScene", true)
 mapper.fetchSceneCache = function(sceneName)
     local isCacheExsting = false
     for i = 1, #mapper.rwAssets[(mapper.cacheManifestPath)], 1 do
@@ -332,7 +333,6 @@ if localPlayer then
 else
     mapper.rwAssets[(mapper.cacheManifestPath)] = imports.file.read(mapper.cacheManifestPath)
     mapper.rwAssets[(mapper.cacheManifestPath)] = (mapper.rwAssets[(mapper.cacheManifestPath)] and imports.fromJSON(mapper.rwAssets[(mapper.cacheManifestPath)])) or {}
-    imports.addEvent("Assetify:Mapper:onLoadScene", true)
     imports.addEvent("Assetify:Mapper:onSaveScene", true)
     imports.addEvent("Assetify:Mapper:onGenerateScene", true)
 
