@@ -341,11 +341,11 @@ if localPlayer then
         else
             local sceneIPLPath = sceneCache.."scene.ipl"
             if sceneData.ipl then
-                mapper.loadedScene = sceneIndex
+                mapper:reset()
                 mapper:enable(false)
+                mapper.loadedScene = sceneIndex
                 thread:create(function(cThread)
                     imports.triggerEvent("Assetify:Mapper:onNotification", localPlayer, "Scene loading; Kindly wait... ["..sceneIPLPath.."]", availableColors.info)
-                    mapper:reset()
                     local unparsedDatas = imports.split(sceneData.ipl, "\n")
                     for i = 1, #unparsedDatas, 1 do
                         local assetName = imports.string.gsub(imports.tostring(imports.gettok(unparsedDatas[i], 2, mapper.separators.IPL)), " ", "")
