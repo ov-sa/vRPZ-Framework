@@ -399,6 +399,7 @@ else
     mapper.rwAssets[(mapper.cacheManifestPath)] = imports.file.read(mapper.cacheManifestPath)
     mapper.rwAssets[(mapper.cacheManifestPath)] = (mapper.rwAssets[(mapper.cacheManifestPath)] and imports.fromJSON(mapper.rwAssets[(mapper.cacheManifestPath)])) or {}
     imports.addEvent("Assetify:Mapper:onSaveScene", true)
+    imports.addEvent("Assetify:Mapper:onDeleteScene", true)
     imports.addEvent("Assetify:Mapper:onGenerateScene", true)
 
     mapper.syncCacheManifest = function(player)
@@ -448,6 +449,16 @@ else
         local sceneIPLPath = sceneCache.."scene.ipl"
         imports.file.write(sceneIPLPath, sceneIPL)
         imports.triggerClientEvent(source, "Assetify:Mapper:onNotification", source, "Scene successfully saved. ["..sceneIPLPath.."]", availableColors.success)
+    end)
+
+    imports.addEventHandler("Assetify:Mapper:onDeleteScene", root, function(sceneName)
+        local sceneCache, sceneIndex = mapper.fetchSceneCache(sceneName)
+        if not sceneCache then return false end
+        imports.table.remove(mapper.rwAssets[(mapper.cacheManifestPath)], sceneIndex)
+        local sceneIPLPath = sceneCache.."scene.ipl"
+        imports.file.delete(sceneIPLPath)
+        mapper.syncCacheManifest(source)
+        imports.triggerClientEvent(source, "Assetify:Mapper:onNotification", source, "Scene successfully deleted. ["..sceneIPLPath.."]", availableColors.success)
     end)
 
     imports.addEventHandler("Assetify:Mapper:onGenerateScene", root, function(sceneName)
