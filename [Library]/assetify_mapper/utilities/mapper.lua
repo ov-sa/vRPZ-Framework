@@ -14,6 +14,7 @@
 
 local imports = {
     pairs = pairs,
+    split = split,
     gettok = gettok,
     tonumber = tonumber,
     tostring = tostring,
@@ -337,15 +338,25 @@ if localPlayer then
         if sceneData then
             local sceneIPLPath = sceneCache.."scene.ipl"
             if sceneData.ipl then
-                mapper:reset()
-                local assetName = imports.string.gsub(imports.tostring(imports.gettok(sceneData.ipl[i], 2, mapper.separators.IPL)), " ", "")
-                local posX, posY, posZ = imports.tonumber(imports.gettok(sceneData.ipl[i], 4, mapper.separators.IPL)), imports.tonumber(imports.gettok(sceneData.ipl[i], 5, mapper.separators.IPL)), imports.tonumber(imports.gettok(sceneData.ipl[i], 6, mapper.separators.IPL)),
-                local rotX, rotY, rotZ = imports.quat.toEuler(imports.tonumber(imports.gettok(unparsedDatas[i], 10, mapper.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 7, mapper.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 8, mapper.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 9, mapper.separators.IPL)))
-                mapper:create(assetName, {
-                    position = {x = posX, y = posY, z = posZ},
-                    rotation = {x = rotX, y = rotY, z = rotZ}
+                thread:create(function(cThread)
+                    imports.triggerEvent("Assetify:Mapper:onNotification", localPlayer, "Scene loading; Kindly wait... ["..sceneIPLPath.."]", availableColors.info)
+                    mapper:reset()
+                    local unparsedDatas = imports.split(sceneData.ipl, "\n")
+                    for i = 1, #unparsedDatas, 1 do
+                        local assetName = imports.string.gsub(imports.tostring(imports.gettok(unparsedDatas[i], 2, mapper.separators.IPL)), " ", "")
+                        local posX, posY, posZ = imports.tonumber(imports.gettok(unparsedDatas[i], 4, mapper.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 5, mapper.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 6, mapper.separators.IPL))
+                        local rotX, rotY, rotZ = imports.quat.toEuler(imports.tonumber(imports.gettok(unparsedDatas[i], 10, mapper.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 7, mapper.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 8, mapper.separators.IPL))
+                        mapper:create(assetName, {
+                            position = {x = posX, y = posY, z = posZ},
+                            rotation = {x = rotX, y = rotY, z = rotZ}
+                        })
+                        thread.pause()
+                    end
+                    imports.triggerEvent("Assetify:Mapper:onNotification", localPlayer, "Scene successfully loaded. ["..sceneIPLPath.."]", availableColors.success)
+                end):resume({
+                    executions = downloadSettings.buildRate,
+                    frames = 1
                 })
-                imports.triggerEvent("Assetify:Mapper:onNotification", localPlayer, "Scene successfully loaded. ["..sceneIPLPath.."]", availableColors.success)
             else
                 imports.triggerEvent("Assetify:Mapper:onNotification", localPlayer, "Scene failed to load. (Corrupted IPL) ["..sceneIPLPath.."]", availableColors.error)
             end
