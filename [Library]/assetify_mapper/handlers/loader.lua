@@ -21,6 +21,9 @@ local imports = {
     getElementLocation = getElementLocation,
     bindKey = bindKey,
     unbindKey = unbindKey,
+    fadeCamera = fadeCamera,
+    toggleControl = toggleControl,
+    setPlayerHudComponentVisible = setPlayerHudComponentVisible,
     showChat = showChat,
     quat = quat,
     assetify = assetify,
@@ -75,6 +78,10 @@ end
 -----------------------------------------------
 
 imports.addEventHandler("onClientResourceStart", resource, function()
+    imports.fadeCamera(true)
+    imports.toggleControl("radar", false)
+    imports.setPlayerHudComponentVisible("all", false)
+    imports.setPlayerHudComponentVisible("crosshair", true)
     for i, j in imports.pairs(availableTemplates) do
         imports.beautify.setUITemplate(i, j)
     end
