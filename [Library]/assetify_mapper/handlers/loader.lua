@@ -51,6 +51,7 @@ function mapper:toggle(state)
         imports.beautify.render.create(mapper.render, {renderType = "input"})
         imports.addEventHandler("onClientKey", root, mapper.controlKey)
         imports.addEventHandler("onClientClick", root, mapper.controlClick)
+        mapper:enable(mapper.isEnabled)
     else
         imports.removeEventHandler("onClientClick", root, mapper.controlClick)
         imports.removeEventHandler("onClientKey", root, mapper.controlKey)
@@ -80,14 +81,14 @@ imports.addEventHandler("onClientResourceStart", resource, function()
     end
     if imports.assetify.isLoaded() then
         Assetify_Props = imports.assetify.getAssets(mapper.assetPack) or {}
-        mapper:toggle(true)
         mapper:enable(true)
+        mapper:toggle(true)
     else
         local booterWrapper = nil
         booterWrapper = function()
             Assetify_Props = imports.assetify.getAssets(mapper.assetPack) or {}
-            mapper:toggle(true)
             mapper:enable(true)
+            mapper:toggle(true)
             imports.removeEventHandler("onAssetifyLoad", root, booterWrapper)
         end
         imports.addEventHandler("onAssetifyLoad", root, booterWrapper)
