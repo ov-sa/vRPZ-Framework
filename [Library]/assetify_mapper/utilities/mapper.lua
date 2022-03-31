@@ -252,15 +252,15 @@ if localPlayer then
                             }
                             if mapper.translationMode[__translationIndex].speed ~= translationSpeed then
                                 mapper.translationMode[__translationIndex].speed = translationSpeed
-                                mapper.translationMode[__translationIndex].previous = (mapper.translationMode[__translationIndex].previous or 0) + (mapper.translationMode[__translationIndex].current or 0)
+                                mapper.translationMode[__translationIndex].previous = mapper.translationMode[__translationIndex].current or 0
                                 mapper.translationMode[__translationIndex].offset = translationValue
                             end
                             mapper.translationMode[__translationIndex].__current = mapper.translationMode[__translationIndex].current or 0
-                            mapper.translationMode[__translationIndex].current = (translationValue - mapper.translationMode[__translationIndex].offset)*translationSpeed
+                            mapper.translationMode[__translationIndex].current = mapper.translationMode[__translationIndex].previous + (translationValue - mapper.translationMode[__translationIndex].offset)*translationSpeed
                             if isSlateTranslation then
-                                mapper.translationMode[translationIndex] = mapper.translationMode[__translationIndex].native + mapper.translationMode[__translationIndex].previous + mapper.translationMode[__translationIndex].current
+                                mapper.translationMode[translationIndex] = mapper.translationMode[__translationIndex].native + mapper.translationMode[__translationIndex].current
                             else
-                                mapper.translationMode[translationIndex] = mapper.translationMode[__translationIndex].previous + mapper.translationMode[__translationIndex].current - mapper.translationMode[__translationIndex].__current
+                                mapper.translationMode[translationIndex] = mapper.translationMode[__translationIndex].current - mapper.translationMode[__translationIndex].__current
                             end
                         end
                         if not isSlateTranslation then
