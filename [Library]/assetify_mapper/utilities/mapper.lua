@@ -292,10 +292,12 @@ if localPlayer then
         elseif button == availableControls.cloneObject then
             if mapper.isTargettingDummy then
                 local posX, posY, posZ, rotX, rotY, rotZ = imports.getElementLocation(mapper.isTargettingDummy)
-                mapper:create(mapper.buffer.element[(mapper.isTargettingDummy)].assetName, {
+                if mapper:create(mapper.buffer.element[(mapper.isTargettingDummy)].assetName, {
                     position = {x = posX, y = posY, z = posZ},
                     rotation = {x = rotX, y = rotY, z = rotZ}
-                }, true)
+                }, true) then
+                    imports.triggerEvent("Assetify:Mapper:onNotification", localPlayer, "Prop succesfully cloned. ["..(mapper.buffer.element[(mapper.isTargettingDummy)].assetName).."]", availableColors.success)
+                end
             end
         elseif button == availableControls.deleteObject then
             if mapper.isTargettingDummy then
@@ -312,10 +314,12 @@ if localPlayer then
                     mapper.isSpawningDummy.isScheduled = true
                     mapper.isTargettingDummy = false
                 else
-                    mapper:create(mapper.isSpawningDummy.assetName, {
+                    if mapper:create(mapper.isSpawningDummy.assetName, {
                         position = {x = worldX, y = worldY, z = worldZ},
                         rotation = {x = 0, y = 0, z = 0}
-                    }, true)
+                    }, true) then
+                        imports.triggerEvent("Assetify:Mapper:onNotification", localPlayer, "Prop succesfully spawned. ["..(mapper.isSpawningDummy.assetName).."]", availableColors.success)
+                    end
                     mapper.isSpawningDummy = false
                 end
             else
