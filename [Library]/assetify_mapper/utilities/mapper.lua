@@ -275,10 +275,10 @@ if localPlayer then
                                 end
                             end
                             local _, _, _, __rotX, __rotY, __rotZ = imports.getElementLocation(mapper.translationMode.element, "ZYX")
-                            local currentQuat = imports.quat.new(imports.quat.fromEuler(__rotX, __rotY, __rotZ))
-                            local rotQuat = imports.quat.fromVectorAngle(imports.Vector3(1, 0, 0), translationValues.rotX)*imports.quat.fromVectorAngle(imports.Vector3(0, 1, 0), translationValues.rotY)*imports.quat.fromVectorAngle(imports.Vector3(0, 0, 1), translationValues.rotZ) 
-                            currentQuat = rotQuat*currentQuat
-                            mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = imports.quat.toEuler(currentQuat[1], currentQuat[2], currentQuat[3], currentQuat[4])
+                            local rotQuat = imports.quat.new(imports.quat.fromEuler(__rotX, __rotY, __rotZ))
+                            local __rotQuat = imports.quat.fromVectorAngle(imports.Vector3(1, 0, 0), translationValues.rotX)*imports.quat.fromVectorAngle(imports.Vector3(0, 1, 0), translationValues.rotY)*imports.quat.fromVectorAngle(imports.Vector3(0, 0, 1), translationValues.rotZ) 
+                            rotQuat = __rotQuat*rotQuat
+                            mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = imports.quat.toEuler(rotQuat[1], rotQuat[2], rotQuat[3], rotQuat[4])
                         end
                         imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ, "ZYX")
                     end
