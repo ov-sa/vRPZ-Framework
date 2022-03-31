@@ -263,19 +263,20 @@ if localPlayer then
                         end
                         --TODO: ... WIP...
                         if not isSlateTranslation then
-                            for i = 1, #mapper.axis.validLocationIndexes, 1 do
+                            local translationValues = {}
+                            for i = 4, #mapper.axis.validLocationIndexes, 1 do
                                 local j = mapper.axis.validLocationIndexes[i]
-                                mapper.translationMode[j] = ((translationIndex == j) and mapper.translationMode[j]) or 0
+                                translationValues[j] = ((translationIndex == j) and mapper.translationMode[j]) or 0
                             end
                             local genQuat = imports.quat.new(imports.quat.fromEuler(mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ))
-                            local vectorX, vectorY, vectorZ = imports.Vector3(1, 0, 0), imports.Vector3(0, 1, 0), imports.Vector3(0, 0, 1)
+                            local relativeToWorld = true
                             if relativeToWorld then
-                                local rotQuat = imports.quat.fromVectorAngle(vectorX, rotX)*imports.quat.fromVectorAngle(vectorY, rotY)*imports.quat.fromVectorAngle(vectorZ, rotZ) 
+                                local rotQuat = imports.quat.fromVectorAngle(imports.Vector3(1, 0, 0), translationValues.rotX)*imports.quat.fromVectorAngle(imports.Vector3(0, 1, 0), translationValues.rotY)*imports.quat.fromVectorAngle(imports.Vector3(0, 0, 1), translationValues.rotZ) 
                                 genQuat = rotQuat*genQuat
                             else
-                                genQuat = genQuat*imports.quat.fromVectorAngle(vectorX, rotX)
-                                genQuat = genQuat*imports.quat.fromVectorAngle(vectorY, rotY)
-                                genQuat = genQuat*imports.quat.fromVectorAngle(vectorZ, rotZ)
+                                genQuat = genQuat*imports.quat.fromVectorAngle(imports.Vector3(1, 0, 0), translationValues.rotX)
+                                genQuat = genQuat*imports.quat.fromVectorAngle(imports.Vector3(0, 1, 0), translationValues.rotY)
+                                genQuat = genQuat*imports.quat.fromVectorAngle(imports.Vector3(0, 0, 1), translationValues.rotZ)
                             end
                             mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = imports.quat.toEuler(genQuat[1], genQuat[2], genQuat[3], genQuat[4])
                         end

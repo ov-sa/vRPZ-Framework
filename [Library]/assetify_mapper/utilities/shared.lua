@@ -154,7 +154,7 @@ end
 quat.fromVectorAngle = function(vector, angle)
     if not vector or not angle then return false end
     local a = imports.math.rad(angle*0.5)
-    local w, s = imports.math.cos(a), imports.math.sin(a)
+    local s, w = imports.math.sin(a), imports.math.cos(a)
     return quat.new(w, s*vector.x, s*vector.y, s*vector.z)
 end
 
