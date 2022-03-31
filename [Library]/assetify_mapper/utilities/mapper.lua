@@ -50,6 +50,7 @@ local imports = {
     toJSON = toJSON,
     fromJSON = fromJSON,
     string = string,
+    Vector3 = Vector3,
     table = table,
     file = file,
     quat = quat,
@@ -266,15 +267,15 @@ if localPlayer then
                                 local j = mapper.axis.validLocationIndexes[i]
                                 mapper.translationMode[j] = ((translationIndex == j) and mapper.translationMode[j]) or 0
                             end
-                            local inQuat = Vector4(EulerToQuaternion(mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ))
-                            local vecX, vecY, vecZ = Vector3(1, 0, 0), Vector3(0, 1, 0), Vector3(0, 0, 1)
+                            local inQuat = imports.quat.new(imports.quat.fromEuler(mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ))
+                            local vecX, vecY, vecZ = imports.Vector3(1, 0, 0), imports.Vector3(0, 1, 0), imports.Vector3(0, 0, 1)
                             if relativeToWorld then
-                                local rotQuat = quat(rotX, vecX)*quat(rotY, vecY)*quat(rotZ, vecZ) 
+                                local rotQuat = imports.quat.fromVectorAngle(vecX, rotX)*imports.quat.fromVectorAngle(vecY, rotY)*imports.quat.fromVectorAngle(vecZ, rotZ) 
                                 inQuat = rotQuat * inQuat
                             else
-                                inQuat = inQuat * quat(rotX, vecX)
-                                inQuat = inQuat * quat(rotY, vecY)
-                                inQuat = inQuat * quat(rotZ, vecZ)
+                                inQuat = inQuat * imports.quat.fromVectorAngle(vecX, rotX)
+                                inQuat = inQuat * imports.quat.fromVectorAngle(vecY, rotY)
+                                inQuat = inQuat * imports.quat.fromVectorAngle(vecZ, rotZ)
                             end
                             mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = imports.quat.toEuler(inQuat[1], inQuat[2], inQuat[3], inQuat[4])
                         end
