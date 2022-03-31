@@ -146,6 +146,11 @@ quat.__mul = function(quat1, quat2)
 	)
 end
 
+quat.__div = function(quat1, quat2)
+    if not quat1 or not quat2 then return false end
+	return quat.new(quat1[1]/quat2[1], quat1[2]/quat2[2], quat1[3]/quat2[3], quat1[4]/quat2[4])
+end
+
 quat.fromVectorAngle = function(vector, angle)
     if not vector or not angle then return false end
     local a = imports.math.rad(angle*0.5)
