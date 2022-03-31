@@ -210,6 +210,21 @@ mapper.ui.sceneListWnd.createUI = function()
             imports.triggerServerEvent("Assetify:Mapper:onLoadScene", localPlayer, sceneName)
         end
     end)
+    imports.addEventHandler("onClientUIClick", mapper.ui.sceneListWnd.deleteBtn.element, function()
+        local sceneSelection = imports.beautify.gridlist.getSelection(mapper.ui.sceneListWnd.sceneLst.element)
+        if not sceneSelection then return false end
+        local sceneName = imports.beautify.gridlist.getRowData(mapper.ui.sceneListWnd.sceneLst.element, sceneSelection, 1)
+        if not sceneName then return false end
+        imports.triggerServerEvent("Assetify:Mapper:onDeleteScene", localPlayer, sceneName)
+        --[[
+        if mapper.loadedScene and (mapper.rwAssets[(mapper.cacheManifestPath)][(mapper.loadedScene)] == sceneName) then
+            --TODO: RESET SCENE AND DELETE IT...
+            --imports.triggerEvent("Assetify:Mapper:onNotification", localPlayer, "Scene already loaded. ["..sceneName.."]", availableColors.error)
+        else
+            --imports.triggerServerEvent("Assetify:Mapper:onLoadScene", localPlayer, sceneName)
+        end
+        ]]
+    end)
     imports.addEventHandler("onClientUIClick", mapper.ui.sceneListWnd.closeBtn.element, function()
         mapper.ui.sceneListWnd.destroyUI()
     end)
