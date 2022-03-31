@@ -16,6 +16,7 @@
 local imports = {
     type = type,
     pairs = pairs,
+    setmetatable = setmetatable,
     fileExists = fileExists,
     fileCreate = fileCreate,
     fileDelete = fileDelete,
