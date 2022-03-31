@@ -63,18 +63,18 @@ local imports = {
 
 mapper = {
     assetPack = "object",
-    cacheDirectoryPath = "files/cache/",
-    sceneDirectoryPath = "files/scenes/",
-    cacheManifestPath = "files/cache/manifest.json",
+    cacheDirectoryPath = ":assetify_library/files/cache/",
+    sceneDirectoryPath = ":assetify_library/files/assets/scene/",
+    cacheManifestPath = ":assetify_library/files/cache/manifest.json",
     rwAssets = {},
     separators = {
         IPL = imports.string.byte(", ")
     }
 }
-mapper.assetPackPath = "files/assetify_library/"..(mapper.assetPack).."/"
 mapper.__index = mapper
 
 imports.addEvent("Assetify:Mapper:onLoadScene", true)
+
 mapper.fetchSceneCache = function(sceneName)
     local isCacheExsting = false
     for i = 1, #mapper.rwAssets[(mapper.cacheManifestPath)], 1 do
@@ -88,6 +88,11 @@ mapper.fetchSceneCache = function(sceneName)
         return mapper.cacheDirectoryPath..sceneName.."/", isCacheExsting
     end
     return false
+end
+
+mapper.fetchSceneDirectory = function(sceneName)
+    if not mapper.fetchSceneCache(sceneName) then return false end
+    return mapper.sceneDirectoryPath..sceneName.."/"
 end
 
 if localPlayer then
@@ -463,8 +468,14 @@ else
     end)
 
     imports.addEventHandler("Assetify:Mapper:onGenerateScene", root, function(sceneName)
+        local sceneDirectory = mapper.fetchSceneDirectory(sceneName)
+        if not sceneDirectory then return false end
         local sceneCache = mapper.fetchSceneCache(sceneName)
-        if not sceneCache then return false end
+        local sceneIPL = imports.file.read(sceneCache.."scene.ipl")
+        if sceneIPL then
+            imports.file.write(sceneDirectory.."scene.ipl", sceneIPL)
+            imports.triggerClientEvent(source, "Assetify:Mapper:onNotification", source, "Scene successfully generated. ["..sceneDirectory.."]", availableColors.success)
+        end
     end)
 
     imports.addEventHandler("onPlayerResourceStart", root, function(resourceElement)
