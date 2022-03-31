@@ -60,7 +60,7 @@ file = {
 --[[ Class: Table ]]--
 ----------------------
 
-function table.clone(baseTable, isRecursive)
+table.clone = function(baseTable, isRecursive)
     if not baseTable or (imports.type(baseTable) ~= "table") then return false end
     local clonedTable = {}
     for i, j in imports.pairs(baseTable) do

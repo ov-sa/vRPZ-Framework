@@ -57,7 +57,7 @@ end
 function onBundleLibrary()
     threaderData = imports.file.read("utilities/thread.lua")
     local importedModules = {
-        bundler = [[
+        bundler = imports.file.read("utilities/shared.lua")..[[
             assetify = {
                 imports = {
                     resourceName = "]]..imports.resourceName..[[",
