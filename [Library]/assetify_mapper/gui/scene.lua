@@ -19,6 +19,7 @@ local imports = {
     addEventHandler = addEventHandler,
     triggerEvent = triggerEvent,
     triggerServerEvent = triggerServerEvent,
+    getElementLocation = getElementLocation,
     string = string,
     beautify = beautify
 }
