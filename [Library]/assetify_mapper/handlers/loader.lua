@@ -71,14 +71,14 @@ imports.addEventHandler("onClientResourceStart", resource, function()
     end
     if imports.assetify.isLoaded() then
         Assetify_Props = imports.assetify.getAssets(mapper.assetPack) or {}
-        mapper:enable(true)
         mapper:toggle(true)
+        mapper:enable(true)
     else
         local booterWrapper = nil
         booterWrapper = function()
             Assetify_Props = imports.assetify.getAssets(mapper.assetPack) or {}
-            mapper:enable(true)
             mapper:toggle(true)
+            mapper:enable(true)
             imports.removeEventHandler("onAssetifyLoad", root, booterWrapper)
         end
         imports.addEventHandler("onAssetifyLoad", root, booterWrapper)
