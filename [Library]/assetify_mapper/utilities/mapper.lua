@@ -14,6 +14,8 @@
 
 local imports = {
     pairs = pairs,
+    gettok = gettok,
+    tonumber = tonumber,
     tostring = tostring,
     tocolor = tocolor,
     isElement = isElement,
@@ -45,8 +47,10 @@ local imports = {
     isKeyOnHold = isKeyOnHold,
     toJSON = toJSON,
     fromJSON = fromJSON,
+    string = string,
     table = table,
     file = file,
+    quat = quat,
     beautify = beautify
 }
 
@@ -60,7 +64,10 @@ mapper = {
     cacheDirectoryPath = "files/cache/",
     sceneDirectoryPath = "files/scenes/",
     cacheManifestPath = "files/cache/manifest.json",
-    rwAssets = {}
+    rwAssets = {},
+    separators = {
+        IPL = imports.string.byte(", ")
+    }
 }
 mapper.assetPackPath = "files/assetify_library/"..(mapper.assetPack).."/"
 mapper.__index = mapper
@@ -330,10 +337,18 @@ if localPlayer then
         if sceneData then
             local sceneIPLPath = sceneCache.."scene.ipl"
             if sceneData.ipl then
-                --TODO: PARSE AND CREATING DUMMIES HERE..
-                print("LOAD ALL DUMMIES AND SET LIBRARY ON COOLDOWN WHILE ITS BEING LOADED..")
+                mapper:reset()
+                local assetName = imports.string.gsub(imports.tostring(imports.gettok(sceneData.ipl[i], 2, mapper.separators.IPL)), " ", "")
+                local posX, posY, posZ = imports.tonumber(imports.gettok(sceneData.ipl[i], 4, mapper.separators.IPL)), imports.tonumber(imports.gettok(sceneData.ipl[i], 5, mapper.separators.IPL)), imports.tonumber(imports.gettok(sceneData.ipl[i], 6, mapper.separators.IPL)),
+                local rotX, rotY, rotZ = imports.quat.toEuler(imports.tonumber(imports.gettok(unparsedDatas[i], 10, mapper.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 7, mapper.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 8, mapper.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 9, mapper.separators.IPL)))
+                mapper:create(assetName, {
+                    position = {x = posX, y = posY, z = posZ},
+                    rotation = {x = rotX, y = rotY, z = rotZ}
+                })
+                imports.triggerEvent("Assetify:Mapper:onNotification", localPlayer, "Scene successfully loaded. ["..sceneIPLPath.."]", availableColors.success)
+            else
+                imports.triggerEvent("Assetify:Mapper:onNotification", localPlayer, "Scene failed to load. (Corrupted IPL) ["..sceneIPLPath.."]", availableColors.error)
             end
-            imports.triggerEvent("Assetify:Mapper:onNotification", localPlayer, "Scene successfully loaded. ["..sceneIPLPath.."]", availableColors.success)
         end
     end)
 
