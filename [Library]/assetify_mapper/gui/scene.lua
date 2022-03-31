@@ -21,6 +21,7 @@ local imports = {
     triggerServerEvent = triggerServerEvent,
     getElementLocation = getElementLocation,
     string = string,
+    quat = quat,
     beautify = beautify
 }
 
