@@ -257,7 +257,11 @@ if localPlayer then
                                 mapper.translationMode[__translationIndex].offset = translationValue
                             end
                             mapper.translationMode[__translationIndex].current = (translationValue - mapper.translationMode[__translationIndex].offset)*translationSpeed
-                            mapper.translationMode[translationIndex] = mapper.translationMode[__translationIndex].native + mapper.translationMode[__translationIndex].previous + mapper.translationMode[__translationIndex].current
+                            if isSlateTranslation then
+                                mapper.translationMode[translationIndex] = mapper.translationMode[__translationIndex].native + mapper.translationMode[__translationIndex].previous + mapper.translationMode[__translationIndex].current
+                            else
+                                mapper.translationMode[translationIndex] = mapper.translationMode[__translationIndex].previous + mapper.translationMode[__translationIndex].current
+                            end
                         end
                         --TODO: ... WIP...
                         if not isSlateTranslation then
@@ -266,17 +270,15 @@ if localPlayer then
                                 local j = mapper.axis.validLocationIndexes[i]
                                 if mapper.translationMode[("__"..j)] and (translationIndex == j) then
                                     translationValues[j] = mapper.translationMode[j] - mapper.translationMode[("__"..j)].native
-                                    --translationValues[j] = 0
                                 else
                                     translationValues[j] = 0
                                 end
                             end
-                            outputChatBox(toJSON(translationValues))
-                            local _, _, _, current_rotX, current_rotY, current_rotZ = imports.getElementLocation(mapper.translationMode.element, "ZYX")
-                            local genQuat = imports.quat.new(imports.quat.fromEuler(current_rotX, current_rotY, current_rotZ))
+                            local _, _, _, __rotX, __rotY, __rotZ = imports.getElementLocation(mapper.translationMode.element, "ZYX")
+                            local currentQuat = imports.quat.new(imports.quat.fromEuler(__rotX, __rotY, __rotZ))
                             local rotQuat = imports.quat.fromVectorAngle(imports.Vector3(1, 0, 0), translationValues.rotX)*imports.quat.fromVectorAngle(imports.Vector3(0, 1, 0), translationValues.rotY)*imports.quat.fromVectorAngle(imports.Vector3(0, 0, 1), translationValues.rotZ) 
-                            genQuat = rotQuat*genQuat
-                            mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = imports.quat.toEuler(genQuat[1], genQuat[2], genQuat[3], genQuat[4])
+                            currentQuat = rotQuat*currentQuat
+                            mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = imports.quat.toEuler(currentQuat[1], currentQuat[2], currentQuat[3], currentQuat[4])
                         end
                         imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ, "ZYX")
                     end
