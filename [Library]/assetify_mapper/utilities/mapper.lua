@@ -384,8 +384,10 @@ if localPlayer then
 
     imports.addEvent("Assetify:Mapper:onRecieveCacheManifest", true)
     imports.addEventHandler("Assetify:Mapper:onRecieveCacheManifest", root, function(manifestData)
+        local preLoadedScene = mapper.loadedScene and mapper.rwAssets[(mapper.cacheManifestPath)][(mapper.loadedScene)]
         mapper.rwAssets[(mapper.cacheManifestPath)] = manifestData
         mapper.ui.sceneListWnd.refreshUI()
+        if preLoadedScene and not mapper.fetchSceneCache(preLoadedScene) then mapper:reset() end
     end)
 
     imports.addEventHandler("onClientElementDestroy", root, function()
