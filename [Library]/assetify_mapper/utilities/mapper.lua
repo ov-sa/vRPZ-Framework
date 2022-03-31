@@ -24,6 +24,7 @@ local imports = {
     setmetatable = setmetatable,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
+    getResourceRootElement = getResourceRootElement,
     triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent,
     getKeyState = getKeyState,
@@ -438,5 +439,11 @@ else
     imports.addEventHandler("Assetify:Mapper:onGenerateScene", root, function(sceneName)
         local sceneCache = mapper.fetchSceneCache(sceneName)
         if not sceneCache then return false end
+    end)
+
+    imports.addEventHandler("onPlayerResourceStart", root, function(resourceElement)
+        if imports.getResourceRootElement(resourceElement) == resourceRoot then
+            mapper.syncCacheManifest(source)
+        end
     end)
 end
