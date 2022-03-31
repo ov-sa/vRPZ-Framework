@@ -126,6 +126,16 @@ quat.new = function(w, x, y, z)
 	return imports.setmetatable({w, x, y, z}, quat)
 end
 
+quat.__mul = function(quat1, quat2)
+    if not quat1 or not quat2 then return false end
+	return quat.new(
+		(quat1[1]*quat2[1]) - (quat1[2]*quat2[2]) - (quat1[3]*quat2[3]) - (quat1[4]*quat2[4]),
+		(quat1[1]*quat2[2]) + (quat1[2]*quat2[1]) + (quat1[3]*quat2[4]) - (quat1[4]*quat2[3]),
+		(quat1[1]*quat2[3]) + (quat1[3]*quat2[1]) + (quat1[4]*quat2[2]) - (quat1[2]*quat2[4]),
+		(quat1[1]*quat2[4]) + (quat1[4]*quat2[1]) + (quat1[2]*quat2[3]) - (quat1[3]*quat2[2])
+	)
+end
+
 quat.fromEuler = function(x, y, z)
     if not x or not y or not z then return false end
     x, y, z = imports.math.rad(x)*0.5, imports.math.rad(y)*0.5, imports.math.rad(z)*0.5
