@@ -33,9 +33,9 @@ local notifUI = {
     buffer = {},
     startX = -5, startY = 5, paddingY = 5, offsetY = 0,
     slideTopTickCounter = CLIENT_CURRENT_TICK,
-    font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 17),
-    leftEdgeTexture = imports.beautify.assets["images"]["curved_square/regular/left.rw"],
-    rightEdgeTexture = imports.beautify.assets["images"]["curved_square/regular/right.rw"]
+    font = CGame.createFont(":beautify_library/files/assets/fonts/signika_semibold.rw", 10),
+    --leftEdgeTexture = imports.beautify.assets["images"]["curved_square/regular/left.rw"],
+    --rightEdgeTexture = imports.beautify.assets["images"]["curved_square/regular/right.rw"]
 }
 
 
