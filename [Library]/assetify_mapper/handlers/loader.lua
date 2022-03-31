@@ -30,17 +30,9 @@ local imports = {
 }
 
 
--------------------------------------------
---[[ Functions: Toggles/Enables Mapper ]]--
--------------------------------------------
-
-function mapper:enable(state)
-    mapper.isEnabled = state
-    if mapper.state then
-        mapper.ui.enable(mapper.isEnabled)
-    end
-    return true
-end
+----------------------------------
+--[[ Function: Toggles Mapper ]]--
+----------------------------------
 
 function mapper:toggle(state)
     if mapper.state == state then return false end

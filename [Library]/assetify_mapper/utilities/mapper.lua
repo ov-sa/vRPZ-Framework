@@ -190,6 +190,12 @@ if localPlayer then
         return true
     end
 
+    function mapper:enable(state)
+        mapper.isEnabled = state
+        mapper.ui.enable(mapper.isEnabled)
+        return true
+    end
+    
     mapper.render = function(renderData)
         if renderData.renderType == "input" then
             mapper.cache.keys.mouse = imports.isMouseClicked()
