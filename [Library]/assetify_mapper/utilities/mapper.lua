@@ -455,6 +455,7 @@ else
         local sceneCache, sceneIndex = mapper.fetchSceneCache(sceneName)
         if not sceneCache then return false end
         imports.table.remove(mapper.rwAssets[(mapper.cacheManifestPath)], sceneIndex)
+        imports.file.write(mapper.cacheManifestPath, imports.toJSON(mapper.rwAssets[(mapper.cacheManifestPath)]))
         local sceneIPLPath = sceneCache.."scene.ipl"
         imports.file.delete(sceneIPLPath)
         mapper.syncCacheManifest(source)
