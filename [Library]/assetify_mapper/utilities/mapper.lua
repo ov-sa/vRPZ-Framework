@@ -492,7 +492,9 @@ else
         imports.table.remove(mapper.rwAssets[(mapper.cacheManifestPath)], sceneIndex)
         imports.file.write(mapper.cacheManifestPath, imports.toJSON(mapper.rwAssets[(mapper.cacheManifestPath)]))
         local sceneIPLPath = sceneCache.."scene.ipl"
-        imports.file.delete(sceneIPLPath)
+        if imports.file.exists(sceneIPLPath) then
+            imports.file.delete(sceneIPLPath)
+        end
         mapper.syncCacheManifest(source)
         imports.triggerClientEvent(source, "Assetify:Mapper:onNotification", source, "Scene successfully deleted. ["..sceneIPLPath.."]", availableColors.success)
     end)
