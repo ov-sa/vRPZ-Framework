@@ -235,6 +235,7 @@ if localPlayer then
                                 end
                             end                            
                         end
+                        local __translationIndex = "__"..translationIndex
                         if not isCursorTranslation then
                             translationValue = ((imports.getKeyState(availableControls.valueUp) and translationSpeed) or (imports.getKeyState(availableControls.valueDown) and -translationSpeed) or 0)
                             if isSlateTranslation then
@@ -243,6 +244,7 @@ if localPlayer then
                             else
                                 mapper.translationMode[translationIndex] = translationValue
                             end
+                            mapper.translationMode[__translationIndex] = nil
                         else
                             local __translationIndex = "__"..translationIndex
                             mapper.translationMode[__translationIndex] = mapper.translationMode[__translationIndex] or {
@@ -258,7 +260,7 @@ if localPlayer then
                             if isSlateTranslation then
                                 mapper.translationMode[translationIndex] = mapper.translationMode[__translationIndex].native + mapper.translationMode[__translationIndex].previous + mapper.translationMode[__translationIndex].current
                             else
-                                mapper.translationMode[translationIndex] = mapper.translationMode[__translationIndex].current - mapper.translationMode[__translationIndex].__current
+                                mapper.translationMode[translationIndex] = mapper.translationMode[__translationIndex].previous + mapper.translationMode[__translationIndex].current - mapper.translationMode[__translationIndex].__current
                             end
                         end
                         if not isSlateTranslation then
