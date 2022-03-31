@@ -153,7 +153,9 @@ mapper.ui.sceneWnd.createUI = function()
         mapper.ui.sceneListWnd.createUI()
     end)
     imports.addEventHandler("onClientUIClick", mapper.ui.sceneWnd.resetBtn.element, function()
-        mapper:reset()
+        if mapper:reset() then
+            imports.triggerEvent("Assetify:Mapper:onNotification", localPlayer, "Scene successfully resetted.", availableColors.success)
+        end
     end)
     imports.addEventHandler("onClientUIClick", mapper.ui.sceneWnd.saveBtn.element, function()
         thread:create(function(cThread)
