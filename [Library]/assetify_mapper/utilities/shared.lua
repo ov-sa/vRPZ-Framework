@@ -72,7 +72,7 @@ function setElementLocation(element, posX, posY, posZ, rotX, rotY, rotZ)
         imports.setElementPosition(element, posX, posY, posZ)
     end
     if rotX and rotY and rotZ then
-        imports.setElementRotation(element, rotX, rotY, rotZ)
+        imports.setElementRotation(element, rotX, rotY, rotZ, "ZYX")
     end
     return true
 end
@@ -80,7 +80,7 @@ end
 function getElementLocation(element)
     if not element or not imports.isElement(element) then return false end
     local posX, posY, posZ = imports.getElementPosition(element)
-    local rotX, rotY, rotZ = imports.getElementRotation(element)
+    local rotX, rotY, rotZ = imports.getElementRotation(element, "ZYX")
     return posX, posY, posZ, rotX, rotY, rotZ 
 end
 
