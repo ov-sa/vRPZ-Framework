@@ -235,41 +235,41 @@ if localPlayer then
                                 end
                             end
                         end
+                        mapper.translationMode[("__"..translationIndex)] = mapper.translationMode[("__"..translationIndex)] or {
+                            native = mapper.translationMode[translationIndex],
+                            previous = 0, current = 0, offset = translationValue,
+                            speed = translationSpeed
+                        }
                         if not isCursorTranslation then
                             translationValue = ((imports.getKeyState(availableControls.valueUp) and translationSpeed) or (imports.getKeyState(availableControls.valueDown) and -translationSpeed) or 0)
-                            if isSlateTranslation then
-                                translationValue = translationValue*0.75
-                                mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + translationValue
-                            else
-                                mapper.translationMode[translationIndex] = translationValue
-                            end
+                            if isSlateTranslation then translationValue = translationValue*0.75 end
+                            mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + translationValue
                         else
-                            mapper.translationMode[("__"..translationIndex)] = mapper.translationMode[("__"..translationIndex)] or {
-                                native = mapper.translationMode[translationIndex],
-                                previous = 0, current = 0, offset = translationValue,
-                                speed = translationSpeed
-                            }
                             if mapper.translationMode[("__"..translationIndex)].speed ~= translationSpeed then
                                 mapper.translationMode[("__"..translationIndex)].speed = translationSpeed
                                 mapper.translationMode[("__"..translationIndex)].previous = mapper.translationMode[("__"..translationIndex)].previous + mapper.translationMode[("__"..translationIndex)].current
                                 mapper.translationMode[("__"..translationIndex)].offset = translationValue
                             end
                             mapper.translationMode[("__"..translationIndex)].current = (translationValue - mapper.translationMode[("__"..translationIndex)].offset)*translationSpeed
-                            if isSlateTranslation then
-                                mapper.translationMode[translationIndex] = mapper.translationMode[("__"..translationIndex)].native + mapper.translationMode[("__"..translationIndex)].previous + mapper.translationMode[("__"..translationIndex)].current
-                            else
-                                mapper.translationMode[translationIndex] = mapper.translationMode[("__"..translationIndex)].previous + mapper.translationMode[("__"..translationIndex)].current
-                            end
+                            mapper.translationMode[translationIndex] = mapper.translationMode[("__"..translationIndex)].native + mapper.translationMode[("__"..translationIndex)].previous + mapper.translationMode[("__"..translationIndex)].current
                         end
                         --TODO: ... WIP...
-                        if not isSlateTranslation then
+                        local enableQuat = true
+                        if not isSlateTranslation and enableQuat then
+                            local nativeValues = {}
                             local translationValues = {}
                             for i = 4, #mapper.axis.validLocationIndexes, 1 do
                                 local j = mapper.axis.validLocationIndexes[i]
-                                translationValues[j] = ((translationIndex == j) and mapper.translationMode[j]) or 0
+                                if mapper.translationMode[("__"..j)] then
+                                    nativeValues[j] = mapper.translationMode[("__"..j)].native
+                                    translationValues[j] = mapper.translationMode[j] - nativeValues[j]
+                                else
+                                    nativeValues[j] = mapper.translationMode[j]
+                                    translationValues[j] = 0
+                                end
                             end
-                            local genQuat = imports.quat.new(imports.quat.fromEuler(mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ))
-                            local relativeToWorld = true
+                            local genQuat = imports.quat.new(imports.quat.fromEuler(nativeValues.rotX, nativeValues.rotY, nativeValues.rotZ))
+                            local relativeToWorld = false
                             if relativeToWorld then
                                 local rotQuat = imports.quat.fromVectorAngle(imports.Vector3(1, 0, 0), translationValues.rotX)*imports.quat.fromVectorAngle(imports.Vector3(0, 1, 0), translationValues.rotY)*imports.quat.fromVectorAngle(imports.Vector3(0, 0, 1), translationValues.rotZ) 
                                 genQuat = rotQuat*genQuat
