@@ -301,7 +301,9 @@ if localPlayer then
             end
         elseif button == availableControls.deleteObject then
             if mapper.isTargettingDummy then
+                local assetName = mapper.buffer.element[(mapper.isTargettingDummy)].assetName
                 imports.destroyElement(mapper.isTargettingDummy)
+                imports.triggerEvent("Assetify:Mapper:onNotification", localPlayer, "Prop succesfully destroyed. ["..assetName.."]", availableColors.success)
             end
         end
     end
