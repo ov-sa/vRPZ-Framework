@@ -14,7 +14,7 @@
 
 configVars["UI"]["Notification"] = {
 
-    height = 30,
+    height = 15,
     slideInDuration = 1000,
     slideOutDuration = 1000,
     slideTopDuration = 1000,
