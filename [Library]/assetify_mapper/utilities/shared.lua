@@ -150,7 +150,7 @@ quat.fromVectorAngle = function(vector, angle)
     if not vector or not angle then return false end
     local a = imports.math.rad(angle*0.5)
     local w, s = imports.math.cos(a), imports.math.sin(a)
-    return quat.new(w, s*vec.x, s*vec.y, s*vec.z)
+    return quat.new(w, s*vector.x, s*vector.y, s*vector.z)
 end
 
 quat.fromEuler = function(x, y, z)
