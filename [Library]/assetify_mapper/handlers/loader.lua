@@ -38,13 +38,13 @@ function mapper:toggle(state)
     if mapper.state == state then return false end
     if state then
         mapper.ui.create()
+        mapper:enable(mapper.isEnabled)
         camera:create()
         imports.bindKey(availableControls.toggleCursor, "down", camera.controlCursor)
         imports.beautify.render.create(mapper.render)
         imports.beautify.render.create(mapper.render, {renderType = "input"})
         imports.addEventHandler("onClientKey", root, mapper.controlKey)
         imports.addEventHandler("onClientClick", root, mapper.controlClick)
-        mapper:enable(mapper.isEnabled)
     else
         imports.removeEventHandler("onClientClick", root, mapper.controlClick)
         imports.removeEventHandler("onClientKey", root, mapper.controlKey)

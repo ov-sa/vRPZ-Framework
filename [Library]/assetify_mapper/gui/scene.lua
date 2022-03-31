@@ -240,10 +240,10 @@ end
 
 mapper.ui.enable = function(state)
     if mapper.ui.propWnd.element and imports.isElement(mapper.ui.propWnd.element) then
-        imports.beautify.setUIDisabled(mapper.ui.propWnd.element, state)
+        imports.beautify.setUIDisabled(mapper.ui.propWnd.element, not state)
     end
     if mapper.ui.sceneWnd.element and imports.isElement(mapper.ui.sceneWnd.element) then
-        imports.beautify.setUIDisabled(mapper.ui.sceneWnd.element, state)
+        imports.beautify.setUIDisabled(mapper.ui.sceneWnd.element, not state)
     end
     return true
 end
