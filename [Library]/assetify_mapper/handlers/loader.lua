@@ -96,3 +96,29 @@ imports.addEventHandler("onClientResourceStop", resource, function()
     mapper.isLibraryStopping = true
     mapper:reset()
 end)
+
+
+--TODO: REMOVE LATER..
+local testMatrix = {getCameraMatrix()}
+testObject = createObject(1328, testMatrix[1], testMatrix[2], testMatrix[3])
+
+local testValues = {0, 2, 0}
+
+addEventHandler("onClientRender", root, function()
+    local posX, posY, posZ, rotX, rotY, rotZ = getElementLocation(testObject, "ZYX")
+    local genQuat = quat.new(quat.fromEuler(rotX, rotY, rotZ))
+    local vecX = Vector3(1, 0, 0)
+    local vecY = Vector3(0, 1, 0)
+    local vecZ = Vector3(0, 0, 1)
+    local relativeToWorld = true
+    if relativeToWorld then
+      local rotQuat = quat.fromVectorAngle(vecX, testValues[1])*quat.fromVectorAngle(vecY, testValues[2])*quat.fromVectorAngle(vecZ, testValues[3]) 
+      genQuat = rotQuat * genQuat
+    else
+      genQuat = genQuat * quat.fromVectorAngle(vecX, testValues[1])
+      genQuat = genQuat * quat.fromVectorAngle(vecY, testValues[2])
+      genQuat = genQuat * quat.fromVectorAngle(vecZ, testValues[3])
+    end
+    rotX, rotY, rotZ = quat.toEuler(genQuat[1], genQuat[2], genQuat[3], genQuat[4])
+    setElementRotation(testObject, rotX, rotY, rotZ, 'ZYX')
+end)
