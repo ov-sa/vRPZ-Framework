@@ -187,6 +187,12 @@ if localPlayer then
         return true
     end
 
+    function mapper:enable(state)
+        if mapper.isEnabled == state then return false end
+        mapper.isEnabled = state
+        return true
+    end
+
     mapper.render = function(renderData)
         if renderData.renderType == "input" then
             mapper.cache.keys.mouse = imports.isMouseClicked()
@@ -340,6 +346,7 @@ if localPlayer then
             local sceneIPLPath = sceneCache.."scene.ipl"
             if sceneData.ipl then
                 mapper.loadedScene = sceneIndex
+                mapper:enable(false)
                 thread:create(function(cThread)
                     imports.triggerEvent("Assetify:Mapper:onNotification", localPlayer, "Scene loading; Kindly wait... ["..sceneIPLPath.."]", availableColors.info)
                     mapper:reset()
@@ -354,6 +361,7 @@ if localPlayer then
                         })
                         thread.pause()
                     end
+                    mapper:enable(true)
                     imports.triggerEvent("Assetify:Mapper:onNotification", localPlayer, "Scene successfully loaded. ["..sceneIPLPath.."]", availableColors.success)
                 end):resume({
                     executions = downloadSettings.buildRate,
