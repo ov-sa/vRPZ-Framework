@@ -334,10 +334,12 @@ if localPlayer then
 
     imports.addEventHandler("Assetify:Mapper:onLoadScene", root, function(sceneName, sceneData)
         local sceneCache, sceneIndex = mapper.fetchSceneCache(sceneName)
-        mapper.loadedScene = sceneIndex
-        if sceneData then
+        if not sceneData then
+            mapper.loadedScene = sceneIndex
+        else
             local sceneIPLPath = sceneCache.."scene.ipl"
             if sceneData.ipl then
+                mapper.loadedScene = sceneIndex
                 thread:create(function(cThread)
                     imports.triggerEvent("Assetify:Mapper:onNotification", localPlayer, "Scene loading; Kindly wait... ["..sceneIPLPath.."]", availableColors.info)
                     mapper:reset()
