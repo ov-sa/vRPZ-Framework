@@ -101,9 +101,9 @@ if localPlayer then
         validAxesTypes = {"slate", "ring"},
         validLocationIndexes = {"posX", "posY", "posZ", "rotX", "rotY", "rotZ"},
         validAxes = {
-            x = {color = {255, 0, 0}, rotation = {slate = {0, 0, 90}, ring = {0, 0, 0}}},
-            y = {color = {0, 255, 0}, rotation = {slate = {0, 0, 0}, ring = {0, 90, 0}}},
-            z = {color = {0, 0, 255}, rotation = {slate = {90, 0, 0}, ring = {90, 0, 0}}}
+            x = {color = {255, 0, 0}, rotation = {slate = {0, 0, 90}, ring = {0, 90, 0}}},
+            y = {color = {0, 255, 0}, rotation = {slate = {0, 0, 0}, ring = {90, 0, 0}}},
+            z = {color = {0, 0, 255}, rotation = {slate = {90, 0, 0}, ring = {0, 0, 0}}}
         }
     }
     mapper.cache = {keys = {}}
@@ -233,28 +233,36 @@ if localPlayer then
                                 else
                                     translationValue = (translationValue*360)%360
                                 end
-                            end
+                            end                            
                         end
                         for i = 1, #mapper.axis.validLocationIndexes, 1 do
                             local j = mapper.axis.validLocationIndexes[i]
                             mapper.translationMode[("__"..j)] = mapper.translationMode[("__"..j)] or {
-                                native = mapper.translationMode[j],
-                                previous = 0, current = 0, offset = translationValue,
-                                speed = translationSpeed
+                                native = mapper.translationMode[j]
                             }
                         end
                         if not isCursorTranslation then
                             translationValue = ((imports.getKeyState(availableControls.valueUp) and translationSpeed) or (imports.getKeyState(availableControls.valueDown) and -translationSpeed) or 0)
-                            if isSlateTranslation then translationValue = translationValue*0.75 end
-                            mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + translationValue
-                        else
-                            if mapper.translationMode[("__"..translationIndex)].speed ~= translationSpeed then
-                                mapper.translationMode[("__"..translationIndex)].speed = translationSpeed
-                                mapper.translationMode[("__"..translationIndex)].previous = mapper.translationMode[("__"..translationIndex)].previous + mapper.translationMode[("__"..translationIndex)].current
-                                mapper.translationMode[("__"..translationIndex)].offset = translationValue
+                            if isSlateTranslation then
+                                translationValue = translationValue*0.75
+                                mapper.translationMode[translationIndex] = mapper.translationMode[translationIndex] + translationValue
+                            else
+                                mapper.translationMode[translationIndex] = translationValue
                             end
-                            mapper.translationMode[("__"..translationIndex)].current = (translationValue - mapper.translationMode[("__"..translationIndex)].offset)*translationSpeed
-                            mapper.translationMode[translationIndex] = mapper.translationMode[("__"..translationIndex)].native + mapper.translationMode[("__"..translationIndex)].previous + mapper.translationMode[("__"..translationIndex)].current
+                        else
+                            local __translationIndex = "__"..translationIndex
+                            if not mapper.translationMode[__translationIndex].previous then
+                                mapper.translationMode[__translationIndex].previous = 0
+                                mapper.translationMode[__translationIndex].current = 0
+                                mapper.translationMode[__translationIndex].offset = translationValue
+                            end
+                            if mapper.translationMode[__translationIndex].speed ~= translationSpeed then
+                                mapper.translationMode[__translationIndex].speed = translationSpeed
+                                mapper.translationMode[__translationIndex].previous = mapper.translationMode[__translationIndex].previous + mapper.translationMode[__translationIndex].current
+                                mapper.translationMode[__translationIndex].offset = translationValue
+                            end
+                            mapper.translationMode[__translationIndex].current = (translationValue - mapper.translationMode[__translationIndex].offset)*translationSpeed
+                            mapper.translationMode[translationIndex] = mapper.translationMode[__translationIndex].native + mapper.translationMode[__translationIndex].previous + mapper.translationMode[__translationIndex].current
                         end
                         --TODO: ... WIP...
                         if not isSlateTranslation then
