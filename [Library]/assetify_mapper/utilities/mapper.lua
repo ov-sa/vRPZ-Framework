@@ -251,14 +251,9 @@ if localPlayer then
                             end
                         else
                             local __translationIndex = "__"..translationIndex
-                            if not mapper.translationMode[__translationIndex].previous then
-                                mapper.translationMode[__translationIndex].previous = 0
-                                mapper.translationMode[__translationIndex].current = 0
-                                mapper.translationMode[__translationIndex].offset = translationValue
-                            end
                             if mapper.translationMode[__translationIndex].speed ~= translationSpeed then
                                 mapper.translationMode[__translationIndex].speed = translationSpeed
-                                mapper.translationMode[__translationIndex].previous = mapper.translationMode[__translationIndex].previous + mapper.translationMode[__translationIndex].current
+                                mapper.translationMode[__translationIndex].previous = (mapper.translationMode[__translationIndex].previous or 0) + (mapper.translationMode[__translationIndex].current or 0)
                                 mapper.translationMode[__translationIndex].offset = translationValue
                             end
                             mapper.translationMode[__translationIndex].current = (translationValue - mapper.translationMode[__translationIndex].offset)*translationSpeed
