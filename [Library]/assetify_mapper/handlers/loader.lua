@@ -28,9 +28,18 @@ local imports = {
 }
 
 
-----------------------------------
---[[ Function: Toggles Mapper ]]--
-----------------------------------
+-------------------------------------------
+--[[ Functions: Toggles/Enables Mapper ]]--
+-------------------------------------------
+
+function mapper:enable(state)
+    if mapper.isEnabled == state then return false end
+    mapper.isEnabled = state
+    if mapper.state then
+        --TODO: ENABLE/DISABLE ALL BTFY UIs
+    end
+    return true
+end
 
 function mapper:toggle(state)
     if mapper.state == state then return false end

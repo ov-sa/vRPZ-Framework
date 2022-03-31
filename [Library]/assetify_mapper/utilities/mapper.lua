@@ -153,6 +153,8 @@ if localPlayer then
 
     function mapper:reset()
         mapper.loadedScene = false
+        mapper.isSpawningDummy = false
+        mapper.isTargettingDummy = false
         for i, j in imports.pairs(mapper.buffer.element) do
             if i and imports.isElement(i) then
                 imports.destroyElement(i)
@@ -184,12 +186,6 @@ if localPlayer then
         mapper.buffer.element[(self.element)] = nil
         imports.beautify.gridlist.removeRow(mapper.ui.sceneWnd.propLst.element, self.id)
         self = nil
-        return true
-    end
-
-    function mapper:enable(state)
-        if mapper.isEnabled == state then return false end
-        mapper.isEnabled = state
         return true
     end
 
