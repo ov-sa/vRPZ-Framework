@@ -19,6 +19,7 @@ loadstring(exports.assetify_library:fetchImports())()
 loadstring(exports.assetify_library:fetchThreader())()
 
 local imports = {
+    setmetatable = setmetatable,
     isElement = isElement,
     fileExists = fileExists,
     fileCreate = fileCreate,
@@ -117,19 +118,25 @@ file = {
 --[[ Class: Quat ]]--
 ---------------------
 
-quat = {
-    fromEuler = function(x, y, z)
-        if not x or not y or not z then return false end
-        x, y, z = imports.math.rad(x)*0.5, imports.math.rad(y)*0.5, imports.math.rad(z)*0.5
-        local sinX, sinY, sinZ = imports.math.sin(x), imports.math.sin(y), imports.math.sin(z)
-        local cosX, cosY, cosZ = imports.math.cos(x), imports.math.cos(y), imports.math.cos(z)
-        return (cosZ*cosX*cosY) + (sinZ*sinX*sinY), (cosZ*sinX*cosY) - (sinZ*cosX*sinY), (cosZ*cosX*sinY) + (sinZ*sinX*cosY), (sinZ*cosX*cosY) - (cosZ*sinX*sinY)
-    end,
+quat = {}
+quat.__index = quat
 
-    toEuler = function(w, x, y, z)
-        if not w or not x or not y or not z then return false end
-        local sinX, sinY, sinZ = 2*((w*x) + (y*z)), 2*((w*y) - (z*x)), 2*((w*z) + (x*y))
-        local cosX, cosY, cosZ = 1.0 - (2*((x*x) + (y*y))), imports.math.min(imports.math.max(sinY, -1), 1), 1 - (2*((y*y) + (z*z)))
-        return imports.math.deg(imports.math.atan2(sinX, cosX)), imports.math.deg(imports.math.asin(cosY)), imports.math.deg(imports.math.atan2(sinZ, cosZ))
-    end
-}
+quat.new = function(w, x, y, z)
+    if not w or not x or not y or not z then return false end
+	return imports.setmetatable({w, x, y, z}, quat)
+end
+
+quat.fromEuler = function(x, y, z)
+    if not x or not y or not z then return false end
+    x, y, z = imports.math.rad(x)*0.5, imports.math.rad(y)*0.5, imports.math.rad(z)*0.5
+    local sinX, sinY, sinZ = imports.math.sin(x), imports.math.sin(y), imports.math.sin(z)
+    local cosX, cosY, cosZ = imports.math.cos(x), imports.math.cos(y), imports.math.cos(z)
+    return (cosZ*cosX*cosY) + (sinZ*sinX*sinY), (cosZ*sinX*cosY) - (sinZ*cosX*sinY), (cosZ*cosX*sinY) + (sinZ*sinX*cosY), (sinZ*cosX*cosY) - (cosZ*sinX*sinY)
+end
+
+quat.toEuler = function(w, x, y, z)
+    if not w or not x or not y or not z then return false end
+    local sinX, sinY, sinZ = 2*((w*x) + (y*z)), 2*((w*y) - (z*x)), 2*((w*z) + (x*y))
+    local cosX, cosY, cosZ = 1.0 - (2*((x*x) + (y*y))), imports.math.min(imports.math.max(sinY, -1), 1), 1 - (2*((y*y) + (z*z)))
+    return imports.math.deg(imports.math.atan2(sinX, cosX)), imports.math.deg(imports.math.asin(cosY)), imports.math.deg(imports.math.atan2(sinZ, cosZ))
+end
