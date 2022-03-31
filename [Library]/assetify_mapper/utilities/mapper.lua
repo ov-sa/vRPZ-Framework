@@ -350,7 +350,7 @@ if localPlayer then
                     for i = 1, #unparsedDatas, 1 do
                         local assetName = imports.string.gsub(imports.tostring(imports.gettok(unparsedDatas[i], 2, mapper.separators.IPL)), " ", "")
                         local posX, posY, posZ = imports.tonumber(imports.gettok(unparsedDatas[i], 4, mapper.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 5, mapper.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 6, mapper.separators.IPL))
-                        local rotX, rotY, rotZ = imports.quat.toEuler(imports.tonumber(imports.gettok(unparsedDatas[i], 10, mapper.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 7, mapper.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 8, mapper.separators.IPL))
+                        local rotX, rotY, rotZ = imports.quat.toEuler(imports.tonumber(imports.gettok(unparsedDatas[i], 10, mapper.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 7, mapper.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 8, mapper.separators.IPL)))
                         mapper:create(assetName, {
                             position = {x = posX, y = posY, z = posZ},
                             rotation = {x = rotX, y = rotY, z = rotZ}
