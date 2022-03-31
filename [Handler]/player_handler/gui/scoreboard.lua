@@ -201,7 +201,7 @@ scoreboardUI.toggleUI = function()
         imports.beautify.render.remove(scoreboardUI.renderUI, {renderType = "input"})
         scoreboardUI.state = false
     end
-    imports.showChat(false, true)
-    imports.showCursor(state, true)
+    imports.showChat(false)
+    imports.showCursor(state)
     return true
 end
