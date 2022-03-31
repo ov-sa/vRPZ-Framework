@@ -431,6 +431,7 @@ else
             mapper.loadScene(source, sceneName, true)
             sceneCache = mapper.fetchSceneCache(sceneName)
         end
+        print("AA 3")
         local sceneIPLPath = sceneCache.."scene.ipl"
         imports.file.write(sceneIPLPath, sceneIPL)
         imports.triggerClientEvent(source, "Assetify:Mapper:onNotification", source, "Scene successfully saved. ["..sceneIPLPath.."]", availableColors.success)

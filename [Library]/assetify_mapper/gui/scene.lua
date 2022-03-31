@@ -168,7 +168,7 @@ mapper.ui.sceneWnd.createUI = function()
                 sceneIPL = sceneIPL..(i - 1)..", "..(j.assetName)..", 0, "..posX..", "..posY..", "..posZ..", "..rotX..", "..rotY..", "..rotZ..", "..rotW..", -1\n"
                 thread.pause()
             end
-            imports.triggerServerEvent("Assetify:Mapper:onSaveScene", localPlayer, mapper.loadedScene, sceneIPL)
+            imports.triggerServerEvent("Assetify:Mapper:onSaveScene", localPlayer, mapper.rwAssets[(mapper.cacheManifestPath)][(mapper.loadedScene)], sceneIPL)
         end):resume({
             executions = downloadSettings.buildRate,
             frames = 1
