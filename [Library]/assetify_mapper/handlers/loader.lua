@@ -75,16 +75,17 @@ imports.addEventHandler("onClientResourceStart", resource, function()
     for i, j in imports.pairs(availableTemplates) do
         imports.beautify.setUITemplate(i, j)
     end
-    if imports.assetify.isLoaded() then
+    local booter = function()
         Assetify_Props = imports.assetify.getAssets(mapper.assetPack) or {}
         mapper:enable(true)
         mapper:toggle(true)
+    end
+    if imports.assetify.isLoaded() then
+        booter()
     else
         local booterWrapper = nil
         booterWrapper = function()
-            Assetify_Props = imports.assetify.getAssets(mapper.assetPack) or {}
-            mapper:enable(true)
-            mapper:toggle(true)
+            booter()
             imports.removeEventHandler("onAssetifyLoad", root, booterWrapper)
         end
         imports.addEventHandler("onAssetifyLoad", root, booterWrapper)
