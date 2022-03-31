@@ -234,14 +234,25 @@ mapper.ui.sceneListWnd.destroyUI = function()
 end
 
 
-----------------------------------------
---[[ Functions: Creates/Destroys UI ]]--
-----------------------------------------
+------------------------------------------------
+--[[ Functions: Enables/Creates/Destroys UI ]]--
+------------------------------------------------
+
+mapper.ui.enable = function(state)
+    if mapper.ui.propWnd.element and imports.isElement(mapper.ui.propWnd.element) then
+        imports.beautify.setUIDisabled(mapper.ui.propWnd.element, state)
+    end
+    if mapper.ui.sceneWnd.element and imports.isElement(mapper.ui.sceneWnd.element) then
+        imports.beautify.setUIDisabled(mapper.ui.sceneWnd.element, state)
+    end
+    return true
+end
 
 mapper.ui.create = function()
     mapper.ui.destroy()
     mapper.ui.propWnd.createUI()
     mapper.ui.sceneWnd.createUI()
+    return true
 end
 
 mapper.ui.destroy = function()
@@ -252,4 +263,5 @@ mapper.ui.destroy = function()
         imports.destroyElement(mapper.ui.sceneWnd.element)
     end
     mapper.ui.sceneListWnd.destroyUI()
+    return true
 end

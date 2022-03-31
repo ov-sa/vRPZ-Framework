@@ -37,7 +37,7 @@ local imports = {
 function mapper:enable(state)
     mapper.isEnabled = state
     if mapper.state then
-        --TODO: ENABLE/DISABLE ALL BTFY UIs
+        mapper.ui.enable(mapper.isEnabled)
     end
     return true
 end
