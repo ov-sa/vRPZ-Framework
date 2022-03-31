@@ -268,7 +268,7 @@ if localPlayer then
                             local translationValues = {}
                             for i = 4, #mapper.axis.validLocationIndexes, 1 do
                                 local j = mapper.axis.validLocationIndexes[i]
-                                if mapper.translationMode[("__"..j)] and (translationIndex == j) then
+                                if translationIndex == j then
                                     translationValues[j] = mapper.translationMode[j]
                                 else
                                     translationValues[j] = 0
