@@ -146,6 +146,13 @@ quat.__mul = function(quat1, quat2)
 	)
 end
 
+quat.fromVectorAngle = function(vector, angle)
+    if not vector or not angle then return false end
+    local a = angle*0.5*imports.math.pi/180
+    local w, s = imports.math.cos(a), imports.math.sin(a)
+    return quat.new(w, s*vec.x, s*vec.y, s*vec.z)
+end
+
 quat.fromEuler = function(x, y, z)
     if not x or not y or not z then return false end
     x, y, z = imports.math.rad(x)*0.5, imports.math.rad(y)*0.5, imports.math.rad(z)*0.5
