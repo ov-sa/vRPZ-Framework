@@ -200,9 +200,7 @@ mapper.ui.sceneListWnd.createUI = function()
     })
 
     imports.addEventHandler("onClientUIClick", mapper.ui.sceneListWnd.loadBtn.element, function()
-        local sceneSelection = imports.beautify.gridlist.getSelection(mapper.ui.sceneListWnd.sceneLst.element)
-        if not sceneSelection then return false end
-        local sceneName = imports.beautify.gridlist.getRowData(mapper.ui.sceneListWnd.sceneLst.element, sceneSelection, 1)
+        local sceneName = mapper.ui.sceneListWnd.fetchSelection()
         if not sceneName then return false end
         if mapper.loadedScene and (mapper.rwAssets[(mapper.cacheManifestPath)][(mapper.loadedScene)] == sceneName) then
             imports.triggerEvent("Assetify:Mapper:onNotification", localPlayer, "Scene already loaded. ["..sceneName.."]", availableColors.error)
@@ -211,15 +209,25 @@ mapper.ui.sceneListWnd.createUI = function()
         end
     end)
     imports.addEventHandler("onClientUIClick", mapper.ui.sceneListWnd.deleteBtn.element, function()
-        local sceneSelection = imports.beautify.gridlist.getSelection(mapper.ui.sceneListWnd.sceneLst.element)
-        if not sceneSelection then return false end
-        local sceneName = imports.beautify.gridlist.getRowData(mapper.ui.sceneListWnd.sceneLst.element, sceneSelection, 1)
+        local sceneName = mapper.ui.sceneListWnd.fetchSelection()
         if not sceneName then return false end
         imports.triggerServerEvent("Assetify:Mapper:onDeleteScene", localPlayer, sceneName)
+    end)
+    imports.addEventHandler("onClientUIClick", mapper.ui.sceneListWnd.generateBtn.element, function()
+        local sceneName = mapper.ui.sceneListWnd.fetchSelection()
+        if not sceneName then return false end
+        imports.triggerServerEvent("Assetify:Mapper:onGenerateScene", localPlayer, sceneName)
     end)
     imports.addEventHandler("onClientUIClick", mapper.ui.sceneListWnd.closeBtn.element, function()
         mapper.ui.sceneListWnd.destroyUI()
     end)
+end
+
+mapper.ui.sceneListWnd.fetchSelection = function()
+    local sceneSelection = imports.beautify.gridlist.getSelection(mapper.ui.sceneListWnd.sceneLst.element)
+    if not sceneSelection then return false end
+    local sceneName = imports.beautify.gridlist.getRowData(mapper.ui.sceneListWnd.sceneLst.element, sceneSelection, 1)
+    return sceneName
 end
 
 mapper.ui.sceneListWnd.refreshUI = function()
