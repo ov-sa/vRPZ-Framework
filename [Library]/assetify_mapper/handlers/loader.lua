@@ -99,10 +99,11 @@ end)
 
 
 --TODO: REMOVE LATER..
+--[[
 local testMatrix = {getCameraMatrix()}
 testObject = createObject(1328, testMatrix[1], testMatrix[2], testMatrix[3])
 
-local testValues = {0, 2, 0}
+local testValues = {0, 200, 0}
 
 addEventHandler("onClientRender", root, function()
     local posX, posY, posZ, rotX, rotY, rotZ = getElementLocation(testObject, "ZYX")
@@ -122,3 +123,4 @@ addEventHandler("onClientRender", root, function()
     rotX, rotY, rotZ = quat.toEuler(genQuat[1], genQuat[2], genQuat[3], genQuat[4])
     setElementRotation(testObject, rotX, rotY, rotZ, 'ZYX')
 end)
+]]

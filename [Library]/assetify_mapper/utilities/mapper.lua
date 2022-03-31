@@ -211,7 +211,7 @@ if localPlayer then
             mapper.ui.toolWnd.renderUI()
             mapper.ui.notif.renderUI()
             mapper.translationMode = (mapper.isTargettingDummy and (mapper.translationMode or {})) or false
-            local isCursorTranslation = false
+            local translationIndex, isCursorTranslation = false, false
             if mapper.translationMode then
                 mapper.translationMode.element = mapper.isTargettingDummy
                 mapper.translationMode.type = mapper.translationMode.type or 1
@@ -219,7 +219,7 @@ if localPlayer then
                 mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = imports.getElementLocation(mapper.translationMode.element, "ZYX")
                 if not CLIENT_MTA_WINDOW_ACTIVE then
                     local isSlateTranslation = mapper.axis.validAxesTypes[(mapper.translationMode.type)] == "slate"
-                    local translationIndex = ((mapper.translationMode.axis == "x") and ((isSlateTranslation and "posX") or "rotX")) or ((mapper.translationMode.axis == "y") and ((isSlateTranslation and "posY") or "rotY")) or ((mapper.translationMode.axis == "z") and ((isSlateTranslation and "posZ") or "rotZ")) or false
+                    translationIndex = ((mapper.translationMode.axis == "x") and ((isSlateTranslation and "posX") or "rotX")) or ((mapper.translationMode.axis == "y") and ((isSlateTranslation and "posY") or "rotY")) or ((mapper.translationMode.axis == "z") and ((isSlateTranslation and "posZ") or "rotZ")) or false
                     if translationIndex then
                         local translationSpeed, translationValue = (imports.getKeyState(availableControls.speedUp) and availableControlSpeeds.fast) or (imports.getKeyState(availableControls.speedDown) and availableControlSpeeds.slow) or availableControlSpeeds.normal, nil
                         if camera.isCursorVisible then
@@ -235,11 +235,14 @@ if localPlayer then
                                 end
                             end
                         end
-                        mapper.translationMode[("__"..translationIndex)] = mapper.translationMode[("__"..translationIndex)] or {
-                            native = mapper.translationMode[translationIndex],
-                            previous = 0, current = 0, offset = translationValue,
-                            speed = translationSpeed
-                        }
+                        for i = 1, #mapper.axis.validLocationIndexes, 1 do
+                            local j = mapper.axis.validLocationIndexes[i]
+                            mapper.translationMode[("__"..j)] = mapper.translationMode[("__"..j)] or {
+                                native = mapper.translationMode[j],
+                                previous = 0, current = 0, offset = translationValue,
+                                speed = translationSpeed
+                            }
+                        end
                         if not isCursorTranslation then
                             translationValue = ((imports.getKeyState(availableControls.valueUp) and translationSpeed) or (imports.getKeyState(availableControls.valueDown) and -translationSpeed) or 0)
                             if isSlateTranslation then translationValue = translationValue*0.75 end
@@ -254,30 +257,22 @@ if localPlayer then
                             mapper.translationMode[translationIndex] = mapper.translationMode[("__"..translationIndex)].native + mapper.translationMode[("__"..translationIndex)].previous + mapper.translationMode[("__"..translationIndex)].current
                         end
                         --TODO: ... WIP...
-                        local enableQuat = true
-                        if not isSlateTranslation and enableQuat then
-                            local nativeValues = {}
+                        if not isSlateTranslation then
                             local translationValues = {}
                             for i = 4, #mapper.axis.validLocationIndexes, 1 do
                                 local j = mapper.axis.validLocationIndexes[i]
-                                if mapper.translationMode[("__"..j)] then
-                                    nativeValues[j] = mapper.translationMode[("__"..j)].native
-                                    translationValues[j] = mapper.translationMode[j] - nativeValues[j]
+                                if mapper.translationMode[("__"..j)] and (translationIndex == j) then
+                                    translationValues[j] = mapper.translationMode[j] - mapper.translationMode[("__"..j)].native
+                                    --translationValues[j] = 0
                                 else
-                                    nativeValues[j] = mapper.translationMode[j]
                                     translationValues[j] = 0
                                 end
                             end
-                            local genQuat = imports.quat.new(imports.quat.fromEuler(nativeValues.rotX, nativeValues.rotY, nativeValues.rotZ))
-                            local relativeToWorld = false
-                            if relativeToWorld then
-                                local rotQuat = imports.quat.fromVectorAngle(imports.Vector3(1, 0, 0), translationValues.rotX)*imports.quat.fromVectorAngle(imports.Vector3(0, 1, 0), translationValues.rotY)*imports.quat.fromVectorAngle(imports.Vector3(0, 0, 1), translationValues.rotZ) 
-                                genQuat = rotQuat*genQuat
-                            else
-                                genQuat = genQuat*imports.quat.fromVectorAngle(imports.Vector3(1, 0, 0), translationValues.rotX)
-                                genQuat = genQuat*imports.quat.fromVectorAngle(imports.Vector3(0, 1, 0), translationValues.rotY)
-                                genQuat = genQuat*imports.quat.fromVectorAngle(imports.Vector3(0, 0, 1), translationValues.rotZ)
-                            end
+                            outputChatBox(toJSON(translationValues))
+                            local _, _, _, current_rotX, current_rotY, current_rotZ = imports.getElementLocation(mapper.translationMode.element, "ZYX")
+                            local genQuat = imports.quat.new(imports.quat.fromEuler(current_rotX, current_rotY, current_rotZ))
+                            local rotQuat = imports.quat.fromVectorAngle(imports.Vector3(1, 0, 0), translationValues.rotX)*imports.quat.fromVectorAngle(imports.Vector3(0, 1, 0), translationValues.rotY)*imports.quat.fromVectorAngle(imports.Vector3(0, 0, 1), translationValues.rotZ) 
+                            genQuat = rotQuat*genQuat
                             mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ = imports.quat.toEuler(genQuat[1], genQuat[2], genQuat[3], genQuat[4])
                         end
                         imports.setElementLocation(mapper.translationMode.element, mapper.translationMode.posX, mapper.translationMode.posY, mapper.translationMode.posZ, mapper.translationMode.rotX, mapper.translationMode.rotY, mapper.translationMode.rotZ, "ZYX")
@@ -299,9 +294,8 @@ if localPlayer then
                     imports.setElementCollisionsEnabled(mapper.axis[j][k].LODInstance, isCollisionEnabled)
                 end
             end
-            mapper.isCursorTranslation = isCursorTranslation
-            mapper.cache.prevCursorY = (mapper.isCursorTranslation and mapper.cache.prevCursorY) or false
-            if mapper.translationMode and not mapper.isCursorTranslation then
+            mapper.cache.prevCursorY = (isCursorTranslation and mapper.cache.prevCursorY) or false
+            if mapper.translationMode and not translationIndex then
                 for i = 1, #mapper.axis.validLocationIndexes, 1 do
                     local j = mapper.axis.validLocationIndexes[i]
                     mapper.translationMode[("__"..j)] = nil
