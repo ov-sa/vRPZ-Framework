@@ -20,6 +20,7 @@ local imports = {
     bindKey = bindKey,
     showChat = showChat,
     showCursor = showCursor,
+    string = string,
     math = math,
     beautify = beautify
 }
@@ -30,25 +31,20 @@ local imports = {
 -------------------
 
 local scoreboardUI = {
+    margin = 10,
     startX = 0, startY = 25,
     width = 1285, height = 500,
     animStatus = "backward",
-    bgColor = tocolor(0, 0, 0, 255),
-    --[[
+    bgColor = tocolor(0, 0, 0, 250),
     banner = {
-        title = {
-            paddingX = 10,
-            serverTitle = "#C81E1E↪ D A Y Z  #C8C8C8E P I C",
-            --font = fonts[38],
-        },
+        title = "#C81E1E↪  v R P Z   #C8C8C8F R A M E W O R K",
         height = 35,
-        bannerPrefix = "O N L I N E    P L A Y E R S | ",
-        --font = fonts[39],
-        fontColor = {175, 175, 175, 255},
-        bgColor = {0, 0, 0, 253},
+        font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 18), counterFont = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 16), fontColor = tocolor(175, 175, 175, 255),
+        bgColor = tocolor(0, 0, 0, 253),
         dividerSize = 2,
         dividerColor = {200, 30, 30, 255}
     },
+    --[[
     dataColumns = {
         dividerSize = 2,
         dividerColor = {100, 100, 100, 35},
@@ -142,7 +138,7 @@ local scoreboardUI = {
 }
 
 scoreboardUI.startX = scoreboardUI.startX + ((CLIENT_MTA_RESOLUTION[1] - scoreboardUI.width)*0.5)
-scoreboardUI.startY = scoreboardUI.startY + ((CLIENT_MTA_RESOLUTION[2] - scoreboardUI.height)*0.5)
+scoreboardUI.startY = scoreboardUI.startY + ((CLIENT_MTA_RESOLUTION[2] - (scoreboardUI.height + scoreboardUI.banner.height))*0.5)
 
 
 --[[
@@ -182,15 +178,20 @@ scoreboardUI.renderUI = function(renderData)
     if renderData.renderType == "input" then
 
     elseif renderData.renderType == "render" then
-        local startX, startY = scoreboardUI.startX, scoreboardUI.startY
+        local startX, startY = scoreboardUI.startX, scoreboardUI.startY + scoreboardUI.banner.height
+        local banner_startX, banner_startY = startX, startY - scoreboardUI.banner.height
+        local serverPlayers = getElementsByType("player")
+        imports.beautify.native.drawRectangle(banner_startX, banner_startY, scoreboardUI.width, scoreboardUI.banner.height, scoreboardUI.banner.bgColor, false)
         imports.beautify.native.drawRectangle(startX, startY, scoreboardUI.width, scoreboardUI.height, scoreboardUI.bgColor, false)
+        imports.beautify.native.drawText(scoreboardUI.banner.title, banner_startX + scoreboardUI.margin, banner_startY, banner_startX + scoreboardUI.width - scoreboardUI.margin, banner_startY + scoreboardUI.banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.font, "left", "center", true, false, false, true)
+        imports.beautify.native.drawText(imports.string.spaceChars((#serverPlayers).."/20"), banner_startX + scoreboardUI.margin, banner_startY, banner_startX + scoreboardUI.width - scoreboardUI.margin, banner_startY + scoreboardUI.banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.counterFont, "right", "center", true, false, false)
     end
 end
 
 
-------------------------------
---[[ Function: UI Helpers ]]--
-------------------------------
+-------------------------------
+--[[ Functions: UI Helpers ]]--
+-------------------------------
 
 function isScoreboardUIVisible() return scoreboardUI.state end
 
