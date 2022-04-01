@@ -33,94 +33,63 @@ local imports = {
 local scoreboardUI = {
     margin = 10,
     startX = 0, startY = 25,
-    width = 1285, height = 500,
+    width = 1282, height = 525,
     animStatus = "backward",
-    bgColor = tocolor(0, 0, 0, 250),
+    bgColor = imports.tocolor(0, 0, 0, 250),
     banner = {
         title = "#C81E1E↪  v R P Z   #C8C8C8F R A M E W O R K",
         height = 35,
+        dividerSize = 1, dividerColor = imports.tocolor(0, 0, 0, 75),
         font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 18), counterFont = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 16), fontColor = tocolor(175, 175, 175, 255),
-        bgColor = tocolor(0, 0, 0, 253),
-        dividerSize = 2,
-        dividerColor = tocolor(200, 30, 30, 255)
+        bgColor = imports.tocolor(0, 0, 0, 255)
     },
-    --[[
-    dataColumns = {
-        dividerSize = 2,
-        dividerColor = {100, 100, 100, 35},
-        title = {
-            height = 25,
-            paddingY = 4.5,
-            --font = fonts[36],
-            fontColor = {175, 175, 175, 235},
-            bgColor = {100, 100, 100, 35},
-            embedLineSize = 10,
-            embedLineColor = {100, 100, 100, 35},
-            embedLinePath = DxTexture("files/images/scoreboard/border.png", "argb", true, "clamp")
-        },
+    columns = {
+        height = 25,
+        dividerSize = 2, dividerColor = imports.tocolor(15, 15, 15, 75),
+        font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 17), fontColor = tocolor(0, 0, 0, 255),
+        bgColor = imports.tocolor(100, 100, 100, 255),
         data = {
-            dividerSize = 1,
-            dividerPadding = 30,
-            dividerColor = {100, 100, 100, 2},
-            height = 35,
-            --font = fonts[37],
-            fontColor = {175, 175, 175, 230}
+            font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 17), fontColor = tocolor(100, 100, 100, 255),
+            bgColor = imports.tocolor(10, 10, 10, 255)
         },
         {
             title = "S.No",
             dataType = "serial_number",
-            width = 50,
-            fontColor = {0, 255, 0, 230}
-        },
-        {
-            title = "R+",
-            dataType = "reputation_+",
-            isReputationIconColumn = true,
-            width = 50,
-            dataText = "+",
-            --font = fonts[38],
-            fontColor = {255, 200, 0, 230},
-            fadeAnimDuration = 2500,
-            __rowAnimData = {}
+            width = 75
         },
         {
             title = "Name",
             dataType = "name",
-            width = 200
+            width = 250
         },
         {
             title = "Level",
             dataType = "level",
-            width = 100
+            width = 125
         },
         {
             title = "Rank",
             dataType = "rank",
-            width = 100
+            width = 125
         },
         {
             title = "Reputation",
             dataType = "reputation",
-            width = 90
+            width = 125
         },
         {
-            title = "Faction",
-            dataType = "faction",
+            title = "Party",
+            dataType = "party",
             width = 125
         },
         {
             title = "Group",
             dataType = "group",
-            width = 125
+            width = 150
         },
         {
-            title = "Murders",
-            dataType = "murders",
-            width = 100
-        },
-        {
-            title = "Kills",
-            dataType = "kills",
+            title = "K:D",
+            dataType = "kd",
             width = 100
         },
         {
@@ -134,7 +103,6 @@ local scoreboardUI = {
             width = 60
         }
     }
-    ]]--
 }
 
 scoreboardUI.startX = scoreboardUI.startX + ((CLIENT_MTA_RESOLUTION[1] - scoreboardUI.width)*0.5)
@@ -178,14 +146,72 @@ scoreboardUI.renderUI = function(renderData)
     if renderData.renderType == "input" then
 
     elseif renderData.renderType == "render" then
+        local serverPlayers = {
+            {
+                name = "Aviril",
+                level = 50,
+                rank = "Eternal",
+                reputation = 75,
+                party = 1,
+                group = "Heroes",
+                kd = 2.5,
+                survival_time = "01:00:00",
+                ping = 20
+            },
+            {
+                name = "Tron",
+                level = 20,
+                rank = "Mythic",
+                reputation = 75,
+                party = 1,
+                group = "Heroes",
+                kd = 1.5,
+                survival_time = "0:21:23",
+                ping = 75
+            },
+            {
+                name = "Maria",
+                level = 60,
+                rank = "Legend",
+                reputation = 75,
+                party = 1,
+                group = "Heroes",
+                kd = 1,
+                survival_time = "0:10:16",
+                ping = 65
+            }
+        }
+    
         local startX, startY = scoreboardUI.startX, scoreboardUI.startY + scoreboardUI.banner.height
         local banner_startX, banner_startY = startX, startY - scoreboardUI.banner.height
-        local serverPlayers = getElementsByType("player")
         imports.beautify.native.drawRectangle(banner_startX, banner_startY, scoreboardUI.width, scoreboardUI.banner.height, scoreboardUI.banner.bgColor, false)
         imports.beautify.native.drawRectangle(startX, startY, scoreboardUI.width, scoreboardUI.height, scoreboardUI.bgColor, false)
+        imports.beautify.native.drawRectangle(banner_startX, startY, scoreboardUI.width, scoreboardUI.columns.height, scoreboardUI.columns.bgColor, false)
         imports.beautify.native.drawRectangle(banner_startX, startY, scoreboardUI.width, scoreboardUI.banner.dividerSize, scoreboardUI.banner.dividerColor, false)
+        for i = 1, #scoreboardUI.columns, 1 do
+            local j = scoreboardUI.columns[i]
+            j.startX = (scoreboardUI.columns[(i - 1)] and scoreboardUI.columns[(i - 1)].endX) or scoreboardUI.columns.dividerSize
+            j.endX = j.startX + j.width + scoreboardUI.columns.dividerSize
+            imports.beautify.native.drawRectangle(startX + j.endX - scoreboardUI.columns.dividerSize, startY + scoreboardUI.columns.height + (scoreboardUI.margin*0.5), scoreboardUI.columns.dividerSize, scoreboardUI.height - scoreboardUI.columns.height - scoreboardUI.margin, scoreboardUI.columns.dividerColor, false)
+        end
+
+        
         imports.beautify.native.drawText(scoreboardUI.banner.title, banner_startX + scoreboardUI.margin, banner_startY, banner_startX + scoreboardUI.width - scoreboardUI.margin, banner_startY + scoreboardUI.banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.font, "left", "center", true, false, false, true)
         imports.beautify.native.drawText(imports.string.spaceChars((#serverPlayers).."/20"), banner_startX + scoreboardUI.margin, banner_startY, banner_startX + scoreboardUI.width - scoreboardUI.margin, banner_startY + scoreboardUI.banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.counterFont, "right", "center", true, false, false)
+        for i = 1, #scoreboardUI.columns, 1 do
+            local j = scoreboardUI.columns[i]
+            imports.beautify.native.drawText(j.title, startX + j.startX, startY, startX + j.endX, startY + scoreboardUI.columns.height, scoreboardUI.columns.fontColor, 1, scoreboardUI.columns.font, "center", "center", true, false, false)
+        end
+        for i = 1, #serverPlayers, 1 do
+            local j = serverPlayers[i]
+            local column_startY = startY + scoreboardUI.columns.height + (scoreboardUI.margin*0.5) + ((scoreboardUI.columns.height + (scoreboardUI.margin*0.5))*(i - 1))
+            for k = 1, #scoreboardUI.columns, 1 do
+                local v = scoreboardUI.columns[k]
+                local column_startX = startX + v.startX
+                imports.beautify.native.drawRectangle(column_startX, column_startY, v.width, scoreboardUI.columns.height, scoreboardUI.columns.data.bgColor, false)
+                imports.beautify.native.drawText(((v.dataType == "serial_number") and i) or j[(v.dataType)] or "-", column_startX, column_startY, column_startX + v.width, column_startY + scoreboardUI.columns.height, scoreboardUI.columns.data.fontColor, 1, scoreboardUI.columns.data.font, "center", "center", true, false, false)
+            end
+        end
     end
 end
 

@@ -61,30 +61,22 @@ configVars["UI"]["Login"] = {
     ["Options"] = {
         play = {
             ["Titles"] = {["EN"] = "Play", ["TR"] = "Oyna"},
-            height = 35,
-            embedLineSize = 3,
-            fontColor = {150, 150, 150, 25},
-            hoverfontColor = {170, 35, 35, 255},
-            embedLineColor = {170, 35, 35, 50},
+            height = 35, embedLineSize = 3,
+            fontColor = {150, 150, 150, 25}, hoverfontColor = {170, 35, 35, 255}, embedLineColor = {170, 35, 35, 50},
             hoverDuration = 2500
         },
 
         characters = {
             ["Titles"] = {["EN"] = "Characters", ["TR"] = "karakterler"},
-            width = 325,
-            height = 510,
+            width = 325, height = 510,
             titlebar = {
                 ["Titles"] = {["EN"] = "Character", ["TR"] = "Karakter"},
                 height = 35,
-                fontColor = {170, 35, 35, 255},
-                bgColor = {0, 0, 0, 255},
-                shadowColor = {50, 50, 50, 255},
+                fontColor = {170, 35, 35, 255}, bgColor = {0, 0, 0, 255}, shadowColor = {50, 50, 50, 255}
             },
             options = {
-                size = 30,
-                iconSize = 14,
-                iconColor = {255, 255, 255, 255},
-                bgColor = {0, 0, 0, 255},
+                size = 30, iconSize = 14,
+                iconColor = {255, 255, 255, 255}, bgColor = {0, 0, 0, 255},
                 hoverDuration = 2750,
                 tooltips = {
                     previous = {["EN"] = "Previous", ["TR"] = "Öncesi"},
@@ -98,8 +90,7 @@ configVars["UI"]["Login"] = {
             },
             categories = {
                 height = 30,
-                fontColor = {200, 200, 200, 255},
-                bgColor = {0, 0, 0, 235},
+                fontColor = {200, 200, 200, 255}, bgColor = {0, 0, 0, 235},
 
                 ["Identity"] = {
                     ["Titles"] = {["EN"] = "Identity", ["TR"] = "Kimlik"},
