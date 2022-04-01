@@ -32,6 +32,7 @@ local scoreboardUI = {
     startX = 0, startY = 25,
     width = 1285, height = 500,
     animStatus = "backward",
+    bgColor = tocolor(0, 0, 0, 255),
     banner = {
         title = {
             paddingX = 10,
@@ -173,14 +174,21 @@ scoreboardCache = {
 --[[ Function: Renders UI ]]--
 ------------------------------
 
-scoreboardUI.renderUI = function()
-    outputChatBox("RENDERING SCOREBOARD UI..")
+scoreboardUI.renderUI = function(renderData)
+    if not scoreboardUI.state or not CPlayer.isInitialized(localPlayer) then return false end
+    if renderData.renderType == "input" then
+
+    elseif renderData.renderType == "render" then
+        local startX, startY = scoreboardUI.startX, scoreboardUI.startY
+        imports.beautify.native.drawRectangle(startX, startY, scoreboardUI.width, scoreboardUI.height, scoreboardUI.bgColor, false)
+        outputChatBox("RENDERING SCOREBOARD UI..")
+    end
 end
 
 
--------------------------------
---[[ Functions: UI Helpers ]]--
--------------------------------
+------------------------------
+--[[ Function: UI Helpers ]]--
+------------------------------
 
 function isScoreboardUIVisible() return scoreboardUI.state end
 
@@ -201,7 +209,9 @@ scoreboardUI.toggleUI = function()
         imports.beautify.render.remove(scoreboardUI.renderUI, {renderType = "input"})
         scoreboardUI.state = false
     end
-    imports.showChat(false)
+    imports.showChat(not state)
     imports.showCursor(state)
     return true
 end
+
+imports.bindKey("z", "down", function() scoreboardUI.toggleUI(not scoreboardUI.state) end)
