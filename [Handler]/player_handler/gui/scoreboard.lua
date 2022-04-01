@@ -42,7 +42,7 @@ local scoreboardUI = {
         font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 18), counterFont = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 16), fontColor = tocolor(175, 175, 175, 255),
         bgColor = tocolor(0, 0, 0, 253),
         dividerSize = 2,
-        dividerColor = {200, 30, 30, 255}
+        dividerColor = tocolor(200, 30, 30, 255)
     },
     --[[
     dataColumns = {
@@ -183,6 +183,7 @@ scoreboardUI.renderUI = function(renderData)
         local serverPlayers = getElementsByType("player")
         imports.beautify.native.drawRectangle(banner_startX, banner_startY, scoreboardUI.width, scoreboardUI.banner.height, scoreboardUI.banner.bgColor, false)
         imports.beautify.native.drawRectangle(startX, startY, scoreboardUI.width, scoreboardUI.height, scoreboardUI.bgColor, false)
+        imports.beautify.native.drawRectangle(banner_startX, startY, scoreboardUI.width, scoreboardUI.banner.dividerSize, scoreboardUI.banner.dividerColor, false)
         imports.beautify.native.drawText(scoreboardUI.banner.title, banner_startX + scoreboardUI.margin, banner_startY, banner_startX + scoreboardUI.width - scoreboardUI.margin, banner_startY + scoreboardUI.banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.font, "left", "center", true, false, false, true)
         imports.beautify.native.drawText(imports.string.spaceChars((#serverPlayers).."/20"), banner_startX + scoreboardUI.margin, banner_startY, banner_startX + scoreboardUI.width - scoreboardUI.margin, banner_startY + scoreboardUI.banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.counterFont, "right", "center", true, false, false)
     end
