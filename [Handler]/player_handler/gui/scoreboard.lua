@@ -17,6 +17,7 @@ local imports = {
     unpackColor = unpackColor,
     interpolateBetween = interpolateBetween,
     getInterpolationProgress = getInterpolationProgress,
+    bindKey = bindKey,
     showChat = showChat,
     showCursor = showCursor,
     math = math,
@@ -33,15 +34,16 @@ local scoreboardUI = {
     width = 1285, height = 500,
     animStatus = "backward",
     bgColor = tocolor(0, 0, 0, 255),
+    --[[
     banner = {
         title = {
             paddingX = 10,
             serverTitle = "#C81E1E↪ D A Y Z  #C8C8C8E P I C",
-            font = fonts[38],
+            --font = fonts[38],
         },
         height = 35,
         bannerPrefix = "O N L I N E    P L A Y E R S | ",
-        font = fonts[39],
+        --font = fonts[39],
         fontColor = {175, 175, 175, 255},
         bgColor = {0, 0, 0, 253},
         dividerSize = 2,
@@ -53,7 +55,7 @@ local scoreboardUI = {
         title = {
             height = 25,
             paddingY = 4.5,
-            font = fonts[36],
+            --font = fonts[36],
             fontColor = {175, 175, 175, 235},
             bgColor = {100, 100, 100, 35},
             embedLineSize = 10,
@@ -65,7 +67,7 @@ local scoreboardUI = {
             dividerPadding = 30,
             dividerColor = {100, 100, 100, 2},
             height = 35,
-            font = fonts[37],
+            --font = fonts[37],
             fontColor = {175, 175, 175, 230}
         },
         {
@@ -80,7 +82,7 @@ local scoreboardUI = {
             isReputationIconColumn = true,
             width = 50,
             dataText = "+",
-            font = fonts[38],
+            --font = fonts[38],
             fontColor = {255, 200, 0, 230},
             fadeAnimDuration = 2500,
             __rowAnimData = {}
@@ -136,6 +138,7 @@ local scoreboardUI = {
             width = 60
         }
     }
+    ]]--
 }
 
 scoreboardUI.startX = scoreboardUI.startX + ((CLIENT_MTA_RESOLUTION[1] - scoreboardUI.width)*0.5)
@@ -175,13 +178,12 @@ scoreboardCache = {
 ------------------------------
 
 scoreboardUI.renderUI = function(renderData)
-    if not scoreboardUI.state or not CPlayer.isInitialized(localPlayer) then return false end
+    --if not scoreboardUI.state or not CPlayer.isInitialized(localPlayer) then return false end
     if renderData.renderType == "input" then
 
     elseif renderData.renderType == "render" then
         local startX, startY = scoreboardUI.startX, scoreboardUI.startY
         imports.beautify.native.drawRectangle(startX, startY, scoreboardUI.width, scoreboardUI.height, scoreboardUI.bgColor, false)
-        outputChatBox("RENDERING SCOREBOARD UI..")
     end
 end
 
@@ -197,7 +199,7 @@ function isScoreboardUIVisible() return scoreboardUI.state end
 --[[ Function: Toggles UI ]]--
 ------------------------------
 
-scoreboardUI.toggleUI = function()
+scoreboardUI.toggleUI = function(state)
     if (((state ~= true) and (state ~= false)) or (state == scoreboardUI.state)) then return false end
 
     if state then
@@ -209,8 +211,9 @@ scoreboardUI.toggleUI = function()
         imports.beautify.render.remove(scoreboardUI.renderUI, {renderType = "input"})
         scoreboardUI.state = false
     end
-    imports.showChat(not state)
-    imports.showCursor(state)
+    --TODO: REMOVE FORCE MODE LATER..
+    imports.showChat(not state, true)
+    imports.showCursor(state, true)
     return true
 end
 
