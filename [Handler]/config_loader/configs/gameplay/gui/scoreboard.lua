@@ -28,10 +28,60 @@ configVars["UI"]["Scoreboard"] = {
 
     columns = {
         height = 25, dividerSize = 2,
-        bgColor = {100, 100, 100, 255}, dividerColor = {15, 15, 15, 200},
+        fontColor = {0, 0, 0, 255}, bgColor = {100, 100, 100, 255}, dividerColor = {15, 15, 15, 200},
         data = {
             fontColor = {100, 100, 100, 255},
             bgColor = {10, 10, 10, 255}
+        },
+        {
+            title = "S.No",
+            dataType = "serial_number",
+            width = 75
+        },
+        {
+            title = "Name",
+            dataType = "name",
+            width = 250
+        },
+        {
+            title = "Level",
+            dataType = "level",
+            width = 125
+        },
+        {
+            title = "Rank",
+            dataType = "rank",
+            width = 125
+        },
+        {
+            title = "Reputation",
+            dataType = "reputation",
+            width = 125
+        },
+        {
+            title = "Party",
+            dataType = "party",
+            width = 125
+        },
+        {
+            title = "Group",
+            dataType = "group",
+            width = 150
+        },
+        {
+            title = "K:D",
+            dataType = "kd",
+            width = 100
+        },
+        {
+            title = "Survival Time",
+            dataType = "survival_time",
+            width = 125
+        },
+        {
+            title = "Ping",
+            dataType = "ping",
+            width = 60
         }
     },
 

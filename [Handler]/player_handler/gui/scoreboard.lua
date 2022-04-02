@@ -46,58 +46,8 @@ local scoreboardUI = {
         font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 17), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.fontColor)),
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.bgColor)), dividerColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.dividerColor)),
         data = {
-            font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 17), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.fontColor)),
-            bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.bgColor))
-        },
-        {
-            title = "S.No",
-            dataType = "serial_number",
-            width = 75
-        },
-        {
-            title = "Name",
-            dataType = "name",
-            width = 250
-        },
-        {
-            title = "Level",
-            dataType = "level",
-            width = 125
-        },
-        {
-            title = "Rank",
-            dataType = "rank",
-            width = 125
-        },
-        {
-            title = "Reputation",
-            dataType = "reputation",
-            width = 125
-        },
-        {
-            title = "Party",
-            dataType = "party",
-            width = 125
-        },
-        {
-            title = "Group",
-            dataType = "group",
-            width = 150
-        },
-        {
-            title = "K:D",
-            dataType = "kd",
-            width = 100
-        },
-        {
-            title = "Survival Time",
-            dataType = "survival_time",
-            width = 125
-        },
-        {
-            title = "Ping",
-            dataType = "ping",
-            width = 60
+            font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 17), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.fontColor)),
+            bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.bgColor))
         }
     },
     --[[
@@ -141,9 +91,9 @@ scoreboardUI.createBGTexture = function(isRefresh)
     end
     scoreboardUI.bgRT = imports.beautify.native.createRenderTarget(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, true)
     imports.beautify.native.setRenderTarget(scoreboardUI.bgRT, true)
-    for i = 1, #scoreboardUI.columns, 1 do
-        local j = scoreboardUI.columns[i]
-        j.startX = (scoreboardUI.columns[(i - 1)] and scoreboardUI.columns[(i - 1)].endX) or FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.dividerSize
+    for i = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns, 1 do
+        local j = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[i]
+        j.startX = (FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[(i - 1)] and FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[(i - 1)].endX) or FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.dividerSize
         j.endX = j.startX + j.width + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.dividerSize
         imports.beautify.native.drawRectangle(j.endX - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.dividerSize, scoreboardUI.margin*0.5, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.dividerSize, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height - scoreboardUI.margin, scoreboardUI.columns.dividerColor, false)
     end
@@ -398,16 +348,16 @@ scoreboardUI.renderUI = function(renderData)
         for i = 1, #serverPlayers, 1 do
             local j = serverPlayers[i]
             local column_startY = (scoreboardUI.margin*0.5) + ((FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + (scoreboardUI.margin*0.5))*(i - 1))
-            for k = 1, #scoreboardUI.columns, 1 do
-                local v = scoreboardUI.columns[k]
+            for k = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns, 1 do
+                local v = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[k]
                 local column_startX = v.startX
                 imports.beautify.native.drawRectangle(column_startX, column_startY, v.width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columns.data.bgColor, false)
                 imports.beautify.native.drawText(((v.dataType == "serial_number") and i) or j[(v.dataType)] or "-", column_startX, column_startY, column_startX + v.width, column_startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columns.data.fontColor, 1, scoreboardUI.columns.data.font, "center", "center", true, false, false)
             end
         end
         imports.beautify.native.setRenderTarget()
-        for i = 1, #scoreboardUI.columns, 1 do
-            local j = scoreboardUI.columns[i]
+        for i = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns, 1 do
+            local j = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[i]
             imports.beautify.native.drawText(j.title, startX + j.startX, startY, startX + j.endX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columns.fontColor, 1, scoreboardUI.columns.font, "center", "center", true, false, false)
         end
         imports.beautify.native.drawImage(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.viewRT, 0, 0, 0, -1, false)
