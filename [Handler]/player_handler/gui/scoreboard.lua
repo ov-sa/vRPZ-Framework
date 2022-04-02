@@ -322,7 +322,7 @@ scoreboardUI.renderUI = function(renderData)
                 ping = 65
             },
             {
-                name = "Maria",
+                name = "Maria Last",
                 level = 60,
                 rank = "Legend",
                 reputation = 75,
