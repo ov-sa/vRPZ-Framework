@@ -43,8 +43,6 @@ local scoreboardUI = {
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.bgColor)), dividerColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.dividerColor))
     },
     columns = {
-        height = 25,
-        dividerSize = 2,
         font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 17), fontColor = tocolor(0, 0, 0, 255),
         bgColor = imports.tocolor(100, 100, 100, 255), dividerColor = imports.tocolor(15, 15, 15, 200),
         data = {
@@ -132,8 +130,8 @@ scoreboardUI.createBGTexture = function(isRefresh)
     imports.beautify.native.setRenderTarget(scoreboardUI.bgRT, true)
     imports.beautify.native.drawRectangle(0, 0, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, scoreboardUI.banner.bgColor, false)
     imports.beautify.native.drawRectangle(0, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height, scoreboardUI.bgColor, false)
-    imports.beautify.native.drawRectangle(0, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, scoreboardUI.columns.height, scoreboardUI.columns.bgColor, false)
-    imports.beautify.native.drawRectangle(0, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height + scoreboardUI.columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.dividerSize, scoreboardUI.banner.dividerColor, false)        
+    imports.beautify.native.drawRectangle(0, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columns.bgColor, false)
+    imports.beautify.native.drawRectangle(0, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.dividerSize, scoreboardUI.banner.dividerColor, false)        
     imports.beautify.native.setRenderTarget()
     local rtPixels = imports.beautify.native.getTexturePixels(scoreboardUI.bgRT)
     if rtPixels then
@@ -141,13 +139,13 @@ scoreboardUI.createBGTexture = function(isRefresh)
         imports.destroyElement(scoreboardUI.bgRT)
         scoreboardUI.bgRT = nil
     end
-    scoreboardUI.bgRT = imports.beautify.native.createRenderTarget(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - scoreboardUI.columns.height, true)
+    scoreboardUI.bgRT = imports.beautify.native.createRenderTarget(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, true)
     imports.beautify.native.setRenderTarget(scoreboardUI.bgRT, true)
     for i = 1, #scoreboardUI.columns, 1 do
         local j = scoreboardUI.columns[i]
-        j.startX = (scoreboardUI.columns[(i - 1)] and scoreboardUI.columns[(i - 1)].endX) or scoreboardUI.columns.dividerSize
-        j.endX = j.startX + j.width + scoreboardUI.columns.dividerSize
-        imports.beautify.native.drawRectangle(j.endX - scoreboardUI.columns.dividerSize, scoreboardUI.margin*0.5, scoreboardUI.columns.dividerSize, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - scoreboardUI.columns.height - scoreboardUI.margin, scoreboardUI.columns.dividerColor, false)
+        j.startX = (scoreboardUI.columns[(i - 1)] and scoreboardUI.columns[(i - 1)].endX) or FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.dividerSize
+        j.endX = j.startX + j.width + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.dividerSize
+        imports.beautify.native.drawRectangle(j.endX - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.dividerSize, scoreboardUI.margin*0.5, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.dividerSize, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height - scoreboardUI.margin, scoreboardUI.columns.dividerColor, false)
     end
     imports.beautify.native.setRenderTarget()
     local rtPixels = imports.beautify.native.getTexturePixels(scoreboardUI.bgRT)
@@ -399,21 +397,21 @@ scoreboardUI.renderUI = function(renderData)
         imports.beautify.native.setRenderTarget(scoreboardUI.viewRT, true)
         for i = 1, #serverPlayers, 1 do
             local j = serverPlayers[i]
-            local column_startY = (scoreboardUI.margin*0.5) + ((scoreboardUI.columns.height + (scoreboardUI.margin*0.5))*(i - 1))
+            local column_startY = (scoreboardUI.margin*0.5) + ((FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + (scoreboardUI.margin*0.5))*(i - 1))
             for k = 1, #scoreboardUI.columns, 1 do
                 local v = scoreboardUI.columns[k]
                 local column_startX = v.startX
-                imports.beautify.native.drawRectangle(column_startX, column_startY, v.width, scoreboardUI.columns.height, scoreboardUI.columns.data.bgColor, false)
-                imports.beautify.native.drawText(((v.dataType == "serial_number") and i) or j[(v.dataType)] or "-", column_startX, column_startY, column_startX + v.width, column_startY + scoreboardUI.columns.height, scoreboardUI.columns.data.fontColor, 1, scoreboardUI.columns.data.font, "center", "center", true, false, false)
+                imports.beautify.native.drawRectangle(column_startX, column_startY, v.width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columns.data.bgColor, false)
+                imports.beautify.native.drawText(((v.dataType == "serial_number") and i) or j[(v.dataType)] or "-", column_startX, column_startY, column_startX + v.width, column_startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columns.data.fontColor, 1, scoreboardUI.columns.data.font, "center", "center", true, false, false)
             end
         end
         imports.beautify.native.setRenderTarget()
         for i = 1, #scoreboardUI.columns, 1 do
             local j = scoreboardUI.columns[i]
-            imports.beautify.native.drawText(j.title, startX + j.startX, startY, startX + j.endX, startY + scoreboardUI.columns.height, scoreboardUI.columns.fontColor, 1, scoreboardUI.columns.font, "center", "center", true, false, false)
+            imports.beautify.native.drawText(j.title, startX + j.startX, startY, startX + j.endX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columns.fontColor, 1, scoreboardUI.columns.font, "center", "center", true, false, false)
         end
-        imports.beautify.native.drawImage(startX, startY + scoreboardUI.columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - scoreboardUI.columns.height, scoreboardUI.viewRT, 0, 0, 0, -1, false)
-        imports.beautify.native.drawImage(startX, startY + scoreboardUI.columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - scoreboardUI.columns.height, scoreboardUI.columnTexture, 0, 0, 0, -1, false)
+        imports.beautify.native.drawImage(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.viewRT, 0, 0, 0, -1, false)
+        imports.beautify.native.drawImage(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columnTexture, 0, 0, 0, -1, false)
         if scoreboardUI.cache.keys.scroll.state then
             --TODO: ..
             scoreboardUI.cache.keys.scroll.state = false
@@ -439,7 +437,7 @@ scoreboardUI.toggleUI = function(state)
     if state then
         imports.beautify.render.create(scoreboardUI.renderUI)
         imports.beautify.render.create(scoreboardUI.renderUI, {renderType = "input"})
-        scoreboardUI.viewRT = imports.beautify.native.createRenderTarget(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - scoreboardUI.columns.height, true)
+        scoreboardUI.viewRT = imports.beautify.native.createRenderTarget(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, true)
     else
         imports.beautify.render.remove(scoreboardUI.renderUI)
         imports.beautify.render.remove(scoreboardUI.renderUI, {renderType = "input"})

@@ -39,6 +39,10 @@ configVars["UI"]["Scoreboard"] = {
     },
     ]]
 
+    columns = {
+        height = 25, dividerSize = 2,
+    },
+
     scroller = {
         width = 5,
         thumbHeight = 100,
