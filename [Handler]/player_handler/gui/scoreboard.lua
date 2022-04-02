@@ -344,7 +344,7 @@ scoreboardUI.renderUI = function(renderData)
         imports.beautify.native.setRenderTarget(scoreboardUI.viewRT, true)
         for i = 1, #serverPlayers, 1 do
             local j = serverPlayers[i]
-            local column_startY = offsetY + (scoreboardUI.margin*0.5) + ((FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + (scoreboardUI.margin*0.5))*(i - 1))
+            local column_startY = -offsetY + (scoreboardUI.margin*0.5) + ((FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + (scoreboardUI.margin*0.5))*(i - 1))
             for k = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns, 1 do
                 local v = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[k]
                 local column_startX = v.startX
