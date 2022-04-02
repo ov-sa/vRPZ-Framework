@@ -122,7 +122,8 @@ for i = 1, 30, 1 do
 end
 
 scoreboardUI.renderUI = function(renderData)
-    --if not scoreboardUI.state or not CPlayer.isInitialized(localPlayer) then return false end
+    if not scoreboardUI.state or not CPlayer.isInitialized(localPlayer) then return false end
+
     if renderData.renderType == "input" then
         scoreboardUI.cache.keys.scroll.state, scoreboardUI.cache.keys.scroll.streak  = imports.isMouseScrolled()
     elseif renderData.renderType == "render" then
@@ -131,16 +132,19 @@ scoreboardUI.renderUI = function(renderData)
         --local serverPlayers = {}
         local startX, startY = scoreboardUI.startX, scoreboardUI.startY
         local view_height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height
-        local overflowHeight =  imports.math.max(0, (scoreboardUI.margin*0.5) + ((FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + (scoreboardUI.margin*0.5))*#serverPlayers) - view_height)
-        local offsetY = overflowHeight*scoreboardUI.scroller.animPercent*0.01
+        local row_height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + (scoreboardUI.margin*0.5)
+        local view_overflowHeight =  imports.math.max(0, (scoreboardUI.margin*0.5) + (row_height*#serverPlayers) - view_height)
+        local offsetY = view_overflowHeight*scoreboardUI.scroller.animPercent*0.01
+        local row_startIndex = imports.math.floor(offsetY/row_height) + 1
+        local row_endIndex = imports.math.min(#serverPlayers, row_startIndex + imports.math.ceil(view_height/row_height))
         imports.beautify.native.drawImage(startX, startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height, scoreboardUI.bgTexture, 0, 0, 0, -1, false)    
         imports.beautify.native.drawText(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.title, startX + scoreboardUI.margin, startY, startX + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.margin, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.font, "left", "center", true, false, false, true)
         imports.beautify.native.drawText(imports.string.spaceChars((#serverPlayers).."/20"), startX + scoreboardUI.margin, startY, startX + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.margin, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.counterFont, "right", "center", true, false, false)
         startY = startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height
         imports.beautify.native.setRenderTarget(scoreboardUI.viewRT, true)
-        for i = 1, #serverPlayers, 1 do
+        for i = row_startIndex, row_endIndex, 1 do
             local j = serverPlayers[i]
-            local column_startY = (scoreboardUI.margin*0.5) + ((FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + (scoreboardUI.margin*0.5))*(i - 1)) - offsetY
+            local column_startY = (scoreboardUI.margin*0.5) + (row_height*(i - 1)) - offsetY
             for k = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns, 1 do
                 local v = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[k]
                 local column_startX = v.startX
@@ -149,15 +153,13 @@ scoreboardUI.renderUI = function(renderData)
             end
         end
         imports.beautify.native.setRenderTarget()
-        --TODO: REMVOE LATER
-        CPlayer.CLanguage = "EN"
         for i = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns, 1 do
             local j = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[i]
             imports.beautify.native.drawText(j.title[(CPlayer.CLanguage)], startX + j.startX, startY, startX + j.endX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columns.fontColor, 1, scoreboardUI.columns.font, "center", "center", true, false, false)
         end
         imports.beautify.native.drawImage(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, view_height, scoreboardUI.viewRT, 0, 0, 0, -1, false)
         imports.beautify.native.drawImage(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, view_height, scoreboardUI.columnTexture, 0, 0, 0, -1, false)
-        if overflowHeight > 0 then
+        if view_overflowHeight > 0 then
             if not scoreboardUI.scroller.isPositioned then
                 scoreboardUI.scroller.startX, scoreboardUI.scroller.startY = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.scroller.width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height
                 scoreboardUI.scroller.height = view_height
@@ -170,7 +172,7 @@ scoreboardUI.renderUI = function(renderData)
             imports.beautify.native.drawRectangle(startX + scoreboardUI.scroller.startX, startY + scoreboardUI.scroller.startY + ((scoreboardUI.scroller.height - scoreboardUI.scroller.thumbHeight)*scoreboardUI.scroller.animPercent*0.01), scoreboardUI.scroller.width, scoreboardUI.scroller.thumbHeight, scoreboardUI.scroller.thumbColor, false)
             if scoreboardUI.cache.keys.scroll.state then
                 --TODO: CHEK IF THE VIEW RT IS HOVERED
-                local scrollPercent = imports.math.max(1, 100/(overflowHeight/(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + (scoreboardUI.margin*0.5))))
+                local scrollPercent = imports.math.max(1, 100/(view_overflowHeight/row_height))
                 scoreboardUI.scroller.percent = imports.math.max(0, imports.math.min(scoreboardUI.scroller.percent + (scrollPercent*imports.math.max(1, scoreboardUI.cache.keys.scroll.streak)*(((scoreboardUI.cache.keys.scroll.state == "down") and 1) or -1)), 100))
                 scoreboardUI.cache.keys.scroll.state = false
             end
@@ -206,9 +208,8 @@ scoreboardUI.toggleUI = function(state)
         end
     end
     scoreboardUI.state = state
-    --TODO: REMOVE FORCE MODE LATER..
-    imports.showChat(not state, true)
-    imports.showCursor(state, true)
+    imports.showChat(not state)
+    imports.showCursor(state)
     return true
 end
 
