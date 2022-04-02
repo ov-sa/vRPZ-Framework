@@ -19,11 +19,13 @@ configVars["UI"]["Scoreboard"] = {
     marginY = 25,
     width = 1282, height = 525,
     bgColor = {0, 0, 0, 250},
+
     banner = {
         title = "#C81E1E↪  v R P Z   #C8C8C8F R A M E W O R K",
         height = 35, dividerSize = 1,
         fontColor = {175, 175, 175, 255}, dividerColor = {0, 0, 0, 200}, bgColor = {0, 0, 0, 255}
-    }
+    },
+
     --[[
     titlebar = {
         height = 35,
