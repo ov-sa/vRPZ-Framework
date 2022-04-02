@@ -13,7 +13,6 @@
 -----------------
 
 local imports = {
-    type = type,
     tocolor = tocolor,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
@@ -50,8 +49,8 @@ notifUI.renderUI = function()
     for i = 1, #notifUI.buffer, 1 do
         local j = notifUI.buffer[i]
         if j then
-            local notif_fontColor = j.fontColor or FRAMEWORK_CONFIGS["UI"]["Notification"].fontColor
             local notif_offsetX, notif_offsetY = 0, 0
+            local notif_fontColor = j.fontColor or FRAMEWORK_CONFIGS["UI"]["Notification"].fontColor
             if j.slideStatus == "forward" then
                 notif_offsetX, notif_offsetY = imports.interpolateBetween(CLIENT_MTA_RESOLUTION[1], notifUI.startY + ((i - 1)*(FRAMEWORK_CONFIGS["UI"]["Notification"].height + notifUI.paddingY)) - FRAMEWORK_CONFIGS["UI"]["Notification"].height, 0, (CLIENT_MTA_RESOLUTION[1]) + notifUI.startX - j.width, notifUI.startY + ((i - 1)*(FRAMEWORK_CONFIGS["UI"]["Notification"].height + notifUI.paddingY)) + offsetY, 0, imports.getInterpolationProgress(j.tickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideInDuration), "InOutBack")
                 j.alphaPercent = imports.interpolateBetween(0, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.tickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideInDuration), "Linear")
@@ -84,7 +83,7 @@ end
 
 imports.addEvent("Client:onNotification", true)
 imports.addEventHandler("Client:onNotification", root, function(message, color)
-    if (not message or imports.type(message) ~= "string" or message == "") then return false end
+    if not message then return false end
 
     imports.table.insert(notifUI.buffer, {
         text = message,

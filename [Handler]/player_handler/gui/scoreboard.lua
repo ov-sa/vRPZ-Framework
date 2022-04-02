@@ -18,6 +18,7 @@ local imports = {
     interpolateBetween = interpolateBetween,
     getInterpolationProgress = getInterpolationProgress,
     bindKey = bindKey,
+    isMouseScrolled = isMouseScrolled,
     showChat = showChat,
     showCursor = showCursor,
     string = string,
@@ -31,6 +32,7 @@ local imports = {
 -------------------
 
 local scoreboardUI = {
+    cache = {keys = {scroll = {}}},
     margin = 10,
     startX = 0, startY = 25,
     width = 1282, height = 525,
@@ -144,7 +146,7 @@ scoreboardCache = {
 scoreboardUI.renderUI = function(renderData)
     --if not scoreboardUI.state or not CPlayer.isInitialized(localPlayer) then return false end
     if renderData.renderType == "input" then
-
+        scoreboardUI.cache.keys.scroll.state, scoreboardUI.cache.keys.scroll.streak  = imports.isMouseScrolled()
     elseif renderData.renderType == "render" then
         local serverPlayers = {
             {
@@ -211,6 +213,10 @@ scoreboardUI.renderUI = function(renderData)
                 imports.beautify.native.drawRectangle(column_startX, column_startY, v.width, scoreboardUI.columns.height, scoreboardUI.columns.data.bgColor, false)
                 imports.beautify.native.drawText(((v.dataType == "serial_number") and i) or j[(v.dataType)] or "-", column_startX, column_startY, column_startX + v.width, column_startY + scoreboardUI.columns.height, scoreboardUI.columns.data.fontColor, 1, scoreboardUI.columns.data.font, "center", "center", true, false, false)
             end
+        end
+        if scoreboardUI.cache.keys.scroll.state then
+            --TODO: ..
+            scoreboardUI.cache.keys.scroll.state = false
         end
     end
 end
