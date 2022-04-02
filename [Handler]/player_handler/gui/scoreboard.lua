@@ -46,7 +46,7 @@ local scoreboardUI = {
         height = 25,
         dividerSize = 2,
         font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 17), fontColor = tocolor(0, 0, 0, 255),
-        bgColor = imports.tocolor(100, 100, 100, 255), dividerColor = imports.tocolor(15, 15, 15, 200)
+        bgColor = imports.tocolor(100, 100, 100, 255), dividerColor = imports.tocolor(15, 15, 15, 200),
         data = {
             font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 17), fontColor = tocolor(100, 100, 100, 255),
             bgColor = imports.tocolor(10, 10, 10, 255)
