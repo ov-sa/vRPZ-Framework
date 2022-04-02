@@ -36,8 +36,10 @@ imports.addEventHandler("onClientResourceStart", resourceRoot, function()
         for i = 550, 19999, 1 do
             imports.removeWorldModel(i, 100000, 0, 0, 0)
         end
-        streamer.waterBuffer = imports.createWater(-3000, -3000, 0, 3000, -3000, 0, -3000, 3000, 0, 3000, 3000, 0, false)
-        imports.setWaterLevel(streamer.waterBuffer, GTAWorldSettings.waterLevel)
+        if GTAWorldSettings.waterLevel then
+            streamer.waterBuffer = imports.createWater(-3000, -3000, 0, 3000, -3000, 0, -3000, 3000, 0, 3000, 3000, 0, false)
+            imports.setWaterLevel(streamer.waterBuffer, GTAWorldSettings.waterLevel)
+        end
     end
     imports.setWaterLevel(GTAWorldSettings.waterLevel, true, true, true, true)
     imports.setOcclusionsEnabled(not GTAWorldSettings.removeWorld)
