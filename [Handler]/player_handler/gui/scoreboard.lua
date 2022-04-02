@@ -43,11 +43,11 @@ local scoreboardUI = {
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.bgColor)), dividerColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.dividerColor))
     },
     columns = {
-        font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 17), fontColor = tocolor(0, 0, 0, 255),
-        bgColor = imports.tocolor(100, 100, 100, 255), dividerColor = imports.tocolor(15, 15, 15, 200),
+        font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 17), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.fontColor)),
+        bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.bgColor)), dividerColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.dividerColor)),
         data = {
-            font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 17), fontColor = tocolor(100, 100, 100, 255),
-            bgColor = imports.tocolor(10, 10, 10, 255)
+            font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 17), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.fontColor)),
+            bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.bgColor))
         },
         {
             title = "S.No",
