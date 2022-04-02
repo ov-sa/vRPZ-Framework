@@ -51,6 +51,7 @@ local scoreboardUI = {
         }
     },
     scroller = {
+        percent = 0, animPercent = 0,
         width = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.width, thumbHeight = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.thumbHeight,
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.bgColor)), thumbColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.thumbColor))
     }
@@ -372,7 +373,7 @@ scoreboardUI.renderUI = function(renderData)
             imports.beautify.native.drawRectangle(startX + scoreboardUI.scroller.startX, startY + scoreboardUI.scroller.startY, scoreboardUI.scroller.width, scoreboardUI.scroller.height, scoreboardUI.scroller.bgColor, false)
             imports.beautify.native.drawRectangle(startX + scoreboardUI.scroller.startX, startY + scoreboardUI.scroller.startY + ((scoreboardUI.scroller.height - scoreboardUI.scroller.thumbHeight)*scoreboardUI.scroller.animPercent*0.01), scoreboardUI.scroller.width, scoreboardUI.scroller.thumbHeight, scoreboardUI.scroller.thumbColor, false)
             if scoreboardUI.cache.keys.scroll.state then
-                local scrollPercent = imports.math.max(1, 100/(overflowHeight/(scoreboardUI.vicinityScoreboard.slotSize*0.5)))
+                local scrollPercent = imports.math.max(1, 100/(overflowHeight/(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + (scoreboardUI.margin*0.5))))
                 scoreboardUI.scroller.percent = imports.math.max(0, imports.math.min(scoreboardUI.scroller.percent + (scrollPercent*imports.math.max(1, scoreboardUI.cache.keys.scroll.streak)*(((scoreboardUI.cache.keys.scroll.state == "down") and 1) or -1)), 100))
                 scoreboardUI.cache.keys.scroll.state = false
             end
