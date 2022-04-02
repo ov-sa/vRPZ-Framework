@@ -39,42 +39,42 @@ configVars["UI"]["Scoreboard"] = {
             width = 75
         },
         {
-            title = {["EN"] = "Name", ["TR"] = "S.No"},
+            title = {["EN"] = "Name", ["TR"] = "İsim"},
             dataType = "name",
             width = 250
         },
         {
-            title = {["EN"] = "Level", ["TR"] = "S.No"},
+            title = {["EN"] = "Level", ["TR"] = "Seviye"},
             dataType = "level",
             width = 125
         },
         {
-            title = {["EN"] = "Rank", ["TR"] = "S.No"},
+            title = {["EN"] = "Rank", ["TR"] = "Rank"},
             dataType = "rank",
             width = 125
         },
         {
-            title = {["EN"] = "Reputation", ["TR"] = "S.No"},
+            title = {["EN"] = "Reputation", ["TR"] = "İtibar"},
             dataType = "reputation",
             width = 125
         },
         {
-            title = {["EN"] = "Party", ["TR"] = "S.No"},
+            title = {["EN"] = "Party", ["TR"] = "Takım"},
             dataType = "party",
             width = 125
         },
         {
-            title = {["EN"] = "Group", ["TR"] = "S.No"},
+            title = {["EN"] = "Group", ["TR"] = "Grup"},
             dataType = "group",
             width = 150
         },
         {
-            title = {["EN"] = "K.D", ["TR"] = "S.No"},
+            title = {["EN"] = "K.D", ["TR"] = "K.D"},
             dataType = "kd",
             width = 100
         },
         {
-            title = {["EN"] = "Survival", ["TR"] = "S.No"},
+            title = {["EN"] = "Survival", ["TR"] = "Hayatta Kalma"},
             dataType = "survival",
             width = 125
         },

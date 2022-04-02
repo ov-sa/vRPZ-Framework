@@ -340,6 +340,8 @@ scoreboardUI.renderUI = function(renderData)
         }
     
         local startX, startY = scoreboardUI.startX, scoreboardUI.startY
+        local overflowHeight =  imports.math.max(0, (scoreboardUI.margin*0.5) + ((FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + (scoreboardUI.margin*0.5))*#serverPlayers) - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height)
+        local offsetY = overflowHeight*scoreboardUI.scroller.animPercent*0.01
         imports.beautify.native.drawImage(startX, startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height, scoreboardUI.bgTexture, 0, 0, 0, -1, false)    
         imports.beautify.native.drawText(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.title, startX + scoreboardUI.margin, startY, startX + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.margin, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.font, "left", "center", true, false, false, true)
         imports.beautify.native.drawText(imports.string.spaceChars((#serverPlayers).."/20"), startX + scoreboardUI.margin, startY, startX + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.margin, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.counterFont, "right", "center", true, false, false)
@@ -347,7 +349,7 @@ scoreboardUI.renderUI = function(renderData)
         imports.beautify.native.setRenderTarget(scoreboardUI.viewRT, true)
         for i = 1, #serverPlayers, 1 do
             local j = serverPlayers[i]
-            local column_startY = (scoreboardUI.margin*0.5) + ((FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + (scoreboardUI.margin*0.5))*(i - 1))
+            local column_startY = offsetY + (scoreboardUI.margin*0.5) + ((FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + (scoreboardUI.margin*0.5))*(i - 1))
             for k = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns, 1 do
                 local v = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[k]
                 local column_startX = v.startX
@@ -356,15 +358,30 @@ scoreboardUI.renderUI = function(renderData)
             end
         end
         imports.beautify.native.setRenderTarget()
+        --TODO: REMVOE LATER
+        CPlayer.CLanguage = "EN"
         for i = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns, 1 do
             local j = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[i]
             imports.beautify.native.drawText(j.title[(CPlayer.CLanguage)], startX + j.startX, startY, startX + j.endX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columns.fontColor, 1, scoreboardUI.columns.font, "center", "center", true, false, false)
         end
         imports.beautify.native.drawImage(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.viewRT, 0, 0, 0, -1, false)
         imports.beautify.native.drawImage(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columnTexture, 0, 0, 0, -1, false)
-        if scoreboardUI.cache.keys.scroll.state then
-            --TODO: ..
-            scoreboardUI.cache.keys.scroll.state = false
+        if overflowHeight > 0 then
+            if not scoreboardUI.scroller.isPositioned then
+                scoreboardUI.scroller.startX, scoreboardUI.scroller.startY = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.scroller.width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height
+                scoreboardUI.scroller.height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height
+                scoreboardUI.scroller.isPositioned = true
+            end
+            if imports.math.round(scoreboardUI.scroller.animPercent, 2) ~= imports.math.round(scoreboardUI.scroller.percent, 2) then
+                scoreboardUI.scroller.animPercent = imports.interpolateBetween(scoreboardUI.scroller.animPercent, 0, 0, scoreboardUI.scroller.percent, 0, 0, 0.5, "InQuad")
+            end
+            imports.beautify.native.drawRectangle(startX + scoreboardUI.scroller.startX, startY + scoreboardUI.scroller.startY, scoreboardUI.scroller.width, scoreboardUI.scroller.height, scoreboardUI.scroller.bgColor, false)
+            imports.beautify.native.drawRectangle(startX + scoreboardUI.scroller.startX, startY + scoreboardUI.scroller.startY + ((scoreboardUI.scroller.height - scoreboardUI.scroller.thumbHeight)*scoreboardUI.scroller.animPercent*0.01), scoreboardUI.scroller.width, scoreboardUI.scroller.thumbHeight, scoreboardUI.scroller.thumbColor, false)
+            if scoreboardUI.cache.keys.scroll.state then
+                local scrollPercent = imports.math.max(1, 100/(overflowHeight/(scoreboardUI.vicinityInventory.slotSize*0.5)))
+                scoreboardUI.scroller.percent = imports.math.max(0, imports.math.min(scoreboardUI.scroller.percent + (scrollPercent*imports.math.max(1, scoreboardUI.cache.keys.scroll.streak)*(((scoreboardUI.cache.keys.scroll.state == "down") and 1) or -1)), 100))
+                scoreboardUI.cache.keys.scroll.state = false
+            end
         end
     end
 end
