@@ -52,7 +52,6 @@ local scoreboardUI = {
     },
     scroller = {
         percent = 0, animPercent = 0,
-        width = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.width, thumbHeight = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.thumbHeight,
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.bgColor)), thumbColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.thumbColor))
     }
 }
@@ -161,15 +160,15 @@ scoreboardUI.renderUI = function(renderData)
         imports.beautify.native.drawImage(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, view_height, scoreboardUI.columnTexture, 0, 0, 0, -1, false)
         if view_overflowHeight > 0 then
             if not scoreboardUI.scroller.isPositioned then
-                scoreboardUI.scroller.startX, scoreboardUI.scroller.startY = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.scroller.width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height
+                scoreboardUI.scroller.startX, scoreboardUI.scroller.startY = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height
                 scoreboardUI.scroller.height = view_height
                 scoreboardUI.scroller.isPositioned = true
             end
             if imports.math.round(scoreboardUI.scroller.animPercent, 2) ~= imports.math.round(scoreboardUI.scroller.percent, 2) then
                 scoreboardUI.scroller.animPercent = imports.interpolateBetween(scoreboardUI.scroller.animPercent, 0, 0, scoreboardUI.scroller.percent, 0, 0, 0.5, "InQuad")
             end
-            imports.beautify.native.drawRectangle(startX + scoreboardUI.scroller.startX, startY + scoreboardUI.scroller.startY, scoreboardUI.scroller.width, scoreboardUI.scroller.height, scoreboardUI.scroller.bgColor, false)
-            imports.beautify.native.drawRectangle(startX + scoreboardUI.scroller.startX, startY + scoreboardUI.scroller.startY + ((scoreboardUI.scroller.height - scoreboardUI.scroller.thumbHeight)*scoreboardUI.scroller.animPercent*0.01), scoreboardUI.scroller.width, scoreboardUI.scroller.thumbHeight, scoreboardUI.scroller.thumbColor, false)
+            imports.beautify.native.drawRectangle(startX + scoreboardUI.scroller.startX, startY + scoreboardUI.scroller.startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.width, scoreboardUI.scroller.height, scoreboardUI.scroller.bgColor, false)
+            imports.beautify.native.drawRectangle(startX + scoreboardUI.scroller.startX, startY + scoreboardUI.scroller.startY + ((scoreboardUI.scroller.height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.thumbHeight)*scoreboardUI.scroller.animPercent*0.01), FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.thumbHeight, scoreboardUI.scroller.thumbColor, false)
             if scoreboardUI.cache.keys.scroll.state then
                 --TODO: CHEK IF THE VIEW RT IS HOVERED
                 local scrollPercent = imports.math.max(1, 100/(view_overflowHeight/row_height))
