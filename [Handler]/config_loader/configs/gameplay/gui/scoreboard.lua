@@ -34,52 +34,53 @@ configVars["UI"]["Scoreboard"] = {
             bgColor = {10, 10, 10, 255}
         },
         {
-            title = "S.No",
+            title = {["EN"] = "S.No", ["TR"] = "S.No"},
             dataType = "serial_number",
             width = 75
         },
         {
             title = "Name",
+            title = {["EN"] = "Name", ["TR"] = "S.No"},
             dataType = "name",
             width = 250
         },
         {
-            title = "Level",
+            title = {["EN"] = "Level", ["TR"] = "S.No"},
             dataType = "level",
             width = 125
         },
         {
-            title = "Rank",
+            title = {["EN"] = "Rank", ["TR"] = "S.No"},
             dataType = "rank",
             width = 125
         },
         {
-            title = "Reputation",
+            title = {["EN"] = "Reputation", ["TR"] = "S.No"},
             dataType = "reputation",
             width = 125
         },
         {
-            title = "Party",
+            title = {["EN"] = "Party", ["TR"] = "S.No"},
             dataType = "party",
             width = 125
         },
         {
-            title = "Group",
+            title = {["EN"] = "Group", ["TR"] = "S.No"},
             dataType = "group",
             width = 150
         },
         {
-            title = "K:D",
+            title = {["EN"] = "K.D", ["TR"] = "S.No"},
             dataType = "kd",
             width = 100
         },
         {
-            title = "Survival Time",
-            dataType = "survival_time",
+            title = {["EN"] = "Survival", ["TR"] = "S.No"},
+            dataType = "survival",
             width = 125
         },
         {
-            title = "Ping",
+            title = {["EN"] = "Ping", ["TR"] = "S.No"},
             dataType = "ping",
             width = 60
         }
