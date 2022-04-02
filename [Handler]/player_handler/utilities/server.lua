@@ -32,6 +32,7 @@ local imports = {
     setTimer = setTimer,
     outputChatBox = outputChatBox,
     setFPSLimit = setFPSLimit,
+    setMaxPlayers = setMaxPlayers,
     setFarClipDistance = setFarClipDistance,
     setFogDistance = setFogDistance,
     setAircraftMaxHeight = setAircraftMaxHeight,
@@ -88,6 +89,7 @@ imports.addEventHandler("onResourceStart", resource, function()
     end
     ]]--
     imports.setFPSLimit(FRAMEWORK_CONFIGS.Game["FPS_Limit"])
+    imports.setMaxPlayers(FRAMEWORK_CONFIGS.Game["Game"]["Player_Limit"])
     imports.setFarClipDistance(FRAMEWORK_CONFIGS.Game["Draw_Distance_Limit"][2])
     imports.setFogDistance(FRAMEWORK_CONFIGS.Game["Fog_Distance_Limit"][2])
     imports.setAircraftMaxHeight(FRAMEWORK_CONFIGS.Game["Aircraft_Max_Height"])
