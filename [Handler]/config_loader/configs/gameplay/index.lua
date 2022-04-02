@@ -16,6 +16,7 @@ configVars = {
 
     ["Game"] = {
         ["FPS_Limit"] = 100,
+        ["Player_Limit"] = 256,
         ["Sync_Rate"] = 50,
         ["Camera_FOV"] = {
             ["player"] = 40,
