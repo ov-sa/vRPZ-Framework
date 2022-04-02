@@ -67,7 +67,7 @@ imports.addEventHandler("onResourceStart", resource, function()
             imports.setElementData(tickSyncer, "Server:TickSyncer", cTickCount)
             imports.triggerEvent("onServerRender", tickSyncer, cTickCount)
         end
-    end, FRAMEWORK_CONFIGS.Game["Sync_Rate"], 0, imports.createElement("Server:TickSyncer"))
+    end, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"], 0, imports.createElement("Server:TickSyncer"))
     --[[
     for i, j in pairs(availableWeaponSlots) do
         for k, v in pairs(j.slots) do
@@ -88,21 +88,21 @@ imports.addEventHandler("onResourceStart", resource, function()
         end
     end
     ]]--
-    imports.setFPSLimit(FRAMEWORK_CONFIGS.Game["FPS_Limit"])
-    imports.setMaxPlayers(FRAMEWORK_CONFIGS.Game["Game"]["Player_Limit"])
-    imports.setFarClipDistance(FRAMEWORK_CONFIGS.Game["Draw_Distance_Limit"][2])
-    imports.setFogDistance(FRAMEWORK_CONFIGS.Game["Fog_Distance_Limit"][2])
-    imports.setAircraftMaxHeight(FRAMEWORK_CONFIGS.Game["Aircraft_Max_Height"])
-    imports.setJetpackMaxHeight(FRAMEWORK_CONFIGS.Game["Jetpack_Max_Height"])
-    imports.setMinuteDuration(FRAMEWORK_CONFIGS.Game["Minute_Duration"])
-    imports.setGameType(FRAMEWORK_CONFIGS.Game["Game_imports.type"])
-    imports.setMapName(FRAMEWORK_CONFIGS.Game["Game_Map"])
+    imports.setFPSLimit(FRAMEWORK_CONFIGS["Game"]["FPS_Limit"])
+    imports.setMaxPlayers(FRAMEWORK_CONFIGS["Game"]["Player_Limit"])
+    imports.setFarClipDistance(FRAMEWORK_CONFIGS["Game"]["Draw_Distance_Limit"][2])
+    imports.setFogDistance(FRAMEWORK_CONFIGS["Game"]["Fog_Distance_Limit"][2])
+    imports.setAircraftMaxHeight(FRAMEWORK_CONFIGS["Game"]["Aircraft_Max_Height"])
+    imports.setJetpackMaxHeight(FRAMEWORK_CONFIGS["Game"]["Jetpack_Max_Height"])
+    imports.setMinuteDuration(FRAMEWORK_CONFIGS["Game"]["Minute_Duration"])
+    imports.setGameType(FRAMEWORK_CONFIGS["Game"]["Game_imports.type"])
+    imports.setMapName(FRAMEWORK_CONFIGS["Game"]["Game_Map"])
 
     imports.addEventHandler("onPlayerChangeNick", root, function() imports.cancelEvent() end)
     imports.addEventHandler("onPlayerCommand", root, function(command)
-        local disabledCMDs = FRAMEWORK_CONFIGS.Game["Disabled_CMDS"]
+        local disabledCMDs = FRAMEWORK_CONFIGS["Game"]["Disabled_CMDS"]
         for i = 1, #disabledCMDs, 1 do
-            local j = FRAMEWORK_CONFIGS.Game["Disabled_CMDS"][i]
+            local j = FRAMEWORK_CONFIGS["Game"]["Disabled_CMDS"][i]
             if j == command then
                 imports.cancelEvent()
                 if command == "logout" then
