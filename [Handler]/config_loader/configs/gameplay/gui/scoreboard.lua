@@ -39,7 +39,6 @@ configVars["UI"]["Scoreboard"] = {
             width = 75
         },
         {
-            title = "Name",
             title = {["EN"] = "Name", ["TR"] = "S.No"},
             dataType = "name",
             width = 250
