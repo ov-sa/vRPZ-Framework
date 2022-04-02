@@ -41,7 +41,9 @@ imports.addEventHandler("onClientResourceStart", resourceRoot, function()
             imports.setWaterLevel(streamer.waterBuffer, GTAWorldSettings.waterLevel)
         end
     end
-    imports.setWaterLevel(GTAWorldSettings.waterLevel, true, true, true, true)
+    if GTAWorldSettings.waterLevel then
+        imports.setWaterLevel(GTAWorldSettings.waterLevel, true, true, true, true)
+    end
     imports.setOcclusionsEnabled(not GTAWorldSettings.removeWorld)
     imports.setWorldSpecialPropertyEnabled("randomfoliage", not GTAWorldSettings.removeWorld)
 end)
