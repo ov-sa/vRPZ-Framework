@@ -14,6 +14,8 @@
 
 configVars["UI"]["Inventory"] = {
 
+    ["Toggle_Key"] = "j",
+    
     titlebar = {
         height = 35,
         fontColor = {170, 35, 35, 255},

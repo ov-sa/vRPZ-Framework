@@ -12,8 +12,4 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["Inventory"] = {
-
-    ["UI_ToggleKey"] = "j"
-
-}
+configVars["Inventory"] = {}

@@ -874,7 +874,7 @@ end
 
 imports.addEvent("Client:onToggleInventoryUI", true)
 imports.addEventHandler("Client:onToggleInventoryUI", root, inventoryUI.toggleUI)
-imports.bindKey(FRAMEWORK_CONFIGS["Inventory"]["UI_ToggleKey"], "down", function() inventoryUI.toggleUI(not inventoryUI.state) end)
+imports.bindKey(FRAMEWORK_CONFIGS["UI"]["Inventory"]["Toggle_Key"], "down", function() inventoryUI.toggleUI(not inventoryUI.state) end)
 imports.addEventHandler("onClientPlayerWasted", localPlayer, function() inventoryUI.toggleUI(false) end)
 
 

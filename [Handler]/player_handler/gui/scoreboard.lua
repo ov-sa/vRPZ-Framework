@@ -460,4 +460,4 @@ scoreboardUI.toggleUI = function(state)
     return true
 end
 
-imports.bindKey("z", "down", function() scoreboardUI.toggleUI(not scoreboardUI.state) end)
+imports.bindKey(FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Toggle_Key"], "down", function() scoreboardUI.toggleUI(not scoreboardUI.state) end)

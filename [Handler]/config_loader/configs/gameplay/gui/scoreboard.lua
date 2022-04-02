@@ -14,6 +14,8 @@
 
 configVars["UI"]["Scoreboard"] = {
 
+    ["Toggle_Key"] = "tab",
+
     --[[
     titlebar = {
         height = 35,
