@@ -101,9 +101,25 @@ scoreboardUI.createBGTexture = function(isRefresh)
     end
 end
 
+
 ------------------------------
 --[[ Function: Renders UI ]]--
 ------------------------------
+
+local serverPlayers = {}
+for i = 1, 30, 1 do
+    table.insert(serverPlayers, {
+        name = "Aviril",
+        level = 50,
+        rank = "Eternal",
+        reputation = 75,
+        party = 1,
+        group = "Heroes",
+        kd = 2.5,
+        survival_time = "01:00:00",
+        ping = 20
+    })
+end
 
 scoreboardUI.renderUI = function(renderData)
     --if not scoreboardUI.state or not CPlayer.isInitialized(localPlayer) then return false end
@@ -111,231 +127,11 @@ scoreboardUI.renderUI = function(renderData)
         scoreboardUI.cache.keys.scroll.state, scoreboardUI.cache.keys.scroll.streak  = imports.isMouseScrolled()
     elseif renderData.renderType == "render" then
         if not scoreboardUI.bgTexture then scoreboardUI.createBGTexture() end
-        local serverPlayers = {
-            {
-                name = "Aviril",
-                level = 50,
-                rank = "Eternal",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 2.5,
-                survival_time = "01:00:00",
-                ping = 20
-            },
-            {
-                name = "Tron",
-                level = 20,
-                rank = "Mythic",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1.5,
-                survival_time = "0:21:23",
-                ping = 75
-            },
-            {
-                name = "Maria",
-                level = 60,
-                rank = "Legend",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1,
-                survival_time = "0:10:16",
-                ping = 65
-            },
-            {
-                name = "Maria",
-                level = 60,
-                rank = "Legend",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1,
-                survival_time = "0:10:16",
-                ping = 65
-            },
-            {
-                name = "Maria",
-                level = 60,
-                rank = "Legend",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1,
-                survival_time = "0:10:16",
-                ping = 65
-            },
-            {
-                name = "Maria",
-                level = 60,
-                rank = "Legend",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1,
-                survival_time = "0:10:16",
-                ping = 65
-            },
-            {
-                name = "Maria",
-                level = 60,
-                rank = "Legend",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1,
-                survival_time = "0:10:16",
-                ping = 65
-            },
-            {
-                name = "Maria",
-                level = 60,
-                rank = "Legend",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1,
-                survival_time = "0:10:16",
-                ping = 65
-            },
-            {
-                name = "Maria",
-                level = 60,
-                rank = "Legend",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1,
-                survival_time = "0:10:16",
-                ping = 65
-            },
-            {
-                name = "Maria",
-                level = 60,
-                rank = "Legend",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1,
-                survival_time = "0:10:16",
-                ping = 65
-            },
-            {
-                name = "Maria",
-                level = 60,
-                rank = "Legend",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1,
-                survival_time = "0:10:16",
-                ping = 65
-            },
-            {
-                name = "Maria",
-                level = 60,
-                rank = "Legend",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1,
-                survival_time = "0:10:16",
-                ping = 65
-            },
-            {
-                name = "Maria",
-                level = 60,
-                rank = "Legend",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1,
-                survival_time = "0:10:16",
-                ping = 65
-            },
-            {
-                name = "Maria",
-                level = 60,
-                rank = "Legend",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1,
-                survival_time = "0:10:16",
-                ping = 65
-            },
-            {
-                name = "Maria",
-                level = 60,
-                rank = "Legend",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1,
-                survival_time = "0:10:16",
-                ping = 65
-            },
-            {
-                name = "Maria",
-                level = 60,
-                rank = "Legend",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1,
-                survival_time = "0:10:16",
-                ping = 65
-            },
-            {
-                name = "Maria",
-                level = 60,
-                rank = "Legend",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1,
-                survival_time = "0:10:16",
-                ping = 65
-            },
-            {
-                name = "Maria",
-                level = 60,
-                rank = "Legend",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1,
-                survival_time = "0:10:16",
-                ping = 65
-            },
-            {
-                name = "Maria",
-                level = 60,
-                rank = "Legend",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1,
-                survival_time = "0:10:16",
-                ping = 65
-            },
-            {
-                name = "Maria Last",
-                level = 60,
-                rank = "Legend",
-                reputation = 75,
-                party = 1,
-                group = "Heroes",
-                kd = 1,
-                survival_time = "0:10:16",
-                ping = 65
-            },
-        }
-    
+        --TODO: FETCH SERVER PLAYERS LAYER..
+        --local serverPlayers = {}
         local startX, startY = scoreboardUI.startX, scoreboardUI.startY
-        local overflowHeight =  imports.math.max(0, (scoreboardUI.margin*0.5) + ((FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + (scoreboardUI.margin*0.5))*#serverPlayers) - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height)
+        local view_height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height
+        local overflowHeight =  imports.math.max(0, (scoreboardUI.margin*0.5) + ((FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + (scoreboardUI.margin*0.5))*#serverPlayers) - view_height)
         local offsetY = overflowHeight*scoreboardUI.scroller.animPercent*0.01
         imports.beautify.native.drawImage(startX, startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height, scoreboardUI.bgTexture, 0, 0, 0, -1, false)    
         imports.beautify.native.drawText(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.title, startX + scoreboardUI.margin, startY, startX + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.margin, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.font, "left", "center", true, false, false, true)
@@ -359,12 +155,12 @@ scoreboardUI.renderUI = function(renderData)
             local j = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[i]
             imports.beautify.native.drawText(j.title[(CPlayer.CLanguage)], startX + j.startX, startY, startX + j.endX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columns.fontColor, 1, scoreboardUI.columns.font, "center", "center", true, false, false)
         end
-        imports.beautify.native.drawImage(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.viewRT, 0, 0, 0, -1, false)
-        imports.beautify.native.drawImage(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columnTexture, 0, 0, 0, -1, false)
+        imports.beautify.native.drawImage(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, view_height, scoreboardUI.viewRT, 0, 0, 0, -1, false)
+        imports.beautify.native.drawImage(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, view_height, scoreboardUI.columnTexture, 0, 0, 0, -1, false)
         if overflowHeight > 0 then
             if not scoreboardUI.scroller.isPositioned then
                 scoreboardUI.scroller.startX, scoreboardUI.scroller.startY = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.scroller.width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height
-                scoreboardUI.scroller.height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height
+                scoreboardUI.scroller.height = view_height
                 scoreboardUI.scroller.isPositioned = true
             end
             if imports.math.round(scoreboardUI.scroller.animPercent, 2) ~= imports.math.round(scoreboardUI.scroller.percent, 2) then

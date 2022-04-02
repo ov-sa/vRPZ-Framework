@@ -79,17 +79,17 @@ configVars["UI"]["Scoreboard"] = {
             width = 125
         },
         {
-            title = {["EN"] = "Ping", ["TR"] = "S.No"},
+            title = {["EN"] = "Ping", ["TR"] = "Ping"},
             dataType = "ping",
             width = 60
         }
     },
 
     scroller = {
-        width = 5,
-        thumbHeight = 100,
+        width = 2,
+        thumbHeight = 245,
         bgColor = {0, 0, 0, 255},
-        thumbColor = {175, 35, 35, 255}
+        thumbColor = {175, 175, 175, 255}
     }
 
 }
