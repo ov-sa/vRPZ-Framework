@@ -118,7 +118,7 @@ function manager:load(assetType, assetName)
                             end
                         end
                     end
-                    shader:create(nil, "control", "Assetify_TextureMapper", k, shaderTextures, shaderInputs, assetReference.unsyncedData.rwCache.map, j, assetReference.manifestData.encryptKey)
+                    shader:create(nil, "control", "Assetify_TextureMapper", i, shaderTextures, shaderInputs, assetReference.unsyncedData.rwCache.map, j, assetReference.manifestData.encryptKey)
                 end
             end
             if assetType == "scene" then
