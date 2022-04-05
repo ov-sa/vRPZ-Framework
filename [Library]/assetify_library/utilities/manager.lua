@@ -105,6 +105,15 @@ function manager:load(assetType, assetName)
                         for i = 1, #unparsedDatas, 1 do
                             local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedDatas[i], 2, asset.separators.IPL)), " ", "")
                             assetReference.unsyncedData.assetCache[i] = {}
+                            local sceneData = {
+                                position = {
+                                    x = imports.tonumber(imports.gettok(unparsedDatas[i], 4, asset.separators.IPL)),
+                                    y = imports.tonumber(imports.gettok(unparsedDatas[i], 5, asset.separators.IPL)),
+                                    z = imports.tonumber(imports.gettok(unparsedDatas[i], 6, asset.separators.IPL))
+                                },
+                                rotation = {}
+                            }
+                            sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z = imports.quat.toEuler(imports.tonumber(imports.gettok(unparsedDatas[i], 10, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 7, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 8, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 9, asset.separators.IPL)))
                             if not assetReference.manifestData.sceneMapped then
                                 asset:create(assetType, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache[i], {
                                     txd = assetPath..(asset.references.asset)..".txd",
@@ -112,21 +121,13 @@ function manager:load(assetType, assetName)
                                     col = assetPath.."col/"..childName..".col"
                                 }, function(state)
                                     if state then
-                                        local sceneData = {
-                                            position = {
-                                                x = imports.tonumber(imports.gettok(unparsedDatas[i], 4, asset.separators.IPL)),
-                                                y = imports.tonumber(imports.gettok(unparsedDatas[i], 5, asset.separators.IPL)),
-                                                z = imports.tonumber(imports.gettok(unparsedDatas[i], 6, asset.separators.IPL))
-                                            },
-                                            rotation = {}
-                                        }
-                                        sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z = imports.quat.toEuler(imports.tonumber(imports.gettok(unparsedDatas[i], 10, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 7, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 8, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 9, asset.separators.IPL)))
                                         scene:create(assetReference.unsyncedData.assetCache[i].cAsset, assetReference.manifestData, sceneData)
                                     end
                                 end)
                             else
-                                assetReference.unsyncedData.assetCache[i].cDummy = nil
-                                --TODO: CREATE DUMMY HERE..
+                                sceneData.dimension = assetReference.manifestData.sceneDimension
+                                sceneData.interior = assetReference.manifestData.sceneInterior
+                                assetReference.unsyncedData.assetCache[i].cDummy = dummy:create("object", childName, sceneData)
                             end
                             thread.pause()
                         end
