@@ -267,6 +267,7 @@ else
                         if assetType == "scene" then
                             assetManifestData.sceneDimension = imports.math.max(asset.ranges.dimension[1], imports.math.min(asset.ranges.dimension[2], imports.tonumber(assetManifestData.sceneDimension) or 0))
                             assetManifestData.sceneInterior = imports.math.max(asset.ranges.interior[1], imports.math.min(asset.ranges.interior[2], imports.tonumber(assetManifestData.sceneInterior) or 0))
+                            assetManifestData.sceneMapped = (assetManifestData.sceneMapped and true) or false
                             if assetManifestData.sceneOffset then
                                 if imports.type(assetManifestData.sceneOffset) ~= "table" then
                                     assetManifestData.sceneOffset = false
@@ -278,7 +279,7 @@ else
                             end
                             local sceneIPLPath = assetPath..(asset.references.scene)..".ipl"
                             local sceneManifestData = imports.file.read(sceneIPLPath)
-                            if sceneManifestData then
+                            if sceneManifestData and not assetManifestData.sceneMapped then
                                 asset:buildFile(sceneIPLPath, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
                                 asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
                                 local unparsedDatas = imports.split(sceneManifestData, "\n")
