@@ -125,6 +125,7 @@ function manager:load(assetType, assetName)
                                     end
                                 end)
                             else
+                                assetReference.unsyncedData.assetCache[i].cDummy = nil
                                 --TODO: CREATE DUMMY HERE..
                             end
                             thread.pause()
@@ -205,6 +206,9 @@ function manager:unload(assetType, assetName)
                                 j.cAsset.cScene:destroy()
                             end
                             j.cAsset:destroy(assetReference.unsyncedData.rwCache)
+                        end
+                        if j.cDummy then
+                            j.cDummy:destroy()
                         end
                         thread.pause()
                     end
