@@ -277,17 +277,19 @@ else
                                     end
                                 end
                             end
-                            local sceneIPLPath = assetPath..(asset.references.scene)..".ipl"
-                            local sceneManifestData = imports.file.read(sceneIPLPath)
-                            if sceneManifestData and not assetManifestData.sceneMapped then
-                                asset:buildFile(sceneIPLPath, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
-                                asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
-                                local unparsedDatas = imports.split(sceneManifestData, "\n")
-                                for k = 1, #unparsedDatas, 1 do
-                                    local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedDatas[k], 2, asset.separators.IPL)), " ", "")
-                                    asset:buildFile(assetPath.."dff/"..childName..".dff", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
-                                    asset:buildFile(assetPath.."col/"..childName..".col", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
-                                    thread.pause()
+                            if not assetManifestData.sceneMapped then
+                                local sceneIPLPath = assetPath..(asset.references.scene)..".ipl"
+                                local sceneManifestData = imports.file.read(sceneIPLPath)
+                                if sceneManifestData then
+                                    asset:buildFile(sceneIPLPath, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                    asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                    local unparsedDatas = imports.split(sceneManifestData, "\n")
+                                    for k = 1, #unparsedDatas, 1 do
+                                        local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedDatas[k], 2, asset.separators.IPL)), " ", "")
+                                        asset:buildFile(assetPath.."dff/"..childName..".dff", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                        asset:buildFile(assetPath.."col/"..childName..".col", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                        thread.pause()
+                                    end
                                 end
                             end
                         else
