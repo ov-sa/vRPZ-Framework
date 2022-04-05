@@ -96,6 +96,31 @@ function manager:load(assetType, assetName)
                 }
             }
             shader:createTex(assetReference.manifestData.shaderMaps, assetReference.unsyncedData.rwCache.map, assetReference.manifestData.encryptKey)
+            if assetReference.manifestData.shaderMaps and assetReference.manifestData.shaderMaps.control then
+                for i, j in imports.pairs(assetReference.manifestData.shaderMaps.control) do
+                    local shaderTextures, shaderInputs = {}, {}
+                    for k = 1, #j, 1 do
+                        local v = j[k]
+                        if v.control then
+                            shaderTextures[("controlTex_"..k)] = v.control
+                        end
+                        if v.bump then
+                            shaderTextures[("controlTex_"..k.."_bump")] = v.bump
+                        end
+                        for x = 1, #shader.defaultData.shaderChannels, 1 do
+                            local y = shader.defaultData.shaderChannels[x]
+                            if v[(y.index)] then
+                                shaderTextures[("controlTex_"..k.."_"..(y.index))] = v[(y.index)].map
+                                shaderInputs[("controlScale_"..k.."_"..(y.index))] = v[(y.index)].scale
+                                if v[(y.index)].bump then
+                                    shaderTextures[("controlTex_"..k.."_"..(y.index).."_bump")] = v[(y.index)].bump
+                                end
+                            end
+                        end
+                    end
+                    shader:create(nil, "control", "Assetify_TextureMapper", k, shaderTextures, shaderInputs, assetReference.unsyncedData.rwCache.map, j, assetReference.manifestData.encryptKey)
+                end
+            end
             if assetType == "scene" then
                 thread:create(function(cThread)
                     local sceneManifestData = imports.file.read(assetPath..(asset.references.scene)..".ipl")
@@ -130,31 +155,6 @@ function manager:load(assetType, assetName)
                                 assetReference.unsyncedData.assetCache[i].cDummy = dummy:create("object", childName, sceneData)
                             end
                             thread.pause()
-                        end
-                        if assetReference.manifestData.shaderMaps and assetReference.manifestData.shaderMaps.control then
-                            for i, j in imports.pairs(assetReference.manifestData.shaderMaps.control) do
-                                local shaderTextures, shaderInputs = {}, {}
-                                for k = 1, #j, 1 do
-                                    local v = j[k]
-                                    if v.control then
-                                        shaderTextures[("controlTex_"..k)] = v.control
-                                    end
-                                    if v.bump then
-                                        shaderTextures[("controlTex_"..k.."_bump")] = v.bump
-                                    end
-                                    for x = 1, #shader.defaultData.shaderChannels, 1 do
-                                        local y = shader.defaultData.shaderChannels[x]
-                                        if v[(y.index)] then
-                                            shaderTextures[("controlTex_"..k.."_"..(y.index))] = v[(y.index)].map
-                                            shaderInputs[("controlScale_"..k.."_"..(y.index))] = v[(y.index)].scale
-                                            if v[(y.index)].bump then
-                                                shaderTextures[("controlTex_"..k.."_"..(y.index).."_bump")] = v[(y.index)].bump
-                                            end
-                                        end
-                                    end
-                                end
-                                shader:create(nil, "control", "Assetify_TextureMapper", k, shaderTextures, shaderInputs, assetReference.unsyncedData.rwCache.map, j, assetReference.manifestData.encryptKey)
-                            end
                         end
                     end
                 end):resume({
