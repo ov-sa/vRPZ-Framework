@@ -103,8 +103,8 @@ function manager:load(assetType, assetName)
                     if sceneManifestData then
                         local unparsedDatas = imports.split(sceneManifestData, "\n")
                         for i = 1, #unparsedDatas, 1 do
-                            local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedDatas[i], 2, asset.separators.IPL)), " ", "")
                             assetReference.unsyncedData.assetCache[i] = {}
+                            local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedDatas[i], 2, asset.separators.IPL)), " ", "")
                             local sceneData = {
                                 position = {
                                     x = imports.tonumber(imports.gettok(unparsedDatas[i], 4, asset.separators.IPL)),
@@ -131,29 +131,29 @@ function manager:load(assetType, assetName)
                             end
                             thread.pause()
                         end
-                        if  assetReference.manifestData.shaderMaps and assetReference.manifestData.shaderMaps.control then
-                            for k, v in imports.pairs(assetReference.manifestData.shaderMaps.control) do
+                        if assetReference.manifestData.shaderMaps and assetReference.manifestData.shaderMaps.control then
+                            for i, j in imports.pairs(assetReference.manifestData.shaderMaps.control) do
                                 local shaderTextures, shaderInputs = {}, {}
-                                for m = 1, #v, 1 do
-                                    local n = v[m]
-                                    if n.control then
-                                        shaderTextures[("controlTex_"..m)] = n.control
+                                for k = 1, #j, 1 do
+                                    local v = j[k]
+                                    if v.control then
+                                        shaderTextures[("controlTex_"..k)] = v.control
                                     end
-                                    if n.bump then
-                                        shaderTextures[("controlTex_"..m.."_bump")] = n.bump
+                                    if v.bump then
+                                        shaderTextures[("controlTex_"..k.."_bump")] = v.bump
                                     end
                                     for x = 1, #shader.defaultData.shaderChannels, 1 do
                                         local y = shader.defaultData.shaderChannels[x]
-                                        if n[(y.index)] then
-                                            shaderTextures[("controlTex_"..m.."_"..(y.index))] = n[(y.index)].map
-                                            shaderInputs[("controlScale_"..m.."_"..(y.index))] = n[(y.index)].scale
-                                            if n[(y.index)].bump then
-                                                shaderTextures[("controlTex_"..m.."_"..(y.index).."_bump")] = n[(y.index)].bump
+                                        if v[(y.index)] then
+                                            shaderTextures[("controlTex_"..k.."_"..(y.index))] = v[(y.index)].map
+                                            shaderInputs[("controlScale_"..k.."_"..(y.index))] = v[(y.index)].scale
+                                            if v[(y.index)].bump then
+                                                shaderTextures[("controlTex_"..k.."_"..(y.index).."_bump")] = v[(y.index)].bump
                                             end
                                         end
                                     end
                                 end
-                                shader:create(nil, "control", "Assetify_TextureMapper", k, shaderTextures, shaderInputs, assetReference.unsyncedData.rwCache.map, v, assetReference.manifestData.encryptKey)
+                                shader:create(nil, "control", "Assetify_TextureMapper", k, shaderTextures, shaderInputs, assetReference.unsyncedData.rwCache.map, j, assetReference.manifestData.encryptKey)
                             end
                         end
                     end
