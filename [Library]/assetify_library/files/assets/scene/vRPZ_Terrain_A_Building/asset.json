@@ -1,60 +1,6 @@
 {
-    "streamRange": 125,
-    "sceneDimension": 0,
+    "sceneDimension": -1,
     "sceneInterior": 0,
-    "sceneOffset": {"x": 0, "y": 0, "z": 0},
-    "shaderMaps": {
-        "control": {
-            "isld_1_h1_1": [
-                {
-                    "bump": "control/isld_1_h1_1/bump.jpg"
-                }
-            ],
-            "isld_1_h1_2": [
-                {
-                    "bump": "control/isld_1_h1_2/bump.jpg"
-                }
-            ],
-            "isld_1_h1_3": [
-                {
-                    "bump": "control/isld_1_h1_3/bump.jpg"
-                }
-            ],
-            "isld_1_h2_1": [
-                {
-                    "bump": "control/isld_1_h2_1/bump.jpg"
-                }
-            ],
-            "isld_1_h2_2": [
-                {
-                    "bump": "control/isld_1_h2_2/bump.jpg"
-                }
-            ],
-            "isld_1_h3_1": [
-                {
-                    "bump": "control/isld_1_h3_1/bump.jpg"
-                }
-            ],
-            "isld_1_h4_1": [
-                {
-                    "bump": "control/isld_1_h4_1/bump.jpg"
-                }
-            ],
-            "isld_1_h5_1": [
-                {
-                    "bump": "control/isld_1_h5_1/bump.jpg"
-                }
-            ],
-            "isld_1_h6_1": [
-                {
-                    "bump": "control/isld_1_h6_1/bump.jpg"
-                }
-            ],
-            "isld_1_w1_1": [
-                {
-                    "bump": "control/isld_1_w1_1/bump.jpg"
-                }
-            ]
-        }
-    }
+    "sceneMapped": true,
+    "sceneOffset": {"x": 0, "y": 0, "z": 0}
 }
