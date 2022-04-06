@@ -277,11 +277,11 @@ else
                                     end
                                 end
                             end
-                            if not assetManifestData.sceneMapped then
-                                local sceneIPLPath = assetPath..(asset.references.scene)..".ipl"
-                                local sceneManifestData = imports.file.read(sceneIPLPath)
-                                if sceneManifestData then
-                                    asset:buildFile(sceneIPLPath, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                            local sceneIPLPath = assetPath..(asset.references.scene)..".ipl"
+                            local sceneManifestData = imports.file.read(sceneIPLPath)
+                            if sceneManifestData then
+                                asset:buildFile(sceneIPLPath, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                if not assetManifestData.sceneMapped then
                                     asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
                                     local unparsedDatas = imports.split(sceneManifestData, "\n")
                                     for k = 1, #unparsedDatas, 1 do

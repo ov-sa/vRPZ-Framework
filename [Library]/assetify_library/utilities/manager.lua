@@ -152,7 +152,9 @@ function manager:load(assetType, assetName)
                             else
                                 sceneData.dimension = assetReference.manifestData.sceneDimension
                                 sceneData.interior = assetReference.manifestData.sceneInterior
+                                print(childName)
                                 assetReference.unsyncedData.assetCache[i].cDummy = dummy:create("object", childName, sceneData)
+                                print(tostring(assetReference.unsyncedData.assetCache[i].cDummy))
                             end
                             thread.pause()
                         end
