@@ -4,7 +4,7 @@
     "shaderMaps": {
         "shaderMaps": {
             "control": {
-                "tree01": [
+                "tree03": [
                     {
                         "bump": "control/tree03/bump.jpg"
                     }
