@@ -150,11 +150,10 @@ function manager:load(assetType, assetName)
                                     end
                                 end)
                             else
+                                sceneData.position.x, sceneData.position.y, sceneData.position.z = sceneData.position.x + ((assetReference.manifestData.sceneOffset and assetReference.manifestData.sceneOffset.x) or 0), sceneData.position.y + ((assetReference.manifestData.sceneOffset and assetReference.manifestData.sceneOffset.y) or 0), sceneData.position.z + ((assetReference.manifestData.sceneOffset and assetReference.manifestData.sceneOffset.z) or 0)
                                 sceneData.dimension = assetReference.manifestData.sceneDimension
                                 sceneData.interior = assetReference.manifestData.sceneInterior
-                                print(childName)
                                 assetReference.unsyncedData.assetCache[i].cDummy = dummy:create("object", childName, sceneData)
-                                print(tostring(assetReference.unsyncedData.assetCache[i].cDummy))
                             end
                             thread.pause()
                         end
