@@ -102,6 +102,18 @@
                     "bump": "clump/shoes/sneakers/2/bump.jpg"
                 }
             ]
+        },
+        "control": {
+            "cj_skn_fce": [
+                {
+                    "bump": "control/cj_skn_fce/bump.jpg"
+                }
+            ],
+            "cj_skn_trso": [
+                {
+                    "bump": "control/cj_skn_trso/bump.jpg"
+                }
+            ]
         }
     }
 }
