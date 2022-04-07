@@ -76,6 +76,7 @@ shaderRW[identifier] = function(shaderMaps)
     -->> Variables <<--
     -------------------*/
 
+    float anisotropy = 1;
     ]]..controlVars..[[
     struct PSInput {
         float4 Position : POSITION0;
