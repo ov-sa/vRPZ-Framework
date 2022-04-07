@@ -195,8 +195,15 @@ else
                 if i == "clump" then
                     for k, v in imports.pairs(j) do
                         for m = 1, #v, 1 do
-                            v[m] = assetPath.."map/"..v[m]
-                            asset:buildFile(v[m], assetFiles, encryptKey)
+                            local n = v[m]
+                            if n.clump then
+                                n.clump = assetPath.."map/"..n.clump
+                                asset:buildFile(n.clump, assetFiles, encryptKey)
+                            end
+                            if n.bump then
+                                n.bump = assetPath.."map/"..n.bump
+                                asset:buildFile(n.bump, assetFiles, encryptKey)
+                            end
                         end
                     end
                 elseif i == "control" then
