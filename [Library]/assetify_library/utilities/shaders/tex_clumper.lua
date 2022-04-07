@@ -50,7 +50,7 @@ shaderRW[identifier] = function(shaderMaps)
         };    
     ]], "", ""
     if shaderMaps.bump then
-        controlVars..[[
+        controlVars = controlVars..[[
             texture clumpTex_bump;
             sampler clumpSampler_bump = sampler_state { 
                 Texture = clumpTex_bump;
