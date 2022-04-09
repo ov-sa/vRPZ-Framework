@@ -27,14 +27,14 @@ CPlayer.CChannel = nil
 CPlayer.CParty = nil
 
 CPlayer.setLanguage = function(language)
-    if not language then return false end
+    if not language or not FRAMEWORK_CONFIGS["Game"]["Game_Languages"][language] then return false end
     imports.triggerEvent("Client:onUpdateLanguage", localPlayer, language)
     CPlayer.CLanguage = language
     return true 
 end
 
 CPlayer.getLanguage = function()
-    return CPlayer.CLanguage or false
+    return CPlayer.CLanguage or FRAMEWORK_CONFIGS["Game"]["Game_Languages"].default
 end
 
 CPlayer.setChannel = function(channelIndex)
