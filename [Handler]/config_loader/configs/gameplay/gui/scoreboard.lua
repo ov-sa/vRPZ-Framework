@@ -69,7 +69,7 @@ configVars["UI"]["Scoreboard"] = {
             width = 150
         },
         {
-            title = {["EN"] = "K.D", ["TR"] = "K.D", ["RU"] = "K.D"},
+            title = {["EN"] = "K.D", ["TR"] = "K.D", ["RU"] = "К.Д"},
             dataType = "kd",
             width = 100
         },
@@ -79,7 +79,7 @@ configVars["UI"]["Scoreboard"] = {
             width = 125
         },
         {
-            title = {["EN"] = "Ping", ["TR"] = "Ping", ["RU"] = "Ping"},
+            title = {["EN"] = "Ping", ["TR"] = "Ping", ["RU"] = "пинг"},
             dataType = "ping",
             width = 60
         }
