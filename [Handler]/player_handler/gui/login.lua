@@ -737,7 +737,7 @@ end)
 -----------------------------------------
 
 imports.addEventHandler("onClientResourceStart", resource, function()
-    CPlayer.setLanguage("EN")
+    CPlayer.setLanguage(FRAMEWORK_CONFIGS["Game"]["Game_Languages"].default)
     imports.fadeCamera(false)
     imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
     local booter = function() imports.triggerServerEvent("Player:onToggleLoginUI", localPlayer) end
