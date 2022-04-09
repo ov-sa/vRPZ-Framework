@@ -34,52 +34,52 @@ configVars["UI"]["Scoreboard"] = {
             bgColor = {10, 10, 10, 255}
         },
         {
-            title = {["EN"] = "S.No", ["TR"] = "S.No"},
+            title = {["EN"] = "S.No", ["TR"] = "S.No", ["RU"] = "S.No"},
             dataType = "serial_number",
             width = 75
         },
         {
-            title = {["EN"] = "Name", ["TR"] = "İsim"},
+            title = {["EN"] = "Name", ["TR"] = "İsim", ["RU"] = "Имя"},
             dataType = "name",
             width = 250
         },
         {
-            title = {["EN"] = "Level", ["TR"] = "Seviye"},
+            title = {["EN"] = "Level", ["TR"] = "Seviye", ["RU"] = "Уровень"},
             dataType = "level",
             width = 125
         },
         {
-            title = {["EN"] = "Rank", ["TR"] = "Rank"},
+            title = {["EN"] = "Rank", ["TR"] = "Rank", ["RU"] = "Классифицировать"},
             dataType = "rank",
             width = 125
         },
         {
-            title = {["EN"] = "Reputation", ["TR"] = "İtibar"},
+            title = {["EN"] = "Reputation", ["TR"] = "İtibar", ["RU"] = "Репутация"},
             dataType = "reputation",
             width = 125
         },
         {
-            title = {["EN"] = "Party", ["TR"] = "Takım"},
+            title = {["EN"] = "Party", ["TR"] = "Takım", ["RU"] = "Вечеринка"},
             dataType = "party",
             width = 125
         },
         {
-            title = {["EN"] = "Group", ["TR"] = "Grup"},
+            title = {["EN"] = "Group", ["TR"] = "Grup", ["RU"] = "Группа"},
             dataType = "group",
             width = 150
         },
         {
-            title = {["EN"] = "K.D", ["TR"] = "K.D"},
+            title = {["EN"] = "K.D", ["TR"] = "K.D", ["RU"] = "K.D"},
             dataType = "kd",
             width = 100
         },
         {
-            title = {["EN"] = "Survival", ["TR"] = "Hayatta Kalma"},
+            title = {["EN"] = "Survival", ["TR"] = "Hayatta Kalma", ["RU"] = "Выживание"},
             dataType = "survival",
             width = 125
         },
         {
-            title = {["EN"] = "Ping", ["TR"] = "Ping"},
+            title = {["EN"] = "Ping", ["TR"] = "Ping", ["RU"] = "Ping"},
             dataType = "ping",
             width = 60
         }
