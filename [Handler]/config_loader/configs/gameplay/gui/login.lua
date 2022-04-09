@@ -60,17 +60,17 @@ configVars["UI"]["Login"] = {
 
     ["Options"] = {
         play = {
-            ["Titles"] = {["EN"] = "Play", ["TR"] = "Oyna"},
+            ["Titles"] = {["EN"] = "Play", ["TR"] = "Oyna", ["RU"] = "Играть"},
             height = 35, embedLineSize = 3,
             fontColor = {150, 150, 150, 25}, hoverfontColor = {170, 35, 35, 255}, embedLineColor = {170, 35, 35, 50},
             hoverDuration = 2500
         },
 
         characters = {
-            ["Titles"] = {["EN"] = "Characters", ["TR"] = "karakterler"},
+            ["Titles"] = {["EN"] = "Characters", ["TR"] = "karakterler", ["RU"] = "Персонажи"},
             width = 325, height = 510,
             titlebar = {
-                ["Titles"] = {["EN"] = "Character", ["TR"] = "Karakter"},
+                ["Titles"] = {["EN"] = "Character", ["TR"] = "Karakter", ["RU"] = "Характер"},
                 height = 35,
                 fontColor = {170, 35, 35, 255}, bgColor = {0, 0, 0, 255}, shadowColor = {50, 50, 50, 255}
             },
@@ -79,13 +79,13 @@ configVars["UI"]["Login"] = {
                 iconColor = {255, 255, 255, 255}, bgColor = {0, 0, 0, 255},
                 hoverDuration = 2750,
                 tooltips = {
-                    previous = {["EN"] = "Previous", ["TR"] = "Öncesi"},
-                    next = {["EN"] = "Next", ["TR"] = "Sonraki"},
-                    pick = {["EN"] = "Pick", ["TR"] = "Seçmek"},
-                    create = {["EN"] = "Create", ["TR"] = "Yaratmak"},
-                    delete = {["EN"] = "Delete", ["TR"] = "Silmek"},
-                    save = {["EN"] = "Save", ["TR"] = "Kayıt etmek"},
-                    back = {["EN"] = "Back", ["TR"] = "Geri"}
+                    previous = {["EN"] = "Previous", ["TR"] = "Öncesi", ["RU"] = "Предыдущий"},
+                    next = {["EN"] = "Next", ["TR"] = "Sonraki", ["RU"] = "Следующий"},
+                    pick = {["EN"] = "Pick", ["TR"] = "Seçmek", ["RU"] = "Выбирать"},
+                    create = {["EN"] = "Create", ["TR"] = "Yaratmak", ["RU"] = "Создавать"},
+                    delete = {["EN"] = "Delete", ["TR"] = "Silmek", ["RU"] = "Удалить"},
+                    save = {["EN"] = "Save", ["TR"] = "Kayıt etmek", ["RU"] = "Сохранять"},
+                    back = {["EN"] = "Back", ["TR"] = "Geri", ["RU"] = "Назад"}
                 }
             },
             categories = {
@@ -93,45 +93,45 @@ configVars["UI"]["Login"] = {
                 fontColor = {200, 200, 200, 255}, bgColor = {0, 0, 0, 235},
 
                 ["Identity"] = {
-                    ["Titles"] = {["EN"] = "Identity", ["TR"] = "Kimlik"},
+                    ["Titles"] = {["EN"] = "Identity", ["TR"] = "Kimlik", ["RU"] = "Личность"},
                     tone = {
-                        ["Titles"] = {["EN"] = "Skin Tone", ["TR"] = "Cilt tonu"},
+                        ["Titles"] = {["EN"] = "Skin Tone", ["TR"] = "Cilt tonu", ["RU"] = "Цвет кожи"},
                         ["Datas"] = configVars["Character"]["Identity"]["Tone"]
                     },
                     gender = {
                         default = "Male",
-                        ["Titles"] = {["EN"] = "Gender", ["TR"] = "Cinsiyet"},
+                        ["Titles"] = {["EN"] = "Gender", ["TR"] = "Cinsiyet", ["RU"] = "Пол"},
                         ["Datas"] = configVars["Character"]["Identity"]["Gender"]
                     }
                 },
                 ["Facial"] = {
-                    ["Titles"] = {["EN"] = "Facial", ["TR"] = "Yüz"},
+                    ["Titles"] = {["EN"] = "Facial", ["TR"] = "Yüz", ["RU"] = "лица"},
                     hair = {
-                        ["Titles"] = {["EN"] = "Hair", ["TR"] = "Saç"},
+                        ["Titles"] = {["EN"] = "Hair", ["TR"] = "Saç", ["RU"] = "Волосы"},
                         ["Datas"] = configVars["Character"]["Clothing"]["Facial"]["Hair"]
                     }
                 },
                 ["Upper"] = {
-                    ["Titles"] = {["EN"] = "Upper", ["TR"] = "Üst"},
+                    ["Titles"] = {["EN"] = "Upper", ["TR"] = "Üst", ["RU"] = "Верхний"},
                     ["Datas"] = configVars["Character"]["Clothing"]["Upper"]
                 },
                 ["Lower"] = {
-                    ["Titles"] = {["EN"] = "Lower", ["TR"] = "Alt"},
+                    ["Titles"] = {["EN"] = "Lower", ["TR"] = "Alt", ["RU"] = "Ниже"},
                     ["Datas"] = configVars["Character"]["Clothing"]["Lower"]
                 },
                 ["Shoes"] = {
-                    ["Titles"] = {["EN"] = "Shoes", ["TR"] = "Ayakkabı"},
+                    ["Titles"] = {["EN"] = "Shoes", ["TR"] = "Ayakkabı", ["RU"] = "Обувь"},
                     ["Datas"] = configVars["Character"]["Clothing"]["Shoes"]
                 }
             }
         },
 
         credits = {
-            ["Titles"] = {["EN"] = "Credits", ["TR"] = "Yapımcılar"},
+            ["Titles"] = {["EN"] = "Credits", ["TR"] = "Yapımcılar", ["RU"] = "Кредиты"},
             fontColor = {170, 35, 35, 255},
             scrollDuration = 8500,
             navigator = {
-                ["Titles"] = {["EN"] = "Back", ["TR"] = "Geri"},
+                ["Titles"] = {["EN"] = "Back", ["TR"] = "Geri", ["RU"] = "Назад"},
                 hoverDuration = 2500
             },
             contributors = {
@@ -141,6 +141,7 @@ configVars["UI"]["Login"] = {
                 "ov | April (Designer)",
                 "ov | Tron (Developer)",
                 "ov | Neor (Developer)",
+                "ov | Аниса (Developer)",
                 "ov | Skann (Modeler)",
                 "ov | Mazvis (Contributor)",
                 "ov | Drew (Contributor)",
