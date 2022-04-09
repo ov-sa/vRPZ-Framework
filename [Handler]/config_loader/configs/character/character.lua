@@ -32,7 +32,7 @@ configVars["Character"] = {
         ["Facial"] = {
             ["Hair"] = {
                 ["Male"] = {
-                    {["EN"] = "None", ["TR"] = "Hiçbiri", ["RU"] = "отсутствует"},
+                    {["EN"] = "None", ["TR"] = "Hiçbiri", ["RU"] = "нет"},
                     {["EN"] = "Casual", ["TR"] = "Gündelik", ["RU"] = "Повседневная"}
                 }
             }
