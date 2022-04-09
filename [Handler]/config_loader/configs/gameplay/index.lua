@@ -31,6 +31,12 @@ configVars = {
         ["Logout_CoolDown_Duration"] = 120000,
         ["Game_Type"] = "vRPZ",
         ["Game_Map"] = "vRPZ : SA",
+        ["Game_Languages"] = {
+            default = "EN",
+            ["EN"] = {},
+            ["TR"] = {},
+            ["RU"] = {}
+        },
         ["Disabled_CMDS"] = {"register", "logout"},
 
         ["Chatbox"] = {
