@@ -45,17 +45,17 @@ configVars["UI"]["Login"] = {
     },
 
     ["Notifications"] = {
-        [1] = {["EN"] = "You must create a character inorder to play..", ["TR"] = "Oynamak için bir karakter seçmelisin.."},
-        [2] = {["EN"] = "You must pick a character inorder to play..", ["TR"] = "Oynamak için bir karakter seçmelisiniz.."},
-        [3] = {["EN"] = "You have exceeded character limit..", ["TR"] = "Karakter sınırını aştınız.."},
-        [4] = {["EN"] = "You've successfully created a character!", ["TR"] = "Başarıyla bir karakter yarattınız!.."},
-        [5] = {["EN"] = "You don't have enough characters..", ["TR"] = "Yeterli karakteriniz yok.."},
-        [6] = {["EN"] = "You've successfully deleted the character!", ["TR"] = "Karakteri başarıyla sildiniz!"},
-        [7] = {["EN"] = "You must save the character prior to picking..", ["TR"] = "Seçmeden önce karakteri kaydetmelisiniz.."},
-        [8] = {["EN"] = "You've successfully picked the character!", ["TR"] = "Karakteri başarıyla seçtiniz!"},
-        [9] = {["EN"] = "You've successfully saved the character!", ["TR"] = "Karakteri başarıyla kaydettiniz!"},
-        [10] = {["EN"] = "Failed to save your character..", ["TR"] = "Karakteriniz kaydedilemedi.."},
-        [11] = {["EN"] = "You must either save or delete your character before navigating..", ["TR"] = "Gezinmeden önce karakterinizi kaydetmeli veya silmelisiniz.."}
+        [1] = {["EN"] = "You must create a character inorder to play..", ["TR"] = "Oynamak için bir karakter seçmelisin..", ["RU"] = "Вы должны создать персонажа, чтобы играть.."},
+        [2] = {["EN"] = "You must pick a character inorder to play..", ["TR"] = "Oynamak için bir karakter seçmelisiniz..", ["RU"] = "Вы должны выбрать персонажа, чтобы играть.."},
+        [3] = {["EN"] = "You have exceeded character limit..", ["TR"] = "Karakter sınırını aştınız..", ["RU"] = "Вы превысили лимит символов.."},
+        [4] = {["EN"] = "You've successfully created a character!", ["TR"] = "Başarıyla bir karakter yarattınız!..", ["RU"] = "Вы успешно создали персонажа!"},
+        [5] = {["EN"] = "You don't have enough characters..", ["TR"] = "Yeterli karakteriniz yok..", ["RU"] = "У вас недостаточно символов.."},
+        [6] = {["EN"] = "You've successfully deleted the character!", ["TR"] = "Karakteri başarıyla sildiniz!", ["RU"] = "Вы успешно удалили персонажа!"},
+        [7] = {["EN"] = "You must save the character prior to picking..", ["TR"] = "Seçmeden önce karakteri kaydetmelisiniz..", ["RU"] = "Вы должны сохранить персонажа перед выбором.."},
+        [8] = {["EN"] = "You've successfully picked the character!", ["TR"] = "Karakteri başarıyla seçtiniz!", ["RU"] = "Вы успешно выбрали персонажа!"},
+        [9] = {["EN"] = "You've successfully saved the character!", ["TR"] = "Karakteri başarıyla kaydettiniz!", ["RU"] = "Вы успешно сохраненный персонажа!"},
+        [10] = {["EN"] = "Failed to save your character..", ["TR"] = "Karakteriniz kaydedilemedi..", ["RU"] = "Не удалось сохранить вашего персонажа.."},
+        [11] = {["EN"] = "You must either save or delete your character before navigating..", ["TR"] = "Gezinmeden önce karakterinizi kaydetmeli veya silmelisiniz..", ["RU"] = "Вы должны либо сохранить, либо удалить своего персонажа перед навигацией."}
     },
 
     ["Options"] = {
