@@ -33,9 +33,9 @@ configVars = {
         ["Game_Map"] = "vRPZ : SA",
         ["Game_Languages"] = {
             default = "EN",
-            ["EN"] = {},
-            ["TR"] = {},
-            ["RU"] = {}
+            ["EN"] = {code = "en_US"},
+            ["TR"] = {code = "tr"},
+            ["RU"] = {code = "ru"}
         },
         ["Disabled_CMDS"] = {"register", "logout"},
 
