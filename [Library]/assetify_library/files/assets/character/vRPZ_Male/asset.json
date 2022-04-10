@@ -1,10 +1,18 @@
 {
     "encryptKey": "vStudio - Aviril",
     "assetClumps": {
-        "H1P1": "H1P1",
-        "H1T1": "H1T1",
-        "TS1P1": "TS1P1",
-        "TS1T1": "TS1T1"
+        "H0H1P1": "H0H1P1",
+        "H1H1P1": "H1H1P1",
+        "H2H1P1": "H2H1P1",
+        "H0H1T1": "H0H1T1",
+        "H1H1T1": "H1H1T1",
+        "H2H1T1": "H2H1T1",
+        "H0TS1P1": "H0TS1P1",
+        "H1TS1P1": "H1TS1P1",
+        "H2TS1P1": "H2TS1P1",
+        "H0TS1T1": "H0TS1T1",
+        "H1TS1T1": "H1TS1T1",
+        "H2TS1T1": "H2TS1T1"
     },
     "shaderMaps": {
         "clump": {
@@ -111,7 +119,12 @@
             ],
             "cj_skn_trso": [
                 {
-                    "bump": "control/cj_skn_trso/bump.jpg"
+                    "bump": "control/cj_skn/bump.jpg"
+                }
+            ],
+            "cj_skn_lwr": [
+                {
+                    "bump": "control/cj_skn/bump.jpg"
                 }
             ]
         }
