@@ -16,98 +16,110 @@
     },
     "shaderMaps": {
         "clump": {
+            "cj_hair_1": [
+                {
+                    "clump": "clump/facial/hair/1/1/clump.jpg",
+                    "bump": "clump/facial/hair/1/1/bump.jpg"
+                }
+            ],
+            "cj_hair_2": [
+                {
+                    "clump": "clump/facial/hair/2/1/clump.jpg",
+                    "bump": "clump/facial/hair/2/1/bump.jpg"
+                }
+            ],
             "cj_tshrt_1": [
                 {
-                    "clump": "clump/upper/tshirt/1/clump.jpg",
-                    "bump": "clump/upper/tshirt/1/bump.jpg"
+                    "clump": "clump/upper/tshirt/1/1/clump.jpg",
+                    "bump": "clump/upper/tshirt/1/1/bump.jpg"
                 },
                 {
-                    "clump": "clump/upper/tshirt/2/clump.jpg",
-                    "bump": "clump/upper/tshirt/2/bump.jpg"
+                    "clump": "clump/upper/tshirt/1/2/clump.jpg",
+                    "bump": "clump/upper/tshirt/1/2/bump.jpg"
                 }
             ],
             "cj_hdy_1": [
                 {
-                    "clump": "clump/upper/hoody/1/clump.jpg",
-                    "bump": "clump/upper/hoody/1/bump.jpg"
+                    "clump": "clump/upper/hoody/1/1/clump.jpg",
+                    "bump": "clump/upper/hoody/1/1/bump.jpg"
                 },
                 {
-                    "clump": "clump/upper/hoody/2/clump.jpg",
-                    "bump": "clump/upper/hoody/2/bump.jpg"
+                    "clump": "clump/upper/hoody/1/2/clump.jpg",
+                    "bump": "clump/upper/hoody/1/2/bump.jpg"
                 },
                 {
-                    "clump": "clump/upper/hoody/3/clump.jpg",
-                    "bump": "clump/upper/hoody/3/bump.jpg"
+                    "clump": "clump/upper/hoody/1/3/clump.jpg",
+                    "bump": "clump/upper/hoody/1/3/bump.jpg"
                 },
                 {
-                    "clump": "clump/upper/hoody/4/clump.jpg",
-                    "bump": "clump/upper/hoody/4/bump.jpg"
+                    "clump": "clump/upper/hoody/1/4/clump.jpg",
+                    "bump": "clump/upper/hoody/1/4/bump.jpg"
                 },
                 {
-                    "clump": "clump/upper/hoody/5/clump.jpg",
-                    "bump": "clump/upper/hoody/5/bump.jpg"
+                    "clump": "clump/upper/hoody/1/5/clump.jpg",
+                    "bump": "clump/upper/hoody/1/5/bump.jpg"
                 },
                 {
-                    "clump": "clump/upper/hoody/6/clump.jpg",
-                    "bump": "clump/upper/hoody/6/bump.jpg"
+                    "clump": "clump/upper/hoody/1/6/clump.jpg",
+                    "bump": "clump/upper/hoody/1/6/bump.jpg"
                 },
                 {
-                    "clump": "clump/upper/hoody/7/clump.jpg",
-                    "bump": "clump/upper/hoody/7/bump.jpg"
+                    "clump": "clump/upper/hoody/1/7/clump.jpg",
+                    "bump": "clump/upper/hoody/1/7/bump.jpg"
                 },
                 {
-                    "clump": "clump/upper/hoody/8/clump.jpg",
-                    "bump": "clump/upper/hoody/8/bump.jpg"
+                    "clump": "clump/upper/hoody/1/8/clump.jpg",
+                    "bump": "clump/upper/hoody/1/8/bump.jpg"
                 }
             ],
             "cj_trsr_1": [
                 {
-                    "clump": "clump/lower/trouser/1/clump.jpg",
-                    "bump": "clump/lower/trouser/1/bump.jpg"
+                    "clump": "clump/lower/trouser/1/1/clump.jpg",
+                    "bump": "clump/lower/trouser/1/1/bump.jpg"
                 }
             ],
             "cj_pnt_1": [
                 {
-                    "clump": "clump/lower/pant/1/clump.jpg",
-                    "bump": "clump/lower/pant/1/bump.jpg"
+                    "clump": "clump/lower/pant/1/1/clump.jpg",
+                    "bump": "clump/lower/pant/1/1/bump.jpg"
                 },
                 {
-                    "clump": "clump/lower/pant/2/clump.jpg",
-                    "bump": "clump/lower/pant/2/bump.jpg"
+                    "clump": "clump/lower/pant/1/2/clump.jpg",
+                    "bump": "clump/lower/pant/1/2/bump.jpg"
                 },
                 {
-                    "clump": "clump/lower/pant/3/clump.jpg",
-                    "bump": "clump/lower/pant/3/bump.jpg"
+                    "clump": "clump/lower/pant/1/3/clump.jpg",
+                    "bump": "clump/lower/pant/1/3/bump.jpg"
                 },
                 {
-                    "clump": "clump/lower/pant/4/clump.jpg",
-                    "bump": "clump/lower/pant/4/bump.jpg"
+                    "clump": "clump/lower/pant/1/4/clump.jpg",
+                    "bump": "clump/lower/pant/1/4/bump.jpg"
                 },
                 {
-                    "clump": "clump/lower/pant/5/clump.jpg",
-                    "bump": "clump/lower/pant/5/bump.jpg"
+                    "clump": "clump/lower/pant/1/5/clump.jpg",
+                    "bump": "clump/lower/pant/1/5/bump.jpg"
                 },
                 {
-                    "clump": "clump/lower/pant/6/clump.jpg",
-                    "bump": "clump/lower/pant/6/bump.jpg"
+                    "clump": "clump/lower/pant/1/6/clump.jpg",
+                    "bump": "clump/lower/pant/1/6/bump.jpg"
                 },
                 {
-                    "clump": "clump/lower/pant/7/clump.jpg",
-                    "bump": "clump/lower/pant/7/bump.jpg"
+                    "clump": "clump/lower/pant/1/7/clump.jpg",
+                    "bump": "clump/lower/pant/1/7/bump.jpg"
                 },
                 {
-                    "clump": "clump/lower/pant/8/clump.jpg",
-                    "bump": "clump/lower/pant/8/bump.jpg"
+                    "clump": "clump/lower/pant/1/8/clump.jpg",
+                    "bump": "clump/lower/pant/1/8/bump.jpg"
                 }
             ],
             "cj_shoe_1": [
                 {
-                    "clump": "clump/shoes/sneakers/1/clump.jpg",
-                    "bump": "clump/shoes/sneakers/1/bump.jpg"
+                    "clump": "clump/shoes/sneakers/1/1/clump.jpg",
+                    "bump": "clump/shoes/sneakers/1/1/bump.jpg"
                 },
                 {
-                    "clump": "clump/shoes/sneakers/2/clump.jpg",
-                    "bump": "clump/shoes/sneakers/2/bump.jpg"
+                    "clump": "clump/shoes/sneakers/1/2/clump.jpg",
+                    "bump": "clump/shoes/sneakers/1/2/bump.jpg"
                 }
             ]
         },
