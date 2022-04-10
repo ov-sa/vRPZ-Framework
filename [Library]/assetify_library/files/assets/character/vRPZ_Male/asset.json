@@ -28,6 +28,12 @@
                     "bump": "clump/facial/hair/2/1/bump.jpg"
                 }
             ],
+            "cj_skn_fce": [
+                {
+                    "clump": "clump/facial/face/1/1/clump.jpg",
+                    "bump": "clump/facial/face/1/1/bump.jpg"
+                }
+            ],
             "cj_tshrt_1": [
                 {
                     "clump": "clump/upper/tshirt/1/1/clump.jpg",
