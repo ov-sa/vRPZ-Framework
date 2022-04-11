@@ -145,6 +145,7 @@ end
 
 imports.addEventHandler("onClientResourceStart", resource, function()
     showChat(false, true)
+    CPlayer.setLanguage("RU") --TODO: UPDATE
     imports.setBlurLevel(0)
     imports.toggleControl("fire", true)
     imports.toggleControl("action", false)
