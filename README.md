@@ -33,6 +33,7 @@
 * **ov | Mazvis (Contributor)**
 * **ov | DREW (Contributor)**
 * **FlyingFork (Developer)**
+* **thejdmego (Developer)**
 * [Read More](credits.md)
 
 ## ━ Installation
