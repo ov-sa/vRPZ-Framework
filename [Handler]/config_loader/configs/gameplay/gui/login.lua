@@ -149,7 +149,8 @@ configVars["UI"]["Login"] = {
                 "ov | Skann (Modeler)",
                 "ov | Mazvis (Contributor)",
                 "ov | Drew (Contributor)",
-                "ov | FlyingFork (Contributor)"
+                "ov | FlyingFork (Developer)"
+                "ov | thejdmego (Developer)"
             }
         }
     }
