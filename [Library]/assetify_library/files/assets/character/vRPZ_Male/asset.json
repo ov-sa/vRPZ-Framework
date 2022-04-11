@@ -32,6 +32,10 @@
                 {
                     "clump": "clump/facial/face/1/1/clump.jpg",
                     "bump": "clump/facial/face/1/1/bump.jpg"
+                },
+                {
+                    "clump": "clump/facial/face/1/2/clump.jpg",
+                    "bump": "clump/facial/face/1/2/bump.jpg"
                 }
             ],
             "cj_tshrt_1": [
@@ -130,11 +134,6 @@
             ]
         },
         "control": {
-            "cj_skn_fce": [
-                {
-                    "bump": "control/cj_skn_fce/bump.jpg"
-                }
-            ],
             "cj_skn_trso": [
                 {
                     "bump": "control/cj_skn/bump.jpg"
