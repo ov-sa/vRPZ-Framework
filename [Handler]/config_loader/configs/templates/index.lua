@@ -18,7 +18,7 @@ configVars["Templates"] = {
         {
             path = ":beautify_library/files/assets/fonts/teko_medium.rw",
             alt = {
-                ["RU"] = {":beautify_library/files/assets/fonts/ttlakes_demibold.rw", 0.85}
+                ["RU"] = {":beautify_library/files/assets/fonts/ttlakes_demibold.rw", 0.95}
             }
         } 
     },

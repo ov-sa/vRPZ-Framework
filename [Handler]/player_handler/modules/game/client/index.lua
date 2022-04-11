@@ -63,7 +63,6 @@ end
 
 imports.addEvent("Client:onUpdateLanguage", false)
 imports.addEventHandler("Client:onUpdateLanguage", root, function(prevLanguage, currLanguage)
-    if not prevLanguage then return false end
     for i, j in imports.pairs(CGame.CFont) do
         for k, v in imports.pairs(j) do
             local cData = FRAMEWORK_CONFIGS["Templates"]["Fonts"][i]
