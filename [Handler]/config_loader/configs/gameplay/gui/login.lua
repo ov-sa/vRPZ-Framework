@@ -53,9 +53,9 @@ configVars["UI"]["Login"] = {
         [6] = {["EN"] = "You've successfully deleted the character!", ["TR"] = "Karakteri başarıyla sildiniz!", ["RU"] = "Вы успешно удалили персонажа!"},
         [7] = {["EN"] = "You must save the character prior to picking..", ["TR"] = "Seçmeden önce karakteri kaydetmelisiniz..", ["RU"] = "Вы должны сохранить персонажа перед выбором.."},
         [8] = {["EN"] = "You've successfully picked the character!", ["TR"] = "Karakteri başarıyla seçtiniz!", ["RU"] = "Вы успешно выбрали персонажа!"},
-        [9] = {["EN"] = "You've successfully saved the character!", ["TR"] = "Karakteri başarıyla kaydettiniz!", ["RU"] = "Вы успешно сохраненный персонажа!"},
+        [9] = {["EN"] = "You've successfully saved the character!", ["TR"] = "Karakteri başarıyla kaydettiniz!", ["RU"] = "Вы успешно сохранили персонажа!"},
         [10] = {["EN"] = "Failed to save your character..", ["TR"] = "Karakteriniz kaydedilemedi..", ["RU"] = "Не удалось сохранить вашего персонажа.."},
-        [11] = {["EN"] = "You must either save or delete your character before navigating..", ["TR"] = "Gezinmeden önce karakterinizi kaydetmeli veya silmelisiniz..", ["RU"] = "Вы должны либо сохранить, либо удалить своего персонажа перед навигацией."}
+        [11] = {["EN"] = "You must either save or delete your character before navigating..", ["TR"] = "Gezinmeden önce karakterinizi kaydetmeli veya silmelisiniz..", ["RU"] = "Вы должны сохранить или удалить своего персонажа перед навигацией."}
     },
 
     ["Options"] = {
@@ -82,9 +82,9 @@ configVars["UI"]["Login"] = {
                     previous = {["EN"] = "Previous", ["TR"] = "Öncesi", ["RU"] = "Предыдущий"},
                     next = {["EN"] = "Next", ["TR"] = "Sonraki", ["RU"] = "Следующий"},
                     pick = {["EN"] = "Pick", ["TR"] = "Seçmek", ["RU"] = "Выбирать"},
-                    create = {["EN"] = "Create", ["TR"] = "Yaratmak", ["RU"] = "Создавать"},
+                    create = {["EN"] = "Create", ["TR"] = "Yaratmak", ["RU"] = "Создать"},
                     delete = {["EN"] = "Delete", ["TR"] = "Silmek", ["RU"] = "Удалить"},
-                    save = {["EN"] = "Save", ["TR"] = "Kayıt etmek", ["RU"] = "Сохранять"},
+                    save = {["EN"] = "Save", ["TR"] = "Kayıt etmek", ["RU"] = "Сохранить"},
                     back = {["EN"] = "Back", ["TR"] = "Geri", ["RU"] = "Назад"}
                 }
             },
@@ -131,7 +131,7 @@ configVars["UI"]["Login"] = {
         },
 
         credits = {
-            ["Titles"] = {["EN"] = "Credits", ["TR"] = "Yapımcılar", ["RU"] = "Кредиты"},
+            ["Titles"] = {["EN"] = "Credits", ["TR"] = "Yapımcılar", ["RU"] = "Авторы"},
             fontColor = {170, 35, 35, 255},
             scrollDuration = 8500,
             navigator = {
