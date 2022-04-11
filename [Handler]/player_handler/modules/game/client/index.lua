@@ -88,7 +88,7 @@ imports.addEventHandler("Client:onUpdateLanguage", root, function(prevLanguage, 
     for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Beautify"]) do
         local isTemplateUpdated = false
         local cTemplate = imports.beautify.getUITemplate(i)
-        if not cTemplate then
+        if not cTemplate.isVRPZTemplate then
             cTemplate = imports.table.clone(j, true)
             isTemplateUpdated = true
         end
