@@ -137,7 +137,7 @@ scoreboardUI.renderUI = function(renderData)
         local row_startIndex = imports.math.floor(offsetY/row_height) + 1
         local row_endIndex = imports.math.min(#serverPlayers, row_startIndex + imports.math.ceil(view_height/row_height))
         imports.beautify.native.drawImage(startX, startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height, scoreboardUI.bgTexture, 0, 0, 0, -1, false)    
-        imports.beautify.native.drawText(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.title, startX + scoreboardUI.margin, startY, startX + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.margin, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.font, "left", "center", true, false, false, true)
+        imports.beautify.native.drawText(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.title, startX + scoreboardUI.margin, startY, startX + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.margin, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.font.instance, "left", "center", true, false, false, true)
         imports.beautify.native.drawText(imports.string.spaceChars((#serverPlayers).."/"..FRAMEWORK_CONFIGS["Game"]["Player_Limit"]), startX + scoreboardUI.margin, startY, startX + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.margin, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.counterFont, "right", "center", true, false, false)
         startY = startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height
         imports.beautify.native.setRenderTarget(scoreboardUI.viewRT, true)
@@ -148,13 +148,13 @@ scoreboardUI.renderUI = function(renderData)
                 local v = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[k]
                 local column_startX = v.startX
                 imports.beautify.native.drawRectangle(column_startX, column_startY, v.width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columns.data.bgColor, false)
-                imports.beautify.native.drawText(((v.dataType == "serial_number") and i) or j[(v.dataType)] or "-", column_startX, column_startY, column_startX + v.width, column_startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columns.data.fontColor, 1, scoreboardUI.columns.data.font, "center", "center", true, false, false)
+                imports.beautify.native.drawText(((v.dataType == "serial_number") and i) or j[(v.dataType)] or "-", column_startX, column_startY, column_startX + v.width, column_startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columns.data.fontColor, 1, scoreboardUI.columns.data.font.instance, "center", "center", true, false, false)
             end
         end
         imports.beautify.native.setRenderTarget()
         for i = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns, 1 do
             local j = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[i]
-            imports.beautify.native.drawText(j.title[(CPlayer.CLanguage)], startX + j.startX, startY, startX + j.endX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columns.fontColor, 1, scoreboardUI.columns.font, "center", "center", true, false, false)
+            imports.beautify.native.drawText(j.title[(CPlayer.CLanguage)], startX + j.startX, startY, startX + j.endX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columns.fontColor, 1, scoreboardUI.columns.font.instance, "center", "center", true, false, false)
         end
         imports.beautify.native.drawImage(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, view_height, scoreboardUI.viewRT, 0, 0, 0, -1, false)
         imports.beautify.native.drawImage(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, view_height, scoreboardUI.columnTexture, 0, 0, 0, -1, false)

@@ -36,9 +36,9 @@ CGame.createFont = function(index, size)
     if CGame.CFont[cPath] and CGame.CFont[cPath][cSize] then return CGame.CFont[cPath][cSize] end
     local cFont = imports.beautify.native.createFont(cPath, cSize)
     if not cFont then return false end
-    CGame.CFont[cPath] = CGame.CFont[cPath] or {}
-    CGame.CFont[cPath][cSize] = cFont
-    return CGame.CFont[cPath][cSize]
+    CGame.CFont[index] = CGame.CFont[index] or {}
+    CGame.CFont[index][cSize] = {instance = cFont}
+    return CGame.CFont[index][cSize]
 end
 
 CGame.isUIVisible = function()

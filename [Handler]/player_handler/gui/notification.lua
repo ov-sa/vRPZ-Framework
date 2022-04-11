@@ -66,7 +66,7 @@ notifUI.renderUI = function()
                 notif_offsetX, notif_offsetY = imports.interpolateBetween((CLIENT_MTA_RESOLUTION[1]) + notifUI.startX - j.width, notifUI.startY + ((i - 1)*(FRAMEWORK_CONFIGS["UI"]["Notification"].height + notifUI.paddingY)), 0, CLIENT_MTA_RESOLUTION[1], notifUI.startY + ((i - 1)*(FRAMEWORK_CONFIGS["UI"]["Notification"].height + notifUI.paddingY)) + (FRAMEWORK_CONFIGS["UI"]["Notification"].height*0.5) - offsetY, 0, imports.getInterpolationProgress(j.tickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideOutDuration), "InOutBack")
                 j.alphaPercent = imports.interpolateBetween(1, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.tickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideOutDuration), "Linear")
             end
-            imports.beautify.native.drawText(j.text, notif_offsetX, notif_offsetY, notif_offsetX + j.width, notif_offsetY + FRAMEWORK_CONFIGS["UI"]["Notification"].height, imports.tocolor(notif_fontColor[1], notif_fontColor[2], notif_fontColor[3], notif_fontColor[4]*j.alphaPercent), 1, notifUI.font, "center", "center", true, false, false, false, true)
+            imports.beautify.native.drawText(j.text, notif_offsetX, notif_offsetY, notif_offsetX + j.width, notif_offsetY + FRAMEWORK_CONFIGS["UI"]["Notification"].height, imports.tocolor(notif_fontColor[1], notif_fontColor[2], notif_fontColor[3], notif_fontColor[4]*j.alphaPercent), 1, notifUI.font.instance, "center", "center", true, false, false, false, true)
             if j.slideStatus == "backward" then
                 if imports.math.round(j.alphaPercent, 2) == 0 then
                     imports.table.remove(notifUI.buffer, i)
@@ -87,7 +87,7 @@ imports.addEventHandler("Client:onNotification", root, function(message, color)
 
     imports.table.insert(notifUI.buffer, {
         text = message,
-        width = imports.beautify.native.getTextWidth(message, 1, notifUI.font),
+        width = imports.beautify.native.getTextWidth(message, 1, notifUI.font.instance),
         fontColor = color,
         slideStatus = "forward",
         tickCounter = CLIENT_CURRENT_TICK

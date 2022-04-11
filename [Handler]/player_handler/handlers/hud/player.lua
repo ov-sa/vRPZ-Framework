@@ -144,18 +144,18 @@ beautify.render.create(function()
     end
     --Primary Equipment--
     imports.beautify.native.drawImage(cache.primary.startX, cache.primary.startY, cache.primary.width, cache.primary.height, cache.primary.bgTexture, 0, 0, 0, -1, false)
-    imports.beautify.native.drawText("01", cache.primary.ammo.startX, cache.primary.ammo.startY, cache.primary.ammo.endX, cache.primary.ammo.endY, cache.primary.ammo.fontColor, 1, cache.primary.ammo.font, "right", "bottom", false, false, false)
-    imports.beautify.native.drawText("999", cache.primary.ammo.mag.startX, cache.primary.ammo.mag.startY, cache.primary.ammo.mag.endX, cache.primary.ammo.mag.endY, cache.primary.ammo.mag.fontColor, 1, cache.primary.ammo.mag.font, "left", "bottom", false, false, false)
+    imports.beautify.native.drawText("01", cache.primary.ammo.startX, cache.primary.ammo.startY, cache.primary.ammo.endX, cache.primary.ammo.endY, cache.primary.ammo.fontColor, 1, cache.primary.ammo.font.instance, "right", "bottom", false, false, false)
+    imports.beautify.native.drawText("999", cache.primary.ammo.mag.startX, cache.primary.ammo.mag.startY, cache.primary.ammo.mag.endX, cache.primary.ammo.mag.endY, cache.primary.ammo.mag.fontColor, 1, cache.primary.ammo.mag.font.instance, "left", "bottom", false, false, false)
     --Secondary Equipment--
     imports.beautify.native.drawImage(cache.secondary.startX, cache.secondary.startY, cache.secondary.width, cache.secondary.height, cache.secondary.bgTexture, 0, 0, 0, -1, false)
-    imports.beautify.native.drawText("01", cache.secondary.ammo.startX, cache.secondary.ammo.startY, cache.secondary.ammo.endX, cache.secondary.ammo.endY, cache.secondary.ammo.fontColor, 1, cache.secondary.ammo.font, "right", "bottom", false, false, false)
-    imports.beautify.native.drawText("999", cache.secondary.ammo.mag.startX, cache.secondary.ammo.mag.startY, cache.secondary.ammo.mag.endX, cache.secondary.ammo.mag.endY, cache.secondary.ammo.mag.fontColor, 1, cache.secondary.ammo.mag.font, "left", "bottom", false, false, false)
+    imports.beautify.native.drawText("01", cache.secondary.ammo.startX, cache.secondary.ammo.startY, cache.secondary.ammo.endX, cache.secondary.ammo.endY, cache.secondary.ammo.fontColor, 1, cache.secondary.ammo.font.instance, "right", "bottom", false, false, false)
+    imports.beautify.native.drawText("999", cache.secondary.ammo.mag.startX, cache.secondary.ammo.mag.startY, cache.secondary.ammo.mag.endX, cache.secondary.ammo.mag.endY, cache.secondary.ammo.mag.fontColor, 1, cache.secondary.ammo.mag.font.instance, "left", "bottom", false, false, false)
     --Party List--
     if cache.party then
         for i = #cache.party.names, 1, -1 do
             local j = cache.party.names[i]
             if not j then break end
-            imports.beautify.native.drawText(j, cache.party.startX, cache.party.startY, cache.party.endX, cache.party.endY, -1, 1, cache.party.font, "right", "center", false, false, false)
+            imports.beautify.native.drawText(j, cache.party.startX, cache.party.startY, cache.party.endX, cache.party.endY, -1, 1, cache.party.font.instance, "right", "center", false, false, false)
         end
     end
 end)
