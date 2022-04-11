@@ -15,6 +15,7 @@
 local imports = {
     pairs = pairs,
     tonumber = tonumber,
+    destroyElement = destroyElement,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     beautify = beautify
@@ -61,8 +62,23 @@ CGame.isUIVisible = function()
 end
 
 imports.addEvent("Client:onUpdateLanguage", false)
-imports.addEventHandler("Client:onUpdateLanguage", root, function(language)
+imports.addEventHandler("Client:onUpdateLanguage", root, function(prevLanguage, currLanguage)
+    if not prevLanguage then return false end
     for i, j in imports.pairs(CGame.CFont) do
-        print("UPDATED LANGUAGE FONT: "..language)
+        for k, v in imports.pairs(j) do
+            local cData = FRAMEWORK_CONFIGS["Templates"]["Fonts"][i]
+            if cData.alt then
+                local cSettings = cData.alt[currLanguage]
+                if cData.alt[prevLanguage] or cSettings then
+                    local cPath, cSize = (cSettings and cSettings[1]) or cData.path, (cSettings and cSettings[2] and (cSettings[2]*k)) or k
+                    local cFont = imports.beautify.native.createFont(cPath, cSize)
+                    if cFont then
+                        local __cFont = j.instance
+                        j.instance = cFont
+                        imports.destroyElement(__cFont)
+                    end
+                end
+            end
+        end
     end
 end)
