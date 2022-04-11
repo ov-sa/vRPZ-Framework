@@ -34,7 +34,7 @@ configVars["UI"]["Scoreboard"] = {
             bgColor = {10, 10, 10, 255}
         },
         {
-            title = {["EN"] = "S.No", ["TR"] = "S.No", ["RU"] = "S.No"},
+            title = {["EN"] = "ID", ["TR"] = "ID", ["RU"] = "ID"},
             dataType = "serial_number",
             width = 75
         },
@@ -49,7 +49,7 @@ configVars["UI"]["Scoreboard"] = {
             width = 125
         },
         {
-            title = {["EN"] = "Rank", ["TR"] = "Rank", ["RU"] = "Классифицировать"},
+            title = {["EN"] = "Rank", ["TR"] = "Rank", ["RU"] = "Ранг"},
             dataType = "rank",
             width = 125
         },
@@ -59,7 +59,7 @@ configVars["UI"]["Scoreboard"] = {
             width = 125
         },
         {
-            title = {["EN"] = "Party", ["TR"] = "Takım", ["RU"] = "Вечеринка"},
+            title = {["EN"] = "Party", ["TR"] = "Takım", ["RU"] = "Отряд"},
             dataType = "party",
             width = 125
         },
@@ -69,17 +69,17 @@ configVars["UI"]["Scoreboard"] = {
             width = 150
         },
         {
-            title = {["EN"] = "K.D", ["TR"] = "K.D", ["RU"] = "К.Д"},
+            title = {["EN"] = "K.D", ["TR"] = "K.D", ["RU"] = "У.С"},
             dataType = "kd",
             width = 100
         },
         {
-            title = {["EN"] = "Survival", ["TR"] = "Hayatta Kalma", ["RU"] = "Выживание"},
+            title = {["EN"] = "Survival", ["TR"] = "Hayatta Kalma", ["RU"] = "Прожито Времени"},
             dataType = "survival",
             width = 125
         },
         {
-            title = {["EN"] = "Ping", ["TR"] = "Ping", ["RU"] = "пинг"},
+            title = {["EN"] = "Ping", ["TR"] = "Ping", ["RU"] = "Пинг"},
             dataType = "ping",
             width = 60
         }
