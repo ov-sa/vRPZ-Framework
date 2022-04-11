@@ -68,7 +68,7 @@ configVars["UI"]["Login"] = {
 
         characters = {
             ["Titles"] = {["EN"] = "Characters", ["TR"] = "karakterler", ["RU"] = "Персонажи"},
-            width = 325, height = 510,
+            width = 325, height = 570,
             titlebar = {
                 ["Titles"] = {["EN"] = "Character", ["TR"] = "Karakter", ["RU"] = "Характер"},
                 height = 35,
@@ -109,6 +109,10 @@ configVars["UI"]["Login"] = {
                     hair = {
                         ["Titles"] = {["EN"] = "Hair", ["TR"] = "Saç", ["RU"] = "Волосы"},
                         ["Datas"] = configVars["Character"]["Clothing"]["Facial"]["Hair"]
+                    },
+                    face = {
+                        ["Titles"] = {["EN"] = "Face", ["TR"] = "Yüz", ["RU"] = "Лицо"},
+                        ["Datas"] = configVars["Character"]["Clothing"]["Facial"]["Face"]
                     }
                 },
                 ["Upper"] = {

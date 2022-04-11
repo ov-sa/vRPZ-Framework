@@ -115,12 +115,18 @@ loginUI = {
                 },
                 {
                     identifier = "Facial",
-                    height = 60,
+                    height = 120,
                     contents = {
                         hair = {
                             identifier = "hair",
                             isSelector = true, isClothing = true,
                             startY = 30,
+                            height = 30
+                        },
+                        face = {
+                            identifier = "face",
+                            isSelector = true, isClothing = true,
+                            startY = 90,
                             height = 30
                         }
                     }
@@ -237,6 +243,7 @@ loginUI.phases[2].fetchSelection = function()
     local tone = imports.beautify.slider.getPercent(loginUI.phases[2].categories[1].contents.tone.element)
     local gender = loginUI.phases[2].categories[1].contents.gender.contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[1].contents.gender.element))]
     local hair = loginUI.phases[2].categories[2].contents.hair.contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[2].contents.hair.element))]
+    local face = loginUI.phases[2].categories[2].contents.face.contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[2].contents.face.element))]
     local upper = loginUI.phases[2].categories[3].contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[3].element))]
     local lower = loginUI.phases[2].categories[4].contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[4].element))]
     local shoes = loginUI.phases[2].categories[5].contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[5].element))]
@@ -244,6 +251,7 @@ loginUI.phases[2].fetchSelection = function()
         tone = tone,
         gender = gender,
         hair = hair,
+        face = face,
         upper = upper,
         lower = lower,
         shoes = shoes
