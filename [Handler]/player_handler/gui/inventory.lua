@@ -55,11 +55,11 @@ local inventoryUI = {
     margin = inventory_margin,
     titlebar = {
         height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.height,
-        font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 19), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.fontColor)),
+        font = CGame.createFont(1, 19), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.fontColor)),
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.bgColor)),
         slot = {
             height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height,
-            fontPaddingY = 2, font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 16), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.fontColor)),
+            fontPaddingY = 2, font = CGame.createFont(1, 16), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.fontColor)),
             bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.bgColor))
         }
     },
@@ -87,7 +87,7 @@ local inventoryUI = {
     vicinityInventory = {
         width = inventory_offsetX,
         slotNameTexture = imports.beautify.native.createTexture("files/images/inventory/ui/vicinity/slot_name.rw", "argb", true, "clamp"),
-        slotNameFont = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 18), slotNameFontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotNameFontColor)),
+        slotNameFont = CGame.createFont(1, 18), slotNameFontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotNameFontColor)),
         slotSize = vicinity_slotSize, slotColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor)),
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor))
     },

@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    tonumber = tonumber,
     beautify = beautify
 }
 
@@ -23,13 +24,19 @@ local imports = {
 
 CGame.CFont = {}
 
-CGame.createFont = function(path, size)
-    if CGame.CFont[path] and CGame.CFont[path][size] then return CGame.CFont[path][size] end
-    local cFont = imports.beautify.native.createFont(path, size)
+CGame.createFont = function(index, size)
+    if not index or not size then return false end
+    local cData = FRAMEWORK_CONFIGS["Templates"]["Fonts"][index]
+    if not cData then return false end
+    local cLanguage = CPlayer.getLanguage()
+    local cSettings = cData.alt and cData.alt[cLanguage]
+    local cPath, cSize = (cSettings and cSettings[1]) or cData.path, (cSettings and cSettings[2] and (cSettings[2]*size)) or size
+    if CGame.CFont[cPath] and CGame.CFont[cPath][cSize] then return CGame.CFont[cPath][cSize] end
+    local cFont = imports.beautify.native.createFont(cPath, cSize)
     if not cFont then return false end
-    CGame.CFont[path] = CGame.CFont[path] or {}
-    CGame.CFont[path][size] = cFont
-    return CGame.CFont[path][size]
+    CGame.CFont[cPath] = CGame.CFont[cPath] or {}
+    CGame.CFont[cPath][cSize] = cFont
+    return CGame.CFont[cPath][cSize]
 end
 
 CGame.isUIVisible = function()
