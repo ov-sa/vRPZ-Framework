@@ -93,7 +93,7 @@ configVars["UI"]["Login"] = {
                 fontColor = {200, 200, 200, 255}, bgColor = {0, 0, 0, 235},
 
                 ["Identity"] = {
-                    ["Titles"] = {["EN"] = "Identity", ["TR"] = "Kimlik", ["RU"] = "Личность"},
+                    ["Titles"] = {["EN"] = "Identity", ["TR"] = "Kimlik", ["RU"] = "Персонаж"},
                     tone = {
                         ["Titles"] = {["EN"] = "Skin Tone", ["TR"] = "Cilt tonu", ["RU"] = "Цвет кожи"},
                         ["Datas"] = configVars["Character"]["Identity"]["Tone"]
@@ -105,9 +105,9 @@ configVars["UI"]["Login"] = {
                     }
                 },
                 ["Facial"] = {
-                    ["Titles"] = {["EN"] = "Facial", ["TR"] = "Yüz", ["RU"] = "лица"},
+                    ["Titles"] = {["EN"] = "Facial", ["TR"] = "Yüz", ["RU"] = "Голова"},
                     hair = {
-                        ["Titles"] = {["EN"] = "Hair", ["TR"] = "Saç", ["RU"] = "Волосы"},
+                        ["Titles"] = {["EN"] = "Hair", ["TR"] = "Saç", ["RU"] = "Причёска"},
                         ["Datas"] = configVars["Character"]["Clothing"]["Facial"]["Hair"]
                     },
                     face = {
@@ -116,11 +116,11 @@ configVars["UI"]["Login"] = {
                     }
                 },
                 ["Upper"] = {
-                    ["Titles"] = {["EN"] = "Upper", ["TR"] = "Üst", ["RU"] = "Верхний"},
+                    ["Titles"] = {["EN"] = "Upper", ["TR"] = "Üst", ["RU"] = "Верх"},
                     ["Datas"] = configVars["Character"]["Clothing"]["Upper"]
                 },
                 ["Lower"] = {
-                    ["Titles"] = {["EN"] = "Lower", ["TR"] = "Alt", ["RU"] = "Ниже"},
+                    ["Titles"] = {["EN"] = "Lower", ["TR"] = "Alt", ["RU"] = "Низ"},
                     ["Datas"] = configVars["Character"]["Clothing"]["Lower"]
                 },
                 ["Shoes"] = {
