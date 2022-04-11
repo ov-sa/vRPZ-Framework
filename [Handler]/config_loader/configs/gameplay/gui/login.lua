@@ -70,7 +70,7 @@ configVars["UI"]["Login"] = {
             ["Titles"] = {["EN"] = "Characters", ["TR"] = "karakterler", ["RU"] = "Персонажи"},
             width = 325, height = 570,
             titlebar = {
-                ["Titles"] = {["EN"] = "Character", ["TR"] = "Karakter", ["RU"] = "Характер"},
+                ["Titles"] = {["EN"] = "Character", ["TR"] = "Karakter", ["RU"] = "Персонаж"},
                 height = 35,
                 fontColor = {170, 35, 35, 255}, bgColor = {0, 0, 0, 255}, shadowColor = {50, 50, 50, 255}
             },
@@ -93,7 +93,7 @@ configVars["UI"]["Login"] = {
                 fontColor = {200, 200, 200, 255}, bgColor = {0, 0, 0, 235},
 
                 ["Identity"] = {
-                    ["Titles"] = {["EN"] = "Identity", ["TR"] = "Kimlik", ["RU"] = "Персонаж"},
+                    ["Titles"] = {["EN"] = "Identity", ["TR"] = "Kimlik", ["RU"] = "Тело"},
                     tone = {
                         ["Titles"] = {["EN"] = "Skin Tone", ["TR"] = "Cilt tonu", ["RU"] = "Цвет кожи"},
                         ["Datas"] = configVars["Character"]["Identity"]["Tone"]
