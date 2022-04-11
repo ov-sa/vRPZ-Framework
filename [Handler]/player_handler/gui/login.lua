@@ -187,7 +187,7 @@ loginUI.phases[2].updateUILang = function(gender)
     for i = 1, #loginUI.phases[2].options, 1 do
         local j = loginUI.phases[2].options[i]
         j.tooltip.text = imports.string.upper(imports.string.spaceChars(j.tooltip.identifier[(CPlayer.CLanguage)]))
-        j.tooltip.width = imports.beautify.native.getTextWidth(j.tooltip.text, 1, loginUI.phases[2].options.tooltipFont) + loginUI.phases[2].options.size
+        j.tooltip.width = imports.beautify.native.getTextWidth(j.tooltip.text, 1, loginUI.phases[2].options.tooltipFont.instance) + loginUI.phases[2].options.size
     end
     for i = 1, #loginUI.phases[2].categories, 1 do
         local j = loginUI.phases[2].categories[i]

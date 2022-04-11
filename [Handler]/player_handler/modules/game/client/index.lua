@@ -70,12 +70,12 @@ imports.addEventHandler("Client:onUpdateLanguage", root, function(prevLanguage, 
             if cData.alt then
                 local cSettings = cData.alt[currLanguage]
                 if cData.alt[prevLanguage] or cSettings then
+                    print("YO: "..currLanguage)
                     local cPath, cSize = (cSettings and cSettings[1]) or cData.path, (cSettings and cSettings[2] and (cSettings[2]*k)) or k
-                    print("SIZE: "..tostring(cSize))
                     local cFont = imports.beautify.native.createFont(cPath, cSize)
                     if cFont then
-                        local __cFont = j.instance
-                        j.instance = cFont
+                        local __cFont = v.instance
+                        v.instance = cFont
                         imports.destroyElement(__cFont)
                     end
                 end
