@@ -14,6 +14,15 @@
 
 configVars["Templates"] = {
 
+    ["Fonts"] = {
+        {
+            path = ":beautify_library/files/assets/fonts/teko_medium.rw",
+            alt = {
+                ["RU"] = {":beautify_library/files/assets/fonts/ttlakes_demibold.rw", 0.5}
+            }
+        } 
+    },
+
     ["Beautify"] = {
         ["beautify_card"] = {
             color = {0, 0, 0, 0}
