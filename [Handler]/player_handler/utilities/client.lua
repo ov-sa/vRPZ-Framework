@@ -30,8 +30,7 @@ local imports = {
     setPlayerHudComponentVisible = setPlayerHudComponentVisible,
     setCameraFieldOfView = setCameraFieldOfView,
     showChat = showChat,
-    showCursor = showCursor,
-    beautify = beautify
+    showCursor = showCursor
 }
 
 
@@ -155,9 +154,6 @@ imports.addEventHandler("onClientResourceStart", resource, function()
     imports.setPedTargetingMarkerEnabled(false)
     imports.setPlayerHudComponentVisible("all", false)
     imports.setPlayerHudComponentVisible("crosshair", true)
-    for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Beautify"]) do
-        imports.beautify.setUITemplate(i, j)
-    end
     for i, j in imports.pairs(FRAMEWORK_CONFIGS["Game"]["Camera_FOV"]) do
         imports.setCameraFieldOfView(i, j)
     end

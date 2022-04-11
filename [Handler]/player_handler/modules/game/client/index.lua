@@ -80,4 +80,11 @@ imports.addEventHandler("Client:onUpdateLanguage", root, function(prevLanguage, 
             end
         end
     end
+    for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Beautify"]) do
+        local cTemplate = imports.beautify.getUITemplate(i)
+        if cTemplate.__font then
+            iprint(cTemplate.__font)
+            --imports.beautify.setUITemplate(i, j)
+        end
+    end
 end)

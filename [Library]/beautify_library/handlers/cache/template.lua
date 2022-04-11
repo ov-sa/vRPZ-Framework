@@ -100,6 +100,7 @@ local function __createTemplate(elementType, defaultTemplate, customTemplate)
                             if fontScale > 0 then
                                 local createdFont = imports.dxCreateFont(fontPath, fontScale)
                                 if createdFont then
+                                    defaultTemplate.__font = customTemplate[i]
                                     defaultTemplate[i] = createdFont
                                     imports.table.insert(createdResourceTemplates[elementType][sourceResource].assets, createdFont)
                                 end
