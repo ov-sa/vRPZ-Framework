@@ -16,9 +16,10 @@ configVars["Templates"] = {
 
     ["Fonts"] = {
         {
-            path = ":beautify_library/files/assets/fonts/teko_medium.rw",
+            resource = "beautify_library",
+            path = "files/assets/fonts/teko_medium.rw",
             alt = {
-                ["RU"] = {":beautify_library/files/assets/fonts/ttlakes_demibold.rw", 0.93}
+                ["RU"] = {"files/assets/fonts/ttlakes_demibold.rw", 0.93, "beautify_library"}
             }
         } 
     },
@@ -30,7 +31,7 @@ configVars["Templates"] = {
     
         ["beautify_selector"] = {
             fontPaddingY = 0,
-            font = {"files/assets/fonts/teko_medium.rw", 16, "beautify_library"},
+            font = {1, 16},
             color = {100, 100, 100, 255},
             fontColor = {200, 200, 200, 255},
             hoverColor = {200, 200, 200, 255}

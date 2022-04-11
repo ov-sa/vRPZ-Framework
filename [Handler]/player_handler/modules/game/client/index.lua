@@ -18,6 +18,7 @@ local imports = {
     destroyElement = destroyElement,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
+    table = table,
     beautify = beautify
 }
 
@@ -33,8 +34,10 @@ CGame.createFont = function(index, size)
     local cData = FRAMEWORK_CONFIGS["Templates"]["Fonts"][index]
     if not cData then return false end
     local cLanguage = CPlayer.getLanguage()
-    local cSettings = cData.alt and cData.alt[cLanguage]
-    local cPath, cSize = (cSettings and cSettings[1]) or cData.path, (cSettings and cSettings[2] and (cSettings[2]*size)) or size
+    local cResource, cSettings = nil, cData.alt and cData.alt[cLanguage]
+    if cSettings then cResource = cSettings[3]
+    else cResource = cData.resource end
+    local cPath, cSize = ((cResource and ":"..cResource.."/") or "")..((cSettings and cSettings[1]) or cData.path), (cSettings and cSettings[2] and (cSettings[2]*size)) or size
     if CGame.CFont[index] and CGame.CFont[index][size] then return CGame.CFont[index][size] end
     local cFont = imports.beautify.native.createFont(cPath, cSize)
     if not cFont then return false end
@@ -67,9 +70,11 @@ imports.addEventHandler("Client:onUpdateLanguage", root, function(prevLanguage, 
         for k, v in imports.pairs(j) do
             local cData = FRAMEWORK_CONFIGS["Templates"]["Fonts"][i]
             if cData.alt then
-                local cSettings = cData.alt[currLanguage]
+                local cResource, cSettings = nil, cData.alt[currLanguage]
                 if cData.alt[prevLanguage] or cSettings then
-                    local cPath, cSize = (cSettings and cSettings[1]) or cData.path, (cSettings and cSettings[2] and (cSettings[2]*k)) or k
+                    if cSettings then cResource = cSettings[3]
+                    else cResource = cData.resource end
+                    local cPath, cSize = ((cResource and ":"..cResource.."/") or "")..((cSettings and cSettings[1]) or cData.path), (cSettings and cSettings[2] and (cSettings[2]*k)) or k
                     local cFont = imports.beautify.native.createFont(cPath, cSize)
                     if cFont then
                         local __cFont = v.instance
@@ -81,10 +86,27 @@ imports.addEventHandler("Client:onUpdateLanguage", root, function(prevLanguage, 
         end
     end
     for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Beautify"]) do
+        local isTemplateUpdated = false
         local cTemplate = imports.beautify.getUITemplate(i)
-        if cTemplate.__font then
-            iprint(cTemplate.__font)
-            --imports.beautify.setUITemplate(i, j)
+        if not cTemplate then
+            cTemplate = imports.table.clone(j, true)
+            isTemplateUpdated = true
+        end
+        if j.font then
+            local cData = FRAMEWORK_CONFIGS["Templates"]["Fonts"][(j.font[1])]
+            if cData.alt then
+                local cResource, cSettings = nil, cData.alt and cData.alt[currLanguage]
+                if cData.alt[prevLanguage] or cSettings then
+                    if cSettings then cResource = cSettings[3]
+                    else cResource = cData.resource end
+                    local cPath, cSize = (cSettings and cSettings[1]) or cData.path, (cSettings and cSettings[2] and (cSettings[2]*j.font[2])) or j.font[2]
+                    cTemplate.font = {cPath, cSize, cResource}
+                    isTemplateUpdated = true
+                end
+            end
+        end
+        if isTemplateUpdated then
+            imports.beautify.setUITemplate(i, cTemplate)
         end
     end
 end)
