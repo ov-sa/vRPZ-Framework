@@ -58,7 +58,7 @@ loginUI = {
             bgTexture = imports.beautify.native.createTexture("files/images/login/login.rw", "dxt5", true, "clamp"),
             optionsUI = {
                 startX = CLIENT_MTA_RESOLUTION[1]*0.5, startY = -15, paddingY = 10,
-                font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 30), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.fontColor)),
+                font = CGame.createFont(1, 30), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.fontColor)),
                 embedLineColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineColor)),
                 {identifier = "play", exec = function() loginUI.phases[2].manageCharacter("play") end},
                 {identifier = "characters", exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 2) end},
@@ -71,7 +71,7 @@ loginUI = {
             titlebar = {
                 paddingY = 2,
                 height = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.height,
-                font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 19), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.fontColor)),
+                font = CGame.createFont(1, 19), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.fontColor)),
                 bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.bgColor)),
                 shadowColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.shadowColor)),
             },
@@ -79,7 +79,7 @@ loginUI = {
                 startX = 5, startY = 5,
                 paddingX = 5, paddingY = 5,
                 size = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.size, iconSize = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconSize,
-                tooltipFont = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 15), tooltipFontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconColor)),
+                tooltipFont = CGame.createFont(1, 15), tooltipFontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconColor)),
                 iconColor = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.iconColor,
                 bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.bgColor)),
                 {iconTexture = imports.beautify.assets["images"]["arrow/left.rw"], tooltip = {identifier = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.tooltips.previous}, exec = function() loginUI.phases[2].manageCharacter("previous") end},
@@ -93,7 +93,7 @@ loginUI = {
             categories = {
                 paddingX = 20, paddingY = 5,
                 height = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.height,
-                font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 16), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor)),
+                font = CGame.createFont(1, 16), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.fontColor)),
                 bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories.bgColor)),
                 {
                     identifier = "Identity",
@@ -151,13 +151,13 @@ loginUI = {
         [3] = {
             startX = 0, startY = 15,
             width = 0, height = -15,
-            font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 28), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.fontColor)),
+            font = CGame.createFont(1, 28), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.fontColor)),
             scrollAnimTickCounter = CLIENT_CURRENT_TICK,
             scrollDelayDuration = FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration - 1000,
             navigator = {
                 startX = -5, startY = 5,
                 width = 0, height = 25,
-                font = CGame.createFont(":beautify_library/files/assets/fonts/teko_medium.rw", 19), fontColor = {200, 200, 200, 255},
+                font = CGame.createFont(1, 19), fontColor = {200, 200, 200, 255},
                 hoverStatus = "backward",
                 hoverAnimTick = CLIENT_CURRENT_TICK,
                 exec = function() imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1) end
