@@ -31,6 +31,8 @@ function getPlayerParty(...) return CPlayer.getParty(...) end
 --[[ Events ]]--
 ----------------
 
+imports.addEvent("Client:onUpdateLanguage", true)
+
 imports.addEvent("Client:onUpdateChannel", true)
 imports.addEventHandler("Client:onUpdateChannel", root, function(...) CPlayer.setChannel(...) end)
 
