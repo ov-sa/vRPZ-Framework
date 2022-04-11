@@ -14,6 +14,7 @@
 
 local imports = {
     tonumber = tonumber,
+    addEvent = addEvent,
     addEventHandler = addEventHandler,
     beautify = beautify
 }
@@ -58,6 +59,7 @@ CGame.isUIVisible = function()
     return state
 end
 
+imports.addEvent("Client:onUpdateLanguage", false)
 imports.addEventHandler("Client:onUpdateLanguage", root, function(language)
     print("UPDATED LANGUAGE: "..language)
 end)
