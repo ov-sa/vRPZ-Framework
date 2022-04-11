@@ -35,12 +35,12 @@ CGame.createFont = function(index, size)
     local cLanguage = CPlayer.getLanguage()
     local cSettings = cData.alt and cData.alt[cLanguage]
     local cPath, cSize = (cSettings and cSettings[1]) or cData.path, (cSettings and cSettings[2] and (cSettings[2]*size)) or size
-    if CGame.CFont[cPath] and CGame.CFont[cPath][cSize] then return CGame.CFont[cPath][cSize] end
+    if CGame.CFont[index] and CGame.CFont[index][size] then return CGame.CFont[index][size] end
     local cFont = imports.beautify.native.createFont(cPath, cSize)
     if not cFont then return false end
     CGame.CFont[index] = CGame.CFont[index] or {}
-    CGame.CFont[index][cSize] = {instance = cFont}
-    return CGame.CFont[index][cSize]
+    CGame.CFont[index][size] = {instance = cFont}
+    return CGame.CFont[index][size]
 end
 
 CGame.isUIVisible = function()
