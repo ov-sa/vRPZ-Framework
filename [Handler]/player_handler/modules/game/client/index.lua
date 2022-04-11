@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
     tonumber = tonumber,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
@@ -61,5 +62,7 @@ end
 
 imports.addEvent("Client:onUpdateLanguage", false)
 imports.addEventHandler("Client:onUpdateLanguage", root, function(language)
-    print("UPDATED LANGUAGE: "..language)
+    for i, j in imports.pairs(CGame.CFont) do
+        print("UPDATED LANGUAGE FONT: "..language)
+    end
 end)

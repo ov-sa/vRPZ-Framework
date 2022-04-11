@@ -22,7 +22,7 @@ local imports = {
 --[[ Module ]]--
 ----------------
 
-CPlayer.CLanguage = nil
+CPlayer.CLanguage = FRAMEWORK_CONFIGS["Game"]["Game_Languages"].default
 CPlayer.CChannel = nil
 CPlayer.CParty = nil
 
