@@ -30,7 +30,7 @@ configVars["UI"]["Loading"] = {
         {
             ["EN"] = "Upgrade your skills to unlock higher blood limit!",
             ["TR"] = "Daha yüksek kan limitinin kilidini açmak için yeteneklerinizi geliştirmelisin!",
-            ["RU"] = "Обновите свои навыки, чтобы разблокировать более высокий лимит крови!"
+            ["RU"] = "Улучшите свои навыки, чтобы увеличить объем крови!"
         },
         {
             ["EN"] = "Use Antiradiation suits to evade radiations effectively!",
@@ -40,17 +40,17 @@ configVars["UI"]["Loading"] = {
         {
             ["EN"] = "Use helmets to evade headshots!",
             ["TR"] = "Kafa vuruşlarından kaçınmak için kask kullanmalısın!",
-            ["RU"] = "Используйте шлемы, чтобы уклоняться от выстрелов в голову!"
+            ["RU"] = "Используйте шлем, чтобы уклоняться от выстрелов в голову!"
         },
         {
             ["EN"] = "Use armors to evade damages!",
             ["TR"] = "Hasarlardan kaçınmak için zırhları kullanmalısın!",
-            ["RU"] = "Используйте доспехи, чтобы избежать повреждений!"
+            ["RU"] = "Используйте броню, чтобы избежать повреждений!"
         },
         {
             ["EN"] = "Use backpacks to carry more items!",
             ["TR"] = "Daha fazla eşya taşımak için sırt çantalarını kullanmalısın!",
-            ["RU"] = "Используйте рюкзаки, чтобы нести больше предметов!"
+            ["RU"] = "Используйте рюкзак, чтобы нести больше предметов!"
         },
         {
             ["EN"] = "Always be alarmed, never trust anyone!",
@@ -75,7 +75,7 @@ configVars["UI"]["Loading"] = {
         {
             ["EN"] = "Collect GPS & Compass to help you travel on the map!",
             ["TR"] = "Haritada seyahat etmenize yardımcı olması için GPS ve Pusula toplayın!",
-            ["RU"] = "Собирайте GPS и компас, чтобы путешествовать по карте!"
+            ["RU"] = "Найдите GPS и компас, они помогут путешествовать по карте!"
         }
     }
 
