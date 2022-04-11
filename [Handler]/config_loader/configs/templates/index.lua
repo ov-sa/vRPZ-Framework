@@ -21,7 +21,14 @@ configVars["Templates"] = {
             alt = {
                 ["RU"] = {"files/assets/fonts/ttlakes_demibold.rw", 0.93, "beautify_library"}
             }
-        } 
+        },
+        {
+            resource = "beautify_library",
+            path = "files/assets/fonts/signika_semibold.rw",
+            alt = {
+                ["RU"] = {"files/assets/fonts/ttlakes_demibold.rw", 0.93, "beautify_library"}
+            }
+        }
     },
 
     ["Beautify"] = {

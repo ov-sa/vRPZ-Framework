@@ -32,7 +32,7 @@ local notifUI = {
     buffer = {},
     startX = -5, startY = 5, paddingY = 10, offsetY = 0,
     slideTopTickCounter = CLIENT_CURRENT_TICK,
-    font = CGame.createFont(":beautify_library/files/assets/fonts/signika_semibold.rw", 10)
+    font = CGame.createFont(2, 10)
 }
 
 
