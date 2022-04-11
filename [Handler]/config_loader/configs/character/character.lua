@@ -50,13 +50,13 @@ configVars["Character"] = {
             ["Male"] = {
                 {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 1}, ["EN"] = "T-Shirt (White)", ["TR"] = "Tişört (Beyaz)", ["RU"] = "Футболка (белая)"},
                 {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 2}, ["EN"] = "T-Shirt (Black)", ["TR"] = "Tişört (Siyah)", ["RU"] = "Футболка (черная)"},
-                {clumpName = "H1", clumpTexture = {"cj_hdy_1", 1}, ["EN"] = "Hoody (Camo#1)", ["TR"] = "Kapüşonlu (Camo#1)", ["RU"] = "Толстовка (Camo№1)"},
-                {clumpName = "H1", clumpTexture = {"cj_hdy_1", 2}, ["EN"] = "Hoody (Camo#2)", ["TR"] = "Kapüşonlu (Camo#2)", ["RU"] = "Толстовка (Camo№2)"},
-                {clumpName = "H1", clumpTexture = {"cj_hdy_1", 3}, ["EN"] = "Hoody (Camo#3)", ["TR"] = "Kapüşonlu (Camo#3)", ["RU"] = "Толстовка (Camo№3)"},
-                {clumpName = "H1", clumpTexture = {"cj_hdy_1", 4}, ["EN"] = "Hoody (Camo#4)", ["TR"] = "Kapüşonlu (Camo#4)", ["RU"] = "Толстовка (Camo№4)"},
-                {clumpName = "H1", clumpTexture = {"cj_hdy_1", 5}, ["EN"] = "Hoody (Camo#5)", ["TR"] = "Kapüşonlu (Camo#5)", ["RU"] = "Толстовка (Camo№5)"},
-                {clumpName = "H1", clumpTexture = {"cj_hdy_1", 6}, ["EN"] = "Hoody (Camo#6)", ["TR"] = "Kapüşonlu (Camo#6)", ["RU"] = "Толстовка (Camo№6)"},
-                {clumpName = "H1", clumpTexture = {"cj_hdy_1", 7}, ["EN"] = "Hoody (Camo#7)", ["TR"] = "Kapüşonlu (Camo#7)", ["RU"] = "Толстовка (Camo№7)"},
+                {clumpName = "H1", clumpTexture = {"cj_hdy_1", 1}, ["EN"] = "Hoody (Camo#1)", ["TR"] = "Kapüşonlu (Camo#1)", ["RU"] = "Толстовка (Camo#1)"},
+                {clumpName = "H1", clumpTexture = {"cj_hdy_1", 2}, ["EN"] = "Hoody (Camo#2)", ["TR"] = "Kapüşonlu (Camo#2)", ["RU"] = "Толстовка (Camo#2)"},
+                {clumpName = "H1", clumpTexture = {"cj_hdy_1", 3}, ["EN"] = "Hoody (Camo#3)", ["TR"] = "Kapüşonlu (Camo#3)", ["RU"] = "Толстовка (Camo#3)"},
+                {clumpName = "H1", clumpTexture = {"cj_hdy_1", 4}, ["EN"] = "Hoody (Camo#4)", ["TR"] = "Kapüşonlu (Camo#4)", ["RU"] = "Толстовка (Camo#4)"},
+                {clumpName = "H1", clumpTexture = {"cj_hdy_1", 5}, ["EN"] = "Hoody (Camo#5)", ["TR"] = "Kapüşonlu (Camo#5)", ["RU"] = "Толстовка (Camo#5)"},
+                {clumpName = "H1", clumpTexture = {"cj_hdy_1", 6}, ["EN"] = "Hoody (Camo#6)", ["TR"] = "Kapüşonlu (Camo#6)", ["RU"] = "Толстовка (Camo#6)"},
+                {clumpName = "H1", clumpTexture = {"cj_hdy_1", 7}, ["EN"] = "Hoody (Camo#7)", ["TR"] = "Kapüşonlu (Camo#7)", ["RU"] = "Толстовка (Camo#7)"},
                 {clumpName = "H1", clumpTexture = {"cj_hdy_1", 8}, ["EN"] = "Hoody (Casual#1)", ["TR"] = "Kapüşonlu (Casual#1)", ["RU"] = "Толстовка (Casual#1)"}
             },
             ["Female"] = {}
