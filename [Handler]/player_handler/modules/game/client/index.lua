@@ -27,10 +27,15 @@ local imports = {
 --[[ Module: Game ]]--
 ----------------------
 
-CGame.CFont = {}
+CGame.CFont = {
+    static = {},
+    dynamic = {}
+}
 
-CGame.createFont = function(index, size)
+CGame.createFont = function(index, size, isStatic)
     if not index or not size then return false end
+    local cPool = (isStatic and CGame.CFont.static) or CGame.CFont.dynamic
+    if cPool[index] and cPool[index][size] then return cPool[index][size] end
     local cData = FRAMEWORK_CONFIGS["Templates"]["Fonts"][index]
     if not cData then return false end
     local cLanguage = CPlayer.getLanguage()
@@ -38,12 +43,11 @@ CGame.createFont = function(index, size)
     if cSettings then cResource = cSettings[3]
     else cResource = cData.resource end
     local cPath, cSize = ((cResource and ":"..cResource.."/") or "")..((cSettings and cSettings[1]) or cData.path), (cSettings and cSettings[2] and (cSettings[2]*size)) or size
-    if CGame.CFont[index] and CGame.CFont[index][size] then return CGame.CFont[index][size] end
     local cFont = imports.beautify.native.createFont(cPath, cSize)
     if not cFont then return false end
-    CGame.CFont[index] = CGame.CFont[index] or {}
-    CGame.CFont[index][size] = {instance = cFont}
-    return CGame.CFont[index][size]
+    cPool[index] = cPool[index] or {}
+    cPool[index][size] = {instance = cFont}
+    return cPool[index][size]
 end
 
 CGame.isUIVisible = function()
@@ -66,7 +70,7 @@ end
 
 imports.addEvent("Client:onUpdateLanguage", false)
 imports.addEventHandler("Client:onUpdateLanguage", root, function(prevLanguage, currLanguage)
-    for i, j in imports.pairs(CGame.CFont) do
+    for i, j in imports.pairs(CGame.CFont.dynamic) do
         for k, v in imports.pairs(j) do
             local cData = FRAMEWORK_CONFIGS["Templates"]["Fonts"][i]
             if cData.alt then
