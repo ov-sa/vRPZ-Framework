@@ -53,6 +53,7 @@ shaderRW[identifier] = function()
     {
         pass P0
         {
+            AlphaBlendEnable = true;
             Texture[0] = baseTexture;
         }
     }
