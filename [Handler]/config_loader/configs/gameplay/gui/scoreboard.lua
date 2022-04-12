@@ -36,22 +36,22 @@ configVars["UI"]["Scoreboard"] = {
         {
             title = {["EN"] = "ID", ["TR"] = "ID", ["RU"] = "ID"},
             dataType = "serial_number",
-            width = 75
+            width = 60
         },
         {
             title = {["EN"] = "Name", ["TR"] = "İsim", ["RU"] = "Имя"},
             dataType = "name",
-            width = 250
+            width = 240
         },
         {
             title = {["EN"] = "Level", ["TR"] = "Seviye", ["RU"] = "Уровень"},
             dataType = "level",
-            width = 125
+            width = 100
         },
         {
             title = {["EN"] = "Rank", ["TR"] = "Rank", ["RU"] = "Ранг"},
             dataType = "rank",
-            width = 125
+            width = 135
         },
         {
             title = {["EN"] = "Reputation", ["TR"] = "İtibar", ["RU"] = "Репутация"},
@@ -66,7 +66,7 @@ configVars["UI"]["Scoreboard"] = {
         {
             title = {["EN"] = "Group", ["TR"] = "Grup", ["RU"] = "Группа"},
             dataType = "group",
-            width = 150
+            width = 155
         },
         {
             title = {["EN"] = "K:D", ["TR"] = "K:D", ["RU"] = "У:С"},
@@ -76,12 +76,12 @@ configVars["UI"]["Scoreboard"] = {
         {
             title = {["EN"] = "Survival", ["TR"] = "Hayatta Kalma", ["RU"] = "Прожито Времени"},
             dataType = "survival",
-            width = 125
+            width = 140
         },
         {
             title = {["EN"] = "Ping", ["TR"] = "Ping", ["RU"] = "Пинг"},
             dataType = "ping",
-            width = 60
+            width = 80
         }
     },
 
