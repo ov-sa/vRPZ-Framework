@@ -70,8 +70,8 @@ function onBundleLibrary()
                     return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isLibraryLoaded")
                 end
 
-                assetify.createShader = function()
-                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createShader")
+                assetify.createShader = function(...)
+                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createShader", ...)
                 end
 
                 assetify.getAssetID = function(...)
