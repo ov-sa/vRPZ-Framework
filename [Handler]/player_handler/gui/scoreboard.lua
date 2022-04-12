@@ -46,7 +46,7 @@ local scoreboardUI = {
         font = CGame.createFont(1, 17), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.fontColor)),
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.bgColor)), dividerColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.dividerColor)),
         data = {
-            font = CGame.createFont(1, 17), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.fontColor)),
+            font = CGame.createFont(1, 17, true), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.fontColor)),
             bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.bgColor))
         }
     },
