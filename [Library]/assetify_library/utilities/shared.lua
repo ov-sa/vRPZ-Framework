@@ -166,8 +166,16 @@ matrix = {
         }
     end,
 
-    transform = function(elemMatrix, rotMatrix, posX, posY, posZ)
+    transform = function(elemMatrix, rotMatrix, posX, posY, posZ, isAbsoluteRotation, isDuplication)
         if not elemMatrix or not rotMatrix or not posX or not posY or not posZ then return false end
+        if isAbsoluteRotation then
+            if isDuplication then elemMatrix = table.clone(elemMatrix, true) end
+            for i = 1, 3, 1, do
+                for k = 1, 4, 1 do
+                    elemMatrix[i][k] = 0
+                end
+            end
+        end
         return {
             {
                 (elemMatrix[2][1]*rotMatrix[1][2]) + (elemMatrix[1][1]*rotMatrix[1][1]) + (rotMatrix[1][3]*elemMatrix[3][1]),
