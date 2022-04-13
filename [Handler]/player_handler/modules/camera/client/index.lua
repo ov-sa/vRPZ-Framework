@@ -50,8 +50,12 @@ CCamera = {
     },
     CInstance = {native = imports.getCamera(), dummy = imports.createObject(1866, 0, 0, 0), instance = imports.createObject(1866, 0, 0, 0)},
     CView = {
-        ["player"] = {},
-        ["vehicle"] = {}
+        ["player"] = {
+            FOV = 50, nearClip = 0.25
+        },
+        ["vehicle"] = {
+            FOV = 50, nearClip = 0.25
+        }
     },
     CControl = {
         movement = {"forwards", "backwards", "left", "right"},
@@ -146,4 +150,5 @@ for i, j in imports.pairs(CCamera.CInstance) do
         imports.setElementCollisionsEnabled(j, false)
     end
 end
+CCamera.updateCameraView("player")
 imports.addEventHandler("onClientCursorMove", root, CCamera.updateMouseRotation)
