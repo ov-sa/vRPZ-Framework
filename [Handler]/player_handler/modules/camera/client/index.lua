@@ -29,6 +29,7 @@ local imports = {
     setCameraMatrix = setCameraMatrix,
     getCameraMatrix = getCameraMatrix,
     isPedDucked = isPedDucked,
+    getKeyState = getKeyState,
     getPedControlState = getPedControlState,
     interpolateBetween = interpolateBetween
 }
@@ -47,7 +48,7 @@ CCamera = {
     end,
 
     isClientOnADS = function()
-        return getKeyState("capslock")
+        return imports.getKeyState(CCamera.CControls.ADS)
     end,
 
     isClientDucked = function()
