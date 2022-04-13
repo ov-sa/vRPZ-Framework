@@ -171,8 +171,8 @@ matrix = {
         if isAbsoluteRotation then
             if isDuplication then elemMatrix = table.clone(elemMatrix, true) end
             for i = 1, 3, 1, do
-                for k = 1, 4, 1 do
-                    elemMatrix[i][k] = 0
+                for k = 1, 3, 1 do
+                    elemMatrix[i][k] = 1
                 end
             end
         end

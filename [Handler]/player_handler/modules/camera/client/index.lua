@@ -33,7 +33,8 @@ local imports = {
     getKeyState = getKeyState,
     getPedControlState = getPedControlState,
     interpolateBetween = interpolateBetween,
-    math = math
+    math = math,
+    matrix = matrix
 }
 
 
@@ -106,6 +107,12 @@ CCamera = {
         imports.setElementPosition(CCamera.CInstance.dummy, imports.getElementBonePosition(localPlayer, 7))
         imports.setElementRotation(CCamera.CInstance.dummy, imports.getElementRotation(localPlayer))
         imports.attachElements(CCamera.CInstance.instance, CCamera.CInstance.dummy, offX, offY, offZ, rotX, rotY, rotZ)
+        --[[
+        local boneMatrix = getElementBoneMatrix(localPlayer, 7)
+        local rotationMatrix = imports.matrix.fromRotation(rotX, rotY, rotZ)
+        local transformedMatrix = imports.matrix.transform(boneMatrix, rotationMatrix, offX, offY, offZ)
+        setElementMatrix(childElement, transformedMatrix)
+        ]]
         return true
     end,
 
