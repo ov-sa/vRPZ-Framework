@@ -32,7 +32,8 @@ local imports = {
     isPedDucked = isPedDucked,
     getKeyState = getKeyState,
     getPedControlState = getPedControlState,
-    interpolateBetween = interpolateBetween
+    interpolateBetween = interpolateBetween,
+    math = math
 }
 
 
@@ -44,7 +45,7 @@ CCamera = {
     CCache = {
         camera = {
             offX = {value = 0, animValue = 0}, posY = {value = 0, animValue = 0}, posZ = {value = 0, animValue = 0},
-            rotX = {value = 0, animValue = 0}, rotY = {value = 0, animValue = 0, cameraValue = 0}, rotZ = {value = 0, animValue = 0, cameraValue = 0}
+            rotX = {value = 0, animValue = 0, cameraValue = 0}, rotY = {value = 0, animValue = 0, cameraValue = 0}, rotZ = {value = 0, animValue = 0}
         }
     },
     CInstance = {native = imports.getCamera(), dummy = imports.createObject(1866, 0, 0, 0), instance = imports.createObject(1866, 0, 0, 0)},
@@ -104,14 +105,37 @@ CCamera = {
         return true
     end,
 
+    updateCameraTarget = function(posX, posY, posZ)
+        posX, posY, posZ = posX or 0, posY or 0, posZ or 0
+        return imports.setCameraTarget(posX, posY, posZ)
+    end,
+
     updateClientRotation = function(rotation)
         rotation = (rotation or 0)%360
         return imports.setElementRotation(localPlayer, 0, 0, rotation, "default", true)
     end,
 
-    updateClientTarget = function(posX, posY, posZ)
-        posX, posY, posZ = posX or 0, posY or 0, posZ or 0
-        return imports.setCameraTarget(posX, posY, posZ)
+    updateMouseRotation = function(_, _, aX, aY)
+        --if CLIENT_MTA_WINDOW_ACTIVE or CLIENT_IS_CURSOR_SHOWING then return false end
+        --if camera.isCursorVisible or not camera.cursorTick or ((CLIENT_CURRENT_TICK - camera.cursorTick) <= 500) then return false end
+        aX, aY = aX - CLIENT_MTA_RESOLUTION[1]*0.5, aY - CLIENT_MTA_RESOLUTION[2]*0.5
+        CCamera.CCache.camera.rotX.value, CCamera.CCache.camera.rotY.value = CCamera.CCache.camera.rotX.value + (aX*0.05*0.01745), CCamera.CCache.camera.rotY.value - (aY*0.05*0.01745)
+        local mulX, mulY = 2*imports.math.pi, imports.math.pi/2.05
+        if CCamera.CCache.camera.rotX.value > imports.math.pi then
+            CCamera.CCache.camera.rotX.value = CCamera.CCache.camera.rotX.value - mulX
+        elseif CCamera.CCache.camera.rotX.value < -imports.math.pi then
+            CCamera.CCache.camera.rotX.value = CCamera.CCache.camera.rotX.value + mulX
+        end
+        if CCamera.CCache.camera.rotY.value > imports.math.pi then
+            CCamera.CCache.camera.rotY.value = CCamera.CCache.camera.rotY.value - mulX
+        elseif CCamera.CCache.camera.rotY.value < -imports.math.pi then
+            CCamera.CCache.camera.rotY.value = CCamera.CCache.camera.rotY.value + mulX
+        end
+        if CCamera.CCache.camera.rotY.value < -mulY then
+            CCamera.CCache.camera.rotY.value = -mulY
+        elseif CCamera.CCache.camera.rotY.value > mulY then
+            CCamera.CCache.camera.rotY.value = mulY
+        end
     end
 }
 
