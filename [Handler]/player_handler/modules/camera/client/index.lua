@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
     addEventHandler = addEventHandler,
     getCamera = getCamera,
     createObject = createObject,
@@ -40,8 +41,11 @@ local imports = {
 ----------------
 
 CCamera = {
-    CInstance = {native = imports.getCamera(), dummy = imports.createObject(1866, 0, 0, 0)},
-    CControls = {"forwards", "backwards", "left", "right"},
+    CInstance = {native = imports.getCamera(), dummy = imports.createObject(1866, 0, 0, 0), instance = imports.createObject(1866, 0, 0, 0)},
+    CControls = {
+        movement = {"forwards", "backwards", "left", "right"},
+        ADS = "lshift"
+    }
 
     isClientAiming = function()
         return imports.getPedControlState(localPlayer, "aim_weapon")
@@ -57,7 +61,7 @@ CCamera = {
 
     isClientMoving = function()
         for i = 1, 4, 1 do
-            local j = CCamera.CControls[i]
+            local j = CCamera.CControls.movement[i]
             if imports.getPedControlState(localPlayer, j) then
                 return j
             end
@@ -65,26 +69,38 @@ CCamera = {
         return false
     end,
 
+    updateTexClips = function(texList, state)
+        for i = 1, #texList, 1 do
+            local j = texList[i]
+            if state then
+                assetify.createShader(localPlayer, "client-camera", "Assetify_TextureClearer", j, {}, {}, {}, {})
+            end
+        end
+        return true
+    end,
+
     updateCamera = function(offX, offY, offZ, rotX, rotY, rotZ)
         offX, offY, offZ = offX or 0, offY or 0, offZ = offZ or 0
         rotX, rotY, rotZ = rotX or 0, rotY or 0, rotZ or 0
         imports.setElementPosition(CCamera.CInstance.dummy, imports.getElementBonePosition(localPlayer, 7))
         imports.setElementRotation(CCamera.CInstance.dummy, imports.getElementRotation(localPlayer))
-        imports.attachElements(cameraCache.cameraElement, CCamera.CInstance.dummy, offX, offY, offZ, rotX, rotY, rotZ)
+        imports.attachElements(CCamera.CInstance.instance, CCamera.CInstance.dummy, offX, offY, offZ, rotX, rotY, rotZ)
         return true
     end,
 
     updateClientRotation = function(rotation)
-        rotation = (rotation or 0)%360
-        return imports.setElementRotation(localPlayer, 0, 0, rotation, "default", true)
+        return imports.setElementRotation(localPlayer, 0, 0, (rotation or 0)%360, "default", true)
     end,
 
     updateClientTarget = function(posX, posY, posZ)
-        posX, posY, posZ = posX or 0, posY or 0, posz or 0
         return imports.setCameraTarget(posX, posY, posZ)
     end
 }
 
-imports.setObjectScale(CCamera.CInstance.dummy, 0)
-imports.setElementAlpha(CCamera.CInstance.dummy, 0)
-imports.setElementCollisionsEnabled(CCamera.CInstance.dummy, false)
+for i, j in imports.pairs(CCamera.CInstance) do
+    if i ~= "native" then
+        imports.setObjectScale(j, 0)
+        imports.setElementAlpha(j, 0)
+        imports.setElementCollisionsEnabled(j, false)
+    end
+end
