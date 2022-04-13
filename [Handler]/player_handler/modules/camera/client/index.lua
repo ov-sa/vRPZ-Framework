@@ -89,10 +89,12 @@ CCamera = {
     end,
 
     updateClientRotation = function(rotation)
-        return imports.setElementRotation(localPlayer, 0, 0, (rotation or 0)%360, "default", true)
+        rotation = (rotation or 0)%360
+        return imports.setElementRotation(localPlayer, 0, 0, rotation, "default", true)
     end,
 
     updateClientTarget = function(posX, posY, posZ)
+        posX, posY, posZ = posX or 0, posY or 0, posZ or 0
         return imports.setCameraTarget(posX, posY, posZ)
     end
 }
