@@ -2,7 +2,7 @@
 --[[ Resource: Player Handler
      Script: gui: loading.lua
      Author: vStudio
-     Developer(s): Mario, Tron, Aviril
+     Developer(s): Mario, Tron, Aviril, Аниса
      DOC: 31/01/2022
      Desc: Loading UI Handler ]]--
 ----------------------------------------------------------------

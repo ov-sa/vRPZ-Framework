@@ -25,6 +25,10 @@
     <export function="createFont" type="client"/>
     <export function="isUIVisible" type="client"/>
 
+    <!-- Modules: Camera -->
+    <!--script src="modules/camera/client/index.lua" type="client"/>
+    <script src="modules/camera/client/exports.lua" type="client"/-->
+
     <!-- Modules: Player -->
     <script src="modules/player/shared/index.lua" type="shared"/>
     <script src="modules/player/shared/exports.lua" type="shared"/>

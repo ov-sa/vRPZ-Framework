@@ -2,7 +2,7 @@
 --[[ Resource: Party Handler
      Script: modules: party: server: index.lua
      Author: vStudio
-     Developer(s): Mario, Tron, Aviril
+     Developer(s): Mario, Tron, Aviril, Аниса
      DOC: 31/01/2022
      Desc: Party Module ]]--
 ----------------------------------------------------------------
