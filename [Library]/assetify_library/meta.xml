@@ -9,6 +9,7 @@
     <script src="utilities/shared.lua" type="shared"/>
     <script src="utilities/shaders/index.lua" type="client"/>
     <file src="utilities/shaders/helper.fx"/>
+    <script src="utilities/shaders/tex_clearer.lua" type="client"/>
     <script src="utilities/shaders/tex_changer.lua" type="client"/>
     <script src="utilities/shaders/tex_clumper.lua" type="client"/>
     <script src="utilities/shaders/tex_mapper.lua" type="client"/>
