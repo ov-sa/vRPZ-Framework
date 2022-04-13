@@ -146,3 +146,4 @@ for i, j in imports.pairs(CCamera.CInstance) do
         imports.setElementCollisionsEnabled(j, false)
     end
 end
+imports.addEventHandler("onClientCursorMove", root, CCamera.updateMouseRotation)
