@@ -170,7 +170,7 @@ matrix = {
         if not elemMatrix or not rotMatrix or not posX or not posY or not posZ then return false end
         if isAbsoluteRotation then
             if isDuplication then elemMatrix = table.clone(elemMatrix, true) end
-            for i = 1, 3, 1, do
+            for i = 1, 3, 1 do
                 for k = 1, 3, 1 do
                     elemMatrix[i][k] = 1
                 end
