@@ -41,8 +41,18 @@ local imports = {
 ----------------
 
 CCamera = {
+    CCache = {
+        camera = {
+            offX = {value = 0, animValue = 0}, posY = {value = 0, animValue = 0}, posZ = {value = 0, animValue = 0},
+            rotX = {value = 0, animValue = 0}, rotY = {value = 0, animValue = 0, cameraValue = 0}, rotZ = {value = 0, animValue = 0, cameraValue = 0}
+        }
+    },
     CInstance = {native = imports.getCamera(), dummy = imports.createObject(1866, 0, 0, 0), instance = imports.createObject(1866, 0, 0, 0)},
-    CControls = {
+    CView = {
+        ["player"] = {},
+        ["vehicle"] = {}
+    },
+    CControl = {
         movement = {"forwards", "backwards", "left", "right"},
         ADS = "lshift"
     }
@@ -52,7 +62,7 @@ CCamera = {
     end,
 
     isClientOnADS = function()
-        return imports.getKeyState(CCamera.CControls.ADS)
+        return imports.getKeyState(CCamera.CControl.ADS)
     end,
 
     isClientDucked = function()
@@ -61,7 +71,7 @@ CCamera = {
 
     isClientMoving = function()
         for i = 1, 4, 1 do
-            local j = CCamera.CControls.movement[i]
+            local j = CCamera.CControl.movement[i]
             if imports.getPedControlState(localPlayer, j) then
                 return j
             end
@@ -76,6 +86,12 @@ CCamera = {
                 assetify.createShader(localPlayer, "client-camera", "Assetify_TextureClearer", j, {}, {}, {}, {})
             end
         end
+        return true
+    end,
+
+    updateCameraView = function(view)
+        if not CCamera.CView[view] or (CCamera.CView == view) then return false end
+        CCamera.CView = view
         return true
     end,
 
