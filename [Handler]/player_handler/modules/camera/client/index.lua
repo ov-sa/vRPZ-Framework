@@ -138,14 +138,6 @@ CCamera = {
         return true
     end,
 
-    updateMouseRotation = function(aX, aY)
-        if CLIENT_MTA_WINDOW_ACTIVE or CLIENT_IS_CURSOR_SHOWING then return false end
-        --if not camera.isCursorVisible or not camera.cursorTick or ((CLIENT_CURRENT_TICK - camera.cursorTick) <= 500) then return false end
-        aX, aY = aX - 0.5, aY - 0.5
-        CCamera.CCache.camera.rotX.value, CCamera.CCache.camera.rotY.value = CCamera.CCache.camera.rotX.value - (aX*360), imports.math.max(-0.65, imports.math.min(0.9, CCamera.CCache.camera.rotY.value - aY))
-        return true
-    end,
-
     updateEntityLocation = function(element, posX, posY, posZ, rotX, rotY, rotZ, rotOrder)
         if posX and posY and posZ then
             imports.setElementPosition(element, posX, posY, posZ)
@@ -166,6 +158,51 @@ CCamera = {
         if not offX or not offY or not offZ then return false end
         local cMatrix = imports.getElementMatrix(entity)
         return (offX*cMatrix[1][1]) + (offY*cMatrix[2][1]) + (offZ*cMatrix[3][1]) + cMatrix[4][1], (offX*cMatrix[1][2]) + (offY*cMatrix[2][2]) + (offZ*cMatrix[3][2]) + cMatrix[4][2], (offX*cMatrix[1][3]) + (offY*cMatrix[2][3]) + (offZ*cMatrix[3][3]) + cMatrix[4][3]
+    end,
+
+    updateMouseRotation = function(aX, aY)
+        if CLIENT_MTA_WINDOW_ACTIVE or CLIENT_IS_CURSOR_SHOWING then return false end
+        --if not camera.isCursorVisible or not camera.cursorTick or ((CLIENT_CURRENT_TICK - camera.cursorTick) <= 500) then return false end
+        aX, aY = aX - 0.5, aY - 0.5
+        CCamera.CCache.camera.rotX.value, CCamera.CCache.camera.rotY.value = CCamera.CCache.camera.rotX.value - (aX*360), imports.math.max(-0.65, imports.math.min(0.9, CCamera.CCache.camera.rotY.value - aY))
+        return true
+    end,
+
+    renderCamera = function()
+        if not CCamera.CView then return false end
+        local camera_viewData = CCamera.CViews[(CCamera.CView)]
+        local isClientOnADS, isClientDucked = CCamera.isClientOnADS(), CCamera.isClientDucked()
+        isClientOnADS = (isClientOnADS and weaponData.ADS.offsets) or false
+        CCamera.updateCamera(camera_viewData.attachOffsets[1], camera_viewData.attachOffsets[2], camera_viewData.attachOffsets[3], camera_viewData.attachOffsets[4], camera_viewData.attachOffsets[5], camera_viewData.attachOffsets[6])
+        CCamera.updateCameraAim()
+        CCamera.updateCameraSway()
+    
+        if isClientOnADS then
+            CCamera.updateCameraSway(_, 0.45)
+            local camera_posX, camera_posY, camera_posZ = CCamera.fetchEntityLocation(CCamera.CInstance.instance)
+            local camera_offsetX, camera_offsetY, camera_offsetZ = CCamera.fetchEntityPosition(weaponObject, isClientOnADS.x, isClientOnADS.y, isClientOnADS.z)
+            CCamera.CCache.camera.offX.value, CCamera.CCache.camera.offY.value, CCamera.CCache.camera.offZ.value = camera_offsetX - camera_posX, camera_offsetY - camera_posY, camera_offsetZ - camera_posZ
+        else
+            CCamera.CCache.camera.offX.value, CCamera.CCache.camera.offY.value, CCamera.CCache.camera.offZ.value = 0, 0, 0
+        end
+        if CCamera.CView == "player" then
+            if isClientDucked then
+                CCamera.updateCameraAim(_, camera_viewData.duckedY)
+            end
+            CCamera.updateClientRotation(CCamera.CCache.camera.rotX.animValue)
+        end
+        CCamera.CCache.camera.offX.animValue, CCamera.CCache.camera.offY.animValue, CCamera.CCache.camera.offZ.animValue = imports.interpolateBetween(CCamera.CCache.camera.offX.animValue, CCamera.CCache.camera.offY.animValue, CCamera.CCache.camera.offZ.animValue, CCamera.CCache.camera.offX.value, CCamera.CCache.camera.offY.value, CCamera.CCache.camera.offZ.value, 0.25, "OutQuad")
+        CCamera.CCache.camera.rotX.animValue, CCamera.CCache.camera.rotY.animValue, CCamera.CCache.camera.rotZ.animValue = imports.interpolateBetween(CCamera.CCache.camera.rotX.animValue, CCamera.CCache.camera.rotY.animValue, CCamera.CCache.camera.rotZ.animValue, CCamera.CCache.camera.rotX.value, CCamera.CCache.camera.rotY.value, CCamera.CCache.camera.rotZ.value, 0.45, "InQuad")
+        CCamera.CCache.camera.rotX.cameraValue, CCamera.CCache.camera.rotY.cameraValue = imports.interpolateBetween(CCamera.CCache.camera.rotX.cameraValue, CCamera.CCache.camera.rotY.cameraValue, 0, CCamera.CCache.camera.rotX.value, CCamera.CCache.camera.rotY.value, 0, CCamera.CCache.cameraSway.value, CCamera.CCache.cameraSway.type)
+        local camera_posX, camera_posY, camera_posZ, camera_rotX, camera_rotY, camera_rotZ = CCamera.fetchEntityLocation(CCamera.CInstance.instance)
+        local cameraTarget_offZ = CCamera.CCache.camera.rotY.animValue + (CCamera.CCache.camera.rotY.animValue - CCamera.CCache.camera.rotY.cameraValue)
+        local camera_forwardX, camera_forwardY, camera_forwardZ = CCamera.fetchEntityPosition(CCamera.CInstance.instance, 0, 1, 0)
+        camera_posX, camera_posY, camera_posZ = camera_posX + CCamera.CCache.camera.offX.animValue, camera_posY + CCamera.CCache.camera.offY.animValue, camera_posZ + CCamera.CCache.camera.offZ.animValue
+        CCamera.updateEntityLocation(CCamera.CInstance.native, camera_posX, camera_posY, camera_posZ, camera_rotX, camera_rotY, camera_rotZ)
+        local camera_posX, camera_posY, camera_posZ, camera_lookX, camera_lookY, camera_lookZ, camera_roll = imports.getCameraMatrix()
+        imports.setNearClipDistance(camera_viewData.nearClip)
+        imports.setCameraTarget(camera_forwardX, camera_forwardY, camera_forwardZ + cameraTarget_offZ + CCamera.CCache.cameraAim.y)
+        imports.setCameraMatrix(camera_posX, camera_posY, camera_posZ, camera_lookX, camera_lookY, camera_lookZ + cameraTarget_offZ, camera_roll, camera_viewData.FOV)
     end
 }
 
@@ -178,3 +215,5 @@ for i, j in imports.pairs(CCamera.CInstance) do
 end
 CCamera.updateCameraView("player")
 imports.addEventHandler("onClientCursorMove", root, CCamera.updateMouseRotation)
+imports.addEventHandler("onClientPedsProcessed", root, CCamera.renderCamera)
+
