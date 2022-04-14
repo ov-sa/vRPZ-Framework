@@ -190,37 +190,42 @@ CCamera = {
         local camera_viewData = CCamera.CViews[(CCamera.CView)]
         local isClientOnADS, isClientDucked = CCamera.isClientOnADS(), CCamera.isClientDucked()
         isClientOnADS = (isClientOnADS and weaponData and weaponData.ADS.offsets) or false
+        local isCameraAimUpdated, isCameraSwayUpdated = false, false
         CCamera.updateCamera(camera_viewData.attachOffsets[1], camera_viewData.attachOffsets[2], camera_viewData.attachOffsets[3], camera_viewData.attachOffsets[4], camera_viewData.attachOffsets[5], camera_viewData.attachOffsets[6])
-        CCamera.updateCameraAim()
-        CCamera.updateCameraSway()
         if isClientOnADS then
             CCamera.updateCameraSway(_, 0.45)
             if isClientDucked then
                 CCamera.updateCameraAim(_, camera_viewData.duckedY)
+                isCameraAimUpdated = true
             end
             local camera_posX, camera_posY, camera_posZ = CCamera.fetchEntityLocation(CCamera.CInstance.instance)
             local camera_offsetX, camera_offsetY, camera_offsetZ = CCamera.fetchEntityPosition(weaponObject, isClientOnADS.x, isClientOnADS.y, isClientOnADS.z)
             CCamera.CCache.camera.offX.value, CCamera.CCache.camera.offY.value, CCamera.CCache.camera.offZ.value = camera_offsetX - camera_posX, camera_offsetY - camera_posY, camera_offsetZ - camera_posZ
+            isCameraSwayUpdated = true
         else
             CCamera.CCache.camera.offX.value, CCamera.CCache.camera.offY.value, CCamera.CCache.camera.offZ.value = 0, 0, 0
         end
+        if not isCameraAimUpdated then CCamera.updateCameraAim() end
+        if not isCameraSwayUpdated then CCamera.updateCameraSway() end
         return true
     end,
 
     renderEntity = function()
         if not CCamera.CView then return false end
         local camera_viewData = CCamera.CViews[(CCamera.CView)]
+        local isCameraVelocityUpdated = false
         CCamera.CCache.camera.offX.animValue, CCamera.CCache.camera.offY.animValue, CCamera.CCache.camera.offZ.animValue = imports.interpolateBetween(CCamera.CCache.camera.offX.animValue, CCamera.CCache.camera.offY.animValue, CCamera.CCache.camera.offZ.animValue, CCamera.CCache.camera.offX.value, CCamera.CCache.camera.offY.value, CCamera.CCache.camera.offZ.value, 0.25, "OutQuad")
         CCamera.CCache.camera.rotX.animValue, CCamera.CCache.camera.rotY.animValue, CCamera.CCache.camera.rotZ.animValue = imports.interpolateBetween(CCamera.CCache.camera.rotX.animValue, CCamera.CCache.camera.rotY.animValue, CCamera.CCache.camera.rotZ.animValue, CCamera.CCache.camera.rotX.value, CCamera.CCache.camera.rotY.value, CCamera.CCache.camera.rotZ.value, 0.45, "InQuad")
         CCamera.CCache.camera.rotX.cameraValue, CCamera.CCache.camera.rotY.cameraValue = imports.interpolateBetween(CCamera.CCache.camera.rotX.cameraValue, CCamera.CCache.camera.rotY.cameraValue, 0, CCamera.CCache.camera.rotX.value, CCamera.CCache.camera.rotY.value, 0, CCamera.CCache.cameraSway.value, CCamera.CCache.cameraSway.type)
-        
-        CCamera.updateCameraVelocity()
+
         if CCamera.CView == "player" then
             local camera_velocityX, camera_velocityY, camera_velocityZ = imports.getElementVelocity(localPlayer)
             CCamera.updateCameraVelocity(camera_velocityX*3, camera_velocityY*3, camera_velocityZ*3)
             CCamera.updateClientRotation(CCamera.CCache.camera.rotX.animValue)
+            isCameraVelocityUpdated = true
         end
-        if CCamera.CCache.cameraLocation and CCamera.CCache.cameraVelocity then
+        if not isCameraVelocityUpdated then CCamera.updateCameraVelocity() end
+        if CCamera.CCache.cameraLocation then
             CCamera.updateEntityLocation(CCamera.CInstance.instance, CCamera.CCache.cameraLocation[1] + CCamera.CCache.cameraVelocity.x, CCamera.CCache.cameraLocation[2] + CCamera.CCache.cameraVelocity.y, CCamera.CCache.cameraLocation[3] + CCamera.CCache.cameraVelocity.z, CCamera.CCache.cameraLocation[4], CCamera.CCache.cameraLocation[5], CCamera.CCache.cameraLocation[6])
         end
         local camera_posX, camera_posY, camera_posZ, camera_rotX, camera_rotY, camera_rotZ = CCamera.fetchEntityLocation(CCamera.CInstance.instance)
