@@ -67,7 +67,7 @@ CCamera = {
     },
 
     isClientAiming = function()
-        return imports.getPedControlState(localPlayer, "aim_weapon")
+        return (CCamera.CView == "player") and imports.getPedControlState(localPlayer, "aim_weapon")
     end,
 
     isClientOnADS = function()
@@ -179,6 +179,10 @@ CCamera = {
     
         if isClientOnADS then
             CCamera.updateCameraSway(_, 0.45)
+            if isClientDucked then
+                CCamera.updateCameraAim(_, camera_viewData.duckedY)
+            end
+            CCamera.updateClientRotation(CCamera.CCache.camera.rotX.animValue)
             local camera_posX, camera_posY, camera_posZ = CCamera.fetchEntityLocation(CCamera.CInstance.instance)
             local camera_offsetX, camera_offsetY, camera_offsetZ = CCamera.fetchEntityPosition(weaponObject, isClientOnADS.x, isClientOnADS.y, isClientOnADS.z)
             CCamera.CCache.camera.offX.value, CCamera.CCache.camera.offY.value, CCamera.CCache.camera.offZ.value = camera_offsetX - camera_posX, camera_offsetY - camera_posY, camera_offsetZ - camera_posZ
@@ -186,9 +190,6 @@ CCamera = {
             CCamera.CCache.camera.offX.value, CCamera.CCache.camera.offY.value, CCamera.CCache.camera.offZ.value = 0, 0, 0
         end
         if CCamera.CView == "player" then
-            if isClientDucked then
-                CCamera.updateCameraAim(_, camera_viewData.duckedY)
-            end
             CCamera.updateClientRotation(CCamera.CCache.camera.rotX.animValue)
         end
         CCamera.CCache.camera.offX.animValue, CCamera.CCache.camera.offY.animValue, CCamera.CCache.camera.offZ.animValue = imports.interpolateBetween(CCamera.CCache.camera.offX.animValue, CCamera.CCache.camera.offY.animValue, CCamera.CCache.camera.offZ.animValue, CCamera.CCache.camera.offX.value, CCamera.CCache.camera.offY.value, CCamera.CCache.camera.offZ.value, 0.25, "OutQuad")
@@ -216,4 +217,3 @@ end
 CCamera.updateCameraView("player")
 imports.addEventHandler("onClientCursorMove", root, CCamera.updateMouseRotation)
 imports.addEventHandler("onClientPedsProcessed", root, CCamera.renderCamera)
-
