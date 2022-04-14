@@ -20,7 +20,9 @@ local imports = {
     getElementBonePosition = getElementBonePosition,
     setElementPosition = setElementPosition,
     setElementRotation = setElementRotation,
+    getElementPosition = getElementPosition,
     getElementRotation = getElementRotation,
+    getElementMatrix = getElementMatrix,
     attachElements = attachElements,
     setObjectScale = setObjectScale,
     setElementAlpha = setElementAlpha,
@@ -51,15 +53,17 @@ CCamera = {
     CInstance = {native = imports.getCamera(), dummy = imports.createObject(1866, 0, 0, 0), instance = imports.createObject(1866, 0, 0, 0)},
     CViews = {
         ["player"] = {
-            FOV = 50, nearClip = 0.25
+            FOV = 50, nearClip = 0.25, duckedY = 0.4,
+            attachOffsets = {0, -0.1, 0, 0, 0, 0},
         },
         ["vehicle"] = {
-            FOV = 50, nearClip = 0.25
+            FOV = 50, nearClip = 0.25,
+            attachOffsets = {0, -0.1, 0, 0, 0, 0}
         }
     },
     CControls = {
         movement = {"forwards", "backwards", "left", "right"},
-        ADS = "lshift"
+        ADS = "capslock"
     },
 
     isClientAiming = function()
@@ -67,7 +71,7 @@ CCamera = {
     end,
 
     isClientOnADS = function()
-        return imports.getKeyState(CCamera.CControls.ADS)
+        return (CCamera.isClientAiming() and imports.getKeyState(CCamera.CControls.ADS)) or false
     end,
 
     isClientDucked = function()
@@ -120,12 +124,48 @@ CCamera = {
         return imports.setElementRotation(localPlayer, 0, 0, rotation, "default", true)
     end,
 
+    updateCameraSway = function(swayType, swayValue)
+        CCamera.CCache.cameraSway = CCamera.CCache.cameraSway or {}
+        CCamera.CCache.cameraSway.type = swayType or "OutQuad"
+        CCamera.CCache.cameraSway.value = swayValue or "0.25"
+        return true
+    end,
+
+    updateCameraAim = function(offX, offY)
+        CCamera.CCache.cameraAim = CCamera.CCache.cameraAim or {}
+        CCamera.CCache.cameraAim.x = offX or 0
+        CCamera.CCache.cameraAim.y = offY or 0
+        return true
+    end,
+
     updateMouseRotation = function(aX, aY)
         if CLIENT_MTA_WINDOW_ACTIVE or CLIENT_IS_CURSOR_SHOWING then return false end
         --if not camera.isCursorVisible or not camera.cursorTick or ((CLIENT_CURRENT_TICK - camera.cursorTick) <= 500) then return false end
         aX, aY = aX - 0.5, aY - 0.5
         CCamera.CCache.camera.rotX.value, CCamera.CCache.camera.rotY.value = CCamera.CCache.camera.rotX.value - (aX*360), imports.math.max(-0.65, imports.math.min(0.9, CCamera.CCache.camera.rotY.value - aY))
         return true
+    end,
+
+    updateEntityLocation = function(element, posX, posY, posZ, rotX, rotY, rotZ, rotOrder)
+        if posX and posY and posZ then
+            imports.setElementPosition(element, posX, posY, posZ)
+        end
+        if rotX and rotY and rotZ then
+            imports.setElementRotation(element, rotX, rotY, rotZ, rotOrder)
+        end
+        return true
+    end,
+
+    fetchEntityLocation = function(element, rotOrder)
+        local posX, posY, posZ = imports.getElementPosition(element)
+        local rotX, rotY, rotZ = imports.getElementRotation(element, rotOrder)
+        return posX, posY, posZ, rotX, rotY, rotZ 
+    end,
+    
+    fetchEntityPosition = function(entity, offX, offY, offZ)
+        if not offX or not offY or not offZ then return false end
+        local cMatrix = imports.getElementMatrix(entity)
+        return (offX*cMatrix[1][1]) + (offY*cMatrix[2][1]) + (offZ*cMatrix[3][1]) + cMatrix[4][1], (offX*cMatrix[1][2]) + (offY*cMatrix[2][2]) + (offZ*cMatrix[3][2]) + cMatrix[4][2], (offX*cMatrix[1][3]) + (offY*cMatrix[2][3]) + (offZ*cMatrix[3][3]) + cMatrix[4][3]
     end
 }
 
