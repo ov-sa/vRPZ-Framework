@@ -19,9 +19,9 @@ syncSettings = {
 }
 
 dbSettings = {
-    username = "sql10484411",
-    password = "ghXF9wzMPs",
-    database = "sql10484411",
+    username = "sql10485769",
+    password = "a2RyQDa8tC",
+    database = "sql10485769",
     host = "sql10.freemysqlhosting.net",
     port = "3306",
     options = ""
