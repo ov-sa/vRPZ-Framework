@@ -63,7 +63,6 @@ CCamera = {
         }
     },
     CControls = {
-        movement = {"forwards", "backwards", "left", "right"},
         ADS = "capslock"
     },
 
@@ -77,16 +76,6 @@ CCamera = {
 
     isClientDucked = function()
         return imports.isPedDucked(localPlayer)
-    end,
-
-    isClientMoving = function()
-        for i = 1, 4, 1 do
-            local j = CCamera.CControls.movement[i]
-            if imports.getPedControlState(localPlayer, j) then
-                return j
-            end
-        end
-        return false
     end,
 
     updateTexClips = function(texList, state)
