@@ -1,0 +1,7 @@
+<meta>
+    <min_mta_version server="1.5.8"/>
+    <oop>true</oop>
+    <script src="config.lua" type="client" cache="false"/>
+    <script src="client.lua" type="client" cache="false"/>
+    <file src="ped.ifp"/>
+</meta>
