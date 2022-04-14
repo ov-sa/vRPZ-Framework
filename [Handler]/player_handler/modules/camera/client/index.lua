@@ -23,6 +23,7 @@ local imports = {
     getElementPosition = getElementPosition,
     getElementRotation = getElementRotation,
     getElementMatrix = getElementMatrix,
+    getElementVelocity = getElementVelocity,
     setObjectScale = setObjectScale,
     setElementAlpha = setElementAlpha,
     setElementCollisionsEnabled = setElementCollisionsEnabled,
@@ -114,9 +115,11 @@ CCamera = {
         rotX, rotY, rotZ = rotX or 0, rotY or 0, rotZ or 0
         local _, _, __rotZ = imports.getElementRotation(localPlayer)
         local bone_posX, bone_posY, bone_posZ = imports.getElementBonePosition(localPlayer, 7)
-        CCamera.updateEntityLocation(CCamera.CInstance.dummy, bone_posX, bone_posY, bone_posZ, rotX, rotY, rotZ + __rotZ)
+        rotZ = rotZ + __rotZ
+        CCamera.updateEntityLocation(CCamera.CInstance.dummy, bone_posX, bone_posY, bone_posZ, rotX, rotY, rotZ)
         offX, offY, offZ = CCamera.fetchEntityPosition(CCamera.CInstance.dummy, offX, offY, offZ)
-        CCamera.updateEntityLocation(CCamera.CInstance.instance, offX, offY, offZ, rotX, rotY, rotZ + __rotZ)
+        CCamera.CCache.cameraLocation = CCamera.CCache.cameraLocation or {}
+        CCamera.CCache.cameraLocation[1], CCamera.CCache.cameraLocation[2], CCamera.CCache.cameraLocation[3], CCamera.CCache.cameraLocation[4], CCamera.CCache.cameraLocation[5], CCamera.CCache.cameraLocation[6] = offX, offY, offZ, rotX, rotY, rotZ
         return true
     end,
 
@@ -125,9 +128,12 @@ CCamera = {
         return imports.setCameraTarget(posX, posY, posZ)
     end,
 
-    updateClientRotation = function(rotation)
-        rotation = (rotation or 0)%360
-        return imports.setElementRotation(localPlayer, 0, 0, rotation, "default", true)
+    updateCameraVelocity = function(velX, velY, velZ)
+        CCamera.CCache.cameraVelocity = CCamera.CCache.cameraVelocity or {}
+        CCamera.CCache.cameraVelocity.x = velX or 0
+        CCamera.CCache.cameraVelocity.y = velY or 0
+        CCamera.CCache.cameraVelocity.z = velZ or 0
+        return true
     end,
 
     updateCameraSway = function(swayType, swayValue)
@@ -154,6 +160,11 @@ CCamera = {
         return true
     end,
 
+    updateClientRotation = function(rotation)
+        rotation = (rotation or 0)%360
+        return imports.setElementRotation(localPlayer, 0, 0, rotation, "default", true)
+    end,
+
     fetchEntityLocation = function(element, rotOrder)
         local posX, posY, posZ = imports.getElementPosition(element)
         local rotX, rotY, rotZ = imports.getElementRotation(element, rotOrder)
@@ -161,7 +172,7 @@ CCamera = {
     end,
     
     fetchEntityPosition = function(entity, offX, offY, offZ)
-        if not offX or not offY or not offZ then return false end
+        offX, offY, offZ = offX or 0, offY or 0, offZ or 0
         local cMatrix = imports.getElementMatrix(entity)
         return (offX*cMatrix[1][1]) + (offY*cMatrix[2][1]) + (offZ*cMatrix[3][1]) + cMatrix[4][1], (offX*cMatrix[1][2]) + (offY*cMatrix[2][2]) + (offZ*cMatrix[3][2]) + cMatrix[4][2], (offX*cMatrix[1][3]) + (offY*cMatrix[2][3]) + (offZ*cMatrix[3][3]) + cMatrix[4][3]
     end,
@@ -193,6 +204,7 @@ CCamera = {
         else
             CCamera.CCache.camera.offX.value, CCamera.CCache.camera.offY.value, CCamera.CCache.camera.offZ.value = 0, 0, 0
         end
+        return true
     end,
 
     renderEntity = function()
@@ -202,8 +214,14 @@ CCamera = {
         CCamera.CCache.camera.rotX.animValue, CCamera.CCache.camera.rotY.animValue, CCamera.CCache.camera.rotZ.animValue = imports.interpolateBetween(CCamera.CCache.camera.rotX.animValue, CCamera.CCache.camera.rotY.animValue, CCamera.CCache.camera.rotZ.animValue, CCamera.CCache.camera.rotX.value, CCamera.CCache.camera.rotY.value, CCamera.CCache.camera.rotZ.value, 0.45, "InQuad")
         CCamera.CCache.camera.rotX.cameraValue, CCamera.CCache.camera.rotY.cameraValue = imports.interpolateBetween(CCamera.CCache.camera.rotX.cameraValue, CCamera.CCache.camera.rotY.cameraValue, 0, CCamera.CCache.camera.rotX.value, CCamera.CCache.camera.rotY.value, 0, CCamera.CCache.cameraSway.value, CCamera.CCache.cameraSway.type)
         
+        CCamera.updateCameraVelocity()
         if CCamera.CView == "player" then
+            local camera_velocityX, camera_velocityY, camera_velocityZ = imports.getElementVelocity(localPlayer)
+            CCamera.updateCameraVelocity(camera_velocityX*3, camera_velocityY*3, camera_velocityZ*3)
             CCamera.updateClientRotation(CCamera.CCache.camera.rotX.animValue)
+        end
+        if CCamera.CCache.cameraLocation and CCamera.CCache.cameraVelocity then
+            CCamera.updateEntityLocation(CCamera.CInstance.instance, CCamera.CCache.cameraLocation[1] + CCamera.CCache.cameraVelocity.x, CCamera.CCache.cameraLocation[2] + CCamera.CCache.cameraVelocity.y, CCamera.CCache.cameraLocation[3] + CCamera.CCache.cameraVelocity.z, CCamera.CCache.cameraLocation[4], CCamera.CCache.cameraLocation[5], CCamera.CCache.cameraLocation[6])
         end
         local camera_posX, camera_posY, camera_posZ, camera_rotX, camera_rotY, camera_rotZ = CCamera.fetchEntityLocation(CCamera.CInstance.instance)
         local cameraTarget_offZ = CCamera.CCache.camera.rotY.animValue + (CCamera.CCache.camera.rotY.animValue - CCamera.CCache.camera.rotY.cameraValue)
@@ -214,6 +232,7 @@ CCamera = {
         imports.setNearClipDistance(camera_viewData.nearClip)
         imports.setCameraTarget(camera_forwardX, camera_forwardY, camera_forwardZ + cameraTarget_offZ + CCamera.CCache.cameraAim.y)
         imports.setCameraMatrix(camera_posX, camera_posY, camera_posZ, camera_lookX, camera_lookY, camera_lookZ + cameraTarget_offZ, camera_roll, camera_viewData.FOV)
+        return true
     end
 }
 
