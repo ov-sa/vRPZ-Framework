@@ -101,6 +101,7 @@ CCamera = {
     updateCameraView = function(view)
         if not view then
             CCamera.CView = false
+            imports.setCameraTarget(localPlayer)
         else
             if not CCamera.CViews[view] or (CCamera.CView == view) then return false end
             CCamera.CView = view
