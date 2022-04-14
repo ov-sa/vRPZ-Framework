@@ -99,8 +99,12 @@ CCamera = {
     end,
 
     updateCameraView = function(view)
-        if not CCamera.CViews[view] or (CCamera.CView == view) then return false end
-        CCamera.CView = view
+        if not view then
+            CCamera.CView = false
+        else
+            if not CCamera.CViews[view] or (CCamera.CView == view) then return false end
+            CCamera.CView = view
+        end
         return true
     end,
 
