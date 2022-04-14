@@ -187,7 +187,6 @@ CCamera = {
             if isClientDucked then
                 CCamera.updateCameraAim(_, camera_viewData.duckedY)
             end
-            CCamera.updateClientRotation(CCamera.CCache.camera.rotX.animValue)
             local camera_posX, camera_posY, camera_posZ = CCamera.fetchEntityLocation(CCamera.CInstance.instance)
             local camera_offsetX, camera_offsetY, camera_offsetZ = CCamera.fetchEntityPosition(weaponObject, isClientOnADS.x, isClientOnADS.y, isClientOnADS.z)
             CCamera.CCache.camera.offX.value, CCamera.CCache.camera.offY.value, CCamera.CCache.camera.offZ.value = camera_offsetX - camera_posX, camera_offsetY - camera_posY, camera_offsetZ - camera_posZ
