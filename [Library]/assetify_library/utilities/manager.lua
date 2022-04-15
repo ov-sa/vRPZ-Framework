@@ -282,7 +282,7 @@ if localPlayer then
         if cAsset.manifestData.assetAnimations then
             for i = 1, #cAsset.manifestData.assetAnimations, 1 do
                 local j = cAsset.manifestData.assetAnimations[i]
-                imports.engineReplaceAnimation(element, j.defaultBlock, j.defaultAnim, j.assetBlock, j.assetAnim)
+                imports.engineReplaceAnimation(element, j.defaultBlock, j.defaultAnim, "animation."..assetName, j.assetAnim)
             end
         end
         return true
