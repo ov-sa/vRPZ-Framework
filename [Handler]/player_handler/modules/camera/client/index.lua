@@ -18,6 +18,7 @@ local imports = {
     getCamera = getCamera,
     createObject = createObject,
     getElementBonePosition = getElementBonePosition,
+    setElementFrozen = setElementFrozen,
     setElementPosition = setElementPosition,
     setElementRotation = setElementRotation,
     getElementPosition = getElementPosition,
@@ -35,6 +36,7 @@ local imports = {
     getKeyState = getKeyState,
     getPedControlState = getPedControlState,
     interpolateBetween = interpolateBetween,
+    processLineOfSight = processLineOfSight,
     math = math,
     assetify = assetify
 }
@@ -50,12 +52,16 @@ CCamera = {
             offX = {value = 0, animValue = 0}, offY = {value = 0, animValue = 0}, offZ = {value = 0, animValue = 0},
             rotX = {value = 0, animValue = 0, cameraValue = 0}, rotY = {value = 0, animValue = 0, cameraValue = 0}, rotZ = {value = 0, animValue = 0},
             velocity = {value = 0, animValue = 0}
+        },
+        controller = {
+            front = {value = 0, animValue = 0}, right = {value = 0, animValue = 0}, up = {value = 0, animValue = 0}
         }
     },
     CInstance = {native = imports.getCamera(), dummy = imports.createObject(1866, 0, 0, 0), instance = imports.createObject(1866, 0, 0, 0)},
     CViews = {
         ["player"] = {
             FOV = 50, nearClip = 0.25, duckedY = 0.4,
+            moveSpeed = 0.1, sprintSpeed = 2.5,
             attachOffsets = {0, -0.1, 0, 0, 0, 0},
         },
         ["vehicle"] = {
@@ -73,6 +79,10 @@ CCamera = {
 
     isClientOnADS = function()
         return (CCamera.isClientAiming() and imports.getKeyState(CCamera.CControls.ADS)) or false
+    end,
+
+    isClientSprinting = function()
+        return (CCamera.CView == "player") and not CCamera.isClientOnADS() and imports.getPedControlState(localPlayer, "sprint")
     end,
 
     isClientDucked = function()
@@ -139,13 +149,20 @@ CCamera = {
         return true
     end,
 
-    updateEntityLocation = function(element, posX, posY, posZ, rotX, rotY, rotZ, rotOrder)
+    updateEntityLocation = function(element, posX, posY, posZ, rotX, rotY, rotZ, warp, rotOrder)
         if posX and posY and posZ then
-            imports.setElementPosition(element, posX, posY, posZ)
+            imports.setElementPosition(element, posX, posY, posZ, warp)
         end
         if rotX and rotY and rotZ then
             imports.setElementRotation(element, rotX, rotY, rotZ, rotOrder)
         end
+        return true
+    end,
+
+    updateControllerLocation = function(offX, offY, offZ)
+        CCamera.CCache.controller.front.value = offX or 0
+        CCamera.CCache.controller.right.value = offY or 0
+        CCamera.CCache.controller.up.value = offZ or 0
         return true
     end,
 
@@ -174,14 +191,44 @@ CCamera = {
         return true
     end,
 
+    renderClient = function()
+        if not CPlayer.isInitialized(localPlayer) or not CCamera.CView then return false end
+        local camera_viewData = CCamera.CViews[(CCamera.CView)]
+        local controller_front, controller_right, controller_up = nil, nil, nil
+
+        if CCamera.CView == "player" then
+            local isClientSprinting = CCamera.isClientSprinting()
+            if imports.getPedControlState(localPlayer, "forwards") then
+                controller_front = camera_viewData.moveSpeed
+            elseif imports.getPedControlState(localPlayer, "backwards") then
+                controller_front = -camera_viewData.moveSpeed
+            end
+            if imports.getPedControlState(localPlayer, "left") then
+                controller_right = -camera_viewData.moveSpeed
+            elseif imports.getPedControlState(localPlayer, "right") then
+                controller_right = camera_viewData.moveSpeed
+            end
+            if isClientSprinting then
+                controller_front = controller_front*camera_viewData.sprintSpeed
+            end
+            local posX, posY, posZ = CCamera.fetchEntityPosition(localPlayer, CCamera.CCache.controller.right.animValue, CCamera.CCache.controller.front.animValue, CCamera.CCache.controller.up.animValue)
+            local hit, hitX, hitY, hitZ = imports.processLineOfSight(posX, posY, posZ, posX, posY, posZ - 50, false, false, false, true, false, false, false, false, weaponObject)
+            if hit then hitZ = hitZ + 1 end
+            imports.setElementFrozen(localPlayer, not isClientSprinting)
+            CCamera.updateEntityLocation(localPlayer, posX, posY, hitZ or posZ, _, _, _, false)
+        end
+        CCamera.updateControllerLocation(controller_front, controller_right, controller_up)
+        return true
+    end,
+
     renderCamera = function()
         if not CPlayer.isInitialized(localPlayer) or not CCamera.CView then return false end
-        if not CCamera.CView then return false end
         local camera_viewData = CCamera.CViews[(CCamera.CView)]
         local isClientOnADS, isClientDucked = CCamera.isClientOnADS(), CCamera.isClientDucked()
         isClientOnADS = (isClientOnADS and weaponData and weaponData.ADS.offsets) or false
         local isCameraAimUpdated, isCameraSwayUpdated = false, false
         CCamera.updateCamera(camera_viewData.attachOffsets[1], camera_viewData.attachOffsets[2], camera_viewData.attachOffsets[3], camera_viewData.attachOffsets[4], camera_viewData.attachOffsets[5], camera_viewData.attachOffsets[6])
+        
         if isClientOnADS then
             CCamera.updateCameraSway(_, 0.45)
             if isClientDucked then
@@ -197,6 +244,7 @@ CCamera = {
         end
         if not isCameraAimUpdated then CCamera.updateCameraAim() end
         if not isCameraSwayUpdated then CCamera.updateCameraSway() end
+        CCamera.renderClient()
         return true
     end,
 
@@ -208,12 +256,19 @@ CCamera = {
         CCamera.CCache.camera.rotX.animValue, CCamera.CCache.camera.rotY.animValue, CCamera.CCache.camera.rotZ.animValue = imports.interpolateBetween(CCamera.CCache.camera.rotX.animValue, CCamera.CCache.camera.rotY.animValue, CCamera.CCache.camera.rotZ.animValue, CCamera.CCache.camera.rotX.value, CCamera.CCache.camera.rotY.value, CCamera.CCache.camera.rotZ.value, 0.45, "InQuad")
         CCamera.CCache.camera.rotX.cameraValue, CCamera.CCache.camera.rotY.cameraValue = imports.interpolateBetween(CCamera.CCache.camera.rotX.cameraValue, CCamera.CCache.camera.rotY.cameraValue, 0, CCamera.CCache.camera.rotX.value, CCamera.CCache.camera.rotY.value, 0, CCamera.CCache.camera.sway.value, CCamera.CCache.camera.sway.type)
         CCamera.CCache.camera.velocity.animValue = imports.interpolateBetween(CCamera.CCache.camera.velocity.animValue, 0, 0, CCamera.CCache.camera.velocity.value, 0, 0, 0.45, "InQuad")
+        CCamera.CCache.controller.front.animValue, CCamera.CCache.controller.right.animValue, CCamera.CCache.controller.up.animValue = imports.interpolateBetween(CCamera.CCache.controller.front.animValue, CCamera.CCache.controller.right.animValue, CCamera.CCache.controller.up.animValue, CCamera.CCache.controller.front.value, CCamera.CCache.controller.right.value, CCamera.CCache.controller.up.value, 0.45, "InQuad")
 
         if CCamera.CView == "player" then
+            local isClientSprinting = CCamera.isClientSprinting()
             local camera_velocityX, camera_velocityY, camera_velocityZ = imports.getElementVelocity(localPlayer)
             CCamera.CCache.camera.velocity.value = 3
-            if imports.getPedControlState(localPlayer, "backwards") then
-                CCamera.CCache.camera.velocity.value = -CCamera.CCache.camera.velocity.value*0.5
+            if imports.getPedControlState(localPlayer, "left") then
+                CCamera.CCache.camera.velocity.value = CCamera.CCache.camera.velocity.value
+            elseif imports.getPedControlState(localPlayer, "right") then
+                CCamera.CCache.camera.velocity.value = CCamera.CCache.camera.velocity.value*0.65
+            end
+            if isClientSprinting then
+                CCamera.CCache.camera.velocity.value = CCamera.CCache.camera.velocity.value*camera_viewData.sprintSpeed
             end
             CCamera.updateCameraVelocity(camera_velocityX*CCamera.CCache.camera.velocity.animValue, camera_velocityY*CCamera.CCache.camera.velocity.animValue, camera_velocityZ*CCamera.CCache.camera.velocity.animValue)
             CCamera.updateClientRotation(CCamera.CCache.camera.rotX.animValue)
