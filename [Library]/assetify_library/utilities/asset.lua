@@ -93,10 +93,12 @@ if localPlayer then
         if assetPack == "assetType" then
             if rwPaths.ifp then
                 rwCache.ifp[(rwPaths.ifp)] = imports.engineLoadIFP((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(rwPaths.ifp), {key = assetManifest.encryptKey})) or rwPaths.ifp)
-                assetData.cAsset = self
-                self.rwPaths = rwPaths
-                self.syncedData = {}
-                loadState = true
+                if rwCache.ifp[(rwPaths.ifp)] then
+                    assetData.cAsset = self
+                    self.rwPaths = rwPaths
+                    self.syncedData = {}
+                    loadState = true
+                end
             end
         else
             local modelID, collisionID = false, false
