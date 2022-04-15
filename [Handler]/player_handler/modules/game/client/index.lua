@@ -19,7 +19,8 @@ local imports = {
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     table = table,
-    beautify = beautify
+    beautify = beautify,
+    assetify = assetify
 }
 
 
@@ -66,6 +67,14 @@ CGame.isUIVisible = function()
         end
     end
     return state
+end
+
+CGame.loadAnim = function(...)
+    return imports.assetify.loadAnim(...)
+end
+
+CGame.unloadAnim = function(...)
+    return imports.assetify.unloadAnim(...)
 end
 
 imports.addEvent("Client:onUpdateLanguage", false)

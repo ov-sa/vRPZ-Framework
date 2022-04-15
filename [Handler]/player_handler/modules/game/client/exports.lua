@@ -14,3 +14,5 @@
 
 function createFont(...) return CGame.createFont(...) end
 function isUIVisible(...) return CGame.isUIVisible(...) end
+function loadAnim(...) return CGame.loadAnim(...) end
+function unloadAnim(...) return CGame.unloadAnim(...) end

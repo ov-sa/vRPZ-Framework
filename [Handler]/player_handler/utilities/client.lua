@@ -30,8 +30,7 @@ local imports = {
     setPlayerHudComponentVisible = setPlayerHudComponentVisible,
     setCameraFieldOfView = setCameraFieldOfView,
     showChat = showChat,
-    showCursor = showCursor,
-    assetify = assetify
+    showCursor = showCursor
 }
 
 
@@ -170,7 +169,7 @@ imports.addEventHandler("onClientResourceStart", resource, function()
     end)
 
     imports.addEventHandler("onClientPlayerJoin", root, function()
-        imports.assetify.loadAnim(source, "vRPZ_Military")
+        CGame.loadAnim(source, "vRPZ_Military")
     end)
 
     imports.addEvent("Client:onSyncWeather", true)
