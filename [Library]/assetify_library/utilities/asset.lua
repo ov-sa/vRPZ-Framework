@@ -258,6 +258,7 @@ else
                         assetManifestData.enableLODs = (assetManifestData.enableLODs and true) or false
                         assetManifestData.encryptKey = (assetManifestData.encryptKey and imports.md5(imports.tostring(assetManifestData.encryptKey))) or false
                         assetManifestData.assetClumps = (assetManifestData.assetClumps and (imports.type(assetManifestData.assetClumps) == "table") and assetManifestData.assetClumps) or false
+                        assetManifestData.shaderMaps = (assetManifestData.shaderMaps and (imports.type(assetManifestData.shaderMaps) == "table") and assetManifestData.shaderMaps) or false
                         cAssetPack.rwDatas[assetReference] = {
                             synced = {
                                 manifestData = assetManifestData
@@ -268,8 +269,13 @@ else
                                 fileHash = {}
                             }
                         }
-                        assetManifestData.shaderMaps = (assetManifestData.shaderMaps and (imports.type(assetManifestData.shaderMaps) == "table") and assetManifestData.shaderMaps) or false
-                        if assetType == "scene" then
+                        if assetType == "animation" then
+                            assetManifestData.streamRange = false
+                            assetManifestData.enableLODs = false
+                            assetManifestData.assetClumps = false
+                            assetManifestData.shaderMaps = false
+                        elseif assetType == "scene" then
+                            assetManifestData.assetClumps = false
                             assetManifestData.sceneDimension = imports.math.max(asset.ranges.dimension[1], imports.math.min(asset.ranges.dimension[2], imports.tonumber(assetManifestData.sceneDimension) or 0))
                             assetManifestData.sceneInterior = imports.math.max(asset.ranges.interior[1], imports.math.min(asset.ranges.interior[2], imports.tonumber(assetManifestData.sceneInterior) or 0))
                             assetManifestData.sceneMapped = (assetManifestData.sceneMapped and true) or false
