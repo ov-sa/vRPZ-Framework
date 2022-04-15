@@ -130,7 +130,13 @@ if localPlayer then
                         shader:create(nil, "control", "Assetify_TextureMapper", i, shaderTextures, shaderInputs, assetReference.unsyncedData.rwCache.map, j, assetReference.manifestData.encryptKey)
                     end
                 end
-                if assetType == "scene" then
+                if assetType == "animation" then
+                    if asset:create(assetType, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache, {
+                        ifp = assetPath..(asset.references.asset)..".ifp"
+                    }) then
+                        return true
+                    end
+                elseif assetType == "scene" then
                     thread:create(function(cThread)
                         local sceneManifestData = imports.file.read(assetPath..(asset.references.scene)..".ipl")
                         sceneManifestData = (assetReference.manifestData.encryptKey and imports.decodeString("tea", sceneManifestData, {key = assetReference.manifestData.encryptKey})) or sceneManifestData
