@@ -242,7 +242,7 @@ for i, j in imports.pairs(CCamera.CInstance) do
         imports.setElementCollisionsEnabled(j, false)
     end
 end
-CCamera.updateCameraView("player")
+CCamera.updateCameraSway()
 imports.addEventHandler("onClientCursorMove", root, CCamera.updateMouseRotation)
 imports.addEventHandler("onClientPedsProcessed", root, CCamera.renderCamera)
 imports.addEventHandler("onClientPreRender", root, CCamera.renderEntity)
