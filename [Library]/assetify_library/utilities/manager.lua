@@ -278,6 +278,7 @@ if localPlayer then
         if not syncer.isLibraryLoaded then return false end
         if not element or not assetName then return false end
         local cAsset = manager:getData("animation", assetName)
+        if not cAsset then return false end
         if cAsset.manifestData.assetAnimations then
             for i = 1, #cAsset.manifestData.assetAnimations, 1 do
                 local j = cAsset.manifestData.assetAnimations[i]
@@ -291,6 +292,7 @@ if localPlayer then
         if not syncer.isLibraryLoaded then return false end
         if not element or not assetName then return false end
         local cAsset = manager:getData("animation", assetName)
+        if not cAsset then return false end
         if cAsset.manifestData.assetAnimations then
             for i = 1, #cAsset.manifestData.assetAnimations, 1 do
                 local j = cAsset.manifestData.assetAnimations[i]
