@@ -72,7 +72,7 @@ end
 CGame.loadAnim = function(element, templateType, ...)
     if not FRAMEWORK_CONFIGS["Templates"]["Animations"][templateType] then return false end
     for i = 1, #FRAMEWORK_CONFIGS["Templates"]["Animations"][templateType], 1 do
-        CGame.loadAnim(element, FRAMEWORK_CONFIGS["Templates"]["Animations"][templateType][i], ...)
+        imports.assetify.loadAnim(element, FRAMEWORK_CONFIGS["Templates"]["Animations"][templateType][i], ...)
     end
     return true
 end
@@ -80,7 +80,7 @@ end
 CGame.unloadAnim = function(element, templateType, ...)
     if not FRAMEWORK_CONFIGS["Templates"]["Animations"][templateType] then return false end
     for i = 1, #FRAMEWORK_CONFIGS["Templates"]["Animations"][templateType], 1 do
-        CGame.unloadAnim(element, FRAMEWORK_CONFIGS["Templates"]["Animations"][templateType][i], ...)
+        imports.assetify.unloadAnim(element, FRAMEWORK_CONFIGS["Templates"]["Animations"][templateType][i], ...)
     end
     return true
 end
