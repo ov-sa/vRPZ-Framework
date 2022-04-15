@@ -20,10 +20,10 @@ local imports = {
     gettok = gettok,
     tonumber = tonumber,
     tostring = tostring,
-    destroyElement = destroyElement,
     addEventHandler = addEventHandler,
+    engineReplaceAnimation = engineReplaceAnimation,
+    engineRestoreAnimation = engineRestoreAnimation,
     collectgarbage = collectgarbage,
-    setTimer = setTimer,
     file = file,
     table = table,
     string = string,
@@ -273,6 +273,32 @@ if localPlayer then
         dummy:clearElementBuffer(source)
         bone:clearElementBuffer(source)
     end)
+
+    function manager:loadAnim(element, assetName)
+        if not syncer.isLibraryLoaded then return false end
+        if not element or not assetName then return false end
+        local cAsset = manager:getData("animation", assetName)
+        if cAsset.manifestData.assetAnimations then
+            for i = 1, #cAsset.manifestData.assetAnimations, 1 do
+                local j = cAsset.manifestData.assetAnimations[i]
+                imports.engineReplaceAnimation(element, j.defaultBlock, j.defaultAnim, j.assetBlock, j.assetAnim)
+            end
+        end
+        return true
+    end
+
+    function manager:unloadAnim(element, assetName)
+        if not syncer.isLibraryLoaded then return false end
+        if not element or not assetName then return false end
+        local cAsset = manager:getData("animation", assetName)
+        if cAsset.manifestData.assetAnimations then
+            for i = 1, #cAsset.manifestData.assetAnimations, 1 do
+                local j = cAsset.manifestData.assetAnimations[i]
+                imports.engineRestoreAnimation(element, j.defaultBlock, j.defaultAnim)
+            end
+        end
+        return true
+    end
 else
     function manager:getData(assetType, assetName)
         if not syncer.isLibraryLoaded then return false end
