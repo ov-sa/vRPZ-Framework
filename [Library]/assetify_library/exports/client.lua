@@ -55,22 +55,14 @@ function unloadAsset(assetType, assetName, ...)
     return state
 end
 
-function loadAnimation(element, assetName, ...)
+function loadAnimation(element, ...)
     if not element or not imports.isElement(element) then return false end
-    local state = manager:load(assetType, assetName, ...)
-    if state then
-        imports.triggerEvent("onAssetLoad", localPlayer, assetType, assetName)
-    end
-    return state
+    return manager:loadAnim(element, ...)
 end
 
-function unloadAnimation(element, assetName, ...)
+function unloadAnimation(element, ...)
     if not element or not imports.isElement(element) then return false end
-    local state = manager:unload(assetType, assetName, ...)
-    if state then
-        imports.triggerEvent("onAssetUnLoad", localPlayer, assetType, assetName)
-    end
-    return state
+    return manager:unloadAnim(element, ...)
 end
 
 function createAssetDummy(...)
