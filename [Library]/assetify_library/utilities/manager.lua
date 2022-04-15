@@ -98,6 +98,7 @@ if localPlayer then
                 assetReference.unsyncedData = {
                     assetCache = {},
                     rwCache = {
+                        ifp = {},
                         txd = {},
                         dff = {},
                         col = {},
