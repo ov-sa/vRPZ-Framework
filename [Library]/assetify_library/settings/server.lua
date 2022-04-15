@@ -14,9 +14,11 @@
 
 availableAssetPacks = {
     ["animation"] = {
+        assetType = "animation",
         autoLoad = true
     },
 
+    --[[
     ["scene"] = {
         autoLoad = true,
         assetType = "object",
@@ -58,4 +60,5 @@ availableAssetPacks = {
         assetBase = 1337,
         assetTransparency = false
     }
+    ]]
 }
