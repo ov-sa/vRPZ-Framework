@@ -19,6 +19,7 @@ local imports = {
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     getElementType = getElementType,
+    getElementsByType = getElementsByType,
     guiSetInputMode = guiSetInputMode,
     setWeather = setWeather,
     setTime = setTime,
