@@ -258,6 +258,7 @@ else
                         assetManifestData.enableLODs = (assetManifestData.enableLODs and true) or false
                         assetManifestData.encryptKey = (assetManifestData.encryptKey and imports.md5(imports.tostring(assetManifestData.encryptKey))) or false
                         assetManifestData.assetClumps = (assetManifestData.assetClumps and (imports.type(assetManifestData.assetClumps) == "table") and assetManifestData.assetClumps) or false
+                        assetManifestData.assetAnimations = (assetManifestData.assetAnimations and (imports.type(assetManifestData.assetAnimations) == "table") and assetManifestData.assetAnimations) or false
                         assetManifestData.shaderMaps = (assetManifestData.shaderMaps and (imports.type(assetManifestData.shaderMaps) == "table") and assetManifestData.shaderMaps) or false
                         cAssetPack.rwDatas[assetReference] = {
                             synced = {
@@ -276,49 +277,52 @@ else
                             assetManifestData.shaderMaps = false
                             asset:buildFile(assetPath..(asset.references.asset)..".ifp", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
                             thread.pause()
-                        elseif assetType == "scene" then
-                            assetManifestData.assetClumps = false
-                            assetManifestData.sceneDimension = imports.math.max(asset.ranges.dimension[1], imports.math.min(asset.ranges.dimension[2], imports.tonumber(assetManifestData.sceneDimension) or 0))
-                            assetManifestData.sceneInterior = imports.math.max(asset.ranges.interior[1], imports.math.min(asset.ranges.interior[2], imports.tonumber(assetManifestData.sceneInterior) or 0))
-                            assetManifestData.sceneMapped = (assetManifestData.sceneMapped and true) or false
-                            if assetManifestData.sceneOffset then
-                                if imports.type(assetManifestData.sceneOffset) ~= "table" then
-                                    assetManifestData.sceneOffset = false
-                                else
-                                    for i, j in imports.pairs(assetManifestData.sceneOffset) do
-                                        assetManifestData.sceneOffset[i] = imports.tonumber(j)
-                                    end
-                                end
-                            end
-                            local sceneIPLPath = assetPath..(asset.references.scene)..".ipl"
-                            local sceneManifestData = imports.file.read(sceneIPLPath)
-                            if sceneManifestData then
-                                asset:buildFile(sceneIPLPath, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
-                                if not assetManifestData.sceneMapped then
-                                    asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
-                                    local unparsedDatas = imports.split(sceneManifestData, "\n")
-                                    for k = 1, #unparsedDatas, 1 do
-                                        local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedDatas[k], 2, asset.separators.IPL)), " ", "")
-                                        asset:buildFile(assetPath.."dff/"..childName..".dff", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
-                                        asset:buildFile(assetPath.."col/"..childName..".col", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
-                                        thread.pause()
-                                    end
-                                end
-                            end
                         else
-                            asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
-                            if assetManifestData.assetClumps then
-                                for i, j in imports.pairs(assetManifestData.assetClumps) do
-                                    asset:buildFile(assetPath.."clump/"..j..".dff", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                            assetManifestData.assetAnimations = false
+                            if assetType == "scene" then
+                                assetManifestData.assetClumps = false
+                                assetManifestData.sceneDimension = imports.math.max(asset.ranges.dimension[1], imports.math.min(asset.ranges.dimension[2], imports.tonumber(assetManifestData.sceneDimension) or 0))
+                                assetManifestData.sceneInterior = imports.math.max(asset.ranges.interior[1], imports.math.min(asset.ranges.interior[2], imports.tonumber(assetManifestData.sceneInterior) or 0))
+                                assetManifestData.sceneMapped = (assetManifestData.sceneMapped and true) or false
+                                if assetManifestData.sceneOffset then
+                                    if imports.type(assetManifestData.sceneOffset) ~= "table" then
+                                        assetManifestData.sceneOffset = false
+                                    else
+                                        for i, j in imports.pairs(assetManifestData.sceneOffset) do
+                                            assetManifestData.sceneOffset[i] = imports.tonumber(j)
+                                        end
+                                    end
+                                end
+                                local sceneIPLPath = assetPath..(asset.references.scene)..".ipl"
+                                local sceneManifestData = imports.file.read(sceneIPLPath)
+                                if sceneManifestData then
+                                    asset:buildFile(sceneIPLPath, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                    if not assetManifestData.sceneMapped then
+                                        asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                        local unparsedDatas = imports.split(sceneManifestData, "\n")
+                                        for k = 1, #unparsedDatas, 1 do
+                                            local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedDatas[k], 2, asset.separators.IPL)), " ", "")
+                                            asset:buildFile(assetPath.."dff/"..childName..".dff", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                            asset:buildFile(assetPath.."col/"..childName..".col", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                            thread.pause()
+                                        end
+                                    end
                                 end
                             else
-                                asset:buildFile(assetPath..(asset.references.asset)..".dff", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                if assetManifestData.assetClumps then
+                                    for i, j in imports.pairs(assetManifestData.assetClumps) do
+                                        asset:buildFile(assetPath.."clump/"..j..".dff", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                    end
+                                else
+                                    asset:buildFile(assetPath..(asset.references.asset)..".dff", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                end
+                                asset:buildFile(assetPath..(asset.references.asset)..".col", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                thread.pause()
                             end
-                            asset:buildFile(assetPath..(asset.references.asset)..".col", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
-                            thread.pause()
-                        end
-                        if assetManifestData.shaderMaps then
-                            asset:buildShader(assetPath, assetManifestData.shaderMaps, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                            if assetManifestData.shaderMaps then
+                                asset:buildShader(assetPath, assetManifestData.shaderMaps, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                            end
                         end
                     end
                 end
