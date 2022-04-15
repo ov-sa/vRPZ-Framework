@@ -168,7 +168,10 @@ imports.addEventHandler("onClientResourceStart", resource, function()
         end
     end)
 
-    CGame.loadAnim(source, "Character")
+    local connectedPlayers = imports.getElementsByType("player")
+    for i = 1, #connectedPlayers, 1 do
+        CGame.loadAnim(connectedPlayers[i], "Character")
+    end
     imports.addEventHandler("onClientPlayerJoin", root, function()
         CGame.loadAnim(source, "Character")
     end)
