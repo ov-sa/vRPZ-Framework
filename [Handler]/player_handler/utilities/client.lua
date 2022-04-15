@@ -169,7 +169,9 @@ imports.addEventHandler("onClientResourceStart", resource, function()
     end)
 
     imports.addEventHandler("onClientPlayerJoin", root, function()
-        CGame.loadAnim(source, "vRPZ_Military")
+        for i = 1, #FRAMEWORK_CONFIGS["Templates"]["Animations"]["Character"], 1 do
+            CGame.loadAnim(source, FRAMEWORK_CONFIGS["Templates"]["Animations"]["Character"][i])
+        end
     end)
 
     imports.addEvent("Client:onSyncWeather", true)
