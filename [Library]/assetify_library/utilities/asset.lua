@@ -90,7 +90,7 @@ if localPlayer then
         if not self or (self == asset) then return false end
         if not assetType or not assetPack or not assetPack.assetType or not rwCache or not assetManifest or not assetData or not rwPaths then return false end
         local loadState = false
-        if assetPack == "assetType" then
+        if assetPack == "animation" then
             if rwPaths.ifp then
                 rwCache.ifp[(rwPaths.ifp)] = imports.engineLoadIFP((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(rwPaths.ifp), {key = assetManifest.encryptKey})) or rwPaths.ifp)
                 if rwCache.ifp[(rwPaths.ifp)] then
