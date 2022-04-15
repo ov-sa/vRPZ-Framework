@@ -132,8 +132,8 @@ if localPlayer then
                     end
                 end
                 if assetType == "animation" then
-                    if asset:create(assetType, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache, {
-                        ifp = assetPath..(asset.references.asset)..".ifp"
+                    if asset:create(assetType, assetName, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache, {
+                        ifp = assetPath..(asset.references.asset)..".ifp",
                     }) then
                         return true
                     end
@@ -156,7 +156,7 @@ if localPlayer then
                                 }
                                 sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z = imports.quat.toEuler(imports.tonumber(imports.gettok(unparsedDatas[i], 10, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 7, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 8, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 9, asset.separators.IPL)))
                                 if not assetReference.manifestData.sceneMapped then
-                                    asset:create(assetType, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache[i], {
+                                    asset:create(assetType, assetName, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache[i], {
                                         txd = assetPath..(asset.references.asset)..".txd",
                                         dff = assetPath.."dff/"..childName..".dff",
                                         col = assetPath.."col/"..childName..".col"
@@ -183,7 +183,7 @@ if localPlayer then
                     thread:create(function(cThread)
                         for i, j in imports.pairs(assetReference.manifestData.assetClumps) do
                             assetReference.unsyncedData.assetCache[i] = {}
-                            asset:create(assetType, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache[i], {
+                            asset:create(assetType, assetName, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache[i], {
                                 txd = assetPath..(asset.references.asset)..".txd",
                                 dff = assetPath.."clump/"..j..".dff",
                                 col = assetPath..(asset.references.asset)..".col"
@@ -196,7 +196,7 @@ if localPlayer then
                     })
                     return true
                 else
-                    if asset:create(assetType, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache, {
+                    if asset:create(assetType, assetName, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache, {
                         txd = assetPath..(asset.references.asset)..".txd",
                         dff = assetPath..(asset.references.asset)..".dff",
                         col = assetPath..(asset.references.asset)..".col"
