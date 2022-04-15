@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    isElement = isElement,
     triggerEvent = triggerEvent
 }
 
@@ -47,6 +48,24 @@ function loadAsset(assetType, assetName, ...)
 end
 
 function unloadAsset(assetType, assetName, ...)
+    local state = manager:unload(assetType, assetName, ...)
+    if state then
+        imports.triggerEvent("onAssetUnLoad", localPlayer, assetType, assetName)
+    end
+    return state
+end
+
+function loadAnimation(element, assetName, ...)
+    if not element or not imports.isElement(element) then return false end
+    local state = manager:load(assetType, assetName, ...)
+    if state then
+        imports.triggerEvent("onAssetLoad", localPlayer, assetType, assetName)
+    end
+    return state
+end
+
+function unloadAnimation(element, assetName, ...)
+    if not element or not imports.isElement(element) then return false end
     local state = manager:unload(assetType, assetName, ...)
     if state then
         imports.triggerEvent("onAssetUnLoad", localPlayer, assetType, assetName)
