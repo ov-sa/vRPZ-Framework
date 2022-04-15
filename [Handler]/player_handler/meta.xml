@@ -28,8 +28,8 @@
     <export function="unloadAnim" type="client"/>
 
     <!-- Modules: Camera -->
-    <!--script src="modules/camera/client/index.lua" type="client"/>
-    <script src="modules/camera/client/exports.lua" type="client"/-->
+    <script src="modules/camera/client/index.lua" type="client"/>
+    <script src="modules/camera/client/exports.lua" type="client"/>
 
     <!-- Modules: Player -->
     <script src="modules/player/shared/index.lua" type="shared"/>

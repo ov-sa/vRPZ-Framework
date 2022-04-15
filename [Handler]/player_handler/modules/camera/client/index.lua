@@ -168,13 +168,14 @@ CCamera = {
 
     updateMouseRotation = function(aX, aY)
         if CLIENT_MTA_WINDOW_ACTIVE or CLIENT_IS_CURSOR_SHOWING then return false end
-        --if not camera.isCursorVisible or not camera.cursorTick or ((CLIENT_CURRENT_TICK - camera.cursorTick) <= 500) then return false end
+        if not CPlayer.isInitialized(localPlayer) or not CCamera.CView then return false end
         aX, aY = aX - 0.5, aY - 0.5
         CCamera.CCache.camera.rotX.value, CCamera.CCache.camera.rotY.value = CCamera.CCache.camera.rotX.value - (aX*360), imports.math.max(-0.65, imports.math.min(0.9, CCamera.CCache.camera.rotY.value - aY))
         return true
     end,
 
     renderCamera = function()
+        if not CPlayer.isInitialized(localPlayer) or not CCamera.CView then return false end
         if not CCamera.CView then return false end
         local camera_viewData = CCamera.CViews[(CCamera.CView)]
         local isClientOnADS, isClientDucked = CCamera.isClientOnADS(), CCamera.isClientDucked()
@@ -200,7 +201,7 @@ CCamera = {
     end,
 
     renderEntity = function()
-        if not CCamera.CView then return false end
+        if not CPlayer.isInitialized(localPlayer) or not CCamera.CView then return false end
         local camera_viewData = CCamera.CViews[(CCamera.CView)]
         local isCameraVelocityUpdated = false
         CCamera.CCache.camera.offX.animValue, CCamera.CCache.camera.offY.animValue, CCamera.CCache.camera.offZ.animValue = imports.interpolateBetween(CCamera.CCache.camera.offX.animValue, CCamera.CCache.camera.offY.animValue, CCamera.CCache.camera.offZ.animValue, CCamera.CCache.camera.offX.value, CCamera.CCache.camera.offY.value, CCamera.CCache.camera.offZ.value, 0.25, "OutQuad")
