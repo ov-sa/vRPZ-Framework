@@ -55,12 +55,12 @@ function unloadAsset(assetType, assetName, ...)
     return state
 end
 
-function loadAnimation(element, ...)
+function loadAnim(element, ...)
     if not element or not imports.isElement(element) then return false end
     return manager:loadAnim(element, ...)
 end
 
-function unloadAnimation(element, ...)
+function unloadAnim(element, ...)
     if not element or not imports.isElement(element) then return false end
     return manager:unloadAnim(element, ...)
 end
