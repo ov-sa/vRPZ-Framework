@@ -168,10 +168,9 @@ imports.addEventHandler("onClientResourceStart", resource, function()
         end
     end)
 
+    CGame.loadAnim(source, "Character")
     imports.addEventHandler("onClientPlayerJoin", root, function()
-        for i = 1, #FRAMEWORK_CONFIGS["Templates"]["Animations"]["Character"], 1 do
-            CGame.loadAnim(source, FRAMEWORK_CONFIGS["Templates"]["Animations"]["Character"][i])
-        end
+        CGame.loadAnim(source, "Character")
     end)
 
     imports.addEvent("Client:onSyncWeather", true)

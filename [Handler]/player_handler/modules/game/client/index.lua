@@ -69,12 +69,20 @@ CGame.isUIVisible = function()
     return state
 end
 
-CGame.loadAnim = function(...)
-    return imports.assetify.loadAnim(...)
+CGame.loadAnim = function(element, templateType, ...)
+    if not FRAMEWORK_CONFIGS["Templates"]["Animations"][templateType] then return false end
+    for i = 1, #FRAMEWORK_CONFIGS["Templates"]["Animations"][templateType], 1 do
+        CGame.loadAnim(element, FRAMEWORK_CONFIGS["Templates"]["Animations"][templateType][i], ...)
+    end
+    return true
 end
 
-CGame.unloadAnim = function(...)
-    return imports.assetify.unloadAnim(...)
+CGame.unloadAnim = function(element, templateType, ...)
+    if not FRAMEWORK_CONFIGS["Templates"]["Animations"][templateType] then return false end
+    for i = 1, #FRAMEWORK_CONFIGS["Templates"]["Animations"][templateType], 1 do
+        CGame.unloadAnim(element, FRAMEWORK_CONFIGS["Templates"]["Animations"][templateType][i], ...)
+    end
+    return true
 end
 
 imports.addEvent("Client:onUpdateLanguage", false)
