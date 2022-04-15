@@ -181,7 +181,7 @@ availableAnimations = {
         {defaultBlockName = "ped", defaultAnimName = "gum_eat", customAnimName = "gum_eat"},
         {defaultBlockName = "ped", defaultAnimName = "GunCrouchBwd", customAnimName = "GunCrouchBwd"},
         {defaultBlockName = "ped", defaultAnimName = "GunCrouchFwd", customAnimName = "GunCrouchFwd"},
-        {defaultBlockName = "ped", defaultAnimName = "GunMove_BWD", customAnimName = "GunMove_BWD"},
+        --{defaultBlockName = "ped", defaultAnimName = "GunMove_BWD", customAnimName = "GunMove_FWD"},
         {defaultBlockName = "ped", defaultAnimName = "GunMove_FWD", customAnimName = "GunMove_FWD"},
         {defaultBlockName = "ped", defaultAnimName = "GunMove_L", customAnimName = "GunMove_L"},
         {defaultBlockName = "ped", defaultAnimName = "GunMove_R", customAnimName = "GunMove_R"},

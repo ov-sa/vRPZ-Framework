@@ -48,7 +48,8 @@ CCamera = {
     CCache = {
         camera = {
             offX = {value = 0, animValue = 0}, offY = {value = 0, animValue = 0}, offZ = {value = 0, animValue = 0},
-            rotX = {value = 0, animValue = 0, cameraValue = 0}, rotY = {value = 0, animValue = 0, cameraValue = 0}, rotZ = {value = 0, animValue = 0}
+            rotX = {value = 0, animValue = 0, cameraValue = 0}, rotY = {value = 0, animValue = 0, cameraValue = 0}, rotZ = {value = 0, animValue = 0},
+            velocity = {value = 0, animValue = 0}
         }
     },
     CInstance = {native = imports.getCamera(), dummy = imports.createObject(1866, 0, 0, 0), instance = imports.createObject(1866, 0, 0, 0)},
@@ -107,8 +108,8 @@ CCamera = {
         rotZ = rotZ + __rotZ
         CCamera.updateEntityLocation(CCamera.CInstance.dummy, bone_posX, bone_posY, bone_posZ, rotX, rotY, rotZ)
         offX, offY, offZ = CCamera.fetchEntityPosition(CCamera.CInstance.dummy, offX, offY, offZ)
-        CCamera.CCache.cameraLocation = CCamera.CCache.cameraLocation or {}
-        CCamera.CCache.cameraLocation[1], CCamera.CCache.cameraLocation[2], CCamera.CCache.cameraLocation[3], CCamera.CCache.cameraLocation[4], CCamera.CCache.cameraLocation[5], CCamera.CCache.cameraLocation[6] = offX, offY, offZ, rotX, rotY, rotZ
+        CCamera.CCache.camera.location = CCamera.CCache.camera.location or {}
+        CCamera.CCache.camera.location[1], CCamera.CCache.camera.location[2], CCamera.CCache.camera.location[3], CCamera.CCache.camera.location[4], CCamera.CCache.camera.location[5], CCamera.CCache.camera.location[6] = offX, offY, offZ, rotX, rotY, rotZ
         return true
     end,
 
@@ -118,24 +119,23 @@ CCamera = {
     end,
 
     updateCameraVelocity = function(velX, velY, velZ)
-        CCamera.CCache.cameraVelocity = CCamera.CCache.cameraVelocity or {}
-        CCamera.CCache.cameraVelocity.x = velX or 0
-        CCamera.CCache.cameraVelocity.y = velY or 0
-        CCamera.CCache.cameraVelocity.z = velZ or 0
+        CCamera.CCache.camera.velocity.x = velX or 0
+        CCamera.CCache.camera.velocity.y = velY or 0
+        CCamera.CCache.camera.velocity.z = velZ or 0
         return true
     end,
 
     updateCameraSway = function(swayType, swayValue)
-        CCamera.CCache.cameraSway = CCamera.CCache.cameraSway or {}
-        CCamera.CCache.cameraSway.type = swayType or "OutQuad"
-        CCamera.CCache.cameraSway.value = swayValue or "0.25"
+        CCamera.CCache.camera.sway = CCamera.CCache.camera.sway or {}
+        CCamera.CCache.camera.sway.type = swayType or "OutQuad"
+        CCamera.CCache.camera.sway.value = swayValue or "0.25"
         return true
     end,
 
     updateCameraAim = function(offX, offY)
-        CCamera.CCache.cameraAim = CCamera.CCache.cameraAim or {}
-        CCamera.CCache.cameraAim.x = offX or 0
-        CCamera.CCache.cameraAim.y = offY or 0
+        CCamera.CCache.camera.aim = CCamera.CCache.camera.aim or {}
+        CCamera.CCache.camera.aim.x = offX or 0
+        CCamera.CCache.camera.aim.y = offY or 0
         return true
     end,
 
@@ -205,17 +205,22 @@ CCamera = {
         local isCameraVelocityUpdated = false
         CCamera.CCache.camera.offX.animValue, CCamera.CCache.camera.offY.animValue, CCamera.CCache.camera.offZ.animValue = imports.interpolateBetween(CCamera.CCache.camera.offX.animValue, CCamera.CCache.camera.offY.animValue, CCamera.CCache.camera.offZ.animValue, CCamera.CCache.camera.offX.value, CCamera.CCache.camera.offY.value, CCamera.CCache.camera.offZ.value, 0.25, "OutQuad")
         CCamera.CCache.camera.rotX.animValue, CCamera.CCache.camera.rotY.animValue, CCamera.CCache.camera.rotZ.animValue = imports.interpolateBetween(CCamera.CCache.camera.rotX.animValue, CCamera.CCache.camera.rotY.animValue, CCamera.CCache.camera.rotZ.animValue, CCamera.CCache.camera.rotX.value, CCamera.CCache.camera.rotY.value, CCamera.CCache.camera.rotZ.value, 0.45, "InQuad")
-        CCamera.CCache.camera.rotX.cameraValue, CCamera.CCache.camera.rotY.cameraValue = imports.interpolateBetween(CCamera.CCache.camera.rotX.cameraValue, CCamera.CCache.camera.rotY.cameraValue, 0, CCamera.CCache.camera.rotX.value, CCamera.CCache.camera.rotY.value, 0, CCamera.CCache.cameraSway.value, CCamera.CCache.cameraSway.type)
+        CCamera.CCache.camera.rotX.cameraValue, CCamera.CCache.camera.rotY.cameraValue = imports.interpolateBetween(CCamera.CCache.camera.rotX.cameraValue, CCamera.CCache.camera.rotY.cameraValue, 0, CCamera.CCache.camera.rotX.value, CCamera.CCache.camera.rotY.value, 0, CCamera.CCache.camera.sway.value, CCamera.CCache.camera.sway.type)
+        CCamera.CCache.camera.velocity.animValue = imports.interpolateBetween(CCamera.CCache.camera.velocity.animValue, 0, 0, CCamera.CCache.camera.velocity.value, 0, 0, 0.45, "InQuad")
 
         if CCamera.CView == "player" then
             local camera_velocityX, camera_velocityY, camera_velocityZ = imports.getElementVelocity(localPlayer)
-            CCamera.updateCameraVelocity(camera_velocityX*3, camera_velocityY*3, camera_velocityZ*3)
+            CCamera.CCache.camera.velocity.value = 3
+            if imports.getPedControlState(localPlayer, "backwards") then
+                CCamera.CCache.camera.velocity.value = -CCamera.CCache.camera.velocity.value*0.5
+            end
+            CCamera.updateCameraVelocity(camera_velocityX*CCamera.CCache.camera.velocity.animValue, camera_velocityY*CCamera.CCache.camera.velocity.animValue, camera_velocityZ*CCamera.CCache.camera.velocity.animValue)
             CCamera.updateClientRotation(CCamera.CCache.camera.rotX.animValue)
             isCameraVelocityUpdated = true
         end
         if not isCameraVelocityUpdated then CCamera.updateCameraVelocity() end
-        if CCamera.CCache.cameraLocation then
-            CCamera.updateEntityLocation(CCamera.CInstance.instance, CCamera.CCache.cameraLocation[1] + CCamera.CCache.cameraVelocity.x, CCamera.CCache.cameraLocation[2] + CCamera.CCache.cameraVelocity.y, CCamera.CCache.cameraLocation[3] + CCamera.CCache.cameraVelocity.z, CCamera.CCache.cameraLocation[4], CCamera.CCache.cameraLocation[5], CCamera.CCache.cameraLocation[6])
+        if CCamera.CCache.camera.location then
+            CCamera.updateEntityLocation(CCamera.CInstance.instance, CCamera.CCache.camera.location[1] + CCamera.CCache.camera.velocity.x, CCamera.CCache.camera.location[2] + CCamera.CCache.camera.velocity.y, CCamera.CCache.camera.location[3] + CCamera.CCache.camera.velocity.z, CCamera.CCache.camera.location[4], CCamera.CCache.camera.location[5], CCamera.CCache.camera.location[6])
         end
         local camera_posX, camera_posY, camera_posZ, camera_rotX, camera_rotY, camera_rotZ = CCamera.fetchEntityLocation(CCamera.CInstance.instance)
         local cameraTarget_offZ = CCamera.CCache.camera.rotY.animValue + (CCamera.CCache.camera.rotY.animValue - CCamera.CCache.camera.rotY.cameraValue)
@@ -224,7 +229,7 @@ CCamera = {
         CCamera.updateEntityLocation(CCamera.CInstance.native, camera_posX, camera_posY, camera_posZ, camera_rotX, camera_rotY, camera_rotZ)
         local camera_posX, camera_posY, camera_posZ, camera_lookX, camera_lookY, camera_lookZ, camera_roll = imports.getCameraMatrix()
         imports.setNearClipDistance(camera_viewData.nearClip)
-        imports.setCameraTarget(camera_forwardX, camera_forwardY, camera_forwardZ + cameraTarget_offZ + CCamera.CCache.cameraAim.y)
+        imports.setCameraTarget(camera_forwardX, camera_forwardY, camera_forwardZ + cameraTarget_offZ + CCamera.CCache.camera.aim.y)
         imports.setCameraMatrix(camera_posX, camera_posY, camera_posZ, camera_lookX, camera_lookY, camera_lookZ + cameraTarget_offZ, camera_roll, camera_viewData.FOV)
         return true
     end
