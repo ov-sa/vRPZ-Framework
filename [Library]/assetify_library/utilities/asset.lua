@@ -30,6 +30,7 @@ local imports = {
     engineRequestModel = engineRequestModel,
     engineSetModelLODDistance = engineSetModelLODDistance,
     engineFreeModel = engineFreeModel,
+    engineLoadIFP = engineLoadIFP,
     engineLoadTXD = engineLoadTXD,
     engineLoadDFF = engineLoadDFF,
     engineLoadCOL = engineLoadCOL,
@@ -88,65 +89,71 @@ if localPlayer then
     function asset:load(assetType, assetPack, rwCache, assetManifest, assetData, rwPaths, callback)
         if not self or (self == asset) then return false end
         if not assetType or not assetPack or not assetPack.assetType or not rwCache or not assetManifest or not assetData or not rwPaths then return false end
-        local modelID, collisionID = false, false
-        if rwPaths.dff then
-            modelID = imports.engineRequestModel(assetPack.assetType, (assetManifest.assetBase and (imports.type(assetManifest.assetBase) == "number") and assetManifest.assetBase) or assetPack.assetBase or nil)
-            if modelID then
-                if assetType == "scene" then
-                    collisionID = imports.engineRequestModel(assetPack.assetType, assetPack.assetBase)
-                end
-                if not rwCache.dff[(rwPaths.dff)] and imports.file.exists(rwPaths.dff) then
-                    imports.engineSetModelLODDistance(modelID, asset.ranges.streamRange)
-                    rwCache.dff[(rwPaths.dff)] = imports.engineLoadDFF((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(rwPaths.dff), {key = assetManifest.encryptKey})) or rwPaths.dff)
-                end
-                if not rwCache.dff[(rwPaths.dff)] then
-                    imports.engineFreeModel(modelID)
-                    if collisionID then
-                        imports.engineFreeModel(collisionID)
-                        collisionID = false
+        local loadState = false
+        if assetPack == "assetType" then
+            if rwPaths.ifp then
+                rwCache.col[(rwPaths.ifp)] = imports.engineLoadIFP((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(rwPaths.ifp), {key = assetManifest.encryptKey})) or rwPaths.ifp)
+            end
+        else
+            local modelID, collisionID = false, false
+            if rwPaths.dff then
+                modelID = imports.engineRequestModel(assetPack.assetType, (assetManifest.assetBase and (imports.type(assetManifest.assetBase) == "number") and assetManifest.assetBase) or assetPack.assetBase or nil)
+                if modelID then
+                    if assetType == "scene" then
+                        collisionID = imports.engineRequestModel(assetPack.assetType, assetPack.assetBase)
                     end
-                    return false
-                else
-                    if not rwCache.col[(rwPaths.col)] and imports.file.exists(rwPaths.col) then
-                        if collisionID then
-                            imports.engineSetModelLODDistance(collisionID, asset.ranges.streamRange)
-                        end
-                        rwCache.col[(rwPaths.col)] = imports.engineLoadCOL((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(rwPaths.col), {key = assetManifest.encryptKey})) or rwPaths.col)
-                    else
+                    if not rwCache.dff[(rwPaths.dff)] and imports.file.exists(rwPaths.dff) then
+                        imports.engineSetModelLODDistance(modelID, asset.ranges.streamRange)
+                        rwCache.dff[(rwPaths.dff)] = imports.engineLoadDFF((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(rwPaths.dff), {key = assetManifest.encryptKey})) or rwPaths.dff)
+                    end
+                    if not rwCache.dff[(rwPaths.dff)] then
+                        imports.engineFreeModel(modelID)
                         if collisionID then
                             imports.engineFreeModel(collisionID)
                             collisionID = false
                         end
+                        return false
+                    else
+                        if not rwCache.col[(rwPaths.col)] and imports.file.exists(rwPaths.col) then
+                            if collisionID then
+                                imports.engineSetModelLODDistance(collisionID, asset.ranges.streamRange)
+                            end
+                            rwCache.col[(rwPaths.col)] = imports.engineLoadCOL((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(rwPaths.col), {key = assetManifest.encryptKey})) or rwPaths.col)
+                        else
+                            if collisionID then
+                                imports.engineFreeModel(collisionID)
+                                collisionID = false
+                            end
+                        end
                     end
                 end
             end
-        end
-        local loadState = false
-        if modelID then
-            if not rwCache.txd[(rwPaths.txd)] and imports.file.exists(rwPaths.txd) then
-                rwCache.txd[(rwPaths.txd)] = imports.engineLoadTXD((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(rwPaths.txd), {key = assetManifest.encryptKey})) or rwPaths.txd)
-            end
-            if rwCache.txd[(rwPaths.txd)] then
-                imports.engineImportTXD(rwCache.txd[(rwPaths.txd)], modelID)
-            end
-            imports.engineReplaceModel(rwCache.dff[(rwPaths.dff)], modelID, (assetManifest and assetManifest.assetTransparency and true) or assetPack.assetTransparency)
-            if collisionID then
-                imports.engineImportTXD(asset.rwAssets.txd, collisionID)
-                imports.engineReplaceModel(asset.rwAssets.dff, collisionID, false)
-            end
-            if rwCache.col[(rwPaths.col)] then
-                imports.engineReplaceCOL(rwCache.col[(rwPaths.col)], modelID)
-                if collisionID then
-                    imports.engineReplaceCOL(rwCache.col[(rwPaths.col)], collisionID)
+            if modelID then
+                if not rwCache.txd[(rwPaths.txd)] and imports.file.exists(rwPaths.txd) then
+                    rwCache.txd[(rwPaths.txd)] = imports.engineLoadTXD((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(rwPaths.txd), {key = assetManifest.encryptKey})) or rwPaths.txd)
                 end
+                if rwCache.txd[(rwPaths.txd)] then
+                    imports.engineImportTXD(rwCache.txd[(rwPaths.txd)], modelID)
+                end
+                imports.engineReplaceModel(rwCache.dff[(rwPaths.dff)], modelID, (assetManifest and assetManifest.assetTransparency and true) or assetPack.assetTransparency)
+                if collisionID then
+                    imports.engineImportTXD(asset.rwAssets.txd, collisionID)
+                    imports.engineReplaceModel(asset.rwAssets.dff, collisionID, false)
+                end
+                if rwCache.col[(rwPaths.col)] then
+                    imports.engineReplaceCOL(rwCache.col[(rwPaths.col)], modelID)
+                    if collisionID then
+                        imports.engineReplaceCOL(rwCache.col[(rwPaths.col)], collisionID)
+                    end
+                end
+                assetData.cAsset = self
+                self.rwPaths = rwPaths
+                self.syncedData = {
+                    modelID = modelID,
+                    collisionID = collisionID
+                }
+                loadState = true
             end
-            assetData.cAsset = self
-            self.rwPaths = rwPaths
-            self.syncedData = {
-                modelID = modelID,
-                collisionID = collisionID
-            }
-            loadState = true
         end
         if callback and (imports.type(callback) == "function") then
             callback(loadState)
