@@ -170,7 +170,9 @@ if localPlayer then
     function asset:unload(rwCache, callback)
         if not self or (self == asset) then return false end
         if not rwCache then return false end
-        imports.engineFreeModel(self.syncedData.modelID)
+        if self.syncedData.modelID then
+            imports.engineFreeModel(self.syncedData.modelID)
+        end
         if self.syncedData.collisionID then
             imports.engineFreeModel(self.syncedData.collisionID)
         end
