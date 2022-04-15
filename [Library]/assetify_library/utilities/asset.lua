@@ -274,6 +274,8 @@ else
                             assetManifestData.enableLODs = false
                             assetManifestData.assetClumps = false
                             assetManifestData.shaderMaps = false
+                            asset:buildFile(assetPath..(asset.references.asset)..".ifp", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                            thread.pause()
                         elseif assetType == "scene" then
                             assetManifestData.assetClumps = false
                             assetManifestData.sceneDimension = imports.math.max(asset.ranges.dimension[1], imports.math.min(asset.ranges.dimension[2], imports.tonumber(assetManifestData.sceneDimension) or 0))
