@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
 --[[ Resource: Config Loader
-     Script: configs: templates: index.lua
+     Script: configs: templates: animations.lua
      Author: vStudio
      Developer(s): Mario, Tron, Aviril
      DOC: 31/01/2022
-     Desc: Templates Configns ]]--
+     Desc: Animation Templates Configns ]]--
 ----------------------------------------------------------------
 
 
@@ -12,4 +12,10 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["Templates"] = {}
+configVars["Templates"]["Animations"] = {
+
+    ["Character"] = {
+        "vRPZ_Military"
+    }
+
+}
