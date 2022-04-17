@@ -99,6 +99,7 @@ if localPlayer then
                     assetCache = {},
                     rwCache = {
                         ifp = {},
+                        sound = {},
                         txd = {},
                         dff = {},
                         col = {},
@@ -137,6 +138,23 @@ if localPlayer then
                     }) then
                         return true
                     end
+                elseif assetType == "sound" then
+                    thread:create(function(cThread)
+                        for i, j in imports.pairs(assetReference.manifestData.assetSounds) do
+                            assetReference.unsyncedData.assetCache[i] = {}
+                            for k, v in imports.pairs(j) do
+                                asset:create(assetType, assetName, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache[i], {
+                                    sound = assetPath.."sound/"..v,
+                                })
+                                thread.pause()
+                            end
+                            thread.pause()
+                        end
+                    end):resume({
+                        executions = downloadSettings.buildRate,
+                        frames = 1
+                    })
+                    return true
                 elseif assetType == "scene" then
                     thread:create(function(cThread)
                         local sceneManifestData = imports.file.read(assetPath..(asset.references.scene)..".ipl")
