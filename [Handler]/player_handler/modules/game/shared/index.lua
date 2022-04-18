@@ -63,6 +63,13 @@ CGame = {
         return imports.string.format("%02d:%02d:%02d", hours, minutes, seconds)
     end,
 
+    getLevelEXP = function(level)
+        level = imports.tonumber(level)
+        if not level then return false end
+        local expMultiplier = FRAMEWORK_CONFIGS["Templates"]["Levels"].expMultiplier*0.001
+        return imports.math.floor(FRAMEWORK_CONFIGS["Templates"]["Levels"].baseExp + (imports.math.pow(FRAMEWORK_CONFIGS["Templates"]["Levels"].baseExp, 2)*imports.math.pow(level, 2)*expMultiplier) + (expMultiplier*level))
+    end,
+
     generateSpawn = function()
         local point = FRAMEWORK_CONFIGS["Spawns"][(imports.math.random(1, #FRAMEWORK_CONFIGS["Spawns"]))]
         return {
