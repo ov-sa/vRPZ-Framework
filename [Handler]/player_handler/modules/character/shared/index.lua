@@ -98,6 +98,7 @@ CCharacter = {
 
     getLevel = function()
         if not CPlayer.isInitialized(player) then return false end
+        --TODO:  RETURN PLAYER'S EXP AND LEVEL HERE..
     end,
 
     getFaction = function(player)
