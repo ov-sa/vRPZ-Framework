@@ -68,9 +68,9 @@ if localPlayer then
         local assetReference = packReference.rwDatas[assetName]
         if imports.type(assetReference.unsyncedData) ~= "table" then return false end
         if assetReference.manifestData.assetClumps then
-            return (assetClump and assetReference.manifestData.assetClumps[assetClump] and assetReference.unsyncedData.assetCache[assetClump] and assetReference.unsyncedData.assetCache[assetClump].cAsset and assetReference.unsyncedData.assetCache[assetClump].cAsset.syncedData.modelID) or false
+            return (assetClump and assetReference.manifestData.assetClumps[assetClump] and assetReference.unsyncedData.assetCache[assetClump] and assetReference.unsyncedData.assetCache[assetClump].cAsset and assetReference.unsyncedData.assetCache[assetClump].cAsset.syncedData and assetReference.unsyncedData.assetCache[assetClump].cAsset.syncedData.modelID) or false
         else
-            return (assetReference.unsyncedData.assetCache.cAsset and assetReference.unsyncedData.assetCache.cAsset.syncedData.modelID) or false
+            return (assetReference.unsyncedData.assetCache.cAsset and assetReference.unsyncedData.assetCache.cAsset.syncedData and assetReference.unsyncedData.assetCache.cAsset.syncedData.modelID) or false
         end
     end
 
