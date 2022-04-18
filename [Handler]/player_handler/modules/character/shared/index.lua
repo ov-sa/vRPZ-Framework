@@ -96,9 +96,15 @@ CCharacter = {
         return FRAMEWORK_CONFIGS["Game"]["Character"]["Max_Blood"]
     end,
 
-    getLevel = function()
+    getLevel = function(player)
         if not CPlayer.isInitialized(player) then return false end
         --TODO:  RETURN PLAYER'S EXP AND LEVEL HERE..
+    end,
+
+    getRank = function(player)
+        local characterLevel = CCharacter.getLevel(player)
+        if not characterLevel then return false end
+        return CGame.getLevelRank(characterLevel)
     end,
 
     getFaction = function(player)
