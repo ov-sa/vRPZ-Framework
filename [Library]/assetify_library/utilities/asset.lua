@@ -304,19 +304,19 @@ else
                             assetManifestData.assetAnimations = false
                             assetManifestData.shaderMaps = false
                             if assetManifestData.assetSounds then
-                                local __assetSounds = {}
+                                local assetSounds = {}
                                 for i, j in imports.pairs(assetManifestData.assetSounds) do
                                     if j then
-                                        __assetSounds[i] = {}
+                                        assetSounds[i] = {}
                                         for k, v in imports.pairs(j) do
-                                            if v and imports.file.exists(v) then
-                                                __assetSounds[i][k] = v
+                                            if v then
+                                                assetSounds[i][k] = v
                                                 asset:buildFile(assetPath.."sound/"..v, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
                                             end
                                         end
                                     end
                                 end
-                                assetManifestData.assetSounds = __assetSounds
+                                assetManifestData.assetSounds = assetSounds
                             end
                             thread.pause()
                         else
