@@ -14,6 +14,7 @@
 
 configVars["UI"]["Login"] = {
 
+    lobbySound = {asset = "vRPZ_Lobby", category = "login", index = 1},
     weathers = {
         {weather = 9, time = {12, 0}},
         {weather = 15, time = {12, 0}}

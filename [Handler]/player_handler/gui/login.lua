@@ -403,7 +403,7 @@ end
 loginUI.phases[2].toggleUI = function(state)
     if state then
         if loginUI.phases[2].element and imports.isElement(loginUI.phases[2].element) then return false end
-        loginUI.lobbySound = CGame.playSound(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound, "login", 1)
+        loginUI.lobbySound = CGame.playSound(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.asset, FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category, FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.index)
         loginUI.phases[2].element = imports.beautify.card.create(loginUI.phases[2].startX, loginUI.phases[2].startY, loginUI.phases[2].width, loginUI.phases[2].height, nil, false)
         loginUI.phases[2].updateUILang()
         imports.beautify.setUIVisible(loginUI.phases[2].element, true)
