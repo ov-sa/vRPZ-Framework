@@ -238,7 +238,25 @@ if localPlayer then
         if packReference and packReference.rwDatas then
             local assetReference = packReference.rwDatas[assetName]
             if assetReference and assetReference.unsyncedData then
-                if assetType == "scene" then
+                if assetType == "sound" then
+                    thread:create(function(cThread)
+                        for i, j in imports.pairs(assetReference.unsyncedData.assetCache) do
+                            for k, v in imports.pairs(j) do
+                                if v.cAsset then
+                                    v.cAsset:destroy(assetReference.unsyncedData.rwCache)
+                                end
+                                thread.pause()
+                            end
+                            thread.pause()
+                        end
+                        shader:clearAssetBuffer(assetReference.unsyncedData.rwCache.map)
+                        assetReference.unsyncedData = nil
+                        imports.collectgarbage()
+                    end):resume({
+                        executions = downloadSettings.buildRate,
+                        frames = 1
+                    })
+                elseif assetType == "scene" then
                     thread:create(function(cThread)
                         for i, j in imports.pairs(assetReference.unsyncedData.assetCache) do
                             if j.cAsset then
