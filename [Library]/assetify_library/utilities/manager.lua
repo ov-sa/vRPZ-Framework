@@ -54,7 +54,7 @@ if localPlayer then
                     assetReference.manifestData.encryptKey = nil
                     assetReference.unsyncedData = nil
                 end
-                if assetType == "scene" then
+                if assetType == "animation" or assetType == "sound" or assetType == "scene" then
                     return assetReference, (unsyncedData and true) or false
                 else
                     return assetReference, (unsyncedData and unsyncedData.assetCache.cAsset and unsyncedData.assetCache.cAsset.syncedData) or false
