@@ -403,7 +403,6 @@ end
 loginUI.phases[2].toggleUI = function(state)
     if state then
         if loginUI.phases[2].element and imports.isElement(loginUI.phases[2].element) then return false end
-        loginUI.lobbySound = CGame.playSound(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.asset, FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category, FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.index)
         loginUI.phases[2].element = imports.beautify.card.create(loginUI.phases[2].startX, loginUI.phases[2].startY, loginUI.phases[2].width, loginUI.phases[2].height, nil, false)
         loginUI.phases[2].updateUILang()
         imports.beautify.setUIVisible(loginUI.phases[2].element, true)
@@ -433,9 +432,7 @@ loginUI.phases[2].toggleUI = function(state)
     else
         if not loginUI.phases[2].element or not imports.isElement(loginUI.phases[2].element) then return false end
         imports.destroyElement(loginUI.phases[2].element)
-        imports.destroyElement(loginUI.lobbySound)
         loginUI.phases[2].element = nil
-        loginUI.lobbySound = nil
     end
     return true
 end
@@ -686,6 +683,7 @@ loginUI.toggleUI = function(state, args)
 
     if state then
         loginUI.state = true
+        loginUI.lobbySound = CGame.playSound(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.asset, FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category, FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.index, true)
         loginUI.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
         imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1)
         imports.beautify.render.create(loginUI.renderUI)
@@ -707,7 +705,9 @@ loginUI.toggleUI = function(state, args)
             end
             j = nil
         end
+        imports.destroyElement(loginUI.lobbySound)
         loginUI.phase = false
+        loginUI.lobbySound = nil
         loginUI.cinemationData = false
         loginUI.character = 0
         loginUI.previewCharacter = false
