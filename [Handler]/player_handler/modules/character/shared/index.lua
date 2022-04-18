@@ -102,7 +102,7 @@ CCharacter = {
         if not fetchEXP then
             return characterLevel
         else
-            characterLevel, imports.math.max(0, imports.math.min(CGame.getLevelEXP(characterLevel), imports.tonumber(imports.getElementData(player, "Character:Data:experience")) or 0))
+            return characterLevel, imports.math.max(0, imports.math.min(CGame.getLevelEXP(characterLevel), imports.tonumber(imports.getElementData(player, "Character:Data:experience")) or 0))
         end
     end,
 
