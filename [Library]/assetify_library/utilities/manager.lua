@@ -328,8 +328,8 @@ if localPlayer then
         if not assetName then return false end
         local cAsset, isLoaded = manager:getData("sound", assetName)
         if not cAsset or not isLoaded then return false end
-        if not cAsset.manifestData.assetSounds or not cAsset.manifestData.assetSounds[soundCategory] or not cAsset.manifestData.assetSounds[soundCategory][soundIndex] then return false end
-        return imports.playSound(cAsset.unsyncedData.rwCache.sound[(cAsset.rwPaths.sound)], ...)
+        if not cAsset.manifestData.assetSounds or not cAsset.unsyncedData.rwCache.sound[soundCategory] or not cAsset.unsyncedData.rwCache.sound[soundCategory][soundIndex] or not cAsset.unsyncedData.rwCache.sound[soundCategory][soundIndex].cAsset then return false end
+        return imports.playSound(cAsset.unsyncedData.rwCache.sound[(cAsset.unsyncedData.rwCache.sound[soundCategory][soundIndex].cAsset.rwPaths.sound)], ...)
     end
 
     function manager:playSound3D(assetName, soundCategory, soundIndex, ...)
@@ -337,9 +337,8 @@ if localPlayer then
         if not assetName then return false end
         local cAsset, isLoaded = manager:getData("sound", assetName)
         if not cAsset or not isLoaded then return false end
-        if not cAsset.manifestData.assetSounds or not cAsset.manifestData.assetSounds[soundCategory] or not cAsset.manifestData.assetSounds[soundCategory][soundIndex] then return false end
-        cAsset.unsyncedData.assetCache[soundCategory]
-        return imports.playSound3D(cAsset.unsyncedData.rwCache.sound[(cAsset.rwPaths.sound)], ...)
+        if not cAsset.manifestData.assetSounds or not cAsset.unsyncedData.rwCache.sound[soundCategory] or not cAsset.unsyncedData.rwCache.sound[soundCategory][soundIndex] or not cAsset.unsyncedData.rwCache.sound[soundCategory][soundIndex].cAsset then return false end
+        return imports.playSound3D(cAsset.unsyncedData.rwCache.sound[(cAsset.unsyncedData.rwCache.sound[soundCategory][soundIndex].cAsset.rwPaths.sound)], ...)
     end
 else
     function manager:getData(assetType, assetName)
