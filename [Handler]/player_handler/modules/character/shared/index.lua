@@ -98,7 +98,7 @@ CCharacter = {
 
     getLevel = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        --TODO:  RETURN PLAYER'S EXP AND LEVEL HERE..
+        return imports.math.max(0, imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"], imports.tonumber(imports.getElementData(player, "Character:level")) or 0))
     end,
 
     getRank = function(player)
