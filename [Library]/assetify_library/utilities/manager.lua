@@ -328,7 +328,8 @@ if localPlayer then
         local cAsset, isLoaded = manager:getData("sound", assetName)
         if not cAsset or not isLoaded then return false end
         if not cAsset.manifestData.assetSounds or not cAsset.manifestData.assetSounds[soundCategory] or not cAsset.manifestData.assetSounds[soundCategory][soundIndex] then return false end
-        return imports.playSound(soundRWHere, ...)
+        local cSound = cAsset.rwPaths.sound
+        return imports.playSound(cSound, ...)
     end
 
     function manager:playSound3D(assetName, soundCategory, soundIndex, ...)
@@ -337,7 +338,8 @@ if localPlayer then
         local cAsset, isLoaded = manager:getData("sound", assetName)
         if not cAsset or not isLoaded then return false end
         if not cAsset.manifestData.assetSounds or not cAsset.manifestData.assetSounds[soundCategory] or not cAsset.manifestData.assetSounds[soundCategory][soundIndex] then return false end
-        return imports.playSound3D(soundRWHere, ...)
+        local cSound = cAsset.rwPaths.sound
+        return imports.playSound3D(cSound, ...)
     end
 else
     function manager:getData(assetType, assetName)
