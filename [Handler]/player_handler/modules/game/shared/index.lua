@@ -70,6 +70,12 @@ CGame = {
         return imports.math.floor(FRAMEWORK_CONFIGS["Templates"]["Levels"].baseExp + (imports.math.pow(FRAMEWORK_CONFIGS["Templates"]["Levels"].baseExp, 2)*imports.math.pow(level, 2)*expMultiplier) + (expMultiplier*level))
     end,
 
+    getLevelRank = function(level)
+        level = imports.tonumber(level)
+        if not level then return false end
+        return imports.math.max(1, imports.math.ceil((#FRAMEWORK_CONFIGS["Templates"]["Levels"]["Ranks"]/FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"])*level))
+    end,
+
     generateSpawn = function()
         local point = FRAMEWORK_CONFIGS["Spawns"][(imports.math.random(1, #FRAMEWORK_CONFIGS["Spawns"]))]
         return {
