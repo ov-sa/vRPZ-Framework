@@ -319,6 +319,34 @@ if localPlayer then
         end
         return true
     end
+
+    function manager:playSound(element, assetName)
+        if not syncer.isLibraryLoaded then return false end
+        if not element or not assetName then return false end
+        local cAsset = manager:getData("sound", assetName)
+        if not cAsset then return false end
+        if cAsset.manifestData.assetAnimations then
+            for i = 1, #cAsset.manifestData.assetAnimations, 1 do
+                local j = cAsset.manifestData.assetAnimations[i]
+                imports.engineReplaceAnimation(element, j.defaultBlock, j.defaultAnim, "animation."..assetName, j.assetAnim)
+            end
+        end
+        return true
+    end
+
+    function manager:playSound3D(element, assetName)
+        if not syncer.isLibraryLoaded then return false end
+        if not element or not assetName then return false end
+        local cAsset = manager:getData("sound", assetName)
+        if not cAsset then return false end
+        if cAsset.manifestData.assetAnimations then
+            for i = 1, #cAsset.manifestData.assetAnimations, 1 do
+                local j = cAsset.manifestData.assetAnimations[i]
+                imports.engineReplaceAnimation(element, j.defaultBlock, j.defaultAnim, "animation."..assetName, j.assetAnim)
+            end
+        end
+        return true
+    end
 else
     function manager:getData(assetType, assetName)
         if not syncer.isLibraryLoaded then return false end
