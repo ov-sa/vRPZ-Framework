@@ -15,3 +15,7 @@
 configVars["Templates"]["Levels"] = {
     
 }
+
+configVars["Templates"]["Ranks"] = {
+    
+}
