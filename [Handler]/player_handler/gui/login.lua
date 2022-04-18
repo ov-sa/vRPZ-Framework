@@ -683,7 +683,10 @@ loginUI.toggleUI = function(state, args)
 
     if state then
         loginUI.state = true
-        loginUI.lobbySound = CGame.playSound(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.asset, FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category, FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.index, true)
+        local cAsset = imports.assetify.getAsset("sound", FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.asset)
+        if cAsset then
+            loginUI.lobbySound = CGame.playSound(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.asset, FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category, imports.math.random(#cAsset.manifestData.assetSounds[(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category)]), true)
+        end
         loginUI.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
         imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1)
         imports.beautify.render.create(loginUI.renderUI)

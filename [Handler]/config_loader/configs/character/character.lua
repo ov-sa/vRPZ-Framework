@@ -38,7 +38,7 @@ configVars["Character"] = {
                 ["Male"] = {
                     {["EN"] = "None", clumpName = "H0", clumpTexture = false, ["TR"] = "Hiçbiri", ["RU"] = "нет"},
                     {["EN"] = "Generic", clumpName = "H1", clumpTexture = {"cj_hair_1", 1}, ["TR"] = "Genel", ["RU"] = "Общий"},
-                    {["EN"] = "Survivor", clumpName = "H2", clumpTexture = {"cj_hair_2", 1}, ["TR"] = "Hayatta kalan", ["RU"] = "Survivor"}
+                    {["EN"] = "Survivor", clumpName = "H2", clumpTexture = {"cj_hair_2", 1}, ["TR"] = "Hayatta kalan", ["RU"] = "Выживший"}
                 }
             },
 
