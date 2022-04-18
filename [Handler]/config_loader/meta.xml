@@ -12,6 +12,7 @@
     <script src="configs/templates/index.lua" type="shared"/>
     <script src="configs/templates/fonts.lua" type="shared"/>
     <script src="configs/templates/levels.lua" type="shared"/>
+    <script src="configs/templates/reputations.lua" type="shared"/>
     <script src="configs/templates/beautify.lua" type="shared"/>
     <script src="configs/templates/animations.lua" type="shared"/>
     <script src="configs/gameplay/gui/loading.lua" type="shared"/>
