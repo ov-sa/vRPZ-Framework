@@ -20,6 +20,7 @@ function getCharacterHealth(...) return CCharacter.getHealth(...) end
 function getCharacterMaximumHealth(...) return CCharacter.getMaxHealth(...) end
 function getCharacterLevel(...) return CCharacter.getLevel(...) end
 function getCharacterRank(...) return CCharacter.getRank(...) end
+function giveCharacterEXP(...) return CCharacter.giveEXP(...) end
 function getCharacterFaction(...) return CCharacter.getFaction(...) end
 function setCharacterMoney(...) return CCharacter.setMoney(...) end
 function getCharacterMoney(...) return CCharacter.getMoney(...) end

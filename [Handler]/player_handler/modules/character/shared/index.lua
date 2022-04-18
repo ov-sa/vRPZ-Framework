@@ -107,6 +107,11 @@ CCharacter = {
         return CGame.getLevelRank(characterLevel)
     end,
 
+    giveEXP = function(player, exp)
+        exp = imports.tonumber(exp)
+        if not CPlayer.isInitialized(player) or not exp then return false end
+    end,
+
     getFaction = function(player)
         if not CPlayer.isInitialized(player) then return false end
         return imports.getElementData(player, "Character:Faction") or false
