@@ -51,6 +51,8 @@
     <export function="unloadAsset" type="client"/>
     <export function="loadAnim" type="client"/>
     <export function="unloadAnim" type="client"/>
+    <export function="playSound" type="client"/>
+    <export function="playSound3D" type="client"/>
     <export function="createAssetDummy" type="client"/>
 
 </meta>
