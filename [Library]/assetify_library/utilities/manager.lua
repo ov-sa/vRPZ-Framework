@@ -54,7 +54,7 @@ if localPlayer then
                     assetReference.manifestData.encryptKey = nil
                     assetReference.unsyncedData = nil
                 end
-                if assetType == "animation" or assetType == "sound" or assetType == "scene" then
+                if (assetType == "animation") or (assetType == "sound") or (assetType == "scene") then
                     return assetReference, (unsyncedData and true) or false
                 else
                     return assetReference, (unsyncedData and unsyncedData.assetCache.cAsset and unsyncedData.assetCache.cAsset.syncedData) or false
@@ -65,6 +65,7 @@ if localPlayer then
     end
 
     function manager:getID(assetType, assetName, assetClump)
+        if (assetType == "animation") or (assetType == "sound") then return false end
         if not manager:isLoaded(assetType, assetName) then return false end
         local packReference = availableAssetPacks[assetType]
         local assetReference = packReference.rwDatas[assetName]
