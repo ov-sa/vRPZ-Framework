@@ -19,7 +19,8 @@ configVars["Character"] = {
         "hunger",
         "thirst",
         "level",
-        "exp"
+        "exp",
+        "reputation"
     },
 
     ["Identity"] = {
