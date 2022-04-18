@@ -96,6 +96,10 @@ CCharacter = {
         return FRAMEWORK_CONFIGS["Game"]["Character"]["Max_Blood"]
     end,
 
+    getLevel = function()
+        if not CPlayer.isInitialized(player) then return false end
+    end,
+
     getFaction = function(player)
         if not CPlayer.isInitialized(player) then return false end
         return imports.getElementData(player, "Character:Faction") or false

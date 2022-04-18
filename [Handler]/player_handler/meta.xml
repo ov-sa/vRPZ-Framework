@@ -75,6 +75,7 @@
     <export function="getCharacterMaximumHealth" type="shared"/>
     <export function="setCharacterMoney" type="shared"/>
     <export function="getCharacterMoney" type="shared"/>
+    <export function="getCharacterLevel" type="shared"/>
     <export function="getCharacterFaction" type="shared"/>
     <export function="getPlayerCurrentSlotItem" type="shared"/>
     <export function="isReloading" type="shared"/>
