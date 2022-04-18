@@ -175,11 +175,11 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
     if reloadBuffer then
         for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
-            imports.setElementData(source, "Player:"..j, CPlayer.CBuffer[serial][j])
+            imports.setElementData(source, "Player:Data:"..j, CPlayer.CBuffer[serial][j])
         end
         for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
-            imports.setElementData(source, "Character:"..j, CCharacter.CBuffer[characterID][j])
+            imports.setElementData(source, "Character:Data:"..j, CCharacter.CBuffer[characterID][j])
         end
         if not isNewCharacter then resetProgress = false end
     end

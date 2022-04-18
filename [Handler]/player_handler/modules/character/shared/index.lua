@@ -83,12 +83,12 @@ CCharacter = {
     setHealth = function(player, amount)
         amount = imports.tonumber(amount)
         if not CPlayer.isInitialized(player) or not amount then return false end
-        return imports.setElementData(player, "Character:blood", imports.math.max(0, imports.math.min(amount, CCharacter.getMaxHealth(player))))
+        return imports.setElementData(player, "Character:Data:blood", imports.math.max(0, imports.math.min(amount, CCharacter.getMaxHealth(player))))
     end,
 
     getHealth = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.tonumber(imports.getElementData(player, "Character:blood")) or 0
+        return imports.tonumber(imports.getElementData(player, "Character:Data:blood")) or 0
     end,
 
     getMaxHealth = function(player)
@@ -98,11 +98,11 @@ CCharacter = {
 
     getLevel = function(player, fetchEXP)
         if not CPlayer.isInitialized(player) then return false end
-        local characterLevel = imports.math.max(0, imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"], imports.tonumber(imports.getElementData(player, "Character:level")) or 0))
+        local characterLevel = imports.math.max(0, imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"], imports.tonumber(imports.getElementData(player, "Character:Data:level")) or 0))
         if not fetchEXP then
             return characterLevel
         else
-            characterLevel, imports.math.max(0, CGame.getLevelEXP(characterLevel), imports.tonumber(imports.getElementData(player, "Character:exp")) or 0))
+            characterLevel, imports.math.max(0, CGame.getLevelEXP(characterLevel), imports.tonumber(imports.getElementData(player, "Character:Data:experience")) or 0))
         end
     end,
 
@@ -112,20 +112,20 @@ CCharacter = {
         return CGame.getLevelRank(characterLevel)
     end,
 
-    giveEXP = function(player, exp)
-        exp = imports.tonumber(exp)
-        if not exp then return false end
+    giveEXP = function(player, experience)
+        experience = imports.tonumber(experience)
+        if not experience then return false end
         local characterLevel, characterEXP = CCharacter.getLevel(player, true)
         if not characterLevel or not characterEXP then return false end
         local levelEXP = CGame.getLevelEXP(characterLevel)
-        characterEXP = characterEXP + exp
+        characterEXP = characterEXP + experience
         if characterEXP >= levelEXP then
             local __characterLevel = imports.math.max(0, imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"], characterLevel + 1)
             if __characterLevel ~= characterLevel then
                 characterLevel = __characterLevel
                 characterEXP = characterEXP - levelEXP
-                imports.setElementData(player, "Character:level", characterLevel)
-                imports.setElementData(player, "Character:exp", characterEXP)
+                imports.setElementData(player, "Character:Data:level", characterLevel)
+                imports.setElementData(player, "Character:Data:experience", characterEXP)
             end
         end
         return true
@@ -133,7 +133,7 @@ CCharacter = {
 
     getReputation = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"], imports.tonumber(imports.getElementData(player, "Character:reputation")) or 0)
+        return imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"], imports.tonumber(imports.getElementData(player, "Character:Data:reputation")) or 0)
     end,
 
     giveReputation = function(player, reputation)
@@ -144,25 +144,25 @@ CCharacter = {
         local __characterReputation = imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"], characterReputation + reputation)
         if __characterReputation ~= characterReputation then
             characterReputation = __characterReputation
-            imports.setElementData(player, "Character:reputation", characterReputation)
+            imports.setElementData(player, "Character:Data:reputation", characterReputation)
         end
         return true
     end,
 
     getFaction = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.getElementData(player, "Character:Faction") or false
+        return imports.getElementData(player, "Character:Data:faction") or false
     end,
 
     setMoney = function(player, amount)
         money = imports.tonumber(money)
         if not CPlayer.isInitialized(player) or not money then return false end
-        return imports.setElementData(player, "Character:money", imports.math.max(0, money))
+        return imports.setElementData(player, "Character:Data:money", imports.math.max(0, money))
     end,
 
     getMoney = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.tonumber(imports.getElementData(player, "Character:money")) or 0
+        return imports.tonumber(imports.getElementData(player, "Character:Data:money")) or 0
     end,
 
     isKnocked = function(player)
