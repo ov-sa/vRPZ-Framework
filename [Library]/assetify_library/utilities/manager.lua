@@ -320,32 +320,22 @@ if localPlayer then
         return true
     end
 
-    function manager:playSound(assetName, assetCategory, assetIndex, ...)
+    function manager:playSound(assetName, soundCategory, soundIndex, ...)
         if not syncer.isLibraryLoaded then return false end
         if not assetName then return false end
         local cAsset, isLoaded = manager:getData("sound", assetName)
         if not cAsset or not isLoaded then return false end
-        if cAsset.manifestData.assetAnimations then
-            for i = 1, #cAsset.manifestData.assetAnimations, 1 do
-                local j = cAsset.manifestData.assetAnimations[i]
-                imports.engineReplaceAnimation(element, j.defaultBlock, j.defaultAnim, "animation."..assetName, j.assetAnim)
-            end
-        end
-        return true
+        if not cAsset.manifestData.assetSounds or not cAsset.manifestData.assetSounds[soundCategory] or not cAsset.manifestData.assetSounds[soundCategory][soundIndex] then return false end
+        return imports.playSound(soundRWHere, ...)
     end
 
-    function manager:playSound3D(assetName, assetCategory, assetIndex, ...)
+    function manager:playSound3D(assetName, soundCategory, soundIndex, ...)
         if not syncer.isLibraryLoaded then return false end
         if not assetName then return false end
         local cAsset, isLoaded = manager:getData("sound", assetName)
         if not cAsset or not isLoaded then return false end
-        if cAsset.manifestData.assetAnimations then
-            for i = 1, #cAsset.manifestData.assetAnimations, 1 do
-                local j = cAsset.manifestData.assetAnimations[i]
-                imports.engineReplaceAnimation(element, j.defaultBlock, j.defaultAnim, "animation."..assetName, j.assetAnim)
-            end
-        end
-        return true
+        if not cAsset.manifestData.assetSounds or not cAsset.manifestData.assetSounds[soundCategory] or not cAsset.manifestData.assetSounds[soundCategory][soundIndex] then return false end
+        return imports.playSound3D(soundRWHere, ...)
     end
 else
     function manager:getData(assetType, assetName)
