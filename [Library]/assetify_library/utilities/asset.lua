@@ -102,6 +102,8 @@ if localPlayer then
         elseif assetType == "sound" then
             if rwPaths.sound and not rwCache.sound[(rwPaths.sound)] then
                 rwCache.sound[(rwPaths.sound)] = (assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(rwPaths.sound), {key = assetManifest.encryptKey})) or rwPaths.sound
+                assetData.cAsset = self
+                self.rwPaths = rwPaths
                 loadState = true
             end
         else
