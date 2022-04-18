@@ -96,9 +96,14 @@ CCharacter = {
         return FRAMEWORK_CONFIGS["Game"]["Character"]["Max_Blood"]
     end,
 
-    getLevel = function(player)
+    getLevel = function(player, fetchEXP)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.math.max(0, imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"], imports.tonumber(imports.getElementData(player, "Character:level")) or 0))
+        local characterLevel = imports.math.max(0, imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"], imports.tonumber(imports.getElementData(player, "Character:level")) or 0))
+        if not fetchEXP then
+            return characterLevel
+        else
+            characterLevel, imports.math.max(0, CGame.getLevelEXP(characterLevel), imports.tonumber(imports.getElementData(player, "Character:exp")) or 0))
+        end
     end,
 
     getRank = function(player)
