@@ -21,6 +21,8 @@
     <export function="getNativeWeather" type="shared"/>
     <export function="getTime" type="shared"/>
     <export function="formatMS" type="shared"/>
+    <export function="getLevelEXP" type="shared"/>
+    <export function="getLevelRank" type="shared"/>
     <export function="generateSpawn" type="shared"/>
     <export function="createFont" type="client"/>
     <export function="isUIVisible" type="client"/>
