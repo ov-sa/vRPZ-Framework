@@ -146,6 +146,7 @@ CCharacter = {
             characterReputation = __characterReputation
             imports.setElementData(player, "Character:reputation", characterReputation)
         end
+        return true
     end,
 
     getFaction = function(player)
