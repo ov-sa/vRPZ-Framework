@@ -145,7 +145,8 @@ if localPlayer then
                         for i, j in imports.pairs(assetReference.manifestData.assetSounds) do
                             assetReference.unsyncedData.assetCache[i] = {}
                             for k, v in imports.pairs(j) do
-                                asset:create(assetType, assetName, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache[i], {
+                                assetReference.unsyncedData.assetCache[i][k] = {}
+                                asset:create(assetType, assetName, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache[i][k], {
                                     sound = assetPath.."sound/"..v,
                                 })
                                 thread.pause()
@@ -337,6 +338,7 @@ if localPlayer then
         local cAsset, isLoaded = manager:getData("sound", assetName)
         if not cAsset or not isLoaded then return false end
         if not cAsset.manifestData.assetSounds or not cAsset.manifestData.assetSounds[soundCategory] or not cAsset.manifestData.assetSounds[soundCategory][soundIndex] then return false end
+        cAsset.unsyncedData.assetCache[soundCategory]
         return imports.playSound3D(cAsset.unsyncedData.rwCache.sound[(cAsset.rwPaths.sound)], ...)
     end
 else
