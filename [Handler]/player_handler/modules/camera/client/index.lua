@@ -298,7 +298,10 @@ for i, j in imports.pairs(CCamera.CInstance) do
         imports.setElementCollisionsEnabled(j, false)
     end
 end
+--[[
+--TODO: DISABLE FOR NOW..
 CCamera.updateCameraSway()
 imports.addEventHandler("onClientCursorMove", root, CCamera.updateMouseRotation)
 imports.addEventHandler("onClientPedsProcessed", root, CCamera.renderCamera)
 imports.addEventHandler("onClientPreRender", root, CCamera.renderEntity)
+]]
