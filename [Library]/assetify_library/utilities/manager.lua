@@ -316,7 +316,7 @@ if localPlayer then
 
     function manager:loadAnim(element, assetName)
         if not syncer.isLibraryLoaded then return false end
-        if not element or not assetName then return false end
+        if not element then return false end
         local cAsset, isLoaded = manager:getData("animation", assetName)
         if not cAsset or not isLoaded then return false end
         if cAsset.manifestData.assetAnimations then
@@ -330,7 +330,7 @@ if localPlayer then
 
     function manager:unloadAnim(element, assetName)
         if not syncer.isLibraryLoaded then return false end
-        if not element or not assetName then return false end
+        if not element then return false end
         local cAsset, isLoaded = manager:getData("animation", assetName)
         if not cAsset or not isLoaded then return false end
         if cAsset.manifestData.assetAnimations then
@@ -344,20 +344,18 @@ if localPlayer then
 
     function manager:playSound(assetName, soundCategory, soundIndex, ...)
         if not syncer.isLibraryLoaded then return false end
-        if not assetName then return false end
-        local cAsset, isLoaded = manager:getData("sound", assetName)
-        if not cAsset or not isLoaded then return false end
-        if not cAsset.manifestData.assetSounds or not cAsset.unsyncedData.assetCache[soundCategory] or not cAsset.unsyncedData.assetCache[soundCategory][soundIndex] or not cAsset.unsyncedData.assetCache[soundCategory][soundIndex].cAsset then return false end
-        return imports.playSound(cAsset.unsyncedData.rwCache.sound[(cAsset.unsyncedData.assetCache[soundCategory][soundIndex].cAsset.rwPaths.sound)], ...)
+        if not manager:isLoaded("sound", assetName) then return false end
+        local assetReference = availableAssetPacks["sound"].rwDatas[assetName]
+        if not assetReference.manifestData.assetSounds or not assetReference.unsyncedData.assetCache[soundCategory] or not assetReference.unsyncedData.assetCache[soundCategory][soundIndex] or not assetReference.unsyncedData.assetCache[soundCategory][soundIndex].cAsset then return false end
+        return imports.playSound(assetReference.unsyncedData.rwCache.sound[(assetReference.unsyncedData.assetCache[soundCategory][soundIndex].cAsset.rwPaths.sound)], ...)
     end
 
     function manager:playSound3D(assetName, soundCategory, soundIndex, ...)
         if not syncer.isLibraryLoaded then return false end
-        if not assetName then return false end
-        local cAsset, isLoaded = manager:getData("sound", assetName)
-        if not cAsset or not isLoaded then return false end
-        if not cAsset.manifestData.assetSounds or not cAsset.unsyncedData.assetCache[soundCategory] or not cAsset.unsyncedData.assetCache[soundCategory][soundIndex] or not cAsset.unsyncedData.assetCache[soundCategory][soundIndex].cAsset then return false end
-        return imports.playSound3D(cAsset.unsyncedData.rwCache.sound[(cAsset.unsyncedData.assetCache[soundCategory][soundIndex].cAsset.rwPaths.sound)], ...)
+        if not manager:isLoaded("sound", assetName) then return false end
+        local assetReference = availableAssetPacks["sound"].rwDatas[assetName]
+        if not assetReference.manifestData.assetSounds or not assetReference.unsyncedData.assetCache[soundCategory] or not assetReference.unsyncedData.assetCache[soundCategory][soundIndex] or not assetReference.unsyncedData.assetCache[soundCategory][soundIndex].cAsset then return false end
+        return imports.playSound3D(assetReference.unsyncedData.rwCache.sound[(assetReference.unsyncedData.assetCache[soundCategory][soundIndex].cAsset.rwPaths.sound)], ...)
     end
 else
     function manager:getData(assetType, assetName)
