@@ -65,11 +65,11 @@ function unloadAnim(element, ...)
     return manager:unloadAnim(element, ...)
 end
 
-function playSound(...)
+function playSoundAsset(...)
     return manager:playSound(...)
 end
 
-function playSound3D(...)
+function playSoundAsset3D(...)
     return manager:playSound3D(...)
 end
 
