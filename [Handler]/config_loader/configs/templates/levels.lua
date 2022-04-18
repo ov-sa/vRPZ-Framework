@@ -14,8 +14,23 @@
 
 configVars["Templates"]["Levels"] = {
     
-}
+    baseEXP = 1000, EXPMultiplier = 1.2, MaxLevel = 200,
 
-configVars["Templates"]["Ranks"] = {
-    
+    ranks = {
+        {name = "RankNameHere", range = {1, 5}},
+        {name = "RankNameHere", range = {1, 5}},
+        {name = "RankNameHere", range = {1, 5}},
+        {name = "RankNameHere", range = {1, 5}},
+        {name = "RankNameHere", range = {1, 5}},
+        {name = "RankNameHere", range = {1, 5}},
+        {name = "RankNameHere", range = {1, 5}},
+        {name = "RankNameHere", range = {1, 5}},
+        {name = "RankNameHere", range = {1, 5}},
+        {name = "RankNameHere", range = {1, 5}},
+        {name = "RankNameHere", range = {1, 5}},
+        {name = "RankNameHere", range = {1, 5}},
+        {name = "RankNameHere", range = {1, 5}},
+        {name = "RankNameHere", range = {1, 5}}
+    }
+
 }
