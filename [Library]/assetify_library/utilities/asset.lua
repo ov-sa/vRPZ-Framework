@@ -311,7 +311,7 @@ else
                             if assetManifestData.assetSounds then
                                 local assetSounds = {}
                                 for i, j in imports.pairs(assetManifestData.assetSounds) do
-                                    if j then
+                                    if j and (imports.type(j) == "table") then
                                         assetSounds[i] = {}
                                         for k, v in imports.pairs(j) do
                                             if v then
