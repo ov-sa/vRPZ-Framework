@@ -85,6 +85,14 @@ CGame.unloadAnim = function(element, templateType, ...)
     return true
 end
 
+CGame.playSound = function(...)
+    return imports.assetify.playSound(...)
+end
+
+CGame.playSound3D = function(...)
+    return imports.assetify.playSound3D(...)
+end
+
 imports.addEvent("Client:onUpdateLanguage", false)
 imports.addEventHandler("Client:onUpdateLanguage", root, function(prevLanguage, currLanguage)
     for i, j in imports.pairs(CGame.CFont.dynamic) do

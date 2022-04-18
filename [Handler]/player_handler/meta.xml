@@ -28,6 +28,8 @@
     <export function="isUIVisible" type="client"/>
     <export function="loadAnim" type="client"/>
     <export function="unloadAnim" type="client"/>
+    <export function="playSound" type="client"/>
+    <export function="playSound3D" type="client"/>
 
     <!-- Modules: Camera -->
     <script src="modules/camera/client/index.lua" type="client"/>
