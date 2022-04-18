@@ -295,8 +295,8 @@ if localPlayer then
     function manager:loadAnim(element, assetName)
         if not syncer.isLibraryLoaded then return false end
         if not element or not assetName then return false end
-        local cAsset = manager:getData("animation", assetName)
-        if not cAsset then return false end
+        local cAsset, isLoaded = manager:getData("animation", assetName)
+        if not cAsset or not isLoaded then return false end
         if cAsset.manifestData.assetAnimations then
             for i = 1, #cAsset.manifestData.assetAnimations, 1 do
                 local j = cAsset.manifestData.assetAnimations[i]
@@ -309,8 +309,8 @@ if localPlayer then
     function manager:unloadAnim(element, assetName)
         if not syncer.isLibraryLoaded then return false end
         if not element or not assetName then return false end
-        local cAsset = manager:getData("animation", assetName)
-        if not cAsset then return false end
+        local cAsset, isLoaded = manager:getData("animation", assetName)
+        if not cAsset or not isLoaded then return false end
         if cAsset.manifestData.assetAnimations then
             for i = 1, #cAsset.manifestData.assetAnimations, 1 do
                 local j = cAsset.manifestData.assetAnimations[i]
@@ -320,11 +320,11 @@ if localPlayer then
         return true
     end
 
-    function manager:playSound(element, assetName)
+    function manager:playSound(assetName, assetCategory, assetIndex, ...)
         if not syncer.isLibraryLoaded then return false end
-        if not element or not assetName then return false end
-        local cAsset = manager:getData("sound", assetName)
-        if not cAsset then return false end
+        if not assetName then return false end
+        local cAsset, isLoaded = manager:getData("sound", assetName)
+        if not cAsset or not isLoaded then return false end
         if cAsset.manifestData.assetAnimations then
             for i = 1, #cAsset.manifestData.assetAnimations, 1 do
                 local j = cAsset.manifestData.assetAnimations[i]
@@ -334,11 +334,11 @@ if localPlayer then
         return true
     end
 
-    function manager:playSound3D(element, assetName)
+    function manager:playSound3D(assetName, assetCategory, assetIndex, ...)
         if not syncer.isLibraryLoaded then return false end
-        if not element or not assetName then return false end
-        local cAsset = manager:getData("sound", assetName)
-        if not cAsset then return false end
+        if not assetName then return false end
+        local cAsset, isLoaded = manager:getData("sound", assetName)
+        if not cAsset or not isLoaded then return false end
         if cAsset.manifestData.assetAnimations then
             for i = 1, #cAsset.manifestData.assetAnimations, 1 do
                 local j = cAsset.manifestData.assetAnimations[i]
