@@ -35,6 +35,11 @@
     <script src="modules/camera/client/index.lua" type="client"/>
     <script src="modules/camera/client/exports.lua" type="client"/>
 
+    <!-- Modules: Sound -->
+    <script src="modules/sound/client/index.lua" type="client"/>
+    <script src="modules/sound/client/exports.lua" type="client"/>
+    <export function="playAmbience" type="client"/>
+
     <!-- Modules: Player -->
     <script src="modules/player/shared/index.lua" type="shared"/>
     <script src="modules/player/shared/exports.lua" type="shared"/>
