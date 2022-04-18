@@ -136,6 +136,18 @@ CCharacter = {
         return imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"], imports.tonumber(imports.getElementData(player, "Character:reputation")) or 0)
     end,
 
+    giveReputation = function(player, reputation)
+        reputation = imports.tonumber(reputation)
+        if not reputation then return false end
+        local characterReputation = CCharacter.getReputation(player)
+        if not characterReputation then return false end
+        local __characterReputation = imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"], characterReputation + reputation)
+        if __characterReputation ~= characterReputation then
+            characterReputation = __characterReputation
+            imports.setElementData(player, "Character:reputation", characterReputation)
+        end
+    end,
+
     getFaction = function(player)
         if not CPlayer.isInitialized(player) then return false end
         return imports.getElementData(player, "Character:Faction") or false
