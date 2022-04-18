@@ -131,6 +131,11 @@ CCharacter = {
         return true
     end,
 
+    getReputation = function(player)
+        if not CPlayer.isInitialized(player) then return false end
+        return imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"], imports.tonumber(imports.getElementData(player, "Character:reputation")) or 0)
+    end,
+
     getFaction = function(player)
         if not CPlayer.isInitialized(player) then return false end
         return imports.getElementData(player, "Character:Faction") or false
