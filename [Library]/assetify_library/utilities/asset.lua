@@ -50,7 +50,7 @@ local imports = {
 
 asset = {
     references = {
-        root = "@files/assets/",
+        root = ((downloadSettings.isAccessSafe and "@") or "").."files/assets/",
         manifest = "manifest",
         asset = "asset",
         scene = "scene"
