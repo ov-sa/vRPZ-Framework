@@ -114,7 +114,21 @@ CCharacter = {
 
     giveEXP = function(player, exp)
         exp = imports.tonumber(exp)
-        if not CPlayer.isInitialized(player) or not exp then return false end
+        if not exp then return false end
+        local characterLevel, characterEXP = CCharacter.getLevel(player, true)
+        if not characterLevel or not characterEXP then return false end
+        local levelEXP = CGame.getLevelEXP(characterLevel)
+        characterEXP = characterEXP + exp
+        if characterEXP >= levelEXP then
+            local __characterLevel = imports.math.max(0, imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"], characterLevel + 1)
+            if __characterLevel ~= characterLevel then
+                characterLevel = __characterLevel
+                characterEXP = characterEXP - levelEXP
+                imports.setElementData(player, "Character:level", characterLevel)
+                imports.setElementData(player, "Character:exp", characterEXP)
+            end
+        end
+        return true
     end,
 
     getFaction = function(player)
