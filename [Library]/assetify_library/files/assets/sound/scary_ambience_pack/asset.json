@@ -94,7 +94,19 @@
             "medium/White-Whispers.ogg"
         ],
         "long": [
-
+            "long/Bells.ogg",
+            "long/Black-Dungeon.ogg",
+            "long/Breathy-Winds.ogg",
+            "long/Cracking-Winds.ogg",
+            "long/Deaths-Melody.ogg",
+            "long/Distorted-Birds.ogg",
+            "long/Draft.ogg",
+            "long/Ghost-Wind.ogg",
+            "long/Low-Rumble.ogg",
+            "long/Robot-Whale.ogg",
+            "long/Sleeping-Monster.ogg",
+            "long/Slow-Sneezing.ogg",
+            "long/Tunnel.ogg"
         ]
     }
 }
