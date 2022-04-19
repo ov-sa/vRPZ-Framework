@@ -753,7 +753,21 @@ end)
 imports.addEventHandler("onClientResourceStart", resource, function()
     imports.fadeCamera(false)
     imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
-    local booter = function() imports.triggerServerEvent("Player:onToggleLoginUI", localPlayer) end
+    local booter = function()
+        for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Ambiences"]) do
+            local cAsset = imports.assetify.getAsset("sound", j.assetName)
+            if imports.type(j.category) == "table" then
+                for k = 1, #j.category, 1 do
+                    local v = j.category[k]
+                    CSound.CAmbience[v] = cAsset.manifestData.assetSounds[v]
+                end
+            else
+                CSound.CAmbience[(j.category)] = cAsset.manifestData.assetSounds[(j.category)]
+            end
+            CSound.playAmbience(i)
+        end
+        imports.triggerServerEvent("Player:onToggleLoginUI", localPlayer)
+    end
     if imports.assetify.isLoaded() then
         booter()
     else
