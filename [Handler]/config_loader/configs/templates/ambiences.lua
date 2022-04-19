@@ -13,15 +13,15 @@
 ------------------
 
 configVars["Templates"]["Ambiences"] = {
-    
-    assetName = "vRPZ_Ambience",
 
     ["Short_Ambience"] = {
+        assetName = "vRPZ_Ambience",
         category = "short",
         loopInterval = 20000
     },
 
     ["Long_Ambience"] = {
+        assetName = "vRPZ_Ambience",
         category = {"medium", "long"},
         loopInterval = 0
     }

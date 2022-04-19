@@ -28,21 +28,20 @@ CSound = {
     CBuffer = {}
 }
 
-CSound.playAmbience = function(category, index, interval)
-    interval = imports.tonumber(interval)
-    if not category then return false end
+CSound.playAmbience = function(ambienceType, index)
+    if not configVars["Templates"]["Ambiences"][ambienceType] then return false end
     if not index then
         index = imports.math.random(CATEGORYTABLEHERE)
     end
-    local cSound = CGame.playSound(category, index)
+    local cSound = CGame.playSound(configVars["Templates"]["Ambiences"][ambienceType].assetName, ambienceType, index)
     if not cSound then return false end
     local soundDuration = imports.getSoundLength(cSound) or 0
-    if interval then
+    if configVars["Templates"]["Ambiences"][ambienceType].loopInterval then
         imports.setTimer(function()
-            CSound.playAmbience(category, _, interval)
-        end, (soundDuration*1000) + interval, 1)
+            CSound.playAmbience(ambienceType, _, configVars["Templates"]["Ambiences"][ambienceType].loopInterval)
+        end, (soundDuration*1000) + configVars["Templates"]["Ambiences"][ambienceType].loopInterval, 1)
     end
     return true 
 end
 
-CSound.playAmbience("short", _, 30000)
+CSound.playAmbience(configVars["Templates"]["Ambiences"]["Short_Ambience"].assetName, _, configVars["Templates"]["Ambiences"]["Short_Ambience"].loopInterval)
