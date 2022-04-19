@@ -28,7 +28,7 @@ CSound = {
     CBuffer = {}
 }
 
-CSound.playAmbience = function(ambienceType, index)
+CSound.playAmbience = function(ambienceType, index, skipLoop)
     if not FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType] then return false end
     if not index then
         index = imports.math.random(CATEGORYTABLEHERE)
@@ -36,7 +36,7 @@ CSound.playAmbience = function(ambienceType, index)
     local cSound = CGame.playSound(FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].assetName, ambienceType, index)
     if not cSound then return false end
     local soundDuration = imports.getSoundLength(cSound) or 0
-    if FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].loopInterval then
+    if not skipLoop and FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].loopInterval then
         imports.setTimer(function()
             CSound.playAmbience(ambienceType)
         end, (soundDuration*1000) + FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].loopInterval, 1)
