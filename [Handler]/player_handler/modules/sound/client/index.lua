@@ -38,7 +38,7 @@ CSound.playAmbience = function(ambienceType, index)
     local soundDuration = imports.getSoundLength(cSound) or 0
     if FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].loopInterval then
         imports.setTimer(function()
-            CSound.playAmbience(ambienceType, _, FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].loopInterval)
+            CSound.playAmbience(ambienceType)
         end, (soundDuration*1000) + FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].loopInterval, 1)
     end
     return true 
