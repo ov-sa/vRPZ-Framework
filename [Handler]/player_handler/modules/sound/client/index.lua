@@ -42,11 +42,12 @@ CSound.playAmbience = function(ambienceType, index, skipLoop)
     else
         ambienceCategory = FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].category
     end
-    CSound.CBuffer[ambienceType].Cinstance = CGame.playSound(FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].assetName, ambienceCategory, index)
-    if not CSound.CBuffer[ambienceType].Cinstance then return false end
-    local soundDuration = imports.getSoundLength(CSound.CBuffer[ambienceType].Cinstance) or 0
+    CSound.CBuffer[ambienceType].soundInstance = CGame.playSound(FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].assetName, ambienceCategory, index)
+    if not CSound.CBuffer[ambienceType].soundInstance then return false end
+    local soundDuration = imports.getSoundLength(CSound.CBuffer[ambienceType].soundInstance) or 0
     if not skipLoop and FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].loopInterval and not CSound.CBuffer[ambienceType].intervalTimer then
         CSound.CBuffer[ambienceType].intervalTimer = imports.setTimer(function(ambienceType)
+            CSound.CBuffer[ambienceType].soundInstance = nil
             CSound.CBuffer[ambienceType].intervalTimer = nil
             CSound.playAmbience(ambienceType)
         end, (soundDuration*1000) + FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].loopInterval, 1, ambienceType)
