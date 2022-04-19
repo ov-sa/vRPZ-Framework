@@ -336,8 +336,8 @@ if localPlayer then
         return false
     end
 
-    imports.addEventHandler("onClientResourceStop", root, function()
-        manager:clearElementBuffer(source)
+    imports.addEventHandler("onClientResourceStop", root, function(stoppedResource)
+        manager:clearElementBuffer(stoppedResource, true)
     end)
 
     imports.addEventHandler("onClientElementDestroy", root, function()
