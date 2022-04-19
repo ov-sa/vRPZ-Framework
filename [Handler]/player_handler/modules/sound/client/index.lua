@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
 --[[ Resource: Player Handler
-     Script: modules: sound: client: index.lua
+     Script: modules: sound: client: ambienceIndex.lua
      Author: vStudio
      Developer(s): Mario, Tron, Aviril, Аниса
      DOC: 31/01/2022
@@ -30,7 +30,8 @@ CSound = {
     CAmbience = {}
 }
 
-CSound.playAmbience = function(ambienceType, index, skipLoop)
+CSound.playAmbience = function(ambienceType, ambienceIndex, skipLoop)
+    if not CPlayer.isInitialized(localPlayer) then return false end
     if not FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType] then return false end
     CSound.CBuffer[ambienceType] = CSound.CBuffer[ambienceType] or {}
     local ambienceCategory = false
@@ -41,8 +42,8 @@ CSound.playAmbience = function(ambienceType, index, skipLoop)
     else
         ambienceCategory = FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].category
     end
-    index = index or imports.math.random(#CSound.CAmbience[ambienceCategory])
-    CSound.CBuffer[ambienceType].soundInstance = CGame.playSound(FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].assetName, ambienceCategory, index)
+    ambienceIndex = ambienceIndex or imports.math.random(#CSound.CAmbience[ambienceCategory])
+    CSound.CBuffer[ambienceType].soundInstance = CGame.playSound(FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].assetName, ambienceCategory, ambienceIndex, _, true)
     if not CSound.CBuffer[ambienceType].soundInstance then return false end
     local soundDuration = imports.getSoundLength(CSound.CBuffer[ambienceType].soundInstance) or 0
     if not skipLoop and FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].loopInterval and not CSound.CBuffer[ambienceType].intervalTimer then
