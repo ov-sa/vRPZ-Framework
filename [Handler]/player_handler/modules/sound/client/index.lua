@@ -13,7 +13,10 @@
 -----------------
 
 local imports = {
-    tonumber = tonumber
+    tonumber = tonumber,
+    setTimer = setTimer,
+    getSoundLength = getSoundLength,
+    math = math
 }
 
 
@@ -25,13 +28,21 @@ CSound = {
     CBuffer = {}
 }
 
-CSound.playAmbience = function(category, index, cooldown)
-    cooldown = imports.tonumber(cooldown) or 0
-    if not category or not index or not cooldown then return false end
-    --[[
-    if not language or not FRAMEWORK_CONFIGS["Game"]["Game_Languages"][language] or (CPlayer.CLanguage == language) then return false end
-    imports.triggerEvent("Client:onUpdateLanguage", localPlayer, CPlayer.CLanguage, language)
-    CPlayer.CLanguage = language
-    ]]
+CSound.playAmbience = function(category, index, interval)
+    interval = imports.tonumber(interval)
+    if not category then return false end
+    if not index then
+        index = imports.math.random(CATEGORYTABLEHERE)
+    end
+    local cSound = CGame.playSound(category, index)
+    if not cSound then return false end
+    local soundDuration = imports.getSoundLength(cSound) or 0
+    if interval then
+        imports.setTimer(function()
+            CSound.playAmbience(category, _, interval)
+        end, (soundDuration*1000) + interval, 1)
+    end
     return true 
 end
+
+CSound.playAmbience("short", _, 30000)
