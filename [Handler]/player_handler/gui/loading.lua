@@ -105,5 +105,4 @@ imports.addEventHandler("Client:onToggleLoadingUI", root, function(state, hint)
     if state and not loadingUI.isVisible then
         imports.beautify.render.create(loadingUI.renderUI)
     end
-    imports.triggerEvent("Sound:onToggleLoading", localPlayer, state)
 end)

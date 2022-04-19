@@ -709,6 +709,9 @@ loginUI.toggleUI = function(state, args)
             end
             j = nil
         end
+        for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Ambiences"]) do
+            CSound.playAmbience(i)
+        end
         imports.destroyElement(loginUI.lobbySound)
         loginUI.phase = false
         loginUI.lobbySound = nil
@@ -718,7 +721,6 @@ loginUI.toggleUI = function(state, args)
         loginUI.characters = {}
         loginUI.isVIP = false
         loginUI.state = false
-        imports.triggerEvent("Sound:onToggleLogin", localPlayer, state)
     end
     imports.showChat(false, true)
     imports.showCursor(state, true)
@@ -743,9 +745,6 @@ imports.addEventHandler("Client:onToggleLoginUI", root, function(state, args)
         end, FRAMEWORK_CONFIGS["UI"]["Login"].fadeDelay, 1)
     else
         loginUI.toggleUI(state, args)
-        for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Ambiences"]) do
-            CSound.playAmbience(i)
-        end
     end
 end)
 
