@@ -44,4 +44,3 @@ CSound.playAmbience = function(ambienceType, index)
     return true 
 end
 
-CSound.playAmbience(FRAMEWORK_CONFIGS["Templates"]["Ambiences"]["Short_Ambience"].assetName, _, FRAMEWORK_CONFIGS["Templates"]["Ambiences"]["Short_Ambience"].loopInterval)
