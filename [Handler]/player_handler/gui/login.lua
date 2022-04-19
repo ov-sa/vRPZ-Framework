@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    type = type,
     pairs = pairs,
     tocolor = tocolor,
     unpackColor = unpackColor,
@@ -742,6 +743,9 @@ imports.addEventHandler("Client:onToggleLoginUI", root, function(state, args)
         end, FRAMEWORK_CONFIGS["UI"]["Login"].fadeDelay, 1)
     else
         loginUI.toggleUI(state, args)
+        for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Ambiences"]) do
+            CSound.playAmbience(i)
+        end
     end
 end)
 
@@ -764,7 +768,6 @@ imports.addEventHandler("onClientResourceStart", resource, function()
             else
                 CSound.CAmbience[(j.category)] = cAsset.manifestData.assetSounds[(j.category)]
             end
-            CSound.playAmbience(i)
         end
         imports.triggerServerEvent("Player:onToggleLoginUI", localPlayer)
     end
