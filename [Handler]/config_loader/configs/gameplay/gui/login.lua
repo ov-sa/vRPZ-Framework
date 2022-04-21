@@ -116,17 +116,20 @@ configVars["UI"]["Login"] = {
                         ["Datas"] = configVars["Character"]["Clothing"]["Facial"]["Face"]
                     }
                 },
-                ["Upper"] = {
-                    ["Titles"] = {["EN"] = "Upper", ["TR"] = "Üst", ["RU"] = "Верх"},
-                    ["Datas"] = configVars["Character"]["Clothing"]["Upper"]
-                },
-                ["Lower"] = {
-                    ["Titles"] = {["EN"] = "Lower", ["TR"] = "Alt", ["RU"] = "Низ"},
-                    ["Datas"] = configVars["Character"]["Clothing"]["Lower"]
-                },
-                ["Shoes"] = {
-                    ["Titles"] = {["EN"] = "Shoes", ["TR"] = "Ayakkabı", ["RU"] = "Обувь"},
-                    ["Datas"] = configVars["Character"]["Clothing"]["Shoes"]
+                ["Clothing"] = {
+                    ["Titles"] = {["EN"] = "Clothing", ["TR"] = "Giyim", ["RU"] = "Одежда"},
+                    ["Upper"] = {
+                        ["Titles"] = {["EN"] = "Upper", ["TR"] = "Üst", ["RU"] = "Верх"},
+                        ["Datas"] = configVars["Character"]["Clothing"]["Upper"]
+                    },
+                    ["Lower"] = {
+                        ["Titles"] = {["EN"] = "Lower", ["TR"] = "Alt", ["RU"] = "Низ"},
+                        ["Datas"] = configVars["Character"]["Clothing"]["Lower"]
+                    },
+                    ["Shoes"] = {
+                        ["Titles"] = {["EN"] = "Shoes", ["TR"] = "Ayakkabı", ["RU"] = "Обувь"},
+                        ["Datas"] = configVars["Character"]["Clothing"]["Shoes"]
+                    }
                 }
             }
         },

@@ -133,19 +133,28 @@ loginUI = {
                     }
                 },
                 {
-                    identifier = "Upper",
-                    isSelector = true, isClothing = true,
-                    height = 40
-                },
-                {
-                    identifier = "Lower",
-                    isSelector = true, isClothing = true,
-                    height = 40
-                },
-                {
-                    identifier = "Shoes",
-                    isSelector = true, isClothing = true,
-                    height = 40
+                    identifier = "Clothing",
+                    height = 180,
+                    contents = {
+                        upper = {
+                            identifier = "Upper",
+                            isSelector = true, isClothing = true,
+                            startY = 30,
+                            height = 30
+                        },
+                        lower = {
+                            identifier = "Lower",
+                            isSelector = true, isClothing = true,
+                            startY = 90,
+                            height = 30
+                        },
+                        shoes = {
+                            identifier = "Shoes",
+                            isSelector = true, isClothing = true,
+                            startY = 150,
+                            height = 30
+                        }
+                    }
                 }
             }
         },
@@ -245,9 +254,9 @@ loginUI.phases[2].fetchSelection = function()
     local gender = loginUI.phases[2].categories[1].contents.gender.contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[1].contents.gender.element))]
     local hair = loginUI.phases[2].categories[2].contents.hair.contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[2].contents.hair.element))]
     local face = loginUI.phases[2].categories[2].contents.face.contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[2].contents.face.element))]
-    local upper = loginUI.phases[2].categories[3].contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[3].element))]
-    local lower = loginUI.phases[2].categories[4].contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[4].element))]
-    local shoes = loginUI.phases[2].categories[5].contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[5].element))]
+    local upper = loginUI.phases[2].categories[3].contents.upper.contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[3].contents.upper.element))]
+    local lower = loginUI.phases[2].categories[3].contents.lower.contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[3].contents.lower.element))]
+    local shoes = loginUI.phases[2].categories[3].contents.shoes.contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[3].contents.shoes.element))]
     return {
         tone = tone,
         gender = gender,
@@ -301,9 +310,9 @@ loginUI.phases[2].loadCharacter = function(loadDefault)
         end
         imports.beautify.slider.getPercent(loginUI.phases[2].categories[1].contents.tone.element, loginUI.characters[(loginUI.previewCharacter)].identity.tone or 0)
         imports.beautify.selector.setSelection(loginUI.phases[2].categories[2].contents.hair.element, loginUI.characters[(loginUI.previewCharacter)].identity.hair or 1)
-        imports.beautify.selector.setSelection(loginUI.phases[2].categories[3].element, loginUI.characters[(loginUI.previewCharacter)].identity.upper or 1)
-        imports.beautify.selector.setSelection(loginUI.phases[2].categories[4].element, loginUI.characters[(loginUI.previewCharacter)].identity.lower or 1)
-        imports.beautify.selector.setSelection(loginUI.phases[2].categories[5].element, loginUI.characters[(loginUI.previewCharacter)].identity.shoes or 1)
+        imports.beautify.selector.setSelection(loginUI.phases[2].categories[3].contents.upper.element, loginUI.characters[(loginUI.previewCharacter)].identity.upper or 1)
+        imports.beautify.selector.setSelection(loginUI.phases[2].categories[3].contents.lower.element, loginUI.characters[(loginUI.previewCharacter)].identity.lower or 1)
+        imports.beautify.selector.setSelection(loginUI.phases[2].categories[3].contents.shoes.element, loginUI.characters[(loginUI.previewCharacter)].identity.shoes or 1)
     end
     loginUI.phases[2].updateCharacter()
     return true
