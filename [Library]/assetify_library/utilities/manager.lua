@@ -235,7 +235,7 @@ if localPlayer then
                             assetReference.unsyncedData.assetCache[i] = {}
                             asset:create(assetType, assetName, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache[i], {
                                 txd = assetPath..(asset.references.asset)..".txd",
-                                dff = assetPath.."clump/"..j..".dff",
+                                dff = assetPath.."clump/"..i..(asset.references.asset)..".dff",
                                 col = assetPath..(asset.references.asset)..".col"
                             })
                             thread.pause()
