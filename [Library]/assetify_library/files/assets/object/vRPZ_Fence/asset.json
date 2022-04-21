@@ -1,6 +1,14 @@
 {
     "encryptKey": "vStudio - Аниса",
     "streamRange": 170,
+    "assetClumps": [
+        "steel_01",
+        "steel_02",
+        "steel_03",
+        "steel_04",
+        "steel_05",
+        "steel_06"
+    ],
     "shaderMaps": {
         "control": {
             "steel_fence01_a": [
