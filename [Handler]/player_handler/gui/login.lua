@@ -199,6 +199,10 @@ loginUI.phases[2].updateUILang = function(gender)
         j.tooltip.text = imports.string.upper(imports.string.spaceChars(j.tooltip.identifier[(CPlayer.CLanguage)]))
         j.tooltip.width = imports.beautify.native.getTextWidth(j.tooltip.text, 1, loginUI.phases[2].options.tooltipFont.instance) + loginUI.phases[2].options.size
     end
+    for i = 1, #loginUI.phases[1].optionsUI, 1 do
+        local j = loginUI.phases[1].optionsUI[i]
+        j.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][(CPlayer.CLanguage)], "  "))
+    end
     for i = 1, #loginUI.phases[2].categories, 1 do
         local j = loginUI.phases[2].categories[i]
         local panel_offsetY = loginUI.phases[2].titlebar.height + loginUI.phases[2].titlebar.paddingY
@@ -558,8 +562,7 @@ loginUI.renderUI = function(renderData)
             imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[loginUI.phase].bgTexture, 0, 0, 0, -1, false)
             for i = 1, #loginUI.phases[1].optionsUI, 1 do
                 local j = loginUI.phases[1].optionsUI[i]
-                local option_title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][(CPlayer.CLanguage)], "  "))
-                local option_width, option_height = imports.beautify.native.getTextWidth(option_title, 1, loginUI.phases[1].optionsUI.font.instance) + 5, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.height
+                local option_width, option_height = imports.beautify.native.getTextWidth(j.title, 1, loginUI.phases[1].optionsUI.font.instance) + 5, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.height
                 local options_offsetX, options_offsetY = loginUI.phases[1].optionsUI.startX - (option_width*0.5), j.startY
                 local isOptionHovered = imports.isMouseOnPosition(options_offsetX, options_offsetY, option_width, option_height) and isUIEnabled
                 if isOptionHovered then
@@ -578,18 +581,23 @@ loginUI.renderUI = function(renderData)
                     end
                 end
                 j.animAlphaPercent = j.animAlphaPercent or 0
+                local isAnimationVisible = false
                 if j.hoverStatus == "forward" then
                     if j.animAlphaPercent < 1 then
+                        isAnimationVisible = true
                         j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")
                     end
                 else
                     if j.animAlphaPercent > 0 then
+                        isAnimationVisible = true
                         j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")
                     end
                 end
-                imports.beautify.native.drawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, loginUI.phases[1].optionsUI.fontColor, 1, loginUI.phases[1].optionsUI.font.instance, "center", "center", true, false, false)
-                imports.beautify.native.drawText(option_title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[1], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[2], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[3], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsUI.font.instance, "center", "center", true, false, false)
-                imports.beautify.native.drawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineSize, loginUI.phases[1].optionsUI.embedLineColor, false)
+                imports.beautify.native.drawText(j.title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, loginUI.phases[1].optionsUI.fontColor, 1, loginUI.phases[1].optionsUI.font.instance, "center", "center", true, false, false)
+                if isAnimationVisible then
+                    imports.beautify.native.drawText(j.title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[1], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[2], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[3], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverfontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsUI.font.instance, "center", "center", true, false, false)
+                    imports.beautify.native.drawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineSize, loginUI.phases[1].optionsUI.embedLineColor, false)
+                end
             end
         elseif loginUI.phase == 2 then
             imports.beautify.setUIDisabled(loginUI.phases[2].element, not isUIEnabled or (loginUI.characters[(loginUI.previewCharacter)] and loginUI.characters[(loginUI.previewCharacter)].id and true) or false)
