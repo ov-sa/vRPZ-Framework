@@ -1,11 +1,14 @@
 {
     "encryptKey": "vStudio - Aviril",
     "streamRange": 170,
+    "assetClumps": [
+        "generic"
+    ],
     "shaderMaps": {
         "control": {
-            "house01_a": [
+            "weapon_box01_a": [
                 {
-                    "bump": "control/house01_a/bump.jpg"
+                    "bump": "control/weapon_box01_a/bump.jpg"
                 }
             ]
         }
