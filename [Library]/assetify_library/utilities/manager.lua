@@ -233,10 +233,13 @@ if localPlayer then
                     thread:create(function(cThread)
                         for i, j in imports.pairs(assetReference.manifestData.assetClumps) do
                             assetReference.unsyncedData.assetCache[i] = {}
+                            local clumpTXD, clumpDFF, clumpCOL = assetPath.."clump/"..i..(asset.references.asset)..".txd", assetPath.."clump/"..i..(asset.references.asset)..".dff", assetPath.."clump/"..i..(asset.references.asset)..".col"
+                            clumpTXD = (imports.file.exists(clumpTXD) and clumpTXD) or assetPath..(asset.references.asset)..".txd"
+                            clumpCOL = (imports.file.exists(clumpCOL) and clumpCOL) or assetPath..(asset.references.asset)..".col"
                             asset:create(assetType, assetName, packReference, assetReference.unsyncedData.rwCache, assetReference.manifestData, assetReference.unsyncedData.assetCache[i], {
-                                txd = assetPath..(asset.references.asset)..".txd",
-                                dff = assetPath.."clump/"..i..(asset.references.asset)..".dff",
-                                col = assetPath..(asset.references.asset)..".col"
+                                txd = clumpTXD,
+                                dff = clumpDFF,
+                                col = clumpCOL
                             })
                             thread.pause()
                         end
