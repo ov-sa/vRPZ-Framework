@@ -303,7 +303,7 @@ loginUI.phases[2].loadCharacter = function(loadDefault)
         for i = 1, #loginUI.phases[2].categories[1].contents.gender.contentIndex, 1 do
             local j = loginUI.phases[2].categories[1].contents.gender.contentIndex[i]
             if j == (loginUI.characters[(loginUI.previewCharacter)].identity.gender or FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default) then
-                imports.beautify.selector.setSelection(loginUI.phases[2].categories[3].element, i)
+                imports.beautify.selector.setSelection(loginUI.phases[2].categories[1].contents.gender.element, i)
                 loginUI.phases[2].updateUILang(j)
                 break
             end
