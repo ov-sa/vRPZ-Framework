@@ -69,7 +69,7 @@ configVars["UI"]["Login"] = {
 
         characters = {
             ["Titles"] = {["EN"] = "Characters", ["TR"] = "karakterler", ["RU"] = "Персонажи"},
-            width = 325, height = 555,
+            width = 325, height = 560,
             titlebar = {
                 ["Titles"] = {["EN"] = "Character", ["TR"] = "Karakter", ["RU"] = "Персонаж"},
                 height = 35,
