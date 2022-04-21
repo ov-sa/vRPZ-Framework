@@ -73,7 +73,7 @@ loginUI = {
                 paddingY = 2,
                 height = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.height,
                 font = CGame.createFont(1, 19), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.fontColor)),
-                bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.bgColor)),
+                iconColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.iconColor)), bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.bgColor)),
                 shadowColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.shadowColor)),
             },
             options = {
@@ -103,14 +103,14 @@ loginUI = {
                         tone = {
                             identifier = "tone",
                             isSlider = true,
-                            startY = 30, paddingY = -8,
-                            height = 30
+                            startY = 30, paddingY = -8, height = 30,
+                            iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"]
                         },
                         gender = {
                             identifier = "gender",
                             isSelector = true,
-                            startY = 90,
-                            height = 30
+                            startY = 90, height = 30,
+                            iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"]
                         }
                     }
                 },
@@ -121,14 +121,14 @@ loginUI = {
                         hair = {
                             identifier = "hair",
                             isSelector = true, isClothing = true,
-                            startY = 30,
-                            height = 30
+                            startY = 30, height = 30,
+                            iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"]
                         },
                         face = {
                             identifier = "face",
                             isSelector = true, isClothing = true,
-                            startY = 90,
-                            height = 30
+                            startY = 90, height = 30,
+                            iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"]
                         }
                     }
                 },
@@ -139,20 +139,20 @@ loginUI = {
                         upper = {
                             identifier = "Upper",
                             isSelector = true, isClothing = true,
-                            startY = 30,
-                            height = 30
+                            startY = 30, height = 30,
+                            iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"]
                         },
                         lower = {
                             identifier = "Lower",
                             isSelector = true, isClothing = true,
-                            startY = 90,
-                            height = 30
+                            startY = 90, height = 30,
+                            iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"]
                         },
                         shoes = {
                             identifier = "Shoes",
                             isSelector = true, isClothing = true,
-                            startY = 150,
-                            height = 30
+                            startY = 150, height = 30,
+                            iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"]
                         }
                     }
                 }
@@ -207,6 +207,7 @@ loginUI.phases[2].updateUILang = function(gender)
         if j.contents then
             for k, v in imports.pairs(j.contents) do
                 v.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Titles"][(CPlayer.CLanguage)]))
+                v.iconX, v.iconY = ((loginUI.phases[2].width - imports.beautify.native.getTextWidth(v.title, 1, loginUI.phases[2].categories.font.instance))*0.5) - FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.iconSize - 7, (loginUI.phases[2].categories.height - FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.iconSize)*0.5
                 if v.isSlider then
                     if not v.element or not imports.isElement(v.element) then
                         v.element = imports.beautify.slider.create(loginUI.phases[2].categories.paddingX, j.offsetY + loginUI.phases[2].categories.height + v.startY + v.paddingY, loginUI.phases[2].width - (loginUI.phases[2].categories.paddingX*2), v.height, "horizontal", loginUI.phases[2].element, false)
@@ -429,10 +430,10 @@ loginUI.phases[2].toggleUI = function(state)
                 imports.beautify.native.drawRectangle(0, category_offsetY, loginUI.phases[2].width, j.height, loginUI.phases[2].categories.bgColor, false)
                 if j.contents then
                     for k, v in imports.pairs(j.contents) do
-                        local title_height = loginUI.phases[2].categories.height
-                        local title_offsetY = category_offsetY + v.startY - title_height
-                        imports.beautify.native.drawRectangle(0, title_offsetY, loginUI.phases[2].width, title_height, loginUI.phases[2].titlebar.bgColor, false)
-                        imports.beautify.native.drawText(v.title, 0, title_offsetY, loginUI.phases[2].width, title_offsetY + title_height, loginUI.phases[2].titlebar.fontColor, 1, loginUI.phases[2].categories.font.instance, "center", "center", true, false, false)
+                        local title_offsetY = category_offsetY + v.startY - loginUI.phases[2].categories.height
+                        imports.beautify.native.drawRectangle(0, title_offsetY, loginUI.phases[2].width, loginUI.phases[2].categories.height, loginUI.phases[2].titlebar.bgColor, false)
+                        imports.beautify.native.drawText(v.title, 0, title_offsetY, loginUI.phases[2].width, title_offsetY + loginUI.phases[2].categories.height, loginUI.phases[2].titlebar.fontColor, 1, loginUI.phases[2].categories.font.instance, "center", "center", true, false, false)
+                        imports.beautify.native.drawImage(v.iconX, title_offsetY + v.iconY, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.iconSize, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.iconSize, v.iconTexture, 0, 0, 0, loginUI.phases[2].titlebar.iconColor, false)
                     end
                 end
             end
