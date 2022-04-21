@@ -194,6 +194,7 @@ for i = 1, #loginUI.phases[2].options, 1 do
 end
 loginUI.phases[2].updateUILang = function(gender)
     gender = gender or FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default
+    loginUI.phases[2].titlebar.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar["Titles"][(CPlayer.CLanguage)]))
     for i = 1, #loginUI.phases[2].options, 1 do
         local j = loginUI.phases[2].options[i]
         j.tooltip.text = imports.string.upper(imports.string.spaceChars(j.tooltip.identifier[(CPlayer.CLanguage)]))
@@ -424,7 +425,7 @@ loginUI.phases[2].toggleUI = function(state)
         imports.beautify.setUIVisible(loginUI.phases[2].element, true)
         imports.beautify.render.create(function()
             imports.beautify.native.drawRectangle(0, 0, loginUI.phases[2].width, loginUI.phases[2].titlebar.height, loginUI.phases[2].titlebar.bgColor, false)
-            imports.beautify.native.drawText(imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar["Titles"][(CPlayer.CLanguage)])), 0, 0, loginUI.phases[2].width, loginUI.phases[2].titlebar.height, loginUI.phases[2].titlebar.fontColor, 1, loginUI.phases[2].titlebar.font.instance, "center", "center", true, false, false)
+            imports.beautify.native.drawText(loginUI.phases[2].titlebar.title, 0, 0, loginUI.phases[2].width, loginUI.phases[2].titlebar.height, loginUI.phases[2].titlebar.fontColor, 1, loginUI.phases[2].titlebar.font.instance, "center", "center", true, false, false)
             imports.beautify.native.drawRectangle(0, loginUI.phases[2].titlebar.height, loginUI.phases[2].width, loginUI.phases[2].titlebar.paddingY, loginUI.phases[2].titlebar.shadowColor, false)
             for i = 1, #loginUI.phases[2].categories, 1 do
                 local j = loginUI.phases[2].categories[i]
