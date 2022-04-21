@@ -104,13 +104,13 @@ loginUI = {
                             identifier = "tone",
                             isSlider = true,
                             startY = 30, paddingY = -8, height = 30,
-                            iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"]
+                            iconTexture = imports.beautify.assets["images"]["canvas/color.rw"]
                         },
                         gender = {
                             identifier = "gender",
                             isSelector = true,
                             startY = 90, height = 30,
-                            iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"]
+                            iconTexture = imports.beautify.assets["images"]["canvas/gender.rw"]
                         }
                     }
                 },
@@ -122,13 +122,13 @@ loginUI = {
                             identifier = "hair",
                             isSelector = true, isClothing = true,
                             startY = 30, height = 30,
-                            iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"]
+                            iconTexture = imports.beautify.assets["images"]["canvas/hair.rw"]
                         },
                         face = {
                             identifier = "face",
                             isSelector = true, isClothing = true,
                             startY = 90, height = 30,
-                            iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"]
+                            iconTexture = imports.beautify.assets["images"]["canvas/face.rw"]
                         }
                     }
                 },
@@ -140,19 +140,19 @@ loginUI = {
                             identifier = "Upper",
                             isSelector = true, isClothing = true,
                             startY = 30, height = 30,
-                            iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"]
+                            iconTexture = imports.beautify.assets["images"]["canvas/tshirt.rw"]
                         },
                         lower = {
                             identifier = "Lower",
                             isSelector = true, isClothing = true,
                             startY = 90, height = 30,
-                            iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"]
+                            iconTexture = imports.beautify.assets["images"]["canvas/trouser.rw"]
                         },
                         shoes = {
                             identifier = "Shoes",
                             isSelector = true, isClothing = true,
                             startY = 150, height = 30,
-                            iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"]
+                            iconTexture = imports.beautify.assets["images"]["canvas/shoes.rw"]
                         }
                     }
                 }
@@ -192,6 +192,12 @@ for i = 1, #loginUI.phases[2].options, 1 do
     j.tooltip.hoverStatus = "backward"
     j.hoverAnimTick = CLIENT_CURRENT_TICK
 end
+loginUI.phases[1].updateUILang = function()
+    for i = 1, #loginUI.phases[1].optionsUI, 1 do
+        local j = loginUI.phases[1].optionsUI[i]
+        j.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][(CPlayer.CLanguage)], "  "))
+    end
+end
 loginUI.phases[2].updateUILang = function(gender)
     gender = gender or FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default
     loginUI.phases[2].titlebar.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar["Titles"][(CPlayer.CLanguage)]))
@@ -199,10 +205,6 @@ loginUI.phases[2].updateUILang = function(gender)
         local j = loginUI.phases[2].options[i]
         j.tooltip.text = imports.string.upper(imports.string.spaceChars(j.tooltip.identifier[(CPlayer.CLanguage)]))
         j.tooltip.width = imports.beautify.native.getTextWidth(j.tooltip.text, 1, loginUI.phases[2].options.tooltipFont.instance) + loginUI.phases[2].options.size
-    end
-    for i = 1, #loginUI.phases[1].optionsUI, 1 do
-        local j = loginUI.phases[1].optionsUI[i]
-        j.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][(CPlayer.CLanguage)], "  "))
     end
     for i = 1, #loginUI.phases[2].categories, 1 do
         local j = loginUI.phases[2].categories[i]
@@ -250,6 +252,7 @@ loginUI.phases[2].updateUILang = function(gender)
 end
 imports.addEventHandler("Client:onUpdateLanguage", root, function()
     if not loginUI.state then return false end
+    loginUI.phases[1].updateUILang()
     if loginUI.phases[2].element and imports.isElement(loginUI.phases[2].element) then
         local characterData = loginUI.phases[2].fetchSelection()
         loginUI.phases[2].updateUILang(characterData.gender)
@@ -705,6 +708,7 @@ loginUI.toggleUI = function(state, args)
 
     if state then
         loginUI.state = true
+        loginUI.phases[1].updateUILang()
         local cAsset = imports.assetify.getAsset("sound", FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.asset)
         if cAsset then
             loginUI.lobbySound = CGame.playSound(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.asset, FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category, imports.math.random(#cAsset.manifestData.assetSounds[(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category)]), true, true)
