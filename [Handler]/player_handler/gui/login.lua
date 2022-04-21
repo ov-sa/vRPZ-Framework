@@ -489,6 +489,7 @@ imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
             loginUI.phases[2].character = imports.createPed(0, loginUI.cinemationData.characterPoint.x, loginUI.cinemationData.characterPoint.y, loginUI.cinemationData.characterPoint.z, loginUI.cinemationData.characterPoint.rotation)
             imports.setElementDimension(loginUI.phases[2].character, FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
             imports.setElementFrozen(loginUI.phases[2].character, true)
+            CGame.loadAnim(loginUI.phases[2].character, "Character")
             loginUI.phases[2].toggleUI(true)
             loginUI.phases[2].loadCharacter()
         else
