@@ -72,7 +72,7 @@ configVars["UI"]["Login"] = {
             width = 325, height = 560,
             titlebar = {
                 ["Titles"] = {["EN"] = "Character", ["TR"] = "Karakter", ["RU"] = "Персонаж"},
-                height = 35, iconSize = 14,
+                height = 35, iconSize = 18,
                 fontColor = {170, 35, 35, 255}, iconColor = {255, 255, 255, 255*0.35}, bgColor = {0, 0, 0, 255}, shadowColor = {50, 50, 50, 255}
             },
             options = {

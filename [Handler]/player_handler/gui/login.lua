@@ -196,6 +196,7 @@ loginUI.phases[1].updateUILang = function()
     for i = 1, #loginUI.phases[1].optionsUI, 1 do
         local j = loginUI.phases[1].optionsUI[i]
         j.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][(CPlayer.CLanguage)], "  "))
+        j.width = imports.beautify.native.getTextWidth(j.title, 1, loginUI.phases[1].optionsUI.font.instance) + 5
     end
 end
 loginUI.phases[2].updateUILang = function(gender)
@@ -250,13 +251,20 @@ loginUI.phases[2].updateUILang = function(gender)
         end
     end
 end
-imports.addEventHandler("Client:onUpdateLanguage", root, function()
-    if not loginUI.state then return false end
+loginUI.phases[3].updateUILang = function()
+    loginUI.phases[3].navigator.__width = loginUI.phases[3].navigator.width + imports.beautify.native.getTextWidth(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator["Titles"][(CPlayer.CLanguage)], 1, loginUI.phases[3].navigator.font.instance)
+end
+loginUI.updateUILang = function()
     loginUI.phases[1].updateUILang()
     if loginUI.phases[2].element and imports.isElement(loginUI.phases[2].element) then
         local characterData = loginUI.phases[2].fetchSelection()
         loginUI.phases[2].updateUILang(characterData.gender)
     end
+    loginUI.phases[3].updateUILang()
+end
+imports.addEventHandler("Client:onUpdateLanguage", root, function()
+    if not loginUI.state then return false end
+    loginUI.updateUILang()
 end)
 loginUI.phases[2].fetchSelection = function()
     local tone = imports.beautify.slider.getPercent(loginUI.phases[2].categories[1].contents.tone.element)
@@ -566,7 +574,7 @@ loginUI.renderUI = function(renderData)
             imports.beautify.native.drawImage(background_offsetX, background_offsetY, background_width, background_height, loginUI.phases[loginUI.phase].bgTexture, 0, 0, 0, -1, false)
             for i = 1, #loginUI.phases[1].optionsUI, 1 do
                 local j = loginUI.phases[1].optionsUI[i]
-                local option_width, option_height = imports.beautify.native.getTextWidth(j.title, 1, loginUI.phases[1].optionsUI.font.instance) + 5, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.height
+                local option_width, option_height = j.width, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.height
                 local options_offsetX, options_offsetY = loginUI.phases[1].optionsUI.startX - (option_width*0.5), j.startY
                 local isOptionHovered = imports.isMouseOnPosition(options_offsetX, options_offsetY, option_width, option_height) and isUIEnabled
                 if isOptionHovered then
@@ -664,8 +672,7 @@ loginUI.renderUI = function(renderData)
                 end
             end
             imports.beautify.native.drawText(loginUI.phases[3].contentText, view_offsetX, credits_offsetY, view_offsetX + view_width, credits_offsetY + loginUI.phases[3].contentHeight, loginUI.phases[3].fontColor, 1, loginUI.phases[3].font.instance, "center", "center", true, false, false, false, true)
-            local navigator_title = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator["Titles"][(CPlayer.CLanguage)]
-            local navigator_width, navigator_height = loginUI.phases[3].navigator.width + imports.beautify.native.getTextWidth(navigator_title, 1, loginUI.phases[3].navigator.font.instance), loginUI.phases[3].navigator.height
+            local navigator_width, navigator_height = loginUI.phases[3].navigator.__width, loginUI.phases[3].navigator.height
             local navigator_offsetX, navigator_offsetY = loginUI.phases[3].navigator.startX + (CLIENT_MTA_RESOLUTION[1] - navigator_width), loginUI.phases[3].navigator.startY
             local isNavigatorHovered = imports.isMouseOnPosition(navigator_offsetX, navigator_offsetY, navigator_width, navigator_height) and isUIEnabled
             if isNavigatorHovered then
@@ -693,7 +700,7 @@ loginUI.renderUI = function(renderData)
                     loginUI.phases[3].navigator.animAlphaPercent = imports.interpolateBetween(loginUI.phases[3].navigator.animAlphaPercent, 0, 0, 0.25, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].navigator.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator.hoverDuration), "Linear")
                 end
             end
-            imports.beautify.native.drawText(navigator_title, navigator_offsetX, navigator_offsetY, navigator_offsetX + navigator_width, navigator_offsetY + navigator_height, imports.tocolor(loginUI.phases[3].navigator.fontColor[1], loginUI.phases[3].navigator.fontColor[2], loginUI.phases[3].navigator.fontColor[3], loginUI.phases[3].navigator.fontColor[4]*loginUI.phases[3].navigator.animAlphaPercent), 1, loginUI.phases[3].navigator.font.instance, "center", "center", true, false, false)
+            imports.beautify.native.drawText(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator["Titles"][(CPlayer.CLanguage)], navigator_offsetX, navigator_offsetY, navigator_offsetX + navigator_width, navigator_offsetY + navigator_height, imports.tocolor(loginUI.phases[3].navigator.fontColor[1], loginUI.phases[3].navigator.fontColor[2], loginUI.phases[3].navigator.fontColor[3], loginUI.phases[3].navigator.fontColor[4]*loginUI.phases[3].navigator.animAlphaPercent), 1, loginUI.phases[3].navigator.font.instance, "center", "center", true, false, false)
         end
     end
 end
@@ -708,7 +715,7 @@ loginUI.toggleUI = function(state, args)
 
     if state then
         loginUI.state = true
-        loginUI.phases[1].updateUILang()
+        loginUI.updateUILang()
         local cAsset = imports.assetify.getAsset("sound", FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.asset)
         if cAsset then
             loginUI.lobbySound = CGame.playSound(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.asset, FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category, imports.math.random(#cAsset.manifestData.assetSounds[(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category)]), true, true)
