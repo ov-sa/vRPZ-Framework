@@ -134,7 +134,8 @@ if localPlayer then
                         txd = {},
                         dff = {},
                         col = {},
-                        map = {}
+                        map = {},
+                        dep = {}
                     }
                 }
                 shader:createTex(assetReference.manifestData.shaderMaps, assetReference.unsyncedData.rwCache.map, assetReference.manifestData.encryptKey)

@@ -284,6 +284,7 @@ else
                         assetManifestData.assetAnimations = (assetManifestData.assetAnimations and (imports.type(assetManifestData.assetAnimations) == "table") and assetManifestData.assetAnimations) or false
                         assetManifestData.assetSounds = (assetManifestData.assetSounds and (imports.type(assetManifestData.assetSounds) == "table") and assetManifestData.assetSounds) or false
                         assetManifestData.shaderMaps = (assetManifestData.shaderMaps and (imports.type(assetManifestData.shaderMaps) == "table") and assetManifestData.shaderMaps) or false
+                        assetManifestData.assetDeps = (assetManifestData.assetDeps and (imports.type(assetManifestData.assetDeps) == "table") and assetManifestData.assetDeps) or false
                         cAssetPack.rwDatas[assetReference] = {
                             synced = {
                                 manifestData = assetManifestData
@@ -317,6 +318,7 @@ else
                                             if v then
                                                 assetSounds[i][k] = v
                                                 asset:buildFile(assetPath.."sound/"..v, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                                thread.pause()
                                             end
                                         end
                                     end
@@ -363,6 +365,7 @@ else
                                         asset:buildFile(assetPath.."clump/"..j.."/"..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
                                         asset:buildFile(assetPath.."clump/"..j.."/"..(asset.references.asset)..".dff", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
                                         asset:buildFile(assetPath.."clump/"..j.."/"..(asset.references.asset)..".col", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                        thread.pause()
                                     end
                                 else
                                     asset:buildFile(assetPath..(asset.references.asset)..".dff", cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
@@ -375,6 +378,10 @@ else
                             end
                         end
                     end
+                end
+                for i, j in imports.pairs(assetManifestData.assetDeps) do
+                    asset:buildFile(assetPath.."dep/"..j, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                    thread.pause()
                 end
                 assetPack.assetPack = cAssetPack
                 if callbackReference and (imports.type(callbackReference) == "function") then
