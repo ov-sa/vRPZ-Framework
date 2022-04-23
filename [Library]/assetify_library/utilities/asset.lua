@@ -376,12 +376,14 @@ else
                             if assetManifestData.shaderMaps then
                                 asset:buildShader(assetPath, assetManifestData.shaderMaps, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
                             end
+                            if assetManifestData.assetDeps then
+                                for i, j in imports.pairs(assetManifestData.assetDeps) do
+                                    asset:buildFile(assetPath.."dep/"..j, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                    thread.pause()
+                                end
+                            end
                         end
                     end
-                end
-                for i, j in imports.pairs(assetManifestData.assetDeps) do
-                    asset:buildFile(assetPath.."dep/"..j, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
-                    thread.pause()
                 end
                 assetPack.assetPack = cAssetPack
                 if callbackReference and (imports.type(callbackReference) == "function") then
