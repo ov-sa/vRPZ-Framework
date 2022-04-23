@@ -131,7 +131,7 @@ function streamer:allocate()
                 imports.setTimer(onBoneUpdate, self.syncRate, 0, streamer.allocator[(self.syncRate)][(self.streamType)])
             end
         end
-        streamBuffer[self] = true
+        streamBuffer[self] = streamer.buffer[(self.dimension)][(self.interior)][(self.streamType)][self]
     end
     return true
 end
