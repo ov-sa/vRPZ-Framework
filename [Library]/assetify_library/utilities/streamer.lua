@@ -151,6 +151,7 @@ end
 
 function streamer:deallocate()
     if not self or (self == streamer) then return false end
+    if not streamer.allocator.validType[(self.streamType)] then return false end
     if not streamer.allocator[(self.syncRate)] or not streamer.allocator[(self.syncRate)][(self.streamType)] or not streamer.allocator[(self.syncRate)][(self.streamType)][(self.dimension)] or not streamer.allocator[(self.syncRate)][(self.streamType)][(self.dimension)][(self.interior)] then return false end
     local isAllocatorVoid = true
     streamer.allocator[(self.syncRate)][(self.streamType)][(self.dimension)][(self.interior)][self] = nil
