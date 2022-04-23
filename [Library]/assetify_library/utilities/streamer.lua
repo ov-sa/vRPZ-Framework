@@ -64,7 +64,6 @@ function streamer:load(streamerInstance, streamType, occlusionInstances, syncRat
     self.occlusions = occlusionInstances
     self.syncRate = imports.math.max(0, syncRate or streamerSettings.syncRate)
     self:allocate()
-    streamerSettings.boneSyncRate
     local streamDimension, streamInterior = imports.getElementDimension(occlusionInstances[1]), imports.getElementInterior(occlusionInstances[1])
     if streamerInstance ~= occlusionInstances[1] then
         if streamType ~= "bone" then
@@ -121,7 +120,7 @@ function streamer:allocate()
             if self.syncRate <= 0 then
                 imports.addEventHandler("onClientPedsProcessed", root, onBoneUpdate)
             else
-                imports.setTimer(onBoneUpdate, self.syncRate, 0)
+                imports.setTimer(onBoneUpdate, self.syncRate, 0, streamer.allocator[(self.streamType)][(self.syncRate)])
             end
         end
         streamer.allocator[(self.streamType)][(self.syncRate)][self] = true
@@ -158,7 +157,8 @@ onBoneStream = function(streamBuffer)
     return true
 end
 
-onBoneUpdate = function()
+onBoneUpdate = function(streamBuffer)
+    streamBuffer = streamBuffer or streamer.allocator["bone"][0]
     local clientDimension, clientInterior = streamer.cache.clientWorld.dimension, streamer.cache.clientWorld.interior
     if streamer.buffer[clientDimension] and streamer.buffer[clientDimension][clientInterior] then
         onBoneStream(streamer.buffer[clientDimension][clientInterior]["bone"])
