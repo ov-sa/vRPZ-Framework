@@ -65,13 +65,14 @@ function dummy:load(assetType, assetName, dummyData)
     dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z = imports.tonumber(dummyData.rotation.x) or 0, imports.tonumber(dummyData.rotation.y) or 0, imports.tonumber(dummyData.rotation.z) or 0
     self.assetType, self.assetName = assetType, assetName
     self.cModelInstance = imports.createObject(cAsset.syncedData.modelID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
+    self.syncRate = imports.tonumber(dummyData.syncRate)
     imports.setElementDoubleSided(self.cModelInstance, true)
     imports.setElementDimension(self.cModelInstance, imports.tonumber(dummyData.dimension) or 0)
     imports.setElementInterior(self.cModelInstance, imports.tonumber(dummyData.interior) or 0)
     if cAsset.syncedData.collisionID then
         self.cCollisionInstance = imports.createObject(cAsset.syncedData.collisionID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
         imports.setElementAlpha(self.cCollisionInstance, 0)
-        self.cStreamer = streamer:create(self.cModelInstance, "dummy", {self.cCollisionInstance})
+        self.cStreamer = streamer:create(self.cModelInstance, "dummy", {self.cCollisionInstance}, self.syncRate)
     end
     self.cDummy = self.cCollisionInstance or self.cModelInstance
     dummy.buffer[(self.cDummy)] = self
