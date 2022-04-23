@@ -39,19 +39,19 @@ streamer = {
     buffer = {},
     cache = {},
     allocator = {
-        validType = {"bone"}
+        validStreams = {"bone"}
     }
 }
 streamer.__index = streamer
 
 local onEntityStream, onBoneStream, onBoneUpdate = nil, nil, nil
-streamer.allocator.__validType = {}
-for i = 1, #streamer.allocator.validType, 1 do
-    local j = streamer.allocator.validType[i]
-    streamer.allocator.__validType[j] = true
+streamer.allocator.__validStreams = {}
+for i = 1, #streamer.allocator.validStreams, 1 do
+    local j = streamer.allocator.validStreams[i]
+    streamer.allocator.__validStreams[j] = true
 end
-streamer.allocator.validType = streamer.allocator.__validType
-streamer.allocator.__validType = nil
+streamer.allocator.validStreams = streamer.allocator.__validStreams
+streamer.allocator.__validStreams = nil
 
 function streamer:create(...)
     local cStreamer = imports.setmetatable({}, {__index = self})
@@ -127,7 +127,7 @@ end
 
 function streamer:allocate()
     if not self or (self == streamer) then return false end
-    if not streamer.allocator.validType[(self.streamType)] then return false end
+    if not streamer.allocator.validStreams[(self.streamType)] then return false end
     streamer.allocator[(self.syncRate)] = streamer.allocator[(self.syncRate)] or {}
     streamer.allocator[(self.syncRate)][(self.streamType)] = streamer.allocator[(self.syncRate)][(self.streamType)] or {}
     streamer.allocator[(self.syncRate)][(self.streamType)][(self.dimension)] = streamer.allocator[(self.syncRate)][(self.streamType)][(self.dimension)] or {}
@@ -151,7 +151,7 @@ end
 
 function streamer:deallocate()
     if not self or (self == streamer) then return false end
-    if not streamer.allocator.validType[(self.streamType)] then return false end
+    if not streamer.allocator.validStreams[(self.streamType)] then return false end
     if not streamer.allocator[(self.syncRate)] or not streamer.allocator[(self.syncRate)][(self.streamType)] or not streamer.allocator[(self.syncRate)][(self.streamType)][(self.dimension)] or not streamer.allocator[(self.syncRate)][(self.streamType)][(self.dimension)][(self.interior)] then return false end
     local isAllocatorVoid = true
     streamer.allocator[(self.syncRate)][(self.streamType)][(self.dimension)][(self.interior)][self] = nil
