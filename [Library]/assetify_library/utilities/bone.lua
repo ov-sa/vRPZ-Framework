@@ -87,7 +87,7 @@ function bone:load(element, parent, boneData)
     self.parent = parent
     if not self:refresh(boneData) then return false end
     imports.setElementCollisionsEnabled(element, false)
-    self.cStreamer = streamer:create(element, "bone", {parent})
+    self.cStreamer = streamer:create(element, "bone", {parent}, imports.tonumber(boneData.syncRate) or streamerSettings.boneSyncRate)
     bone.buffer.element[element] = self
     bone.buffer.parent[parent] = bone.buffer.parent[parent] or {}
     bone.buffer.parent[parent][self] = true
