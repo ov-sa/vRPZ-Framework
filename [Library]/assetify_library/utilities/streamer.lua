@@ -38,11 +38,20 @@ local imports = {
 streamer = {
     buffer = {},
     cache = {},
-    allocator = {}
+    allocator = {
+        validType = {"bone"}
+    }
 }
 streamer.__index = streamer
 
 local onEntityStream, onBoneStream, onBoneUpdate = nil, nil, nil
+streamer.allocator.__validType = {}
+for i = 1, #streamer.allocator.validType, 1 do
+    local j = streamer.allocator.validType[i]
+    streamer.allocator.__validType[j] = true
+end
+streamer.allocator.validType = streamer.allocator.__validType
+streamer.allocator.__validType = nil
 
 function streamer:create(...)
     local cStreamer = imports.setmetatable({}, {__index = self})
@@ -118,6 +127,7 @@ end
 
 function streamer:allocate()
     if not self or (self == streamer) then return false end
+    if not streamer.allocator.validType[(self.streamType)] then return false end
     streamer.allocator[(self.syncRate)] = streamer.allocator[(self.syncRate)] or {}
     streamer.allocator[(self.syncRate)][(self.streamType)] = streamer.allocator[(self.syncRate)][(self.streamType)] or {}
     streamer.allocator[(self.syncRate)][(self.streamType)][(self.dimension)] = streamer.allocator[(self.syncRate)][(self.streamType)][(self.dimension)] or {}
