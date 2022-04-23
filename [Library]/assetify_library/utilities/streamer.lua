@@ -27,8 +27,7 @@ local imports = {
     getElementDimension = getElementDimension,
     getElementInterior = getElementInterior,
     setElementDimension = setElementDimension,
-    setElementInterior = setElementInterior,
-    math = math
+    setElementInterior = setElementInterior
 }
 
 
@@ -68,7 +67,7 @@ function streamer:load(streamerInstance, streamType, occlusionInstances, syncRat
     self.occlusions = occlusionInstances
     self.dimension = streamDimension
     self.interior = streamInterior
-    self.syncRate = imports.math.max(0, syncRate or streamerSettings.syncRate)
+    self.syncRate = syncRate or streamerSettings.syncRate
     if streamerInstance ~= occlusionInstances[1] then
         if streamType ~= "bone" then
             imports.attachElements(streamerInstance, occlusionInstances[1])
