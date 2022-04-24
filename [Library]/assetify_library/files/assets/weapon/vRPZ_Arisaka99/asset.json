@@ -1,0 +1,18 @@
+{
+    "weaponName": "Arisaka 99",
+    "encryptKey": "vStudio - Aviril",
+    "streamRange": 100,
+    "assetClumps": [
+        "high",
+        "low"
+    ],
+    "shaderMaps": {
+        "control": {
+            "wp_arisaka99": [
+                {
+                    "bump": "control/wp_arisaka99/bump.jpg"
+                }
+            ]
+        }
+    }
+}
