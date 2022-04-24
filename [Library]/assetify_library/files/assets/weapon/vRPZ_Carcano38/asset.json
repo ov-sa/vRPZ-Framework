@@ -1,0 +1,18 @@
+{
+    "weaponName": "Carcano 38",
+    "encryptKey": "vStudio - Aviril",
+    "streamRange": 100,
+    "assetClumps": [
+        "high",
+        "low"
+    ],
+    "shaderMaps": {
+        "control": {
+            "wp_carcano38": [
+                {
+                    "bump": "control/wp_carcano38/bump.jpg"
+                }
+            ]
+        }
+    }
+}
