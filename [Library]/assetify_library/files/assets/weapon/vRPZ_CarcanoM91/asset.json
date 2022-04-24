@@ -1,0 +1,18 @@
+{
+    "weaponName": "Carcano M91",
+    "encryptKey": "vStudio - Aviril",
+    "streamRange": 100,
+    "assetClumps": [
+        "high",
+        "low"
+    ],
+    "shaderMaps": {
+        "control": {
+            "wp_carcanom91": [
+                {
+                    "bump": "control/wp_carcanom91/bump.jpg"
+                }
+            ]
+        }
+    }
+}
