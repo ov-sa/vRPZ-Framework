@@ -1,0 +1,18 @@
+{
+    "weaponName": "AR Bayonet",
+    "encryptKey": "vStudio - Aviril",
+    "streamRange": 100,
+    "assetClumps": [
+        "high",
+        "low"
+    ],
+    "shaderMaps": {
+        "control": {
+            "wp_arbayonet": [
+                {
+                    "bump": "control/wp_arbayonet/bump.jpg"
+                }
+            ]
+        }
+    }
+}
