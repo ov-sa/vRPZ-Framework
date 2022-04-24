@@ -1,0 +1,33 @@
+{
+    "weaponName": "FG42",
+    "encryptKey": "vStudio - Aviril",
+    "streamRange": 100,
+    "assetClumps": [
+        "high",
+        "low"
+    ],
+    "shaderMaps": {
+        "control": {
+            "wp_fg42": [
+                {
+                    "bump": "control/wp_fg42/bump.jpg"
+                }
+            ],
+            "wp_fg42_bipl": [
+                {
+                    "bump": "control/wp_fg42_bipl/bump.jpg"
+                }
+            ],
+            "wp_fg42_bipr": [
+                {
+                    "bump": "control/wp_fg42_bipr/bump.jpg"
+                }
+            ],
+            "wp_fg42_bipu": [
+                {
+                    "bump": "control/wp_fg42_bipu/bump.jpg"
+                }
+            ]
+        }
+    }
+}
