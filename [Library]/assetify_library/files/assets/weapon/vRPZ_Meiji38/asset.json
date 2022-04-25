@@ -1,0 +1,18 @@
+{
+    "weaponName": "Meiji 38",
+    "encryptKey": "vStudio - Aviril",
+    "streamRange": 100,
+    "assetClumps": [
+        "high",
+        "low"
+    ],
+    "shaderMaps": {
+        "control": {
+            "wp_meiji38": [
+                {
+                    "bump": "control/wp_meiji38/bump.jpg"
+                }
+            ]
+        }
+    }
+}
