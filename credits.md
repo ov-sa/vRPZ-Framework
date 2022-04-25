@@ -15,3 +15,4 @@
 * **ov | DREW (Contributor)**
 * **FlyingFork (Developer)**
 * **thejdmego (Developer)**
+* **Gaimo (Developer)**
