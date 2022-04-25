@@ -320,6 +320,7 @@ configVars["UI"]["Login"] = {
                 "ov | Drew (Contributor)",
                 "ov | FlyingFork (Developer)",
                 "ov | thejdmego (Developer)"
+                "Gaimo (Developer)"
             }
         }
     }
