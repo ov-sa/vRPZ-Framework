@@ -1,0 +1,18 @@
+{
+    "weaponName": "K98",
+    "encryptKey": "vStudio - Aviril",
+    "streamRange": 100,
+    "assetClumps": [
+        "high",
+        "low"
+    ],
+    "shaderMaps": {
+        "control": {
+            "wp_k98": [
+                {
+                    "bump": "control/wp_k98/bump.jpg"
+                }
+            ]
+        }
+    }
+}
