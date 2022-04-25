@@ -35,7 +35,8 @@ configVars = {
             default = "EN",
             ["EN"] = {code = "en_US"},
             ["TR"] = {code = "tr"},
-            ["RU"] = {code = "ru"}
+            ["RU"] = {code = "ru"},
+            ["BR"] = {code = "pt_BR"}
         },
         ["Disabled_CMDS"] = {"register", "logout"},
 

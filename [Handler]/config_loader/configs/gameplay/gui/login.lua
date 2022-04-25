@@ -46,32 +46,102 @@ configVars["UI"]["Login"] = {
     },
 
     ["Notifications"] = {
-        [1] = {["EN"] = "You must create a character inorder to play..", ["TR"] = "Oynamak için bir karakter seçmelisin..", ["RU"] = "Вы должны создать персонажа, чтобы играть.."},
-        [2] = {["EN"] = "You must pick a character inorder to play..", ["TR"] = "Oynamak için bir karakter seçmelisiniz..", ["RU"] = "Вы должны выбрать персонажа, чтобы играть.."},
-        [3] = {["EN"] = "You have exceeded character limit..", ["TR"] = "Karakter sınırını aştınız..", ["RU"] = "Вы превысили лимит символов.."},
-        [4] = {["EN"] = "You've successfully created a character!", ["TR"] = "Başarıyla bir karakter yarattınız!..", ["RU"] = "Вы успешно создали персонажа!"},
-        [5] = {["EN"] = "You don't have enough characters..", ["TR"] = "Yeterli karakteriniz yok..", ["RU"] = "У вас недостаточно символов.."},
-        [6] = {["EN"] = "You've successfully deleted the character!", ["TR"] = "Karakteri başarıyla sildiniz!", ["RU"] = "Вы успешно удалили персонажа!"},
-        [7] = {["EN"] = "You must save the character prior to picking..", ["TR"] = "Seçmeden önce karakteri kaydetmelisiniz..", ["RU"] = "Вы должны сохранить персонажа перед выбором.."},
-        [8] = {["EN"] = "You've successfully picked the character!", ["TR"] = "Karakteri başarıyla seçtiniz!", ["RU"] = "Вы успешно выбрали персонажа!"},
-        [9] = {["EN"] = "You've successfully saved the character!", ["TR"] = "Karakteri başarıyla kaydettiniz!", ["RU"] = "Вы успешно сохранили персонажа!"},
-        [10] = {["EN"] = "Failed to save your character..", ["TR"] = "Karakteriniz kaydedilemedi..", ["RU"] = "Не удалось сохранить вашего персонажа.."},
-        [11] = {["EN"] = "You must either save or delete your character before navigating..", ["TR"] = "Gezinmeden önce karakterinizi kaydetmeli veya silmelisiniz..", ["RU"] = "Вы должны сохранить или удалить своего персонажа перед навигацией."}
+        [1] = {
+            ["EN"] = "You must create a character inorder to play..",
+            ["TR"] = "Oynamak için bir karakter seçmelisin..",
+            ["RU"] = "Вы должны создать персонажа, чтобы играть..",
+            ["BR"] = "Você deve criar um personagem para jogar..",
+        },
+        [2] = {
+            ["EN"] = "You must pick a character inorder to play..", 
+            ["TR"] = "Oynamak için bir karakter seçmelisiniz..", 
+            ["RU"] = "Вы должны выбрать персонажа, чтобы играть..",
+            ["BR"] = "Você deve escolher um personagem para jogar..",
+        },
+        [3] = {
+            ["EN"] = "You have exceeded character limit..", 
+            ["TR"] = "Karakter sınırını aştınız..", 
+            ["RU"] = "Вы превысили лимит символов..",
+            ["BR"] = "Você excedeu o limite de personagens.",
+        },
+        [4] = {
+            ["EN"] = "You've successfully created a character!", 
+            ["TR"] = "Başarıyla bir karakter yarattınız!..", 
+            ["RU"] = "Вы успешно создали персонажа!",
+            ["BR"] = "Você criou um personagem com sucesso!",
+        },
+        [5] = {
+            ["EN"] = "You don't have enough characters..", 
+            ["TR"] = "Yeterli karakteriniz yok..", 
+            ["RU"] = "У вас недостаточно символов..",
+            ["BR"] = "Você não tem personagens suficientes..",
+        },
+        [6] = {
+            ["EN"] = "You've successfully deleted the character!", 
+            ["TR"] = "Karakteri başarıyla sildiniz!", 
+            ["RU"] = "Вы успешно удалили персонажа!",
+            ["BR"] = "Você excluiu o personagem com sucesso!",
+        },
+        [7] = {
+            ["EN"] = "You must save the character prior to picking..", 
+            ["TR"] = "Seçmeden önce karakteri kaydetmelisiniz..", 
+            ["RU"] = "Вы должны сохранить персонажа перед выбором..",
+            ["BR"] = "Você deve salvar o personagem antes de escolher.",
+        },
+        [8] = {
+            ["EN"] = "You've successfully picked the character!", 
+            ["TR"] = "Karakteri başarıyla seçtiniz!", 
+            ["RU"] = "Вы успешно выбрали персонажа!",
+            ["BR"] = "Você escolheu o personagem com sucesso!",
+        },
+        [9] = {
+            ["EN"] = "You've successfully saved the character!", 
+            ["TR"] = "Karakteri başarıyla kaydettiniz!", 
+            ["RU"] = "Вы успешно сохранили персонажа!",
+            ["BR"] = "Você salvou o personagem com sucesso!",
+        },
+        [10] = {
+            ["EN"] = "Failed to save your character..", 
+            ["TR"] = "Karakteriniz kaydedilemedi..", 
+            ["RU"] = "Не удалось сохранить вашего персонажа..",
+            ["BR"] = "Falha ao salvar seu personagem..",
+        },
+        [11] = {
+            ["EN"] = "You must either save or delete your character before navigating..", 
+            ["TR"] = "Gezinmeden önce karakterinizi kaydetmeli veya silmelisiniz..", 
+            ["RU"] = "Вы должны сохранить или удалить своего персонажа перед навигацией.",
+            ["BR"] = "Você deve salvar ou excluir seu personagem antes de navegar.",
+        }
     },
 
     ["Options"] = {
         play = {
-            ["Titles"] = {["EN"] = "Play", ["TR"] = "Oyna", ["RU"] = "Играть"},
+            ["Titles"] = {
+                ["EN"] = "Play", 
+                ["TR"] = "Oyna", 
+                ["RU"] = "Играть",
+                ["BR"] = "Jogar",
+            },
             height = 35, embedLineSize = 3,
             fontColor = {150, 150, 150, 25}, hoverfontColor = {170, 35, 35, 255}, embedLineColor = {170, 35, 35, 50},
             hoverDuration = 2500
         },
 
         characters = {
-            ["Titles"] = {["EN"] = "Characters", ["TR"] = "karakterler", ["RU"] = "Персонажи"},
+            ["Titles"] = {
+                ["EN"] = "Characters", 
+                ["TR"] = "karakterler", 
+                ["RU"] = "Персонажи",
+                ["BR"] = "Personagens",
+            },
             width = 325, height = 560,
             titlebar = {
-                ["Titles"] = {["EN"] = "Character", ["TR"] = "Karakter", ["RU"] = "Персонаж"},
+                ["Titles"] = {
+                    ["EN"] = "Character", 
+                    ["TR"] = "Karakter", 
+                    ["RU"] = "Персонаж",
+                    ["BR"] = "Personagem",
+                },
                 height = 35, iconSize = 18,
                 fontColor = {170, 35, 35, 255}, iconColor = {255, 255, 255, 255*0.35}, bgColor = {0, 0, 0, 255}, shadowColor = {50, 50, 50, 255}
             },
@@ -80,13 +150,48 @@ configVars["UI"]["Login"] = {
                 iconColor = {255, 255, 255, 255}, bgColor = {0, 0, 0, 255},
                 hoverDuration = 2750,
                 tooltips = {
-                    previous = {["EN"] = "Previous", ["TR"] = "Öncesi", ["RU"] = "Предыдущий"},
-                    next = {["EN"] = "Next", ["TR"] = "Sonraki", ["RU"] = "Следующий"},
-                    pick = {["EN"] = "Pick", ["TR"] = "Seçmek", ["RU"] = "Выбирать"},
-                    create = {["EN"] = "Create", ["TR"] = "Yaratmak", ["RU"] = "Создать"},
-                    delete = {["EN"] = "Delete", ["TR"] = "Silmek", ["RU"] = "Удалить"},
-                    save = {["EN"] = "Save", ["TR"] = "Kayıt etmek", ["RU"] = "Сохранить"},
-                    back = {["EN"] = "Back", ["TR"] = "Geri", ["RU"] = "Назад"}
+                    previous = {
+                        ["EN"] = "Previous", 
+                        ["TR"] = "Öncesi", 
+                        ["RU"] = "Предыдущий",
+                        ["BR"] = "Anterior",
+                    },
+                    next = {
+                        ["EN"] = "Next", 
+                        ["TR"] = "Sonraki", 
+                        ["RU"] = "Следующий",
+                        ["BR"] = "Próximo",
+                    },
+                    pick = {
+                        ["EN"] = "Pick", 
+                        ["TR"] = "Seçmek", 
+                        ["RU"] = "Выбирать",
+                        ["BR"] = "Escolher",
+                    },
+                    create = {
+                        ["EN"] = "Create", 
+                        ["TR"] = "Yaratmak", 
+                        ["RU"] = "Создать",
+                        ["BR"] = "Criar",
+                    },
+                    delete = {
+                        ["EN"] = "Delete", 
+                        ["TR"] = "Silmek", 
+                        ["RU"] = "Удалить",
+                        ["BR"] = "Deletar",
+                    },
+                    save = {
+                        ["EN"] = "Save", 
+                        ["TR"] = "Kayıt etmek", 
+                        ["RU"] = "Сохранить",
+                        ["BR"] = "Salvar",
+                    },
+                    back = {
+                        ["EN"] = "Back", 
+                        ["TR"] = "Geri", 
+                        ["RU"] = "Назад",
+                        ["BR"] = "Voltar",
+                    }
                 }
             },
             categories = {
@@ -94,40 +199,90 @@ configVars["UI"]["Login"] = {
                 fontColor = {200, 200, 200, 255}, bgColor = {0, 0, 0, 235},
 
                 ["Identity"] = {
-                    ["Titles"] = {["EN"] = "Identity", ["TR"] = "Kimlik", ["RU"] = "Тело"},
+                    ["Titles"] = {
+                        ["EN"] = "Identity", 
+                        ["TR"] = "Kimlik", 
+                        ["RU"] = "Тело",
+                        ["BR"] = "Características físicas",
+                    },
                     tone = {
-                        ["Titles"] = {["EN"] = "Skin Tone", ["TR"] = "Cilt tonu", ["RU"] = "Цвет кожи"},
+                        ["Titles"] = {
+                            ["EN"] = "Skin Tone", 
+                            ["TR"] = "Cilt tonu", 
+                            ["RU"] = "Цвет кожи",
+                            ["BR"] = "Tom da pele",
+                        },
                         ["Datas"] = configVars["Character"]["Identity"]["Tone"]
                     },
                     gender = {
                         default = "Male",
-                        ["Titles"] = {["EN"] = "Gender", ["TR"] = "Cinsiyet", ["RU"] = "Пол"},
+                        ["Titles"] = {
+                            ["EN"] = "Gender", 
+                            ["TR"] = "Cinsiyet", 
+                            ["RU"] = "Пол",
+                            ["BR"] = "Gênero",
+                        },
                         ["Datas"] = configVars["Character"]["Identity"]["Gender"]
                     }
                 },
                 ["Facial"] = {
-                    ["Titles"] = {["EN"] = "Facial", ["TR"] = "Yüz", ["RU"] = "Голова"},
+                    ["Titles"] = {
+                        ["EN"] = "Facial", 
+                        ["TR"] = "Yüz", 
+                        ["RU"] = "Голова",
+                        ["BR"] = "Cabeça",
+                    },
                     hair = {
-                        ["Titles"] = {["EN"] = "Hair", ["TR"] = "Saç", ["RU"] = "Причёска"},
+                        ["Titles"] = {
+                            ["EN"] = "Hair", 
+                            ["TR"] = "Saç", 
+                            ["RU"] = "Причёска",
+                            ["BR"] = "Cabelo",
+                        },
                         ["Datas"] = configVars["Character"]["Clothing"]["Facial"]["Hair"]
                     },
                     face = {
-                        ["Titles"] = {["EN"] = "Face", ["TR"] = "Yüz", ["RU"] = "Лицо"},
+                        ["Titles"] = {
+                            ["EN"] = "Face", 
+                            ["TR"] = "Yüz", 
+                            ["RU"] = "Лицо",
+                            ["BR"] = "Rosto",
+                        },
                         ["Datas"] = configVars["Character"]["Clothing"]["Facial"]["Face"]
                     }
                 },
                 ["Clothing"] = {
-                    ["Titles"] = {["EN"] = "Clothing", ["TR"] = "Giyim", ["RU"] = "Одежда"},
+                    ["Titles"] = {
+                        ["EN"] = "Clothing", 
+                        ["TR"] = "Giyim", 
+                        ["RU"] = "Одежда",
+                        ["BR"] = "Roupas",
+                    },
                     ["Upper"] = {
-                        ["Titles"] = {["EN"] = "Upper", ["TR"] = "Üst", ["RU"] = "Верх"},
+                        ["Titles"] = {
+                            ["EN"] = "Upper", 
+                            ["TR"] = "Üst", 
+                            ["RU"] = "Верх",
+                            ["BR"] = "Parte de cima",
+                        },
                         ["Datas"] = configVars["Character"]["Clothing"]["Upper"]
                     },
                     ["Lower"] = {
-                        ["Titles"] = {["EN"] = "Lower", ["TR"] = "Alt", ["RU"] = "Низ"},
+                        ["Titles"] = {
+                            ["EN"] = "Lower", 
+                            ["TR"] = "Alt", 
+                            ["RU"] = "Низ",
+                            ["BR"] = "Parte de baixo",
+                        },
                         ["Datas"] = configVars["Character"]["Clothing"]["Lower"]
                     },
                     ["Shoes"] = {
-                        ["Titles"] = {["EN"] = "Shoes", ["TR"] = "Ayakkabı", ["RU"] = "Обувь"},
+                        ["Titles"] = {
+                            ["EN"] = "Shoes", 
+                            ["TR"] = "Ayakkabı", 
+                            ["RU"] = "Обувь",
+                            ["BR"] = "Calçados",
+                        },
                         ["Datas"] = configVars["Character"]["Clothing"]["Shoes"]
                     }
                 }
@@ -135,11 +290,21 @@ configVars["UI"]["Login"] = {
         },
 
         credits = {
-            ["Titles"] = {["EN"] = "Credits", ["TR"] = "Yapımcılar", ["RU"] = "Авторы"},
+            ["Titles"] = {
+                ["EN"] = "Credits", 
+                ["TR"] = "Yapımcılar", 
+                ["RU"] = "Авторы",
+                ["BR"] = "Créditos",
+            },
             fontColor = {170, 35, 35, 255},
             scrollDuration = 8500,
             navigator = {
-                ["Titles"] = {["EN"] = "Back", ["TR"] = "Geri", ["RU"] = "Назад"},
+                ["Titles"] = {
+                    ["EN"] = "Back", 
+                    ["TR"] = "Geri", 
+                    ["RU"] = "Назад",
+                    ["BR"] = "Voltar",
+                },
                 hoverDuration = 2500
             },
             contributors = {
