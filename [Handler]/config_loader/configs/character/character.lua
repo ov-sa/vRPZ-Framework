@@ -59,7 +59,7 @@ configVars["Character"] = {
                 {clumpName = "H1", clumpTexture = {"cj_hdy_1", 5}, ["EN"] = "Hoody (Camo#5)", ["TR"] = "Kapüşonlu (Camo#5)", ["RU"] = "Толстовка (Camo#5)", ["BR"] = "Moletom (Camo#5)"},
                 {clumpName = "H1", clumpTexture = {"cj_hdy_1", 6}, ["EN"] = "Hoody (Camo#6)", ["TR"] = "Kapüşonlu (Camo#6)", ["RU"] = "Толстовка (Camo#6)", ["BR"] = "Moletom (Camo#6)"},
                 {clumpName = "H1", clumpTexture = {"cj_hdy_1", 7}, ["EN"] = "Hoody (Camo#7)", ["TR"] = "Kapüşonlu (Camo#7)", ["RU"] = "Толстовка (Camo#7)", ["BR"] = "Moletom (Camo#7)"},
-                {clumpName = "H1", clumpTexture = {"cj_hdy_1", 8}, ["EN"] = "Hoody (Casual#1)", ["TR"] = "Kapüşonlu (Casual#1)", ["RU"] = "Толстовка (Casual#1)", ["BR"] = "Moletom (Casual#1)"}
+                {clumpName = "H1", clumpTexture = {"cj_hdy_1", 8}, ["EN"] = "Hoody (Camo#8)", ["TR"] = "Kapüşonlu (Casual#1)", ["RU"] = "Толстовка (Camo#8)", ["BR"] = "Moletom (Camo#8)"}
             },
             ["Female"] = {}
         },
