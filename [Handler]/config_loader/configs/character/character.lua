@@ -52,8 +52,6 @@ configVars["Character"] = {
     
         ["Upper"] = {
             ["Male"] = {
-                {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 1}, ["EN"] = "T-Shirt (White)", ["TR"] = "Tişört (Beyaz)", ["RU"] = "Футболка (белая)", ["BR"] = "Camisa (Branca)" },
-                {clumpName = "TS1", clumpTexture = {"cj_tshrt_1", 2}, ["EN"] = "T-Shirt (Black)", ["TR"] = "Tişört (Siyah)", ["RU"] = "Футболка (черная)", ["BR"] = "Camisa (Preta)"},
                 {clumpName = "H1", clumpTexture = {"cj_hdy_1", 1}, ["EN"] = "Hoody (Camo#1)", ["TR"] = "Kapüşonlu (Camo#1)", ["RU"] = "Толстовка (Camo#1)", ["BR"] = "Moletom (Camo#1)"},
                 {clumpName = "H1", clumpTexture = {"cj_hdy_1", 2}, ["EN"] = "Hoody (Camo#2)", ["TR"] = "Kapüşonlu (Camo#2)", ["RU"] = "Толстовка (Camo#2)", ["BR"] = "Moletom (Camo#2)"},
                 {clumpName = "H1", clumpTexture = {"cj_hdy_1", 3}, ["EN"] = "Hoody (Camo#3)", ["TR"] = "Kapüşonlu (Camo#3)", ["RU"] = "Толстовка (Camo#3)", ["BR"] = "Moletom (Camo#3)"},
