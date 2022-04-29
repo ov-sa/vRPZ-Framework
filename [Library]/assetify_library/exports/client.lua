@@ -39,6 +39,10 @@ function isAssetLoaded(...)
     return manager:isLoaded(...)
 end
 
+function fetchAssetDep(...)
+    return manager:fetchDep(...)
+end
+
 function loadAsset(assetType, assetName, ...)
     local state = manager:load(assetType, assetName, ...)
     if state then
@@ -63,10 +67,6 @@ end
 function unloadAnim(element, ...)
     if not element or not imports.isElement(element) then return false end
     return manager:unloadAnim(element, ...)
-end
-
-function fetchAssetDep(...)
-    return manager:fetchDep(...)
 end
 
 function playSoundAsset(...)
