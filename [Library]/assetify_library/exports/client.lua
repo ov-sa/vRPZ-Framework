@@ -29,12 +29,12 @@ end
 function getLibraryProgress(assetType, assetName)
     local cDownloaded, cTotal = nil, nil
     if assetType and assetName then
-        if syncer.scheduledAssets[assetType] and syncer.scheduledAssets[assetType][assetName] then
-            cDownloaded = syncer.scheduledAssets[assetType][assetName].assetSize
+        if availableAssetPacks[assetType] and availableAssetPacks[assetType].rwDatas.[assetName] then
             cTotal = availableAssetPacks[assetType].rwDatas.[assetName].assetSize.total
+            cDownloaded = (syncer.scheduledAssets[assetType] and syncer.scheduledAssets[assetType][assetName] and syncer.scheduledAssets[assetType][assetName].assetSize) or cTotal
         end
     else
-        
+
     end
     if cDownloaded and cTotal then
         return cDownloaded, cTotal, (cDownloaded/cTotal)*100
