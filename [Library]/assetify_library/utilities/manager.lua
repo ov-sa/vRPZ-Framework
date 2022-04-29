@@ -126,6 +126,9 @@ if localPlayer then
             }
         }
         shader:createTex(cAsset.manifestData.shaderMaps, cAsset.unsyncedData.rwCache.map, cAsset.manifestData.encryptKey)
+        if cAsset.manifestData.assetDeps and cAsset.manifestData.assetDeps.texture then
+            shader:createTex(cAsset.manifestData.assetDeps.texture, cAsset.unsyncedData.rwCache.dep, cAsset.manifestData.encryptKey, true)
+        end
         if cAsset.manifestData.shaderMaps and cAsset.manifestData.shaderMaps.control then
             for i, j in imports.pairs(cAsset.manifestData.shaderMaps.control) do
                 local shaderTextures, shaderInputs = {}, {}
