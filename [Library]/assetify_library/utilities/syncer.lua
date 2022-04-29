@@ -95,6 +95,7 @@ if localPlayer then
                     fetchFiles[i] = true
                 else
                     syncer.scheduledAssets[assetType][assetName].assetSize = syncer.scheduledAssets[assetType][assetName].assetSize + availableAssetPacks[assetType].rwDatas.[assetName].assetSize.file[i]
+                    syncer.librarySize = syncer.librarySize + availableAssetPacks[assetType].rwDatas.[assetName].assetSize.file[i]
                 end
                 fileData = nil
                 thread.pause()
@@ -131,6 +132,7 @@ if localPlayer then
     imports.addEventHandler("Assetify:onRecieveContent", root, function(assetType, assetName, contentPath, ...)
         if assetType and assetName then
             syncer.scheduledAssets[assetType][assetName].assetSize = syncer.scheduledAssets[assetType][assetName].assetSize + availableAssetPacks[assetType].rwDatas.[assetName].assetSize.file[contentPath]
+            syncer.librarySize = syncer.librarySize + availableAssetPacks[assetType].rwDatas.[assetName].assetSize.file[contentPath]
         end
         imports.file.write(contentPath, ...)
         imports.collectgarbage()
