@@ -38,7 +38,9 @@
         }
     },
     "assetDeps": [
-        "inventory_icon": "icon/inventory.png",
-        "hud_icon": "icon/hud.png"
+        "texture": {
+            "inventory": "icon/inventory.png",
+            "hud": "icon/hud.png"
+        }
     ]
 }
