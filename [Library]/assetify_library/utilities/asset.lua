@@ -229,9 +229,10 @@ else
         if not filePointer.unSynced.fileHash[filePath] then
             local builtFileData, builtFileSize = imports.file.read(filePath)
             if builtFileData then
+                filePointer.synced.assetSize.fileSize[filePath] = builtFileSize
+                filePointer.synced.assetSize.total = filePointer.synced.assetSize.total + builtFileSize
                 filePointer.unSynced.fileData[filePath] = (encryptKey and imports.encodeString("tea", builtFileData, {key = encryptKey})) or builtFileData
                 filePointer.unSynced.fileHash[filePath] = imports.md5(filePointer.unSynced.fileData[filePath])
-                filePointer.synced.assetSize = filePointer.synced.assetSize + builtFileSize
             end
         end
         return true
@@ -313,7 +314,10 @@ else
                         cAssetPack.rwDatas[assetName] = {
                             synced = {
                                 manifestData = assetManifestData,
-                                assetSize = 0
+                                assetSize = {
+                                    total = 0,
+                                    fileSize = {}
+                                }
                             },
                             unSynced = {
                                 fileData = {},
