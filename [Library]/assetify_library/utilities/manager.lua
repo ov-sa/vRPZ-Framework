@@ -111,8 +111,7 @@ if localPlayer then
     function manager:getDep(assetType, assetName, depType, depIndex)
         local cAsset, isLoaded = manager:getData(assetType, assetName)
         if not cAsset or not isLoaded then return false end
-        if not cAsset.manifestData.assetDeps or not cAsset.manifestData.assetDeps[depType] or not cAsset.manifestData.assetDeps[depType][depIndex] then return false end
-        return cAsset.manifestData.assetDeps[depType][depIndex]
+        return (cAsset.manifestData.assetDeps and cAsset.unsyncedData.rwCache.dep[depType] and cAsset.unsyncedData.rwCache.dep[depType][depIndex]) or false
     end
 
     function manager:load(assetType, assetName)
@@ -322,8 +321,8 @@ if localPlayer then
         else
             if cAsset.cAsset then
                 cAsset.cAsset:destroy(cAsset.unsyncedData.rwCache)
+                
                 shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.map)
-                asset:clearAssetBuffer(cAsset.unsyncedData.rwCache.dep)
                 cAsset.unsyncedData = nil
                 imports.collectgarbage()
                 return true
