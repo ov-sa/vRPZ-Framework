@@ -111,6 +111,9 @@ if localPlayer then
     function manager:load(assetType, assetName)
         if not syncer.isLibraryLoaded then return false end
         if not assetType or not assetName then return false end
+
+        local cAsset, isLoaded = manager:getData(assetType, assetName)
+        if not cAsset or 
         local packReference = availableAssetPacks[assetType]
         if packReference and packReference.rwDatas then
             local assetReference = packReference.rwDatas[assetName]
@@ -254,72 +257,72 @@ if localPlayer then
     end
 
     function manager:unload(assetType, assetName)
-        local cAsset, isLoaded = manager:getData("sound", assetName)
-        if cAsset and isLoaded then
-            if assetType == "sound" then
-                thread:create(function(cThread)
-                    for i, j in imports.pairs(cAsset.unsyncedData.assetCache) do
-                        for k, v in imports.pairs(j) do
-                            if v.cAsset then
-                                v.cAsset:destroy(cAsset.unsyncedData.rwCache)
-                            end
-                            thread.pause()
+        local cAsset, isLoaded = manager:getData(assetType, assetName)
+        if not cAsset or not isLoaded then return false end
+        if assetType == "sound" then
+            thread:create(function(cThread)
+                for i, j in imports.pairs(cAsset.unsyncedData.assetCache) do
+                    for k, v in imports.pairs(j) do
+                        if v.cAsset then
+                            v.cAsset:destroy(cAsset.unsyncedData.rwCache)
                         end
                         thread.pause()
                     end
-                    shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.map)
-                    cAsset.unsyncedData = nil
-                    imports.collectgarbage()
-                end):resume({
-                    executions = downloadSettings.buildRate,
-                    frames = 1
-                })
-            elseif assetType == "scene" then
-                thread:create(function(cThread)
-                    for i, j in imports.pairs(cAsset.unsyncedData.assetCache) do
-                        if j.cAsset then
-                            if j.cAsset.cScene then
-                                j.cAsset.cScene:destroy()
-                            end
-                            j.cAsset:destroy(cAsset.unsyncedData.rwCache)
-                        end
-                        if j.cDummy then
-                            j.cDummy:destroy()
-                        end
-                        thread.pause()
-                    end
-                    shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.map)
-                    cAsset.unsyncedData = nil
-                    imports.collectgarbage()
-                end):resume({
-                    executions = downloadSettings.buildRate,
-                    frames = 1
-                })
-                return true
-            elseif cAsset.manifestData.assetClumps then
-                thread:create(function(cThread)
-                    for i, j in imports.pairs(cAsset.unsyncedData.assetCache) do
-                        if j.cAsset then
-                            j.cAsset:destroy(cAsset.unsyncedData.rwCache)
-                        end
-                        thread.pause()
-                    end
-                    shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.map)
-                    cAsset.unsyncedData = nil
-                    imports.collectgarbage()
-                end):resume({
-                    executions = downloadSettings.buildRate,
-                    frames = 1
-                })
-                return true
-            else
-                if cAsset.cAsset then
-                    cAsset.cAsset:destroy(cAsset.unsyncedData.rwCache)
-                    shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.map)
-                    cAsset.unsyncedData = nil
-                    imports.collectgarbage()
-                    return true
+                    thread.pause()
                 end
+                shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.map)
+                cAsset.unsyncedData = nil
+                imports.collectgarbage()
+            end):resume({
+                executions = downloadSettings.buildRate,
+                frames = 1
+            })
+            return true
+        elseif assetType == "scene" then
+            thread:create(function(cThread)
+                for i, j in imports.pairs(cAsset.unsyncedData.assetCache) do
+                    if j.cAsset then
+                        if j.cAsset.cScene then
+                            j.cAsset.cScene:destroy()
+                        end
+                        j.cAsset:destroy(cAsset.unsyncedData.rwCache)
+                    end
+                    if j.cDummy then
+                        j.cDummy:destroy()
+                    end
+                    thread.pause()
+                end
+                shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.map)
+                cAsset.unsyncedData = nil
+                imports.collectgarbage()
+            end):resume({
+                executions = downloadSettings.buildRate,
+                frames = 1
+            })
+            return true
+        elseif cAsset.manifestData.assetClumps then
+            thread:create(function(cThread)
+                for i, j in imports.pairs(cAsset.unsyncedData.assetCache) do
+                    if j.cAsset then
+                        j.cAsset:destroy(cAsset.unsyncedData.rwCache)
+                    end
+                    thread.pause()
+                end
+                shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.map)
+                cAsset.unsyncedData = nil
+                imports.collectgarbage()
+            end):resume({
+                executions = downloadSettings.buildRate,
+                frames = 1
+            })
+            return true
+        else
+            if cAsset.cAsset then
+                cAsset.cAsset:destroy(cAsset.unsyncedData.rwCache)
+                shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.map)
+                cAsset.unsyncedData = nil
+                imports.collectgarbage()
+                return true
             end
         end
         return false
