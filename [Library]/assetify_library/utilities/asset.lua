@@ -89,7 +89,7 @@ if localPlayer then
                 if i == "texture" then
                     rwCache[i][k] = shader:loadTex(v, encryptKey)
                 else
-                    rwCache[i][k] = imports.decodeString("tea", imports.file.read(v))
+                    rwCache[i][k] = (encryptKey and imports.decodeString("tea", imports.file.read(v), {key = encryptKey})) or imports.file.read(v)
                 end
             end
         end
