@@ -26,9 +26,8 @@ function isLibraryLoaded()
     return syncer.isLibraryLoaded
 end
 
-function createShader(...)
-    local cShader = shader:create(...)
-    return cShader
+function getLibraryProgress()
+    --TODO: WIP..
 end
 
 function getAssetID(...)
@@ -67,6 +66,11 @@ end
 function unloadAnim(element, ...)
     if not element or not imports.isElement(element) then return false end
     return manager:unloadAnim(element, ...)
+end
+
+function createShader(...)
+    local cShader = shader:create(...)
+    return cShader
 end
 
 function playSoundAsset(...)
