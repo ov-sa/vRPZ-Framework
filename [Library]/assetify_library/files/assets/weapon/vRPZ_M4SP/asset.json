@@ -1,5 +1,11 @@
 {
     "weaponName": "M4 SP",
+    "weaponOffsets": {
+        "attachment": {
+            "position": {"x": -0.0225, "y": 0, "z": 0.175},
+            "rotation": {"x": 0, "y": 0, "z": 0}
+        }
+    },
     "encryptKey": "vStudio - Аниса",
     "streamRange": 100,
     "assetClumps": {
