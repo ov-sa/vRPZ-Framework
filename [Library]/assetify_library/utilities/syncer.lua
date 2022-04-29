@@ -94,7 +94,7 @@ if localPlayer then
                 if not fileData or (imports.md5(fileData) ~= j) then
                     fetchFiles[i] = true
                 else
-                    syncer.scheduledAssets[assetType][assetName].assetize = syncer.scheduledAssets[assetType][assetName].assetize + availableAssetPacks[assetType].rwDatas.assetSize.file[i]
+                    syncer.scheduledAssets[assetType][assetName].assetSize = syncer.scheduledAssets[assetType][assetName].assetSize + availableAssetPacks[assetType].rwDatas.[assetName].assetSize.file[i]
                 end
                 fileData = nil
                 thread.pause()
@@ -128,7 +128,10 @@ if localPlayer then
     end)
 
     imports.addEvent("Assetify:onRecieveContent", true)
-    imports.addEventHandler("Assetify:onRecieveContent", root, function(contentPath, ...)
+    imports.addEventHandler("Assetify:onRecieveContent", root, function(assetType, assetName, contentPath, ...)
+        if assetType and assetName then
+            syncer.scheduledAssets[assetType][assetName].assetSize = syncer.scheduledAssets[assetType][assetName].assetSize + availableAssetPacks[assetType].rwDatas.[assetName].assetSize.file[i]
+        end
         imports.file.write(contentPath, ...)
         imports.collectgarbage()
     end)
