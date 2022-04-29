@@ -54,5 +54,6 @@
     <export function="playSoundAsset" type="client"/>
     <export function="playSoundAsset3D" type="client"/>
     <export function="createAssetDummy" type="client"/>
+    <export function="fetchAssetDep" type="client"/>
 
 </meta>

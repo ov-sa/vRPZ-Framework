@@ -77,3 +77,7 @@ function createAssetDummy(...)
     local cDummy = dummy:create(...)
     return (cDummy and cDummy.cDummy) or false
 end
+
+function fetchAssetDep(...)
+    return manager:fetchDep(...)
+end
