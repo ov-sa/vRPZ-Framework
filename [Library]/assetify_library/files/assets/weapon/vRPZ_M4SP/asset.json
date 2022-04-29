@@ -38,6 +38,7 @@
         }
     },
     "assetDeps": [
-        "icon": "icon.png"
+        "inventory_icon": "icon/inventory.png",
+        "hud_icon": "icon/hud.png"
     ]
 }
