@@ -170,11 +170,11 @@ if localPlayer then
         if modelID then
             shader:clearElementBuffer(element, "clump")
             if clumpMaps then
-                local assetReference = manager:getData(assetType, assetName)
-                if assetReference and assetReference.manifestData.shaderMaps and assetReference.manifestData.shaderMaps.clump then
+                local cAsset = manager:getData(assetType, assetName)
+                if cAsset and cAsset.manifestData.shaderMaps and cAsset.manifestData.shaderMaps.clump then
                     for i, j in imports.pairs(clumpMaps) do
-                        if assetReference.manifestData.shaderMaps.clump[i] and assetReference.manifestData.shaderMaps.clump[i][j] then
-                            shader:create(element, "clump", "Assetify_TextureClumper", i, {clumpTex = assetReference.manifestData.shaderMaps.clump[i][j].clump, clumpTex_bump = assetReference.manifestData.shaderMaps.clump[i][j].bump}, {}, assetReference.unsyncedData.rwCache.map, assetReference.manifestData.shaderMaps.clump[i][j], assetReference.manifestData.encryptKey)
+                        if cAsset.manifestData.shaderMaps.clump[i] and cAsset.manifestData.shaderMaps.clump[i][j] then
+                            shader:create(element, "clump", "Assetify_TextureClumper", i, {clumpTex = cAsset.manifestData.shaderMaps.clump[i][j].clump, clumpTex_bump = cAsset.manifestData.shaderMaps.clump[i][j].bump}, {}, cAsset.unsyncedData.rwCache.map, cAsset.manifestData.shaderMaps.clump[i][j], cAsset.manifestData.encryptKey)
                         end
                     end
                 end
@@ -232,9 +232,9 @@ else
 
     function syncer:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, targetPlayer)
         if not targetPlayer then
-            if not element or not imports.isElement(element) or not availableAssetPacks[assetType] then return false end
-            local assetReference = availableAssetPacks[assetType].assetPack.rwDatas[assetName]
-            if not assetReference or (assetReference.synced.manifestData.assetClumps and (not assetClump or not assetReference.synced.manifestData.assetClumps[assetClump])) then return false end
+            if not element or not imports.isElement(element) then return false end
+            local cAsset = manager:getData(assetType, assetName)
+            if not cAsset or (cAsset.synced.manifestData.assetClumps and (not assetClump or not cAsset.synced.manifestData.assetClumps[assetClump])) then return false end
             syncer.syncedElements[element] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps}
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
