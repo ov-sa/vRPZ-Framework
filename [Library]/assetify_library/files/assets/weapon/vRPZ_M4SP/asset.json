@@ -2,10 +2,10 @@
     "weaponName": "M4 SP",
     "encryptKey": "vStudio - Аниса",
     "streamRange": 100,
-    "assetClumps": [
-        "high",
-        "low"
-    ],
+    "assetClumps": {
+        "high": "high",
+        "low": "low"
+    },
     "shaderMaps": {
         "control": {
             "wp_cr_a_bdy": [
