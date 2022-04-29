@@ -8,14 +8,24 @@
     },
     "shaderMaps": {
         "control": {
-            "wp_cr_a_bdy": [
+            "wp_m4sp_bdy": [
                 {
-                    "bump": "control/wp_cr_a_bdy/bump.jpg"
+                    "bump": "control/wp_m4sp_bdy/bump.jpg"
                 }
             ],
-            "wp_cr_a_scp": [
+            "wp_m4sp_bdy2": [
                 {
-                    "bump": "control/wp_cr_a_scp/bump.jpg"
+                    "bump": "control/wp_m4sp_bdy2/bump.jpg"
+                }
+            ],
+            "wp_m4sp_bdy3": [
+                {
+                    "bump": "control/wp_m4sp_bdy3/bump.jpg"
+                }
+            ],
+            "wp_m4sp_sghtbdy": [
+                {
+                    "bump": "control/wp_m4sp_sghtbdy/bump.jpg"
                 }
             ]
         }
