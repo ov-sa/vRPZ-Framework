@@ -111,7 +111,8 @@ function bone:refresh(boneData)
     parentType = (parentType == "player" and "ped") or parentType
     if not parentType or not bone.ids[parentType] then return false end
     boneData.id = imports.tonumber(boneData.id)
-    if not boneData.id or not bone.ids[parentType][(boneData.id)] or not boneData.position or not boneData.rotation then return false end
+    if not boneData.id or not bone.ids[parentType][(boneData.id)] then return false end
+    boneData.position, boneData.rotation = boneData.position or {}, boneData.rotation or {}
     boneData.position.x, boneData.position.y, boneData.position.z = imports.tonumber(boneData.position.x) or 0, imports.tonumber(boneData.position.y) or 0, imports.tonumber(boneData.position.z) or 0
     boneData.rotation.x, boneData.rotation.y, boneData.rotation.z = imports.tonumber(boneData.rotation.x) or 0, imports.tonumber(boneData.rotation.y) or 0, imports.tonumber(boneData.rotation.z) or 0
     boneData.rotationMatrix = imports.matrix.fromRotation(boneData.rotation.x, boneData.rotation.y, boneData.rotation.z)
