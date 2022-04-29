@@ -95,27 +95,20 @@ if localPlayer then
     function manager:getID(assetType, assetName, assetClump)
         if (assetType == "animation") or (assetType == "sound") then return false end
         if not manager:isLoaded(assetType, assetName) then return false end
-        local packReference = availableAssetPacks[assetType]
-        local assetReference = packReference.rwDatas[assetName]
-        if imports.type(assetReference.unsyncedData) ~= "table" then return false end
-        if assetReference.manifestData.assetClumps then
-            return (assetClump and assetReference.manifestData.assetClumps[assetClump] and assetReference.unsyncedData.assetCache[assetClump] and assetReference.unsyncedData.assetCache[assetClump].cAsset and assetReference.unsyncedData.assetCache[assetClump].cAsset.syncedData and assetReference.unsyncedData.assetCache[assetClump].cAsset.syncedData.modelID) or false
+        local cAsset = manager:getData(assetType, assetName)
+        if imports.type(cAsset.unsyncedData) ~= "table" then return false end
+        if cAsset.manifestData.assetClumps then
+            return (assetClump and cAsset.manifestData.assetClumps[assetClump] and cAsset.unsyncedData.assetCache[assetClump] and cAsset.unsyncedData.assetCache[assetClump].cAsset and cAsset.unsyncedData.assetCache[assetClump].cAsset.syncedData and cAsset.unsyncedData.assetCache[assetClump].cAsset.syncedData.modelID) or false
         else
-            return (assetReference.unsyncedData.assetCache.cAsset and assetReference.unsyncedData.assetCache.cAsset.syncedData and assetReference.unsyncedData.assetCache.cAsset.syncedData.modelID) or false
+            return (cAsset.unsyncedData.assetCache.cAsset and cAsset.unsyncedData.assetCache.cAsset.syncedData and cAsset.unsyncedData.assetCache.cAsset.syncedData.modelID) or false
         end
     end
 
     function manager:isLoaded(assetType, assetName)
         if not syncer.isLibraryLoaded then return false end
         if not assetType or not assetName then return false end
-        local packReference = availableAssetPacks[assetType]
-        if packReference and packReference.rwDatas then
-            local assetReference = packReference.rwDatas[assetName]
-            if assetReference and assetReference.unsyncedData then
-                return true
-            end
-        end
-        return false
+        local cAsset, isLoaded = manager:getData(assetType, assetName)
+        return (cAsset and isLoaded and true) or false
     end
 
     function manager:load(assetType, assetName)
