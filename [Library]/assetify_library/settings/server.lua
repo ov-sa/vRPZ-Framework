@@ -18,7 +18,6 @@ availableAssetPacks = {
         autoLoad = true
     },
 
-    --[[
     ["sound"] = {
         assetType = "sound",
         autoLoad = true
@@ -65,5 +64,4 @@ availableAssetPacks = {
         assetBase = 1337,
         assetTransparency = false
     }
-    ]]
 }
