@@ -418,8 +418,6 @@ else
                                 assetManifestData.assetDeps = assetDeps
                             end
                         end
-                        --TODO: REMOVE LATER..
-                        print("Asset: "..assetName..", Size: "..cAssetPack.rwDatas[assetName].synced.assetSize)
                     end
                 end
                 assetPack.assetPack = cAssetPack
