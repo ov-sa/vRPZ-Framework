@@ -68,50 +68,44 @@ if localPlayer then
         return cShader
     end
 
-    function shader:createTex(shaderMaps, rwCache, encryptKey, isDependency)
+    function shader:createTex(shaderMaps, rwCache, encryptKey)
         if not shaderMaps or not rwCache then return false end
+        rwCache.shader = {}
         rwCache.texture = {}
-        if not isDependency then
-            rwCache.shader = {}
-            for i, j in imports.pairs(shaderMaps) do
-                if i == "clump" then
-                    for k, v in imports.pairs(j) do
-                        for m = 1, #v, 1 do
-                            local n = v[m]
-                            if n.clump then
-                                rwCache.texture[(n.clump)] = shader:loadTex(n.clump, encryptKey)
-                            end
-                            if n.bump then
-                                rwCache.texture[(n.bump)] = shader:loadTex(n.bump, encryptKey)
-                            end
+        for i, j in imports.pairs(shaderMaps) do
+            if i == "clump" then
+                for k, v in imports.pairs(j) do
+                    for m = 1, #v, 1 do
+                        local n = v[m]
+                        if n.clump then
+                            rwCache.texture[(n.clump)] = shader:loadTex(n.clump, encryptKey)
+                        end
+                        if n.bump then
+                            rwCache.texture[(n.bump)] = shader:loadTex(n.bump, encryptKey)
                         end
                     end
-                elseif i == "control" then
-                    for k, v in imports.pairs(j) do
-                        for m = 1, #v, 1 do
-                            local n = v[m]
-                            if n.control then
-                                rwCache.texture[(n.control)] = shader:loadTex(n.control, encryptKey)
-                            end
-                            if n.bump then
-                                rwCache.texture[(n.bump)] = shader:loadTex(n.bump, encryptKey)
-                            end
-                            for x = 1, #shader.defaultData.shaderChannels, 1 do
-                                local y = n[(shader.defaultData.shaderChannels[x].index)]
-                                if y and y.map then
-                                    rwCache.texture[(y.map)] = shader:loadTex(y.map, encryptKey)
-                                    if y.bump then
-                                        rwCache.texture[(y.bump)] = shader:loadTex(y.bump, encryptKey)
-                                    end
+                end
+            elseif i == "control" then
+                for k, v in imports.pairs(j) do
+                    for m = 1, #v, 1 do
+                        local n = v[m]
+                        if n.control then
+                            rwCache.texture[(n.control)] = shader:loadTex(n.control, encryptKey)
+                        end
+                        if n.bump then
+                            rwCache.texture[(n.bump)] = shader:loadTex(n.bump, encryptKey)
+                        end
+                        for x = 1, #shader.defaultData.shaderChannels, 1 do
+                            local y = n[(shader.defaultData.shaderChannels[x].index)]
+                            if y and y.map then
+                                rwCache.texture[(y.map)] = shader:loadTex(y.map, encryptKey)
+                                if y.bump then
+                                    rwCache.texture[(y.bump)] = shader:loadTex(y.bump, encryptKey)
                                 end
                             end
                         end
                     end
                 end
-            end
-        else
-            for i, j in imports.pairs(shaderMaps) do
-                rwCache.texture[i] = shader:loadTex(v, encryptKey)
             end
         end
         return true

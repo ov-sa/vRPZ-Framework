@@ -133,9 +133,7 @@ if localPlayer then
             }
         }
         shader:createTex(cAsset.manifestData.shaderMaps, cAsset.unsyncedData.rwCache.map, cAsset.manifestData.encryptKey)
-        if cAsset.manifestData.assetDeps and cAsset.manifestData.assetDeps.texture then
-            shader:createTex(cAsset.manifestData.assetDeps.texture, cAsset.unsyncedData.rwCache.dep, cAsset.manifestData.encryptKey, true)
-        end
+        asset:createDep(cAsset.manifestData.assetDeps, cAsset.unsyncedData.rwCache.dep, cAsset.manifestData.encryptKey, true)
         if cAsset.manifestData.shaderMaps and cAsset.manifestData.shaderMaps.control then
             for i, j in imports.pairs(cAsset.manifestData.shaderMaps.control) do
                 local shaderTextures, shaderInputs = {}, {}
@@ -273,7 +271,7 @@ if localPlayer then
                     thread.pause()
                 end
                 shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.map)
-                shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.dep.texture)
+                asset:clearAssetBuffer(cAsset.unsyncedData.rwCache.dep)
                 cAsset.unsyncedData = nil
                 imports.collectgarbage()
             end):resume({
@@ -296,7 +294,7 @@ if localPlayer then
                     thread.pause()
                 end
                 shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.map)
-                shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.dep.texture)
+                asset:clearAssetBuffer(cAsset.unsyncedData.rwCache.dep)
                 cAsset.unsyncedData = nil
                 imports.collectgarbage()
             end):resume({
@@ -313,7 +311,7 @@ if localPlayer then
                     thread.pause()
                 end
                 shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.map)
-                shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.dep.texture)
+                asset:clearAssetBuffer(cAsset.unsyncedData.rwCache.dep)
                 cAsset.unsyncedData = nil
                 imports.collectgarbage()
             end):resume({
@@ -325,7 +323,7 @@ if localPlayer then
             if cAsset.cAsset then
                 cAsset.cAsset:destroy(cAsset.unsyncedData.rwCache)
                 shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.map)
-                shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.dep.texture)
+                asset:clearAssetBuffer(cAsset.unsyncedData.rwCache.dep)
                 cAsset.unsyncedData = nil
                 imports.collectgarbage()
                 return true

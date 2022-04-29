@@ -81,11 +81,36 @@ if localPlayer then
         return cAsset
     end
     
+    function asset:createDep(assetDeps, rwCache, encryptKey)
+        if not assetDeps or not rwCache then return false end
+        for i, j in imports.pairs(assetDeps) do
+            rwCache[i] = {}
+            for k, v in imports.pairs(j) do
+                if i == "texture" then
+                    rwCache[i][k] = shader:loadTex(v, encryptKey)
+                else
+                    rwCache[i][k] = imports.decodeString("tea", imports.file.read(v))
+                end
+            end
+        end
+        return true
+    end
+
     function asset:destroy(...)
         if not self or (self == asset) then return false end
         return self:unload(...)
     end
-    
+
+    function asset:clearAssetBuffer(rwCache)
+        if not rwCache then return false end
+        for i, j in imports.pairs(rwCache) do
+            if j and imports.isElement(j) then
+                imports.destroyElement(j)
+            end
+        end
+        return true
+    end
+
     function asset:load(assetType, assetName, assetPack, rwCache, assetManifest, assetData, rwPaths, callback)
         if not self or (self == asset) then return false end
         if not assetType or not assetName or not assetPack or not assetPack.assetType or not rwCache or not assetManifest or not assetData or not rwPaths then return false end
