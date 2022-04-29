@@ -1,6 +1,7 @@
 {
-    "encryptKey": "vStudio - Аниса",
     "weaponName": "M4 SP",
+    "encryptKey": "vStudio - Аниса",
+    "streamRange": 100,
     "weaponOffsets": {
         "bone": {
             "position": {"x": -0.0225, "y": 0, "z": 0.175},
@@ -8,7 +9,6 @@
         },
         "ADS": {"x": -0.4, "y": 0.054, "z": 0.122}
     },
-    "streamRange": 100,
     "assetClumps": {
         "high": "high",
         "low": "low"
