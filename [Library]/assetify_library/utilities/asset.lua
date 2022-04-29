@@ -231,7 +231,7 @@ else
             if builtFileData then
                 filePointer.synced.assetSize.file[filePath] = builtFileSize
                 filePointer.synced.assetSize.total = filePointer.synced.assetSize.total + filePointer.synced.assetSize.file[filePath]
-                syncer.librarySize = syncer.librarySize + filePointer.synced.assetSize.file[filePath]
+                syncer.libraryBandwidth = syncer.libraryBandwidth + filePointer.synced.assetSize.file[filePath]
                 filePointer.unSynced.fileData[filePath] = (encryptKey and imports.encodeString("tea", builtFileData, {key = encryptKey})) or builtFileData
                 filePointer.unSynced.fileHash[filePath] = imports.md5(filePointer.unSynced.fileData[filePath])
             end

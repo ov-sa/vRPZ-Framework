@@ -14,7 +14,8 @@
 
 local imports = {
     isElement = isElement,
-    triggerEvent = triggerEvent
+    triggerEvent = triggerEvent,
+    math = math
 }
 
 
@@ -27,17 +28,19 @@ function isLibraryLoaded()
 end
 
 function getLibraryProgress(assetType, assetName)
-    local cDownloaded, cTotal = nil, nil
+    local cDownloaded, cBandwidth = nil, nil
     if assetType and assetName then
         if availableAssetPacks[assetType] and availableAssetPacks[assetType].rwDatas.[assetName] then
-            cTotal = availableAssetPacks[assetType].rwDatas.[assetName].assetSize.total
-            cDownloaded = (syncer.scheduledAssets[assetType] and syncer.scheduledAssets[assetType][assetName] and syncer.scheduledAssets[assetType][assetName].assetSize) or cTotal
+            cBandwidth = availableAssetPacks[assetType].rwDatas.[assetName].assetSize.total
+            cDownloaded = (syncer.scheduledAssets[assetType] and syncer.scheduledAssets[assetType][assetName] and syncer.scheduledAssets[assetType][assetName].assetSize) or cBandwidth
         end
     else
-
+        cBandwidth = syncer.libraryBandwidth
+        cDownloaded = syncer.__libraryBandwidth or 0
     end
-    if cDownloaded and cTotal then
-        return cDownloaded, cTotal, (cDownloaded/cTotal)*100
+    if cDownloaded and cBandwidth then
+        cDownloaded = imports.math.min(cDownloaded, cBandwidth)
+        return cDownloaded, cBandwidth, (cDownloaded/cBandwidth)*100
     end
     return false
 end

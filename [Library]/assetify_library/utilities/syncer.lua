@@ -45,7 +45,7 @@ syncer = {
     isLibraryLoaded = false,
     libraryName = imports.getResourceName(resource),
     librarySerial = imports.md5(imports.getResourceName(resource)..":"..imports.tostring(resource)..":"..imports.toJSON(imports.getRealTime())),
-    librarySize = 0
+    libraryBandwidth = 0
 }
 syncer.__index = syncer
 
@@ -81,6 +81,11 @@ if localPlayer then
         imports.triggerServerEvent("Assetify:onRequestElementModels", localPlayer)
     end)
 
+    imports.addEvent("Assetify:onRecieveBandwidth", true)
+    imports.addEventHandler("Assetify:onRecieveBandwidth", root, function(libraryBandwidth)
+        syncer.libraryBandwidth = libraryBandwidth
+    end)
+
     imports.addEvent("Assetify:onRecieveHash", true)
     imports.addEventHandler("Assetify:onRecieveHash", root, function(assetType, assetName, hashes)
         if not syncer.scheduledAssets[assetType] then syncer.scheduledAssets[assetType] = {} end
@@ -95,7 +100,7 @@ if localPlayer then
                     fetchFiles[i] = true
                 else
                     syncer.scheduledAssets[assetType][assetName].assetSize = syncer.scheduledAssets[assetType][assetName].assetSize + availableAssetPacks[assetType].rwDatas.[assetName].assetSize.file[i]
-                    syncer.librarySize = syncer.librarySize + availableAssetPacks[assetType].rwDatas.[assetName].assetSize.file[i]
+                    syncer.__libraryBandwidth = (syncer.__libraryBandwidth or 0) + availableAssetPacks[assetType].rwDatas.[assetName].assetSize.file[i]
                 end
                 fileData = nil
                 thread.pause()
@@ -132,7 +137,7 @@ if localPlayer then
     imports.addEventHandler("Assetify:onRecieveContent", root, function(assetType, assetName, contentPath, ...)
         if assetType and assetName then
             syncer.scheduledAssets[assetType][assetName].assetSize = syncer.scheduledAssets[assetType][assetName].assetSize + availableAssetPacks[assetType].rwDatas.[assetName].assetSize.file[contentPath]
-            syncer.librarySize = syncer.librarySize + availableAssetPacks[assetType].rwDatas.[assetName].assetSize.file[contentPath]
+            syncer.__libraryBandwidth = (syncer.__libraryBandwidth or 0) + availableAssetPacks[assetType].rwDatas.[assetName].assetSize.file[contentPath]
         end
         imports.file.write(contentPath, ...)
         imports.collectgarbage()
@@ -355,6 +360,7 @@ else
         if not assetDatas then
             thread:create(function(cThread)
                 local isLibraryVoid = true
+                imports.triggerClientEvent(player, "Assetify:onRecieveBandwidth", player, syncer.libraryBandwidth)
                 for i, j in imports.pairs(availableAssetPacks) do
                     for k, v in imports.pairs(j.assetPack) do
                         isLibraryVoid = false
