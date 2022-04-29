@@ -380,7 +380,9 @@ else
                                 local assetDeps = {}
                                 for i, j in imports.pairs(assetManifestData.assetDeps) do
                                     if j and (imports.type(j) == "table") then
+                                        assetDeps[i] = {}
                                         for k, v in imports.pairs(j) do
+                                            assetDeps[i][k] = v
                                             asset:buildFile(assetPath.."dep/"..v, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
                                             thread.pause()
                                         end
