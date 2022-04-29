@@ -370,11 +370,10 @@ if localPlayer then
     end
 
     function manager:playSound(assetName, soundCategory, soundIndex, isScoped, ...)
-        if not syncer.isLibraryLoaded then return false end
-        if not manager:isLoaded("sound", assetName) then return false end
-        local assetReference = availableAssetPacks["sound"].rwDatas[assetName]
-        if not assetReference.manifestData.assetSounds or not assetReference.unsyncedData.assetCache[soundCategory] or not assetReference.unsyncedData.assetCache[soundCategory][soundIndex] or not assetReference.unsyncedData.assetCache[soundCategory][soundIndex].cAsset then return false end
-        local cSound = imports.playSound(assetReference.unsyncedData.rwCache.sound[(assetReference.unsyncedData.assetCache[soundCategory][soundIndex].cAsset.rwPaths.sound)], ...)
+        local cAsset, isLoaded = manager:getData("sound", assetName)
+        if not cAsset or not isLoaded then return false end
+        if not cAsset.manifestData.assetSounds or not cAsset.unsyncedData.assetCache[soundCategory] or not cAsset.unsyncedData.assetCache[soundCategory][soundIndex] or not cAsset.unsyncedData.assetCache[soundCategory][soundIndex].cAsset then return false end
+        local cSound = imports.playSound(cAsset.unsyncedData.rwCache.sound[(cAsset.unsyncedData.assetCache[soundCategory][soundIndex].cAsset.rwPaths.sound)], ...)
         if cSound and isScoped and sourceResource and (sourceResource ~= resource) then
             manager.buffer.instance[cSound] = sourceResource
             manager.buffer.scoped[sourceResource] = manager.buffer.scoped[sourceResource] or {}
@@ -384,11 +383,10 @@ if localPlayer then
     end
 
     function manager:playSound3D(assetName, soundCategory, soundIndex, isScoped, ...)
-        if not syncer.isLibraryLoaded then return false end
-        if not manager:isLoaded("sound", assetName) then return false end
-        local assetReference = availableAssetPacks["sound"].rwDatas[assetName]
-        if not assetReference.manifestData.assetSounds or not assetReference.unsyncedData.assetCache[soundCategory] or not assetReference.unsyncedData.assetCache[soundCategory][soundIndex] or not assetReference.unsyncedData.assetCache[soundCategory][soundIndex].cAsset then return false end
-        local cSound = imports.playSound3D(assetReference.unsyncedData.rwCache.sound[(assetReference.unsyncedData.assetCache[soundCategory][soundIndex].cAsset.rwPaths.sound)], ...)
+        local cAsset, isLoaded = manager:getData("sound", assetName)
+        if not cAsset or not isLoaded then return false end
+        if not cAsset.manifestData.assetSounds or not cAsset.unsyncedData.assetCache[soundCategory] or not cAsset.unsyncedData.assetCache[soundCategory][soundIndex] or not cAsset.unsyncedData.assetCache[soundCategory][soundIndex].cAsset then return false end
+        local cSound = imports.playSound3D(cAsset.unsyncedData.rwCache.sound[(cAsset.unsyncedData.assetCache[soundCategory][soundIndex].cAsset.rwPaths.sound)], ...)
         if cSound and isScoped and sourceResource and (sourceResource ~= resource) then
             manager.buffer.instance[cSound] = sourceResource
             manager.buffer.scoped[sourceResource] = manager.buffer.scoped[sourceResource] or {}
