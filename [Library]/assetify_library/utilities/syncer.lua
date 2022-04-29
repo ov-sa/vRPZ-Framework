@@ -44,7 +44,8 @@ local imports = {
 syncer = {
     isLibraryLoaded = false,
     libraryName = imports.getResourceName(resource),
-    librarySerial = imports.md5(imports.getResourceName(resource)..":"..imports.tostring(resource)..":"..imports.toJSON(imports.getRealTime()))
+    librarySerial = imports.md5(imports.getResourceName(resource)..":"..imports.tostring(resource)..":"..imports.toJSON(imports.getRealTime())),
+    librarySize = 0
 }
 syncer.__index = syncer
 

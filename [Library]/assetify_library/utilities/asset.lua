@@ -227,11 +227,12 @@ else
     function asset:buildFile(filePath, filePointer, encryptKey)
         if not filePath or not filePointer then return false end
         if not filePointer[filePath] then
-            local builtFileData = imports.file.read(filePath)
+            local builtFileData, builtFileSize = imports.file.read(filePath)
             if builtFileData then
                 filePointer[filePath] = true
                 filePointer.fileData[filePath] = (encryptKey and imports.encodeString("tea", builtFileData, {key = encryptKey})) or builtFileData
                 filePointer.fileHash[filePath] = imports.md5(filePointer.fileData[filePath])
+                syncer.librarySize = syncer.librarySize + builtFileSize
             end
         end
         return true
