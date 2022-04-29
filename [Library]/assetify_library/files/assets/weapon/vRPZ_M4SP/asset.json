@@ -36,10 +36,10 @@
             ]
         }
     },
-    "assetDeps": [
+    "assetDeps": {
         "texture": {
             "inventory": "icon/inventory.png",
             "hud": "icon/hud.png"
         }
-    ]
+    }
 }
