@@ -4,8 +4,7 @@
     "streamRange": 100,
     "weaponOffsets": {
         "bone": {
-            "position": {"x": -0.0225, "y": 0, "z": 0.175},
-            "rotation": {"x": 0, "y": 0, "z": 0}
+            "position": {"x": -0.0225, "y": 0, "z": 0.175}
         },
         "ADS": {"x": -0.4, "y": 0.054, "z": 0.122}
     },
