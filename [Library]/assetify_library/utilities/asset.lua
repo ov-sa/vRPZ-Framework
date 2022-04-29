@@ -389,6 +389,7 @@ else
                                     end
                                     thread.pause()
                                 end
+                                assetManifestData.assetDeps = assetDeps
                             end
                         end
                     end
