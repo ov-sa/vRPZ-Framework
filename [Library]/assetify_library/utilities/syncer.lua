@@ -383,7 +383,7 @@ else
                     thread.pause()
                 end
                 for i, j in imports.pairs(assetDatas.hashes) do
-                    syncer:syncContent(player, i, assetReference.unSynced.fileData[i])
+                    syncer:syncContent(player, assetDatas.type, assetDatas.name, i, assetReference.unSynced.fileData[i])
                     thread.pause()
                 end
                 syncer:syncState(player, assetDatas.type, assetDatas.name)
