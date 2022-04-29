@@ -71,7 +71,7 @@ function onBundleLibrary()
 
                 assetify.getProgress = function(...)
                     return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getLibraryProgress", ...)
-                end,
+                end
 
                 assetify.getAssetID = function(...)
                     return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getAssetID", ...)
