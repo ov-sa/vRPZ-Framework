@@ -99,8 +99,8 @@ if localPlayer then
                 if not fileData or (imports.md5(fileData) ~= j) then
                     fetchFiles[i] = true
                 else
-                    syncer.scheduledAssets[assetType][assetName].assetSize = syncer.scheduledAssets[assetType][assetName].assetSize + availableAssetPacks[assetType].rwDatas.[assetName].assetSize.file[i]
-                    syncer.__libraryBandwidth = (syncer.__libraryBandwidth or 0) + availableAssetPacks[assetType].rwDatas.[assetName].assetSize.file[i]
+                    syncer.scheduledAssets[assetType][assetName].assetSize = syncer.scheduledAssets[assetType][assetName].assetSize + availableAssetPacks[assetType].rwDatas[assetName].assetSize.file[i]
+                    syncer.__libraryBandwidth = (syncer.__libraryBandwidth or 0) + availableAssetPacks[assetType].rwDatas[assetName].assetSize.file[i]
                 end
                 fileData = nil
                 thread.pause()
@@ -136,8 +136,8 @@ if localPlayer then
     imports.addEvent("Assetify:onRecieveContent", true)
     imports.addEventHandler("Assetify:onRecieveContent", root, function(assetType, assetName, contentPath, ...)
         if assetType and assetName then
-            syncer.scheduledAssets[assetType][assetName].assetSize = syncer.scheduledAssets[assetType][assetName].assetSize + availableAssetPacks[assetType].rwDatas.[assetName].assetSize.file[contentPath]
-            syncer.__libraryBandwidth = (syncer.__libraryBandwidth or 0) + availableAssetPacks[assetType].rwDatas.[assetName].assetSize.file[contentPath]
+            syncer.scheduledAssets[assetType][assetName].assetSize = syncer.scheduledAssets[assetType][assetName].assetSize + availableAssetPacks[assetType].rwDatas[assetName].assetSize.file[contentPath]
+            syncer.__libraryBandwidth = (syncer.__libraryBandwidth or 0) + availableAssetPacks[assetType].rwDatas[assetName].assetSize.file[contentPath]
         end
         imports.file.write(contentPath, ...)
         imports.collectgarbage()
