@@ -108,6 +108,13 @@ if localPlayer then
         return (cAsset and isLoaded and true) or false
     end
 
+    function manager:fetchDep(assetType, assetName, depType, depIndex)
+        local cAsset, isLoaded = manager:getData(assetType, assetName)
+        if not cAsset or not isLoaded then return false end
+        if not cAsset.manifestData.assetDeps or not cAsset.manifestData.assetDeps[depType] or not cAsset.manifestData.assetDeps[depType][depIndex] then return false end
+        return cAsset.manifestData.assetDeps[depType][depIndex]
+    end
+
     function manager:load(assetType, assetName)
         local cAsset, isLoaded = manager:getData(assetType, assetName)
         if not cAsset or isLoaded then return false end
