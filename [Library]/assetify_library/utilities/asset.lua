@@ -377,8 +377,14 @@ else
                                 asset:buildShader(assetPath, assetManifestData.shaderMaps, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
                             end
                             if assetManifestData.assetDeps then
+                                local assetDeps = {}
                                 for i, j in imports.pairs(assetManifestData.assetDeps) do
-                                    asset:buildFile(assetPath.."dep/"..j, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                    if j and (imports.type(j) == "table") then
+                                        for k, v in imports.pairs(j) do
+                                            asset:buildFile(assetPath.."dep/"..v, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                            thread.pause()
+                                        end
+                                    end
                                     thread.pause()
                                 end
                             end
