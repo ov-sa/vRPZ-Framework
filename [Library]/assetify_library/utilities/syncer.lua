@@ -94,13 +94,13 @@ if localPlayer then
                 if not fileData or (imports.md5(fileData) ~= j) then
                     fetchFiles[i] = true
                 else
-                    syncer.scheduledAssets[assetType][assetName].assetize = syncer.scheduledAssets[assetType][assetName].assetize + (availableAssetPacks[assetType].rwDatas.assetSize.fileSize[i])
+                    syncer.scheduledAssets[assetType][assetName].assetize = syncer.scheduledAssets[assetType][assetName].assetize + (availableAssetPacks[assetType].rwDatas.assetSize.file[i])
                 end
                 fileData = nil
                 thread.pause()
             end
             --TODO: CONNECT WITH SYNCER LATER..
-            print("ALREADY DOWNLOADED ASSET SIZE: "..syncer.scheduledAssets[assetType][assetName])
+            print("ALREADY DOWNLOADED ASSET SIZE: "..syncer.scheduledAssets[assetType][assetName].assetSize)
             imports.triggerLatentServerEvent("Assetify:onRecieveHash", downloadSettings.speed, false, localPlayer, assetType, assetName, fetchFiles)
             imports.collectgarbage()
         end):resume({
