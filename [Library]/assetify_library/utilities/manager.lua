@@ -105,8 +105,6 @@ if localPlayer then
     end
 
     function manager:isLoaded(assetType, assetName)
-        if not syncer.isLibraryLoaded then return false end
-        if not assetType or not assetName then return false end
         local cAsset, isLoaded = manager:getData(assetType, assetName)
         return (cAsset and isLoaded and true) or false
     end
