@@ -36,5 +36,8 @@
                 }
             ]
         }
-    }
+    },
+    "assetDeps": [
+        "icon": "icon.png"
+    ]
 }
