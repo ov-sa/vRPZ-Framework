@@ -69,7 +69,7 @@ if localPlayer then
         return true
     end
 
-    function manager:getData(assetType, assetName)
+    function manager:getData(assetType, assetName, isInternal)
         if not syncer.isLibraryLoaded then return false end
         if not assetType or not assetName then return false end
         if availableAssetPacks[assetType] then
@@ -77,12 +77,12 @@ if localPlayer then
             if assetReference then
                 local isExternalResource = sourceResource and (sourceResource ~= resource)
                 local unsyncedData = assetReference.unsyncedData
-                if isExternalResource then
+                if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
                     assetReference = imports.table.clone(assetReference, true)
                     assetReference.manifestData.encryptKey = nil
                     assetReference.unsyncedData = nil
                 end
-                if (assetType == "animation") or (assetType == "sound") or (assetType == "scene") then
+                if assetReference.manifestData.assetClumps or (assetType == "animation") or (assetType == "sound") or (assetType == "scene") then
                     return assetReference, (unsyncedData and true) or false
                 else
                     return assetReference, (unsyncedData and unsyncedData.assetCache.cAsset and unsyncedData.assetCache.cAsset.syncedData) or false
@@ -109,7 +109,7 @@ if localPlayer then
     end
 
     function manager:getDep(assetType, assetName, depType, depIndex)
-        local cAsset, isLoaded = manager:getData(assetType, assetName)
+        local cAsset, isLoaded = manager:getData(assetType, assetName, syncer.librarySerial)
         if not cAsset or not isLoaded then return false end
         return (cAsset.manifestData.assetDeps and cAsset.unsyncedData.rwCache.dep[depType] and cAsset.unsyncedData.rwCache.dep[depType][depIndex]) or false
     end

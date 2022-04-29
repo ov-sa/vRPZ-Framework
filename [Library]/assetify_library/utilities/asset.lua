@@ -407,8 +407,9 @@ else
                                     if j and (imports.type(j) == "table") then
                                         assetDeps[i] = {}
                                         for k, v in imports.pairs(j) do
-                                            assetDeps[i][k] = v
-                                            asset:buildFile(assetPath.."dep/"..v, cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
+                                            j[k] = assetPath.."dep/"..j[k]
+                                            assetDeps[i][k] = j[k]
+                                            asset:buildFile(assetDeps[i][k], cAssetPack.rwDatas[assetReference].unSynced, assetManifestData.encryptKey)
                                             thread.pause()
                                         end
                                     end

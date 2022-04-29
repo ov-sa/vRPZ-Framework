@@ -16,7 +16,10 @@ local imports = {
     type = type,
     pairs = pairs,
     md5 = md5,
+    tostring = tostring,
     isElement = isElement,
+    getRealTime = getRealTime,
+    getResourceName = getResourceName,
     getElementsByType = getElementsByType,
     setElementModel = setElementModel,
     collectgarbage = collectgarbage,
@@ -29,6 +32,7 @@ local imports = {
     triggerLatentClientEvent = triggerLatentClientEvent,
     triggerLatentServerEvent = triggerLatentServerEvent,
     loadAsset = loadAsset,
+    toJSON = toJSON,
     file = file
 }
 
@@ -37,10 +41,13 @@ local imports = {
 --[[ Class: Syncer ]]--
 -----------------------
 
-syncer = {}
+syncer = {
+    isLibraryLoaded = false,
+    libraryName = imports.getResourceName(resource),
+    librarySerial = imports.md5(imports.getResourceName(resource)..":"..imports.tostring(resource)..":"..imports.toJSON(imports.getRealTime()))
+}
 syncer.__index = syncer
 
-syncer.isLibraryLoaded = false
 if localPlayer then
     syncer.scheduledAssets = {}
     availableAssetPacks = {}
