@@ -266,6 +266,7 @@ if localPlayer then
                     thread.pause()
                 end
                 shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.map)
+                shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.dep.texture)
                 cAsset.unsyncedData = nil
                 imports.collectgarbage()
             end):resume({
@@ -288,6 +289,7 @@ if localPlayer then
                     thread.pause()
                 end
                 shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.map)
+                shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.dep.texture)
                 cAsset.unsyncedData = nil
                 imports.collectgarbage()
             end):resume({
@@ -304,6 +306,7 @@ if localPlayer then
                     thread.pause()
                 end
                 shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.map)
+                shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.dep.texture)
                 cAsset.unsyncedData = nil
                 imports.collectgarbage()
             end):resume({
@@ -315,6 +318,7 @@ if localPlayer then
             if cAsset.cAsset then
                 cAsset.cAsset:destroy(cAsset.unsyncedData.rwCache)
                 shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.map)
+                shader:clearAssetBuffer(cAsset.unsyncedData.rwCache.dep.texture)
                 cAsset.unsyncedData = nil
                 imports.collectgarbage()
                 return true
