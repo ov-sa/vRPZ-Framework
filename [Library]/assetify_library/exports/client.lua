@@ -39,8 +39,8 @@ function isAssetLoaded(...)
     return manager:isLoaded(...)
 end
 
-function fetchAssetDep(...)
-    return manager:fetchDep(...)
+function getAssetDep(...)
+    return manager:getDep(...)
 end
 
 function loadAsset(assetType, assetName, ...)

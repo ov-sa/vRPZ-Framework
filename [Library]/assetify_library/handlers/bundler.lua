@@ -82,6 +82,10 @@ function onBundleLibrary()
                     return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isAssetLoaded", ...)
                 end
 
+                assetify.getAssetDep = function(...)
+                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getAssetDep", ...)
+                end
+
                 assetify.loadAsset = function(...)
                     return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "loadAsset", ...)
                 end
@@ -96,10 +100,6 @@ function onBundleLibrary()
 
                 assetify.unloadAnim = function(...)
                     return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "unloadAnim", ...)
-                end
-
-                assetify.fetchAssetDep = function(...)
-                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "fetchAssetDep", ...)
                 end
 
                 assetify.playSound = function(...)
