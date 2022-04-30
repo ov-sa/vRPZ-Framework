@@ -95,7 +95,7 @@ if localPlayer then
 
     function manager:getID(assetType, assetName, assetClump)
         if (assetType == "animation") or (assetType == "sound") then return false end
-        local cAsset, isLoaded = manager:getData(assetType, assetName)
+        local cAsset, isLoaded = manager:getData(assetType, assetName, syncer.librarySerial)
         if not cAsset or not isLoaded or imports.type(cAsset.unsyncedData) ~= "table" then return false end
         if cAsset.manifestData.assetClumps then
             return (assetClump and cAsset.manifestData.assetClumps[assetClump] and cAsset.unsyncedData.assetCache[assetClump] and cAsset.unsyncedData.assetCache[assetClump].cAsset and cAsset.unsyncedData.assetCache[assetClump].cAsset.syncedData and cAsset.unsyncedData.assetCache[assetClump].cAsset.syncedData.modelID) or false
@@ -372,7 +372,7 @@ if localPlayer then
     end
 
     function manager:playSound(assetName, soundCategory, soundIndex, soundVolume, isScoped, ...)
-        local cAsset, isLoaded = manager:getData("sound", assetName)
+        local cAsset, isLoaded = manager:getData("sound", assetName, syncer.librarySerial)
         if not cAsset or not isLoaded then return false end
         if not cAsset.manifestData.assetSounds or not cAsset.unsyncedData.assetCache[soundCategory] or not cAsset.unsyncedData.assetCache[soundCategory][soundIndex] or not cAsset.unsyncedData.assetCache[soundCategory][soundIndex].cAsset then return false end
         local cSound = imports.playSound(cAsset.unsyncedData.rwCache.sound[(cAsset.unsyncedData.assetCache[soundCategory][soundIndex].cAsset.rwPaths.sound)], ...)
@@ -388,7 +388,7 @@ if localPlayer then
     end
 
     function manager:playSound3D(assetName, soundCategory, soundIndex, soundVolume, isScoped, ...)
-        local cAsset, isLoaded = manager:getData("sound", assetName)
+        local cAsset, isLoaded = manager:getData("sound", assetName, syncer.librarySerial)
         if not cAsset or not isLoaded then return false end
         if not cAsset.manifestData.assetSounds or not cAsset.unsyncedData.assetCache[soundCategory] or not cAsset.unsyncedData.assetCache[soundCategory][soundIndex] or not cAsset.unsyncedData.assetCache[soundCategory][soundIndex].cAsset then return false end
         local cSound = imports.playSound3D(cAsset.unsyncedData.rwCache.sound[(cAsset.unsyncedData.assetCache[soundCategory][soundIndex].cAsset.rwPaths.sound)], ...)
