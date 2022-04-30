@@ -29,8 +29,7 @@ local imports = {
     getElementInterior = getElementInterior,
     setElementDimension = setElementDimension,
     setElementInterior = setElementInterior,
-    getElementVelocity = getElementVelocity,
-    Vector3 = Vector3
+    getElementVelocity = getElementVelocity
 }
 
 
