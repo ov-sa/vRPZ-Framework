@@ -356,29 +356,43 @@ else
         return true
     end
 
-    function syncer:syncPack(player, assetDatas)
+    function syncer:syncPack(player, assetDatas, syncModules)
         if not assetDatas then
             thread:create(function(cThread)
-                local isLibraryVoid = true
                 imports.triggerClientEvent(player, "Assetify:onRecieveBandwidth", player, syncer.libraryBandwidth)
-                for i, j in imports.pairs(availableAssetPacks) do
-                    for k, v in imports.pairs(j.assetPack) do
-                        isLibraryVoid = false
-                        if k ~= "rwDatas" then
-                            syncer:syncData(player, i, k, nil, v)
-                        else
-                            for m, n in imports.pairs(v) do
-                                syncer:syncData(player, i, "rwDatas", {m, "assetSize"}, n.synced.assetSize)
-                                syncer:syncHash(player, i, m, n.unSynced.fileHash)
+                if syncModules then
+                    local isModuleVoid = true
+                    if availableAssetPacks["module"] then
+                        for i, j in imports.pairs(availableAssetPacks["module"]) do
+                            isModuleVoid = false
+                            --TODO: SYNC THEM ALL HERE..
+                            print("TRYNNA SYNC")
+                        end
+                    end
+                    if isModuleVoid then
+                        imports.triggerClientEvent(player, "onAssetifyModuleLoad", player)
+                        syncer:syncPack(player, _)
+                    end
+                else
+                    local isLibraryVoid = true
+                    for i, j in imports.pairs(availableAssetPacks) do
+                        if i ~= "module" then
+                            for k, v in imports.pairs(j.assetPack) do
+                                isLibraryVoid = false
+                                if k ~= "rwDatas" then
+                                    syncer:syncData(player, i, k, nil, v)
+                                else
+                                    for m, n in imports.pairs(v) do
+                                        syncer:syncData(player, i, "rwDatas", {m, "assetSize"}, n.synced.assetSize)
+                                        syncer:syncHash(player, i, m, n.unSynced.fileHash)
+                                        thread.pause()
+                                    end
+                                end
                                 thread.pause()
                             end
                         end
-                        thread.pause()
                     end
-                end
-                if isLibraryVoid then
-                    imports.triggerClientEvent(player, "onAssetifyModuleLoad", player)
-                    imports.triggerClientEvent(player, "onAssetifyLoad", resourceRoot)
+                    if isLibraryVoid then imports.triggerClientEvent(player, "onAssetifyLoad", resourceRoot) end
                 end
             end):resume({
                 executions = downloadSettings.syncRate,
@@ -440,7 +454,7 @@ else
         if imports.getResourceRootElement(resourceElement) == resourceRoot then
             if syncer.isLibraryLoaded then
                 syncer.loadedClients[source] = true
-                syncer:syncPack(source)
+                syncer:syncPack(source, _, true)
             else
                 syncer.scheduledClients[source] = true
             end
