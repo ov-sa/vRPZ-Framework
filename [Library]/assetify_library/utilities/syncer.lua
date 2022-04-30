@@ -54,6 +54,7 @@ if localPlayer then
     availableAssetPacks = {}
     imports.addEvent("onAssetifyLoad", true)
     imports.addEvent("onAssetifyUnLoad", false)
+    imports.addEvent("onAssetifyModuleLoad", true)
     imports.addEvent("onAssetLoad", false)
     imports.addEvent("onAssetUnLoad", false)
 
@@ -164,8 +165,21 @@ if localPlayer then
             end
             if isSyncDone then
                 if assetType == "module" then
-                    print("LOADED ALL MODULE")
-                    --TODO: TRIGGER HERE..
+                    imports.triggerServerEvent("Assetify:onRequestAssets", localPlayer)
+                    thread:create(function(cThread)
+                        if availableAssetPacks["module"].autoLoad and availableAssetPacks["module"].rwDatas then
+                            for i, j in imports.pairs(availableAssetPacks["module"].rwDatas) do
+                                if j then
+                                    imports.loadAsset("module", i)
+                                end
+                                thread.pause()
+                            end
+                        end
+                        imports.triggerEvent("onAssetifyModuleLoad", localPlayer)
+                    end):resume({
+                        executions = downloadSettings.buildRate,
+                        frames = 1
+                    })
                 else
                     syncer.scheduledAssets = nil
                     syncer.isLibraryLoaded = true
@@ -384,7 +398,7 @@ else
                     end
                     if isModuleVoid then
                         imports.triggerClientEvent(player, "onAssetifyModuleLoad", player)
-                        syncer:syncPack(player, _)
+                        imports.triggerEvent("Assetify:onRequestAssets", player)
                     end
                 else
                     local isLibraryVoid = true
@@ -440,6 +454,11 @@ else
             name = assetName,
             hashes = hashes
         })
+    end)
+
+    imports.addEvent("Assetify:onRequestAssets", true)
+    imports.addEventHandler("Assetify:onRequestAssets", root, function()
+        syncer:syncPack(source, _)
     end)
 
     imports.addEvent("Assetify:onRequestElementModels", true)
