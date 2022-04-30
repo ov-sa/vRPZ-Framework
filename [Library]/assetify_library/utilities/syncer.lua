@@ -377,7 +377,7 @@ else
                     end
                 end
                 if isLibraryVoid then
-                    imports.triggerClientEvent(player, "onAssetModuleLoad", player)
+                    imports.triggerClientEvent(player, "onAssetifyModuleLoad", player)
                     imports.triggerClientEvent(player, "onAssetifyLoad", resourceRoot)
                 end
             end):resume({
