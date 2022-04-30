@@ -363,10 +363,18 @@ else
                 if syncModules then
                     local isModuleVoid = true
                     if availableAssetPacks["module"] then
-                        for i, j in imports.pairs(availableAssetPacks["module"]) do
+                        for i, j in imports.pairs(availableAssetPacks["module"].assetPack) do
                             isModuleVoid = false
-                            --TODO: SYNC THEM ALL HERE..
-                            print("TRYNNA SYNC")
+                            if i ~= "rwDatas" then
+                                syncer:syncData(player, "module", i, nil, j)
+                            else
+                                for k, v in imports.pairs(j) do
+                                    syncer:syncData(player, "module", "rwDatas", {k, "assetSize"}, v.synced.assetSize)
+                                    syncer:syncHash(player, "module", k, v.unSynced.fileHash)
+                                    thread.pause()
+                                end
+                            end
+                            thread.pause()
                         end
                     end
                     if isModuleVoid then
