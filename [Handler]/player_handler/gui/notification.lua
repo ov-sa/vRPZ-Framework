@@ -24,7 +24,7 @@ local imports = {
 }
 
 
-CGame.execOnLoad(function()
+CGame.execOnModuleLoad(function()
     -------------------
     --[[ Variables ]]--
     -------------------

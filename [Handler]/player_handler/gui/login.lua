@@ -46,7 +46,7 @@ local imports = {
 }
 
 
-CGame.execOnLoad(function()
+CGame.execOnModuleLoad(function()
     -------------------
     --[[ Variables ]]--
     -------------------
@@ -783,7 +783,7 @@ CGame.execOnLoad(function()
 
     imports.fadeCamera(false)
     imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
-    local booter = function()
+    CGame.execOnLoad(function()
         for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Ambiences"]) do
             local cAsset = imports.assetify.getAsset("sound", j.assetName)
             if imports.type(j.category) == "table" then
@@ -796,15 +796,5 @@ CGame.execOnLoad(function()
             end
         end
         imports.triggerServerEvent("Player:onToggleLoginUI", localPlayer)
-    end
-    if imports.assetify.isLoaded() then
-        booter()
-    else
-        local booterWrapper = nil
-        booterWrapper = function()
-            booter()
-            imports.removeEventHandler("onAssetifyLoad", root, booterWrapper)
-        end
-        imports.addEventHandler("onAssetifyLoad", root, booterWrapper)
-    end
+    end)
 end)
