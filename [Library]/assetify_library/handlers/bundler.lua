@@ -100,14 +100,6 @@ function onBundleLibrary()
             end
 
             if localPlayer then
-                assetify.isLoaded = function()
-                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isLibraryLoaded")
-                end
-
-                assetify.isModuleLoaded = function()
-                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isLibraryModuleLoaded")
-                end
-
                 assetify.getProgress = function(...)
                     return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getLibraryProgress", ...)
                 end
@@ -151,6 +143,14 @@ function onBundleLibrary()
                 assetify.createDummy = function(...)
                     return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createAssetDummy", ...)
                 end
+            end
+
+            assetify.isLoaded = function()
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isLibraryLoaded")
+            end
+
+            assetify.isModuleLoaded = function()
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isLibraryModuleLoaded")
             end
 
             assetify.getAssets = function(...)
