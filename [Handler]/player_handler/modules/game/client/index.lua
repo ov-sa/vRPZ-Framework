@@ -50,6 +50,7 @@ CGame.updateSettings = function(index, data)
 end
 
 CGame.loadLanguage = function()
+    --[[
     local cLanguage = CGame.fetchSettings("language")
     cLanguage = (cLanguage and FRAMEWORK_CONFIGS["Game"]["Game_Languages"][cLanguage] and cLanguage) or false
     if not cLanguage then
@@ -58,6 +59,8 @@ CGame.loadLanguage = function()
     else
         CPlayer.setLanguage(cLanguage)
     end
+    ]]
+    CPlayer.setLanguage("TR")
     return true
 end
 
@@ -150,11 +153,17 @@ imports.addEventHandler("Client:onUpdateLanguage", root, function(prevLanguage, 
         local cTemplate = imports.beautify.getUITemplate(i)
         if not cTemplate.isVRPZTemplate then
             cTemplate = imports.table.clone(j, true)
+            cTemplate.isVRPZTemplate = true
             isTemplateUpdated = true
         end
         if j.font then
             local cData = FRAMEWORK_CONFIGS["Templates"]["Fonts"][(j.font[1])]
-            if cData.alt then
+            if not cData.alt or not cData.alt[currLanguage] then
+                if isTemplateUpdated or (cData.alt and cData.alt[prevLanguage]) then
+                    cTemplate.font = {cData.path, j.font[2], cData.resource}
+                    isTemplateUpdated = true
+                end
+            else
                 local cResource, cSettings = nil, cData.alt and cData.alt[currLanguage]
                 if cData.alt[prevLanguage] or cSettings then
                     if cSettings then cResource = cSettings[3]
@@ -165,8 +174,6 @@ imports.addEventHandler("Client:onUpdateLanguage", root, function(prevLanguage, 
                 end
             end
         end
-        if isTemplateUpdated then
-            imports.beautify.setUITemplate(i, cTemplate)
-        end
+        if isTemplateUpdated then imports.beautify.setUITemplate(i, cTemplate) end
     end
 end)
