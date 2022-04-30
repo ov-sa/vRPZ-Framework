@@ -42,7 +42,7 @@ CSound.playAmbience = function(ambienceType, ambienceIndex, skipLoop)
         ambienceCategory = FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].category
     end
     ambienceIndex = ambienceIndex or imports.math.random(#CSound.CAmbience[ambienceCategory])
-    CSound.CBuffer[ambienceType].soundInstance = CGame.playSound(FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].assetName, ambienceCategory, ambienceIndex, true)
+    CSound.CBuffer[ambienceType].soundInstance = CGame.playSound(FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].assetName, ambienceCategory, ambienceIndex, FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].volume, true)
     if not CSound.CBuffer[ambienceType].soundInstance then return false end
     local soundDuration = imports.getSoundLength(CSound.CBuffer[ambienceType].soundInstance) or 0
     if not skipLoop and FRAMEWORK_CONFIGS["Templates"]["Ambiences"][ambienceType].loopInterval and not CSound.CBuffer[ambienceType].intervalTimer then

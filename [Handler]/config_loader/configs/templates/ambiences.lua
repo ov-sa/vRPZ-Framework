@@ -17,6 +17,7 @@ configVars["Templates"]["Ambiences"] = {
     ["Short"] = {
         assetName = "vRPZ_Ambience",
         category = "short",
+        volume = 1,
         loopInterval = 20000
     },
 

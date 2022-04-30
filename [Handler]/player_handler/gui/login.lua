@@ -718,7 +718,7 @@ loginUI.toggleUI = function(state, args)
         loginUI.updateUILang()
         local cAsset = imports.assetify.getAsset("sound", FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.asset)
         if cAsset then
-            loginUI.lobbySound = CGame.playSound(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.asset, FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category, imports.math.random(#cAsset.manifestData.assetSounds[(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category)]), true, true)
+            loginUI.lobbySound = CGame.playSound(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.asset, FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category, imports.math.random(#cAsset.manifestData.assetSounds[(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category)]), _, true, true)
         end
         loginUI.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
         imports.triggerEvent("Client:onSetLoginUIPhase", localPlayer, 1)

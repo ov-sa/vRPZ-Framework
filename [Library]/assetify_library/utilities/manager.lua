@@ -27,6 +27,7 @@ local imports = {
     engineRestoreAnimation = engineRestoreAnimation,
     playSound = playSound,
     playSound3D = playSound3D,
+    setSoundVolume = setSoundVolume,
     collectgarbage = collectgarbage,
     file = file,
     table = table,
