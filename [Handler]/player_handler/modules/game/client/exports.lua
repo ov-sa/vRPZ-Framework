@@ -14,6 +14,7 @@
 
 function fetchSettings(...) return CGame.fetchSettings(...) end
 function updateSettings(...) return CGame.updateSettings(...) end
+function loadLanguage(...) return CGame.loadLanguage(...) end
 function createFont(...) return CGame.createFont(...) end
 function isUIVisible(...) return CGame.isUIVisible(...) end
 function loadAnim(...) return CGame.loadAnim(...) end

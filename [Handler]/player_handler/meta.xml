@@ -26,6 +26,7 @@
     <export function="generateSpawn" type="shared"/>
     <export function="fetchSettings" type="client"/>
     <export function="updateSettings" type="client"/>
+    <export function="loadLanguage" type="client"/>
     <export function="createFont" type="client"/>
     <export function="isUIVisible" type="client"/>
     <export function="loadAnim" type="client"/>

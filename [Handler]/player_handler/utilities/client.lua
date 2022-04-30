@@ -16,7 +16,6 @@ loadstring(exports.beautify_library:fetchImports())()
 local imports = {
     pairs = pairs,
     tonumber = tonumber,
-    getLocalization = getLocalization,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     getElementType = getElementType,
@@ -147,14 +146,7 @@ end
 
 imports.addEventHandler("onClientResourceStart", resource, function()
     showChat(false, true)
-    local cLanguage = CGame.fetchSettings("language")
-    cLanguage = (cLanguage and FRAMEWORK_CONFIGS["Game"]["Game_Languages"][cLanguage] and cLanguage) or false
-    if not cLanguage then
-        local localization = imports.getLocalization()
-        CPlayer.setLanguage(localization.code, true)
-    else
-        CPlayer.setLanguage(cLanguage)
-    end
+    CGame.loadLanguage()
     imports.setBlurLevel(0)
     imports.toggleControl("fire", true)
     imports.toggleControl("action", false)

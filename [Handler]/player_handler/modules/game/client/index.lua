@@ -16,6 +16,7 @@ local imports = {
     pairs = pairs,
     tonumber = tonumber,
     destroyElement = destroyElement,
+    getLocalization = getLocalization,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     toJSON = toJSON,
@@ -44,6 +45,18 @@ end
 CGame.updateSettings = function(index, data)
     CGame.CSettings.cache[index] = data
     imports.file.write(CGame.CSettings.path, imports.toJSON(CGame.CSettings.cache))
+    return true
+end
+
+CGame.loadLanguage = function()
+    local cLanguage = CGame.fetchSettings("language")
+    cLanguage = (cLanguage and FRAMEWORK_CONFIGS["Game"]["Game_Languages"][cLanguage] and cLanguage) or false
+    if not cLanguage then
+        local localization = imports.getLocalization()
+        CPlayer.setLanguage(localization.code, true)
+    else
+        CPlayer.setLanguage(cLanguage)
+    end
     return true
 end
 
