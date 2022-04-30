@@ -24,6 +24,8 @@
     <export function="getLevelEXP" type="shared"/>
     <export function="getLevelRank" type="shared"/>
     <export function="generateSpawn" type="shared"/>
+    <export function="fetchSetting" type="client"/>
+    <export function="updateSetting" type="client"/>
     <export function="createFont" type="client"/>
     <export function="isUIVisible" type="client"/>
     <export function="loadAnim" type="client"/>

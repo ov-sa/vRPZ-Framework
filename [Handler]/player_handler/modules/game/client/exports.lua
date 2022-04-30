@@ -12,6 +12,8 @@
 --[[ Exports ]]--
 -----------------
 
+function fetchSetting(...) return CGame.fetchSetting(...) end
+function updateSetting(...) return CGame.updateSetting(...) end
 function createFont(...) return CGame.createFont(...) end
 function isUIVisible(...) return CGame.isUIVisible(...) end
 function loadAnim(...) return CGame.loadAnim(...) end

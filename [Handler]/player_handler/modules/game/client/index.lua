@@ -28,10 +28,21 @@ local imports = {
 --[[ Module: Game ]]--
 ----------------------
 
+CGame.CSettings = imports.file.read("@files/cache/settings.json")
+CGame.CSettings = (CGame.CSettings and imports.fromJSON(CGame.CSettings)) or {}
 CGame.CFont = {
     static = {},
     dynamic = {}
 }
+
+CGame.fetchSetting = function(index, setting)
+    CGame.CSettings[index] = setting
+    return true
+end
+
+CGame.updateSetting = function(index)
+    return CGame.CSettings[index] or false
+end
 
 CGame.createFont = function(index, size, isStatic)
     if not index or not size then return false end
@@ -93,6 +104,9 @@ CGame.playSound3D = function(...)
     return imports.assetify.playSound3D(...)
 end
 
+imports.addEventHandler("Client:onUpdateLanguage", root, function(prevLanguage, currLanguage)
+
+end)
 imports.addEvent("Client:onUpdateLanguage", false)
 imports.addEventHandler("Client:onUpdateLanguage", root, function(prevLanguage, currLanguage)
     for i, j in imports.pairs(CGame.CFont.dynamic) do
