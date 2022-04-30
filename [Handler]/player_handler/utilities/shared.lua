@@ -30,6 +30,19 @@ local imports = {
     math = math
 }
 
+CGame = {
+    execOnLoad = function(execFunc)
+        if imports.assetify.execOnLoad(execFunc) then
+
+        end
+    end,
+    execOnModuleLoad = function(execFunc)
+        if imports.assetify.execOnModuleLoad(execFunc) then
+            
+        end
+    end
+}
+
 
 ----------------------------------------------
 --[[ Function: Retrieves Resource's State ]]--

@@ -20,7 +20,8 @@ local imports = {
     getWeather = getWeather,
     getTime = getTime,
     math = math,
-    string = string
+    string = string,
+    assetify = assetify
 }
 
 
@@ -30,8 +31,8 @@ local imports = {
 
 CGame = {
     CTickSyncer = nil,
-    execOnLoad = assetify.execOnLoad,
-    execOnModuleLoad = assetify.execOnModuleLoad,
+    execOnLoad = imports.assetify.execOnLoad,
+    execOnModuleLoad = imports.assetify.execOnModuleLoad,
 
     getServerTick = function()
         local currentTick = 0
