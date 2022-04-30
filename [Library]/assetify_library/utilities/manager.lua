@@ -74,19 +74,19 @@ if localPlayer then
         if not syncer.isLibraryLoaded then return false end
         if not assetType or not assetName then return false end
         if availableAssetPacks[assetType] then
-            local assetReference = availableAssetPacks[assetType].rwDatas[assetName]
-            if assetReference then
+            local cAsset = availableAssetPacks[assetType].rwDatas[assetName]
+            if cAsset then
                 local isExternalResource = sourceResource and (sourceResource ~= resource)
-                local unsyncedData = assetReference.unsyncedData
+                local unsyncedData = cAsset.unsyncedData
                 if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
-                    assetReference = imports.table.clone(assetReference, true)
-                    assetReference.manifestData.encryptKey = nil
-                    assetReference.unsyncedData = nil
+                    cAsset = imports.table.clone(cAsset, true)
+                    cAsset.manifestData.encryptKey = nil
+                    cAsset.unsyncedData = nil
                 end
-                if assetReference.manifestData.assetClumps or (assetType == "animation") or (assetType == "sound") or (assetType == "scene") then
-                    return assetReference, (unsyncedData and true) or false
+                if cAsset.manifestData.assetClumps or (assetType == "animation") or (assetType == "sound") or (assetType == "scene") then
+                    return cAsset, (unsyncedData and true) or false
                 else
-                    return assetReference, (unsyncedData and unsyncedData.assetCache.cAsset and unsyncedData.assetCache.cAsset.syncedData) or false
+                    return cAsset, (unsyncedData and unsyncedData.assetCache.cAsset and unsyncedData.assetCache.cAsset.syncedData) or false
                 end
             end
         end
@@ -403,24 +403,28 @@ if localPlayer then
         return cSound
     end
 else
-    function manager:getData(assetType, assetName)
+    function manager:getData(assetType, assetName, isInternal)
         if not syncer.isLibraryLoaded then return false end
         if not assetType or not assetName then return false end
         if availableAssetPacks[assetType] then
-            local assetReference = availableAssetPacks[assetType].assetPack.rwDatas[assetName]
-            if assetReference then
-                assetReference = assetReference.synced
-                if assetReference.manifestData.encryptKey then
-                    assetReference = imports.table.clone(assetReference, true)
-                    assetReference.manifestData.encryptKey = nil
+            local cAsset = availableAssetPacks[assetType].assetPack.rwDatas[assetName]
+            if cAsset then
+                if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
+                    cAsset = cAsset.synced
+                    if cAsset.manifestData.encryptKey then
+                        cAsset = imports.table.clone(cAsset, true)
+                        cAsset.manifestData.encryptKey = nil
+                    end
                 end
-                if assetType == "scene" then
-                    return assetReference, false
-                else
-                    return assetReference, false
-                end
+                return cAsset, false
             end
         end
         return false
+    end
+
+    function manager:getDep(assetType, assetName, depType, depIndex)
+        local cAsset = manager:getData(assetType, assetName, syncer.librarySerial)
+        if not cAsset then return false end
+        return (cAsset.synced.manifestData.assetDeps and cAsset.synced.manifestData.assetDeps[depType] and cAsset.synced.manifestData.assetDeps[depType][depIndex] and cAsset.unSynced.fileData[(cAsset.synced.manifestData.assetDeps[depType][depIndex])]) or false
     end
 end

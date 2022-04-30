@@ -383,15 +383,15 @@ else
             })
         else
             thread:create(function(cThread)
-                local assetReference = availableAssetPacks[(assetDatas.type)].assetPack.rwDatas[(assetDatas.name)]
-                for i, j in imports.pairs(assetReference.synced) do
+                local cAsset = availableAssetPacks[(assetDatas.type)].assetPack.rwDatas[(assetDatas.name)]
+                for i, j in imports.pairs(cAsset.synced) do
                     if i ~= "assetSize" then
                         syncer:syncData(player, assetDatas.type, "rwDatas", {assetDatas.name, i}, j)
                     end
                     thread.pause()
                 end
                 for i, j in imports.pairs(assetDatas.hashes) do
-                    syncer:syncContent(player, assetDatas.type, assetDatas.name, i, assetReference.unSynced.fileData[i])
+                    syncer:syncContent(player, assetDatas.type, assetDatas.name, i, cAsset.unSynced.fileData[i])
                     thread.pause()
                 end
                 syncer:syncState(player, assetDatas.type, assetDatas.name)

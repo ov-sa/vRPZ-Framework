@@ -37,6 +37,10 @@ function getAssetData(...)
     return manager:getData(...)
 end
 
+function getAssetDep(...)
+    return manager:getDep(...)
+end
+
 function setElementAsset(element, ...)
     if not element or not imports.isElement(element) then return false end
     local elementType = imports.getElementType(element)

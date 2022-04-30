@@ -38,6 +38,7 @@
     <export function="fetchThreader" type="shared"/>
     <export function="getLibraryAssets" type="shared"/>
     <export function="getAssetData" type="shared"/>
+    <export function="getAssetDep" type="shared"/>
     <export function="setElementAsset" type="shared"/>
     <export function="setBoneAttachment" type="shared"/>
     <export function="setBoneDetachment" type="shared"/>
@@ -47,7 +48,6 @@
     <export function="getLibraryProgress" type="client"/>
     <export function="getAssetID" type="client"/>
     <export function="isAssetLoaded" type="client"/>
-    <export function="getAssetDep" type="client"/>
     <export function="loadAsset" type="client"/>
     <export function="unloadAsset" type="client"/>
     <export function="loadAnim" type="client"/>
