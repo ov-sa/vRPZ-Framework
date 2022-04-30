@@ -37,14 +37,14 @@ CGame.CFont = {
     dynamic = {}
 }
 
-CGame.fetchSetting = function(index, setting)
-    CGame.CSettings.cache[index] = setting
-    imports.file.write(CGame.CSettings.path, imports.toJSON(CGame.CSettings.cache))
-    return true
+CGame.fetchSettings = function(index)
+    return CGame.CSettings.cache[index] or false
 end
 
-CGame.updateSetting = function(index)
-    return CGame.CSettings.cache[index] or false
+CGame.updateSettings = function(index, data)
+    CGame.CSettings.cache[index] = data
+    imports.file.write(CGame.CSettings.path, imports.toJSON(CGame.CSettings.cache))
+    return true
 end
 
 CGame.createFont = function(index, size, isStatic)
