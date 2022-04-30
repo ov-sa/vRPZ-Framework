@@ -14,6 +14,7 @@
 
 resource = getResourceRootElement(getThisResource())
 
+FRAMEWORK_CACHE = "@files/cache/"
 FRAMEWORK_CONFIGS = {
     ["Templates"] = exports.config_loader:getConfig("Templates"),
     ["Game"] = exports.config_loader:getConfig("Game"),

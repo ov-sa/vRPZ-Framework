@@ -18,6 +18,7 @@ local imports = {
     destroyElement = destroyElement,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
+    toJSON = toJSON,
     table = table,
     beautify = beautify,
     assetify = assetify
@@ -28,20 +29,22 @@ local imports = {
 --[[ Module: Game ]]--
 ----------------------
 
-CGame.CSettings = imports.file.read("@files/cache/settings.json")
-CGame.CSettings = (CGame.CSettings and imports.fromJSON(CGame.CSettings)) or {}
+CGame.CSettings = {
+    path = FRAMEWORK_CACHE.."settings.rw"
+}
 CGame.CFont = {
     static = {},
     dynamic = {}
 }
 
 CGame.fetchSetting = function(index, setting)
-    CGame.CSettings[index] = setting
+    CGame.CSettings.cache[index] = setting
+    imports.file.write(CGame.CSettings.path, imports.toJSON(CGame.CSettings.cache))
     return true
 end
 
 CGame.updateSetting = function(index)
-    return CGame.CSettings[index] or false
+    return CGame.CSettings.cache[index] or false
 end
 
 CGame.createFont = function(index, size, isStatic)
@@ -104,9 +107,9 @@ CGame.playSound3D = function(...)
     return imports.assetify.playSound3D(...)
 end
 
-imports.addEventHandler("Client:onUpdateLanguage", root, function(prevLanguage, currLanguage)
+CGame.CSettings.cache = imports.file.read(CGame.CSettings.path)
+CGame.CSettings.cache = (CGame.CSettings.cache and imports.fromJSON(CGame.CSettings.cache)) or {}
 
-end)
 imports.addEvent("Client:onUpdateLanguage", false)
 imports.addEventHandler("Client:onUpdateLanguage", root, function(prevLanguage, currLanguage)
     for i, j in imports.pairs(CGame.CFont.dynamic) do
