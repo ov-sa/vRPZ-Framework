@@ -303,7 +303,6 @@ else
                 local callbackReference = callback
                 for i = 1, #cAssetPack.manifestData, 1 do
                     local assetName = cAssetPack.manifestData[i]
-                    print(assetName)
                     local assetPath = (asset.references.root)..imports.string.lower(assetType).."/"..assetName.."/"
                     local assetManifestPath = assetPath..(asset.references.asset)..".json"
                     local assetManifestData = imports.file.read(assetManifestPath)
@@ -331,6 +330,7 @@ else
                             }
                         }
                         if assetType == "module" then
+                            imports.table.insert(syncer.libraryModules, assetName)
                             assetManifestData.streamRange = false
                             assetManifestData.enableLODs = false
                             assetManifestData.assetClumps = false
