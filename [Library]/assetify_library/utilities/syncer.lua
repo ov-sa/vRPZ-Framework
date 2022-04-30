@@ -163,24 +163,29 @@ if localPlayer then
                 end
             end
             if isSyncDone then
-                syncer.scheduledAssets = nil
-                syncer.isLibraryLoaded = true
-                imports.triggerEvent("onAssetifyLoad", resourceRoot)
-                thread:create(function(cThread)
-                    for i, j in imports.pairs(availableAssetPacks) do
-                        if j.autoLoad and j.rwDatas then
-                            for k, v in imports.pairs(j.rwDatas) do
-                                if v then
-                                    imports.loadAsset(i, k)
+                if assetType == "module" then
+                    print("LOADED ALL MODULE")
+                    --TODO: TRIGGER HERE..
+                else
+                    syncer.scheduledAssets = nil
+                    syncer.isLibraryLoaded = true
+                    imports.triggerEvent("onAssetifyLoad", resourceRoot)
+                    thread:create(function(cThread)
+                        for i, j in imports.pairs(availableAssetPacks) do
+                            if j.autoLoad and j.rwDatas then
+                                for k, v in imports.pairs(j.rwDatas) do
+                                    if v then
+                                        imports.loadAsset(i, k)
+                                    end
+                                    thread.pause()
                                 end
-                                thread.pause()
                             end
                         end
-                    end
-                end):resume({
-                    executions = downloadSettings.buildRate,
-                    frames = 1
-                })
+                    end):resume({
+                        executions = downloadSettings.buildRate,
+                        frames = 1
+                    })
+                end
             end
         end
     end)
