@@ -37,7 +37,7 @@
     <export function="fetchImports" type="shared"/>
     <export function="fetchThreader" type="shared"/>
     <export function="isLibraryLoaded" type="shared"/>
-    <export function="isLibraryModuleLoaded" type="shared"/>
+    <export function="isModuleLoaded" type="shared"/>
     <export function="getLibraryAssets" type="shared"/>
     <export function="getAssetData" type="shared"/>
     <export function="getAssetDep" type="shared"/>

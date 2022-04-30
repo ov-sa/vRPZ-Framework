@@ -28,8 +28,8 @@ function isLibraryLoaded()
     return syncer.isLibraryLoaded
 end
 
-function isLibraryModuleLoaded()
-    return syncer.isLibraryModuleLoaded
+function isModuleLoaded()
+    return syncer.isModuleLoaded
 end
 
 function getLibraryAssets(assetType)

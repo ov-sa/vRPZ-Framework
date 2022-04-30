@@ -150,7 +150,7 @@ function onBundleLibrary()
             end
 
             assetify.isModuleLoaded = function()
-                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isLibraryModuleLoaded")
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isModuleLoaded")
             end
 
             assetify.getAssets = function(...)
