@@ -47,3 +47,7 @@ imports.addEventHandler("onResourceStart", resourceRoot, function()
         onLibraryLoaded()
     end):resume()
 end)
+
+imports.addEventHandler("onResourceStop", resourceRoot, function()
+    imports.triggerEvent("onAssetifyUnLoad", resourceRoot)
+end)
