@@ -2,8 +2,7 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["Inventory"]["Slots"] = {
-
+FRAMEWORK_CONFIGS["Inventory"]["Slots"] = {
     ["Primary"] = {
         identifier = "Weapon"
     },
@@ -27,5 +26,4 @@ configVars["Inventory"]["Slots"] = {
     ["Backpack"] = {
         identifier = "Backpack"
     }
-
 }

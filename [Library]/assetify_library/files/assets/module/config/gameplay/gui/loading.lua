@@ -2,8 +2,7 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["UI"]["Loading"] = {
-
+FRAMEWORK_CONFIGS["UI"]["Loading"] = {
     fadeInDuration = 500,
     fadeOutDuration = 2500,
     fadeDelayDuration = 2000,
@@ -78,5 +77,4 @@ configVars["UI"]["Loading"] = {
             ["BR"] = "Colete GPS e Bússola para ajudá-lo a viajar no mapa!",
         }
     }
-
 }

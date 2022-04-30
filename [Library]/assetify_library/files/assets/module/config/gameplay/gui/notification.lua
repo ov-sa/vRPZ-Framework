@@ -2,8 +2,7 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["UI"]["Notification"] = {
-
+FRAMEWORK_CONFIGS["UI"]["Notification"] = {
     height = 15,
     slideInDuration = 1000,
     slideOutDuration = 1000,
@@ -14,5 +13,4 @@ configVars["UI"]["Notification"] = {
         success = {80, 255, 80, 255},
         error = {255, 80, 80, 255}
     }
-
 }

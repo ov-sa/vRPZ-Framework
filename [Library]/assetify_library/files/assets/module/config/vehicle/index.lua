@@ -2,4 +2,4 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["Vehicles"] = {}
+FRAMEWORK_CONFIGS["Vehicles"] = {}

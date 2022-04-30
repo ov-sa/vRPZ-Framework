@@ -2,8 +2,7 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["Templates"]["Reputations"] = {
-    
+FRAMEWORK_CONFIGS["Templates"]["Reputations"] = {
     ["Regeneration_Amount"] = 0.01,
     ["Regeneration_Duration"] = 5*60*1000,
     ["Max_Reputation"] = 150,
@@ -13,5 +12,4 @@ configVars["Templates"]["Reputations"] = {
         ["Kick"] = -25,
         ["Ban"] = -50
     }
-
 }

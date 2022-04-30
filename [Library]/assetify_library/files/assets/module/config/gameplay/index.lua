@@ -2,8 +2,7 @@
 --[[ Configns ]]--
 ------------------
 
-configVars = {
-
+FRAMEWORK_CONFIGS = {
     ["Game"] = {
         ["FPS_Limit"] = 100,
         ["Player_Limit"] = 256,
@@ -86,5 +85,4 @@ configVars = {
     },
 
     ["UI"] = {}
-
 }

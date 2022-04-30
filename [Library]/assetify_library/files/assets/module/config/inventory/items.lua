@@ -2,8 +2,7 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["Inventory"]["Items"] = {
-
+FRAMEWORK_CONFIGS["Inventory"]["Items"] = {
     ["Primary"] = {
         ["awm"] = {name = "AWM", weight = {rows = 2, columns = 6}, itemObjectID = 2827, itemPickupDetails = {scale = 1, rotX = 90}, weapon = {id = 34, ammo = "sniper_ammo", mag = 5, damage = 13000, fireDelay = 1500}},
         ["colt_model_733"] = {name = "Colt Model 733", weight = {rows = 2, columns = 6}, itemObjectID = 2827, itemPickupDetails = {scale = 1, rotX = 90}, weapon = {id = 34, ammo = "sniper_ammo", mag = 5, damage = 13000, fireDelay = 1500}},
@@ -24,5 +23,4 @@ configVars["Inventory"]["Items"] = {
     ["Armor"] = {},
 
     ["Backpack"] = {}
-
 }

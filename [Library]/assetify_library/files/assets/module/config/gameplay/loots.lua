@@ -2,8 +2,7 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["Loots"] = {
-
+FRAMEWORK_CONFIGS["Loots"] = {
     ["LootCategory"] = {
         name = "Loot Name",
         pack = "loot",
@@ -18,5 +17,4 @@ configVars["Loots"] = {
         {position = {x = 0, y = 0, z = 0}, rotation = {x = 0, y = 0, z = 0}},
         {position = {x = 0, y = 0, z = 0}, rotation = {x = 0, y = 0, z = 0}}
     }
-
 }

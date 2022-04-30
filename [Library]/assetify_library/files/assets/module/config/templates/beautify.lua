@@ -2,8 +2,7 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["Templates"]["Beautify"] = {
-
+FRAMEWORK_CONFIGS["Templates"]["Beautify"] = {
     ["beautify_card"] = {
         color = {0, 0, 0, 0}
     },
@@ -15,5 +14,4 @@ configVars["Templates"]["Beautify"] = {
         fontColor = {200, 200, 200, 255},
         hoverColor = {200, 200, 200, 255}
     }
-
 }

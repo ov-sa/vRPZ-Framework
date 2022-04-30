@@ -2,8 +2,7 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["Templates"]["Ambiences"] = {
-
+FRAMEWORK_CONFIGS["Templates"]["Ambiences"] = {
     ["Short"] = {
         assetName = "vRPZ_Ambience",
         category = "short",
@@ -16,5 +15,4 @@ configVars["Templates"]["Ambiences"] = {
         volume = 0.75,
         loopInterval = 0
     }
-
 }

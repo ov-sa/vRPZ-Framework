@@ -2,8 +2,7 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["UI"]["Login"] = {
-
+FRAMEWORK_CONFIGS["UI"]["Login"] = {
     lobbySound = {asset = "vRPZ_Lobby", category = "login"},
     weathers = {
         {weather = 9, time = {12, 0}},
@@ -202,7 +201,7 @@ configVars["UI"]["Login"] = {
                             ["RU"] = "Цвет кожи",
                             ["BR"] = "Tom da pele",
                         },
-                        ["Datas"] = configVars["Character"]["Identity"]["Tone"]
+                        ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Identity"]["Tone"]
                     },
                     gender = {
                         default = "Male",
@@ -212,7 +211,7 @@ configVars["UI"]["Login"] = {
                             ["RU"] = "Пол",
                             ["BR"] = "Gênero",
                         },
-                        ["Datas"] = configVars["Character"]["Identity"]["Gender"]
+                        ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Identity"]["Gender"]
                     }
                 },
                 ["Facial"] = {
@@ -229,7 +228,7 @@ configVars["UI"]["Login"] = {
                             ["RU"] = "Причёска",
                             ["BR"] = "Cabelo",
                         },
-                        ["Datas"] = configVars["Character"]["Clothing"]["Facial"]["Hair"]
+                        ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Facial"]["Hair"]
                     },
                     face = {
                         ["Titles"] = {
@@ -238,7 +237,7 @@ configVars["UI"]["Login"] = {
                             ["RU"] = "Лицо",
                             ["BR"] = "Rosto",
                         },
-                        ["Datas"] = configVars["Character"]["Clothing"]["Facial"]["Face"]
+                        ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Facial"]["Face"]
                     }
                 },
                 ["Clothing"] = {
@@ -255,7 +254,7 @@ configVars["UI"]["Login"] = {
                             ["RU"] = "Верх",
                             ["BR"] = "Parte de cima",
                         },
-                        ["Datas"] = configVars["Character"]["Clothing"]["Upper"]
+                        ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Upper"]
                     },
                     ["Lower"] = {
                         ["Titles"] = {
@@ -264,7 +263,7 @@ configVars["UI"]["Login"] = {
                             ["RU"] = "Низ",
                             ["BR"] = "Parte de baixo",
                         },
-                        ["Datas"] = configVars["Character"]["Clothing"]["Lower"]
+                        ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Lower"]
                     },
                     ["Shoes"] = {
                         ["Titles"] = {
@@ -273,7 +272,7 @@ configVars["UI"]["Login"] = {
                             ["RU"] = "Обувь",
                             ["BR"] = "Calçados",
                         },
-                        ["Datas"] = configVars["Character"]["Clothing"]["Shoes"]
+                        ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Shoes"]
                     }
                 }
             }
@@ -314,5 +313,4 @@ configVars["UI"]["Login"] = {
             }
         }
     }
-
 }

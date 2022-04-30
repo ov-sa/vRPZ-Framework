@@ -2,8 +2,7 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["Tasks"] = {
-
+FRAMEWORK_CONFIGS["Tasks"] = {
     ["Reviving"] = {
         ["Duration"] = 20*1000
     },
@@ -11,5 +10,4 @@ configVars["Tasks"] = {
     ["Refueling"] = {
         ["Duration"] = 30*1000
     }
-
 }

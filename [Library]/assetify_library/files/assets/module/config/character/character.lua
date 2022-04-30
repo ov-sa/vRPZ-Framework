@@ -2,7 +2,7 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["Character"] = {
+FRAMEWORK_CONFIGS["Character"] = {
 
     ["Datas"] = {
         "blood",

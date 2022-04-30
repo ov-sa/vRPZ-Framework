@@ -2,8 +2,7 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["Templates"]["Levels"] = {
-    
+FRAMEWORK_CONFIGS["Templates"]["Levels"] = {
     baseEXP = 1000, expMultiplier = 1.2,
 
     ["Max_Level"] = 200,
@@ -24,5 +23,4 @@ configVars["Templates"]["Levels"] = {
         {name = "Rank 14"},
         {name = "Rank 15"}
     }
-
 }

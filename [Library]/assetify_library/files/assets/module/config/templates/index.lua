@@ -2,4 +2,4 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["Templates"] = {}
+FRAMEWORK_CONFIGS["Templates"] = {}

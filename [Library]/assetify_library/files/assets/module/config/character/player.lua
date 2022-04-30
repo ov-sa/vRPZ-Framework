@@ -2,7 +2,7 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["Player"] = {
+FRAMEWORK_CONFIGS["Player"] = {
 
     ["Datas"] = {}
 

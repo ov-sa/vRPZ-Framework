@@ -2,4 +2,4 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["Inventory"] = {}
+FRAMEWORK_CONFIGS["Inventory"] = {}

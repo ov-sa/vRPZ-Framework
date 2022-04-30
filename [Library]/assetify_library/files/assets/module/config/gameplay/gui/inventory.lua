@@ -2,8 +2,7 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["UI"]["Inventory"] = {
-
+FRAMEWORK_CONFIGS["UI"]["Inventory"] = {
     ["Toggle_Key"] = "j",
     
     titlebar = {
@@ -35,5 +34,4 @@ configVars["UI"]["Inventory"] = {
         slotNameFontColor = {175, 175, 175, 255},
         dividerColor = {100, 100, 100, 50}
     }
-
 }

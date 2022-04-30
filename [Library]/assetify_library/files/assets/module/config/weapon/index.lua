@@ -12,4 +12,4 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["Weapons"] = {}
+FRAMEWORK_CONFIGS["Weapons"] = {}

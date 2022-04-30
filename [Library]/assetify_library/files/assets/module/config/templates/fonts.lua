@@ -3,8 +3,7 @@
 ------------------
 
 
-configVars["Templates"]["Fonts"] = {
-
+FRAMEWORK_CONFIGS["Templates"]["Fonts"] = {
     {
         resource = "beautify_library",
         path = "files/assets/fonts/teko_medium.rw",
@@ -20,5 +19,4 @@ configVars["Templates"]["Fonts"] = {
             ["RU"] = {"files/assets/fonts/ttlakes_demibold.rw", 1.5, "beautify_library"}
         }
     }
-
 }

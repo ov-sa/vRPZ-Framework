@@ -2,8 +2,7 @@
 --[[ Configns ]]--
 ------------------
 
-configVars["UI"]["Scoreboard"] = {
-
+FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
     ["Toggle_Key"] = "tab",
 
     marginY = 25,
@@ -131,5 +130,4 @@ configVars["UI"]["Scoreboard"] = {
         bgColor = {0, 0, 0, 255},
         thumbColor = {175, 175, 175, 255}
     }
-
 }
