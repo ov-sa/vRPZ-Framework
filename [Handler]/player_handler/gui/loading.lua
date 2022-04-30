@@ -25,6 +25,7 @@ local imports = {
 }
 
 
+local exec = function()
 -------------------
 --[[ Variables ]]--
 -------------------
@@ -109,3 +110,4 @@ imports.addEventHandler("Client:onToggleLoadingUI", root, function(state, hint)
         imports.beautify.render.create(loadingUI.renderUI)
     end
 end)
+end
