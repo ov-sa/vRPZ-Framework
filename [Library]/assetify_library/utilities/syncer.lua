@@ -376,7 +376,10 @@ else
                         thread.pause()
                     end
                 end
-                if isLibraryVoid then imports.triggerClientEvent(player, "onAssetifyLoad", resourceRoot) end
+                if isLibraryVoid then
+                    imports.triggerClientEvent(player, "onAssetModuleLoad", player)
+                    imports.triggerClientEvent(player, "onAssetifyLoad", resourceRoot)
+                end
             end):resume({
                 executions = downloadSettings.syncRate,
                 frames = 1
