@@ -28,7 +28,9 @@ local imports = {
     getElementDimension = getElementDimension,
     getElementInterior = getElementInterior,
     setElementDimension = setElementDimension,
-    setElementInterior = setElementInterior
+    setElementInterior = setElementInterior,
+    getElementVelocity = getElementVelocity,
+    Vector3 = Vector3
 }
 
 
@@ -222,7 +224,8 @@ imports.addEventHandler("onAssetifyLoad", root, function()
     streamer:update(imports.getElementDimension(localPlayer))
     imports.setTimer(function()
         if streamer.cache.isCameraTranslated then return false end
-        streamer.cache.isCameraTranslated = isElementMoving(streamer.cache.clientCamera)
+        local velX, velY, velZ = imports.getElementVelocity(streamer.cache.clientCamera)
+        streamer.cache.isCameraTranslated = ((velX ~= 0) and true) or ((velY ~= 0) and true) or ((velZ ~= 0) and true) or false
     end, streamerSettings.cameraSyncRate, 0)
     imports.setTimer(function()
         if not streamer.cache.isCameraTranslated then return false end
