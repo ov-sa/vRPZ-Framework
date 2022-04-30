@@ -17,6 +17,8 @@
     <script src="modules/game/shared/exports.lua" type="shared"/>
     <script src="modules/game/client/index.lua" type="client"/>
     <script src="modules/game/client/exports.lua" type="client"/>
+    <export function="execOnLoad" type="shared"/>
+    <export function="execOnModuleLoad" type="shared"/>
     <export function="getServerTick" type="shared"/>
     <export function="getNativeWeather" type="shared"/>
     <export function="getTime" type="shared"/>

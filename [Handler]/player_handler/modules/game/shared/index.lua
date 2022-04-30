@@ -30,6 +30,8 @@ local imports = {
 
 CGame = {
     CTickSyncer = nil,
+    execOnLoad = assetify.execOnLoad,
+    execOnModuleLoad = assetify.execOnModuleLoad,
 
     getServerTick = function()
         local currentTick = 0

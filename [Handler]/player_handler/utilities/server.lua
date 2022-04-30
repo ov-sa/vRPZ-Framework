@@ -55,11 +55,11 @@ function showChat(player, bool, isForced)
 end
 
 
----------------------------------------
---[[ Event: On Resource Start/Stop ]]--
----------------------------------------
+-------------------------
+--[[ Utility Helpers ]]--
+-------------------------
 
-imports.addEventHandler("onResourceStart", resource, function()
+CGame.execOnModuleLoad(function()
     imports.addEvent("onServerRender", false)
     imports.setTimer(function(tickSyncer)
         if tickSyncer and imports.isElement(tickSyncer) then

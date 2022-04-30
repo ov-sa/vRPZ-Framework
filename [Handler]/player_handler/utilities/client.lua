@@ -144,7 +144,7 @@ end
 --[[ Event: On Client Resource Start ]]--
 -----------------------------------------
 
-imports.addEventHandler("onClientResourceStart", resource, function()
+CGame.execOnModuleLoad(function()
     showChat(false, true)
     CGame.loadLanguage()
     imports.setBlurLevel(0)
