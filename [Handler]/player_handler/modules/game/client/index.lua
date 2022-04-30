@@ -21,6 +21,7 @@ local imports = {
     addEventHandler = addEventHandler,
     toJSON = toJSON,
     table = table,
+    file = file,
     beautify = beautify,
     assetify = assetify
 }
