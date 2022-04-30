@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
     tonumber = tonumber,
     triggerEvent = triggerEvent
 }
@@ -26,7 +27,20 @@ CPlayer.CLanguage = FRAMEWORK_CONFIGS["Game"]["Game_Languages"].default
 CPlayer.CChannel = nil
 CPlayer.CParty = nil
 
-CPlayer.setLanguage = function(language)
+CPlayer.setLanguage = function(language, isLangCode)
+    if language and isLangCode then
+        local isCodeValid = false
+        for i, j in imports.pairs(FRAMEWORK_CONFIGS["Game"]["Game_Languages"]) do
+            if i ~= "default" then
+                if language == j.code then
+                    language = i
+                    isCodeValid = true
+                    break
+                end
+            end
+        end
+        language = (isCodeValid and language) or false
+    end
     if not language or not FRAMEWORK_CONFIGS["Game"]["Game_Languages"][language] or (CPlayer.CLanguage == language) then return false end
     imports.triggerEvent("Client:onUpdateLanguage", localPlayer, CPlayer.CLanguage, language)
     CPlayer.CLanguage = language
