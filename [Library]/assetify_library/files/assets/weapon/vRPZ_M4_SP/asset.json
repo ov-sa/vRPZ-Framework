@@ -1,0 +1,45 @@
+{
+    "weaponName": "M4 SP",
+    "encryptKey": "vStudio - Аниса",
+    "streamRange": 100,
+    "weaponOffsets": {
+        "bone": {
+            "position": {"x": -0.0225, "y": 0, "z": 0.175}
+        },
+        "ADS": {"x": -0.4, "y": 0.054, "z": 0.122}
+    },
+    "assetClumps": {
+        "high": "high",
+        "low": "low"
+    },
+    "shaderMaps": {
+        "control": {
+            "wp_m4sp_bdy": [
+                {
+                    "bump": "control/wp_m4sp_bdy/bump.jpg"
+                }
+            ],
+            "wp_m4sp_bdy2": [
+                {
+                    "bump": "control/wp_m4sp_bdy2/bump.jpg"
+                }
+            ],
+            "wp_m4sp_bdy3": [
+                {
+                    "bump": "control/wp_m4sp_bdy3/bump.jpg"
+                }
+            ],
+            "wp_m4sp_sghtbdy": [
+                {
+                    "bump": "control/wp_m4sp_sghtbdy/bump.jpg"
+                }
+            ]
+        }
+    },
+    "assetDeps": {
+        "texture": {
+            "inventory": "icon/inventory.png",
+            "hud": "icon/hud.png"
+        }
+    }
+}
