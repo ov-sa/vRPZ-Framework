@@ -83,7 +83,7 @@ if localPlayer then
                     cAsset.manifestData.encryptKey = nil
                     cAsset.unsyncedData = nil
                 end
-                if cAsset.manifestData.assetClumps or (assetType == "animation") or (assetType == "sound") or (assetType == "scene") then
+                if cAsset.manifestData.assetClumps or (assetType == "module") or (assetType == "animation") or (assetType == "sound") or (assetType == "scene") then
                     return cAsset, (unsyncedData and true) or false
                 else
                     return cAsset, (unsyncedData and unsyncedData.assetCache.cAsset and unsyncedData.assetCache.cAsset.syncedData) or false
@@ -94,7 +94,7 @@ if localPlayer then
     end
 
     function manager:getID(assetType, assetName, assetClump)
-        if (assetType == "animation") or (assetType == "sound") then return false end
+        if (assetType == "module") or (assetType == "animation") or (assetType == "sound") then return false end
         local cAsset, isLoaded = manager:getData(assetType, assetName, syncer.librarySerial)
         if not cAsset or not isLoaded or imports.type(cAsset.unsyncedData) ~= "table" then return false end
         if cAsset.manifestData.assetClumps then
@@ -159,7 +159,11 @@ if localPlayer then
                 shader:create(nil, "control", "Assetify_TextureMapper", i, shaderTextures, shaderInputs, cAsset.unsyncedData.rwCache.map, j, cAsset.manifestData.encryptKey)
             end
         end
-        if assetType == "animation" then
+        if assetType == "module" then
+            if asset:create(assetType, assetName, cAssetPack, cAsset.unsyncedData.rwCache, cAsset.manifestData, cAsset.unsyncedData.assetCache, {}) then
+                return true
+            end
+        elseif assetType == "animation" then
             if asset:create(assetType, assetName, cAssetPack, cAsset.unsyncedData.rwCache, cAsset.manifestData, cAsset.unsyncedData.assetCache, {
                 ifp = assetPath..(asset.references.asset)..".ifp",
             }) then

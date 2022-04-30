@@ -13,6 +13,11 @@
 ------------------
 
 availableAssetPacks = {
+    ["module"] = {
+        autoLoad = true,
+        assetType = "module"
+    },
+
     ["animation"] = {
         autoLoad = true,
         assetType = "animation"

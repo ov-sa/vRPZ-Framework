@@ -115,7 +115,11 @@ if localPlayer then
         if not self or (self == asset) then return false end
         if not assetType or not assetName or not assetPack or not assetPack.assetType or not rwCache or not assetManifest or not assetData or not rwPaths then return false end
         local loadState = false
-        if assetType == "animation" then
+        if assetType == "module" then
+            assetData.cAsset = self
+            self.rwPaths = rwPaths
+            loadState = true
+        elseif assetType == "animation" then
             if rwPaths.ifp and not rwCache.ifp[(rwPaths.ifp)] then
                 rwCache.ifp[(rwPaths.ifp)] = imports.engineLoadIFP((assetManifest.encryptKey and imports.decodeString("tea", imports.file.read(rwPaths.ifp), {key = assetManifest.encryptKey})) or rwPaths.ifp, assetType.."."..assetName)
                 if rwCache.ifp[(rwPaths.ifp)] then
@@ -325,7 +329,14 @@ else
                                 fileHash = {}
                             }
                         }
-                        if assetType == "animation" then
+                        if assetType == "module" then
+                            assetManifestData.streamRange = false
+                            assetManifestData.enableLODs = false
+                            assetManifestData.assetClumps = false
+                            assetManifestData.assetAnimations = false
+                            assetManifestData.assetSounds = false
+                            assetManifestData.shaderMaps = false
+                        elseif assetType == "animation" then
                             assetManifestData.streamRange = false
                             assetManifestData.enableLODs = false
                             assetManifestData.assetClumps = false

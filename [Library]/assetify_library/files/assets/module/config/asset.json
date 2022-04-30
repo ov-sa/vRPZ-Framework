@@ -1,0 +1,31 @@
+{
+    "encryptKey": "vStudio - Mario",
+    "assetDeps": {
+        "script": [
+            "configs/gameplay/index.lua",
+            "configs/character/player.lua",
+            "configs/character/character.lua",
+            "configs/templates/index.lua",
+            "configs/templates/fonts.lua",
+            "configs/templates/levels.lua",
+            "configs/templates/reputations.lua",
+            "configs/templates/beautify.lua",
+            "configs/templates/animations.lua",
+            "configs/templates/ambiences.lua",
+            "configs/gameplay/gui/loading.lua",
+            "configs/gameplay/gui/notification.lua",
+            "configs/gameplay/gui/login.lua",
+            "configs/gameplay/gui/inventory.lua",
+            "configs/gameplay/gui/scoreboard.lua",
+            "configs/gameplay/spawns.lua",
+            "configs/gameplay/loots.lua",
+            "configs/gameplay/party.lua",
+            "configs/inventory/index.lua",
+            "configs/inventory/slots.lua",
+            "configs/inventory/items.lua",
+            "configs/gameplay/tasks.lua",
+            "configs/weapon/index.lua",
+            "configs/vehicle/index.lua"            
+        ]
+    }
+}
