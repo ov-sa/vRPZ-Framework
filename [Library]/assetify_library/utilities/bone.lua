@@ -23,6 +23,7 @@ local imports = {
     getElementRotation = getElementRotation,
     getElementBoneMatrix = getElementBoneMatrix,
     setElementCollisionsEnabled = setElementCollisionsEnabled,
+    Vector3 = Vector3,
     math = math,
     quat = quat,
     matrix = matrix
