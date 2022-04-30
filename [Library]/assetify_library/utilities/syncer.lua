@@ -397,6 +397,7 @@ else
                         end
                     end
                     if isModuleVoid then
+                        syncer.isModuleLoaded = true
                         imports.triggerClientEvent(player, "onAssetifyModuleLoad", player)
                         imports.triggerEvent("Assetify:onRequestAssets", player)
                     end
