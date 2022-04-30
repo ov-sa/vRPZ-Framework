@@ -303,6 +303,7 @@ else
                 local callbackReference = callback
                 for i = 1, #cAssetPack.manifestData, 1 do
                     local assetName = cAssetPack.manifestData[i]
+                    print(assetName)
                     local assetPath = (asset.references.root)..imports.string.lower(assetType).."/"..assetName.."/"
                     local assetManifestPath = assetPath..(asset.references.asset)..".json"
                     local assetManifestData = imports.file.read(assetManifestPath)
@@ -417,22 +418,22 @@ else
                             if assetManifestData.shaderMaps then
                                 asset:buildShader(assetPath, assetManifestData.shaderMaps, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                             end
-                            if assetManifestData.assetDeps then
-                                local assetDeps = {}
-                                for i, j in imports.pairs(assetManifestData.assetDeps) do
-                                    if j and (imports.type(j) == "table") then
-                                        assetDeps[i] = {}
-                                        for k, v in imports.pairs(j) do
-                                            j[k] = assetPath.."dep/"..j[k]
-                                            assetDeps[i][k] = j[k]
-                                            asset:buildFile(assetDeps[i][k], cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
-                                            thread.pause()
-                                        end
+                        end
+                        if assetManifestData.assetDeps then
+                            local assetDeps = {}
+                            for i, j in imports.pairs(assetManifestData.assetDeps) do
+                                if j and (imports.type(j) == "table") then
+                                    assetDeps[i] = {}
+                                    for k, v in imports.pairs(j) do
+                                        j[k] = assetPath.."dep/"..j[k]
+                                        assetDeps[i][k] = j[k]
+                                        asset:buildFile(assetDeps[i][k], cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                        thread.pause()
                                     end
-                                    thread.pause()
                                 end
-                                assetManifestData.assetDeps = assetDeps
+                                thread.pause()
                             end
+                            assetManifestData.assetDeps = assetDeps
                         end
                     end
                 end

@@ -18,6 +18,7 @@ availableAssetPacks = {
         assetType = "module"
     },
 
+    --[[
     ["animation"] = {
         autoLoad = true,
         assetType = "animation"
@@ -69,4 +70,5 @@ availableAssetPacks = {
         assetBase = 1337,
         assetTransparency = false
     }
+    ]]
 }
