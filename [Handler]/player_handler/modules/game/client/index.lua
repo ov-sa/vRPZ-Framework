@@ -50,7 +50,6 @@ CGame.updateSettings = function(index, data)
 end
 
 CGame.loadLanguage = function()
-    --[[
     local cLanguage = CGame.fetchSettings("language")
     cLanguage = (cLanguage and FRAMEWORK_CONFIGS["Game"]["Game_Languages"][cLanguage] and cLanguage) or false
     if not cLanguage then
@@ -59,8 +58,6 @@ CGame.loadLanguage = function()
     else
         CPlayer.setLanguage(cLanguage)
     end
-    ]]
-    CPlayer.setLanguage("TR")
     return true
 end
 
