@@ -47,7 +47,7 @@ local imports = {
 imports.assetify.execOnModuleLoad(function()
     CGame.loadModule("vRPZ_Config", {"shared", "server"})
     CGame.loadModule("vRPZ_Core", {"shared", "server"})
-    scheduleExec.boot()
+    imports.assetify.scheduleExec.boot()
 end)
 
 

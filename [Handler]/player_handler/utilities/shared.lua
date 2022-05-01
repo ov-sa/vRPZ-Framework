@@ -30,56 +30,7 @@ local imports = {
     math = math,
     assetify = assetify
 }
-
-
------------------------
---[[ Module Booter ]]--
------------------------
-
-scheduleExec = {
-    buffer = {
-        onLoad = {}, onModuleLoad = {}
-    },
-    boot = function()
-        imports.assetify.execOnLoad(function()
-            for i = 1, #scheduleExec.buffer.onLoad, 1 do
-                imports.assetify.execOnLoad(scheduleExec.buffer.onLoad[i])
-            end
-            scheduleExec = nil
-        end)
-        imports.assetify.execOnModuleLoad(function()
-            for i = 1, #scheduleExec.buffer.onModuleLoad, 1 do
-                imports.assetify.execOnModuleLoad(scheduleExec.buffer.onModuleLoad[i])
-            end
-            scheduleExec.buffer.onModuleLoad = nil
-        end)
-        return true
-    end,
-    loadModule = function(assetName, moduleTypes)
-        local cAsset = imports.assetify.getAsset("module", assetName)
-        if not cAsset or not moduleTypes or (#moduleTypes <= 0) then return false end
-        for i = 1, #moduleTypes, 1 do
-            local j = moduleTypes[i]
-            if cAsset.synced.manifestData.assetDeps.script[j] then
-                for k = 1, #cAsset.synced.manifestData.assetDeps.script[j], 1 do
-                    loadstring(imports.assetify.getAssetDep("module", assetName, "script", j, k))()
-                end
-            end
-        end
-        return true
-    end,
-    execOnLoad = function(execFunc)
-        if not execFunc or (imports.type(execFunc) ~= "function") then return false end
-        imports.table.insert(scheduleExec.buffer.onLoad, execFunc)
-        return true
-    end,
-    execOnModuleLoad = function(execFunc)
-        if not execFunc or (imports.type(execFunc) ~= "function") then return false end
-        imports.table.insert(scheduleExec.buffer.onModuleLoad, execFunc)
-        return true
-    end
-}
-CGame = scheduleExec
+CGame = imports.assetify.scheduleExec
 
 
 ----------------------------------------------
