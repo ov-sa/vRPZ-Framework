@@ -60,6 +60,7 @@ end
 -------------------------
 
 CGame.execOnModuleLoad(function()
+    print("YYEYE LOADEEDDD")
     imports.addEvent("onServerRender", false)
     imports.setTimer(function(tickSyncer)
         if tickSyncer and imports.isElement(tickSyncer) then

@@ -58,12 +58,15 @@ imports.assetify.execOnLoad(function()
     for i = 1, #scheduledExecs.onLoad, 1 do
         imports.assetify.execOnLoad(scheduledExecs.onLoad[i])
     end
+    scheduledExecs.onLoad = nil
 end)
 imports.assetify.execOnModuleLoad(function()
     CGame.loadModule("vRPZ_Config")
+    CGame.loadModule("vRPZ_Core")
     for i = 1, #scheduledExecs.onModuleLoad, 1 do
         imports.assetify.execOnModuleLoad(scheduledExecs.onModuleLoad[i])
     end
+    scheduledExecs = nil
 end)
 
 
