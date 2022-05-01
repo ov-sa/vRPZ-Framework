@@ -208,7 +208,7 @@ if localPlayer then
                     imports.triggerEvent("onAssetifyLoad", resourceRoot)
                     thread:create(function(cThread)
                         for i, j in imports.pairs(availableAssetPacks) do
-                            if assetType ~= "module" then
+                            if i ~= "module" then
                                 if j.autoLoad and j.rwDatas then
                                     for k, v in imports.pairs(j.rwDatas) do
                                         if v then
