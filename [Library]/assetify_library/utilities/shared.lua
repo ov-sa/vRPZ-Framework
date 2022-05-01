@@ -34,9 +34,13 @@ local imports = {
 --[[ Decoder ]]--
 -----------------
 
-decodeString = function(...)
-    local rawString = imports.decodeString(...)
-    return (rawString and imports.utf8.gsub(rawString, imports.utf8.char(0), "")) or false
+decodeString = function(decodeType, decodeData, decodeOptions, removeNull)
+    local rawString = imports.decodeString(decodeType, decodeData, decodeOptions)
+    if not rawString then return false end
+    if removeNull then
+        rawString = imports.utf8.gsub(rawString, imports.utf8.char(0), "")
+    end
+    return rawString
 end
 
 

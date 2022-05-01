@@ -114,13 +114,6 @@ if localPlayer then
         if not cAsset or not isLoaded then return false end
         if not depType or not depIndex or not cAsset.manifestData.assetDeps or not cAsset.manifestData.assetDeps[depType] or not cAsset.manifestData.assetDeps[depType][depIndex] or ((imports.type(cAsset.manifestData.assetDeps[depType][depIndex]) == "table") and (not depSubIndex or not cAsset.manifestData.assetDeps[depType][depIndex][depSubIndex])) then return false end
         if depSubIndex then
-            if not cAsset.unSynced.rwCache.dep[depType] then
-                iprint(cAsset.unSynced.rwCache.dep)
-                print("WOT 1")
-                print(depType)
-            elseif not cAsset.unSynced.rwCache.dep[depType][depIndex] then
-                print("WOT 2")
-            end
             return cAsset.unSynced.rwCache.dep[depType][depIndex][depSubIndex] or false
         else
             return cAsset.unSynced.rwCache.dep[depType][depIndex] or false

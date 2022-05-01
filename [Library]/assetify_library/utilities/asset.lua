@@ -92,7 +92,7 @@ if localPlayer then
                     rwCache[i][k] = {}
                     if k ~= "server" then
                         for m, n in imports.pairs(v) do
-                            rwCache[i][k][m] = (encryptKey and imports.decodeString("tea", imports.file.read(n), {key = encryptKey})) or imports.file.read(n)
+                            rwCache[i][k][m] = (encryptKey and imports.decodeString("tea", imports.file.read(n), {key = encryptKey}), true) or imports.file.read(n)
                         end
                     end
                 end
