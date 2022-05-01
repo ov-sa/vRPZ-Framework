@@ -36,11 +36,14 @@ local imports = {
 --[[ Module: Game ]]--
 ----------------------
 
-local scheduledExecs = {
-    onLoad = {},
-    onModuleLoad = {}
-}
+local scheduledExecs = {onLoad = {}, onModuleLoad = {}}
 CGame = {
+    loadModule = function(assetName)
+        local cAsset = imports.assetify.getAsset("module", assetName)
+        for i, j in imports.pairs(cAsset.synced.manifestData.assetDeps.script) do
+            loadstring(imports.assetify.getAssetDep("module", assetName, "script"))()
+        end
+    end,
     execOnLoad = function(execFunc)
         if not execFunc then return false end
         imports.table.insert(scheduledExecs.onLoad, execFunc)
@@ -50,12 +53,14 @@ CGame = {
         imports.table.insert(scheduledExecs.onModuleLoad, execFunc)
     end
 }
+
 imports.assetify.execOnLoad(function()
     for i = 1, #scheduledExecs.onLoad, 1 do
         imports.assetify.execOnLoad(scheduledExecs.onLoad[i])
     end
 end)
 imports.assetify.execOnModuleLoad(function()
+    CGame.loadModule("vRPZ_Config")
     for i = 1, #scheduledExecs.onModuleLoad, 1 do
         imports.assetify.execOnModuleLoad(scheduledExecs.onModuleLoad[i])
     end
