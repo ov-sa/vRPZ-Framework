@@ -47,6 +47,7 @@ local imports = {
 
 
 CGame.execOnModuleLoad(function()
+    print("CLIENT LOADED.. 1")
     -------------------
     --[[ Variables ]]--
     -------------------
@@ -784,6 +785,7 @@ CGame.execOnModuleLoad(function()
     imports.fadeCamera(false)
     imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
     CGame.execOnLoad(function()
+        print("CLIENT LOADED.. 2")
         for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Ambiences"]) do
             local cAsset = imports.assetify.getAsset("sound", j.assetName)
             if imports.type(j.category) == "table" then
