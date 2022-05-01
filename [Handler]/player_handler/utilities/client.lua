@@ -36,10 +36,8 @@ local imports = {
 }
 imports.assetify.execOnModuleLoad(function()
     imports.assetify.loadModule("vRPZ_Config", {"shared", "client"})
-    --imports.assetify.loadModule("vRPZ_Core", {"shared", "client"})
-    --print(#imports.assetify.scheduleExec.buffer.onModuleLoad)
+    imports.assetify.loadModule("vRPZ_Core", {"shared", "client"})
     imports.assetify.scheduleExec.boot()
-    print("BOOT")
 end)
 
 
