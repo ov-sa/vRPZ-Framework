@@ -3,7 +3,7 @@
 ------------------
 
 FRAMEWORK_CONFIGS = {
-    ["Game"] = {}
+    ["Game"] = {},
     ["UI"] = {},
     ["Templates"] = {},
     ["Inventory"] = {},
