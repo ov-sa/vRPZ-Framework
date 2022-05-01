@@ -40,8 +40,15 @@ local imports = {
     setMinuteDuration = setMinuteDuration,
     setGameType = setGameType,
     setMapName = setMapName,
-    math = math
+    math = math,
+    assetify = assetify
 }
+
+imports.assetify.execOnModuleLoad(function()
+    CGame.loadModule("vRPZ_Config", {"shared", "server"})
+    CGame.loadModule("vRPZ_Core", {"shared", "server"})
+    scheduledExecs.bootModule()
+end)
 
 
 ---------------------------------------

@@ -113,7 +113,11 @@ if localPlayer then
         local cAsset, isLoaded = manager:getData(assetType, assetName, syncer.librarySerial)
         if not cAsset or not isLoaded then return false end
         if not depType or not depIndex or not cAsset.manifestData.assetDeps or not cAsset.manifestData.assetDeps[depType] or not cAsset.manifestData.assetDeps[depType][depIndex] or ((imports.type(cAsset.manifestData.assetDeps[depType][depIndex]) == "table") and (not depSubIndex or not cAsset.manifestData.assetDeps[depType][depIndex][depSubIndex])) then return false end
-        return (depSubIndex and cAsset.unsyncedData.rwCache.dep[depType][depIndex] and cAsset.unsyncedData.rwCache.dep[depType][depIndex][depSubIndex]) or cAsset.unsyncedData.rwCache.dep[depType][depIndex] or false
+        if depSubIndex then
+            return cAsset.unsyncedData.rwCache.dep[depType][depIndex][depSubIndex] or false
+        else
+            return cAsset.unsyncedData.rwCache.dep[depType][depIndex] or false
+        end
     end
 
     function manager:load(assetType, assetName)
@@ -134,7 +138,7 @@ if localPlayer then
             }
         }
         shader:createTex(cAsset.manifestData.shaderMaps, cAsset.unsyncedData.rwCache.map, cAsset.manifestData.encryptKey)
-        asset:createDep(cAsset.manifestData.assetDeps, cAsset.unsyncedData.rwCache.dep, cAsset.manifestData.encryptKey, true)
+        asset:createDep(cAsset.manifestData.assetDeps, cAsset.unsyncedData.rwCache.dep, cAsset.manifestData.encryptKey)
         if cAsset.manifestData.shaderMaps and cAsset.manifestData.shaderMaps.control then
             for i, j in imports.pairs(cAsset.manifestData.shaderMaps.control) do
                 local shaderTextures, shaderInputs = {}, {}
@@ -431,6 +435,6 @@ else
         local cAsset = manager:getData(assetType, assetName, syncer.librarySerial)
         if not cAsset then return false end
         if not depType or not depIndex or not cAsset.synced.manifestData.assetDeps or not cAsset.synced.manifestData.assetDeps[depType] or not cAsset.synced.manifestData.assetDeps[depType][depIndex] or ((imports.type(cAsset.synced.manifestData.assetDeps[depType][depIndex]) == "table") and (not depSubIndex or not cAsset.synced.manifestData.assetDeps[depType][depIndex][depSubIndex])) then return false end
-        return (depSubIndex and cAsset.synced.manifestData.assetDeps[depType][depIndex][depSubIndex]) or cAsset.synced.manifestData.assetDeps[depType][depIndex] or false
+        return (depSubIndex and cAsset.unSynced.rawData[(cAsset.synced.manifestData.assetDeps[depType][depIndex][depSubIndex])]) or cAsset.unSynced.rawData[(cAsset.synced.manifestData.assetDeps[depType][depIndex])] or false
     end
 end

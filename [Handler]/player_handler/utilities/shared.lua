@@ -32,17 +32,39 @@ local imports = {
 }
 
 
-----------------------
---[[ Module: Game ]]--
-----------------------
+-----------------------
+--[[ Module Booter ]]--
+-----------------------
 
-local scheduledExecs = {onLoad = {}, onModuleLoad = {}}
-CGame = {
-    loadModule = function(assetName)
+scheduledExecs = {onLoad = {}, onModuleLoad = {}}
+scheduledExecs = {
+    onLoad = {}, onModuleLoad = {},
+    bootModule = function()
+        imports.assetify.execOnLoad(function()
+            for i = 1, #scheduledExecs.onLoad, 1 do
+                imports.assetify.execOnLoad(scheduledExecs.onLoad[i])
+            end
+            scheduledExecs.onLoad = nil
+        end)
+        imports.assetify.execOnModuleLoad(function()
+            for i = 1, #scheduledExecs.onModuleLoad, 1 do
+                imports.assetify.execOnModuleLoad(scheduledExecs.onModuleLoad[i])
+            end
+            scheduledExecs = nil
+        end)
+    end,
+    loadModule = function(assetName, moduleTypes)
         local cAsset = imports.assetify.getAsset("module", assetName)
-        for i = 1, #cAsset.synced.manifestData.assetDeps.script, 1 do
-            loadstring(imports.assetify.getAssetDep("module", assetName, "script", i))()
+        if not cAsset or not moduleTypes or (#moduleTypes <= 0) then return false end
+        for i = 1, #moduleTypes, 1 do
+            local j = moduleTypes[i]
+            if cAsset.synced.manifestData.assetDeps.script[j] then
+                for k = 1, #cAsset.synced.manifestData.assetDeps.script[j], 1 do
+                    loadstring(imports.assetify.getAssetDep("module", assetName, "script", j, k))()
+                end
+            end
         end
+        return true
     end,
     execOnLoad = function(execFunc)
         if not execFunc then return false end
@@ -53,21 +75,7 @@ CGame = {
         imports.table.insert(scheduledExecs.onModuleLoad, execFunc)
     end
 }
-
-imports.assetify.execOnLoad(function()
-    for i = 1, #scheduledExecs.onLoad, 1 do
-        imports.assetify.execOnLoad(scheduledExecs.onLoad[i])
-    end
-    scheduledExecs.onLoad = nil
-end)
-imports.assetify.execOnModuleLoad(function()
-    CGame.loadModule("vRPZ_Config")
-    CGame.loadModule("vRPZ_Core")
-    for i = 1, #scheduledExecs.onModuleLoad, 1 do
-        imports.assetify.execOnModuleLoad(scheduledExecs.onModuleLoad[i])
-    end
-    scheduledExecs = nil
-end)
+CGame = scheduledExecs
 
 
 ----------------------------------------------
