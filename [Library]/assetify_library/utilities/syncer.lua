@@ -43,6 +43,7 @@ local imports = {
 
 syncer = {
     isLibraryLoaded = false,
+    isModuleLoaded = false,
     libraryName = imports.getResourceName(resource),
     librarySerial = imports.md5(imports.getResourceName(resource)..":"..imports.tostring(resource)..":"..imports.toJSON(imports.getRealTime())),
     libraryBandwidth = 0
@@ -53,7 +54,6 @@ imports.addEvent("onAssetifyLoad", true)
 imports.addEvent("onAssetifyUnLoad", false)
 imports.addEvent("onAssetifyModuleLoad", true)
 if localPlayer then
-    syncer.isModuleLoaded = false
     syncer.scheduledAssets = {}
     availableAssetPacks = {}
     imports.addEvent("onAssetLoad", false)
@@ -176,6 +176,7 @@ if localPlayer then
                                 thread.pause()
                             end
                         end
+                        syncer.isModuleLoaded = true
                         imports.triggerEvent("onAssetifyModuleLoad", localPlayer)
                     end):resume({
                         executions = downloadSettings.buildRate,

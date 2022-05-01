@@ -43,10 +43,9 @@ local imports = {
     math = math,
     assetify = assetify
 }
-
 imports.assetify.execOnModuleLoad(function()
-    CGame.loadModule("vRPZ_Config", {"shared", "server"})
-    CGame.loadModule("vRPZ_Core", {"shared", "server"})
+    imports.assetify.loadModule("vRPZ_Config", {"shared", "server"})
+    imports.assetify.loadModule("vRPZ_Core", {"shared", "server"})
     imports.assetify.scheduleExec.boot()
 end)
 
@@ -67,7 +66,6 @@ end
 -------------------------
 
 CGame.execOnModuleLoad(function()
-    print("YYEYE LOADEEDDD")
     imports.addEvent("onServerRender", false)
     imports.setTimer(function(tickSyncer)
         if tickSyncer and imports.isElement(tickSyncer) then

@@ -31,8 +31,16 @@ local imports = {
     setPlayerHudComponentVisible = setPlayerHudComponentVisible,
     setCameraFieldOfView = setCameraFieldOfView,
     showChat = showChat,
-    showCursor = showCursor
+    showCursor = showCursor,
+    assetify = assetify
 }
+imports.assetify.execOnModuleLoad(function()
+    imports.assetify.loadModule("vRPZ_Config", {"shared", "client"})
+    imports.assetify.loadModule("vRPZ_Core", {"shared", "client"})
+    --print(#imports.assetify.scheduleExec.buffer.onModuleLoad)
+    imports.assetify.scheduleExec.boot()
+    print("BOOT")
+end)
 
 
 ---------------------------------------
