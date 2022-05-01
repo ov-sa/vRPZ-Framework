@@ -36,19 +36,20 @@ local imports = {
 --[[ Module Booter ]]--
 -----------------------
 
-scheduledExecs = {onLoad = {}, onModuleLoad = {}}
 scheduledExecs = {
-    onLoad = {}, onModuleLoad = {},
+    buffer = {
+        onLoad = {}, onModuleLoad = {}
+    },
     bootModule = function()
         imports.assetify.execOnLoad(function()
-            for i = 1, #scheduledExecs.onLoad, 1 do
-                imports.assetify.execOnLoad(scheduledExecs.onLoad[i])
+            for i = 1, #scheduledExecs.buffer.onLoad, 1 do
+                imports.assetify.execOnLoad(scheduledExecs.buffer.onLoad[i])
             end
-            scheduledExecs.onLoad = nil
+            scheduledExecs.buffer.onLoad = nil
         end)
         imports.assetify.execOnModuleLoad(function()
-            for i = 1, #scheduledExecs.onModuleLoad, 1 do
-                imports.assetify.execOnModuleLoad(scheduledExecs.onModuleLoad[i])
+            for i = 1, #scheduledExecs.buffer.onModuleLoad, 1 do
+                imports.assetify.execOnModuleLoad(scheduledExecs.buffer.onModuleLoad[i])
             end
             scheduledExecs = nil
         end)
@@ -67,12 +68,12 @@ scheduledExecs = {
         return true
     end,
     execOnLoad = function(execFunc)
-        if not execFunc then return false end
-        imports.table.insert(scheduledExecs.onLoad, execFunc)
+        if not execFunc or (imports.type(execFunc) ~= "function") then return false end
+        imports.table.insert(scheduledExecs.buffer.onLoad, execFunc)
     end,
     execOnModuleLoad = function(execFunc)
-        if not execFunc then return false end
-        imports.table.insert(scheduledExecs.onModuleLoad, execFunc)
+        if not execFunc or (imports.type(execFunc) ~= "function") then return false end
+        imports.table.insert(scheduledExecs.buffer.onModuleLoad, execFunc)
     end
 }
 CGame = scheduledExecs
