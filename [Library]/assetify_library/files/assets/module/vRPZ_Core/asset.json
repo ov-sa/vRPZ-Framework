@@ -1,6 +1,44 @@
 {
     "encryptKey": "vStudio - Mario",
     "assetDeps": {
-        "script": []
+        "script": {
+            "shared": [
+                "game/shared/index.lua",
+                "game/shared/exports.lua",
+                "player/shared/index.lua",
+                "player/shared/exports.lua",
+                "character/shared/index.lua",
+                "character/shared/exports.lua",
+                "inventory/shared/index.lua",
+                "inventory/shared/exports.lua",
+                "loot/shared/index.lua",
+                "loot/shared/exports.lua"
+            ],
+
+            "server": [
+                "player/server/index.lua",
+                "player/server/exports.lua",
+                "party/server/index.lua",
+                "party/server/exports.lua",
+                "character/server/index.lua",
+                "character/server/exports.lua",
+                "character/server/saver.lua",
+                "inventory/server/index.lua",
+                "inventory/server/exports.lua"
+            ],
+
+            "client": [
+                "game/client/index.lua",
+                "game/client/exports.lua",
+                "camera/client/index.lua",
+                "camera/client/exports.lua",
+                "sound/client/index.lua",
+                "sound/client/exports.lua",
+                "player/client/index.lua",
+                "player/client/exports.lua",
+                "inventory/client/index.lua",
+                "inventory/client/exports.lua"
+            ]
+        }
     }
 }

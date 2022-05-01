@@ -228,16 +228,18 @@ if localPlayer then
         return true
     end
 else
-    function asset:buildFile(filePath, filePointer, encryptKey, rawPointer)
+    function asset:buildFile(filePath, filePointer, encryptKey, rawPointer, skipSync)
         if not filePath or not filePointer then return false end
-        if not filePointer.unSynced.fileHash[filePath] then
+        if (not skipSync and not filePointer.unSynced.fileHash[filePath]) or (skipSync and rawPointer and not rawPointer[filePath]) then
             local builtFileData, builtFileSize = imports.file.read(filePath)
             if builtFileData then
-                filePointer.synced.assetSize.file[filePath] = builtFileSize
-                filePointer.synced.assetSize.total = filePointer.synced.assetSize.total + filePointer.synced.assetSize.file[filePath]
-                syncer.libraryBandwidth = syncer.libraryBandwidth + filePointer.synced.assetSize.file[filePath]
-                filePointer.unSynced.fileData[filePath] = (encryptKey and imports.encodeString("tea", builtFileData, {key = encryptKey})) or builtFileData
-                filePointer.unSynced.fileHash[filePath] = imports.md5(filePointer.unSynced.fileData[filePath])
+                if not skipSync then
+                    filePointer.synced.assetSize.file[filePath] = builtFileSize
+                    filePointer.synced.assetSize.total = filePointer.synced.assetSize.total + filePointer.synced.assetSize.file[filePath]
+                    syncer.libraryBandwidth = syncer.libraryBandwidth + filePointer.synced.assetSize.file[filePath]
+                    filePointer.unSynced.fileData[filePath] = (encryptKey and imports.encodeString("tea", builtFileData, {key = encryptKey})) or builtFileData
+                    filePointer.unSynced.fileHash[filePath] = imports.md5(filePointer.unSynced.fileData[filePath])
+                end
                 if rawPointer then rawPointer[filePath] = builtFileData end
             end
         end
@@ -427,9 +429,19 @@ else
                                 if j and (imports.type(j) == "table") then
                                     assetDeps[i] = {}
                                     for k, v in imports.pairs(j) do
-                                        j[k] = assetPath.."dep/"..j[k]
-                                        assetDeps[i][k] = j[k]
-                                        asset:buildFile(assetDeps[i][k], cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, cAssetPack.rwDatas[assetName].unSynced.rawData)
+                                        assetDeps[i][k] = {}
+                                        if i == "script" then
+                                            for m, n in imports.pairs(v) do
+                                                v[m] = assetPath.."dep/"..v[m]
+                                                assetDeps[i][k][m] = v[m]
+                                                asset:buildFile(assetDeps[i][k][m], cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, cAssetPack.rwDatas[assetName].unSynced.rawData, k == "server")
+                                                thread.pause()
+                                            end
+                                        else
+                                            j[k] = assetPath.."dep/"..j[k]
+                                            assetDeps[i][k] = j[k]
+                                            asset:buildFile(assetDeps[i][k], cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, cAssetPack.rwDatas[assetName].unSynced.rawData)
+                                        end
                                         thread.pause()
                                     end
                                 end
