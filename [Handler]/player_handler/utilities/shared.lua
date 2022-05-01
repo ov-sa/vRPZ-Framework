@@ -36,23 +36,24 @@ local imports = {
 --[[ Module Booter ]]--
 -----------------------
 
-scheduledExecs = {
+scheduleExec = {
     buffer = {
         onLoad = {}, onModuleLoad = {}
     },
-    bootModule = function()
+    boot = function()
         imports.assetify.execOnLoad(function()
-            for i = 1, #scheduledExecs.buffer.onLoad, 1 do
-                imports.assetify.execOnLoad(scheduledExecs.buffer.onLoad[i])
+            for i = 1, #scheduleExec.buffer.onLoad, 1 do
+                imports.assetify.execOnLoad(scheduleExec.buffer.onLoad[i])
             end
-            scheduledExecs.buffer.onLoad = nil
+            scheduleExec = nil
         end)
         imports.assetify.execOnModuleLoad(function()
-            for i = 1, #scheduledExecs.buffer.onModuleLoad, 1 do
-                imports.assetify.execOnModuleLoad(scheduledExecs.buffer.onModuleLoad[i])
+            for i = 1, #scheduleExec.buffer.onModuleLoad, 1 do
+                imports.assetify.execOnModuleLoad(scheduleExec.buffer.onModuleLoad[i])
             end
-            scheduledExecs = nil
+            scheduleExec.buffer.onModuleLoad = nil
         end)
+        return true
     end,
     loadModule = function(assetName, moduleTypes)
         local cAsset = imports.assetify.getAsset("module", assetName)
@@ -69,14 +70,16 @@ scheduledExecs = {
     end,
     execOnLoad = function(execFunc)
         if not execFunc or (imports.type(execFunc) ~= "function") then return false end
-        imports.table.insert(scheduledExecs.buffer.onLoad, execFunc)
+        imports.table.insert(scheduleExec.buffer.onLoad, execFunc)
+        return true
     end,
     execOnModuleLoad = function(execFunc)
         if not execFunc or (imports.type(execFunc) ~= "function") then return false end
-        imports.table.insert(scheduledExecs.buffer.onModuleLoad, execFunc)
+        imports.table.insert(scheduleExec.buffer.onModuleLoad, execFunc)
+        return true
     end
 }
-CGame = scheduledExecs
+CGame = scheduleExec
 
 
 ----------------------------------------------
