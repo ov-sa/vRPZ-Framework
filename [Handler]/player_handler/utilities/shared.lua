@@ -27,21 +27,39 @@ local imports = {
     getResourceState = getResourceState,
     isElementWithinMarker = isElementWithinMarker,
     table = table,
-    math = math
+    math = math,
+    assetify = assetify
 }
 
+
+----------------------
+--[[ Module: Game ]]--
+----------------------
+
+local scheduledExecs = {
+    onLoad = {},
+    onModuleLoad = {}
+}
 CGame = {
     execOnLoad = function(execFunc)
-        if imports.assetify.execOnLoad(execFunc) then
-
-        end
+        if not execFunc then return false end
+        imports.table.insert(scheduledExecs.onLoad, execFunc)
     end,
     execOnModuleLoad = function(execFunc)
-        if imports.assetify.execOnModuleLoad(execFunc) then
-            
-        end
+        if not execFunc then return false end
+        imports.table.insert(scheduledExecs.onModuleLoad, execFunc)
     end
 }
+imports.assetify.execOnLoad(function()
+    for i = 1, #scheduledExecs.onLoad, 1 do
+        imports.assetify.execOnLoad(scheduledExecs.onLoad[i])
+    end
+end)
+imports.assetify.execOnModuleLoad(function()
+    for i = 1, #scheduledExecs.onModuleLoad, 1 do
+        imports.assetify.execOnModuleLoad(scheduledExecs.onModuleLoad[i])
+    end
+end)
 
 
 ----------------------------------------------
