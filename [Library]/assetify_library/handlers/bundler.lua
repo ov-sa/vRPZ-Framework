@@ -119,19 +119,6 @@ function onBundleLibrary()
                     end)
                     return true
                 end,
-                loadModule = function(assetName, moduleTypes)
-                    local cAsset = assetify.getAsset("module", assetName)
-                    if not cAsset or not moduleTypes or (#moduleTypes <= 0) then return false end
-                    for i = 1, #moduleTypes, 1 do
-                        local j = moduleTypes[i]
-                        if cAsset.synced.manifestData.assetDeps.script[j] then
-                            for k = 1, #cAsset.synced.manifestData.assetDeps.script[j], 1 do
-                                assetify.imports.loadstring(assetify.getAssetDep("module", assetName, "script", j, k))()
-                            end
-                        end
-                    end
-                    return true
-                end,
                 execOnLoad = function(execFunc)
                     if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
                     assetify.imports.table.insert(assetify.scheduleExec.buffer.onLoad, execFunc)
@@ -208,6 +195,20 @@ function onBundleLibrary()
 
             assetify.getAssetDep = function(...)
                 return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getAssetDep", ...)
+            end
+
+            assetify.loadModule = function(assetName, moduleTypes)
+                local cAsset = assetify.getAsset("module", assetName)
+                if not cAsset or not moduleTypes or (#moduleTypes <= 0) then return false end
+                for i = 1, #moduleTypes, 1 do
+                    local j = moduleTypes[i]
+                    if cAsset.synced.manifestData.assetDeps.script[j] then
+                        for k = 1, #cAsset.synced.manifestData.assetDeps.script[j], 1 do
+                            assetify.imports.loadstring(assetify.getAssetDep("module", assetName, "script", j, k))()
+                        end
+                    end
+                end
+                return true
             end
 
             assetify.setElementAsset = function(...)
