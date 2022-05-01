@@ -109,10 +109,11 @@ if localPlayer then
         return (cAsset and isLoaded and true) or false
     end
 
-    function manager:getDep(assetType, assetName, depType, depIndex)
+    function manager:getDep(assetType, assetName, depType, depIndex, depSubIndex)
         local cAsset, isLoaded = manager:getData(assetType, assetName, syncer.librarySerial)
         if not cAsset or not isLoaded then return false end
-        return (cAsset.manifestData.assetDeps and cAsset.unsyncedData.rwCache.dep[depType] and cAsset.unsyncedData.rwCache.dep[depType][depIndex]) or false
+        if not depType or not depIndex or not cAsset.manifestData.assetDeps or not cAsset.manifestData.assetDeps[depType] or not cAsset.manifestData.assetDeps[depType][depIndex] or ((imports.type(cAsset.manifestData.assetDeps[depType][depIndex]) == "table") and (not depSubIndex or not cAsset.manifestData.assetDeps[depType][depIndex][depSubIndex])) then return false end
+        return (depSubIndex and cAsset.unsyncedData.rwCache.dep[depType][depIndex] and cAsset.unsyncedData.rwCache.dep[depType][depIndex][depSubIndex]) or cAsset.unsyncedData.rwCache.dep[depType][depIndex] or false
     end
 
     function manager:load(assetType, assetName)
@@ -426,9 +427,10 @@ else
         return false
     end
 
-    function manager:getDep(assetType, assetName, depType, depIndex)
+    function manager:getDep(assetType, assetName, depType, depIndex, depSubIndex)
         local cAsset = manager:getData(assetType, assetName, syncer.librarySerial)
         if not cAsset then return false end
-        return (cAsset.synced.manifestData.assetDeps and cAsset.synced.manifestData.assetDeps[depType] and cAsset.synced.manifestData.assetDeps[depType][depIndex] and cAsset.unSynced.rawData[(cAsset.synced.manifestData.assetDeps[depType][depIndex])]) or false
+        if not depType or not depIndex or not cAsset.synced.manifestData.assetDeps or not cAsset.synced.manifestData.assetDeps[depType] or not cAsset.synced.manifestData.assetDeps[depType][depIndex] or ((imports.type(cAsset.synced.manifestData.assetDeps[depType][depIndex]) == "table") and (not depSubIndex or not cAsset.synced.manifestData.assetDeps[depType][depIndex][depSubIndex])) then return false end
+        return (depSubIndex and cAsset.synced.manifestData.assetDeps[depType][depIndex][depSubIndex]) or cAsset.synced.manifestData.assetDeps[depType][depIndex] or false
     end
 end
