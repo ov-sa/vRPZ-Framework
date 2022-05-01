@@ -32,6 +32,23 @@ local imports = {
 }
 CGame = imports.assetify.scheduleExec
 
+assetify.loadModule = function(assetName, moduleTypes)
+    local cAsset = assetify.getAsset("module", assetName)
+    if not cAsset or not moduleTypes or (#moduleTypes <= 0) then return false end
+    local assetDeps = false
+    if localPlayer then assetDeps = cAsset.manifestData.assetDeps
+    else assetDeps = cAsset.synced.manifestData.assetDeps end
+    for i = 1, #moduleTypes, 1 do
+        local j = moduleTypes[i]
+        if assetDeps.script[j] then
+            for k = 1, #assetDeps.script[j], 1 do
+                loadstring(assetify.getAssetDep("module", assetName, "script", j, k))()
+            end
+        end
+    end
+    return true
+end
+
 
 ----------------------------------------------
 --[[ Function: Retrieves Resource's State ]]--
