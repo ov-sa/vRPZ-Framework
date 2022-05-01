@@ -40,8 +40,8 @@ local scheduledExecs = {onLoad = {}, onModuleLoad = {}}
 CGame = {
     loadModule = function(assetName)
         local cAsset = imports.assetify.getAsset("module", assetName)
-        for i, j in imports.pairs(cAsset.synced.manifestData.assetDeps.script) do
-            loadstring(imports.assetify.getAssetDep("module", assetName, "script"))()
+        for i = 1, #cAsset.synced.manifestData.assetDeps.script, 1 do
+            loadstring(imports.assetify.getAssetDep("module", assetName, "script", i))()
         end
     end,
     execOnLoad = function(execFunc)
