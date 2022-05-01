@@ -25,6 +25,7 @@ local imports = {
     collectgarbage = collectgarbage,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
+    removeEventHandler = removeEventHandler,
     getResourceRootElement = getResourceRootElement,
     triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent,
@@ -53,6 +54,27 @@ syncer.__index = syncer
 imports.addEvent("onAssetifyLoad", true)
 imports.addEvent("onAssetifyUnLoad", false)
 imports.addEvent("onAssetifyModuleLoad", true)
+syncer.execOnLoad = function(execFunc)
+    local execWrapper = nil
+    execWrapper = function()
+        execFunc()
+        imports.removeEventHandler("onAssetifyModuleLoad", root, execWrapper)
+    end
+    imports.addEventHandler("onAssetifyModuleLoad", root, execWrapper)
+    return true
+end
+syncer.execOnModuleLoad = function(execFunc)
+    local execWrapper = nil
+    execWrapper = function()
+        execFunc()
+        imports.removeEventHandler("onAssetifyModuleLoad", root, execWrapper)
+    end
+    imports.addEventHandler("onAssetifyModuleLoad", root, execWrapper)
+    return true
+end
+syncer.execOnLoad(function() syncer.isLibraryLoaded = true end)
+syncer.execOnModuleLoad(function() syncer.isModuleLoaded = true end)
+
 if localPlayer then
     syncer.scheduledAssets = {}
     availableAssetPacks = {}
@@ -176,7 +198,6 @@ if localPlayer then
                                 thread.pause()
                             end
                         end
-                        syncer.isModuleLoaded = true
                         imports.triggerEvent("onAssetifyModuleLoad", localPlayer)
                     end):resume({
                         executions = downloadSettings.buildRate,
@@ -184,7 +205,6 @@ if localPlayer then
                     })
                 else
                     syncer.scheduledAssets = nil
-                    syncer.isLibraryLoaded = true
                     imports.triggerEvent("onAssetifyLoad", resourceRoot)
                     thread:create(function(cThread)
                         for i, j in imports.pairs(availableAssetPacks) do
@@ -399,7 +419,6 @@ else
                         end
                     end
                     if isModuleVoid then
-                        syncer.isModuleLoaded = true
                         imports.triggerClientEvent(player, "onAssetifyModuleLoad", player)
                         imports.triggerEvent("Assetify:onRequestAssets", player)
                     end

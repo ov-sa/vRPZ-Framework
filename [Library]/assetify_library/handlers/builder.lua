@@ -25,7 +25,6 @@ local imports = {
 ----------------------------------
 
 local function onLibraryLoaded()
-    syncer.isLibraryLoaded = true
     imports.triggerEvent("onAssetifyLoad", resourceRoot)
     for i, j in imports.pairs(syncer.scheduledClients) do
         syncer:syncPack(i)
@@ -38,13 +37,11 @@ imports.addEventHandler("onResourceStart", resourceRoot, function()
     thread:create(function(cThread)
         syncer.libraryModules = {}
         if not availableAssetPacks["module"] then
-            syncer.isModuleLoaded = true
             imports.triggerEvent("onAssetifyModuleLoad", resourceRoot)
         end
         for i, j in imports.pairs(availableAssetPacks) do
             asset:buildPack(i, j, function(state, assetType)
                 if assetType == "module" then
-                    syncer.isModuleLoaded = true
                     imports.triggerEvent("onAssetifyModuleLoad", resourceRoot)
                 end
                 imports.setTimer(function()
