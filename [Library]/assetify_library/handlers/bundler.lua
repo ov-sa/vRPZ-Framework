@@ -110,9 +110,6 @@ function onBundleLibrary()
                         assetify.scheduleExec.buffer.onLoad = {}
                     end)
                     assetify.execOnModuleLoad(function()
-                        if localPlayer then
-                            print(#assetify.scheduleExec.buffer.onModuleLoad)
-                        end
                         for i = 1, #assetify.scheduleExec.buffer.onModuleLoad, 1 do
                             assetify.execOnModuleLoad(assetify.scheduleExec.buffer.onModuleLoad[i])
                         end
