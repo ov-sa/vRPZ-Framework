@@ -70,8 +70,7 @@ function onBundleLibrary()
             }
             assetify.execOnLoad = function(execFunc)
                 if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
-                local isLoaded = true
-                if localPlayer then isLoaded = assetify.isLoaded() end
+                local isLoaded = assetify.isLoaded()
                 if isLoaded then
                     execFunc()
                 else
@@ -86,8 +85,7 @@ function onBundleLibrary()
             end
             assetify.execOnModuleLoad = function(execFunc)
                 if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
-                local isModuleLoaded = true
-                if localPlayer then isModuleLoaded = assetify.isModuleLoaded() end
+                local isModuleLoaded = assetify.isModuleLoaded()
                 if isModuleLoaded then
                     execFunc()
                 else
@@ -200,10 +198,12 @@ function onBundleLibrary()
             assetify.loadModule = function(assetName, moduleTypes)
                 local cAsset = assetify.getAsset("module", assetName)
                 if not cAsset or not moduleTypes or (#moduleTypes <= 0) then return false end
+                cAsset = (localPlayer and cAsset) or cAsset.synced
+                if not cAsset.manifestData.assetDeps or not cAsset.manifestData.assetDeps.script then return false end
                 for i = 1, #moduleTypes, 1 do
                     local j = moduleTypes[i]
-                    if cAsset.synced.manifestData.assetDeps.script[j] then
-                        for k = 1, #cAsset.synced.manifestData.assetDeps.script[j], 1 do
+                    if cAsset.manifestData.assetDeps.script[j] then
+                        for k = 1, #cAsset.manifestData.assetDeps.script[j], 1 do
                             assetify.imports.loadstring(assetify.getAssetDep("module", assetName, "script", j, k))()
                         end
                     end
