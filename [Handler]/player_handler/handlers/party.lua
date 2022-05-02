@@ -24,9 +24,7 @@ local imports = {
     getElementData = getElementData,
     removeElementData = removeElementData,
     addCommandHandler = addCommandHandler,
-    string = {
-        lower = string.lower
-    }
+    string = string
 }
 
 
