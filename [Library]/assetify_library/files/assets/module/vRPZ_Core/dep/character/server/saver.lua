@@ -12,6 +12,7 @@ local imports = {
     getPlayerSerial = getPlayerSerial,
     getElementData = getElementData,
     setElementData = setElementData,
+    triggerEvent = triggerEvent,
     toJSON = toJSON,
     table = table,
     math = math
@@ -84,6 +85,7 @@ CCharacter.loadProgress = function(player)
     CCharacter.resetProgress(player, false, {
         characterID = characterID
     }, false, true)
+    imports.triggerEvent("Player:onLogin", player)
     return true
 end
 
@@ -100,5 +102,6 @@ CCharacter.saveProgress = function(player)
         characterID = characterID,
         inventoryID = inventoryID
     }, true)
+    imports.triggerEvent("Player:onLogout", player)
     return true
 end
