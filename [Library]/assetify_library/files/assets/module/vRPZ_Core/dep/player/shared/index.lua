@@ -4,8 +4,7 @@
 
 local imports = {
     isElement = isElement,
-    getElementType = getElementType,
-    getElementData = getElementData
+    getElementType = getElementType
 }
 
 
@@ -21,7 +20,11 @@ CPlayer = {
 
     isInitialized = function(player)
         if (not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player")) then return false end
-        return imports.getElementData(player, "Player:Initialized") or false
+        return CPlayer.CLogged[player] or false
+    end,
+
+    getLogged = function()
+        return CPlayer.CLogged
     end,
 
     getChannel = function(player)
