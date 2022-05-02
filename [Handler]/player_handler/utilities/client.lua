@@ -162,10 +162,12 @@ CGame.execOnModuleLoad(function()
     imports.setPedTargetingMarkerEnabled(false)
     imports.setPlayerHudComponentVisible("all", false)
     imports.setPlayerHudComponentVisible("crosshair", true)
+    for i = 1, #FRAMEWORK_CONFIGS["Weapon"].clearModels, 1 do
+        imports.assetify.clearModel(FRAMEWORK_CONFIGS["Weapon"].clearModels[i])
+    end
     for i, j in imports.pairs(FRAMEWORK_CONFIGS["Game"]["Camera_FOV"]) do
         imports.setCameraFieldOfView(i, j)
     end
-
     imports.addEventHandler("onClientGUIClick", root, function()
         local guiElement = imports.getElementType(source)
         if ((guiElement == "gui-edit") or (guiElement == "gui-memo")) then
@@ -174,15 +176,6 @@ CGame.execOnModuleLoad(function()
             imports.guiSetInputMode("allow_binds")
         end
     end)
-
-    local connectedPlayers = imports.getElementsByType("player")
-    for i = 1, #connectedPlayers, 1 do
-        CGame.loadAnim(connectedPlayers[i], "Character")
-    end
-    imports.addEventHandler("onClientPlayerJoin", root, function()
-        CGame.loadAnim(source, "Character")
-    end)
-
     imports.addEvent("Client:onSyncWeather", true)
     imports.addEventHandler("Client:onSyncWeather", root, function(serverWeather, serverTime)
         serverWeather = imports.tonumber(serverWeather)
@@ -191,4 +184,14 @@ CGame.execOnModuleLoad(function()
         imports.setTime(serverTime[1], serverTime[2])
         return true
     end)
+
+    CGame.execOnLoad(function()
+        local connectedPlayers = imports.getElementsByType("player")
+        for i = 1, #connectedPlayers, 1 do
+            CGame.loadAnim(connectedPlayers[i], "Character")
+        end
+        imports.addEventHandler("onClientPlayerJoin", root, function()
+            CGame.loadAnim(source, "Character")
+        end)
+    end
 end)
