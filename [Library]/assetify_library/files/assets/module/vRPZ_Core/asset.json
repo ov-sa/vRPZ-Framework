@@ -31,8 +31,6 @@
             "client": [
                 "game/client/index.lua",
                 "game/client/exports.lua",
-                "camera/client/index.lua",
-                "camera/client/exports.lua",
                 "sound/client/index.lua",
                 "sound/client/exports.lua",
                 "player/client/index.lua",
