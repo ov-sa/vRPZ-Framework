@@ -5,7 +5,6 @@
 local imports = {
     type = type,
     pairs = pairs,
-    ipairs = ipairs,
     tonumber = tonumber,
     tostring = tostring,
     toJSON = toJSON,
@@ -53,7 +52,8 @@ dbify.inventory = {
             local result = imports.dbPoll(queryHandler, 0)
             local itemsToBeAdded, itemsToBeDeleted = {}, {}
             if result and (#result > 0) then
-                for i, j in imports.ipairs(result) do
+                for i = 1, #result, 1 do
+                    local j = result[i]
                     local columnName = j["column_name"]
                     local itemIndex = imports.string.gsub(columnName, "item_", "", 1)
                     if not arguments[1].items[itemIndex] then
@@ -68,7 +68,8 @@ dbify.inventory = {
             if #itemsToBeDeleted > 0 then
                 dbify.mysql.column.delete(dbify.inventory.connection.table, itemsToBeDeleted, function(result, arguments)
                     if result then
-                        for i, j in imports.ipairs(arguments[1].items) do
+                        for i = 1, #arguments[1].items, 1 do
+                            local j = arguments[1].items[i]
                             dbify.mysql.column.isValid(dbify.inventory.connection.table, j, function(isValid, arguments)
                                 local callbackReference = callback
                                 if not isValid then
@@ -89,7 +90,8 @@ dbify.inventory = {
                     end
                 end, arguments[1], arguments[2])
             else
-                for i, j in imports.ipairs(arguments[1].items) do
+                for i = 1, #arguments[1].items, 1 do
+                    local j = arguments[1].items[i]
                     dbify.mysql.column.isValid(dbify.inventory.connection.table, j, function(isValid, arguments)
                         local callbackReference = callback
                         if not isValid then
@@ -167,7 +169,8 @@ dbify.inventory = {
                 }, function(result, arguments)
                     if result then
                         result = result[1]
-                        for i, j in imports.ipairs(arguments[1].items) do
+                        for i = 1, #arguments[1].items do
+                            local j = arguments[1].items[i]
                             j[1] = "item_"..imports.tostring(j[1])
                             j[2] = imports.math.max(0, imports.tonumber(j[2]) or 0)
                             local prevItemData = result[(j[1])]
@@ -201,7 +204,8 @@ dbify.inventory = {
             property_setnget = function(inventoryID, items, properties, processType, callback, ...)
                 if not dbify.mysql.connection.instance then return false end
                 if not inventoryID or (imports.type(inventoryID) ~= "number") or not items or (imports.type(items) ~= "table") or (#items <= 0) or not properties or (imports.type(properties) ~= "table") or (#properties <= 0) or not processType or (imports.type(processType) ~= "string") or ((processType ~= "set") and (processType ~= "get")) then return false end
-                for i, j in imports.ipairs(items) do
+                for i = 1, #items, 1 do
+                    local j = items[i]
                     items[i] = "item_"..imports.tostring(j)
                 end
                 return dbify.inventory.getData(inventoryID, items, function(result, arguments)
@@ -215,7 +219,8 @@ dbify.inventory = {
                                 if not j then
                                     j = dbify.imports.table.clone(dbify.inventory.connection.itemFormat.content, true)
                                 end
-                                for k, v in imports.ipairs(arguments[1].properties) do
+                                for k = 1, #arguments[1].properties, 1 do
+                                    local v = arguments[1].properties[k]
                                     v[1] = imports.tostring(v[1])
                                     if v[1] == dbify.inventory.connection.itemFormat.counter then
                                         v[2] = imports.math.max(0, imports.tonumber(v[2]) or j.property[(v[1])])
@@ -227,7 +232,8 @@ dbify.inventory = {
                                 local itemIndex = imports.string.gsub(i, "item_", "", 1)
                                 properties[itemIndex] = {}
                                 if j then
-                                    for k, v in imports.ipairs(arguments[1].properties) do
+                                    for k = 1, #arguments[1].properties, 1 do
+                                        local v = arguments[1].properties[k]
                                         v = imports.tostring(v)
                                         properties[itemIndex][v] = j.property[v]
                                     end
@@ -261,7 +267,8 @@ dbify.inventory = {
             data_setnget = function(inventoryID, items, datas, processType, callback, ...)
                 if not dbify.mysql.connection.instance then return false end
                 if not inventoryID or (imports.type(inventoryID) ~= "number") or not items or (imports.type(items) ~= "table") or (#items <= 0) or not datas or (imports.type(datas) ~= "table") or (#datas <= 0) or not processType or (imports.type(processType) ~= "string") or ((processType ~= "set") and (processType ~= "get")) then return false end
-                for i, j in imports.ipairs(items) do
+                for i = 1, #items, 1 do
+                    local j = items[i]
                     items[i] = "item_"..imports.tostring(j)
                 end
                 return dbify.inventory.getData(inventoryID, items, function(result, arguments)
@@ -275,7 +282,8 @@ dbify.inventory = {
                                 if not j then
                                     j = dbify.imports.table.clone(dbify.inventory.connection.itemFormat.content, true)
                                 end
-                                for k, v in imports.ipairs(arguments[1].datas) do
+                                for k = 1, #arguments[1].datas, 1 do
+                                    local v = arguments[1].datas[k]
                                     j.data[imports.tostring(v[1])] = v[2]
                                 end
                                 imports.table.insert(datas, {i, imports.toJSON(j)})
@@ -283,7 +291,8 @@ dbify.inventory = {
                                 local itemIndex = imports.string.gsub(i, "item_", "", 1)
                                 datas[itemIndex] = {}
                                 if j then
-                                    for k, v in imports.ipairs(arguments[1].datas) do
+                                    for k = 1, #arguments[1].datas, 1 do
+                                        local v = arguments[1].datas[k]
                                         v = imports.tostring(v)
                                         datas[itemIndex][v] = j.data[v]
                                     end
