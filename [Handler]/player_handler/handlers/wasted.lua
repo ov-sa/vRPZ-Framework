@@ -171,7 +171,7 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, loadBuffer)
     imports.setElementCollisionsEnabled(source, true)
     imports.setCameraTarget(source, source)
     CCharacter.loadProgress(source, loadBuffer, ((not loadBuffer or ((loadBuffer and not spawnpoint and true) or false)) and true) or false)
-    if (CCharacter.getHealth(source) <= 0) then
+    if CCharacter.getHealth(source) <= 0 then
         --TODO: NEEDS TO BE IMPLEMENTED..
         --imports.triggerEvent("Player:onDeath", source, nil, false, nil, 3)
         imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false, FRAMEWORK_CONFIGS["Spawns"]["Hint"])
