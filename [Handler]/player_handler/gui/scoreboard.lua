@@ -136,7 +136,7 @@ CGame.execOnModuleLoad(function()
             local serverPlayers = {}
             for i, j in imports.pairs(CPlayer.CLogged) do
                 imports.table.insert(serverPlayers, {
-                    name = getPlayerName(i)
+                    name = imports.getPlayerName(i)
                 })
             end
             local startX, startY = scoreboardUI.startX, scoreboardUI.startY
