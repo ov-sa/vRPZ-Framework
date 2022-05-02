@@ -171,7 +171,6 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
             local characterIdentity = CCharacter.CBuffer[(args[2])].identity
             imports.setElementData(args[1], "Character:ID", args[2])
             imports.setElementData(args[1], "Character:Identity", characterIdentity)
-            imports.setElementData(args[1], "Player:Initialized", true)
             CPlayer.setData(serial, {
                 {"character", character}
             })
