@@ -17,6 +17,7 @@ local imports = {
     isElement = isElement,
     engineImportTXD = engineImportTXD,
     engineReplaceModel = engineReplaceModel,
+    engineRestoreModel = engineRestoreModel,
     triggerEvent = triggerEvent,
     math = math
 }
@@ -90,6 +91,12 @@ function clearModel(modelID)
         return true
     end
     return false
+end
+
+function restoreModel(modelID)
+    modelID = imports.tonumber(modelID)
+    if not modelID then return false end
+    return imports.engineRestoreModel(modelID)
 end
 
 function playSoundAsset(...)
