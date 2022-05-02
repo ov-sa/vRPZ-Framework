@@ -96,10 +96,9 @@ imports.addEventHandler("onResourceStart", resourceRoot, function()
     end
 end)
 
-imports.addEventHandler("onPlayerJoin", root, function(_, playerSerial)
-    if not dbify.mysql.connection.instance then return false end
-    if dbify.serial.connection.autoSync then
-        local playerSerial = imports.getPlayerSerial(source)
-        dbify.serial.create(playerSerial)
-    end
-end)
+if dbify.settings.syncSerial then
+    imports.addEventHandler("onPlayerJoin", root, function()
+        if not dbify.mysql.connection.instance then return false end
+        dbify.serial.create(imports.getPlayerSerial(source))
+    end)
+end

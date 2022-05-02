@@ -100,10 +100,10 @@ imports.assetify.execOnModuleLoad(function()
         end
     end
 
-    imports.addEventHandler("onPlayerLogin", root, function(_, playerAccount)
-        if not dbify.mysql.connection.instance then return false end
-        if dbify.account.connection.autoSync then
+    if dbify.settings.syncAccount then
+        imports.addEventHandler("onPlayerLogin", root, function(_, playerAccount)
+            if not dbify.mysql.connection.instance then return false end
             dbify.account.create(imports.getAccountName(playerAccount))
-        end
-    end)
+        end)
+    end
 end)

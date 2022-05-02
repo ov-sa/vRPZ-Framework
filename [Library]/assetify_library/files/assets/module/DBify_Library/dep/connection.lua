@@ -12,7 +12,7 @@ dbify = {
             port = "3306",
             options = ""
         },
-        syncAccounts = false,
-        syncSerials = true
+        syncAccount = false,
+        syncSerial = true
     }
 }

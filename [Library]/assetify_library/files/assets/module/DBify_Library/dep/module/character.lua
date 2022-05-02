@@ -7,7 +7,8 @@ local imports = {
     addEventHandler = addEventHandler,
     dbQuery = dbQuery,
     dbPoll = dbPoll,
-    dbExec = dbExec
+    dbExec = dbExec,
+    assetify = assetify
 }
 
 
@@ -80,7 +81,7 @@ dbify.character = {
 --[[ Module Booter ]]--
 -----------------------
 
-imports.addEventHandler("onResourceStart", resourceRoot, function()
+imports.assetify.execOnModuleLoad(function()
     if not dbify.mysql.connection.instance then return false end
     imports.dbExec(dbify.mysql.connection.instance, "CREATE TABLE IF NOT EXISTS `??` (`??` INT AUTO_INCREMENT PRIMARY KEY)", dbify.character.connection.table, dbify.character.connection.keyColumn)
 end)
