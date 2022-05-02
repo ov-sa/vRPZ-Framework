@@ -5,7 +5,7 @@
         "script": {
             "server": [
                 "connection.lua",
-                "mysql.lua",
+                "module/mysql.lua",
                 "module/account.lua",
                 "module/serial.lua",
                 "module/character.lua",

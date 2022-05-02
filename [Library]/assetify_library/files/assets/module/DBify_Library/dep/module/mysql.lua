@@ -3,7 +3,6 @@
 -----------------
 
 local imports = {
-    call = call,
     type = type,
     unpack = unpack,
     tostring = tostring,
@@ -15,9 +14,9 @@ local imports = {
 }
 
 
-----------------
---[[ Module ]]--
-----------------
+-----------------------
+--[[ Module: MySQL ]]--
+-----------------------
 
 dbify.mysql = {
     connection = {
