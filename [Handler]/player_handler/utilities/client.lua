@@ -193,5 +193,5 @@ CGame.execOnModuleLoad(function()
         imports.addEventHandler("onClientPlayerJoin", root, function()
             CGame.loadAnim(source, "Character")
         end)
-    end
+    end)
 end)
