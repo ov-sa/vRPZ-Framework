@@ -1,14 +1,3 @@
-----------------------------------------------------------------
---[[ Resource: DBify Library
-     Files: modules: vehicle.lua
-     Server: -
-     Author: vStudio
-     Developer: Aviril
-     DOC: 09/10/2021
-     Desc: Vehicle Module ]]--
-----------------------------------------------------------------
-
-
 -----------------
 --[[ Imports ]]--
 -----------------
@@ -22,23 +11,23 @@ local imports = {
 }
 
 
--------------------
---[[ Variables ]]--
--------------------
+-------------------------
+--[[ Module: Vehicle ]]--
+-------------------------
 
-dbify["vehicle"] = {
-    __connection__ = {
+dbify.vehicle = {
+    connection = {
         table = "server_vehicles",
         keyColumn = "id"
     },
 
     fetchAll = function(keyColumns, callback, ...)
-        if not dbify.mysql.__connection__.instance then return false end
-        return dbify.mysql.table.fetchContents(dbify.vehicle.__connection__.table, keyColumns, callback, ...)
+        if not dbify.mysql.connection.instance then return false end
+        return dbify.mysql.table.fetchContents(dbify.vehicle.connection.table, keyColumns, callback, ...)
     end,
 
     create = function(callback, ...)
-        if not dbify.mysql.__connection__.instance then return false end
+        if not dbify.mysql.connection.instance then return false end
         if not callback or (imports.type(callback) ~= "function") then return false end
         imports.dbQuery(function(queryHandler, arguments)
             local callbackReference = callback
@@ -47,17 +36,17 @@ dbify["vehicle"] = {
             if callbackReference and (imports.type(callbackReference) == "function") then
                 callbackReference(result, arguments)
             end
-        end, {{...}}, dbify.mysql.__connection__.instance, "INSERT INTO `??` (`??`) VALUES(NULL)", dbify.vehicle.__connection__.table, dbify.vehicle.__connection__.keyColumn)
+        end, {{...}}, dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(NULL)", dbify.vehicle.connection.table, dbify.vehicle.connection.keyColumn)
         return true
     end,
 
     delete = function(vehicleID, callback, ...)
-        if not dbify.mysql.__connection__.instance then return false end
+        if not dbify.mysql.connection.instance then return false end
         if not vehicleID or (imports.type(vehicleID) ~= "number") then return false end
-        return dbify.vehicle.getData(vehicleID, {dbify.vehicle.__connection__.keyColumn}, function(result, arguments)
+        return dbify.vehicle.getData(vehicleID, {dbify.vehicle.connection.keyColumn}, function(result, arguments)
             local callbackReference = callback
             if result then
-                result = imports.dbExec(dbify.mysql.__connection__.instance, "DELETE FROM `??` WHERE `??`=?", dbify.vehicle.__connection__.table, dbify.vehicle.__connection__.keyColumn, vehicleID)
+                result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.vehicle.connection.table, dbify.vehicle.connection.keyColumn, vehicleID)
                 if callbackReference and (imports.type(callbackReference) == "function") then
                     callbackReference(result, arguments)
                 end
@@ -70,28 +59,28 @@ dbify["vehicle"] = {
     end,
 
     setData = function(vehicleID, dataColumns, callback, ...)
-        if not dbify.mysql.__connection__.instance then return false end
+        if not dbify.mysql.connection.instance then return false end
         if not vehicleID or (imports.type(vehicleID) ~= "number") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
-        return dbify.mysql.data.set(dbify.vehicle.__connection__.table, dataColumns, {
-            {dbify.vehicle.__connection__.keyColumn, vehicleID}
+        return dbify.mysql.data.set(dbify.vehicle.connection.table, dataColumns, {
+            {dbify.vehicle.connection.keyColumn, vehicleID}
         }, callback, ...)
     end,
 
     getData = function(vehicleID, dataColumns, callback, ...)
-        if not dbify.mysql.__connection__.instance then return false end
+        if not dbify.mysql.connection.instance then return false end
         if not vehicleID or (imports.type(vehicleID) ~= "number") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
-        return dbify.mysql.data.get(dbify.vehicle.__connection__.table, dataColumns, {
-            {dbify.vehicle.__connection__.keyColumn, vehicleID}
+        return dbify.mysql.data.get(dbify.vehicle.connection.table, dataColumns, {
+            {dbify.vehicle.connection.keyColumn, vehicleID}
         }, true, callback, ...)
     end
 }
 
 
-----------------------------------
---[[ Event: On Resource-Start ]]--
-----------------------------------
+-----------------------
+--[[ Module Booter ]]--
+-----------------------
 
 imports.addEventHandler("onResourceStart", resourceRoot, function()
-    if not dbify.mysql.__connection__.instance then return false end
-    imports.dbExec(dbify.mysql.__connection__.instance, "CREATE TABLE IF NOT EXISTS `??` (`??` INT AUTO_INCREMENT PRIMARY KEY)", dbify.vehicle.__connection__.table, dbify.vehicle.__connection__.keyColumn)
+    if not dbify.mysql.connection.instance then return false end
+    imports.dbExec(dbify.mysql.connection.instance, "CREATE TABLE IF NOT EXISTS `??` (`??` INT AUTO_INCREMENT PRIMARY KEY)", dbify.vehicle.connection.table, dbify.vehicle.connection.keyColumn)
 end)

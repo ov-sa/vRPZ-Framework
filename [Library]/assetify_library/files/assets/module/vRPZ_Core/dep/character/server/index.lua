@@ -17,7 +17,7 @@ CCharacter.CBuffer = {}
 
 CCharacter.fetch = function(characterID, ...)
     dbify.character.fetchAll({
-        {dbify.character.__connection__.keyColumn, characterID}
+        {dbify.character.connection.keyColumn, characterID}
     }, ...)
     return true
 end

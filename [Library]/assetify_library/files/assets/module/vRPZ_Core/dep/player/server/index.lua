@@ -21,7 +21,7 @@ CPlayer.CBuffer = {}
 
 CPlayer.fetch = function(serial, ...)
     dbify.serial.fetchAll({
-        {dbify.serial.__connection__.keyColumn, serial}
+        {dbify.serial.connection.keyColumn, serial}
     }, ...)
     return true
 end

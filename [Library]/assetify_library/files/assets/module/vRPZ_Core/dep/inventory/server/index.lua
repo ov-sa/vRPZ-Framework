@@ -4,7 +4,7 @@
 
 CInventory.fetch = function(inventoryID, ...)
     dbify.inventory.fetchAll({
-        {dbify.inventory.__connection__.keyColumn, inventoryID}
+        {dbify.inventory.connection.keyColumn, inventoryID}
     }, ...)
     return true
 end

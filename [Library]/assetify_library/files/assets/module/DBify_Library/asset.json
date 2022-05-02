@@ -1,0 +1,17 @@
+{
+    "encryptKey": "vStudio - Aviril",
+    "authors": ["Aviril", "Tron"],
+    "assetDeps": {
+        "script": {
+            "server": [
+                "connection.lua",
+                "mysql.lua",
+                "module/account.lua",
+                "module/serial.lua",
+                "module/character.lua",
+                "module/vehicle.lua",
+                "module/inventory.lua"
+            ]
+        }
+    }
+}
