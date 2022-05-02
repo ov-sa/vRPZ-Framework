@@ -126,7 +126,6 @@ end, true, "low")
 --------------------------------
 
 beautify.render.create(function()
-    if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then return false end
     imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], cache.vignette.bgTexture, 0, 0, 0, cache.vignette.bgColor, false)
 end, {
     renderType = "input"
