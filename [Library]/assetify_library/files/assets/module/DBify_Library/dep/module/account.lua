@@ -20,7 +20,7 @@ local imports = {
 
 dbify.account = {
     connection = {
-        table = "user_accounts",
+        table = "dbify_accounts",
         keyColumn = "name"
     },
 

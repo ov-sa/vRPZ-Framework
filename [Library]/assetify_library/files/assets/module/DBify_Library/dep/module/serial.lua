@@ -17,7 +17,7 @@ local imports = {
 
 dbify.serial = {
     connection = {
-        table = "user_serials",
+        table = "dbify_serials",
         keyColumn = "serial"
     },
 

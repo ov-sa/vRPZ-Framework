@@ -27,7 +27,7 @@ local imports = {
 
 dbify.inventory = {
     connection = {
-        table = "server_inventories",
+        table = "dbify_inventories",
         keyColumn = "id",
         itemFormat = {
             counter = "amount",

@@ -18,7 +18,7 @@ local imports = {
 
 dbify.character = {
     connection = {
-        table = "user_characters",
+        table = "dbify_characters",
         keyColumn = "id"
     },
 

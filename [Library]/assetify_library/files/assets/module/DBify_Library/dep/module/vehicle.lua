@@ -18,7 +18,7 @@ local imports = {
 
 dbify.vehicle = {
     connection = {
-        table = "server_vehicles",
+        table = "dbify_vehicles",
         keyColumn = "id"
     },
 
