@@ -82,23 +82,32 @@ end
 
 CCharacter.loadProgress = function(player, loadBuffer, resetProgress)
     if (not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player")) then return false end
+    local characterID = imports.getElementData(player, "Character:ID")
     if loadBuffer then
+        local serial = CPlayer.getSerial(player)
         for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
-            imports.setElementData(source, "Player:Data:"..j, CPlayer.CBuffer[serial][j])
+            imports.setElementData(player, "Player:Data:"..j, CPlayer.CBuffer[serial][j])
         end
         for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
-            imports.setElementData(source, "Character:Data:"..j, CCharacter.CBuffer[characterID][j])
+            imports.setElementData(player, "Character:Data:"..j, CCharacter.CBuffer[characterID][j])
         end
         CPlayer.setLogged(player, true)
     end
     if resetProgress then
         if not CPlayer.isInitialized(player) then return false end
-        local characterID = imports.getElementData(player, "Character:ID")
         CCharacter.resetProgress(player, false, {
             characterID = characterID
         }, false, true)
+        for i = 1, #FRAMEWORK_CONFIGS["Spawns"]["Datas"].generic, 1 do
+            local j = FRAMEWORK_CONFIGS["Spawns"]["Datas"].generic[i]
+            local value = j.amount
+            if j.name == "Character:blood" then
+                value = CCharacter.getMaxHealth(player)
+            end
+            imports.setElementData(player, j.name, value)
+        end
     end
     return true
 end
