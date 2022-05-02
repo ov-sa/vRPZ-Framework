@@ -162,8 +162,8 @@ CGame.execOnModuleLoad(function()
     imports.setPedTargetingMarkerEnabled(false)
     imports.setPlayerHudComponentVisible("all", false)
     imports.setPlayerHudComponentVisible("crosshair", true)
-    for i = 1, #FRAMEWORK_CONFIGS["Weapon"].clearModels, 1 do
-        imports.assetify.clearModel(FRAMEWORK_CONFIGS["Weapon"].clearModels[i])
+    for i = 1, #FRAMEWORK_CONFIGS["Weapons"].clearModels, 1 do
+        imports.assetify.clearModel(FRAMEWORK_CONFIGS["Weapons"].clearModels[i])
     end
     for i, j in imports.pairs(FRAMEWORK_CONFIGS["Game"]["Camera_FOV"]) do
         imports.setCameraFieldOfView(i, j)
