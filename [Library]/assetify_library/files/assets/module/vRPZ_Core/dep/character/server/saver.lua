@@ -7,6 +7,7 @@ local imports = {
     tonumber = tonumber,
     tostring = tostring,
     isElement = isElement,
+    getElementType = getElementType,
     destroyElement = destroyElement,
     collectgarbage = collectgarbage,
     getPlayerSerial = getPlayerSerial,
@@ -79,13 +80,26 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
     return true
 end
 
-CCharacter.loadProgress = function(player)
-    if CPlayer.isInitialized(player) then return false end
-    local characterID = imports.getElementData(player, "Character:ID")
-    CCharacter.resetProgress(player, false, {
-        characterID = characterID
-    }, false, true)
-    imports.triggerEvent("Player:onLogin", player)
+CCharacter.loadProgress = function(player, loadBuffer, resetProgress)
+    if (not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player")) then return false end
+    if loadBuffer then
+        for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
+            local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
+            imports.setElementData(source, "Player:Data:"..j, CPlayer.CBuffer[serial][j])
+        end
+        for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
+            local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
+            imports.setElementData(source, "Character:Data:"..j, CCharacter.CBuffer[characterID][j])
+        end
+        imports.triggerEvent("Player:onLogin", player)
+    end
+    if resetProgress then
+        if not CPlayer.isInitialized(player) then return false end
+        local characterID = imports.getElementData(player, "Character:ID")
+        CCharacter.resetProgress(player, false, {
+            characterID = characterID
+        }, false, true)
+    end
     return true
 end
 

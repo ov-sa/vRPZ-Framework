@@ -157,8 +157,7 @@ end)
 --------------------------
 
 imports.addEvent("Player:onSpawn", true)
-imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffer)
-    local isNewCharacter = (reloadBuffer and not spawnpoint and true) or false
+imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, loadBuffer)
     spawnpoint = spawnpoint or CGame.generateSpawn()
     local serial = CPlayer.getSerial(source)
     local characterID = imports.getElementData(source, "Character:ID")
@@ -171,21 +170,7 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, reloadBuffe
     imports.setElementFrozen(source, false)
     imports.setElementCollisionsEnabled(source, true)
     imports.setCameraTarget(source, source)
-
-    local resetProgress = true
-    if reloadBuffer then
-        for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
-            local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
-            imports.setElementData(source, "Player:Data:"..j, CPlayer.CBuffer[serial][j])
-        end
-        for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
-            local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
-            imports.setElementData(source, "Character:Data:"..j, CCharacter.CBuffer[characterID][j])
-        end
-        if not isNewCharacter then resetProgress = false end
-    end
-    if resetProgress then CCharacter.loadProgress(source) end
-
+    CCharacter.loadProgress(source, loadBuffer, ((not loadBuffer or ((loadBuffer and not spawnpoint and true) or false)) and true) or false)
     if (CCharacter.getHealth(source) <= 0) then
         --TODO: NEEDS TO BE IMPLEMENTED..
         --imports.triggerEvent("Player:onDeath", source, nil, false, nil, 3)
