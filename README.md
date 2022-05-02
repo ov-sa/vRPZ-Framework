@@ -39,12 +39,12 @@
 ## ━ Installation
 
 1. Download the latest release
-2. Unpack it to your `YourMTAFolder\server\mods\deathmatch\resources` directory
+2. Unpack it to your `YourMTAFolder/server/mods/deathmatch/resources` directory
 3. Add below mentioned to your `mtaserver.conf` 
 ```xml
 <resource src="resource_loader" startup="1" protected="0"/>
 ```
-4. Add your MySQL database credentials into `[Library]/dbify_library/settings/server.lua`
+4. Add your MySQL database credentials into `YourMTAFolder/server/mods/deathmatch/resources/[Library]/assetify_library/files/assets/module/DBify_Library/dep/connection.lua`
 5. Boot your server
 
 ## ━ Contents
