@@ -84,7 +84,7 @@ dbify.serial = {
 --[[ Module Booter ]]--
 -----------------------
 
-imports.addEventHandler("onResourceStart", resourceRoot, function()
+imports.assetify.execOnModuleLoad(function()
     if not dbify.mysql.connection.instance then return false end
     imports.dbExec(dbify.mysql.connection.instance, "CREATE TABLE IF NOT EXISTS `??` (`??` VARCHAR(100) PRIMARY KEY)", dbify.serial.connection.table, dbify.serial.connection.keyColumn)
     if dbify.serial.connection.autoSync then
@@ -94,11 +94,10 @@ imports.addEventHandler("onResourceStart", resourceRoot, function()
             dbify.serial.create(playerSerial)
         end
     end
+    if dbify.settings.syncSerial then
+        imports.addEventHandler("onPlayerJoin", root, function()
+            if not dbify.mysql.connection.instance then return false end
+            dbify.serial.create(imports.getPlayerSerial(source))
+        end)
+    end
 end)
-
-if dbify.settings.syncSerial then
-    imports.addEventHandler("onPlayerJoin", root, function()
-        if not dbify.mysql.connection.instance then return false end
-        dbify.serial.create(imports.getPlayerSerial(source))
-    end)
-end

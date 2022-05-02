@@ -99,7 +99,6 @@ imports.assetify.execOnModuleLoad(function()
             end
         end
     end
-
     if dbify.settings.syncAccount then
         imports.addEventHandler("onPlayerLogin", root, function(_, playerAccount)
             if not dbify.mysql.connection.instance then return false end
