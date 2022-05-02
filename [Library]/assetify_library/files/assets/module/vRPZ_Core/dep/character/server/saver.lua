@@ -91,7 +91,7 @@ CCharacter.loadProgress = function(player, loadBuffer, resetProgress)
             local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
             imports.setElementData(source, "Character:Data:"..j, CCharacter.CBuffer[characterID][j])
         end
-        imports.triggerEvent("Player:onLogin", player)
+        CPlayer.setLogged(player, true)
     end
     if resetProgress then
         if not CPlayer.isInitialized(player) then return false end
@@ -116,6 +116,6 @@ CCharacter.saveProgress = function(player)
         characterID = characterID,
         inventoryID = inventoryID
     }, true)
-    imports.triggerEvent("Player:onLogout", player)
+    CPlayer.setLogged(player, false)
     return true
 end

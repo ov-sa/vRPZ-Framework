@@ -4,11 +4,13 @@
 
 local imports = {
     type = type,
+    pairs = pairs,
     tonumber = tonumber,
     isElement = isElement,
     getElementType = getElementType,
     getElementsByType = getElementsByType,
     getPlayerSerial = getPlayerSerial,
+    triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent,
 }
 
@@ -75,6 +77,29 @@ CPlayer.getPlayer = function(serial)
         end
     end
     return false
+end
+
+CPlayer.setLogged = function(player, state)
+    if (not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player")) then return false end
+    if state then
+        if CPlayer.CLogged[player] then return false end
+        CPlayer.CLogged[player] = true
+        for i, j in imports.pairs(CPlayer.CLogged) do
+            imports.triggerClientEvent(i, "Player:onLogin", player)
+            if i ~= player then
+                imports.triggerClientEvent(player, "Player:onLogin", i)
+            end
+        end
+        imports.triggerEvent("Player:onLogin", player)
+    else
+        if not CPlayer.CLogged[player] then return false end
+        for i, j in imports.pairs(CPlayer.CLogged) do
+            imports.triggerClientEvent(i, "Player:onLogout", player)
+        end
+        CPlayer.CLogged[player] = nil
+        imports.triggerEvent("Player:onLogout", player)
+    end
+    return true
 end
 
 CPlayer.setChannel = function(player, channelIndex)
