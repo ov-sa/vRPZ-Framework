@@ -8,6 +8,7 @@ local imports = {
     unpack = unpack,
     ipairs = ipairs,
     tostring = tostring,
+    dbConnect = dbConnect,
     dbQuery = dbQuery,
     dbPoll = dbPoll,
     dbExec = dbExec,
@@ -21,9 +22,7 @@ local imports = {
 
 dbify.mysql = {
     connection = {
-        instance = function()
-            dbify.mysql.connection.instance = imports.call(imports.resource, "fetchDatabase")
-        end
+        instance = imports.dbConnect("mysql", "dbname="..(dbify.settings.credentials.database)..";host="..(dbify.settings.credentials.host)..";port="..(dbify.settings.credentials.port)..";charset=utf8;", dbify.settings.credentials.username, dbify.settings.credentials.password, dbify.settings.credentials.options) or false
     },
 
     table = {
