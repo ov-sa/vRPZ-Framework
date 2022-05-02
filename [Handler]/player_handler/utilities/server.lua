@@ -12,7 +12,6 @@
 --[[ Imports ]]--
 -----------------
 
-loadstring(exports.dbify_library:fetchImports())()
 local imports = {
     type = type,
     isElement = isElement,
