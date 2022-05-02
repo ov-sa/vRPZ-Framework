@@ -14,6 +14,7 @@ local imports = {
 ----------------
 
 CPlayer = {
+    CLogged = {},
     CParty = {},
     CChannel = {},
     CAttachments = {},

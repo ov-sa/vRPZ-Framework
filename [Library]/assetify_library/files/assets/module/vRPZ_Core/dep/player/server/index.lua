@@ -9,6 +9,7 @@ local imports = {
     getElementType = getElementType,
     getElementsByType = getElementsByType,
     getPlayerSerial = getPlayerSerial,
+    addEvent = addEvent,
     triggerClientEvent = triggerClientEvent,
 }
 
@@ -99,3 +100,5 @@ CPlayer.setParty = function(player, partyData)
         return true
     end
 end
+
+imports.addEvent("Player:onLogin", false)

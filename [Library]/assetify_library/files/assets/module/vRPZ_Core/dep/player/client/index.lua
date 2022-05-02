@@ -5,6 +5,7 @@
 local imports = {
     pairs = pairs,
     tonumber = tonumber,
+    addEvent = addEvent,
     triggerEvent = triggerEvent
 }
 
