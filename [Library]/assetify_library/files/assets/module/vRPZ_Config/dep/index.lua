@@ -2,6 +2,7 @@
 --[[ Configns ]]--
 ------------------
 
+FRAMEWORK_CACHE = "@files/cache/"
 FRAMEWORK_CONFIGS = {
     ["Game"] = {},
     ["UI"] = {},

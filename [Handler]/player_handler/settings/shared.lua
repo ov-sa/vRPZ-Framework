@@ -13,5 +13,3 @@
 ------------------
 
 resource = getResourceRootElement(getThisResource())
-
-FRAMEWORK_CACHE = "@files/cache/"
