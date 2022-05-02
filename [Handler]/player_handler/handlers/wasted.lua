@@ -34,7 +34,6 @@ local imports = {
     createPed = createPed,
     createMarker = createMarker,
     spawnPlayer = spawnPlayer,
-    loadProgress = CCharacter.loadProgress,
     killPed = killPed,
     setTimer = setTimer,
     showChat = showChat,
@@ -61,20 +60,6 @@ local deathAnimations = {
 ---------------------------------
 --[[ Player: On Player Death ]]--
 ---------------------------------
-
-CCharacter.loadProgress = function(player)
-    if not CPlayer.isInitialized(player) then return false end
-    imports.loadProgress(player)
-    for i = 1, #FRAMEWORK_CONFIGS["Spawns"]["Datas"].generic, 1 do
-        local j = FRAMEWORK_CONFIGS["Spawns"]["Datas"].generic[i]
-        local value = j.amount
-        if j.name == "Character:blood" then
-            value = CCharacter.getMaxHealth(player)
-        end
-        imports.setElementData(player, j.name, value)
-    end
-    return true
-end
 
 local function destroyPedLoot(ped, marker)
     if ped and imports.isElement(ped) then imports.destroyElement(ped) end
@@ -159,7 +144,6 @@ end)
 imports.addEvent("Player:onSpawn", true)
 imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, loadBuffer)
     spawnpoint = spawnpoint or CGame.generateSpawn()
-    local serial = CPlayer.getSerial(source)
     local characterID = imports.getElementData(source, "Character:ID")
     local characterIdentity = CCharacter.CBuffer[characterID].identity
     local characterClothing = {CCharacter.generateClothing(characterIdentity)}
