@@ -6,7 +6,6 @@ local imports = {
     call = call,
     type = type,
     unpack = unpack,
-    ipairs = ipairs,
     tostring = tostring,
     dbConnect = dbConnect,
     dbQuery = dbQuery,
@@ -46,7 +45,8 @@ dbify.mysql = {
             keyColumns = ((keyColumns and (imports.type(keyColumns) == "table") and (#keyColumns > 0)) and keyColumns) or false
             if keyColumns then
                 local _validateKeyColumns, validateKeyColumns = {}, {}
-                for i, j in imports.ipairs(keyColumns) do
+                for i = 1, #keyColumns, 1 do
+                    local j = keyColumns[i]
                     if not _validateKeyColumns[(j[1])] then
                         imports.table.insert(validateKeyColumns, j[1])
                     end
@@ -54,7 +54,8 @@ dbify.mysql = {
                 return dbify.mysql.column.areValid(tableName, validateKeyColumns, function(areValid, arguments)
                     if areValid then
                         local queryString, queryArguments = "SELECT * FROM `??` WHERE", {arguments[1].tableName}
-                        for i, j in imports.ipairs(arguments[1].keyColumns) do
+                        for i = 1, #arguments[1].keyColumns, 1 do
+                            local j = arguments[1].keyColumns[i]
                             imports.table.insert(queryArguments, imports.tostring(j[1]))
                             imports.table.insert(queryArguments, imports.tostring(j[2]))
                             queryString = queryString.." `??`=?"..(((i < #arguments[1].keyColumns) and " AND") or "")
@@ -134,7 +135,8 @@ dbify.mysql = {
             return dbify.mysql.table.isValid(tableName, function(isValid, arguments)
                 if isValid then
                     local queryString, queryArguments = "SELECT `table_name` FROM information_schema.columns WHERE `table_schema`=? AND `table_name`=? AND (", {dbify.mysql.connection.databaseName, tableName}
-                    for i, j in imports.ipairs(arguments[1]) do
+                    for i = 1, #arguments[1], 1 do
+                        local j = arguments[1][i]
                         imports.table.insert(queryArguments, imports.tostring(j))
                         queryString = queryString..(((i > 1) and " ") or "").."`column_name`=?"..(((i < #arguments[1]) and " OR") or "")
                     end
@@ -163,7 +165,8 @@ dbify.mysql = {
                 if isValid then
                     local callbackReference = callback
                     local queryString, queryArguments = "ALTER TABLE `??`", {tableName}
-                    for i, j in imports.ipairs(arguments[1]) do
+                    for i = 1, #arguments[1], 1 do
+                        local j = arguments[1][i]
                         imports.table.insert(queryArguments, imports.tostring(j))
                         queryString = queryString.." DROP COLUMN `??`"..(((i < #arguments[1]) and ", ") or "")
                     end
@@ -186,7 +189,8 @@ dbify.mysql = {
             if not dbify.mysql.connection.instance then return false end
             if not tableName or (imports.type(tableName) ~= "string") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) or not keyColumns or (imports.type(keyColumns) ~= "table") or (#keyColumns <= 0) then return false end
             local _validateKeyColumns, validateKeyColumns = {}, {}
-            for i, j in imports.ipairs(keyColumns) do
+            for i = 1, #keyColumns, 1 do
+                local j = keyColumns[i]
                 if not _validateKeyColumns[(j[1])] then
                     imports.table.insert(validateKeyColumns, j[1])
                 end
@@ -194,7 +198,8 @@ dbify.mysql = {
             return dbify.mysql.column.areValid(tableName, validateKeyColumns, function(areValid, arguments)
                 if areValid then
                     local queryStrings, queryArguments = {"UPDATE `??` SET", " WHERE"}, {subLength = 0, arguments = {}}
-                    for i, j in imports.ipairs(arguments[1].keyColumns) do
+                    for i = 1, #arguments[1].keyColumns, 1 do
+                        local j = arguments[1].keyColumns[i]
                         j[1] = imports.tostring(j[1])
                         imports.table.insert(queryArguments.arguments, j[1])
                         imports.table.insert(queryArguments.arguments, imports.tostring(j[2]))
@@ -202,7 +207,8 @@ dbify.mysql = {
                     end
                     queryArguments.subLength = #queryArguments.arguments
                     imports.table.insert(queryArguments.arguments, (#queryArguments.arguments - queryArguments.subLength) + 1, arguments[1].tableName)
-                    for i, j in imports.ipairs(arguments[1].dataColumns) do
+                    for i = 1, #arguments[1].dataColumns, 1 do
+                        local j = arguments[1].dataColumns[i]
                         j[1] = imports.tostring(j[1])
                         imports.table.insert(queryArguments.arguments, (#queryArguments.arguments - queryArguments.subLength) + 1, j[1])
                         imports.table.insert(queryArguments.arguments, (#queryArguments.arguments - queryArguments.subLength) + 1, imports.tostring(j[2]))
@@ -241,11 +247,13 @@ dbify.mysql = {
             if not tableName or (imports.type(tableName) ~= "string") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) or not keyColumns or (imports.type(keyColumns) ~= "table") or (#keyColumns <= 0) or not callback or (imports.type(callback) ~= "function") then return false end
             soloFetch = (soloFetch and true) or false
             local _validateColumns, validateColumns = {}, {}
-            for i, j in imports.ipairs(dataColumns) do
+            for i = 1, #dataColumns, 1 do
+                local j = dataColumns[i]
                 _validateColumns[j] = true
                 imports.table.insert(validateColumns, j)
             end
-            for i, j in imports.ipairs(keyColumns) do
+            for i = 1, #keyColumns, 1 do
+                local j = keyColumns[i]
                 if not _validateColumns[(j[1])] then
                     _validateColumns[(j[1])] = true
                     imports.table.insert(validateColumns, j[1])
@@ -254,13 +262,15 @@ dbify.mysql = {
             return dbify.mysql.column.areValid(tableName, validateColumns, function(areValid, arguments)
                 if areValid then
                     local queryString, queryArguments = "SELECT", {}
-                    for i, j in imports.ipairs(arguments[1].dataColumns) do
+                    for i = 1, #arguments[1].dataColumns, 1 do
+                        local j = arguments[1].dataColumns[i]
                         imports.table.insert(queryArguments, imports.tostring(j))
                         queryString = queryString.." `??`"..(((i < #arguments[1].dataColumns) and ",") or "")
                     end
                     imports.table.insert(queryArguments, arguments[1].tableName)
                     queryString = queryString.." FROM `??` WHERE"
-                    for i, j in imports.ipairs(arguments[1].keyColumns) do
+                    for i = 1, #arguments[1].keyColumns, 1 do
+                        local j = arguments[1].keyColumns[i]
                         imports.table.insert(queryArguments, imports.tostring(j[1]))
                         imports.table.insert(queryArguments, imports.tostring(j[2]))
                         queryString = queryString.." `??`=?"..(((i < #arguments[1].keyColumns) and " AND") or "")
