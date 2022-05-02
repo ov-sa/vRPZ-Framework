@@ -17,6 +17,7 @@ local imports = {
     unpackColor = unpackColor,
     isElement = isElement,
     destroyElement = destroyElement,
+    getPlayerName = getPlayerName,
     interpolateBetween = interpolateBetween,
     getInterpolationProgress = getInterpolationProgress,
     bindKey = bindKey,
@@ -24,6 +25,7 @@ local imports = {
     showChat = showChat,
     showCursor = showCursor,
     string = string,
+    table = table,
     math = math,
     beautify = beautify
 }
@@ -106,7 +108,8 @@ CGame.execOnModuleLoad(function()
     --[[ Function: Renders UI ]]--
     ------------------------------
 
-    local serverPlayers = {}
+    --[[
+    local serverPlayers = CPlayer.CLogged
     for i = 1, 30, 1 do
         table.insert(serverPlayers, {
             name = "Aviril",
@@ -120,6 +123,7 @@ CGame.execOnModuleLoad(function()
             ping = 20
         })
     end
+`   ]]
 
     scoreboardUI.renderUI = function(renderData)
         if not scoreboardUI.state or not CPlayer.isInitialized(localPlayer) then return false end
@@ -129,7 +133,12 @@ CGame.execOnModuleLoad(function()
         elseif renderData.renderType == "render" then
             if not scoreboardUI.bgTexture then scoreboardUI.createBGTexture() end
             --TODO: FETCH SERVER PLAYERS LAYER..
-            --local serverPlayers = {}
+            local serverPlayers = {}
+            for i, j in imports.pairs(CPlayer.CLogged) do
+                imports.table.insert(serverPlayers, {
+                    name = getPlayerName(i)
+                })
+            end
             local startX, startY = scoreboardUI.startX, scoreboardUI.startY
             local view_height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height
             local row_height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + (scoreboardUI.margin*0.5)
