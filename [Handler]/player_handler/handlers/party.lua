@@ -33,7 +33,7 @@ local imports = {
 ---------------
 
 
-addCommandHandler("party", function(player, _, category, ...)
+imports.addCommandHandler("party", function(player, _, category, ...)
     if not category then
         return imports.outputChatBox("━━ Syntax: /party create/invite/accept/leave/kick", player, 255, 255, 255)
     end
