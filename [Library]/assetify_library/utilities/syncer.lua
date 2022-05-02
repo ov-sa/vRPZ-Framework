@@ -402,8 +402,8 @@ else
     function syncer:syncPack(player, assetDatas, syncModules)
         if not assetDatas then
             thread:create(function(cThread)
-                imports.triggerClientEvent(player, "Assetify:onRecieveBandwidth", player, syncer.libraryBandwidth)
                 if syncModules then
+                    imports.triggerClientEvent(player, "Assetify:onRecieveBandwidth", player, syncer.libraryBandwidth)
                     local isModuleVoid = true
                     if availableAssetPacks["module"] and availableAssetPacks["module"].assetPack then
                         for i, j in imports.pairs(availableAssetPacks["module"].assetPack) do
