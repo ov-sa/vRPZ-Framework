@@ -31,16 +31,19 @@ imports.addEvent("Player:onLogin", false)
 imports.addEventHandler("Player:onLogin", root, function()
     if CPlayer.CLogged[source] then return false end
     for i, j in imports.pairs(CPlayer.CLogged) do
-        imports.triggerClientEvent(i, "Player:onLogin", i)
+        imports.triggerClientEvent(i, "Player:onLogin", source)
     end
     CPlayer.CLogged[source] = true
+    for i, j in imports.pairs(CPlayer.CLogged) do
+        imports.triggerClientEvent(source, "Player:onLogin", i)
+    end
 end)
 
 imports.addEvent("Player:onLogout", false)
 imports.addEventHandler("Player:onLogout", root, function()
     if not CPlayer.CLogged[source] then return false end
     for i, j in imports.pairs(CPlayer.CLogged) do
-        imports.triggerClientEvent(i, "Player:onLogout", i)
+        imports.triggerClientEvent(i, "Player:onLogout", source)
     end
     CPlayer.CLogged[source] = nil
 end)
