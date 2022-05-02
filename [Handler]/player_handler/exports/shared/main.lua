@@ -16,8 +16,7 @@ local imports = {
     type = type,
     pairs = pairs,
     tonumber = tonumber,
-    isElement = isElement,
-    getElementsByType = getElementsByType
+    isElement = isElement
 }
 
 
