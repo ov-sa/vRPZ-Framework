@@ -88,14 +88,12 @@ dbify.serial = {
 imports.assetify.execOnModuleLoad(function()
     if not dbify.mysql.connection.instance then return false end
     imports.dbExec(dbify.mysql.connection.instance, "CREATE TABLE IF NOT EXISTS `??` (`??` VARCHAR(100) PRIMARY KEY)", dbify.serial.connection.table, dbify.serial.connection.keyColumn)
-    if dbify.serial.connection.autoSync then
+    if dbify.settings.syncSerial then
         local playerList = imports.getElementsByType("player")
         for i = 1, #playerList, 1 do
             local playerSerial = imports.getPlayerSerial(playerList[i])
             dbify.serial.create(playerSerial)
         end
-    end
-    if dbify.settings.syncSerial then
         imports.addEventHandler("onPlayerJoin", root, function()
             if not dbify.mysql.connection.instance then return false end
             dbify.serial.create(imports.getPlayerSerial(source))

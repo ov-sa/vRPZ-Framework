@@ -34,7 +34,7 @@ dbify.mysql = {
                 if callbackReference and (imports.type(callbackReference) == "function") then
                     callbackReference(result, arguments)
                 end
-            end, {{...}}, dbify.mysql.connection.instance, "SELECT `table_name` FROM information_schema.tables WHERE `table_schema`=? AND `table_name`=?", dbify.mysql.connection.databaseName, tableName)
+            end, {{...}}, dbify.mysql.connection.instance, "SELECT `table_name` FROM information_schema.tables WHERE `table_schema`=? AND `table_name`=?", dbify.settings.credentials.database, tableName)
             return true
         end,
 
@@ -118,7 +118,7 @@ dbify.mysql = {
                         if callbackReference and (imports.type(callbackReference) == "function") then
                             callbackReference(result, arguments)
                         end
-                    end, {arguments}, dbify.mysql.connection.instance, "SELECT `table_name` FROM information_schema.columns WHERE `table_schema`=? AND `table_name`=? AND `column_name`=?", dbify.mysql.connection.databaseName, tableName, columnName)
+                    end, {arguments}, dbify.mysql.connection.instance, "SELECT `table_name` FROM information_schema.columns WHERE `table_schema`=? AND `table_name`=? AND `column_name`=?", dbify.settings.credentials.database, tableName, columnName)
                 else
                     local callbackReference = callback
                     if callbackReference and (imports.type(callbackReference) == "function") then
@@ -133,7 +133,7 @@ dbify.mysql = {
             if not tableName or (imports.type(tableName) ~= "string") or not columns or (imports.type(columns) ~= "table") or (#columns <= 0) or not callback or (imports.type(callback) ~= "function") then return false end
             return dbify.mysql.table.isValid(tableName, function(isValid, arguments)
                 if isValid then
-                    local queryString, queryArguments = "SELECT `table_name` FROM information_schema.columns WHERE `table_schema`=? AND `table_name`=? AND (", {dbify.mysql.connection.databaseName, tableName}
+                    local queryString, queryArguments = "SELECT `table_name` FROM information_schema.columns WHERE `table_schema`=? AND `table_name`=? AND (", {dbify.settings.credentials.database, tableName}
                     for i = 1, #arguments[1], 1 do
                         local j = arguments[1][i]
                         imports.table.insert(queryArguments, imports.tostring(j))

@@ -90,7 +90,7 @@ dbify.account = {
 imports.assetify.execOnModuleLoad(function()
     if not dbify.mysql.connection.instance then return false end
     imports.dbExec(dbify.mysql.connection.instance, "CREATE TABLE IF NOT EXISTS `??` (`??` VARCHAR(100) PRIMARY KEY)", dbify.account.connection.table, dbify.account.connection.keyColumn)
-    if dbify.account.connection.autoSync then
+    if dbify.settings.syncAccount then
         local playerList = imports.getElementsByType("player")
         for i = 1, #playerList, 1 do
             local playerAccount = imports.getPlayerAccount(playerList[i])
@@ -98,11 +98,9 @@ imports.assetify.execOnModuleLoad(function()
                 dbify.account.create(imports.getAccountName(playerAccount))
             end
         end
-    end
-    if dbify.settings.syncAccount then
-        imports.addEventHandler("onPlayerLogin", root, function(_, playerAccount)
+        imports.addEventHandler("onPlayerLogin", root, function(_, currAccount)
             if not dbify.mysql.connection.instance then return false end
-            dbify.account.create(imports.getAccountName(playerAccount))
+            dbify.account.create(imports.getAccountName(currAccount))
         end)
     end
 end)

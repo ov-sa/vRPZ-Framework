@@ -54,7 +54,7 @@ dbify.inventory = {
             if result and (#result > 0) then
                 for i = 1, #result, 1 do
                     local j = result[i]
-                    local columnName = j["column_name"]
+                    local columnName = j["column_name"] or j[(string.upper("column_name"))]
                     local itemIndex = imports.string.gsub(columnName, "item_", "", 1)
                     if not arguments[1].items[itemIndex] then
                         imports.table.insert(itemsToBeDeleted, columnName)
@@ -107,7 +107,7 @@ dbify.inventory = {
             end
         end, {{{
             items = items
-        }, {...}}}, dbify.mysql.connection.instance, "SELECT `column_name` FROM information_schema.columns WHERE `table_schema`=? AND `table_name`=? AND `column_name` LIKE 'item_%'", dbify.mysql.connection.databaseName, dbify.inventory.connection.table)
+        }, {...}}}, dbify.mysql.connection.instance, "SELECT `column_name` FROM information_schema.columns WHERE `table_schema`=? AND `table_name`=? AND `column_name` LIKE 'item_%'", dbify.settings.credentials.database, dbify.inventory.connection.table)
         return true
     end,
 
