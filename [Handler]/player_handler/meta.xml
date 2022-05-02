@@ -154,10 +154,6 @@
     <file src="files/images/hud/player/slotBG1.png"/>
     <file src="files/images/hud/player/slotBG2.png"/>
 
-
-    <file src="files/images/hud/crosshair.png"/>
-
-
     <!-- Exports: Shared: Main -->
     <export function="getElementUsedSlots" type="shared"/>
     <export function="getBackpackOffset" type="shared"/>
