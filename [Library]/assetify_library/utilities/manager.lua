@@ -419,6 +419,7 @@ else
             local cAsset = availableAssetPacks[assetType].assetPack.rwDatas[assetName]
             if cAsset then
                 local isExternalResource = sourceResource and (sourceResource ~= resource)
+                print("IS EXTERNAL RESOURCE: "..tostring(isExternalResource))
                 if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
                     cAsset = cAsset.synced
                     if cAsset.manifestData.encryptKey then
