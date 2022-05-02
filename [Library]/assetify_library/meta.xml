@@ -54,6 +54,7 @@
     <export function="loadAnim" type="client"/>
     <export function="unloadAnim" type="client"/>
     <export function="createShader" type="client"/>
+    <export function="clearModel" type="client"/>
     <export function="playSoundAsset" type="client"/>
     <export function="playSoundAsset3D" type="client"/>
     <export function="createAssetDummy" type="client"/>
