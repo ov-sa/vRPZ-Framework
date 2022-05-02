@@ -3,12 +3,8 @@
 -----------------
 
 local imports = {
-    pairs = pairs,
-    tonumber = tonumber,
-    destroyElement = destroyElement,
     getLocalization = getLocalization,
     toJSON = toJSON,
-    table = table,
     file = file,
     beautify = beautify,
     assetify = assetify

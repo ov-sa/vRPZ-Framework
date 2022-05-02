@@ -3,8 +3,12 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
+    destroyElement = destroyElement,
     addEvent = addEvent,
-    addEventHandler = addEventHandler
+    addEventHandler = addEventHandler,
+    table = table,
+    beautify = beautify
 }
 
 
