@@ -5,7 +5,7 @@
     <include resource="cinecam_handler"/>
     <include resource="assetify_library"/>
     <include resource="beautify_library"/>
-    <include resource="loot_handler"/>
+    <!--include resource="loot_handler"/-->
     <!--include resource="pickup_handler"/-->
     <include resource="player_handler"/>
 
