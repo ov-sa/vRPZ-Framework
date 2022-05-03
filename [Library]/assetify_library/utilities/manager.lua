@@ -70,8 +70,7 @@ if localPlayer then
         return true
     end
 
-    function manager:getData(assetType, assetName, isInternal, isModule)
-        if (not isModule or (isInternal and (isInternal ~= syncer.librarySerial))) and (not syncer.isLibraryLoaded) then return false end
+    function manager:getData(assetType, assetName, isInternal)
         if not assetType or not assetName then return false end
         if availableAssetPacks[assetType] then
             local cAsset = availableAssetPacks[assetType].rwDatas[assetName]
@@ -121,7 +120,7 @@ if localPlayer then
     end
 
     function manager:load(assetType, assetName)
-        local cAsset, isLoaded = manager:getData(assetType, assetName, syncer.librarySerial, assetType == "module")
+        local cAsset, isLoaded = manager:getData(assetType, assetName, syncer.librarySerial)
         if not cAsset or isLoaded then return false end
         local cAssetPack = availableAssetPacks[assetType]
         local assetPath = (asset.references.root)..assetType.."/"..assetName.."/"
