@@ -43,9 +43,11 @@ local cache = {
     indexedItems = {}
 }
 
-for i, j in imports.pairs(CInventory.CItems) do
-    imports.table.insert(cache.indexedItems, i)
-end
+CGame.execOnModuleLoad(function()
+    for i, j in imports.pairs(CInventory.CItems) do
+        imports.table.insert(cache.indexedItems, i)
+    end
+end)
 
 
 ------------------------------------------
