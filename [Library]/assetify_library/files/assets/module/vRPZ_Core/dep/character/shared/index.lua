@@ -108,20 +108,20 @@ CCharacter = {
         local characterLevel, characterEXP = CCharacter.getLevel(player, true)
         if not characterLevel or not characterEXP then return false end
         characterEXP = characterEXP + experience
-        local __characterLevel, __characterEXP = characterLevel, CGame.getLevelEXP(characterLevel)
-        while (__characterEXP and (characterEXP > __characterEXP) and (characterLevel < FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"]) and (__characterLevel <= FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"])) do
-            characterEXP = characterEXP - __characterEXP
-            __characterLevel = __characterLevel + 1
-            __characterEXP = CGame.getLevelEXP(__characterLevel)
+        local genLevel, genLevelEXP = characterLevel, CGame.getLevelEXP(characterLevel)
+        while (genLevelEXP and (characterEXP > genLevelEXP) and (characterLevel < FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"]) and (genLevel <= FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"])) do
+            characterEXP = characterEXP - genLevelEXP
+            genLevel = genLevel + 1
+            genLevelEXP = CGame.getLevelEXP(genLevel)
         end
-        __characterLevel = imports.math.max(1, imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"], __characterLevel))
-        __characterEXP = imports.math.min(CGame.getLevelEXP(__characterLevel), characterEXP)
-        if characterLevel ~= __characterLevel then
-            characterLevel = __characterLevel
+        genLevel = imports.math.max(1, imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"], genLevel))
+        local genEXP = imports.math.min(CGame.getLevelEXP(genLevel), characterEXP)
+        if characterLevel ~= genLevel then
+            characterLevel = genLevel
             imports.setElementData(player, "Character:Data:level", characterLevel)
         end
-        if characterEXP ~= __characterEXP then
-            characterEXP = __characterEXP
+        if characterEXP ~= genEXP then
+            characterEXP = genEXP
             imports.setElementData(player, "Character:Data:experience", characterEXP)
         end
         return true
