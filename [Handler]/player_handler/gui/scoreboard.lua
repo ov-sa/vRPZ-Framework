@@ -18,6 +18,7 @@ local imports = {
     isElement = isElement,
     destroyElement = destroyElement,
     getPlayerName = getPlayerName,
+    getPlayerPing = getPlayerPing,
     interpolateBetween = interpolateBetween,
     getInterpolationProgress = getInterpolationProgress,
     bindKey = bindKey,
@@ -109,9 +110,9 @@ CGame.execOnModuleLoad(function()
     ------------------------------
 
     --[[
-    local serverPlayers = CPlayer.CLogged
+        --TODO: REMOVE LATER
     for i = 1, 30, 1 do
-        table.insert(serverPlayers, {
+        table.insert(scoreboardUI.buffer, {
             name = "Aviril",
             level = 50,
             rank = "Eternal",
@@ -132,27 +133,27 @@ CGame.execOnModuleLoad(function()
             scoreboardUI.cache.keys.scroll.state, scoreboardUI.cache.keys.scroll.streak  = imports.isMouseScrolled()
         elseif renderData.renderType == "render" then
             if not scoreboardUI.bgTexture then scoreboardUI.createBGTexture() end
-            --TODO: FETCH SERVER PLAYERS LAYER..
-            local serverPlayers = {}
+            scoreboardUI.buffer = {}
             for i, j in imports.pairs(CPlayer.CLogged) do
-                imports.table.insert(serverPlayers, {
-                    name = imports.getPlayerName(i)
+                imports.table.insert(scoreboardUI.buffer, {
+                    name = imports.getPlayerName(i),
+                    ping = imports.getPlayerPing(i)
                 })
             end
             local startX, startY = scoreboardUI.startX, scoreboardUI.startY
             local view_height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height
             local row_height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + (scoreboardUI.margin*0.5)
-            local view_overflowHeight =  imports.math.max(0, (scoreboardUI.margin*0.5) + (row_height*#serverPlayers) - view_height)
+            local view_overflowHeight =  imports.math.max(0, (scoreboardUI.margin*0.5) + (row_height*#scoreboardUI.buffer) - view_height)
             local offsetY = view_overflowHeight*scoreboardUI.scroller.animPercent*0.01
             local row_startIndex = imports.math.floor(offsetY/row_height) + 1
-            local row_endIndex = imports.math.min(#serverPlayers, row_startIndex + imports.math.ceil(view_height/row_height))
+            local row_endIndex = imports.math.min(#scoreboardUI.buffer, row_startIndex + imports.math.ceil(view_height/row_height))
             imports.beautify.native.drawImage(startX, startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height, scoreboardUI.bgTexture, 0, 0, 0, -1, false)    
             imports.beautify.native.drawText(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.title, startX + scoreboardUI.margin, startY, startX + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.margin, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.font.instance, "left", "center", true, false, false, true)
-            imports.beautify.native.drawText(imports.string.spaceChars((#serverPlayers).."/"..FRAMEWORK_CONFIGS["Game"]["Player_Limit"]), startX + scoreboardUI.margin, startY, startX + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.margin, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.counterFont.instance, "right", "center", true, false, false)
+            imports.beautify.native.drawText(imports.string.spaceChars((#scoreboardUI.buffer).."/"..FRAMEWORK_CONFIGS["Game"]["Player_Limit"]), startX + scoreboardUI.margin, startY, startX + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.margin, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.counterFont.instance, "right", "center", true, false, false)
             startY = startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height
             imports.beautify.native.setRenderTarget(scoreboardUI.viewRT, true)
             for i = row_startIndex, row_endIndex, 1 do
-                local j = serverPlayers[i]
+                local j = scoreboardUI.buffer[i]
                 local column_startY = (scoreboardUI.margin*0.5) + (row_height*(i - 1)) - offsetY
                 for k = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns, 1 do
                     local v = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[k]
