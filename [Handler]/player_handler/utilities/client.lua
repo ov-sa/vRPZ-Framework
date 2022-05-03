@@ -35,11 +35,14 @@ local imports = {
     assetify = assetify
 }
 imports.assetify.execOnModuleLoad(function()
+    print("wowoo")
     imports.assetify.loadModule("vRPZ_Config", {"shared", "client"})
     imports.assetify.loadModule("vRPZ_Core", {"shared", "client"})
     imports.assetify.scheduleExec.boot()
 end)
-
+setTimer(function()
+    print(#imports.assetify.scheduleExec.buffer.onModuleLoad)
+end, 2500, 1)
 
 ---------------------------------------
 --[[ Function: Overrides Show Chat ]]--

@@ -47,6 +47,7 @@ local imports = {
 
 
 CGame.execOnModuleLoad(function()
+    print("Wooo 1")
     -------------------
     --[[ Variables ]]--
     -------------------
