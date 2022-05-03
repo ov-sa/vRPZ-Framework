@@ -108,7 +108,7 @@ CCharacter = {
         local characterLevel, characterEXP = CCharacter.getLevel(player, true)
         if not characterLevel or not characterEXP then return false end
         characterEXP = characterEXP + experience
-        local __characterLevel, __characterEXP = characterLevel, CGame.getLevelEXP(__characterLevel)
+        local __characterLevel, __characterEXP = characterLevel, CGame.getLevelEXP(characterLevel)
         while (__characterEXP and (characterEXP > __characterEXP) and (characterLevel < FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"]) and (__characterLevel <= FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"])) do
             characterEXP = characterEXP - __characterEXP
             __characterLevel = __characterLevel + 1
