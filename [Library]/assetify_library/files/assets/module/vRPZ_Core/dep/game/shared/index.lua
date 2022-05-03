@@ -60,7 +60,7 @@ CGame = {
         level = imports.tonumber(level)
         if not level then return false end
         local expMultiplier = FRAMEWORK_CONFIGS["Templates"]["Levels"].expMultiplier*0.001
-        return imports.math.floor(FRAMEWORK_CONFIGS["Templates"]["Levels"].baseExp + (imports.math.pow(FRAMEWORK_CONFIGS["Templates"]["Levels"].baseEXP, 2)*imports.math.pow(level, 2)*expMultiplier) + (expMultiplier*level))
+        return imports.math.floor(FRAMEWORK_CONFIGS["Templates"]["Levels"].baseEXP + (imports.math.pow(FRAMEWORK_CONFIGS["Templates"]["Levels"].baseEXP, 2)*imports.math.pow(level, 2)*expMultiplier) + (expMultiplier*level))
     end,
 
     getLevelRank = function(level)
