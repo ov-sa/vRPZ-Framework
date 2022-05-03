@@ -119,18 +119,20 @@ CGame.execOnModuleLoad(function()
             if not scoreboardUI.bgTexture then scoreboardUI.createBGTexture() end
             scoreboardUI.buffer = {}
             for i, j in imports.pairs(CPlayer.CLogged) do
-                imports.table.insert(scoreboardUI.buffer, {
+                local cBuffer = {
                     --TODO: FINALIZE ALL LATER
                     name = imports.getPlayerName(i),
                     level = CCharacter.getLevel(i),
-                    rank = CCharacter.getRank(i),
                     reputation = CCharacter.getReputation(i),
                     faction = CCharacter.getFaction(i), 
                     group = CCharacter.getGroup(i),
                     kd = 0,
                     survival_time = "01:00:00",
                     ping = imports.getPlayerPing(i)
-                })
+                }
+                local _, rank = CCharacter.getRank(i)
+                cBuffer.rank = (rank and rank.name) or rank
+                imports.table.insert(scoreboardUI.buffer, cBuffer)
             end
             local startX, startY = scoreboardUI.startX, scoreboardUI.startY
             local view_height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height

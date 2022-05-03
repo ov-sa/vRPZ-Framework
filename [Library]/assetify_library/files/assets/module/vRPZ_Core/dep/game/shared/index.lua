@@ -66,7 +66,8 @@ CGame = {
     getLevelRank = function(level)
         level = imports.tonumber(level)
         if not level then return false end
-        return imports.math.max(1, imports.math.ceil((#FRAMEWORK_CONFIGS["Templates"]["Levels"]["Ranks"]/FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"])*level))
+        local rank = imports.math.max(1, imports.math.ceil((#FRAMEWORK_CONFIGS["Templates"]["Levels"]["Ranks"]/FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"])*level))
+        return rank, FRAMEWORK_CONFIGS["Templates"]["Levels"]["Ranks"][rank]
     end,
 
     generateSpawn = function()
