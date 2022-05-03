@@ -403,8 +403,8 @@ else
         if not assetDatas then
             thread:create(function(cThread)
                 if syncModules then
-                    imports.triggerClientEvent(player, "Assetify:onRecieveBandwidth", player, syncer.libraryBandwidth)
                     local isModuleVoid = true
+                    imports.triggerClientEvent(player, "Assetify:onRecieveBandwidth", player, syncer.libraryBandwidth)
                     if availableAssetPacks["module"] and availableAssetPacks["module"].assetPack then
                         for i, j in imports.pairs(availableAssetPacks["module"].assetPack) do
                             if i ~= "rwDatas" then
