@@ -87,7 +87,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
                 ["EN"] = "Group", 
                 ["TR"] = "Grup", 
                 ["RU"] = "Группа",
-                ["BR"] = "Facção",
+                ["BR"] = "Grupo",
             },
             dataType = "group",
             width = 125
