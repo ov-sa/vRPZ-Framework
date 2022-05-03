@@ -115,10 +115,13 @@ CCharacter = {
             __characterEXP = CGame.getLevelEXP(__characterLevel)
         end
         __characterLevel = imports.math.max(1, imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"], __characterLevel))
-        if __characterLevel ~= characterLevel then
+        __characterEXP = imports.math.min(CGame.getLevelEXP(__characterLevel), characterEXP)
+        if characterLevel ~= __characterLevel then
             characterLevel = __characterLevel
-            characterEXP = imports.math.min(CGame.getLevelEXP(characterLevel), characterEXP)
             imports.setElementData(player, "Character:Data:level", characterLevel)
+        end
+        if characterEXP ~= __characterEXP then
+            characterEXP = __characterEXP
             imports.setElementData(player, "Character:Data:experience", characterEXP)
         end
         return true
