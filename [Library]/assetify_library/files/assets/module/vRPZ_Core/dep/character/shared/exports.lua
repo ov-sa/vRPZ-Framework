@@ -14,6 +14,7 @@ function giveCharacterEXP(...) return CCharacter.giveEXP(...) end
 function getCharacterReputation(...) return CCharacter.getReputation(...) end
 function giveCharacterReputation(...) return CCharacter.giveReputation(...) end
 function getCharacterFaction(...) return CCharacter.getFaction(...) end
+function getCharacterGroup(...) return CCharacter.getGroup(...) end
 function setCharacterMoney(...) return CCharacter.setMoney(...) end
 function getCharacterMoney(...) return CCharacter.getMoney(...) end
 function isCharacterKnocked(...) return CCharacter.isKnocked(...) end

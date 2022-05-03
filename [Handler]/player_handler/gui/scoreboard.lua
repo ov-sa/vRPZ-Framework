@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
     tocolor = tocolor,
     unpackColor = unpackColor,
     isElement = isElement,
@@ -109,23 +110,6 @@ CGame.execOnModuleLoad(function()
     --[[ Function: Renders UI ]]--
     ------------------------------
 
-    --[[
-        --TODO: REMOVE LATER
-    for i = 1, 30, 1 do
-        table.insert(scoreboardUI.buffer, {
-            name = "Aviril",
-            level = 50,
-            rank = "Eternal",
-            reputation = 75,
-            party = 1,
-            group = "Heroes",
-            kd = 2.5,
-            survival_time = "01:00:00",
-            ping = 20
-        })
-    end
-`   ]]
-
     scoreboardUI.renderUI = function(renderData)
         if not scoreboardUI.state or not CPlayer.isInitialized(localPlayer) then return false end
 
@@ -136,7 +120,15 @@ CGame.execOnModuleLoad(function()
             scoreboardUI.buffer = {}
             for i, j in imports.pairs(CPlayer.CLogged) do
                 imports.table.insert(scoreboardUI.buffer, {
+                    --TODO: FINALIZE ALL LATER
                     name = imports.getPlayerName(i),
+                    level = CCharacter.getLevel(i),
+                    rank = CCharacter.getRank(i),
+                    reputation = CCharacter.getReputation(i),
+                    faction = CCharacter.getFaction(i), 
+                    group = CCharacter.getGroup(i),
+                    kd = 0,
+                    survival_time = "01:00:00",
                     ping = imports.getPlayerPing(i)
                 })
             end

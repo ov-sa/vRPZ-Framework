@@ -144,6 +144,11 @@ CCharacter = {
         return imports.getElementData(player, "Character:Data:faction") or false
     end,
 
+    getGroup = function(player)
+        if not CPlayer.isInitialized(player) then return false end
+        return imports.getElementData(player, "Character:Data:group") or false
+    end,
+
     setMoney = function(player, amount)
         money = imports.tonumber(money)
         if not CPlayer.isInitialized(player) or not money then return false end

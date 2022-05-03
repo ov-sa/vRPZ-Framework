@@ -74,13 +74,13 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
         },
         {
             title = {
-                ["EN"] = "Party", 
-                ["TR"] = "Takım", 
-                ["RU"] = "Отряд",
-                ["BR"] = "Grupo",
+                ["EN"] = "Faction", 
+                ["TR"] = "Hizip", 
+                ["RU"] = "Фракция",
+                ["BR"] = "Facção",
             },
-            dataType = "party",
-            width = 125
+            dataType = "faction",
+            width = 155
         },
         {
             title = {
@@ -90,7 +90,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
                 ["BR"] = "Facção",
             },
             dataType = "group",
-            width = 155
+            width = 125
         },
         {
             title = {

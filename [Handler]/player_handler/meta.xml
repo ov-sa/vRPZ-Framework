@@ -73,6 +73,7 @@
     <export function="getCharacterReputation" type="shared"/>
     <export function="giveCharacterReputation" type="shared"/>
     <export function="getCharacterFaction" type="shared"/>
+    <export function="getCharacterGroup" type="shared"/>
     <export function="getPlayerCurrentSlotItem" type="shared"/>
     <export function="isReloading" type="shared"/>
     <export function="isCharacterKnocked" type="shared"/>
