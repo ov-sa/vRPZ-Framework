@@ -185,8 +185,7 @@ CGame.execOnModuleLoad(function()
                 end
                 imports.beautify.native.drawRectangle(startX + scoreboardUI.scroller.startX, startY + scoreboardUI.scroller.startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.width, scoreboardUI.scroller.height, scoreboardUI.scroller.bgColor, false)
                 imports.beautify.native.drawRectangle(startX + scoreboardUI.scroller.startX, startY + scoreboardUI.scroller.startY + ((scoreboardUI.scroller.height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.thumbHeight)*scoreboardUI.scroller.animPercent*0.01), FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.thumbHeight, scoreboardUI.scroller.thumbColor, false)
-                if scoreboardUI.cache.keys.scroll.state then
-                    --TODO: CHEK IF THE VIEW RT IS HOVERED
+                if scoreboardUI.cache.keys.scroll.state and imports.isMouseOnPosition(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, view_height) then
                     local scrollPercent = imports.math.max(1, 100/(view_overflowHeight/row_height))
                     scoreboardUI.scroller.percent = imports.math.max(0, imports.math.min(scoreboardUI.scroller.percent + (scrollPercent*imports.math.max(1, scoreboardUI.cache.keys.scroll.streak)*(((scoreboardUI.cache.keys.scroll.state == "down") and 1) or -1)), 100))
                     scoreboardUI.cache.keys.scroll.state = false
