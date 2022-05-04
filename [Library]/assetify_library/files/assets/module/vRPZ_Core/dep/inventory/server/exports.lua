@@ -2,15 +2,17 @@
 --[[ Exports ]]--
 -----------------
 
-function fetchInventory(...) return CInventory.fetch(...) end
-function ensureInventoryItems(...) return CInventory.ensureItems(...) end
-function createInventory(...) return CInventory.create(...) end
-function deleteInventory(...) return CInventory.delete(...) end
-function setInventoryData(...) return CInventory.setData(...) end
-function getInventoryData(...) return CInventory.getData(...) end
-function addInventoryItem(...) return CInventory.addItem(...) end
-function removeInventoryItem(...) return CInventory.removeItem(...) end
-function setInventoryItemProperty(...) return CInventory.setItemProperty(...) end
-function getInventoryItemProperty(...) return CInventory.getItemProperty(...) end
-function setInventoryItemData(...) return CInventory.setItemData(...) end
-function getInventoryItemData(...) return CInventory.getItemData(...) end
+CGame.createExports({
+    {"fetchInventory", "CInventory", "fetch"},
+    {"ensureInventoryItems", "CInventory", "ensureItems"},
+    {"createInventory", "CInventory", "create"},
+    {"deleteInventory", "CInventory", "delete"},
+    {"setInventoryData", "CInventory", "setData"},
+    {"getInventoryData", "CInventory", "getData"},
+    {"addInventoryItem", "CInventory", "addItem"},
+    {"removeInventoryItem", "CInventory", "removeItem"},
+    {"setInventoryItemProperty", "CInventory", "setItemProperty"},
+    {"getInventoryItemProperty", "CInventory", "getItemProperty"},
+    {"setInventoryItemData", "CInventory", "setItemData"},
+    {"getInventoryItemData", "CInventory", "getItemData"}
+})

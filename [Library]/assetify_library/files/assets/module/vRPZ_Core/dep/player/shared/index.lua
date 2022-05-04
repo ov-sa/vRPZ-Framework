@@ -33,6 +33,7 @@ CPlayer = {
     end,
 
     getParty = function(player)
+        --TODO: WRONG CLIENT AND SERVER STORING ORDER DONT MATCH + MAKE ALL PARTY FUNCTIONS SHARED
         if not CPlayer.isInitialized(player) then return false end
         return CPlayer.CParty[player] or false
     end

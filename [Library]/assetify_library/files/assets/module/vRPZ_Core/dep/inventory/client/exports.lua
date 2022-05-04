@@ -2,4 +2,6 @@
 --[[ Exports ]]--
 -----------------
 
-function fetchInventorySlotDimensions(...) return CInventory.fetchSlotDimensions(...) end
+CGame.createExports({
+    {"fetchInventorySlotDimensions", "CInventory", "fetchSlotDimensions"}
+})
