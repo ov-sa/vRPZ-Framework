@@ -74,6 +74,11 @@ CGame.execOnModuleLoad(function()
             imports.triggerEvent("onServerRender", tickSyncer, cTickCount)
         end
     end, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"], 0, imports.createElement("Server:TickSyncer"))
+    imports.setTimer(function()
+        for i, j in imports.pairs(CPlayer.CLogged) do
+            CCharacter.giveReputation(i, FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Regeneration_Amount"])
+        end
+    end, FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Regeneration_Duration"], 0)
     --[[
     for i, j in pairs(availableWeaponSlots) do
         for k, v in pairs(j.slots) do
