@@ -14,6 +14,7 @@
 
 local imports = {
     type = type,
+    pairs = pairs,
     isElement = isElement,
     createElement = createElement,
     getElementType = getElementType,
@@ -24,8 +25,6 @@ local imports = {
     cancelEvent = cancelEvent,
     triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent,
-    getElementPosition = getElementPosition,
-    getPlayerSerial = getPlayerSerial,
     getPlayerName = getPlayerName,
     setElementData = setElementData,
     setTimer = setTimer,
