@@ -3,6 +3,12 @@
     <info author="vStudio" name="Player Handler" type="Handler" version="1.0.0"/>
     <min_mta_version server="1.5.9" client="1.5.9"/>
 
+    <!-- Settings & Utilities -->
+    <script src="utilities/shared.lua" type="shared"/>
+    <script src="settings/shared.lua" type="shared"/>
+    <script src="utilities/client.lua" type="client"/>
+    <script src="utilities/server.lua" type="server"/>
+
     <!-- Exports -->
     <script src="exports/shared/main.lua" type="shared"/>
 
@@ -38,12 +44,6 @@
 
     <file src="files/images/hud/player/slotBG1.png"/>
     <file src="files/images/hud/player/slotBG2.png"/>
-
-    <!-- Settings & Utilities -->
-    <script src="utilities/shared.lua" type="shared"/>
-    <script src="settings/shared.lua" type="shared"/>
-    <script src="utilities/client.lua" type="client"/>
-    <script src="utilities/server.lua" type="server"/>
 
     <!-- Modules: Game -->
     <export function="execOnLoad" type="shared"/>

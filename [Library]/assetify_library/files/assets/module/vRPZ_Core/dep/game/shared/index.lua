@@ -6,6 +6,7 @@ local imports = {
     tonumber = tonumber,
     loadstring = loadstring,
     isElement = isElement,
+    getThisResource = getThisResource,
     getResourceName = getResourceName,
     getElementsByType = getElementsByType,
     getElementData = getElementData,
@@ -24,7 +25,7 @@ local imports = {
 CGame = {
     CExports = [[
         local imports = {
-            resourceName = "]]..imports.getResourceName(resource)..[[",
+            resourceName = "]]..imports.getResourceName(imports.getThisResource())..[[",
             call = call,
             getResourceFromName = getResourceFromName
         }
@@ -37,11 +38,11 @@ CGame = {
         if not data then return false end
         for i = 1, #data, 1 do
             local j = data[i]
-            imports.loadstring("function "..j[1].."(...) return "..j[2].."."..j[3].."(...) end")()
+            imports.loadstring("function "..j.exportName.."(...) return "..j.moduleName.."."..j.moduleMethod.."(...) end")()
             CGame.CExports = CGame.CExports..[[
-                ]]..j[2]..[[ = ]]..j[2]..[[ or {}
-                ]]..j[2]..[[.]]..j[3]..[[ = function(...)
-                    return imports.call(imports.getResourceFromName(imports.resourceName), "]]..j[1]..[[", ...)
+                ]]..j.moduleName..[[ = ]]..j.moduleName..[[ or {}
+                ]]..j.moduleName..[[.]]..j.moduleMethod..[[ = function(...)
+                    return imports.call(imports.getResourceFromName(imports.resourceName), "]]..j.exportName..[[", ...)
                 end
             ]]
         end
