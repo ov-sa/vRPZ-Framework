@@ -74,6 +74,21 @@ CGame.execOnModuleLoad(function()
             imports.triggerEvent("onServerRender", tickSyncer, cTickCount, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"])
         end
     end, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"], 0, imports.createElement("Server:TickSyncer"))
+    imports.setFPSLimit(FRAMEWORK_CONFIGS["Game"]["FPS_Limit"])
+    imports.setMaxPlayers(FRAMEWORK_CONFIGS["Game"]["Player_Limit"])
+    imports.setFarClipDistance(FRAMEWORK_CONFIGS["Game"]["Draw_Distance_Limit"][2])
+    imports.setFogDistance(FRAMEWORK_CONFIGS["Game"]["Fog_Distance_Limit"][2])
+    imports.setAircraftMaxHeight(FRAMEWORK_CONFIGS["Game"]["Aircraft_Max_Height"])
+    imports.setJetpackMaxHeight(FRAMEWORK_CONFIGS["Game"]["Jetpack_Max_Height"])
+    imports.setMinuteDuration(FRAMEWORK_CONFIGS["Game"]["Minute_Duration"])
+    imports.setGameType(FRAMEWORK_CONFIGS["Game"]["Game_imports.type"])
+    imports.setMapName(FRAMEWORK_CONFIGS["Game"]["Game_Map"])
+    imports.setTimer(function()
+        for i, j in imports.pairs(CPlayer.CLogged) do
+            CCharacter.giveReputation(i, FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Regeneration_Amount"])
+        end
+    end, FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Regeneration_Duration"], 0)
+
     --[[
     for i, j in pairs(availableWeaponSlots) do
         for k, v in pairs(j.slots) do
@@ -94,21 +109,10 @@ CGame.execOnModuleLoad(function()
         end
     end
     ]]--
-    imports.setFPSLimit(FRAMEWORK_CONFIGS["Game"]["FPS_Limit"])
-    imports.setMaxPlayers(FRAMEWORK_CONFIGS["Game"]["Player_Limit"])
-    imports.setFarClipDistance(FRAMEWORK_CONFIGS["Game"]["Draw_Distance_Limit"][2])
-    imports.setFogDistance(FRAMEWORK_CONFIGS["Game"]["Fog_Distance_Limit"][2])
-    imports.setAircraftMaxHeight(FRAMEWORK_CONFIGS["Game"]["Aircraft_Max_Height"])
-    imports.setJetpackMaxHeight(FRAMEWORK_CONFIGS["Game"]["Jetpack_Max_Height"])
-    imports.setMinuteDuration(FRAMEWORK_CONFIGS["Game"]["Minute_Duration"])
-    imports.setGameType(FRAMEWORK_CONFIGS["Game"]["Game_imports.type"])
-    imports.setMapName(FRAMEWORK_CONFIGS["Game"]["Game_Map"])
-    imports.setTimer(function()
-        for i, j in imports.pairs(CPlayer.CLogged) do
-            CCharacter.giveReputation(i, FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Regeneration_Amount"])
-        end
-    end, FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Regeneration_Duration"], 0)
 
+    imports.addEventHandler("onServerRender", root, function(_, deltaTick)
+        print(deltaTick)
+    end)
     imports.addEventHandler("onPlayerChangeNick", root, function() imports.cancelEvent() end)
     imports.addEventHandler("onPlayerCommand", root, function(command)
         local disabledCMDs = FRAMEWORK_CONFIGS["Game"]["Disabled_CMDS"]
