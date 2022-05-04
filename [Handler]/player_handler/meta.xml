@@ -104,6 +104,10 @@
     <export function="giveCharacterEXP" type="shared"/>
     <export function="getCharacterReputation" type="shared"/>
     <export function="giveCharacterReputation" type="shared"/>
+    <export function="getCharacterKills" type="shared"/>
+    <export function="giveCharacterKills" type="shared"/>
+    <export function="getCharacterDeaths" type="shared"/>
+    <export function="giveCharacterDeaths" type="shared"/>
     <export function="getCharacterFaction" type="shared"/>
     <export function="getCharacterGroup" type="shared"/>
     <export function="setCharacterMoney" type="shared"/>
