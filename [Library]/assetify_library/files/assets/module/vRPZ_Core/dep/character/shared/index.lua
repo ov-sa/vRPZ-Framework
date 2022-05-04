@@ -134,9 +134,9 @@ CCharacter = {
         if not reputation then return false end
         local characterReputation = CCharacter.getReputation(player)
         if not characterReputation then return false end
-        local __characterReputation = imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"], characterReputation + reputation)
-        if __characterReputation ~= characterReputation then
-            characterReputation = __characterReputation
+        local genReputation = imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"], characterReputation + reputation)
+        if characterReputation ~= genReputation then
+            characterReputation = genReputation
             imports.setElementData(player, "Character:Data:reputation", characterReputation)
         end
         return true
