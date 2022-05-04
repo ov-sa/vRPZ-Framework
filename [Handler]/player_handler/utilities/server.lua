@@ -71,14 +71,9 @@ CGame.execOnModuleLoad(function()
         if tickSyncer and imports.isElement(tickSyncer) then
             local cTickCount = imports.getTickCount()
             imports.setElementData(tickSyncer, "Server:TickSyncer", cTickCount)
-            imports.triggerEvent("onServerRender", tickSyncer, cTickCount)
+            imports.triggerEvent("onServerRender", tickSyncer, cTickCount, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"])
         end
     end, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"], 0, imports.createElement("Server:TickSyncer"))
-    imports.setTimer(function()
-        for i, j in imports.pairs(CPlayer.CLogged) do
-            CCharacter.giveReputation(i, FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Regeneration_Amount"])
-        end
-    end, FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Regeneration_Duration"], 0)
     --[[
     for i, j in pairs(availableWeaponSlots) do
         for k, v in pairs(j.slots) do
@@ -108,6 +103,11 @@ CGame.execOnModuleLoad(function()
     imports.setMinuteDuration(FRAMEWORK_CONFIGS["Game"]["Minute_Duration"])
     imports.setGameType(FRAMEWORK_CONFIGS["Game"]["Game_imports.type"])
     imports.setMapName(FRAMEWORK_CONFIGS["Game"]["Game_Map"])
+    imports.setTimer(function()
+        for i, j in imports.pairs(CPlayer.CLogged) do
+            CCharacter.giveReputation(i, FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Regeneration_Amount"])
+        end
+    end, FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Regeneration_Duration"], 0)
 
     imports.addEventHandler("onPlayerChangeNick", root, function() imports.cancelEvent() end)
     imports.addEventHandler("onPlayerCommand", root, function(command)
