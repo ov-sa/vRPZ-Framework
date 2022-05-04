@@ -65,8 +65,6 @@
     <export function="setCharacterHealth" type="shared"/>
     <export function="getCharacterHealth" type="shared"/>
     <export function="getCharacterMaximumHealth" type="shared"/>
-    <export function="setCharacterMoney" type="shared"/>
-    <export function="getCharacterMoney" type="shared"/>
     <export function="getCharacterLevel" type="shared"/>
     <export function="getCharacterRank" type="shared"/>
     <export function="giveCharacterEXP" type="shared"/>
@@ -74,9 +72,10 @@
     <export function="giveCharacterReputation" type="shared"/>
     <export function="getCharacterFaction" type="shared"/>
     <export function="getCharacterGroup" type="shared"/>
-    <export function="getPlayerCurrentSlotItem" type="shared"/>
-    <export function="isReloading" type="shared"/>
+    <export function="setCharacterMoney" type="shared"/>
+    <export function="getCharacterMoney" type="shared"/>
     <export function="isCharacterKnocked" type="shared"/>
+    <export function="isCharacterReloading" type="shared"/>
     <export function="isCharacterInLoot" type="shared"/>
     <export function="fetchCharacter" type="server"/>
     <export function="fetchCharactersOwned" type="server"/>

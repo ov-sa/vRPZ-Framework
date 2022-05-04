@@ -5,6 +5,7 @@
 local imports = {
     tonumber = tonumber,
     isElement = isElement,
+    getResourceName = getResourceName,
     getElementsByType = getElementsByType,
     getElementData = getElementData,
     getWeather = getWeather,
@@ -20,9 +21,31 @@ local imports = {
 ----------------------
 
 CGame = {
+    CExports = [[
+        local imports = {
+            resourceName = "]]..imports.getResourceName(resource)..[[",
+            call = call,
+            getResourceFromName = getResourceFromName
+        }
+    ]],
     CTickSyncer = nil,
     execOnLoad = imports.assetify.execOnLoad,
     execOnModuleLoad = imports.assetify.execOnModuleLoad,
+
+    createExports = function(data)
+        if not data then return false end
+        for i = 1, #data, 1 do
+            local j = data[i]
+            --function getLevelRank(...) return CGame.getLevelRank(...) end
+            CGame.CExports = CGame.CExports..[[
+                ]]..j[2]..[[ = ]]..j[2]..[[ or {}
+                ]]..j[2]..[[.]]..j[3]..[[ = function(...)
+                    return imports.call(imports.getResourceFromName(imports.resourceName), "]]..j[1]..[[", ...)
+                end
+            ]]
+        end
+        return true
+    end,
 
     getServerTick = function()
         local currentTick = 0

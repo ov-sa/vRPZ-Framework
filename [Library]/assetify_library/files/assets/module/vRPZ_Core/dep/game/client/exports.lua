@@ -16,15 +16,17 @@ local imports = {
 --[[ Exports ]]--
 -----------------
 
-function fetchSettings(...) return CGame.fetchSettings(...) end
-function updateSettings(...) return CGame.updateSettings(...) end
-function loadLanguage(...) return CGame.loadLanguage(...) end
-function createFont(...) return CGame.createFont(...) end
-function isUIVisible(...) return CGame.isUIVisible(...) end
-function loadAnim(...) return CGame.loadAnim(...) end
-function unloadAnim(...) return CGame.unloadAnim(...) end
-function playSound(...) return CGame.playSound(...) end
-function playSound3D(...) return CGame.playSound3D(...) end
+CGame.createExports({
+    {"fetchSettings", "CGame", "fetchSettings"},
+    {"updateSettings", "CGame", "updateSettings"},
+    {"loadLanguage", "CGame", "loadLanguage"},
+    {"createFont", "CGame", "createFont"},
+    {"isUIVisible", "CGame", "isUIVisible"},
+    {"loadAnim", "CGame", "loadAnim"},
+    {"unloadAnim", "CGame", "unloadAnim"},
+    {"playSound", "CGame", "playSound"},
+    {"playSound3D", "CGame", "playSound3D"}
+})
 
 
 ----------------

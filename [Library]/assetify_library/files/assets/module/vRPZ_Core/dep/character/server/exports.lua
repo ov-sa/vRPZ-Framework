@@ -2,12 +2,14 @@
 --[[ Exports ]]--
 -----------------
 
-function fetchCharacter(...) return CCharacter.fetch(...) end
-function fetchCharactersOwned(...) return CCharacter.fetchOwned(...) end
-function createCharacter(...) return CCharacter.create(...) end
-function deleteCharacter(...) return CCharacter.delete(...) end
-function setCharacterData(...) return CCharacter.setData(...) end
-function getCharacterData(...) return CCharacter.getData(...) end
-function resetCharacterProgress(...) return CCharacter.resetProgress(...) end
-function loadCharacterProgress(...) return CCharacter.loadProgress(...) end
-function saveCharacterProgress(...) return CCharacter.saveProgress(...) end
+CGame.createExports({
+    {"fetchCharacter", "CCharacter", "fetch"},
+    {"fetchCharactersOwned", "CCharacter", "fetchOwned"},
+    {"createCharacter", "CCharacter", "create"},
+    {"deleteCharacter", "CCharacter", "delete"},
+    {"setCharacterData", "CCharacter", "setData"},
+    {"getCharacterData", "CCharacter", "getData"},
+    {"resetCharacterProgress", "CCharacter", "resetProgress"},
+    {"loadCharacterProgress", "CCharacter", "loadProgress"},
+    {"saveCharacterProgress", "CCharacter", "saveProgress"}
+})
