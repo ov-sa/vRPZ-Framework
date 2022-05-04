@@ -161,9 +161,10 @@ dbify.inventory = {
 
     item = {
         __utilities__ = {
-            pushnpop = function(inventoryID, items, processType, callback, ...)
+            pushnpop = function(inventoryID, items, processType, callback, cloneTable, ...)
                 if not dbify.mysql.connection.instance then return false end
                 if not inventoryID or (imports.type(inventoryID) ~= "number") or not items or (imports.type(items) ~= "table") or (#items <= 0) or not processType or (imports.type(processType) ~= "string") or ((processType ~= "push") and (processType ~= "pop")) then return false end
+                if cloneTable then items = imports.table.clone(items, true) end
                 return dbify.inventory.fetchAll({
                     {dbify.inventory.connection.keyColumn, inventoryID},
                 }, function(result, arguments)
@@ -201,9 +202,10 @@ dbify.inventory = {
                 }, {...})
             end,
 
-            property_setnget = function(inventoryID, items, properties, processType, callback, ...)
+            property_setnget = function(inventoryID, items, properties, processType, callback, cloneTable, ...)
                 if not dbify.mysql.connection.instance then return false end
                 if not inventoryID or (imports.type(inventoryID) ~= "number") or not items or (imports.type(items) ~= "table") or (#items <= 0) or not properties or (imports.type(properties) ~= "table") or (#properties <= 0) or not processType or (imports.type(processType) ~= "string") or ((processType ~= "set") and (processType ~= "get")) then return false end
+                if cloneTable then items = imports.table.clone(items, true) end
                 for i = 1, #items, 1 do
                     local j = items[i]
                     items[i] = "item_"..imports.tostring(j)
@@ -264,9 +266,10 @@ dbify.inventory = {
                 }, {...})
             end,
 
-            data_setnget = function(inventoryID, items, datas, processType, callback, ...)
+            data_setnget = function(inventoryID, items, datas, processType, callback, cloneTable, ...)
                 if not dbify.mysql.connection.instance then return false end
                 if not inventoryID or (imports.type(inventoryID) ~= "number") or not items or (imports.type(items) ~= "table") or (#items <= 0) or not datas or (imports.type(datas) ~= "table") or (#datas <= 0) or not processType or (imports.type(processType) ~= "string") or ((processType ~= "set") and (processType ~= "get")) then return false end
+                if cloneTable then items = imports.table.clone(items, true) end
                 for i = 1, #items, 1 do
                     local j = items[i]
                     items[i] = "item_"..imports.tostring(j)
