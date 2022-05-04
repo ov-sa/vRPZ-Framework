@@ -175,6 +175,19 @@ CCharacter = {
         return characterKills/imports.math.max(1, characterDeaths)
     end,
 
+    getSurvivalTime = function(player)
+        if not CPlayer.isInitialized(player) then return false end
+        return imports.tonumber(imports.getElementData(player, "Character:Data:survival_time")) or 0
+    end,
+
+    giveSurvivalTime = function(player, survivalTime)
+        survivalTime = imports.tonumber(survivalTime)
+        if not survivalTime then return false end
+        local characterSurvivalTime = CCharacter.getSurvivalTime(player)
+        if not characterSurvivalTime then return false end
+        imports.setElementData(player, "Character:Data:survival_time", characterSurvivalTime + survivalTime)
+    end,
+
     getFaction = function(player)
         if not CPlayer.isInitialized(player) then return false end
         return imports.getElementData(player, "Character:Data:faction") or false

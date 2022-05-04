@@ -109,6 +109,8 @@
     <export function="getCharacterDeaths" type="shared"/>
     <export function="giveCharacterDeaths" type="shared"/>
     <export function="giveCharacterKD" type="shared"/>
+    <export function="getCharacterSurvivalTime" type="shared"/>
+    <export function="giveCharacterSurvivalTime" type="shared"/>
     <export function="getCharacterFaction" type="shared"/>
     <export function="getCharacterGroup" type="shared"/>
     <export function="setCharacterMoney" type="shared"/>
