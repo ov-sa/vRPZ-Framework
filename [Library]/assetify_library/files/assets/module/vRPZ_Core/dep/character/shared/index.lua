@@ -180,12 +180,12 @@ CCharacter = {
         return imports.tonumber(imports.getElementData(player, "Character:Data:survival_time")) or 0
     end,
 
-    giveSurvivalTime = function(player, survivalTime)
-        survivalTime = imports.tonumber(survivalTime)
-        if not survivalTime then return false end
+    giveSurvivalTime = function(player, time)
+        time = imports.tonumber(time)
+        if not time then return false end
         local characterSurvivalTime = CCharacter.getSurvivalTime(player)
         if not characterSurvivalTime then return false end
-        imports.setElementData(player, "Character:Data:survival_time", characterSurvivalTime + survivalTime)
+        imports.setElementData(player, "Character:Data:survival_time", characterSurvivalTime + time)
     end,
 
     getFaction = function(player)

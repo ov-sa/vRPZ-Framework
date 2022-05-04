@@ -112,7 +112,7 @@ CGame.execOnModuleLoad(function()
 
     imports.addEventHandler("onServerRender", root, function(_, deltaTick)
         for i, j in imports.pairs(CPlayer.CLogged) do
-            CCharacter.giveCharacterSurvivalTime(i, deltaTick)
+            CCharacter.giveSurvivalTime(i, deltaTick)
         end
     end)
     imports.addEventHandler("onPlayerChangeNick", root, function() imports.cancelEvent() end)

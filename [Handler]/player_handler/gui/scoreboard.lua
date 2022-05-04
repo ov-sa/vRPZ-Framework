@@ -120,18 +120,18 @@ CGame.execOnModuleLoad(function()
             scoreboardUI.buffer = {}
             for i, j in imports.pairs(CPlayer.CLogged) do
                 local cBuffer = {
-                    --TODO: FINALIZE ALL LATER
                     name = imports.getPlayerName(i),
                     level = CCharacter.getLevel(i),
                     reputation = CCharacter.getReputation(i),
                     faction = CCharacter.getFaction(i), 
                     group = CCharacter.getGroup(i),
                     kd = CCharacter.getKD(i),
-                    survival_time = "01:00:00",
                     ping = imports.getPlayerPing(i)
                 }
                 local _, rank = CCharacter.getRank(i)
                 cBuffer.rank = (rank and rank.name) or rank
+                cBuffer.survival_time = CCharacter.getSurvivalTime(i)
+                cBuffer.survival_time = (cBuffer.survival_time and CGame.formatMS(cBuffer.survival_time)) or cBuffer.survival_time
                 imports.table.insert(scoreboardUI.buffer, cBuffer)
             end
             local startX, startY = scoreboardUI.startX, scoreboardUI.startY
