@@ -172,7 +172,7 @@ CCharacter = {
     getKD = function(player)
         local characterKills, characterDeaths = CCharacter.getKills(player), CCharacter.getDeaths(player)
         if not characterKills or not characterDeaths then return false end
-        return characterKills/characterDeaths
+        return characterKills/imports.math.max(1, characterDeaths)
     end,
 
     getFaction = function(player)

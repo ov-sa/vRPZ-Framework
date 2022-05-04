@@ -126,7 +126,7 @@ CGame.execOnModuleLoad(function()
                     reputation = CCharacter.getReputation(i),
                     faction = CCharacter.getFaction(i), 
                     group = CCharacter.getGroup(i),
-                    kd = 0,
+                    kd = CCharacter.getKD(i),
                     survival_time = "01:00:00",
                     ping = imports.getPlayerPing(i)
                 }
