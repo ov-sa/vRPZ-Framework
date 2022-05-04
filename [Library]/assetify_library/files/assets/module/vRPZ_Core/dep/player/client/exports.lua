@@ -13,9 +13,9 @@ local imports = {
 -----------------
 
 CGame.createExports({
-    {"setPlayerLanguage", "CPlayer", "setLanguage"},
-    {"getPlayerLanguage", "CPlayer", "getLanguage"},
-    {"getPlayerParty", "CPlayer", "getParty"}
+    {exportName = "setPlayerLanguage", moduleName = "CPlayer", moduleMethod = "setLanguage"},
+    {exportName = "getPlayerLanguage", moduleName = "CPlayer", moduleMethod = "getLanguage"},
+    {exportName = "getPlayerParty", moduleName = "CPlayer", moduleMethod = "getParty"}
 })
 
 

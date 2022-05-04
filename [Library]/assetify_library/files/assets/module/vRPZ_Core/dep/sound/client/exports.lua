@@ -3,5 +3,5 @@
 -----------------
 
 CGame.createExports({
-    {"playAmbience", "CSound", "playAmbience"}
+    {exportName = "playAmbience", moduleName = "CSound", moduleMethod = "playAmbience"}
 })

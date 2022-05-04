@@ -3,8 +3,8 @@
 -----------------
 
 CGame.createExports({
-    {"isPlayerInitialized", "CPlayer", "isInitialized"},
-    {"getLoggedPlayers", "CPlayer", "getLogged"},
-    {"getPlayerChannel", "CPlayer", "getChannel"},
-    {"getPlayerParty", "CPlayer", "getParty"}
+    {exportName = "isPlayerInitialized", moduleName = "CPlayer", moduleMethod = "isInitialized"},
+    {exportName = "getLoggedPlayers", moduleName = "CPlayer", moduleMethod = "getLogged"},
+    {exportName = "getPlayerChannel", moduleName = "CPlayer", moduleMethod = "getChannel"},
+    {exportName = "getPlayerParty", moduleName = "CPlayer", moduleMethod = "getParty"}
 })

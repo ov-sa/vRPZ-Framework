@@ -3,10 +3,10 @@
 -----------------
 
 CGame.createExports({
-    {"createParty", "CParty", "create"},
-    {"destroyParty", "CParty", "destroy"},
-    {"getPartyMembers", "CParty", "getMembers"},
-    {"getParty", "CParty", "getParty"},
-    {"invitePartyMember", "CParty", "invite"},
-    {"removePartyMember", "CParty", "remove"}
+    {exportName = "createParty", moduleName = "CParty", moduleMethod = "create"},
+    {exportName = "destroyParty", moduleName = "CParty", moduleMethod = "destroy"},
+    {exportName = "getPartyMembers", moduleName = "CParty", moduleMethod = "getMembers"},
+    {exportName = "getParty", moduleName = "CParty", moduleMethod = "getParty"},
+    {exportName = "invitePartyMember", moduleName = "CParty", moduleMethod = "invite"},
+    {exportName = "removePartyMember", moduleName = "CParty", moduleMethod = "remove"}
 })

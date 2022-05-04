@@ -17,15 +17,15 @@ local imports = {
 -----------------
 
 CGame.createExports({
-    {"fetchSettings", "CGame", "fetchSettings"},
-    {"updateSettings", "CGame", "updateSettings"},
-    {"loadLanguage", "CGame", "loadLanguage"},
-    {"createFont", "CGame", "createFont"},
-    {"isUIVisible", "CGame", "isUIVisible"},
-    {"loadAnim", "CGame", "loadAnim"},
-    {"unloadAnim", "CGame", "unloadAnim"},
-    {"playSound", "CGame", "playSound"},
-    {"playSound3D", "CGame", "playSound3D"}
+    {exportName = "fetchSettings", moduleName = "CGame", moduleMethod = "fetchSettings"},
+    {exportName = "updateSettings", moduleName = "CGame", moduleMethod = "updateSettings"},
+    {exportName = "loadLanguage", moduleName = "CGame", moduleMethod = "loadLanguage"},
+    {exportName = "createFont", moduleName = "CGame", moduleMethod = "createFont"},
+    {exportName = "isUIVisible", moduleName = "CGame", moduleMethod = "isUIVisible"},
+    {exportName = "loadAnim", moduleName = "CGame", moduleMethod = "loadAnim"},
+    {exportName = "unloadAnim", moduleName = "CGame", moduleMethod = "unloadAnim"},
+    {exportName = "playSound", moduleName = "CGame", moduleMethod = "playSound"},
+    {exportName = "playSound3D", moduleName = "CGame", moduleMethod = "playSound3D"}
 })
 
 

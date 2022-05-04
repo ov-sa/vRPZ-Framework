@@ -3,19 +3,19 @@
 -----------------
 
 CGame.createExports({
-    {"fetchInventoryItem", "CInventory", "fetchItem"},
-    {"fetchInventoryItemSlot", "CInventory", "fetchItemSlot"},
-    {"fetchInventoryItemName", "CInventory", "fetchItemName"},
-    {"fetchInventoryItemWeight", "CInventory", "fetchItemWeight"},
-    {"fetchInventoryItemObjectID", "CInventory", "fetchItemObjectID"},
-    {"fetchInventoryWeaponSlot", "CInventory", "fetchWeaponSlot"},
-    {"fetchInventoryWeaponID", "CInventory", "fetchWeaponID"},
-    {"fetchInventoryWeaponAmmo", "CInventory", "fetchWeaponAmmo"},
-    {"fetchInventoryWeaponMag", "CInventory", "fetchWeaponMag"},
-    {"fetchInventorySlot", "CInventory", "fetchSlot"},
-    {"fetchInventoryItemCount", "CInventory", "fetchItemCount"},
-    {"fetchInventoryMaxSlotsMultiplier", "CInventory", "fetchMaxSlotsMultiplier"},
-    {"fetchInventoryParentMaxSlots", "CInventory", "fetchParentMaxSlots"},
-    {"fetchInventoryParentAssignedSlots", "CInventory", "fetchParentAssignedSlots"},
-    {"fetchInventoryParentUsedSlots", "CInventory", "fetchParentUsedSlots"}
+    {exportName = "fetchInventoryItem", moduleName = "CInventory", moduleMethod = "fetchItem"},
+    {exportName = "fetchInventoryItemSlot", moduleName = "CInventory", moduleMethod = "fetchItemSlot"},
+    {exportName = "fetchInventoryItemName", moduleName = "CInventory", moduleMethod = "fetchItemName"},
+    {exportName = "fetchInventoryItemWeight", moduleName = "CInventory", moduleMethod = "fetchItemWeight"},
+    {exportName = "fetchInventoryItemObjectID", moduleName = "CInventory", moduleMethod = "fetchItemObjectID"},
+    {exportName = "fetchInventoryWeaponSlot", moduleName = "CInventory", moduleMethod = "fetchWeaponSlot"},
+    {exportName = "fetchInventoryWeaponID", moduleName = "CInventory", moduleMethod = "fetchWeaponID"},
+    {exportName = "fetchInventoryWeaponAmmo", moduleName = "CInventory", moduleMethod = "fetchWeaponAmmo"},
+    {exportName = "fetchInventoryWeaponMag", moduleName = "CInventory", moduleMethod = "fetchWeaponMag"},
+    {exportName = "fetchInventorySlot", moduleName = "CInventory", moduleMethod = "fetchSlot"},
+    {exportName = "fetchInventoryItemCount", moduleName = "CInventory", moduleMethod = "fetchItemCount"},
+    {exportName = "fetchInventoryMaxSlotsMultiplier", moduleName = "CInventory", moduleMethod = "fetchMaxSlotsMultiplier"},
+    {exportName = "fetchInventoryParentMaxSlots", moduleName = "CInventory", moduleMethod = "fetchParentMaxSlots"},
+    {exportName = "fetchInventoryParentAssignedSlots", moduleName = "CInventory", moduleMethod = "fetchParentAssignedSlots"},
+    {exportName = "fetchInventoryParentUsedSlots", moduleName = "CInventory", moduleMethod = "fetchParentUsedSlots"}
 })
