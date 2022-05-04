@@ -40,7 +40,7 @@ imports.addEventHandler("Client:onUpdateLanguage", root, function(prevLanguage, 
             local cData = FRAMEWORK_CONFIGS["Templates"]["Fonts"][i]
             if cData.alt then
                 local cResource, cSettings = nil, cData.alt[currLanguage]
-                if cData.alt[prevLanguage] or cSettings then
+                if (prevLanguage and cData.alt[prevLanguage]) or cSettings then
                     if cSettings then cResource = cSettings[3]
                     else cResource = cData.resource end
                     local cPath, cSize = ((cResource and ":"..cResource.."/") or "")..((cSettings and cSettings[1]) or cData.path), (cSettings and cSettings[2] and (cSettings[2]*k)) or k
@@ -65,13 +65,13 @@ imports.addEventHandler("Client:onUpdateLanguage", root, function(prevLanguage, 
         if j.font then
             local cData = FRAMEWORK_CONFIGS["Templates"]["Fonts"][(j.font[1])]
             if not cData.alt or not cData.alt[currLanguage] then
-                if isTemplateUpdated or (cData.alt and cData.alt[prevLanguage]) then
+                if isTemplateUpdated or (cData.alt and prevLanguage and cData.alt[prevLanguage]) then
                     cTemplate.font = {cData.path, j.font[2], cData.resource}
                     isTemplateUpdated = true
                 end
             else
                 local cResource, cSettings = nil, cData.alt and cData.alt[currLanguage]
-                if cData.alt[prevLanguage] or cSettings then
+                if (prevLanguage and cData.alt[prevLanguage]) or cSettings then
                     if cSettings then cResource = cSettings[3]
                     else cResource = cData.resource end
                     local cPath, cSize = (cSettings and cSettings[1]) or cData.path, (cSettings and cSettings[2] and (cSettings[2]*j.font[2])) or j.font[2]
