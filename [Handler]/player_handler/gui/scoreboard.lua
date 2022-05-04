@@ -106,7 +106,27 @@ CGame.execOnModuleLoad(function()
             scoreboardUI.bgRT = nil
         end
     end
-
+    scoreboardUI.updateBuffer = function()
+        local bufferCount = 0
+        for i, j in imports.pairs(CPlayer.CLogged) do
+            bufferCount = bufferCount + 1
+            scoreboardUI.buffer[bufferCount] = scoreboardUI.buffer[bufferCount] or {}
+            scoreboardUI.buffer[bufferCount].name = imports.getPlayerName(i)
+            scoreboardUI.buffer[bufferCount].level = CCharacter.getLevel(i)
+            scoreboardUI.buffer[bufferCount].reputation = CCharacter.getReputation(i)
+            scoreboardUI.buffer[bufferCount].faction = CCharacter.getFaction(i)
+            scoreboardUI.buffer[bufferCount].group = CCharacter.getGroup(i)
+            scoreboardUI.buffer[bufferCount].kd = CCharacter.getKD(i)
+            scoreboardUI.buffer[bufferCount].ping = imports.getPlayerPing(i)
+            local _, rank = CCharacter.getRank(i)
+            scoreboardUI.buffer[bufferCount].rank = (rank and rank.name) or rank
+            scoreboardUI.buffer[bufferCount].reputation = (scoreboardUI.buffer[bufferCount].reputation and imports.math.round(scoreboardUI.buffer[bufferCount].reputation, 2)) or scoreboardUI.buffer[bufferCount].reputation
+            scoreboardUI.buffer[bufferCount].kd = (scoreboardUI.buffer[bufferCount].kd and imports.math.round(scoreboardUI.buffer[bufferCount].kd, 2)) or scoreboardUI.buffer[bufferCount].kd
+            scoreboardUI.buffer[bufferCount].survival_time = CCharacter.getSurvivalTime(i)
+            scoreboardUI.buffer[bufferCount].survival_time = (scoreboardUI.buffer[bufferCount].survival_time and CGame.formatMS(scoreboardUI.buffer[bufferCount].survival_time)) or scoreboardUI.buffer[bufferCount].survival_time
+        end
+        return bufferCount
+    end
 
     ------------------------------
     --[[ Function: Renders UI ]]--
@@ -119,24 +139,7 @@ CGame.execOnModuleLoad(function()
             scoreboardUI.cache.keys.scroll.state, scoreboardUI.cache.keys.scroll.streak  = imports.isMouseScrolled()
         elseif renderData.renderType == "render" then
             if not scoreboardUI.bgTexture then scoreboardUI.createBGTexture() end
-            local bufferCount = 0
-            for i, j in imports.pairs(CPlayer.CLogged) do
-                bufferCount = bufferCount + 1
-                scoreboardUI.buffer[i] = scoreboardUI.buffer[i] or {}
-                scoreboardUI.buffer[i].name = imports.getPlayerName(i)
-                scoreboardUI.buffer[i].level = CCharacter.getLevel(i)
-                scoreboardUI.buffer[i].reputation = CCharacter.getReputation(i)
-                scoreboardUI.buffer[i].faction = CCharacter.getFaction(i)
-                scoreboardUI.buffer[i].group = CCharacter.getGroup(i)
-                scoreboardUI.buffer[i].kd = CCharacter.getKD(i)
-                scoreboardUI.buffer[i].ping = imports.getPlayerPing(i)
-                local _, rank = CCharacter.getRank(i)
-                scoreboardUI.buffer[i].rank = (rank and rank.name) or rank
-                scoreboardUI.buffer[i].reputation = (scoreboardUI.buffer[i].reputation and imports.math.round(scoreboardUI.buffer[i].reputation, 2)) or scoreboardUI.buffer[i].reputation
-                scoreboardUI.buffer[i].kd = (scoreboardUI.buffer[i].kd and imports.math.round(scoreboardUI.buffer[i].kd, 2)) or scoreboardUI.buffer[i].kd
-                scoreboardUI.buffer[i].survival_time = CCharacter.getSurvivalTime(i)
-                scoreboardUI.buffer[i].survival_time = (scoreboardUI.buffer[i].survival_time and CGame.formatMS(scoreboardUI.buffer[i].survival_time)) or scoreboardUI.buffer[i].survival_time
-            end
+            local bufferCount = scoreboardUI.updateBuffer()
             local startX, startY = scoreboardUI.startX, scoreboardUI.startY
             local view_height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height
             local row_height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + (scoreboardUI.margin*0.5)
@@ -150,7 +153,7 @@ CGame.execOnModuleLoad(function()
             startY = startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height
             imports.beautify.native.setRenderTarget(scoreboardUI.viewRT, true)
             for i = row_startIndex, row_endIndex, 1 do
-                local j = scoreboardUI.buffer[i]
+                local j = scoreboardUI.buffer[bufferCount]
                 local column_startY = (scoreboardUI.margin*0.5) + (row_height*(i - 1)) - offsetY
                 local isRowHovered = imports.isMouseOnPosition(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + column_startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height)
                 if isRowHovered then
