@@ -13,3 +13,12 @@ CGame.createExports({
     {"getLevelRank", "CGame", "getLevelRank"},
     {"generateSpawn", "CGame", "generateSpawn"}
 })
+
+
+-----------------------------------
+--[[ Function: Fetches Imports ]]--
+-----------------------------------
+
+fetchImports = function()
+    return CGame.CExports
+end

@@ -6,6 +6,39 @@
     <!-- Exports -->
     <script src="exports/shared/main.lua" type="shared"/>
 
+    <!-- GUIs -->
+    <script src="gui/loading.lua" type="client"/>
+    <script src="gui/notification.lua" type="client"/>
+    <script src="gui/login.lua" type="client"/>
+    <script src="gui/inventory.lua" type="client"/>
+    <script src="gui/scoreboard.lua" type="client"/>
+
+    <!-- Handlers -->
+    <!--script src="handlers/hud/chatbox.lua" type="server"/-->
+    <script src="handlers/hud/player.lua" type="client"/>
+    <script src="handlers/channel.lua" type="server"/>
+    <script src="handlers/resumer.lua" type="server"/>
+    <script src="handlers/wasted.lua" type="server"/>
+    <script src="handlers/party.lua" type="server"/>
+
+    <!-- Files: Images: GUIs -->
+    <file src="files/images/login/login.rw"/>
+    <file src="files/images/login/background.rw"/>
+    <file src="files/images/loading/loader.rw"/>
+    <file src="files/images/inventory/ui/vicinity/slot_name.rw"/>
+
+    <!-- Files: Images: HUD -->
+    <file src="files/images/hud/overlays/vignette.rw"/>
+    <file src="files/images/hud/player/blood/border.rw"/>
+    <file src="files/images/hud/player/blood/icon.rw"/>
+    <file src="files/images/hud/player/hunger/border.rw"/>
+    <file src="files/images/hud/player/hunger/icon.rw"/>
+    <file src="files/images/hud/player/thirst/border.rw"/>
+    <file src="files/images/hud/player/thirst/icon.rw"/>
+
+    <file src="files/images/hud/player/slotBG1.png"/>
+    <file src="files/images/hud/player/slotBG2.png"/>
+
     <!-- Settings & Utilities -->
     <script src="utilities/shared.lua" type="shared"/>
     <script src="settings/shared.lua" type="shared"/>
@@ -123,38 +156,8 @@
     <export function="fetchLootName" type="shared"/>
     <export function="isLootLocked" type="shared"/>
 
-    <!-- GUIs -->
-    <script src="gui/loading.lua" type="client"/>
-    <script src="gui/notification.lua" type="client"/>
-    <script src="gui/login.lua" type="client"/>
-    <script src="gui/inventory.lua" type="client"/>
-    <script src="gui/scoreboard.lua" type="client"/>
-
-    <!-- Handlers -->
-    <!--script src="handlers/hud/chatbox.lua" type="server"/-->
-    <script src="handlers/hud/player.lua" type="client"/>
-    <script src="handlers/channel.lua" type="server"/>
-    <script src="handlers/resumer.lua" type="server"/>
-    <script src="handlers/wasted.lua" type="server"/>
-    <script src="handlers/party.lua" type="server"/>
-
-    <!-- Files: Images: GUIs -->
-    <file src="files/images/login/login.rw"/>
-    <file src="files/images/login/background.rw"/>
-    <file src="files/images/loading/loader.rw"/>
-    <file src="files/images/inventory/ui/vicinity/slot_name.rw"/>
-
-    <!-- Files: Images: HUD -->
-    <file src="files/images/hud/overlays/vignette.rw"/>
-    <file src="files/images/hud/player/blood/border.rw"/>
-    <file src="files/images/hud/player/blood/icon.rw"/>
-    <file src="files/images/hud/player/hunger/border.rw"/>
-    <file src="files/images/hud/player/hunger/icon.rw"/>
-    <file src="files/images/hud/player/thirst/border.rw"/>
-    <file src="files/images/hud/player/thirst/icon.rw"/>
-
-    <file src="files/images/hud/player/slotBG1.png"/>
-    <file src="files/images/hud/player/slotBG2.png"/>
+    <!-- Exports -->
+    <export function="fetchImports" type="shared"/>
 
     <!-- Exports: Shared: Main -->
     <export function="getElementUsedSlots" type="shared"/>

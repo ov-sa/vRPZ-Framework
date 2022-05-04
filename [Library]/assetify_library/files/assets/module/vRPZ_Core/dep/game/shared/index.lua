@@ -4,6 +4,7 @@
 
 local imports = {
     tonumber = tonumber,
+    loadstring = loadstring,
     isElement = isElement,
     getResourceName = getResourceName,
     getElementsByType = getElementsByType,
@@ -36,7 +37,7 @@ CGame = {
         if not data then return false end
         for i = 1, #data, 1 do
             local j = data[i]
-            --function getLevelRank(...) return CGame.getLevelRank(...) end
+            imports.loadstring("function "..j[1].."(...) return "..j[2].."."..j[3].."(...) end")()
             CGame.CExports = CGame.CExports..[[
                 ]]..j[2]..[[ = ]]..j[2]..[[ or {}
                 ]]..j[2]..[[.]]..j[3]..[[ = function(...)
