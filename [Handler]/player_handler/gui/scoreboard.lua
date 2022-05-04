@@ -158,10 +158,18 @@ CGame.execOnModuleLoad(function()
                 local column_startY = (scoreboardUI.margin*0.5) + (row_height*(i - 1)) - offsetY
                 local isRowHovered = imports.isMouseOnPosition(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + column_startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height)
                 if isRowHovered then
-                    --TODO: ADD HOVER ANIM
-                    outputChatBox("HOVERED ROW: "..i)
+                    if j.hoverStatus ~= "forward" then
+                        j.hoverStatus = "forward"
+                        j.hoverAnimTick = CLIENT_CURRENT_TICK
+                    end
                     isScoreboardHovered = true
+                else
+                    if j.hoverStatus ~= "backward" then
+                        j.hoverStatus = "backward"
+                        j.hoverAnimTick = CLIENT_CURRENT_TICK
+                    end
                 end
+                --TODO: if its hovered draw the hover bar here..
                 for k = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns, 1 do
                     local v = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[k]
                     local column_startX = v.startX
