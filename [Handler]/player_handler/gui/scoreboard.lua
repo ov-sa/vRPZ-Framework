@@ -136,9 +136,10 @@ CGame.execOnModuleLoad(function()
         if not scoreboardUI.state or not CPlayer.isInitialized(localPlayer) then return false end
 
         if renderData.renderType == "input" then
-            scoreboardUI.cache.keys.scroll.state, scoreboardUI.cache.keys.scroll.streak  = imports.isMouseScrolled()
+            scoreboardUI.cache.keys.scroll.state, scoreboardUI.cache.keys.scroll.streak = imports.isMouseScrolled()
         elseif renderData.renderType == "render" then
             if not scoreboardUI.bgTexture then scoreboardUI.createBGTexture() end
+            local isScoreboardHovered = false
             local bufferCount = scoreboardUI.updateBuffer()
             local startX, startY = scoreboardUI.startX, scoreboardUI.startY
             local view_height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height
@@ -159,6 +160,7 @@ CGame.execOnModuleLoad(function()
                 if isRowHovered then
                     --TODO: ADD HOVER ANIM
                     outputChatBox("HOVERED ROW: "..i)
+                    isScoreboardHovered = true
                 end
                 for k = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns, 1 do
                     local v = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[k]
@@ -185,7 +187,8 @@ CGame.execOnModuleLoad(function()
                 end
                 imports.beautify.native.drawRectangle(startX + scoreboardUI.scroller.startX, startY + scoreboardUI.scroller.startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.width, scoreboardUI.scroller.height, scoreboardUI.scroller.bgColor, false)
                 imports.beautify.native.drawRectangle(startX + scoreboardUI.scroller.startX, startY + scoreboardUI.scroller.startY + ((scoreboardUI.scroller.height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.thumbHeight)*scoreboardUI.scroller.animPercent*0.01), FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.thumbHeight, scoreboardUI.scroller.thumbColor, false)
-                if scoreboardUI.cache.keys.scroll.state and imports.isMouseOnPosition(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, view_height) then
+                isScoreboardHovered = isScoreboardHovered or imports.isMouseOnPosition(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, view_height)
+                if scoreboardUI.cache.keys.scroll.state and isScoreboardHovered then
                     local scrollPercent = imports.math.max(1, 100/(view_overflowHeight/row_height))
                     scoreboardUI.scroller.percent = imports.math.max(0, imports.math.min(scoreboardUI.scroller.percent + (scrollPercent*imports.math.max(1, scoreboardUI.cache.keys.scroll.streak)*(((scoreboardUI.cache.keys.scroll.state == "down") and 1) or -1)), 100))
                     scoreboardUI.cache.keys.scroll.state = false
