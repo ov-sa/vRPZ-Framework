@@ -24,6 +24,7 @@ local imports = {
     getInterpolationProgress = getInterpolationProgress,
     bindKey = bindKey,
     isMouseScrolled = isMouseScrolled,
+    isMouseOnPosition = isMouseOnPosition,
     showChat = showChat,
     showCursor = showCursor,
     string = string,
