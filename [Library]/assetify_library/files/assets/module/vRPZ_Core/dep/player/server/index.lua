@@ -11,7 +11,7 @@ local imports = {
     getElementsByType = getElementsByType,
     getPlayerSerial = getPlayerSerial,
     triggerEvent = triggerEvent,
-    triggerClientEvent = triggerClientEvent,
+    triggerClientEvent = triggerClientEvent
 }
 
 
