@@ -150,6 +150,11 @@ CGame.execOnModuleLoad(function()
             for i = row_startIndex, row_endIndex, 1 do
                 local j = scoreboardUI.buffer[i]
                 local column_startY = (scoreboardUI.margin*0.5) + (row_height*(i - 1)) - offsetY
+                local isRowHovered = imports.isMouseOnPosition(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + column_startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height)
+                if isRowHovered then
+                    --TODO: ADD HOVER ANIM
+                    outputChatBox("HOVERED ROW: "..i)
+                end
                 for k = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns, 1 do
                     local v = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[k]
                     local column_startX = v.startX
