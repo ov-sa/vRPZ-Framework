@@ -11,7 +11,10 @@ FRAMEWORK_CONFIGS["Character"] = {
         "money",
         "level",
         "experience",
-        "reputation"
+        "reputation",
+        "kills",
+        "deaths",
+        "survival_time"
     },
 
     ["Identity"] = {

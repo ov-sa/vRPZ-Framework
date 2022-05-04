@@ -117,8 +117,7 @@ CCharacter = {
         genLevel = imports.math.max(1, imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"], genLevel))
         characterEXP = imports.math.min(CGame.getLevelEXP(genLevel), characterEXP)
         if characterLevel ~= genLevel then
-            characterLevel = genLevel
-            imports.setElementData(player, "Character:Data:level", characterLevel)
+            imports.setElementData(player, "Character:Data:level", genLevel)
         end
         imports.setElementData(player, "Character:Data:experience", characterEXP)
         return true
@@ -139,6 +138,34 @@ CCharacter = {
             characterReputation = genReputation
             imports.setElementData(player, "Character:Data:reputation", characterReputation)
         end
+        return true
+    end,
+
+    getKills = function(player)
+        if not CPlayer.isInitialized(player) then return false end
+        return imports.tonumber(imports.getElementData(player, "Character:Data:kills")) or 0
+    end,
+
+    giveKills = function(player, kills)
+        kills = imports.tonumber(kills)
+        if not kills then return false end
+        local characterKills = CCharacter.getKills(player)
+        if not characterKills then return false end
+        imports.setElementData(player, "Character:Data:kills", characterKills + kills)
+        return true
+    end,
+
+    getDeaths = function(player)
+        if not CPlayer.isInitialized(player) then return false end
+        return imports.tonumber(imports.getElementData(player, "Character:Data:deaths")) or 0
+    end,
+
+    giveDeaths = function(player, deaths)
+        deaths = imports.tonumber(deaths)
+        if not deaths then return false end
+        local characterDeaths = CCharacter.getKills(player)
+        if not characterDeaths then return false end
+        imports.setElementData(player, "Character:Data:deaths", characterDeaths + deaths)
         return true
     end,
 
