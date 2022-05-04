@@ -130,6 +130,7 @@ CGame.execOnModuleLoad(function()
                 }
                 local _, rank = CCharacter.getRank(i)
                 cBuffer.rank = (rank and rank.name) or rank
+                cBuffer.kd = (cBuffer.kd and imports.math.round(cBuffer.kd, 2)) or cBuffer.kd
                 cBuffer.survival_time = CCharacter.getSurvivalTime(i)
                 cBuffer.survival_time = (cBuffer.survival_time and CGame.formatMS(cBuffer.survival_time)) or cBuffer.survival_time
                 imports.table.insert(scoreboardUI.buffer, cBuffer)
