@@ -41,6 +41,7 @@ CGame.execOnModuleLoad(function()
 
     local scoreboardUI = {
         cache = {keys = {scroll = {}}},
+        buffer = {},
         margin = 10,
         animStatus = "backward",
         bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].bgColor)),
@@ -118,35 +119,34 @@ CGame.execOnModuleLoad(function()
             scoreboardUI.cache.keys.scroll.state, scoreboardUI.cache.keys.scroll.streak  = imports.isMouseScrolled()
         elseif renderData.renderType == "render" then
             if not scoreboardUI.bgTexture then scoreboardUI.createBGTexture() end
-            scoreboardUI.buffer = {}
+            local bufferCount = 0
             for i, j in imports.pairs(CPlayer.CLogged) do
-                local cBuffer = {
-                    name = imports.getPlayerName(i),
-                    level = CCharacter.getLevel(i),
-                    reputation = CCharacter.getReputation(i),
-                    faction = CCharacter.getFaction(i), 
-                    group = CCharacter.getGroup(i),
-                    kd = CCharacter.getKD(i),
-                    ping = imports.getPlayerPing(i)
-                }
+                bufferCount = bufferCount + 1
+                scoreboardUI.buffer[i] = scoreboardUI.buffer[i] or {}
+                scoreboardUI.buffer[i].name = imports.getPlayerName(i)
+                scoreboardUI.buffer[i].level = CCharacter.getLevel(i)
+                scoreboardUI.buffer[i].reputation = CCharacter.getReputation(i)
+                scoreboardUI.buffer[i].faction = CCharacter.getFaction(i)
+                scoreboardUI.buffer[i].group = CCharacter.getGroup(i)
+                scoreboardUI.buffer[i].kd = CCharacter.getKD(i)
+                scoreboardUI.buffer[i].ping = imports.getPlayerPing(i)
                 local _, rank = CCharacter.getRank(i)
-                cBuffer.rank = (rank and rank.name) or rank
-                cBuffer.reputation = (cBuffer.reputation and imports.math.round(cBuffer.reputation, 2)) or cBuffer.reputation
-                cBuffer.kd = (cBuffer.kd and imports.math.round(cBuffer.kd, 2)) or cBuffer.kd
-                cBuffer.survival_time = CCharacter.getSurvivalTime(i)
-                cBuffer.survival_time = (cBuffer.survival_time and CGame.formatMS(cBuffer.survival_time)) or cBuffer.survival_time
-                imports.table.insert(scoreboardUI.buffer, cBuffer)
+                scoreboardUI.buffer[i].rank = (rank and rank.name) or rank
+                scoreboardUI.buffer[i].reputation = (scoreboardUI.buffer[i].reputation and imports.math.round(scoreboardUI.buffer[i].reputation, 2)) or scoreboardUI.buffer[i].reputation
+                scoreboardUI.buffer[i].kd = (scoreboardUI.buffer[i].kd and imports.math.round(scoreboardUI.buffer[i].kd, 2)) or scoreboardUI.buffer[i].kd
+                scoreboardUI.buffer[i].survival_time = CCharacter.getSurvivalTime(i)
+                scoreboardUI.buffer[i].survival_time = (scoreboardUI.buffer[i].survival_time and CGame.formatMS(scoreboardUI.buffer[i].survival_time)) or scoreboardUI.buffer[i].survival_time
             end
             local startX, startY = scoreboardUI.startX, scoreboardUI.startY
             local view_height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height
             local row_height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height + (scoreboardUI.margin*0.5)
-            local view_overflowHeight =  imports.math.max(0, (scoreboardUI.margin*0.5) + (row_height*#scoreboardUI.buffer) - view_height)
+            local view_overflowHeight =  imports.math.max(0, (scoreboardUI.margin*0.5) + (row_height*bufferCount) - view_height)
             local offsetY = view_overflowHeight*scoreboardUI.scroller.animPercent*0.01
             local row_startIndex = imports.math.floor(offsetY/row_height) + 1
-            local row_endIndex = imports.math.min(#scoreboardUI.buffer, row_startIndex + imports.math.ceil(view_height/row_height))
+            local row_endIndex = imports.math.min(bufferCount, row_startIndex + imports.math.ceil(view_height/row_height))
             imports.beautify.native.drawImage(startX, startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height, scoreboardUI.bgTexture, 0, 0, 0, -1, false)    
             imports.beautify.native.drawText(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.title, startX + scoreboardUI.margin, startY, startX + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.margin, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.font.instance, "left", "center", true, false, false, true)
-            imports.beautify.native.drawText(imports.string.spaceChars((#scoreboardUI.buffer).."/"..FRAMEWORK_CONFIGS["Game"]["Player_Limit"]), startX + scoreboardUI.margin, startY, startX + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.margin, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.counterFont.instance, "right", "center", true, false, false)
+            imports.beautify.native.drawText(imports.string.spaceChars((bufferCount).."/"..FRAMEWORK_CONFIGS["Game"]["Player_Limit"]), startX + scoreboardUI.margin, startY, startX + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.margin, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.counterFont.instance, "right", "center", true, false, false)
             startY = startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height
             imports.beautify.native.setRenderTarget(scoreboardUI.viewRT, true)
             for i = row_startIndex, row_endIndex, 1 do
