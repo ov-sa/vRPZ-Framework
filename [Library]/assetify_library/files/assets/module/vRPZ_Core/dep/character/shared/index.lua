@@ -169,6 +169,12 @@ CCharacter = {
         return true
     end,
 
+    getKD = function(player)
+        local characterKills, characterDeaths = CCharacter.getKills(player), CCharacter.getDeaths(player)
+        if not characterKills or not characterDeaths then return false end
+        return characterKills/characterDeaths
+    end,
+
     getFaction = function(player)
         if not CPlayer.isInitialized(player) then return false end
         return imports.getElementData(player, "Character:Data:faction") or false

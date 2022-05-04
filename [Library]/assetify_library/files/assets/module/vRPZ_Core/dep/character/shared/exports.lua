@@ -18,6 +18,7 @@ CGame.createExports({
     {exportName = "giveCharacterKills", moduleName = "CCharacter", moduleMethod = "giveKills"},
     {exportName = "getCharacterDeaths", moduleName = "CCharacter", moduleMethod = "getDeaths"},
     {exportName = "giveCharacterDeaths", moduleName = "CCharacter", moduleMethod = "giveDeaths"},
+    {exportName = "giveCharacterKD", moduleName = "CCharacter", moduleMethod = "getKD"},
     {exportName = "getCharacterFaction", moduleName = "CCharacter", moduleMethod = "getFaction"},
     {exportName = "getCharacterGroup", moduleName = "CCharacter", moduleMethod = "getGroup"},
     {exportName = "setCharacterMoney", moduleName = "CCharacter", moduleMethod = "setMoney"},
