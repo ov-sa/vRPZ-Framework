@@ -49,6 +49,7 @@
     <export function="setPlayerParty" type="server"/>
     <export function="setPlayerLanguage" type="client"/>
     <export function="getPlayerLanguage" type="client"/>
+    <export function="getPlayerParty" type="client"/>
 
     <!-- Modules: Party -->
     <export function="createParty" type="server"/>

@@ -2,7 +2,9 @@
 --[[ Exports ]]--
 -----------------
 
-function isPlayerInitialized(...) return CPlayer.isInitialized(...) end
-function getLoggedPlayers(...) return CPlayer.getLogged(...) end
-function getPlayerChannel(...) return CPlayer.getChannel(...) end
-function getPlayerParty(...) return CPlayer.getParty(...) end
+CGame.createExports({
+    {"isPlayerInitialized", "CPlayer", "isInitialized"},
+    {"getLoggedPlayers", "CPlayer", "getLogged"},
+    {"getPlayerChannel", "CPlayer", "getChannel"},
+    {"getPlayerParty", "CPlayer", "getParty"}
+})

@@ -12,9 +12,11 @@ local imports = {
 --[[ Exports ]]--
 -----------------
 
-function setPlayerLanguage(...) return CPlayer.setLanguage(...) end
-function getPlayerLanguage(...) return CPlayer.getLanguage(...) end
-function getPlayerParty(...) return CPlayer.getParty(...) end
+CGame.createExports({
+    {"setPlayerLanguage", "CPlayer", "setLanguage"},
+    {"getPlayerLanguage", "CPlayer", "getLanguage"},
+    {"getPlayerParty", "CPlayer", "getParty"}
+})
 
 
 ----------------
