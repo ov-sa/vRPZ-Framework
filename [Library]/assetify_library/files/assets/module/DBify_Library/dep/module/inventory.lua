@@ -177,7 +177,7 @@ dbify.inventory = {
                             prevItemData = (prevItemData and imports.fromJSON(prevItemData)) or false
                             prevItemData = (prevItemData and prevItemData.data and (imports.type(prevItemData.data) == "table") and prevItemData.item and (imports.type(prevItemData.item) == "table") and prevItemData) or false
                             if not prevItemData then
-                                prevItemData = dbify.imports.table.clone(dbify.inventory.connection.itemFormat.content, true)
+                                prevItemData = imports.table.clone(dbify.inventory.connection.itemFormat.content, true)
                             end
                             prevItemData.property[(dbify.inventory.connection.itemFormat.counter)] = j[2] + (imports.math.max(0, imports.tonumber(prevItemData.property[(dbify.inventory.connection.itemFormat.counter)]) or 0)*((arguments[1].processType == "push" and 1) or -1))
                             arguments[1].items[i][2] = imports.toJSON(prevItemData)
@@ -217,7 +217,7 @@ dbify.inventory = {
                             j = (j and j.data and (imports.type(j.data) == "table") and j.property and (imports.type(j.property) == "table") and j) or false
                             if arguments[1].processType == "set" then
                                 if not j then
-                                    j = dbify.imports.table.clone(dbify.inventory.connection.itemFormat.content, true)
+                                    j = imports.table.clone(dbify.inventory.connection.itemFormat.content, true)
                                 end
                                 for k = 1, #arguments[1].properties, 1 do
                                     local v = arguments[1].properties[k]
@@ -280,7 +280,7 @@ dbify.inventory = {
                             j = (j and j.data and (imports.type(j.data) == "table") and j.property and (imports.type(j.property) == "table") and j) or false
                             if arguments[1].processType == "set" then
                                 if not j then
-                                    j = dbify.imports.table.clone(dbify.inventory.connection.itemFormat.content, true)
+                                    j = imports.table.clone(dbify.inventory.connection.itemFormat.content, true)
                                 end
                                 for k = 1, #arguments[1].datas, 1 do
                                     local v = arguments[1].datas[k]

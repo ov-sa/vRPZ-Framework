@@ -109,7 +109,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
                 ["RU"] = "Прожито Времени",
                 ["BR"] = "Tempo de sobrevivência",
             },
-            dataType = "survival",
+            dataType = "survival_time",
             width = 140
         },
         {

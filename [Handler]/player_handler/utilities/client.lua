@@ -186,9 +186,9 @@ CGame.execOnModuleLoad(function()
     end)
 
     CGame.execOnLoad(function()
-        local connectedPlayers = imports.getElementsByType("player")
-        for i = 1, #connectedPlayers, 1 do
-            CGame.loadAnim(connectedPlayers[i], "Character")
+        local serverPlayers = imports.getElementsByType("player")
+        for i = 1, #serverPlayers, 1 do
+            CGame.loadAnim(serverPlayers[i], "Character")
         end
         imports.addEventHandler("onClientPlayerJoin", root, function()
             CGame.loadAnim(source, "Character")
