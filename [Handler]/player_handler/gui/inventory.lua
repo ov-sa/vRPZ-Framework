@@ -842,7 +842,7 @@ CGame.execOnModuleLoad(function()
             --inventoryUI.vicinityInventory.element = CCharacter.isInLoot(localPlayer)
             inventoryUI.vicinityInventory.element = testPed --TODO: REMOVE IT LATER AND ENABLE ^
             imports.triggerEvent("Client:onEnableInventoryUI", localPlayer, true)
-            inventoryUI.createBuffer(localPlayer, imports.getPlayerName(localPlayer).."'s Inventory")
+            inventoryUI.createBuffer(localPlayer, imports.string.format(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory["Title"][(CPlayer.CLanguage)], imports.getPlayerName(localPlayer)))
             inventoryUI.createBuffer(inventoryUI.vicinityInventory.element)
             inventoryUI.opacityAdjuster.element = imports.beautify.slider.create(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, "vertical", nil, false)
             inventoryUI.opacityAdjuster.percent = inventoryUI.opacityAdjuster.percent or 100
