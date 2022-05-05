@@ -75,7 +75,7 @@ function getElementAssetInfo(element)
         return asset.cache.modelID[elementModel].type, asset.cache.modelID[elementModel].name
     else
         if not syncer.syncedElements[element] then return false end
-        return syncer.syncedElements[element].type, syncer.syncedElements[element].name
+        return syncer.syncedElements[element].type, syncer.syncedElements[element].name, syncer.syncedElements[element].clump, syncer.syncedElements[element].clumpMaps
     end
 end
 
