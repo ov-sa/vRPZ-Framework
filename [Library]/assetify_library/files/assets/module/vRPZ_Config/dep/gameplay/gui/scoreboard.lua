@@ -29,7 +29,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             hoverDuration = 2500
         },
         {
-            ["Titles"] = {
+            ["Title"] = {
                 ["EN"] = "ID", 
                 ["TR"] = "ID", 
                 ["RU"] = "ID",
@@ -39,7 +39,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             width = 60
         },
         {
-            ["Titles"] = {
+            ["Title"] = {
                 ["EN"] = "Name", 
                 ["TR"] = "İsim", 
                 ["RU"] = "Имя",
@@ -49,7 +49,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             width = 240
         },
         {
-            ["Titles"] = {
+            ["Title"] = {
                 ["EN"] = "Level", 
                 ["TR"] = "Seviye", 
                 ["RU"] = "Уровень",
@@ -59,7 +59,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             width = 100
         },
         {
-            ["Titles"] = {
+            ["Title"] = {
                 ["EN"] = "Rank", 
                 ["TR"] = "Rank", 
                 ["RU"] = "Ранг",
@@ -69,7 +69,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             width = 135
         },
         {
-            ["Titles"] = {
+            ["Title"] = {
                 ["EN"] = "Reputation", 
                 ["TR"] = "İtibar", 
                 ["RU"] = "Репутация",
@@ -79,7 +79,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             width = 125
         },
         {
-            ["Titles"] = {
+            ["Title"] = {
                 ["EN"] = "Faction", 
                 ["TR"] = "Hizip", 
                 ["RU"] = "Фракция",
@@ -89,7 +89,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             width = 155
         },
         {
-            ["Titles"] = {
+            ["Title"] = {
                 ["EN"] = "Group", 
                 ["TR"] = "Grup", 
                 ["RU"] = "Группа",
@@ -99,7 +99,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             width = 125
         },
         {
-            ["Titles"] = {
+            ["Title"] = {
                 ["EN"] = "K:D", 
                 ["TR"] = "K:D", 
                 ["RU"] = "У:С",
@@ -109,7 +109,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             width = 100
         },
         {
-            ["Titles"] = {
+            ["Title"] = {
                 ["EN"] = "Survival", 
                 ["TR"] = "Hayatta Kalma", 
                 ["RU"] = "Прожито Времени",
@@ -119,7 +119,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             width = 140
         },
         {
-            ["Titles"] = {
+            ["Title"] = {
                 ["EN"] = "Ping", 
                 ["TR"] = "Ping", 
                 ["RU"] = "Пинг",

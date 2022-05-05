@@ -196,13 +196,13 @@ CGame.execOnModuleLoad(function()
     loginUI.phases[1].updateUILang = function()
         for i = 1, #loginUI.phases[1].optionsUI, 1 do
             local j = loginUI.phases[1].optionsUI[i]
-            j.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Titles"][(CPlayer.CLanguage)], "  "))
+            j.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Title"][(CPlayer.CLanguage)], "  "))
             j.width = imports.beautify.native.getTextWidth(j.title, 1, loginUI.phases[1].optionsUI.font.instance) + 5
         end
     end
     loginUI.phases[2].updateUILang = function(gender)
         gender = gender or FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default
-        loginUI.phases[2].titlebar.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar["Titles"][(CPlayer.CLanguage)]))
+        loginUI.phases[2].titlebar.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar["Title"][(CPlayer.CLanguage)]))
         for i = 1, #loginUI.phases[2].options, 1 do
             local j = loginUI.phases[2].options[i]
             j.tooltip.text = imports.string.upper(imports.string.spaceChars(j.tooltip.identifier[(CPlayer.CLanguage)]))
@@ -211,11 +211,11 @@ CGame.execOnModuleLoad(function()
         for i = 1, #loginUI.phases[2].categories, 1 do
             local j = loginUI.phases[2].categories[i]
             local panel_offsetY = loginUI.phases[2].titlebar.height + loginUI.phases[2].titlebar.paddingY
-            j.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)]["Titles"][(CPlayer.CLanguage)]))
+            j.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)]["Title"][(CPlayer.CLanguage)]))
             j.offsetY = (loginUI.phases[2].categories[(i - 1)] and (loginUI.phases[2].categories[(i - 1)].offsetY + loginUI.phases[2].categories.height + loginUI.phases[2].categories[(i - 1)].height + loginUI.phases[2].categories.paddingY)) or panel_offsetY
             if j.contents then
                 for k, v in imports.pairs(j.contents) do
-                    v.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Titles"][(CPlayer.CLanguage)]))
+                    v.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Title"][(CPlayer.CLanguage)]))
                     v.iconX, v.iconY = ((loginUI.phases[2].width - imports.beautify.native.getTextWidth(v.title, 1, loginUI.phases[2].categories.font.instance))*0.5) - FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.iconSize - 7, (loginUI.phases[2].categories.height - FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.iconSize)*0.5
                     if v.isSlider then
                         if not v.element or not imports.isElement(v.element) then
@@ -253,7 +253,7 @@ CGame.execOnModuleLoad(function()
         end
     end
     loginUI.phases[3].updateUILang = function()
-        loginUI.phases[3].navigator.__width = loginUI.phases[3].navigator.width + imports.beautify.native.getTextWidth(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator["Titles"][(CPlayer.CLanguage)], 1, loginUI.phases[3].navigator.font.instance)
+        loginUI.phases[3].navigator.__width = loginUI.phases[3].navigator.width + imports.beautify.native.getTextWidth(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator["Title"][(CPlayer.CLanguage)], 1, loginUI.phases[3].navigator.font.instance)
     end
     loginUI.updateUILang = function()
         loginUI.phases[1].updateUILang()
@@ -705,7 +705,7 @@ CGame.execOnModuleLoad(function()
                         loginUI.phases[3].navigator.animAlphaPercent = imports.interpolateBetween(loginUI.phases[3].navigator.animAlphaPercent, 0, 0, 0.25, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].navigator.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator.hoverDuration), "Linear")
                     end
                 end
-                imports.beautify.native.drawText(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator["Titles"][(CPlayer.CLanguage)], navigator_offsetX, navigator_offsetY, navigator_offsetX + navigator_width, navigator_offsetY + navigator_height, imports.tocolor(loginUI.phases[3].navigator.fontColor[1], loginUI.phases[3].navigator.fontColor[2], loginUI.phases[3].navigator.fontColor[3], loginUI.phases[3].navigator.fontColor[4]*loginUI.phases[3].navigator.animAlphaPercent), 1, loginUI.phases[3].navigator.font.instance, "center", "center", true, false, false)
+                imports.beautify.native.drawText(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator["Title"][(CPlayer.CLanguage)], navigator_offsetX, navigator_offsetY, navigator_offsetX + navigator_width, navigator_offsetY + navigator_height, imports.tocolor(loginUI.phases[3].navigator.fontColor[1], loginUI.phases[3].navigator.fontColor[2], loginUI.phases[3].navigator.fontColor[3], loginUI.phases[3].navigator.fontColor[4]*loginUI.phases[3].navigator.animAlphaPercent), 1, loginUI.phases[3].navigator.font.instance, "center", "center", true, false, false)
             end
         end
     end

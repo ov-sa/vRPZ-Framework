@@ -205,7 +205,7 @@ CGame.execOnModuleLoad(function()
             imports.beautify.native.setRenderTarget()
             for i = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Columns"], 1 do
                 local j = FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Columns"][i]
-                imports.beautify.native.drawText(j["Titles"][(CPlayer.CLanguage)], startX + j.startX, startY, startX + j.endX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Columns"].height, scoreboardUI.columns.fontColor, 1, scoreboardUI.columns.font.instance, "center", "center", true, false, false)
+                imports.beautify.native.drawText(j["Title"][(CPlayer.CLanguage)], startX + j.startX, startY, startX + j.endX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Columns"].height, scoreboardUI.columns.fontColor, 1, scoreboardUI.columns.font.instance, "center", "center", true, false, false)
             end
             imports.beautify.native.drawImage(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Columns"].height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, view_height, scoreboardUI.viewRT, 0, 0, 0, -1, false)
             imports.beautify.native.drawImage(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Columns"].height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, view_height, scoreboardUI.columnTexture, 0, 0, 0, -1, false)

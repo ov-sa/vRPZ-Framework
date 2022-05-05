@@ -22,7 +22,7 @@ FRAMEWORK_CONFIGS["UI"]["Inventory"] = {
     },
 
     inventory = {
-        ["Titles"] = {
+        ["Title"] = {
             ["EN"] = "%s's Inventory", 
             ["TR"] = "%s'nun Envanteri",
             ["RU"] = "Инвентарь %s", 

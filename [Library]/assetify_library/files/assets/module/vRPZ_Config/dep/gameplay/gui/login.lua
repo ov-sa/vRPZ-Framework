@@ -104,7 +104,7 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
 
     ["Options"] = {
         play = {
-            ["Titles"] = {
+            ["Title"] = {
                 ["EN"] = "Play", 
                 ["TR"] = "Oyna", 
                 ["RU"] = "Играть",
@@ -116,7 +116,7 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
         },
 
         characters = {
-            ["Titles"] = {
+            ["Title"] = {
                 ["EN"] = "Characters", 
                 ["TR"] = "karakterler", 
                 ["RU"] = "Персонажи",
@@ -124,7 +124,7 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
             },
             width = 325, height = 560,
             titlebar = {
-                ["Titles"] = {
+                ["Title"] = {
                     ["EN"] = "Character", 
                     ["TR"] = "Karakter", 
                     ["RU"] = "Персонаж",
@@ -187,14 +187,14 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                 fontColor = {200, 200, 200, 255}, bgColor = {0, 0, 0, 235},
 
                 ["Identity"] = {
-                    ["Titles"] = {
+                    ["Title"] = {
                         ["EN"] = "Identity", 
                         ["TR"] = "Kimlik", 
                         ["RU"] = "Тело",
                         ["BR"] = "Características físicas"
                     },
                     tone = {
-                        ["Titles"] = {
+                        ["Title"] = {
                             ["EN"] = "Skin Tone", 
                             ["TR"] = "Cilt tonu", 
                             ["RU"] = "Цвет кожи",
@@ -204,7 +204,7 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                     },
                     gender = {
                         default = "Male",
-                        ["Titles"] = {
+                        ["Title"] = {
                             ["EN"] = "Gender", 
                             ["TR"] = "Cinsiyet", 
                             ["RU"] = "Пол",
@@ -214,14 +214,14 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                     }
                 },
                 ["Facial"] = {
-                    ["Titles"] = {
+                    ["Title"] = {
                         ["EN"] = "Facial", 
                         ["TR"] = "Yüz", 
                         ["RU"] = "Голова",
                         ["BR"] = "Cabeça"
                     },
                     hair = {
-                        ["Titles"] = {
+                        ["Title"] = {
                             ["EN"] = "Hair", 
                             ["TR"] = "Saç", 
                             ["RU"] = "Причёска",
@@ -230,7 +230,7 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                         ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Facial"]["Hair"]
                     },
                     face = {
-                        ["Titles"] = {
+                        ["Title"] = {
                             ["EN"] = "Face", 
                             ["TR"] = "Yüz", 
                             ["RU"] = "Лицо",
@@ -240,14 +240,14 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                     }
                 },
                 ["Clothing"] = {
-                    ["Titles"] = {
+                    ["Title"] = {
                         ["EN"] = "Clothing", 
                         ["TR"] = "Giyim", 
                         ["RU"] = "Одежда",
                         ["BR"] = "Roupas"
                     },
                     ["Upper"] = {
-                        ["Titles"] = {
+                        ["Title"] = {
                             ["EN"] = "Upper", 
                             ["TR"] = "Üst", 
                             ["RU"] = "Верх",
@@ -256,7 +256,7 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                         ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Upper"]
                     },
                     ["Lower"] = {
-                        ["Titles"] = {
+                        ["Title"] = {
                             ["EN"] = "Lower", 
                             ["TR"] = "Alt", 
                             ["RU"] = "Низ",
@@ -265,7 +265,7 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                         ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Lower"]
                     },
                     ["Shoes"] = {
-                        ["Titles"] = {
+                        ["Title"] = {
                             ["EN"] = "Shoes", 
                             ["TR"] = "Ayakkabı", 
                             ["RU"] = "Обувь",
@@ -278,7 +278,7 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
         },
 
         credits = {
-            ["Titles"] = {
+            ["Title"] = {
                 ["EN"] = "Credits", 
                 ["TR"] = "Yapımcılar", 
                 ["RU"] = "Авторы",
@@ -287,7 +287,7 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
             fontColor = {170, 35, 35, 255},
             scrollDuration = 8500,
             navigator = {
-                ["Titles"] = {
+                ["Title"] = {
                     ["EN"] = "Back", 
                     ["TR"] = "Geri", 
                     ["RU"] = "Назад",
