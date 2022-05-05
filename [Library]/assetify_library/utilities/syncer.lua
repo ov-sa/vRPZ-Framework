@@ -519,10 +519,12 @@ else
         end
     end)
 
+    imports.addEventHandler("onElementModelChange", root, function()
+        syncer.syncedElements[source] = nil
+    end)
     imports.addEventHandler("onElementDestroy", root, function()
         syncer.syncedElements[source] = nil
     end)
-    
     imports.addEventHandler("onPlayerQuit", root, function()
         syncer.loadedClients[source] = nil
         syncer.scheduledClients[source] = nil
