@@ -190,7 +190,7 @@ CGame.execOnModuleLoad(function()
                     imports.beautify.native.drawImage(0, column_startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.rowTexture, 0, 0, 0, scoreboardUI.columns.data.bgColor, false)
                 end
                 if isAnimationVisible then
-                    imports.beautify.native.drawImage(0, column_startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, 0, 0, 0, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.hoverBGColor[1], FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.hoverBGColor[2], FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.hoverBGColor[3], FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.hoverBGColor[4]*j.animAlphaPercent), false)
+                    imports.beautify.native.drawImage(0, column_startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.rowTexture, 0, 0, 0, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.hoverBGColor[1], FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.hoverBGColor[2], FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.hoverBGColor[3], FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.hoverBGColor[4]*j.animAlphaPercent), false)
                 end
                 for k = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns, 1 do
                     local v = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[k]
