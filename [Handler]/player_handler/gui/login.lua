@@ -287,7 +287,7 @@ CGame.execOnModuleLoad(function()
     end
     loginUI.phases[2].updateCharacter = function()
         local characterClothing = {CCharacter.generateClothing((loginUI.phases[2].fetchSelection()))}
-        imports.assetify.setElementAsset(loginUI.phases[2].character, characterClothing[1], characterClothing[2], characterClothing[3])
+        imports.assetify.setElementAsset(loginUI.phases[2].character, "character", characterClothing[1], characterClothing[2], characterClothing[3])
     end
     loginUI.phases[2].loadCharacter = function(loadDefault)
         if not loadDefault then

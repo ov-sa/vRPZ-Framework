@@ -148,7 +148,7 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, loadBuffer)
     local characterIdentity = CCharacter.CBuffer[characterID].identity
     local characterClothing = {CCharacter.generateClothing(characterIdentity)}
     imports.spawnPlayer(source, spawnpoint.position[1], spawnpoint.position[2], spawnpoint.position[3] + 1, spawnpoint.rotation[3])
-    imports.assetify.setElementAsset(source, characterClothing[1], characterClothing[2], characterClothing[3])
+    imports.assetify.setElementAsset(source, "character", characterClothing[1], characterClothing[2], characterClothing[3])
     imports.setElementAlpha(source, 255)
     imports.setElementDimension(source, 0)
     imports.setElementFrozen(source, false)
