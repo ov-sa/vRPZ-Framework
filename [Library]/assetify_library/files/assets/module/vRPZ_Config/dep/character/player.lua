@@ -3,7 +3,5 @@
 ------------------
 
 FRAMEWORK_CONFIGS["Player"] = {
-
     ["Datas"] = {}
-
 }
