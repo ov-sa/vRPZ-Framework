@@ -3,11 +3,11 @@
 ------------------
 
 FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
-    ["Toggle_Key"] = "tab",
-
+    toggleKey = "tab",
     marginY = 25,
     width = 1282, height = 525,
     bgColor = {0, 0, 0, 250},
+    hoverDuration = 2500,
 
     banner = {
         title = "#C81E1E↪  v R P Z   #C8C8C8F R A M E W O R K",

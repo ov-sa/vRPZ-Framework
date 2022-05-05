@@ -11,10 +11,11 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
     dimension = 1,
     fadeDelay = 7000,
     clientPoint = {x = 0, y = 0, z = 0},
-
     spawnLocations = {
         {
             cinemationFOV = 30,
+            characterCinemationFOV = 50,
+            characterPoint = {x = -257.4282531738281, y = -76.09749603271484, z = 67.12364196777344, rotation = 110},
             cinemationPoint = {
                 cameraStart = {x = 763.5717163085938, y = 463.2174987792969, z = 151.6784057617188},
                 cameraStartLook = {x = 762.7440795898438, y = 462.7048645019531, z = 151.4499969482422},
@@ -22,8 +23,6 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                 cameraEndLook = {x = 1.33843719959259, y = 8.141613006591797, z = 3.951257228851318},
                 cinemationDuration = 10000 
             },
-            characterCinemationFOV = 50,
-            characterPoint = {x = -257.4282531738281, y = -76.09749603271484, z = 67.12364196777344, rotation = 110},
             characterCinemationPoint = {
                 cameraStart = {x = -260.7944030761719, y = -79.50209808349609, z = 68.01069641113281},
                 cameraStartLook = {x = -260.2499389648438, y = -78.67666625976562, z = 67.86155700683594},
@@ -112,7 +111,7 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                 ["BR"] = "Jogar",
             },
             height = 35, embedLineSize = 3,
-            fontColor = {150, 150, 150, 25}, hoverfontColor = {170, 35, 35, 255}, embedLineColor = {170, 35, 35, 50},
+            fontColor = {150, 150, 150, 25}, hoverFontColor = {170, 35, 35, 255}, embedLineColor = {170, 35, 35, 50},
             hoverDuration = 2500
         },
 
