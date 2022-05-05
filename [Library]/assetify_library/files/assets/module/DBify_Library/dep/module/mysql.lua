@@ -6,12 +6,25 @@ local imports = {
     type = type,
     unpack = unpack,
     tostring = tostring,
+    tonumber = tonumber,
     dbConnect = dbConnect,
     dbQuery = dbQuery,
     dbPoll = dbPoll,
     dbExec = dbExec,
     table = table
 }
+
+string.parse = function(rawString)
+    if not rawString then return false end
+    if imports.tostring(rawString) == "nil" then
+        rawString = nil
+    elseif imports.tostring(rawString) == "false" then
+        rawString = false
+    elseif imports.tostring(rawString) == "true" then
+        rawString = true
+    end
+    return imports.tonumber(rawString) or rawString
+end
 
 
 -----------------------
