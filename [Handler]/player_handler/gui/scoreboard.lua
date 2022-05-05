@@ -65,18 +65,8 @@ CGame.execOnModuleLoad(function()
 
     scoreboardUI.startX = ((CLIENT_MTA_RESOLUTION[1] - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width)*0.5)
     scoreboardUI.startY = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].marginY + ((CLIENT_MTA_RESOLUTION[2] - (FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height))*0.5)
-    scoreboardUI.createBGTexture = function(isRefresh)
+    scoreboardUI.createBGTexture = function()
         if CLIENT_MTA_MINIMIZED then return false end
-        if isRefresh then
-            if scoreboardUI.bgTexture and imports.isElement(scoreboardUI.bgTexture) then
-                imports.destroyElement(scoreboardUI.bgTexture)
-                scoreboardUI.bgTexture = nil
-            end
-            if scoreboardUI.columnTexture and imports.isElement(scoreboardUI.columnTexture) then
-                imports.destroyElement(scoreboardUI.columnTexture)
-                scoreboardUI.columnTexture = nil
-            end
-        end
         scoreboardUI.bgRT = imports.beautify.native.createRenderTarget(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height, true)
         imports.beautify.native.setRenderTarget(scoreboardUI.bgRT, true)
         imports.beautify.native.drawRectangle(0, 0, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].banner.height, scoreboardUI.banner.bgColor, false)
@@ -90,20 +80,32 @@ CGame.execOnModuleLoad(function()
             imports.destroyElement(scoreboardUI.bgRT)
             scoreboardUI.bgRT = nil
         end
-        scoreboardUI.bgRT = imports.beautify.native.createRenderTarget(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, true)
-        imports.beautify.native.setRenderTarget(scoreboardUI.bgRT, true)
+        scoreboardUI.columnRT = imports.beautify.native.createRenderTarget(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, true)
+        scoreboardUI.rowRT = imports.beautify.native.createRenderTarget(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, true)
+        imports.beautify.native.setRenderTarget(scoreboardUI.columnRT, true)
         for i = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns, 1 do
             local j = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[i]
             j.startX = (FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[(i - 1)] and FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[(i - 1)].endX) or FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.dividerSize
             j.endX = j.startX + j.width + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.dividerSize
             imports.beautify.native.drawRectangle(j.endX - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.dividerSize, scoreboardUI.margin*0.5, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.dividerSize, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height - scoreboardUI.margin, scoreboardUI.columns.dividerColor, false)
         end
+        imports.beautify.native.setRenderTarget(scoreboardUI.rowRT, true)
+        for i = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns, 1 do
+            local j = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[i]
+            imports.beautify.native.drawRectangle(j.startX, 0, j.width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, -1, false)
+        end
         imports.beautify.native.setRenderTarget()
-        local rtPixels = imports.beautify.native.getTexturePixels(scoreboardUI.bgRT)
+        local rtPixels = imports.beautify.native.getTexturePixels(scoreboardUI.columnRT)
         if rtPixels then
             scoreboardUI.columnTexture = imports.beautify.native.createTexture(rtPixels, "dxt5", false, "clamp")
-            imports.destroyElement(scoreboardUI.bgRT)
-            scoreboardUI.bgRT = nil
+            imports.destroyElement(scoreboardUI.columnRT)
+            scoreboardUI.columnRT = nil
+        end
+        local rtPixels = imports.beautify.native.getTexturePixels(scoreboardUI.rowRT)
+        if rtPixels then
+            scoreboardUI.rowTexture = imports.beautify.native.createTexture(rtPixels, "dxt5", false, "clamp")
+            imports.destroyElement(scoreboardUI.rowRT)
+            scoreboardUI.rowRT = nil
         end
     end
     scoreboardUI.updateBuffer = function()
@@ -127,7 +129,7 @@ CGame.execOnModuleLoad(function()
         end
         return bufferCount
     end
-
+    
     ------------------------------
     --[[ Function: Renders UI ]]--
     ------------------------------
@@ -170,26 +172,34 @@ CGame.execOnModuleLoad(function()
                     end
                 end
                 j.animAlphaPercent = j.animAlphaPercent or 0
-                local isAnimationVisible = false
+                local isAnimationVisible, isAnimationFullyRendered = false, false
                 if j.hoverStatus == "forward" then
                     isAnimationVisible = true
                     if j.animAlphaPercent < 1 then
-                        j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].hoverDuration), "Linear")
+                        j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.hoverDuration), "Linear")
+                    else
+                        isAnimationFullyRendered = true
                     end
                 else
                     if j.animAlphaPercent > 0 then
                         isAnimationVisible = true
-                        j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].hoverDuration), "Linear")
+                        j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.hoverDuration), "Linear")
                     end
                 end
+                if not isAnimationFullyRendered then
+                    imports.beautify.native.drawImage(0, column_startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.rowTexture, 0, 0, 0, scoreboardUI.columns.data.bgColor, false)
+                end
                 if isAnimationVisible then
-                    --TODO: if its hovered draw the hover bar here..
+                    imports.beautify.native.drawImage(0, column_startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, 0, 0, 0, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.hoverBGColor[1], FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.hoverBGColor[2], FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.hoverBGColor[3], FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.hoverBGColor[4]*j.animAlphaPercent), false)
                 end
                 for k = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns, 1 do
                     local v = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[k]
-                    local column_startX = v.startX
-                    imports.beautify.native.drawRectangle(column_startX, column_startY, v.width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columns.data.bgColor, false)
-                    imports.beautify.native.drawText(((v.dataType == "serial_number") and i) or j[(v.dataType)] or "-", column_startX, column_startY, column_startX + v.width, column_startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columns.data.fontColor, 1, scoreboardUI.columns.data.font.instance, "center", "center", true, false, false)
+                    if not isAnimationFullyRendered then
+                        imports.beautify.native.drawText(((v.dataType == "serial_number") and i) or j[(v.dataType)] or "-", v.startX, column_startY, v.startX + v.width, column_startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, scoreboardUI.columns.data.fontColor, 1, scoreboardUI.columns.data.font.instance, "center", "center", true, false, false)
+                    end
+                    if isAnimationVisible then
+                        imports.beautify.native.drawText(((v.dataType == "serial_number") and i) or j[(v.dataType)] or "-", v.startX, column_startY, v.startX + v.width, column_startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.height, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.fontColor[1], FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.fontColor[2], FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.fontColor[3], FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns.data.fontColor[4]*j.animAlphaPercent), 1, scoreboardUI.columns.data.font.instance, "center", "center", true, false, false)
+                    end
                 end
             end
             imports.beautify.native.setRenderTarget()

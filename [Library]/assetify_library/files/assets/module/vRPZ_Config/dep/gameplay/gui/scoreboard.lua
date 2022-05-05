@@ -7,7 +7,6 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
     marginY = 25,
     width = 1282, height = 525,
     bgColor = {0, 0, 0, 250},
-    hoverDuration = 2500,
 
     banner = {
         title = "#C81E1E↪  v R P Z   #C8C8C8F R A M E W O R K",
@@ -19,8 +18,9 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
         height = 25, dividerSize = 2,
         fontColor = {0, 0, 0, 255}, bgColor = {100, 100, 100, 255}, dividerColor = {15, 15, 15, 200},
         data = {
-            fontColor = {100, 100, 100, 255},
-            bgColor = {10, 10, 10, 255}
+            fontColor = {100, 100, 100, 255}, hoverFontColor = {0, 0, 0, 255},
+            bgColor = {10, 10, 10, 255}, hoverBGColor = {100, 100, 100, 255},
+            hoverDuration = 2500
         },
         {
             title = {
