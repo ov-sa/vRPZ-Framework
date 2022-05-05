@@ -29,16 +29,16 @@ FRAMEWORK_CONFIGS["Character"] = {
         ["Facial"] = {
             ["Hair"] = {
                 ["Male"] = {
-                    {["EN"] = "None", clumpName = "H0", clumpTexture = false, ["TR"] = "Hiçbiri", ["RU"] = "нет", ["BR"] = "Nenhum"},
-                    {["EN"] = "Generic", clumpName = "H1", clumpTexture = {"cj_hair_1", 1}, ["TR"] = "Genel", ["RU"] = "Общий", ["BR"] = "Genérico"},
-                    {["EN"] = "Survivor", clumpName = "H2", clumpTexture = {"cj_hair_2", 1}, ["TR"] = "Hayatta kalan", ["RU"] = "Выживший", ["BR"] = "Sobrevivente"}
+                    {clumpName = "H0", clumpTexture = false, ["EN"] = "None", ["TR"] = "Hiçbiri", ["RU"] = "нет", ["BR"] = "Nenhum"},
+                    {clumpName = "H1", clumpTexture = {"cj_hair_1", 1}, ["EN"] = "Generic", ["TR"] = "Genel", ["RU"] = "Общий", ["BR"] = "Genérico"},
+                    {clumpName = "H2", clumpTexture = {"cj_hair_2", 1}, ["EN"] = "Survivor", ["TR"] = "Hayatta kalan", ["RU"] = "Выживший", ["BR"] = "Sobrevivente"}
                 }
             },
 
             ["Face"] = {
                 ["Male"] = {
-                    {["EN"] = "Generic", clumpName = false, clumpTexture = {"cj_skn_fce", 1}, ["TR"] = "Genel", ["RU"] = "Общий", ["BR"] = "Genérico"},
-                    {["EN"] = "Survivor", clumpName = false, clumpTexture = {"cj_skn_fce", 2}, ["TR"] = "Hayatta kalan", ["RU"] = "Выживший", ["BR"] = "Sobrevivente"}
+                    {clumpName = false, clumpTexture = {"cj_skn_fce", 1}, ["EN"] = "Generic", ["TR"] = "Genel", ["RU"] = "Общий", ["BR"] = "Genérico"},
+                    {clumpName = false, clumpTexture = {"cj_skn_fce", 2}, ["EN"] = "Survivor", ["TR"] = "Hayatta kalan", ["RU"] = "Выживший", ["BR"] = "Sobrevivente"}
                 }
             }
         },
