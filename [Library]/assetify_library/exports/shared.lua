@@ -16,6 +16,7 @@ local imports = {
     pairs = pairs,
     isElement = isElement,
     getElementType = getElementType,
+    getElementModel = getElementModel,
     table = table
 }
 
@@ -57,12 +58,19 @@ function getAssetDep(...)
     return manager:getDep(...)
 end
 
-function setElementAsset(element, ...)
+function setElementAsset(element, assetType, ...)
     if not element or not imports.isElement(element) then return false end
     local elementType = imports.getElementType(element)
-    elementType = (((elementType == "ped") or (elementType == "player")) and "character") or elementType
-    if not availableAssetPacks[elementType] then return false end
+    elementType = (((elementType == "ped") or (elementType == "player")) and "ped") or elementType
+    if not availableAssetPacks[assetType] or not availableAssetPacks[assetType].assetType or (availableAssetPacks[assetType].assetType ~= elementType) then return false end
     local arguments = {...}
+    return syncer:syncElementModel(element, elementType, arguments[1], arguments[2], arguments[3], arguments[4])
+end
+
+function getElementAsset(element)
+    if not element or not imports.isElement(element) then return false end
+    if localPlayer then
+    local elementModel = imports.getElementModel(element) --TODO: DOESN'T WORKS FOR SERVER SIDE XDDD
     return syncer:syncElementModel(element, elementType, arguments[1], arguments[2], arguments[3], arguments[4])
 end
 

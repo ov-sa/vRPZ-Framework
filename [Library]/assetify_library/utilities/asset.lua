@@ -49,6 +49,9 @@ local imports = {
 ----------------------
 
 asset = {
+    cache = {
+        modelID = {}
+    },
     references = {
         root = ((downloadSettings.isAccessSafe and "@") or "").."files/assets/",
         manifest = "manifest",
@@ -199,6 +202,10 @@ if localPlayer then
                     modelID = modelID,
                     collisionID = collisionID
                 }
+                asset.cache.modelID[modelID] = {
+                    assetType = assetType,
+                    assetName = assetName
+                }
                 loadState = true
             end
         end
@@ -213,6 +220,7 @@ if localPlayer then
         if not rwCache then return false end
         if self.synced then
             if self.synced.modelID then
+                asset.cache.modelID[(self.synced.modelID)] = nil
                 imports.engineFreeModel(self.synced.modelID)
             end
             if self.synced.collisionID then
