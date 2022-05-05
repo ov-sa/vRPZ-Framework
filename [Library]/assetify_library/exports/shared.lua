@@ -16,7 +16,6 @@ local imports = {
     pairs = pairs,
     isElement = isElement,
     getElementType = getElementType,
-    getElementModel = getElementModel,
     table = table
 }
 
@@ -69,14 +68,8 @@ end
 
 function getElementAssetInfo(element)
     if not element or not imports.isElement(element) then return false end
-    if localPlayer then
-        local elementModel = imports.getElementModel(element)
-        if not asset.cache.modelID[elementModel] then return false end
-        return asset.cache.modelID[elementModel].type, asset.cache.modelID[elementModel].name
-    else
-        if not syncer.syncedElements[element] then return false end
-        return syncer.syncedElements[element].type, syncer.syncedElements[element].name, syncer.syncedElements[element].clump, syncer.syncedElements[element].clumpMaps
-    end
+    if not syncer.syncedElements[element] then return false end
+    return syncer.syncedElements[element].type, syncer.syncedElements[element].name, syncer.syncedElements[element].clump, syncer.syncedElements[element].clumpMaps
 end
 
 function setBoneAttachment(element, parent, ...)
