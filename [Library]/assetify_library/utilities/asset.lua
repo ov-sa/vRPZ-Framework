@@ -202,10 +202,7 @@ if localPlayer then
                     modelID = modelID,
                     collisionID = collisionID
                 }
-                asset.cache.modelID[modelID] = {
-                    assetType = assetType,
-                    assetName = assetName
-                }
+                asset.cache.modelID[modelID] = {type = assetType, name = assetName}
                 loadState = true
             end
         end

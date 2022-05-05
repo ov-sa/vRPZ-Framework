@@ -72,8 +72,9 @@ function getElementAssetInfo(element)
     if localPlayer then
         local elementModel = imports.getElementModel(element)
         if not asset.cache.modelID[elementModel] then return false end
-        return asset.cache.modelID[elementModel].assetType, asset.cache.modelID[elementModel].assetName
+        return asset.cache.modelID[elementModel].type, asset.cache.modelID[elementModel].name
     else
+        if not asset.cache.modelID[elementModel]
         --TODO: ...
     end
 end
