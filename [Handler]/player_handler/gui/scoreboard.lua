@@ -169,7 +169,22 @@ CGame.execOnModuleLoad(function()
                         j.hoverAnimTick = CLIENT_CURRENT_TICK
                     end
                 end
-                --TODO: if its hovered draw the hover bar here..
+                j.animAlphaPercent = j.animAlphaPercent or 0
+                local isAnimationVisible = false
+                if j.hoverStatus == "forward" then
+                    isAnimationVisible = true
+                    if j.animAlphaPercent < 1 then
+                        j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].hoverDuration), "Linear")
+                    end
+                else
+                    if j.animAlphaPercent > 0 then
+                        isAnimationVisible = true
+                        j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].hoverDuration), "Linear")
+                    end
+                end
+                if isAnimationVisible then
+                    --TODO: if its hovered draw the hover bar here..
+                end
                 for k = 1, #FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns, 1 do
                     local v = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].columns[k]
                     local column_startX = v.startX
@@ -237,5 +252,5 @@ CGame.execOnModuleLoad(function()
         imports.showCursor(state)
         return true
     end
-    imports.bindKey(FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Toggle_Key"], "down", function() scoreboardUI.toggleUI(not scoreboardUI.state) end)
+    imports.bindKey(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].toggleKey, "down", function() scoreboardUI.toggleUI(not scoreboardUI.state) end)
 end)
