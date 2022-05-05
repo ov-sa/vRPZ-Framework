@@ -67,11 +67,15 @@ function setElementAsset(element, assetType, ...)
     return syncer:syncElementModel(element, elementType, arguments[1], arguments[2], arguments[3], arguments[4])
 end
 
-function getElementAsset(element)
+function getElementAssetName(element)
     if not element or not imports.isElement(element) then return false end
     if localPlayer then
-    local elementModel = imports.getElementModel(element) --TODO: DOESN'T WORKS FOR SERVER SIDE XDDD
-    return syncer:syncElementModel(element, elementType, arguments[1], arguments[2], arguments[3], arguments[4])
+        local elementModel = imports.getElementModel(element)
+        if not asset.cache.modelID[elementModel] then return false end
+        return asset.cache.modelID[elementModel].assetType, asset.cache.modelID[elementModel].assetName
+    else
+        --TODO: ...
+    end
 end
 
 function setBoneAttachment(element, parent, ...)
