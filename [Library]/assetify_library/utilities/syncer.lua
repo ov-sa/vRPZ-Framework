@@ -531,7 +531,7 @@ else
         if not response or not status or (status ~= 0) then return false end
         response = imports.fromJSON(response)
         if response and response.tag_name and (syncer.libraryVersion ~= response.tag_name) then
-            imports.outputDebugString("[Assetify]: Update to latest version - "..response.tag_name, 3)
+            imports.outputDebugString("[Assetify]: Latest version available - "..response.tag_name, 3)
         end
     end)
     imports.addEventHandler("onElementModelChange", root, function()
