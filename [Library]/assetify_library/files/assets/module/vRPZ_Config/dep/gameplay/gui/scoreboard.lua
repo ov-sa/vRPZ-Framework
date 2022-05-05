@@ -7,14 +7,20 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
     marginY = 25,
     width = 1282, height = 525,
     bgColor = {0, 0, 0, 250},
+    scroller = {
+        width = 2,
+        thumbHeight = 245,
+        bgColor = {0, 0, 0, 255},
+        thumbColor = {175, 175, 175, 255}
+    },
 
-    banner = {
+    ["Banner"] = {
         title = "#C81E1E↪  v R P Z   #C8C8C8F R A M E W O R K",
         height = 35, dividerSize = 1,
         fontColor = {175, 175, 175, 255}, dividerColor = {0, 0, 0, 200}, bgColor = {0, 0, 0, 255}
     },
 
-    columns = {
+    ["Columns"] = {
         height = 25, dividerSize = 2,
         fontColor = {0, 0, 0, 255}, bgColor = {100, 100, 100, 255}, dividerColor = {15, 15, 15, 200},
         data = {
@@ -23,7 +29,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             hoverDuration = 2500
         },
         {
-            title = {
+            ["Titles"] = {
                 ["EN"] = "ID", 
                 ["TR"] = "ID", 
                 ["RU"] = "ID",
@@ -33,7 +39,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             width = 60
         },
         {
-            title = {
+            ["Titles"] = {
                 ["EN"] = "Name", 
                 ["TR"] = "İsim", 
                 ["RU"] = "Имя",
@@ -43,7 +49,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             width = 240
         },
         {
-            title = {
+            ["Titles"] = {
                 ["EN"] = "Level", 
                 ["TR"] = "Seviye", 
                 ["RU"] = "Уровень",
@@ -53,7 +59,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             width = 100
         },
         {
-            title = {
+            ["Titles"] = {
                 ["EN"] = "Rank", 
                 ["TR"] = "Rank", 
                 ["RU"] = "Ранг",
@@ -63,7 +69,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             width = 135
         },
         {
-            title = {
+            ["Titles"] = {
                 ["EN"] = "Reputation", 
                 ["TR"] = "İtibar", 
                 ["RU"] = "Репутация",
@@ -73,7 +79,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             width = 125
         },
         {
-            title = {
+            ["Titles"] = {
                 ["EN"] = "Faction", 
                 ["TR"] = "Hizip", 
                 ["RU"] = "Фракция",
@@ -83,7 +89,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             width = 155
         },
         {
-            title = {
+            ["Titles"] = {
                 ["EN"] = "Group", 
                 ["TR"] = "Grup", 
                 ["RU"] = "Группа",
@@ -93,7 +99,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             width = 125
         },
         {
-            title = {
+            ["Titles"] = {
                 ["EN"] = "K:D", 
                 ["TR"] = "K:D", 
                 ["RU"] = "У:С",
@@ -103,7 +109,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             width = 100
         },
         {
-            title = {
+            ["Titles"] = {
                 ["EN"] = "Survival", 
                 ["TR"] = "Hayatta Kalma", 
                 ["RU"] = "Прожито Времени",
@@ -113,7 +119,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             width = 140
         },
         {
-            title = {
+            ["Titles"] = {
                 ["EN"] = "Ping", 
                 ["TR"] = "Ping", 
                 ["RU"] = "Пинг",
@@ -122,12 +128,5 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
             dataType = "ping",
             width = 80
         }
-    },
-
-    scroller = {
-        width = 2,
-        thumbHeight = 245,
-        bgColor = {0, 0, 0, 255},
-        thumbColor = {175, 175, 175, 255}
     }
 }
