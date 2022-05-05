@@ -5,5 +5,10 @@
     "shaderMaps": {
         "control": {}
                 {
+                    "control": "control/road_scheme/control.jpg",
+                    "red": {"map": "control/texture/grass/2/albedo.jpg", "bump": "control/texture/grass/2/bump.jpg", "scale": 100},
+                    "blue": {"map": "control/texture/sand/1/albedo.jpg", "bump": "control/texture/sand/1/bump.jpg", "scale": 100}
+            ]
+        }
     }
 }

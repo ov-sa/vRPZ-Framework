@@ -26,7 +26,8 @@ FRAMEWORK_CONFIGS["UI"]["Inventory"] = {
             ["EN"] = "%s's Inventory", 
             ["TR"] = "%s'nun Envanteri",
             ["RU"] = "Инвентарь %s", 
-            ["BR"] = "Inventário do(a) %s"
+            ["BR"] = "Inventário do(a) %s",
+            ["NL"] = "%s's inventaris"
         },
         rows = 12, columns = 10,
         slotSize = 45, dividerSize = 1,

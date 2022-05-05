@@ -34,6 +34,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
                 ["TR"] = "ID", 
                 ["RU"] = "ID",
                 ["BR"] = "ID",
+                ["NL"] = "ID"
             },
             dataType = "serial_number",
             width = 60
@@ -44,6 +45,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
                 ["TR"] = "İsim", 
                 ["RU"] = "Имя",
                 ["BR"] = "Nome",
+                ["NL"] = "Naam"
             },
             dataType = "name",
             width = 240
@@ -54,6 +56,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
                 ["TR"] = "Seviye", 
                 ["RU"] = "Уровень",
                 ["BR"] = "Nível",
+                ["NL"] = "Peil"
             },
             dataType = "level",
             width = 100
@@ -64,6 +67,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
                 ["TR"] = "Rank", 
                 ["RU"] = "Ранг",
                 ["BR"] = "Rank",
+                ["NL"] = "Rang"
             },
             dataType = "rank",
             width = 135
@@ -74,6 +78,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
                 ["TR"] = "İtibar", 
                 ["RU"] = "Репутация",
                 ["BR"] = "Reputação",
+                ["NL"] = "Reputatie"
             },
             dataType = "reputation",
             width = 125
@@ -84,6 +89,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
                 ["TR"] = "Hizip", 
                 ["RU"] = "Фракция",
                 ["BR"] = "Facção",
+                ["NL"] = "Factie"
             },
             dataType = "faction",
             width = 155
@@ -94,6 +100,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
                 ["TR"] = "Grup", 
                 ["RU"] = "Группа",
                 ["BR"] = "Grupo",
+                ["NL"] = "Groep"
             },
             dataType = "group",
             width = 125
@@ -104,6 +111,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
                 ["TR"] = "K:D", 
                 ["RU"] = "У:С",
                 ["BR"] = "K:D",
+                ["NL"] = "K.D"
             },
             dataType = "kd",
             width = 100
@@ -114,6 +122,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
                 ["TR"] = "Hayatta Kalma", 
                 ["RU"] = "Прожито Времени",
                 ["BR"] = "Tempo de sobrevivência",
+                ["NL"] = "Overlevingstijd"
             },
             dataType = "survival_time",
             width = 140
@@ -124,6 +133,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
                 ["TR"] = "Ping", 
                 ["RU"] = "Пинг",
                 ["BR"] = "Ping",
+                ["NL"] = "Ping"
             },
             dataType = "ping",
             width = 80

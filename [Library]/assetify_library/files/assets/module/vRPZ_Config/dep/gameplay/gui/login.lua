@@ -38,67 +38,78 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
             ["EN"] = "You must create a character inorder to play..",
             ["TR"] = "Oynamak için bir karakter seçmelisin..",
             ["RU"] = "Вы должны создать персонажа, чтобы играть..",
-            ["BR"] = "Você deve criar um personagem para jogar.."
+            ["BR"] = "Você deve criar um personagem para jogar..",
+            ["NL"] = "Je moet een personage maken om te kunnen spelen.."
         },
         [2] = {
             ["EN"] = "You must pick a character inorder to play..", 
             ["TR"] = "Oynamak için bir karakter seçmelisiniz..", 
             ["RU"] = "Вы должны выбрать персонажа, чтобы играть..",
-            ["BR"] = "Você deve escolher um personagem para jogar.."
+            ["BR"] = "Você deve escolher um personagem para jogar..",
+            ["NL"] = "Je moet een personage kiezen om te spelen.."
         },
         [3] = {
             ["EN"] = "You have exceeded character limit..", 
             ["TR"] = "Karakter sınırını aştınız..", 
             ["RU"] = "Вы превысили лимит символов..",
-            ["BR"] = "Você excedeu o limite de personagens."
+            ["BR"] = "Você excedeu o limite de personagens.",
+            ["NL"] = "Je hebt de tekenlimiet overschreden.."
         },
         [4] = {
             ["EN"] = "You've successfully created a character!", 
             ["TR"] = "Başarıyla bir karakter yarattınız!..", 
             ["RU"] = "Вы успешно создали персонажа!",
-            ["BR"] = "Você criou um personagem com sucesso!"
+            ["BR"] = "Você criou um personagem com sucesso!",
+            ["NL"] = "Je hebt met succes een personage gemaakt!"
         },
         [5] = {
             ["EN"] = "You don't have enough characters..", 
             ["TR"] = "Yeterli karakteriniz yok..", 
             ["RU"] = "У вас недостаточно символов..",
-            ["BR"] = "Você não tem personagens suficientes.."
+            ["BR"] = "Você não tem personagens suficientes..",
+            ["NL"] = "Je hebt niet genoeg karakters.."
         },
         [6] = {
             ["EN"] = "You've successfully deleted the character!", 
             ["TR"] = "Karakteri başarıyla sildiniz!", 
             ["RU"] = "Вы успешно удалили персонажа!",
-            ["BR"] = "Você excluiu o personagem com sucesso!"
+            ["BR"] = "Você excluiu o personagem com sucesso!",
+            ["NL"] = "Je hebt het personage met succes verwijderd!"
         },
         [7] = {
             ["EN"] = "You must save the character prior to picking..", 
             ["TR"] = "Seçmeden önce karakteri kaydetmelisiniz..", 
             ["RU"] = "Вы должны сохранить персонажа перед выбором..",
-            ["BR"] = "Você deve salvar o personagem antes de escolher."
+            ["BR"] = "Você deve salvar o personagem antes de escolher.",
+            ["NL"] = "Je moet het personage opslaan voordat je het kiest.."
         },
         [8] = {
             ["EN"] = "You've successfully picked the character!", 
             ["TR"] = "Karakteri başarıyla seçtiniz!", 
             ["RU"] = "Вы успешно выбрали персонажа!",
-            ["BR"] = "Você escolheu o personagem com sucesso!"
+            ["BR"] = "Você escolheu o personagem com sucesso!",
+            ["NL"] = "Je hebt het personage met succes gekozen!"
         },
         [9] = {
             ["EN"] = "You've successfully saved the character!", 
             ["TR"] = "Karakteri başarıyla kaydettiniz!", 
             ["RU"] = "Вы успешно сохранили персонажа!",
-            ["BR"] = "Você salvou o personagem com sucesso!"
+            ["BR"] = "Você salvou o personagem com sucesso!",
+            ["NL"] = "Je hebt het personage met succes opgeslagen!"
         },
         [10] = {
             ["EN"] = "Failed to save your character..", 
             ["TR"] = "Karakteriniz kaydedilemedi..", 
             ["RU"] = "Не удалось сохранить вашего персонажа..",
-            ["BR"] = "Falha ao salvar seu personagem.."
+            ["BR"] = "Falha ao salvar seu personagem..",
+            ["NL"] = "Kan je personage niet opslaan.."
         },
         [11] = {
             ["EN"] = "You must either save or delete your character before navigating..", 
             ["TR"] = "Gezinmeden önce karakterinizi kaydetmeli veya silmelisiniz..", 
             ["RU"] = "Вы должны сохранить или удалить своего персонажа перед навигацией.",
-            ["BR"] = "Você deve salvar ou excluir seu personagem antes de navegar."
+            ["BR"] = "Você deve salvar ou excluir seu personagem antes de navegar.",
+            ["NL"] = "Je moet je personage opslaan of verwijderen voordat je gaat navigeren."
         }
     },
 
@@ -108,7 +119,8 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                 ["EN"] = "Play", 
                 ["TR"] = "Oyna", 
                 ["RU"] = "Играть",
-                ["BR"] = "Jogar"
+                ["BR"] = "Jogar",
+                ["NL"] = "Toneelstuk"
             },
             height = 35, embedLineSize = 3,
             fontColor = {150, 150, 150, 25}, hoverFontColor = {170, 35, 35, 255}, embedLineColor = {170, 35, 35, 50},
@@ -120,7 +132,8 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                 ["EN"] = "Characters", 
                 ["TR"] = "karakterler", 
                 ["RU"] = "Персонажи",
-                ["BR"] = "Personagens"
+                ["BR"] = "Personagens",
+                ["NL"] = "karakters"
             },
             width = 325, height = 560,
             titlebar = {
@@ -128,7 +141,8 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                     ["EN"] = "Character", 
                     ["TR"] = "Karakter", 
                     ["RU"] = "Персонаж",
-                    ["BR"] = "Personagem"
+                    ["BR"] = "Personagem",
+                    ["NL"] = "Karakter"
                 },
                 height = 35, iconSize = 18,
                 fontColor = {170, 35, 35, 255}, iconColor = {255, 255, 255, 255*0.35}, bgColor = {0, 0, 0, 255}, shadowColor = {50, 50, 50, 255}
@@ -142,43 +156,50 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                         ["EN"] = "Previous", 
                         ["TR"] = "Öncesi", 
                         ["RU"] = "Предыдущий",
-                        ["BR"] = "Anterior"
+                        ["BR"] = "Anterior",
+                        ["NL"] = "Vorig"
                     },
                     next = {
                         ["EN"] = "Next", 
                         ["TR"] = "Sonraki", 
                         ["RU"] = "Следующий",
-                        ["BR"] = "Próximo"
+                        ["BR"] = "Próximo",
+                        ["NL"] = "Volgende"
                     },
                     pick = {
                         ["EN"] = "Pick", 
                         ["TR"] = "Seçmek", 
                         ["RU"] = "Выбирать",
-                        ["BR"] = "Escolher"
+                        ["BR"] = "Escolher",
+                        ["NL"] = "Kies"
                     },
                     create = {
                         ["EN"] = "Create", 
                         ["TR"] = "Yaratmak", 
                         ["RU"] = "Создать",
-                        ["BR"] = "Criar"
+                        ["BR"] = "Criar",
+                        ["NL"] = "Creëren"
                     },
                     delete = {
                         ["EN"] = "Delete", 
                         ["TR"] = "Silmek", 
                         ["RU"] = "Удалить",
-                        ["BR"] = "Deletar"
+                        ["BR"] = "Deletar",
+                        ["NL"] = "Verwijderen"
                     },
                     save = {
                         ["EN"] = "Save", 
                         ["TR"] = "Kayıt etmek", 
                         ["RU"] = "Сохранить",
-                        ["BR"] = "Salvar"
+                        ["BR"] = "Salvar",
+                        ["NL"] = "Opslaan"
                     },
                     back = {
                         ["EN"] = "Back", 
                         ["TR"] = "Geri", 
                         ["RU"] = "Назад",
-                        ["BR"] = "Voltar"
+                        ["BR"] = "Voltar",
+                        ["NL"] = "Rug"
                     }
                 }
             },
@@ -191,14 +212,16 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                         ["EN"] = "Identity", 
                         ["TR"] = "Kimlik", 
                         ["RU"] = "Тело",
-                        ["BR"] = "Características físicas"
+                        ["BR"] = "Características físicas",
+                        ["NL"] = "Identiteit"
                     },
                     tone = {
                         ["Title"] = {
                             ["EN"] = "Skin Tone", 
                             ["TR"] = "Cilt tonu", 
                             ["RU"] = "Цвет кожи",
-                            ["BR"] = "Tom da pele"
+                            ["BR"] = "Tom da pele",
+                            ["NL"] = "Huidskleur"
                         },
                         ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Identity"]["Tone"]
                     },
@@ -208,7 +231,8 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                             ["EN"] = "Gender", 
                             ["TR"] = "Cinsiyet", 
                             ["RU"] = "Пол",
-                            ["BR"] = "Gênero"
+                            ["BR"] = "Gênero",
+                            ["NL"] = "Geslacht"
                         },
                         ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Identity"]["Gender"]
                     }
@@ -218,14 +242,16 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                         ["EN"] = "Facial", 
                         ["TR"] = "Yüz", 
                         ["RU"] = "Голова",
-                        ["BR"] = "Cabeça"
+                        ["BR"] = "Cabeça",
+                        ["NL"] = "Hoofd"
                     },
                     hair = {
                         ["Title"] = {
                             ["EN"] = "Hair", 
                             ["TR"] = "Saç", 
                             ["RU"] = "Причёска",
-                            ["BR"] = "Cabelo"
+                            ["BR"] = "Cabelo",
+                            ["NL"] = "Haar"
                         },
                         ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Facial"]["Hair"]
                     },
@@ -234,7 +260,8 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                             ["EN"] = "Face", 
                             ["TR"] = "Yüz", 
                             ["RU"] = "Лицо",
-                            ["BR"] = "Rosto"
+                            ["BR"] = "Rosto",
+                            ["NL"] = "Gezicht"
                         },
                         ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Facial"]["Face"]
                     }
@@ -244,14 +271,16 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                         ["EN"] = "Clothing", 
                         ["TR"] = "Giyim", 
                         ["RU"] = "Одежда",
-                        ["BR"] = "Roupas"
+                        ["BR"] = "Roupas",
+                        ["NL"] = "Kleding"
                     },
                     ["Upper"] = {
                         ["Title"] = {
                             ["EN"] = "Upper", 
                             ["TR"] = "Üst", 
                             ["RU"] = "Верх",
-                            ["BR"] = "Parte de cima"
+                            ["BR"] = "Parte de cima",
+                            ["NL"] = "Bovenste"
                         },
                         ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Upper"]
                     },
@@ -260,7 +289,8 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                             ["EN"] = "Lower", 
                             ["TR"] = "Alt", 
                             ["RU"] = "Низ",
-                            ["BR"] = "Parte de baixo"
+                            ["BR"] = "Parte de baixo",
+                            ["NL"] = "Lager"
                         },
                         ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Lower"]
                     },
@@ -269,7 +299,8 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                             ["EN"] = "Shoes", 
                             ["TR"] = "Ayakkabı", 
                             ["RU"] = "Обувь",
-                            ["BR"] = "Calçados"
+                            ["BR"] = "Calçados",
+                            ["NL"] = "Schoenen"
                         },
                         ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Shoes"]
                     }
@@ -282,7 +313,8 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                 ["EN"] = "Credits", 
                 ["TR"] = "Yapımcılar", 
                 ["RU"] = "Авторы",
-                ["BR"] = "Créditos"
+                ["BR"] = "Créditos",
+                ["NL"] = "tegoeden"
             },
             fontColor = {170, 35, 35, 255},
             scrollDuration = 8500,
@@ -291,7 +323,8 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                     ["EN"] = "Back", 
                     ["TR"] = "Geri", 
                     ["RU"] = "Назад",
-                    ["BR"] = "Voltar"
+                    ["BR"] = "Voltar",
+                    ["NL"] = "Rug"
                 },
                 hoverDuration = 2500
             },

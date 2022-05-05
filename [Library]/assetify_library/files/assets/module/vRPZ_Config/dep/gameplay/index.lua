@@ -24,7 +24,8 @@ FRAMEWORK_CONFIGS["Game"] = {
         ["EN"] = {code = "en_US"},
         ["TR"] = {code = "tr"},
         ["RU"] = {code = "ru"},
-        ["BR"] = {code = "pt_BR"}
+        ["BR"] = {code = "pt_BR"},
+        ["NL"] = {code = "nl"}
     },
     ["Disabled_CMDS"] = {"register", "logout"},
 
