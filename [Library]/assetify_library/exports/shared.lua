@@ -74,8 +74,8 @@ function getElementAssetInfo(element)
         if not asset.cache.modelID[elementModel] then return false end
         return asset.cache.modelID[elementModel].type, asset.cache.modelID[elementModel].name
     else
-        if not asset.cache.modelID[elementModel]
-        --TODO: ...
+        if not syncer.syncedElements[element] then return false end
+        return syncer.syncedElements[element].type, syncer.syncedElements[element].name
     end
 end
 
