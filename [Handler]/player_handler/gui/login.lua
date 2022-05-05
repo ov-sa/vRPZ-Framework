@@ -594,11 +594,13 @@ CGame.execOnModuleLoad(function()
                         end
                     end
                     j.animAlphaPercent = j.animAlphaPercent or 0
-                    local isAnimationVisible = false
+                    local isAnimationVisible, isAnimationFullyRendered = false, false
                     if j.hoverStatus == "forward" then
                         isAnimationVisible = true
                         if j.animAlphaPercent < 1 then
                             j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")
+                        else
+                            isAnimationFullyRendered = true
                         end
                     else
                         if j.animAlphaPercent > 0 then
@@ -606,7 +608,9 @@ CGame.execOnModuleLoad(function()
                             j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverDuration), "Linear")
                         end
                     end
-                    imports.beautify.native.drawText(j.title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, loginUI.phases[1].optionsUI.fontColor, 1, loginUI.phases[1].optionsUI.font.instance, "center", "center", true, false, false)
+                    if not isAnimationFullyRendered then
+                        imports.beautify.native.drawText(j.title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, loginUI.phases[1].optionsUI.fontColor, 1, loginUI.phases[1].optionsUI.font.instance, "center", "center", true, false, false)
+                    end
                     if isAnimationVisible then
                         imports.beautify.native.drawText(j.title, options_offsetX, options_offsetY, options_offsetX + option_width, options_offsetY + option_height, imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverFontColor[1], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverFontColor[2], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverFontColor[3], FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.hoverFontColor[4]*j.animAlphaPercent), 1, loginUI.phases[1].optionsUI.font.instance, "center", "center", true, false, false)
                         imports.beautify.native.drawRectangle(options_offsetX + ((option_width - (option_width*j.animAlphaPercent))*0.5), options_offsetY + option_height, option_width*j.animAlphaPercent, FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineSize, loginUI.phases[1].optionsUI.embedLineColor, false)
