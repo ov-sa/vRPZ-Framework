@@ -67,7 +67,7 @@ function setElementAsset(element, assetType, ...)
     return syncer:syncElementModel(element, elementType, arguments[1], arguments[2], arguments[3], arguments[4])
 end
 
-function getElementAssetName(element)
+function getElementAssetInfo(element)
     if not element or not imports.isElement(element) then return false end
     if localPlayer then
         local elementModel = imports.getElementModel(element)

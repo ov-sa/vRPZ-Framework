@@ -222,8 +222,8 @@ function onBundleLibrary()
                 return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setElementAsset", ...)
             end
 
-            assetify.getElementAssetName = function(...)
-                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getElementAssetName", ...)
+            assetify.getElementAssetInfo = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getElementAssetInfo", ...)
             end
 
             assetify.setBoneAttach = function(...)
