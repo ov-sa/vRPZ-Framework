@@ -1,0 +1,25 @@
+{
+    "weaponName": "PPS-43",
+    "encryptKey": "vStudio - Аниса",
+    "streamRange": 125,
+    "weaponOffsets": {
+        "bone": {
+            "position": {"x": -0.0225, "y": 0, "z": 0.175}
+        }
+    },
+    "shaderMaps": {
+        "control": {
+            "wp_pps43_a": [
+                {
+                    "bump": "control/wp_pps43_a/bump.jpg"
+                }
+            ]
+        }
+    },
+    "assetDeps": {
+        "texture": {
+            "inventory": "icon/inventory.png",
+            "hud": "icon/hud.png"
+        }
+    }
+}
