@@ -1,7 +1,7 @@
 {
     "weaponName": "Haenel-Schmeisser",
     "weaponType": "Sub Machine",
-    "weaponAmmo": "9x19mm",
+    "weaponAmmo": "9 x 19mm",
     "encryptKey": "vStudio - Аниса",
     "streamRange": 125,
     "weaponBase": {"normal": 29},

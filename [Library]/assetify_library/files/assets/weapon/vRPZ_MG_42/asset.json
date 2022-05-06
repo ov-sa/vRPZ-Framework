@@ -1,7 +1,7 @@
 {
     "weaponName": "MG-42",
     "weaponType": "Rifle",
-    "weaponAmmo": "7.92x57mm Mauser",
+    "weaponAmmo": "7.92 x 57mm Mauser",
     "encryptKey": "vStudio - Аниса",
     "streamRange": 125,
     "weaponBase": {"normal": 33},

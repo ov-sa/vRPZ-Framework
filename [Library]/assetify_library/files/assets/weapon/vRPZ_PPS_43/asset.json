@@ -1,7 +1,7 @@
 {
     "weaponName": "PPS-43",
     "weaponType": "Sub Machine",
-    "weaponAmmo": "7.62x25mm Tokarev",
+    "weaponAmmo": "7.62 x 25mm Tokarev",
     "encryptKey": "vStudio - Аниса",
     "streamRange": 125,
     "weaponBase": {"normal": 29},
