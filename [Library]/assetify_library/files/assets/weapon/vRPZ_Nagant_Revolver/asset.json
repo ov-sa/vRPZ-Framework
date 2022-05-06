@@ -1,7 +1,10 @@
 {
     "weaponName": "Nagant Revolver",
+    "weaponType": "Pistol",
+    "weaponAmmo": "7.62 x 38mm Nagant",
     "encryptKey": "vStudio - Аниса",
     "streamRange": 125,
+    "weaponBase": {"normal": 23},
     "weaponOffsets": {
         "bone": {
             "position": {"x": -0.0225, "y": 0, "z": 0.175}
