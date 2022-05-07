@@ -120,7 +120,7 @@ function bone:refresh(boneData)
     boneData.rotation.x, boneData.rotation.y, boneData.rotation.z = imports.tonumber(boneData.rotation.x) or 0, imports.tonumber(boneData.rotation.y) or 0, imports.tonumber(boneData.rotation.z) or 0
     if boneData.rotation.isRelative then
         local prev_rotX, prev_rotY, prev_rotZ = nil, nil, nil
-        if self.boneData then prev_rotX, prev_rotY, prev_rotZ = boneData.rotation.x, boneData.rotation.y, boneData.rotation.z
+        if self.boneData then prev_rotX, prev_rotY, prev_rotZ = self.boneData.rotation.x, self.boneData.rotation.y, self.boneData.rotation.z
         else prev_rotX, prev_rotY, prev_rotZ = imports.getElementRotation(self.element, "ZYX") end
         local rotQuat = imports.quat.new(imports.quat.fromEuler(prev_rotX, prev_rotY, prev_rotZ))
         local __rotQuat = imports.quat.fromVectorAngle(imports.Vector3(1, 0, 0), boneData.rotation.x)*imports.quat.fromVectorAngle(imports.Vector3(0, 1, 0), boneData.rotation.y)*imports.quat.fromVectorAngle(imports.Vector3(0, 0, 1), boneData.rotation.z) 
