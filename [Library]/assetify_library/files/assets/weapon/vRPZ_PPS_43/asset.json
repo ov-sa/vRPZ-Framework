@@ -7,7 +7,8 @@
     "weaponBase": {"normal": 29},
     "weaponOffsets": {
         "bone": {
-            "position": {"x": -0.0225, "y": 0, "z": 0.175}
+            "position": {"x": -0.01, "y": 0.015, "z": 0.2},
+            "rotation": {"x": 7, "y": 0, "z": -5}
         }
     },
     "shaderMaps": {
