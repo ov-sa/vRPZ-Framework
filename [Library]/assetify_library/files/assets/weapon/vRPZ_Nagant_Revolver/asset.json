@@ -3,7 +3,7 @@
     "weaponType": "Pistol",
     "weaponAmmo": "7.62 x 38mm Nagant",
     "encryptKey": "vStudio - Аниса",
-    "streamRange": 125,
+    "streamRange": 75,
     "weaponBase": {"normal": 23},
     "weaponOffsets": {
         "bone": {

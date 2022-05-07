@@ -3,7 +3,7 @@
     "weaponType": "Sub Machine",
     "weaponAmmo": ".45 ACP",
     "encryptKey": "vStudio - Аниса",
-    "streamRange": 125,
+    "streamRange": 75,
     "weaponBase": {"normal": 29},
     "weaponOffsets": {
         "bone": {

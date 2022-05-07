@@ -3,7 +3,7 @@
     "weaponType": "Rifle",
     "weaponAmmo": "7.92 x 57mm Mauser",
     "encryptKey": "vStudio - Аниса",
-    "streamRange": 125,
+    "streamRange": 75,
     "weaponBase": {"normal": 33},
     "weaponOffsets": {
         "bone": {
