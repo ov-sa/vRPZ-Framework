@@ -98,7 +98,8 @@ function bone:load(element, parent, boneData)
 end
 
 function bone:unload()
-    if not self or (self == bone) then return false end
+    if not self or (self == bone) or self.isUnloading then return false end
+    self.isUnloading = true
     if self.cStreamer then
         self.cStreamer:destroy()
     end
