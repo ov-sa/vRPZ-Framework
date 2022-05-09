@@ -142,13 +142,22 @@ CInventory = {
     end
 }
 
-local inventoryWeapons = imports.assetify.getAssets("weapon")
+local inventoryItems, inventoryWeapons = imports.assetify.getAssets("inventory"), imports.assetify.getAssets("weapon")
 for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Slots"]) do
     if j.identifier == "Weapon" then
         CInventory.CSlots[(j.identifier)] = CInventory.CSlots[(j.identifier)] or {}
         CInventory.CSlots[(j.identifier)][i] = j
     else
         CInventory.CSlots[(j.identifier)] = j
+    end
+end
+if inventoryItems then
+    for i = 1, #inventoryItems, 1 do
+        local j = inventoryItems[i]
+        local cAsset = imports.assetify.getAsset(j)
+        if cAsset and cAsset.manifestData.itemCategory and FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemCategory)] then
+            CInventory.CItems[j] = {slot = cAsset.manifestData.itemCategory, data = cAsset.manifestData}
+        end
     end
 end
 if inventoryWeapons then
@@ -158,10 +167,5 @@ if inventoryWeapons then
         if cAsset and cAsset.manifestData.weaponCategory and FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.weaponCategory)] and (FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.weaponCategory)].identifier == "Weapon") then
             CInventory.CItems[j] = {slot = cAsset.manifestData.weaponCategory, data = cAsset.manifestData}
         end
-    end
-end
-for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
-    for k, v in imports.pairs(j) do
-        CInventory.CItems[k] = {slot = i, data = v}
     end
 end
