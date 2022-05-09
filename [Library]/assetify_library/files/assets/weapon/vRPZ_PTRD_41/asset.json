@@ -1,6 +1,7 @@
 {
     "weaponName": "PTRD-41",
     "weaponType": "Rifle",
+    "weaponCategory": "Primary",
     "weaponAmmo": "14.5 x 114mm",
     "encryptKey": "vStudio - Аниса",
     "streamRange": 75,
