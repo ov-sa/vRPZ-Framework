@@ -22,8 +22,8 @@ end
 
 for i, j in imports.pairs(CInventory.CItems) do
     j.icon = {
-        inventory = imports.assetify.getAssetDep(j.slot, j, "texture", "inventory"),
-        hud = imports.assetify.getAssetDep(j.slot, j, "texture", "hud")
+        inventory = imports.assetify.getAssetDep(j.pack, i, "texture", "inventory"),
+        hud = imports.assetify.getAssetDep(j.slot, i, "texture", "hud")
     }
     j.dimensions = {CInventory.fetchSlotDimensions(j.data.weight.rows, j.data.weight.columns)}
 end
