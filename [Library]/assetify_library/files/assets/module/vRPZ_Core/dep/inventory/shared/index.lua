@@ -156,7 +156,7 @@ if inventoryItems then
         local j = inventoryItems[i]
         local cAsset = imports.assetify.getAsset(j)
         if cAsset and cAsset.manifestData.itemCategory and FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemCategory)] then
-            CInventory.CItems[j] = {slot = cAsset.manifestData.itemCategory, data = cAsset.manifestData}
+            CInventory.CItems[j] = {pack = "inventory", slot = cAsset.manifestData.itemCategory, data = cAsset.manifestData}
         end
     end
 end
@@ -165,7 +165,7 @@ if inventoryWeapons then
         local j = inventoryWeapons[i]
         local cAsset = imports.assetify.getAsset(j)
         if cAsset and cAsset.manifestData.weaponCategory and FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.weaponCategory)] and (FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.weaponCategory)].identifier == "Weapon") then
-            CInventory.CItems[j] = {slot = cAsset.manifestData.weaponCategory, data = cAsset.manifestData}
+            CInventory.CItems[j] = {pack = "weapon", slot = cAsset.manifestData.weaponCategory, data = cAsset.manifestData}
         end
     end
 end
