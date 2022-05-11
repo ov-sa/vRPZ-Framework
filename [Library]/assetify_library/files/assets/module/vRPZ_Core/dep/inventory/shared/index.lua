@@ -8,7 +8,8 @@ local imports = {
     isElement = isElement,
     getElementType = getElementType,
     getElementData = getElementData,
-    math = math
+    math = math,
+    assetify = assetify
 }
 
 
@@ -141,14 +142,30 @@ CInventory = {
     end
 }
 
-for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
-    if FRAMEWORK_CONFIGS["Inventory"]["Slots"][i] and (FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].identifier == "Weapon") then
-        CInventory.CSlots[(FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].identifier)] = CInventory.CSlots[(FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].identifier)] or {}
-        CInventory.CSlots[(FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].identifier)][i] = FRAMEWORK_CONFIGS["Inventory"]["Slots"][i]
+local inventoryItems, inventoryWeapons = imports.assetify.getAssets("inventory"), imports.assetify.getAssets("weapon")
+for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Slots"]) do
+    if j.identifier == "Weapon" then
+        CInventory.CSlots[(j.identifier)] = CInventory.CSlots[(j.identifier)] or {}
+        CInventory.CSlots[(j.identifier)][i] = j
     else
-        CInventory.CSlots[(FRAMEWORK_CONFIGS["Inventory"]["Slots"][i].identifier)] = FRAMEWORK_CONFIGS["Inventory"]["Slots"][i]
+        CInventory.CSlots[(j.identifier)] = j
     end
-    for k, v in imports.pairs(j) do
-        CInventory.CItems[k] = {slot = i, data = v}
+end
+if inventoryItems then
+    for i = 1, #inventoryItems, 1 do
+        local j = inventoryItems[i]
+        local cAsset = imports.assetify.getAsset(j)
+        if cAsset and cAsset.manifestData.itemCategory and FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemCategory)] then
+            CInventory.CItems[j] = {pack = "inventory", slot = cAsset.manifestData.itemCategory, data = cAsset.manifestData}
+        end
+    end
+end
+if inventoryWeapons then
+    for i = 1, #inventoryWeapons, 1 do
+        local j = inventoryWeapons[i]
+        local cAsset = imports.assetify.getAsset(j)
+        if cAsset and cAsset.manifestData.weaponCategory and FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.weaponCategory)] and (FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.weaponCategory)].identifier == "Weapon") then
+            CInventory.CItems[j] = {pack = "weapon", slot = cAsset.manifestData.weaponCategory, data = cAsset.manifestData}
+        end
     end
 end
