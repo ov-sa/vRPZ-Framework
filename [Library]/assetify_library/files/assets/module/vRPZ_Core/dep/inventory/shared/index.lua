@@ -166,9 +166,9 @@ imports.assetify.execOnLoad(function()
         for i = 1, #CItems, 1 do
             local j = CItems[i]
             local cAsset = imports.assetify.getAsset("inventory", j)
-            if cAsset and cAsset.manifestData.itemCategory and FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemCategory)] then
-                CInventory.CItems[j] = {pack = "inventory", slot = cAsset.manifestData.itemCategory, data = cAsset.manifestData}
-                CInventory.CCategories[(cAsset.manifestData.itemCategory)][j] = true
+            if cAsset and cAsset.manifestData.itemSlot and FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)] then
+                CInventory.CItems[j] = {pack = "inventory", slot = cAsset.manifestData.itemSlot, data = cAsset.manifestData}
+                CInventory.CCategories[(cAsset.manifestData.itemSlot)][j] = true
             end
         end
     end
@@ -176,9 +176,9 @@ imports.assetify.execOnLoad(function()
         for i = 1, #CWeapons, 1 do
             local j = CWeapons[i]
             local cAsset = imports.assetify.getAsset("weapon", j)
-            if cAsset and cAsset.manifestData.itemCategory and FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemCategory)] and (FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemCategory)].identifier == "Weapon") then
-                CInventory.CItems[j] = {pack = "weapon", slot = cAsset.manifestData.itemCategory, data = cAsset.manifestData}
-                CInventory.CCategories[(cAsset.manifestData.itemCategory)][j] = true
+            if cAsset and cAsset.manifestData.itemSlot and FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)] and (FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)].identifier == "Weapon") then
+                CInventory.CItems[j] = {pack = "weapon", slot = cAsset.manifestData.itemSlot, data = cAsset.manifestData}
+                CInventory.CCategories[(cAsset.manifestData.itemSlot)][j] = true
             end
         end
     end

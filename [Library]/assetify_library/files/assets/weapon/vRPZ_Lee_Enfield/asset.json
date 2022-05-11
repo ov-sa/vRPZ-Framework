@@ -1,6 +1,6 @@
 {
     "itemName": "Lee-Enfield",
-    "itemCategory": "Primary",
+    "itemSlot": "Primary",
     "itemWeight": {"rows": 2, "columns": 6},
     "weaponType": "Rifle",
     "weaponAmmo": ".303 British",

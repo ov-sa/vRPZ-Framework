@@ -1,6 +1,6 @@
 {
     "itemName": "PTRS-41",
-    "itemCategory": "Primary",
+    "itemSlot": "Primary",
     "itemWeight": {"rows": 2, "columns": 6},
     "weaponType": "Rifle",
     "weaponAmmo": "14.5 x 114mm",

@@ -1,6 +1,6 @@
 {
     "itemName": "Panzerschreck",
-    "itemCategory": "Primary",
+    "itemSlot": "Primary",
     "itemWeight": {"rows": 2, "columns": 6},
     "weaponType": "Launcher",
     "weaponAmmo": "88mm",
