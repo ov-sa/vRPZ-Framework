@@ -4,7 +4,8 @@
 
 local imports = {
     pairs = pairs,
-    string = string
+    string = string,
+    assetify = assetify
 }
 
 
@@ -30,9 +31,10 @@ CInventory.getItemProperty = dbify.inventory.item.getProperty
 CInventory.setItemData = dbify.inventory.item.setData
 CInventory.getItemData = dbify.inventory.item.getData
 
-local __CItems = {}
-for i, j in imports.pairs(CInventory.CItems) do
-    __CItems[(imports.string.lower(i))] = true
-end
-CInventory.ensureItems(__CItems)
-__CItems = nil
+imports.assetify.execOnLoad(function()
+    local CItems = {}
+    for i, j in imports.pairs(CInventory.CItems) do
+        CItems[(imports.string.lower(i))] = true
+    end
+    CInventory.ensureItems(CItems)
+end)
