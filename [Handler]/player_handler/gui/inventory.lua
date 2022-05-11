@@ -829,7 +829,7 @@ CGame.execOnModuleLoad(function()
     local testPed = createPed(0, 0, 0, 0); setElementAlpha(testPed, 0) --TODO: REMOVE IT LATER
     setElementData(testPed, "Loot:Type", "something")
     setElementData(testPed, "Loot:Name", "Test Loot")
-    for i, j in pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]["Primary"]) do
+    for i, j in pairs(CInventory.CItems) do
         setElementData(testPed, "Item:"..i, 1)
     end
     inventoryUI.toggleUI = function(state)
