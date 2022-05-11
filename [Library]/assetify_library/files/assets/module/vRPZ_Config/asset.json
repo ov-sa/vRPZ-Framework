@@ -23,7 +23,6 @@
                 "gameplay/loots.lua",
                 "gameplay/party.lua",
                 "inventory/slots.lua",
-                "inventory/items.lua",
                 "gameplay/tasks.lua"
             ]
         }
