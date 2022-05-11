@@ -39,13 +39,13 @@ local imports = {
 -------------------
 
 local cache = {
-    resumeTicks = {},
-    indexedItems = {}
+    resumeTicks = {}
 }
 
 CGame.execOnModuleLoad(function()
+    cache.indexedItems = {}
     for i, j in imports.pairs(CInventory.CItems) do
-        imports.table.insert(cache.indexedItems, i)
+        imports.table.insert(cache.indexedItems, imports.string.lower(i))
     end
 end)
 

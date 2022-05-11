@@ -21,6 +21,7 @@ CInventory = {
     CBuffer = {},
     CSlots = {},
     CItems = {},
+    CCategories = {},
 
     fetchItem = function(item)
         if not item or not CInventory.CItems[item] then return false end
@@ -159,6 +160,7 @@ imports.assetify.execOnLoad(function()
         else
             CInventory.CSlots[(j.identifier)] = j
         end
+        CInventory.CCategories[i] = {}
     end
     if CItems then
         for i = 1, #CItems, 1 do
@@ -166,6 +168,7 @@ imports.assetify.execOnLoad(function()
             local cAsset = imports.assetify.getAsset("inventory", j)
             if cAsset and cAsset.manifestData.itemCategory and FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemCategory)] then
                 CInventory.CItems[j] = {pack = "inventory", slot = cAsset.manifestData.itemCategory, data = cAsset.manifestData}
+                CInventory.CCategories[(cAsset.manifestData.itemCategory)][j] = true
             end
         end
     end
@@ -175,6 +178,7 @@ imports.assetify.execOnLoad(function()
             local cAsset = imports.assetify.getAsset("weapon", j)
             if cAsset and cAsset.manifestData.itemCategory and FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemCategory)] and (FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemCategory)].identifier == "Weapon") then
                 CInventory.CItems[j] = {pack = "weapon", slot = cAsset.manifestData.itemCategory, data = cAsset.manifestData}
+                CInventory.CCategories[(cAsset.manifestData.itemCategory)][j] = true
             end
         end
     end

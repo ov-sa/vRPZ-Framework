@@ -519,16 +519,16 @@ CGame.execOnModuleLoad(function()
                     local __orderedPriority = {}
                     for i = 1, #orderedPriority, 1 do
                         local j = orderedPriority[i]
-                        if FRAMEWORK_CONFIGS["Inventory"]["Items"][j] then
+                        if CInventory.CCategories[j] then
                             __orderedPriority[j] = true
-                            for k, v in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"][j]) do
+                            for k, v in imports.pairs(CInventory.CCategories[j]) do
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
                                     imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
                                 end
                             end
                         end
                     end
-                    for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
+                    for i, j in imports.pairs(CInventory.CCategories) do
                         if not __orderedPriority[i] then
                             for k, v in imports.pairs(j) do
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
