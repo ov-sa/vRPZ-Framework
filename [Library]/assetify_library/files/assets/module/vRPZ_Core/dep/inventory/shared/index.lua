@@ -44,6 +44,7 @@ CInventory = {
 
     fetchItemObjectID = function(item)
         local itemData = CInventory.fetchItem(item)
+        --TODO: THIS SHOULDN'T WORK ANYWAY///
         return (itemData and itemData.data and imports.tonumber(itemData.data.objectID)) or false
     end,
 
@@ -71,7 +72,7 @@ CInventory = {
     fetchWeaponMag = function(item)
         local itemData = CInventory.fetchItem(item)
         local weaponSlot = CInventory.fetchWeaponSlot(item)
-        return (itemData and weaponSlot and itemData.data.weapon and imports.tonumber(itemData.data.weapon.mag)) or 0
+        return (itemData and weaponSlot and itemData.data.weaponMAG and imports.tonumber(itemData.data.weaponMAG)) or 0
     end,
 
     fetchSlot = function(slot)

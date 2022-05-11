@@ -4,6 +4,7 @@
     "itemWeight": {"rows": 2, "columns": 6},
     "weaponType": "Rifle",
     "weaponAmmo": ".303 British",
+    "weaponMAG": 5,
     "encryptKey": "vStudio - Аниса",
     "streamRange": 75,
     "weaponBase": {"normal": 33, "scope": 34},

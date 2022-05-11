@@ -4,6 +4,7 @@
     "itemWeight": {"rows": 2, "columns": 6},
     "weaponType": "Launcher",
     "weaponAmmo": "88mm",
+    "weaponMAG": 5,
     "encryptKey": "vStudio - Аниса",
     "streamRange": 75,
     "weaponBase": {"normal": 35},

@@ -2,6 +2,7 @@
     "itemName": "Reising-M50",
     "weaponType": "Sub Machine",
     "weaponAmmo": ".45 ACP",
+    "weaponMAG": 5,
     "encryptKey": "vStudio - Аниса",
     "streamRange": 75,
     "weaponBase": {"normal": 29},
