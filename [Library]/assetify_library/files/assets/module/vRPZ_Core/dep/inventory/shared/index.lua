@@ -56,6 +56,12 @@ CInventory = {
         return false
     end,
 
+    fetchWeaponType = function(item)
+        local itemData = CInventory.fetchItem(item)
+        local weaponSlot = CInventory.fetchWeaponSlot(item)
+        return (itemData and weaponSlot and itemData.data.weaponType) or false
+    end,
+
     fetchWeaponID = function(item, baseType)
         baseType = baseType or "normal"
         local itemData = CInventory.fetchItem(item)
@@ -69,7 +75,7 @@ CInventory = {
         return (itemData and weaponSlot and itemData.data.weaponAmmo and imports.tonumber(itemData.data.weaponAmmo)) or false
     end,
 
-    fetchWeaponMag = function(item)
+    fetchWeaponMAG = function(item)
         local itemData = CInventory.fetchItem(item)
         local weaponSlot = CInventory.fetchWeaponSlot(item)
         return (itemData and weaponSlot and itemData.data.weaponMAG and imports.tonumber(itemData.data.weaponMAG)) or 0
