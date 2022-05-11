@@ -1,7 +1,8 @@
 {
-    "weaponName": "Panzerschreck",
+    "itemName": "Panzerschreck",
+    "itemCategory": "Primary",
+    "itemWeight": {"rows": 2, "columns": 6},
     "weaponType": "Launcher",
-    "weaponCategory": "Primary",
     "weaponAmmo": "88mm",
     "encryptKey": "vStudio - Аниса",
     "streamRange": 75,

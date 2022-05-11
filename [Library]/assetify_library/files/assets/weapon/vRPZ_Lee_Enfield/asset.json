@@ -1,7 +1,8 @@
 {
-    "weaponName": "Lee-Enfield",
+    "itemName": "Lee-Enfield",
+    "itemCategory": "Primary",
+    "itemWeight": {"rows": 2, "columns": 6},
     "weaponType": "Rifle",
-    "weaponCategory": "Primary",
     "weaponAmmo": ".303 British",
     "encryptKey": "vStudio - Аниса",
     "streamRange": 75,

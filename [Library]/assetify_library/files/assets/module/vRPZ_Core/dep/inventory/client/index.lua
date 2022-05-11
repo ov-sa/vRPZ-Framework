@@ -25,5 +25,5 @@ for i, j in imports.pairs(CInventory.CItems) do
         inventory = imports.assetify.getAssetDep(j.pack, i, "texture", "inventory"),
         hud = imports.assetify.getAssetDep(j.slot, i, "texture", "hud")
     }
-    j.dimensions = {CInventory.fetchSlotDimensions(j.data.weight.rows, j.data.weight.columns)}
+    j.dimensions = {CInventory.fetchSlotDimensions(j.data.itemWeight.rows, j.data.itemWeight.columns)}
 end

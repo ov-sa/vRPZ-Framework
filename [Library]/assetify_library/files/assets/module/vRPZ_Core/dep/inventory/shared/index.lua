@@ -34,12 +34,12 @@ CInventory = {
 
     fetchItemName = function(item)
         local itemData = CInventory.fetchItem(item)
-        return (itemData and itemData.data and itemData.data.name) or false
+        return (itemData and itemData.data and itemData.data.itemName) or false
     end,
 
     fetchItemWeight = function(item)
         local itemData = CInventory.fetchItem(item)
-        return (itemData and itemData.data and itemData.data.weight and imports.math.max(0, itemData.data.weight.rows*itemData.data.weight.columns)) or false
+        return (itemData and itemData.data and itemData.data.itemWeight and imports.math.max(0, itemData.data.itemWeight.rows*itemData.data.itemWeight.columns)) or false
     end,
 
     fetchItemObjectID = function(item)
@@ -132,8 +132,8 @@ CInventory = {
             end
             if isValidSlot then
                 usedSlots[i] = true
-                for k = i, i + (CInventory.CItems[(j.item)].data.weight.columns - 1), 1 do
-                    for m = 1, CInventory.CItems[(j.item)].data.weight.rows, 1 do
+                for k = i, i + (CInventory.CItems[(j.item)].data.itemWeight.columns - 1), 1 do
+                    for m = 1, CInventory.CItems[(j.item)].data.itemWeight.rows, 1 do
                         usedSlots[(k + (maximumInventoryRowSlots*(m - 1)))] = true
                     end
                 end
@@ -166,8 +166,8 @@ imports.assetify.execOnLoad(function()
         for i = 1, #CWeapons, 1 do
             local j = CWeapons[i]
             local cAsset = imports.assetify.getAsset(j)
-            if cAsset and cAsset.manifestData.weaponCategory and FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.weaponCategory)] and (FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.weaponCategory)].identifier == "Weapon") then
-                CInventory.CItems[j] = {pack = "weapon", slot = cAsset.manifestData.weaponCategory, data = cAsset.manifestData}
+            if cAsset and cAsset.manifestData.itemCategory and FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemCategory)] and (FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemCategory)].identifier == "Weapon") then
+                CInventory.CItems[j] = {pack = "weapon", slot = cAsset.manifestData.itemCategory, data = cAsset.manifestData}
             end
         end
     end
