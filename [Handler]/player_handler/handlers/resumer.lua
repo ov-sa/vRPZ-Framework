@@ -39,13 +39,18 @@ local imports = {
 -------------------
 
 local cache = {
+    inventoryItems = {
+        index = {},
+        reference = {}
+    },
     resumeTicks = {}
 }
 
 CGame.execOnModuleLoad(function()
-    cache.indexedItems = {}
     for i, j in imports.pairs(CInventory.CItems) do
-        imports.table.insert(cache.indexedItems, imports.string.lower(i))
+        local reference = imports.string.lower(i)
+        cache.inventoryItems.reference[reference] = i
+        imports.table.insert(cache.inventoryItems.index, reference)
     end
 end)
 
@@ -159,7 +164,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         end
     end
     imports.collectgarbage()
-    CInventory.getItemProperty(CCharacter.CBuffer[(characters[character].id)].inventory, cache.indexedItems, {dbify.inventory.connection.itemFormat.counter}, function(result, args)
+    CInventory.getItemProperty(CCharacter.CBuffer[(characters[character].id)].inventory, cache.inventoryItems.index, {dbify.inventory.connection.itemFormat.counter}, function(result, args)
         if not result then
             imports.triggerEvent("Player:onToggleLoginUI", args[1])
             return false
@@ -181,7 +186,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
                 slots = result.slots
             }
             for i, j in imports.pairs(args[4]) do
-                imports.setElementData(args[1], "Item:"..i, imports.tonumber(j[(dbify.inventory.connection.itemFormat.counter)]) or 0)
+                imports.setElementData(args[1], "Item:"..(cache.inventoryItems.reference[i]), imports.tonumber(j[(dbify.inventory.connection.itemFormat.counter)]) or 0)
             end
             cache.resumeTicks[(args[1])] = imports.getTickCount()
             CPlayer.setChannel(args[1], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"])
