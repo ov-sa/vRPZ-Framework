@@ -5,8 +5,8 @@
 local imports = {
     pairs = pairs,
     tonumber = tonumber,
-    beautify = beautify,
-    math = math
+    math = math,
+    assetify = assetify
 }
 
 
@@ -21,6 +21,9 @@ CInventory.fetchSlotDimensions = function(rows, columns)
 end
 
 for i, j in imports.pairs(CInventory.CItems) do
-    j.icon = imports.beautify.native.createTexture("files/images/inventory/items/"..(j.slot).."/"..i..".png", "dxt5", true, "clamp")
+    j.icon = {
+        inventory = imports.assetify.getAssetDep(j.pack, i, "texture", "inventory"),
+        hud = imports.assetify.getAssetDep(j.slot, i, "texture", "hud")
+    }
     j.dimensions = {CInventory.fetchSlotDimensions(j.data.weight.rows, j.data.weight.columns)}
 end
