@@ -1,3 +1,13 @@
+-----------------
+--[[ Imports ]]--
+-----------------
+
+local imports = {
+    pairs = pairs,
+    string = string
+}
+
+
 ---------------------------
 --[[ Module: Inventory ]]--
 ---------------------------
@@ -20,4 +30,9 @@ CInventory.getItemProperty = dbify.inventory.item.getProperty
 CInventory.setItemData = dbify.inventory.item.setData
 CInventory.getItemData = dbify.inventory.item.getData
 
-CInventory.ensureItems(CInventory.CItems)
+local __CItems = {}
+for i, j in imports.pairs(CInventory.CItems) do
+    __CItems[(imports.string.lower(i))] = true
+end
+CInventory.ensureItems(__CItems)
+__CItems = nil

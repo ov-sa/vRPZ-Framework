@@ -16,6 +16,7 @@ local imports = {
     triggerEvent = triggerEvent,
     toJSON = toJSON,
     table = table,
+    string = string,
     math = math
 }
 
@@ -64,7 +65,7 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
     imports.table.insert(dataBuffer.inventory, {"slots", imports.toJSON(CInventory.CBuffer[player].slots)})
     for i, j in imports.pairs(CInventory.CItems) do
         if saveProgress then
-            CInventory.setItemProperty(depDatas.inventoryID, {i}, {
+            CInventory.setItemProperty(depDatas.inventoryID, {imports.string.lower(i)}, {
                 {dbify.inventory.connection.itemFormat.counter, imports.math.max(0, imports.tonumber(imports.getElementData(player, "Item:"..i)) or 0)}
             })
         end
