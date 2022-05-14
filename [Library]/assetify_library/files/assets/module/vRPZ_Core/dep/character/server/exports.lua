@@ -10,6 +10,7 @@ CGame.createExports({
     {exportName = "setCharacterData", moduleName = "CCharacter", moduleMethod = "setData"},
     {exportName = "getCharacterData", moduleName = "CCharacter", moduleMethod = "getData"},
     {exportName = "resetCharacterProgress", moduleName = "CCharacter", moduleMethod = "resetProgress"},
+    {exportName = "loadCharacterInventory", moduleName = "CCharacter", moduleMethod = "loadInventory"},
     {exportName = "loadCharacterProgress", moduleName = "CCharacter", moduleMethod = "loadProgress"},
     {exportName = "saveCharacterProgress", moduleName = "CCharacter", moduleMethod = "saveProgress"}
 })
