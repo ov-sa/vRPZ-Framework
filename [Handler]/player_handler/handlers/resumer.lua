@@ -163,7 +163,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         CPlayer.setData(serial, {
             {"character", character}
         })
-        cache.resumeTicks[player] = imports.getTickCount()
+        resumeTicks[player] = imports.getTickCount()
         CPlayer.setChannel(player, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"])
         imports.bindKey(player, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Channel_ShuffleKey"], "down", shufflePlayerChannel)
         imports.triggerClientEvent(player, "Client:onSyncInventoryBuffer", player, CInventory.CBuffer[(data.inventoryID)])
