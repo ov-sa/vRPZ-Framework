@@ -24,7 +24,7 @@ CParty.create = function(leader)
         leader = leader,
         members = {leader}
     }
-    setPlayerParty(leader, CParty.CParties[partyIndex])
+    CPlayer.setParty(leader, CParty.CParties[partyIndex])
     return partyIndex
 end
 
@@ -32,7 +32,7 @@ CParty.destroy = function(partyIndex)
     if not CParty.CParties[partyIndex] then return false end
     local partyMembers = CParty.CParties[partyIndex].members
     CParty.CParties[partyIndex] = nil
-    setPlayerParty(partyMembers, nil)
+    CPlayer.setParty(partyMembers, nil)
     return true
 end
 
@@ -50,7 +50,7 @@ CParty.invite = function(partyIndex, player)
     if not CParty.CParties[partyIndex] or not isPlayerInitialized(player) then return false end
     if getPlayerParty(player) ~= nil then return false end
     imports.table.insert(CParty.CParties[partyIndex].members, player)
-    setPlayerParty(CParty.CParties[partyIndex].members, CParty.CParties[partyIndex])
+    CPlayer.setParty(CParty.CParties[partyIndex].members, CParty.CParties[partyIndex])
     return true
 end
 
@@ -59,7 +59,7 @@ CPlayer.remove = function(partyIndex, player)
     if getPlayerParty(player) == nil then return false end
     local memberIndex = binsearch(CParty.CParties[partyIndex].members, player)
     imports.table.remove(CParty.CParties[partyIndex].members, memberIndex[1])
-    setPlayerParty(CParty.CParties[partyIndex].members, CParty.CParties[partyIndex])
-    setPlayerParty(player, nil)
+    CPlayer.setParty(CParty.CParties[partyIndex].members, CParty.CParties[partyIndex])
+    CPlayer.setParty(player, nil)
     return true
 end
