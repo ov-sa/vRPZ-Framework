@@ -193,10 +193,23 @@ if localPlayer then
             return true
         elseif assetType == "scene" then
             thread:create(function(cThread)
-                local sceneManifestData = imports.file.read(assetPath..(asset.references.scene)..".ipl")
-                sceneManifestData = (cAsset.manifestData.encryptKey and imports.decodeString("tea", sceneManifestData, {key = cAsset.manifestData.encryptKey})) or sceneManifestData
-                if sceneManifestData then
-                    local unparsedIPLDatas = imports.split(sceneManifestData, "\n")
+                local sceneIPLData = imports.file.read(assetPath..(asset.references.scene)..".ipl")
+                sceneIPLData = (cAsset.manifestData.encryptKey and imports.decodeString("tea", sceneIPLData, {key = cAsset.manifestData.encryptKey})) or sceneIPLData
+                if sceneIPLData then
+                    local sceneIDEData = imports.file.read(assetPath..(asset.references.scene)..".ide")
+                    if sceneIDEData then
+                        sceneIDEData = (cAsset.manifestData.encryptKey and imports.decodeString("tea", sceneIDEData, {key = cAsset.manifestData.encryptKey})) or sceneIDEData
+                    end
+                    local unparsedIDEDatas, unparsedIPLDatas = (sceneIDEData and imports.split(sceneIDEData, "\n")) or false, imports.split(sceneIPLData, "\n")
+                    local parsedIDEDatas = (unparsedIDEDatas and {}) or false
+                    if unparsedIDEDatas then
+                        for i = 1, #unparsedIDEDatas, 1 do
+                            local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedIDEDatas[i], 2, asset.separators.IDE)), " ", "")
+                            parsedIDEDatas[childName] = {
+                                imports.string.gsub(imports.tostring(imports.gettok(unparsedIDEDatas[i], 3, asset.separators.IDE)), " ", "")
+                            }
+                        end
+                    end
                     for i = 1, #unparsedIPLDatas, 1 do
                         cAsset.unSynced.assetCache[i] = {}
                         local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedIPLDatas[i], 2, asset.separators.IPL)), " ", "")
