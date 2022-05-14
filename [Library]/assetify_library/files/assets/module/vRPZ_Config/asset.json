@@ -14,6 +14,7 @@
                 "templates/beautify.lua",
                 "templates/animations.lua",
                 "templates/ambiences.lua",
+                "templates/inventory.lua",
                 "gameplay/gui/loading.lua",
                 "gameplay/gui/notification.lua",
                 "gameplay/gui/login.lua",
@@ -22,7 +23,6 @@
                 "gameplay/spawns.lua",
                 "gameplay/loots.lua",
                 "gameplay/party.lua",
-                "inventory/slots.lua",
                 "gameplay/tasks.lua"
             ]
         }

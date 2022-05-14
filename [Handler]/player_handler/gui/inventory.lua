@@ -293,12 +293,6 @@ CGame.execOnModuleLoad(function()
     --[[ Function: Renders UI ]]--
     ------------------------------
 
-    --TODO: LATER MERGE WITH INVENTORY CONFIG
-    local orderedPriority = {
-        "Primary",
-        "Secondary"
-    }
-
     inventoryUI.renderUI = function(renderData)
         if not inventoryUI.state or not CPlayer.isInitialized(localPlayer) then return false end
         if renderData.renderType == "input" then
@@ -516,11 +510,11 @@ CGame.execOnModuleLoad(function()
                 imports.beautify.native.setRenderTarget(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, true)
                 if not inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache then
                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache = {}
-                    local __orderedPriority = {}
-                    for i = 1, #orderedPriority, 1 do
-                        local j = orderedPriority[i]
+                    local priority = {}
+                    for i = 1, #FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Priority"], 1 do
+                        local j = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Priority"][i]
                         if CInventory.CCategories[j] then
-                            __orderedPriority[j] = true
+                            priority[j] = true
                             for k, v in imports.pairs(CInventory.CCategories[j]) do
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
                                     imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
@@ -529,7 +523,7 @@ CGame.execOnModuleLoad(function()
                         end
                     end
                     for i, j in imports.pairs(CInventory.CCategories) do
-                        if not __orderedPriority[i] then
+                        if not priority[i] then
                             for k, v in imports.pairs(j) do
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
                                     imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
