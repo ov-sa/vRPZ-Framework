@@ -6,18 +6,15 @@ local imports = {
     type = type,
     pairs = pairs,
     tonumber = tonumber,
-    tostring = tostring,
     isElement = isElement,
     getElementType = getElementType,
     destroyElement = destroyElement,
     collectgarbage = collectgarbage,
     getElementData = getElementData,
     setElementData = setElementData,
-    triggerEvent = triggerEvent,
     toJSON = toJSON,
     table = table,
     math = math,
-    string = string,
     dbify = dbify
 }
 
@@ -66,7 +63,7 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
     imports.table.insert(dataBuffer.inventory, {"slots", imports.toJSON(CInventory.CBuffer[player].slots)})
     for i, j in imports.pairs(CInventory.CItems) do
         if saveProgress then
-            CInventory.setItemProperty(depDatas.inventoryID, {imports.string.lower(i)}, {
+            CInventory.setItemProperty(depDatas.inventoryID, {j.ref}, {
                 {imports.dbify.inventory.connection.itemFormat.counter, imports.math.max(0, imports.tonumber(imports.getElementData(player, "Item:"..i)) or 0)}
             })
         end

@@ -169,7 +169,7 @@ imports.assetify.execOnLoad(function()
             local j = CItems[i]
             local cAsset = imports.assetify.getAsset("inventory", j)
             if cAsset and cAsset.manifestData.itemSlot and FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)] then
-                CInventory.CItems[j] = {pack = "inventory", slot = cAsset.manifestData.itemSlot, data = cAsset.manifestData}
+                CInventory.CItems[j] = {pack = "inventory", ref = imports.string.lower(j), slot = cAsset.manifestData.itemSlot, data = cAsset.manifestData}
                 CInventory.CCategories[(cAsset.manifestData.itemSlot)][j] = true
             end
         end
@@ -179,14 +179,13 @@ imports.assetify.execOnLoad(function()
             local j = CWeapons[i]
             local cAsset = imports.assetify.getAsset("weapon", j)
             if cAsset and cAsset.manifestData.itemSlot and FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)] and (FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)].identifier == "Weapon") then
-                CInventory.CItems[j] = {pack = "weapon", slot = cAsset.manifestData.itemSlot, data = cAsset.manifestData}
+                CInventory.CItems[j] = {pack = "weapon", ref = imports.string.lower(j), slot = cAsset.manifestData.itemSlot, data = cAsset.manifestData}
                 CInventory.CCategories[(cAsset.manifestData.itemSlot)][j] = true
             end
         end
     end
     for i, j in imports.pairs(CInventory.CItems) do
-        local ref = imports.string.lower(i)
-        CInventory.CRefs.ref[ref] = i
-        imports.table.insert(CInventory.CRefs.index, ref)
+        CInventory.CRefs.ref[(j.ref)] = i
+        imports.table.insert(CInventory.CRefs.index, j.ref)
     end
 end)
