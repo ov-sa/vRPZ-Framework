@@ -196,19 +196,19 @@ if localPlayer then
                 local sceneManifestData = imports.file.read(assetPath..(asset.references.scene)..".ipl")
                 sceneManifestData = (cAsset.manifestData.encryptKey and imports.decodeString("tea", sceneManifestData, {key = cAsset.manifestData.encryptKey})) or sceneManifestData
                 if sceneManifestData then
-                    local unparsedDatas = imports.split(sceneManifestData, "\n")
-                    for i = 1, #unparsedDatas, 1 do
+                    local unparsedIPLDatas = imports.split(sceneManifestData, "\n")
+                    for i = 1, #unparsedIPLDatas, 1 do
                         cAsset.unSynced.assetCache[i] = {}
-                        local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedDatas[i], 2, asset.separators.IPL)), " ", "")
+                        local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedIPLDatas[i], 2, asset.separators.IPL)), " ", "")
                         local sceneData = {
                             position = {
-                                x = imports.tonumber(imports.gettok(unparsedDatas[i], 4, asset.separators.IPL)),
-                                y = imports.tonumber(imports.gettok(unparsedDatas[i], 5, asset.separators.IPL)),
-                                z = imports.tonumber(imports.gettok(unparsedDatas[i], 6, asset.separators.IPL))
+                                x = imports.tonumber(imports.gettok(unparsedIPLDatas[i], 4, asset.separators.IPL)),
+                                y = imports.tonumber(imports.gettok(unparsedIPLDatas[i], 5, asset.separators.IPL)),
+                                z = imports.tonumber(imports.gettok(unparsedIPLDatas[i], 6, asset.separators.IPL))
                             },
                             rotation = {}
                         }
-                        sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z = imports.quat.toEuler(imports.tonumber(imports.gettok(unparsedDatas[i], 10, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 7, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 8, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedDatas[i], 9, asset.separators.IPL)))
+                        sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z = imports.quat.toEuler(imports.tonumber(imports.gettok(unparsedIPLDatas[i], 10, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedIPLDatas[i], 7, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedIPLDatas[i], 8, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedIPLDatas[i], 9, asset.separators.IPL)))
                         if not cAsset.manifestData.sceneMapped then
                             asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache[i], {
                                 txd = assetPath..(asset.references.asset)..".txd",

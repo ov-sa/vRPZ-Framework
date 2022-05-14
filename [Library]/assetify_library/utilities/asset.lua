@@ -405,9 +405,9 @@ else
                                         local sceneIDEData = imports.file.read(sceneIDEPath)
                                         asset:buildFile(sceneIDEPath, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                         asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
-                                        local unparsedDatas = imports.split(sceneIPLData, "\n")
-                                        for k = 1, #unparsedDatas, 1 do
-                                            local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedDatas[k], 2, asset.separators.IPL)), " ", "")
+                                        local unparsedIDEDatas, unparsedIPLDatas = (sceneIDEData and imports.split(sceneIDEData, "\n")) or false, imports.split(sceneIPLData, "\n")
+                                        for k = 1, #unparsedIPLDatas, 1 do
+                                            local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedIPLDatas[k], 2, asset.separators.IPL)), " ", "")
                                             asset:buildFile(assetPath.."dff/"..childName..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                             asset:buildFile(assetPath.."col/"..childName..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                             --TODO: FETCH TXD OF THE SPECIFIED DFF FROM IDE..
