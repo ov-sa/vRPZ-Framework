@@ -3,6 +3,7 @@
 -----------------
 
 local imports = {
+    type = type,
     pairs = pairs,
     tonumber = tonumber,
     tostring = tostring,
@@ -10,14 +11,14 @@ local imports = {
     getElementType = getElementType,
     destroyElement = destroyElement,
     collectgarbage = collectgarbage,
-    getPlayerSerial = getPlayerSerial,
     getElementData = getElementData,
     setElementData = setElementData,
     triggerEvent = triggerEvent,
     toJSON = toJSON,
     table = table,
     string = string,
-    math = math
+    math = math,
+    dbify = dbify
 }
 
 
@@ -66,7 +67,7 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
     for i, j in imports.pairs(CInventory.CItems) do
         if saveProgress then
             CInventory.setItemProperty(depDatas.inventoryID, {imports.string.lower(i)}, {
-                {dbify.inventory.connection.itemFormat.counter, imports.math.max(0, imports.tonumber(imports.getElementData(player, "Item:"..i)) or 0)}
+                {imports.dbify.inventory.connection.itemFormat.counter, imports.math.max(0, imports.tonumber(imports.getElementData(player, "Item:"..i)) or 0)}
             })
         end
         imports.setElementData(player, "Item:"..i, (loadProgress and 0) or nil)
@@ -81,8 +82,38 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
     return true
 end
 
+CCharacter.loadInventory = function(player, depDatas, callback)
+    if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") then return false end
+    --TODO: FINALIZE .index and .reference
+    CInventory.getItemProperty(depDatas.inventoryID, cache.inventoryItems.index, {imports.dbify.inventory.connection.itemFormat.counter}, function(result, args)
+        local callbackReference = callback
+        if not result then
+            if callback and (imports.type(callback) == "function") then
+                callbackReference(false, args[1], args[2])
+            end
+            return false
+        end
+        CInventory.getData(args[2].inventoryID, {"max_slots", "slots"}, function(result, args)
+            local callbackReference = callback
+            result = result or {}
+            result.max_slots, result.slots = imports.math.max(CInventory.fetchMaxSlotsMultiplier(), imports.tonumber(result.max_slots) or 0), (result.slots and imports.fromJSON(result.slots)) or {}
+            CInventory.CBuffer[(args[2].characterID)] = {
+                maxSlots = result.max_slots,
+                slots = result.slots
+            }
+            for i, j in imports.pairs(args[3]) do
+                imports.setElementData(args[1], "Item:"..(cache.inventoryItems.reference[i]), imports.tonumber(j[(imports.dbify.inventory.connection.itemFormat.counter)]) or 0)
+            end
+            if callback and (imports.type(callback) == "function") then
+                callbackReference(true, args[1], args[2])
+            end
+        end, args[1], args[2], result)
+    end, true, player, depDatas)
+    return true
+end
+
 CCharacter.loadProgress = function(player, loadBuffer, resetProgress)
-    if (not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player")) then return false end
+    if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") then return false end
     local characterID = imports.getElementData(player, "Character:ID")
     if loadBuffer then
         local serial = CPlayer.getSerial(player)
@@ -115,7 +146,7 @@ end
 
 CCharacter.saveProgress = function(player)
     if not CPlayer.isInitialized(player) then return false end
-    local serial = imports.getPlayerSerial(player)
+    local serial = CPlayer.getSerial(player)
     local characterID = imports.getElementData(player, "Character:ID")
     local inventoryID = CCharacter.CBuffer[characterID].inventory
     CCharacter.setData(characterID, {
