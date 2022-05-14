@@ -8,7 +8,9 @@ local imports = {
     isElement = isElement,
     getElementType = getElementType,
     getElementData = getElementData,
+    table = table,
     math = math,
+    string = string,
     assetify = assetify
 }
 
@@ -20,8 +22,8 @@ local imports = {
 CInventory = {
     CBuffer = {},
     CSlots = {},
-    CItems = {},
-    CCategories = {},
+    CItems = {}, CCategories = {},
+    CRefs = {index = {}, ref = {}},
 
     fetchItem = function(item)
         if not item or not CInventory.CItems[item] then return false end
@@ -181,5 +183,10 @@ imports.assetify.execOnLoad(function()
                 CInventory.CCategories[(cAsset.manifestData.itemSlot)][j] = true
             end
         end
+    end
+    for i, j in imports.pairs(CInventory.CItems) do
+        local ref = imports.string.lower(i)
+        CInventory.CRefs.ref[ref] = i
+        imports.table.insert(CInventory.CRefs.index, ref)
     end
 end)
