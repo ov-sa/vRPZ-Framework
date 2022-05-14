@@ -406,6 +406,7 @@ else
                                         asset:buildFile(sceneIDEPath, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                         asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                         local unparsedIDEDatas, unparsedIPLDatas = (sceneIDEData and imports.split(sceneIDEData, "\n")) or false, imports.split(sceneIPLData, "\n")
+                                        local parsedIDEDatas = (unparsedIDEDatas and {}) or false
                                         for k = 1, #unparsedIPLDatas, 1 do
                                             local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedIPLDatas[k], 2, asset.separators.IPL)), " ", "")
                                             asset:buildFile(assetPath.."dff/"..childName..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
