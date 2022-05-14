@@ -36,9 +36,7 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-local cache = {
-    resumeTicks = {}
-}
+local resumeTicks = {}
 
 
 ------------------------------------------
@@ -134,7 +132,7 @@ end)
 --[[ Player: On Resume ]]--
 ---------------------------
 
-function getResumeTick(player) return cache.resumeTicks[player] or false end
+function getResumeTick(player) return resumeTicks[player] or false end
 
 imports.addEvent("Player:onResume", true)
 imports.addEventHandler("Player:onResume", root, function(character, characters)
