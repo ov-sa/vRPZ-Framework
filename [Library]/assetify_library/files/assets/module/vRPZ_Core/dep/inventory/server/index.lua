@@ -5,7 +5,8 @@
 local imports = {
     pairs = pairs,
     string = string,
-    assetify = assetify
+    assetify = assetify,
+    dbify = dbify
 }
 
 
@@ -14,22 +15,22 @@ local imports = {
 ---------------------------
 
 CInventory.fetch = function(inventoryID, ...)
-    dbify.inventory.fetchAll({
-        {dbify.inventory.connection.keyColumn, inventoryID}
+    imports.dbify.inventory.fetchAll({
+        {imports.dbify.inventory.connection.keyColumn, inventoryID}
     }, ...)
     return true
 end
-CInventory.ensureItems = dbify.inventory.ensureItems
-CInventory.create = dbify.inventory.create
-CInventory.delete = dbify.inventory.delete
-CInventory.setData = dbify.inventory.setData
-CInventory.getData = dbify.inventory.getData
-CInventory.addItem = dbify.inventory.item.add
-CInventory.removeItem = dbify.inventory.item.remove
-CInventory.setItemProperty = dbify.inventory.item.setProperty
-CInventory.getItemProperty = dbify.inventory.item.getProperty
-CInventory.setItemData = dbify.inventory.item.setData
-CInventory.getItemData = dbify.inventory.item.getData
+CInventory.ensureItems = imports.dbify.inventory.ensureItems
+CInventory.create = imports.dbify.inventory.create
+CInventory.delete = imports.dbify.inventory.delete
+CInventory.setData = imports.dbify.inventory.setData
+CInventory.getData = imports.dbify.inventory.getData
+CInventory.addItem = imports.dbify.inventory.item.add
+CInventory.removeItem = imports.dbify.inventory.item.remove
+CInventory.setItemProperty = imports.dbify.inventory.item.setProperty
+CInventory.getItemProperty = imports.dbify.inventory.item.getProperty
+CInventory.setItemData = imports.dbify.inventory.item.setData
+CInventory.getItemData = imports.dbify.inventory.item.getData
 
 imports.assetify.execOnLoad(function()
     local CItems = {}

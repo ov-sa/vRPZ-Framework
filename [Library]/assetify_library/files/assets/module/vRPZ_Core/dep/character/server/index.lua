@@ -5,7 +5,8 @@
 local imports = {
     type = type,
     pairs = pairs,
-    table = table
+    table = table,
+    dbify = dbify
 }
 
 
@@ -16,14 +17,14 @@ local imports = {
 CCharacter.CBuffer = {}
 
 CCharacter.fetch = function(characterID, ...)
-    dbify.character.fetchAll({
-        {dbify.character.connection.keyColumn, characterID}
+    imports.dbify.character.fetchAll({
+        {imports.dbify.character.connection.keyColumn, characterID}
     }, ...)
     return true
 end
 
 CCharacter.fetchOwned = function(serial, ...)
-    dbify.character.fetchAll({
+    imports.dbify.character.fetchAll({
         {"owner", serial}
     }, ...)
     return true
@@ -31,11 +32,11 @@ end
 
 CCharacter.create = function(serial, callback, ...)
     if (not serial or (imports.type(serial) ~= "string")) then return false end
-    dbify.character.create(function(characterID, args)
+    imports.dbify.character.create(function(characterID, args)
         CCharacter.CBuffer[characterID] = {
             {"owner", args[1]}
         }
-        dbify.character.setData(characterID, CCharacter.CBuffer[characterID])
+        imports.dbify.character.setData(characterID, CCharacter.CBuffer[characterID])
         local callbackReference = callback
         if (callbackReference and (imports.type(callbackReference) == "function")) then
             imports.table.remove(args, 1)
@@ -46,7 +47,7 @@ CCharacter.create = function(serial, callback, ...)
 end
 
 CCharacter.delete = function(characterID, callback, ...)
-    dbify.character.delete(characterID, function(result, args)
+    imports.dbify.character.delete(characterID, function(result, args)
         if result then
             CCharacter.CBuffer[characterID] = nil
         end
@@ -59,7 +60,7 @@ CCharacter.delete = function(characterID, callback, ...)
 end
 
 CCharacter.setData = function(characterID, characterDatas, callback, ...)
-    dbify.character.setData(characterID, characterDatas, function(result, args)
+    imports.dbify.character.setData(characterID, characterDatas, function(result, args)
         if result and CCharacter.CBuffer[characterID] then
             for i = 1, #characterDatas, 1 do
                 local j = characterDatas[i]
@@ -76,7 +77,7 @@ CCharacter.setData = function(characterID, characterDatas, callback, ...)
 end
 
 CCharacter.getData = function(characterID, characterDatas, callback, ...)
-    dbify.character.getData(characterID, characterDatas, function(result, args)
+    imports.dbify.character.getData(characterID, characterDatas, function(result, args)
         local callbackReference = callback
         if (callbackReference and (imports.type(callbackReference) == "function")) then
             callbackReference(result, args)
