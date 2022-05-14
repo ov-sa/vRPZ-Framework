@@ -421,7 +421,7 @@ else
                                             asset:buildFile(assetPath.."dff/"..childName..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                             asset:buildFile(assetPath.."col/"..childName..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                             if parsedIDEDatas and parsedIDEDatas[childName] then
-                                                asset:buildFile(assetPath.."txd/"..parsedIDEDatas[childName][1]..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                                asset:buildFile(assetPath.."txd/"..(parsedIDEDatas[childName][1])..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                             end
                                             thread.pause()
                                         end
