@@ -548,7 +548,7 @@ CGame.execOnModuleLoad(function()
                     j.offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1) - vicinity_offsetY
                     vicinity_isSlotHovered = (vicinity_isHovered and isUIActionEnabled and (vicinity_isSlotHovered or (imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + j.offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and i))) or false
                     if not j.isPositioned then
-                        j.title = imports.string.upper(CInventory.CItems[(j.item)].data.name)
+                        j.title = imports.string.upper(CInventory.CItems[(j.item)].data.itemName)
                         j.width, j.height = (CInventory.CItems[(j.item)].dimensions[1]/CInventory.CItems[(j.item)].dimensions[2])*inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotSize
                         j.startX, j.startY = inventoryUI.vicinityInventory.width - j.width, 0
                         j.isPositioned = true
