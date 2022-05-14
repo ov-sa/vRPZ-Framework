@@ -61,7 +61,7 @@ CPlayer.getData = function(serial, serialDatas, callback, ...)
 end
 
 CPlayer.getSerial = function(player)
-    if (not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player")) then return false end
+    if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") then return false end
     return imports.getPlayerSerial(player)
 end
 
@@ -80,7 +80,7 @@ CPlayer.getPlayer = function(serial)
 end
 
 CPlayer.setLogged = function(player, state)
-    if (not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player")) then return false end
+    if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") then return false end
     if state then
         if CPlayer.CLogged[player] then return false end
         CPlayer.CLogged[player] = true

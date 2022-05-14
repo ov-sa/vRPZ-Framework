@@ -19,7 +19,7 @@ CPlayer = {
     CAttachments = {},
 
     isInitialized = function(player)
-        if (not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player")) then return false end
+        if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") then return false end
         return CPlayer.CLogged[player] or false
     end,
 
