@@ -24,7 +24,6 @@ CParty.create = function(leader)
         leader = leader,
         members = {leader}
     }
-
     setPlayerParty(leader, CParty.CParties[partyIndex])
     return partyIndex
 end
