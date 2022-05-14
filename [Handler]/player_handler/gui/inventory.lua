@@ -509,12 +509,12 @@ CGame.execOnModuleLoad(function()
                 local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
                 imports.beautify.native.setRenderTarget(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, true)
                 if not inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache then
+                    local slotPriority = {}
                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache = {}
-                    local priority = {}
                     for i = 1, #FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Priority"], 1 do
                         local j = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Priority"][i]
                         if CInventory.CCategories[j] then
-                            priority[j] = true
+                            slotPriority[j] = true
                             for k, v in imports.pairs(CInventory.CCategories[j]) do
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
                                     imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
@@ -523,7 +523,7 @@ CGame.execOnModuleLoad(function()
                         end
                     end
                     for i, j in imports.pairs(CInventory.CCategories) do
-                        if not priority[i] then
+                        if not slotPriority[i] then
                             for k, v in imports.pairs(j) do
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
                                     imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
