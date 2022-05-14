@@ -85,7 +85,7 @@ end
 CCharacter.loadInventory = function(player, depDatas, callback)
     if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") then return false end
     --TODO: FINALIZE .index and .reference
-    CInventory.getItemProperty(depDatas.inventoryID, cache.inventoryItems.index, {imports.dbify.inventory.connection.itemFormat.counter}, function(result, args)
+    CInventory.getItemProperty(depDatas.inventoryID, CInventory.CRefs.index, {imports.dbify.inventory.connection.itemFormat.counter}, function(result, args)
         local callbackReference = callback
         if not result then
             if callback and (imports.type(callback) == "function") then
@@ -102,7 +102,7 @@ CCharacter.loadInventory = function(player, depDatas, callback)
                 slots = result.slots
             }
             for i, j in imports.pairs(args[3]) do
-                imports.setElementData(args[1], "Item:"..(cache.inventoryItems.reference[i]), imports.tonumber(j[(imports.dbify.inventory.connection.itemFormat.counter)]) or 0)
+                imports.setElementData(args[1], "Item:"..(CInventory.CRefs.ref[i]), imports.tonumber(j[(imports.dbify.inventory.connection.itemFormat.counter)]) or 0)
             end
             if callback and (imports.type(callback) == "function") then
                 callbackReference(true, args[1], args[2])
