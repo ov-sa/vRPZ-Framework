@@ -408,7 +408,7 @@ else
                                         asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                         local unparsedIDEDatas, unparsedIPLDatas = (sceneIDEData and imports.split(sceneIDEData, "\n")) or false, imports.split(sceneIPLData, "\n")
                                         local parsedIDEDatas = (unparsedIDEDatas and {}) or false
-                                        cAssetPack.rwDatas[assetName].sceneIDE = (parsedIDEDatas and true) or false
+                                        cAssetPack.rwDatas[assetName].synced.sceneIDE = (parsedIDEDatas and true) or false
                                         if unparsedIDEDatas then
                                             for k = 1, #unparsedIDEDatas, 1 do
                                                 local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedIDEDatas[k], 2, asset.separators.IDE)), " ", "")
