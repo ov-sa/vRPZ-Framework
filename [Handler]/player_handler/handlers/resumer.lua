@@ -153,23 +153,23 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     CCharacter.loadInventory(source, {
         characterID = characters[character].id,
         inventoryID = CCharacter.CBuffer[(characters[character].id)].inventory
-    }, function(result, player, args)
+    }, function(result, player, data)
         if not result then
             imports.triggerEvent("Player:onToggleLoginUI", player)
             return false
         end
         local serial = CPlayer.getSerial(player)
-        local characterIdentity = CCharacter.CBuffer[(args[2])].identity
-        imports.setElementData(player, "Character:ID", args[2])
+        local characterIdentity = CCharacter.CBuffer[(data.characterID)].identity
+        imports.setElementData(player, "Character:ID", data.characterID)
         imports.setElementData(player, "Character:Identity", characterIdentity)
         CPlayer.setData(serial, {
             {"character", character}
         })
-        cache.resumeTicks[(args[1])] = imports.getTickCount()
-        CPlayer.setChannel(args[1], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"])
-        imports.bindKey(args[1], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Channel_ShuffleKey"], "down", shufflePlayerChannel)
-        imports.triggerClientEvent(player, "Client:onSyncInventoryBuffer", args[1], CInventory.CBuffer[(args[1])])
-        imports.triggerClientEvent(player, "Client:onSyncWeather", args[1], CGame.getNativeWeather())
-        imports.triggerEvent("Player:onSpawn", player, CCharacter.CBuffer[(args[2])].location, true)
+        cache.resumeTicks[player] = imports.getTickCount()
+        CPlayer.setChannel(player, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"])
+        imports.bindKey(player, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Channel_ShuffleKey"], "down", shufflePlayerChannel)
+        imports.triggerClientEvent(player, "Client:onSyncInventoryBuffer", player, CInventory.CBuffer[(data.inventoryID)])
+        imports.triggerClientEvent(player, "Client:onSyncWeather", player, CGame.getNativeWeather())
+        imports.triggerEvent("Player:onSpawn", player, CCharacter.CBuffer[(data.characterID)].location, true)
     end)
 end)
