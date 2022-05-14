@@ -396,18 +396,24 @@ else
                                         end
                                     end
                                 end
-                                local sceneIDEPath, sceneIPLPath = assetPath..(asset.references.scene)..".ide", assetPath..(asset.references.scene)..".ipl"
-                                local sceneManifestData = imports.file.read(sceneIPLPath)
-                                if sceneManifestData then
-                                    asset:buildFile(sceneIDEPath, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                local sceneIPLPath = assetPath..(asset.references.scene)..".ipl"
+                                local sceneIPLData = imports.file.read(sceneIPLPath)
+                                if sceneIPLData then
                                     asset:buildFile(sceneIPLPath, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                     if not assetManifestData.sceneMapped then
+                                        local sceneIDEPath = assetPath..(asset.references.scene)..".ide"
+                                        local sceneIDEData = imports.file.read(sceneIDEPath)
+                                        asset:buildFile(sceneIDEPath, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                         asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
-                                        local unparsedDatas = imports.split(sceneManifestData, "\n")
+                                        local unparsedDatas = imports.split(sceneIPLData, "\n")
                                         for k = 1, #unparsedDatas, 1 do
                                             local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedDatas[k], 2, asset.separators.IPL)), " ", "")
                                             asset:buildFile(assetPath.."dff/"..childName..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                             asset:buildFile(assetPath.."col/"..childName..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                            --TODO: FETCH TXD OF THE SPECIFIED DFF FROM IDE..
+                                            --if sceneIDEData then
+                                                --asset:buildFile(sceneIDEPath, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                            --end
                                             thread.pause()
                                         end
                                     end
