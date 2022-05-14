@@ -13,6 +13,7 @@ local imports = {
     getElementData = getElementData,
     setElementData = setElementData,
     toJSON = toJSON,
+    fromJSON = fromJSON,
     table = table,
     math = math,
     dbify = dbify
