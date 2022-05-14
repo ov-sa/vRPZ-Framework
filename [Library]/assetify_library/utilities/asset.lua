@@ -412,8 +412,7 @@ else
                                             for k = 1, #unparsedIDEDatas, 1 do
                                                 local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedIDEDatas[k], 2, asset.separators.IDE)), " ", "")
                                                 parsedIDEDatas[childName] = {
-                                                    imports.string.gsub(imports.tostring(imports.gettok(unparsedIDEDatas[k], 3, asset.separators.IDE)), " ", ""),
-                                                    imports.string.gsub(imports.tostring(imports.gettok(unparsedIDEDatas[k], 4, asset.separators.IDE)), " ", "")
+                                                    imports.string.gsub(imports.tostring(imports.gettok(unparsedIDEDatas[k], 3, asset.separators.IDE)), " ", "")
                                                 }
                                             end
                                         end
