@@ -29,8 +29,7 @@ local imports = {
     toJSON = toJSON,
     fromJSON = fromJSON,
     table = table,
-    string = string,
-    math = math
+    string = string
 }
 
 
@@ -39,10 +38,7 @@ local imports = {
 -------------------
 
 local cache = {
-    inventoryItems = {
-        index = {},
-        reference = {}
-    },
+    inventoryItems = {index = {}, reference = {}},
     resumeTicks = {}
 }
 
@@ -164,36 +160,26 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         end
     end
     imports.collectgarbage()
-    CInventory.getItemProperty(CCharacter.CBuffer[(characters[character].id)].inventory, cache.inventoryItems.index, {dbify.inventory.connection.itemFormat.counter}, function(result, args)
+    CCharacter.loadInventory(source, {
+        characterID = characters[character].id,
+        inventoryID = CCharacter.CBuffer[(characters[character].id)].inventory
+    }, function(result, player, args)
         if not result then
-            imports.triggerEvent("Player:onToggleLoginUI", args[1])
+            imports.triggerEvent("Player:onToggleLoginUI", player)
             return false
         end
-
-        CInventory.getData(args[3], {"max_slots", "slots"}, function(result, args)
-            result = result or {}
-            result.max_slots, result.slots = imports.math.max(CInventory.fetchMaxSlotsMultiplier(), imports.tonumber(result.max_slots) or 0), (result.slots and imports.fromJSON(result.slots)) or {}
-            local serverWeather, serverTime = CGame.getNativeWeather()
-            local serial = CPlayer.getSerial(args[1])
-            local characterIdentity = CCharacter.CBuffer[(args[2])].identity
-            imports.setElementData(args[1], "Character:ID", args[2])
-            imports.setElementData(args[1], "Character:Identity", characterIdentity)
-            CPlayer.setData(serial, {
-                {"character", character}
-            })
-            CInventory.CBuffer[(args[1])] = {
-                maxSlots = result.max_slots,
-                slots = result.slots
-            }
-            for i, j in imports.pairs(args[4]) do
-                imports.setElementData(args[1], "Item:"..(cache.inventoryItems.reference[i]), imports.tonumber(j[(dbify.inventory.connection.itemFormat.counter)]) or 0)
-            end
-            cache.resumeTicks[(args[1])] = imports.getTickCount()
-            CPlayer.setChannel(args[1], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"])
-            imports.bindKey(args[1], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Channel_ShuffleKey"], "down", shufflePlayerChannel)
-            imports.triggerClientEvent(args[1], "Client:onSyncInventoryBuffer", args[1], CInventory.CBuffer[(args[1])])
-            imports.triggerClientEvent(args[1], "Client:onSyncWeather", args[1], serverWeather, serverTime)
-            imports.triggerEvent("Player:onSpawn", args[1], CCharacter.CBuffer[(args[2])].location, true)
-        end, args[1], args[2], args[3], result)
-    end, true, source, characters[character].id, CCharacter.CBuffer[(characters[character].id)].inventory)
+        local serial = CPlayer.getSerial(player)
+        local characterIdentity = CCharacter.CBuffer[(args[2])].identity
+        imports.setElementData(player, "Character:ID", args[2])
+        imports.setElementData(player, "Character:Identity", characterIdentity)
+        CPlayer.setData(serial, {
+            {"character", character}
+        })
+        cache.resumeTicks[(args[1])] = imports.getTickCount()
+        CPlayer.setChannel(args[1], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"])
+        imports.bindKey(args[1], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Channel_ShuffleKey"], "down", shufflePlayerChannel)
+        imports.triggerClientEvent(player, "Client:onSyncInventoryBuffer", args[1], CInventory.CBuffer[(args[1])])
+        imports.triggerClientEvent(player, "Client:onSyncWeather", args[1], CGame.getNativeWeather())
+        imports.triggerEvent("Player:onSpawn", player, CCharacter.CBuffer[(args[2])].location, true)
+    end)
 end)
