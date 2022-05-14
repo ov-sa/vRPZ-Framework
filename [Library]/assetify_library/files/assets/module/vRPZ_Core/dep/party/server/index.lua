@@ -4,11 +4,7 @@
 
 
 local imports = {
-    triggerClientEvent = triggerClientEvent,
-    table = {
-        insert = table.insert,
-        remove = table.remove
-    }
+    table = table
 }
 
 
