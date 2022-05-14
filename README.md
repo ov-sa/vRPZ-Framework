@@ -2,7 +2,7 @@
 
 **━ Maintainer(s):** [**Aviril**](https://github.com/Aviril), [**Mario**](https://github.com/OvileAmriam), [**Tron**](https://github.com/OvileAmriam), [**Anisa**](https://github.com/Anisa-Nur)
 
-**vRPZ** is a startup **Dayz-Roleplay Template** focussing on optimization and integrating existing vStudio licensed libraries. You must consider using this framework only if you are a developer and experienced enough to extend it. This is not recommended for production ready server rather serving as core.
+**vRPZ** is a startup **DayZ-Roleplay Template** focussing on optimization and integrating existing vStudio licensed libraries. You must consider using this framework only if you are a developer and experienced enough to extend it. This is not recommended for production ready server rather serving as core.
 
 ## ━ Features
 
