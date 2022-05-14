@@ -396,9 +396,10 @@ else
                                         end
                                     end
                                 end
-                                local sceneIPLPath = assetPath..(asset.references.scene)..".ipl"
+                                local sceneIDEPath, sceneIPLPath = assetPath..(asset.references.scene)..".ide", assetPath..(asset.references.scene)..".ipl"
                                 local sceneManifestData = imports.file.read(sceneIPLPath)
                                 if sceneManifestData then
+                                    asset:buildFile(sceneIDEPath, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                     asset:buildFile(sceneIPLPath, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                     if not assetManifestData.sceneMapped then
                                         asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
