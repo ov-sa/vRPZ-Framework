@@ -13,7 +13,6 @@
 -----------------
 
 local imports = {
-    pairs = pairs,
     tonumber = tonumber,
     getTickCount = getTickCount,
     collectgarbage = collectgarbage,
@@ -38,17 +37,8 @@ local imports = {
 -------------------
 
 local cache = {
-    inventoryItems = {index = {}, reference = {}},
     resumeTicks = {}
 }
-
-CGame.execOnModuleLoad(function()
-    for i, j in imports.pairs(CInventory.CItems) do
-        local reference = imports.string.lower(i)
-        cache.inventoryItems.reference[reference] = i
-        imports.table.insert(cache.inventoryItems.index, reference)
-    end
-end)
 
 
 ------------------------------------------
