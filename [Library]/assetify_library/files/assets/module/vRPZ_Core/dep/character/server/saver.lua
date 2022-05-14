@@ -16,8 +16,8 @@ local imports = {
     triggerEvent = triggerEvent,
     toJSON = toJSON,
     table = table,
-    string = string,
     math = math,
+    string = string,
     dbify = dbify
 }
 
