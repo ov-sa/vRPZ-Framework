@@ -125,6 +125,7 @@
     <export function="setCharacterData" type="server"/>
     <export function="getCharacterData" type="server"/>
     <export function="resetCharacterProgress" type="server"/>
+    <export function="loadCharacterInventory" type="server"/>
     <export function="loadCharacterProgress" type="server"/>
     <export function="saveCharacterProgress" type="server"/>
 
