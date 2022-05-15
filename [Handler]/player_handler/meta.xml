@@ -141,6 +141,7 @@
     <export function="fetchInventoryWeaponAmmo" type="shared"/>
     <export function="fetchInventoryWeaponMAG" type="shared"/>
     <export function="fetchInventorySlot" type="shared"/>
+    <export function="fetchInventorySlotLocation" type="shared"/>
     <export function="fetchInventoryItemCount" type="shared"/>
     <export function="fetchInventoryMaxSlotsMultiplier" type="shared"/>
     <export function="fetchInventoryParentMaxSlots" type="shared"/>

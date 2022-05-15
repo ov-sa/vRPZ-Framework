@@ -89,6 +89,14 @@ CInventory = {
         return FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] or false
     end,
 
+    fetchSlotLocation = function(slot)
+        slot = imports.tonumber(slot)
+        if not slot then return false end
+        local row = imports.math.ceil(slot/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)
+        local column = slot - (imports.math.max(0, row - 1)*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)
+        return row, column
+    end,
+
     fetchItemCount = function(parent, item)
         if not parent or not item or not imports.isElement(parent) or not CInventory.CItems[item] then return false end
         return imports.math.max(0, imports.tonumber(imports.getElementData(parent, "Item:"..item)) or 0)
