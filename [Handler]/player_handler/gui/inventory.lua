@@ -415,7 +415,7 @@ CGame.execOnModuleLoad(function()
                     if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition then
                         local slotIndex = CInventory.fetchSlotIndex(slotRow, slotColumn)
                         if not inventoryUI.buffer[localPlayer].usedSlots[slotIndex] then
-                            if CInventory.isSlotAvailableForOrdering(localPlayer, inventoryUI.attachedItem.item, slotIndex) then
+                            if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, slotIndex) then
                                 outputChatBox("SLOT AVAILABLE TO DROP: "..slotIndex)
                             else
                                 outputChatBox("SLOT NOT AVAILABLE TO DROP: "..slotIndex)
