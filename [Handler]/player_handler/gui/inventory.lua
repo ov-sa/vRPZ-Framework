@@ -321,11 +321,9 @@ CGame.execOnModuleLoad(function()
             local isLMBClicked = (inventoryUI.cache.keys.mouse == "mouse1") and isUIActionEnabled
             local client_startX, client_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
             local client_width, client_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
-            if not inventoryUI.buffer[localPlayer].bufferCache and CInventory.CBuffer then
-                inventoryUI.buffer[localPlayer].bufferCache = {
-                    assignedItems = {}
-                }
-                for i, j in imports.pairs(CInventory.CBuffer.slots) do
+            if not inventoryUI.buffer[localPlayer].bufferCache then
+                inventoryUI.buffer[localPlayer].bufferCache, inventoryUI.buffer[localPlayer].assignedItems = {}, {}
+                for i, j in imports.pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
                     if not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] and (imports.type(i) == "number") then
                         if not inventoryUI.isSynced then
                             if (j.movementType == "equip") and j.isAutoIndexed then
@@ -363,8 +361,8 @@ CGame.execOnModuleLoad(function()
                         else
                             for k = 1, #inventoryUI.buffer[localPlayer].bufferCache, 1 do
                                 local v = inventoryUI.buffer[localPlayer].bufferCache[k]
-                                if (j.item == v.item) and not inventoryUI.buffer[localPlayer].bufferCache.assignedItems[k] then
-                                    inventoryUI.buffer[localPlayer].bufferCache.assignedItems[k] = i
+                                if (j.item == v.item) and not inventoryUI.buffer[localPlayer].assignedItems[k] then
+                                    inventoryUI.buffer[localPlayer].assignedItems[k] = i
                                     break
                                 end
                             end
@@ -378,7 +376,7 @@ CGame.execOnModuleLoad(function()
             --[[
             for k, v in ipairs(inventory_bufferCache) do
                 if CInventory.CItems[v.item] then
-                    local slotIndex = inventoryUI.buffer[localPlayer].bufferCache.assignedItems[k] or false
+                    local slotIndex = inventoryUI.buffer[localPlayer].assignedItems[k] or false
                     if slotIndex then
                         local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
                         local verticalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemVerticalSlots) or 1)
@@ -442,8 +440,8 @@ CGame.execOnModuleLoad(function()
                         dxDrawRectangle(slot_offsetX, slot_offsetY, template.contentWrapper.itemGrid.inventory.slotSize, template.contentWrapper.itemGrid.inventory.slotSize, tocolor(unpack(template.contentWrapper.itemGrid.slot.bgColor)), false)
                     end
                 else
-                    if CInventory.CBuffer.slots[k] and CInventory.CBuffer.slots[k].movementType and CInventory.CBuffer.slots[k].movementType == "equipment" then
-                        local itemDetails, itemCategory = getItemDetails(CInventory.CBuffer.slots[k].item)
+                    if inventoryUI.buffer[localPlayer].assignedSlots[k] and inventoryUI.buffer[localPlayer].assignedSlots[k].movementType and inventoryUI.buffer[localPlayer].assignedSlots[k].movementType == "equipment" then
+                        local itemDetails, itemCategory = getItemDetails(inventoryUI.buffer[localPlayer].assignedSlots[k].item)
                         if itemDetails and itemCategory then
                             local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
                             local verticalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemVerticalSlots) or 1)
@@ -451,10 +449,10 @@ CGame.execOnModuleLoad(function()
                             local slot_column = k - (math.max(0, slot_row - 1)*maximumInventoryRowSlots)
                             local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_column - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
                             local slotWidth, slotHeight = horizontalSlotsToOccupy*template.contentWrapper.itemGrid.inventory.slotSize + ((horizontalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding), verticalSlotsToOccupy*template.contentWrapper.itemGrid.inventory.slotSize + ((verticalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding)
-                            local equippedIndex = CInventory.CBuffer.slots[k].equipmentIndex
+                            local equippedIndex = inventoryUI.buffer[localPlayer].assignedSlots[k].equipmentIndex
                             if not equippedIndex then
                                 for m, n in pairs(inventoryUI.gui.equipment.slot) do
-                                    if CInventory.CBuffer.slots[m] and CInventory.CBuffer.slots[m] == CInventory.CBuffer.slots[k].item then
+                                    if inventoryUI.buffer[localPlayer].assignedSlots[m] and inventoryUI.buffer[localPlayer].assignedSlots[m] == inventoryUI.buffer[localPlayer].assignedSlots[k].item then
                                         equippedIndex = m
                                         break
                                     end
@@ -717,8 +715,8 @@ CGame.execOnModuleLoad(function()
                         if inventoryUI.attachedItem.isEquippedItem then
                             local reservedSlotIndex = false
                             inventoryUI.isSyncScheduled = true
-                            CInventory.CBuffer.slots[releaseIndex] = nil
-                            for i, j in pairs(CInventory.CBuffer.slots) do
+                            inventoryUI.buffer[localPlayer].assignedSlots[releaseIndex] = nil
+                            for i, j in pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
                                 if tonumber(i) then
                                     if j.movementType and j.movementType == "equipment" and releaseIndex == j.equipmentIndex then
                                         reservedSlotIndex = i
@@ -729,7 +727,7 @@ CGame.execOnModuleLoad(function()
                             if reservedSlotIndex then
                                 inventoryUI.attachedItem.reservedSlotType = "equipment"
                                 inventoryUI.attachedItem.reservedSlot = reservedSlotIndex
-                                CInventory.CBuffer.slots[reservedSlotIndex] = {
+                                inventoryUI.buffer[localPlayer].assignedSlots[reservedSlotIndex] = {
                                     item = inventoryUI.attachedItem.item,
                                     loot = isItemAvailableForDropping.loot,
                                     movementType = "loot"
@@ -737,7 +735,7 @@ CGame.execOnModuleLoad(function()
                             end
                         else
                             inventoryUI.isSyncScheduled = true
-                            CInventory.CBuffer.slots[releaseIndex] = {
+                            inventoryUI.buffer[localPlayer].assignedSlots[releaseIndex] = {
                                 item = inventoryUI.attachedItem.item,
                                 loot = isItemAvailableForDropping.loot,
                                 movementType = "loot"
@@ -762,13 +760,13 @@ CGame.execOnModuleLoad(function()
                         inventoryUI.attachedItem.reservedSlot = reservedSlot
                         if loot == localPlayer then
                             inventoryUI.isSyncScheduled = true
-                            CInventory.CBuffer.slots[reservedSlot] = {
+                            inventoryUI.buffer[localPlayer].assignedSlots[reservedSlot] = {
                                 item = inventoryUI.attachedItem.item,
                                 movementType = "equipment"
                             }
                         else
                             inventoryUI.isSyncScheduled = true
-                            CInventory.CBuffer.slots[reservedSlot] = {
+                            inventoryUI.buffer[localPlayer].assignedSlots[reservedSlot] = {
                                 item = inventoryUI.attachedItem.item,
                                 loot = isItemAvailableForEquipping.loot,
                                 isAutoIndexed = true,
@@ -927,8 +925,8 @@ CGame.execOnModuleLoad(function()
         --Draws Equipment
         for i, j in pairs(inventoryUI.gui.equipment.slot) do
             local itemDetails, itemCategory = false, false
-            if CInventory.CBuffer and CInventory.CBuffer.slots[i] then
-                itemDetails, itemCategory = getItemDetails(CInventory.CBuffer.slots[i])
+            if CInventory.CBuffer and inventoryUI.buffer[localPlayer].assignedSlots[i] then
+                itemDetails, itemCategory = getItemDetails(inventoryUI.buffer[localPlayer].assignedSlots[i])
             end
             imports.beautify.native.drawImage(j.startX - j.borderSize, j.startY - j.borderSize, j.height/2 + j.borderSize, j.height/2 + j.borderSize, inventoryUI.gui.equipment.slotTopLeftCurvedEdgeBGPath, 0, 0, 0, tocolor(j.borderColor[1], j.borderColor[2], j.borderColor[3], j.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
             imports.beautify.native.drawImage(j.startX + j.width - j.height/2, j.startY - j.borderSize, j.height/2 + j.borderSize, j.height/2 + j.borderSize, inventoryUI.gui.equipment.slotTopRightCurvedEdgeBGPath, 0, 0, 0, tocolor(j.borderColor[1], j.borderColor[2], j.borderColor[3], j.borderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
@@ -1021,7 +1019,7 @@ CGame.execOnModuleLoad(function()
                     local exceededContentHeight =  totalContentHeight - template.contentWrapper.height
                     dxSetRenderTarget(j.gui.bufferRT, true)
                     if CInventory.CBuffer then
-                        for k, v in pairs(CInventory.CBuffer.slots) do
+                        for k, v in pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
                             if tonumber(k) then
                                 local isSlotToBeDrawn = true
                                 if v.movementType and v.movementType ~= "inventory" then
@@ -1138,8 +1136,8 @@ CGame.execOnModuleLoad(function()
                                 dxDrawRectangle(slot_offsetX, slot_offsetY, template.contentWrapper.itemGrid.inventory.slotSize, template.contentWrapper.itemGrid.inventory.slotSize, tocolor(unpack(template.contentWrapper.itemGrid.slot.bgColor)), false)
                             end
                         else
-                            if CInventory.CBuffer.slots[k] and CInventory.CBuffer.slots[k].movementType and CInventory.CBuffer.slots[k].movementType == "equipment" then
-                                local itemDetails, itemCategory = getItemDetails(CInventory.CBuffer.slots[k].item)
+                            if inventoryUI.buffer[localPlayer].assignedSlots[k] and inventoryUI.buffer[localPlayer].assignedSlots[k].movementType and inventoryUI.buffer[localPlayer].assignedSlots[k].movementType == "equipment" then
+                                local itemDetails, itemCategory = getItemDetails(inventoryUI.buffer[localPlayer].assignedSlots[k].item)
                                 if itemDetails and itemCategory then
                                     local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
                                     local verticalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemVerticalSlots) or 1)
@@ -1147,10 +1145,10 @@ CGame.execOnModuleLoad(function()
                                     local slot_column = k - (math.max(0, slot_row - 1)*maximumInventoryRowSlots)
                                     local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_column - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
                                     local slotWidth, slotHeight = horizontalSlotsToOccupy*template.contentWrapper.itemGrid.inventory.slotSize + ((horizontalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding), verticalSlotsToOccupy*template.contentWrapper.itemGrid.inventory.slotSize + ((verticalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding)
-                                    local equippedIndex = CInventory.CBuffer.slots[k].equipmentIndex
+                                    local equippedIndex = inventoryUI.buffer[localPlayer].assignedSlots[k].equipmentIndex
                                     if not equippedIndex then
                                         for m, n in pairs(inventoryUI.gui.equipment.slot) do
-                                            if CInventory.CBuffer.slots[m] and CInventory.CBuffer.slots[m] == CInventory.CBuffer.slots[k].item then
+                                            if inventoryUI.buffer[localPlayer].assignedSlots[m] and inventoryUI.buffer[localPlayer].assignedSlots[m] == inventoryUI.buffer[localPlayer].assignedSlots[k].item then
                                                 equippedIndex = m
                                                 break
                                             end
@@ -1236,7 +1234,7 @@ CGame.execOnModuleLoad(function()
                     end
                 else
                     if not inventoryUI.isSynced then
-                        for k, v in pairs(CInventory.CBuffer.slots) do
+                        for k, v in pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
                             if tonumber(k) and v.loot and v.loot == i then
                                 if v.movementType then
                                     if v.movementType == "loot" and (tonumber(j.inventory[v.item]) or 0) <= 0 then
