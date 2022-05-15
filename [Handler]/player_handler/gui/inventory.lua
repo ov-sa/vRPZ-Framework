@@ -314,7 +314,7 @@ CGame.execOnModuleLoad(function()
             inventoryUI.cache.keys.scroll.state, inventoryUI.cache.keys.scroll.streak  = imports.isMouseScrolled()
             inventoryUI.cache.isEnabled = inventoryUI.isUIEnabled()
         elseif renderData.renderType == "preRender" then
-            if not inventoryUI.bgTexture or CLIENT_MTA_RESTORED then inventoryUI.createBGTexture()
+            if not inventoryUI.bgTexture or not inventoryUI.gridTexture or CLIENT_MTA_RESTORED then inventoryUI.createBGTexture()
             elseif inventoryUI.vicinityInventory.bgTexture ~= ((inventoryUI.vicinityInventory.element and inventoryUI.buffer[(inventoryUI.vicinityInventory.element)] and true) or false) then inventoryUI.createBGTexture(true) end
             local isUIEnabled, isUIAttachmentTask = inventoryUI.cache.isEnabled, false
             local isUIActionEnabled = isUIEnabled and not inventoryUI.attachedItem
