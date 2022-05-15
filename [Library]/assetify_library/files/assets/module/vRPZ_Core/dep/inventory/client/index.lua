@@ -26,11 +26,11 @@ CInventory.isSlotAvailableForOrdering = function(item, slot, isEquipped)
     if not CPlayer.isInitialized(localPlayer) or not item or not slot or not imports.isInventoryUIEnabled() then return false end
     local itemData = CInventory.fetchItem(item)
     if not itemData then return false end
-    local maxSlots, usedSlots = CInventory.fetchParentMaxSlots(player), CInventory.fetchParentUsedSlots(player)
+    local maxSlots, usedSlots = CInventory.fetchParentMaxSlots(localPlayer), CInventory.fetchParentUsedSlots(localPlayer)
     if not maxSlots or not usedSlots or (slot > maxSlots) or usedSlots[slot] then return false end
     if not isEquipped then
         --TODO: ...
-        --local usedSlots = getElementUsedSlots(player)
+        --local usedSlots = getElementUsedSlots(localPlayer)
         --if (maxSlots - usedSlots) < CInventory.fetchItemWeight(item) then return false end
     end
     local slotRow, slotColumn = CInventory.fetchSlotLocation(slot)
