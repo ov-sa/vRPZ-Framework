@@ -3,6 +3,7 @@
 -----------------
 
 local imports = {
+    type = type,
     pairs = pairs,
     tonumber = tonumber,
     isElement = isElement,
@@ -119,7 +120,7 @@ CInventory = {
         for i, j in imports.pairs(assignedSlots) do
             local isValidSlot = true
             if localPlayer then
-                if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] and not imports.tonumber(i) then
+                if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] and (imports.type(i) == "number") then
                     isValidSlot = false
                 else
                     --TODO: WIP..
