@@ -138,9 +138,11 @@ CGame.execOnModuleLoad(function()
     inventoryUI.opacityAdjuster.height = inventoryUI.clientInventory.equipment[8].startY - inventoryUI.opacityAdjuster.startY - inventoryUI.margin - inventoryUI.titlebar.slot.height
     inventoryUI.createBGTexture = function(isRefresh)
         if CLIENT_MTA_MINIMIZED then return false end
-        if isRefresh and inventoryUI.bgTexture and imports.isElement(inventoryUI.bgTexture) then
-            imports.destroyElement(inventoryUI.bgTexture)
-            inventoryUI.bgTexture = nil
+        if isRefresh then
+            if inventoryUI.bgTexture and imports.isElement(inventoryUI.bgTexture) then
+                imports.destroyElement(inventoryUI.bgTexture)
+                inventoryUI.bgTexture = nil
+            end
         end
         inventoryUI.bgRT = imports.beautify.native.createRenderTarget(CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], true)
         imports.beautify.native.setRenderTarget(inventoryUI.bgRT, true)
@@ -148,12 +150,6 @@ CGame.execOnModuleLoad(function()
         local client_width, client_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
         imports.beautify.native.drawRectangle(client_startX, client_startY - inventoryUI.titlebar.height, client_width, inventoryUI.titlebar.height, inventoryUI.titlebar.bgColor, false)
         imports.beautify.native.drawRectangle(client_startX, client_startY, client_width, client_height, inventoryUI.clientInventory.bgColor, false)
-        for i = 1, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - 1, 1 do
-            imports.beautify.native.drawRectangle(inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*i), inventoryUI.clientInventory.width, 1, inventoryUI.clientInventory.dividerColor, false)
-        end
-        for i = 1, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - 1, 1 do
-            imports.beautify.native.drawRectangle(inventoryUI.clientInventory.startX + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*i), inventoryUI.clientInventory.startY + inventoryUI.titlebar.height, 1, inventoryUI.clientInventory.height, inventoryUI.clientInventory.dividerColor, false)
-        end
         for i = 1, #inventoryUI.clientInventory.equipment, 1 do
             local j = inventoryUI.clientInventory.equipment[i]
             local title_height = inventoryUI.titlebar.slot.height
@@ -168,7 +164,8 @@ CGame.execOnModuleLoad(function()
                 imports.beautify.native.drawRectangle(j.startX + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*k), j.startY, 1, j.height, inventoryUI.clientInventory.dividerColor, false)
             end
         end
-        if inventoryUI.vicinityInventory.element then
+        inventoryUI.vicinityInventory.bgTexture = (inventoryUI.vicinityInventory.element and true) or false
+        if inventoryUI.vicinityInventory.bgTexture then
             local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
             local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
             imports.beautify.native.drawRectangle(vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_width, inventoryUI.titlebar.height, inventoryUI.titlebar.bgColor, false)
@@ -181,6 +178,24 @@ CGame.execOnModuleLoad(function()
             inventoryUI.bgTexture = imports.beautify.native.createTexture(rtPixels, "dxt5", false, "clamp")
             imports.destroyElement(inventoryUI.bgRT)
             inventoryUI.bgRT = nil
+        end
+        if not inventoryUI.gridTexture then
+            inventoryUI.gridWidth, inventoryUI.gridHeight = (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows) + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize*math.max(0, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - 1)), (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns) + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize*math.max(0, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - 1))
+            inventoryUI.gridRT = imports.beautify.native.createRenderTarget(inventoryUI.gridWidth, inventoryUI.gridHeight, true)
+            imports.beautify.native.setRenderTarget(inventoryUI.gridRT, true)
+            for i = 1, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - 1, 1 do
+                imports.beautify.native.drawRectangle(0, (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*i, inventoryUI.clientInventory.width, 1, inventoryUI.clientInventory.dividerColor, false)
+            end
+            for i = 1, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - 1, 1 do
+                imports.beautify.native.drawRectangle((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*i, 0, 1, inventoryUI.clientInventory.height, inventoryUI.clientInventory.dividerColor, false)
+            end
+            imports.beautify.native.setRenderTarget()
+            local rtPixels = imports.beautify.native.getTexturePixels(inventoryUI.gridRT)
+            if rtPixels then
+                inventoryUI.gridTexture = imports.beautify.native.createTexture(rtPixels, "dxt5", false, "clamp")
+                imports.destroyElement(inventoryUI.gridRT)
+                inventoryUI.gridRT = nil
+            end
         end
     end
     inventoryUI.updateUILang = function() inventoryUI.isLangUpdated = true end
@@ -300,7 +315,8 @@ CGame.execOnModuleLoad(function()
             inventoryUI.cache.keys.scroll.state, inventoryUI.cache.keys.scroll.streak  = imports.isMouseScrolled()
             inventoryUI.cache.isEnabled = inventoryUI.isUIEnabled()
         elseif renderData.renderType == "preRender" then
-            if not inventoryUI.bgTexture then inventoryUI.createBGTexture(inventoryUI.isLangUpdated) end
+            if not inventoryUI.bgTexture then inventoryUI.createBGTexture()
+            elseif inventoryUI.vicinityInventory.bgTexture ~= ((inventoryUI.vicinityInventory.element and inventoryUI.buffer[(inventoryUI.vicinityInventory.element)] and true) or false) then inventoryUI.createBGTexture(true) end
             local isUIEnabled, isUIAttachmentTask = inventoryUI.cache.isEnabled, false
             local isUIActionEnabled = isUIEnabled and not inventoryUI.attachedItem
             local isLMBClicked = (inventoryUI.cache.keys.mouse == "mouse1") and isUIActionEnabled
@@ -496,6 +512,7 @@ CGame.execOnModuleLoad(function()
                 ]]--
             end
             imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], inventoryUI.bgTexture, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
+            imports.beautify.native.drawImage(inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height, inventoryUI.gridWidth, inventoryUI.gridHeight, inventoryUI.gridTexture, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
             imports.beautify.native.drawText(inventoryUI.buffer[localPlayer].name, client_startX, client_startY - inventoryUI.titlebar.height, client_startX + client_width, client_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font.instance, "center", "center", true, false, false)
             imports.beautify.native.drawImage(client_startX + inventoryUI.margin, client_startY + inventoryUI.margin, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height, inventoryUI.buffer[localPlayer].bufferRT, 0, 0, 0, -1, false)
             imports.beautify.native.drawImage(client_startX + inventoryUI.clientInventory.lockStat.startX, client_startY + inventoryUI.clientInventory.lockStat.startY, inventoryUI.clientInventory.lockStat.size, inventoryUI.clientInventory.lockStat.size, (isUIActionEnabled and inventoryUI.clientInventory.lockStat.unlockTexture) or inventoryUI.clientInventory.lockStat.lockTexture, 0, 0, 0, inventoryUI.titlebar.fontColor, false)
