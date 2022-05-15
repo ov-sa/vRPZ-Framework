@@ -8,7 +8,6 @@ local imports = {
     isElement = isElement,
     getElementType = getElementType,
     getElementData = getElementData,
-    isInventoryUIEnabled = isInventoryUIEnabled,
     table = table,
     math = math,
     string = string,
@@ -162,49 +161,6 @@ CInventory = {
             end
         end
         return usedSlots
-    end,
-
-    isSlotAvailableForOrdering = function(player, item, slot, isEquipped)
-        slot = imports.tonumber(slot)
-        if not CPlayer.isInitialized(player) or not item or not slot then return false end
-        local itemData = CInventory.fetchItem(item)
-        if not itemData then return false end
-        local maxSlots, usedSlots = nil, nil
-        if localPlayer then
-            if imports.isInventoryUIEnabled() then
-                maxSlots = CInventory.fetchParentMaxSlots(player)
-                usedSlots = CInventory.fetchParentUsedSlots(player)
-            end
-        else
-            if CInventory.CBuffer[player] then
-                maxSlots = CInventory.CBuffer[player].maxSlots
-                usedSlots = CInventory.fetchParentUsedSlots(player)
-            end
-        end
-        if maxSlots and usedSlots and (slot <= maxSlots) and not usedSlots[slot] then
-            if not isEquipped then
-                --TODO: ...
-                --local usedSlots = getElementUsedSlots(player)
-                --if (maxSlots - usedSlots) < CInventory.fetchItemWeight(item) then return false end
-            end
-            local slotRow, slotColumn = CInventory.fetchSlotLocation(slot)
-            if (itemData.data.itemWeight.columns - 1) <= (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - slotColumn) then
-                for i = slot, slot + (itemData.data.itemWeight.columns - 1), 1 do
-                    if (i > maxSlots) or usedSlots[i] then
-                        return false
-                    else
-                        for k = 2, itemData.data.itemWeight.rows, 1 do
-                            local v = i + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*(k - 1))
-                            if (v > maxSlots) or usedSlots[v] then
-                                return false
-                            end
-                        end
-                    end
-                end
-                return true
-            end
-        end
-        return false
     end
 }
 
