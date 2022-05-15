@@ -89,6 +89,12 @@ CInventory = {
         return FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] or false
     end,
 
+    fetchSlotIndex = function(row, column)
+        row, column = imports.tonumber(row), imports.tonumber(column)
+        if not row or not column then return false end
+        return (imports.math.max(0, row - 1)*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns) + column
+    end,
+
     fetchSlotLocation = function(slot)
         slot = imports.tonumber(slot)
         if not slot then return false end

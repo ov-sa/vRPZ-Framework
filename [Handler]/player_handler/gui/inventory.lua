@@ -414,7 +414,7 @@ CGame.execOnModuleLoad(function()
                 if slotRow and slotColumn then
                     outputChatBox("Hovered: "..slotRow.." : "..slotColumn)
                     if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition then
-                        local slotIndex = 0 ---TODO: GET SLOT INDEX FRM 
+                        local slotIndex = CInventory.fetchSlotIndex(slotRow, slotColumn)
                         if not inventoryUI.buffer[localPlayer].usedSlots[slotIndex] then
                             --TODO: READY TO DROP?
                             outputChatBox("TRynna drop in slot: "..slotIndex)
