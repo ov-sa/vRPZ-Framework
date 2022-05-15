@@ -324,7 +324,6 @@ CGame.execOnModuleLoad(function()
             local client_startX, client_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
             local client_width, client_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
             local maxSlots, assignedItems, usedSlots = inventoryUI.buffer[localPlayer].maxSlots, {}, inventoryUI.buffer[localPlayer].usedSlots
-            
             if CInventory.CBuffer then
                 --[[
                 for k, v in pairs(CInventory.CBuffer.slots) do
@@ -467,6 +466,7 @@ CGame.execOnModuleLoad(function()
                 end
             end
             ]]
+
             if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition then
                 --TODO: CHECK IF GRID IS HOVERED OR NOT
                 local cursorX, cursorY = imports.getAbsoluteCursorPosition()
