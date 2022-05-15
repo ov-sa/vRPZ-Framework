@@ -106,6 +106,7 @@ CGame.execOnModuleLoad(function()
             imports.destroyElement(scoreboardUI.rowRT)
             scoreboardUI.rowRT = nil
         end
+        return true
     end
     scoreboardUI.updateBuffer = function()
         local bufferCount = 0

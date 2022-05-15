@@ -198,6 +198,7 @@ CGame.execOnModuleLoad(function()
             j.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Title"][(CPlayer.CLanguage)], "  "))
             j.width = imports.beautify.native.getTextWidth(j.title, 1, loginUI.phases[1].optionsUI.font.instance) + 5
         end
+        return true
     end
     loginUI.phases[2].updateUILang = function(gender)
         gender = gender or FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default
@@ -250,9 +251,11 @@ CGame.execOnModuleLoad(function()
                 imports.beautify.selector.setDataList(j.element, j.content)
             end
         end
+        return true
     end
     loginUI.phases[3].updateUILang = function()
         loginUI.phases[3].navigator.__width = loginUI.phases[3].navigator.width + imports.beautify.native.getTextWidth(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator["Title"][(CPlayer.CLanguage)], 1, loginUI.phases[3].navigator.font.instance)
+        return true
     end
     loginUI.updateUILang = function()
         loginUI.phases[1].updateUILang()
@@ -261,6 +264,7 @@ CGame.execOnModuleLoad(function()
             loginUI.phases[2].updateUILang(characterData.gender)
         end
         loginUI.phases[3].updateUILang()
+        return true
     end
     imports.addEventHandler("Client:onUpdateLanguage", root, function()
         if not loginUI.state then return false end
@@ -287,6 +291,7 @@ CGame.execOnModuleLoad(function()
     loginUI.phases[2].updateCharacter = function()
         local characterClothing = {CCharacter.generateClothing((loginUI.phases[2].fetchSelection()))}
         imports.assetify.setElementAsset(loginUI.phases[2].character, "character", characterClothing[1], characterClothing[2], characterClothing[3])
+        return true
     end
     loginUI.phases[2].loadCharacter = function(loadDefault)
         if not loadDefault then
