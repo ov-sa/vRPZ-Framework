@@ -1124,42 +1124,6 @@ end)
                             end
                         end
                     end
-                    dxSetRenderTarget()
-                    imports.beautify.native.drawImage(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height, j.gui.bufferRT, 0, 0, 0, tocolor(255, 255, 255, 255*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                    if exceededContentHeight > 0 then
-                        local scrollOverlayStartX, scrollOverlayStartY = j.gui.startX + template.scrollBar.overlay.startX, j.gui.startY + template.scrollBar.overlay.startY
-                        local scrollOverlayWidth, scrollOverlayHeight =  template.scrollBar.overlay.width, template.scrollBar.overlay.height
-                        dxDrawRectangle(scrollOverlayStartX, scrollOverlayStartY, scrollOverlayWidth, scrollOverlayHeight, tocolor(template.scrollBar.overlay.bgColor[1], template.scrollBar.overlay.bgColor[2], template.scrollBar.overlay.bgColor[3], template.scrollBar.overlay.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                        local scrollBarWidth, scrollBarHeight =  scrollOverlayWidth, template.scrollBar.bar.height
-                        local scrollBarStartX, scrollBarStartY = scrollOverlayStartX, scrollOverlayStartY + ((scrollOverlayHeight - scrollBarHeight)*j.gui.scroller.percent*0.01)
-                        dxDrawRectangle(scrollBarStartX, scrollBarStartY, scrollBarWidth, scrollBarHeight, tocolor(template.scrollBar.bar.bgColor[1], template.scrollBar.bar.bgColor[2], template.scrollBar.bar.bgColor[3], template.scrollBar.bar.bgColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                        if prevScrollState and (not inventoryUI.attachedItem or not inventoryUI.attachedItem.animTickCounter) and (isMouseOnPosition(scrollOverlayStartX, scrollOverlayStartY, scrollOverlayWidth, scrollOverlayHeight) or isMouseOnPosition(j.gui.startX + template.contentWrapper.startX, j.gui.startY + template.contentWrapper.startY, template.contentWrapper.width, template.contentWrapper.height)) then
-                            if prevScrollState == "up" then
-                                if j.gui.scroller.percent <= 0 then
-                                    j.gui.scroller.percent = 0
-                                else
-                                    if exceededContentHeight < template.contentWrapper.height then
-                                        j.gui.scroller.percent = j.gui.scroller.percent - (10*prevScrollStreak.streak)
-                                    else
-                                        j.gui.scroller.percent = j.gui.scroller.percent - (1*prevScrollStreak.streak)
-                                    end
-                                    if j.gui.scroller.percent <= 0 then j.gui.scroller.percent = 0 end
-                                end
-                            elseif prevScrollState == "down" then
-                                if j.gui.scroller.percent >= 100 then
-                                    j.gui.scroller.percent = 100
-                                else
-                                    if exceededContentHeight < template.contentWrapper.height then
-                                        j.gui.scroller.percent = j.gui.scroller.percent + (10*prevScrollStreak.streak)
-                                    else
-                                        j.gui.scroller.percent = j.gui.scroller.percent + (1*prevScrollStreak.streak)
-                                    end
-                                    if j.gui.scroller.percent >= 100 then j.gui.scroller.percent = 100 end
-                                end
-                            end
-                            prevScrollState = false
-                        end
-                    end
                 else
                     if not inventoryUI.isSynced then
                         for k, v in pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
