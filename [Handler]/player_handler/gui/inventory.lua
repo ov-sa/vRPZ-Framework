@@ -524,7 +524,6 @@ CGame.execOnModuleLoad(function()
                 imports.beautify.native.drawImage(inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height, inventoryUI.gridWidth, inventoryUI.gridHeight, inventoryUI.gridTexture, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
             end
             if inventoryUI.vicinityInventory.element and inventoryUI.buffer[(inventoryUI.vicinityInventory.element)] then
-                local vicinity_bufferCache, vicinity_isHovered, vicinity_isSlotHovered = nil, nil, nil
                 local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
                 local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
                 imports.beautify.native.setRenderTarget(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, true)
@@ -552,12 +551,15 @@ CGame.execOnModuleLoad(function()
                         end
                     end
                 end
-                vicinity_bufferCache = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
-                vicinity_isHovered = imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height)
-                vicinity_bufferCache.overflowHeight =  imports.math.max(0, (inventoryUI.vicinityInventory.slotSize*#vicinity_bufferCache) + (inventoryUI.margin*imports.math.max(0, #vicinity_bufferCache - 1)) - inventoryUI.vicinityInventory.height)
+                local vicinity_bufferCache = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
+                local vicinity_bufferCount = #vicinity_bufferCache
+                local vicinity_isHovered, vicinity_isSlotHovered = imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height), nil
+                vicinity_bufferCache.overflowHeight = imports.math.max(0, (inventoryUI.vicinityInventory.slotSize*vicinity_bufferCount) + (inventoryUI.margin*imports.math.max(0, vicinity_bufferCount - 1)) - inventoryUI.vicinityInventory.height)
                 local vicinity_offsetY = vicinity_bufferCache.overflowHeight*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.animPercent*0.01
-                --TODO: MUST SHOW ONLY THE ROWS THAT ARE VISIBLE..
-                for i = 1, #vicinity_bufferCache, 1 do
+                local vicinity_rowHeight = inventoryUI.vicinityInventory.slotSize + inventoryUI.margin
+                local vicinity_row_startIndex = imports.math.floor(vicinity_offsetY/vicinity_rowHeight) + 1
+                local vicinity_row_endIndex = imports.math.min(vicinity_bufferCount, vicinity_row_startIndex + imports.math.ceil(inventoryUI.vicinityInventory.height/vicinity_rowHeight))
+                for i = vicinity_row_startIndex, vicinity_row_endIndex, 1 do
                     local j = vicinity_bufferCache[i]
                     j.offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1) - vicinity_offsetY
                     vicinity_isSlotHovered = (vicinity_isHovered and isUIActionEnabled and (vicinity_isSlotHovered or (imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + j.offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and i))) or false

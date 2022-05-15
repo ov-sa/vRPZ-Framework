@@ -145,7 +145,7 @@ CGame.execOnModuleLoad(function()
             local startX, startY = scoreboardUI.startX, scoreboardUI.startY
             local view_height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Columns"].height
             local row_height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Columns"].height + (scoreboardUI.margin*0.5)
-            local view_overflowHeight =  imports.math.max(0, (scoreboardUI.margin*0.5) + (row_height*bufferCount) - view_height)
+            local view_overflowHeight = imports.math.max(0, (scoreboardUI.margin*0.5) + (row_height*bufferCount) - view_height)
             local offsetY = view_overflowHeight*scoreboardUI.scroller.animPercent*0.01
             local row_startIndex = imports.math.floor(offsetY/row_height) + 1
             local row_endIndex = imports.math.min(bufferCount, row_startIndex + imports.math.ceil(view_height/row_height))
@@ -155,7 +155,7 @@ CGame.execOnModuleLoad(function()
             startY = startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Banner"].height
             imports.beautify.native.setRenderTarget(scoreboardUI.viewRT, true)
             for i = row_startIndex, row_endIndex, 1 do
-                local j = scoreboardUI.buffer[bufferCount]
+                local j = scoreboardUI.buffer[i]
                 local column_startY = (scoreboardUI.margin*0.5) + (row_height*(i - 1)) - offsetY
                 local isRowHovered = imports.isMouseOnPosition(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Columns"].height + column_startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Columns"].height)
                 if isRowHovered then
