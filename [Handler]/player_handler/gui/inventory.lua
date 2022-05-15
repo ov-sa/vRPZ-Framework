@@ -327,13 +327,12 @@ CGame.execOnModuleLoad(function()
                     if not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] and (imports.type(i) == "number") then
                         if not inventoryUI.isSynced then
                             if (j.movementType == "equip") and j.isAutoIndexed then
-                                --TODO: WIP...
-                                ---if (imports.tonumber(j.inventory[(j.item)]) or 0) <= 0 then
+                                if (inventoryUI.buffer[localPlayer].inventory[(j.item)] or 0) <= 0 then
                                     if not inventoryUI.buffer[localPlayer].bufferCache[("__"..j.item)] then
                                         imports.table.insert(inventoryUI.buffer[localPlayer].bufferCache, {item = j.item, amount = 1})
                                         inventoryUI.buffer[localPlayer].bufferCache[("__"..j.item)] = true
                                     end
-                                ---end
+                                end
                             end
                         end
                         --TODO:...
