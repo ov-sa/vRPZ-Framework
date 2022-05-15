@@ -321,23 +321,25 @@ CGame.execOnModuleLoad(function()
             local isLMBClicked = (inventoryUI.cache.keys.mouse == "mouse1") and isUIActionEnabled
             local client_startX, client_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
             local client_width, client_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
-            local maxSlots, assignedItems, usedSlots = inventoryUI.buffer[localPlayer].maxSlots, {}, inventoryUI.buffer[localPlayer].usedSlots
-            if CInventory.CBuffer then
-                --[[
-                for k, v in pairs(CInventory.CBuffer.slots) do
-                    if tonumber(k) then
+            local client_maxSlots, client_assignedItems, client_usedSlots = inventoryUI.buffer[localPlayer].maxSlots, {}, inventoryUI.buffer[localPlayer].usedSlots
+            if not inventoryUI.buffer[localPlayer].bufferCache and CInventory.CBuffer then
+                inventoryUI.buffer[localPlayer].bufferCache = {}
+                for i, j in imports.pairs(CInventory.CBuffer.slots) do
+                    if not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] and (imports.type(i) == "number") then
                         if not inventoryUI.isSynced then
-                            if v.movementType == "equipment" and v.isAutoReserved then
-                                if (tonumber(j.inventory[v.item]) or 0) <= 0 then
-                                    if not bufferCache["__"..v.item] then
-                                        table.insert(bufferCache, {item = v.item, itemValue = 1})
-                                        bufferCache["__"..v.item] = true
+                            if (j.movementType == "equip") and j.isAutoIndexed then
+                                --TODO: WIP...
+                                ---if (imports.tonumber(j.inventory[(j.item)]) or 0) <= 0 then
+                                    if not inventoryUI.buffer[localPlayer].bufferCache[("__"..j.item)] then
+                                        imports.table.insert(inventoryUI.buffer[localPlayer].bufferCache, {item = j.item, amount = 1})
+                                        inventoryUI.buffer[localPlayer].bufferCache[("__"..j.item)] = true
                                     end
-                                end
+                                ---end
                             end
                         end
                         --TODO:...
                         if v.movementType then
+                            --[[
                             local itemDetails, itemCategory = getItemDetails(v.item)
                             if itemDetails and itemCategory and CInventory.CItems[itemDetails.iconPath] then
                                 local slotIndex = k
@@ -356,11 +358,13 @@ CGame.execOnModuleLoad(function()
                                     end
                                 end
                             end
+                            ]]--
                         else
-                            for m, n in ipairs(bufferCache) do
-                                if v.item == n.item then
-                                    if not assignedItems[m] then
-                                        assignedItems[m] = k
+                            for k = 1, #inventoryUI.buffer[localPlayer].bufferCache, 1 do
+                                local v = inventoryUI.buffer[localPlayer].bufferCache[k]
+                                if j.item == v.item then
+                                    if not client_assignedItems[k] then
+                                        client_assignedItems[k] = i
                                         break
                                     end
                                 end
@@ -368,7 +372,6 @@ CGame.execOnModuleLoad(function()
                         end
                     end
                 end
-                ]]--
             end
             local client_bufferCache = inventoryUI.buffer[localPlayer].bufferCache
             local client_bufferCount = #client_bufferCache
@@ -376,7 +379,7 @@ CGame.execOnModuleLoad(function()
             --[[
             for k, v in ipairs(inventory_bufferCache) do
                 if CInventory.CItems[v.item] then
-                    local slotIndex = assignedItems[k] or false
+                    local slotIndex = client_assignedItems[k] or false
                     if slotIndex then
                         local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
                         local verticalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemVerticalSlots) or 1)
@@ -414,8 +417,8 @@ CGame.execOnModuleLoad(function()
                     end
                 end
             end
-            for k = 1, maxSlots, 1 do
-                if not usedSlots[k] then
+            for k = 1, client_maxSlots, 1 do
+                if not client_usedSlots[k] then
                     local slot_row = math.ceil(k/maximumInventoryRowSlots)
                     local slot_column = k - (math.max(0, slot_row - 1)*maximumInventoryRowSlots)
                     local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_column - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
@@ -423,10 +426,10 @@ CGame.execOnModuleLoad(function()
                     if inventoryUI.attachedItem and inventoryUI.attachedItem.parent and isElement(inventoryUI.attachedItem.parent) and inventoryUI.attachedItem.parent ~= localPlayer and inventoryUI.attachedItem.animTickCounter and inventoryUI.attachedItem.releaseType and inventoryUI.attachedItem.releaseType == "ordering" then
                         local slotIndexesToOccupy = {}
                         for m = inventoryUI.attachedItem.prevSlotIndex, inventoryUI.attachedItem.prevSlotIndex + (inventoryUI.attachedItem.occupiedRowSlots - 1), 1 do
-                            if m <= maxSlots then
+                            if m <= client_maxSlots then
                                 for x = 1, inventoryUI.attachedItem.occupiedColumnSlots, 1 do
                                     local succeedingColumnIndex = m + (maximumInventoryRowSlots*(x - 1))
-                                    if succeedingColumnIndex <= maxSlots then
+                                    if succeedingColumnIndex <= client_maxSlots then
                                         if k == succeedingColumnIndex then
                                             isSlotToBeDrawn = false
                                             break
@@ -766,7 +769,7 @@ CGame.execOnModuleLoad(function()
                             CInventory.CBuffer.slots[reservedSlot] = {
                                 item = inventoryUI.attachedItem.item,
                                 loot = isItemAvailableForEquipping.loot,
-                                isAutoReserved = true,
+                                isAutoIndexed = true,
                                 movementType = "equipment"
                             }
                         end
@@ -912,23 +915,6 @@ CGame.execOnModuleLoad(function()
 
 
     --[[
-    local bufferCache = {
-        "primary_weapon",
-        "secondary_weapon",
-        "Ammo",
-        "special_weapon",
-        "Medical",
-        "Nutrition",
-        "Backpack",
-        "Helmet",
-        "Armor",
-        "Suit",
-        "Tent",
-        "Other",
-        "Build",
-        "Utility"
-    }
-
     function displayInventoryUI()
         local isItemAvailableForOrdering = false
         local isItemAvailableForDropping = false
@@ -1046,7 +1032,7 @@ CGame.execOnModuleLoad(function()
                                     isSlotToBeDrawn = false
                                 end
                                 if not inventoryUI.isSynced then
-                                    if v.movementType == "equipment" and v.isAutoReserved then
+                                    if v.movementType == "equipment" and v.isAutoIndexed then
                                         if (tonumber(j.inventory[v.item]) or 0) <= 0 then
                                             if not bufferCache["__"..v.item] then
                                                 table.insert(bufferCache, {item = v.item, itemValue = 1})
@@ -1263,7 +1249,7 @@ CGame.execOnModuleLoad(function()
                                             bufferCache["__"..v.item] = true
                                         end
                                     elseif not inventoryUI.attachedItem then
-                                        if (v.movementType == "inventory" and not v.isOrdering) or (v.movementType == "equipment" and v.isAutoReserved) then
+                                        if (v.movementType == "inventory" and not v.isOrdering) or (v.movementType == "equipment" and v.isAutoIndexed) then
                                             if not bufferCache["__"..v.item] then
                                                 for m, n in ipairs(bufferCache) do
                                                     if n.item == v.item then
