@@ -127,7 +127,7 @@ CInventory = {
                             isValidSlot = false
                         else
                             if j.translation == "equipment" then
-                                if inventoryUI.attachedItem and (inventoryUI.attachedItem.itemBox == localPlayer) and (inventoryUI.attachedItem.prevSlotIndex == j.equipmentIndex) then                
+                                if inventoryUI.attachedItem and (inventoryUI.attachedItem.parent == localPlayer) and (inventoryUI.attachedItem.prevSlot == j.equipmentIndex) then                
                                     if not inventoryUI.attachedItem.animTickCounter then
                                         isValidSlot = false
                                     end
