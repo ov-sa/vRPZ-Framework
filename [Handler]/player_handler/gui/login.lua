@@ -25,7 +25,6 @@ local imports = {
     setElementDimension = setElementDimension,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
-    removeEventHandler = removeEventHandler,
     triggerEvent = triggerEvent,
     triggerServerEvent = triggerServerEvent,
     isTimer = isTimer,

@@ -28,7 +28,6 @@ local imports = {
     showChat = showChat,
     showCursor = showCursor,
     string = string,
-    table = table,
     math = math,
     beautify = beautify
 }
