@@ -183,7 +183,7 @@ CGame.execOnModuleLoad(function()
             inventoryUI.gridWidth, inventoryUI.gridHeight = (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows) + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize*math.max(0, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - 1)), (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns + 2) + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize*math.max(0, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns + 1))
             inventoryUI.gridRT = imports.beautify.native.createRenderTarget(inventoryUI.gridWidth, inventoryUI.gridHeight, true)
             imports.beautify.native.setRenderTarget(inventoryUI.gridRT, true)
-            for i = 1, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - 1, 1 do
+            for i = 1, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows + 1, 1 do
                 imports.beautify.native.drawRectangle(0, (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*i, inventoryUI.clientInventory.width, 1, inventoryUI.clientInventory.dividerColor, false)
             end
             for i = 1, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - 1, 1 do
