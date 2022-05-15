@@ -318,6 +318,7 @@ CGame.execOnModuleLoad(function()
             if not inventoryUI.bgTexture or not inventoryUI.gridTexture or CLIENT_MTA_RESTORED then inventoryUI.createBGTexture()
             elseif inventoryUI.vicinityInventory.bgTexture ~= ((inventoryUI.vicinityInventory.element and inventoryUI.buffer[(inventoryUI.vicinityInventory.element)] and true) or false) then inventoryUI.createBGTexture(true) end
             local cursorX, cursorY = imports.getAbsoluteCursorPosition()
+            --local isItemAvailableForOrdering, isItemAvailableForEquipping, isItemAvailableForDropping = false, false, false
             local isUIEnabled, isUIAttachmentTask = inventoryUI.cache.isEnabled, false
             local isUIActionEnabled = isUIEnabled and not inventoryUI.attachedItem
             local isLMBClicked = (inventoryUI.cache.keys.mouse == "mouse1") and isUIActionEnabled
@@ -412,48 +413,21 @@ CGame.execOnModuleLoad(function()
             if client_isHovered then
                 local slotRow, slotColumn = inventoryUI.fetchUIGridFromOffset(cursorX - inventoryUI.clientInventory.startX, cursorY - (inventoryUI.clientInventory.startY + inventoryUI.titlebar.height))
                 if slotRow and slotColumn then
-                    if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition then
-                        local slotIndex = CInventory.fetchSlotIndex(slotRow, slotColumn)
-                        if not inventoryUI.buffer[localPlayer].usedSlots[slotIndex] then
-                            if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, slotIndex) then
-                                outputChatBox("SLOT AVAILABLE TO DROP: "..slotIndex)
-                            else
-                                outputChatBox("SLOT NOT AVAILABLE TO DROP: "..slotIndex)
+                    if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and not inventoryUI.attachedItem.isOrderable then
+                        local slot = CInventory.fetchSlotIndex(slotRow, slotColumn)
+                        if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, slot) then
+                            inventoryUI.attachedItem.isOrderable = {slot = slot, tyoe = "order"}
+                        end
+                        for i = slot, slot + (CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2] - 1), 1 do
+                            for k = 1, CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1], 1 do
+                                local v = m + (maximumInventoryRowSlots*(x - 1))
                             end
                         end
+                            --TODO: DRAW THE SUCCESS/FAIL HINT ICON
+                        --imports.beautify.native.drawRectangle(__slot_offsetX, __slot_offsetY, 100, 100, tocolor(255, 0, 0, 100), false)
                     end
                 end
             end
-            --TODO: REMOVE LATER
-            --[[
-            for i = 1, inventoryUI.buffer[localPlayer].maxSlots, 1 do
-                if inventoryUI.buffer[localPlayer].usedSlots[i] then
-                    if inventoryUI.buffer[localPlayer].assignedSlots[k] and inventoryUI.buffer[localPlayer].assignedSlots[k].translation and inventoryUI.buffer[localPlayer].assignedSlots[k].translation == "equipment" then
-                        local itemDetails, itemCategory = getItemDetails(inventoryUI.buffer[localPlayer].assignedSlots[k].item)
-                        if itemDetails and itemCategory then
-                            local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
-                            local verticalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemVerticalSlots) or 1)
-                            local slotRow = math.ceil(k/maximumInventoryRowSlots)
-                            local slotColumn = k - (math.max(0, slotRow - 1)*maximumInventoryRowSlots)
-                            local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slotColumn - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slotRow - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
-                            local slotWidth, slotHeight = horizontalSlotsToOccupy*template.contentWrapper.itemGrid.inventory.slotSize + ((horizontalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding), verticalSlotsToOccupy*template.contentWrapper.itemGrid.inventory.slotSize + ((verticalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding)
-                            local equippedIndex = inventoryUI.buffer[localPlayer].assignedSlots[k].equipmentIndex
-                            if not equippedIndex then
-                                for m, n in pairs(inventoryUI.gui.equipment.slot) do
-                                    if inventoryUI.buffer[localPlayer].assignedSlots[m] and inventoryUI.buffer[localPlayer].assignedSlots[m] == inventoryUI.buffer[localPlayer].assignedSlots[k].item then
-                                        equippedIndex = m
-                                        break
-                                    end
-                                end
-                            end
-                            if equippedIndex then
-                                dxDrawText(string.upper("EQUIPPED: "..equippedIndex), slot_offsetX, slot_offsetY, slot_offsetX + slotWidth, slot_offsetY + slotHeight, tocolor(unpack(template.contentWrapper.itemGrid.slot.fontColor)), 1, template.contentWrapper.itemGrid.slot.font.instance, "right", "bottom", true, true, false)
-                            end
-                        end
-                    end
-                end
-            end
-            ]]
             imports.beautify.native.setRenderTarget()
             imports.beautify.native.drawText(inventoryUI.buffer[localPlayer].name, client_startX, client_startY - inventoryUI.titlebar.height, client_startX + client_width, client_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font.instance, "center", "center", true, false, false)
             imports.beautify.native.drawImage(client_startX + inventoryUI.clientInventory.lockStat.startX, client_startY + inventoryUI.clientInventory.lockStat.startY, inventoryUI.clientInventory.lockStat.size, inventoryUI.clientInventory.lockStat.size, (isUIActionEnabled and inventoryUI.clientInventory.lockStat.unlockTexture) or inventoryUI.clientInventory.lockStat.lockTexture, 0, 0, 0, inventoryUI.titlebar.fontColor, false)
@@ -855,9 +829,6 @@ end)
 --[[
 --TODO: REMOVE LATER...........
     function displayInventoryUI()
-        local isItemAvailableForOrdering = false
-        local isItemAvailableForDropping = false
-        local isItemAvailableForEquipping = false
         local playerMaxSlots = CInventory.fetchParentMaxSlots(localPlayer)
         local playerUsedSlots = getElementUsedSlots(localPlayer)
 
@@ -1020,41 +991,6 @@ end)
                                     end
                                     if equippedIndex then
                                         dxDrawText(string.upper("EQUIPPED: "..equippedIndex), slot_offsetX, slot_offsetY, slot_offsetX + slotWidth, slot_offsetY + slotHeight, tocolor(unpack(template.contentWrapper.itemGrid.slot.fontColor)), 1, template.contentWrapper.itemGrid.slot.font.instance, "right", "bottom", true, true, false)
-                                    end
-                                end
-                            end
-                        end
-                    end
-                    if inventoryUI.attachedItem and not inventoryUI.attachedItem.animTickCounter then
-                        for k = 1, maxSlots, 1 do
-                            if not usedSlots[k] then
-                                local slotRow = math.ceil(k/maximumInventoryRowSlots)
-                                local slotColumn = k - (math.max(0, slotRow - 1)*maximumInventoryRowSlots)
-                                local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slotColumn - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slotRow - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
-                                if (slot_offsetY >= 0) and ((slot_offsetY + template.contentWrapper.itemGrid.inventory.slotSize) <= template.contentWrapper.height) then
-                                    local isSlotHovered = isMouseOnPosition(j.gui.startX + template.contentWrapper.startX + slot_offsetX, j.gui.startY + template.contentWrapper.startY + slot_offsetY, template.contentWrapper.itemGrid.inventory.slotSize, template.contentWrapper.itemGrid.inventory.slotSize)
-                                    if isSlotHovered then
-                                        local isSlotAvailable = isPlayerSlotAvailableForOrdering(localPlayer, inventoryUI.attachedItem.item, k, inventoryUI.attachedItem.isEquippedItem)
-                                        if isSlotAvailable then
-                                            isItemAvailableForOrdering = {
-                                                slotIndex = k,
-                                                offsetX = slot_offsetX,
-                                                offsetY = slot_offsetY
-                                            }
-                                        end
-                                        for m = k, k + (inventoryUI.attachedItem.occupiedRowSlots - 1), 1 do
-                                            for x = 1, inventoryUI.attachedItem.occupiedColumnSlots, 1 do
-                                                local succeedingColumnIndex = m + (maximumInventoryRowSlots*(x - 1))
-                                                if succeedingColumnIndex <= maxSlots and not usedSlots[succeedingColumnIndex] then
-                                                    local _slot_row = math.ceil(succeedingColumnIndex/maximumInventoryRowSlots)
-                                                    local _slot_column = succeedingColumnIndex - (math.max(0, _slot_row - 1)*maximumInventoryRowSlots)
-                                                    local _slot_offsetX, _slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, _slot_column - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, _slot_row - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
-                                                    if _slot_column >= slotColumn then
-                                                        dxDrawRectangle(_slot_offsetX, _slot_offsetY, template.contentWrapper.itemGrid.inventory.slotSize, template.contentWrapper.itemGrid.inventory.slotSize, tocolor(unpack((isSlotAvailable and template.contentWrapper.itemGrid.slot.availableBGColor) or template.contentWrapper.itemGrid.slot.unavailableBGColor)), false)
-                                                    end
-                                                end
-                                            end
-                                        end
                                     end
                                 end
                             end
