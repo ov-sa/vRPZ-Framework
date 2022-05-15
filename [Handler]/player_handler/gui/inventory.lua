@@ -418,13 +418,9 @@ CGame.execOnModuleLoad(function()
                         if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, slot) then
                             inventoryUI.attachedItem.isOrderable = {slot = slot, tyoe = "order"}
                         end
-                        for i = slot, slot + (CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2] - 1), 1 do
-                            for k = 1, CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1], 1 do
-                                local v = m + (maximumInventoryRowSlots*(x - 1))
-                            end
-                        end
+                        local slotWidth, slotHeight = CInventory.fetchSlotDimensions(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - slotColumn, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - slotRow)
                             --TODO: DRAW THE SUCCESS/FAIL HINT ICON
-                        --imports.beautify.native.drawRectangle(__slot_offsetX, __slot_offsetY, 100, 100, tocolor(255, 0, 0, 100), false)
+                        --imports.beautify.native.drawRectangle(__slot_offsetX, __slot_offsetY, slotWidth, slotHeight, tocolor(255, 0, 0, 100), false)
                     end
                 end
             end
