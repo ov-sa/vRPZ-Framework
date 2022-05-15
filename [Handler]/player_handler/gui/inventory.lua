@@ -656,22 +656,14 @@ CGame.execOnModuleLoad(function()
                 inventoryUI.opacityAdjuster.bgColor = imports.tocolor(255, 255, 255, 255*0.01*(inventoryUI.opacityAdjuster.range[1] + ((inventoryUI.opacityAdjuster.range[2] - inventoryUI.opacityAdjuster.range[1])*inventoryUI.opacityAdjuster.percent*0.01)))
             end
             if inventoryUI.attachedItem then
-                --TODO: HIGHLY WIP..
-                --[[
-                local horizontalSlotsToOccupy = inventoryUI.attachedItem.occupiedRowSlots
-                local verticalSlotsToOccupy = inventoryUI.attachedItem.occupiedColumnSlots
-                local iconWidth, iconHeight = 0, inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize*verticalSlotsToOccupy
-                local originalWidth, originalHeight = iconDimensions[itemDetails.iconPath].width, iconDimensions[itemDetails.iconPath].height
-                iconWidth = (originalWidth / originalHeight)*iconHeight
-                ]]
                 if not inventoryUI.attachedItem.isOnTransition and (CLIENT_MTA_WINDOW_ACTIVE or not imports.isKeyOnHold("mouse1") or not isUIEnabled) then
                     if isUIAttachmentTask == "order" then
                         --[[
-                        local slotWidth, slotHeight = horizontalSlotsToOccupy*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((horizontalSlotsToOccupy - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding), verticalSlotsToOccupy*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((verticalSlotsToOccupy - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)
+                        local slotWidth, slotHeight = CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding), CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)
                         local releaseIndex = inventoryUI.attachedItem.prevSlotIndex
                         inventoryUI.attachedItem.prevSlotIndex = isItemAvailableForOrdering.slotIndex
-                        inventoryUI.attachedItem.prevPosX = inventoryUI.buffer[localPlayer].gui.startX + inventoryUI.gui.itemBox.templates[1].contentWrapper.startX + isItemAvailableForOrdering.offsetX + ((slotWidth - iconWidth)/2)
-                        inventoryUI.attachedItem.prevPosY = inventoryUI.buffer[localPlayer].gui.startY + inventoryUI.gui.itemBox.templates[1].contentWrapper.startY + isItemAvailableForOrdering.offsetY + ((slotHeight - iconHeight)/2)
+                        inventoryUI.attachedItem.prevPosX = inventoryUI.buffer[localPlayer].gui.startX + inventoryUI.gui.itemBox.templates[1].contentWrapper.startX + isItemAvailableForOrdering.offsetX + ((slotWidth - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1])/2)
+                        inventoryUI.attachedItem.prevPosY = inventoryUI.buffer[localPlayer].gui.startY + inventoryUI.gui.itemBox.templates[1].contentWrapper.startY + isItemAvailableForOrdering.offsetY + ((slotHeight - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2])/2)
                         inventoryUI.attachedItem.releaseType = isUIAttachmentTask
                         inventoryUI.attachedItem.releaseIndex = releaseIndex
                         if inventoryUI.attachedItem.parent == localPlayer then
