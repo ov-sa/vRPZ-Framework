@@ -362,11 +362,9 @@ CGame.execOnModuleLoad(function()
                         else
                             for k = 1, #inventoryUI.buffer[localPlayer].bufferCache, 1 do
                                 local v = inventoryUI.buffer[localPlayer].bufferCache[k]
-                                if j.item == v.item then
-                                    if not client_assignedItems[k] then
-                                        client_assignedItems[k] = i
-                                        break
-                                    end
+                                if (j.item == v.item) and not client_assignedItems[k] then
+                                    client_assignedItems[k] = i
+                                    break
                                 end
                             end
                         end
