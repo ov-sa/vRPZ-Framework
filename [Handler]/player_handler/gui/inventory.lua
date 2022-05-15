@@ -321,9 +321,10 @@ CGame.execOnModuleLoad(function()
             local isLMBClicked = (inventoryUI.cache.keys.mouse == "mouse1") and isUIActionEnabled
             local client_startX, client_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
             local client_width, client_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
-            local client_assignedItems = {}
             if not inventoryUI.buffer[localPlayer].bufferCache and CInventory.CBuffer then
-                inventoryUI.buffer[localPlayer].bufferCache = {}
+                inventoryUI.buffer[localPlayer].bufferCache = {
+                    assignedItems = {}
+                }
                 for i, j in imports.pairs(CInventory.CBuffer.slots) do
                     if not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] and (imports.type(i) == "number") then
                         if not inventoryUI.isSynced then
@@ -362,8 +363,8 @@ CGame.execOnModuleLoad(function()
                         else
                             for k = 1, #inventoryUI.buffer[localPlayer].bufferCache, 1 do
                                 local v = inventoryUI.buffer[localPlayer].bufferCache[k]
-                                if (j.item == v.item) and not client_assignedItems[k] then
-                                    client_assignedItems[k] = i
+                                if (j.item == v.item) and not inventoryUI.buffer[localPlayer].bufferCache.assignedItems[k] then
+                                    inventoryUI.buffer[localPlayer].bufferCache.assignedItems[k] = i
                                     break
                                 end
                             end
@@ -377,7 +378,7 @@ CGame.execOnModuleLoad(function()
             --[[
             for k, v in ipairs(inventory_bufferCache) do
                 if CInventory.CItems[v.item] then
-                    local slotIndex = client_assignedItems[k] or false
+                    local slotIndex = inventoryUI.buffer[localPlayer].bufferCache.assignedItems[k] or false
                     if slotIndex then
                         local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
                         local verticalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemVerticalSlots) or 1)
