@@ -160,7 +160,7 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, loadBuffer)
         --imports.triggerEvent("Player:onDeath", source, nil, false, nil, 3)
         imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false, FRAMEWORK_CONFIGS["Spawns"]["Hint"])
     else
-        --triggerClientEvent(source, ""Client:onSyncInventoryBuffer"", source, playerInventorySlots[source])
+        --triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, playerInventorySlots[source])
         imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false)
         imports.showChat(source, true)
     end
