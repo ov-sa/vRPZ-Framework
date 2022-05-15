@@ -180,9 +180,9 @@ CGame.execOnModuleLoad(function()
             inventoryUI.bgRT = nil
         end
         if not inventoryUI.gridTexture then
-            inventoryUI.gridWidth, inventoryUI.gridHeight = (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows) + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize*math.max(0, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - 1)), (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns + 2)) + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize*math.max(0, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns + 1))
-            inventoryUI.gridRT = imports.beautify.native.createRenderTarget(inventoryUI.gridWidth, inventoryUI.gridHeight, true)
-            imports.beautify.native.setRenderTarget(inventoryUI.gridRT, true)
+            inventoryUI.gridWidth, inventoryUI.gridHeight = CInventory.fetchSlotDimensions(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows + 2, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)
+            inventoryUI.gridTexture = imports.beautify.native.createRenderTarget(inventoryUI.gridWidth, inventoryUI.gridHeight, true)
+            imports.beautify.native.setRenderTarget(inventoryUI.gridTexture, true)
             for i = 1, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows + 1, 1 do
                 imports.beautify.native.drawRectangle(0, (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*i, inventoryUI.clientInventory.width, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize, inventoryUI.clientInventory.dividerColor, false)
             end
@@ -190,12 +190,6 @@ CGame.execOnModuleLoad(function()
                 imports.beautify.native.drawRectangle((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*i, 0, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize, inventoryUI.clientInventory.height + ((FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*2), inventoryUI.clientInventory.dividerColor, false)
             end
             imports.beautify.native.setRenderTarget()
-            local rtPixels = imports.beautify.native.getTexturePixels(inventoryUI.gridRT)
-            if rtPixels then
-                inventoryUI.gridTexture = imports.beautify.native.createTexture(rtPixels, "dxt5", false, "clamp")
-                imports.destroyElement(inventoryUI.gridRT)
-                inventoryUI.gridRT = nil
-            end
         end
     end
     inventoryUI.updateUILang = function() inventoryUI.isLangUpdated = true end
