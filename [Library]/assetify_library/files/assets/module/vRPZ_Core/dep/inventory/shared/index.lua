@@ -188,12 +188,12 @@ CInventory = {
                 --if (maxSlots - usedSlots) < CInventory.fetchItemWeight(item) then return false end
             end
             local slotRow, slotColumn = CInventory.fetchSlotLocation(slot)
-            if (itemData.itemData.data.itemWeight.columns - 1) <= (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - slotColumn) then
-                for i = slot, slot + (itemData.itemData.data.itemWeight.columns - 1), 1 do
+            if (itemData.data.itemWeight.columns - 1) <= (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - slotColumn) then
+                for i = slot, slot + (itemData.data.itemWeight.columns - 1), 1 do
                     if (i > maxSlots) or usedSlots[i] then
                         return false
                     else
-                        for k = 2, itemData.itemData.data.itemWeight.rows, 1 do
+                        for k = 2, itemData.data.itemWeight.rows, 1 do
                             local v = i + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*(k - 1))
                             if (v > maxSlots) or usedSlots[v] then
                                 return false
@@ -225,6 +225,7 @@ imports.assetify.execOnLoad(function()
             local cAsset = imports.assetify.getAsset("inventory", j)
             if cAsset and cAsset.manifestData.itemSlot and FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)] then
                 CInventory.CItems[j] = {pack = "inventory", ref = imports.string.lower(j), slot = cAsset.manifestData.itemSlot, data = cAsset.manifestData}
+                CInventory.CItems[j].data.itemWeight.rows, CInventory.CItems[j].data.itemWeight.columns = imports.math.max(1, CInventory.CItems[j].data.itemWeight.rows), imports.math.max(1, CInventory.CItems[j].data.itemWeight.columns)
                 CInventory.CCategories[(cAsset.manifestData.itemSlot)][j] = true
             end
         end
@@ -235,6 +236,7 @@ imports.assetify.execOnLoad(function()
             local cAsset = imports.assetify.getAsset("weapon", j)
             if cAsset and cAsset.manifestData.itemSlot and FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)] and (FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)].identifier == "Weapon") then
                 CInventory.CItems[j] = {pack = "weapon", ref = imports.string.lower(j), slot = cAsset.manifestData.itemSlot, data = cAsset.manifestData}
+                CInventory.CItems[j].data.itemWeight.rows, CInventory.CItems[j].data.itemWeight.columns = imports.math.max(1, CInventory.CItems[j].data.itemWeight.rows), imports.math.max(1, CInventory.CItems[j].data.itemWeight.columns)
                 CInventory.CCategories[(cAsset.manifestData.itemSlot)][j] = true
             end
         end
