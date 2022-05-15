@@ -200,7 +200,7 @@ addEventHandler("onPlayerEquipItemInInventory", root, function(item, prevSlotInd
                 playerInventorySlots[source].slots[prevSlotIndex] = {
                     item = item,
                     equipmentIndex = newSlotIndex,
-                    movementType = "equipment"
+                    translation = "equipment"
                 }
                 playerInventorySlots[source].slots[newSlotIndex] = item
                 refreshPlayerEquipmentSlot(source, newSlotIndex)
@@ -209,7 +209,7 @@ addEventHandler("onPlayerEquipItemInInventory", root, function(item, prevSlotInd
                 playerInventorySlots[source].slots[reservedSlotIndex] = {
                     item = item,
                     equipmentIndex = newSlotIndex,
-                    movementType = "equipment"
+                    translation = "equipment"
                 }
                 playerInventorySlots[source].slots[newSlotIndex] = item
                 refreshPlayerEquipmentSlot(source, newSlotIndex)

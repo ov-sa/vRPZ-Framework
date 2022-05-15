@@ -26,7 +26,7 @@ function moveItemInInventory(item, slotIndex, loot)
         item = item,
         loot = loot,
         isOrdering = false,
-        movementType = "inventory"
+        translation = "inventory"
     }
     triggerServerEvent("onPlayerMoveItemInInventory", localPlayer, item, slotIndex, loot)
     return true
@@ -45,7 +45,7 @@ function moveItemInLoot(item, slotIndex, loot)
     CInventory.CBuffer.slots[slotIndex] = {
         item = item,
         loot = loot,
-        movementType = "loot"
+        translation = "loot"
     }
     triggerServerEvent("onPlayerMoveItemInLoot", localPlayer, item, slotIndex, loot)
     return true
@@ -71,7 +71,7 @@ function orderItemInInventory(item, prevSlotIndex, newSlotIndex)
     CInventory.CBuffer.slots[newSlotIndex] = {
         item = item,
         isOrdering = true,
-        movementType = "inventory"
+        translation = "inventory"
     }
     triggerServerEvent("onPlayerOrderItemInInventory", localPlayer, item, prevSlotIndex, newSlotIndex)
     return true
@@ -91,14 +91,14 @@ function equipItemInInventory(item, prevSlotIndex, reservedSlotIndex, newSlotInd
         CInventory.CBuffer.slots[prevSlotIndex] = {
             item = item,
             isAutoReserved = false,
-            movementType = "equipment"
+            translation = "equipment"
         }
     else
         CInventory.CBuffer.slots[reservedSlotIndex] = {
             item = item,
             loot = loot,
             isAutoReserved = true,
-            movementType = "equipment"
+            translation = "equipment"
         }
     end
     CInventory.CBuffer.slots[newSlotIndex] = item
@@ -118,7 +118,7 @@ function unequipItemInInventory(item, prevSlotIndex, newSlotIndex, loot, reserve
         reservedSlotIndex = false
         for i, j in pairs(CInventory.CBuffer.slots) do
             if tonumber(i) then
-                if j.movementType and j.movementType == "equipment" and prevSlotIndex == j.equipmentIndex then
+                if j.translation and j.translation == "equipment" and prevSlotIndex == j.equipmentIndex then
                     reservedSlotIndex = i
                     break
                 end
@@ -135,13 +135,13 @@ function unequipItemInInventory(item, prevSlotIndex, newSlotIndex, loot, reserve
         CInventory.CBuffer.slots[newSlotIndex] = {
             item = item,
             isOrdering = true,
-            movementType = "inventory"
+            translation = "inventory"
         }
     else
         CInventory.CBuffer.slots[reservedSlotIndex] = {
             item = item,
             loot = loot,
-            movementType = "loot"
+            translation = "loot"
         }
     end
     triggerServerEvent("onPlayerUnequipItemInInventory", localPlayer, item, prevSlotIndex, reservedSlotIndex, newSlotIndex, loot)

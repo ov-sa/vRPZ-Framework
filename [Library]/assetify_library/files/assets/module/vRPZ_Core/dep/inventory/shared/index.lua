@@ -3,7 +3,6 @@
 -----------------
 
 local imports = {
-    type = type,
     pairs = pairs,
     tonumber = tonumber,
     isElement = isElement,
@@ -120,16 +119,14 @@ CInventory = {
         for i, j in imports.pairs(assignedSlots) do
             local isValidSlot = true
             if localPlayer then
-                if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] and (imports.type(i) == "number") then
+                if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] then
                     isValidSlot = false
                 else
-                    --TODO: WIP..
-                    --[[
-                    if j.movementType then
-                        if j.movementType ~= "inventory" and j.movementType ~= "equipment" then
+                    if j.translation then
+                        if (j.translation ~= "inventory") and (j.translation ~= "equipment") then
                             isValidSlot = false
                         else
-                            if j.movementType == "equipment" then
+                            if j.translation == "equipment" then
                                 if inventoryUI.attachedItem and (inventoryUI.attachedItem.itemBox == localPlayer) and (inventoryUI.attachedItem.prevSlotIndex == j.equipmentIndex) then                
                                     if not inventoryUI.attachedItem.animTickCounter then
                                         isValidSlot = false
@@ -138,7 +135,6 @@ CInventory = {
                             end
                         end
                     end
-                    ]]
                 end
             end
             if isValidSlot then

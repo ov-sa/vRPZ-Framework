@@ -325,7 +325,7 @@ CGame.execOnModuleLoad(function()
             if not inventoryUI.buffer[localPlayer].bufferCache then
                 inventoryUI.buffer[localPlayer].bufferCache, inventoryUI.buffer[localPlayer].assignedItems = {}, {}
                 for i, j in imports.pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
-                    if not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] and (imports.type(i) == "number") then
+                    if not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] then
                         if not inventoryUI.isSynced then
                             if (j.translation == "equipment") and j.isAutoIndexed then
                                 if (inventoryUI.buffer[localPlayer].inventory[(j.item)] or 0) <= 0 then
