@@ -164,7 +164,7 @@ CInventory = {
     end,
 
     isSlotAvailableForOrdering = function(player, item, slot, isEquipped)
-        slotIndex = imports.tonumber(slotIndex)
+        slot = imports.tonumber(slot)
         if not CPlayer.isInitialized(player) or not item or not slot then return false end
         local itemData = CInventory.fetchItem(item)
         if not itemData then return false end
@@ -180,15 +180,15 @@ CInventory = {
                 usedSlots = CInventory.fetchParentUsedSlots(player)
             end
         end
-        if maxSlots and usedSlots and (slotIndex <= maxSlots) and not usedSlots[slotIndex] then
+        if maxSlots and usedSlots and (slot <= maxSlots) and not usedSlots[slot] then
             if not isEquipped then
                 --TODO: ...
                 --local usedSlots = getElementUsedSlots(player)
                 --if (maxSlots - usedSlots) < CInventory.fetchItemWeight(item) then return false end
             end
-            local slotRow, slotColumn = CInventory.fetchSlotLocation(slotIndex)
+            local slotRow, slotColumn = CInventory.fetchSlotLocation(slot)
             if (itemData.itemData.data.itemWeight.columns - 1) <= (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - slotColumn) then
-                for i = slotIndex, slotIndex + (itemData.itemData.data.itemWeight.columns - 1), 1 do
+                for i = slot, slot + (itemData.itemData.data.itemWeight.columns - 1), 1 do
                     if (i > maxSlots) or usedSlots[i] then
                         return false
                     else
