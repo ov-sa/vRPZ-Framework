@@ -18,7 +18,7 @@ FRAMEWORK_CONFIGS["UI"]["Inventory"] = {
         width = 5,
         thumbHeight = 100,
         bgColor = {0, 0, 0, 255},
-        thumbColor = {175, 35, 35, 255}
+        thumbColor = {175, 175, 175, 255}
     },
 
     inventory = {
