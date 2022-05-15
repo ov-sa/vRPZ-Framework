@@ -412,12 +412,14 @@ CGame.execOnModuleLoad(function()
             if client_isHovered then
                 local slotRow, slotColumn = inventoryUI.fetchUIGridFromOffset(cursorX - inventoryUI.clientInventory.startX, cursorY - (inventoryUI.clientInventory.startY + inventoryUI.titlebar.height))
                 if slotRow and slotColumn then
-                    outputChatBox("Hovered: "..slotRow.." : "..slotColumn)
                     if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition then
                         local slotIndex = CInventory.fetchSlotIndex(slotRow, slotColumn)
                         if not inventoryUI.buffer[localPlayer].usedSlots[slotIndex] then
-                            --TODO: READY TO DROP?
-                            outputChatBox("TRynna drop in slot: "..slotIndex)
+                            if CInventory.isSlotAvailableForOrdering(localPlayer, inventoryUI.attachedItem.item, slotIndex) then
+                                outputChatBox("SLOT AVAILABLE TO DROP: "..slotIndex)
+                            else
+                                outputChatBox("SLOT NOT AVAILABLE TO DROP: "..slotIndex)
+                            end
                         end
                     end
                 end
