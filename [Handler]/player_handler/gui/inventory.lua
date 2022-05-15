@@ -874,6 +874,10 @@ CGame.execOnModuleLoad(function()
                 imports.destroyElement(inventoryUI.opacityAdjuster.element)
                 imports.beautify.render.remove(inventoryUI.renderUI, {renderType = "input"})
             end
+            if inventoryUI.gridTexture and imports.isElement(inventoryUI.gridTexture) then
+                imports.destroyElement(inventoryUI.gridTexture)
+                inventoryUI.gridTexture = nil
+            end
             if inventoryUI.isSyncScheduled then
                 imports.triggerServerEvent("Player:onSyncInventorySlots", localPlayer)
             end
