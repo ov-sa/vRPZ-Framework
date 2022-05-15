@@ -300,7 +300,7 @@ CGame.execOnModuleLoad(function()
             inventoryUI.cache.keys.scroll.state, inventoryUI.cache.keys.scroll.streak  = imports.isMouseScrolled()
             inventoryUI.cache.isEnabled = inventoryUI.isUIEnabled()
         elseif renderData.renderType == "preRender" then
-            if inventoryUI.isLangUpdated or not inventoryUI.bgTexture then inventoryUI.createBGTexture(inventoryUI.isLangUpdated) end
+            if not inventoryUI.bgTexture then inventoryUI.createBGTexture(inventoryUI.isLangUpdated) end
             local isUIEnabled, isUIAttachmentTask = inventoryUI.cache.isEnabled, false
             local isUIActionEnabled = isUIEnabled and not inventoryUI.attachedItem
             local isLMBClicked = (inventoryUI.cache.keys.mouse == "mouse1") and isUIActionEnabled
