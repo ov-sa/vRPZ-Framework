@@ -411,13 +411,15 @@ CGame.execOnModuleLoad(function()
             end
             if client_isHovered then
                 local slotRow, slotColumn = inventoryUI.fetchUIGridFromOffset(cursorX - inventoryUI.clientInventory.startX, cursorY - (inventoryUI.clientInventory.startY + inventoryUI.titlebar.height))
-                outputChatBox("Hovered: "..slotRow.." : "..slotColumn)
-                --[[
-                if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition then
-                    if slotRow and slotColumn then
+                if slotRow and slotColumn then
+                    outputChatBox("Hovered: "..slotRow.." : "..slotColumn)
+                    --[[
+                    if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition then
+                        if slotRow and slotColumn then
+                        end
                     end
+                    ]]
                 end
-                ]]
             end
             --TODO: REMOVE LATER
             --[[
