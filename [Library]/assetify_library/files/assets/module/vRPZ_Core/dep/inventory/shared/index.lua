@@ -8,6 +8,7 @@ local imports = {
     isElement = isElement,
     getElementType = getElementType,
     getElementData = getElementData,
+    isInventoryUIEnabled = isInventoryUIEnabled,
     table = table,
     math = math,
     string = string,
@@ -170,7 +171,7 @@ CInventory = {
         if not itemData then return false end
         local maxSlots, usedSlots = nil, nil
         if localPlayer then
-            if isInventoryUIEnabled() then
+            if imports.isInventoryUIEnabled() then
                 maxSlots = CInventory.fetchParentMaxSlots(player)
                 usedSlots = CInventory.fetchParentUsedSlots(player)
             end
