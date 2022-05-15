@@ -799,7 +799,7 @@ CGame.execOnModuleLoad(function()
         setElementData(testPed, "Item:"..i, 1)
     end
     inventoryUI.toggleUI = function(state)
-        if (((state ~= true) and (state ~= false)) or (state == inventoryUI.state)) then return false end
+        if (((state ~= true) and (state ~= false)) or (state == inventoryUI.state)) or (state and CGame.isUIVisible()) then return false end
 
         if state then
             if inventoryUI.state then return false end

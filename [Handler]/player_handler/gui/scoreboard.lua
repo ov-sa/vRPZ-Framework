@@ -243,7 +243,7 @@ CGame.execOnModuleLoad(function()
     ------------------------------
 
     scoreboardUI.toggleUI = function(state)
-        if (((state ~= true) and (state ~= false)) or (state == scoreboardUI.state)) then return false end
+        if (((state ~= true) and (state ~= false)) or (state == scoreboardUI.state)) or (state and CGame.isUIVisible()) then return false end
 
         if state then
             imports.beautify.render.create(scoreboardUI.renderUI)
