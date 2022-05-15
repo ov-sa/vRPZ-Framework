@@ -909,11 +909,12 @@ CGame.execOnModuleLoad(function()
     imports.addEventHandler("Client:onToggleInventoryUI", root, inventoryUI.toggleUI)
     imports.bindKey(FRAMEWORK_CONFIGS["UI"]["Inventory"].toggleKey, "down", function() inventoryUI.toggleUI(not inventoryUI.state) end)
     imports.addEventHandler("onClientPlayerWasted", localPlayer, function() inventoryUI.toggleUI(false) end)
+end)
 
 
 
-
-    --[[
+--[[
+--TODO: REMOVE LATER...........
     function displayInventoryUI()
         local isItemAvailableForOrdering = false
         local isItemAvailableForDropping = false
@@ -1269,4 +1270,3 @@ CGame.execOnModuleLoad(function()
         end
     end
     ]]--
-end)
