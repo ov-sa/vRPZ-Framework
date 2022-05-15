@@ -319,7 +319,6 @@ CGame.execOnModuleLoad(function()
             local isUIEnabled, isUIAttachmentTask = inventoryUI.cache.isEnabled, false
             local isUIActionEnabled = isUIEnabled and not inventoryUI.attachedItem
             local isLMBClicked = (inventoryUI.cache.keys.mouse == "mouse1") and isUIActionEnabled
-            local client_bufferCache, client_isHovered, client_isSlotHovered = nil, nil, nil
             local client_startX, client_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
             local client_width, client_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
             local maxSlots, assignedItems, usedSlots = inventoryUI.buffer[localPlayer].maxSlots, {}, inventoryUI.buffer[localPlayer].usedSlots
@@ -371,7 +370,9 @@ CGame.execOnModuleLoad(function()
                 end
                 ]]--
             end
-            client_bufferCache = inventoryUI.buffer[localPlayer].bufferCache
+            local client_bufferCache = inventoryUI.buffer[localPlayer].bufferCache
+            local client_bufferCount = #client_bufferCache
+            local client_isHovered, client_isSlotHovered = imports.isMouseOnPosition(client_startX + inventoryUI.margin, client_startY + inventoryUI.margin, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height), nil
             --[[
             for k, v in ipairs(inventory_bufferCache) do
                 if CInventory.CItems[v.item] then
@@ -511,16 +512,32 @@ CGame.execOnModuleLoad(function()
                 ]]--
             end
             imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], inventoryUI.bgTexture, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
-            if inventoryUI.buffer[localPlayer] then
-                imports.beautify.native.setRenderTarget(inventoryUI.buffer[localPlayer].bufferRT, true)
-                imports.beautify.native.drawImage(0, 0, inventoryUI.gridWidth, inventoryUI.gridHeight, inventoryUI.gridTexture, 0, 0, 0, -1, false)
-                imports.beautify.native.setRenderTarget()
-                imports.beautify.native.drawText(inventoryUI.buffer[localPlayer].name, client_startX, client_startY - inventoryUI.titlebar.height, client_startX + client_width, client_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font.instance, "center", "center", true, false, false)
-                imports.beautify.native.drawImage(client_startX + inventoryUI.clientInventory.lockStat.startX, client_startY + inventoryUI.clientInventory.lockStat.startY, inventoryUI.clientInventory.lockStat.size, inventoryUI.clientInventory.lockStat.size, (isUIActionEnabled and inventoryUI.clientInventory.lockStat.unlockTexture) or inventoryUI.clientInventory.lockStat.lockTexture, 0, 0, 0, inventoryUI.titlebar.fontColor, false)
-                imports.beautify.native.drawImage(client_startX + inventoryUI.margin, client_startY + inventoryUI.margin, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height, inventoryUI.buffer[localPlayer].bufferRT, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
-                for i = 1, #inventoryUI.clientInventory.equipment, 1 do
-                    local j = inventoryUI.clientInventory.equipment[i]
-                    imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font.instance, "center", "center", true, false, false)
+            imports.beautify.native.setRenderTarget(inventoryUI.buffer[localPlayer].bufferRT, true)
+            imports.beautify.native.drawImage(0, 0, inventoryUI.gridWidth, inventoryUI.gridHeight, inventoryUI.gridTexture, 0, 0, 0, -1, false)
+            imports.beautify.native.setRenderTarget()
+            imports.beautify.native.drawText(inventoryUI.buffer[localPlayer].name, client_startX, client_startY - inventoryUI.titlebar.height, client_startX + client_width, client_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font.instance, "center", "center", true, false, false)
+            imports.beautify.native.drawImage(client_startX + inventoryUI.clientInventory.lockStat.startX, client_startY + inventoryUI.clientInventory.lockStat.startY, inventoryUI.clientInventory.lockStat.size, inventoryUI.clientInventory.lockStat.size, (isUIActionEnabled and inventoryUI.clientInventory.lockStat.unlockTexture) or inventoryUI.clientInventory.lockStat.lockTexture, 0, 0, 0, inventoryUI.titlebar.fontColor, false)
+            imports.beautify.native.drawImage(client_startX + inventoryUI.margin, client_startY + inventoryUI.margin, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height, inventoryUI.buffer[localPlayer].bufferRT, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
+            for i = 1, #inventoryUI.clientInventory.equipment, 1 do
+                local j = inventoryUI.clientInventory.equipment[i]
+                imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font.instance, "center", "center", true, false, false)
+            end
+            if client_bufferCount.overflowHeight > 0 then
+                if not inventoryUI.buffer[localPlayer].scroller.isPositioned then
+                    inventoryUI.buffer[localPlayer].scroller.startX, inventoryUI.buffer[localPlayer].scroller.startY = client_startX + client_width - inventoryUI.scroller.width, client_startY + inventoryUI.margin
+                    inventoryUI.buffer[localPlayer].scroller.height = inventoryUI.clientInventory.height
+                    inventoryUI.buffer[localPlayer].scroller.isPositioned = true
+                end
+                if imports.math.round(inventoryUI.buffer[localPlayer].scroller.animPercent, 2) ~= imports.math.round(inventoryUI.buffer[localPlayer].scroller.percent, 2) then
+                    inventoryUI.buffer[localPlayer].scroller.animPercent = imports.interpolateBetween(inventoryUI.buffer[localPlayer].scroller.animPercent, 0, 0, inventoryUI.buffer[localPlayer].scroller.percent, 0, 0, 0.5, "InQuad")
+                end
+                imports.beautify.native.drawRectangle(inventoryUI.buffer[localPlayer].scroller.startX, inventoryUI.buffer[localPlayer].scroller.startY, inventoryUI.scroller.width, inventoryUI.buffer[localPlayer].scroller.height, inventoryUI.scroller.bgColor, false)
+                imports.beautify.native.drawRectangle(inventoryUI.buffer[localPlayer].scroller.startX, inventoryUI.buffer[localPlayer].scroller.startY + ((inventoryUI.buffer[localPlayer].scroller.height - inventoryUI.scroller.thumbHeight)*inventoryUI.buffer[localPlayer].scroller.animPercent*0.01), inventoryUI.scroller.width, inventoryUI.scroller.thumbHeight, inventoryUI.scroller.thumbColor, false)
+                if inventoryUI.cache.keys.scroll.state and (not inventoryUI.attachedItem or not inventoryUI.attachedItem.isOnTransition) and client_isHovered then
+                    --TODO: WIP
+                    --local client_scrollPercent = imports.math.max(1, 100/(vicinity_bufferCache.overflowHeight/(inventoryUI.clientInventory.slotSize*0.5)))
+                    inventoryUI.buffer[localPlayer].scroller.percent = imports.math.max(0, imports.math.min(inventoryUI.buffer[localPlayer].scroller.percent + (client_scrollPercent*imports.math.max(1, inventoryUI.cache.keys.scroll.streak)*(((inventoryUI.cache.keys.scroll.state == "down") and 1) or -1)), 100))
+                    inventoryUI.cache.keys.scroll.state = false
                 end
             end
             if inventoryUI.vicinityInventory.element and inventoryUI.buffer[(inventoryUI.vicinityInventory.element)] then
