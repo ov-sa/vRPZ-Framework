@@ -327,7 +327,7 @@ CGame.execOnModuleLoad(function()
                 for i, j in imports.pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
                     if not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] and (imports.type(i) == "number") then
                         if not inventoryUI.isSynced then
-                            if (j.movementType == "equip") and j.isAutoIndexed then
+                            if (j.translation == "equip") and j.isAutoIndexed then
                                 if (inventoryUI.buffer[localPlayer].inventory[(j.item)] or 0) <= 0 then
                                     if not inventoryUI.buffer[localPlayer].bufferCache[("__"..j.item)] then
                                         imports.table.insert(inventoryUI.buffer[localPlayer].bufferCache, {item = j.item, amount = 1})
@@ -337,7 +337,7 @@ CGame.execOnModuleLoad(function()
                             end
                         end
                         --TODO:...
-                        if v.movementType then
+                        if v.translation then
                             --[[
                             local itemDetails, itemCategory = getItemDetails(v.item)
                             if itemDetails and itemCategory and CInventory.CItems[itemDetails.iconPath] then
@@ -440,7 +440,7 @@ CGame.execOnModuleLoad(function()
                         dxDrawRectangle(slot_offsetX, slot_offsetY, template.contentWrapper.itemGrid.inventory.slotSize, template.contentWrapper.itemGrid.inventory.slotSize, tocolor(unpack(template.contentWrapper.itemGrid.slot.bgColor)), false)
                     end
                 else
-                    if inventoryUI.buffer[localPlayer].assignedSlots[k] and inventoryUI.buffer[localPlayer].assignedSlots[k].movementType and inventoryUI.buffer[localPlayer].assignedSlots[k].movementType == "equipment" then
+                    if inventoryUI.buffer[localPlayer].assignedSlots[k] and inventoryUI.buffer[localPlayer].assignedSlots[k].translation and inventoryUI.buffer[localPlayer].assignedSlots[k].translation == "equipment" then
                         local itemDetails, itemCategory = getItemDetails(inventoryUI.buffer[localPlayer].assignedSlots[k].item)
                         if itemDetails and itemCategory then
                             local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
@@ -718,7 +718,7 @@ CGame.execOnModuleLoad(function()
                             inventoryUI.buffer[localPlayer].assignedSlots[releaseIndex] = nil
                             for i, j in pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
                                 if tonumber(i) then
-                                    if j.movementType and j.movementType == "equipment" and releaseIndex == j.equipmentIndex then
+                                    if j.translation and j.translation == "equipment" and releaseIndex == j.equipmentIndex then
                                         reservedSlotIndex = i
                                         break
                                     end
@@ -729,16 +729,16 @@ CGame.execOnModuleLoad(function()
                                 inventoryUI.attachedItem.reservedSlot = reservedSlotIndex
                                 inventoryUI.buffer[localPlayer].assignedSlots[reservedSlotIndex] = {
                                     item = inventoryUI.attachedItem.item,
-                                    loot = isItemAvailableForDropping.parent,
-                                    movementType = "loot"
+                                    parent = isItemAvailableForDropping.parent,
+                                    translation = "loot"
                                 }
                             end
                         else
                             inventoryUI.isSyncScheduled = true
                             inventoryUI.buffer[localPlayer].assignedSlots[releaseIndex] = {
                                 item = inventoryUI.attachedItem.item,
-                                loot = isItemAvailableForDropping.parent,
-                                movementType = "loot"
+                                parent = isItemAvailableForDropping.parent,
+                                translation = "loot"
                             }
                         end
                         triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
@@ -758,19 +758,19 @@ CGame.execOnModuleLoad(function()
                         inventoryUI.attachedItem.releaseLoot = isItemAvailableForEquipping.parent
                         inventoryUI.attachedItem.releaseIndex = releaseIndex
                         inventoryUI.attachedItem.reservedSlot = reservedSlot
-                        if loot == localPlayer then
+                        if parent == localPlayer then
                             inventoryUI.isSyncScheduled = true
                             inventoryUI.buffer[localPlayer].assignedSlots[reservedSlot] = {
                                 item = inventoryUI.attachedItem.item,
-                                movementType = "equipment"
+                                translation = "equipment"
                             }
                         else
                             inventoryUI.isSyncScheduled = true
                             inventoryUI.buffer[localPlayer].assignedSlots[reservedSlot] = {
                                 item = inventoryUI.attachedItem.item,
-                                loot = isItemAvailableForEquipping.parent,
+                                parent = isItemAvailableForEquipping.parent,
                                 isAutoIndexed = true,
-                                movementType = "equipment"
+                                translation = "equipment"
                             }
                         end
                         triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
@@ -976,7 +976,7 @@ end)
                                         reservedSlot = slotIndex,
                                         offsetX = j.startX + (j.paddingX/2),
                                         offsetY = j.startY + (j.paddingY/2),
-                                        loot = inventoryUI.attachedItem.parent
+                                        parent = inventoryUI.attachedItem.parent
                                     }
                                 end
                                 placeHolderColor = (isSlotAvailable and j.availableBGColor) or j.unavailableBGColor
@@ -1023,11 +1023,11 @@ end)
                         for k, v in pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
                             if tonumber(k) then
                                 local isSlotToBeDrawn = true
-                                if v.movementType and v.movementType ~= "inventory" then
+                                if v.translation and v.translation ~= "inventory" then
                                     isSlotToBeDrawn = false
                                 end
                                 if not inventoryUI.isSynced then
-                                    if v.movementType == "equipment" and v.isAutoIndexed then
+                                    if v.translation == "equipment" and v.isAutoIndexed then
                                         if (tonumber(j.inventory[v.item]) or 0) <= 0 then
                                             if not bufferCache["__"..v.item] then
                                                 table.insert(bufferCache, {item = v.item, itemValue = 1})
@@ -1037,7 +1037,7 @@ end)
                                     end
                                 end
                                 if isSlotToBeDrawn then
-                                    if v.movementType then
+                                    if v.translation then
                                         local itemDetails, itemCategory = getItemDetails(v.item)
                                         if itemDetails and itemCategory and CInventory.CItems[itemDetails.iconPath] then
                                             local slotIndex = k
@@ -1137,7 +1137,7 @@ end)
                                 dxDrawRectangle(slot_offsetX, slot_offsetY, template.contentWrapper.itemGrid.inventory.slotSize, template.contentWrapper.itemGrid.inventory.slotSize, tocolor(unpack(template.contentWrapper.itemGrid.slot.bgColor)), false)
                             end
                         else
-                            if inventoryUI.buffer[localPlayer].assignedSlots[k] and inventoryUI.buffer[localPlayer].assignedSlots[k].movementType and inventoryUI.buffer[localPlayer].assignedSlots[k].movementType == "equipment" then
+                            if inventoryUI.buffer[localPlayer].assignedSlots[k] and inventoryUI.buffer[localPlayer].assignedSlots[k].translation and inventoryUI.buffer[localPlayer].assignedSlots[k].translation == "equipment" then
                                 local itemDetails, itemCategory = getItemDetails(inventoryUI.buffer[localPlayer].assignedSlots[k].item)
                                 if itemDetails and itemCategory then
                                     local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
@@ -1237,14 +1237,14 @@ end)
                     if not inventoryUI.isSynced then
                         for k, v in pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
                             if tonumber(k) and v.parent and v.parent == i then
-                                if v.movementType then
-                                    if v.movementType == "loot" and (tonumber(j.inventory[v.item]) or 0) <= 0 then
+                                if v.translation then
+                                    if v.translation == "loot" and (tonumber(j.inventory[v.item]) or 0) <= 0 then
                                         if not bufferCache["__"..v.item] then
                                             table.insert(bufferCache, {item = v.item, itemValue = 1})
                                             bufferCache["__"..v.item] = true
                                         end
                                     elseif not inventoryUI.attachedItem then
-                                        if (v.movementType == "inventory" and not v.isOrdering) or (v.movementType == "equipment" and v.isAutoIndexed) then
+                                        if (v.translation == "inventory" and not v.isOrdering) or (v.translation == "equipment" and v.isAutoIndexed) then
                                             if not bufferCache["__"..v.item] then
                                                 for m, n in ipairs(bufferCache) do
                                                     if n.item == v.item then
