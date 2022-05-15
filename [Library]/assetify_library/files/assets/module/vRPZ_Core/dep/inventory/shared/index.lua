@@ -43,7 +43,7 @@ CInventory = {
 
     fetchItemWeight = function(item)
         local itemData = CInventory.fetchItem(item)
-        return (itemData and itemData.data and itemData.data.itemWeight and imports.math.max(0, itemData.data.itemWeight.rows*itemData.data.itemWeight.columns)) or false
+        return (itemData and itemData.data and itemData.data.itemWeight.weight) or false
     end,
 
     fetchItemObjectID = function(item)
@@ -225,7 +225,6 @@ imports.assetify.execOnLoad(function()
             local cAsset = imports.assetify.getAsset("inventory", j)
             if cAsset and cAsset.manifestData.itemSlot and FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)] then
                 CInventory.CItems[j] = {pack = "inventory", ref = imports.string.lower(j), slot = cAsset.manifestData.itemSlot, data = cAsset.manifestData}
-                CInventory.CItems[j].data.itemWeight.rows, CInventory.CItems[j].data.itemWeight.columns = imports.math.max(1, CInventory.CItems[j].data.itemWeight.rows), imports.math.max(1, CInventory.CItems[j].data.itemWeight.columns)
                 CInventory.CCategories[(cAsset.manifestData.itemSlot)][j] = true
             end
         end
@@ -236,7 +235,6 @@ imports.assetify.execOnLoad(function()
             local cAsset = imports.assetify.getAsset("weapon", j)
             if cAsset and cAsset.manifestData.itemSlot and FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)] and (FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)].identifier == "Weapon") then
                 CInventory.CItems[j] = {pack = "weapon", ref = imports.string.lower(j), slot = cAsset.manifestData.itemSlot, data = cAsset.manifestData}
-                CInventory.CItems[j].data.itemWeight.rows, CInventory.CItems[j].data.itemWeight.columns = imports.math.max(1, CInventory.CItems[j].data.itemWeight.rows), imports.math.max(1, CInventory.CItems[j].data.itemWeight.columns)
                 CInventory.CCategories[(cAsset.manifestData.itemSlot)][j] = true
             end
         end
@@ -244,5 +242,8 @@ imports.assetify.execOnLoad(function()
     for i, j in imports.pairs(CInventory.CItems) do
         CInventory.CRefs.ref[(j.ref)] = i
         imports.table.insert(CInventory.CRefs.index, j.ref)
+        j.data.itemWeight = j.data.itemWeight or {}
+        j.data.itemWeight.rows, j.data.itemWeight.columns = imports.math.max(1, imports.tonumber(j.data.itemWeight.rows) or 0), imports.math.max(1, imports.tonumber(j.data.itemWeight.columns) or 0)        
+        j.data.itemWeight.weight = j.data.itemWeight.rows*j.data.itemWeight.columns
     end
 end)
