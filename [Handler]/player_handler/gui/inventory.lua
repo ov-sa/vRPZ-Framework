@@ -321,7 +321,7 @@ CGame.execOnModuleLoad(function()
             local isLMBClicked = (inventoryUI.cache.keys.mouse == "mouse1") and isUIActionEnabled
             local client_startX, client_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
             local client_width, client_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
-            local client_maxSlots, client_assignedItems, client_usedSlots = inventoryUI.buffer[localPlayer].maxSlots, {}, inventoryUI.buffer[localPlayer].usedSlots
+            local client_assignedItems = {}
             if not inventoryUI.buffer[localPlayer].bufferCache and CInventory.CBuffer then
                 inventoryUI.buffer[localPlayer].bufferCache = {}
                 for i, j in imports.pairs(CInventory.CBuffer.slots) do
@@ -415,8 +415,8 @@ CGame.execOnModuleLoad(function()
                     end
                 end
             end
-            for k = 1, client_maxSlots, 1 do
-                if not client_usedSlots[k] then
+            for k = 1, inventoryUI.buffer[localPlayer].maxSlots, 1 do
+                if not inventoryUI.buffer[localPlayer].usedSlots[k] then
                     local slot_row = math.ceil(k/maximumInventoryRowSlots)
                     local slot_column = k - (math.max(0, slot_row - 1)*maximumInventoryRowSlots)
                     local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_column - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slot_row - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
@@ -424,10 +424,10 @@ CGame.execOnModuleLoad(function()
                     if inventoryUI.attachedItem and inventoryUI.attachedItem.parent and isElement(inventoryUI.attachedItem.parent) and inventoryUI.attachedItem.parent ~= localPlayer and inventoryUI.attachedItem.animTickCounter and inventoryUI.attachedItem.releaseType and inventoryUI.attachedItem.releaseType == "ordering" then
                         local slotIndexesToOccupy = {}
                         for m = inventoryUI.attachedItem.prevSlotIndex, inventoryUI.attachedItem.prevSlotIndex + (inventoryUI.attachedItem.occupiedRowSlots - 1), 1 do
-                            if m <= client_maxSlots then
+                            if m <= inventoryUI.buffer[localPlayer].maxSlots then
                                 for x = 1, inventoryUI.attachedItem.occupiedColumnSlots, 1 do
                                     local succeedingColumnIndex = m + (maximumInventoryRowSlots*(x - 1))
-                                    if succeedingColumnIndex <= client_maxSlots then
+                                    if succeedingColumnIndex <= inventoryUI.buffer[localPlayer].maxSlots then
                                         if k == succeedingColumnIndex then
                                             isSlotToBeDrawn = false
                                             break
