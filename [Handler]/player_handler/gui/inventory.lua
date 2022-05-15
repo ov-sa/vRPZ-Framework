@@ -327,7 +327,7 @@ CGame.execOnModuleLoad(function()
                 for i, j in imports.pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
                     if not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] and (imports.type(i) == "number") then
                         if not inventoryUI.isSynced then
-                            if (j.translation == "equip") and j.isAutoIndexed then
+                            if (j.translation == "equipment") and j.isAutoIndexed then
                                 if (inventoryUI.buffer[localPlayer].inventory[(j.item)] or 0) <= 0 then
                                     if not inventoryUI.buffer[localPlayer].bufferCache[("__"..j.item)] then
                                         imports.table.insert(inventoryUI.buffer[localPlayer].bufferCache, {item = j.item, amount = 1})
@@ -730,7 +730,7 @@ CGame.execOnModuleLoad(function()
                                 inventoryUI.buffer[localPlayer].assignedSlots[reservedSlotIndex] = {
                                     item = inventoryUI.attachedItem.item,
                                     parent = isItemAvailableForDropping.parent,
-                                    translation = "loot"
+                                    translation = "vicinity"
                                 }
                             end
                         else
@@ -738,7 +738,7 @@ CGame.execOnModuleLoad(function()
                             inventoryUI.buffer[localPlayer].assignedSlots[releaseIndex] = {
                                 item = inventoryUI.attachedItem.item,
                                 parent = isItemAvailableForDropping.parent,
-                                translation = "loot"
+                                translation = "vicinity"
                             }
                         end
                         triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
@@ -1238,7 +1238,7 @@ end)
                         for k, v in pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
                             if tonumber(k) and v.parent and v.parent == i then
                                 if v.translation then
-                                    if v.translation == "loot" and (tonumber(j.inventory[v.item]) or 0) <= 0 then
+                                    if v.translation == "vicinity" and (tonumber(j.inventory[v.item]) or 0) <= 0 then
                                         if not bufferCache["__"..v.item] then
                                             table.insert(bufferCache, {item = v.item, itemValue = 1})
                                             bufferCache["__"..v.item] = true
