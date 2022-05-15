@@ -25,7 +25,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
         fontColor = {0, 0, 0, 255}, bgColor = {100, 100, 100, 255}, dividerColor = {15, 15, 15, 200},
         data = {
             fontColor = {100, 100, 100, 255}, hoverFontColor = {0, 0, 0, 255},
-            bgColor = {10, 10, 10, 255}, hoverBGColor = {85, 85, 85, 255},
+            bgColor = {10, 10, 10, 255}, hoverBGColor = {255, 85, 85, 255},
             hoverDuration = 2500
         },
         {

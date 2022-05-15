@@ -86,7 +86,7 @@ CInventory = {
 
     fetchSlot = function(slot)
         if not slot then return false end
-        return FRAMEWORK_CONFIGS["Inventory"]["Slots"][slot] or false
+        return FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] or false
     end,
 
     fetchItemCount = function(parent, item)
@@ -119,7 +119,7 @@ CInventory = {
         for i, j in imports.pairs(assignedSlots) do
             local isValidSlot = true
             if localPlayer then
-                if FRAMEWORK_CONFIGS["Inventory"]["Slots"][i] then
+                if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] then
                     isValidSlot = false
                 else
                     --TODO: WIP..
@@ -155,7 +155,7 @@ CInventory = {
 
 imports.assetify.execOnLoad(function()
     local CItems, CWeapons = imports.assetify.getAssets("inventory"), imports.assetify.getAssets("weapon")
-    for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Slots"]) do
+    for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]) do
         if j.identifier == "Weapon" then
             CInventory.CSlots[(j.identifier)] = CInventory.CSlots[(j.identifier)] or {}
             CInventory.CSlots[(j.identifier)][i] = j
@@ -168,7 +168,7 @@ imports.assetify.execOnLoad(function()
         for i = 1, #CItems, 1 do
             local j = CItems[i]
             local cAsset = imports.assetify.getAsset("inventory", j)
-            if cAsset and cAsset.manifestData.itemSlot and FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)] then
+            if cAsset and cAsset.manifestData.itemSlot and FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)] then
                 CInventory.CItems[j] = {pack = "inventory", ref = imports.string.lower(j), slot = cAsset.manifestData.itemSlot, data = cAsset.manifestData}
                 CInventory.CCategories[(cAsset.manifestData.itemSlot)][j] = true
             end
@@ -178,7 +178,7 @@ imports.assetify.execOnLoad(function()
         for i = 1, #CWeapons, 1 do
             local j = CWeapons[i]
             local cAsset = imports.assetify.getAsset("weapon", j)
-            if cAsset and cAsset.manifestData.itemSlot and FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)] and (FRAMEWORK_CONFIGS["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)].identifier == "Weapon") then
+            if cAsset and cAsset.manifestData.itemSlot and FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)] and (FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)].identifier == "Weapon") then
                 CInventory.CItems[j] = {pack = "weapon", ref = imports.string.lower(j), slot = cAsset.manifestData.itemSlot, data = cAsset.manifestData}
                 CInventory.CCategories[(cAsset.manifestData.itemSlot)][j] = true
             end

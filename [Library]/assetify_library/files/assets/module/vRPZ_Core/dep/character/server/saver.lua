@@ -56,7 +56,7 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
         dataBuffer.character[i] = {j, imports.getElementData(player, "Character:Data:"..j)}
         imports.setElementData(player, "Character:"..j, nil)
     end
-    for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Slots"]) do
+    for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]) do
         imports.setElementData(player, "Slot:"..i, nil)
         imports.setElementData(player, "Slot:Object:"..i, nil)
     end
