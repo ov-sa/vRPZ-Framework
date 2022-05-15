@@ -180,7 +180,7 @@ CGame.execOnModuleLoad(function()
             inventoryUI.bgRT = nil
         end
         if not inventoryUI.gridTexture then
-            inventoryUI.gridWidth, inventoryUI.gridHeight = (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows) + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize*math.max(0, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - 1)), (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns + 2) + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize*math.max(0, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns + 1))
+            inventoryUI.gridWidth, inventoryUI.gridHeight = (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows) + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize*math.max(0, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - 1)), (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns + 2)) + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize*math.max(0, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns + 1))
             inventoryUI.gridRT = imports.beautify.native.createRenderTarget(inventoryUI.gridWidth, inventoryUI.gridHeight, true)
             imports.beautify.native.setRenderTarget(inventoryUI.gridRT, true)
             for i = 1, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows + 1, 1 do
@@ -512,16 +512,17 @@ CGame.execOnModuleLoad(function()
                 ]]--
             end
             imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], inventoryUI.bgTexture, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
-            imports.beautify.native.drawText(inventoryUI.buffer[localPlayer].name, client_startX, client_startY - inventoryUI.titlebar.height, client_startX + client_width, client_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font.instance, "center", "center", true, false, false)
-            imports.beautify.native.drawImage(client_startX + inventoryUI.margin, client_startY + inventoryUI.margin, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height, inventoryUI.buffer[localPlayer].bufferRT, 0, 0, 0, -1, false)
-            imports.beautify.native.drawImage(client_startX + inventoryUI.clientInventory.lockStat.startX, client_startY + inventoryUI.clientInventory.lockStat.startY, inventoryUI.clientInventory.lockStat.size, inventoryUI.clientInventory.lockStat.size, (isUIActionEnabled and inventoryUI.clientInventory.lockStat.unlockTexture) or inventoryUI.clientInventory.lockStat.lockTexture, 0, 0, 0, inventoryUI.titlebar.fontColor, false)
-            for i = 1, #inventoryUI.clientInventory.equipment, 1 do
-                local j = inventoryUI.clientInventory.equipment[i]
-                imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font.instance, "center", "center", true, false, false)
-            end
             if inventoryUI.buffer[localPlayer] then
                 imports.beautify.native.setRenderTarget(inventoryUI.buffer[localPlayer].bufferRT, true)
-                imports.beautify.native.drawImage(inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height, inventoryUI.gridWidth, inventoryUI.gridHeight, inventoryUI.gridTexture, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
+                imports.beautify.native.drawImage(0, 0, inventoryUI.gridWidth, inventoryUI.gridHeight, inventoryUI.gridTexture, 0, 0, 0, -1, false)
+                imports.beautify.native.setRenderTarget()
+                imports.beautify.native.drawText(inventoryUI.buffer[localPlayer].name, client_startX, client_startY - inventoryUI.titlebar.height, client_startX + client_width, client_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font.instance, "center", "center", true, false, false)
+                imports.beautify.native.drawImage(client_startX + inventoryUI.clientInventory.lockStat.startX, client_startY + inventoryUI.clientInventory.lockStat.startY, inventoryUI.clientInventory.lockStat.size, inventoryUI.clientInventory.lockStat.size, (isUIActionEnabled and inventoryUI.clientInventory.lockStat.unlockTexture) or inventoryUI.clientInventory.lockStat.lockTexture, 0, 0, 0, inventoryUI.titlebar.fontColor, false)
+                imports.beautify.native.drawImage(client_startX + inventoryUI.margin, client_startY + inventoryUI.margin, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height, inventoryUI.buffer[localPlayer].bufferRT, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
+                for i = 1, #inventoryUI.clientInventory.equipment, 1 do
+                    local j = inventoryUI.clientInventory.equipment[i]
+                    imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font.instance, "center", "center", true, false, false)
+                end
             end
             if inventoryUI.vicinityInventory.element and inventoryUI.buffer[(inventoryUI.vicinityInventory.element)] then
                 local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
@@ -612,7 +613,7 @@ CGame.execOnModuleLoad(function()
                 end
                 imports.beautify.native.setRenderTarget()
                 imports.beautify.native.drawText(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].name, vicinity_startX, vicinity_startY - inventoryUI.titlebar.height, vicinity_startX + vicinity_width, vicinity_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font.instance, "center", "center", true, false, false)
-                imports.beautify.native.drawImage(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, 0, 0, 0, -1, false)
+                imports.beautify.native.drawImage(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
                 if vicinity_bufferCache.overflowHeight > 0 then
                     if not inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.isPositioned then
                         inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startX, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startY = vicinity_startX + vicinity_width - inventoryUI.scroller.width, vicinity_startY + inventoryUI.margin
@@ -830,7 +831,7 @@ CGame.execOnModuleLoad(function()
                     inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY = cursorX - inventoryUI.attachedItem.offsetX, cursorY - inventoryUI.attachedItem.offsetY
                     attachment_posX, attachment_posY = inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY
                 end
-                imports.beautify.native.drawImage(attachment_posX, attachment_posY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, CInventory.CItems[(inventoryUI.attachedItem.item)].icon.inventory, 0, 0, 0, -1, false)
+                imports.beautify.native.drawImage(attachment_posX, attachment_posY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, CInventory.CItems[(inventoryUI.attachedItem.item)].icon.inventory, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
                 if isDetachAttachment then inventoryUI.detachItem(true) end
             end
             inventoryUI.isLangUpdated = nil
