@@ -323,8 +323,8 @@ CGame.execOnModuleLoad(function()
             local client_bufferCache, client_isHovered, client_isSlotHovered = nil, nil, nil
             local client_startX, client_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
             local client_width, client_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
-
             local maxSlots, assignedItems, usedSlots = inventoryUI.buffer[localPlayer].maxSlots, {}, inventoryUI.buffer[localPlayer].usedSlots
+            
             if CInventory.CBuffer then
                 --[[
                 for k, v in pairs(CInventory.CBuffer.slots) do
@@ -512,7 +512,6 @@ CGame.execOnModuleLoad(function()
                 ]]--
             end
             imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], inventoryUI.bgTexture, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
-            imports.beautify.native.drawImage(inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height, inventoryUI.gridWidth, inventoryUI.gridHeight, inventoryUI.gridTexture, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
             imports.beautify.native.drawText(inventoryUI.buffer[localPlayer].name, client_startX, client_startY - inventoryUI.titlebar.height, client_startX + client_width, client_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font.instance, "center", "center", true, false, false)
             imports.beautify.native.drawImage(client_startX + inventoryUI.margin, client_startY + inventoryUI.margin, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height, inventoryUI.buffer[localPlayer].bufferRT, 0, 0, 0, -1, false)
             imports.beautify.native.drawImage(client_startX + inventoryUI.clientInventory.lockStat.startX, client_startY + inventoryUI.clientInventory.lockStat.startY, inventoryUI.clientInventory.lockStat.size, inventoryUI.clientInventory.lockStat.size, (isUIActionEnabled and inventoryUI.clientInventory.lockStat.unlockTexture) or inventoryUI.clientInventory.lockStat.lockTexture, 0, 0, 0, inventoryUI.titlebar.fontColor, false)
@@ -520,6 +519,8 @@ CGame.execOnModuleLoad(function()
                 local j = inventoryUI.clientInventory.equipment[i]
                 imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font.instance, "center", "center", true, false, false)
             end
+            --TODO: MUST BE DRAWN INSIDE LOCALPLAYER'S BUFFER RT
+            imports.beautify.native.drawImage(inventoryUI.clientInventory.startX, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height, inventoryUI.gridWidth, inventoryUI.gridHeight, inventoryUI.gridTexture, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
             if inventoryUI.vicinityInventory.element and inventoryUI.buffer[(inventoryUI.vicinityInventory.element)] then
                 local vicinity_bufferCache, vicinity_isHovered, vicinity_isSlotHovered = nil, nil, nil
                 local vicinity_startX, vicinity_startY = inventoryUI.vicinityInventory.startX - (inventoryUI.margin*2), inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
