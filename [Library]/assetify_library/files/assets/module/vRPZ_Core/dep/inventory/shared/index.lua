@@ -119,7 +119,7 @@ CInventory = {
         for i, j in imports.pairs(assignedSlots) do
             local isValidSlot = true
             if localPlayer then
-                if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] then
+                if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] and not imports.tonumber(i) then
                     isValidSlot = false
                 else
                     --TODO: WIP..
