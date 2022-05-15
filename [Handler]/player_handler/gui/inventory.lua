@@ -247,7 +247,7 @@ CGame.execOnModuleLoad(function()
     inventoryUI.attachItem = function(parent, item, amount, prevSlot, prevX, prevY, prevWidth, prevHeight, offsetX, offsetY)
         if inventoryUI.attachedItem then return false end
         if not parent or not imports.isElement(parent) or not item or not amount or not prevSlot or not prevX or not prevY or not prevWidth or not prevHeight or not offsetX or not offsetY then return false end
-        --if parent == localPlayer then revSlot = (inventoryUI.ui.equipment.grids[prevSlot] and prevSlot) or tonumber(prevSlot) end
+        --if parent == localPlayer then prevSlot = (inventoryUI.ui.equipment.grids[prevSlot] and prevSlot) or tonumber(prevSlot) end
         inventoryUI.attachedItem = {
             parent = parent, item = item, amount = amount,
             --TODO: REQUIRES A FINISH
