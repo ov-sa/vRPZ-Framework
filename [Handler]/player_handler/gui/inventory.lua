@@ -529,12 +529,12 @@ CGame.execOnModuleLoad(function()
                 local vicinity_width, vicinity_height = inventoryUI.vicinityInventory.width + (inventoryUI.margin*2), inventoryUI.vicinityInventory.height + (inventoryUI.margin*2)
                 imports.beautify.native.setRenderTarget(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, true)
                 if not inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache then
-                    local slotPriority = {}
+                    local categoryPriority = {}
                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache = {}
                     for i = 1, #FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Priority"], 1 do
                         local j = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Priority"][i]
                         if CInventory.CCategories[j] then
-                            slotPriority[j] = true
+                            categoryPriority[j] = true
                             for k, v in imports.pairs(CInventory.CCategories[j]) do
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
                                     imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
@@ -543,7 +543,7 @@ CGame.execOnModuleLoad(function()
                         end
                     end
                     for i, j in imports.pairs(CInventory.CCategories) do
-                        if not slotPriority[i] then
+                        if not categoryPriority[i] then
                             for k, v in imports.pairs(j) do
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
                                     imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
@@ -556,7 +556,7 @@ CGame.execOnModuleLoad(function()
                 vicinity_isHovered = imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height)
                 vicinity_bufferCache.overflowHeight =  imports.math.max(0, (inventoryUI.vicinityInventory.slotSize*#vicinity_bufferCache) + (inventoryUI.margin*imports.math.max(0, #vicinity_bufferCache - 1)) - inventoryUI.vicinityInventory.height)
                 local vicinity_offsetY = vicinity_bufferCache.overflowHeight*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.animPercent*0.01
-                --TODO: MUST SHOW ONLY THE RORWS THAT ARE VISIBLE..
+                --TODO: MUST SHOW ONLY THE ROWS THAT ARE VISIBLE..
                 for i = 1, #vicinity_bufferCache, 1 do
                     local j = vicinity_bufferCache[i]
                     j.offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1) - vicinity_offsetY
