@@ -323,7 +323,7 @@ CGame.execOnModuleLoad(function()
             elseif inventoryUI.vicinityInventory.bgTexture ~= ((inventoryUI.vicinityInventory.element and inventoryUI.buffer[(inventoryUI.vicinityInventory.element)] and true) or false) then inventoryUI.createBGTexture(true) end
             local cursorX, cursorY = imports.getAbsoluteCursorPosition()
             --local isItemAvailableForOrdering, isItemAvailableForEquipping, isItemAvailableForDropping = false, false, false
-            local isUIEnabled, isUIAttachmentTask = inventoryUI.cache.isEnabled, false
+            local isUIEnabled = inventoryUI.cache.isEnabled
             local isUIActionEnabled = isUIEnabled and not inventoryUI.attachedItem
             local isLMBClicked = (inventoryUI.cache.keys.mouse == "mouse1") and isUIActionEnabled
             local client_startX, client_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
@@ -576,122 +576,129 @@ CGame.execOnModuleLoad(function()
             end
             if inventoryUI.attachedItem then
                 if not inventoryUI.attachedItem.isOnTransition and (CLIENT_MTA_WINDOW_ACTIVE or not imports.isKeyOnHold("mouse1") or not isUIEnabled) then
-                    if isUIAttachmentTask == "order" then
-                        --[[
-                        local slotWidth, slotHeight = CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding), CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)
-                        local releaseIndex = inventoryUI.attachedItem.prevSlot
-                        inventoryUI.attachedItem.prevSlot = isItemAvailableForOrdering.slotIndex
-                        inventoryUI.attachedItem.prevPosX = inventoryUI.buffer[localPlayer].gui.startX + inventoryUI.gui.itemBox.templates[1].contentWrapper.startX + isItemAvailableForOrdering.offsetX + ((slotWidth - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1])/2)
-                        inventoryUI.attachedItem.prevPosY = inventoryUI.buffer[localPlayer].gui.startY + inventoryUI.gui.itemBox.templates[1].contentWrapper.startY + isItemAvailableForOrdering.offsetY + ((slotHeight - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2])/2)
-                        inventoryUI.attachedItem.releaseType = isUIAttachmentTask
-                        inventoryUI.attachedItem.releaseIndex = releaseIndex
-                        if inventoryUI.attachedItem.parent == localPlayer then
-                            if inventoryUI.attachedItem.isEquippedItem then
-                                unequipItemInInventory(inventoryUI.attachedItem.item, releaseIndex, isItemAvailableForOrdering.slotIndex, localPlayer)
-                            else
-                                orderItemInInventory(inventoryUI.attachedItem.item, releaseIndex, isItemAvailableForOrdering.slotIndex)
-                            end
-                        end
-                        triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
-                        ]]
-                    elseif isUIAttachmentTask == "drop" then
-                        --[[
-                        local totalLootItems = 0
-                        for index, _ in pairs(inventoryUI.buffer[isItemAvailableForDropping.parent].inventory) do
-                            totalLootItems = totalLootItems + 1
-                        end
-                        local template = inventoryUI.gui.itemBox.templates[(inventoryUI.buffer[isItemAvailableForDropping.parent].gui.templateIndex)]
-                        local totalContentHeight = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*totalLootItems)
-                        local exceededContentHeight =  totalContentHeight - template.contentWrapper.height
-                        local slot_offsetY = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*(isItemAvailableForDropping.slotIndex - 1))
-                        local slotWidth, slotHeight = 0, template.contentWrapper.itemSlot.iconSlot.height
-                        slotWidth = (originalWidth / originalHeight)*slotHeight
-                        if exceededContentHeight > 0 then
-                            slot_offsetY = slot_offsetY - (exceededContentHeight*inventoryUI.buffer[isItemAvailableForDropping.parent].gui.scroller.percent*0.01)
-                            if slot_offsetY < 0 then
-                                local finalScrollPercent = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.scroller.percent + (slot_offsetY/exceededContentHeight)*100
-                                slot_offsetY = template.contentWrapper.itemSlot.paddingY
-                                inventoryUI.attachedItem.__scrollItemBox = {initial = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
-                            elseif (slot_offsetY + template.contentWrapper.itemSlot.height + template.contentWrapper.itemSlot.paddingY) > template.contentWrapper.height then
-                                local finalScrollPercent = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.scroller.percent + (((slot_offsetY + template.contentWrapper.itemSlot.height + template.contentWrapper.itemSlot.paddingY) - template.contentWrapper.height)/exceededContentHeight)*100
-                                slot_offsetY = template.contentWrapper.height - (template.contentWrapper.itemSlot.height + template.contentWrapper.itemSlot.paddingY)
-                                inventoryUI.attachedItem.__scrollItemBox = {initial = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
-                            end
-                        end
-                        local releaseIndex = inventoryUI.attachedItem.prevSlot
-                        inventoryUI.attachedItem.finalWidth, inventoryUI.attachedItem.finalHeight = slotWidth, slotHeight
-                        inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight = inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height
-                        inventoryUI.attachedItem.animTickCounter = getTickCount()
-                        inventoryUI.attachedItem.prevSlot = isItemAvailableForDropping.slotIndex
-                        inventoryUI.attachedItem.prevPosX = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.startX + template.contentWrapper.startX + template.contentWrapper.itemSlot.startX + template.contentWrapper.itemSlot.iconSlot.startX
-                        inventoryUI.attachedItem.prevPosY = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.startY + template.contentWrapper.startY + slot_offsetY
-                        inventoryUI.attachedItem.releaseType = isUIAttachmentTask
-                        inventoryUI.attachedItem.releaseLoot = isItemAvailableForDropping.parent
-                        inventoryUI.attachedItem.releaseIndex = releaseIndex
-                        if inventoryUI.attachedItem.isEquippedItem then
-                            local reservedSlotIndex = false
-                            inventoryUI.isSyncScheduled = true
-                            inventoryUI.buffer[localPlayer].assignedSlots[releaseIndex] = nil
-                            for i, j in pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
-                                if tonumber(i) then
-                                    if j.translation and j.translation == "equipment" and releaseIndex == j.equipmentIndex then
-                                        reservedSlotIndex = i
-                                        break
-                                    end
+                    local isPlaceAttachment = false
+                    if inventoryUI.attachedItem.isPlaceable then
+                        if inventoryUI.attachedItem.isPlaceable.type == "order" then
+                            isPlaceAttachment = true
+                            --[[
+                            local slotWidth, slotHeight = CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding), CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)
+                            local releaseIndex = inventoryUI.attachedItem.prevSlot
+                            inventoryUI.attachedItem.prevSlot = isItemAvailableForOrdering.slotIndex
+                            inventoryUI.attachedItem.prevPosX = inventoryUI.buffer[localPlayer].gui.startX + inventoryUI.gui.itemBox.templates[1].contentWrapper.startX + isItemAvailableForOrdering.offsetX + ((slotWidth - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1])/2)
+                            inventoryUI.attachedItem.prevPosY = inventoryUI.buffer[localPlayer].gui.startY + inventoryUI.gui.itemBox.templates[1].contentWrapper.startY + isItemAvailableForOrdering.offsetY + ((slotHeight - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2])/2)
+                            inventoryUI.attachedItem.releaseType = isUIAttachmentTask
+                            inventoryUI.attachedItem.releaseIndex = releaseIndex
+                            if inventoryUI.attachedItem.parent == localPlayer then
+                                if inventoryUI.attachedItem.isEquippedItem then
+                                    unequipItemInInventory(inventoryUI.attachedItem.item, releaseIndex, isItemAvailableForOrdering.slotIndex, localPlayer)
+                                else
+                                    orderItemInInventory(inventoryUI.attachedItem.item, releaseIndex, isItemAvailableForOrdering.slotIndex)
                                 end
                             end
-                            if reservedSlotIndex then
-                                inventoryUI.attachedItem.reservedSlot = "equipment"
-                                inventoryUI.attachedItem.reservedSlot = reservedSlotIndex
-                                inventoryUI.buffer[localPlayer].assignedSlots[reservedSlotIndex] = {
+                            triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
+                            ]]
+                        elseif inventoryUI.attachedItem.isPlaceable.type == "drop" then
+                            isPlaceAttachment = true
+                            --[[
+                            local totalLootItems = 0
+                            for index, _ in pairs(inventoryUI.buffer[isItemAvailableForDropping.parent].inventory) do
+                                totalLootItems = totalLootItems + 1
+                            end
+                            local template = inventoryUI.gui.itemBox.templates[(inventoryUI.buffer[isItemAvailableForDropping.parent].gui.templateIndex)]
+                            local totalContentHeight = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*totalLootItems)
+                            local exceededContentHeight =  totalContentHeight - template.contentWrapper.height
+                            local slot_offsetY = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*(isItemAvailableForDropping.slotIndex - 1))
+                            local slotWidth, slotHeight = 0, template.contentWrapper.itemSlot.iconSlot.height
+                            slotWidth = (originalWidth / originalHeight)*slotHeight
+                            if exceededContentHeight > 0 then
+                                slot_offsetY = slot_offsetY - (exceededContentHeight*inventoryUI.buffer[isItemAvailableForDropping.parent].gui.scroller.percent*0.01)
+                                if slot_offsetY < 0 then
+                                    local finalScrollPercent = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.scroller.percent + (slot_offsetY/exceededContentHeight)*100
+                                    slot_offsetY = template.contentWrapper.itemSlot.paddingY
+                                    inventoryUI.attachedItem.__scrollItemBox = {initial = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
+                                elseif (slot_offsetY + template.contentWrapper.itemSlot.height + template.contentWrapper.itemSlot.paddingY) > template.contentWrapper.height then
+                                    local finalScrollPercent = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.scroller.percent + (((slot_offsetY + template.contentWrapper.itemSlot.height + template.contentWrapper.itemSlot.paddingY) - template.contentWrapper.height)/exceededContentHeight)*100
+                                    slot_offsetY = template.contentWrapper.height - (template.contentWrapper.itemSlot.height + template.contentWrapper.itemSlot.paddingY)
+                                    inventoryUI.attachedItem.__scrollItemBox = {initial = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
+                                end
+                            end
+                            local releaseIndex = inventoryUI.attachedItem.prevSlot
+                            inventoryUI.attachedItem.finalWidth, inventoryUI.attachedItem.finalHeight = slotWidth, slotHeight
+                            inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight = inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height
+                            inventoryUI.attachedItem.animTickCounter = getTickCount()
+                            inventoryUI.attachedItem.prevSlot = isItemAvailableForDropping.slotIndex
+                            inventoryUI.attachedItem.prevPosX = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.startX + template.contentWrapper.startX + template.contentWrapper.itemSlot.startX + template.contentWrapper.itemSlot.iconSlot.startX
+                            inventoryUI.attachedItem.prevPosY = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.startY + template.contentWrapper.startY + slot_offsetY
+                            inventoryUI.attachedItem.releaseType = isUIAttachmentTask
+                            inventoryUI.attachedItem.releaseLoot = isItemAvailableForDropping.parent
+                            inventoryUI.attachedItem.releaseIndex = releaseIndex
+                            if inventoryUI.attachedItem.isEquippedItem then
+                                local reservedSlotIndex = false
+                                inventoryUI.isSyncScheduled = true
+                                inventoryUI.buffer[localPlayer].assignedSlots[releaseIndex] = nil
+                                for i, j in pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
+                                    if tonumber(i) then
+                                        if j.translation and j.translation == "equipment" and releaseIndex == j.equipmentIndex then
+                                            reservedSlotIndex = i
+                                            break
+                                        end
+                                    end
+                                end
+                                if reservedSlotIndex then
+                                    inventoryUI.attachedItem.reservedSlot = "equipment"
+                                    inventoryUI.attachedItem.reservedSlot = reservedSlotIndex
+                                    inventoryUI.buffer[localPlayer].assignedSlots[reservedSlotIndex] = {
+                                        item = inventoryUI.attachedItem.item,
+                                        parent = isItemAvailableForDropping.parent,
+                                        translation = "vicinity"
+                                    }
+                                end
+                            else
+                                inventoryUI.isSyncScheduled = true
+                                inventoryUI.buffer[localPlayer].assignedSlots[releaseIndex] = {
                                     item = inventoryUI.attachedItem.item,
                                     parent = isItemAvailableForDropping.parent,
                                     translation = "vicinity"
                                 }
                             end
-                        else
-                            inventoryUI.isSyncScheduled = true
-                            inventoryUI.buffer[localPlayer].assignedSlots[releaseIndex] = {
-                                item = inventoryUI.attachedItem.item,
-                                parent = isItemAvailableForDropping.parent,
-                                translation = "vicinity"
-                            }
+                            triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
+                            ]]
+                        elseif inventoryUI.attachedItem.isPlaceable.type == "equip" then
+                            isPlaceAttachment = true
+                            --[[
+                            local slotWidth, slotHeight = inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].width - inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].paddingX, inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].height - inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].paddingY
+                            local releaseIndex = inventoryUI.attachedItem.prevSlot
+                            local reservedSlot = isItemAvailableForEquipping.reservedSlot or releaseIndex
+                            inventoryUI.attachedItem.finalWidth, inventoryUI.attachedItem.finalHeight = slotWidth, slotHeight
+                            inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight = inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height
+                            inventoryUI.attachedItem.animTickCounter = getTickCount()
+                            inventoryUI.attachedItem.prevSlot = isItemAvailableForEquipping.slotIndex
+                            inventoryUI.attachedItem.prevPosX = isItemAvailableForEquipping.offsetX
+                            inventoryUI.attachedItem.prevPosY = isItemAvailableForEquipping.offsetY
+                            inventoryUI.attachedItem.releaseType = isUIAttachmentTask
+                            inventoryUI.attachedItem.releaseLoot = isItemAvailableForEquipping.parent
+                            inventoryUI.attachedItem.releaseIndex = releaseIndex
+                            inventoryUI.attachedItem.reservedSlot = reservedSlot
+                            if parent == localPlayer then
+                                inventoryUI.isSyncScheduled = true
+                                inventoryUI.buffer[localPlayer].assignedSlots[reservedSlot] = {
+                                    item = inventoryUI.attachedItem.item,
+                                    translation = "equipment"
+                                }
+                            else
+                                inventoryUI.isSyncScheduled = true
+                                inventoryUI.buffer[localPlayer].assignedSlots[reservedSlot] = {
+                                    item = inventoryUI.attachedItem.item,
+                                    parent = isItemAvailableForEquipping.parent,
+                                    isAutoIndexed = true,
+                                    translation = "equipment"
+                                }
+                            end
+                            triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
+                            ]]
                         end
-                        triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
-                        ]]
-                    elseif isUIAttachmentTask == "equip" then
-                        --[[
-                        local slotWidth, slotHeight = inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].width - inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].paddingX, inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].height - inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].paddingY
-                        local releaseIndex = inventoryUI.attachedItem.prevSlot
-                        local reservedSlot = isItemAvailableForEquipping.reservedSlot or releaseIndex
-                        inventoryUI.attachedItem.finalWidth, inventoryUI.attachedItem.finalHeight = slotWidth, slotHeight
-                        inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight = inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height
-                        inventoryUI.attachedItem.animTickCounter = getTickCount()
-                        inventoryUI.attachedItem.prevSlot = isItemAvailableForEquipping.slotIndex
-                        inventoryUI.attachedItem.prevPosX = isItemAvailableForEquipping.offsetX
-                        inventoryUI.attachedItem.prevPosY = isItemAvailableForEquipping.offsetY
-                        inventoryUI.attachedItem.releaseType = isUIAttachmentTask
-                        inventoryUI.attachedItem.releaseLoot = isItemAvailableForEquipping.parent
-                        inventoryUI.attachedItem.releaseIndex = releaseIndex
-                        inventoryUI.attachedItem.reservedSlot = reservedSlot
-                        if parent == localPlayer then
-                            inventoryUI.isSyncScheduled = true
-                            inventoryUI.buffer[localPlayer].assignedSlots[reservedSlot] = {
-                                item = inventoryUI.attachedItem.item,
-                                translation = "equipment"
-                            }
-                        else
-                            inventoryUI.isSyncScheduled = true
-                            inventoryUI.buffer[localPlayer].assignedSlots[reservedSlot] = {
-                                item = inventoryUI.attachedItem.item,
-                                parent = isItemAvailableForEquipping.parent,
-                                isAutoIndexed = true,
-                                translation = "equipment"
-                            }
-                        end
-                        triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
-                        ]]
-                    else
+                    end
+                    if not isPlaceAttachment then
                         if inventoryUI.attachedItem.parent == localPlayer then
                             --[[
                             local maxSlots = CInventory.fetchParentMaxSlots(inventoryUI.attachedItem.parent)
