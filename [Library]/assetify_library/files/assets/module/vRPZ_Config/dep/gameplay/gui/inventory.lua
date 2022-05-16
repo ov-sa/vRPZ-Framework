@@ -33,6 +33,6 @@ FRAMEWORK_CONFIGS["UI"]["Inventory"] = {
         slotSize = 45, dividerSize = 1,
         bgColor = {0, 0, 0, 245}, slotColor = {255, 255, 255, 75}, slotNameFontColor = {175, 175, 175, 255}, dividerColor = {35, 35, 35, 255},
         slotAvailableColor = {0, 255, 0, 100}, slotUnavailableColor = {255, 0, 0, 100},
-        animDuration = 950
+        animDuration = 150
     }
 }
