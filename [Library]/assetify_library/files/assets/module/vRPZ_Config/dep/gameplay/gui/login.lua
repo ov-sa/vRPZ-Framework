@@ -275,33 +275,15 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                         ["NL"] = "Kleding"
                     },
                     ["Upper"] = {
-                        ["Title"] = {
-                            ["EN"] = "Upper", 
-                            ["TR"] = "Üst", 
-                            ["RU"] = "Верх",
-                            ["BR"] = "Parte de cima",
-                            ["NL"] = "Bovenste"
-                        },
+                        ["Title"] = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Upper"]["Title"],
                         ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Upper"]
                     },
                     ["Lower"] = {
-                        ["Title"] = {
-                            ["EN"] = "Lower", 
-                            ["TR"] = "Alt", 
-                            ["RU"] = "Низ",
-                            ["BR"] = "Parte de baixo",
-                            ["NL"] = "Lager"
-                        },
+                        ["Title"] = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Lower"]["Title"],
                         ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Lower"]
                     },
                     ["Shoes"] = {
-                        ["Title"] = {
-                            ["EN"] = "Shoes", 
-                            ["TR"] = "Ayakkabı", 
-                            ["RU"] = "Обувь",
-                            ["BR"] = "Calçados",
-                            ["NL"] = "Schoenen"
-                        },
+                        ["Title"] = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Shoes"]["Title"],
                         ["Datas"] = FRAMEWORK_CONFIGS["Character"]["Clothing"]["Shoes"]
                     }
                 }
