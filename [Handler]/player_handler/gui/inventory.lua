@@ -424,6 +424,7 @@ CGame.execOnModuleLoad(function()
                         if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, slot) then
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "order"}
                             inventoryUI.attachedItem.isPlaceable.slot = slot
+                            inventoryUI.attachedItem.isPlaceable.slot = slot
                             inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.attachedItem.isPlaceable.offsetY = slot_offsetX, slot_offsetY
                             inventoryUI.attachedItem.isPlaceable.width, inventoryUI.attachedItem.isPlaceable.height = slotWidth, slotHeight
                         else
@@ -582,15 +583,12 @@ CGame.execOnModuleLoad(function()
                     if inventoryUI.attachedItem.isPlaceable then
                         if inventoryUI.attachedItem.isPlaceable.type == "order" then
                             isPlaceAttachment = true
-                            inventoryUI.attachedItem.prevSlot = inventoryUI.attachedItem.isPlaceable.slot
                             inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY = client_startX + inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetX + ((inventoryUI.attachedItem.isPlaceable.width - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1])*0.5), client_startY + inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetY + ((inventoryUI.attachedItem.isPlaceable.height - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2])*0.5)
-                            --[[
-                                if inventoryUI.attachedItem.isEquippedItem then
-                                    unequipItemInInventory(inventoryUI.attachedItem.item, releaseIndex, isItemAvailableForOrdering.slotIndex, localPlayer)
-                                else
-                                    orderItemInInventory(inventoryUI.attachedItem.item, releaseIndex, isItemAvailableForOrdering.slotIndex)
-                                end
-                            ]]
+                            if (inventoryUI.attachedItem.parent == localPlayer) and FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(inventoryUI.attachedItem.isPlaceable.slot)] then
+                                --unequipItemInInventory(inventoryUI.attachedItem.item, releaseIndex, isItemAvailableForOrdering.slotIndex, localPlayer)
+                            else
+                                --orderItemInInventory(inventoryUI.attachedItem.item, releaseIndex, isItemAvailableForOrdering.slotIndex)
+                            end
                             --triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                         elseif inventoryUI.attachedItem.isPlaceable.type == "drop" then
                             isPlaceAttachment = true
