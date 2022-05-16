@@ -287,6 +287,7 @@ CGame.execOnModuleLoad(function()
         return true
     end
 
+
     -------------------------------
     --[[ Functions: UI Helpers ]]--
     -------------------------------
@@ -584,7 +585,6 @@ CGame.execOnModuleLoad(function()
                                 --unequipItemInInventory(inventoryUI.attachedItem.item, releaseIndex, isItemAvailableForOrdering.slotIndex, localPlayer)
                             else
                                 inventoryUI.orderItem()
-                                --orderItemInInventory(inventoryUI.attachedItem.item, releaseIndex, isItemAvailableForOrdering.slotIndex)
                             end
                             --triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                         elseif inventoryUI.attachedItem.isPlaceable.type == "drop" then
