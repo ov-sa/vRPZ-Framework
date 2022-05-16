@@ -75,16 +75,7 @@ CGame.execOnModuleLoad(function()
             lockStat = {
                 lockTexture = imports.beautify.assets["images"]["canvas/lock.rw"], unlockTexture = imports.beautify.assets["images"]["canvas/unlock.rw"]
             },
-            equipment = {
-                "Helmet",
-                "Vest",
-                "Upper",
-                "Lower",
-                "Shoes",
-                "Primary",
-                "Secondary",
-                "Backpack"
-            }
+            equipment = {"Helmet", "Vest", "Upper", "Lower", "Shoes", "Primary", "Secondary", "Backpack"}
         },
         vicinityInventory = {
             width = inventory_offsetX,
@@ -157,7 +148,6 @@ CGame.execOnModuleLoad(function()
                 local j = inventoryUI.clientInventory.equipment[i]
                 local title_height = inventoryUI.titlebar.slot.height
                 local title_startY = j.startY - inventoryUI.titlebar.slot.height
-                j.title = imports.string.upper(imports.string.spaceChars(j.identifier))
                 imports.beautify.native.drawRectangle(j.startX, title_startY, j.width, title_height, inventoryUI.titlebar.slot.bgColor, false)
                 imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, inventoryUI.clientInventory.bgColor, false)
                 for k = 1, j.slots.rows - 1, 1 do
@@ -199,7 +189,12 @@ CGame.execOnModuleLoad(function()
         end
         return true
     end
-    inventoryUI.updateUILang = function() inventoryUI.isLangUpdated = true end
+    inventoryUI.updateUILang = function()
+        for i = 1, #inventoryUI.clientInventory.equipment, 1 do
+            j.title = imports.string.upper(imports.string.spaceChars(j["Title"][(CPlayer.CLanguage)]))
+        end
+        return true
+    end
     imports.addEventHandler("Client:onUpdateLanguage", root, inventoryUI.updateUILang)
     inventoryUI.fetchUIGridSlotFromOffset = function(offsetX, offsetY)
         if not offsetX or not offsetY then return false end
@@ -764,7 +759,6 @@ CGame.execOnModuleLoad(function()
                 imports.beautify.native.drawImage(attachment_posX, attachment_posY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, CInventory.CItems[(inventoryUI.attachedItem.item)].icon.inventory, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
                 if isDetachAttachment then inventoryUI.detachItem(true) end
             end
-            inventoryUI.isLangUpdated = nil
         end
     end
 
