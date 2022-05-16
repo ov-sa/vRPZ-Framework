@@ -777,7 +777,7 @@ CGame.execOnModuleLoad(function()
         if (((state ~= true) and (state ~= false)) or (state == inventoryUI.state)) or (state and CGame.isUIVisible()) then return false end
 
         if state then
-            if inventoryUI.state then return false end
+            inventoryUI.updateUILang()
             --TODO: ENABLE LATER
             --if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then inventoryUI.toggleUI(false) return false end
             --inventoryUI.vicinityInventory.element = CCharacter.isInLoot(localPlayer)
@@ -794,7 +794,6 @@ CGame.execOnModuleLoad(function()
             imports.beautify.render.create(inventoryUI.renderUI, {renderType = "input"})
             imports.beautify.setUIVisible(inventoryUI.opacityAdjuster.element, true)
         else
-            if not inventoryUI.state then return false end
             if inventoryUI.opacityAdjuster.element and imports.isElement(inventoryUI.opacityAdjuster.element) then
                 imports.destroyElement(inventoryUI.opacityAdjuster.element)
                 imports.beautify.render.remove(inventoryUI.renderUI, {renderType = "input"})

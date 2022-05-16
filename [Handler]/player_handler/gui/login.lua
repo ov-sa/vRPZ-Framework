@@ -723,7 +723,6 @@ CGame.execOnModuleLoad(function()
         if (((state ~= true) and (state ~= false)) or (state == loginUI.state)) then return false end
 
         if state then
-            loginUI.state = true
             loginUI.updateUILang()
             local cAsset = imports.assetify.getAsset("sound", FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.asset)
             if cAsset then
@@ -761,8 +760,8 @@ CGame.execOnModuleLoad(function()
             loginUI.previewCharacter = false
             loginUI.characters = {}
             loginUI.isVIP = false
-            loginUI.state = false
         end
+        loginUI.state = (state and true) or false
         imports.showChat(false, true)
         imports.showCursor(state, true)
         return true
