@@ -76,7 +76,6 @@ CGame.execOnModuleLoad(function()
                 lockTexture = imports.beautify.assets["images"]["canvas/lock.rw"], unlockTexture = imports.beautify.assets["images"]["canvas/unlock.rw"]
             },
             equipment = {
-                --TODO: ADD SLOTS UPPER LOWER SHOES INTO INVENTORY TEMPLATE SLOTS + LOAD THE SIZE OF THIS VIA IT
                 {identifier = "helmet", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Helmet"].slots},
                 {identifier = "vest", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Vest"].slots},
                 {identifier = "upper", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Upper"].slots},
