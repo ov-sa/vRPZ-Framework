@@ -775,7 +775,9 @@ CGame.execOnModuleLoad(function()
         setElementData(testPed, "Item:"..i, 1)
     end
     inventoryUI.toggleUI = function(state)
-        if (((state ~= true) and (state ~= false)) or (state == inventoryUI.state)) or (state and (not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) or CGame.isUIVisible())) then return false end
+        --TODO: ENABLE LATER
+        --if (((state ~= true) and (state ~= false)) or (state == inventoryUI.state)) or (state and (not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) or CGame.isUIVisible())) then return false end
+        if (((state ~= true) and (state ~= false)) or (state == inventoryUI.state)) or (state and (not CPlayer.isInitialized(localPlayer) or CGame.isUIVisible())) then return false end
 
         if state then
             inventoryUI.updateUILang()
