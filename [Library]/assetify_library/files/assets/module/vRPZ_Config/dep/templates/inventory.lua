@@ -8,7 +8,7 @@ FRAMEWORK_CONFIGS["Templates"]["Inventory"] = {
         "Secondary",
         "Ammo",
         "Helmet",
-        "Armor",
+        "Vest",
         "Backpack",
         "Upper",
         "Lower",
@@ -34,8 +34,8 @@ FRAMEWORK_CONFIGS["Templates"]["Inventory"] = {
             slots = {rows = 2, columns = 2}
         },
     
-        ["Armor"] = {
-            identifier = "Armor",
+        ["Vest"] = {
+            identifier = "Vest",
             slots = {rows = 2, columns = 2}
         },
     
