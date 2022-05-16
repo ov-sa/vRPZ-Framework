@@ -370,21 +370,29 @@ CGame.execOnModuleLoad(function()
             imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], inventoryUI.bgTexture, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
             imports.beautify.native.setRenderTarget(inventoryUI.buffer[localPlayer].bufferRT, true)
             imports.beautify.native.drawImage(0, 0, inventoryUI.gridWidth, inventoryUI.gridHeight, inventoryUI.gridTexture, 0, 0, 0, -1, false)
-            for i = 1, #client_bufferCache, 1 do
-                local j = client_bufferCache[i]
-                if inventoryUI.buffer[localPlayer].assignedItems[i] then
-                    --TODO: WIP...
-                    local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(i)
-                    local slotWidth, slotHeight = CInventory.fetchSlotDimensions(CInventory.CItems[(j.item)].data.itemWeight.rows, CInventory.CItems[(j.item)].data.itemWeight.columns)
-                    imports.beautify.native.drawImage(slot_offsetX + ((slotWidth - CInventory.CItems[(j.item)].dimensions[1])*0.5), slot_offsetY + ((slotHeight - CInventory.CItems[(j.item)].dimensions[2])*0.5), CInventory.CItems[(j.item)].dimensions[1], CInventory.CItems[(j.item)].dimensions[2], CInventory.CItems[(j.item)].icon.inventory, 0, 0, 0, -1, false)
+            for i, j in imports.pairs(inventoryUI.buffer[localPlayer].assignedItems) do
+                local slotBuffer = inventoryUI.buffer[localPlayer].bufferCache[i]
+                local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(j)
+                local slotWidth, slotHeight = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
+                local isItemVisible = true
+                --TODO: IDK MAYB NO NEED OF THIS
+                --if inventoryUI.attachedItem and (inventoryUI.attachedItem.prevSlot == j) and not inventoryUI.attachedItem.reservedSlot then
+                if inventoryUI.attachedItem then
+                    if inventoryUI.attachedItem.parent == localPlayer then
+                        if inventoryUI.attachedItem.prevSlot == j then
+                            isItemVisible = false
+                        end
+                    elseif inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and (inventoryUI.attachedItem.isPlaceable.slot == j) then
+                        local slotData = inventoryUI.buffer[localPlayer].assignedSlots[j]
+                        if slotData and (slotData.translation == "inventory") then
+                            isItemVisible = false
+                        end
+                    end
+                end
+                if isItemVisible then
+                    imports.beautify.native.drawImage(slot_offsetX + ((slotWidth - CInventory.CItems[(slotBuffer.item)].dimensions[1])*0.5), slot_offsetY + ((slotHeight - CInventory.CItems[(slotBuffer.item)].dimensions[2])*0.5), CInventory.CItems[(slotBuffer.item)].dimensions[1], CInventory.CItems[(slotBuffer.item)].dimensions[2], CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
+                    --TODO: WIP..
                     --[[
-                    local isItemVisible = true
-                    if inventoryUI.attachedItem and (inventoryUI.attachedItem.prevSlot == inventoryUI.buffer[localPlayer].assignedItems[i]) and not inventoryUI.attachedItem.reservedSlot then
-                        isItemVisible = false
-                    end
-                    if isItemVisible then
-                        imports.beautify.native.drawImage(slot_offsetX + ((slotWidth - CInventory.CItems[(j.item)].dimensions[1])/2), slot_offsetY + ((slotHeight - CInventory.CItems[(j.item)].dimensions[2])/2), CInventory.CItems[(j.item)].dimensions[1], CInventory.CItems[(j.item)].dimensions[2], CInventory.CItems[itemDetails.iconPath], 0, 0, 0, -1, false)
-                    end
                     if not inventoryUI.attachedItem and isUIEnabled then
                         if (slot_offsetY >= 0) and ((slot_offsetY + slotHeight) <= template.contentWrapper.height) then
                             local isSlotHovered = isMouseOnPosition(j.gui.startX + template.contentWrapper.startX + slot_offsetX, j.gui.startY + template.contentWrapper.startY + slot_offsetY, slotWidth, slotHeight)
