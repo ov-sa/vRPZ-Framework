@@ -273,7 +273,19 @@ CGame.execOnModuleLoad(function()
         end
         return true
     end
-
+    inventoryUI.orderItem = function()
+        inventoryUI.isSynced = false
+        inventoryUI.isSyncScheduled = true
+        CInventory.CBuffer.slots[(inventoryUI.attachedItem.prevSlot)] = nil
+        CInventory.CBuffer.slots[(inventoryUI.attachedItem.isPlaceable.slot)] = {
+            item = inventoryUI.attachedItem.item,
+            translation = "inventory"
+        }
+        inventoryUI.updateBuffer(localPlayer)
+        --TODO: WIP
+        --triggerServerEvent("onPlayerOrderItemInInventory", localPlayer, item, prevSlotIndex, newSlotIndex)
+        return true
+    end
 
     -------------------------------
     --[[ Functions: UI Helpers ]]--
@@ -322,7 +334,6 @@ CGame.execOnModuleLoad(function()
             if not inventoryUI.bgTexture or not inventoryUI.gridTexture or CLIENT_MTA_RESTORED then inventoryUI.createBGTexture()
             elseif inventoryUI.vicinityInventory.bgTexture ~= ((inventoryUI.vicinityInventory.element and inventoryUI.buffer[(inventoryUI.vicinityInventory.element)] and true) or false) then inventoryUI.createBGTexture(true) end
             local cursorX, cursorY = imports.getAbsoluteCursorPosition()
-            --local isItemAvailableForOrdering, isItemAvailableForEquipping, isItemAvailableForDropping = false, false, false
             local isUIEnabled = inventoryUI.cache.isEnabled
             local isUIActionEnabled = isUIEnabled and not inventoryUI.attachedItem
             local isLMBClicked = (inventoryUI.cache.keys.mouse == "mouse1") and isUIActionEnabled
@@ -333,44 +344,21 @@ CGame.execOnModuleLoad(function()
                 for i, j in imports.pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
                     if not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] then
                         if not inventoryUI.isSynced then
-                            if (j.translation == "equipment") and j.isAutoIndexed then
+                            if j.translation == "inventory" then
+                                imports.table.insert(inventoryUI.buffer[localPlayer].bufferCache, {item = j.item, amount = 1})
+                            --[[
+                            elseif (j.translation == "equipment") and j.isAutoIndexed then
                                 if (inventoryUI.buffer[localPlayer].inventory[(j.item)] or 0) <= 0 then
-                                    if not inventoryUI.buffer[localPlayer].bufferCache[("__"..j.item)] then
-                                        imports.table.insert(inventoryUI.buffer[localPlayer].bufferCache, {item = j.item, amount = 1})
-                                        inventoryUI.buffer[localPlayer].bufferCache[("__"..j.item)] = true
-                                    end
+                                    imports.table.insert(inventoryUI.buffer[localPlayer].bufferCache, {item = j.item, amount = 1})
                                 end
+                            ]]
                             end
                         end
-                        --TODO:...
-                        if v.translation then
-                            --[[
-                            local itemDetails, itemCategory = getItemDetails(v.item)
-                            if itemDetails and itemCategory and CInventory.CItems[itemDetails.iconPath] then
-                                local slotIndex = k
-                                if slotIndex then
-                                    local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
-                                    local verticalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemVerticalSlots) or 1)
-                                    local iconWidth, iconHeight = 0, template.contentWrapper.itemGrid.inventory.slotSize*verticalSlotsToOccupy
-                                    local originalWidth, originalHeight = iconDimensions[itemDetails.iconPath].width, iconDimensions[itemDetails.iconPath].height
-                                    iconWidth = (originalWidth / originalHeight)*iconHeight
-                                    local slotRow = math.ceil(slotIndex/maximumInventoryRowSlots)
-                                    local slotColumn = slotIndex - (math.max(0, slotRow - 1)*maximumInventoryRowSlots)
-                                    local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slotColumn - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slotRow - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
-                                    local slotWidth, slotHeight = horizontalSlotsToOccupy*template.contentWrapper.itemGrid.inventory.slotSize + ((horizontalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding), verticalSlotsToOccupy*template.contentWrapper.itemGrid.inventory.slotSize + ((verticalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding)
-                                    if not inventoryUI.attachedItem or (inventoryUI.attachedItem.parent ~= i) or (inventoryUI.attachedItem.prevSlot ~= slotIndex) then
-                                        imports.beautify.native.drawImage(slot_offsetX + ((slotWidth - iconWidth)/2), slot_offsetY + ((slotHeight - iconHeight)/2), iconWidth, iconHeight, CInventory.CItems[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255), false)
-                                    end
-                                end
-                            end
-                            ]]--
-                        else
-                            for k = 1, #inventoryUI.buffer[localPlayer].bufferCache, 1 do
-                                local v = inventoryUI.buffer[localPlayer].bufferCache[k]
-                                if (j.item == v.item) and not inventoryUI.buffer[localPlayer].assignedItems[k] then
-                                    inventoryUI.buffer[localPlayer].assignedItems[k] = i
-                                    break
-                                end
+                        for k = 1, #inventoryUI.buffer[localPlayer].bufferCache, 1 do
+                            local v = inventoryUI.buffer[localPlayer].bufferCache[k]
+                            if (j.item == v.item) and not inventoryUI.buffer[localPlayer].assignedItems[k] then
+                                inventoryUI.buffer[localPlayer].assignedItems[k] = i
+                                break
                             end
                         end
                     end
@@ -386,10 +374,10 @@ CGame.execOnModuleLoad(function()
                 local j = client_bufferCache[i]
                 if inventoryUI.buffer[localPlayer].assignedItems[i] then
                     --TODO: WIP...
-                    local slotRow, slotColumn = CInventory.fetchSlotLocation(inventoryUI.buffer[localPlayer].assignedItems[i])
+                    local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(i)
+                    local slotWidth, slotHeight = CInventory.fetchSlotDimensions(CInventory.CItems[(j.item)].data.itemWeight.rows, CInventory.CItems[(j.item)].data.itemWeight.columns)
+                    imports.beautify.native.drawImage(slot_offsetX + ((slotWidth - CInventory.CItems[(j.item)].dimensions[1])*0.5), slot_offsetY + ((slotHeight - CInventory.CItems[(j.item)].dimensions[2])*0.5), CInventory.CItems[(j.item)].dimensions[1], CInventory.CItems[(j.item)].dimensions[2], CInventory.CItems[(j.item)].icon.inventory, 0, 0, 0, -1, false)
                     --[[
-                    local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slotColumn - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slotRow - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
-                    local slotWidth, slotHeight = CInventory.CItems[(j.item)].data.itemWeight.columns*template.contentWrapper.itemGrid.inventory.slotSize + ((CInventory.CItems[(j.item)].data.itemWeight.columns - 1)*template.contentWrapper.itemGrid.padding), CInventory.CItems[(j.item)].data.itemWeight.rows*template.contentWrapper.itemGrid.inventory.slotSize + ((CInventory.CItems[(j.item)].data.itemWeight.rows - 1)*template.contentWrapper.itemGrid.padding)
                     local isItemVisible = true
                     if inventoryUI.attachedItem and (inventoryUI.attachedItem.prevSlot == inventoryUI.buffer[localPlayer].assignedItems[i]) and not inventoryUI.attachedItem.reservedSlot then
                         isItemVisible = false
@@ -587,6 +575,7 @@ CGame.execOnModuleLoad(function()
                             if (inventoryUI.attachedItem.parent == localPlayer) and FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(inventoryUI.attachedItem.isPlaceable.slot)] then
                                 --unequipItemInInventory(inventoryUI.attachedItem.item, releaseIndex, isItemAvailableForOrdering.slotIndex, localPlayer)
                             else
+                                inventoryUI.orderItem()
                                 --orderItemInInventory(inventoryUI.attachedItem.item, releaseIndex, isItemAvailableForOrdering.slotIndex)
                             end
                             --triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
@@ -801,7 +790,8 @@ CGame.execOnModuleLoad(function()
                 inventoryUI.gridTexture = nil
             end
             if inventoryUI.isSyncScheduled then
-                imports.triggerServerEvent("Player:onSyncInventorySlots", localPlayer)
+                --TODO: ...WIP..
+                --imports.triggerServerEvent("Player:onSyncInventorySlots", localPlayer)
             end
             inventoryUI.destroyBuffer(localPlayer)
             inventoryUI.destroyBuffer(inventoryUI.vicinityInventory.element)
