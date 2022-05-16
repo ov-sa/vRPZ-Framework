@@ -419,14 +419,16 @@ CGame.execOnModuleLoad(function()
                 if slotRow and slotColumn then
                     if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and (not inventoryUI.attachedItem.isPlaceable or (inventoryUI.attachedItem.isPlaceable.type == "order")) then
                         local slot = CInventory.fetchSlotIndex(slotRow, slotColumn)
+                        local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(slot)
+                        local slotWidth, slotHeight = CInventory.fetchSlotDimensions(imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - (slotRow - 1)), imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - (slotColumn - 1)))
                         if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, slot) then
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "order"}
                             inventoryUI.attachedItem.isPlaceable.slot = slot
+                            inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.attachedItem.isPlaceable.offsetY = slot_offsetX, slot_offsetY
+                            inventoryUI.attachedItem.isPlaceable.width, inventoryUI.attachedItem.isPlaceable.height = slotWidth, slotHeight
                         else
                             inventoryUI.attachedItem.isPlaceable = false
                         end
-                        local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(slot)
-                        local slotWidth, slotHeight = CInventory.fetchSlotDimensions(imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - (slotRow - 1)), imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - (slotColumn - 1)))
                         imports.beautify.native.drawRectangle(slot_offsetX, slot_offsetY, slotWidth, slotHeight, (inventoryUI.attachedItem.isPlaceable and inventoryUI.clientInventory.slotAvailableColor) or inventoryUI.clientInventory.slotUnavailableColor, false)
                     end
                 end
@@ -579,24 +581,17 @@ CGame.execOnModuleLoad(function()
                     local isPlaceAttachment = false
                     if inventoryUI.attachedItem.isPlaceable then
                         if inventoryUI.attachedItem.isPlaceable.type == "order" then
-                            --isPlaceAttachment = true
-                            --TODO: TEST
-                            --[[
-                            local slotWidth, slotHeight = CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding), CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + ((CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows - 1)*inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)
-                            local releaseIndex = inventoryUI.attachedItem.prevSlot
+                            isPlaceAttachment = true
                             inventoryUI.attachedItem.prevSlot = inventoryUI.attachedItem.isPlaceable.slot
-                            inventoryUI.attachedItem.prevPosX = inventoryUI.buffer[localPlayer].gui.startX + inventoryUI.gui.itemBox.templates[1].contentWrapper.startX + isItemAvailableForOrdering.offsetX + ((slotWidth - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1])/2)
-                            inventoryUI.attachedItem.prevPosY = inventoryUI.buffer[localPlayer].gui.startY + inventoryUI.gui.itemBox.templates[1].contentWrapper.startY + isItemAvailableForOrdering.offsetY + ((slotHeight - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2])/2)
-                            inventoryUI.attachedItem.releaseIndex = releaseIndex
-                            if inventoryUI.attachedItem.parent == localPlayer then
+                            inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY = client_startX + inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetX + ((inventoryUI.attachedItem.isPlaceable.width - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1])*0.5), client_startY + inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetY + ((inventoryUI.attachedItem.isPlaceable.height - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2])*0.5)
+                            --[[
                                 if inventoryUI.attachedItem.isEquippedItem then
                                     unequipItemInInventory(inventoryUI.attachedItem.item, releaseIndex, isItemAvailableForOrdering.slotIndex, localPlayer)
                                 else
                                     orderItemInInventory(inventoryUI.attachedItem.item, releaseIndex, isItemAvailableForOrdering.slotIndex)
                                 end
-                            end
-                            triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                             ]]
+                            --triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                         elseif inventoryUI.attachedItem.isPlaceable.type == "drop" then
                             isPlaceAttachment = true
                             --[[
@@ -630,7 +625,6 @@ CGame.execOnModuleLoad(function()
                             inventoryUI.attachedItem.prevPosX = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.startX + template.contentWrapper.startX + template.contentWrapper.itemSlot.startX + template.contentWrapper.itemSlot.iconSlot.startX
                             inventoryUI.attachedItem.prevPosY = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.startY + template.contentWrapper.startY + slot_offsetY
                             inventoryUI.attachedItem.releaseLoot = isItemAvailableForDropping.parent
-                            inventoryUI.attachedItem.releaseIndex = releaseIndex
                             if inventoryUI.attachedItem.isEquippedItem then
                                 local reservedSlotIndex = false
                                 inventoryUI.isSyncScheduled = true
@@ -675,7 +669,6 @@ CGame.execOnModuleLoad(function()
                             inventoryUI.attachedItem.prevPosX = isItemAvailableForEquipping.offsetX
                             inventoryUI.attachedItem.prevPosY = isItemAvailableForEquipping.offsetY
                             inventoryUI.attachedItem.releaseLoot = isItemAvailableForEquipping.parent
-                            inventoryUI.attachedItem.releaseIndex = releaseIndex
                             inventoryUI.attachedItem.reservedSlot = reservedSlot
                             if parent == localPlayer then
                                 inventoryUI.isSyncScheduled = true
