@@ -23,7 +23,7 @@ FRAMEWORK_CONFIGS["Templates"]["Inventory"] = {
             ["Title"] = {
                 ["EN"] = "Primary",
                 ["TR"] = "Öncelik",
-                ["RU"] = "Начальный",
+                ["RU"] = "Основное",
                 ["BR"] = "Primária",
                 ["NL"] = "primair"
             },
@@ -35,7 +35,7 @@ FRAMEWORK_CONFIGS["Templates"]["Inventory"] = {
             ["Title"] = {
                 ["EN"] = "Secondary",
                 ["TR"] = "İkincil",
-                ["RU"] = "Среднее",
+                ["RU"] = "Дополнительное",
                 ["BR"] = "Secundária",
                 ["NL"] = "Ondergeschikt"
             },
