@@ -211,7 +211,7 @@ CGame.execOnModuleLoad(function()
         if not slot then return false end
         local row, column = CInventory.fetchSlotLocation(slot)
         if not row or not column then return false end
-        return column*(inventoryUI.clientInventory.width/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns), row*(inventoryUI.clientInventory.height/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows)
+        return (column - 1)*(inventoryUI.clientInventory.width/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns), (row - 1)*(inventoryUI.clientInventory.height/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows)
     end
     inventoryUI.createBuffer = function(parent, name)
         if not parent or not imports.isElement(parent) or inventoryUI.buffer[parent] then return false end
@@ -426,7 +426,7 @@ CGame.execOnModuleLoad(function()
                             inventoryUI.attachedItem.isPlaceable = {slot = slot, type = "order"}
                         end
                         local slot_offsetX, slot_offsetY = inventoryUI.fetchUIOffsetFromSlot(slot)
-                        local slotWidth, slotHeight = CInventory.fetchSlotDimensions(imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - slotRow), imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - slotColumn))
+                        local slotWidth, slotHeight = CInventory.fetchSlotDimensions(imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - (slotRow - 1)), imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - (slotColumn - 1)))
                         --TODO: DRAW THE SUCCESS/FAIL HINT ICON
                         imports.beautify.native.drawRectangle(slot_offsetX, slot_offsetY, slotWidth, slotHeight, tocolor(255, 0, 0, 100), false)
                     end
