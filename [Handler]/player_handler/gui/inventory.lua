@@ -200,12 +200,18 @@ CGame.execOnModuleLoad(function()
     end
     inventoryUI.updateUILang = function() inventoryUI.isLangUpdated = true end
     imports.addEventHandler("Client:onUpdateLanguage", root, inventoryUI.updateUILang)
-    inventoryUI.fetchUIGridFromOffset = function(offsetX, offsetY)
+    inventoryUI.fetchUISlotFromOffset = function(offsetX, offsetY)
         if not offsetX or not offsetY then return false end
-        local rowIndex, columnIndex = imports.math.ceil(offsetY/(inventoryUI.clientInventory.height/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows)), imports.math.ceil(offsetX/(inventoryUI.clientInventory.width/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns))
-        rowIndex, columnIndex = (((rowIndex >= 1) and (rowIndex <= FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows)) and rowIndex) or false, (((columnIndex >= 1) and (columnIndex <= FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)) and columnIndex) or false
-        if not rowIndex or not columnIndex then return false end
-        return rowIndex, columnIndex
+        local row, column = imports.math.ceil(offsetY/(inventoryUI.clientInventory.height/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows)), imports.math.ceil(offsetX/(inventoryUI.clientInventory.width/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns))
+        row, column = (((row >= 1) and (row <= FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows)) and row) or false, (((column >= 1) and (column <= FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)) and column) or false
+        if not row or not column then return false end
+        return row, column
+    end
+    inventoryUI.fetchUIOffsetFromSlot = function(slot)
+        if not slot then return false end
+        local row, column = CInventory.fetchSlotLocation(slot)
+        if not row or not column then return false end
+        return column*(inventoryUI.clientInventory.width/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns), row*(inventoryUI.clientInventory.height/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows)
     end
     inventoryUI.createBuffer = function(parent, name)
         if not parent or not imports.isElement(parent) or inventoryUI.buffer[parent] then return false end
@@ -412,16 +418,17 @@ CGame.execOnModuleLoad(function()
                 end
             end
             if client_isHovered then
-                local slotRow, slotColumn = inventoryUI.fetchUIGridFromOffset(cursorX - inventoryUI.clientInventory.startX, cursorY - (inventoryUI.clientInventory.startY + inventoryUI.titlebar.height))
+                local slotRow, slotColumn = inventoryUI.fetchUISlotFromOffset(cursorX - inventoryUI.clientInventory.startX, cursorY - (inventoryUI.clientInventory.startY + inventoryUI.titlebar.height))
                 if slotRow and slotColumn then
-                    if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and not inventoryUI.attachedItem.isOrderable then
+                    if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and (not inventoryUI.attachedItem.isPlaceable or (inventoryUI.attachedItem.isPlaceable.type == "order")) then
                         local slot = CInventory.fetchSlotIndex(slotRow, slotColumn)
                         if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, slot) then
-                            inventoryUI.attachedItem.isOrderable = {slot = slot, tyoe = "order"}
+                            inventoryUI.attachedItem.isPlaceable = {slot = slot, type = "order"}
                         end
-                        local slotWidth, slotHeight = CInventory.fetchSlotDimensions(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - slotColumn, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - slotRow)
-                            --TODO: DRAW THE SUCCESS/FAIL HINT ICON
-                        --imports.beautify.native.drawRectangle(__slot_offsetX, __slot_offsetY, slotWidth, slotHeight, tocolor(255, 0, 0, 100), false)
+                        local slot_offsetX, slot_offsetY = inventoryUI.fetchUIOffsetFromSlot(slot)
+                        local slotWidth, slotHeight = CInventory.fetchSlotDimensions(imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - slotRow), imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - slotColumn))
+                        --TODO: DRAW THE SUCCESS/FAIL HINT ICON
+                        imports.beautify.native.drawRectangle(slot_offsetX, slot_offsetY, slotWidth, slotHeight, tocolor(255, 0, 0, 100), false)
                     end
                 end
             end
