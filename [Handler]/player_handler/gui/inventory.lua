@@ -47,7 +47,7 @@ CGame.execOnModuleLoad(function()
     -------------------
 
     local inventory_margin = 4
-    local inventory_offsetX, inventory_offsetY = CInventory.fetchSlotDimensions(2, 6)
+    local inventory_offsetX, inventory_offsetY = CInventory.fetchSlotDimensions(FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Primary"].slots.rows, FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Primary"].slots.columns)
     local vicinity_slotSize = inventory_offsetY
     inventory_offsetY = inventory_offsetY + FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height + inventory_margin
     local inventoryUI = {
@@ -77,14 +77,14 @@ CGame.execOnModuleLoad(function()
             },
             equipment = {
                 --TODO: ADD SLOTS UPPER LOWER SHOES INTO INVENTORY TEMPLATE SLOTS + LOAD THE SIZE OF THIS VIA IT
-                {identifier = "helmet", slots = {rows = 2, columns = 2}},
-                {identifier = "vest", slots = {rows = 2, columns = 2}},
-                {identifier = "upper", slots = {rows = 2, columns = 2}},
-                {identifier = "lower", slots = {rows = 2, columns = 2}},
-                {identifier = "shoes", slots = {rows = 2, columns = 2}},
-                {identifier = "primary", slots = {rows = 2, columns = 6}},
-                {identifier = "secondary", slots = {rows = 2, columns = 4}},
-                {identifier = "backpack", slots = {rows = 3, columns = 3}}
+                {identifier = "helmet", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Helmet"].slots},
+                {identifier = "vest", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Vest"].slots},
+                {identifier = "upper", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Upper"].slots},
+                {identifier = "lower", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Lower"].slots},
+                {identifier = "shoes", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Shoes"].slots},
+                {identifier = "primary", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Primary"].slots},
+                {identifier = "secondary", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Secondary"].slots},
+                {identifier = "backpack", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Backpack"].slots}
             }
         },
         vicinityInventory = {
