@@ -424,7 +424,10 @@ CGame.execOnModuleLoad(function()
                     if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and (not inventoryUI.attachedItem.isPlaceable or (inventoryUI.attachedItem.isPlaceable.type == "order")) then
                         local slot = CInventory.fetchSlotIndex(slotRow, slotColumn)
                         if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, slot) then
-                            inventoryUI.attachedItem.isPlaceable = {slot = slot, type = "order"}
+                            inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "order"}
+                            inventoryUI.attachedItem.isPlaceable.slot = slot
+                        else
+                            inventoryUI.attachedItem.isPlaceable = false
                         end
                         local slot_offsetX, slot_offsetY = inventoryUI.fetchUIOffsetFromSlot(slot)
                         local slotWidth, slotHeight = CInventory.fetchSlotDimensions(imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - (slotRow - 1)), imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - (slotColumn - 1)))
