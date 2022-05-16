@@ -76,14 +76,14 @@ CGame.execOnModuleLoad(function()
                 lockTexture = imports.beautify.assets["images"]["canvas/lock.rw"], unlockTexture = imports.beautify.assets["images"]["canvas/unlock.rw"]
             },
             equipment = {
-                {identifier = "helmet", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Helmet"].slots},
-                {identifier = "vest", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Vest"].slots},
-                {identifier = "upper", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Upper"].slots},
-                {identifier = "lower", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Lower"].slots},
-                {identifier = "shoes", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Shoes"].slots},
-                {identifier = "primary", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Primary"].slots},
-                {identifier = "secondary", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Secondary"].slots},
-                {identifier = "backpack", slots = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]["Backpack"].slots}
+                "Helmet",
+                "Vest",
+                "Upper",
+                "Lower",
+                "Shoes",
+                "Primary",
+                "Secondary",
+                "Backpack"
             }
         },
         vicinityInventory = {
@@ -107,7 +107,8 @@ CGame.execOnModuleLoad(function()
     inventoryUI.clientInventory.lockStat.startX, inventoryUI.clientInventory.lockStat.startY = inventoryUI.clientInventory.width - inventoryUI.clientInventory.lockStat.size, -inventoryUI.titlebar.height + ((inventoryUI.titlebar.height - inventoryUI.clientInventory.lockStat.size)*0.5)
     for i = 1, #inventoryUI.clientInventory.equipment, 1 do
         local j = inventoryUI.clientInventory.equipment[i]
-        j.width, j.height = CInventory.fetchSlotDimensions(j.slots.rows, j.slots.columns)
+        inventoryUI.clientInventory.equipment[i] = imports.table.clone(FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][j], true)
+        inventoryUI.clientInventory.equipment[i].width, inventoryUI.clientInventory.equipment[i].height = CInventory.fetchSlotDimensions(inventoryUI.clientInventory.equipment[i].slots.rows, inventoryUI.clientInventory.equipment[i].slots.columns)
     end
     local equipment_prevX, equipment_prevY = -inventoryUI.margin, inventoryUI.titlebar.slot.height + inventoryUI.clientInventory.equipment[1].height + inventoryUI.margin
     for i = 5, 1, -1 do
