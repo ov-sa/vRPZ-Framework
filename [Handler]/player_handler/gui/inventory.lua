@@ -201,14 +201,14 @@ CGame.execOnModuleLoad(function()
     end
     inventoryUI.updateUILang = function() inventoryUI.isLangUpdated = true end
     imports.addEventHandler("Client:onUpdateLanguage", root, inventoryUI.updateUILang)
-    inventoryUI.fetchUISlotFromOffset = function(offsetX, offsetY)
+    inventoryUI.fetchUIGridSlotFromOffset = function(offsetX, offsetY)
         if not offsetX or not offsetY then return false end
         local row, column = imports.math.ceil(offsetY/(inventoryUI.clientInventory.height/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows)), imports.math.ceil(offsetX/(inventoryUI.clientInventory.width/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns))
         row, column = (((row >= 1) and (row <= FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows)) and row) or false, (((column >= 1) and (column <= FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)) and column) or false
         if not row or not column then return false end
         return row, column
     end
-    inventoryUI.fetchUIOffsetFromSlot = function(slot)
+    inventoryUI.fetchUIGridOffsetFromSlot = function(slot)
         if not slot then return false end
         local row, column = CInventory.fetchSlotLocation(slot)
         if not row or not column then return false end
@@ -419,7 +419,7 @@ CGame.execOnModuleLoad(function()
                 end
             end
             if client_isHovered then
-                local slotRow, slotColumn = inventoryUI.fetchUISlotFromOffset(cursorX - inventoryUI.clientInventory.startX, cursorY - (inventoryUI.clientInventory.startY + inventoryUI.titlebar.height))
+                local slotRow, slotColumn = inventoryUI.fetchUIGridSlotFromOffset(cursorX - inventoryUI.clientInventory.startX, cursorY - (inventoryUI.clientInventory.startY + inventoryUI.titlebar.height))
                 if slotRow and slotColumn then
                     if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and (not inventoryUI.attachedItem.isPlaceable or (inventoryUI.attachedItem.isPlaceable.type == "order")) then
                         local slot = CInventory.fetchSlotIndex(slotRow, slotColumn)
@@ -429,7 +429,7 @@ CGame.execOnModuleLoad(function()
                         else
                             inventoryUI.attachedItem.isPlaceable = false
                         end
-                        local slot_offsetX, slot_offsetY = inventoryUI.fetchUIOffsetFromSlot(slot)
+                        local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(slot)
                         local slotWidth, slotHeight = CInventory.fetchSlotDimensions(imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - (slotRow - 1)), imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - (slotColumn - 1)))
                         imports.beautify.native.drawRectangle(slot_offsetX, slot_offsetY, slotWidth, slotHeight, (inventoryUI.attachedItem.isPlaceable and inventoryUI.clientInventory.slotAvailableColor) or inventoryUI.clientInventory.slotUnavailableColor, false)
                     end

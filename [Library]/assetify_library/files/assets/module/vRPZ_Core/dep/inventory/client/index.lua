@@ -17,7 +17,7 @@ local imports = {
 CInventory.fetchSlotDimensions = function(rows, columns)
     rows, columns = imports.tonumber(rows), imports.tonumber(columns)
     if not rows or not columns then return false end
-    return (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*imports.math.max(0, columns), (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*imports.math.max(0, rows)
+    return (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*imports.math.max(0, columns) + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize, (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*imports.math.max(0, rows) + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize
 end
 
 CInventory.isSlotAvailableForOrdering = function(item, slot, isEquipped)
@@ -49,10 +49,12 @@ CInventory.isSlotAvailableForOrdering = function(item, slot, isEquipped)
     return true
 end
 
-for i, j in imports.pairs(CInventory.CItems) do
-    j.icon = {
-        inventory = imports.assetify.getAssetDep(j.pack, i, "texture", "inventory"),
-        hud = imports.assetify.getAssetDep(j.slot, i, "texture", "hud")
-    }
-    j.dimensions = {CInventory.fetchSlotDimensions(j.data.itemWeight.rows, j.data.itemWeight.columns)}
-end
+imports.assetify.execOnLoad(function()
+    for i, j in imports.pairs(CInventory.CItems) do
+        j.icon = {
+            inventory = imports.assetify.getAssetDep(j.pack, i, "texture", "inventory"),
+            hud = imports.assetify.getAssetDep(j.slot, i, "texture", "hud")
+        }
+        j.dimensions = {CInventory.fetchSlotDimensions(j.data.itemWeight.rows, j.data.itemWeight.columns)}
+    end
+end)
