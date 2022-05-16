@@ -952,57 +952,6 @@ end)
                             end
                         end
                     end
-                    for k = 1, maxSlots, 1 do
-                        if not usedSlots[k] then
-                            local slotRow = math.ceil(k/maximumInventoryRowSlots)
-                            local slotColumn = k - (math.max(0, slotRow - 1)*maximumInventoryRowSlots)
-                            local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slotColumn - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slotRow - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
-                            local isSlotToBeDrawn = true
-                            if inventoryUI.attachedItem and inventoryUI.attachedItem.parent and isElement(inventoryUI.attachedItem.parent) and inventoryUI.attachedItem.parent ~= localPlayer and inventoryUI.attachedItem.animTickCounter and inventoryUI.attachedItem.releaseType and inventoryUI.attachedItem.releaseType == "ordering" then
-                                local slotIndexesToOccupy = {}
-                                for m = inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.prevSlot + (inventoryUI.attachedItem.occupiedRowSlots - 1), 1 do
-                                    if m <= maxSlots then
-                                        for x = 1, inventoryUI.attachedItem.occupiedColumnSlots, 1 do
-                                            local succeedingColumnIndex = m + (maximumInventoryRowSlots*(x - 1))
-                                            if succeedingColumnIndex <= maxSlots then
-                                                if k == succeedingColumnIndex then
-                                                    isSlotToBeDrawn = false
-                                                    break
-                                                end
-                                            end
-                                        end
-                                    end
-                                end
-                            end
-                            if isSlotToBeDrawn then
-                                dxDrawRectangle(slot_offsetX, slot_offsetY, template.contentWrapper.itemGrid.inventory.slotSize, template.contentWrapper.itemGrid.inventory.slotSize, tocolor(unpack(template.contentWrapper.itemGrid.slot.bgColor)), false)
-                            end
-                        else
-                            if inventoryUI.buffer[localPlayer].assignedSlots[k] and inventoryUI.buffer[localPlayer].assignedSlots[k].translation and inventoryUI.buffer[localPlayer].assignedSlots[k].translation == "equipment" then
-                                local itemDetails, itemCategory = getItemDetails(inventoryUI.buffer[localPlayer].assignedSlots[k].item)
-                                if itemDetails and itemCategory then
-                                    local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
-                                    local verticalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemVerticalSlots) or 1)
-                                    local slotRow = math.ceil(k/maximumInventoryRowSlots)
-                                    local slotColumn = k - (math.max(0, slotRow - 1)*maximumInventoryRowSlots)
-                                    local slot_offsetX, slot_offsetY = template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slotColumn - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)), template.contentWrapper.padding + template.contentWrapper.itemGrid.padding + (math.max(0, slotRow - 1)*(template.contentWrapper.itemGrid.inventory.slotSize + template.contentWrapper.itemGrid.padding)) - (exceededContentHeight*j.gui.scroller.percent*0.01)
-                                    local slotWidth, slotHeight = horizontalSlotsToOccupy*template.contentWrapper.itemGrid.inventory.slotSize + ((horizontalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding), verticalSlotsToOccupy*template.contentWrapper.itemGrid.inventory.slotSize + ((verticalSlotsToOccupy - 1)*template.contentWrapper.itemGrid.padding)
-                                    local equippedIndex = inventoryUI.buffer[localPlayer].assignedSlots[k].equipmentIndex
-                                    if not equippedIndex then
-                                        for m, n in pairs(inventoryUI.gui.equipment.slot) do
-                                            if inventoryUI.buffer[localPlayer].assignedSlots[m] and inventoryUI.buffer[localPlayer].assignedSlots[m] == inventoryUI.buffer[localPlayer].assignedSlots[k].item then
-                                                equippedIndex = m
-                                                break
-                                            end
-                                        end
-                                    end
-                                    if equippedIndex then
-                                        dxDrawText(string.upper("EQUIPPED: "..equippedIndex), slot_offsetX, slot_offsetY, slot_offsetX + slotWidth, slot_offsetY + slotHeight, tocolor(unpack(template.contentWrapper.itemGrid.slot.fontColor)), 1, template.contentWrapper.itemGrid.slot.font.instance, "right", "bottom", true, true, false)
-                                    end
-                                end
-                            end
-                        end
-                    end
                 else
                     if not inventoryUI.isSynced then
                         for k, v in pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
