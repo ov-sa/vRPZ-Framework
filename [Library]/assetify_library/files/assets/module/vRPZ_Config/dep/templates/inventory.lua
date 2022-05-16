@@ -18,27 +18,48 @@ FRAMEWORK_CONFIGS["Templates"]["Inventory"] = {
 
     ["Slots"] = {
         ["Primary"] = {
-            identifier = "Weapon"
+            identifier = "Weapon",
+            space = {rows = 2, columns = 6}
         },
     
         ["Secondary"] = {
-            identifier = "Weapon"
+            identifier = "Weapon",
+            space = {rows = 2, columns = 4}
         },
     
         ["Tertiary"] = {
-            identifier = "Weapon"
+            identifier = "Weapon",
+            space = {rows = 2, columns = 2}
         },
     
         ["Helmet"] = {
-            identifier = "Helmet"
+            identifier = "Helmet",
+            space = {rows = 2, columns = 2}
         },
     
         ["Armor"] = {
-            identifier = "Armor"
+            identifier = "Armor",
+            space = {rows = 2, columns = 2}
         },
     
         ["Backpack"] = {
-            identifier = "Backpack"
+            identifier = "Backpack",
+            space = {rows = 3, columns = 3}
+        },
+
+        ["Upper"] = {
+            identifier = "Upper",
+            space = {rows = 2, columns = 2}
+        },
+
+        ["Lower"] = {
+            identifier = "Lower",
+            space = {rows = 2, columns = 2}
+        },
+
+        ["Shoes"] = {
+            identifier = "Shoes",
+            space = {rows = 2, columns = 2}
         }
     }
 }
