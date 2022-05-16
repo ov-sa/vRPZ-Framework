@@ -191,6 +191,7 @@ CGame.execOnModuleLoad(function()
     end
     inventoryUI.updateUILang = function()
         for i = 1, #inventoryUI.clientInventory.equipment, 1 do
+            local j = inventoryUI.clientInventory.equipment[i]
             j.title = imports.string.upper(imports.string.spaceChars(j["Title"][(CPlayer.CLanguage)]))
         end
         return true
