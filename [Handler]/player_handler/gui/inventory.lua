@@ -72,7 +72,7 @@ CGame.execOnModuleLoad(function()
         clientInventory = {
             startX = 0, startY = -inventory_offsetY,
             bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor)), dividerColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor[3], 255),
-            slotAvailableColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor)), slotUnavailableColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor)),
+            slotColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor)), slotAvailableColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor)), slotUnavailableColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor)),
             lockStat = {
                 lockTexture = imports.beautify.assets["images"]["canvas/lock.rw"], unlockTexture = imports.beautify.assets["images"]["canvas/unlock.rw"]
             },
@@ -411,6 +411,7 @@ CGame.execOnModuleLoad(function()
                         isItemVisible = false
                     end
                 end
+                imports.beautify.native.drawRectangle(slot_offsetX, slot_offsetY, slotWidth, slotHeight, inventoryUI.vicinityInventory.slotColor, false)
                 if isItemVisible then
                     imports.beautify.native.drawImage(slot_offsetX + ((slotWidth - CInventory.CItems[(slotBuffer.item)].dimensions[1])*0.5), slot_offsetY + ((slotHeight - CInventory.CItems[(slotBuffer.item)].dimensions[2])*0.5), CInventory.CItems[(slotBuffer.item)].dimensions[1], CInventory.CItems[(slotBuffer.item)].dimensions[2], CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
                     --TODO: WIP..
