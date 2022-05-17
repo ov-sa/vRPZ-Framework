@@ -111,7 +111,7 @@ end
 
 CCharacter.loadProgress = function(player, loadBuffer, resetProgress)
     if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") then return false end
-    local characterID = imports.getElementData(player, "Character:ID")
+    local characterID = CPlayer.getCharacterID(player)
     if loadBuffer then
         local serial = CPlayer.getSerial(player)
         for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
@@ -144,7 +144,7 @@ end
 CCharacter.saveProgress = function(player)
     if not CPlayer.isInitialized(player) then return false end
     local serial = CPlayer.getSerial(player)
-    local characterID = imports.getElementData(player, "Character:ID")
+    local characterID = CPlayer.getCharacterID(player)
     local inventoryID = CCharacter.CBuffer[characterID].inventory
     CCharacter.setData(characterID, {
         {"location", imports.toJSON(CCharacter.getLocation(player))}

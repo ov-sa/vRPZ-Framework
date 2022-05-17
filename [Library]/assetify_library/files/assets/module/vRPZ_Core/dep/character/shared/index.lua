@@ -25,7 +25,7 @@ CCharacter = {
         for i = 1, #players, 1 do
             local j = players[i]
             if CPlayer.isInitialized(j) then
-                local _characterID = imports.getElementData(j, "Character:ID")
+                local _characterID = CPlayer.getCharacterID(j)
                 if _characterID == characterID then
                     return j
                 end
