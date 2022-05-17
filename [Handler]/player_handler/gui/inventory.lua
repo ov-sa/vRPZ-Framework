@@ -353,6 +353,11 @@ CGame.execOnModuleLoad(function()
             local client_width, client_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
             if not inventoryUI.buffer[localPlayer].bufferCache then
                 inventoryUI.buffer[localPlayer].bufferCache, inventoryUI.buffer[localPlayer].assignedItems = {}, {}
+                for i, j in imports.pairs(inventoryUI.buffer[localPlayer].inventory) do
+                    for k = 1, j, 1 do
+                        imports.table.insert(inventoryUI.buffer[localPlayer].bufferCache, {item = i, amount = 1})
+                    end
+                end
                 for i, j in imports.pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
                     if not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] then
                         if not inventoryUI.isSynced then
