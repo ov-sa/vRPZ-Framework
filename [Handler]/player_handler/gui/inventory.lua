@@ -400,8 +400,6 @@ CGame.execOnModuleLoad(function()
                 local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(j)
                 local slotWidth, slotHeight = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
                 local isItemVisible = true
-                --TODO: IDK MAYB NO NEED OF THIS
-                --if inventoryUI.attachedItem and (inventoryUI.attachedItem.prevSlot == j) and not inventoryUI.attachedItem.reservedSlot then
                 if inventoryUI.attachedItem then
                     if inventoryUI.attachedItem.parent == localPlayer then
                         if inventoryUI.attachedItem.prevSlot == j then
@@ -411,12 +409,12 @@ CGame.execOnModuleLoad(function()
                         isItemVisible = false
                     end
                 end
-                imports.beautify.native.drawRectangle(slot_offsetX, slot_offsetY, slotWidth, slotHeight, inventoryUI.vicinityInventory.slotColor, false)
+                imports.beautify.native.drawRectangle(slot_offsetX, slot_offsetY, slotWidth, slotHeight, inventoryUI.clientInventory.slotColor, false)
                 if isItemVisible then
                     imports.beautify.native.drawImage(slot_offsetX + ((slotWidth - CInventory.CItems[(slotBuffer.item)].dimensions[1])*0.5), slot_offsetY + ((slotHeight - CInventory.CItems[(slotBuffer.item)].dimensions[2])*0.5), CInventory.CItems[(slotBuffer.item)].dimensions[1], CInventory.CItems[(slotBuffer.item)].dimensions[2], CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
-                    --TODO: WIP..
-                    --[[
-                    if not inventoryUI.attachedItem and isUIEnabled then
+                    --TODO: CHECK IF ITS HOVERED...
+                    if isLMBClicked then
+                        --[[
                         if (slot_offsetY >= 0) and ((slot_offsetY + slotHeight) <= template.contentWrapper.height) then
                             local isSlotHovered = isMouseOnPosition(j.gui.startX + template.contentWrapper.startX + slot_offsetX, j.gui.startY + template.contentWrapper.startY + slot_offsetY, slotWidth, slotHeight)
                             if isSlotHovered then
@@ -429,8 +427,8 @@ CGame.execOnModuleLoad(function()
                                 end
                             end
                         end
+                        ]]
                     end
-                    ]]
                 end
             end
             if client_isHovered then
