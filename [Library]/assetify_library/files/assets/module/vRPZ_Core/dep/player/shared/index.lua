@@ -3,8 +3,10 @@
 -----------------
 
 local imports = {
+    tonumber = tonumber,
     isElement = isElement,
-    getElementType = getElementType
+    getElementType = getElementType,
+    getElementData = getElementData
 }
 
 
@@ -25,6 +27,11 @@ CPlayer = {
 
     getLogged = function()
         return CPlayer.CLogged
+    end,
+
+    getCharacterID = function(player)
+        if not CPlayer.isInitialized(player) then return false end
+        return imports.tonumber(imports.getElementData(player, "Character:ID")) or false
     end,
 
     getChannel = function(player)
