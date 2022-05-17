@@ -550,13 +550,13 @@ CGame.execOnModuleLoad(function()
                             slotBuffer.slotNameWidth = inventoryUI.vicinityInventory.width*slotBuffer.animAlphaPercent
                         end
                     end
-                    imports.beautify.native.drawRectangle(0, j.offsetY, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotColor, false)
+                    imports.beautify.native.drawRectangle(0, slotBuffer.offsetY, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotColor, false)
                     if isItemVisible then
-                        imports.beautify.native.drawImage(j.startX, j.offsetY + j.startY, j.width, j.height, CInventory.CItems[(j.item)].icon.inventory, 0, 0, 0, -1, false)
+                        imports.beautify.native.drawImage(slotBuffer.startX, slotBuffer.offsetY + slotBuffer.startY, slotBuffer.width, slotBuffer.height, CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
                     end
-                    if j.slotNameWidth and (j.slotNameWidth > 0) then
-                        imports.beautify.native.drawImageSection(0, j.offsetY, j.slotNameWidth, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.width - j.slotNameWidth, 0, j.slotNameWidth, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotNameTexture, 0, 0, 0, -1, false)
-                        imports.beautify.native.drawText(j.title, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*0.25, j.offsetY, j.slotNameWidth - FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize, j.offsetY + inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotNameFontColor, 1, inventoryUI.vicinityInventory.slotNameFont.instance, "left", "center", true, false, false)
+                    if slotBuffer.slotNameWidth and (slotBuffer.slotNameWidth > 0) then
+                        imports.beautify.native.drawImageSection(0, slotBuffer.offsetY, slotBuffer.slotNameWidth, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.width - slotBuffer.slotNameWidth, 0, slotBuffer.slotNameWidth, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotNameTexture, 0, 0, 0, -1, false)
+                        imports.beautify.native.drawText(slotBuffer.title, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize*0.25, slotBuffer.offsetY, slotBuffer.slotNameWidth - FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize, slotBuffer.offsetY + inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotNameFontColor, 1, inventoryUI.vicinityInventory.slotNameFont.instance, "left", "center", true, false, false)
                     end
                 end
                 if vicinity_isSlotHovered then
