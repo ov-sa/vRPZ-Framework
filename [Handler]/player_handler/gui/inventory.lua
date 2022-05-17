@@ -405,25 +405,21 @@ CGame.execOnModuleLoad(function()
                         isItemVisible = false
                     end
                 end
+                client_isSlotHovered = (client_isHovered and isUIActionEnabled and (client_isSlotHovered or (isItemVisible and imports.isMouseOnPosition(client_startX + inventoryUI.margin + slot_offsetX, client_startY + inventoryUI.margin + slot_offsetY, slotWidth, slotHeight) and j))) or false
                 imports.beautify.native.drawRectangle(slot_offsetX, slot_offsetY, slotWidth, slotHeight, inventoryUI.clientInventory.slotColor, false)
                 if isItemVisible then
                     imports.beautify.native.drawImage(slot_offsetX + ((slotWidth - CInventory.CItems[(slotBuffer.item)].dimensions[1])*0.5), slot_offsetY + ((slotHeight - CInventory.CItems[(slotBuffer.item)].dimensions[2])*0.5), CInventory.CItems[(slotBuffer.item)].dimensions[1], CInventory.CItems[(slotBuffer.item)].dimensions[2], CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
                     --TODO: CHECK IF ITS HOVERED...
-                    if isLMBClicked then
-                        --[[
-                        if (slot_offsetY >= 0) and ((slot_offsetY + slotHeight) <= template.contentWrapper.height) then
-                            local isSlotHovered = isMouseOnPosition(j.gui.startX + template.contentWrapper.startX + slot_offsetX, j.gui.startY + template.contentWrapper.startY + slot_offsetY, slotWidth, slotHeight)
-                            if isSlotHovered then
-                                if isLMBClicked then
-                                    local CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = getAbsoluteCursorPosition()
-                                    local prev_offsetX, prev_offsetY = j.gui.startX + template.contentWrapper.startX + slot_offsetX, j.gui.startY + template.contentWrapper.startY + slot_offsetY
-                                    local prev_width, prev_height = CInventory.CItems[(j.item)].dimensions[1], CInventory.CItems[(j.item)].dimensions[2]
-                                    local attached_offsetX, attached_offsetY = CLIENT_CURSOR_OFFSET[1] - prev_offsetX, CLIENT_CURSOR_OFFSET[2] - prev_offsetY
-                                    --inventoryUI.attachItem(i, v.item, itemCategory, inventoryUI.buffer[localPlayer].assignedItems[i], horizontalSlotsToOccupy, verticalSlotsToOccupy, prev_offsetX, prev_offsetY, prev_width, prev_height, attached_offsetX, attached_offsetY)
-                                end
-                            end
+                    if client_isSlotHovered then
+                        if isLMBClicked then
+                            --[[
+                            local CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = getAbsoluteCursorPosition()
+                            local prev_offsetX, prev_offsetY = j.gui.startX + template.contentWrapper.startX + slot_offsetX, j.gui.startY + template.contentWrapper.startY + slot_offsetY
+                            local prev_width, prev_height = CInventory.CItems[(j.item)].dimensions[1], CInventory.CItems[(j.item)].dimensions[2]
+                            local attached_offsetX, attached_offsetY = CLIENT_CURSOR_OFFSET[1] - prev_offsetX, CLIENT_CURSOR_OFFSET[2] - prev_offsetY
+                            --inventoryUI.attachItem(i, v.item, itemCategory, inventoryUI.buffer[localPlayer].assignedItems[i], horizontalSlotsToOccupy, verticalSlotsToOccupy, prev_offsetX, prev_offsetY, prev_width, prev_height, attached_offsetX, attached_offsetY)
+                            ]]
                         end
-                        ]]
                     end
                 end
             end
