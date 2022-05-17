@@ -738,28 +738,6 @@ CGame.execOnModuleLoad(function()
                 if inventoryUI.attachedItem.isOnTransition then
                     attachment_posX, attachment_posY = imports.interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY, 0, imports.getInterpolationProgress(inventoryUI.attachedItem.transitionTickCounter, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration), "OutQuad")
                     if (imports.math.round(attachment_posX, 2) == imports.math.round(inventoryUI.attachedItem.prevX, 2)) and (imports.math.round(attachment_posY, 2) == imports.math.round(inventoryUI.attachedItem.prevY, 2)) then
-                        --TODO: WIP..
-                        --[[
-                        if inventoryUI.attachedItem.releaseType and inventoryUI.attachedItem.releaseType == "equipping" then
-                            equipItemInInventory(inventoryUI.attachedItem.item, inventoryUI.attachedItem.releaseIndex, inventoryUI.attachedItem.reservedSlot, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.parent)
-                        else
-                            if inventoryUI.attachedItem.parent ~= localPlayer then
-                                if inventoryUI.attachedItem.releaseType and inventoryUI.attachedItem.releaseType == "ordering" then
-                                    if not inventoryUI.attachedItem.isEquippedItem then
-                                        moveItemInInventory(inventoryUI.attachedItem.item, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.parent)
-                                    end
-                                end
-                            else
-                                if inventoryUI.attachedItem.releaseType and inventoryUI.attachedItem.releaseType == "dropping" then
-                                    if inventoryUI.attachedItem.isEquippedItem then
-                                        unequipItemInInventory(inventoryUI.attachedItem.item, inventoryUI.attachedItem.releaseIndex, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.releaseLoot, inventoryUI.attachedItem.reservedSlot)
-                                    else
-                                        moveItemInLoot(inventoryUI.attachedItem.item, inventoryUI.attachedItem.releaseIndex, inventoryUI.attachedItem.releaseLoot)
-                                    end
-                                end
-                            end
-                        end
-                        ]]
                         isDetachAttachment = true
                     end
                 else
