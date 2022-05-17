@@ -392,7 +392,7 @@ CGame.execOnModuleLoad(function()
             imports.beautify.native.setRenderTarget(inventoryUI.buffer[localPlayer].bufferRT, true)
             imports.beautify.native.drawImage(0, 0, inventoryUI.gridWidth, inventoryUI.gridHeight, inventoryUI.gridTexture, 0, 0, 0, -1, false)
             for i, j in imports.pairs(inventoryUI.buffer[localPlayer].assignedItems) do
-                local slotBuffer = inventoryUI.buffer[localPlayer].bufferCache[i]
+                local slotBuffer = client_bufferCache[i]
                 local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(j)
                 local slotWidth, slotHeight = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
                 local isItemVisible = true
@@ -439,7 +439,7 @@ CGame.execOnModuleLoad(function()
                     if isLMBClicked then
                         local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(client_isSlotHovered)
                         local slot_prevX, slot_prevY = client_startX + inventoryUI.margin + slot_offsetX, client_startY + inventoryUI.margin + slot_offsetY
-                        inventoryUI.attachItem(inventoryUI.clientInventory.element, slotBuffer.item, slotBuffer.amount, client_isSlotHovered, slot_prevX, slot_prevY, inventoryUI.buffer[localPlayer].bufferCache[client_isSlotHovered].width, inventoryUI.buffer[localPlayer].bufferCache[client_isSlotHovered].height, cursorX - slot_prevX, cursorY - slot_prevY)
+                        inventoryUI.attachItem(localPlayer, client_bufferCache[client_isSlotHovered].item, client_bufferCache[client_isSlotHovered].amount, client_isSlotHovered, slot_prevX, slot_prevY, client_bufferCache[client_isSlotHovered].width, client_bufferCache[client_isSlotHovered].height, cursorX - slot_prevX, cursorY - slot_prevY)
                         isUIActionEnabled = false
                     end
                 end
@@ -556,7 +556,7 @@ CGame.execOnModuleLoad(function()
                 if vicinity_isSlotHovered then
                     if isLMBClicked then
                         local slot_prevX, slot_prevY = vicinity_startX + inventoryUI.margin + vicinity_bufferCache[vicinity_isSlotHovered].startX, vicinity_startY + inventoryUI.margin + vicinity_bufferCache[vicinity_isSlotHovered].startY + vicinity_bufferCache[vicinity_isSlotHovered].offsetY
-                        inventoryUI.attachItem(inventoryUI.vicinityInventory.element, j.item, 1, vicinity_isSlotHovered, slot_prevX, slot_prevY, vicinity_bufferCache[vicinity_isSlotHovered].width, vicinity_bufferCache[vicinity_isSlotHovered].height, cursorX - slot_prevX, cursorY - slot_prevY)
+                        inventoryUI.attachItem(inventoryUI.vicinityInventory.element, vicinity_bufferCache[vicinity_isSlotHovered].item, 1, vicinity_isSlotHovered, slot_prevX, slot_prevY, vicinity_bufferCache[vicinity_isSlotHovered].width, vicinity_bufferCache[vicinity_isSlotHovered].height, cursorX - slot_prevX, cursorY - slot_prevY)
                         isUIActionEnabled = false
                     end
                 end
