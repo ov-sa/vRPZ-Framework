@@ -404,6 +404,9 @@ CGame.execOnModuleLoad(function()
                             if inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and inventoryUI.attachedItem.isPlaceable.slot then
                                 isSlotVisible = false
                             end
+                        elseif inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and (inventoryUI.attachedItem.isPlaceable.slot == j) and (inventoryUI.attachedItem.isPlaceable.type == "order") then
+                                isItemVisible = false
+                            end
                         end
                     elseif inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and (inventoryUI.attachedItem.isPlaceable.slot == j) and (inventoryUI.attachedItem.isPlaceable.type == "order") then
                         isItemVisible = false
@@ -443,9 +446,9 @@ CGame.execOnModuleLoad(function()
                 end
                 if client_isSlotHovered then
                     if isLMBClicked then
-                        local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(client_isSlotHovered)
+                        local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(inventoryUI.buffer[localPlayer].assignedItems[client_isSlotHovered])
                         local slot_prevX, slot_prevY = client_startX + inventoryUI.margin + slot_offsetX, client_startY + inventoryUI.margin + slot_offsetY
-                        inventoryUI.attachItem(localPlayer, client_bufferCache[client_isSlotHovered].item, client_bufferCache[client_isSlotHovered].amount, client_isSlotHovered, slot_prevX, slot_prevY, client_bufferCache[client_isSlotHovered].width, client_bufferCache[client_isSlotHovered].height, cursorX - slot_prevX, cursorY - slot_prevY)
+                        inventoryUI.attachItem(localPlayer, client_bufferCache[client_isSlotHovered].item, client_bufferCache[client_isSlotHovered].amount, inventoryUI.buffer[localPlayer].assignedItems[client_isSlotHovered], slot_prevX, slot_prevY, client_bufferCache[client_isSlotHovered].width, client_bufferCache[client_isSlotHovered].height, cursorX - slot_prevX, cursorY - slot_prevY)
                         isUIActionEnabled = false
                     end
                 end
