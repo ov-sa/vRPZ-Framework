@@ -273,19 +273,31 @@ CGame.execOnModuleLoad(function()
         end
         return true
     end
+    inventoryUI.addItem = function()
+        inventoryUI.isSynced = false
+        inventoryUI.isSyncScheduled = true
+        --CInventory.CBuffer.slots[(inventoryUI.attachedItem.prevSlot)] = nil
+        --TODO: REDUCE 1 ON VICINITY
+        CInventory.CBuffer.slots[(inventoryUI.attachedItem.isPlaceable.slot)] = {
+            item = inventoryUI.attachedItem.item,
+            translation = "inventory_add"
+        }
+        inventoryUI.updateBuffer(localPlayer)
+        imports.triggerServerEvent("Player:onAddItem", localPlayer, inventoryUI.attachedItem.item, inventoryUI.attachedItem.parent, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot)
+        return true
+    end
     inventoryUI.orderItem = function()
         inventoryUI.isSynced = false
         inventoryUI.isSyncScheduled = true
         CInventory.CBuffer.slots[(inventoryUI.attachedItem.prevSlot)] = nil
         CInventory.CBuffer.slots[(inventoryUI.attachedItem.isPlaceable.slot)] = {
             item = inventoryUI.attachedItem.item,
-            translation = "inventory"
+            translation = "inventory_order"
         }
         inventoryUI.updateBuffer(localPlayer)
         imports.triggerServerEvent("Player:onOrderItem", localPlayer, inventoryUI.attachedItem.item, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot)
         return true
     end
-
 
     -------------------------------
     --[[ Functions: UI Helpers ]]--
@@ -344,7 +356,7 @@ CGame.execOnModuleLoad(function()
                 for i, j in imports.pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
                     if not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] then
                         if not inventoryUI.isSynced then
-                            if j.translation == "inventory" then
+                            if j.translation == "inventory_add" then
                                 imports.table.insert(inventoryUI.buffer[localPlayer].bufferCache, {item = j.item, amount = 1})
                             --[[
                             elseif (j.translation == "equipment") and j.isAutoIndexed then
@@ -382,11 +394,8 @@ CGame.execOnModuleLoad(function()
                         if inventoryUI.attachedItem.prevSlot == j then
                             isItemVisible = false
                         end
-                    elseif inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and (inventoryUI.attachedItem.isPlaceable.slot == j) then
-                        local slotData = inventoryUI.buffer[localPlayer].assignedSlots[j]
-                        if slotData and (slotData.translation == "inventory") then
-                            isItemVisible = false
-                        end
+                    elseif inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and (inventoryUI.attachedItem.isPlaceable.slot == j) and inventoryUI.buffer[localPlayer].assignedSlots[j] then
+                        isItemVisible = false
                     end
                 end
                 if isItemVisible then
@@ -419,7 +428,6 @@ CGame.execOnModuleLoad(function()
                         local slotWidth, slotHeight = CInventory.fetchSlotDimensions(imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - (slotRow - 1)), imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - (slotColumn - 1)))
                         if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, slot) then
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "order"}
-                            inventoryUI.attachedItem.isPlaceable.slot = slot
                             inventoryUI.attachedItem.isPlaceable.slot = slot
                             inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.attachedItem.isPlaceable.offsetY = slot_offsetX, slot_offsetY
                             inventoryUI.attachedItem.isPlaceable.width, inventoryUI.attachedItem.isPlaceable.height = slotWidth, slotHeight
@@ -580,10 +588,13 @@ CGame.execOnModuleLoad(function()
                         if inventoryUI.attachedItem.isPlaceable.type == "order" then
                             isPlaceAttachment = true
                             inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY = client_startX + inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetX + ((inventoryUI.attachedItem.isPlaceable.width - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1])*0.5), client_startY + inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetY + ((inventoryUI.attachedItem.isPlaceable.height - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2])*0.5)
-                            if (inventoryUI.attachedItem.parent == localPlayer) and FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(inventoryUI.attachedItem.isPlaceable.slot)] then
-                                --unequipItemInInventory(inventoryUI.attachedItem.item, releaseIndex, isItemAvailableForOrdering.slotIndex, localPlayer)
+                            if inventoryUI.attachedItem.parent == localPlayer then
+                                if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(inventoryUI.attachedItem.isPlaceable.slot)] then
+                                    --unequipItemInInventory(inventoryUI.attachedItem.item, releaseIndex, isItemAvailableForOrdering.slotIndex, localPlayer)
+                                end
                             else
-                                inventoryUI.orderItem()
+                                inventoryUI.addItem()
+                                --TODO:
                             end
                             --triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                         elseif inventoryUI.attachedItem.isPlaceable.type == "drop" then
