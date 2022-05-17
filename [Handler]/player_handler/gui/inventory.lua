@@ -812,7 +812,6 @@ CGame.execOnModuleLoad(function()
 end)
 
 
-
 --[[
 --TODO: REMOVE LATER...........
     function displayInventoryUI()
@@ -869,43 +868,6 @@ end)
                     end
                 end
             end
-        end
-
-        --Draws ItemBoxes
-        for i, j in pairs(inventoryUI.buffer) do
-                    if not inventoryUI.isSynced then
-                        for k, v in pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
-                            if tonumber(k) and v.parent and v.parent == i then
-                                if v.translation then
-                                    if v.translation == "vicinity" and (tonumber(j.inventory[v.item]) or 0) <= 0 then
-                                        if not bufferCache["__"..v.item] then
-                                            table.insert(bufferCache, {item = v.item, itemValue = 1})
-                                            bufferCache["__"..v.item] = true
-                                        end
-                                    elseif not inventoryUI.attachedItem then
-                                        if (v.translation == "inventory" and not v.isOrdering) or (v.translation == "equipment" and v.isAutoIndexed) then
-                                            if not bufferCache["__"..v.item] then
-                                                for m, n in ipairs(bufferCache) do
-                                                    if n.item == v.item then
-                                                        if n.itemValue == 1 then
-                                                            table.remove(bufferCache, m)
-                                                        else
-                                                            n.itemValue = n.itemValue - 1
-                                                        end
-                                                        bufferCache["__"..v.item] = true
-                                                        break
-                                                    end
-                                                end
-                                            end
-                                        end
-                                    end
-                                end
-                                break
-                            end
-                        end
-                    end
-                    dxSetRenderTarget()
-                end
         end
     end
     ]]--
