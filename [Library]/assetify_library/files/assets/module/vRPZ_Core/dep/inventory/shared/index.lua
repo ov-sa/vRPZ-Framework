@@ -6,6 +6,7 @@ local imports = {
     pairs = pairs,
     tonumber = tonumber,
     isElement = isElement,
+    setElementData = setElementData,
     getElementData = getElementData,
     table = table,
     math = math,
@@ -105,6 +106,24 @@ CInventory = {
     fetchItemCount = function(parent, item)
         if not parent or not item or not imports.isElement(parent) or not CInventory.CItems[item] then return false end
         return imports.math.max(0, imports.tonumber(imports.getElementData(parent, "Item:"..item)) or 0)
+    end,
+
+    addItemCount = function(parent, item, count)
+        count = imports.tonumber(count)
+        if not count then return false end
+        local itemCount = CInventory.fetchItemCount(parent, item)
+        if not itemCount then return false end
+        imports.setElementData(parent, "Item:"..item, itemCount + count)
+        return true
+    end,
+
+    removeItemCount = function(parent, item, count)
+        count = imports.tonumber(count)
+        if not count then return false end
+        local itemCount = CInventory.fetchItemCount(parent, item)
+        if not itemCount then return false end
+        imports.setElementData(parent, "Item:"..item, imports.math.max(0, itemCount - count))
+        return true
     end,
 
     fetchMaxSlotsMultiplier = function()

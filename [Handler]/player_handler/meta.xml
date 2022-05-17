@@ -147,6 +147,8 @@
     <export function="fetchInventorySlotIndex" type="shared"/>
     <export function="fetchInventorySlotLocation" type="shared"/>
     <export function="fetchInventoryItemCount" type="shared"/>
+    <export function="addInventoryItemCount" type="shared"/>
+    <export function="removeInventoryItemCount" type="shared"/>
     <export function="fetchInventoryMaxSlotsMultiplier" type="shared"/>
     <export function="fetchInventoryParentMaxSlots" type="shared"/>
     <export function="fetchInventoryParentAssignedSlots" type="shared"/>

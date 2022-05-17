@@ -17,6 +17,8 @@ CGame.createExports({
     {exportName = "fetchInventorySlotIndex", moduleName = "CInventory", moduleMethod = "fetchSlotIndex"},
     {exportName = "fetchInventorySlotLocation", moduleName = "CInventory", moduleMethod = "fetchSlotLocation"},
     {exportName = "fetchInventoryItemCount", moduleName = "CInventory", moduleMethod = "fetchItemCount"},
+    {exportName = "addInventoryItemCount", moduleName = "CInventory", moduleMethod = "addItemCount"},
+    {exportName = "removeInventoryItemCount", moduleName = "CInventory", moduleMethod = "removeItemCount"},
     {exportName = "fetchInventoryMaxSlotsMultiplier", moduleName = "CInventory", moduleMethod = "fetchMaxSlotsMultiplier"},
     {exportName = "fetchInventoryParentMaxSlots", moduleName = "CInventory", moduleMethod = "fetchParentMaxSlots"},
     {exportName = "fetchInventoryParentAssignedSlots", moduleName = "CInventory", moduleMethod = "fetchParentAssignedSlots"},
