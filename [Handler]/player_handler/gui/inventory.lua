@@ -405,8 +405,7 @@ CGame.execOnModuleLoad(function()
                                 isSlotVisible = false
                             end
                         elseif inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and (inventoryUI.attachedItem.isPlaceable.slot == j) and (inventoryUI.attachedItem.isPlaceable.type == "order") then
-                                isItemVisible = false
-                            end
+                            isItemVisible = false
                         end
                     elseif inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and (inventoryUI.attachedItem.isPlaceable.slot == j) and (inventoryUI.attachedItem.isPlaceable.type == "order") then
                         isItemVisible = false
