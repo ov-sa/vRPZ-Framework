@@ -368,7 +368,8 @@ CGame.execOnModuleLoad(function()
                         if not inventoryUI.isSynced then
                             if j.translation == "inventory_add" then
                                 imports.table.insert(inventoryUI.buffer[localPlayer].bufferCache, {item = j.item, amount = 1})
-                            --[[
+                            --TODO: REMOVE LATER..
+                                --[[
                             elseif (j.translation == "equipment") and j.isAutoIndexed then
                                 if (inventoryUI.buffer[localPlayer].inventory[(j.item)] or 0) <= 0 then
                                     imports.table.insert(inventoryUI.buffer[localPlayer].bufferCache, {item = j.item, amount = 1})
