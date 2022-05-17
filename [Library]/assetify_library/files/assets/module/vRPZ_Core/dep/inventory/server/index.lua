@@ -41,6 +41,7 @@ CInventory.fetchParentMaxSlots = function(parent)
         local inventoryID = CPlayer.getInventoryID(parent)
         return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), (inventoryID and CInventory.CBuffer[inventoryID].maxSlots) or 0)
     end
+    return false
 end
 
 CInventory.fetchParentAssignedSlots = function(parent)
@@ -49,6 +50,7 @@ CInventory.fetchParentAssignedSlots = function(parent)
         local inventoryID = CPlayer.getInventoryID(parent)
         return (inventoryID and CInventory.CBuffer[inventoryID].slots) or false
     end
+    return false
 end
 
 CInventory.isSlotAvailableForOrdering = function(player, item, slot, isEquipped)

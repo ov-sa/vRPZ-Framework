@@ -26,20 +26,20 @@ createPed(0, 0, 0, 0)--TODO: REMOVE LATER
 -------------------------------
 
 imports.addEvent("Player:onAddItem", true)
-imports.addEventHandler("Player:onAddItem", root, function(parent, item, prevSlot, newSlot)
+imports.addEventHandler("Player:onAddItem", root, function(parent, item, slot)
     if not CPlayer.isInitialized(source) then return false end
-    prevSlot, newSlot = imports.tonumber(prevSlot), imports.tonumber(newSlot)
+    slot = imports.tonumber(slot)
 
     local characterID = CPlayer.getCharacterID(source)
     local inventoryID = CPlayer.getInventoryID(source)
-    print("WOOW 1: "..tostring(item).." : "..tostring(prevSlot).." : "..tostring(newSlot))
-    if item and prevSlot and newSlot and CInventory.isSlotAvailableForOrdering(source, item, newSlot) then
+    print("WOOW 1: "..tostring(item).." : "..tostring(slot))
+    if item and slot and CInventory.isSlotAvailableForOrdering(source, item, slot) then
         print("WOOW 2")
         CInventory.addItemCount(source, item, 1)
         CInventory.removeItemCount(parent, item, 1)
         --TODO: WHY IS IT CLEARING WHEN VICINITY TO INVENTORY?
         --playerInventorySlots[source].slots[prevSlot] = nil --TODO: ONLY FOR ORDER
-        CInventory.CBuffer[inventoryID].slots[newSlot] = {
+        CInventory.CBuffer[inventoryID].slots[slot] = {
             item = item
         }
     end

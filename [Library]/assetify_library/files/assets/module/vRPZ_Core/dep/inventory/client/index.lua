@@ -26,6 +26,7 @@ CInventory.fetchParentMaxSlots = function(parent)
         if not CPlayer.isInitialized(parent) then return false end
         return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), CInventory.CBuffer.maxSlots or 0)
     end
+    return false
 end
 
 CInventory.fetchParentAssignedSlots = function(parent)
@@ -33,6 +34,7 @@ CInventory.fetchParentAssignedSlots = function(parent)
         if not CPlayer.isInitialized(parent) then return false end
         return CInventory.CBuffer.slots
     end
+    return false
 end
 
 CInventory.isSlotAvailableForOrdering = function(item, slot, isEquipped)
