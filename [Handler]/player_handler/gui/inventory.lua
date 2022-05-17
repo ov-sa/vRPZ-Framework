@@ -271,10 +271,10 @@ CGame.execOnModuleLoad(function()
             inventoryUI.attachedItem.transitionTickCounter = CLIENT_CURRENT_TICK
         else
             inventoryUI.attachedItem = nil
-        end
-        imports.assetify.execOnModuleLoad(function()
-            imports.assetify.scheduleExec.boot()
-        end)        
+            imports.assetify.execOnModuleLoad(function()
+                imports.assetify.scheduleExec.boot()
+            end)
+        end      
         return true
     end
     inventoryUI.addItem = function()
