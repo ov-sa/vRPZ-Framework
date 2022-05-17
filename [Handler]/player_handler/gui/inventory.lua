@@ -387,7 +387,6 @@ CGame.execOnModuleLoad(function()
                 end
             end
             local client_bufferCache = inventoryUI.buffer[localPlayer].bufferCache
-            local client_bufferCount = #client_bufferCache
             local client_isHovered, client_isSlotHovered = imports.isMouseOnPosition(client_startX + inventoryUI.margin, client_startY + inventoryUI.margin, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height), nil
             imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], inventoryUI.bgTexture, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
             imports.beautify.native.setRenderTarget(inventoryUI.buffer[localPlayer].bufferRT, true)
