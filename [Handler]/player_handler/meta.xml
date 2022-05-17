@@ -72,6 +72,7 @@
     <!-- Modules: Player -->
     <export function="isPlayerInitialized" type="shared"/>
     <export function="getLoggedPlayers" type="shared"/>
+    <export function="getPlayerCharacterID" type="shared"/>
     <export function="getPlayerChannel" type="shared"/>
     <export function="getPlayerParty" type="shared"/>
     <export function="fetchPlayer" type="server"/>
