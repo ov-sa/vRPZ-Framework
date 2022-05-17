@@ -116,14 +116,23 @@ CInventory = {
         if not parent or not imports.isElement(parent) then return false end
         if imports.getElementType(parent) == "player" then
             if not CPlayer.isInitialized(parent) or (localPlayer and (localPlayer ~= parent)) then return false end
-            return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), (localPlayer and imports.tonumber(CInventory.CBuffer.maxSlots)) or (not localPlayer and CInventory.CBuffer[parent] and imports.tonumber(CInventory.CBuffer[parent].maxSlots)) or 0)
+            if localPlayer then
+                return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), CInventory.CBuffer.maxSlots or 0)
+            else
+                local inventoryID = CPlayer.getInventoryID(parent)
+                return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), (inventoryID and CInventory.CBuffer[inventoryID].maxSlots) or 0)
+            end
         end
-        return imports.tonumber(imports.getElementData(parent, "Inventory:MaxSlots")) or 0
     end,
 
     fetchParentAssignedSlots = function(parent)
         if not CPlayer.isInitialized(parent) or (not localPlayer and not CInventory.CBuffer[parent]) then return false end
-        return (localPlayer and CInventory.CBuffer.slots) or (not localPlayer and CInventory.CBuffer[parent].slots)
+        if localPlayer then
+            return CInventory.CBuffer.slots
+        else
+            local inventoryID = CPlayer.getInventoryID(parent)
+            return (inventoryID and CInventory.CBuffer[inventoryID].slots) or false
+        end
     end,
 
     fetchParentUsedSlots = function(parent)
