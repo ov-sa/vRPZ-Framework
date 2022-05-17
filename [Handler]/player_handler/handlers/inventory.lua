@@ -32,9 +32,7 @@ imports.addEventHandler("Player:onAddItem", root, function(parent, item, slot)
 
     local characterID = CPlayer.getCharacterID(source)
     local inventoryID = CPlayer.getInventoryID(source)
-    print("WOOW 1: "..tostring(item).." : "..tostring(slot))
     if item and slot and CInventory.isSlotAvailableForOrdering(source, item, slot) then
-        print("WOOW 2")
         CInventory.addItemCount(source, item, 1)
         CInventory.removeItemCount(parent, item, 1)
         --TODO: WHY IS IT CLEARING WHEN VICINITY TO INVENTORY?
