@@ -29,7 +29,7 @@ imports.addEvent("Player:onAddItem", true)
 imports.addEventHandler("Player:onAddItem", root, function(item, parent, prevSlot, newSlot)
     if not CPlayer.isInitialized(source) then return false end
     prevSlot, newSlot = imports.tonumber(prevSlot), imports.tonumber(newSlot)
-    local characterID = imports.getElementData(source, "Character:ID")
+    local characterID = CPlayer.getCharacterID(source)
     local inventoryID = CCharacter.CBuffer[characterID].inventory
 
     print("WOOW 1: "..tostring(item).." : "..tostring(prevSlot).." : "..tostring(newSlot))

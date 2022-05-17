@@ -24,7 +24,6 @@ local imports = {
     setElementAlpha = setElementAlpha,
     setElementFrozen = setElementFrozen,
     setElementCollisionsEnabled = setElementCollisionsEnabled,
-    getElementData = getElementData,
     setElementData = setElementData,
     setElementDimension = setElementDimension,
     setCameraTarget = setCameraTarget,
@@ -144,7 +143,7 @@ end)
 imports.addEvent("Player:onSpawn", true)
 imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, loadBuffer)
     spawnpoint = spawnpoint or CGame.generateSpawn()
-    local characterID = imports.getElementData(source, "Character:ID")
+    local characterID = CPlayer.getCharacterID(source)
     local characterIdentity = CCharacter.CBuffer[characterID].identity
     local characterClothing = {CCharacter.generateClothing(characterIdentity)}
     imports.spawnPlayer(source, spawnpoint.position[1], spawnpoint.position[2], spawnpoint.position[3] + 1, spawnpoint.rotation[3])
