@@ -34,8 +34,8 @@ imports.addEventHandler("Player:onAddItem", root, function(parent, item, prevSlo
     print("WOOW 1: "..tostring(item).." : "..tostring(prevSlot).." : "..tostring(newSlot))
     if item and prevSlot and newSlot and CInventory.isSlotAvailableForOrdering(source, item, newSlot) then
         print("WOOW 2")
-        addItemCount(source, item, 1)
-        removeItemCount(parent, item, 1)
+        CInventory.addItemCount(source, item, 1)
+        CInventory.removeItemCount(parent, item, 1)
         --TODO: WHY IS IT CLEARING WHEN VICINITY TO INVENTORY?
         --playerInventorySlots[source].slots[prevSlot] = nil --TODO: ONLY FOR ORDER
         CInventory.CBuffer[inventoryID].slots[newSlot] = {
