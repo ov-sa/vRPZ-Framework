@@ -9,30 +9,6 @@
 ----------------------------------------------------------------
 
 
--------------------------------------------------
---[[ Functions: Moves Item In Inventory/Loot ]]--
--------------------------------------------------
-
-function moveItemInInventory(item, slotIndex, loot)
-
-    slotIndex = tonumber(slotIndex)
-    if not item or not slotIndex or not loot or not isElement(loot) then return false end
-    local itemDetails = getItemDetails(item)
-    local itemAmountData = tonumber(loot:getData("Item:"..item)) or 0
-    if not itemDetails or itemAmountData <= 0 then return false end
-
-    inventoryUI.isSynced = false
-    CInventory.CBuffer.slots[slotIndex] = {
-        item = item,
-        loot = loot,
-        isOrdering = false,
-        translation = "inventory"
-    }
-    triggerServerEvent("onPlayerMoveItemInInventory", localPlayer, item, slotIndex, loot)
-    return true
-
-end
-
 function moveItemInLoot(item, slotIndex, loot)
 
     slotIndex = tonumber(slotIndex)
@@ -48,32 +24,6 @@ function moveItemInLoot(item, slotIndex, loot)
         translation = "loot"
     }
     triggerServerEvent("onPlayerMoveItemInLoot", localPlayer, item, slotIndex, loot)
-    return true
-
-end
-
-
--------------------------------------------------------------
---[[ Functions: Orders/Equips/Unequips Item In Inventory ]]--
--------------------------------------------------------------
-
-function orderItemInInventory(item, prevSlotIndex, newSlotIndex)
-
-    prevSlotIndex, newSlotIndex = tonumber(prevSlotIndex), tonumber(newSlotIndex)
-    if not item or not prevSlotIndex or not newSlotIndex then return false end
-    local itemDetails = getItemDetails(item)
-    local itemAmountData = tonumber(getElementData(localPlayer, "Item:"..item)) or 0
-    if not itemDetails or itemAmountData <= 0 then return false end
-
-    inventoryUI.isSynced = false
-    inventoryUI.isSyncScheduled = true
-    CInventory.CBuffer.slots[prevSlotIndex] = nil
-    CInventory.CBuffer.slots[newSlotIndex] = {
-        item = item,
-        isOrdering = true,
-        translation = "inventory"
-    }
-    triggerServerEvent("onPlayerOrderItemInInventory", localPlayer, item, prevSlotIndex, newSlotIndex)
     return true
 
 end

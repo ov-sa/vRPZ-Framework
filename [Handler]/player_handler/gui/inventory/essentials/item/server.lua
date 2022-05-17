@@ -9,29 +9,6 @@
 ----------------------------------------------------------------
 
 
--------------------
---[[ Variables ]]--
--------------------
-
-playerInventorySlots = {}
-local whiteListedResources = {
-    "admin_system"
-}
-
-
--------------------------------------------------------
---[[ Event: On Client Request Sync Inventory Slots ]]--
--------------------------------------------------------
-
-addEvent("onClientRequestSyncInventorySlots", true)
-addEventHandler("onClientRequestSyncInventorySlots", root, function()
-    if not client or not CPlayer.isInitialized(client) then return false end
-    if playerInventorySlots[source] then
-        triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, playerInventorySlots[source])
-    end
-end)
-
-
 ---------------------------------------
 --[[ Event: On Element Data Change ]]--
 ---------------------------------------
