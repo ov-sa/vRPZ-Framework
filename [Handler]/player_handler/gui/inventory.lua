@@ -428,7 +428,7 @@ CGame.execOnModuleLoad(function()
                         local slot = CInventory.fetchSlotIndex(slotRow, slotColumn)
                         local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(slot)
                         local slotWidth, slotHeight = CInventory.fetchSlotDimensions(imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - (slotRow - 1)), imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - (slotColumn - 1)))
-                        if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, slot) then
+                        if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, slot, (inventoryUI.attachedItem.parent == localPlayer) and not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(inventoryUI.attachedItem.prevSlot)]) then
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "order"}
                             inventoryUI.attachedItem.isPlaceable.slot = slot
                             inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.attachedItem.isPlaceable.offsetY = slot_offsetX, slot_offsetY

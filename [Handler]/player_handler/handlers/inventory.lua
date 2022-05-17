@@ -21,9 +21,9 @@ local imports = {
 
 
 createPed(0, 0, 0, 0)--TODO: REMOVE LATER
--------------------------------
---[[ Player: On Order Item ]]--
--------------------------------
+-----------------------------
+--[[ Player: On Add Item ]]--
+-----------------------------
 
 imports.addEvent("Player:onAddItem", true)
 imports.addEventHandler("Player:onAddItem", root, function(parent, item, slot)
@@ -35,11 +35,7 @@ imports.addEventHandler("Player:onAddItem", root, function(parent, item, slot)
     if item and slot and CInventory.isSlotAvailableForOrdering(source, item, slot) then
         CInventory.addItemCount(source, item, 1)
         CInventory.removeItemCount(parent, item, 1)
-        --TODO: WHY IS IT CLEARING WHEN VICINITY TO INVENTORY?
-        --playerInventorySlots[source].slots[prevSlot] = nil --TODO: ONLY FOR ORDER
-        CInventory.CBuffer[inventoryID].slots[slot] = {
-            item = item
-        }
+        CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
     end
     imports.triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, CInventory.CBuffer[inventoryID])
 end)
@@ -52,15 +48,21 @@ end)
 imports.addEvent("Player:onOrderItem", true)
 imports.addEventHandler("Player:onOrderItem", root, function(item, prevSlot, newSlot)
     if not CPlayer.isInitialized(source) then return false end
-    prevSlot, newSlot = imports.tonumber(prevSlot), imports.tonumber(newSlot)
 
     local characterID = CPlayer.getCharacterID(source)
     local inventoryID = CPlayer.getInventoryID(source)
-    if item and prevSlot and newSlot and CInventory.isSlotAvailableForOrdering(source, item, newSlot) then
-        CInventory.CBuffer[inventoryID].slots[prevSlot] = nil
-        CInventory.CBuffer[inventoryID].slots[newSlot] = {
-            item = item
-        }
+    if item and prevSlot and newSlot then
+        if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][newSlot] then
+            --TODO: ADD AND UPDATE ATTACHMENT...
+        else
+            if CInventory.isSlotAvailableForOrdering(source, item, newSlot, not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot]) then
+                CInventory.CBuffer[inventoryID].slots[prevSlot] = nil
+                CInventory.CBuffer[inventoryID].slots[newSlot] = {item = item}
+                if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot] then
+                    --TODO: REMOVE AND UPDATE ATTACHMENT...
+                end
+            end
+        end
     end
     imports.triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, CInventory.CBuffer[inventoryID])
 end)
