@@ -20,6 +20,7 @@ local imports = {
 }
 
 
+createPed(0, 0, 0, 0)--TODO: REMOVE LATER
 -------------------------------
 --[[ Player: On Order Item ]]--
 -------------------------------

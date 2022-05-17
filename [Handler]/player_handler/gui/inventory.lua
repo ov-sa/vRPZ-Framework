@@ -771,7 +771,7 @@ CGame.execOnModuleLoad(function()
     --[[ Client: On Toggle Inventory UI ]]--
     ----------------------------------------
 
-    local testPed = createPed(0, 0, 0, 0); setElementAlpha(testPed, 0) --TODO: REMOVE IT LATER
+    local testPed = getElementsByType("ped")[1]; setElementAlpha(testPed, 0) --TODO: REMOVE IT LATER
     setElementData(testPed, "Loot:Type", "something")
     setElementData(testPed, "Loot:Name", "Test Loot")
     for i, j in pairs(CInventory.CItems) do
