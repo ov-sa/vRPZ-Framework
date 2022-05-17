@@ -282,8 +282,7 @@ CGame.execOnModuleLoad(function()
             translation = "inventory"
         }
         inventoryUI.updateBuffer(localPlayer)
-        --TODO: WIP
-        --triggerServerEvent("onPlayerOrderItemInInventory", localPlayer, item, prevSlotIndex, newSlotIndex)
+        imports.triggerServerEvent("Player:onOrderItem", localPlayer, inventoryUI.attachedItem.item, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot)
         return true
     end
 

@@ -22,9 +22,10 @@
     <!-- Handlers -->
     <!--script src="handlers/hud/chatbox.lua" type="server"/-->
     <script src="handlers/hud/player.lua" type="client"/>
-    <script src="handlers/channel.lua" type="server"/>
     <script src="handlers/resumer.lua" type="server"/>
+    <script src="handlers/inventory.lua" type="server"/>
     <script src="handlers/wasted.lua" type="server"/>
+    <script src="handlers/channel.lua" type="server"/>
     <script src="handlers/party.lua" type="server"/>
 
     <!-- Files: Images: GUIs -->
