@@ -17,6 +17,7 @@ CGame.createExports({
     {exportName = "getPlayerData", moduleName = "CPlayer", moduleMethod = "getData"},
     {exportName = "getPlayerSerial", moduleName = "CPlayer", moduleMethod = "getSerial"},
     {exportName = "getPlayerFromSerial", moduleName = "CPlayer", moduleMethod = "getPlayer"},
+    {exportName = "getPlayerInventoryID", moduleName = "CPlayer", moduleMethod = "getInventoryID"},
     {exportName = "setPlayerChannel", moduleName = "CPlayer", moduleMethod = "setChannel"},
     {exportName = "setPlayerParty", moduleName = "CPlayer", moduleMethod = "setParty"}
 })

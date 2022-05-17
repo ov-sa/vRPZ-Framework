@@ -79,6 +79,11 @@ CPlayer.getPlayer = function(serial)
     return false
 end
 
+CPlayer.getInventoryID = function(player)
+    local characterID = CPlayer.getCharacterID(player)
+    return (characterID and CCharacter.CBuffer[characterID] and CCharacter.CBuffer[characterID].inventory) or false
+end
+
 CPlayer.setLogged = function(player, state)
     if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") then return false end
     if state then

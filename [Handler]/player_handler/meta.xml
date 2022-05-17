@@ -80,6 +80,7 @@
     <export function="getPlayerData" type="server"/>
     <export function="getPlayerSerial" type="server"/>
     <export function="getPlayerFromSerial" type="server"/>
+    <export function="getPlayerInventoryID" type="server"/>
     <export function="setPlayerChannel" type="server"/>
     <export function="setPlayerParty" type="server"/>
     <export function="setPlayerLanguage" type="client"/>
