@@ -407,8 +407,8 @@ CGame.execOnModuleLoad(function()
                 end
                 client_isSlotHovered = (client_isHovered and isUIActionEnabled and (client_isSlotHovered or (isItemVisible and imports.isMouseOnPosition(client_startX + inventoryUI.margin + slot_offsetX, client_startY + inventoryUI.margin + slot_offsetY, slotWidth, slotHeight) and i))) or false
                 if not slotBuffer.isPositioned then
-                    slotBuffer.title = imports.string.upper(CInventory.CItems[(slotBuffer.item)].data.itemName)
-                    slotBuffer.width, slotBuffer.height = CInventory.CItems[(slotBuffer.item)].dimensions[1], CInventory.CItems[(slotBuffer.item)].dimensions[2] --TODO: FETCH SIDE USING SLOT ROW AND COLUMNS
+                    slotBuffer.title = imports.string.upper(CInventory.CItems[(slotBuffer.item)].data.itemName)                    
+                    slotBuffer.width, slotBuffer.height = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
                     slotBuffer.startX, slotBuffer.startY = (slotWidth - CInventory.CItems[(slotBuffer.item)].dimensions[1])*0.5, (slotHeight - CInventory.CItems[(slotBuffer.item)].dimensions[2])*0.5
                     slotBuffer.isPositioned = true
                 end
