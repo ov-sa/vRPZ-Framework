@@ -53,6 +53,21 @@ CInventory.fetchParentAssignedSlots = function(parent)
     return false
 end
 
+CInventory.fetchParentUsedSlots = function(parent)
+    local maxSlots, assignedSlots = CInventory.fetchParentMaxSlots(parent), CInventory.fetchParentAssignedSlots(parent)
+    if not maxSlots or not assignedSlots then return false end
+    local usedSlots = {}
+    for i, j in imports.pairs(assignedSlots) do
+        usedSlots[i] = true
+        for k = i, i + (CInventory.CItems[(j.item)].data.itemWeight.columns - 1), 1 do
+            for m = 1, CInventory.CItems[(j.item)].data.itemWeight.rows, 1 do
+                usedSlots[(k + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*(m - 1)))] = true
+            end
+        end
+    end
+    return usedSlots
+end
+
 CInventory.isSlotAvailableForOrdering = function(player, item, slot, isEquipped)
     slot = imports.tonumber(slot)
     print("test 1")
@@ -61,6 +76,7 @@ CInventory.isSlotAvailableForOrdering = function(player, item, slot, isEquipped)
     if not itemData then return false end
     print("test 2")
     local maxSlots, usedSlots = CInventory.fetchParentMaxSlots(player), CInventory.fetchParentUsedSlots(player)
+    print(tostring(maxSlots).." : "..tostring(usedSlots))
     if not maxSlots or not usedSlots or (slot > maxSlots) or usedSlots[slot] then return false end
     print("test 3")
     if not isEquipped then

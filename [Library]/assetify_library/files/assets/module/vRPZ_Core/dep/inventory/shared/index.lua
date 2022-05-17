@@ -128,44 +128,6 @@ CInventory = {
 
     fetchMaxSlotsMultiplier = function()
         return FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns
-    end,
-
-    fetchParentUsedSlots = function(parent)
-        if not CPlayer.isInitialized(parent) or (not localPlayer and not CInventory.CBuffer[parent]) then return false end
-        local maxSlots, assignedSlots = CInventory.fetchParentMaxSlots(parent), CInventory.fetchParentAssignedSlots(parent)
-        if not maxSlots or not assignedSlots then return false end
-        local usedSlots = {}
-        for i, j in imports.pairs(assignedSlots) do
-            local isValidSlot = true
-            if localPlayer then
-                if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] then
-                    isValidSlot = false
-                else
-                    if j.translation then
-                        if (j.translation ~= "inventory") and (j.translation ~= "equipment") then
-                            isValidSlot = false
-                        else
-                            if j.translation == "equipment" then
-                                if inventoryUI.attachedItem and (inventoryUI.attachedItem.parent == localPlayer) and (inventoryUI.attachedItem.prevSlot == j.equipmentIndex) then                
-                                    if not inventoryUI.attachedItem.animTickCounter then
-                                        isValidSlot = false
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-            if isValidSlot then
-                usedSlots[i] = true
-                for k = i, i + (CInventory.CItems[(j.item)].data.itemWeight.columns - 1), 1 do
-                    for m = 1, CInventory.CItems[(j.item)].data.itemWeight.rows, 1 do
-                        usedSlots[(k + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*(m - 1)))] = true
-                    end
-                end
-            end
-        end
-        return usedSlots
     end
 }
 
