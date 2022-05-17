@@ -70,15 +70,11 @@ end
 
 CInventory.isSlotAvailableForOrdering = function(player, item, slot, isEquipped)
     slot = imports.tonumber(slot)
-    print("test 1")
     if not CPlayer.isInitialized(player) or not item or not slot then return false end
     local itemData = CInventory.fetchItem(item)
     if not itemData then return false end
-    print("test 2")
     local maxSlots, usedSlots = CInventory.fetchParentMaxSlots(player), CInventory.fetchParentUsedSlots(player)
-    print(tostring(maxSlots).." : "..tostring(usedSlots))
     if not maxSlots or not usedSlots or (slot > maxSlots) or usedSlots[slot] then return false end
-    print("test 3")
     if not isEquipped then
         --TODO: ...
         --local usedSlots = getElementUsedSlots(player)
@@ -86,22 +82,18 @@ CInventory.isSlotAvailableForOrdering = function(player, item, slot, isEquipped)
     end
     local slotRow, slotColumn = CInventory.fetchSlotLocation(slot)
     if (itemData.data.itemWeight.columns - 1) > (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - slotColumn) then return false end
-    print("test 4")
     for i = slot, slot + (itemData.data.itemWeight.columns - 1), 1 do
         if (i > maxSlots) or usedSlots[i] then
-            print("test 5")
             return false
         else
             for k = 2, itemData.data.itemWeight.rows, 1 do
                 local v = i + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*(k - 1))
                 if (v > maxSlots) or usedSlots[v] then
-                    print("test 6")
                     return false
                 end
             end
         end
     end
-    print("test 7")
     return true
 end
 
