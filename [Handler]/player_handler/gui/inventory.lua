@@ -34,10 +34,11 @@ local imports = {
     getAbsoluteCursorPosition = getAbsoluteCursorPosition,
     showChat = showChat,
     showCursor = showCursor,
-    beautify = beautify,
     string = string,
     table = table,
-    math = math
+    math = math,
+    beautify = beautify,
+    assetify = assetify
 }
 
 
@@ -271,6 +272,9 @@ CGame.execOnModuleLoad(function()
         else
             inventoryUI.attachedItem = nil
         end
+        imports.assetify.execOnModuleLoad(function()
+            imports.assetify.scheduleExec.boot()
+        end)        
         return true
     end
     inventoryUI.addItem = function()
@@ -278,24 +282,30 @@ CGame.execOnModuleLoad(function()
         inventoryUI.isSyncScheduled = true
         --CInventory.CBuffer.slots[(inventoryUI.attachedItem.prevSlot)] = nil
         --TODO: REDUCE 1 ON VICINITY
-        CInventory.CBuffer.slots[(inventoryUI.attachedItem.isPlaceable.slot)] = {
-            item = inventoryUI.attachedItem.item,
+        local parent, item, newSlot = inventoryUI.attachedItem.parent, inventoryUI.attachedItem.item, inventoryUI.attachedItem.isPlaceable.slot
+        CInventory.CBuffer.slots[newSlot] = {
+            item = item,
             translation = "inventory_add"
         }
         inventoryUI.updateBuffer(localPlayer)
-        imports.triggerServerEvent("Player:onAddItem", localPlayer, inventoryUI.attachedItem.parent, inventoryUI.attachedItem.item, inventoryUI.attachedItem.isPlaceable.slot)
+        imports.assetify.scheduleExec.execOnModuleLoad(function()
+            imports.triggerServerEvent("Player:onAddItem", localPlayer, parent, item, newSlot)    
+        end)
         return true
     end
     inventoryUI.orderItem = function()
         inventoryUI.isSynced = false
         inventoryUI.isSyncScheduled = true
-        CInventory.CBuffer.slots[(inventoryUI.attachedItem.prevSlot)] = nil
-        CInventory.CBuffer.slots[(inventoryUI.attachedItem.isPlaceable.slot)] = {
+        local item, prevSlot, newSlot = inventoryUI.attachedItem.item, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot
+        CInventory.CBuffer.slots[prevSlot] = nil
+        CInventory.CBuffer.slots[newSlot] = {
             item = inventoryUI.attachedItem.item,
             translation = "inventory_order"
         }
         inventoryUI.updateBuffer(localPlayer)
-        imports.triggerServerEvent("Player:onOrderItem", localPlayer, inventoryUI.attachedItem.item, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot)
+        imports.assetify.scheduleExec.execOnModuleLoad(function()
+            imports.triggerServerEvent("Player:onOrderItem", localPlayer, item, prevSlot, newSlot)        
+        end)
         return true
     end
 
