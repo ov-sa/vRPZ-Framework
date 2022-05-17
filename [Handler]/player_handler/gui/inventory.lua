@@ -395,13 +395,16 @@ CGame.execOnModuleLoad(function()
                 local slotBuffer = client_bufferCache[i]
                 local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(j)
                 local slotWidth, slotHeight = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
-                local isItemVisible = true
+                local isItemVisible, isSlotVisible = true, true
                 if inventoryUI.attachedItem then
                     if inventoryUI.attachedItem.parent == localPlayer then
                         if inventoryUI.attachedItem.prevSlot == j then
                             isItemVisible = false
+                            if inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and inventoryUI.attachedItem.isPlaceable.slot then
+                                isSlotVisible = false
+                            end
                         end
-                    elseif inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and (inventoryUI.attachedItem.isPlaceable.slot == j) and inventoryUI.buffer[localPlayer].assignedSlots[j] then
+                    elseif inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and (inventoryUI.attachedItem.isPlaceable.slot == j) and (inventoryUI.attachedItem.isPlaceable.type == "order") then
                         isItemVisible = false
                     end
                 end
@@ -412,7 +415,9 @@ CGame.execOnModuleLoad(function()
                     slotBuffer.startX, slotBuffer.startY = (slotWidth - CInventory.CItems[(slotBuffer.item)].dimensions[1])*0.5, (slotHeight - CInventory.CItems[(slotBuffer.item)].dimensions[2])*0.5
                     slotBuffer.isPositioned = true
                 end
-                imports.beautify.native.drawRectangle(slot_offsetX, slot_offsetY, slotWidth, slotHeight, inventoryUI.clientInventory.slotColor, false)
+                if isSlotVisible then
+                    imports.beautify.native.drawRectangle(slot_offsetX, slot_offsetY, slotWidth, slotHeight, inventoryUI.clientInventory.slotColor, false)
+                end
                 if isItemVisible then
                     imports.beautify.native.drawImage(slot_offsetX + slotBuffer.startX, slot_offsetY + slotBuffer.startY, slotBuffer.width, slotBuffer.height, CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
                 end
