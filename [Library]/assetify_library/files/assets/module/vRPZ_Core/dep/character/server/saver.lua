@@ -109,10 +109,10 @@ CCharacter.loadInventory = function(player, depDatas, callback)
     return true
 end
 
-CCharacter.loadProgress = function(player, loadBuffer, resetProgress)
+CCharacter.loadProgress = function(player, loadCharacterID, resetProgress)
     if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") then return false end
-    local characterID = CPlayer.getCharacterID(player)
-    if loadBuffer then
+    local characterID = loadCharacterID or CPlayer.getCharacterID(player, true)
+    if loadCharacterID then
         local serial = CPlayer.getSerial(player)
         for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
@@ -120,6 +120,9 @@ CCharacter.loadProgress = function(player, loadBuffer, resetProgress)
         end
         for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
+            print(tostring(CCharacter.CBuffer[characterID]))
+            print(tostring(j))
+            print(tostring(CCharacter.CBuffer[characterID][j]))
             imports.setElementData(player, "Character:Data:"..j, CCharacter.CBuffer[characterID][j])
         end
         CPlayer.setLogged(player, true)

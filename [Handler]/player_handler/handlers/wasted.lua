@@ -141,9 +141,9 @@ end)
 --------------------------
 
 imports.addEvent("Player:onSpawn", true)
-imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, characterID)
+imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, loadCharacterID)
     spawnpoint = spawnpoint or CGame.generateSpawn()
-    characterID = characterID or CPlayer.getCharacterID(source)
+    local characterID = loadCharacterID or CPlayer.getCharacterID(source, true)
     local characterIdentity = CCharacter.CBuffer[characterID].identity
     local characterClothing = {CCharacter.generateClothing(characterIdentity)}
     imports.spawnPlayer(source, spawnpoint.position[1], spawnpoint.position[2], spawnpoint.position[3] + 1, spawnpoint.rotation[3])
@@ -153,7 +153,8 @@ imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, characterID
     imports.setElementFrozen(source, false)
     imports.setElementCollisionsEnabled(source, true)
     imports.setCameraTarget(source, source)
-    CCharacter.loadProgress(source, (characterID and true) or false, ((not characterID or ((characterID and not spawnpoint and true) or false)) and true) or false)
+    CCharacter.loadProgress(source, loadCharacterID, ((not loadCharacterID or ((loadCharacterID and not spawnpoint and true) or false)) and true) or false)
+
     if CCharacter.getHealth(source) <= 0 then
         --TODO: NEEDS TO BE IMPLEMENTED..
         --imports.triggerEvent("Player:onDeath", source, nil, false, nil, 3)

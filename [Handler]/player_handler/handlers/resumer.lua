@@ -156,6 +156,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
             imports.triggerEvent("Player:onToggleLoginUI", player)
             return false
         end
+
         local serial = CPlayer.getSerial(player)
         local characterIdentity = CCharacter.CBuffer[(data.characterID)].identity
         imports.setElementData(player, "Character:ID", data.characterID)
