@@ -791,10 +791,6 @@ CGame.execOnModuleLoad(function()
                 imports.destroyElement(inventoryUI.gridTexture)
                 inventoryUI.gridTexture = nil
             end
-            if inventoryUI.isSyncScheduled then
-                --TODO: ...WIP..
-                --imports.triggerServerEvent("Player:onSyncInventorySlots", localPlayer)
-            end
             inventoryUI.destroyBuffer(localPlayer)
             inventoryUI.destroyBuffer(inventoryUI.vicinityInventory.element)
             inventoryUI.vicinityInventory.element = nil
