@@ -405,7 +405,7 @@ CGame.execOnModuleLoad(function()
                         isItemVisible = false
                     end
                 end
-                client_isSlotHovered = (client_isHovered and isUIActionEnabled and (client_isSlotHovered or (isItemVisible and imports.isMouseOnPosition(client_startX + inventoryUI.margin + slot_offsetX, client_startY + inventoryUI.margin + slot_offsetY, slotWidth, slotHeight) and j))) or false
+                client_isSlotHovered = (client_isHovered and isUIActionEnabled and (client_isSlotHovered or (isItemVisible and imports.isMouseOnPosition(client_startX + inventoryUI.margin + slot_offsetX, client_startY + inventoryUI.margin + slot_offsetY, slotWidth, slotHeight) and i))) or false
                 if not slotBuffer.isPositioned then
                     slotBuffer.title = imports.string.upper(CInventory.CItems[(slotBuffer.item)].data.itemName)
                     slotBuffer.width, slotBuffer.height = CInventory.CItems[(slotBuffer.item)].dimensions[1], CInventory.CItems[(slotBuffer.item)].dimensions[2] --TODO: FETCH SIDE USING SLOT ROW AND COLUMNS
@@ -437,6 +437,7 @@ CGame.execOnModuleLoad(function()
                 end
                 if client_isSlotHovered then
                     if isLMBClicked then
+                        iprint(client_bufferCache[client_isSlotHovered])
                         local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(client_isSlotHovered)
                         local slot_prevX, slot_prevY = client_startX + inventoryUI.margin + slot_offsetX, client_startY + inventoryUI.margin + slot_offsetY
                         inventoryUI.attachItem(localPlayer, client_bufferCache[client_isSlotHovered].item, client_bufferCache[client_isSlotHovered].amount, client_isSlotHovered, slot_prevX, slot_prevY, client_bufferCache[client_isSlotHovered].width, client_bufferCache[client_isSlotHovered].height, cursorX - slot_prevX, cursorY - slot_prevY)
