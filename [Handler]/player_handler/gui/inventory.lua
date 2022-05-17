@@ -598,12 +598,9 @@ CGame.execOnModuleLoad(function()
                             isPlaceAttachment = true
                             inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY = client_startX + inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetX + ((inventoryUI.attachedItem.isPlaceable.width - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1])*0.5), client_startY + inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetY + ((inventoryUI.attachedItem.isPlaceable.height - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2])*0.5)
                             if inventoryUI.attachedItem.parent == localPlayer then
-                                if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(inventoryUI.attachedItem.isPlaceable.slot)] then
-                                    --unequipItemInInventory(inventoryUI.attachedItem.item, releaseIndex, isItemAvailableForOrdering.slotIndex, localPlayer)
-                                end
+                                inventoryUI.orderItem()
                             else
                                 inventoryUI.addItem()
-                                --TODO:
                             end
                             --triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                         elseif inventoryUI.attachedItem.isPlaceable.type == "drop" then
