@@ -775,7 +775,7 @@ CGame.execOnModuleLoad(function()
     setElementData(testPed, "Loot:Type", "something")
     setElementData(testPed, "Loot:Name", "Test Loot")
     for i, j in pairs(CInventory.CItems) do
-        setElementData(testPed, "Item:"..i, 1)
+        setElementData(testPed, CInventory.fetchItemCount(i))
     end
     inventoryUI.toggleUI = function(state)
         --TODO: ENABLE LATER

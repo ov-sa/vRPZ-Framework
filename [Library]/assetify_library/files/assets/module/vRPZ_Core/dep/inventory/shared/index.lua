@@ -6,7 +6,6 @@ local imports = {
     pairs = pairs,
     tonumber = tonumber,
     isElement = isElement,
-    getElementType = getElementType,
     getElementData = getElementData,
     table = table,
     math = math,
@@ -110,29 +109,6 @@ CInventory = {
 
     fetchMaxSlotsMultiplier = function()
         return FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns
-    end,
-
-    fetchParentMaxSlots = function(parent)
-        if not parent or not imports.isElement(parent) then return false end
-        if imports.getElementType(parent) == "player" then
-            if not CPlayer.isInitialized(parent) or (localPlayer and (localPlayer ~= parent)) then return false end
-            if localPlayer then
-                return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), CInventory.CBuffer.maxSlots or 0)
-            else
-                local inventoryID = CPlayer.getInventoryID(parent)
-                return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), (inventoryID and CInventory.CBuffer[inventoryID].maxSlots) or 0)
-            end
-        end
-    end,
-
-    fetchParentAssignedSlots = function(parent)
-        if not CPlayer.isInitialized(parent) or (not localPlayer and not CInventory.CBuffer[parent]) then return false end
-        if localPlayer then
-            return CInventory.CBuffer.slots
-        else
-            local inventoryID = CPlayer.getInventoryID(parent)
-            return (inventoryID and CInventory.CBuffer[inventoryID].slots) or false
-        end
     end,
 
     fetchParentUsedSlots = function(parent)

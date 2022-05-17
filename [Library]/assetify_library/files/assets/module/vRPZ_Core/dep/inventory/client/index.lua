@@ -5,6 +5,7 @@
 local imports = {
     pairs = pairs,
     tonumber = tonumber,
+    getElementType = getElementType,
     math = math,
     assetify = assetify
 }
@@ -18,6 +19,20 @@ CInventory.fetchSlotDimensions = function(rows, columns)
     rows, columns = imports.tonumber(rows), imports.tonumber(columns)
     if not rows or not columns then return false end
     return (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*imports.math.max(0, columns) + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize, (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*imports.math.max(0, rows) + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize
+end
+
+CInventory.fetchParentMaxSlots = function(parent)
+    if imports.getElementType(parent) == "player" then
+        if not CPlayer.isInitialized(parent) then return false end
+        return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), CInventory.CBuffer.maxSlots or 0)
+    end
+end
+
+CInventory.fetchParentAssignedSlots = function(parent)
+    if imports.getElementType(parent) == "player" then
+        if not CPlayer.isInitialized(parent) then return false end
+        return CInventory.CBuffer.slots
+    end
 end
 
 CInventory.isSlotAvailableForOrdering = function(item, slot, isEquipped)

@@ -16,8 +16,7 @@ local imports = {
     tonumber = tonumber,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
-    triggerClientEvent = triggerClientEvent,
-    getElementData = getElementData
+    triggerClientEvent = triggerClientEvent
 }
 
 
@@ -36,7 +35,7 @@ imports.addEventHandler("Player:onAddItem", root, function(item, parent, prevSlo
     if item and prevSlot and newSlot and CInventory.isSlotAvailableForOrdering(source, item, newSlot) then
         --TODO: ADD FUNCTION TO GIVE/REVOKE ITEMS ETC
         print("WOOW 2")
-        local itemAmount = imports.tonumber(imports.getElementData(source, "Item:"..item)) or 0
+        local itemAmount = CInventory.fetchItemCount(item)
         setElementData(localPlayer, "Item:"..item, itemAmounts + 1) --SYNC AMOUNT TOO....
         --TODO: WHY IS IT CLEARING WHEN VICINITY TO INVENTORY?
         --playerInventorySlots[source].slots[prevSlot] = nil --TODO: ONLY FOR ORDER
