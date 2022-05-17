@@ -510,38 +510,38 @@ CGame.execOnModuleLoad(function()
                 local vicinity_row_startIndex = imports.math.floor(vicinity_offsetY/vicinity_rowHeight) + 1
                 local vicinity_row_endIndex = imports.math.min(vicinity_bufferCount, vicinity_row_startIndex + imports.math.ceil(inventoryUI.vicinityInventory.height/vicinity_rowHeight))
                 for i = vicinity_row_startIndex, vicinity_row_endIndex, 1 do
-                    local j = vicinity_bufferCache[i]
-                    j.offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1) - vicinity_offsetY
-                    local itemValue = (inventoryUI.attachedItem and (inventoryUI.attachedItem.parent == inventoryUI.vicinityInventory.element) and (inventoryUI.attachedItem.prevSlot == i) and (j.amount - inventoryUI.attachedItem.amount)) or j.amount
+                    local slotBuffer = vicinity_bufferCache[i]
+                    slotBuffer.offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1) - vicinity_offsetY
+                    local itemValue = (inventoryUI.attachedItem and (inventoryUI.attachedItem.parent == inventoryUI.vicinityInventory.element) and (inventoryUI.attachedItem.prevSlot == i) and (slotBuffer.amount - inventoryUI.attachedItem.amount)) or slotBuffer.amount
                     local isItemVisible = itemValue > 0
-                    vicinity_isSlotHovered = (vicinity_isHovered and isUIActionEnabled and (vicinity_isSlotHovered or (isItemVisible and imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + j.offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and i))) or false
-                    if not j.isPositioned then
-                        j.title = imports.string.upper(CInventory.CItems[(j.item)].data.itemName)
-                        j.width, j.height = (CInventory.CItems[(j.item)].dimensions[1]/CInventory.CItems[(j.item)].dimensions[2])*inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotSize
-                        j.startX, j.startY = inventoryUI.vicinityInventory.width - j.width, 0
-                        j.isPositioned = true
+                    vicinity_isSlotHovered = (vicinity_isHovered and isUIActionEnabled and (vicinity_isSlotHovered or (isItemVisible and imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + slotBuffer.offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and i))) or false
+                    if not slotBuffer.isPositioned then
+                        slotBuffer.title = imports.string.upper(CInventory.CItems[(slotBuffer.item)].data.itemName)
+                        slotBuffer.width, slotBuffer.height = (CInventory.CItems[(slotBuffer.item)].dimensions[1]/CInventory.CItems[(slotBuffer.item)].dimensions[2])*inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotSize
+                        slotBuffer.startX, slotBuffer.startY = inventoryUI.vicinityInventory.width - slotBuffer.width, 0
+                        slotBuffer.isPositioned = true
                     end
                     if vicinity_isSlotHovered == i then
-                        if j.hoverStatus ~= "forward" then
-                            j.hoverStatus = "forward"
-                            j.hoverAnimTick = CLIENT_CURRENT_TICK
+                        if slotBuffer.hoverStatus ~= "forward" then
+                            slotBuffer.hoverStatus = "forward"
+                            slotBuffer.hoverAnimTick = CLIENT_CURRENT_TICK
                         end
                     else
-                        if j.hoverStatus ~= "backward" then
-                            j.hoverStatus = "backward"
-                            j.hoverAnimTick = CLIENT_CURRENT_TICK
+                        if slotBuffer.hoverStatus ~= "backward" then
+                            slotBuffer.hoverStatus = "backward"
+                            slotBuffer.hoverAnimTick = CLIENT_CURRENT_TICK
                         end
                     end
-                    j.animAlphaPercent = j.animAlphaPercent or 0
-                    if j.hoverStatus == "forward" then
-                        if j.animAlphaPercent < 1 then
-                            j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration*0.75), "OutQuad")
-                            j.slotNameWidth = inventoryUI.vicinityInventory.width*j.animAlphaPercent
+                    slotBuffer.animAlphaPercent = slotBuffer.animAlphaPercent or 0
+                    if slotBuffer.hoverStatus == "forward" then
+                        if slotBuffer.animAlphaPercent < 1 then
+                            slotBuffer.animAlphaPercent = imports.interpolateBetween(slotBuffer.animAlphaPercent, 0, 0, 1, 0, 0, imports.getInterpolationProgress(slotBuffer.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration*0.75), "OutQuad")
+                            slotBuffer.slotNameWidth = inventoryUI.vicinityInventory.width*slotBuffer.animAlphaPercent
                         end
                     else
-                        if j.animAlphaPercent > 0 then
-                            j.animAlphaPercent = imports.interpolateBetween(j.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(j.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration*0.75), "OutQuad")
-                            j.slotNameWidth = inventoryUI.vicinityInventory.width*j.animAlphaPercent
+                        if slotBuffer.animAlphaPercent > 0 then
+                            slotBuffer.animAlphaPercent = imports.interpolateBetween(slotBuffer.animAlphaPercent, 0, 0, 0, 0, 0, imports.getInterpolationProgress(slotBuffer.hoverAnimTick, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration*0.75), "OutQuad")
+                            slotBuffer.slotNameWidth = inventoryUI.vicinityInventory.width*slotBuffer.animAlphaPercent
                         end
                     end
                     imports.beautify.native.drawRectangle(0, j.offsetY, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotColor, false)
