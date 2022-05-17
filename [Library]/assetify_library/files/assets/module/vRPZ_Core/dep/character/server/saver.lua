@@ -120,9 +120,6 @@ CCharacter.loadProgress = function(player, loadCharacterID, resetProgress)
         end
         for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
-            print(tostring(CCharacter.CBuffer[characterID]))
-            print(tostring(j))
-            print(tostring(CCharacter.CBuffer[characterID][j]))
             imports.setElementData(player, "Character:Data:"..j, CCharacter.CBuffer[characterID][j])
         end
         CPlayer.setLogged(player, true)
