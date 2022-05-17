@@ -30,7 +30,7 @@ imports.addEventHandler("Player:onAddItem", root, function(item, parent, prevSlo
     if not CPlayer.isInitialized(source) then return false end
     prevSlot, newSlot = imports.tonumber(prevSlot), imports.tonumber(newSlot)
     local characterID = CPlayer.getCharacterID(source)
-    local inventoryID = CCharacter.CBuffer[characterID].inventory
+    local inventoryID = CPlayer.getInventoryID(source)
 
     print("WOOW 1: "..tostring(item).." : "..tostring(prevSlot).." : "..tostring(newSlot))
     if item and prevSlot and newSlot and CInventory.isSlotAvailableForOrdering(source, item, newSlot) then
