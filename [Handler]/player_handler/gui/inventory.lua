@@ -276,9 +276,8 @@ CGame.execOnModuleLoad(function()
     end
     inventoryUI.addItem = function()
         inventoryUI.isSynced, inventoryUI.isSyncScheduled = false, true
-        --CInventory.CBuffer.slots[(inventoryUI.attachedItem.prevSlot)] = nil
-        --TODO: REDUCE 1 ON VICINITY
-        local parent, item, newSlot = inventoryUI.attachedItem.parent, inventoryUI.attachedItem.item, inventoryUI.attachedItem.isPlaceable.slot
+        local parent, item, prevSlot, newSlot = inventoryUI.attachedItem.parent, inventoryUI.attachedItem.item, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot
+        inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[prevSlot].amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[prevSlot].amount - 1
         CInventory.CBuffer.slots[newSlot] = {
             item = item,
             translation = "inventory_add"
