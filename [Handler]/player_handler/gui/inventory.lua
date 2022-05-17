@@ -255,8 +255,6 @@ CGame.execOnModuleLoad(function()
         --if parent == localPlayer then prevSlot = (inventoryUI.ui.equipment.grids[prevSlot] and prevSlot) or tonumber(prevSlot) end
         inventoryUI.attachedItem = {
             parent = parent, item = item, amount = amount,
-            --TODO: REQUIRES A FINISH
-            --isEquippedItem = (inventoryUI.ui.equipment.grids[prevSlot] and true) or false,
             prevSlot = prevSlot, prevX = prevX, prevY = prevY,
             prevWidth = prevWidth, prevHeight = prevHeight,
             offsetX = offsetX, offsetY = offsetY,
