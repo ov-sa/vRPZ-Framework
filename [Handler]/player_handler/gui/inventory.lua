@@ -407,7 +407,7 @@ CGame.execOnModuleLoad(function()
                 end
                 client_isSlotHovered = (client_isHovered and isUIActionEnabled and (client_isSlotHovered or (isItemVisible and imports.isMouseOnPosition(client_startX + inventoryUI.margin + slot_offsetX, client_startY + inventoryUI.margin + slot_offsetY, slotWidth, slotHeight) and i))) or false
                 if not slotBuffer.isPositioned then
-                    slotBuffer.title = imports.string.upper(CInventory.CItems[(slotBuffer.item)].data.itemName)                    
+                    slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
                     slotBuffer.width, slotBuffer.height = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
                     slotBuffer.startX, slotBuffer.startY = (slotWidth - CInventory.CItems[(slotBuffer.item)].dimensions[1])*0.5, (slotHeight - CInventory.CItems[(slotBuffer.item)].dimensions[2])*0.5
                     slotBuffer.isPositioned = true
@@ -516,7 +516,7 @@ CGame.execOnModuleLoad(function()
                     local isItemVisible = itemValue > 0
                     vicinity_isSlotHovered = (vicinity_isHovered and isUIActionEnabled and (vicinity_isSlotHovered or (isItemVisible and imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + slotBuffer.offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and i))) or false
                     if not slotBuffer.isPositioned then
-                        slotBuffer.title = imports.string.upper(CInventory.CItems[(slotBuffer.item)].data.itemName)
+                        slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")
                         slotBuffer.width, slotBuffer.height = (CInventory.CItems[(slotBuffer.item)].dimensions[1]/CInventory.CItems[(slotBuffer.item)].dimensions[2])*inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotSize
                         slotBuffer.startX, slotBuffer.startY = inventoryUI.vicinityInventory.width - slotBuffer.width, 0
                         slotBuffer.isPositioned = true
