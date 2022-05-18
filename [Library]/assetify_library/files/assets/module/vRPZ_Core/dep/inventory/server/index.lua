@@ -115,19 +115,6 @@ CInventory.isSlotAvailableForOrdering = function(player, item, slot, isEquipped)
     return true
 end
 
-CInventory.isVicinityAvailableForDropping = function(vicinity, item)
-    if not vicinity or not imports.isElement(vicinity) then return false end
-    local itemDetails = getItemDetails(item)
-    if not itemDetails then return false end
-    local usedSlots = getElementUsedSlots(loot)
-    local maxSlots = CInventory.fetchParentMaxSlots(loot)
-    if not usedSlots or not maxSlots then return false end
-
-    local itemWeight = getItemWeight(item)
-    local remainingSlots = maxSlots - usedSlots
-    return itemWeight <= remainingSlots
-end
-
 imports.assetify.execOnLoad(function()
     local CItems = {}
     for i, j in imports.pairs(CInventory.CItems) do
