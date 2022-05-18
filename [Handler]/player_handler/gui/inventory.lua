@@ -390,7 +390,7 @@ CGame.execOnModuleLoad(function()
                 end
             end
             local client_bufferCache = inventoryUI.buffer[localPlayer].bufferCache
-            local client_isHovered, client_isSlotHovered = imports.isMouseOnPosition(client_startX + inventoryUI.margin, client_startY + inventoryUI.margin, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height), nil
+            local client_isHovered, client_isSlotHovered, equipment_isSlotHovered = imports.isMouseOnPosition(client_startX + inventoryUI.margin, client_startY + inventoryUI.margin, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height), nil, nil
             imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], inventoryUI.bgTexture, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
             imports.beautify.native.setRenderTarget(inventoryUI.buffer[localPlayer].bufferRT, true)
             imports.beautify.native.drawImage(0, 0, inventoryUI.gridWidth, inventoryUI.gridHeight, inventoryUI.gridTexture, 0, 0, 0, -1, false)
@@ -462,11 +462,16 @@ CGame.execOnModuleLoad(function()
             imports.beautify.native.drawImage(client_startX + inventoryUI.margin, client_startY + inventoryUI.margin, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height, inventoryUI.buffer[localPlayer].bufferRT, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
             for i = 1, #inventoryUI.clientInventory.equipment, 1 do
                 local j = inventoryUI.clientInventory.equipment[i]
-                local slotBuffer = client_bufferCache[(inventoryUI.buffer[localPlayer].assignedBuffers[i])]
-                local isItemVisible, isSlotVisible = false, false
-                if inventoryUI.buffer[parent].assignedSlots[(j.slot)] then
-                    isItemVisible = true
-                    isSlotVisible = true
+                local slotBuffer = (inventoryUI.buffer[localPlayer].assignedBuffers[(j.slot)] and client_bufferCache[(inventoryUI.buffer[localPlayer].assignedBuffers[(j.slot)])]) or false
+                local isItemVisible, isSlotVisible = (slotBuffer and true) or false, false
+                isSlotVisible = isItemVisible
+                --TODO: make  the item false when its attached...
+                equipment_isSlotHovered = (isUIActionEnabled and (equipment_isSlotHovered or (isItemVisible and imports.isMouseOnPosition(j.startX, j.startY, j.startX + j.width, j.startY + j.height) and j.slot))) or false
+                if not slotBuffer.isPositioned then
+                    slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
+                    slotBuffer.width, slotBuffer.height = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
+                    slotBuffer.startX, slotBuffer.startY = (j.width - CInventory.CItems[(slotBuffer.item)].dimensions[1])*0.5, (j.height - CInventory.CItems[(slotBuffer.item)].dimensions[2])*0.5
+                    slotBuffer.isPositioned = true
                 end
                 imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font.instance, "center", "center", true, false, false)
                 if isSlotVisible then
@@ -474,6 +479,14 @@ CGame.execOnModuleLoad(function()
                 end
                 if isItemVisible then
                     imports.beautify.native.drawImage(slotBuffer.startX, slotBuffer.startY, slotBuffer.width, slotBuffer.height, CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
+                end
+            end
+            if equipment_isSlotHovered then
+                if isLMBClicked then
+                    local bufferIndex = inventoryUI.buffer[localPlayer].assignedBuffers[equipment_isSlotHovered]
+                    local slot_prevX, slot_prevY = inventoryUI.clientInventory.equipment[bufferIndex].startX, inventoryUI.clientInventory.equipment[bufferIndex].startY
+                    inventoryUI.attachItem(localPlayer, client_bufferCache[bufferIndex].item, client_bufferCache[bufferIndex].amount, inventoryUI.buffer[localPlayer].assignedItems[bufferIndex], slot_prevX, slot_prevY, client_bufferCache[bufferIndex].width, client_bufferCache[bufferIndex].height, cursorX - slot_prevX, cursorY - slot_prevY)
+                    isUIActionEnabled = false
                 end
             end
             --[[
