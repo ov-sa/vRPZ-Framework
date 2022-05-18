@@ -5,6 +5,7 @@
 local imports = {
     pairs = pairs,
     tonumber = tonumber,
+    isElement = isElement,
     getElementType = getElementType,
     math = math,
     string = string,
@@ -36,6 +37,7 @@ CInventory.setItemData = imports.dbify.inventory.item.setData
 CInventory.getItemData = imports.dbify.inventory.item.getData
 
 CInventory.fetchParentMaxSlots = function(parent)
+    if not parent or not imports.isElement(parent) then return false end
     if imports.getElementType(parent) == "player" then
         if not CPlayer.isInitialized(parent) then return false end
         local inventoryID = CPlayer.getInventoryID(parent)
@@ -45,6 +47,7 @@ CInventory.fetchParentMaxSlots = function(parent)
 end
 
 CInventory.fetchParentAssignedSlots = function(parent)
+    if not parent or not imports.isElement(parent) then return false end
     if imports.getElementType(parent) == "player" then
         if not CPlayer.isInitialized(parent) then return false end
         local inventoryID = CPlayer.getInventoryID(parent)

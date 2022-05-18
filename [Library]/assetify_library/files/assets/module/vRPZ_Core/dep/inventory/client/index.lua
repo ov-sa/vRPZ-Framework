@@ -5,6 +5,7 @@
 local imports = {
     pairs = pairs,
     tonumber = tonumber,
+    isElement = isElement,
     getElementType = getElementType,
     math = math,
     assetify = assetify
@@ -22,6 +23,7 @@ CInventory.fetchSlotDimensions = function(rows, columns)
 end
 
 CInventory.fetchParentMaxSlots = function(parent)
+    if not parent or not imports.isElement(parent) then return false end
     if imports.getElementType(parent) == "player" then
         if not CPlayer.isInitialized(parent) then return false end
         return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), CInventory.CBuffer.maxSlots or 0)
@@ -30,11 +32,16 @@ CInventory.fetchParentMaxSlots = function(parent)
 end
 
 CInventory.fetchParentAssignedSlots = function(parent)
+    if not parent or not imports.isElement(parent) then return false end
     if imports.getElementType(parent) == "player" then
         if not CPlayer.isInitialized(parent) then return false end
         return CInventory.CBuffer.slots
     end
     return false
+end
+
+CInventory.fetchParentUsedWeight = function(parent)
+
 end
 
 CInventory.fetchParentUsedSlots = function(parent)
