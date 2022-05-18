@@ -39,7 +39,7 @@ imports.addEventHandler("Player:onAddItem", root, function(parent, item, slot)
     local characterID = CPlayer.getCharacterID(source)
     local inventoryID = CPlayer.getInventoryID(source)
     if parent and item and slot then
-        if CInventory.isSlotAvailableForOrdering(source, item, slot) then
+        if CInventory.isSlotAvailableForOrdering(source, item, _, slot) then
             CInventory.addItemCount(source, item, 1)
             CInventory.removeItemCount(parent, item, 1)
             CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
@@ -57,7 +57,7 @@ imports.addEventHandler("Player:onOrderItem", root, function(item, prevSlot, slo
     local characterID = CPlayer.getCharacterID(source)
     local inventoryID = CPlayer.getInventoryID(source)
     if item and prevSlot and slot then
-        if CInventory.isSlotAvailableForOrdering(source, item, slot, true) then
+        if CInventory.isSlotAvailableForOrdering(source, item, prevSlot, slot, true) then
             CInventory.CBuffer[inventoryID].slots[prevSlot] = nil
             CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
             if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot] then
