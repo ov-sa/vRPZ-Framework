@@ -93,7 +93,7 @@ CInventory.isSlotAvailableForOrdering = function(item, prevSlot, slot, isEquippe
     local itemData = CInventory.fetchItem(item)
     if not itemData then return false end
     local maxSlots, usedSlots = CInventory.fetchParentMaxSlots(localPlayer), CInventory.fetchParentUsedSlots(localPlayer)
-    if not maxSlots or not usedSlots or (isEquipmentSlot and (not itemData.slot or (itemData.slot ~= slot))) or (not isEquipmentSlot and (slot > maxSlots)) or usedSlots[slot] then return false end
+    if not maxSlots or not usedSlots or (isEquipmentSlot and (not itemData.slot or (itemData.slot ~= slot))) or (not isEquipmentSlot and (slot > maxSlots)) then return false end
     if isEquipped then
         if not isEquipmentSlot and not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot] then
             prevSlot = imports.tonumber(prevSlot)
@@ -114,7 +114,6 @@ CInventory.isSlotAvailableForOrdering = function(item, prevSlot, slot, isEquippe
             for k = 1, itemData.data.itemWeight.rows, 1 do
                 local v = i + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*(k - 1))
                 if (v > maxSlots) or usedSlots[v] then
-                    print("NOT FREE: "..v)
                     return false
                 end
             end
