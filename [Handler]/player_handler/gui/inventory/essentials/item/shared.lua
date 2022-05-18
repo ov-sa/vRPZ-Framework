@@ -45,18 +45,3 @@ function isPlayerSlotAvailableForEquipping(player, item, slotIndex, viaClientInv
     return false
 
 end
-
-function isLootSlotAvailableForDropping(loot, item)
-
-    if not loot or not isElement(loot) or not item then return false end
-    local itemDetails = getItemDetails(item)
-    if not itemDetails then return false end
-    local usedSlots = getElementUsedSlots(loot)
-    local maxSlots = CInventory.fetchParentMaxSlots(loot)
-    if not usedSlots or not maxSlots then return false end
-
-    local itemWeight = getItemWeight(item)
-    local remainingSlots = maxSlots - usedSlots
-    return itemWeight <= remainingSlots
-
-end
