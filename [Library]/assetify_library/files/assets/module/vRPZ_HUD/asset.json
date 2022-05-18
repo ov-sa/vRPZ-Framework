@@ -2,22 +2,22 @@
     "encryptKey": "vStudio - Mario",
     "authors": ["Mario", "Tron", "Aviril", "Аниса", "April"],
     "assetDeps": {
-        "texture": [
-            "overlays/vignette.png",
-            "status/blood/border.png",
-            "status/blood/icon.png",
-            "status/hunger/border.png",
-            "status/hunger/icon.png",
-            "status/thirst/border.png",
-            "status/thirst/icon.png",
-            "roles/developer.png",
-            "roles/manager.png",
-            "roles/assistant.png",
-            "roles/warden.png",
-            "roles/content_creator.png",
-            "roles/content_designer.png",
-            "roles/streamer.png",
-            "roles/patron.png"
-        ]
+        "texture": {
+            "role:developer": "roles/developer.png",
+            "role:manager": "roles/manager.png",
+            "role:assistant": "roles/assistant.png",
+            "role:warden": "roles/warden.png",
+            "role:content_creator": "roles/content_creator.png",
+            "role:content_designer": "roles/content_designer.png",
+            "role:streamer": "roles/streamer.png",
+            "role:patron": "roles/patron.png",
+            "overlay:vignette": "overlays/vignette.png",
+            "status:blood_border": "status/blood/border.png",
+            "status:blood_icon": "status/blood/icon.png",
+            "status:hunger_border": "status/hunger/border.png",
+            "status:hunger_icon": "status/hunger/icon.png",
+            "status:thirst_border": "status/thirst/border.png",
+            "status:thirst_icon": "status/thirst/icon.png"
+        }
     }
 }
