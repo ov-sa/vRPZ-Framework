@@ -36,7 +36,6 @@ CGame.createExports({
 imports.addEvent("Player:onAddItem", true)
 imports.addEventHandler("Player:onAddItem", root, function(parent, item, slot)
     if not CPlayer.isInitialized(source) then return false end
-    slot = imports.tonumber(slot)
     local characterID = CPlayer.getCharacterID(source)
     local inventoryID = CPlayer.getInventoryID(source)
     if parent and item and slot then
