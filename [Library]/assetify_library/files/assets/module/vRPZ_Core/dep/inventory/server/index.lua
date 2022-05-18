@@ -71,6 +71,18 @@ CInventory.fetchParentUsedSlots = function(parent)
     return usedSlots
 end
 
+CInventory.fetchParentMaxWeight = CInventory.fetchParentMaxSlots
+
+CInventory.fetchParentUsedWeight = function(parent)
+    if not parent or not imports.isElement(parent) then return false end
+    if (imports.getElementType(parent) == "player") and not CPlayer.isInitialized(parent) then return false end
+    local usedWeight = 0
+    for i, j in imports.pairs(CInventory.CItems) do
+        usedWeight = usedWeight + (CInventory.fetchItemCount(parent, i)*CInventory.fetchItemWeight(i))
+    end
+    return imports.math.min(CInventory.fetchParentMaxWeight(parent), usedWeight)
+end
+
 CInventory.isSlotAvailableForOrdering = function(player, item, slot, isEquipped)
     slot = imports.tonumber(slot)
     if not CPlayer.isInitialized(player) or not item or not slot then return false end

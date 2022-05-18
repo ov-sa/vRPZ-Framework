@@ -25,8 +25,9 @@ end
 CInventory.fetchParentMaxSlots = function(parent)
     if not parent or not imports.isElement(parent) then return false end
     if imports.getElementType(parent) == "player" then
-        if not CPlayer.isInitialized(parent) and (parent ~= localPlayer) then return false end
-        return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), CInventory.CBuffer.maxSlots or 0)
+        if not CPlayer.isInitialized(parent) and (parent == localPlayer) then
+            return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), CInventory.CBuffer.maxSlots or 0)
+        end
     else
         --TODO: Get data max slots here..
     end
@@ -82,7 +83,7 @@ CInventory.fetchParentMaxWeight = CInventory.fetchParentMaxSlots
 
 CInventory.fetchParentUsedWeight = function(parent)
     if not parent or not imports.isElement(parent) then return false end
-    if (imports.getElementType(parent) == "player") and not CPlayer.isInitialized(parent) and (parent ~= localPlayer) then return false end
+    if (imports.getElementType(parent) == "player") and (not CPlayer.isInitialized(parent) or (parent ~= localPlayer)) then return false end
     local usedWeight = 0
     for i, j in imports.pairs(CInventory.CItems) do
         usedWeight = usedWeight + (CInventory.fetchItemCount(parent, i)*CInventory.fetchItemWeight(i))
