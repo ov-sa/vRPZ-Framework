@@ -239,7 +239,7 @@ CGame.execOnModuleLoad(function()
     end
     inventoryUI.updateBuffer = function(parent)
         if not parent or not imports.isElement(parent) or not inventoryUI.buffer[parent] then return false end
-        inventoryUI.buffer[parent].maxSlots, inventoryUI.buffer[parent].assignedSlots, inventoryUI.buffer[parent].usedSlots = CInventory.fetchParentMaxSlots(parent), CInventory.fetchParentAssignedSlots(parent), CInventory.fetchParentUsedSlots(parent)
+        inventoryUI.buffer[parent].maxSlots, inventoryUI.buffer[parent].assignedSlots = CInventory.fetchParentMaxSlots(parent), CInventory.fetchParentAssignedSlots(parent)
         inventoryUI.buffer[parent].inventory = {}
         inventoryUI.buffer[parent].bufferCache = nil
         for i, j in imports.pairs(CInventory.CItems) do
