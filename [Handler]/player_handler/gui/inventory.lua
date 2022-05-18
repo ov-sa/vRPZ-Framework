@@ -477,8 +477,9 @@ CGame.execOnModuleLoad(function()
                         end
                     end
                 end
-                equipment_isSlotHovered = (isUIActionEnabled and (equipment_isSlotHovered or (isItemVisible and imports.isMouseOnPosition(j.startX, j.startY, j.startX + j.width, j.startY + j.height) and j.slot))) or false
-                if not slotBuffer.isPositioned then
+                local equipment_isHovered = imports.isMouseOnPosition(j.startX, j.startY, j.startX + j.width, j.startY + j.height) and j.slot)
+                equipment_isSlotHovered = (isUIActionEnabled and (equipment_isSlotHovered or (isItemVisible and equipment_isHovered)) or false
+                if slotBuffer and not slotBuffer.isPositioned then
                     slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
                     slotBuffer.width, slotBuffer.height = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
                     slotBuffer.startX, slotBuffer.startY = (j.width - slotBuffer.width)*0.5, (j.height - slotBuffer.height)*0.5
@@ -491,7 +492,7 @@ CGame.execOnModuleLoad(function()
                 if isItemVisible then
                     imports.beautify.native.drawImage(slotBuffer.startX, slotBuffer.startY, slotBuffer.width, slotBuffer.height, CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
                 end
-                if equipment_isSlotHovered then --TODO: NEED TO CHECK IF ITS HOVERED EXCLUSIVE OF WHTETHER ITME IS VISIBLE OR NOT
+                if equipment_isHovered then
                     if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and (not inventoryUI.attachedItem.isPlaceable or (inventoryUI.attachedItem.isPlaceable.type == "order")) then
                         if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, j.slot, (inventoryUI.attachedItem.parent == localPlayer) and not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(inventoryUI.attachedItem.prevSlot)]) then
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "order"}
