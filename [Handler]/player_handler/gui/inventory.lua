@@ -100,6 +100,7 @@ CGame.execOnModuleLoad(function()
     for i = 1, #inventoryUI.clientInventory.equipment, 1 do
         local j = inventoryUI.clientInventory.equipment[i]
         inventoryUI.clientInventory.equipment[i] = imports.table.clone(FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][j], true)
+        inventoryUI.clientInventory.equipment[i].slot = j
         inventoryUI.clientInventory.equipment[i].width, inventoryUI.clientInventory.equipment[i].height = CInventory.fetchSlotDimensions(inventoryUI.clientInventory.equipment[i].slots.rows, inventoryUI.clientInventory.equipment[i].slots.columns)
     end
     local equipment_prevX, equipment_prevY = -inventoryUI.margin, inventoryUI.titlebar.slot.height + inventoryUI.clientInventory.equipment[1].height + inventoryUI.margin
@@ -458,7 +459,11 @@ CGame.execOnModuleLoad(function()
             imports.beautify.native.drawImage(client_startX + inventoryUI.margin, client_startY + inventoryUI.margin, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height, inventoryUI.buffer[localPlayer].bufferRT, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
             for i = 1, #inventoryUI.clientInventory.equipment, 1 do
                 local j = inventoryUI.clientInventory.equipment[i]
-                local isItemVisible, isSlotVisible = true, false
+                local isItemVisible, isSlotVisible = false, false
+                if inventoryUI.buffer[parent].assignedSlots[(j.slot)] then
+                    isItemVisible = true
+                    isSlotVisible = true
+                end
                 imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font.instance, "center", "center", true, false, false)
                 if isSlotVisible then
                     imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, inventoryUI.clientInventory.slotColor, false)
