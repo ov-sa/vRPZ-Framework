@@ -7,8 +7,8 @@ local imports = {
     tonumber = tonumber,
     isElement = isElement,
     getElementType = getElementType,
-    math = math,
     string = string,
+    math = math,
     assetify = assetify,
     dbify = dbify
 }

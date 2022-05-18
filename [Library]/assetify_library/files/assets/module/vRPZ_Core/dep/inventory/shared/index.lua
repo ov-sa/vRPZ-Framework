@@ -9,9 +9,9 @@ local imports = {
     getElementType = getElementType,
     setElementData = setElementData,
     getElementData = getElementData,
+    string = string,
     table = table,
     math = math,
-    string = string,
     assetify = assetify
 }
 
