@@ -477,7 +477,7 @@ CGame.execOnModuleLoad(function()
                         end
                     end
                 end
-                local equipment_isHovered = imports.isMouseOnPosition(j.startX, j.startY, j.startX + j.width, j.startY + j.height)
+                local equipment_isHovered = (not client_isHovered and imports.isMouseOnPosition(j.startX, j.startY, j.width, j.height)) or false
                 equipment_isSlotHovered = (isUIActionEnabled and (equipment_isSlotHovered or (isItemVisible and equipment_isHovered and j.slot))) or false
                 if slotBuffer and not slotBuffer.isPositioned then
                     slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
