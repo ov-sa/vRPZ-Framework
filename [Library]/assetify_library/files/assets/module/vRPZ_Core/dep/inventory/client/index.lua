@@ -102,9 +102,7 @@ CInventory.isSlotAvailableForOrdering = function(item, slot, isEquipped)
             end
         end
     else
-        --TODO: ...
-        --local usedSlots = getElementUsedSlots(localPlayer)
-        --if (maxSlots - usedSlots) < CInventory.fetchItemWeight(item) then return false end
+        if (maxSlots - CInventory.fetchParentUsedWeight(localPlayer)) < CInventory.fetchItemWeight(item) then return false end
     end
     local slotRow, slotColumn = CInventory.fetchSlotLocation(slot)
     if (itemData.data.itemWeight.columns - 1) > (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - slotColumn) then return false end
