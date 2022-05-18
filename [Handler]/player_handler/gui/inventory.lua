@@ -358,7 +358,7 @@ CGame.execOnModuleLoad(function()
             local client_startX, client_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
             local client_width, client_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
             if not inventoryUI.buffer[localPlayer].bufferCache then
-                inventoryUI.buffer[localPlayer].bufferCache, inventoryUI.buffer[localPlayer].assignedItems = {}, {}
+                inventoryUI.buffer[localPlayer].bufferCache, inventoryUI.buffer[localPlayer].assignedItems, inventoryUI.buffer[localPlayer].assignedBuffers = {}, {}, {}
                 for i, j in imports.pairs(inventoryUI.buffer[localPlayer].inventory) do
                     for k = 1, j, 1 do
                         imports.table.insert(inventoryUI.buffer[localPlayer].bufferCache, {item = i, amount = 1})
@@ -378,12 +378,13 @@ CGame.execOnModuleLoad(function()
                             ]]
                             end
                         end
-                        for k = 1, #inventoryUI.buffer[localPlayer].bufferCache, 1 do
-                            local v = inventoryUI.buffer[localPlayer].bufferCache[k]
-                            if (j.item == v.item) and not inventoryUI.buffer[localPlayer].assignedItems[k] then
-                                inventoryUI.buffer[localPlayer].assignedItems[k] = i
-                                break
-                            end
+                    end
+                    for k = 1, #inventoryUI.buffer[localPlayer].bufferCache, 1 do
+                        local v = inventoryUI.buffer[localPlayer].bufferCache[k]
+                        if (j.item == v.item) and not inventoryUI.buffer[localPlayer].assignedItems[k] then
+                            inventoryUI.buffer[localPlayer].assignedItems[k] = i
+                            inventoryUI.buffer[localPlayer].assignedBuffers[i] = k
+                            break
                         end
                     end
                 end
@@ -470,7 +471,7 @@ CGame.execOnModuleLoad(function()
                 end
                 if isItemVisible then
                     --TODO: DRAW EQUIPMENT...
-                    --imports.beautify.native.drawImage(j.startX, j.startY, j.width, j.height, CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
+                    imports.beautify.native.drawImage(j.startX, j.startY, j.width, j.height, CInventory.CItems[(inventoryUI.buffer[parent].assignedSlots[(j.slot)].item)].icon.inventory, 0, 0, 0, -1, false)
                 end
             end
             --[[
