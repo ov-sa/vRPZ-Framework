@@ -461,7 +461,7 @@ CGame.execOnModuleLoad(function()
                 local isItemVisible, isSlotVisible = true, true
                 imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font.instance, "center", "center", true, false, false)
                 if isSlotVisible then
-                    --TODO: DRAW SLOT HERE...
+                    imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, inventoryUI.clientInventory.slotColor, false)
                 end
                 if isItemVisible then
                     --TODO: DRAW EQUIPMENT...
