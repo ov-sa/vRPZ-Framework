@@ -36,15 +36,15 @@
 
     <!-- Files: Images: HUD -->
     <file src="files/images/hud/overlays/vignette.rw"/>
-    <file src="files/images/hud/player/blood/border.rw"/>
-    <file src="files/images/hud/player/blood/icon.rw"/>
-    <file src="files/images/hud/player/hunger/border.rw"/>
-    <file src="files/images/hud/player/hunger/icon.rw"/>
-    <file src="files/images/hud/player/thirst/border.rw"/>
-    <file src="files/images/hud/player/thirst/icon.rw"/>
+    <file src="files/images/hud/status/blood/border.rw"/>
+    <file src="files/images/hud/status/blood/icon.rw"/>
+    <file src="files/images/hud/status/hunger/border.rw"/>
+    <file src="files/images/hud/status/hunger/icon.rw"/>
+    <file src="files/images/hud/status/thirst/border.rw"/>
+    <file src="files/images/hud/status/thirst/icon.rw"/>
 
-    <file src="files/images/hud/player/slotBG1.png"/>
-    <file src="files/images/hud/player/slotBG2.png"/>
+    <file src="files/images/hud/status/slotBG1.png"/>
+    <file src="files/images/hud/status/slotBG2.png"/>
 
     <!-- Modules: Game -->
     <export function="execOnLoad" type="shared"/>

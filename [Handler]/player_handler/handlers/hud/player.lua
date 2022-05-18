@@ -35,26 +35,26 @@ local cache = {
         thirst = {
             paddingX = 15, paddingY = 10,
             size = 32,
-            borderTexture = imports.beautify.native.createTexture("files/images/hud/player/thirst/border.rw", "dxt5", true, "clamp"),
-            iconTexture = imports.beautify.native.createTexture("files/images/hud/player/thirst/icon.rw", "dxt5", true, "clamp")
+            borderTexture = imports.beautify.native.createTexture("files/images/hud/status/thirst/border.rw", "dxt5", true, "clamp"),
+            iconTexture = imports.beautify.native.createTexture("files/images/hud/status/thirst/icon.rw", "dxt5", true, "clamp")
         },
         hunger = {
             paddingX = 57, paddingY = 10,
             size = 32,
-            borderTexture = imports.beautify.native.createTexture("files/images/hud/player/hunger/border.rw", "dxt5", true, "clamp"),
-            iconTexture = imports.beautify.native.createTexture("files/images/hud/player/hunger/icon.rw", "dxt5", true, "clamp")
+            borderTexture = imports.beautify.native.createTexture("files/images/hud/status/hunger/border.rw", "dxt5", true, "clamp"),
+            iconTexture = imports.beautify.native.createTexture("files/images/hud/status/hunger/icon.rw", "dxt5", true, "clamp")
         },
         blood = {
             paddingX = 99, paddingY = 10,
             size = 32,
-            borderTexture = imports.beautify.native.createTexture("files/images/hud/player/blood/border.rw", "dxt5", true, "clamp"),
-            iconTexture = imports.beautify.native.createTexture("files/images/hud/player/blood/icon.rw", "dxt5", true, "clamp")
+            borderTexture = imports.beautify.native.createTexture("files/images/hud/status/blood/border.rw", "dxt5", true, "clamp"),
+            iconTexture = imports.beautify.native.createTexture("files/images/hud/status/blood/icon.rw", "dxt5", true, "clamp")
         }
     },
     primary = {
         paddingX = 5, paddingY = 0,
         width = 175, height = 53,
-        bgTexture = imports.beautify.native.createTexture("files/images/hud/player/slotBG1.png", "dxt5", true, "clamp"),
+        bgTexture = imports.beautify.native.createTexture("files/images/hud/status/slotBG1.png", "dxt5", true, "clamp"),
         ammo = {
             font = CGame.createFont(1, 23), fontColor = imports.tocolor(255, 255, 255, 255),
             mag = {
@@ -66,7 +66,7 @@ local cache = {
     secondary = {
         paddingX = 5, paddingY = 0,
         width = 100*0.75, height = 50*0.75,
-        bgTexture = imports.beautify.native.createTexture("files/images/hud/player/slotBG2.png", "dxt5", true, "clamp"),
+        bgTexture = imports.beautify.native.createTexture("files/images/hud/status/slotBG2.png", "dxt5", true, "clamp"),
         ammo = {
             font = CGame.createFont(1, 23), fontColor = imports.tocolor(255, 255, 255, 255),
             mag = {
