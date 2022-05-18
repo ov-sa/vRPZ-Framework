@@ -66,7 +66,7 @@ syncer.execOnLoad = function(execFunc)
         execFunc()
         imports.removeEventHandler("onAssetifyLoad", root, execWrapper)
     end
-    imports.addEventHandler("onAssetifyLoad", root, execWrapper, false, "high+1000")
+    imports.addEventHandler("onAssetifyLoad", root, execWrapper)
     return true
 end
 syncer.execOnModuleLoad = function(execFunc)
@@ -75,7 +75,7 @@ syncer.execOnModuleLoad = function(execFunc)
         execFunc()
         imports.removeEventHandler("onAssetifyModuleLoad", root, execWrapper)
     end
-    imports.addEventHandler("onAssetifyModuleLoad", root, execWrapper, false, "high+1000")
+    imports.addEventHandler("onAssetifyModuleLoad", root, execWrapper)
     return true
 end
 syncer.execOnLoad(function() syncer.isLibraryLoaded = true end)
@@ -211,7 +211,6 @@ if localPlayer then
                     })
                 else
                     syncer.scheduledAssets = nil
-                    imports.triggerEvent("onAssetifyLoad", resourceRoot)
                     thread:create(function(cThread)
                         for i, j in imports.pairs(availableAssetPacks) do
                             if i ~= "module" then
@@ -225,6 +224,7 @@ if localPlayer then
                                 end
                             end
                         end
+                        imports.triggerEvent("onAssetifyLoad", resourceRoot)
                     end):resume({
                         executions = downloadSettings.buildRate,
                         frames = 1
