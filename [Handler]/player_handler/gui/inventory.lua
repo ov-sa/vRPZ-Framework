@@ -439,7 +439,7 @@ CGame.execOnModuleLoad(function()
                         local slot = CInventory.fetchSlotIndex(slotRow, slotColumn)
                         local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(slot)
                         local slotWidth, slotHeight = CInventory.fetchSlotDimensions(imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - (slotRow - 1)), imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - (slotColumn - 1)))
-                        if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, slot, (inventoryUI.attachedItem.parent == localPlayer) and not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(inventoryUI.attachedItem.prevSlot)]) then
+                        if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, slot, inventoryUI.attachedItem.parent == localPlayer) then
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "order"}
                             inventoryUI.attachedItem.isPlaceable.slot = slot
                             inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.attachedItem.isPlaceable.offsetY = slot_offsetX, slot_offsetY
@@ -497,7 +497,7 @@ CGame.execOnModuleLoad(function()
                 end
                 if equipment_isHovered then
                     if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and (not inventoryUI.attachedItem.isPlaceable or (inventoryUI.attachedItem.isPlaceable.type == "order")) then
-                        if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, j.slot, (inventoryUI.attachedItem.parent == localPlayer) and not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(inventoryUI.attachedItem.prevSlot)]) then
+                        if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, j.slot, inventoryUI.attachedItem.parent == localPlayer) then
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "order"}
                             inventoryUI.attachedItem.isPlaceable.slot = j.slot
                             inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.attachedItem.isPlaceable.offsetY = j.startX, j.startY

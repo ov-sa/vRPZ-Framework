@@ -39,13 +39,7 @@ imports.addEventHandler("Player:onAddItem", root, function(parent, item, slot)
     local characterID = CPlayer.getCharacterID(source)
     local inventoryID = CPlayer.getInventoryID(source)
     if parent and item and slot then
-        local isVerified = false
-        if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] then
-            --TODO: CHECK IF ITS AVAILABLE FOR EQUIPPING..
-        else
-            isVerified = CInventory.isSlotAvailableForOrdering(source, item, slot)
-        end
-        if isVerified then
+        if CInventory.isSlotAvailableForOrdering(source, item, slot) then
             CInventory.addItemCount(source, item, 1)
             CInventory.removeItemCount(parent, item, 1)
             CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
@@ -63,13 +57,7 @@ imports.addEventHandler("Player:onOrderItem", root, function(item, prevSlot, slo
     local characterID = CPlayer.getCharacterID(source)
     local inventoryID = CPlayer.getInventoryID(source)
     if item and prevSlot and slot then
-        local isVerified = false
-        if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] then
-            --TODO: ADD AND UPDATE ATTACHMENT...
-        else
-            isVerified = CInventory.isSlotAvailableForOrdering(source, item, slot, not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot])
-        end
-        if isVerified then
+        if CInventory.isSlotAvailableForOrdering(source, item, slot, true) then
             CInventory.CBuffer[inventoryID].slots[prevSlot] = nil
             CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
             if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot] then
