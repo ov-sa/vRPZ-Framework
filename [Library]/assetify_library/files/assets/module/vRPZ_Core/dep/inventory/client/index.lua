@@ -22,10 +22,19 @@ CInventory.fetchSlotDimensions = function(rows, columns)
     return (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*imports.math.max(0, columns) + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize, (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*imports.math.max(0, rows) + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize
 end
 
+CInventory.fetchParentUsedWeight = function(parent)
+    if not parent or not imports.isElement(parent) then return false end
+    if imports.getElementType(parent) == "player" then
+
+    else
+
+    end
+end
+
 CInventory.fetchParentMaxSlots = function(parent)
     if not parent or not imports.isElement(parent) then return false end
     if imports.getElementType(parent) == "player" then
-        if not CPlayer.isInitialized(parent) then return false end
+        if not CPlayer.isInitialized(parent) and (parent ~= localPlayer) then return false end
         return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), CInventory.CBuffer.maxSlots or 0)
     end
     return false
@@ -34,14 +43,10 @@ end
 CInventory.fetchParentAssignedSlots = function(parent)
     if not parent or not imports.isElement(parent) then return false end
     if imports.getElementType(parent) == "player" then
-        if not CPlayer.isInitialized(parent) then return false end
+        if not CPlayer.isInitialized(parent) and (parent ~= localPlayer) then return false end
         return CInventory.CBuffer.slots
     end
     return false
-end
-
-CInventory.fetchParentUsedWeight = function(parent)
-
 end
 
 CInventory.fetchParentUsedSlots = function(parent)
