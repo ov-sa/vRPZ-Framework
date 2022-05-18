@@ -473,8 +473,7 @@ CGame.execOnModuleLoad(function()
                     imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, inventoryUI.clientInventory.slotColor, false)
                 end
                 if isItemVisible then
-                    --TODO: DRAW EQUIPMENT...
-                    imports.beautify.native.drawImage(j.startX, j.startY, j.width, j.height, CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
+                    imports.beautify.native.drawImage(slotBuffer.startX, slotBuffer.startY, slotBuffer.width, slotBuffer.height, CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
                 end
             end
             --[[
