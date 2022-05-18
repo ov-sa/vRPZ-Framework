@@ -395,36 +395,38 @@ CGame.execOnModuleLoad(function()
             imports.beautify.native.setRenderTarget(inventoryUI.buffer[localPlayer].bufferRT, true)
             imports.beautify.native.drawImage(0, 0, inventoryUI.gridWidth, inventoryUI.gridHeight, inventoryUI.gridTexture, 0, 0, 0, -1, false)
             for i, j in imports.pairs(inventoryUI.buffer[localPlayer].assignedItems) do
-                local slotBuffer = client_bufferCache[i]
-                local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(j)
-                local slotWidth, slotHeight = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
-                local isItemVisible, isSlotVisible = true, true
-                if inventoryUI.attachedItem then
-                    if inventoryUI.attachedItem.parent == localPlayer then
-                        if inventoryUI.attachedItem.prevSlot == j then
-                            isItemVisible = false
-                            if inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and inventoryUI.attachedItem.isPlaceable.slot then
-                                isSlotVisible = false
+                if not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] then
+                    local slotBuffer = client_bufferCache[i]
+                    local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(j)
+                    local slotWidth, slotHeight = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
+                    local isItemVisible, isSlotVisible = true, true
+                    if inventoryUI.attachedItem then
+                        if inventoryUI.attachedItem.parent == localPlayer then
+                            if inventoryUI.attachedItem.prevSlot == j then
+                                isItemVisible = false
+                                if inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and inventoryUI.attachedItem.isPlaceable.slot then
+                                    isSlotVisible = false
+                                end
+                            elseif inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and (inventoryUI.attachedItem.isPlaceable.slot == j) and (inventoryUI.attachedItem.isPlaceable.type == "order") then
+                                isItemVisible = false
                             end
                         elseif inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and (inventoryUI.attachedItem.isPlaceable.slot == j) and (inventoryUI.attachedItem.isPlaceable.type == "order") then
                             isItemVisible = false
                         end
-                    elseif inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and (inventoryUI.attachedItem.isPlaceable.slot == j) and (inventoryUI.attachedItem.isPlaceable.type == "order") then
-                        isItemVisible = false
                     end
-                end
-                client_isSlotHovered = (client_isHovered and isUIActionEnabled and (client_isSlotHovered or (isItemVisible and imports.isMouseOnPosition(client_startX + inventoryUI.margin + slot_offsetX, client_startY + inventoryUI.margin + slot_offsetY, slotWidth, slotHeight) and i))) or false
-                if not slotBuffer.isPositioned then
-                    slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
-                    slotBuffer.width, slotBuffer.height = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
-                    slotBuffer.startX, slotBuffer.startY = (slotWidth - CInventory.CItems[(slotBuffer.item)].dimensions[1])*0.5, (slotHeight - CInventory.CItems[(slotBuffer.item)].dimensions[2])*0.5
-                    slotBuffer.isPositioned = true
-                end
-                if isSlotVisible then
-                    imports.beautify.native.drawRectangle(slot_offsetX, slot_offsetY, slotWidth, slotHeight, inventoryUI.clientInventory.slotColor, false)
-                end
-                if isItemVisible then
-                    imports.beautify.native.drawImage(slot_offsetX + slotBuffer.startX, slot_offsetY + slotBuffer.startY, slotBuffer.width, slotBuffer.height, CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
+                    client_isSlotHovered = (client_isHovered and isUIActionEnabled and (client_isSlotHovered or (isItemVisible and imports.isMouseOnPosition(client_startX + inventoryUI.margin + slot_offsetX, client_startY + inventoryUI.margin + slot_offsetY, slotWidth, slotHeight) and i))) or false
+                    if not slotBuffer.isPositioned then
+                        slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
+                        slotBuffer.width, slotBuffer.height = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
+                        slotBuffer.startX, slotBuffer.startY = (slotWidth - CInventory.CItems[(slotBuffer.item)].dimensions[1])*0.5, (slotHeight - CInventory.CItems[(slotBuffer.item)].dimensions[2])*0.5
+                        slotBuffer.isPositioned = true
+                    end
+                    if isSlotVisible then
+                        imports.beautify.native.drawRectangle(slot_offsetX, slot_offsetY, slotWidth, slotHeight, inventoryUI.clientInventory.slotColor, false)
+                    end
+                    if isItemVisible then
+                        imports.beautify.native.drawImage(slot_offsetX + slotBuffer.startX, slot_offsetY + slotBuffer.startY, slotBuffer.width, slotBuffer.height, CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
+                    end
                 end
             end
             if client_isHovered then
@@ -460,6 +462,7 @@ CGame.execOnModuleLoad(function()
             imports.beautify.native.drawImage(client_startX + inventoryUI.margin, client_startY + inventoryUI.margin, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height, inventoryUI.buffer[localPlayer].bufferRT, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
             for i = 1, #inventoryUI.clientInventory.equipment, 1 do
                 local j = inventoryUI.clientInventory.equipment[i]
+                local slotBuffer = client_bufferCache[(inventoryUI.buffer[localPlayer].assignedBuffers[i])]
                 local isItemVisible, isSlotVisible = false, false
                 if inventoryUI.buffer[parent].assignedSlots[(j.slot)] then
                     isItemVisible = true
@@ -471,7 +474,7 @@ CGame.execOnModuleLoad(function()
                 end
                 if isItemVisible then
                     --TODO: DRAW EQUIPMENT...
-                    imports.beautify.native.drawImage(j.startX, j.startY, j.width, j.height, CInventory.CItems[(inventoryUI.buffer[parent].assignedSlots[(j.slot)].item)].icon.inventory, 0, 0, 0, -1, false)
+                    imports.beautify.native.drawImage(j.startX, j.startY, j.width, j.height, CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
                 end
             end
             --[[
