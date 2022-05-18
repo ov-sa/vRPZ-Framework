@@ -801,12 +801,7 @@ CGame.execOnModuleLoad(function()
     --[[ Client: On Toggle Inventory UI ]]--
     ----------------------------------------
 
-    local testPed = getElementsByType("ped")[1]; setElementAlpha(testPed, 0) --TODO: REMOVE IT LATER
-    setElementData(testPed, "Loot:Type", "something")
-    setElementData(testPed, "Loot:Name", "Test Loot")
-    for i, j in pairs(CInventory.CItems) do
-        CInventory.addItemCount(testPed, i, 1)
-    end
+    local testPed = getElementsByType("ped")[1];  --TODO: REMOVE IT LATER
     inventoryUI.toggleUI = function(state)
         --TODO: ENABLE LATER
         --if (((state ~= true) and (state ~= false)) or (state == inventoryUI.state)) or (state and (not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) or CGame.isUIVisible())) then return false end
@@ -854,64 +849,3 @@ CGame.execOnModuleLoad(function()
     imports.bindKey(FRAMEWORK_CONFIGS["UI"]["Inventory"].toggleKey, "down", function() inventoryUI.toggleUI(not inventoryUI.state) end)
     imports.addEventHandler("onClientPlayerWasted", localPlayer, function() inventoryUI.toggleUI(false) end)
 end)
-
-
---[[
---TODO: REMOVE LATER...........
-    function displayInventoryUI()
-        local playerMaxSlots = CInventory.fetchParentMaxSlots(localPlayer)
-        local playerUsedSlots = getElementUsedSlots(localPlayer)
-
-        --Draws Equipment
-        for i, j in pairs(inventoryUI.gui.equipment.slot) do
-            local isSlotHovered = isMouseOnPosition(j.startX, j.startY, j.width, j.height) and isUIEnabled
-            if itemDetails and itemCategory then
-                if CInventory.CItems[itemDetails.iconPath] then
-                    if not inventoryUI.attachedItem or (inventoryUI.attachedItem.parent ~= localPlayer) or (inventoryUI.attachedItem.prevSlot ~= i) then                
-                        imports.beautify.native.drawImage(j.startX + (j.paddingX/2), j.startY + (j.paddingY/2), j.width - j.paddingX, j.height - j.paddingY, CInventory.CItems[itemDetails.iconPath], 0, 0, 0, tocolor(255, 255, 255, 255*inventoryOpacityPercent), inventoryUI.gui.postGUI)
-                    end
-                    if isSlotHovered then
-                        if isLMBClicked then
-                            local horizontalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemHorizontalSlots) or 1)
-                            local verticalSlotsToOccupy = math.max(1, tonumber(itemDetails.itemVerticalSlots) or 1)
-                            local CLIENT_CURSOR_OFFSET[1], CLIENT_CURSOR_OFFSET[2] = getAbsoluteCursorPosition()
-                            local prev_offsetX, prev_offsetY = j.startX + (j.paddingX/2), j.startY + (j.paddingY/2)
-                            local prev_width, prev_height = j.width - j.paddingX, j.height - j.paddingY
-                            local attached_offsetX, attached_offsetY = CLIENT_CURSOR_OFFSET[1] - prev_offsetX, CLIENT_CURSOR_OFFSET[2] - prev_offsetY
-                            attachInventoryItem(localPlayer, itemDetails.dataName, itemCategory, i, horizontalSlotsToOccupy, verticalSlotsToOccupy, prev_offsetX, prev_offsetY, prev_width, prev_height, attached_offsetX, attached_offsetY)
-                        end
-                    end
-                end
-            else
-                if j.bgImage then
-                    local isPlaceHolderToBeShown = true
-                    local placeHolderColor = {255, 255, 255, 255}
-                    if inventoryUI.attachedItem then
-                        if not inventoryUI.attachedItem.animTickCounter then
-                            if isSlotHovered and isUIEnabled then
-                                local isSlotAvailable, slotIndex = isPlayerSlotAvailableForEquipping(localPlayer, inventoryUI.attachedItem.item, i, inventoryUI.attachedItem.parent == localPlayer)
-                                if isSlotAvailable then
-                                    isItemAvailableForEquipping = {
-                                        slotIndex = i,
-                                        reservedSlot = slotIndex,
-                                        offsetX = j.startX + (j.paddingX/2),
-                                        offsetY = j.startY + (j.paddingY/2),
-                                        parent = inventoryUI.attachedItem.parent
-                                    }
-                                end
-                                placeHolderColor = (isSlotAvailable and j.availableBGColor) or j.unavailableBGColor
-                            end
-                        else
-                            if inventoryUI.attachedItem.releaseType and inventoryUI.attachedItem.releaseType == "equipping" and inventoryUI.attachedItem.prevSlot == i then
-                                isPlaceHolderToBeShown = false
-                            end
-                        end
-                    end
-                    if isPlaceHolderToBeShown then
-                        imports.beautify.native.drawImage(j.startX, j.startY, j.width, j.height, j.bgImage, 0, 0, 0, tocolor(placeHolderColor[1], placeHolderColor[2], placeHolderColor[3], placeHolderColor[4]*inventoryOpacityPercent), inventoryUI.gui.postGUI)	
-                    end
-                end
-            end
-        end
-    end
-    ]]--
