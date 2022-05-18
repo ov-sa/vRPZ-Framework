@@ -60,10 +60,13 @@ CInventory.fetchParentUsedSlots = function(parent)
     if not maxSlots or not assignedSlots then return false end
     local usedSlots = {}
     for i, j in imports.pairs(assignedSlots) do
-        usedSlots[i] = true
-        for k = i, i + (CInventory.CItems[(j.item)].data.itemWeight.columns - 1), 1 do
-            for m = 1, CInventory.CItems[(j.item)].data.itemWeight.rows, 1 do
-                usedSlots[(k + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*(m - 1)))] = true
+        if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] then
+            usedSlots[i] = true
+        else
+            for k = i, i + (CInventory.CItems[(j.item)].data.itemWeight.columns - 1), 1 do
+                for m = 1, CInventory.CItems[(j.item)].data.itemWeight.rows, 1 do
+                    usedSlots[(k + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*(m - 1)))] = true
+                end
             end
         end
     end
