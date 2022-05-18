@@ -169,9 +169,4 @@
     <!-- Exports -->
     <export function="fetchImports" type="shared"/>
 
-    <!-- Exports: Shared: Main -->
-    <export function="getElementUsedSlots" type="shared"/>
-    <export function="getBackpackOffset" type="shared"/>
-    <export function="getWeaponOffset" type="shared"/>
-
 </meta>

@@ -20,29 +20,6 @@ local imports = {
 }
 
 
--------------------------------------------------------
---[[ Functions: Retrieves Element's Max/Used Slots ]]--
--------------------------------------------------------
-
-function getElementUsedSlots(element)
-
-    if not element or not imports.isElement(element) then return false end
-
-    local usedSlots = 0
-    for i, j in imports.pairs(inventoryDatas) do
-        for k, v in iimports.pairs(j) do
-            local elementItemData = imports.tonumber(element:getData("Item:"..v.dataName)) or 0
-            local itemWeight = CInventory.fetchItemWeight(v.dataName)
-            if elementItemData > 0 then
-                usedSlots = usedSlots + (itemWeight*elementItemData)
-            end
-        end
-    end
-    return usedSlots
-
-end
-
-
 ----------------------------------------------------------
 --[[ Functions: Retrieves Weapon's/Backpack's Offsets ]]--
 ----------------------------------------------------------
