@@ -21,8 +21,8 @@ local imports = {
     bindKey = bindKey,
     unbindKey = unbindKey,
     isElementWithinMarker = isElementWithinMarker,
-    table = table,
     string = string,
+    table = table,
     math = math,
     assetify = assetify
 }
