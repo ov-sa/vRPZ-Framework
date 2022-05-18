@@ -48,12 +48,9 @@ end
 
 CInventory.fetchParentAssignedSlots = function(parent)
     if not parent or not imports.isElement(parent) then return false end
-    if imports.getElementType(parent) == "player" then
-        if not CPlayer.isInitialized(parent) then return false end
-        local inventoryID = CPlayer.getInventoryID(parent)
-        return (inventoryID and CInventory.CBuffer[inventoryID].slots) or false
-    end
-    return false
+    if not CPlayer.isInitialized(parent) then return false end
+    local inventoryID = CPlayer.getInventoryID(parent)
+    return (inventoryID and CInventory.CBuffer[inventoryID].slots) or false
 end
 
 CInventory.fetchParentUsedSlots = function(parent)

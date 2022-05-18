@@ -25,9 +25,8 @@ end
 CInventory.fetchParentMaxSlots = function(parent)
     if not parent or not imports.isElement(parent) then return false end
     if imports.getElementType(parent) == "player" then
-        if not CPlayer.isInitialized(parent) and (parent == localPlayer) then
-            return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), CInventory.CBuffer.maxSlots or 0)
-        end
+        if not CPlayer.isInitialized(parent) and (parent ~= localPlayer) then return false end
+        return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), CInventory.CBuffer.maxSlots or 0)
     else
         --TODO: Get data max slots here..
     end
@@ -36,10 +35,8 @@ end
 
 CInventory.fetchParentAssignedSlots = function(parent)
     if not parent or not imports.isElement(parent) then return false end
-    if CPlayer.isInitialized(parent) and (parent == localPlayer) then
-        return CInventory.CBuffer.slots
-    end
-    return false
+    if not CPlayer.isInitialized(parent) or (parent ~= localPlayer) then return false end
+    return CInventory.CBuffer.slots
 end
 
 CInventory.fetchParentUsedSlots = function(parent)
