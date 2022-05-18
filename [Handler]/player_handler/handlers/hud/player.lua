@@ -17,7 +17,6 @@ local imports = {
     tocolor = tocolor,
     getPlayerName = getPlayerName,
     addEventHandler = addEventHandler,
-    dxGetMaterialSize = dxGetMaterialSize,
     beautify = beautify,
     assetify = assetify
 }
@@ -30,8 +29,8 @@ CGame.execOnModuleLoad(function()
 
     local cache = {
         startX = 5, startY = 60, padding = 10,
-        vignette = {
-            bgTexture = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "overlay:vignette")
+        overlay = {
+            vignette = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "overlay:vignette")
         },
         status = {
             thirst = {
@@ -127,7 +126,7 @@ CGame.execOnModuleLoad(function()
     --------------------------------
 
     imports.beautify.render.create(function()
-        imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], cache.vignette.bgTexture, 0, 0, 0, cache.vignette.bgColor, false)
+        imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], cache.overlay.vignette, 0, 0, 0, -1, false)
     end, {
         renderType = "input"
     })
