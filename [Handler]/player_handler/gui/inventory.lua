@@ -656,7 +656,11 @@ CGame.execOnModuleLoad(function()
                     if inventoryUI.attachedItem.isPlaceable then
                         if inventoryUI.attachedItem.isPlaceable.type == "order" then
                             isPlaceAttachment = true
-                            inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY = client_startX + inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetX + ((inventoryUI.attachedItem.isPlaceable.width - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1])*0.5), client_startY + inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetY + ((inventoryUI.attachedItem.isPlaceable.height - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2])*0.5)
+                            if not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(inventoryUI.attachedItem.isPlaceable.slot)] then
+                                inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY = client_startX + inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetX + ((inventoryUI.attachedItem.isPlaceable.width - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1])*0.5), client_startY + inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetY + ((inventoryUI.attachedItem.isPlaceable.height - CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2])*0.5)
+                            else
+                                inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY = inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.attachedItem.isPlaceable.offsetY
+                            end
                             if inventoryUI.attachedItem.parent == localPlayer then
                                 inventoryUI.orderItem()
                             else
