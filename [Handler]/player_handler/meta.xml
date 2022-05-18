@@ -32,10 +32,6 @@
     <file src="files/images/loading/loader.rw"/>
     <file src="files/images/inventory/ui/vicinity/slot_name.rw"/>
 
-    <!-- Files: Images: HUD: TODO: REMOVE LATER -->
-    <file src="files/images/hud/status/slotBG1.png"/>
-    <file src="files/images/hud/status/slotBG2.png"/>
-
     <!-- Modules: Game -->
     <export function="execOnLoad" type="shared"/>
     <export function="execOnModuleLoad" type="shared"/>
