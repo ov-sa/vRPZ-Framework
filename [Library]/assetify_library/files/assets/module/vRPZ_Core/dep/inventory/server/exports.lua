@@ -39,31 +39,60 @@ imports.addEventHandler("Player:onAddItem", root, function(parent, item, slot)
     slot = imports.tonumber(slot)
     local characterID = CPlayer.getCharacterID(source)
     local inventoryID = CPlayer.getInventoryID(source)
-    if item and slot and CInventory.isSlotAvailableForOrdering(source, item, slot) then
-        CInventory.addItemCount(source, item, 1)
-        CInventory.removeItemCount(parent, item, 1)
-        CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
+    if parent and item and slot then
+        local isVerified = false
+        if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] then
+            --TODO: CHECK IF ITS AVAILABLE FOR EQUIPPING..
+        else
+            isVerified = CInventory.isSlotAvailableForOrdering(source, item, slot)
+        end
+        if isVerified then
+            CInventory.addItemCount(source, item, 1)
+            CInventory.removeItemCount(parent, item, 1)
+            CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
+            if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] then
+                --TODO: Add AND UPDATE ATTACHMENT...
+            end
+        end
     end
     imports.triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, CInventory.CBuffer[inventoryID])
 end)
 
 imports.addEvent("Player:onOrderItem", true)
-imports.addEventHandler("Player:onOrderItem", root, function(item, prevSlot, newSlot)
+imports.addEventHandler("Player:onOrderItem", root, function(item, prevSlot, slot)
     if not CPlayer.isInitialized(source) then return false end
     local characterID = CPlayer.getCharacterID(source)
     local inventoryID = CPlayer.getInventoryID(source)
-    if item and prevSlot and newSlot then
-        if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][newSlot] then
+    if item and prevSlot and slot then
+        local isVerified = false
+        if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] then
             --TODO: ADD AND UPDATE ATTACHMENT...
         else
-            if CInventory.isSlotAvailableForOrdering(source, item, newSlot, not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot]) then
-                CInventory.CBuffer[inventoryID].slots[prevSlot] = nil
-                CInventory.CBuffer[inventoryID].slots[newSlot] = {item = item}
-                if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot] then
-                    --TODO: REMOVE AND UPDATE ATTACHMENT...
-                end
+            isVerified = CInventory.isSlotAvailableForOrdering(source, item, slot, not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot])
+        end
+        if isVerified then
+            CInventory.CBuffer[inventoryID].slots[prevSlot] = nil
+            CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
+            if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot] then
+                --TODO: REMOVE AND UPDATE ATTACHMENT...
+            end
+            if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] then
+                --TODO: Add AND UPDATE ATTACHMENT...
             end
         end
+    end
+    imports.triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, CInventory.CBuffer[inventoryID])
+end)
+
+imports.addEvent("Player:onDropItem", true)
+imports.addEventHandler("Player:onDropItem", root, function(vicinity, item, prevSlot)
+    if not CPlayer.isInitialized(source) then return false end
+    local characterID = CPlayer.getCharacterID(source)
+    local inventoryID = CPlayer.getInventoryID(source)
+    if parent and item and prevSlot and CInventory.isVicinityAvailableForDropping(vicinity, item) then
+        CInventory.addItemCount(vicinity, item, 1)
+        CInventory.removeItemCount(source, item, 1)
+        CInventory.CBuffer[inventoryID].slots[prevSlot] = nil
     end
     imports.triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, CInventory.CBuffer[inventoryID])
 end)
