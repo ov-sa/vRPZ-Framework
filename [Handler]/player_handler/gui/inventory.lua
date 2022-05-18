@@ -465,7 +465,18 @@ CGame.execOnModuleLoad(function()
                 local slotBuffer = (inventoryUI.buffer[localPlayer].assignedBuffers[(j.slot)] and client_bufferCache[(inventoryUI.buffer[localPlayer].assignedBuffers[(j.slot)])]) or false
                 local isItemVisible, isSlotVisible = (slotBuffer and true) or false, false
                 isSlotVisible = isItemVisible
-                --TODO: make  the item false when its attached...
+                if inventoryUI.attachedItem then
+                    if inventoryUI.attachedItem.parent == localPlayer then
+                        if inventoryUI.attachedItem.prevSlot == j.slot then
+                            isItemVisible = false
+                            if inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and inventoryUI.attachedItem.isPlaceable.slot then
+                                isSlotVisible = false
+                            end
+                        elseif inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and (inventoryUI.attachedItem.isPlaceable.slot == j.slot) and (inventoryUI.attachedItem.isPlaceable.type == "order") then
+                            isItemVisible = false
+                        end
+                    end
+                end
                 equipment_isSlotHovered = (isUIActionEnabled and (equipment_isSlotHovered or (isItemVisible and imports.isMouseOnPosition(j.startX, j.startY, j.startX + j.width, j.startY + j.height) and j.slot))) or false
                 if not slotBuffer.isPositioned then
                     slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
