@@ -23,5 +23,7 @@ CGame.createExports({
     {exportName = "fetchInventoryParentMaxSlots", moduleName = "CInventory", moduleMethod = "fetchParentMaxSlots"},
     {exportName = "fetchInventoryParentAssignedSlots", moduleName = "CInventory", moduleMethod = "fetchParentAssignedSlots"},
     {exportName = "fetchInventoryParentUsedSlots", moduleName = "CInventory", moduleMethod = "fetchParentUsedSlots"},
+    {exportName = "fetchInventoryParentMaxWeight", moduleName = "CInventory", moduleMethod = "fetchParentMaxWeight"},
+    {exportName = "fetchInventoryParentUsedWeight", moduleName = "CInventory", moduleMethod = "fetchParentUsedWeight"},
     {exportName = "isInventorySlotAvailableForOrdering", moduleName = "CInventory", moduleMethod = "isSlotAvailableForOrdering"}
 })

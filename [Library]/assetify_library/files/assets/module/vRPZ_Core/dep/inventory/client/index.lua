@@ -22,28 +22,20 @@ CInventory.fetchSlotDimensions = function(rows, columns)
     return (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*imports.math.max(0, columns) + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize, (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotSize + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize)*imports.math.max(0, rows) + FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerSize
 end
 
-CInventory.fetchParentUsedWeight = function(parent)
-    if not parent or not imports.isElement(parent) then return false end
-    if imports.getElementType(parent) == "player" then
-
-    else
-
-    end
-end
-
 CInventory.fetchParentMaxSlots = function(parent)
     if not parent or not imports.isElement(parent) then return false end
     if imports.getElementType(parent) == "player" then
         if not CPlayer.isInitialized(parent) and (parent ~= localPlayer) then return false end
         return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), CInventory.CBuffer.maxSlots or 0)
+    else
+        --TODO: Get data max slots here..
     end
     return false
 end
 
 CInventory.fetchParentAssignedSlots = function(parent)
     if not parent or not imports.isElement(parent) then return false end
-    if imports.getElementType(parent) == "player" then
-        if not CPlayer.isInitialized(parent) and (parent ~= localPlayer) then return false end
+    if CPlayer.isInitialized(parent) and (parent == localPlayer) then
         return CInventory.CBuffer.slots
     end
     return false
@@ -84,6 +76,18 @@ CInventory.fetchParentUsedSlots = function(parent)
         end
     end
     return usedSlots
+end
+
+CInventory.fetchParentMaxWeight = CInventory.fetchParentMaxSlots
+
+CInventory.fetchParentUsedWeight = function(parent)
+    if not parent or not imports.isElement(parent) then return false end
+    if (imports.getElementType(parent) == "player") and not CPlayer.isInitialized(parent) and (parent ~= localPlayer) then return false end
+    local usedWeight = 0
+    for i, j in imports.pairs(CInventory.CItems) do
+        usedWeight = usedWeight + (CInventory.fetchItemCount(parent, i)*CInventory.fetchItemWeight(i))
+    end
+    return imports.math.min(CInventory.fetchParentMaxWeight(parent), usedWeight)
 end
 
 CInventory.isSlotAvailableForOrdering = function(item, slot, isEquipped)

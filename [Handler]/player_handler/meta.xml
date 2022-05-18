@@ -153,6 +153,8 @@
     <export function="fetchInventoryParentMaxSlots" type="shared"/>
     <export function="fetchInventoryParentAssignedSlots" type="shared"/>
     <export function="fetchInventoryParentUsedSlots" type="shared"/>
+    <export function="fetchInventoryParentMaxWeight" type="shared"/>
+    <export function="fetchInventoryParentUsedWeight" type="shared"/>
     <export function="isInventorySlotAvailableForOrdering" type="shared"/>
     <export function="fetchInventory" type="server"/>
     <export function="ensureInventoryItems" type="server"/>
