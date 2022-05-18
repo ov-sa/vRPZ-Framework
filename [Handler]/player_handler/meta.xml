@@ -3,9 +3,8 @@
     <info author="vStudio" name="Player Handler" type="Handler" version="1.0.0"/>
     <min_mta_version server="1.5.9" client="1.5.9"/>
 
-    <!-- Settings & Utilities -->
+    <!-- Utilities -->
     <script src="utilities/shared.lua" type="shared"/>
-    <script src="settings/shared.lua" type="shared"/>
     <script src="utilities/client.lua" type="client"/>
     <script src="utilities/server.lua" type="server"/>
 
