@@ -86,7 +86,7 @@ CInventory.fetchParentUsedWeight = function(parent)
     return imports.math.min(CInventory.fetchParentMaxWeight(parent), usedWeight)
 end
 
-CInventory.isSlotAvailableForOrdering = function(item, slot, isEquipped)
+CInventory.isSlotAvailableForOrdering = function(item, prevSlot, slot, isEquipped)
     local isEquipmentSlot = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot]
     if not isEquipmentSlot then slot = imports.tonumber(slot) end
     if not CPlayer.isInitialized(localPlayer) or not item or not slot or not isInventoryUIEnabled() then return false end
@@ -95,8 +95,10 @@ CInventory.isSlotAvailableForOrdering = function(item, slot, isEquipped)
     local maxSlots, usedSlots = CInventory.fetchParentMaxSlots(localPlayer), CInventory.fetchParentUsedSlots(localPlayer)
     if not maxSlots or not usedSlots or (isEquipmentSlot and (not itemData.slot or (itemData.slot ~= slot))) or (not isEquipmentSlot and (slot > maxSlots)) or usedSlots[slot] then return false end
     if isEquipped then
-        if not isEquipmentSlot then
-            for i = slot, slot + (itemData.data.itemWeight.columns - 1), 1 do
+        if not isEquipmentSlot and not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot] then
+            prevSlot = imports.tonumber(prevSlot)
+            if not prevSlot then return false end
+            for i = prevSlot, prevSlot + (itemData.data.itemWeight.columns - 1), 1 do
                 for j = 1, itemData.data.itemWeight.rows, 1 do
                     usedSlots[(i + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*(j - 1)))] = nil
                 end
