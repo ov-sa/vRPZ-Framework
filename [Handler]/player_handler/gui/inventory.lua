@@ -458,7 +458,7 @@ CGame.execOnModuleLoad(function()
             imports.beautify.native.drawImage(client_startX + inventoryUI.margin, client_startY + inventoryUI.margin, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height, inventoryUI.buffer[localPlayer].bufferRT, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
             for i = 1, #inventoryUI.clientInventory.equipment, 1 do
                 local j = inventoryUI.clientInventory.equipment[i]
-                local isItemVisible, isSlotVisible = true, true
+                local isItemVisible, isSlotVisible = true, false
                 imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font.instance, "center", "center", true, false, false)
                 if isSlotVisible then
                     imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, inventoryUI.clientInventory.slotColor, false)
