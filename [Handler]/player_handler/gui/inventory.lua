@@ -76,7 +76,10 @@ CGame.execOnModuleLoad(function()
             lockStat = {
                 lockTexture = imports.beautify.assets["images"]["canvas/lock.rw"], unlockTexture = imports.beautify.assets["images"]["canvas/unlock.rw"]
             },
-            equipment = {"Helmet", "Vest", "Upper", "Lower", "Shoes", "Primary", "Secondary", "Backpack"}
+            equipment = {
+                slotAvailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[3], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[4]*0.5), slotUnavailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[3], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[4]*0.5),
+                "Helmet", "Vest", "Upper", "Lower", "Shoes", "Primary", "Secondary", "Backpack"
+            }
         },
         vicinityInventory = {
             width = inventory_offsetX,
@@ -502,7 +505,7 @@ CGame.execOnModuleLoad(function()
                         else
                             inventoryUI.attachedItem.isPlaceable = false
                         end
-                        imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, (inventoryUI.attachedItem.isPlaceable and inventoryUI.clientInventory.slotAvailableColor) or inventoryUI.clientInventory.slotUnavailableColor, false)
+                        imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, (inventoryUI.attachedItem.isPlaceable and inventoryUI.clientInventory.equipment.slotAvailableColor) or inventoryUI.clientInventory.equipment.slotUnavailableColor, false)
                     end
                 end
             end
