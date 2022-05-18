@@ -21,15 +21,12 @@ local imports = {
 
 
 createPed(0, 0, 0, 0)--TODO: REMOVE LATER
------------------------------
---[[ Player: On Add Item ]]--
------------------------------
 
+--[[
 imports.addEvent("Player:onAddItem", true)
 imports.addEventHandler("Player:onAddItem", root, function(parent, item, slot)
     if not CPlayer.isInitialized(source) then return false end
     slot = imports.tonumber(slot)
-
     local characterID = CPlayer.getCharacterID(source)
     local inventoryID = CPlayer.getInventoryID(source)
     if item and slot and CInventory.isSlotAvailableForOrdering(source, item, slot) then
@@ -40,15 +37,9 @@ imports.addEventHandler("Player:onAddItem", root, function(parent, item, slot)
     imports.triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, CInventory.CBuffer[inventoryID])
 end)
 
-
--------------------------------
---[[ Player: On Order Item ]]--
--------------------------------
-
 imports.addEvent("Player:onOrderItem", true)
 imports.addEventHandler("Player:onOrderItem", root, function(item, prevSlot, newSlot)
     if not CPlayer.isInitialized(source) then return false end
-
     local characterID = CPlayer.getCharacterID(source)
     local inventoryID = CPlayer.getInventoryID(source)
     if item and prevSlot and newSlot then
@@ -66,3 +57,4 @@ imports.addEventHandler("Player:onOrderItem", root, function(item, prevSlot, new
     end
     imports.triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, CInventory.CBuffer[inventoryID])
 end)
+]]
