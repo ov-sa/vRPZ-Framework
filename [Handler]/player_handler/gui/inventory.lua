@@ -72,11 +72,14 @@ CGame.execOnModuleLoad(function()
         clientInventory = {
             startX = 0, startY = -inventory_offsetY,
             bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor)), dividerColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor[3], 255),
-            slotColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor)), slotAvailableColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor)), slotUnavailableColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor)),
+            slotColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor)), slotAvailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[3], 100), slotUnavailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[3], 100),
             lockStat = {
                 lockTexture = imports.beautify.assets["images"]["canvas/lock.rw"], unlockTexture = imports.beautify.assets["images"]["canvas/unlock.rw"]
             },
-            equipment = {"Helmet", "Vest", "Upper", "Lower", "Shoes", "Primary", "Secondary", "Backpack"}
+            equipment = {
+                slotAvailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[3], 25), slotUnavailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[3], 25),
+                "Helmet", "Vest", "Upper", "Lower", "Shoes", "Primary", "Secondary", "Backpack"
+            }
         },
         vicinityInventory = {
             width = inventory_offsetX,
@@ -502,7 +505,7 @@ CGame.execOnModuleLoad(function()
                         else
                             inventoryUI.attachedItem.isPlaceable = false
                         end
-                        imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, (inventoryUI.attachedItem.isPlaceable and inventoryUI.clientInventory.slotAvailableColor) or inventoryUI.clientInventory.slotUnavailableColor, false)
+                        imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, (inventoryUI.attachedItem.isPlaceable and inventoryUI.clientInventory.equipment.slotAvailableColor) or inventoryUI.clientInventory.equipment.slotUnavailableColor, false)
                     end
                 end
             end
