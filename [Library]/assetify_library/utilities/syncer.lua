@@ -66,7 +66,7 @@ syncer.execOnLoad = function(execFunc)
         execFunc()
         imports.removeEventHandler("onAssetifyLoad", root, execWrapper)
     end
-    imports.addEventHandler("onAssetifyLoad", root, execWrapper)
+    imports.addEventHandler("onAssetifyLoad", root, execWrapper, false, "high+1000")
     return true
 end
 syncer.execOnModuleLoad = function(execFunc)
@@ -75,7 +75,7 @@ syncer.execOnModuleLoad = function(execFunc)
         execFunc()
         imports.removeEventHandler("onAssetifyModuleLoad", root, execWrapper)
     end
-    imports.addEventHandler("onAssetifyModuleLoad", root, execWrapper)
+    imports.addEventHandler("onAssetifyModuleLoad", root, execWrapper, false, "high+1000")
     return true
 end
 syncer.execOnLoad(function() syncer.isLibraryLoaded = true end)
