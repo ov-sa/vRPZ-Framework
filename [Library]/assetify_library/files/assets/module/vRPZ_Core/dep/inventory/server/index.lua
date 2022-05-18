@@ -75,7 +75,13 @@ CInventory.isSlotAvailableForOrdering = function(player, item, slot, isEquipped)
     if not itemData then return false end
     local maxSlots, usedSlots = CInventory.fetchParentMaxSlots(player), CInventory.fetchParentUsedSlots(player)
     if not maxSlots or not usedSlots or (slot > maxSlots) or usedSlots[slot] then return false end
-    if not isEquipped then
+    if isEquipped then
+        for i = slot, slot + (CInventory.CItems[(assignedSlots[slot].item)].data.itemWeight.columns - 1), 1 do
+            for j = 1, CInventory.CItems[(assignedSlots[slot].item)].data.itemWeight.rows, 1 do
+                usedSlots[(i + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*(j - 1)))] = nil
+            end
+        end
+    else
         --TODO: ...
         --local usedSlots = getElementUsedSlots(player)
         --if (maxSlots - usedSlots) < CInventory.fetchItemWeight(item) then return false end
