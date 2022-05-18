@@ -86,31 +86,36 @@ CInventory.fetchParentUsedWeight = function(parent)
 end
 
 CInventory.isSlotAvailableForOrdering = function(player, item, slot, isEquipped)
-    slot = imports.tonumber(slot)
+    local isEquipmentSlot = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot]
+    if not isEquipmentSlot then slot = imports.tonumber(slot) end
     if not CPlayer.isInitialized(player) or not item or not slot then return false end
     local itemData = CInventory.fetchItem(item)
     if not itemData then return false end
     local maxSlots, usedSlots = CInventory.fetchParentMaxSlots(player), CInventory.fetchParentUsedSlots(player)
-    if not maxSlots or not usedSlots or (slot > maxSlots) or usedSlots[slot] then return false end
+    if not maxSlots or not usedSlots or (not isEquipmentSlot and (slot > maxSlots)) or usedSlots[slot] then return false end
     if isEquipped then
-        for i = slot, slot + (itemData.data.itemWeight.columns - 1), 1 do
-            for j = 1, itemData.data.itemWeight.rows, 1 do
-                usedSlots[(i + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*(j - 1)))] = nil
+        if not isEquipmentSlot then
+            for i = slot, slot + (itemData.data.itemWeight.columns - 1), 1 do
+                for j = 1, itemData.data.itemWeight.rows, 1 do
+                    usedSlots[(i + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*(j - 1)))] = nil
+                end
             end
         end
     else
         if (maxSlots - CInventory.fetchParentUsedWeight(player)) < CInventory.fetchItemWeight(item) then return false end
     end
-    local slotRow, slotColumn = CInventory.fetchSlotLocation(slot)
-    if (itemData.data.itemWeight.columns - 1) > (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - slotColumn) then return false end
-    for i = slot, slot + (itemData.data.itemWeight.columns - 1), 1 do
-        if (i > maxSlots) or usedSlots[i] then
-            return false
-        else
-            for k = 2, itemData.data.itemWeight.rows, 1 do
-                local v = i + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*(k - 1))
-                if (v > maxSlots) or usedSlots[v] then
-                    return false
+    if not isEquipmentSlot then
+        local slotRow, slotColumn = CInventory.fetchSlotLocation(slot)
+        if (itemData.data.itemWeight.columns - 1) > (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - slotColumn) then return false end
+        for i = slot, slot + (itemData.data.itemWeight.columns - 1), 1 do
+            if (i > maxSlots) or usedSlots[i] then
+                return false
+            else
+                for k = 2, itemData.data.itemWeight.rows, 1 do
+                    local v = i + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*(k - 1))
+                    if (v > maxSlots) or usedSlots[v] then
+                        return false
+                    end
                 end
             end
         end
