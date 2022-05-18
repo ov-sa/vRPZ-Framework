@@ -485,7 +485,7 @@ CGame.execOnModuleLoad(function()
                 if slotBuffer and not slotBuffer.isPositioned then
                     slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
                     slotBuffer.width, slotBuffer.height = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
-                    slotBuffer.startX, slotBuffer.startY = (j.width - slotBuffer.width)*0.5, (j.height - slotBuffer.height)*0.5
+                    slotBuffer.startX, slotBuffer.startY = j.startX + (j.width - slotBuffer.width)*0.5, j.startY + (j.height - slotBuffer.height)*0.5
                     slotBuffer.isPositioned = true
                 end
                 imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font.instance, "center", "center", true, false, false)
