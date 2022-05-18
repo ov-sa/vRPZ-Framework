@@ -9,7 +9,15 @@
             "status/hunger/border.png",
             "status/hunger/icon.png",
             "status/thirst/border.png",
-            "status/thirst/icon.png"
+            "status/thirst/icon.png",
+            "roles/developer.png",
+            "roles/manager.png",
+            "roles/assistant.png",
+            "roles/warden.png",
+            "roles/content_creator.png",
+            "roles/content_designer.png",
+            "roles/streamer.png",
+            "roles/patron.png"
         ]
     }
 }
