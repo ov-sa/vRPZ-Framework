@@ -418,7 +418,7 @@ CGame.execOnModuleLoad(function()
                     if not slotBuffer.isPositioned then
                         slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
                         slotBuffer.width, slotBuffer.height = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
-                        slotBuffer.startX, slotBuffer.startY = (slotWidth - CInventory.CItems[(slotBuffer.item)].dimensions[1])*0.5, (slotHeight - CInventory.CItems[(slotBuffer.item)].dimensions[2])*0.5
+                        slotBuffer.startX, slotBuffer.startY = (slotWidth - slotBuffer.width)*0.5, (slotHeight - slotBuffer.height)*0.5
                         slotBuffer.isPositioned = true
                     end
                     if isSlotVisible then
@@ -481,7 +481,7 @@ CGame.execOnModuleLoad(function()
                 if not slotBuffer.isPositioned then
                     slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
                     slotBuffer.width, slotBuffer.height = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
-                    slotBuffer.startX, slotBuffer.startY = (j.width - CInventory.CItems[(slotBuffer.item)].dimensions[1])*0.5, (j.height - CInventory.CItems[(slotBuffer.item)].dimensions[2])*0.5
+                    slotBuffer.startX, slotBuffer.startY = (j.width - slotBuffer.width)*0.5, (j.height - slotBuffer.height)*0.5
                     slotBuffer.isPositioned = true
                 end
                 imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font.instance, "center", "center", true, false, false)
@@ -490,6 +490,19 @@ CGame.execOnModuleLoad(function()
                 end
                 if isItemVisible then
                     imports.beautify.native.drawImage(slotBuffer.startX, slotBuffer.startY, slotBuffer.width, slotBuffer.height, CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
+                end
+                if equipment_isSlotHovered then --TODO: NEED TO CHECK IF ITS HOVERED EXCLUSIVE OF WHTETHER ITME IS VISIBLE OR NOT
+                    if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and (not inventoryUI.attachedItem.isPlaceable or (inventoryUI.attachedItem.isPlaceable.type == "order")) then
+                        if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, j.slot, (inventoryUI.attachedItem.parent == localPlayer) and not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(inventoryUI.attachedItem.prevSlot)]) then
+                            inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "order"}
+                            inventoryUI.attachedItem.isPlaceable.slot = j.slot
+                            inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.attachedItem.isPlaceable.offsetY = j.startX, j.startY
+                            inventoryUI.attachedItem.isPlaceable.width, inventoryUI.attachedItem.isPlaceable.height = j.width, j.height
+                        else
+                            inventoryUI.attachedItem.isPlaceable = false
+                        end
+                        imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, (inventoryUI.attachedItem.isPlaceable and inventoryUI.clientInventory.slotAvailableColor) or inventoryUI.clientInventory.slotUnavailableColor, false)
+                    end
                 end
             end
             if equipment_isSlotHovered then
