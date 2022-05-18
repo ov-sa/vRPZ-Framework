@@ -42,6 +42,8 @@ CInventory.fetchParentMaxSlots = function(parent)
         if not CPlayer.isInitialized(parent) then return false end
         local inventoryID = CPlayer.getInventoryID(parent)
         return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), (inventoryID and CInventory.CBuffer[inventoryID].maxSlots) or 0)
+    else
+        --TODO: Get data max slots here..
     end
     return false
 end
