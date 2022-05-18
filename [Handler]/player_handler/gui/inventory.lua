@@ -72,12 +72,12 @@ CGame.execOnModuleLoad(function()
         clientInventory = {
             startX = 0, startY = -inventory_offsetY,
             bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor)), dividerColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor[3], 255),
-            slotColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor)), slotAvailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[3], 100), slotUnavailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[3], 100),
+            slotColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[3], 75), slotAvailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[3], 100), slotUnavailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[3], 100),
             lockStat = {
                 lockTexture = imports.beautify.assets["images"]["canvas/lock.rw"], unlockTexture = imports.beautify.assets["images"]["canvas/unlock.rw"]
             },
             equipment = {
-                slotAvailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[3], 25), slotUnavailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[3], 25),
+                slotColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[3], 75*0.15), slotAvailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[3], 100*0.15), slotUnavailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[3], 100*0.15),
                 "Helmet", "Vest", "Upper", "Lower", "Shoes", "Primary", "Secondary", "Backpack"
             }
         },
@@ -85,7 +85,7 @@ CGame.execOnModuleLoad(function()
             width = inventory_offsetX,
             slotNameTexture = imports.beautify.native.createTexture("files/images/inventory/ui/vicinity/slot_name.rw", "argb", true, "clamp"),
             slotNameFont = CGame.createFont(1, 18), slotNameFontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotNameFontColor)),
-            slotSize = vicinity_slotSize, slotColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor)),
+            slotSize = vicinity_slotSize, slotColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[3], 75),
             bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor))
         },
         opacityAdjuster = {
@@ -490,7 +490,7 @@ CGame.execOnModuleLoad(function()
                 end
                 imports.beautify.native.drawText(j.title, j.startX, j.startY - inventoryUI.titlebar.slot.height + inventoryUI.titlebar.slot.fontPaddingY, j.startX + j.width, j.startY, inventoryUI.titlebar.slot.fontColor, 1, inventoryUI.titlebar.slot.font.instance, "center", "center", true, false, false)
                 if isSlotVisible then
-                    imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, inventoryUI.clientInventory.slotColor, false)
+                    imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, inventoryUI.clientInventory.equipment.slotColor, false)
                 end
                 if isItemVisible then
                     imports.beautify.native.drawImage(slotBuffer.startX, slotBuffer.startY, slotBuffer.width, slotBuffer.height, CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
@@ -730,37 +730,6 @@ CGame.execOnModuleLoad(function()
                                     item = inventoryUI.attachedItem.item,
                                     parent = isItemAvailableForDropping.parent,
                                     translation = "vicinity"
-                                }
-                            end
-                            triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
-                            ]]
-                        elseif inventoryUI.attachedItem.isPlaceable.type == "equip" then
-                            isPlaceAttachment = true
-                            --[[
-                            local slotWidth, slotHeight = inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].width - inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].paddingX, inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].height - inventoryUI.gui.equipment.slot[isItemAvailableForEquipping.slotIndex].paddingY
-                            local releaseIndex = inventoryUI.attachedItem.prevSlot
-                            local reservedSlot = isItemAvailableForEquipping.reservedSlot or releaseIndex
-                            inventoryUI.attachedItem.finalWidth, inventoryUI.attachedItem.finalHeight = slotWidth, slotHeight
-                            inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight = inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height
-                            inventoryUI.attachedItem.animTickCounter = getTickCount()
-                            inventoryUI.attachedItem.prevSlot = isItemAvailableForEquipping.slotIndex
-                            inventoryUI.attachedItem.prevPosX = isItemAvailableForEquipping.offsetX
-                            inventoryUI.attachedItem.prevPosY = isItemAvailableForEquipping.offsetY
-                            inventoryUI.attachedItem.releaseLoot = isItemAvailableForEquipping.parent
-                            inventoryUI.attachedItem.reservedSlot = reservedSlot
-                            if parent == localPlayer then
-                                inventoryUI.isSyncScheduled = true
-                                inventoryUI.buffer[localPlayer].assignedSlots[reservedSlot] = {
-                                    item = inventoryUI.attachedItem.item,
-                                    translation = "equipment"
-                                }
-                            else
-                                inventoryUI.isSyncScheduled = true
-                                inventoryUI.buffer[localPlayer].assignedSlots[reservedSlot] = {
-                                    item = inventoryUI.attachedItem.item,
-                                    parent = isItemAvailableForEquipping.parent,
-                                    isAutoIndexed = true,
-                                    translation = "equipment"
                                 }
                             end
                             triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
