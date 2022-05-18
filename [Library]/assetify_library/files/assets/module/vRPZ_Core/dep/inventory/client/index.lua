@@ -99,8 +99,8 @@ CInventory.isSlotAvailableForOrdering = function(item, prevSlot, slot, isEquippe
             prevSlot = imports.tonumber(prevSlot)
             if not prevSlot then return false end
             for i = prevSlot, prevSlot + (itemData.data.itemWeight.columns - 1), 1 do
-                for j = 1, itemData.data.itemWeight.rows, 1 do
-                    usedSlots[(i + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*(j - 1)))] = nil
+                for k = 1, itemData.data.itemWeight.rows, 1 do
+                    usedSlots[(i + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*(k - 1)))] = nil
                 end
             end
         end
@@ -111,14 +111,10 @@ CInventory.isSlotAvailableForOrdering = function(item, prevSlot, slot, isEquippe
         local slotRow, slotColumn = CInventory.fetchSlotLocation(slot)
         if (itemData.data.itemWeight.columns - 1) > (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - slotColumn) then return false end
         for i = slot, slot + (itemData.data.itemWeight.columns - 1), 1 do
-            if (i > maxSlots) or usedSlots[i] then
-                return false
-            else
-                for k = 2, itemData.data.itemWeight.rows, 1 do
-                    local v = i + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*(k - 1))
-                    if (v > maxSlots) or usedSlots[v] then
-                        return false
-                    end
+            for k = 1, itemData.data.itemWeight.rows - 1, 1 do
+                local v = i + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*k)
+                if (v > maxSlots) or usedSlots[v] then
+                    return false
                 end
             end
         end
