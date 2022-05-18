@@ -16,34 +16,17 @@ resource = getResourceRootElement(getThisResource())
 loadstring(exports.assetify_library:fetchImports())()
 loadstring(exports.assetify_library:fetchThreader())()
 local imports = {
-    type = type,
-    pairs = pairs,
-    tostring = tostring,
     tonumber = tonumber,
-    string = string,
     isElement = isElement,
     bindKey = bindKey,
     unbindKey = unbindKey,
-    getResourceName = getResourceName,
-    getResourceState = getResourceState,
     isElementWithinMarker = isElementWithinMarker,
     table = table,
+    string = string,
     math = math,
     assetify = assetify
 }
 CGame = imports.assetify.scheduleExec
-
-
-----------------------------------------------
---[[ Function: Retrieves Resource's State ]]--
-----------------------------------------------
-
-function isResourceRunning(resourceName)
-    if not resourceName then return false end
-    local resourceInstance = imports.getResourceName(resourceName)
-    if not resourceInstance or (imports.getResourceState(resourceInstance) ~= "running") then return false end
-    return true
-end
 
 
 ------------------------------
