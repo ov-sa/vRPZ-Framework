@@ -439,7 +439,7 @@ CGame.execOnModuleLoad(function()
                         local slot = CInventory.fetchSlotIndex(slotRow, slotColumn)
                         local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(slot)
                         local slotWidth, slotHeight = CInventory.fetchSlotDimensions(imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - (slotRow - 1)), imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - (slotColumn - 1)))
-                        if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, slot, inventoryUI.attachedItem.parent == localPlayer) then
+                        if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, ((inventoryUI.attachedItem.parent == localPlayer) and inventoryUI.attachedItem.prevSlot) or false, slot, inventoryUI.attachedItem.parent == localPlayer) then
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "order"}
                             inventoryUI.attachedItem.isPlaceable.slot = slot
                             inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.attachedItem.isPlaceable.offsetY = slot_offsetX, slot_offsetY
@@ -483,6 +483,7 @@ CGame.execOnModuleLoad(function()
                 local equipment_isHovered = (not client_isHovered and imports.isMouseOnPosition(j.startX, j.startY, j.width, j.height)) or false
                 equipment_isSlotHovered = (isUIActionEnabled and (equipment_isSlotHovered or (isItemVisible and equipment_isHovered and j.slot))) or false
                 if slotBuffer and not slotBuffer.isPositioned then
+                    slotBuffer.index = i
                     slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
                     slotBuffer.width, slotBuffer.height = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
                     slotBuffer.startX, slotBuffer.startY = j.startX + (j.width - slotBuffer.width)*0.5, j.startY + (j.height - slotBuffer.height)*0.5
@@ -497,7 +498,7 @@ CGame.execOnModuleLoad(function()
                 end
                 if equipment_isHovered then
                     if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and (not inventoryUI.attachedItem.isPlaceable or (inventoryUI.attachedItem.isPlaceable.type == "order")) then
-                        if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, j.slot, inventoryUI.attachedItem.parent == localPlayer) then
+                        if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, ((inventoryUI.attachedItem.parent == localPlayer) and inventoryUI.attachedItem.prevSlot) or false, j.slot, inventoryUI.attachedItem.parent == localPlayer) then
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "order"}
                             inventoryUI.attachedItem.isPlaceable.slot = j.slot
                             inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.attachedItem.isPlaceable.offsetY = j.startX, j.startY
@@ -512,7 +513,8 @@ CGame.execOnModuleLoad(function()
             if equipment_isSlotHovered then
                 if isLMBClicked then
                     local bufferIndex = inventoryUI.buffer[localPlayer].assignedBuffers[equipment_isSlotHovered]
-                    local slot_prevX, slot_prevY = inventoryUI.clientInventory.equipment[bufferIndex].startX, inventoryUI.clientInventory.equipment[bufferIndex].startY
+                    local renderIndex = client_bufferCache[bufferIndex].index
+                    local slot_prevX, slot_prevY = inventoryUI.clientInventory.equipment[renderIndex].startX, inventoryUI.clientInventory.equipment[renderIndex].startY
                     inventoryUI.attachItem(localPlayer, client_bufferCache[bufferIndex].item, client_bufferCache[bufferIndex].amount, inventoryUI.buffer[localPlayer].assignedItems[bufferIndex], slot_prevX, slot_prevY, client_bufferCache[bufferIndex].width, client_bufferCache[bufferIndex].height, cursorX - slot_prevX, cursorY - slot_prevY)
                     isUIActionEnabled = false
                 end
