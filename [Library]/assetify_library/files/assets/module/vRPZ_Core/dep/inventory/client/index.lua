@@ -111,9 +111,10 @@ CInventory.isSlotAvailableForOrdering = function(item, prevSlot, slot, isEquippe
         local slotRow, slotColumn = CInventory.fetchSlotLocation(slot)
         if (itemData.data.itemWeight.columns - 1) > (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - slotColumn) then return false end
         for i = slot, slot + (itemData.data.itemWeight.columns - 1), 1 do
-            for k = 1, itemData.data.itemWeight.rows - 1, 1 do
-                local v = i + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*k)
+            for k = 1, itemData.data.itemWeight.rows, 1 do
+                local v = i + (FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns*(k - 1))
                 if (v > maxSlots) or usedSlots[v] then
+                    print("NOT FREE: "..v)
                     return false
                 end
             end
