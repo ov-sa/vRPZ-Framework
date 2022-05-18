@@ -477,8 +477,8 @@ CGame.execOnModuleLoad(function()
                         end
                     end
                 end
-                local equipment_isHovered = imports.isMouseOnPosition(j.startX, j.startY, j.startX + j.width, j.startY + j.height) and j.slot)
-                equipment_isSlotHovered = (isUIActionEnabled and (equipment_isSlotHovered or (isItemVisible and equipment_isHovered)) or false
+                local equipment_isHovered = imports.isMouseOnPosition(j.startX, j.startY, j.startX + j.width, j.startY + j.height)
+                equipment_isSlotHovered = (isUIActionEnabled and (equipment_isSlotHovered or (isItemVisible and equipment_isHovered and j.slot))) or false
                 if slotBuffer and not slotBuffer.isPositioned then
                     slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
                     slotBuffer.width, slotBuffer.height = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
