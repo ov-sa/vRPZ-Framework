@@ -76,10 +76,7 @@ CGame.execOnModuleLoad(function()
             lockStat = {
                 lockTexture = imports.beautify.assets["images"]["canvas/lock.rw"], unlockTexture = imports.beautify.assets["images"]["canvas/unlock.rw"]
             },
-            equipment = {
-                slotAvailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[3], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[4]*0.5), slotUnavailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[3], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[4]*0.5),
-                "Helmet", "Vest", "Upper", "Lower", "Shoes", "Primary", "Secondary", "Backpack"
-            }
+            equipment = {"Helmet", "Vest", "Upper", "Lower", "Shoes", "Primary", "Secondary", "Backpack"}
         },
         vicinityInventory = {
             width = inventory_offsetX,
@@ -398,7 +395,7 @@ CGame.execOnModuleLoad(function()
             imports.beautify.native.setRenderTarget(inventoryUI.buffer[localPlayer].bufferRT, true)
             imports.beautify.native.drawImage(0, 0, inventoryUI.gridWidth, inventoryUI.gridHeight, inventoryUI.gridTexture, 0, 0, 0, -1, false)
             for i, j in imports.pairs(inventoryUI.buffer[localPlayer].assignedItems) do
-                if not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] then
+                if not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][j] then
                     local slotBuffer = client_bufferCache[i]
                     local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(j)
                     local slotWidth, slotHeight = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
@@ -505,7 +502,7 @@ CGame.execOnModuleLoad(function()
                         else
                             inventoryUI.attachedItem.isPlaceable = false
                         end
-                        imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, (inventoryUI.attachedItem.isPlaceable and inventoryUI.clientInventory.equipment.slotAvailableColor) or inventoryUI.clientInventory.equipment.slotUnavailableColor, false)
+                        imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, (inventoryUI.attachedItem.isPlaceable and inventoryUI.clientInventory.slotAvailableColor) or inventoryUI.clientInventory.slotUnavailableColor, false)
                     end
                 end
             end
