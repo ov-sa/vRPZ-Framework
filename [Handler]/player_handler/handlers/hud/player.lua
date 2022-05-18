@@ -31,7 +31,7 @@ CGame.execOnModuleLoad(function()
     local cache = {
         startX = 5, startY = 60, padding = 10,
         vignette = {
-            bgTexture = imports.beautify.native.createTexture("files/images/hud/overlays/vignette.rw", "dxt5", true, "clamp"), bgColor = imports.tocolor(0, 0, 0, 255)
+            bgTexture = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "overlay:vignette")
         },
         status = {
             thirst = {
@@ -100,7 +100,6 @@ CGame.execOnModuleLoad(function()
     --[[ Functions: Party Handler ]]--
     ----------------------------------
 
-
     imports.addEventHandler("Client:onPartyUpdate", root, function(partyData)
         if partyData then
             cache.party = {
@@ -127,13 +126,13 @@ CGame.execOnModuleLoad(function()
     --[[ Functions: Renders HUD ]]--
     --------------------------------
 
-    beautify.render.create(function()
+    imports.beautify.render.create(function()
         imports.beautify.native.drawImage(0, 0, CLIENT_MTA_RESOLUTION[1], CLIENT_MTA_RESOLUTION[2], cache.vignette.bgTexture, 0, 0, 0, cache.vignette.bgColor, false)
     end, {
         renderType = "input"
     })
 
-    beautify.render.create(function()
+    imports.beautify.render.create(function()
         if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then return false end
         --Status--
         for i, j in imports.pairs(cache.status) do
