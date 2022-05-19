@@ -308,18 +308,20 @@ CGame.execOnModuleLoad(function()
     end
     inventoryUI.dropItem = function()
         --inventoryUI.isSynced, inventoryUI.isSyncScheduled = false, true
-        local parent, item, prevSlot, newSlot = inventoryUI.attachedItem.parent, inventoryUI.attachedItem.item, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot
-        --[[
-        inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[prevSlot].amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[prevSlot].amount - 1
-        CInventory.CBuffer.slots[newSlot] = {
-            item = item,
-            translation = "inventory_add"
-        }
+        local parent, item, amount, prevSlot, newSlot = inventoryUI.attachedItem.parent, inventoryUI.attachedItem.item, inventoryUI.attachedItem.amount, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot, 
+        local slotBuffer = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[newSlot]
+        if not slotBuffer or (slotBuffer.item ~= item) then
+            imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = item, amount = 0}, newSlot)
+            slotBuffer = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[newSlot]
+        end
+        slotBuffer.amount = slotBuffer.amount + amount
+        CInventory.CBuffer.slots[prevSlot] = nil
         inventoryUI.updateBuffer(localPlayer)
+        print("DROPPED CLIENT SIDE")
         imports.assetify.scheduleExec.execOnModuleLoad(function()
-            imports.triggerServerEvent("Player:onDropItem", localPlayer, parent, item, newSlot)    
+            --TODO: ....
+            --imports.triggerServerEvent("Player:onDropItem", localPlayer, parent, item, amount, prevSlot, newSlot)    
         end)
-        ]]
         return true
     end
 
@@ -610,9 +612,10 @@ CGame.execOnModuleLoad(function()
                         local isEquipped = inventoryUI.attachedItem.parent == inventoryUI.vicinityInventory.element
                         local slot = (isEquipped and inventoryUI.attachedItem.prevSlot) or inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[(inventoryUI.attachedItem.item)] or false
                         if not slot then
-                            imports.table.insert(vicinity_bufferCache, {item = inventoryUI.attachedItem.item, amount = inventoryUI.attachedItem.amount})
-                            inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[(inventoryUI.attachedItem.item)] = #vicinity_bufferCache
-                            slot = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[(inventoryUI.attachedItem.item)]
+                            --TODO: DETECT DYNAMICALLY WHERE TO PLACE.......
+                            --imports.table.insert(vicinity_bufferCache, {item = inventoryUI.attachedItem.item, amount = inventoryUI.attachedItem.amount})
+                            --inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[(inventoryUI.attachedItem.item)] = #vicinity_bufferCache
+                            slot = #vicinity_bufferCache + 1
                         end
                         if CInventory.isVicinityAvailableForDropping(inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, isEquipped) then
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "drop"}
