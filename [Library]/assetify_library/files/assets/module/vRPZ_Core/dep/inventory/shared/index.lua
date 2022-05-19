@@ -131,7 +131,7 @@ CInventory = {
         return FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns
     end,
 
-    isVicinityAvailableForDropping = function(vicinity, item, prevSlot, slot, isEquipped)
+    isVicinityAvailableForDropping = function(vicinity, item, prevSlot, isEquipped)
         if not vicinity or not imports.isElement(vicinity) or (imports.getElementType(vicinity) == "player") then return false end
         local itemData = CInventory.fetchItem(item)
         if not itemData then return false end
