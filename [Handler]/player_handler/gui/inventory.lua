@@ -571,7 +571,7 @@ CGame.execOnModuleLoad(function()
                 imports.beautify.native.setRenderTarget(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, true)
                 if not inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache then
                     local categoryPriority = {}
-                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache = {}
+                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers = {}, {}
                     for i = 1, #FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Priority"], 1 do
                         local j = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Priority"][i]
                         if CInventory.CCategories[j] then
@@ -579,6 +579,7 @@ CGame.execOnModuleLoad(function()
                             for k, v in imports.pairs(CInventory.CCategories[j]) do
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
                                     imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
+                                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[k] = #inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
                                 end
                             end
                         end
@@ -588,6 +589,7 @@ CGame.execOnModuleLoad(function()
                             for k, v in imports.pairs(j) do
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
                                     imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
+                                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[k] = #inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
                                 end
                             end
                         end
@@ -608,11 +610,13 @@ CGame.execOnModuleLoad(function()
                         local isEquipped = inventoryUI.attachedItem.parent == inventoryUI.vicinityInventory.element
                         local slot = (isEquipped and inventoryUI.attachedItem.prevSlot) or false
                         if not slot then
-                            local found = false
+                            local found = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[k]
                             --TODO: FIND ITEM INDEX IN BUFFER IF DOESN'T EXIST INSERT AT SOME INDEX
                             if not found then
                                 imports.table.insert(vicinity_bufferCache, {item = inventoryUI.attachedItem.item, amount = inventoryUI.attachedItem.amount})
                                 slot = #vicinity_bufferCache
+                            else
+                                slot = found
                             end
                         end
                         if CInventory.isVicinityAvailableForDropping(inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, isEquipped) then
