@@ -608,16 +608,10 @@ CGame.execOnModuleLoad(function()
                     if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and (not inventoryUI.attachedItem.isPlaceable or (inventoryUI.attachedItem.isPlaceable.type == "drop")) then
                         isUIClearPlacement = false
                         local isEquipped = inventoryUI.attachedItem.parent == inventoryUI.vicinityInventory.element
-                        local slot = (isEquipped and inventoryUI.attachedItem.prevSlot) or false
+                        local slot = (isEquipped and inventoryUI.attachedItem.prevSlot) or inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[(inventoryUI.attachedItem.item)] or false
                         if not slot then
-                            local found = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[k]
-                            --TODO: FIND ITEM INDEX IN BUFFER IF DOESN'T EXIST INSERT AT SOME INDEX
-                            if not found then
-                                imports.table.insert(vicinity_bufferCache, {item = inventoryUI.attachedItem.item, amount = inventoryUI.attachedItem.amount})
-                                slot = #vicinity_bufferCache
-                            else
-                                slot = found
-                            end
+                            imports.table.insert(vicinity_bufferCache, {item = inventoryUI.attachedItem.item, amount = inventoryUI.attachedItem.amount})
+                            slot = #vicinity_bufferCache
                         end
                         if CInventory.isVicinityAvailableForDropping(inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, isEquipped) then
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "drop"}
