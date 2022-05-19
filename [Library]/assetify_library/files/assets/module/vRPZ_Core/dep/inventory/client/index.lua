@@ -29,7 +29,7 @@ CInventory.fetchParentMaxSlots = function(parent)
         if not CPlayer.isInitialized(parent) and (parent ~= localPlayer) then return false end
         return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), CInventory.CBuffer.maxSlots or 0)
     else
-        return import.math.max(0, imports.tonumber(imports.getElementData(parent, "Inventory:MaxSlots")) or 0)
+        return imports.math.max(0, imports.tonumber(imports.getElementData(parent, "Inventory:MaxSlots")) or 0)
     end
     return false
 end
