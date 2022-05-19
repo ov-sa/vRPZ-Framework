@@ -741,6 +741,7 @@ CGame.execOnModuleLoad(function()
                         inventoryUI.attachedItem.animTickCounter = CLIENT_CURRENT_TICK
                     else
                         if inventoryUI.attachedItem.parent == localPlayer then
+                            --TODO: LATER SCROLL LOCAL INVENTORY TOO..
                             --[[
                             local maxSlots = CInventory.fetchParentMaxSlots(inventoryUI.attachedItem.parent)
                             local totalContentHeight = inventoryUI.gui.itemBox.templates[1].contentWrapper.padding + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding + (math.max(0, math.ceil(maxSlots/maximumInventoryRowSlots) - 1)*(inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)) + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding
