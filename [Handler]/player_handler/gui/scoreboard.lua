@@ -130,6 +130,7 @@ CGame.execOnModuleLoad(function()
         return bufferCount
     end
     
+
     ------------------------------
     --[[ Function: Renders UI ]]--
     ------------------------------
