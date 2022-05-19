@@ -4,8 +4,8 @@
 
 local imports = {
     getLocalization = getLocalization,
-    toJSON = toJSON,
     file = file,
+    json = json,
     beautify = beautify,
     assetify = assetify
 }

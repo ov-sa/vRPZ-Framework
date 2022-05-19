@@ -36,9 +36,8 @@ local imports = {
     triggerLatentClientEvent = triggerLatentClientEvent,
     triggerLatentServerEvent = triggerLatentServerEvent,
     loadAsset = loadAsset,
-    toJSON = toJSON,
-    fromJSON = fromJSON,
-    file = file
+    file = file,
+    json = json
 }
 
 
