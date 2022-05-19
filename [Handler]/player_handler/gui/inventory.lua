@@ -576,6 +576,27 @@ CGame.execOnModuleLoad(function()
                 local vicinity_rowHeight = inventoryUI.vicinityInventory.slotSize + inventoryUI.margin
                 local vicinity_row_startIndex = imports.math.floor(vicinity_offsetY/vicinity_rowHeight) + 1
                 local vicinity_row_endIndex = imports.math.min(vicinity_bufferCount, vicinity_row_startIndex + imports.math.ceil(inventoryUI.vicinityInventory.height/vicinity_rowHeight))
+                if vicinity_isHovered then
+                    if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and (not inventoryUI.attachedItem.isPlaceable or (inventoryUI.attachedItem.isPlaceable.type == "drop")) then
+                        local isVicinityItem = inventoryUI.attachedItem.parent == inventoryUI.vicinityInventory.element
+                        local prevSlot = (isVicinityItem and inventoryUI.attachedItem.prevSlot) or false
+                        local slot = prevSlot
+                        if not slot then
+                            --TODO: FIND ITEM INDEX IN BUFFER IF DOESN'T EXIST INSERT AT SOME INDEX
+                            --TODO: AUTO RESERVE...
+                        end
+                        if CInventory.isVicinityAvailableForDropping(inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, prevSlot, slot, isVicinityItem) then
+                            --TODO: SHOULD PROCEDURALLY GENERATE THIS...
+                            inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "drop"}
+                            inventoryUI.attachedItem.isPlaceable.slot = slot
+                            --inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.attachedItem.isPlaceable.offsetY = j.startX, j.startY
+                            inventoryUI.attachedItem.isPlaceable.width, inventoryUI.attachedItem.isPlaceable.height = inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.slotSize
+                        else
+                            inventoryUI.attachedItem.isPlaceable = false
+                        end
+                        --imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, (inventoryUI.attachedItem.isPlaceable and inventoryUI.clientInventory.equipment.slotAvailableColor) or inventoryUI.clientInventory.equipment.slotUnavailableColor, false)
+                    end
+                end
                 for i = vicinity_row_startIndex, vicinity_row_endIndex, 1 do
                     local slotBuffer = vicinity_bufferCache[i]
                     slotBuffer.offsetY = (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(i - 1) - vicinity_offsetY
