@@ -719,13 +719,13 @@ CGame.execOnModuleLoad(function()
                         elseif inventoryUI.attachedItem.isPlaceable.type == "drop" then
                             if inventoryUI.attachedItem.parent == localPlayer then
                                 isPlaceAttachment = true
-                                --TODO: SCROLL...
+                                inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY = inventoryUI.vicinityInventory.startX - inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + inventoryUI.attachedItem.isPlaceable.offsetY
                                 inventoryUI.dropItem()
-                            end
-                            if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight > 0 then
-                                local slot_offsetY = inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + ((inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(inventoryUI.attachedItem.isPlaceable.slot - 1)) - (inventoryUI.buffer[(inventoryUI.attachedItem.parent)].bufferCache.overflowHeight*inventoryUI.buffer[(inventoryUI.attachedItem.parent)].scroller.percent*0.01)
-                                if imports.math.round(slot_offsetY, 2) ~= imports.math.round(inventoryUI.attachedItem.prevY, 2) then
-                                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent + (((slot_offsetY - inventoryUI.attachedItem.prevY)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100)
+                                if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight > 0 then
+                                    local slot_offsetY = inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + ((inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(inventoryUI.attachedItem.isPlaceable.slot - 1)) - (inventoryUI.buffer[(inventoryUI.attachedItem.parent)].bufferCache.overflowHeight*inventoryUI.buffer[(inventoryUI.attachedItem.parent)].scroller.percent*0.01)
+                                    if imports.math.round(slot_offsetY, 2) ~= imports.math.round(inventoryUI.attachedItem.prevY, 2) then
+                                        inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent + (((slot_offsetY - inventoryUI.attachedItem.prevY)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100)
+                                    end
                                 end
                             end
                             --TODO: ADD LATER
