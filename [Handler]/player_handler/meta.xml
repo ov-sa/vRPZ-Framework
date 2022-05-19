@@ -26,9 +26,6 @@
     <script src="handlers/channel.lua" type="server"/>
     <script src="handlers/party.lua" type="server"/>
 
-    <!-- Files: Images: GUIs -->
-    <file src="files/images/inventory/ui/vicinity/slot_name.rw"/>
-
     <!-- Modules: Game -->
     <export function="execOnLoad" type="shared"/>
     <export function="execOnModuleLoad" type="shared"/>
