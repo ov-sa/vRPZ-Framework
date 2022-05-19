@@ -311,7 +311,7 @@ CGame.execOnModuleLoad(function()
         local parent, item, amount, prevSlot, newSlot = inventoryUI.attachedItem.parent, inventoryUI.attachedItem.item, inventoryUI.attachedItem.amount, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot
         local slotBuffer = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[newSlot]
         if not slotBuffer or (slotBuffer.item ~= item) then
-            imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = item, amount = 0}, newSlot)
+            imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, newSlot, {item = item, amount = 0})
             slotBuffer = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[newSlot]
         end
         slotBuffer.amount = slotBuffer.amount + amount
