@@ -571,7 +571,7 @@ CGame.execOnModuleLoad(function()
                 imports.beautify.native.setRenderTarget(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferRT, true)
                 if not inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache then
                     local categoryPriority = {}
-                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers = {}, {}
+                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].unassignedBuffers = {}, {}, {}
                     for i = 1, #FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Priority"], 1 do
                         local j = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Priority"][i]
                         if CInventory.CCategories[j] then
@@ -580,6 +580,8 @@ CGame.execOnModuleLoad(function()
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
                                     imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
                                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[k] = #inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
+                                else
+                                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].unassignedBuffers[k] = #inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache + 1
                                 end
                             end
                         end
@@ -590,6 +592,8 @@ CGame.execOnModuleLoad(function()
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
                                     imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
                                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[k] = #inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
+                                else
+                                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].unassignedBuffers[k] = #inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache + 1
                                 end
                             end
                         end
@@ -607,15 +611,8 @@ CGame.execOnModuleLoad(function()
                 if vicinity_isHovered then
                     if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and (not inventoryUI.attachedItem.isPlaceable or (inventoryUI.attachedItem.isPlaceable.type == "drop")) then
                         isUIClearPlacement = false
-                        local isEquipped = inventoryUI.attachedItem.parent == inventoryUI.vicinityInventory.element
-                        local slot = (isEquipped and inventoryUI.attachedItem.prevSlot) or inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[(inventoryUI.attachedItem.item)] or false
-                        if not slot then
-                            --TODO: DETECT DYNAMICALLY WHERE TO PLACE.......
-                            --imports.table.insert(vicinity_bufferCache, {item = inventoryUI.attachedItem.item, amount = inventoryUI.attachedItem.amount})
-                            --inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[(inventoryUI.attachedItem.item)] = #vicinity_bufferCache
-                            slot = #vicinity_bufferCache + 1
-                        end
-                        if CInventory.isVicinityAvailableForDropping(inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, isEquipped) then
+                        local slot = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[(inventoryUI.attachedItem.item)] or inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].unassignedBuffers[(inventoryUI.attachedItem.item)]
+                        if CInventory.isVicinityAvailableForDropping(inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, inventoryUI.attachedItem.parent == inventoryUI.vicinityInventory.element) then
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "drop"}
                             inventoryUI.attachedItem.isPlaceable.slot = slot
                             inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.attachedItem.isPlaceable.offsetY = 0, (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(slot - 1)
