@@ -594,7 +594,7 @@ CGame.execOnModuleLoad(function()
                         else
                             inventoryUI.attachedItem.isPlaceable = false
                         end
-                        --imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, (inventoryUI.attachedItem.isPlaceable and inventoryUI.clientInventory.equipment.slotAvailableColor) or inventoryUI.clientInventory.equipment.slotUnavailableColor, false)
+                        imports.beautify.native.drawRectangle(0, 0, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height, (inventoryUI.attachedItem.isPlaceable and inventoryUI.vicinityInventory.slotAvailableColor) or inventoryUI.vicinityInventory.slotUnavailableColor, false)
                     end
                 end
                 for i = vicinity_row_startIndex, vicinity_row_endIndex, 1 do
