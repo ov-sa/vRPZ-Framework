@@ -7,27 +7,6 @@
      DOC: 18/12/2020 (OvileAmriam)
      Desc: Inventory Item's Essentials ]]--
 ----------------------------------------------------------------
-
-
-function moveItemInLoot(item, slotIndex, loot)
-
-    slotIndex = tonumber(slotIndex)
-    if not item or not slotIndex or not loot or not isElement(loot) then return false end
-    local itemDetails = getItemDetails(item)
-    local itemAmountData = tonumber(getElementData(localPlayer, "Item:"..item)) or 0
-    if not itemDetails or itemAmountData <= 0 then return false end
-
-    inventoryUI.isSynced = false
-    CInventory.CBuffer.slots[slotIndex] = {
-        item = item,
-        loot = loot,
-        translation = "loot"
-    }
-    triggerServerEvent("onPlayerMoveItemInLoot", localPlayer, item, slotIndex, loot)
-    return true
-
-end
-
 function equipItemInInventory(item, prevSlotIndex, reservedSlotIndex, newSlotIndex, loot)
 
     prevSlotIndex, reservedSlotIndex = tonumber(prevSlotIndex), tonumber(reservedSlotIndex)
