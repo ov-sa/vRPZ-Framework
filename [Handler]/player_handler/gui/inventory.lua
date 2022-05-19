@@ -372,7 +372,7 @@ CGame.execOnModuleLoad(function()
             elseif inventoryUI.vicinityInventory.bgTexture ~= ((inventoryUI.vicinityInventory.element and inventoryUI.buffer[(inventoryUI.vicinityInventory.element)] and true) or false) then inventoryUI.createBGTexture(true) end
             local cursorX, cursorY = imports.getAbsoluteCursorPosition()
             local isUIEnabled = inventoryUI.cache.isEnabled
-            local isUIActionEnabled = isUIEnabled and not inventoryUI.attachedItem
+            local isUIActionEnabled, isUIClearPlacement = isUIEnabled and not inventoryUI.attachedItem, true
             local isLMBClicked = (inventoryUI.cache.keys.mouse == "mouse1") and isUIActionEnabled
             local client_startX, client_startY = inventoryUI.clientInventory.startX - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.titlebar.height - inventoryUI.margin
             local client_width, client_height = inventoryUI.clientInventory.width + (inventoryUI.margin*2), inventoryUI.clientInventory.height + (inventoryUI.margin*2)
@@ -452,6 +452,7 @@ CGame.execOnModuleLoad(function()
                 local slotRow, slotColumn = inventoryUI.fetchUIGridSlotFromOffset(cursorX - inventoryUI.clientInventory.startX, cursorY - (inventoryUI.clientInventory.startY + inventoryUI.titlebar.height))
                 if slotRow and slotColumn then
                     if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and (not inventoryUI.attachedItem.isPlaceable or (inventoryUI.attachedItem.isPlaceable.type == "order")) then
+                        isUIClearPlacement = false
                         local slot = CInventory.fetchSlotIndex(slotRow, slotColumn)
                         local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(slot)
                         local slotWidth, slotHeight = CInventory.fetchSlotDimensions(imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - (slotRow - 1)), imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - (slotColumn - 1)))
@@ -474,6 +475,9 @@ CGame.execOnModuleLoad(function()
                         isUIActionEnabled = false
                     end
                 end
+            end
+            if isUIClearPlacement and inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and (inventoryUI.attachedItem.isPlaceable.type == "order") and not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(inventoryUI.attachedItem.isPlaceable.slot)] then
+                inventoryUI.attachedItem.isPlaceable = false
             end
             imports.beautify.native.setRenderTarget()
             imports.beautify.native.drawText(inventoryUI.buffer[localPlayer].name, client_startX, client_startY - inventoryUI.titlebar.height, client_startX + client_width, client_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font.instance, "center", "center", true, false, false)
@@ -592,8 +596,10 @@ CGame.execOnModuleLoad(function()
                 local vicinity_rowHeight = inventoryUI.vicinityInventory.slotSize + inventoryUI.margin
                 local vicinity_row_startIndex = imports.math.floor(vicinity_offsetY/vicinity_rowHeight) + 1
                 local vicinity_row_endIndex = imports.math.min(vicinity_bufferCount, vicinity_row_startIndex + imports.math.ceil(inventoryUI.vicinityInventory.height/vicinity_rowHeight))
+                isUIClearPlacement = true
                 if vicinity_isHovered then
                     if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and (not inventoryUI.attachedItem.isPlaceable or (inventoryUI.attachedItem.isPlaceable.type == "drop")) then
+                        isUIClearPlacement = false
                         local isEquipped = inventoryUI.attachedItem.parent == inventoryUI.vicinityInventory.element
                         local slot = (isEquipped and inventoryUI.attachedItem.prevSlot) or false
                         if not slot then
@@ -611,6 +617,9 @@ CGame.execOnModuleLoad(function()
                         end
                         imports.beautify.native.drawRectangle(0, 0, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height, (inventoryUI.attachedItem.isPlaceable and inventoryUI.vicinityInventory.slotAvailableColor) or inventoryUI.vicinityInventory.slotUnavailableColor, false)
                     end
+                end
+                if isUIClearPlacement and inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and (inventoryUI.attachedItem.isPlaceable.type == "drop") then
+                    inventoryUI.attachedItem.isPlaceable = false
                 end
                 for i = vicinity_row_startIndex, vicinity_row_endIndex, 1 do
                     local slotBuffer = vicinity_bufferCache[i]
