@@ -594,14 +594,14 @@ CGame.execOnModuleLoad(function()
                 local vicinity_row_endIndex = imports.math.min(vicinity_bufferCount, vicinity_row_startIndex + imports.math.ceil(inventoryUI.vicinityInventory.height/vicinity_rowHeight))
                 if vicinity_isHovered then
                     if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and (not inventoryUI.attachedItem.isPlaceable or (inventoryUI.attachedItem.isPlaceable.type == "drop")) then
-                        local isVicinityItem = inventoryUI.attachedItem.parent == inventoryUI.vicinityInventory.element
-                        local prevSlot = (isVicinityItem and inventoryUI.attachedItem.prevSlot) or false
+                        local isEquipped = inventoryUI.attachedItem.parent == inventoryUI.vicinityInventory.element
+                        local prevSlot = (isEquipped and inventoryUI.attachedItem.prevSlot) or false
                         local slot = prevSlot
                         if not slot then
                             --TODO: FIND ITEM INDEX IN BUFFER IF DOESN'T EXIST INSERT AT SOME INDEX
                             --TODO: AUTO RESERVE...
                         end
-                        if CInventory.isVicinityAvailableForDropping(inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, prevSlot, slot, isVicinityItem) then
+                        if CInventory.isVicinityAvailableForDropping(inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, prevSlot, slot, isEquipped) then
                             --TODO: SHOULD PROCEDURALLY GENERATE THIS...
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "drop"}
                             inventoryUI.attachedItem.isPlaceable.slot = slot
