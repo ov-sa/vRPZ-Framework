@@ -7,6 +7,7 @@ local imports = {
     tonumber = tonumber,
     isElement = isElement,
     getElementType = getElementType,
+    getElementData = getElementData,
     string = string,
     math = math,
     assetify = assetify,
@@ -43,7 +44,7 @@ CInventory.fetchParentMaxSlots = function(parent)
         local inventoryID = CPlayer.getInventoryID(parent)
         return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), (inventoryID and CInventory.CBuffer[inventoryID].maxSlots) or 0)
     else
-        --TODO: Get data max slots here..
+        return import.math.max(0, imports.tonumber(imports.getElementData(parent, "Inventory:MaxSlots")) or 0)
     end
     return false
 end
