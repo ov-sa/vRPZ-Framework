@@ -312,12 +312,12 @@ CGame.execOnModuleLoad(function()
         local slotBuffer = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[newSlot]
         if not slotBuffer or (slotBuffer.item ~= item) then
             imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, newSlot, {item = item, amount = 0})
-            slotBuffer = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[newSlot]
         end
-        slotBuffer.amount = slotBuffer.amount + amount
         CInventory.CBuffer.slots[prevSlot] = nil
         inventoryUI.updateBuffer(localPlayer)
         imports.assetify.scheduleExec.execOnModuleLoad(function()
+            local slotBuffer = slotBuffer
+            slotBuffer.amount = slotBuffer.amount + amount
             imports.triggerServerEvent("Player:onDropItem", localPlayer, vicinity, item, amount, prevSlot)
         end)
         return true
