@@ -720,6 +720,7 @@ CGame.execOnModuleLoad(function()
                             else
                                 inventoryUI.addItem()
                             end
+                            --TODO: ADD LATER
                             --triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                         elseif inventoryUI.attachedItem.isPlaceable.type == "drop" then
                             if inventoryUI.attachedItem.parent == localPlayer then
