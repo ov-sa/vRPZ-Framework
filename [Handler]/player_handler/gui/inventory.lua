@@ -308,7 +308,7 @@ CGame.execOnModuleLoad(function()
     end
     inventoryUI.dropItem = function()
         --inventoryUI.isSynced, inventoryUI.isSyncScheduled = false, true
-        local parent, item, amount, prevSlot, newSlot = inventoryUI.attachedItem.parent, inventoryUI.attachedItem.item, inventoryUI.attachedItem.amount, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot, 
+        local parent, item, amount, prevSlot, newSlot = inventoryUI.attachedItem.parent, inventoryUI.attachedItem.item, inventoryUI.attachedItem.amount, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot
         local slotBuffer = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[newSlot]
         if not slotBuffer or (slotBuffer.item ~= item) then
             imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = item, amount = 0}, newSlot)
