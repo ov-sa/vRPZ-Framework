@@ -595,13 +595,12 @@ CGame.execOnModuleLoad(function()
                 if vicinity_isHovered then
                     if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and (not inventoryUI.attachedItem.isPlaceable or (inventoryUI.attachedItem.isPlaceable.type == "drop")) then
                         local isEquipped = inventoryUI.attachedItem.parent == inventoryUI.vicinityInventory.element
-                        local prevSlot = (isEquipped and inventoryUI.attachedItem.prevSlot) or false
-                        local slot = prevSlot
+                        local slot = (isEquipped and inventoryUI.attachedItem.prevSlot) or false
                         if not slot then
                             --TODO: FIND ITEM INDEX IN BUFFER IF DOESN'T EXIST INSERT AT SOME INDEX
                             --TODO: AUTO RESERVE...
                         end
-                        if CInventory.isVicinityAvailableForDropping(inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, prevSlot, isEquipped) then
+                        if CInventory.isVicinityAvailableForDropping(inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, isEquipped) then
                             --TODO: SHOULD PROCEDURALLY GENERATE THIS...
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "drop"}
                             inventoryUI.attachedItem.isPlaceable.slot = slot
