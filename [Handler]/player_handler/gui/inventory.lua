@@ -483,6 +483,7 @@ CGame.execOnModuleLoad(function()
             imports.beautify.native.drawText(inventoryUI.buffer[localPlayer].name, client_startX, client_startY - inventoryUI.titlebar.height, client_startX + client_width, client_startY, inventoryUI.titlebar.fontColor, 1, inventoryUI.titlebar.font.instance, "center", "center", true, false, false)
             imports.beautify.native.drawImage(client_startX + inventoryUI.clientInventory.lockStat.startX, client_startY + inventoryUI.clientInventory.lockStat.startY, inventoryUI.clientInventory.lockStat.size, inventoryUI.clientInventory.lockStat.size, (isUIActionEnabled and inventoryUI.clientInventory.lockStat.unlockTexture) or inventoryUI.clientInventory.lockStat.lockTexture, 0, 0, 0, inventoryUI.titlebar.fontColor, false)
             imports.beautify.native.drawImage(client_startX + inventoryUI.margin, client_startY + inventoryUI.margin, inventoryUI.clientInventory.width, inventoryUI.clientInventory.height, inventoryUI.buffer[localPlayer].bufferRT, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
+            isUIClearPlacement = true
             for i = 1, #inventoryUI.clientInventory.equipment, 1 do
                 local j = inventoryUI.clientInventory.equipment[i]
                 local slotBuffer = (inventoryUI.buffer[localPlayer].assignedBuffers[(j.slot)] and client_bufferCache[(inventoryUI.buffer[localPlayer].assignedBuffers[(j.slot)])]) or false
@@ -518,6 +519,7 @@ CGame.execOnModuleLoad(function()
                 end
                 if equipment_isHovered then
                     if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and (not inventoryUI.attachedItem.isPlaceable or (inventoryUI.attachedItem.isPlaceable.type == "order")) then
+                        isUIClearPlacement = false
                         if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, ((inventoryUI.attachedItem.parent == localPlayer) and inventoryUI.attachedItem.prevSlot) or false, j.slot, inventoryUI.attachedItem.parent == localPlayer) then
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "order"}
                             inventoryUI.attachedItem.isPlaceable.slot = j.slot
@@ -529,6 +531,9 @@ CGame.execOnModuleLoad(function()
                         imports.beautify.native.drawRectangle(j.startX, j.startY, j.width, j.height, (inventoryUI.attachedItem.isPlaceable and inventoryUI.clientInventory.equipment.slotAvailableColor) or inventoryUI.clientInventory.equipment.slotUnavailableColor, false)
                     end
                 end
+            end
+            if isUIClearPlacement and inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and (inventoryUI.attachedItem.isPlaceable.type == "order") and FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(inventoryUI.attachedItem.isPlaceable.slot)] then
+                inventoryUI.attachedItem.isPlaceable = false
             end
             if equipment_isSlotHovered then
                 if isLMBClicked then
