@@ -725,6 +725,7 @@ CGame.execOnModuleLoad(function()
                         elseif inventoryUI.attachedItem.isPlaceable.type == "drop" then
                             if inventoryUI.attachedItem.parent == localPlayer then
                                 isPlaceAttachment = true
+                                --TODO: SCROLL...
                                 inventoryUI.dropItem()
                             end
                             --TODO: ADD LATER
