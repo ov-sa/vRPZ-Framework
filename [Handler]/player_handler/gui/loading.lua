@@ -37,7 +37,7 @@ CGame.execOnModuleLoad(function()
         loader = {
             startX = 0, startY = (CLIENT_MTA_RESOLUTION[2]/768)*-15,
             tickCounter = CLIENT_CURRENT_TICK,
-            bgTexture = imports.beautify.native.createTexture("files/images/loading/loader.rw", "dxt5", true, "clamp")
+            bgTexture = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "loader:icon")
         },
         hint = {
             paddingX = 5, paddingY = 15,

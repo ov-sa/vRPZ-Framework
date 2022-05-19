@@ -27,8 +27,6 @@
     <script src="handlers/party.lua" type="server"/>
 
     <!-- Files: Images: GUIs -->
-    <file src="files/images/login/background.rw"/>
-    <file src="files/images/loading/loader.rw"/>
     <file src="files/images/inventory/ui/vicinity/slot_name.rw"/>
 
     <!-- Modules: Game -->
