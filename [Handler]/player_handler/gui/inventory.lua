@@ -749,45 +749,9 @@ CGame.execOnModuleLoad(function()
                                     inventoryUI.attachedItem.__scrollItemBox = {initial = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
                                 end
                             end
-                            local releaseIndex = inventoryUI.attachedItem.prevSlot
-                            inventoryUI.attachedItem.finalWidth, inventoryUI.attachedItem.finalHeight = slotWidth, slotHeight
-                            inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight = inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height
-                            inventoryUI.attachedItem.animTickCounter = getTickCount()
-                            inventoryUI.attachedItem.prevSlot = isItemAvailableForDropping.slotIndex
-                            inventoryUI.attachedItem.prevPosX = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.startX + template.contentWrapper.startX + template.contentWrapper.itemSlot.startX + template.contentWrapper.itemSlot.iconSlot.startX
-                            inventoryUI.attachedItem.prevPosY = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.startY + template.contentWrapper.startY + slot_offsetY
-                            inventoryUI.attachedItem.releaseLoot = isItemAvailableForDropping.parent
-                            if inventoryUI.attachedItem.isEquippedItem then
-                                local reservedSlotIndex = false
-                                inventoryUI.isSyncScheduled = true
-                                inventoryUI.buffer[localPlayer].assignedSlots[releaseIndex] = nil
-                                for i, j in pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
-                                    if tonumber(i) then
-                                        if j.translation and j.translation == "equipment" and releaseIndex == j.equipmentIndex then
-                                            reservedSlotIndex = i
-                                            break
-                                        end
-                                    end
-                                end
-                                if reservedSlotIndex then
-                                    inventoryUI.attachedItem.reservedSlot = "equipment"
-                                    inventoryUI.attachedItem.reservedSlot = reservedSlotIndex
-                                    inventoryUI.buffer[localPlayer].assignedSlots[reservedSlotIndex] = {
-                                        item = inventoryUI.attachedItem.item,
-                                        parent = isItemAvailableForDropping.parent,
-                                        translation = "vicinity"
-                                    }
-                                end
-                            else
-                                inventoryUI.isSyncScheduled = true
-                                inventoryUI.buffer[localPlayer].assignedSlots[releaseIndex] = {
-                                    item = inventoryUI.attachedItem.item,
-                                    parent = isItemAvailableForDropping.parent,
-                                    translation = "vicinity"
-                                }
-                            end
-                            triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                             ]]
+                            --TODO: ADD LATER
+                            --triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                         end
                     end
                     if not isPlaceAttachment then
