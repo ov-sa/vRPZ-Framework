@@ -727,30 +727,6 @@ CGame.execOnModuleLoad(function()
                                 isPlaceAttachment = true
                                 inventoryUI.dropItem()
                             end
-                            --[[
-                            local totalLootItems = 0
-                            for index, _ in pairs(inventoryUI.buffer[isItemAvailableForDropping.parent].inventory) do
-                                totalLootItems = totalLootItems + 1
-                            end
-                            local template = inventoryUI.gui.itemBox.templates[(inventoryUI.buffer[isItemAvailableForDropping.parent].gui.templateIndex)]
-                            local totalContentHeight = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*totalLootItems)
-                            local exceededContentHeight =  totalContentHeight - template.contentWrapper.height
-                            local slot_offsetY = template.contentWrapper.itemSlot.startY + ((template.contentWrapper.itemSlot.paddingY + template.contentWrapper.itemSlot.height)*(isItemAvailableForDropping.slotIndex - 1))
-                            local slotWidth, slotHeight = 0, template.contentWrapper.itemSlot.iconSlot.height
-                            slotWidth = (originalWidth / originalHeight)*slotHeight
-                            if exceededContentHeight > 0 then
-                                slot_offsetY = slot_offsetY - (exceededContentHeight*inventoryUI.buffer[isItemAvailableForDropping.parent].gui.scroller.percent*0.01)
-                                if slot_offsetY < 0 then
-                                    local finalScrollPercent = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.scroller.percent + (slot_offsetY/exceededContentHeight)*100
-                                    slot_offsetY = template.contentWrapper.itemSlot.paddingY
-                                    inventoryUI.attachedItem.__scrollItemBox = {initial = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
-                                elseif (slot_offsetY + template.contentWrapper.itemSlot.height + template.contentWrapper.itemSlot.paddingY) > template.contentWrapper.height then
-                                    local finalScrollPercent = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.scroller.percent + (((slot_offsetY + template.contentWrapper.itemSlot.height + template.contentWrapper.itemSlot.paddingY) - template.contentWrapper.height)/exceededContentHeight)*100
-                                    slot_offsetY = template.contentWrapper.height - (template.contentWrapper.itemSlot.height + template.contentWrapper.itemSlot.paddingY)
-                                    inventoryUI.attachedItem.__scrollItemBox = {initial = inventoryUI.buffer[isItemAvailableForDropping.parent].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
-                                end
-                            end
-                            ]]
                             --TODO: ADD LATER
                             --triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                         end
