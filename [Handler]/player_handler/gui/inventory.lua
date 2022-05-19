@@ -612,7 +612,6 @@ CGame.execOnModuleLoad(function()
                             --TODO: AUTO RESERVE...
                         end
                         if CInventory.isVicinityAvailableForDropping(inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, isEquipped) then
-                            --TODO: SHOULD PROCEDURALLY GENERATE THIS...
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "drop"}
                             inventoryUI.attachedItem.isPlaceable.slot = slot
                             inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.attachedItem.isPlaceable.offsetY = 0, (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(slot - 1)
