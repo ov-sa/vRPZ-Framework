@@ -132,8 +132,7 @@ CInventory = {
     end,
 
     isVicinityAvailableForDropping = function(vicinity, item, prevSlot, slot, isEquipped)
-        slot = imports.tonumber(slot)
-        if not vicinity or not imports.isElement(vicinity) or (imports.getElementType(vicinity) == "player") or not slot then return false end
+        if not vicinity or not imports.isElement(vicinity) or (imports.getElementType(vicinity) == "player") then return false end
         local itemData = CInventory.fetchItem(item)
         if not itemData then return false end
         if isEquipped then

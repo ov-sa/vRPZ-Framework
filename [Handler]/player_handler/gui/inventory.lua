@@ -601,7 +601,7 @@ CGame.execOnModuleLoad(function()
                             --TODO: FIND ITEM INDEX IN BUFFER IF DOESN'T EXIST INSERT AT SOME INDEX
                             --TODO: AUTO RESERVE...
                         end
-                        if CInventory.isVicinityAvailableForDropping(inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, prevSlot, slot, isEquipped) then
+                        if CInventory.isVicinityAvailableForDropping(inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, prevSlot, isEquipped) then
                             --TODO: SHOULD PROCEDURALLY GENERATE THIS...
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "drop"}
                             inventoryUI.attachedItem.isPlaceable.slot = slot
