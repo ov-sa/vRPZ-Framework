@@ -85,7 +85,7 @@ CGame.execOnModuleLoad(function()
         },
         vicinityInventory = {
             width = inventory_offsetX,
-            slotNameTexture = imports.beautify.native.createTexture("files/images/inventory/ui/vicinity/slot_name.rw", "argb", true, "clamp"),
+            slotNameTexture = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "inventory:vicinity:slot_name"),
             slotNameFont = CGame.createFont(1, 18), slotNameFontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotNameFontColor)),
             slotSize = vicinity_slotSize, slotColor = inventory_rt_slotColor, slotAvailableColor = inventory_rt_slotAvailableColor, slotUnavailableColor = inventory_rt_slotUnavailableColor,
             bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor))

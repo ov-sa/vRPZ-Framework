@@ -20,7 +20,8 @@
             "status:hunger_border": "status/hunger/border.png",
             "status:hunger_icon": "status/hunger/icon.png",
             "status:thirst_border": "status/thirst/border.png",
-            "status:thirst_icon": "status/thirst/icon.png"
+            "status:thirst_icon": "status/thirst/icon.png",
+            "inventory:vicinity:slot_name": "inventory/vicinity/slot_name.png"
         }
     }
 }
