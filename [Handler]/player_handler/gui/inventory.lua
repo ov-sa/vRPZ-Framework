@@ -791,7 +791,6 @@ CGame.execOnModuleLoad(function()
     --[[ Client: On Toggle Inventory UI ]]--
     ----------------------------------------
 
-    local testPed = getElementsByType("ped")[1];  --TODO: REMOVE IT LATER
     inventoryUI.toggleUI = function(state)
         --TODO: ENABLE LATER
         --if (((state ~= true) and (state ~= false)) or (state == inventoryUI.state)) or (state and (not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) or CGame.isUIVisible())) then return false end
@@ -801,7 +800,7 @@ CGame.execOnModuleLoad(function()
             inventoryUI.updateUILang()
             --TODO: ENABLE LATER
             --inventoryUI.vicinityInventory.element = CCharacter.isInLoot(localPlayer)
-            inventoryUI.vicinityInventory.element = testPed --TODO: REMOVE IT LATER AND ENABLE ^
+            inventoryUI.vicinityInventory.element = getElementsByType("ped")[1] --TODO: REMOVE IT LATER AND ENABLE ^
             imports.triggerEvent("Client:onEnableInventoryUI", localPlayer, true)
             inventoryUI.createBuffer(localPlayer, imports.string.format(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory["Title"][(CPlayer.CLanguage)], imports.getPlayerName(localPlayer)))
             inventoryUI.createBuffer(inventoryUI.vicinityInventory.element)
