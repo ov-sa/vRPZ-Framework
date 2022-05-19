@@ -174,13 +174,13 @@ dbify.inventory = {
                             j[1] = "item_"..imports.tostring(j[1])
                             j[2] = imports.math.max(0, imports.tonumber(j[2]) or 0)
                             local prevItemData = result[(j[1])]
-                            prevItemData = (prevItemData and imports.fromJSON(prevItemData)) or false
+                            prevItemData = (prevItemData and imports.json.decode(prevItemData)) or false
                             prevItemData = (prevItemData and prevItemData.data and (imports.type(prevItemData.data) == "table") and prevItemData.item and (imports.type(prevItemData.item) == "table") and prevItemData) or false
                             if not prevItemData then
                                 prevItemData = imports.table.clone(dbify.inventory.connection.itemFormat.content, true)
                             end
                             prevItemData.property[(dbify.inventory.connection.itemFormat.counter)] = j[2] + (imports.math.max(0, imports.tonumber(prevItemData.property[(dbify.inventory.connection.itemFormat.counter)]) or 0)*((arguments[1].processType == "push" and 1) or -1))
-                            arguments[1].items[i][2] = imports.toJSON(prevItemData)
+                            arguments[1].items[i][2] = imports.json.encode(prevItemData)
                         end
                         dbify.inventory.setData(arguments[1].inventoryID, arguments[1].items, function(result, arguments)
                             local callbackReference = callback
@@ -214,7 +214,7 @@ dbify.inventory = {
                     if result then
                         local properties = {}
                         for i, j in imports.pairs(result) do
-                            j = (j and imports.fromJSON(j)) or false
+                            j = (j and imports.json.decode(j)) or false
                             j = (j and j.data and (imports.type(j.data) == "table") and j.property and (imports.type(j.property) == "table") and j) or false
                             if arguments[1].processType == "set" then
                                 if not j then
@@ -228,7 +228,7 @@ dbify.inventory = {
                                     end
                                     j.property[(v[1])] = v[2]
                                 end
-                                imports.table.insert(properties, {i, imports.toJSON(j)})
+                                imports.table.insert(properties, {i, imports.json.encode(j)})
                             else
                                 local itemIndex = imports.string.gsub(i, "item_", "", 1)
                                 properties[itemIndex] = {}
@@ -278,7 +278,7 @@ dbify.inventory = {
                     if result then
                         local datas = {}
                         for i, j in imports.pairs(result) do
-                            j = (j and imports.fromJSON(j)) or false
+                            j = (j and imports.json.decode(j)) or false
                             j = (j and j.data and (imports.type(j.data) == "table") and j.property and (imports.type(j.property) == "table") and j) or false
                             if arguments[1].processType == "set" then
                                 if not j then
@@ -288,7 +288,7 @@ dbify.inventory = {
                                     local v = arguments[1].datas[k]
                                     j.data[imports.tostring(v[1])] = v[2]
                                 end
-                                imports.table.insert(datas, {i, imports.toJSON(j)})
+                                imports.table.insert(datas, {i, imports.json.encode(j)})
                             else
                                 local itemIndex = imports.string.gsub(i, "item_", "", 1)
                                 datas[itemIndex] = {}

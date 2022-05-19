@@ -50,7 +50,7 @@ syncer = {
     isModuleLoaded = false,
     libraryName = imports.getResourceName(resource),
     librarySource = "https://api.github.com/repos/ov-sa/Assetify-Library/releases/latest",
-    librarySerial = imports.md5(imports.getResourceName(resource)..":"..imports.tostring(resource)..":"..imports.toJSON(imports.getRealTime())),
+    librarySerial = imports.md5(imports.getResourceName(resource)..":"..imports.tostring(resource)..":"..imports.json.encode(imports.getRealTime())),
     libraryBandwidth = 0,
     syncedElements = {}
 }
@@ -528,7 +528,7 @@ else
 
     imports.fetchRemote(syncer.librarySource, function(response, status)
         if not response or not status or (status ~= 0) then return false end
-        response = imports.fromJSON(response)
+        response = imports.json.decode(response)
         if response and response.tag_name and (syncer.libraryVersion ~= response.tag_name) then
             imports.outputDebugString("[Assetify]: Latest version available - "..response.tag_name, 3)
         end

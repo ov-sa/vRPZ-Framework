@@ -29,7 +29,7 @@ end
 
 CGame.updateSettings = function(index, data)
     CGame.CSettings.cache[index] = data
-    imports.file.write(CGame.CSettings.path, imports.toJSON(CGame.CSettings.cache))
+    imports.file.write(CGame.CSettings.path, imports.json.encode(CGame.CSettings.cache))
     return true
 end
 
@@ -106,4 +106,4 @@ CGame.playSound3D = function(...)
 end
 
 CGame.CSettings.cache = imports.file.read(CGame.CSettings.path)
-CGame.CSettings.cache = (CGame.CSettings.cache and imports.fromJSON(CGame.CSettings.cache)) or {}
+CGame.CSettings.cache = (CGame.CSettings.cache and imports.json.decode(CGame.CSettings.cache)) or {}

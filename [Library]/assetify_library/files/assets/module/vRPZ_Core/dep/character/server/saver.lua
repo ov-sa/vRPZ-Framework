@@ -60,7 +60,7 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
         imports.setElementData(player, "Slot:Object:"..i, nil)
     end
     imports.table.insert(dataBuffer.inventory, {"max_slots", CInventory.CBuffer[player].maxSlots})
-    imports.table.insert(dataBuffer.inventory, {"slots", imports.toJSON(CInventory.CBuffer[player].slots)})
+    imports.table.insert(dataBuffer.inventory, {"slots", imports.json.encode(CInventory.CBuffer[player].slots)})
     for i, j in imports.pairs(CInventory.CItems) do
         if saveProgress then
             CInventory.setItemProperty(depDatas.inventoryID, {j.ref}, {
@@ -92,7 +92,7 @@ CCharacter.loadInventory = function(player, depDatas, callback)
         CInventory.getData(args[2].inventoryID, {"max_slots", "slots"}, function(result, args)
             local callbackReference = callback
             result = result or {}
-            result.max_slots, result.slots = imports.math.max(CInventory.fetchMaxSlotsMultiplier(), imports.tonumber(result.max_slots) or 0), (result.slots and imports.fromJSON(result.slots)) or {}
+            result.max_slots, result.slots = imports.math.max(CInventory.fetchMaxSlotsMultiplier(), imports.tonumber(result.max_slots) or 0), (result.slots and imports.json.decode(result.slots)) or {}
             CInventory.CBuffer[(args[2].characterID)] = {
                 maxSlots = result.max_slots,
                 slots = result.slots
@@ -146,7 +146,7 @@ CCharacter.saveProgress = function(player)
     local characterID = CPlayer.getCharacterID(player)
     local inventoryID = CPlayer.getInventoryID(player)
     CCharacter.setData(characterID, {
-        {"location", imports.toJSON(CCharacter.getLocation(player))}
+        {"location", imports.json.encode(CCharacter.getLocation(player))}
     })
     CCharacter.resetProgress(player, true, {
         serial = serial,
