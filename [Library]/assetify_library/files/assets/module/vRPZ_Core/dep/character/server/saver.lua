@@ -59,8 +59,8 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
         imports.setElementData(player, "Slot:"..i, nil)
         imports.setElementData(player, "Slot:Object:"..i, nil)
     end
-    imports.table.insert(dataBuffer.inventory, {"max_slots", CInventory.CBuffer[player].maxSlots})
-    imports.table.insert(dataBuffer.inventory, {"slots", imports.json.encode(CInventory.CBuffer[player].slots)})
+    imports.table.insert(dataBuffer.inventory, {"max_slots", CInventory.CBuffer[(depDatas.inventoryID)].maxSlots})
+    imports.table.insert(dataBuffer.inventory, {"slots", imports.json.encode(CInventory.CBuffer[(depDatas.inventoryID)].slots)})
     for i, j in imports.pairs(CInventory.CItems) do
         if saveProgress then
             CInventory.setItemProperty(depDatas.inventoryID, {j.ref}, {
