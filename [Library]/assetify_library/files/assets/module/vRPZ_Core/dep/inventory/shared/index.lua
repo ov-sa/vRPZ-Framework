@@ -138,7 +138,7 @@ CInventory = {
         if not isEquipped then
             local maxWeight, usedWeight = CInventory.fetchParentMaxWeight(vicinity), CInventory.fetchParentUsedWeight(vicinity)
             if not maxWeight or not usedWeight then return false end
-            return itemData.data.itemWeight.weight <= (maxSlots - usedSlots)
+            return itemData.data.itemWeight.weight <= (maxWeight - usedWeight)
         end
         return true
     end
