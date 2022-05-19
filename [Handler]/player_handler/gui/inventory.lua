@@ -611,7 +611,8 @@ CGame.execOnModuleLoad(function()
                         local slot = (isEquipped and inventoryUI.attachedItem.prevSlot) or inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[(inventoryUI.attachedItem.item)] or false
                         if not slot then
                             imports.table.insert(vicinity_bufferCache, {item = inventoryUI.attachedItem.item, amount = inventoryUI.attachedItem.amount})
-                            slot = #vicinity_bufferCache
+                            inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[(inventoryUI.attachedItem.item)] = #vicinity_bufferCache
+                            slot = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[(inventoryUI.attachedItem.item)]
                         end
                         if CInventory.isVicinityAvailableForDropping(inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, isEquipped) then
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "drop"}
