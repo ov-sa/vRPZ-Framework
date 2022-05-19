@@ -25,8 +25,7 @@ local imports = {
     bindKey = bindKey,
     setPedStat = setPedStat,
     setPlayerNametagShowing = setPlayerNametagShowing,
-    toJSON = toJSON,
-    fromJSON = fromJSON,
+    json = json,
     table = table,
     string = string
 }
@@ -102,7 +101,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                 for i = 1, #result, 1 do
                     local j = result[i]
                     j.inventory = imports.tonumber(j.inventory)
-                    j.identity = imports.fromJSON(j.identity)
+                    j.identity = imports.json.decode(j.identity)
                     args[3].characters[i] = {
                         id = j.id,
                         identity = j.identity
@@ -112,7 +111,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
                         local v = FRAMEWORK_CONFIGS["Character"]["Datas"][k]
                         CCharacter.CBuffer[(j.id)][v] = imports.string.parse(CCharacter.CBuffer[(j.id)][v])
                     end
-                    CCharacter.CBuffer[(j.id)].location = (CCharacter.CBuffer[(j.id)].location and imports.fromJSON(CCharacter.CBuffer[(j.id)].location)) or false
+                    CCharacter.CBuffer[(j.id)].location = (CCharacter.CBuffer[(j.id)].location and imports.json.decode(CCharacter.CBuffer[(j.id)].location)) or false
                 end
                 if not args[3].characters[(args[3].character)] then args[3].character = 0 end
             else
