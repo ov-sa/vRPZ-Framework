@@ -722,11 +722,21 @@ CGame.execOnModuleLoad(function()
                                 --TODO: SCROLL...
                                 inventoryUI.dropItem()
                             end
+                            if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight > 0 then
+                                local slot_offsetY = inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + ((inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(inventoryUI.attachedItem.isPlaceable.slot - 1)) - (inventoryUI.buffer[(inventoryUI.attachedItem.parent)].bufferCache.overflowHeight*inventoryUI.buffer[(inventoryUI.attachedItem.parent)].scroller.percent*0.01)
+                                if imports.math.round(slot_offsetY, 2) ~= imports.math.round(inventoryUI.attachedItem.prevY, 2) then
+                                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent + (((slot_offsetY - inventoryUI.attachedItem.prevY)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100)
+                                end
+                            end
                             --TODO: ADD LATER
                             --triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                         end
                     end
-                    if not isPlaceAttachment then
+                    if isPlaceAttachment then
+                        inventoryUI.attachedItem.finalWidth, inventoryUI.attachedItem.finalHeight = inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight
+                        inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight = inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height
+                        inventoryUI.attachedItem.animTickCounter = CLIENT_CURRENT_TICK
+                    else
                         if inventoryUI.attachedItem.parent == localPlayer then
                             --[[
                             local maxSlots = CInventory.fetchParentMaxSlots(inventoryUI.attachedItem.parent)
@@ -749,7 +759,7 @@ CGame.execOnModuleLoad(function()
                             if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight > 0 then
                                 local slot_offsetY = inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + ((inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(inventoryUI.attachedItem.prevSlot - 1)) - (inventoryUI.buffer[(inventoryUI.attachedItem.parent)].bufferCache.overflowHeight*inventoryUI.buffer[(inventoryUI.attachedItem.parent)].scroller.percent*0.01)
                                 if imports.math.round(slot_offsetY, 2) ~= imports.math.round(inventoryUI.attachedItem.prevY, 2) then
-                                    inventoryUI.buffer[(inventoryUI.attachedItem.parent)].scroller.percent = inventoryUI.buffer[(inventoryUI.attachedItem.parent)].scroller.percent + (((slot_offsetY - inventoryUI.attachedItem.prevY)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100)
+                                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent + (((slot_offsetY - inventoryUI.attachedItem.prevY)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100)
                                 end
                             end
                         end
