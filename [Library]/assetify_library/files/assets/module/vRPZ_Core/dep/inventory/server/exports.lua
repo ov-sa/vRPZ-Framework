@@ -72,13 +72,13 @@ imports.addEventHandler("Player:onOrderItem", root, function(item, prevSlot, slo
 end)
 
 imports.addEvent("Player:onDropItem", true)
-imports.addEventHandler("Player:onDropItem", root, function(vicinity, item, prevSlot)
+imports.addEventHandler("Player:onDropItem", root, function(vicinity, item, amount, prevSlot)
     if not CPlayer.isInitialized(source) then return false end
     local characterID = CPlayer.getCharacterID(source)
     local inventoryID = CPlayer.getInventoryID(source)
-    if parent and item and prevSlot and CInventory.isVicinityAvailableForDropping(vicinity, item) then
-        CInventory.addItemCount(vicinity, item, 1)
-        CInventory.removeItemCount(source, item, 1)
+    if vicinity and item and amount and prevSlot and CInventory.isVicinityAvailableForDropping(vicinity, item) then
+        CInventory.addItemCount(vicinity, item, amount)
+        CInventory.removeItemCount(source, item, amount)
         CInventory.CBuffer[inventoryID].slots[prevSlot] = nil
     end
     imports.triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, CInventory.CBuffer[inventoryID])

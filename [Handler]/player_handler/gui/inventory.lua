@@ -308,7 +308,7 @@ CGame.execOnModuleLoad(function()
     end
     inventoryUI.dropItem = function()
         inventoryUI.isSynced, inventoryUI.isSyncScheduled = false, true
-        local parent, item, amount, prevSlot, newSlot = inventoryUI.attachedItem.parent, inventoryUI.attachedItem.item, inventoryUI.attachedItem.amount, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot
+        local vicinity, item, amount, prevSlot, newSlot = inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, inventoryUI.attachedItem.amount, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot
         local slotBuffer = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[newSlot]
         if not slotBuffer or (slotBuffer.item ~= item) then
             imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, newSlot, {item = item, amount = 0})
@@ -318,7 +318,7 @@ CGame.execOnModuleLoad(function()
         CInventory.CBuffer.slots[prevSlot] = nil
         inventoryUI.updateBuffer(localPlayer)
         imports.assetify.scheduleExec.execOnModuleLoad(function()
-            imports.triggerServerEvent("Player:onDropItem", localPlayer, parent, item, amount, prevSlot, newSlot)    
+            imports.triggerServerEvent("Player:onDropItem", localPlayer, vicinity, item, amount, prevSlot)
         end)
         return true
     end
