@@ -53,10 +53,10 @@ CGame.execOnModuleLoad(function()
     local loginUI = nil
     loginUI = {
         cache = {keys = {}, timers = {}},
-        bgTexture = imports.beautify.native.createTexture("files/images/login/background.rw", "dxt5", true, "clamp"),
+        bgTexture = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "login:background"),
         phases = {
             [1] = {
-                bgTexture = imports.beautify.native.createTexture("files/images/login/login.rw", "dxt5", true, "clamp"),
+                bgTexture = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "login:lobby"),
                 optionsUI = {
                     startX = CLIENT_MTA_RESOLUTION[1]*0.5, startY = -15, paddingY = 10,
                     font = CGame.createFont(1, 30), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.fontColor)),
