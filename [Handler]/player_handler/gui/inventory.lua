@@ -608,8 +608,12 @@ CGame.execOnModuleLoad(function()
                         local isEquipped = inventoryUI.attachedItem.parent == inventoryUI.vicinityInventory.element
                         local slot = (isEquipped and inventoryUI.attachedItem.prevSlot) or false
                         if not slot then
+                            local found = false
                             --TODO: FIND ITEM INDEX IN BUFFER IF DOESN'T EXIST INSERT AT SOME INDEX
-                            --TODO: AUTO RESERVE...
+                            if not found then
+                                imports.table.insert(vicinity_bufferCache, {item = inventoryUI.attachedItem.item, amount = inventoryUI.attachedItem.amount})
+                                slot = #vicinity_bufferCache
+                            end
                         end
                         if CInventory.isVicinityAvailableForDropping(inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, isEquipped) then
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "drop"}
