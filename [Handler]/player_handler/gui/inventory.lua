@@ -317,7 +317,6 @@ CGame.execOnModuleLoad(function()
         CInventory.CBuffer.slots[prevSlot] = nil
         inventoryUI.updateBuffer(localPlayer)
         imports.assetify.scheduleExec.execOnModuleLoad(function()
-            local slotBuffer = slotBuffer
             slotBuffer.amount = slotBuffer.amount + amount
             imports.triggerServerEvent("Player:onDropItem", localPlayer, vicinity, item, amount, prevSlot)
         end)
