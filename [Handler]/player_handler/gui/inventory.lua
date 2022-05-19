@@ -306,6 +306,22 @@ CGame.execOnModuleLoad(function()
         end)
         return true
     end
+    inventoryUI.dropItem = function()
+        --inventoryUI.isSynced, inventoryUI.isSyncScheduled = false, true
+        local parent, item, prevSlot, newSlot = inventoryUI.attachedItem.parent, inventoryUI.attachedItem.item, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot
+        --[[
+        inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[prevSlot].amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[prevSlot].amount - 1
+        CInventory.CBuffer.slots[newSlot] = {
+            item = item,
+            translation = "inventory_add"
+        }
+        inventoryUI.updateBuffer(localPlayer)
+        imports.assetify.scheduleExec.execOnModuleLoad(function()
+            imports.triggerServerEvent("Player:onDropItem", localPlayer, parent, item, newSlot)    
+        end)
+        ]]
+        return true
+    end
 
 
     -------------------------------
@@ -694,7 +710,10 @@ CGame.execOnModuleLoad(function()
                             end
                             --triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
                         elseif inventoryUI.attachedItem.isPlaceable.type == "drop" then
-                            isPlaceAttachment = true
+                            if inventoryUI.attachedItem.parent == localPlayer then
+                                isPlaceAttachment = true
+                                inventoryUI.dropItem()
+                            end
                             --[[
                             local totalLootItems = 0
                             for index, _ in pairs(inventoryUI.buffer[isItemAvailableForDropping.parent].inventory) do
