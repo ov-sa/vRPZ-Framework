@@ -85,7 +85,7 @@ CGame.execOnModuleLoad(function()
             width = inventory_offsetX,
             slotNameTexture = imports.beautify.native.createTexture("files/images/inventory/ui/vicinity/slot_name.rw", "argb", true, "clamp"),
             slotNameFont = CGame.createFont(1, 18), slotNameFontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotNameFontColor)),
-            slotSize = vicinity_slotSize, slotColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[3], 75),
+            slotSize = vicinity_slotSize, slotColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[3], 75), slotAvailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[3], 100), slotUnavailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[3], 100),
             bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor))
         },
         opacityAdjuster = {
@@ -604,7 +604,7 @@ CGame.execOnModuleLoad(function()
                             --TODO: SHOULD PROCEDURALLY GENERATE THIS...
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "drop"}
                             inventoryUI.attachedItem.isPlaceable.slot = slot
-                            --inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.attachedItem.isPlaceable.offsetY = j.startX, j.startY
+                            inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.attachedItem.isPlaceable.offsetY = 0, (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(slot - 1)
                             inventoryUI.attachedItem.isPlaceable.width, inventoryUI.attachedItem.isPlaceable.height = inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.slotSize
                         else
                             inventoryUI.attachedItem.isPlaceable = false
