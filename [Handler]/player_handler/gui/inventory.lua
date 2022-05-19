@@ -312,6 +312,7 @@ CGame.execOnModuleLoad(function()
         local slotBuffer = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[newSlot]
         if not slotBuffer or (slotBuffer.item ~= item) then
             imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, newSlot, {item = item, amount = 0})
+            slotBuffer = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[newSlot]
         end
         CInventory.CBuffer.slots[prevSlot] = nil
         inventoryUI.updateBuffer(localPlayer)
