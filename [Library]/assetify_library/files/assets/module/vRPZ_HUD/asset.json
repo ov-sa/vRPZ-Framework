@@ -11,6 +11,8 @@
             "role:content_designer": "roles/content_designer.png",
             "role:streamer": "roles/streamer.png",
             "role:patron": "roles/patron.png",
+            "login:lobby": "login/lobby.png",
+            "login:background": "login/background.png",
             "overlay:vignette": "overlays/vignette.png",
             "status:blood_border": "status/blood/border.png",
             "status:blood_icon": "status/blood/icon.png",
