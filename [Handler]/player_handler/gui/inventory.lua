@@ -725,10 +725,12 @@ CGame.execOnModuleLoad(function()
                             if inventoryUI.attachedItem.parent == localPlayer then
                                 isPlaceAttachment = true
                                 inventoryUI.dropItem()
-                                --TODO: ADD FEATURE TO SEE SLOT IS WITHIN VISIBILITY RANGE THEN DON'T FORCE SCROLL :0
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight > 0 then
-                                    local slot_offsetY = inventoryUI.attachedItem.isPlaceable.offsetY + inventoryUI.vicinityInventory.slotSize
-                                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math.max(0, imports.math.min(100, ((slot_offsetY - inventoryUI.vicinityInventory.height)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100))
+                                    local __slot_offsetY = inventoryUI.attachedItem.isPlaceable.offsetY - (inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight*0.01)
+                                    if __slot_offsetY < 0 or ((__slot_offsetY + inventoryUI.vicinityInventory.slotSize) > inventoryUI.vicinityInventory.height) then
+                                        local slot_offsetY = inventoryUI.attachedItem.isPlaceable.offsetY + inventoryUI.vicinityInventory.slotSize
+                                        inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math.max(0, imports.math.min(100, ((slot_offsetY - inventoryUI.vicinityInventory.height)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100))
+                                    end
                                 end
                                 inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY = inventoryUI.vicinityInventory.startX - inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + inventoryUI.attachedItem.isPlaceable.offsetY - (inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight*0.01)
                             end
