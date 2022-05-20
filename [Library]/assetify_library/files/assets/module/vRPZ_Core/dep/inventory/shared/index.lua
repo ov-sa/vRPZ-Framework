@@ -161,6 +161,7 @@ imports.assetify.execOnLoad(function()
             local cAsset = imports.assetify.getAsset("inventory", j)
             if cAsset and cAsset.manifestData.itemSlot then
                 CInventory.CItems[j] = {pack = "inventory", ref = imports.string.lower(j), slot = cAsset.manifestData.itemSlot, data = cAsset.manifestData}
+                CInventory.CCategories[(cAsset.manifestData.itemSlot)] = CInventory.CCategories[(cAsset.manifestData.itemSlot)] or {}
                 CInventory.CCategories[(cAsset.manifestData.itemSlot)][j] = true
             end
         end
