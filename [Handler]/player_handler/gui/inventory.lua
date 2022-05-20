@@ -611,7 +611,7 @@ CGame.execOnModuleLoad(function()
                         if CInventory.isVicinityAvailableForDropping(inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, inventoryUI.attachedItem.parent == inventoryUI.vicinityInventory.element) then
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "drop"}
                             inventoryUI.attachedItem.isPlaceable.slot = slot
-                            inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.attachedItem.isPlaceable.offsetY = 0, (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(slot - 1)
+                            inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.attachedItem.isPlaceable.offsetY = inventoryUI.vicinityInventory.width - ((CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1]/CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2])*inventoryUI.vicinityInventory.slotSize), (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(slot - 1)
                             inventoryUI.attachedItem.isPlaceable.width, inventoryUI.attachedItem.isPlaceable.height = inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.slotSize
                         else
                             inventoryUI.attachedItem.isPlaceable = false
