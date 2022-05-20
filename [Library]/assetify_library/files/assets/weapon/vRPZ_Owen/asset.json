@@ -1,5 +1,7 @@
 {
     "itemName": "Owen",
+    "itemSlot": "Secondary",
+    "itemWeight": {"rows": 2, "columns": 4},
     "weaponType": "Sub Machine",
     "weaponAmmo": "9 x 19mm",
     "weaponMAG": 5,

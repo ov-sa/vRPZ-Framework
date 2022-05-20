@@ -1,5 +1,7 @@
 {
     "itemName": "Nagant Revolver",
+    "itemSlot": "Secondary",
+    "itemWeight": {"rows": 2, "columns": 4},
     "weaponType": "Pistol",
     "weaponAmmo": "7.62 x 38mm Nagant",
     "weaponMAG": 5,

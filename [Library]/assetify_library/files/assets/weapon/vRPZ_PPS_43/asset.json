@@ -1,5 +1,7 @@
 {
     "itemName": "PPS-43",
+    "itemSlot": "Secondary",
+    "itemWeight": {"rows": 2, "columns": 4},
     "weaponType": "Sub Machine",
     "weaponAmmo": "7.62 x 25mm Tokarev",
     "weaponMAG": 5,

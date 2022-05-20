@@ -1,5 +1,7 @@
 {
     "itemName": "Reising-M50",
+    "itemSlot": "Secondary",
+    "itemWeight": {"rows": 2, "columns": 4},
     "weaponType": "Sub Machine",
     "weaponAmmo": ".45 ACP",
     "weaponMAG": 5,
