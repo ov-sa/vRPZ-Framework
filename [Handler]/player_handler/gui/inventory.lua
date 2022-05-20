@@ -315,6 +315,8 @@ CGame.execOnModuleLoad(function()
         local slotBuffer = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[newSlot]
         if not slotBuffer or (slotBuffer.item ~= item) then
             imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, newSlot, {item = item, amount = 0})
+            local vicinity_bufferCount = #inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
+            inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight = imports.math.max(0, (inventoryUI.vicinityInventory.slotSize*vicinity_bufferCount) + (inventoryUI.margin*imports.math.max(0, vicinity_bufferCount - 1)) - inventoryUI.vicinityInventory.height)
             slotBuffer = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[newSlot]
         end
         CInventory.CBuffer.slots[prevSlot] = nil
@@ -723,12 +725,11 @@ CGame.execOnModuleLoad(function()
                             if inventoryUI.attachedItem.parent == localPlayer then
                                 isPlaceAttachment = true
                                 inventoryUI.dropItem()
-                                local slot_offsetY = inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + inventoryUI.attachedItem.isPlaceable.offsetY
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight > 0 then
-                                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math.max(0, imports.math.min(100, ((slot_offsetY + inventoryUI.vicinityInventory.slotSize - inventoryUI.vicinityInventory.height)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100))
-                                    slot_offsetY = slot_offsetY - (inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight*0.01)
+                                    local slot_offsetY = inventoryUI.attachedItem.isPlaceable.offsetY + inventoryUI.vicinityInventory.slotSize
+                                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math.max(0, imports.math.min(100, ((slot_offsetY - inventoryUI.vicinityInventory.height)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100))
                                 end
-                                inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY = inventoryUI.vicinityInventory.startX - inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetX, slot_offsetY
+                                inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY = inventoryUI.vicinityInventory.startX - inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + inventoryUI.attachedItem.isPlaceable.offsetY - (inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight*0.01)
                             end
                             --TODO: ADD LATER
                             --triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
@@ -775,7 +776,7 @@ CGame.execOnModuleLoad(function()
                 local attachment_posX, attachment_posY = nil, nil
                 inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height = imports.interpolateBetween(inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight, 0, inventoryUI.attachedItem.finalWidth or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1], inventoryUI.attachedItem.finalHeight or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2], 0, imports.getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration*0.35), "OutBack")
                 if inventoryUI.attachedItem.isOnTransition then
-                    attachment_posX, attachment_posY = imports.interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY, 0, imports.getInterpolationProgress(inventoryUI.attachedItem.transitionTickCounter, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration), "OutQuad")
+                    attachment_posX, attachment_posY = imports.interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY, 0, imports.getInterpolationProgress(inventoryUI.attachedItem.transitionTickCounter, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration*4), "OutQuad")
                     if (imports.math.round(attachment_posX, 2) == imports.math.round(inventoryUI.attachedItem.prevX, 2)) and (imports.math.round(attachment_posY, 2) == imports.math.round(inventoryUI.attachedItem.prevY, 2)) then
                         isDetachAttachment = true
                     end
