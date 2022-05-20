@@ -159,7 +159,7 @@ imports.assetify.execOnLoad(function()
         for i = 1, #CItems, 1 do
             local j = CItems[i]
             local cAsset = imports.assetify.getAsset("inventory", j)
-            if cAsset and cAsset.manifestData.itemSlot and FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)] then
+            if cAsset and cAsset.manifestData.itemSlot then
                 CInventory.CItems[j] = {pack = "inventory", ref = imports.string.lower(j), slot = cAsset.manifestData.itemSlot, data = cAsset.manifestData}
                 CInventory.CCategories[(cAsset.manifestData.itemSlot)][j] = true
             end
