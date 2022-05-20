@@ -34,14 +34,14 @@ CGame.createExports({
 ----------------
 
 imports.addEvent("Player:onAddItem", true)
-imports.addEventHandler("Player:onAddItem", root, function(parent, item, slot)
+imports.addEventHandler("Player:onAddItem", root, function(vicinity, item, slot)
     if not CPlayer.isInitialized(source) then return false end
     local characterID = CPlayer.getCharacterID(source)
     local inventoryID = CPlayer.getInventoryID(source)
-    if parent and item and slot then
+    if vicinity and item and slot then
         if CInventory.isSlotAvailableForOrdering(source, item, _, slot) then
             CInventory.addItemCount(source, item, 1)
-            CInventory.removeItemCount(parent, item, 1)
+            CInventory.removeItemCount(vicinity, item, 1)
             CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
             if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] then
                 --TODO: Add AND UPDATE ATTACHMENT...

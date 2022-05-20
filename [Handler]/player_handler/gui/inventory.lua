@@ -283,7 +283,7 @@ CGame.execOnModuleLoad(function()
     end
     inventoryUI.addItem = function()
         inventoryUI.isSynced, inventoryUI.isSyncScheduled = false, true
-        local parent, item, prevSlot, newSlot = inventoryUI.attachedItem.parent, inventoryUI.attachedItem.item, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot
+        local vicinity, item, prevSlot, newSlot = inventoryUI.attachedItem.parent, inventoryUI.attachedItem.item, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot
         inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[prevSlot].amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[prevSlot].amount - 1
         CInventory.CBuffer.slots[newSlot] = {
             item = item,
@@ -291,7 +291,7 @@ CGame.execOnModuleLoad(function()
         }
         inventoryUI.updateBuffer(localPlayer)
         imports.assetify.scheduleExec.execOnModuleLoad(function()
-            imports.triggerServerEvent("Player:onAddItem", localPlayer, parent, item, newSlot)    
+            imports.triggerServerEvent("Player:onAddItem", localPlayer, vicinity, item, newSlot)    
         end)
         return true
     end
@@ -725,7 +725,7 @@ CGame.execOnModuleLoad(function()
                                 inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY = inventoryUI.vicinityInventory.startX - inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + inventoryUI.attachedItem.isPlaceable.offsetY
                                 inventoryUI.dropItem()
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight > 0 then
-                                    local slot_offsetY = inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + ((inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(inventoryUI.attachedItem.isPlaceable.slot - 1)) - (inventoryUI.buffer[(inventoryUI.attachedItem.parent)].bufferCache.overflowHeight*inventoryUI.buffer[(inventoryUI.attachedItem.parent)].scroller.percent*0.01)
+                                    local slot_offsetY = inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + ((inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(inventoryUI.attachedItem.isPlaceable.slot - 1)) - (inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent*0.01)
                                     if imports.math.round(slot_offsetY, 2) ~= imports.math.round(inventoryUI.attachedItem.prevY, 2) then
                                         inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent + (((slot_offsetY - inventoryUI.attachedItem.prevY)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100)
                                     end
@@ -761,7 +761,7 @@ CGame.execOnModuleLoad(function()
                             inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight = inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height
                             inventoryUI.attachedItem.animTickCounter = CLIENT_CURRENT_TICK
                             if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight > 0 then
-                                local slot_offsetY = inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + ((inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(inventoryUI.attachedItem.prevSlot - 1)) - (inventoryUI.buffer[(inventoryUI.attachedItem.parent)].bufferCache.overflowHeight*inventoryUI.buffer[(inventoryUI.attachedItem.parent)].scroller.percent*0.01)
+                                local slot_offsetY = inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + ((inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(inventoryUI.attachedItem.prevSlot - 1)) - (inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent*0.01)
                                 if imports.math.round(slot_offsetY, 2) ~= imports.math.round(inventoryUI.attachedItem.prevY, 2) then
                                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent + (((slot_offsetY - inventoryUI.attachedItem.prevY)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100)
                                 end
