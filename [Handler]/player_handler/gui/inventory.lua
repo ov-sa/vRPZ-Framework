@@ -722,14 +722,14 @@ CGame.execOnModuleLoad(function()
                         elseif inventoryUI.attachedItem.isPlaceable.type == "drop" then
                             if inventoryUI.attachedItem.parent == localPlayer then
                                 isPlaceAttachment = true
-                                inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY = inventoryUI.vicinityInventory.startX - inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + inventoryUI.attachedItem.isPlaceable.offsetY
                                 inventoryUI.dropItem()
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight > 0 then
-                                    local slot_offsetY = inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + ((inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(inventoryUI.attachedItem.isPlaceable.slot - 1)) - (inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent*0.01)
+                                    local slot_offsetY = inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + ((inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(inventoryUI.attachedItem.isPlaceable.slot - 1)) - inventoryUI.vicinityInventory.height
                                     if imports.math.round(slot_offsetY, 2) ~= imports.math.round(inventoryUI.attachedItem.prevY, 2) then
-                                        inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent + (((slot_offsetY - inventoryUI.attachedItem.prevY)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100)
+                                        inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math.max(0, imports.math.min(100, (slot_offsetY/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100))
                                     end
                                 end
+                                inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY = inventoryUI.vicinityInventory.startX - inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + inventoryUI.attachedItem.isPlaceable.offsetY
                             end
                             --TODO: ADD LATER
                             --triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
@@ -763,7 +763,7 @@ CGame.execOnModuleLoad(function()
                             if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight > 0 then
                                 local slot_offsetY = inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + ((inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(inventoryUI.attachedItem.prevSlot - 1)) - (inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent*0.01)
                                 if imports.math.round(slot_offsetY, 2) ~= imports.math.round(inventoryUI.attachedItem.prevY, 2) then
-                                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent + (((slot_offsetY - inventoryUI.attachedItem.prevY)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100)
+                                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math.max(0, imports.math.min(100, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent + (((slot_offsetY - inventoryUI.attachedItem.prevY)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100)))
                                 end
                             end
                         end
