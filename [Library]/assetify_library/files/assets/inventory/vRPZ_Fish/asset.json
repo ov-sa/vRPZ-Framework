@@ -1,0 +1,21 @@
+{
+    "itemName": "Raw Fish",
+    "itemSlot": "Cookable",
+    "itemWeight": {"rows": 2, "columns": 4},
+    "encryptKey": "vStudio - Аниса",
+    "streamRange": 75,
+    "shaderMaps": {
+        "control": {
+            "fish01_a": [
+                {
+                    "bump": "control/fish01_a/bump.jpg"
+                }
+            ]
+        }
+    },
+    "assetDeps": {
+        "texture": {
+            "inventory": "icon/inventory.png"
+        }
+    }
+}
