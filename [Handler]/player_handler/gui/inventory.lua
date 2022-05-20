@@ -723,13 +723,12 @@ CGame.execOnModuleLoad(function()
                             if inventoryUI.attachedItem.parent == localPlayer then
                                 isPlaceAttachment = true
                                 inventoryUI.dropItem()
+                                local slot_offsetY = inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + inventoryUI.attachedItem.isPlaceable.offsetY
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight > 0 then
-                                    local slot_offsetY = inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + ((inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(inventoryUI.attachedItem.isPlaceable.slot - 1)) + inventoryUI.vicinityInventory.slotSize - inventoryUI.vicinityInventory.height
-                                    if imports.math.round(slot_offsetY, 2) ~= imports.math.round(inventoryUI.attachedItem.prevY, 2) then --TODO: DONT CHECK FOR TIS MAYBE
-                                        inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math.max(0, imports.math.min(100, (slot_offsetY/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100))
-                                    end
+                                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math.max(0, imports.math.min(100, ((slot_offsetY + inventoryUI.vicinityInventory.slotSize - inventoryUI.vicinityInventory.height)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100))
+                                    slot_offsetY = slot_offsetY - (inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight*0.01)
                                 end
-                                inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY = inventoryUI.vicinityInventory.startX - inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + inventoryUI.attachedItem.isPlaceable.offsetY
+                                inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY = inventoryUI.vicinityInventory.startX - inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetX, slot_offsetY
                             end
                             --TODO: ADD LATER
                             --triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
