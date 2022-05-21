@@ -1,0 +1,21 @@
+{
+    "itemName": "Local Vodka",
+    "itemSlot": "Beverage",
+    "itemWeight": {"rows": 2, "columns": 1},
+    "encryptKey": "vStudio - Аниса",
+    "streamRange": 75,
+    "shaderMaps": {
+        "control": {
+            "vdka01_a": [
+                {
+                    "bump": "control/vdka01_a/bump.jpg"
+                }
+            ]
+        }
+    },
+    "assetDeps": {
+        "texture": {
+            "inventory": "icon/inventory.png"
+        }
+    }
+}
