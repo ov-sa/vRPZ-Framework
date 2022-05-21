@@ -20,6 +20,11 @@
 * Built-In Slot based Inventory System (Safe & Secure)
 * Completely Performance-Friendly
 
+## ━ Sponsors💎
+
+* **Jimmy**
+* [Read More](sponsors.md)
+
 ## ━ Credits
 
 * **ov | Mario (Developer)**
@@ -35,11 +40,6 @@
 * **FlyingFork (Developer)**
 * **thejdmego (Developer)**
 * [Read More](credits.md)
-
-## ━ Sponsors
-
-* **Jimmy**
-* [Read More](sponsors.md)
 
 ## ━ Installation
 
