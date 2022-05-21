@@ -1,3 +1,3 @@
 ## ━ Sponsors💎
 
-* **Jimmy**
+* **Jimmy Smile**
