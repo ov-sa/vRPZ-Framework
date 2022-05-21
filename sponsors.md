@@ -1,3 +1,3 @@
-## ━ Sponsors
+## ━ Sponsors💎
 
-* [**Jimmy**]()
+* **Jimmy**
