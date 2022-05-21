@@ -1,0 +1,21 @@
+{
+    "itemName": "Antibiotic",
+    "itemSlot": "Medicine",
+    "itemWeight": {"rows": 1, "columns": 1},
+    "encryptKey": "vStudio - Аниса",
+    "streamRange": 75,
+    "shaderMaps": {
+        "control": {
+            "atbtc01_a": [
+                {
+                    "bump": "control/atbtc01_a/bump.jpg"
+                }
+            ]
+        }
+    },
+    "assetDeps": {
+        "texture": {
+            "inventory": "icon/inventory.png"
+        }
+    }
+}
