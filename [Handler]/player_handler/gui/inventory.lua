@@ -87,6 +87,7 @@ CGame.execOnModuleLoad(function()
             width = inventory_offsetX,
             slotNameTexture = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "inventory:vicinity:slot_name"),
             slotNameFont = CGame.createFont(1, 18), slotNameFontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotNameFontColor)),
+            slotCounterFont = CGame.createFont(1, 16, true), slotCounterFontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotCounterFontColor)),
             slotSize = vicinity_slotSize, slotColor = inventory_rt_slotColor, slotAvailableColor = inventory_rt_slotAvailableColor, slotUnavailableColor = inventory_rt_slotUnavailableColor,
             bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor))
         },
@@ -663,7 +664,7 @@ CGame.execOnModuleLoad(function()
                     if isItemVisible then
                         local counter_offsetY = slotBuffer.offsetY + inventoryUI.vicinityInventory.slotSize - inventoryUI.margin
                         imports.beautify.native.drawImage(slotBuffer.startX, slotBuffer.offsetY + slotBuffer.startY, slotBuffer.width, slotBuffer.height, CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
-                        imports.beautify.native.drawText("x"..vicinity_bufferCache.amount, inventoryUI.margin, counter_offsetY, inventoryUI.vicinityInventory.width - inventoryUI.margin, counter_offsetY, inventoryUI.vicinityInventory.slotNameFontColor, 1, inventoryUI.vicinityInventory.slotNameFont.instance, "left", "bottom", true, false, false)
+                        imports.beautify.native.drawText("x"..vicinity_bufferCache.amount, inventoryUI.margin, counter_offsetY, inventoryUI.vicinityInventory.width - inventoryUI.margin, counter_offsetY, inventoryUI.vicinityInventory.slotCounterFontColor, 1, inventoryUI.vicinityInventory.slotCounterFont.instance, "left", "bottom", true, false, false)
                     end
                     if slotBuffer.slotNameWidth and (slotBuffer.slotNameWidth > 0) then
                         imports.beautify.native.drawImageSection(0, slotBuffer.offsetY, slotBuffer.slotNameWidth, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.width - slotBuffer.slotNameWidth, 0, slotBuffer.slotNameWidth, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotNameTexture, 0, 0, 0, -1, false)
