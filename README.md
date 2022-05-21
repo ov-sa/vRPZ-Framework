@@ -6,7 +6,7 @@
 
 ## ━ Features
 
-💎**CONSIDER** [**SPONSORING**](https://ko-fi.com/ovStudio) **US TO SUPPORT THE DEVELOPMENT. [**View Sponsors**](sponsors.md)**
+💎**CONSIDER** [**SPONSORING**](https://ko-fi.com/ovStudio) **US TO SUPPORT THE DEVELOPMENT.**
 
 * Completely Open-Source
 * Modular Programming
@@ -35,6 +35,11 @@
 * **FlyingFork (Developer)**
 * **thejdmego (Developer)**
 * [Read More](credits.md)
+
+## ━ Sponsors
+
+* **Jimmy**
+* [Read More](sponsors.md)
 
 ## ━ Installation
 
