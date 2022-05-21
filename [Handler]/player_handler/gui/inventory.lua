@@ -661,7 +661,9 @@ CGame.execOnModuleLoad(function()
                     end
                     imports.beautify.native.drawRectangle(0, slotBuffer.offsetY, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotColor, false)
                     if isItemVisible then
+                        local counter_offsetY = slotBuffer.offsetY + inventoryUI.vicinityInventory.slotSize - inventoryUI.margin
                         imports.beautify.native.drawImage(slotBuffer.startX, slotBuffer.offsetY + slotBuffer.startY, slotBuffer.width, slotBuffer.height, CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
+                        imports.beautify.native.drawText("x"..vicinity_bufferCache.amount, inventoryUI.margin, counter_offsetY, inventoryUI.vicinityInventory.width - inventoryUI.margin, counter_offsetY, inventoryUI.vicinityInventory.slotNameFontColor, 1, inventoryUI.vicinityInventory.slotNameFont.instance, "left", "bottom", true, false, false)
                     end
                     if slotBuffer.slotNameWidth and (slotBuffer.slotNameWidth > 0) then
                         imports.beautify.native.drawImageSection(0, slotBuffer.offsetY, slotBuffer.slotNameWidth, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.width - slotBuffer.slotNameWidth, 0, slotBuffer.slotNameWidth, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotNameTexture, 0, 0, 0, -1, false)
