@@ -22,7 +22,7 @@
 
 ## ━ Sponsors💎
 
-* **Jimmy**
+* **Jimmy Smile**
 * [Read More](sponsors.md)
 
 ## ━ Credits
