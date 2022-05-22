@@ -17,7 +17,8 @@ FRAMEWORK_CONFIGS["Templates"]["Inventory"] = {
         "Snack",
         "Beverage",
         "Cookable",
-        "Industry"
+        "Industry",
+        "Utility"
     },
 
     ["Slots"] = {
