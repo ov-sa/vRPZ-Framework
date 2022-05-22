@@ -1,0 +1,21 @@
+{
+    "itemName": "Matches",
+    "itemSlot": "Utility",
+    "itemWeight": {"rows": 1, "columns": 1},
+    "encryptKey": "vStudio - Аниса",
+    "streamRange": 75,
+    "shaderMaps": {
+        "control": {
+            "mtchs01_a": [
+                {
+                    "bump": "control/mtchs01_a/bump.jpg"
+                }
+            ]
+        }
+    },
+    "assetDeps": {
+        "texture": {
+            "inventory": "icon/inventory.png"
+        }
+    }
+}
