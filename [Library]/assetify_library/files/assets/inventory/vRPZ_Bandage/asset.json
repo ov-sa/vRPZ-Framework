@@ -1,0 +1,21 @@
+{
+    "itemName": "Bandage",
+    "itemSlot": "Medicine",
+    "itemWeight": {"rows": 2, "columns": 1},
+    "encryptKey": "vStudio - Аниса",
+    "streamRange": 75,
+    "shaderMaps": {
+        "control": {
+            "bndg01_a": [
+                {
+                    "bump": "control/bndg01_a/bump.jpg"
+                }
+            ]
+        }
+    },
+    "assetDeps": {
+        "texture": {
+            "inventory": "icon/inventory.png"
+        }
+    }
+}
