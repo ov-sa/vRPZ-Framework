@@ -4,15 +4,6 @@
     "itemWeight": {"rows": 2, "columns": 1},
     "encryptKey": "vStudio - Аниса",
     "streamRange": 75,
-    "shaderMaps": {
-        "control": {
-            "sda01_a": [
-                {
-                    "bump": "control/sda01_a/bump.jpg"
-                }
-            ]
-        }
-    },
     "assetDeps": {
         "texture": {
             "inventory": "icon/inventory.png"
