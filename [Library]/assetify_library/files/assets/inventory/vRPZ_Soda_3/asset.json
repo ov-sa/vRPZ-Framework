@@ -1,0 +1,12 @@
+{
+    "itemName": "Soda Can #3",
+    "itemSlot": "Beverage",
+    "itemWeight": {"rows": 2, "columns": 1},
+    "encryptKey": "vStudio - Аниса",
+    "streamRange": 75,
+    "assetDeps": {
+        "texture": {
+            "inventory": "icon/inventory.png"
+        }
+    }
+}
