@@ -1,0 +1,21 @@
+{
+    "itemName": "Painkiller",
+    "itemSlot": "Medicine",
+    "itemWeight": {"rows": 1, "columns": 1},
+    "encryptKey": "vStudio - Аниса",
+    "streamRange": 75,
+    "shaderMaps": {
+        "control": {
+            "pnklr01_a": [
+                {
+                    "bump": "control/pnklr01_a/bump.jpg"
+                }
+            ]
+        }
+    },
+    "assetDeps": {
+        "texture": {
+            "inventory": "icon/inventory.png"
+        }
+    }
+}
