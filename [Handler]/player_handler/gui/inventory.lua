@@ -664,7 +664,7 @@ CGame.execOnModuleLoad(function()
                     if isItemVisible then
                         local counter_offsetY = slotBuffer.offsetY + inventoryUI.vicinityInventory.slotSize - inventoryUI.margin
                         imports.beautify.native.drawImage(slotBuffer.startX, slotBuffer.offsetY + slotBuffer.startY, slotBuffer.width, slotBuffer.height, CInventory.CItems[(slotBuffer.item)].icon.inventory, 0, 0, 0, -1, false)
-                        imports.beautify.native.drawText("x"..vicinity_bufferCache.amount, inventoryUI.margin, counter_offsetY, inventoryUI.vicinityInventory.width - inventoryUI.margin, counter_offsetY, inventoryUI.vicinityInventory.slotCounterFontColor, 1, inventoryUI.vicinityInventory.slotCounterFont.instance, "left", "bottom", true, false, false)
+                        imports.beautify.native.drawText("x"..slotBuffer.amount, inventoryUI.margin, slotBuffer.offsetY, inventoryUI.vicinityInventory.width - inventoryUI.margin, counter_offsetY, inventoryUI.vicinityInventory.slotCounterFontColor, 1, inventoryUI.vicinityInventory.slotCounterFont.instance, "left", "bottom", true, false, false)
                     end
                     if slotBuffer.slotNameWidth and (slotBuffer.slotNameWidth > 0) then
                         imports.beautify.native.drawImageSection(0, slotBuffer.offsetY, slotBuffer.slotNameWidth, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.width - slotBuffer.slotNameWidth, 0, slotBuffer.slotNameWidth, inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotNameTexture, 0, 0, 0, -1, false)
@@ -674,8 +674,10 @@ CGame.execOnModuleLoad(function()
                 if vicinity_isSlotHovered then
                     if isLMBClicked then
                         local slot_prevX, slot_prevY = vicinity_startX + inventoryUI.margin + vicinity_bufferCache[vicinity_isSlotHovered].startX, vicinity_startY + inventoryUI.margin + vicinity_bufferCache[vicinity_isSlotHovered].startY + vicinity_bufferCache[vicinity_isSlotHovered].offsetY
-                        inventoryUI.attachItem(inventoryUI.vicinityInventory.element, vicinity_bufferCache[vicinity_isSlotHovered].item, 1, vicinity_isSlotHovered, slot_prevX, slot_prevY, vicinity_bufferCache[vicinity_isSlotHovered].width, vicinity_bufferCache[vicinity_isSlotHovered].height, cursorX - slot_prevX, cursorY - slot_prevY)
-                        isUIActionEnabled = false
+                        if imports.isMouseOnPosition(slot_prevX, slot_prevY, vicinity_bufferCache[vicinity_isSlotHovered].width, vicinity_bufferCache[vicinity_isSlotHovered].height) then
+                            inventoryUI.attachItem(inventoryUI.vicinityInventory.element, vicinity_bufferCache[vicinity_isSlotHovered].item, 1, vicinity_isSlotHovered, slot_prevX, slot_prevY, vicinity_bufferCache[vicinity_isSlotHovered].width, vicinity_bufferCache[vicinity_isSlotHovered].height, cursorX - slot_prevX, cursorY - slot_prevY)
+                            isUIActionEnabled = false
+                        end
                     end
                 end
                 imports.beautify.native.setRenderTarget()
@@ -780,6 +782,7 @@ CGame.execOnModuleLoad(function()
                 end
                 local isDetachAttachment = false
                 local attachment_posX, attachment_posY = nil, nil
+                --TODO: FETCH WIDTH AND HEIGHT
                 inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height = imports.interpolateBetween(inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight, 0, inventoryUI.attachedItem.finalWidth or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1], inventoryUI.attachedItem.finalHeight or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2], 0, imports.getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration*0.35), "OutBack")
                 if inventoryUI.attachedItem.isOnTransition then
                     attachment_posX, attachment_posY = imports.interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY, 0, imports.getInterpolationProgress(inventoryUI.attachedItem.transitionTickCounter, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration), "OutQuad")
