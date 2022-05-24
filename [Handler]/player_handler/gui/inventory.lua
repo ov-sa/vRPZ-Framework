@@ -782,7 +782,6 @@ CGame.execOnModuleLoad(function()
                 end
                 local isDetachAttachment = false
                 local attachment_posX, attachment_posY = nil, nil
-                --TODO: FETCH WIDTH AND HEIGHT
                 inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height = imports.interpolateBetween(inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight, 0, inventoryUI.attachedItem.finalWidth or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1], inventoryUI.attachedItem.finalHeight or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2], 0, imports.getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration*0.35), "OutBack")
                 if inventoryUI.attachedItem.isOnTransition then
                     attachment_posX, attachment_posY = imports.interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY, 0, imports.getInterpolationProgress(inventoryUI.attachedItem.transitionTickCounter, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration), "OutQuad")
@@ -790,7 +789,8 @@ CGame.execOnModuleLoad(function()
                         isDetachAttachment = true
                     end
                 else
-                    inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY = cursorX - inventoryUI.attachedItem.offsetX, cursorY - inventoryUI.attachedItem.offsetY
+                    local __offsetX, __offsetY = (inventoryUI.attachedItem.prevWidth - inventoryUI.attachedItem.__width)*0.5, (inventoryUI.attachedItem.prevHeight - inventoryUI.attachedItem.__height)*0.5
+                    inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY = cursorX - inventoryUI.attachedItem.offsetX + __offsetX, cursorY - inventoryUI.attachedItem.offsetY + __offsetY
                     attachment_posX, attachment_posY = inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY
                 end
                 imports.beautify.native.drawImage(attachment_posX, attachment_posY, inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height, CInventory.CItems[(inventoryUI.attachedItem.item)].icon.inventory, 0, 0, 0, inventoryUI.opacityAdjuster.bgColor, false)
