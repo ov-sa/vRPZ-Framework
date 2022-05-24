@@ -1,0 +1,21 @@
+{
+    "itemName": "Orange Juice",
+    "itemSlot": "Beverage",
+    "itemWeight": {"rows": 2, "columns": 2},
+    "encryptKey": "vStudio - Аниса",
+    "streamRange": 75,
+    "shaderMaps": {
+        "control": {
+            "orgjce01_a": [
+                {
+                    "bump": "control/orgjce01_a/bump.jpg"
+                }
+            ]
+        }
+    },
+    "assetDeps": {
+        "texture": {
+            "inventory": "icon/inventory.png"
+        }
+    }
+}
