@@ -111,3 +111,15 @@ function createAssetDummy(...)
     local cDummy = dummy:create(...)
     return (cDummy and cDummy.cDummy) or false
 end
+
+function getRendererState()
+    return renderer.state
+end
+
+function getRendererLayers()
+    return (renderer.state and renderer.layers) or false
+end
+
+function toggleRenderer(...)
+    return renderer:toggle(...)
+end
