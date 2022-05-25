@@ -1,0 +1,21 @@
+{
+    "itemName": "Generator",
+    "itemSlot": "Industry",
+    "itemWeight": {"rows": 4, "columns": 4},
+    "encryptKey": "vStudio - Аниса",
+    "streamRange": 75,
+    "shaderMaps": {
+        "control": {
+            "gnrt01_a": [
+                {
+                    "bump": "control/gnrt01_a/bump.jpg"
+                }
+            ]
+        }
+    },
+    "assetDeps": {
+        "texture": {
+            "inventory": "icon/inventory.png"
+        }
+    }
+}
