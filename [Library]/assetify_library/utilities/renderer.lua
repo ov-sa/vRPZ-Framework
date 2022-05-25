@@ -52,7 +52,6 @@ renderer.render = function()
         imports.dxUpdateScreenSource(renderer.layers.diffuse)
     end
     imports.dxDrawRectangle(0, 0, renderer.cache.resolution[1], renderer.cache.resolution[2], renderer.cache.ambience)
-    dxDrawImage(0, 0, renderer.cache.resolution[1]*0.25, renderer.cache.resolution[2]*0.25, renderer.layers.diffuse)
 end
 
 function renderer:toggle(state, layers)
