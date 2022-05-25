@@ -187,6 +187,18 @@ function onBundleLibrary()
                 assetify.createDummy = function(...)
                     return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createAssetDummy", ...)
                 end
+
+                assetify.isRendererEnabled = function(...)
+                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isRendererEnabled", ...)
+                end
+
+                assetify.fetchRendererLayers = function(...)
+                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "fetchRendererLayers", ...)
+                end
+
+                assetify.toggleRenderer = function(...)
+                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "toggleRenderer", ...)
+                end
             end
 
             assetify.isLoaded = function()

@@ -64,8 +64,8 @@
     <export function="playSoundAsset" type="client"/>
     <export function="playSoundAsset3D" type="client"/>
     <export function="createAssetDummy" type="client"/>
-    <export function="getRendererState" type="client"/>
-    <export function="getRendererLayers" type="client"/>
+    <export function="isRendererEnabled" type="client"/>
+    <export function="fetchRendererLayers" type="client"/>
     <export function="toggleRenderer" type="client"/>
 
 </meta>

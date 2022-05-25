@@ -112,11 +112,11 @@ function createAssetDummy(...)
     return (cDummy and cDummy.cDummy) or false
 end
 
-function getRendererState()
+function isRendererEnabled()
     return renderer.state
 end
 
-function getRendererLayers()
+function fetchRendererLayers()
     return (renderer.state and renderer.layers) or false
 end
 
