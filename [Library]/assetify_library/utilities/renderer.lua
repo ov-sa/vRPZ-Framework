@@ -60,9 +60,9 @@ function renderer:toggle(state, layers)
     renderer.state = state
     if renderer.state then
         renderer.layers = {
-            index = {}
+            index = {},
+            diffuse = imports.dxCreateScreenSource(renderer.cache.resolution[1], renderer.cache.resolution[2])
         }
-        renderer.layers.diffuse = imports.dxCreateScreenSource(renderer.cache.resolution[1], renderer.cache.resolution[2])
         if layers and (imports.type(layers) == "table") then
             for i, j in imports.pairs(layers) do
                 if not renderer.layers[i] and j then
