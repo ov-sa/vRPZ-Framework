@@ -1,7 +1,7 @@
 {
     "itemName": "Generator",
     "itemSlot": "Industry",
-    "itemWeight": {"rows": 4, "columns": 4},
+    "itemWeight": {"rows": 3, "columns": 4},
     "encryptKey": "vStudio - Аниса",
     "streamRange": 75,
     "shaderMaps": {
