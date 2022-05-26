@@ -33,8 +33,7 @@ renderer = {
     state = false,
     cache = {
         renderFrame = 0,
-        resolution = {imports.guiGetScreenSize()},
-        ambience = imports.tocolor(2, 2, 2, 255)
+        resolution = {imports.guiGetScreenSize()}
     },
     shaders = {},
     layers = {
@@ -42,6 +41,7 @@ renderer = {
         emissive = false
     }
 }
+renderer.cache.resolution[1], renderer.cache.resolution[2] = renderer.cache.resolution[1]*rendererSettings.resolution, renderer.cache.resolution[2]*rendererSettings.resolution
 renderer.__index = renderer
 
 renderer.render = function()

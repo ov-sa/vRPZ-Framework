@@ -16,3 +16,8 @@ GTAWorldSettings = {
     removeWorld = true,
     waterLevel = false
 }
+
+rendererSettings = {
+    resolution = 1,
+    ambienceColor = {2, 2, 2}
+}
