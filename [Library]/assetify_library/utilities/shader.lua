@@ -40,7 +40,7 @@ shader = {
             {index = "blue", channel = "b"}
         },
         shaderBlacklist = {
-            "tex_exporter"
+            "tex_exporter" --TODO: Remote resources shouldn't be allowed to create blacklisted shaders nor fetch preloaded tex
         }
     }
 }
