@@ -56,7 +56,7 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(character, char
     CCharacter.create(serial, function(characterID, args)
         CInventory.create(function(inventoryID, args)
             CCharacter.setData(characterID, {
-                {"identity", imports.toJSON(args[3])},
+                {"identity", imports.json.encode(args[3])},
                 {"inventory", inventoryID}
             }, function(result, args)
                 if result then CCharacter.CBuffer[(args[3].id)].identity = args[3].identity end
