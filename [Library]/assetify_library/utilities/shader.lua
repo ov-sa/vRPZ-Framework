@@ -165,8 +165,8 @@ if localPlayer then
         for i, j in imports.pairs(shader.preLoaded) do
 
         end
-        for i, j in imports.pairs(renderer.layers) do
-            renderer.layers[i] = imports.dxCreateRenderTarget(renderer.resolution[1], renderer.resolution[2], true)
+        for i, j in imports.pairs(renderer.buffer) do
+            renderer.buffer[i] = imports.dxCreateRenderTarget(renderer.resolution[1], renderer.resolution[2], true)
         end
         if state then
 

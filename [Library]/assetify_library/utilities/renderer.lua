@@ -32,17 +32,18 @@ local imports = {
 renderer = {
     state = false,
     resolution = {imports.guiGetScreenSize()}
-    layers = {
-        diffuse = false,
-        emissive = false
-    }
+    cache = {
+        diffuse = {alpha = true},
+        emissive = {alpha = false}
+    },
+    buffer = {}
 }
 renderer.resolution[1], renderer.resolution[2] = renderer.resolution[1]*rendererSettings.resolution, renderer.resolution[2]*rendererSettings.resolution
 renderer.__index = renderer
 
 renderer.render = function()
-    imports.dxSetRenderTarget(renderer.layers.diffuse, true)
-    imports.dxSetRenderTarget(renderer.layers.emissive, true)
+    imports.dxSetRenderTarget(renderer.buffer.diffuse, true)
+    imports.dxSetRenderTarget(renderer.buffer.emissive, true)
     return true
 end
 
@@ -51,8 +52,8 @@ function renderer:toggle(state)
     if renderer.state == state then return false end
     renderer.state = state
     if renderer.state then
-        for i, j in imports.pairs(renderer.layers) do
-            renderer.layers[i] = imports.dxCreateRenderTarget(renderer.resolution[1], renderer.resolution[2], true)
+        for i, j in imports.pairs(renderer.cache) do
+            renderer.buffer[i] = imports.dxCreateRenderTarget(renderer.resolution[1], renderer.resolution[2], j.alpha)
         end
         shader:syncTexExporter(renderer.state)
         imports.engineApplyShaderToWorldTexture(shader.preLoaded["Assetify_TextureExporter"], "*")
@@ -60,10 +61,10 @@ function renderer:toggle(state)
     else
         shader:syncTexExporter(renderer.state)
         imports.engineRemoveShaderFromWorldTexture(shader.preLoaded["Assetify_TextureExporter"], "*")
-        for i, j in imports.pairs(renderer.layers) do
+        for i, j in imports.pairs(renderer.buffer) do
             if j and imports.isElement(j) then
                 imports.destroyElement(j)
-                renderer.layers[i] = false
+                renderer.buffer[i] = false
             end
         end
     end
