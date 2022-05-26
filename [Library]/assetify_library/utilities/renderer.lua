@@ -15,13 +15,11 @@
 local imports = {
     type = type,
     pairs = pairs,
-    tocolor = tocolor,
     isElement = isElement,
     destroyElement = destroyElement,
     guiGetScreenSize = guiGetScreenSize,
     addEventHandler = addEventHandler,
-    engineRemoveShaderFromWorldTexture = engineRemoveShaderFromWorldTexture,
-    dxDrawRectangle = dxDrawRectangle
+    engineRemoveShaderFromWorldTexture = engineRemoveShaderFromWorldTexture
 }
 
 
@@ -31,29 +29,17 @@ local imports = {
 
 renderer = {
     state = false,
-    cache = {
-        renderFrame = 0,
-        resolution = {imports.guiGetScreenSize()}
-    },
-    shaders = {},
+    resolution = {imports.guiGetScreenSize()}
     layers = {
         color = false,
         emissive = false
     }
 }
-renderer.cache.resolution[1], renderer.cache.resolution[2] = renderer.cache.resolution[1]*rendererSettings.resolution, renderer.cache.resolution[2]*rendererSettings.resolution
+renderer.resolution[1], renderer.resolution[2] = renderer.resolution[1]*rendererSettings.resolution, renderer.resolution[2]*rendererSettings.resolution
 renderer.__index = renderer
 
 renderer.render = function()
-    renderer.cache.renderFrame = ((renderer.cache.renderFrame == #renderer.layers.index) and 1) or (renderer.cache.renderFrame + 1)
-    local currentLayer = renderer.layers.index[(renderer.cache.renderFrame)]
-    for i, j in imports.pairs(renderer.shaders) do
-        imports.engineRemoveShaderFromWorldTexture(j, "*")
-    end
-    if currentLayer == "diffuse" then
-        imports.dxUpdateScreenSource(renderer.layers.diffuse)
-    end
-    imports.dxDrawRectangle(0, 0, renderer.cache.resolution[1], renderer.cache.resolution[2], renderer.cache.ambience)
+    --TODO: ...
 end
 
 function renderer:toggle(state)
@@ -62,7 +48,7 @@ function renderer:toggle(state)
     renderer.state = state
     if renderer.state then
         for i, j in imports.pairs(renderer.layers) do
-            renderer.layers[i] = imports.dxCreateRenderTarget(renderer.cache.resolution[1], renderer.cache.resolution[2], true)
+            renderer.layers[i] = imports.dxCreateRenderTarget(renderer.resolution[1], renderer.resolution[2], true)
         end
         imports.addEventHandler("onClientHUDRender", root, renderer.render)
     else
