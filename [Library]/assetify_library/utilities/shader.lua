@@ -44,6 +44,11 @@ shader = {
         }
     }
 }
+shader.__remoteBlacklist = {}
+for i, j in imports.pairs(shader.remoteBlacklist) do
+    shader.__remoteBlacklist[j] = true 
+end
+shader.remoteBlacklist = shader.__remoteBlacklist
 shader.__index = shader
 
 if localPlayer then
