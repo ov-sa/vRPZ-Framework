@@ -33,7 +33,7 @@ local imports = {
 -----------------------
 
 shader = {
-    defaultData = {
+    cache = {
         shaderChannels = {
             {index = "red", channel = "r"},
             {index = "green", channel = "g"},
@@ -47,8 +47,8 @@ shader = {
 shader.__index = shader
 
 if localPlayer then
-    shader.defaultData.shaderPriority = 10000
-    shader.defaultData.shaderDistance = 0
+    shader.cache.shaderPriority = 10000
+    shader.cache.shaderDistance = 0
     shader.preLoadedTex = {
         invisibleMap = imports.dxCreateTexture(2, 2, "dxt5", "clamp")
     }
@@ -59,8 +59,8 @@ if localPlayer then
     shader.rwCache = shaderRW
     shaderRW = nil
     shader.preLoaded = {
-        ["Assetify_TextureClearer"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureClearer"](), shader.defaultData.shaderPriority + 1, shader.defaultData.shaderDistance, false, "all"),
-        ["Assetify_TextureExporter"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureExporter"](), shader.defaultData.shaderPriority, shader.defaultData.shaderDistance, true, "all")
+        ["Assetify_TextureClearer"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureClearer"](), shader.cache.shaderPriority + 1, shader.cache.shaderDistance, false, "all"),
+        ["Assetify_TextureExporter"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureExporter"](), shader.cache.shaderPriority, shader.cache.shaderDistance, true, "all")
     }
     for i, j in imports.pairs(shader.preloaded) do
         shader.buffer.shader[j] = true
@@ -103,8 +103,8 @@ if localPlayer then
                         if n.bump then
                             rwCache.texture[(n.bump)] = shader:loadTex(n.bump, encryptKey)
                         end
-                        for x = 1, #shader.defaultData.shaderChannels, 1 do
-                            local y = n[(shader.defaultData.shaderChannels[x].index)]
+                        for x = 1, #shader.cache.shaderChannels, 1 do
+                            local y = n[(shader.cache.shaderChannels[x].index)]
                             if y and y.map then
                                 rwCache.texture[(y.map)] = shader:loadTex(y.map, encryptKey)
                                 if y.bump then
@@ -194,8 +194,8 @@ if localPlayer then
         if not self or (self == shader) then return false end
         if not shaderCategory or not shaderName or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures or not shaderInputs or not rwCache or not shaderMaps then return false end
         element = ((element and imports.isElement(element)) and element) or false
-        shaderPriority = imports.tonumber(shaderPriority) or shader.defaultData.shaderPriority
-        shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
+        shaderPriority = imports.tonumber(shaderPriority) or shader.cache.shaderPriority
+        shaderDistance = imports.tonumber(shaderDistance) or shader.cache.shaderDistance
         self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
         self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName](shaderMaps), shaderPriority, shaderDistance, false, "all")
         shader.buffer.shader[(self.cShader)] = true
