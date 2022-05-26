@@ -42,6 +42,8 @@ shaderRW[identifier] = function()
     -->> Variables <<--
     -------------------*/
 
+    texture diffuseLayer <string renderTarget = "yes";>;
+    texture emissiveLayer <string renderTarget = "yes";>;
     texture baseTexture;
 
 
