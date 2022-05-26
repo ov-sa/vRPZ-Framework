@@ -71,7 +71,7 @@ if localPlayer then
         ["Assetify_TextureClearer"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureClearer"](), shader.cache.shaderPriority + 1, shader.cache.shaderDistance, false, "all"),
         ["Assetify_TextureExporter"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureExporter"](), shader.cache.shaderPriority, shader.cache.shaderDistance, true, "all")
     }
-    for i, j in imports.pairs(shader.preloaded) do
+    for i, j in imports.pairs(shader.preLoaded) do
         shader.buffer.shader[j] = true
     end
     imports.dxSetShaderValue(shader.preLoaded["Assetify_TextureClearer"], "baseTexture", shader.preLoadedTex.invisibleMap)
