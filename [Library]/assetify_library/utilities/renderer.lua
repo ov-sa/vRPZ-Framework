@@ -64,7 +64,7 @@ function renderer:toggle(state)
         for i, j in imports.pairs(renderer.buffer) do
             if j and imports.isElement(j) then
                 imports.destroyElement(j)
-                renderer.buffer[i] = false
+                renderer.buffer[i] = nil
             end
         end
     end
