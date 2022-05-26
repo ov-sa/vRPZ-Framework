@@ -48,11 +48,11 @@ shader = {
         }
     }
 }
-shader.__remoteBlacklist = {}
-for i, j in imports.pairs(shader.remoteBlacklist) do
-    shader.__remoteBlacklist[j] = true 
+shader.cache.__remoteBlacklist = {}
+for i, j in imports.pairs(shader.cache.remoteBlacklist) do
+    shader.cache.__remoteBlacklist[j] = true 
 end
-shader.remoteBlacklist = shader.__remoteBlacklist
+shader.cache.remoteBlacklist = shader.cache.__remoteBlacklist
 shader.__index = shader
 
 if localPlayer then
@@ -204,7 +204,7 @@ if localPlayer then
     function shader:load(element, shaderCategory, shaderName, textureName, shaderTextures, shaderInputs, rwCache, shaderMaps, encryptKey, shaderPriority, shaderDistance)
         if not self or (self == shader) then return false end
         local isExternalResource = sourceResource and (sourceResource ~= resource)
-        if not shaderCategory or not shaderName or (isExternalResource and shader.remoteBlacklist[shaderName]) or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures or not shaderInputs or not rwCache or not shaderMaps then return false end
+        if not shaderCategory or not shaderName or (isExternalResource and shader.cache.remoteBlacklist[shaderName]) or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not textureName or not shaderTextures or not shaderInputs or not rwCache or not shaderMaps then return false end
         element = ((element and imports.isElement(element)) and element) or false
         shaderPriority = imports.tonumber(shaderPriority) or shader.cache.shaderPriority
         shaderDistance = imports.tonumber(shaderDistance) or shader.cache.shaderDistance
