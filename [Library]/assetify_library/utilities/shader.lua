@@ -161,6 +161,21 @@ if localPlayer then
         return true
     end
 
+    function shader:syncTexExporter(state)
+        for i, j in imports.pairs(shader.preLoaded) do
+
+        end
+        for i, j in imports.pairs(renderer.layers) do
+            renderer.layers[i] = imports.dxCreateRenderTarget(renderer.resolution[1], renderer.resolution[2], true)
+        end
+        if state then
+
+        else
+
+        end
+        return true
+    end
+
     function shader:loadTex(texturePath, encryptKey)
         if texturePath then
             if encryptKey then

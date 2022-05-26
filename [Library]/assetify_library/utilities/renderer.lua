@@ -54,9 +54,11 @@ function renderer:toggle(state)
         for i, j in imports.pairs(renderer.layers) do
             renderer.layers[i] = imports.dxCreateRenderTarget(renderer.resolution[1], renderer.resolution[2], true)
         end
+        shader:syncTexExporter(renderer.state)
         imports.engineApplyShaderToWorldTexture(shader.preLoaded["Assetify_TextureExporter"], "*")
         imports.addEventHandler("onClientPreRender", root, renderer.render)
     else
+        shader:syncTexExporter(renderer.state)
         imports.engineRemoveShaderFromWorldTexture(shader.preLoaded["Assetify_TextureExporter"], "*")
         for i, j in imports.pairs(renderer.layers) do
             if j and imports.isElement(j) then
