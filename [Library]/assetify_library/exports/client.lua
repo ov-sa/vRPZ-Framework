@@ -117,7 +117,7 @@ function isRendererEnabled()
 end
 
 function fetchRendererLayers()
-    return (renderer.state and renderer.layers) or false
+    return (renderer.state and renderer.buffer) or false
 end
 
 function toggleRenderer(...)
