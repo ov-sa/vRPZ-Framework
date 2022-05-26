@@ -44,6 +44,7 @@ shaderRW[identifier] = function()
     -->> Variables <<--
     -------------------*/
 
+    bool isTexExporterEnabled = false;
     texture diffuseLayer <string renderTarget = "yes";>;
     texture emissiveLayer <string renderTarget = "yes";>;
     struct Export {

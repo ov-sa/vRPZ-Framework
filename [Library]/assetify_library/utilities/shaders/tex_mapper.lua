@@ -152,6 +152,7 @@ shaderRW[identifier] = function(shaderMaps)
 
     float anisotropy = 1;
     ]]..controlVars..[[
+    bool isTexExporterEnabled = false;
     texture diffuseLayer <string renderTarget = "yes";>;
     texture emissiveLayer <string renderTarget = "yes";>;
     struct PSInput {
