@@ -149,8 +149,8 @@ if localPlayer then
                     if v.bump then
                         shaderTextures[("controlTex_"..k.."_bump")] = v.bump
                     end
-                    for x = 1, #shader.defaultData.shaderChannels, 1 do
-                        local y = shader.defaultData.shaderChannels[x]
+                    for x = 1, #shader.cache.shaderChannels, 1 do
+                        local y = shader.cache.shaderChannels[x]
                         if v[(y.index)] then
                             shaderTextures[("controlTex_"..k.."_"..(y.index))] = v[(y.index)].map
                             shaderInputs[("controlScale_"..k.."_"..(y.index))] = v[(y.index)].scale

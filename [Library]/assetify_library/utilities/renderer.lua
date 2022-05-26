@@ -43,6 +43,9 @@ renderer.__index = renderer
 renderer.render = function()
     imports.dxSetRenderTarget(renderer.buffer.diffuse, true)
     imports.dxSetRenderTarget(renderer.buffer.emissive, true)
+    imports.dxSetRenderTarget()
+    dxDrawImage(0, 0, 1366*0.25, 768*0.25, renderer.buffer.diffuse)
+    dxDrawImage(0, (768*0.25) + 15, 1366*0.25, 768*0.25, renderer.buffer.emissive)
     return true
 end
 
@@ -56,7 +59,7 @@ function renderer:toggle(state)
         end
         shader:syncTexExporter(renderer.state)
         imports.engineApplyShaderToWorldTexture(shader.preLoaded["Assetify_TextureExporter"], "*")
-        --imports.addEventHandler("onClientPreRender", root, renderer.render)
+        imports.addEventHandler("onClientPreRender", root, renderer.render)
     else
         shader:syncTexExporter(renderer.state)
         imports.engineRemoveShaderFromWorldTexture(shader.preLoaded["Assetify_TextureExporter"], "*")

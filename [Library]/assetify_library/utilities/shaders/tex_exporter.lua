@@ -71,7 +71,6 @@ shaderRW[identifier] = function()
         Export output;
         float4 sampledTexel = tex2D(baseSampler, PS.TexCoord);
         output.World = ambienceColor;
-        output.World.a = 0;
         output.Diffuse.rgb = sampledTexel.rgb;
         output.Diffuse.a = sampledTexel.a*PS.Diffuse.a;
         output.Emissive.rgb = 0;
