@@ -50,7 +50,7 @@ shaderRW[identifier] = function()
     texture emissiveLayer <string renderTarget = "yes";>;
     struct Export {
         float4 World : COLOR0;
-        float4 Color : COLOR1;
+        float4 Diffuse : COLOR1;
         float4 Emissive : COLOR2;
     };
     struct PSInput {
@@ -72,8 +72,8 @@ shaderRW[identifier] = function()
         float4 sampledTexel = tex2D(baseSampler, PS.TexCoord);
         output.World = ambienceColor;
         output.World.a = 0;
-        output.Color.rgb = sampledTexel.rgb;
-        output.Color.a = sampledTexel.a*PS.Diffuse.a;
+        output.Diffuse.rgb = sampledTexel.rgb;
+        output.Diffuse.a = sampledTexel.a*PS.Diffuse.a;
         output.Emissive.rgb = 0;
         output.Emissive.a = 1;
         return output;
