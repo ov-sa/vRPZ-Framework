@@ -70,10 +70,7 @@ shaderRW[identifier] = function()
     Export PSHandler(PSInput PS) {
         Export output;
         float4 sampledTexel = tex2D(baseSampler, PS.TexCoord);
-        float4 worldColor = sampledTexel*PS.Diffuse;
-        worldColor = lerp(worldColor, ambienceColor, ambienceColor.a);
-        worldColor.a = sampledTexel.a;
-        output.World = sampledTexel;
+        output.World = ambienceColor;
         output.World.a = 0;
         output.Color.rgb = sampledTexel.rgb;
         output.Color.a = sampledTexel.a*PS.Diffuse.a;
