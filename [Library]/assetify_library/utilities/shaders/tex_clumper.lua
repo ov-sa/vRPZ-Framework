@@ -76,7 +76,7 @@ shaderRW[identifier] = function(shaderMaps)
     -->> Variables <<--
     -------------------*/
 
-    bool isTexExporterEnabled = false;
+    bool isRendererEnabled = false;
     float anisotropy = 1;
     float4 ambienceColor = float4(0, 0, 0, 1);
     texture diffuseLayer <string renderTarget = "yes";>;
