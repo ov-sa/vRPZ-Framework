@@ -56,7 +56,7 @@ shaderRW[identifier] = function()
         float4 Diffuse : COLOR0;
         float2 TexCoord : TEXCOORD0;
     };
-    sampler inputSampler = sampler_state {
+    sampler baseSampler = sampler_state {
         Texture = (gTexture0);
     };
 
@@ -67,7 +67,7 @@ shaderRW[identifier] = function()
 
     Export PSHandler(PSInput PS) {
         Export output;
-        float4 sampledTexel = tex2D(inputSampler, PS.TexCoord);
+        float4 sampledTexel = tex2D(baseSampler, PS.TexCoord);
         float4 worldColor = sampledTexel*PS.Diffuse;
         //worldColor = lerp(worldColor, filterColor, filterColor.a);
         worldColor.a = sampledTexel.a;
