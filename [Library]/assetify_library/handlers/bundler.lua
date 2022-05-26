@@ -136,6 +136,20 @@ function onBundleLibrary()
             }
 
             if localPlayer then
+                assetify.renderer = {
+                    isEnabled = function(...)
+                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isRendererEnabled", ...)
+                    end
+    
+                    fetchLayers = function(...)
+                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "fetchRendererLayers", ...)
+                    end
+    
+                    toggle = function(...)
+                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "toggleRenderer", ...)
+                    end
+                }
+
                 assetify.getProgress = function(...)
                     return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getLibraryProgress", ...)
                 end
@@ -186,18 +200,6 @@ function onBundleLibrary()
 
                 assetify.createDummy = function(...)
                     return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createAssetDummy", ...)
-                end
-
-                assetify.isRendererEnabled = function(...)
-                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isRendererEnabled", ...)
-                end
-
-                assetify.fetchRendererLayers = function(...)
-                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "fetchRendererLayers", ...)
-                end
-
-                assetify.toggleRenderer = function(...)
-                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "toggleRenderer", ...)
                 end
             end
 
