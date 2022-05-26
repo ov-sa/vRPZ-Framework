@@ -38,6 +38,9 @@ shader = {
             {index = "red", channel = "r"},
             {index = "green", channel = "g"},
             {index = "blue", channel = "b"}
+        },
+        shaderBlacklist = {
+            "tex_exporter"
         }
     }
 }
