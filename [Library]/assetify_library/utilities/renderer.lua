@@ -33,7 +33,7 @@ local imports = {
 
 renderer = {
     state = false,
-    resolution = {imports.guiGetScreenSize()}
+    resolution = {imports.guiGetScreenSize()},
     buffer = {}
 }
 renderer.resolution[1], renderer.resolution[2] = renderer.resolution[1]*rendererSettings.resolution, renderer.resolution[2]*rendererSettings.resolution
