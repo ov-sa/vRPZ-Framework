@@ -178,8 +178,8 @@ if localPlayer then
         for i, j in imports.pairs(shader.buffer.shader) do
             imports.dxSetShaderValue(i, "isRendererEnabled", state)
             renderer:setAmbienceColor(rendererSettings.ambienceColor[1], rendererSettings.ambienceColor[2], rendererSettings.ambienceColor[3], rendererSettings.ambienceColor[4])
-            for k, v in imports.pairs(renderer.cache) do
-                imports.dxSetShaderValue(i, k.."Layer", (state and renderer.buffer[k]) or false)
+            for k, v in imports.pairs(shader.cache.validLayers) do
+                imports.dxSetShaderValue(i, (v.index).."Layer", (state and renderer.buffer[(v.index)]) or false)
             end
         end
         return true

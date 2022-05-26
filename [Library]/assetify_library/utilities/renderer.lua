@@ -23,6 +23,7 @@ local imports = {
     dxCreateRenderTarget = dxCreateRenderTarget,
     dxSetRenderTarget = dxSetRenderTarget,
     dxSetShaderValue = dxSetShaderValue,
+    engineApplyShaderToWorldTexture = engineApplyShaderToWorldTexture,
     engineRemoveShaderFromWorldTexture = engineRemoveShaderFromWorldTexture
 }
 
@@ -55,7 +56,7 @@ function renderer:toggle(state)
         end
         shader:syncTexExporter(renderer.state)
         imports.engineApplyShaderToWorldTexture(shader.preLoaded["Assetify_TextureExporter"], "*")
-        imports.addEventHandler("onClientPreRender", root, renderer.render)
+        --imports.addEventHandler("onClientPreRender", root, renderer.render)
     else
         shader:syncTexExporter(renderer.state)
         imports.engineRemoveShaderFromWorldTexture(shader.preLoaded["Assetify_TextureExporter"], "*")
@@ -66,6 +67,7 @@ function renderer:toggle(state)
             end
         end
     end
+    return true
 end
 
 function renderer:setAmbienceColor(r, g, b, a)
