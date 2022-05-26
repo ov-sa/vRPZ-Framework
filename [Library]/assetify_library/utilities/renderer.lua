@@ -20,8 +20,6 @@ local imports = {
     destroyElement = destroyElement,
     guiGetScreenSize = guiGetScreenSize,
     addEventHandler = addEventHandler,
-    dxCreateScreenSource = dxCreateScreenSource,
-    dxUpdateScreenSource = dxUpdateScreenSource,
     engineRemoveShaderFromWorldTexture = engineRemoveShaderFromWorldTexture,
     dxDrawRectangle = dxDrawRectangle
 }
@@ -38,7 +36,11 @@ renderer = {
         resolution = {imports.guiGetScreenSize()},
         ambience = imports.tocolor(2, 2, 2, 255)
     },
-    shaders = {}
+    shaders = {},
+    layers = {
+        color = false,
+        emissive = false
+    }
 }
 renderer.__index = renderer
 
@@ -54,34 +56,21 @@ renderer.render = function()
     imports.dxDrawRectangle(0, 0, renderer.cache.resolution[1], renderer.cache.resolution[2], renderer.cache.ambience)
 end
 
-function renderer:toggle(state, layers)
+function renderer:toggle(state)
     state = (state and true) or false
     if renderer.state == state then return false end
     renderer.state = state
     if renderer.state then
-        renderer.layers = {
-            index = {},
-            diffuse = imports.dxCreateScreenSource(renderer.cache.resolution[1], renderer.cache.resolution[2])
-        }
-        if layers and (imports.type(layers) == "table") then
-            for i, j in imports.pairs(layers) do
-                if not renderer.layers[i] and j then
-                    renderer.layers[i] = imports.dxCreateScreenSource(renderer.cache.resolution[1]*0.25, renderer.cache.resolution[2]*0.25)
-                end
-            end
-        end
         for i, j in imports.pairs(renderer.layers) do
-            if i ~= "index" then
-                renderer.layers.index[(#renderer.layers.index + 1)] = i
-            end
+            renderer.layers[i] = imports.dxCreateRenderTarget(renderer.cache.resolution[1], renderer.cache.resolution[2], true)
         end
         imports.addEventHandler("onClientHUDRender", root, renderer.render)
     else
         for i, j in imports.pairs(renderer.layers) do
             if j and imports.isElement(j) then
                 imports.destroyElement(j)
+                renderer.layers[i] = false
             end
         end
-        renderer.layers = false
     end
 end
