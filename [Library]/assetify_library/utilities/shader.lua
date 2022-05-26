@@ -39,6 +39,10 @@ shader = {
             {index = "green", channel = "g"},
             {index = "blue", channel = "b"}
         },
+        validLayers = {
+            {index = "diffuse", alpha = true},
+            {index = "emissive", alpha = false}
+        },
         remoteBlacklist = {
             "tex_exporter"
         }

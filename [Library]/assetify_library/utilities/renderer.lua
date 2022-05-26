@@ -32,10 +32,6 @@ local imports = {
 renderer = {
     state = false,
     resolution = {imports.guiGetScreenSize()}
-    cache = {
-        diffuse = {alpha = true},
-        emissive = {alpha = false}
-    },
     buffer = {}
 }
 renderer.resolution[1], renderer.resolution[2] = renderer.resolution[1]*rendererSettings.resolution, renderer.resolution[2]*rendererSettings.resolution
@@ -52,8 +48,8 @@ function renderer:toggle(state)
     if renderer.state == state then return false end
     renderer.state = state
     if renderer.state then
-        for i, j in imports.pairs(renderer.cache) do
-            renderer.buffer[i] = imports.dxCreateRenderTarget(renderer.resolution[1], renderer.resolution[2], j.alpha)
+        for i, j in imports.pairs(shader.cache.validLayers) do
+            renderer.buffer[(j.index)] = imports.dxCreateRenderTarget(renderer.resolution[1], renderer.resolution[2], j.alpha)
         end
         shader:syncTexExporter(renderer.state)
         imports.engineApplyShaderToWorldTexture(shader.preLoaded["Assetify_TextureExporter"], "*")
