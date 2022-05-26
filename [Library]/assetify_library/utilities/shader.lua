@@ -53,7 +53,8 @@ if localPlayer then
         invisibleMap = imports.dxCreateTexture(2, 2, "dxt5", "clamp")
     }
     shader.buffer = {
-        element = {}
+        element = {},
+        shader = {}
     }
     shader.rwCache = shaderRW
     shaderRW = nil
@@ -61,6 +62,9 @@ if localPlayer then
         ["Assetify_TextureClearer"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureClearer"](), shader.defaultData.shaderPriority + 1, shader.defaultData.shaderDistance, false, "all"),
         ["Assetify_TextureExporter"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureExporter"](), shader.defaultData.shaderPriority, shader.defaultData.shaderDistance, true, "all")
     }
+    for i, j in imports.pairs(shader.preloaded) do
+        shader.buffer.shader[j] = true
+    end
     imports.dxSetShaderValue(shader.preLoaded["Assetify_TextureClearer"], "baseTexture", shader.preLoadedTex.invisibleMap)
 
     function shader:create(...)
@@ -162,16 +166,10 @@ if localPlayer then
     end
 
     function shader:syncTexExporter(state)
-        for i, j in imports.pairs(shader.preLoaded) do
-
-        end
-        for i, j in imports.pairs(renderer.buffer) do
-            renderer.buffer[i] = imports.dxCreateRenderTarget(renderer.resolution[1], renderer.resolution[2], true)
-        end
-        if state then
-
-        else
-
+        for i, j in imports.pairs(shader.buffer.shader) do
+            for k, v in imports.pairs(renderer.cache) do
+                imports.dxSetShaderValue(j, k.."Layer", (state and renderer.buffer[k]) or false)
+            end
         end
         return true
     end
@@ -200,6 +198,7 @@ if localPlayer then
         shaderDistance = imports.tonumber(shaderDistance) or shader.defaultData.shaderDistance
         self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
         self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName](shaderMaps), shaderPriority, shaderDistance, false, "all")
+        shader.buffer.shader[(self.cShader)] = true
         if not self.isPreLoaded then rwCache.shader[textureName] = self.cShader end
         for i, j in imports.pairs(shaderTextures) do
             if j and imports.isElement(rwCache.texture[j]) then
@@ -219,8 +218,8 @@ if localPlayer then
             shaderPriority = shaderPriority,
             shaderDistance = shaderDistance
         }
+        shader.buffer.element[(self.shaderData.element)] = shader.buffer.element[(self.shaderData.element)] or {}
         local bufferCache = shader.buffer.element[(self.shaderData.element)]
-        bufferCache = bufferCache or {}
         bufferCache[shaderCategory] = bufferCache[shaderCategory] or {}
         bufferCache[shaderCategory][textureName] = self
         imports.engineApplyShaderToWorldTexture(self.cShader, textureName, element or nil)
@@ -232,6 +231,7 @@ if localPlayer then
         self.isUnloading = true
         if not self.preLoaded then
             if self.cShader and imports.isElement(self.cShader) then
+                shader.buffer.shader[(self.cShader)] = nil
                 imports.destroyElement(self.cShader)
             end
         else
