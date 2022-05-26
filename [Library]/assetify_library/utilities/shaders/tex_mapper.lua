@@ -85,8 +85,8 @@ shaderRW[identifier] = function(shaderMaps)
                 float4 controlTexel_]]..i..[[_bump = tex2D(controlSampler_]]..i..[[_bump, PS.TexCoord);
             ]]
         end
-        for k = 1, #shader.cache.shaderChannels, 1 do
-            local v, channel = shader.cache.shaderChannels[k].index, shader.cache.shaderChannels[k].channel
+        for k = 1, #shader.cache.validChannels, 1 do
+            local v, channel = shader.cache.validChannels[k].index, shader.cache.validChannels[k].channel
             if j[v] then
                 controlVars = controlVars..[[
                     texture controlTex_]]..i..[[_]]..v..[[;
