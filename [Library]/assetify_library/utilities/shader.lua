@@ -34,12 +34,12 @@ local imports = {
 
 shader = {
     cache = {
-        shaderChannels = {
+        validChannels = {
             {index = "red", channel = "r"},
             {index = "green", channel = "g"},
             {index = "blue", channel = "b"}
         },
-        shaderBlacklist = {
+        remoteBlacklist = {
             "tex_exporter" --TODO: Remote resources shouldn't be allowed to create blacklisted shaders nor fetch preloaded tex
         }
     }
@@ -103,8 +103,8 @@ if localPlayer then
                         if n.bump then
                             rwCache.texture[(n.bump)] = shader:loadTex(n.bump, encryptKey)
                         end
-                        for x = 1, #shader.cache.shaderChannels, 1 do
-                            local y = n[(shader.cache.shaderChannels[x].index)]
+                        for x = 1, #shader.cache.validChannels, 1 do
+                            local y = n[(shader.cache.validChannels[x].index)]
                             if y and y.map then
                                 rwCache.texture[(y.map)] = shader:loadTex(y.map, encryptKey)
                                 if y.bump then
