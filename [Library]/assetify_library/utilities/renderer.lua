@@ -49,7 +49,7 @@ function renderer:setAmbienceColor(r, g, b, a)
     if not renderer.state return false end
     r, g, b, a = imports.tonumber(r) or 0, imports.tonumber(g) or 0, imports.tonumber(b) or 0, imports.tonumber(a) or 255
     for i, j in imports.pairs(shader.buffer.shader) do
-        imports.dxSetShaderValue(j, "ambienceColor", r/255, g/255, b/255, a/255)
+        imports.dxSetShaderValue(i, "ambienceColor", r/255, g/255, b/255, a/255)
     end
     return true
 end

@@ -147,6 +147,10 @@ function onBundleLibrary()
     
                     toggle = function(...)
                         return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "toggleRenderer", ...)
+                    end,
+
+                    setAmbienceColor = function(...)
+                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererAmbienceColor", ...)
                     end
                 }
 

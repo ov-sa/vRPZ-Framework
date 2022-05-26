@@ -68,5 +68,6 @@
     <export function="isRendererEnabled" type="client"/>
     <export function="fetchRendererLayers" type="client"/>
     <export function="toggleRenderer" type="client"/>
+    <export function="setRendererAmbienceColor" type="client"/>
 
 </meta>

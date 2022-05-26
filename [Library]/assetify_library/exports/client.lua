@@ -123,3 +123,7 @@ end
 function toggleRenderer(...)
     return renderer:toggle(...)
 end
+
+function setRendererAmbienceColor(...)
+    return renderer:setAmbienceColor(...)
+end
