@@ -45,20 +45,6 @@ renderer.render = function()
     return true
 end
 
-function renderer:setAmbienceColor(r, g, b, a)
-    if not renderer.state return false end
-    rendererSettings.ambienceColor[1], rendererSettings.ambienceColor[2], rendererSettings.ambienceColor[3], rendererSettings.ambienceColor[4] = imports.tonumber(r) or 0, imports.tonumber(g) or 0, imports.tonumber(b) or 0, imports.tonumber(a) or 255
-    for i, j in imports.pairs(shader.buffer.shader) do
-        imports.dxSetShaderValue(i, "ambienceColor", rendererSettings.ambienceColor[1]/255, rendererSettings.ambienceColor[2]/255, rendererSettings.ambienceColor[3]/255, rendererSettings.ambienceColor[4]/255)
-    end
-    return true
-end
-
-function renderer:getAmbienceColor()
-    if not renderer.state return false end
-    return rendererSettings.ambienceColor[1], rendererSettings.ambienceColor[2], rendererSettings.ambienceColor[3], rendererSettings.ambienceColor[4]
-end
-
 function renderer:toggle(state)
     state = (state and true) or false
     if renderer.state == state then return false end
@@ -80,4 +66,18 @@ function renderer:toggle(state)
             end
         end
     end
+end
+
+function renderer:setAmbienceColor(r, g, b, a)
+    if not renderer.state return false end
+    rendererSettings.ambienceColor[1], rendererSettings.ambienceColor[2], rendererSettings.ambienceColor[3], rendererSettings.ambienceColor[4] = imports.tonumber(r) or 0, imports.tonumber(g) or 0, imports.tonumber(b) or 0, imports.tonumber(a) or 255
+    for i, j in imports.pairs(shader.buffer.shader) do
+        imports.dxSetShaderValue(i, "ambienceColor", rendererSettings.ambienceColor[1]/255, rendererSettings.ambienceColor[2]/255, rendererSettings.ambienceColor[3]/255, rendererSettings.ambienceColor[4]/255)
+    end
+    return true
+end
+
+function renderer:getAmbienceColor()
+    if not renderer.state return false end
+    return rendererSettings.ambienceColor[1], rendererSettings.ambienceColor[2], rendererSettings.ambienceColor[3], rendererSettings.ambienceColor[4]
 end
