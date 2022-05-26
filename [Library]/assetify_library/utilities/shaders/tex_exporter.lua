@@ -44,7 +44,7 @@ shaderRW[identifier] = function()
     -->> Variables <<--
     -------------------*/
 
-    texture colorLayer <string renderTarget = "yes";>;
+    texture diffuseLayer <string renderTarget = "yes";>;
     texture emissiveLayer <string renderTarget = "yes";>;
     struct Export {
         float4 World : COLOR0;

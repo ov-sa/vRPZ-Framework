@@ -31,7 +31,7 @@ renderer = {
     state = false,
     resolution = {imports.guiGetScreenSize()}
     layers = {
-        color = false,
+        diffuse = false,
         emissive = false
     }
 }
