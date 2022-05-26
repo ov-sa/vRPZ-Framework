@@ -139,11 +139,11 @@ function onBundleLibrary()
                 assetify.renderer = {
                     isEnabled = function(...)
                         return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isRendererEnabled", ...)
-                    end
+                    end,
     
                     fetchLayers = function(...)
                         return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "fetchRendererLayers", ...)
-                    end
+                    end,
     
                     toggle = function(...)
                         return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "toggleRenderer", ...)
@@ -151,6 +151,10 @@ function onBundleLibrary()
 
                     setAmbienceColor = function(...)
                         return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererAmbienceColor", ...)
+                    end,
+
+                    getAmbienceColor = function(...)
+                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getRendererAmbienceColor", ...)
                     end
                 }
 

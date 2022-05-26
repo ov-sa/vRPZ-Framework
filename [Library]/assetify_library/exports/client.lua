@@ -127,3 +127,7 @@ end
 function setRendererAmbienceColor(...)
     return renderer:setAmbienceColor(...)
 end
+
+function getRendererAmbienceColor(...)
+    return renderer:getAmbienceColor(...)
+end

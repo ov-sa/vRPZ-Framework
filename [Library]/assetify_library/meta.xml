@@ -69,5 +69,6 @@
     <export function="fetchRendererLayers" type="client"/>
     <export function="toggleRenderer" type="client"/>
     <export function="setRendererAmbienceColor" type="client"/>
+    <export function="getRendererAmbienceColor" type="client"/>
 
 </meta>
