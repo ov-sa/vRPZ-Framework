@@ -71,7 +71,7 @@ shaderRW[identifier] = function()
         Export output;
         float4 sampledTexel = tex2D(baseSampler, PS.TexCoord);
         float4 worldColor = sampledTexel*PS.Diffuse;
-        //worldColor = lerp(worldColor, filterColor, filterColor.a); //TODO: ADD FILTER COLOR
+        worldColor = lerp(worldColor, ambienceColor, ambienceColor.a);
         worldColor.a = sampledTexel.a;
         output.World = sampledTexel;
         output.World.a = 0;
