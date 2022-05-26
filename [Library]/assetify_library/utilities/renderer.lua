@@ -52,6 +52,7 @@ function renderer:toggle(state)
         end
         imports.addEventHandler("onClientHUDRender", root, renderer.render)
     else
+        imports.engineRemoveShaderFromWorldTexture(shader.preLoaded["Assetify_TextureExporter"], "*")
         for i, j in imports.pairs(renderer.layers) do
             if j and imports.isElement(j) then
                 imports.destroyElement(j)
