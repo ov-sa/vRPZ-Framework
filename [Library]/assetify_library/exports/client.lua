@@ -116,7 +116,7 @@ function isRendererEnabled()
     return renderer.state
 end
 
-function fetchRendererSource()
+function getRendererSource()
     return (renderer.state and renderer.source) or false
 end
 
