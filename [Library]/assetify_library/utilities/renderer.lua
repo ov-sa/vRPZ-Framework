@@ -20,6 +20,7 @@ local imports = {
     destroyElement = destroyElement,
     guiGetScreenSize = guiGetScreenSize,
     addEventHandler = addEventHandler,
+    removeEventHandler = removeEventHandler,
     dxSetShaderValue = dxSetShaderValue
 }
 
@@ -35,11 +36,21 @@ renderer = {
 renderer.resolution[1], renderer.resolution[2] = renderer.resolution[1]*rendererSettings.resolution, renderer.resolution[2]*rendererSettings.resolution
 renderer.__index = renderer
 
+renderer.render = function()
+    --TODO: UPDATE SCREENSOURCE...
+    return true
+end
+
 function renderer:toggle(state)
     state = (state and true) or false
     if renderer.state == state then return false end
     renderer.state = state
     shader:syncTexExporter(renderer.state)
+    if renderer.state then
+        imports.addEventHandler("onHUDRender", root, renderer.render)
+    else
+        imports.removeEventHandler("onHUDRender", root, renderer.render)
+    end
     return true
 end
 
