@@ -43,9 +43,7 @@ shader = {
             {index = "diffuse", alpha = true},
             {index = "emissive", alpha = false}
         },
-        remoteBlacklist = {
-            "tex_exporter"
-        }
+        remoteBlacklist = {}
     }
 }
 shader.cache.__remoteBlacklist = {}
@@ -69,7 +67,7 @@ if localPlayer then
     shaderRW = nil
     shader.preLoaded = {
         ["Assetify_TextureClearer"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureClearer"](), shader.cache.shaderPriority + 1, shader.cache.shaderDistance, false, "all"),
-        ["Assetify_TextureExporter"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureExporter"](), shader.cache.shaderPriority, shader.cache.shaderDistance, true, "all")
+        ["Assetify_TextureExporter"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureExporter"](), shader.cache.shaderPriority, shader.cache.shaderDistance, false, "all")
     }
     for i, j in imports.pairs(shader.preLoaded) do
         shader.buffer.shader[j] = true
@@ -177,11 +175,11 @@ if localPlayer then
     function shader:syncTexExporter(state)
         for i, j in imports.pairs(shader.buffer.shader) do
             imports.dxSetShaderValue(i, "isRendererEnabled", state)
-            renderer:setAmbienceColor(rendererSettings.ambienceColor[1], rendererSettings.ambienceColor[2], rendererSettings.ambienceColor[3], rendererSettings.ambienceColor[4])
             for k, v in imports.pairs(shader.cache.validLayers) do
                 imports.dxSetShaderValue(i, (v.index).."Layer", (state and renderer.buffer[(v.index)]) or false)
             end
         end
+        renderer:setAmbienceColor(rendererSettings.ambienceColor[1], rendererSettings.ambienceColor[2], rendererSettings.ambienceColor[3], rendererSettings.ambienceColor[4])
         return true
     end
 
