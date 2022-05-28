@@ -53,7 +53,7 @@ shaderRW[identifier] = function()
     };
     struct Export {
         float4 World : COLOR0;
-        float4 Diffuse : COLOR1;
+        float4 Render : COLOR1;
     };
     sampler baseSampler = sampler_state {
         Texture = (gTexture0);
@@ -68,8 +68,8 @@ shaderRW[identifier] = function()
         Export output;
         float4 sampledTexel = tex2D(baseSampler, PS.TexCoord);
         output.World = saturate(sampledTexel);
-        output.Diffuse.rgb = sampledTexel.rgb;
-        output.Diffuse.a = sampledTexel.a*PS.Diffuse.a;
+        output.Render.rgb = sampledTexel.rgb;
+        output.Render.a = sampledTexel.a*PS.Diffuse.a;
         return output;
     }
 
