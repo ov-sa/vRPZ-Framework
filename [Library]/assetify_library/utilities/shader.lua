@@ -171,11 +171,6 @@ if localPlayer then
         return true
     end
 
-    function shader:syncTexExporter(state)
-        renderer:setServerTick(renderer.cache.serverTick)
-        return true
-    end
-
     function shader:loadTex(texturePath, encryptKey)
         if texturePath then
             if encryptKey then

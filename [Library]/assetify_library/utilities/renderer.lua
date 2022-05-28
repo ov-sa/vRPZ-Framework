@@ -35,7 +35,8 @@ renderer = {
     state = false,
     resolution = {imports.guiGetScreenSize()},
     cache = {
-        serverTick = 3600000
+        serverTick = 3600000,
+        minuteDuration = 60
     }
 }
 renderer.resolution[1], renderer.resolution[2] = renderer.resolution[1]*rendererSettings.resolution, renderer.resolution[2]*rendererSettings.resolution
@@ -50,8 +51,9 @@ function renderer:toggle(state)
     state = (state and true) or false
     if renderer.state == state then return false end
     renderer.state = state
-    shader:syncTexExporter(renderer.state)
     if renderer.state then
+        renderer:setServerTick(renderer.cache.serverTick)
+        renderer:setMinuteDuration(renderer.cache.minuteDuration)
         renderer.source = imports.dxCreateScreenSource(renderer.resolution[1], renderer.resolution[2])
         imports.addEventHandler("onClientHUDRender", root, renderer.render)
     else
@@ -82,7 +84,7 @@ end
 
 function renderer:setMinuteDuration(minuteDuration, syncShader, isInternal)
     if not syncShader then
-        renderer.cache.minuteDuration = imports.tonumber(minuteDuration) or 0
+        renderer.cache.minuteDuration = (imports.tonumber(minuteDuration) or 0)*0.001
         for i, j in imports.pairs(shader.buffer.shader) do
             renderer:setMinuteDuration(_, i, syncer.librarySerial)
         end
