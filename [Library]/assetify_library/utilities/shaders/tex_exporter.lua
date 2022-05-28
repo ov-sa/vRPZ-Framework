@@ -66,7 +66,7 @@ shaderRW[identifier] = function()
     Export PSHandler(PSInput PS) {
         Export output;
         float4 sampledTexel = tex2D(baseSampler, PS.TexCoord);
-        output.World = ambienceColor;
+        output.World = saturate(sampledTexel);
         output.Diffuse.rgb = sampledTexel.rgb;
         output.Diffuse.a = sampledTexel.a*PS.Diffuse.a;
         output.Emissive.rgb = 0;
