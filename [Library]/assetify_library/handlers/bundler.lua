@@ -151,6 +151,10 @@ function onBundleLibrary()
 
                     setServerTick = function(...)
                         return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererServerTick", ...)
+                    end,
+
+                    setMinuteDuration = function(...)
+                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererMinuteDuration", ...)
                     end
                 }
 
