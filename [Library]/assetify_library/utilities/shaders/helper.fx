@@ -16,7 +16,7 @@ float3 gCameraPosition : CAMERAPOSITION;
 float3 gCameraDirection : CAMERADIRECTION;
 
 float gTime : TIME;
-float gServerTick = 0;
+float gServerTick = 3600000;
 float gMinuteDuration = 60;
 float4 gLightAmbient : LIGHTAMBIENT;
 float4 gLightDiffuse : LIGHTDIFFUSE;

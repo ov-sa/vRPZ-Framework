@@ -124,10 +124,10 @@ function toggleRenderer(...)
     return renderer:toggle(...)
 end
 
-function setRendererAmbienceColor(...)
+function setRendererServerTick(...)
     return renderer:setServerTick(...)
 end
 
-function getRendererAmbienceColor(...)
-    return renderer:getServerTick(...)
+function setRendererMinuteDuration(...)
+    return renderer:setMinuteDuration(...)
 end

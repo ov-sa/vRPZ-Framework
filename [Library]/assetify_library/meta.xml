@@ -68,7 +68,7 @@
     <export function="isRendererEnabled" type="client"/>
     <export function="getRendererSource" type="client"/>
     <export function="toggleRenderer" type="client"/>
-    <export function="setRendererAmbienceColor" type="client"/>
-    <export function="getRendererAmbienceColor" type="client"/>
+    <export function="setRendererServerTick" type="client"/>
+    <export function="setRendererMinuteDuration" type="client"/>
 
 </meta>

@@ -150,11 +150,7 @@ function onBundleLibrary()
                     end,
 
                     setServerTick = function(...)
-                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererAmbienceColor", ...)
-                    end,
-
-                    getServerTick = function(...)
-                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getRendererAmbienceColor", ...)
+                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererServerTick", ...)
                     end
                 }
 

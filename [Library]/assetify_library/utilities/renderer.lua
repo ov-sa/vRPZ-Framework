@@ -68,7 +68,7 @@ function renderer:setServerTick(serverTick, syncShader, isInternal)
     if not syncShader then
         renderer.cache.serverTick = imports.tonumber(serverTick) or 0
         for i, j in imports.pairs(shader.buffer.shader) do
-            renderer:setServerTick(serverTick, i, syncer.librarySerial)
+            renderer:setServerTick(_, i, syncer.librarySerial)
         end
     else
         local isExternalResource = sourceResource and (sourceResource ~= resource)
@@ -80,6 +80,18 @@ function renderer:setServerTick(serverTick, syncShader, isInternal)
     return true
 end
 
-function renderer:getServerTick()
-    return renderer.cache.serverTick
+function renderer:setMinuteDuration(minuteDuration, syncShader, isInternal)
+    if not syncShader then
+        renderer.cache.minuteDuration = imports.tonumber(minuteDuration) or 0
+        for i, j in imports.pairs(shader.buffer.shader) do
+            renderer:setMinuteDuration(_, i, syncer.librarySerial)
+        end
+    else
+        local isExternalResource = sourceResource and (sourceResource ~= resource)
+        if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
+            return false
+        end
+        imports.dxSetShaderValue(syncShader, "gMinuteDuration", renderer.cache.minuteDuration)
+    end
+    return true
 end
