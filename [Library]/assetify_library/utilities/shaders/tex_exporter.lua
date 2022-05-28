@@ -68,8 +68,7 @@ shaderRW[identifier] = function()
         Export output;
         float4 sampledTexel = tex2D(baseSampler, PS.TexCoord);
         output.World = saturate(sampledTexel);
-        output.Render.rgb = sampledTexel.rgb;
-        output.Render.a = sampledTexel.a*PS.Diffuse.a;
+        output.Render = sampledTexel;
         return output;
     }
 
