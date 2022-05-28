@@ -45,8 +45,7 @@ shaderRW[identifier] = function()
     -------------------*/
 
     float4 ambienceColor = float4(0, 0, 0, 1);
-    texture diffuseLayer <string renderTarget = "yes";>;
-    texture emissiveLayer <string renderTarget = "yes";>;
+    texture renderLayer <string renderTarget = "yes";>;
     struct PSInput {
         float4 Position : POSITION0;
         float4 Diffuse : COLOR0;
@@ -55,7 +54,6 @@ shaderRW[identifier] = function()
     struct Export {
         float4 World : COLOR0;
         float4 Diffuse : COLOR1;
-        float4 Emissive : COLOR2;
     };
     sampler baseSampler = sampler_state {
         Texture = (gTexture0);
@@ -72,8 +70,6 @@ shaderRW[identifier] = function()
         output.World = saturate(sampledTexel);
         output.Diffuse.rgb = sampledTexel.rgb;
         output.Diffuse.a = sampledTexel.a*PS.Diffuse.a;
-        output.Emissive.rgb = 0;
-        output.Emissive.a = 1;
         return output;
     }
 
