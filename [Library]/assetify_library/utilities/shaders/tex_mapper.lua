@@ -166,7 +166,8 @@ shaderRW[identifier] = function(shaderMaps)
 
     float4 PSHandler(PSInput PS) : COLOR0 {
         ]]..handlerBody..handlerFooter..[[
-        return saturate(sampledTexel*weatherTick);
+        sampledTexel.rgb *= weatherTick;
+        return saturate(sampledTexel);
     }
 
 

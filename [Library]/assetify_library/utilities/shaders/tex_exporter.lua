@@ -71,7 +71,8 @@ shaderRW[identifier] = function()
     Export PSHandler(PSInput PS) {
         Export output;
         float4 sampledTexel = tex2D(baseSampler, PS.TexCoord);
-        output.World = saturate(sampledTexel*weatherTick);
+        sampledTexel.rgb *= weatherTick;
+        output.World = saturate(sampledTexel);
         if (renderTex) {
             output.Render = sampledTexel;
         } else {
