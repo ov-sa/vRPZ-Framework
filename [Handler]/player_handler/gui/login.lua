@@ -791,6 +791,8 @@ CGame.execOnModuleLoad(function()
     imports.fadeCamera(false)
     imports.triggerEvent("Client:onToggleLoadingUI", localPlayer, true)
     CGame.execOnLoad(function()
+        imports.assetify.renderer.setServerTick(CGame.getServerTick())
+        imports.assetify.renderer.setMinuteDuration(FRAMEWORK_CONFIGS["Game"]["Minute_Duration"])
         for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Ambiences"]) do
             local cAsset = imports.assetify.getAsset("sound", j.assetName)
             if imports.type(j.category) == "table" then
