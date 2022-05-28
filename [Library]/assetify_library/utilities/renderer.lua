@@ -23,8 +23,7 @@ local imports = {
     removeEventHandler = removeEventHandler,
     dxCreateScreenSource = dxCreateScreenSource,
     dxUpdateScreenSource = dxUpdateScreenSource,
-    dxSetShaderValue = dxSetShaderValue,
-    math = math
+    dxSetShaderValue = dxSetShaderValue
 }
 
 
@@ -36,7 +35,7 @@ renderer = {
     state = false,
     resolution = {imports.guiGetScreenSize()},
     cache = {
-        weatherTick = 1
+        serverTick = 1
     }
 }
 renderer.resolution[1], renderer.resolution[2] = renderer.resolution[1]*rendererSettings.resolution, renderer.resolution[2]*rendererSettings.resolution
@@ -65,22 +64,22 @@ function renderer:toggle(state)
     return true
 end
 
-function renderer:setWeatherTick(weatherTick, syncShader, isInternal)
+function renderer:setWeatherTick(serverTick, syncShader, isInternal)
     if not syncShader then
-        renderer.cache.weatherTick = imports.tonumber(weatherTick) or 0
+        renderer.cache.serverTick = imports.tonumber(serverTick) or 0
         for i, j in imports.pairs(shader.buffer.shader) do
-            renderer:setWeatherTick(weatherTick, i, syncer.librarySerial)
+            renderer:setWeatherTick(serverTick, i, syncer.librarySerial)
         end
     else
         local isExternalResource = sourceResource and (sourceResource ~= resource)
         if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
             return false
         end
-        imports.dxSetShaderValue(syncShader, "weatherTick", renderer.cache.weatherTick)
+        imports.dxSetShaderValue(syncShader, "serverTick", renderer.cache.serverTick)
     end
     return true
 end
 
 function renderer:getWeatherTick()
-    return renderer.cache.weatherTick
+    return renderer.cache.serverTick
 end

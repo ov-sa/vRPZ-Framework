@@ -217,7 +217,7 @@ float MTACalculateSpecular(float3 CamDir, float3 LightDir, float3 SurfNormal, fl
 float3 MTAApplyFog(float3 texel, float linDistance) {
     if (!gFogEnable)
         return texel;
- 
+
     float FogAmount = (linDistance - gFogStart)/(gFogEnd - gFogStart);
     texel.rgb = lerp(texel.rgb, gFogColor.rgb, saturate(FogAmount));
     return texel;
@@ -226,4 +226,8 @@ float3 MTAApplyFog(float3 texel, float linDistance) {
 void MTAFixUpNormal(in out float3 OutNormal) {
     if (OutNormal.x == 0 && OutNormal.y == 0 && OutNormal.z == 0)
         OutNormal = float3(0,0,1);
+}
+
+float MTAGetWeatherValue(float serverTick) {
+    return (serverTick + gTime)%3600000;
 }

@@ -151,7 +151,7 @@ shaderRW[identifier] = function(shaderMaps)
     -------------------*/
 
     float anisotropy = 1;
-    float weatherTick = 0;
+    float serverTick = 0;
     ]]..controlVars..[[
     struct PSInput {
         float4 Position : POSITION0;
@@ -166,7 +166,7 @@ shaderRW[identifier] = function(shaderMaps)
 
     float4 PSHandler(PSInput PS) : COLOR0 {
         ]]..handlerBody..handlerFooter..[[
-        sampledTexel.rgb *= weatherTick;
+        sampledTexel.rgb *= MTAGetWeatherValue(serverTick);
         return saturate(sampledTexel);
     }
 

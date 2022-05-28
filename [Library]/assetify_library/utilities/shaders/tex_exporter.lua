@@ -44,7 +44,7 @@ shaderRW[identifier] = function()
     -->> Variables <<--
     -------------------*/
 
-    float weatherTick = 0;
+    float serverTick = 0;
     texture renderTex;
     texture renderLayer <string renderTarget = "yes";>;
     struct PSInput {
@@ -71,7 +71,7 @@ shaderRW[identifier] = function()
     Export PSHandler(PSInput PS) {
         Export output;
         float4 sampledTexel = tex2D(baseSampler, PS.TexCoord);
-        sampledTexel.rgb *= weatherTick;
+        sampledTexel.rgb *= MTAGetWeatherValue(serverTick);
         output.World = saturate(sampledTexel);
         if (renderTex) {
             output.Render = sampledTexel;

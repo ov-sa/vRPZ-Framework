@@ -172,7 +172,7 @@ if localPlayer then
     end
 
     function shader:syncTexExporter(state)
-        renderer:setWeatherTick(renderer.cache.weatherTick)
+        renderer:setWeatherTick(renderer.cache.serverTick)
         return true
     end
 
