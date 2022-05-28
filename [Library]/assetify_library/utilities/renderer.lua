@@ -61,7 +61,11 @@ function renderer:toggle(state)
     return true
 end
 
-function renderer:setAmbienceColor(r, g, b, a)
+function renderer:setAmbienceColor(r, g, b, a, syncShader, isInternal)
+    if syncShader then
+        local isExternalResource = sourceResource and (sourceResource ~= resource)
+        if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then syncShader = false end
+    end
     rendererSettings.ambienceColor[1], rendererSettings.ambienceColor[2], rendererSettings.ambienceColor[3], rendererSettings.ambienceColor[4] = imports.tonumber(r) or 0, imports.tonumber(g) or 0, imports.tonumber(b) or 0, imports.tonumber(a) or 255
     for i, j in imports.pairs(shader.buffer.shader) do
         imports.dxSetShaderValue(i, "ambienceColor", rendererSettings.ambienceColor[1]/255, rendererSettings.ambienceColor[2]/255, rendererSettings.ambienceColor[3]/255, rendererSettings.ambienceColor[4]/255)
