@@ -141,8 +141,8 @@ function onBundleLibrary()
                         return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isRendererEnabled", ...)
                     end,
     
-                    fetchLayers = function(...)
-                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "fetchRendererLayers", ...)
+                    fetchSource = function(...)
+                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "fetchRendererSource", ...)
                     end,
     
                     toggle = function(...)
