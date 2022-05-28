@@ -45,6 +45,8 @@ shaderRW[identifier] = function()
     -------------------*/
 
     float4 ambienceColor = float4(0, 0, 0, 1);
+    texture diffuseLayer <string renderTarget = "yes";>;
+    texture emissiveLayer <string renderTarget = "yes";>;
     struct PSInput {
         float4 Position : POSITION0;
         float4 Diffuse : COLOR0;
