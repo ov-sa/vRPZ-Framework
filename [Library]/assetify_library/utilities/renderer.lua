@@ -75,7 +75,7 @@ function renderer:setServerTick(serverTick, syncShader, isInternal)
         if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
             return false
         end
-        imports.dxSetShaderValue(syncShader, "serverTick", renderer.cache.serverTick)
+        imports.dxSetShaderValue(syncShader, "gServerTick", renderer.cache.serverTick)
     end
     return true
 end

@@ -16,6 +16,8 @@ float3 gCameraPosition : CAMERAPOSITION;
 float3 gCameraDirection : CAMERADIRECTION;
 
 float gTime : TIME;
+float gServerTick = 0;
+float gMinuteDuration = 60;
 float4 gLightAmbient : LIGHTAMBIENT;
 float4 gLightDiffuse : LIGHTDIFFUSE;
 float4 gLightSpecular : LIGHTSPECULAR;
@@ -228,6 +230,9 @@ void MTAFixUpNormal(in out float3 OutNormal) {
         OutNormal = float3(0,0,1);
 }
 
-float MTAGetWeatherValue(float serverTick) {
-    return ((serverTick/3600000)%24)*0.04166;
+float MTAGetWeatherValue() {
+    gServerTick = (gServerTick + gTime)/(60*gMinuteDuration);
+    float weatherValue = (gServerTick%24)/24;
+    bool isReverse = ((floor(gServerTick/24)%2) != 0) ? true : false;
+    return isReverse ? 1 - weatherValue : weatherValue;
 }
