@@ -200,7 +200,11 @@ if localPlayer then
         shaderPriority = imports.tonumber(shaderPriority) or shader.cache.shaderPriority
         shaderDistance = imports.tonumber(shaderDistance) or shader.cache.shaderDistance
         self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
-        self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName]) or imports.dxCreateShader(shader.rwCache[shaderName](shaderMaps), shaderPriority, shaderDistance, false, "all")
+        self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName])
+        if not self.cShader then
+            self.cShader = imports.dxCreateShader(shader.rwCache[shaderName](shaderMaps), shaderPriority, shaderDistance, false, "all")
+            renderer.setAmbienceColor(_, _, _, _, self.cShader, syncer.librarySerial)
+        end
         shader.buffer.shader[(self.cShader)] = true
         if not self.isPreLoaded then rwCache.shader[textureName] = self.cShader end
         for i, j in imports.pairs(shaderTextures) do
