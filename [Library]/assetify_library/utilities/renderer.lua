@@ -76,8 +76,7 @@ function renderer:setWeatherTick(weatherTick, syncShader, isInternal)
         if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
             return false
         end
-        print(imports.math.abs(0, weatherTick))
-        imports.dxSetShaderValue(syncShader, "weatherTick", imports.math.abs(0, weatherTick))
+        imports.dxSetShaderValue(syncShader, "weatherTick", renderer.cache.weatherTick)
     end
     return true
 end
