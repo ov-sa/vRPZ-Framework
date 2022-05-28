@@ -229,5 +229,5 @@ void MTAFixUpNormal(in out float3 OutNormal) {
 }
 
 float MTAGetWeatherValue(float serverTick) {
-    return (serverTick + gTime)%3600000;
+    return ((serverTick/3600000)%24)/24;
 }
