@@ -64,11 +64,11 @@ function renderer:toggle(state)
     return true
 end
 
-function renderer:setWeatherTick(serverTick, syncShader, isInternal)
+function renderer:setServerTick(serverTick, syncShader, isInternal)
     if not syncShader then
         renderer.cache.serverTick = imports.tonumber(serverTick) or 0
         for i, j in imports.pairs(shader.buffer.shader) do
-            renderer:setWeatherTick(serverTick, i, syncer.librarySerial)
+            renderer:setServerTick(serverTick, i, syncer.librarySerial)
         end
     else
         local isExternalResource = sourceResource and (sourceResource ~= resource)
@@ -80,6 +80,6 @@ function renderer:setWeatherTick(serverTick, syncShader, isInternal)
     return true
 end
 
-function renderer:getWeatherTick()
+function renderer:getServerTick()
     return renderer.cache.serverTick
 end
