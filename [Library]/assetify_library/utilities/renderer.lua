@@ -47,9 +47,9 @@ function renderer:toggle(state)
     renderer.state = state
     shader:syncTexExporter(renderer.state)
     if renderer.state then
-        imports.addEventHandler("onHUDRender", root, renderer.render)
+        imports.addEventHandler("onClientHUDRender", root, renderer.render)
     else
-        imports.removeEventHandler("onHUDRender", root, renderer.render)
+        imports.removeEventHandler("onClientHUDRender", root, renderer.render)
     end
     return true
 end
