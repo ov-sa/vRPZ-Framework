@@ -66,8 +66,7 @@ if localPlayer then
     shader.rwCache = shaderRW
     shaderRW = nil
     shader.preLoaded = {
-        ["Assetify_TextureClearer"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureClearer"](), shader.cache.shaderPriority + 1, shader.cache.shaderDistance, false, "all"),
-        ["Assetify_TextureExporter"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureExporter"](), shader.cache.shaderPriority, shader.cache.shaderDistance, false, "all")
+        ["Assetify_TextureClearer"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureClearer"](), shader.cache.shaderPriority + 1, shader.cache.shaderDistance, false, "all")
     }
     for i, j in imports.pairs(shader.preLoaded) do
         shader.buffer.shader[j] = true
