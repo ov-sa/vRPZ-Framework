@@ -125,9 +125,9 @@ function toggleRenderer(...)
 end
 
 function setRendererAmbienceColor(...)
-    return renderer:setAmbienceColor(...)
+    return renderer:setWeatherTick(...)
 end
 
 function getRendererAmbienceColor(...)
-    return renderer:getAmbienceColor(...)
+    return renderer:getWeatherTick(...)
 end

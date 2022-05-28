@@ -44,7 +44,7 @@ shaderRW[identifier] = function()
     -->> Variables <<--
     -------------------*/
 
-    float4 ambienceColor = float4(0, 0, 0, 1);
+    float weatherTick = 0;
     texture renderTex;
     texture renderLayer <string renderTarget = "yes";>;
     struct PSInput {
@@ -71,8 +71,7 @@ shaderRW[identifier] = function()
     Export PSHandler(PSInput PS) {
         Export output;
         float4 sampledTexel = tex2D(baseSampler, PS.TexCoord);
-        sampledTexel = lerp(sampledTexel, ambienceColor, ambienceColor.a);
-        output.World = saturate(sampledTexel);
+        output.World = saturate(sampledTexel*weatherTick);
         if (renderTex) {
             output.Render = sampledTexel;
         } else {

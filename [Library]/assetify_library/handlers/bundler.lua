@@ -149,11 +149,11 @@ function onBundleLibrary()
                         return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "toggleRenderer", ...)
                     end,
 
-                    setAmbienceColor = function(...)
+                    setWeatherTick = function(...)
                         return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererAmbienceColor", ...)
                     end,
 
-                    getAmbienceColor = function(...)
+                    getWeatherTick = function(...)
                         return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getRendererAmbienceColor", ...)
                     end
                 }

@@ -23,7 +23,8 @@ local imports = {
     removeEventHandler = removeEventHandler,
     dxCreateScreenSource = dxCreateScreenSource,
     dxUpdateScreenSource = dxUpdateScreenSource,
-    dxSetShaderValue = dxSetShaderValue
+    dxSetShaderValue = dxSetShaderValue,
+    math = math
 }
 
 
@@ -33,7 +34,10 @@ local imports = {
 
 renderer = {
     state = false,
-    resolution = {imports.guiGetScreenSize()}
+    resolution = {imports.guiGetScreenSize()},
+    cache = {
+        weatherTick = 1
+    }
 }
 renderer.resolution[1], renderer.resolution[2] = renderer.resolution[1]*rendererSettings.resolution, renderer.resolution[2]*rendererSettings.resolution
 renderer.__index = renderer
@@ -61,22 +65,22 @@ function renderer:toggle(state)
     return true
 end
 
-function renderer:setAmbienceColor(r, g, b, a, syncShader, isInternal)
+function renderer:setWeatherTick(weatherTick, syncShader, isInternal)
     if not syncShader then
-        rendererSettings.ambienceColor[1], rendererSettings.ambienceColor[2], rendererSettings.ambienceColor[3], rendererSettings.ambienceColor[4] = imports.tonumber(r) or 0, imports.tonumber(g) or 0, imports.tonumber(b) or 0, imports.tonumber(a) or 255
+        renderer.cache.weatherTick = imports.tonumber(weatherTick) or 0
         for i, j in imports.pairs(shader.buffer.shader) do
-            renderer:setAmbienceColor(_, _, _, _, i, syncer.librarySerial)
+            renderer:setWeatherTick(weatherTick, i, syncer.librarySerial)
         end
     else
         local isExternalResource = sourceResource and (sourceResource ~= resource)
         if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
             return false
         end
-        imports.dxSetShaderValue(syncShader, "ambienceColor", rendererSettings.ambienceColor[1]/255, rendererSettings.ambienceColor[2]/255, rendererSettings.ambienceColor[3]/255, rendererSettings.ambienceColor[4]/255)
+        imports.dxSetShaderValue(syncShader, "ambienceColor", imports.math.abs(0, weatherTick))
     end
     return true
 end
 
-function renderer:getAmbienceColor()
-    return rendererSettings.ambienceColor[1], rendererSettings.ambienceColor[2], rendererSettings.ambienceColor[3], rendererSettings.ambienceColor[4]
+function renderer:getWeatherTick()
+    return renderer.cache.weatherTick
 end

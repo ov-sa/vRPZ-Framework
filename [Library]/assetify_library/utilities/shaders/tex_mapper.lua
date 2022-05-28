@@ -120,9 +120,6 @@ shaderRW[identifier] = function(shaderMaps)
                         sampledTexel_]]..i..[[ = lerp(sampledTexel_]]..i..[[, controlTexel_]]..i..[[_]]..v..[[, controlTexel_]]..i..[[.]]..channel..[[);
                     ]]
                 end
-                handlerBody = handlerBody..[[
-                    sampledTexel_]]..i..[[ = lerp(sampledTexel_]]..i..[[, ambienceColor, ambienceColor.a);
-                ]]
                 if j[v].bump then
                     handlerBody = handlerBody..[[
                         sampledTexel_]]..i..[[.rgb *= controlTexel_]]..i..[[_]]..v..[[_bump.rgb;
@@ -132,7 +129,6 @@ shaderRW[identifier] = function(shaderMaps)
         end
         handlerBody = handlerBody..[[
             sampledTexel_]]..i..[[.rgb *= ]]..(1/samplingIteration)..[[;
-            sampledTexel_]]..i..[[ = lerp(sampledTexel_]]..i..[[, ambienceColor, ambienceColor.a);
         ]]
         if j.bump then
             handlerBody = handlerBody..[[
@@ -155,7 +151,7 @@ shaderRW[identifier] = function(shaderMaps)
     -------------------*/
 
     float anisotropy = 1;
-    float4 ambienceColor = float4(0, 0, 0, 1);
+    float weatherTick = 0;
     ]]..controlVars..[[
     struct PSInput {
         float4 Position : POSITION0;
@@ -170,7 +166,7 @@ shaderRW[identifier] = function(shaderMaps)
 
     float4 PSHandler(PSInput PS) : COLOR0 {
         ]]..handlerBody..handlerFooter..[[
-        return saturate(sampledTexel);
+        return saturate(sampledTexel*weatherTick);
     }
 
 
