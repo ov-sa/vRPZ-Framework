@@ -19,5 +19,5 @@ GTAWorldSettings = {
 
 rendererSettings = {
     resolution = 1,
-    ambienceColor = {2, 2, 2, 255}
+    ambienceColor = {255, 255, 255, 255}
 }
