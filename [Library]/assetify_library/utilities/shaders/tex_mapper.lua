@@ -152,14 +152,15 @@ shaderRW[identifier] = function(shaderMaps)
 
     float anisotropy = 1;
     ]]..controlVars..[[
-    bool isRendererEnabled = false;
-    float4 ambienceColor = float4(0, 0, 0, 1);
-    texture diffuseLayer <string renderTarget = "yes";>;
-    texture emissiveLayer <string renderTarget = "yes";>;
     struct PSInput {
         float4 Position : POSITION0;
         float4 Diffuse : COLOR0;
         float2 TexCoord : TEXCOORD0;
+    };
+    struct Export {
+        float4 World : COLOR0;
+        float4 Diffuse : COLOR1;
+        float4 Emissive : COLOR2;
     };
 
 
