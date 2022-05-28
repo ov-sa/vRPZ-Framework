@@ -39,17 +39,7 @@ function renderer:toggle(state)
     state = (state and true) or false
     if renderer.state == state then return false end
     renderer.state = state
-    if renderer.state then
-        shader:syncTexExporter(renderer.state)
-    else
-        shader:syncTexExporter(renderer.state)
-        for i, j in imports.pairs(renderer.buffer) do
-            if j and imports.isElement(j) then
-                imports.destroyElement(j)
-                renderer.buffer[i] = nil
-            end
-        end
-    end
+    shader:syncTexExporter(renderer.state)
     return true
 end
 
