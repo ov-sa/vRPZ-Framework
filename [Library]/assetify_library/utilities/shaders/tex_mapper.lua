@@ -157,11 +157,6 @@ shaderRW[identifier] = function(shaderMaps)
         float4 Diffuse : COLOR0;
         float2 TexCoord : TEXCOORD0;
     };
-    struct Export {
-        float4 World : COLOR0;
-        float4 Diffuse : COLOR1;
-        float4 Emissive : COLOR2;
-    };
 
 
     /*----------------
