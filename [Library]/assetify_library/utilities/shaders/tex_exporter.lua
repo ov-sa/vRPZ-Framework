@@ -44,6 +44,7 @@ shaderRW[identifier] = function()
     -->> Variables <<--
     -------------------*/
 
+    float4 ambienceColor = float4(0, 0, 0, 1);
     struct PSInput {
         float4 Position : POSITION0;
         float4 Diffuse : COLOR0;
