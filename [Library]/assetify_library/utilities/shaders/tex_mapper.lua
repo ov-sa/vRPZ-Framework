@@ -166,6 +166,7 @@ shaderRW[identifier] = function(shaderMaps)
 
     float4 PSHandler(PSInput PS) : COLOR0 {
         ]]..handlerBody..handlerFooter..[[
+        sampledTexel = lerp(sampledTexel, ambienceColor, ambienceColor.a);
         return saturate(sampledTexel);
     }
 
