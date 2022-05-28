@@ -35,7 +35,7 @@ renderer = {
     state = false,
     resolution = {imports.guiGetScreenSize()},
     cache = {
-        serverTick = 1
+        serverTick = 3600000
     }
 }
 renderer.resolution[1], renderer.resolution[2] = renderer.resolution[1]*rendererSettings.resolution, renderer.resolution[2]*rendererSettings.resolution
