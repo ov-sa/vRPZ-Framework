@@ -151,6 +151,7 @@ shaderRW[identifier] = function(shaderMaps)
     -------------------*/
 
     float anisotropy = 1;
+    float4 ambienceColor = float4(0, 0, 0, 1);
     ]]..controlVars..[[
     struct PSInput {
         float4 Position : POSITION0;
