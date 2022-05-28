@@ -20,11 +20,7 @@ local imports = {
     destroyElement = destroyElement,
     guiGetScreenSize = guiGetScreenSize,
     addEventHandler = addEventHandler,
-    dxCreateRenderTarget = dxCreateRenderTarget,
-    dxSetRenderTarget = dxSetRenderTarget,
-    dxSetShaderValue = dxSetShaderValue,
-    engineApplyShaderToWorldTexture = engineApplyShaderToWorldTexture,
-    engineRemoveShaderFromWorldTexture = engineRemoveShaderFromWorldTexture
+    dxSetShaderValue = dxSetShaderValue
 }
 
 
@@ -34,35 +30,19 @@ local imports = {
 
 renderer = {
     state = false,
-    resolution = {imports.guiGetScreenSize()},
-    buffer = {}
+    resolution = {imports.guiGetScreenSize()}
 }
 renderer.resolution[1], renderer.resolution[2] = renderer.resolution[1]*rendererSettings.resolution, renderer.resolution[2]*rendererSettings.resolution
 renderer.__index = renderer
-
-renderer.render = function()
-    imports.dxSetRenderTarget(renderer.buffer.diffuse, true)
-    imports.dxSetRenderTarget(renderer.buffer.emissive, true)
-    imports.dxSetRenderTarget()
-    dxDrawImage(0, 0, 1366*0.25, 768*0.25, renderer.buffer.diffuse)
-    dxDrawImage(0, (768*0.25) + 15, 1366*0.25, 768*0.25, renderer.buffer.emissive)
-    return true
-end
 
 function renderer:toggle(state)
     state = (state and true) or false
     if renderer.state == state then return false end
     renderer.state = state
     if renderer.state then
-        for i, j in imports.pairs(shader.cache.validLayers) do
-            renderer.buffer[(j.index)] = imports.dxCreateRenderTarget(renderer.resolution[1], renderer.resolution[2], j.alpha)
-        end
         shader:syncTexExporter(renderer.state)
-        imports.engineApplyShaderToWorldTexture(shader.preLoaded["Assetify_TextureExporter"], "*")
-        imports.addEventHandler("onClientPreRender", root, renderer.render)
     else
         shader:syncTexExporter(renderer.state)
-        imports.engineRemoveShaderFromWorldTexture(shader.preLoaded["Assetify_TextureExporter"], "*")
         for i, j in imports.pairs(renderer.buffer) do
             if j and imports.isElement(j) then
                 imports.destroyElement(j)
