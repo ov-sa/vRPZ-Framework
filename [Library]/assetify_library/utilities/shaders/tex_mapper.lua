@@ -120,6 +120,9 @@ shaderRW[identifier] = function(shaderMaps)
                         sampledTexel_]]..i..[[ = lerp(sampledTexel_]]..i..[[, controlTexel_]]..i..[[_]]..v..[[, controlTexel_]]..i..[[.]]..channel..[[);
                     ]]
                 end
+                handlerBody = handlerBody..[[
+                    sampledTexel_]]..i..[[ = lerp(sampledTexel_]]..i..[[, ambienceColor, ambienceColor.a);
+                ]]
                 if j[v].bump then
                     handlerBody = handlerBody..[[
                         sampledTexel_]]..i..[[.rgb *= controlTexel_]]..i..[[_]]..v..[[_bump.rgb;
@@ -129,6 +132,7 @@ shaderRW[identifier] = function(shaderMaps)
         end
         handlerBody = handlerBody..[[
             sampledTexel_]]..i..[[.rgb *= ]]..(1/samplingIteration)..[[;
+            sampledTexel_]]..i..[[ = lerp(sampledTexel_]]..i..[[, ambienceColor, ambienceColor.a);
         ]]
         if j.bump then
             handlerBody = handlerBody..[[
@@ -166,7 +170,6 @@ shaderRW[identifier] = function(shaderMaps)
 
     float4 PSHandler(PSInput PS) : COLOR0 {
         ]]..handlerBody..handlerFooter..[[
-        sampledTexel = lerp(sampledTexel, ambienceColor, ambienceColor.a);
         return saturate(sampledTexel);
     }
 
