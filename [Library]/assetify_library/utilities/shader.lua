@@ -174,9 +174,6 @@ if localPlayer then
     function shader:syncTexExporter(state)
         for i, j in imports.pairs(shader.buffer.shader) do
             imports.dxSetShaderValue(i, "isRendererEnabled", state)
-            for k, v in imports.pairs(shader.cache.validLayers) do
-                imports.dxSetShaderValue(i, (v.index).."Layer", (state and renderer.buffer[(v.index)]) or false)
-            end
         end
         renderer:setAmbienceColor(rendererSettings.ambienceColor[1], rendererSettings.ambienceColor[2], rendererSettings.ambienceColor[3], rendererSettings.ambienceColor[4])
         return true
