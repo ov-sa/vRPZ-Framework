@@ -82,6 +82,7 @@ shaderRW[identifier] = function()
     {
         pass P0
         {
+            AlphaBlendEnable = true;
             PixelShader = compile ps_2_0 PSHandler();
         }
     }
