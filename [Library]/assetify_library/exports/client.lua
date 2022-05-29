@@ -116,12 +116,12 @@ function isRendererVirtualRendering()
     return renderer.cache.isVirtualRendering
 end
 
-function getRendererSource()
-    return (renderer.cache.isVirtualRendering and renderer.cache.virtualSource) or false
+function setRendererVirtualRendering(...)
+    return renderer:setVirtualRendering(...)
 end
 
-function toggleRenderer(...)
-    return renderer:toggle(...)
+function getRendererVirtualSource()
+    return (renderer.cache.isVirtualRendering and renderer.cache.virtualSource) or false
 end
 
 function setRendererTimeSync(...)

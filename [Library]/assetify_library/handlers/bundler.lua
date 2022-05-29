@@ -137,16 +137,16 @@ function onBundleLibrary()
 
             if localPlayer then
                 assetify.renderer = {
-                    isEnabled = function(...)
+                    isVirtualRendering = function(...)
                         return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isRendererVirtualRendering", ...)
                     end,
     
-                    getSource = function(...)
-                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getRendererSource", ...)
+                    setVirtualRendering = function(...)
+                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererVirtualRendering", ...)
                     end,
-    
-                    toggle = function(...)
-                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "toggleRenderer", ...)
+
+                    getVirtualSource = function(...)
+                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getRendererVirtualSource", ...)
                     end,
 
                     setTimeSync = function(...)
