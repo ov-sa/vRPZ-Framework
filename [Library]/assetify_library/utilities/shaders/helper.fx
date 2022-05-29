@@ -17,7 +17,7 @@ float3 gCameraDirection : CAMERADIRECTION;
 
 float gTime : TIME;
 bool gTimeSync = false;
-float gServerTick = 3600000;
+float gServerTick = 3600;
 float gMinuteDuration = 60;
 float4 gLightAmbient : LIGHTAMBIENT;
 float4 gLightDiffuse : LIGHTDIFFUSE;
