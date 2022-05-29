@@ -16,6 +16,7 @@ local imports = {
     type = type,
     pairs = pairs,
     tonumber = tonumber,
+    getTickCount = getTickCount,
     isElement = isElement,
     destroyElement = destroyElement,
     guiGetScreenSize = guiGetScreenSize,
@@ -70,6 +71,9 @@ function renderer:setTimeSync(state, syncShader, isInternal)
         state = (state and true) or false
         if renderer.cache.isTimeSynced == state then return false end
         renderer.cache.isTimeSynced = state
+        if not renderer.cache.isTimeSynced then
+            renderer.cache.serverTick = (renderer.cache.serverTick or 0) + (imports.getTickCount() - (renderer.cache.__serverTick or 0))
+        end
         for i, j in imports.pairs(shader.buffer.shader) do
             renderer:setTimeSync(_, i, syncer.librarySerial)
         end
@@ -79,6 +83,7 @@ function renderer:setTimeSync(state, syncShader, isInternal)
             return false
         end
         imports.dxSetShaderValue(syncShader, "gTimeSync", renderer.cache.isTimeSynced)
+        if renderer.cache.isTimeSynced then renderer:setServerTick(_, syncShader, isInternal) end
     end
     return true
 end
@@ -86,6 +91,7 @@ end
 function renderer:setServerTick(serverTick, syncShader, isInternal)
     if not syncShader then
         renderer.cache.serverTick = imports.tonumber(serverTick) or 0
+        renderer.cache.__serverTick = imports.getTickCount()
         for i, j in imports.pairs(shader.buffer.shader) do
             renderer:setServerTick(_, i, syncer.librarySerial)
         end
