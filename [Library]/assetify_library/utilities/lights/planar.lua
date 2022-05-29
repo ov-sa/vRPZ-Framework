@@ -127,10 +127,6 @@ if localPlayer then
                 light.planar.buffer[(self.cLight)] = nil
                 imports.destroyElement(self.cLight)
             end
-            if self.cShader and imports.isElement(self.cLight) then
-                light.planar.buffer[(self.cLight)] = nil
-                imports.destroyElement(self.cLight)
-            end
             if self.shaderData.element and imports.isElement(self.shaderData.element) then
                 imports.destroyElement(self.shaderData.element)
             end
