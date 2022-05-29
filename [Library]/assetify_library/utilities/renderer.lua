@@ -49,6 +49,14 @@ renderer.render = function()
     return true
 end
 
+function renderer:syncShader(syncShader)
+    if not syncShader then return false end
+    imports.dxSetShaderValue(syncShader, "vSource0", (renderer.cache.isVirtualRendering and renderer.cache.virtualSource) or false)
+    renderer:setServerTick(_, syncShader, syncer.librarySerial)
+    renderer:setMinuteDuration(_, syncShader, syncer.librarySerial)
+    return true
+end
+
 function renderer:setVirtualRendering(state)
     state = (state and true) or false
     if renderer.cache.isVirtualRendering == state then return false end
@@ -86,7 +94,9 @@ function renderer:setTimeSync(state, syncShader, isInternal)
             return false
         end
         imports.dxSetShaderValue(syncShader, "gTimeSync", renderer.cache.isTimeSynced)
-        if renderer.cache.isTimeSynced then renderer:setServerTick(_, syncShader, isInternal) end
+        if renderer.cache.isTimeSynced then
+            renderer:setServerTick(_, syncShader, isInternal)
+        end
     end
     return true
 end
