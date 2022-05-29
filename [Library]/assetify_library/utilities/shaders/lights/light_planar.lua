@@ -55,14 +55,12 @@ shaderRW[identifier] = function()
     sampler virtualSourceSampler = sampler_state {
         Texture = vSource;
     };
-    struct VSInput
-    {
+    struct VSInput {
         float4 Position : POSITION0;
         float4 Diffuse : COLOR0;
         float2 TexCoord : TEXCOORD0;
     };
-    struct PSInput
-    {
+    struct PSInput {
         float4 Position : POSITION0;
         float2 TexCoord : TEXCOORD0;
     };
@@ -79,7 +77,7 @@ shaderRW[identifier] = function()
         float4x4 gWorldFix = mul(gWorld, positionMatrix);
         float4x4 worldViewMatrix = mul(gWorldFix, gView);
         float4 worldViewPosition = float4(worldViewMatrix[3].xyz + position.xzy - lightOffset.xzy, 1);
-        worldViewPosition.xyz += 1.5*mul(normalize(gCameraPosition), gView).xyz;
+        worldViewPosition.xyz += 1.5*mul(normalize(gCameraPosition - lightOffset), gView).xyz;
         PS.Position = mul(worldViewPosition, gProjection);
         PS.TexCoord = float2(VS.TexCoord.x, 1 - VS.TexCoord.y);
         return PS;
