@@ -36,7 +36,8 @@ renderer = {
     resolution = {imports.guiGetScreenSize()},
     cache = {
         serverTick = 3600000,
-        minuteDuration = 60
+        minuteDuration = 60000,
+        isTimeSynced = false
     }
 }
 renderer.resolution[1], renderer.resolution[2] = renderer.resolution[1]*rendererSettings.resolution, renderer.resolution[2]*rendererSettings.resolution
@@ -62,6 +63,24 @@ function renderer:toggle(state)
             imports.destroyElement(renderer.source)
         end
         renderer.source = nil
+    end
+    return true
+end
+
+function renderer:setTimeSync(state, syncShader, isInternal)
+    if not syncShader then
+        state = (state and true) or false
+        if renderer.cache.isTimeSynced == state then return false end
+        renderer.cache.isTimeSynced = state
+        for i, j in imports.pairs(shader.buffer.shader) do
+            renderer:setTimeSync(_, i, syncer.librarySerial)
+        end
+    else
+        local isExternalResource = sourceResource and (sourceResource ~= resource)
+        if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
+            return false
+        end
+        imports.dxSetShaderValue(syncShader, "gsetTimeSync", renderer.cache.isTimeSynced)
     end
     return true
 end

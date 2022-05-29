@@ -124,6 +124,10 @@ function toggleRenderer(...)
     return renderer:toggle(...)
 end
 
+function setRendererTimeSync(...)
+    return renderer:setTimeSync(...)
+end
+
 function setRendererServerTick(...)
     return renderer:setServerTick(...)
 end
