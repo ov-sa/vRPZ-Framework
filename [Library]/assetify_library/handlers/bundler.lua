@@ -138,7 +138,7 @@ function onBundleLibrary()
             if localPlayer then
                 assetify.renderer = {
                     isEnabled = function(...)
-                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isRendererEnabled", ...)
+                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isRendererVirtualRendering", ...)
                     end,
     
                     getSource = function(...)

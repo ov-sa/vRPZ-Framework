@@ -112,12 +112,12 @@ function createAssetDummy(...)
     return (cDummy and cDummy.cDummy) or false
 end
 
-function isRendererEnabled()
-    return renderer.state
+function isRendererVirtualRendering()
+    return renderer.cache.isVirtualRendering
 end
 
 function getRendererSource()
-    return (renderer.state and renderer.source) or false
+    return (renderer.cache.isVirtualRendering and renderer.cache.virtualSource) or false
 end
 
 function toggleRenderer(...)

@@ -32,37 +32,35 @@ local imports = {
 -------------------------
 
 renderer = {
-    state = false,
     resolution = {imports.guiGetScreenSize()},
     cache = {
+        isVirtualRendering = false,
+        isTimeSynced = false,
         serverTick = 3600000,
-        minuteDuration = 60000,
-        isTimeSynced = false
+        minuteDuration = 60000
     }
 }
 renderer.resolution[1], renderer.resolution[2] = renderer.resolution[1]*rendererSettings.resolution, renderer.resolution[2]*rendererSettings.resolution
 renderer.__index = renderer
 
 renderer.render = function()
-    imports.dxUpdateScreenSource(renderer.source)
+    imports.dxUpdateScreenSource(renderer.cache.virtualSource)
     return true
 end
 
-function renderer:toggle(state)
+function renderer:setVirtualRendering(state)
     state = (state and true) or false
-    if renderer.state == state then return false end
-    renderer.state = state
-    if renderer.state then
-        renderer:setServerTick(renderer.cache.serverTick)
-        renderer:setMinuteDuration(renderer.cache.minuteDuration)
-        renderer.source = imports.dxCreateScreenSource(renderer.resolution[1], renderer.resolution[2])
+    if renderer.cache.isVirtualRendering == state then return false end
+    renderer.cache.isVirtualRendering = state
+    if renderer.cache.isVirtualRendering then
+        renderer.cache.virtualSource = imports.dxCreateScreenSource(renderer.resolution[1], renderer.resolution[2])
         imports.addEventHandler("onClientHUDRender", root, renderer.render)
     else
         imports.removeEventHandler("onClientHUDRender", root, renderer.render)
-        if renderer.source and imports.isElement(renderer.source) then
-            imports.destroyElement(renderer.source)
+        if renderer.cache.virtualSource and imports.isElement(renderer.cache.virtualSource) then
+            imports.destroyElement(renderer.cache.virtualSource)
         end
-        renderer.source = nil
+        renderer.cache.virtualSource = nil
     end
     return true
 end

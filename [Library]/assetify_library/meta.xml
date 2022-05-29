@@ -65,7 +65,7 @@
     <export function="playSoundAsset" type="client"/>
     <export function="playSoundAsset3D" type="client"/>
     <export function="createAssetDummy" type="client"/>
-    <export function="isRendererEnabled" type="client"/>
+    <export function="isRendererVirtualRendering" type="client"/>
     <export function="getRendererSource" type="client"/>
     <export function="toggleRenderer" type="client"/>
     <export function="setRendererTimeSync" type="client"/>
