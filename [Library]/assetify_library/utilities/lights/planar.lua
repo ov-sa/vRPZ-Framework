@@ -14,6 +14,7 @@
 
 local imports = {
     pairs = pairs,
+    tonumber = tonumber,
     isElement = isElement,
     destroyElement = destroyElement,
     setmetatable = setmetatable,
@@ -77,11 +78,25 @@ if localPlayer then
         return true
     end
 
-    function light.planar:load(lightType, lightPosition, shaderInputs)
+    function light.planar:load(lightType, lightData, shaderInputs)
         if not self or (self == light.planar) then return false end
-        if not lightType or not light.planar.validTypes[lightType] then return false end
-        self.cLight = false -- TODO: CREATE DUMMY HERE...
-        self.cStreamer = streamer:create(self.cModelInstance, "light", {self.cCollisionInstance}, self.syncRate)
+        if not lightType or not lightCache then return false end
+        local lightCache = light.planar.validTypes[lightType]
+        if not lightCache then return false end
+        lightData.position, lightData.rotation = lightData.position or {}, lightData.rotation or {}
+        lightData.position.x, lightData.position.y, lightData.position.z = imports.tonumber(lightData.position.x) or 0, imports.tonumber(lightData.position.y) or 0, imports.tonumber(lightData.position.z) or 0
+        lightData.rotation.x, lightData.rotation.y, lightData.rotation.z = imports.tonumber(lightData.rotation.x) or 0, imports.tonumber(lightData.rotation.y) or 0, imports.tonumber(lightData.rotation.z) or 0
+        self.cModelInstance = imports.createObject(lightCache.modelID, lightData.position.x, lightData.position.y, lightData.position.z, lightData.rotation.x, lightData.rotation.y, lightData.rotation.z)
+        self.syncRate = imports.tonumber(lightData.syncRate)
+        imports.setElementDoubleSided(self.cModelInstance, true)
+        imports.setElementDimension(self.cModelInstance, imports.tonumber(lightData.dimension) or 0)
+        imports.setElementInterior(self.cModelInstance, imports.tonumber(lightData.interior) or 0)
+        if lightCache.collisionID then
+            self.cCollisionInstance = imports.createObject(lightCache.collisionID, lightData.position.x, lightData.position.y, lightData.position.z, lightData.rotation.x, lightData.rotation.y, lightData.rotation.z)
+            imports.setElementAlpha(self.cCollisionInstance, 0)
+            self.cStreamer = streamer:create(self.cModelInstance, "light", {self.cCollisionInstance}, self.syncRate)
+        end
+        self.cLight = self.cModelInstance
         self.cShader = imports.dxCreateShader(light.planar.rwCache["Assetify_LightPlanar"](), shader.cache.shaderPriority, shader.cache.shaderDistance, false, "all")
         --TODO: MAKE A RENDERER HELPER THAT SETS MNUTE DURATION VSOURCE AND SERVER TICK WITHIN IT
         renderer:setServerTick(_, self.cShader, syncer.librarySerial)
@@ -90,10 +105,9 @@ if localPlayer then
         for i, j in imports.pairs(shaderInputs) do
             imports.dxSetShaderValue(self.cLight, i, j)
         end
-        self.lightData = {
-            shaderInputs = shaderInputs
-        }
-        imports.engineApplyShaderToWorldTexture(self.cShader, light.planar.validTypes[lightType].textureName, self.cLight)
+        self.lightData = lightData
+        self.lightData.shaderInputs = shaderInputs
+        imports.engineApplyShaderToWorldTexture(self.cShader, lightCache.textureName, self.cLight)
         return true
     end
 
@@ -103,9 +117,12 @@ if localPlayer then
         if self.cStreamer then
             self.cStreamer:destroy()
         end
-        if self.cLight and imports.isElement(self.cLight) then
-            light.planar.buffer[(self.cLight)] = nil
-            imports.destroyElement(self.cLight)
+        if self.cModelInstance and imports.isElement(self.cModelInstance) then
+            light.planar.buffer[(self.cModelInstance)] = nil
+            imports.destroyElement(self.cModelInstance)
+        end
+        if self.cCollisionInstance and imports.isElement(self.cCollisionInstance) then
+            imports.destroyElement(self.cCollisionInstance)
         end
         if self.cShader and imports.isElement(self.cShader) then
             shader.buffer.shader[(self.cShader)] = nil
