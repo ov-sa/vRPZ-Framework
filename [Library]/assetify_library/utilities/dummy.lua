@@ -97,10 +97,3 @@ function dummy:unload()
     self = nil
     return true
 end
-
-function dummy:stream()
-    if not self or (self == dummy) then return false end
-    if self.cStreamer or not self.cModelInstance or not self.cCollisionInstance then return false end
-    self.cStreamer = streamer:create(self.cModelInstance, "dummy", {self.cCollisionInstance})
-    return true
-end
