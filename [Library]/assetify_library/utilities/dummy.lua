@@ -50,10 +50,8 @@ function dummy:destroy(...)
 end
 
 function dummy:clearElementBuffer(element)
-    if not element or not imports.isElement(element) then return false end
-    if dummy.buffer[element] then
-        dummy.buffer[element]:destroy()
-    end
+    if not element or not imports.isElement(element) or not dummy.buffer[element] then return false end
+    dummy.buffer[element]:destroy()
     return true
 end
 

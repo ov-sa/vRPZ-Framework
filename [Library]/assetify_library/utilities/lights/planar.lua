@@ -75,7 +75,6 @@ if localPlayer then
     function light.planar:clearElementBuffer(element)
         if not element or not imports.isElement(element) or not light.planar.buffer[element] then return false end
         light.planar.buffer[element]:destroy()
-        light.planar.buffer[element] = nil
         return true
     end
 
