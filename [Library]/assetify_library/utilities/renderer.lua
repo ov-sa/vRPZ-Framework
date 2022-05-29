@@ -63,6 +63,9 @@ function renderer:setVirtualRendering(state)
         end
         renderer.cache.virtualSource = nil
     end
+    for i, j in imports.pairs(shader.buffer.shader) do
+        imports.dxSetShaderValue(i, "vSource0", (state and renderer.cache.virtualSource) or false)
+    end
     return true
 end
 

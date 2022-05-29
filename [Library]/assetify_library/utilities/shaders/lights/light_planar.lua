@@ -48,12 +48,11 @@ shaderRW[identifier] = function()
     float3 lightOffset = float3(0, 0, 0);
     float3 lightColor = float3(1, 1, 1);
     texture baseTexture;
-    texture vSource;
     sampler baseSampler = sampler_state {
         Texture = baseTexture;
     };
     sampler virtualSourceSampler = sampler_state {
-        Texture = vSource;
+        Texture = (vSource0);
     };
     struct VSInput {
         float4 Position : POSITION0;

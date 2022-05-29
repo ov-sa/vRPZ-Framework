@@ -41,6 +41,7 @@ float4 gMaterialSpecular    <string materialState="Specular";>;
 float4 gMaterialEmissive    <string materialState="Emissive";>;
 float gMaterialSpecPower    <string materialState="Power";>;
 
+texture vSource0;
 texture gTexture0           <string textureState="0,Texture";>;
 texture gTexture1           <string textureState="1,Texture";>;
 texture gTexture2           <string textureState="2,Texture";>;
