@@ -82,7 +82,8 @@ if localPlayer then
         if not lightType or not light.planar.validTypes[lightType] then return false end
         self.cLight = false -- TODO: CREATE DUMMY HERE...
         self.cShader = imports.dxCreateShader(light.planar.rwCache["Assetify_LightPlanar"](), shader.cache.shaderPriority, shader.cache.shaderDistance, false, "all")
-        --TODO: SYNC RENDERER W/ LIGHT SHADER HERE
+        --TODO: MAKE A RENDERER HELPER THAT SETS MNUTE DURATION VSOURCE AND SERVER TICK WITHIN IT
+        renderer:setServerTick(_, self.cShader, syncer.librarySerial)
         shader.buffer.shader[cShader] = "light"
         self.lightType = lightType
         for i, j in imports.pairs(shaderInputs) do
