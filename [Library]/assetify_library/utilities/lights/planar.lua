@@ -103,7 +103,7 @@ function light.planar:load(lightType, lightData, shaderInputs)
         self.cStreamer = streamer:create(self.cModelInstance, "light", {self.cCollisionInstance}, self.syncRate)
     end
     self.cLight = self.cModelInstance
-    self.cShader = imports.dxCreateShader(light.planar.rwCache["Assetify_LightPlanar"](), shader.cache.shaderPriority, shader.cache.shaderDistance, false, "all")
+    self.cShader = imports.dxCreateShader(shader.rwCache["Assetify_LightPlanar"](), shader.cache.shaderPriority, shader.cache.shaderDistance, false, "all")
     renderer:syncShader(self.cShader)
     light.planar.buffer[(self.cLight)] = self
     shader.buffer.shader[cShader] = "light"
