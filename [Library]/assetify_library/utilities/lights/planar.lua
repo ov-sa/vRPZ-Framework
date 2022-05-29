@@ -95,7 +95,7 @@ if localPlayer then
             self.cLight = imports.dxCreateShader(light.planar.rwCache[shaderName](shaderMaps), shaderPriority, shaderDistance, false, "all")
             renderer:setServerTick(_, self.cLight, syncer.librarySerial)
         end
-        light.planar.buffer.light.planar[(self.cLight)] = true
+        light.planar.buffer[(self.cLight)] = true
         if not self.isPreLoaded then rwCache.light.planar[textureName] = self.cLight end
         for i, j in imports.pairs(shaderTextures) do
             if j and imports.isElement(rwCache.texture[j]) then
@@ -128,7 +128,7 @@ if localPlayer then
         self.isUnloading = true
         if not self.preLoaded then
             if self.cLight and imports.isElement(self.cLight) then
-                light.planar.buffer.light.planar[(self.cLight)] = nil
+                light.planar.buffer[(self.cLight)] = nil
                 imports.destroyElement(self.cLight)
             end
         else
