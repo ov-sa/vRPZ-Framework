@@ -154,7 +154,7 @@ if localPlayer then
         if not shaderCategory then
             for i, j in imports.pairs(shader.buffer.element[element]) do
                 for k, v in imports.pairs(j) do
-                    if v and imports.isElement(v) then
+                    if v then
                         v:destroy()
                     end
                 end
