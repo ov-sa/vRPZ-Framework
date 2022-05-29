@@ -101,6 +101,7 @@ if localPlayer then
         self.cLight = self.cModelInstance
         self.cShader = imports.dxCreateShader(light.planar.rwCache["Assetify_LightPlanar"](), shader.cache.shaderPriority, shader.cache.shaderDistance, false, "all")
         renderer:syncShader(self.cShader)
+        light.planar.buffer[(self.cLight)] = self
         shader.buffer.shader[cShader] = "light"
         self.lightType = lightType
         for i, j in imports.pairs(shaderInputs) do

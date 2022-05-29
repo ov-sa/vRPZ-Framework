@@ -141,6 +141,7 @@ function createPlanarLight(...)
     return light.planar:create(...)
 end
 
-function setPlanarLightColor(...)
-    return light.planar:setColor(...)
+function setPlanarLightColor(cLight, ...)
+    if not light.planar.buffer[cLight] then return false end
+    return light.planar.buffer[cLight]:setColor(...)
 end
