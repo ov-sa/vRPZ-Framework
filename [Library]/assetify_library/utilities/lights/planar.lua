@@ -136,6 +136,13 @@ if localPlayer then
         return true
     end
 
+    function light.planar:setTexture(texture)
+        if not self or (self == light.planar) then return false end
+        self.lightData.texture = (self.lightData.texture or texture) or false
+        imports.dxSetShaderValue(self.cShader, "baseTexture", self.lightData.texture)
+        return true
+    end
+
     function light.planar:setColor(r, g, b, a)
         if not self or (self == light.planar) then return false end
         self.lightData.color = self.lightData.color or {}

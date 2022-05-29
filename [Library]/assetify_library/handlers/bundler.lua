@@ -174,6 +174,10 @@ function onBundleLibrary()
                             return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createPlanarLight", ...)
                         end,
 
+                        setTexture = function(...)
+                            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setPlanarLightTexture", ...)
+                        end,
+
                         setColor = function(...)
                             return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setPlanarLightColor", ...)
                         end
