@@ -115,14 +115,6 @@ if localPlayer then
         return true
     end
 
-    function light.planar:setColor(r, g, b, a)
-        if not self or (self == light.planar) then return false end
-        self.lightData.color = self.lightData.color or {}
-        self.lightData.color[1], self.lightData.color[2], self.lightData.color[3], self.lightData.color[4] = imports.math.max(0, imports.math.min(255, imports.tonumber(r) or 255)), imports.math.max(0, imports.math.min(255, imports.tonumber(g) or 255)), imports.math.max(0, imports.math.min(255, imports.tonumber(b) or 255)), imports.math.max(0, imports.math.min(255, imports.tonumber(a) or 255))
-        imports.dxSetShaderValue(self.cShader, "lightColor", self.lightData.color[1]/255, self.lightData.color[2]/255, self.lightData.color[3]/255, self.lightData.color[4]/255)
-        return true
-    end
-
     function light.planar:unload()
         if not self or (self == light.planar) or self.isUnloading then return false end
         self.isUnloading = true
@@ -141,6 +133,14 @@ if localPlayer then
             imports.destroyElement(self.cShader)
         end
         self = nil
+        return true
+    end
+
+    function light.planar:setColor(r, g, b, a)
+        if not self or (self == light.planar) then return false end
+        self.lightData.color = self.lightData.color or {}
+        self.lightData.color[1], self.lightData.color[2], self.lightData.color[3], self.lightData.color[4] = imports.math.max(0, imports.math.min(255, imports.tonumber(r) or 255)), imports.math.max(0, imports.math.min(255, imports.tonumber(g) or 255)), imports.math.max(0, imports.math.min(255, imports.tonumber(b) or 255)), imports.math.max(0, imports.math.min(255, imports.tonumber(a) or 255))
+        imports.dxSetShaderValue(self.cShader, "lightColor", self.lightData.color[1]/255, self.lightData.color[2]/255, self.lightData.color[3]/255, self.lightData.color[4]/255)
         return true
     end
 end
