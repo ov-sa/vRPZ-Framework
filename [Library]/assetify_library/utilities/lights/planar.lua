@@ -88,7 +88,7 @@ if localPlayer then
         for i, j in imports.pairs(shaderInputs) do
             imports.dxSetShaderValue(self.cLight, i, j)
         end
-        self.shaderData = {
+        self.lightData = {
             shaderInputs = shaderInputs
         }
         imports.engineApplyShaderToWorldTexture(self.cShader, light.planar.validTypes[lightType].textureName, self.cLight)
