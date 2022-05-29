@@ -81,6 +81,7 @@ if localPlayer then
         if not self or (self == light.planar) then return false end
         if not lightType or not light.planar.validTypes[lightType] then return false end
         self.cLight = false -- TODO: CREATE DUMMY HERE...
+        self.cStreamer = streamer:create(self.cModelInstance, "light", {self.cCollisionInstance}, self.syncRate)
         self.cShader = imports.dxCreateShader(light.planar.rwCache["Assetify_LightPlanar"](), shader.cache.shaderPriority, shader.cache.shaderDistance, false, "all")
         --TODO: MAKE A RENDERER HELPER THAT SETS MNUTE DURATION VSOURCE AND SERVER TICK WITHIN IT
         renderer:setServerTick(_, self.cShader, syncer.librarySerial)
@@ -99,15 +100,16 @@ if localPlayer then
     function light.planar:unload()
         if not self or (self == light.planar) or self.isUnloading then return false end
         self.isUnloading = true
-        if not self.preLoaded then
-            if self.cLight and imports.isElement(self.cLight) then
-                light.planar.buffer[(self.cLight)] = nil
-                imports.destroyElement(self.cLight)
-            end
-            if self.cShader and imports.isElement(self.cShader) then
-                shader.buffer.shader[(self.cShader)] = nil
-                imports.destroyElement(self.cShader)
-            end
+        if self.cStreamer then
+            self.cStreamer:destroy()
+        end
+        if self.cLight and imports.isElement(self.cLight) then
+            light.planar.buffer[(self.cLight)] = nil
+            imports.destroyElement(self.cLight)
+        end
+        if self.cShader and imports.isElement(self.cShader) then
+            shader.buffer.shader[(self.cShader)] = nil
+            imports.destroyElement(self.cShader)
         end
         self = nil
         return true

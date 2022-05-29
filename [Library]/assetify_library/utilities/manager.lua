@@ -237,7 +237,7 @@ if localPlayer then
                             sceneData.dimension = cAsset.manifestData.sceneDimension
                             sceneData.interior = cAsset.manifestData.sceneInterior
                             --TODO: DETECT IF ITS CLUMPED OR NOT...
-                            cAsset.unSynced.assetCache[i].cDummy = dummy:create("object", childName, sceneData)
+                            cAsset.unSynced.assetCache[i].cDummy = dummy:create("object", childName, _, _, SsceneData)
                         end
                         thread.pause()
                     end
