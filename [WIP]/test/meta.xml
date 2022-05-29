@@ -1,0 +1,7 @@
+<meta>
+	<script src="test.lua" type="client"/>
+    <file src="models/planelight.dff"/>
+	<file src="models/planelight.txd"/>
+	<file src="fx/helper.fx"/>
+	<file src="fx/planelight.fx"/>
+</meta>

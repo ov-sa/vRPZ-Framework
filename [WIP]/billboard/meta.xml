@@ -1,0 +1,18 @@
+<meta>
+	<info name="custom_billboards" author="Ren712" version="1.0.4" type="script" />	
+	<min_mta_version client="1.3.4" server="1.3.4" />
+	<script src="c_main.lua" type="client" />
+	<script src="c_helper_functions.lua" type="client" />
+	<script src="c_exported_functions.lua" type="client" />
+	<file src="fx/billboard.fx" type="client" />
+	<export function="createBillboard" type="client" />
+	<export function="destroyBillboard" type="client" />
+	<export function="setBillboardMaterial" type="client" />
+	<export function="setBillboardPosition" type="client" />
+	<export function="setBillboardColor" type="client" />
+	<export function="setBillboardSize" type="client" />
+	<export function="setBillboardSizeXY" type="client" />
+	<export function="setBillboardDepthBias" type="client" />
+	<export function="setBillboardsDistFade" type="client" />
+	<export function="enableDepthBiasScale" type="client" />
+</meta>
