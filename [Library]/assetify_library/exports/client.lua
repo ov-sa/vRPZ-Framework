@@ -86,7 +86,8 @@ end
 
 function clearModel(modelID)
     modelID = imports.tonumber(modelID)
-    if modelID and imports.engineImportTXD(asset.rwAssets.txd, modelID) then
+    if modelID then
+        imports.engineImportTXD(asset.rwAssets.txd, modelID)
         imports.engineReplaceModel(asset.rwAssets.dff, modelID, false)
         return true
     end

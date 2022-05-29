@@ -27,7 +27,8 @@ local imports = {
     engineImportTXD = engineImportTXD,
     engineReplaceModel = engineReplaceModel,
     engineReplaceCOL = engineReplaceCOL,
-    engineApplyShaderToWorldTexture = engineApplyShaderToWorldTexture
+    engineApplyShaderToWorldTexture = engineApplyShaderToWorldTexture,
+    clearModel = clearModel
 }
 
 
@@ -50,8 +51,7 @@ for i = 1, #light.planar.validTypes, 1 do
     imports.engineImportTXD(imports.engineLoadTXD(modelPath.."dict.rw"), j.modelID)
     imports.engineReplaceModel(imports.engineLoadDFF(modelPath.."buffer.rw"), j.modelID, true)
     imports.engineReplaceCOL(imports.engineLoadCOL(modelPath.."collision.rw"), j.modelID)
-    --imports.engineImportTXD(imports.engineLoadTXD(modelPath.."dict.rw"), j.collisionID)
-    --imports.engineReplaceModel(imports.engineLoadDFF(modelPath.."buffer.rw"), j.collisionID, true)
+    clearModel(j.collisionID)
     imports.engineReplaceCOL(imports.engineLoadCOL(modelPath.."collision.rw"), j.collisionID)
     light.planar.validTypes[i] = nil
     light.planar.validTypes[(j.index)] = j
