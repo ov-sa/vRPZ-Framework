@@ -82,7 +82,7 @@ if localPlayer then
 
     function light.planar:load(lightType, lightData, shaderInputs)
         if not self or (self == light.planar) then return false end
-        if not lightType or not lightCache then return false end
+        if not lightType or not lightData or not shaderInputs then return false end
         local lightCache = light.planar.validTypes[lightType]
         if not lightCache then return false end
         lightData.position, lightData.rotation = lightData.position or {}, lightData.rotation or {}
@@ -108,8 +108,16 @@ if localPlayer then
         end
         self.lightData = lightData
         self.lightData.shaderInputs = shaderInputs
+        self:setColor(self.lightData.color and self.lightData.color.r, self.lightData.color and self.lightData.color.g, self.lightData.color and self.lightData.color.b, self.lightData.color and self.lightData.color.a)
         imports.engineApplyShaderToWorldTexture(self.cShader, lightCache.textureName, self.cLight)
         return true
+    end
+
+    function light.planar:setColor(r, g, b, a)
+        if not self or (self == light.planar) then return false end
+        self.lightData.color = self.lightData.color or {}
+        self.lightData.color[1], self.lightData.color[2], self.lightData.color[3], self.lightData.color[4] = imports.math.max(0, imports.math.min(255, imports.tonumber(r) or 255)), imports.math.max(0, imports.math.min(255, imports.tonumber(g) or 255)), imports.math.max(0, imports.math.min(255, imports.tonumber(b) or 255)), imports.math.max(0, imports.math.min(255, imports.tonumber(a) or 255))
+        imports.dxSetShaderValue(self.cShader, self.lightData.color[1]/255, self.lightData.color[2]/255, self.lightData.color[3]/255, self.lightData.color[4]/255)
     end
 
     function light.planar:unload()

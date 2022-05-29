@@ -136,3 +136,7 @@ end
 function setRendererMinuteDuration(...)
     return renderer:setMinuteDuration(...)
 end
+
+function createLightPlanar(...)
+    return light.planar:create(...)
+end
