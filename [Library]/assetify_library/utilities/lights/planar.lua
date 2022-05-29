@@ -27,8 +27,7 @@ local imports = {
     engineImportTXD = engineImportTXD,
     engineReplaceModel = engineReplaceModel,
     engineReplaceCOL = engineReplaceCOL,
-    engineApplyShaderToWorldTexture = engineApplyShaderToWorldTexture,
-    engineRemoveShaderFromWorldTexture = engineRemoveShaderFromWorldTexture
+    engineApplyShaderToWorldTexture = engineApplyShaderToWorldTexture
 }
 
 
@@ -131,11 +130,13 @@ if localPlayer then
                 light.planar.buffer[(self.cLight)] = nil
                 imports.destroyElement(self.cLight)
             end
-        else
-            imports.engineRemoveShaderFromWorldTexture(self.cLight, self.shaderData.textureName, self.shaderData.element)
-        end
-        if self.shaderData.element then
-            light.planar.buffer.element[(self.shaderData.element)][(self.shaderData.shaderCategory)][(self.shaderData.textureName)] = nil
+            if self.cShader and imports.isElement(self.cLight) then
+                light.planar.buffer[(self.cLight)] = nil
+                imports.destroyElement(self.cLight)
+            end
+            if self.shaderData.element and imports.isElement(self.shaderData.element) then
+                imports.destroyElement(self.shaderData.element)
+            end
         end
         self = nil
         return true
