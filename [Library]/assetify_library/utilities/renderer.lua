@@ -80,7 +80,7 @@ function renderer:setTimeSync(state, syncShader, isInternal)
         if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
             return false
         end
-        imports.dxSetShaderValue(syncShader, "gsetTimeSync", renderer.cache.isTimeSynced)
+        imports.dxSetShaderValue(syncShader, "gTimeSync", renderer.cache.isTimeSynced)
     end
     return true
 end

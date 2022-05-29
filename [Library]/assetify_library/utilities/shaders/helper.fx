@@ -16,6 +16,7 @@ float3 gCameraPosition : CAMERAPOSITION;
 float3 gCameraDirection : CAMERADIRECTION;
 
 float gTime : TIME;
+bool gTimeSync = false;
 float gServerTick = 3600000;
 float gMinuteDuration = 60;
 float4 gLightAmbient : LIGHTAMBIENT;
@@ -231,6 +232,7 @@ void MTAFixUpNormal(in out float3 OutNormal) {
 }
 
 float MTAGetWeatherValue() {
+    if (!gTimeSync) return 1;
     float cTick = (gServerTick + gTime)/(60*gMinuteDuration);
     float weatherValue = (cTick%24)/24;
     bool isReverse = (floor(cTick/24)%2) != 0;
