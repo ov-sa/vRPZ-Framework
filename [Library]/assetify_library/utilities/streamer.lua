@@ -43,7 +43,7 @@ streamer = {
         clientCamera = imports.getCamera()
     },
     allocator = {
-        validStreams = {"bone"}
+        validStreams = {"dummy", "bone", "light"}
     }
 }
 streamer.__index = streamer
