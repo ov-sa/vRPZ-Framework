@@ -100,8 +100,7 @@ if localPlayer then
         end
         self.cLight = self.cModelInstance
         self.cShader = imports.dxCreateShader(light.planar.rwCache["Assetify_LightPlanar"](), shader.cache.shaderPriority, shader.cache.shaderDistance, false, "all")
-        --TODO: MAKE A RENDERER HELPER THAT SETS MNUTE DURATION VSOURCE AND SERVER TICK WITHIN IT
-        renderer:setServerTick(_, self.cShader, syncer.librarySerial)
+        renderer:syncShader(self.cShader)
         shader.buffer.shader[cShader] = "light"
         self.lightType = lightType
         for i, j in imports.pairs(shaderInputs) do

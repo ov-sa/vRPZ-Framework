@@ -198,7 +198,7 @@ if localPlayer then
         self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName])
         if not self.cShader then
             self.cShader = imports.dxCreateShader(shader.rwCache[shaderName](shaderMaps), shaderPriority, shaderDistance, false, "all")
-            renderer:setServerTick(_, self.cShader, syncer.librarySerial)
+            renderer:syncShader(self.cShader)
         end
         shader.buffer.shader[(self.cShader)] = true
         if not self.isPreLoaded then rwCache.shader[textureName] = self.cShader end
