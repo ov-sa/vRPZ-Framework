@@ -72,7 +72,7 @@ function renderer:setTimeSync(state, syncShader, isInternal)
         if renderer.cache.isTimeSynced == state then return false end
         renderer.cache.isTimeSynced = state
         if not renderer.cache.isTimeSynced then
-            renderer.cache.serverTick = (renderer.cache.serverTick or 0) + (imports.getTickCount() - (renderer.cache.__serverTick or 0))
+            renderer.cache.serverTick = ((renderer.cache.serverTick or 0)*1000) + (imports.getTickCount() - (renderer.cache.__serverTick or 0))
         end
         for i, j in imports.pairs(shader.buffer.shader) do
             renderer:setTimeSync(_, i, syncer.librarySerial)
@@ -90,7 +90,7 @@ end
 
 function renderer:setServerTick(serverTick, syncShader, isInternal)
     if not syncShader then
-        renderer.cache.serverTick = imports.tonumber(serverTick) or 0
+        renderer.cache.serverTick = (imports.tonumber(serverTick) or 0)*0.001
         renderer.cache.__serverTick = imports.getTickCount()
         for i, j in imports.pairs(shader.buffer.shader) do
             renderer:setServerTick(_, i, syncer.librarySerial)
@@ -100,7 +100,7 @@ function renderer:setServerTick(serverTick, syncShader, isInternal)
         if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
             return false
         end
-        imports.dxSetShaderValue(syncShader, "gServerTick", renderer.cache.serverTick*0.001)
+        imports.dxSetShaderValue(syncShader, "gServerTick", renderer.cache.serverTick)
     end
     return true
 end
