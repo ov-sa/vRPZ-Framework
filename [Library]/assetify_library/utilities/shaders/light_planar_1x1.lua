@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
 --[[ Resource: Assetify Library
-     Script: utilities: shaders: light_planar_1x1.lua
+     Script: utilities: shaders: light_planar.lua
      Author: vStudio
      Developer(s): Aviril, Tron
      DOC: 19/10/2021
-     Desc: Planar Light (1x1) ]]--
+     Desc: Planar Light ]]--
 ----------------------------------------------------------------
 
 
@@ -22,7 +22,7 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-local identifier = "Assetify_LightPlanar_1x1"
+local identifier = "Assetify_LightPlanar"
 local depDatas, dependencies = "", {
     helper = "utilities/shaders/helper.fx"
 }
@@ -46,6 +46,7 @@ shaderRW[identifier] = function()
 
     bool isVirtualRendering = false;
     float3 lightOffset = float3(0, 0, 0);
+    float2 lightResolution = float2(1, 1);
     float3 lightColor = float3(1, 1, 1);
     texture baseTexture;
     sampler baseSampler = sampler_state {
