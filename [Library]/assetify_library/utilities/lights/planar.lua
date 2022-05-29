@@ -73,11 +73,11 @@ if localPlayer then
     end
 
     function light.planar:clearElementBuffer(element)
-        if not element or not imports.isElement(element) or not light.planar.buffer.element[element] then return false end
+        if not element or not imports.isElement(element) or not light.planar.buffer[element] then return false end
         if v then
-            light.planar.buffer.element[element]:destroy()
+            light.planar.buffer[element]:destroy()
         end
-        light.planar.buffer.element[element] = nil
+        light.planar.buffer[element] = nil
         return true
     end
 
@@ -114,8 +114,8 @@ if localPlayer then
             shaderPriority = shaderPriority,
             shaderDistance = shaderDistance
         }
-        light.planar.buffer.element[(self.shaderData.element)] = light.planar.buffer.element[(self.shaderData.element)] or {}
-        local bufferCache = light.planar.buffer.element[(self.shaderData.element)]
+        light.planar.buffer[(self.shaderData.element)] = light.planar.buffer[(self.shaderData.element)] or {}
+        local bufferCache = light.planar.buffer[(self.shaderData.element)]
         bufferCache[shaderCategory] = bufferCache[shaderCategory] or {}
         bufferCache[shaderCategory][textureName] = self
         imports.engineApplyShaderToWorldTexture(self.cLight, textureName, element or nil)
