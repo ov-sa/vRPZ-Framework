@@ -45,12 +45,14 @@ light.planar = {
 }
 for i = 1, #light.planar.validTypes, 1 do
     local j = light.planar.validTypes[i]
-    local modelID = imports.engineRequestModel("object")
     local modelPath = "utilities/rw/"..j.index.."/"
-    j.modelID = modelID
-    imports.engineImportTXD(imports.engineLoadTXD(modelPath.."dict.rw"), modelID)
-    imports.engineReplaceModel(imports.engineLoadDFF(modelPath.."buffer.rw"), modelID, true)
-    imports.engineReplaceCOL(imports.engineLoadCOL(modelPath.."collision.rw"), modelID)
+    j.modelID, j.collisionID = imports.engineRequestModel("object"), imports.engineRequestModel("object")
+    imports.engineImportTXD(imports.engineLoadTXD(modelPath.."dict.rw"), j.modelID)
+    imports.engineReplaceModel(imports.engineLoadDFF(modelPath.."buffer.rw"), j.modelID, true)
+    imports.engineReplaceCOL(imports.engineLoadCOL(modelPath.."collision.rw"), j.modelID)
+    --imports.engineImportTXD(imports.engineLoadTXD(modelPath.."dict.rw"), j.collisionID)
+    --imports.engineReplaceModel(imports.engineLoadDFF(modelPath.."buffer.rw"), j.collisionID, true)
+    imports.engineReplaceCOL(imports.engineLoadCOL(modelPath.."collision.rw"), j.collisionID)
     light.planar.validTypes[i] = nil
     light.planar.validTypes[(j.index)] = j
     light.planar.validTypes[(j.index)].index = nil
