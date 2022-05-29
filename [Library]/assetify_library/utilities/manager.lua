@@ -362,6 +362,11 @@ if localPlayer then
         dummy:clearElementBuffer(source)
         bone:clearElementBuffer(source)
         manager:clearElementBuffer(source)
+        for i, j in imports.pairs(light) do
+            if j and (imports.type(j) == "table") and j.clearElementBuffer then
+                j:clearElementBuffer(source)
+            end
+        end
     end)
 
     function manager:loadAnim(element, assetName)
