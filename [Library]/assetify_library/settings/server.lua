@@ -17,7 +17,6 @@ availableAssetPacks = {
         autoLoad = true
     },
 
-    --[[
     ["animation"] = {
         autoLoad = true
     },
@@ -74,5 +73,4 @@ availableAssetPacks = {
         assetBase = 1337,
         assetTransparency = false
     }
-    ]]
 }

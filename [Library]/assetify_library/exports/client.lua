@@ -138,7 +138,8 @@ function setRendererMinuteDuration(...)
 end
 
 function createPlanarLight(...)
-    return light.planar:create(...)
+    local cLight = light.planar:create(...)
+    return (cLight and cLight.cLight) or false
 end
 
 function setPlanarLightTexture(cLight, ...)
