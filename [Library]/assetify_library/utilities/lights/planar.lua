@@ -33,7 +33,8 @@ local imports = {
     setElementDoubleSided = setElementDoubleSided,
     setElementDimension = setElementDimension,
     setElementInterior = setElementInterior,
-    clearModel = clearModel
+    clearModel = clearModel,
+    math = math
 }
 
 
@@ -56,7 +57,7 @@ for i = 1, #light.planar.cache.validTypes, 1 do
     imports.engineImportTXD(imports.engineLoadTXD(modelPath.."dict.rw"), j.modelID)
     imports.engineReplaceModel(imports.engineLoadDFF(modelPath.."buffer.rw"), j.modelID, true)
     imports.engineReplaceCOL(imports.engineLoadCOL(modelPath.."collision.rw"), j.modelID)
-    clearModel(j.collisionID)
+    imports.clearModel(j.collisionID)
     imports.engineReplaceCOL(imports.engineLoadCOL(modelPath.."collision.rw"), j.collisionID)
     light.planar.cache.validTypes[i] = nil
     light.planar.cache.validTypes[(j.index)] = j
@@ -106,7 +107,7 @@ function light.planar:load(lightType, lightData, shaderInputs)
     self.cShader = imports.dxCreateShader(shader.rwCache["Assetify_LightPlanar"](), shader.cache.shaderPriority, shader.cache.shaderDistance, false, "all")
     renderer:syncShader(self.cShader)
     light.planar.buffer[(self.cLight)] = self
-    shader.buffer.shader[cShader] = "light"
+    shader.buffer.shader[(self.cShader)] = "light"
     self.lightType = lightType
     for i, j in imports.pairs(shaderInputs) do
         imports.dxSetShaderValue(self.cLight, i, j)
