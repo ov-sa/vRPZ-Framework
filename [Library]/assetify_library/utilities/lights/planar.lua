@@ -39,7 +39,7 @@ local imports = {
 light.planar = {
     cache = {
         validTypes = {
-            {index = "planar_1x1", textureName = "assetify_light_plane"}
+            {index = "planar_1x1", textureName = "assetify_light_plane", resolution = {1, 1}}
         }
     },
     buffer = {}
@@ -107,6 +107,7 @@ if localPlayer then
         for i, j in imports.pairs(shaderInputs) do
             imports.dxSetShaderValue(self.cLight, i, j)
         end
+        imports.dxSetShaderValue(self.cShader, "lightResolution", lightCache.resolution[1], lightCache.resolution[2])
         self.lightData = lightData
         self.lightData.shaderInputs = shaderInputs
         self:setColor(self.lightData.color and self.lightData.color.r, self.lightData.color and self.lightData.color.g, self.lightData.color and self.lightData.color.b, self.lightData.color and self.lightData.color.a)
@@ -118,7 +119,7 @@ if localPlayer then
         if not self or (self == light.planar) then return false end
         self.lightData.color = self.lightData.color or {}
         self.lightData.color[1], self.lightData.color[2], self.lightData.color[3], self.lightData.color[4] = imports.math.max(0, imports.math.min(255, imports.tonumber(r) or 255)), imports.math.max(0, imports.math.min(255, imports.tonumber(g) or 255)), imports.math.max(0, imports.math.min(255, imports.tonumber(b) or 255)), imports.math.max(0, imports.math.min(255, imports.tonumber(a) or 255))
-        imports.dxSetShaderValue(self.cShader, self.lightData.color[1]/255, self.lightData.color[2]/255, self.lightData.color[3]/255, self.lightData.color[4]/255)
+        imports.dxSetShaderValue(self.cShader, "lightColor", self.lightData.color[1]/255, self.lightData.color[2]/255, self.lightData.color[3]/255, self.lightData.color[4]/255)
         return true
     end
 

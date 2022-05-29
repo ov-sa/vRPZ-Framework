@@ -47,7 +47,7 @@ shaderRW[identifier] = function()
     bool isVirtualRendering = false;
     float3 lightOffset = float3(0, 0, 0);
     float2 lightResolution = float2(1, 1);
-    float3 lightColor = float3(1, 1, 1);
+    float4 lightColor = float4(1, 1, 1, 1);
     texture baseTexture;
     sampler baseSampler = sampler_state {
         Texture = baseTexture;
@@ -90,7 +90,7 @@ shaderRW[identifier] = function()
             float4 sourceTex = tex2D(vSourceSampler, PS.TexCoord.xy);
             sampledTexel.rgb *= lerp(sampledTexel.rgb, sourceTex.rgb*2.5, 0.95);
         }
-        sampledTexel.rgb *= lightColor;
+        sampledTexel *= lightColor;
         sampledTexel.rgb *= 1 + (1 - MTAGetWeatherValue());
         return saturate(sampledTexel);
     }
