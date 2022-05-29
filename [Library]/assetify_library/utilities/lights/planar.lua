@@ -80,8 +80,8 @@ if localPlayer then
     function light.planar:load(lightType, lightPosition, shaderInputs)
         if not self or (self == light.planar) then return false end
         if not lightType or not light.planar.validTypes[lightType] then return false end
-        local cShader = imports.dxCreateShader(light.planar.rwCache["Assetify_LightPlanar"](shaderMaps), shader.cache.shaderPriority, shader.cache.shaderDistance, false, "all")
         self.cLight = false -- TODO: CREATE DUMMY HERE...
+        self.cShader = imports.dxCreateShader(light.planar.rwCache["Assetify_LightPlanar"](shaderMaps), shader.cache.shaderPriority, shader.cache.shaderDistance, false, "all")
         --TODO: CREATE DUMMY HERE...
         shader.buffer.shader[cShader] = "light"
         self.lightType = lightType
@@ -89,10 +89,9 @@ if localPlayer then
             imports.dxSetShaderValue(self.cLight, i, j)
         end
         self.shaderData = {
-            element = cShader,
             shaderInputs = shaderInputs
         }
-        imports.engineApplyShaderToWorldTexture(cShader, light.planar.validTypes[lightType].textureName, self.cLight)
+        imports.engineApplyShaderToWorldTexture(self.cShader, light.planar.validTypes[lightType].textureName, self.cLight)
         return true
     end
 
@@ -104,9 +103,9 @@ if localPlayer then
                 light.planar.buffer[(self.cLight)] = nil
                 imports.destroyElement(self.cLight)
             end
-            if self.shaderData.element and imports.isElement(self.shaderData.element) then
-                shader.buffer.shader[(self.shaderData.element)] = nil
-                imports.destroyElement(self.shaderData.element)
+            if self.cShader and imports.isElement(self.cShader) then
+                shader.buffer.shader[(self.cShader)] = nil
+                imports.destroyElement(self.cShader)
             end
         end
         self = nil
