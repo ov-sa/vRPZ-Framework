@@ -232,7 +232,7 @@ void MTAFixUpNormal(in out float3 OutNormal) {
 }
 
 float MTAGetWeatherValue() {
-    float cDuration = gTimeSync ? (gServerTick/1000) + gTime : (gServerTick/1000);
+    float cDuration = gTimeSync ? gServerTick + gTime : gServerTick;
     float cTick = cDuration/(60*gMinuteDuration);
     float weatherValue = (cTick%24)/24;
     bool isReverse = (floor(cTick/24)%2) != 0;
