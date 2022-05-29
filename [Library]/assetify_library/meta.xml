@@ -9,6 +9,8 @@
     <!-- Exports, Settings & Utilities -->
     <file src="utilities/rw/dict.rw"/>
     <file src="utilities/rw/buffer.rw"/>
+    <file src="utilities/rw/lights/planar/dict.rw"/>
+    <file src="utilities/rw/lights/planar/buffer.rw"/>
     <script src="utilities/shared.lua" type="shared"/>
     <script src="utilities/shaders/index.lua" type="client"/>
     <file src="utilities/shaders/helper.fx"/>
