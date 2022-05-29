@@ -26,5 +26,5 @@ bindKey("z", "down", function()
 end)
 
 addEventHandler("onClientPreRender", root, function()
-    dxDrawImage(10, 10, 1366*0.3, 768*0.3, vSource)
+    --dxDrawImage(10, 10, 1366*0.3, 768*0.3, vSource)
 end)

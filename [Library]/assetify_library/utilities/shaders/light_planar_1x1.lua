@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
 --[[ Resource: Assetify Library
-     Script: utilities: shaders: lights: light_planar.lua
+     Script: utilities: shaders: light_planar_1x1.lua
      Author: vStudio
      Developer(s): Aviril, Tron
      DOC: 19/10/2021
-     Desc: Planar Lightning ]]--
+     Desc: Planar Light (1x1) ]]--
 ----------------------------------------------------------------
 
 
@@ -22,7 +22,7 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
-local identifier = "Assetify_LightPlanar"
+local identifier = "Assetify_LightPlanar_1x1"
 local depDatas, dependencies = "", {
     helper = "utilities/shaders/helper.fx"
 }
@@ -87,7 +87,7 @@ shaderRW[identifier] = function()
         sampledTexel.rgb = pow(sampledTexel.rgb*1.5, 1.5);
         if (isVirtualRendering) {
             float4 sourceTex = tex2D(virtualSourceSampler, PS.TexCoord.xy);
-            sampledTexel.rgb *= lerp(sampledTexel.rgb, sourceTex.rgb*2.5, 1);
+            sampledTexel.rgb *= lerp(sampledTexel.rgb, sourceTex.rgb*2.5, 0.95);
         }
         sampledTexel.rgb *= lightColor;
         sampledTexel.rgb *= 1 + (1 - MTAGetWeatherValue());

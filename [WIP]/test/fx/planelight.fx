@@ -49,7 +49,7 @@ float4 PixelShaderFunction(PSInput PS) : COLOR0
     sampledTexel.rgb = pow(sampledTexel.rgb*1.5, 1.5);
     if (isVSourceEnabled) {
         float4 sourceTex = tex2D(vSourceSampler, PS.TexCoord.xy);
-        sampledTexel.rgb *= lerp(sampledTexel.rgb, sourceTex.rgb*2.5, 1);
+        sampledTexel.rgb *= lerp(sampledTexel.rgb, sourceTex.rgb*2.5, 0.95);
     }
     sampledTexel.rgb *= lightColor;
     sampledTexel.rgb *= 1 + (1 - MTAGetWeatherValue());

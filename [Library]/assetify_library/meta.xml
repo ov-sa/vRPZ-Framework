@@ -9,8 +9,8 @@
     <!-- Exports, Settings & Utilities -->
     <file src="utilities/rw/dict.rw"/>
     <file src="utilities/rw/buffer.rw"/>
-    <file src="utilities/rw/lights/planar/dict.rw"/>
-    <file src="utilities/rw/lights/planar/buffer.rw"/>
+    <file src="utilities/rw/lights/planar_1x1/dict.rw"/>
+    <file src="utilities/rw/lights/planar_1x1/buffer.rw"/>
     <script src="utilities/shared.lua" type="shared"/>
     <script src="utilities/shaders/index.lua" type="client"/>
     <file src="utilities/shaders/helper.fx"/>
@@ -19,7 +19,7 @@
     <script src="utilities/shaders/tex_clumper.lua" type="client"/>
     <script src="utilities/shaders/tex_mapper.lua" type="client"/>
     <script src="utilities/shaders/tex_exporter.lua" type="client"/>
-    <script src="utilities/shaders/lights/light_planar.lua" type="client"/>
+    <script src="utilities/shaders/light_planar_1x1.lua" type="client"/>
     <script src="exports/shared.lua" type="shared"/>
     <script src="exports/client.lua" type="client"/>
     <script src="settings/shared.lua" type="shared"/>
