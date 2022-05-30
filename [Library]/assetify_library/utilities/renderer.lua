@@ -51,28 +51,36 @@ end
 
 function renderer:syncShader(syncShader)
     if not syncShader then return false end
-    imports.dxSetShaderValue(syncShader, "vSource0", (renderer.cache.isVirtualRendering and renderer.cache.virtualSource) or false)
+    renderer:setVirtualRendering(_, syncShader, syncer.librarySerial)
     renderer:setServerTick(_, syncShader, syncer.librarySerial)
     renderer:setMinuteDuration(_, syncShader, syncer.librarySerial)
     return true
 end
 
-function renderer:setVirtualRendering(state)
-    state = (state and true) or false
-    if renderer.cache.isVirtualRendering == state then return false end
-    renderer.cache.isVirtualRendering = state
-    if renderer.cache.isVirtualRendering then
-        renderer.cache.virtualSource = imports.dxCreateScreenSource(renderer.resolution[1], renderer.resolution[2])
-        imports.addEventHandler("onClientHUDRender", root, renderer.render)
-    else
-        imports.removeEventHandler("onClientHUDRender", root, renderer.render)
-        if renderer.cache.virtualSource and imports.isElement(renderer.cache.virtualSource) then
-            imports.destroyElement(renderer.cache.virtualSource)
+function renderer:setVirtualRendering(state, syncShader, isInternal)
+    if not syncShader then
+        state = (state and true) or false
+        if renderer.cache.isVirtualRendering == state then return false end
+        renderer.cache.isVirtualRendering = state
+        if renderer.cache.isVirtualRendering then
+            renderer.cache.virtualSource = imports.dxCreateScreenSource(renderer.resolution[1], renderer.resolution[2])
+            imports.addEventHandler("onClientHUDRender", root, renderer.render)
+        else
+            imports.removeEventHandler("onClientHUDRender", root, renderer.render)
+            if renderer.cache.virtualSource and imports.isElement(renderer.cache.virtualSource) then
+                imports.destroyElement(renderer.cache.virtualSource)
+            end
+            renderer.cache.virtualSource = nil
         end
-        renderer.cache.virtualSource = nil
-    end
-    for i, j in imports.pairs(shader.buffer.shader) do
-        imports.dxSetShaderValue(i, "vSource0", (state and renderer.cache.virtualSource) or false)
+        for i, j in imports.pairs(shader.buffer.shader) do
+            renderer:setVirtualRendering(_, i, syncer.librarySerial)
+        end
+    else
+        local isExternalResource = sourceResource and (sourceResource ~= resource)
+        if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
+            return false
+        end
+        imports.dxSetShaderValue(syncShader, "vSource0", (renderer.cache.isVirtualRendering and renderer.cache.virtualSource) or false)
     end
     return true
 end
@@ -113,6 +121,7 @@ function renderer:setServerTick(serverTick, syncShader, isInternal)
         if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
             return false
         end
+        print("SYNCING SERVER TICK: "..renderer.cache.serverTick)
         imports.dxSetShaderValue(syncShader, "gServerTick", renderer.cache.serverTick)
     end
     return true
