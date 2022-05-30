@@ -52,6 +52,7 @@ end
 function renderer:syncShader(syncShader)
     if not syncShader then return false end
     renderer:setVirtualRendering(_, syncShader, syncer.librarySerial)
+    renderer:setTimeSync(_, syncShader, syncer.librarySerial)
     renderer:setServerTick(_, syncShader, syncer.librarySerial)
     renderer:setMinuteDuration(_, syncShader, syncer.librarySerial)
     return true
