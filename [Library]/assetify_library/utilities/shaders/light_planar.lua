@@ -44,7 +44,6 @@ shaderRW[identifier] = function()
     -->> Variables <<--
     -------------------*/
 
-    bool isVirtualRendering = false;
     float3 lightOffset = float3(0, 0, 0);
     float2 lightResolution = float2(1, 1);
     float4 lightColor = float4(1, 1, 1, 1);
@@ -86,7 +85,7 @@ shaderRW[identifier] = function()
     float4 PSHandler(PSInput PS) : COLOR0 {
         float4 sampledTexel = tex2D(baseSampler, PS.TexCoord.xy);
         sampledTexel.rgb = pow(sampledTexel.rgb*1.5, 1.5);
-        if (isVirtualRendering) {
+        if (vRenderingEnabled) {
             float4 sourceTex = tex2D(vSourceSampler, PS.TexCoord.xy);
             sampledTexel.rgb *= lerp(sampledTexel.rgb, sourceTex.rgb*2.5, 0.95);
         }

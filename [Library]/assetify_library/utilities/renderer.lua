@@ -74,12 +74,14 @@ function renderer:setVirtualRendering(state, syncShader, isInternal)
         end
         for i, j in imports.pairs(shader.buffer.shader) do
             renderer:setVirtualRendering(_, i, syncer.librarySerial)
+            print("SYNCING VSOURCE...")
         end
     else
         local isExternalResource = sourceResource and (sourceResource ~= resource)
         if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
             return false
         end
+        imports.dxSetShaderValue(syncShader, "vRenderingEnabled", (renderer.cache.isVirtualRendering and true) or false)
         imports.dxSetShaderValue(syncShader, "vSource0", (renderer.cache.isVirtualRendering and renderer.cache.virtualSource) or false)
     end
     return true
