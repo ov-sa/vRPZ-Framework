@@ -78,7 +78,7 @@ shaderRW[identifier] = function()
         float4 worldViewPosition = float4(worldViewMatrix[3].xyz + position.xzy - lightOffset.xzy, 1);
         worldViewPosition.xyz += 1.5*mul(normalize(gCameraPosition - lightOffset), gView).xyz;
         PS.Position = mul(worldViewPosition, gProjection);
-        PS.TexCoord = float2(VS.TexCoord.x, 1 - VS.TexCoord.y);
+        PS.TexCoord = float2(VS.TexCoord.x, VS.TexCoord.y);
         return PS;
     }
     
