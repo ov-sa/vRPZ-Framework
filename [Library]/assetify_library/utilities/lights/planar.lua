@@ -45,7 +45,7 @@ local imports = {
 light.planar = {
     cache = {
         validTypes = {
-            {index = "planar_1x1", textureName = "assetify_light_plane", resolution = {1, 1}}
+            {index = "planar_1x1", textureName = "assetify_light_planar", resolution = {1, 1}}
         }
     },
     buffer = {}
