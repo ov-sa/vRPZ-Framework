@@ -74,7 +74,6 @@ function renderer:setVirtualRendering(state, syncShader, isInternal)
         end
         for i, j in imports.pairs(shader.buffer.shader) do
             renderer:setVirtualRendering(_, i, syncer.librarySerial)
-            print("SYNCING VSOURCE...")
         end
     else
         local isExternalResource = sourceResource and (sourceResource ~= resource)
@@ -123,7 +122,6 @@ function renderer:setServerTick(serverTick, syncShader, isInternal)
         if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
             return false
         end
-        print("SYNCING SERVER TICK: "..renderer.cache.serverTick)
         imports.dxSetShaderValue(syncShader, "gServerTick", renderer.cache.serverTick)
     end
     return true
