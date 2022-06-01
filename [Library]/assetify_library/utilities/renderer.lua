@@ -97,6 +97,7 @@ function renderer:setVirtualRendering(state, rtModes, syncShader, isInternal)
             return false
         end
         local vSource0, vSource1, vSource2 = (renderer.cache.isVirtualRendering and renderer.cache.virtualSource) or false, (renderer.cache.isVirtualRendering and renderer.cache.virtualRTs.diffuse) or false, (renderer.cache.isVirtualRendering and renderer.cache.virtualRTs.emissive) or false
+        imports.dxSetShaderValue(syncShader, "vResolution", (renderer.cache.isVirtualRendering and renderer.resolution) or false)
         imports.dxSetShaderValue(syncShader, "vRenderingEnabled", (renderer.cache.isVirtualRendering and true) or false)
         imports.dxSetShaderValue(syncShader, "vSource0", vSource0)
         imports.dxSetShaderValue(syncShader, "vSource1", vSource1)
