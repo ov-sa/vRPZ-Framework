@@ -96,10 +96,13 @@ function renderer:setVirtualRendering(state, rtModes, syncShader, isInternal)
         if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
             return false
         end
+        local vSource0, vSource1, vSource2 = (renderer.cache.isVirtualRendering and renderer.cache.virtualSource) or false, (renderer.cache.isVirtualRendering and renderer.cache.virtualRTs.diffuse) or false, (renderer.cache.isVirtualRendering and renderer.cache.virtualRTs.emissive) or false
         imports.dxSetShaderValue(syncShader, "vRenderingEnabled", (renderer.cache.isVirtualRendering and true) or false)
-        imports.dxSetShaderValue(syncShader, "vSource0", (renderer.cache.isVirtualRendering and renderer.cache.virtualSource) or false)
-        imports.dxSetShaderValue(syncShader, "vSource1", (renderer.cache.isVirtualRendering and renderer.cache.virtualRTs.diffuse) or false)
-        imports.dxSetShaderValue(syncShader, "vSource2", (renderer.cache.isVirtualRendering and renderer.cache.virtualRTs.emissive) or false)
+        imports.dxSetShaderValue(syncShader, "vSource0", vSource0)
+        imports.dxSetShaderValue(syncShader, "vSource1", vSource1)
+        imports.dxSetShaderValue(syncShader, "vSource1RTEnabled", (vSource1 and true) or false)
+        imports.dxSetShaderValue(syncShader, "vSource2", vSource2)
+        imports.dxSetShaderValue(syncShader, "vSource2RTEnabled", (vSource2 and true) or false)
     end
     return true
 end
