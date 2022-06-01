@@ -89,7 +89,7 @@ shaderRW[identifier] = function()
         float4 sampledTexel = tex2D(baseSampler, PS.TexCoord.xy);
         sampledTexel.rgb = pow(sampledTexel.rgb*1.5, 1.5);
         if (vRenderingEnabled) {
-            float4 sourceTex = vSource1Enabled ? tex2D(vSource1Sampler, PS.TexCoord.xy); : tex2D(vSource0Sampler, PS.TexCoord.xy);;
+            float4 sourceTex = vSource1Enabled ? tex2D(vSource1Sampler, PS.TexCoord.xy) : tex2D(vSource0Sampler, PS.TexCoord.xy);
             sampledTexel.rgb *= lerp(sampledTexel.rgb, sourceTex.rgb*2.5, 0.95);
         }
         sampledTexel *= lightColor;
