@@ -100,7 +100,7 @@ function thread:resume(syncRate)
 end
 
 function thread:wait(exec, ...)
-    exec(self, ...)
+    exec(self)
     self.isScheduled = true
     thread.pause()
     local resolvedValues = self.scheduledValues
