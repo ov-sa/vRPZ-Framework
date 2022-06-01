@@ -59,17 +59,17 @@ function renderer:syncShader(syncShader)
     return true
 end
 
-function renderer:setVirtualRendering(state, virtualModes, syncShader, isInternal)
+function renderer:setVirtualRendering(state, rtModes, syncShader, isInternal)
     if not syncShader then
         state = (state and true) or false
-        virtualModes = (virtualModes and (imports.type(virtualModes) == "table") and virtualModes) or false
+        rtModes = (rtModes and (imports.type(rtModes) == "table") and rtModes) or false
         if renderer.cache.isVirtualRendering == state then return false end
         renderer.cache.isVirtualRendering = state
         if renderer.cache.isVirtualRendering then
             renderer.cache.virtualSource = imports.dxCreateScreenSource(renderer.resolution[1], renderer.resolution[2])
-            if virtualModes.diffuseRT then
+            if rtModes.diffuseRT then
                 renderer.cache.diffuseRT = imports.dxCreateRenderTarget(renderer.resolution[1], renderer.resolution[2], true)
-                if virtualModes.emissiveRT then
+                if rtModes.emissiveRT then
                     renderer.cache.emissiveRT = imports.dxCreateRenderTarget(renderer.resolution[1], renderer.resolution[2], false)
                 end
             end

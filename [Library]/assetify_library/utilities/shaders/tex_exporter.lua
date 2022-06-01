@@ -44,7 +44,6 @@ shaderRW[identifier] = function()
     -->> Variables <<--
     -------------------*/
 
-    texture renderTex;
     texture renderLayer <string renderTarget = "yes";>;
     struct PSInput {
         float4 Position : POSITION0;
@@ -58,9 +57,6 @@ shaderRW[identifier] = function()
     sampler baseSampler = sampler_state {
         Texture = (gTexture0);
     };
-    sampler renderSampler = sampler_state {
-        Texture = renderTex;
-    };
 
 
     /*----------------
@@ -70,14 +66,9 @@ shaderRW[identifier] = function()
     Export PSHandler(PSInput PS) {
         Export output;
         float4 sampledTexel = tex2D(baseSampler, PS.TexCoord);
+        output.Render = sampledTexel;
         sampledTexel.rgb *= MTAGetWeatherValue();
         output.World = saturate(sampledTexel);
-        if (renderTex) {
-            output.Render = sampledTexel;
-        } else {
-            float4 renderTexel = tex2D(renderSampler, PS.TexCoord);
-            output.Render = renderTexel;
-        }
         return output;
     }
 
