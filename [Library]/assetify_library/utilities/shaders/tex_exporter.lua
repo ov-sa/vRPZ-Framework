@@ -67,7 +67,7 @@ shaderRW[identifier] = function()
     Export PSHandler(PSInput PS) {
         Export output;
         float4 sampledTexel = tex2D(baseSampler, PS.TexCoord);
-        output.Diffuse = sampledTexel;
+        output.Diffuse = vRenderingEnabled ? sampledTexel : 0;
         sampledTexel.rgb *= MTAGetWeatherValue();
         output.World = saturate(sampledTexel);
         return output;
