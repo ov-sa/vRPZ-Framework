@@ -4,6 +4,7 @@
 
 local imports = {
     type = type,
+    pairs = pairs,
     unpack = unpack,
     tostring = tostring,
     tonumber = tonumber,
@@ -26,6 +27,20 @@ string.parse = function(rawString)
     return imports.tonumber(rawString) or rawString
 end
 
+dbify.createAsync = function(module)
+    if not module or not module.async then return false end
+    for i, j in imports.pairs(module.async) do
+        module.async[i] = function(cThread, ...)
+            local cArgs = {...}
+            imports.table.insert(cArgs, j, function(...) return cThread:resolve(...) end)
+            thread:create(function(self)
+                module[i](cArgs)
+            end):resume()
+        end
+    end
+    return true
+end
+
 
 -----------------------
 --[[ Module: MySQL ]]--
@@ -34,6 +49,9 @@ end
 dbify.mysql = {
     connection = {
         instance = imports.dbConnect("mysql", "dbname="..(dbify.settings.credentials.database)..";host="..(dbify.settings.credentials.host)..";port="..(dbify.settings.credentials.port)..";charset=utf8;", dbify.settings.credentials.username, dbify.settings.credentials.password, dbify.settings.credentials.options) or false
+    },
+    async = {
+        --TODO: PENDING...
     },
 
     table = {
@@ -315,3 +333,4 @@ dbify.mysql = {
         end
     }
 }
+dbify.createAsync(dbify.mysql)
