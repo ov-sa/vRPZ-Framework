@@ -48,6 +48,7 @@ texture gTexture0           <string textureState="0,Texture";>;
 texture gTexture1           <string textureState="1,Texture";>;
 texture gTexture2           <string textureState="2,Texture";>;
 texture gTexture3           <string textureState="3,Texture";>;
+bool vEmissiveSource = false;
 bool vRenderingEnabled = false;
 
 int gDeclNormal             <string vertexDeclState="Normal";>;
