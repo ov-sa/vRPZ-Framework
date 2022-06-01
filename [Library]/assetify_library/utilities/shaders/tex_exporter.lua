@@ -68,6 +68,7 @@ shaderRW[identifier] = function()
         Export output;
         float4 sampledTexel = tex2D(baseSampler, PS.TexCoord);
         output.Diffuse = vRenderingEnabled ? sampledTexel : 0;
+        output.Emissive = vRenderingEnabled ? sampledTexel : 0;
         sampledTexel.rgb *= MTAGetWeatherValue();
         output.World = saturate(sampledTexel);
         return output;

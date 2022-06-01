@@ -98,6 +98,7 @@ shaderRW[identifier] = function(shaderMaps)
         Export output;
         ]]..handlerBody..handlerFooter..[[
         output.Diffuse = vRenderingEnabled ? sampledTexel : 0;
+        output.Emissive = vRenderingEnabled ? sampledTexel : 0;
         sampledTexel.rgb *= MTAGetWeatherValue();
         output.World = saturate(sampledTexel);
         return output;
