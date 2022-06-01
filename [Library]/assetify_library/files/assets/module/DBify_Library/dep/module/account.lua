@@ -23,6 +23,13 @@ dbify.account = {
         table = "dbify_accounts",
         keyColumn = "name"
     },
+    async = {
+        fetchAll = 2,
+        create = 2,
+        delete = 2,
+        setData = 3,
+        getData = 3
+    },
 
     fetchAll = function(keyColumns, callback, ...)
         if not dbify.mysql.connection.instance then return false end
@@ -81,6 +88,7 @@ dbify.account = {
         }, true, callback, ...)
     end
 }
+dbify.createAsync(dbify.account)
 
 
 -----------------------

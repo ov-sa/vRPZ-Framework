@@ -21,6 +21,13 @@ dbify.serial = {
         table = "dbify_serials",
         keyColumn = "serial"
     },
+    async = {
+        fetchAll = 2,
+        create = 2,
+        delete = 2,
+        setData = 3,
+        getData = 3
+    },
 
     fetchAll = function(keyColumns, callback, ...)
         if not dbify.mysql.connection.instance then return false end
@@ -79,6 +86,7 @@ dbify.serial = {
         }, true, callback, ...)
     end
 }
+dbify.createAsync(dbify.serial)
 
 
 -----------------------

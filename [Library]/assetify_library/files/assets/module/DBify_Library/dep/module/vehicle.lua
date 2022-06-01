@@ -21,6 +21,13 @@ dbify.vehicle = {
         table = "dbify_vehicles",
         keyColumn = "id"
     },
+    async = {
+        fetchAll = 2,
+        create = 1,
+        delete = 2,
+        setData = 3,
+        getData = 3
+    },
 
     fetchAll = function(keyColumns, callback, ...)
         if not dbify.mysql.connection.instance then return false end
@@ -75,6 +82,7 @@ dbify.vehicle = {
         }, true, callback, ...)
     end
 }
+dbify.createAsync(dbify.vehicle)
 
 
 -----------------------
