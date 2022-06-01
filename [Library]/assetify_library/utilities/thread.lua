@@ -21,11 +21,7 @@ local imports = {
     setTimer = setTimer,
     isTimer = isTimer,
     killTimer = killTimer,
-    coroutine = {
-        create = coroutine.create,
-        resume = coroutine.resume,
-        status = coroutine.status
-    }
+    coroutine = coroutine
 }
 
 
@@ -103,8 +99,8 @@ function thread:resume(syncRate)
     return true
 end
 
-function thread:wait(exec)
-    exec(self)
+function thread:wait(exec, ...)
+    exec(self, ...)
     self.isScheduled = true
     thread.pause()
     local resolvedValues = self.scheduledValues
