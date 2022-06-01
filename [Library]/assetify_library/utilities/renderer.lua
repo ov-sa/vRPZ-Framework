@@ -59,24 +59,33 @@ function renderer:syncShader(syncShader)
     return true
 end
 
-function renderer:setVirtualRendering(state, syncShader, isInternal)
+function renderer:setVirtualRendering(state, virtualModes, syncShader, isInternal)
     if not syncShader then
         state = (state and true) or false
+        virtualModes = (virtualModes and (imports.type(virtualModes) == "table") and virtualModes) or false
         if renderer.cache.isVirtualRendering == state then return false end
         renderer.cache.isVirtualRendering = state
         if renderer.cache.isVirtualRendering then
             renderer.cache.virtualSource = imports.dxCreateScreenSource(renderer.resolution[1], renderer.resolution[2])
-            renderer.cache.virtualSourceRT = imports.dxCreateRenderTarget(renderer.resolution[1], renderer.resolution[2], true)
+            if virtualModes.diffuseRT then
+                renderer.cache.diffuseRT = imports.dxCreateRenderTarget(renderer.resolution[1], renderer.resolution[2], true)
+                if virtualModes.emissiveRT then
+                    renderer.cache.emissiveRT = imports.dxCreateRenderTarget(renderer.resolution[1], renderer.resolution[2], false)
+                end
+            end
             imports.addEventHandler("onClientHUDRender", root, renderer.render)
         else
             imports.removeEventHandler("onClientHUDRender", root, renderer.render)
             if renderer.cache.virtualSource and imports.isElement(renderer.cache.virtualSource) then
                 imports.destroyElement(renderer.cache.virtualSource)
             end
-            if renderer.cache.virtualSourceRT and imports.isElement(renderer.cache.virtualSourceRT) then
-                imports.destroyElement(renderer.cache.virtualSourceRT)
+            if renderer.cache.diffuseRT and imports.isElement(renderer.cache.diffuseRT) then
+                imports.destroyElement(renderer.cache.diffuseRT)
             end
-            renderer.cache.virtualSource, renderer.cache.virtualSourceRT = nil, nil
+            if renderer.cache.emissiveRT and imports.isElement(renderer.cache.emissiveRT) then
+                imports.destroyElement(renderer.cache.emissiveRT)
+            end
+            renderer.cache.virtualSource, renderer.cache.diffuseRT, renderer.cache.emissiveRT = nil, nil, nil
         end
         for i, j in imports.pairs(shader.buffer.shader) do
             renderer:setVirtualRendering(_, i, syncer.librarySerial)
@@ -88,7 +97,8 @@ function renderer:setVirtualRendering(state, syncShader, isInternal)
         end
         imports.dxSetShaderValue(syncShader, "vRenderingEnabled", (renderer.cache.isVirtualRendering and true) or false)
         imports.dxSetShaderValue(syncShader, "vSource0", (renderer.cache.isVirtualRendering and renderer.cache.virtualSource) or false)
-        imports.dxSetShaderValue(syncShader, "vSource1", (renderer.cache.isVirtualRendering and renderer.cache.virtualSourceRT) or false)
+        imports.dxSetShaderValue(syncShader, "vSource1", (renderer.cache.isVirtualRendering and renderer.cache.diffuseRT) or false)
+        imports.dxSetShaderValue(syncShader, "vSource2", (renderer.cache.isVirtualRendering and renderer.cache.emissiveRT) or false)
     end
     return true
 end
