@@ -52,10 +52,10 @@ end
 
 function renderer:syncShader(syncShader)
     if not syncShader then return false end
-    renderer:setVirtualRendering(_, syncShader, syncer.librarySerial)
-    renderer:setTimeSync(_, syncShader, syncer.librarySerial)
-    renderer:setServerTick(_, syncShader, syncer.librarySerial)
-    renderer:setMinuteDuration(_, syncShader, syncer.librarySerial)
+    renderer:setVirtualRendering(_, _. syncShader, syncer.librarySerial)
+    renderer:setTimeSync(_, _, syncShader, syncer.librarySerial)
+    renderer:setServerTick(_, _, syncShader, syncer.librarySerial)
+    renderer:setMinuteDuration(_, _, syncShader, syncer.librarySerial)
     return true
 end
 
@@ -89,7 +89,7 @@ function renderer:setVirtualRendering(state, rtModes, syncShader, isInternal)
             end
         end
         for i, j in imports.pairs(shader.buffer.shader) do
-            renderer:setVirtualRendering(_, i, syncer.librarySerial)
+            renderer:setVirtualRendering(_, _, i, syncer.librarySerial)
         end
     else
         local isExternalResource = sourceResource and (sourceResource ~= resource)
