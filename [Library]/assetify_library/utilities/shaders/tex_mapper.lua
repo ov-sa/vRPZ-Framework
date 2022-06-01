@@ -159,7 +159,8 @@ shaderRW[identifier] = function(shaderMaps)
     };
     struct Export {
         float4 World : COLOR0;
-        float4 Render : COLOR1;
+        float4 Diffuse : COLOR1;
+        float4 Emissive : COLOR2;
     };
 
 
@@ -170,7 +171,7 @@ shaderRW[identifier] = function(shaderMaps)
     Export PSHandler(PSInput PS) : COLOR0 {
         Export output;
         ]]..handlerBody..handlerFooter..[[
-        output.Render = vRenderingEnabled ? sampledTexel : 0;
+        output.Diffuse = vRenderingEnabled ? sampledTexel : 0;
         sampledTexel.rgb *= MTAGetWeatherValue();
         output.World = saturate(sampledTexel);
         return output;

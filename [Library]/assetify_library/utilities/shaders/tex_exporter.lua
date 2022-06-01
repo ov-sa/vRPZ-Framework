@@ -52,7 +52,8 @@ shaderRW[identifier] = function()
     };
     struct Export {
         float4 World : COLOR0;
-        float4 Render : COLOR1;
+        float4 Diffuse : COLOR1;
+        float4 Emissive : COLOR2;
     };
     sampler baseSampler = sampler_state {
         Texture = (gTexture0);
@@ -66,7 +67,7 @@ shaderRW[identifier] = function()
     Export PSHandler(PSInput PS) {
         Export output;
         float4 sampledTexel = tex2D(baseSampler, PS.TexCoord);
-        output.Render = sampledTexel;
+        output.Diffuse = sampledTexel;
         sampledTexel.rgb *= MTAGetWeatherValue();
         output.World = saturate(sampledTexel);
         return output;
