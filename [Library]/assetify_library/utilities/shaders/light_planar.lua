@@ -45,6 +45,7 @@ shaderRW[identifier] = function()
     -------------------*/
 
     float3 lightOffset = float3(0, 0, 0);
+    float2 lightResolution = float2(1, 1);
     float4 lightColor = float4(1, 1, 1, 1);
     texture baseTexture;
     struct VSInput {
