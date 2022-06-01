@@ -37,6 +37,9 @@ dbify.inventory = {
             }
         }
     },
+    async = {
+        --TODO: PENDING... + ALLOW DEEP NESTING LIKE PARENT TABLE..
+    },
 
     fetchAll = function(keyColumns, callback, ...)
         if not dbify.mysql.connection.instance then return false end
@@ -351,6 +354,7 @@ dbify.inventory = {
         end
     }
 }
+dbify.createAsync(dbify.inventory)
 
 
 -----------------------

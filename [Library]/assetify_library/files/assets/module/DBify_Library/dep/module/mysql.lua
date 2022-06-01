@@ -51,7 +51,7 @@ dbify.mysql = {
         instance = imports.dbConnect("mysql", "dbname="..(dbify.settings.credentials.database)..";host="..(dbify.settings.credentials.host)..";port="..(dbify.settings.credentials.port)..";charset=utf8;", dbify.settings.credentials.username, dbify.settings.credentials.password, dbify.settings.credentials.options) or false
     },
     async = {
-        --TODO: PENDING...
+        --TODO: PENDING... + ALLOW DEEP NESTING LIKE PARENT TABLE..
     },
 
     table = {
