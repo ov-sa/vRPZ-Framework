@@ -100,9 +100,9 @@ function renderer:setVirtualRendering(state, rtModes, syncShader, isInternal)
         imports.dxSetShaderValue(syncShader, "vRenderingEnabled", (renderer.cache.isVirtualRendering and true) or false)
         imports.dxSetShaderValue(syncShader, "vSource0", vSource0)
         imports.dxSetShaderValue(syncShader, "vSource1", vSource1)
-        imports.dxSetShaderValue(syncShader, "vSource1RTEnabled", (vSource1 and true) or false)
+        imports.dxSetShaderValue(syncShader, "vSource1Enabled", (vSource1 and true) or false)
         imports.dxSetShaderValue(syncShader, "vSource2", vSource2)
-        imports.dxSetShaderValue(syncShader, "vSource2RTEnabled", (vSource2 and true) or false)
+        imports.dxSetShaderValue(syncShader, "vSource2Enabled", (vSource2 and true) or false)
     end
     return true
 end
