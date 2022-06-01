@@ -49,6 +49,15 @@ if localPlayer then
         scoped = {}
     }
 
+
+    function manager:setElementScoped(element)
+        if not sourceResource or (sourceResource == resource) then return false end
+        manager.buffer.instance[element] = sourceResource
+        manager.buffer.scoped[sourceResource] = manager.buffer.scoped[sourceResource] or {}
+        manager.buffer.scoped[sourceResource][element] = true
+        return true
+    end
+
     function manager:clearElementBuffer(element, isResource)
         if not element then return false end
         if isResource then
@@ -405,11 +414,7 @@ if localPlayer then
         local cSound = imports.playSound(cAsset.unSynced.rwCache.sound[(cAsset.unSynced.assetCache[soundCategory][soundIndex].cAsset.rwPaths.sound)], ...)
         if cSound then
             if soundVolume then imports.setSoundVolume(cSound, soundVolume) end
-            if isScoped and sourceResource and (sourceResource ~= resource) then
-                manager.buffer.instance[cSound] = sourceResource
-                manager.buffer.scoped[sourceResource] = manager.buffer.scoped[sourceResource] or {}
-                manager.buffer.scoped[sourceResource][cSound] = true
-            end
+            if isScoped then manager:setElementScoped(cSound) end
         end
         return cSound
     end
@@ -422,11 +427,7 @@ if localPlayer then
         local cSound = imports.playSound3D(cAsset.unSynced.rwCache.sound[(cAsset.unSynced.assetCache[soundCategory][soundIndex].cAsset.rwPaths.sound)], ...)
         if cSound then
             if soundVolume then imports.setSoundVolume(cSound, soundVolume) end
-            if isScoped and sourceResource and (sourceResource ~= resource) then
-                manager.buffer.instance[cSound] = sourceResource
-                manager.buffer.scoped[sourceResource] = manager.buffer.scoped[sourceResource] or {}
-                manager.buffer.scoped[sourceResource][cSound] = true
-            end
+            if isScoped then manager:setElementScoped(cSound) end
         end
         return cSound
     end
