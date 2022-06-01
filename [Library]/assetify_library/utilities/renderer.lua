@@ -23,6 +23,7 @@ local imports = {
     addEventHandler = addEventHandler,
     removeEventHandler = removeEventHandler,
     dxCreateScreenSource = dxCreateScreenSource,
+    dxCreateRenderTarget = dxCreateRenderTarget,
     dxUpdateScreenSource = dxUpdateScreenSource,
     dxSetShaderValue = dxSetShaderValue
 }
@@ -65,13 +66,17 @@ function renderer:setVirtualRendering(state, syncShader, isInternal)
         renderer.cache.isVirtualRendering = state
         if renderer.cache.isVirtualRendering then
             renderer.cache.virtualSource = imports.dxCreateScreenSource(renderer.resolution[1], renderer.resolution[2])
+            renderer.cache.virtualSourceRT = imports.dxCreateRenderTarget(renderer.resolution[1], renderer.resolution[2], true)
             imports.addEventHandler("onClientHUDRender", root, renderer.render)
         else
             imports.removeEventHandler("onClientHUDRender", root, renderer.render)
             if renderer.cache.virtualSource and imports.isElement(renderer.cache.virtualSource) then
                 imports.destroyElement(renderer.cache.virtualSource)
             end
-            renderer.cache.virtualSource = nil
+            if renderer.cache.virtualSourceRT and imports.isElement(renderer.cache.virtualSourceRT) then
+                imports.destroyElement(renderer.cache.virtualSourceRT)
+            end
+            renderer.cache.virtualSource, renderer.cache.virtualSourceRT = nil, nil
         end
         for i, j in imports.pairs(shader.buffer.shader) do
             renderer:setVirtualRendering(_, i, syncer.librarySerial)
@@ -83,6 +88,7 @@ function renderer:setVirtualRendering(state, syncShader, isInternal)
         end
         imports.dxSetShaderValue(syncShader, "vRenderingEnabled", (renderer.cache.isVirtualRendering and true) or false)
         imports.dxSetShaderValue(syncShader, "vSource0", (renderer.cache.isVirtualRendering and renderer.cache.virtualSource) or false)
+        imports.dxSetShaderValue(syncShader, "vSource1", (renderer.cache.isVirtualRendering and renderer.cache.virtualSourceRT) or false)
     end
     return true
 end
