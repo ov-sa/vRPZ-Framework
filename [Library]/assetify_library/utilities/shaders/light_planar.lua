@@ -51,10 +51,10 @@ shaderRW[identifier] = function()
     sampler baseSampler = sampler_state {
         Texture = baseTexture;
     };
-    sampler vSourceSampler = sampler_state {
+    sampler vSource0Sampler = sampler_state {
         Texture = (vSource0);
     };
-    sampler vSourceRTSampler = sampler_state {
+    sampler vSource1Sampler = sampler_state {
         Texture = (vSource1);
     };
     struct VSInput {
@@ -89,7 +89,7 @@ shaderRW[identifier] = function()
         float4 sampledTexel = tex2D(baseSampler, PS.TexCoord.xy);
         sampledTexel.rgb = pow(sampledTexel.rgb*1.5, 1.5);
         if (vRenderingEnabled) {
-            float4 sourceTex = tex2D(vSource1RTEnabled ? vSourceRTSampler : vSourceSampler, PS.TexCoord.xy);
+            float4 sourceTex = tex2D(vSource1RTEnabled ? vSource1Sampler : vSource0Sampler, PS.TexCoord.xy);
             sampledTexel.rgb *= lerp(sampledTexel.rgb, sourceTex.rgb*2.5, 0.95);
         }
         sampledTexel *= lightColor;
