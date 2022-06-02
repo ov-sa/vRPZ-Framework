@@ -27,18 +27,16 @@ string.parse = function(rawString)
     return imports.tonumber(rawString) or rawString
 end
 
-dbify.createAsync = function(module)
-    if not module or not module.async then return false end
-    for i, j in imports.pairs(module.async) do
-        module.async[i] = function(cThread, ...)
-            local cArgs = {...}
-            imports.table.insert(cArgs, j, function(...) return cThread:resolve(...) end)
-            thread:create(function(self)
-                module[i](cArgs)
-            end):resume()
-        end
+dbify.parseArgs = function(...)
+    local rawArgs = {...}
+    local cThread, callbackIndex = rawArgs[2], imports.tonumber(rawArgs[1])
+    if cThread and thread:isInstance(cThread) then
+        if not callbackIndex then return false end
+        imports.table.remove(rawArgs, 1)
+        imports.table.remove(rawArgs, 2)
+        imports.table.insert(rawArgs, callbackIndex, function(...) return cThread:resolve(...) end)
     end
-    return true
+    return imports.unpack(rawArgs)
 end
 
 
