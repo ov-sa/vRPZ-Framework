@@ -29,7 +29,8 @@ CPlayer.fetch = function(cThread, serial)
     return result
 end
 
-CPlayer.setData = function(serial, serialDatas)
+CPlayer.setData = function(cThread, serial, serialDatas)
+    if not cThread then return false end
     local result = cThread:await(dbify.serial.setData(cThread, serial, serialDatas))
     if result and CPlayer.CBuffer[serial] then
         for i = 1, #serialDatas, 1 do
@@ -40,19 +41,16 @@ CPlayer.setData = function(serial, serialDatas)
     return result
 end
 
-CPlayer.getData = function(serial, serialDatas, callback, ...)
-    dbify.serial.getData(serial, serialDatas, function(result, args)
-        local cbRef = callback
-        if (cbRef and (imports.type(cbRef) == "function")) then
-            cbRef(result, args)
+CPlayer.getData = function(cThread, serial, serialDatas)
+    if not cThread then return false end
+    local result = cThread:await(dbify.serial.getData(cThread, serial, serialDatas))
+    if result and CPlayer.CBuffer[serial] then
+        for i = 1, #serialDatas, 1 do
+            local j = serialDatas[i]
+            CPlayer.CBuffer[serial][j] = result[j]
         end
-        if result and CPlayer.CBuffer[serial] then
-            for i, j in imports.pairs(serialDatas) do
-                CPlayer.CBuffer[serial][j] = result[j]
-            end
-        end
-    end, ...)
-    return true
+    end
+    return result
 end
 
 CPlayer.getSerial = function(player)

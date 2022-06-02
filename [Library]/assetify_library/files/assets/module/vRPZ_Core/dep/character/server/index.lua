@@ -68,7 +68,7 @@ CCharacter.getData = function(cThread, characterID, characterDatas)
     if result and CCharacter.CBuffer[characterID] then
         for i = 1, #characterDatas, 1 do
             local j = characterDatas[i]
-            CCharacter.CBuffer[characterID][(j[1])] = result[(j[1])]
+            CCharacter.CBuffer[characterID][j] = result[j]
         end
     end
     return result

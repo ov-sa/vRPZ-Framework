@@ -19,11 +19,12 @@ local imports = {
 --[[ Module: Inventory ]]--
 ---------------------------
 
-CInventory.fetch = function(inventoryID, ...)
-    imports.dbify.inventory.fetchAll({
+CInventory.fetch = function(cThread, inventoryID)
+    if not cThread then return false end
+    local result = cThread:await(imports.dbify.inventory.fetchAll(cThread, {
         {imports.dbify.inventory.connection.keyColumn, inventoryID}
-    }, ...)
-    return true
+    }))
+    return result
 end
 CInventory.ensureItems = imports.dbify.inventory.ensureItems
 CInventory.create = imports.dbify.inventory.create
