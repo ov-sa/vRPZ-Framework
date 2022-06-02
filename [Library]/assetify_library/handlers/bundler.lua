@@ -272,10 +272,10 @@ function onBundleLibrary()
                     local j = moduleTypes[i]
                     if cAsset.manifestData.assetDeps.script[j] then
                         for k = 1, #cAsset.manifestData.assetDeps.script[j], 1 do
-                            local rwData = assetify.imports.loadstring(assetify.getAssetDep("module", assetName, "script", j, k))
-                            if not assetify.imports.pcall(rwData) then
+                            local rwData = assetify.getAssetDep("module", assetName, "script", j, k)
+                            if not assetify.imports.pcall(assetify.imports.loadstring(rwData)) then
                                 assetify.imports.print("[Module: "..assetName.."] "..cAsset.manifestData.assetDeps.script[j][k].." ("..j..")")
-                                assetify.imports.assert(rwData)
+                                assetify.imports.assert(assetify.imports.loadstring(rwData))
                             end
                         end
                     end
