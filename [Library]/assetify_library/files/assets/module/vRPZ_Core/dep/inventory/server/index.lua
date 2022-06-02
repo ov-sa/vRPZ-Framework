@@ -26,6 +26,7 @@ CInventory.fetch = function(cThread, inventoryID)
     }))
     return result
 end
+--TODO: ADD ASYNC SUPPORT FOR ALL THESE...
 CInventory.ensureItems = imports.dbify.inventory.ensureItems
 CInventory.create = imports.dbify.inventory.create
 CInventory.delete = imports.dbify.inventory.delete

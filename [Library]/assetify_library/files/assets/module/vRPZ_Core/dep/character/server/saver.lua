@@ -101,7 +101,7 @@ CCharacter.loadInventory = function(player, depDatas, callback)
                 imports.setElementData(args[1], "Item:"..(CInventory.CRefs.ref[i]), imports.tonumber(j[(imports.dbify.inventory.connection.itemFormat.counter)]) or 0)
             end
             if callback and (imports.type(callback) == "function") then
-                cbRef(true, args[1], args[2])
+                cbRef(true)
             end
         end, args[1], args[2], result)
     end, true, player, depDatas)
