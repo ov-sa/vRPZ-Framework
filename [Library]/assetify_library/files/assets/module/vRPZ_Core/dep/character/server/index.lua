@@ -16,50 +16,35 @@ local imports = {
 
 CCharacter.CBuffer = {}
 
-CCharacter.fetch = function(cThread, characterID, ...)
+CCharacter.fetch = function(cThread, characterID)
     if not cThread then return false end
-    cThread:await(imports.dbify.character.fetchAll(cThread, {
+    return cThread:await(imports.dbify.character.fetchAll(cThread, {
         {imports.dbify.character.connection.keyColumn, characterID}
-    }, ...))
-    return true
+    }))
 end
 
-CCharacter.fetchOwned = function(cThread, serial, ...)
+CCharacter.fetchOwned = function(cThread, serial)
     if not cThread then return false end
-    cThread:await(imports.dbify.character.fetchAll(cThread, {
+    return cThread:await(imports.dbify.character.fetchAll(cThread, {
         {"owner", serial}
-    }, ...))
-    return true
+    }))
 end
 
-CCharacter.create = function(cThread, serial, callback, ...)
+CCharacter.create = function(cThread, serial)
     if not cThread then return false end
     if (not serial or (imports.type(serial) ~= "string")) then return false end
-    cThread:await(imports.dbify.character.create(cThread, function(characterID, args)
-        CCharacter.CBuffer[characterID] = {
-            {"owner", args[1]}
-        }
-        imports.dbify.character.setData(characterID, CCharacter.CBuffer[characterID])
-        local cbRef = callback
-        if (cbRef and (imports.type(cbRef) == "function")) then
-            imports.table.remove(args, 1)
-            cbRef(characterID, args)
-        end
-    end, serial, ...))
-    return true
+    local characterID = cThread:await(imports.dbify.character.create(cThread)
+    CCharacter.CBuffer[characterID] = {
+        {"owner", serial}
+    }
+    cThread:await(imports.dbify.character.setData(cThread, characterID, CCharacter.CBuffer[characterID]))
+    return characterID
 end
 
-CCharacter.delete = function(cThread, characterID, callback, ...)
+CCharacter.delete = function(cThread, characterID)
     if not cThread then return false end
-    cThread:await(imports.dbify.character.delete(cThread, characterID, function(result, args)
-        if result then
-            CCharacter.CBuffer[characterID] = nil
-        end
-        local cbRef = callback
-        if (cbRef and (imports.type(cbRef) == "function")) then
-            cbRef(result, args)
-        end
-    end, ...))
+    cThread:await(imports.dbify.character.delete(cThread, characterID))
+    CCharacter.CBuffer[characterID] = nil
     return true
 end
 
