@@ -40,11 +40,11 @@ dbify.vehicle = {
         if not callback or (imports.type(callback) ~= "function") then return false end
         local promise = function()
             imports.dbQuery(function(queryHandler, arguments)
-                local callbackReference = callback
+                local cbRef = callback
                 local _, _, vehicleID = imports.dbPoll(queryHandler, 0)
                 local result = vehicleID or false
-                if callbackReference and (imports.type(callbackReference) == "function") then
-                    callbackReference(result, arguments)
+                if cbRef and (imports.type(cbRef) == "function") then
+                    cbRef(result, arguments)
                 end
             end, {cArgs}, dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(NULL)", dbify.vehicle.connection.table, dbify.vehicle.connection.keyColumn)
             return true
@@ -59,15 +59,15 @@ dbify.vehicle = {
         if not vehicleID or (imports.type(vehicleID) ~= "number") then return false end
         local promise = function()
             return dbify.vehicle.getData(vehicleID, {dbify.vehicle.connection.keyColumn}, function(result, arguments)
-                local callbackReference = callback
+                local cbRef = callback
                 if result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.vehicle.connection.table, dbify.vehicle.connection.keyColumn, vehicleID)
-                    if callbackReference and (imports.type(callbackReference) == "function") then
-                        callbackReference(result, arguments)
+                    if cbRef and (imports.type(cbRef) == "function") then
+                        cbRef(result, arguments)
                     end
                 else
-                    if callbackReference and (imports.type(callbackReference) == "function") then
-                        callbackReference(false, arguments)
+                    if cbRef and (imports.type(cbRef) == "function") then
+                        cbRef(false, arguments)
                     end
                 end
             end, imports.unpack(cArgs))

@@ -36,10 +36,10 @@ CPlayer.setData = function(serial, serialDatas, callback, ...)
                 CPlayer.CBuffer[serial][(j[1])] = j[2]
             end
         end
-        local callbackReference = callback
-        if (callbackReference and (imports.type(callbackReference) == "function")) then
+        local cbRef = callback
+        if (cbRef and (imports.type(cbRef) == "function")) then
             imports.table.remove(args, 1)
-            callbackReference(result, args)
+            cbRef(result, args)
         end
     end, serialDatas, ...)
     return true
@@ -47,9 +47,9 @@ end
 
 CPlayer.getData = function(serial, serialDatas, callback, ...)
     dbify.serial.getData(serial, serialDatas, function(result, args)
-        local callbackReference = callback
-        if (callbackReference and (imports.type(callbackReference) == "function")) then
-            callbackReference(result, args)
+        local cbRef = callback
+        if (cbRef and (imports.type(cbRef) == "function")) then
+            cbRef(result, args)
         end
         if result and CPlayer.CBuffer[serial] then
             for i, j in imports.pairs(serialDatas) do

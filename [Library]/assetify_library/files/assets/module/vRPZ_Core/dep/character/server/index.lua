@@ -37,10 +37,10 @@ CCharacter.create = function(serial, callback, ...)
             {"owner", args[1]}
         }
         imports.dbify.character.setData(characterID, CCharacter.CBuffer[characterID])
-        local callbackReference = callback
-        if (callbackReference and (imports.type(callbackReference) == "function")) then
+        local cbRef = callback
+        if (cbRef and (imports.type(cbRef) == "function")) then
             imports.table.remove(args, 1)
-            callbackReference(characterID, args)
+            cbRef(characterID, args)
         end
     end, serial, ...)
     return true
@@ -51,9 +51,9 @@ CCharacter.delete = function(characterID, callback, ...)
         if result then
             CCharacter.CBuffer[characterID] = nil
         end
-        local callbackReference = callback
-        if (callbackReference and (imports.type(callbackReference) == "function")) then
-            callbackReference(result, args)
+        local cbRef = callback
+        if (cbRef and (imports.type(cbRef) == "function")) then
+            cbRef(result, args)
         end
     end, ...)
     return true
@@ -67,10 +67,10 @@ CCharacter.setData = function(characterID, characterDatas, callback, ...)
                 CCharacter.CBuffer[characterID][(j[1])] = j[2]
             end
         end
-        local callbackReference = callback
-        if (callbackReference and (imports.type(callbackReference) == "function")) then
+        local cbRef = callback
+        if (cbRef and (imports.type(cbRef) == "function")) then
             imports.table.remove(args, 1)
-            callbackReference(result, args)
+            cbRef(result, args)
         end
     end, characterDatas, ...)
     return true
@@ -78,9 +78,9 @@ end
 
 CCharacter.getData = function(characterID, characterDatas, callback, ...)
     imports.dbify.character.getData(characterID, characterDatas, function(result, args)
-        local callbackReference = callback
-        if (callbackReference and (imports.type(callbackReference) == "function")) then
-            callbackReference(result, args)
+        local cbRef = callback
+        if (cbRef and (imports.type(cbRef) == "function")) then
+            cbRef(result, args)
         end
         if result and CCharacter.CBuffer[characterID] then
             for i, j in imports.pairs(characterDatas) do

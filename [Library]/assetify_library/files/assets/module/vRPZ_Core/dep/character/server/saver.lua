@@ -82,15 +82,15 @@ end
 CCharacter.loadInventory = function(player, depDatas, callback)
     if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") then return false end
     CInventory.getItemProperty(depDatas.inventoryID, CInventory.CRefs.index, {imports.dbify.inventory.connection.itemFormat.counter}, function(result, args)
-        local callbackReference = callback
+        local cbRef = callback
         if not result and (CInventory.CRefs.index > 0) then
             if callback and (imports.type(callback) == "function") then
-                callbackReference(false, args[1], args[2])
+                cbRef(false, args[1], args[2])
             end
             return false
         end
         CInventory.getData(args[2].inventoryID, {"max_slots", "slots"}, function(result, args)
-            local callbackReference = callback
+            local cbRef = callback
             result = result or {}
             result.max_slots, result.slots = imports.math.max(CInventory.fetchMaxSlotsMultiplier(), imports.tonumber(result.max_slots) or 0), (result.slots and imports.json.decode(result.slots)) or {}
             CInventory.CBuffer[(args[2].characterID)] = {
@@ -101,7 +101,7 @@ CCharacter.loadInventory = function(player, depDatas, callback)
                 imports.setElementData(args[1], "Item:"..(CInventory.CRefs.ref[i]), imports.tonumber(j[(imports.dbify.inventory.connection.itemFormat.counter)]) or 0)
             end
             if callback and (imports.type(callback) == "function") then
-                callbackReference(true, args[1], args[2])
+                cbRef(true, args[1], args[2])
             end
         end, args[1], args[2], result)
     end, true, player, depDatas)

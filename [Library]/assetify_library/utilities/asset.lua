@@ -311,7 +311,7 @@ else
         if cAssetPack.manifestData then
             cAssetPack.rwDatas = {}
             thread:create(function(cThread)
-                local callbackReference = callback
+                local cbRef = callback
                 for i = 1, #cAssetPack.manifestData, 1 do
                     local assetName = cAssetPack.manifestData[i]
                     local assetPath = (asset.references.root)..imports.string.lower(assetType).."/"..assetName.."/"
@@ -476,8 +476,8 @@ else
                     end
                 end
                 assetPack.assetPack = cAssetPack
-                if callbackReference and (imports.type(callbackReference) == "function") then
-                    callbackReference(true, assetType)
+                if cbRef and (imports.type(cbRef) == "function") then
+                    cbRef(true, assetType)
                 end
             end):resume({
                 executions = downloadSettings.buildRate,
@@ -485,8 +485,8 @@ else
             })
             return true
         end
-        if callbackReference and (imports.type(callbackReference) == "function") then
-            callbackReference(false, assetType)
+        if cbRef and (imports.type(cbRef) == "function") then
+            cbRef(false, assetType)
         end
         return false
     end

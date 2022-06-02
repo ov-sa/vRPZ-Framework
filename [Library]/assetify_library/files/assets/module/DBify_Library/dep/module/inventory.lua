@@ -56,7 +56,7 @@ dbify.inventory = {
         if not items or (imports.type(items) ~= "table") then return false end
         local promise = function()
             imports.dbQuery(function(queryHandler, arguments)
-                local callbackReference = callback
+                local cbRef = callback
                 local result = imports.dbPoll(queryHandler, 0)
                 local itemsToBeAdded, itemsToBeDeleted = {}, {}
                 if result and (#result > 0) then
@@ -79,21 +79,21 @@ dbify.inventory = {
                             for i = 1, #arguments[1].items, 1 do
                                 local j = arguments[1].items[i]
                                 dbify.mysql.column.isValid(dbify.inventory.connection.table, j, function(isValid, arguments)
-                                    local callbackReference = callback
+                                    local cbRef = callback
                                     if not isValid then
                                         imports.dbExec(dbify.mysql.connection.instance, "ALTER TABLE `??` ADD COLUMN `??` TEXT", dbify.inventory.connection.table, arguments[1])
                                     end
                                     if arguments[2] then
-                                        if callbackReference and (imports.type(callbackReference) == "function") then
-                                            callbackReference(true, arguments[2])
+                                        if cbRef and (imports.type(cbRef) == "function") then
+                                            cbRef(true, arguments[2])
                                         end
                                     end
                                 end, j, ((i >= #arguments[1].items) and arguments[2]) or false)
                             end
                         else
-                            local callbackReference = callback
-                            if callbackReference and (imports.type(callbackReference) == "function") then
-                                callbackReference(result, arguments[2])
+                            local cbRef = callback
+                            if cbRef and (imports.type(cbRef) == "function") then
+                                cbRef(result, arguments[2])
                             end
                         end
                     end, arguments[1], arguments[2])
@@ -101,13 +101,13 @@ dbify.inventory = {
                     for i = 1, #arguments[1].items, 1 do
                         local j = arguments[1].items[i]
                         dbify.mysql.column.isValid(dbify.inventory.connection.table, j, function(isValid, arguments)
-                            local callbackReference = callback
+                            local cbRef = callback
                             if not isValid then
                                 imports.dbExec(dbify.mysql.connection.instance, "ALTER TABLE `??` ADD COLUMN `??` TEXT", dbify.inventory.connection.table, arguments[1])
                             end
                             if arguments[2] then
-                                if callbackReference and (imports.type(callbackReference) == "function") then
-                                    callbackReference(true, arguments[2])
+                                if cbRef and (imports.type(cbRef) == "function") then
+                                    cbRef(true, arguments[2])
                                 end
                             end
                         end, j, ((i >= #arguments[1].items) and arguments[2]) or false)
@@ -128,11 +128,11 @@ dbify.inventory = {
         if not callback or (imports.type(callback) ~= "function") then return false end
         local promise = function()
             imports.dbQuery(function(queryHandler, arguments)
-                local callbackReference = callback
+                local cbRef = callback
                 local _, _, inventoryID = imports.dbPoll(queryHandler, 0)
                 local result = inventoryID or false
-                if callbackReference and (imports.type(callbackReference) == "function") then
-                    callbackReference(result, arguments)
+                if cbRef and (imports.type(cbRef) == "function") then
+                    cbRef(result, arguments)
                 end
             end, {cArgs}, dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(NULL)", dbify.inventory.connection.table, dbify.inventory.connection.keyColumn)
             return true
@@ -147,15 +147,15 @@ dbify.inventory = {
         if not inventoryID or (imports.type(inventoryID) ~= "number") then return false end
         local promise = function()
             return dbify.inventory.getData(inventoryID, {dbify.inventory.connection.keyColumn}, function(result, arguments)
-                local callbackReference = callback
+                local cbRef = callback
                 if result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.inventory.connection.table, dbify.inventory.connection.keyColumn, inventoryID)
-                    if callbackReference and (imports.type(callbackReference) == "function") then
-                        callbackReference(result, arguments)
+                    if cbRef and (imports.type(cbRef) == "function") then
+                        cbRef(result, arguments)
                     end
                 else
-                    if callbackReference and (imports.type(callbackReference) == "function") then
-                        callbackReference(false, arguments)
+                    if cbRef and (imports.type(cbRef) == "function") then
+                        cbRef(false, arguments)
                     end
                 end
             end, imports.unpack(cArgs))
@@ -214,15 +214,15 @@ dbify.inventory = {
                             arguments[1].items[i][2] = imports.json.encode(prevItemData)
                         end
                         dbify.inventory.setData(arguments[1].inventoryID, arguments[1].items, function(result, arguments)
-                            local callbackReference = callback
-                            if callbackReference and (imports.type(callbackReference) == "function") then
-                                callbackReference(result, arguments)
+                            local cbRef = callback
+                            if cbRef and (imports.type(cbRef) == "function") then
+                                cbRef(result, arguments)
                             end
                         end, arguments[2])
                     else
-                        local callbackReference = callback
-                        if callbackReference and (imports.type(callbackReference) == "function") then
-                            callbackReference(false, arguments[2])
+                        local cbRef = callback
+                        if cbRef and (imports.type(cbRef) == "function") then
+                            cbRef(false, arguments[2])
                         end
                     end
                 end, {
@@ -241,7 +241,7 @@ dbify.inventory = {
                     items[i] = "item_"..imports.tostring(j)
                 end
                 return dbify.inventory.getData(inventoryID, items, function(result, arguments)
-                    local callbackReference = callback
+                    local cbRef = callback
                     if result then
                         local properties = {}
                         for i, j in imports.pairs(result) do
@@ -274,19 +274,19 @@ dbify.inventory = {
                         end
                         if arguments[1].processType == "set" then
                             dbify.inventory.setData(arguments[1].inventoryID, properties, function(result, arguments)
-                                local callbackReference = callback
-                                if callbackReference and (imports.type(callbackReference) == "function") then
-                                    callbackReference(result, arguments)
+                                local cbRef = callback
+                                if cbRef and (imports.type(cbRef) == "function") then
+                                    cbRef(result, arguments)
                                 end
                             end, arguments[2])
                         else
-                            if callbackReference and (imports.type(callbackReference) == "function") then
-                                callbackReference(properties, arguments[2])
+                            if cbRef and (imports.type(cbRef) == "function") then
+                                cbRef(properties, arguments[2])
                             end
                         end
                     else
-                        if callbackReference and (imports.type(callbackReference) == "function") then
-                            callbackReference(false, arguments[2])
+                        if cbRef and (imports.type(cbRef) == "function") then
+                            cbRef(false, arguments[2])
                         end
                     end
                 end, {
@@ -305,7 +305,7 @@ dbify.inventory = {
                     items[i] = "item_"..imports.tostring(j)
                 end
                 return dbify.inventory.getData(inventoryID, items, function(result, arguments)
-                    local callbackReference = callback
+                    local cbRef = callback
                     if result then
                         local datas = {}
                         for i, j in imports.pairs(result) do
@@ -334,19 +334,19 @@ dbify.inventory = {
                         end
                         if arguments[1].processType == "set" then
                             dbify.inventory.setData(arguments[1].inventoryID, datas, function(result, arguments)
-                                local callbackReference = callback
-                                if callbackReference and (imports.type(callbackReference) == "function") then
-                                    callbackReference(result, arguments)
+                                local cbRef = callback
+                                if cbRef and (imports.type(cbRef) == "function") then
+                                    cbRef(result, arguments)
                                 end
                             end, arguments[2])
                         else
-                            if callbackReference and (imports.type(callbackReference) == "function") then
-                                callbackReference(datas, arguments[2])
+                            if cbRef and (imports.type(cbRef) == "function") then
+                                cbRef(datas, arguments[2])
                             end
                         end
                     else
-                        if callbackReference and (imports.type(callbackReference) == "function") then
-                            callbackReference(false, arguments[2])
+                        if cbRef and (imports.type(cbRef) == "function") then
+                            cbRef(false, arguments[2])
                         end
                     end
                 end, {
