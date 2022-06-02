@@ -45,8 +45,10 @@ local resumeTicks = {}
 
 imports.addEvent("Player:onDeleteCharacter", true)
 imports.addEventHandler("Player:onDeleteCharacter", root, function(characterID)
-    CInventory.delete(CCharacter.CBuffer[characterID].inventory)
-    CCharacter.delete(characterID)
+    imports.thread:create(function(self)
+        self:await(CInventory.delete(self, CCharacter.CBuffer[characterID].inventory))
+        self:await(CCharacter.delete(self, characterID))
+    end):resume()
 end)
 
 imports.addEvent("Player:onSaveCharacter", true)
