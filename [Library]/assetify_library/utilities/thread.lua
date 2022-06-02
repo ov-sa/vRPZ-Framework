@@ -118,7 +118,7 @@ function thread:sleep(duration)
     if self.timer and imports.isTimer(self.timer) then return false end
     self.timer = imports.setTimer(function()
         self:resume()
-    end, duration, 1, self)
+    end, duration, 1)
     self:pause()
     return true
 end
