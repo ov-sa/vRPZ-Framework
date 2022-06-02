@@ -53,18 +53,41 @@ CInventory.getData = function(cThread, inventoryID, inventoryDatas)
     return result
 end
 
---TODO: ...
-CInventory.addItem = function(cThread, inventoryID, inventoryDatas)
+CInventory.addItem = function(cThread, inventoryID, inventoryItems)
     if not cThread then return false end
-    local result = cThread:await(imports.dbify.inventory.getData(cThread, inventoryID, inventoryDatas)
+    local result = cThread:await(imports.dbify.inventory.item.add(cThread, inventoryID, inventoryItems)
     return result
 end
 
-CInventory.removeItem = imports.dbify.inventory.item.remove
-CInventory.setItemProperty = imports.dbify.inventory.item.setProperty
-CInventory.getItemProperty = imports.dbify.inventory.item.getProperty
-CInventory.setItemData = imports.dbify.inventory.item.setData
-CInventory.getItemData = imports.dbify.inventory.item.getData
+CInventory.removeItem = function(cThread, inventoryID, inventoryItems)
+    if not cThread then return false end
+    local result = cThread:await(imports.dbify.inventory.item.remove(cThread, inventoryID, inventoryItems)
+    return result
+end
+
+CInventory.setItemProperty = function(cThread, inventoryID, inventoryItems, itemProperties)
+    if not cThread then return false end
+    local result = cThread:await(imports.dbify.inventory.item.setProperty(cThread, inventoryID, inventoryItems, itemProperties)
+    return result
+end
+
+CInventory.getItemProperty = function(cThread, inventoryID, inventoryItems, itemProperties)
+    if not cThread then return false end
+    local result = cThread:await(imports.dbify.inventory.item.getProperty(cThread, inventoryID, inventoryItems, itemProperties)
+    return result
+end
+
+CInventory.setItemData = function(cThread, inventoryID, inventoryItems, itemDatas)
+    if not cThread then return false end
+    local result = cThread:await(imports.dbify.inventory.item.setData(cThread, inventoryID, inventoryItems, itemDatas)
+    return result
+end
+
+CInventory.getItemData = function(cThread, inventoryID, inventoryItems, itemDatas)
+    if not cThread then return false end
+    local result = cThread:await(imports.dbify.inventory.item.getData(cThread, inventoryID, inventoryItems, itemDatas)
+    return result
+end
 
 CInventory.fetchParentMaxSlots = function(parent)
     if not parent or not imports.isElement(parent) then return false end
