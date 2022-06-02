@@ -56,7 +56,9 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(character, char
     if not character or not characters or not characters[character] or characters[character].id then return false end
 
     local serial = CPlayer.getSerial(source)
+    local __source = source
     imports.thread:create(function(self)
+        local source = __source
         local characterID = CCharacter.create(self, serial)
         local inventoryID = CInventory.create(self)
         local bool = CCharacter.setData(self, characterID, {
@@ -150,7 +152,9 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
     end
     imports.collectgarbage()
 
+    local __source = source
     imports.thread:create(function(self)
+        local source = __source
         local characterID, inventoryID = characters[character].id, CCharacter.CBuffer[(characters[character].id)].inventory
         if not CCharacter.loadInventory(self, source, {characterID = characterID, inventoryID = inventoryID}) then
             imports.triggerEvent("Player:onToggleLoginUI", source)
