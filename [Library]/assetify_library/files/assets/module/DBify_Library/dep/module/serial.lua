@@ -25,69 +25,84 @@ dbify.serial = {
 
     fetchAll = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local cArgs = {dbify.parseArgs(2, ...)}
+        local isAsync, cArgs = {dbify.parseArgs(2, ...)}
         local keyColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
-        return dbify.mysql.table.fetchContents(dbify.serial.connection.table, keyColumns, callback, imports.unpack(cArgs))
+        local promise = function()
+            return dbify.mysql.table.fetchContents(dbify.serial.connection.table, keyColumns, callback, imports.unpack(cArgs))
+        end
+        return (isAsync and promise) or promise()
     end,
 
     create = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local cArgs = {dbify.parseArgs(2, ...)}
+        local isAsync, cArgs = {dbify.parseArgs(2, ...)}
         local serial, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not serial or (imports.type(serial) ~= "string") then return false end
-        return dbify.serial.getData(serial, {dbify.serial.connection.keyColumn}, function(result, arguments)
-            local callbackReference = callback
-            if not result then
-                result = imports.dbExec(dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(?)", dbify.serial.connection.table, dbify.serial.connection.keyColumn, serial)
-                if callbackReference and (imports.type(callbackReference) == "function") then
-                    callbackReference(result, arguments)
+        local promise = function()
+            return dbify.serial.getData(serial, {dbify.serial.connection.keyColumn}, function(result, arguments)
+                local callbackReference = callback
+                if not result then
+                    result = imports.dbExec(dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(?)", dbify.serial.connection.table, dbify.serial.connection.keyColumn, serial)
+                    if callbackReference and (imports.type(callbackReference) == "function") then
+                        callbackReference(result, arguments)
+                    end
+                else
+                    if callbackReference and (imports.type(callbackReference) == "function") then
+                        callbackReference(false, arguments)
+                    end
                 end
-            else
-                if callbackReference and (imports.type(callbackReference) == "function") then
-                    callbackReference(false, arguments)
-                end
-            end
-        end, imports.unpack(cArgs))
+            end, imports.unpack(cArgs))
+        end
+        return (isAsync and promise) or promise()
     end,
 
     delete = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local cArgs = {dbify.parseArgs(2, ...)}
+        local isAsync, cArgs = {dbify.parseArgs(2, ...)}
         local serial, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not serial or (imports.type(serial) ~= "string") then return false end
-        return dbify.serial.getData(serial, {dbify.serial.connection.keyColumn}, function(result, arguments)
-            local callbackReference = callback
-            if result then
-                result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.serial.connection.table, dbify.serial.connection.keyColumn, serial)
-                if callbackReference and (imports.type(callbackReference) == "function") then
-                    callbackReference(result, arguments)
+        local promise = function()
+            return dbify.serial.getData(serial, {dbify.serial.connection.keyColumn}, function(result, arguments)
+                local callbackReference = callback
+                if result then
+                    result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.serial.connection.table, dbify.serial.connection.keyColumn, serial)
+                    if callbackReference and (imports.type(callbackReference) == "function") then
+                        callbackReference(result, arguments)
+                    end
+                else
+                    if callbackReference and (imports.type(callbackReference) == "function") then
+                        callbackReference(false, arguments)
+                    end
                 end
-            else
-                if callbackReference and (imports.type(callbackReference) == "function") then
-                    callbackReference(false, arguments)
-                end
-            end
-        end, imports.unpack(cArgs))
+            end, imports.unpack(cArgs))
+        end
+        return (isAsync and promise) or promise()
     end,
 
     setData = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local cArgs = {dbify.parseArgs(3, ...)}
+        local isAsync, cArgs = {dbify.parseArgs(3, ...)}
         local serial, dataColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not serial or (imports.type(serial) ~= "string") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
-        return dbify.mysql.data.set(dbify.serial.connection.table, dataColumns, {
-            {dbify.serial.connection.keyColumn, serial}
-        }, callback, imports.unpack(cArgs))
+        local promise = function()
+            return dbify.mysql.data.set(dbify.serial.connection.table, dataColumns, {
+                {dbify.serial.connection.keyColumn, serial}
+            }, callback, imports.unpack(cArgs))
+        end
+        return (isAsync and promise) or promise()
     end,
 
     getData = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local cArgs = {dbify.parseArgs(3, ...)}
+        local isAsync, cArgs = {dbify.parseArgs(3, ...)}
         local serial, dataColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not serial or (imports.type(serial) ~= "string") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
-        return dbify.mysql.data.get(dbify.serial.connection.table, dataColumns, {
-            {dbify.serial.connection.keyColumn, serial}
-        }, true, callback, imports.unpack(cArgs))
+        local promise = function()
+            return dbify.mysql.data.get(dbify.serial.connection.table, dataColumns, {
+                {dbify.serial.connection.keyColumn, serial}
+            }, true, callback, imports.unpack(cArgs))
+        end
+        return (isAsync and promise) or promise()
     end
 }
 

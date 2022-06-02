@@ -41,14 +41,14 @@ dbify.inventory = {
 
     fetchAll = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local cArgs = {dbify.parseArgs(2, ...)}
+        local isAsync, cArgs = {dbify.parseArgs(2, ...)}
         local keyColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         return dbify.mysql.table.fetchContents(dbify.inventory.connection.table, keyColumns, callback, imports.unpack(cArgs))
     end,
 
     ensureItems = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local cArgs = {dbify.parseArgs(2, ...)}
+        local isAsync, cArgs = {dbify.parseArgs(2, ...)}
         local items, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not items or (imports.type(items) ~= "table") then return false end
         imports.dbQuery(function(queryHandler, arguments)
@@ -117,7 +117,7 @@ dbify.inventory = {
 
     create = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local cArgs = {dbify.parseArgs(1, ...)}
+        local isAsync, cArgs = {dbify.parseArgs(1, ...)}
         local callback = dbify.fetchArg(_, cArgs)
         if not callback or (imports.type(callback) ~= "function") then return false end
         imports.dbQuery(function(queryHandler, arguments)
@@ -133,7 +133,7 @@ dbify.inventory = {
 
     delete = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local cArgs = {dbify.parseArgs(2, ...)}
+        local isAsync, cArgs = {dbify.parseArgs(2, ...)}
         local inventoryID, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not inventoryID or (imports.type(inventoryID) ~= "number") then return false end
         return dbify.inventory.getData(inventoryID, {dbify.inventory.connection.keyColumn}, function(result, arguments)
@@ -153,7 +153,7 @@ dbify.inventory = {
 
     setData = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local cArgs = {dbify.parseArgs(3, ...)}
+        local isAsync, cArgs = {dbify.parseArgs(3, ...)}
         local inventoryID, dataColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not inventoryID or (imports.type(inventoryID) ~= "number") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
         return dbify.mysql.data.set(dbify.inventory.connection.table, dataColumns, {
@@ -163,7 +163,7 @@ dbify.inventory = {
 
     getData = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local cArgs = {dbify.parseArgs(3, ...)}
+        local isAsync, cArgs = {dbify.parseArgs(3, ...)}
         local inventoryID, dataColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not inventoryID or (imports.type(inventoryID) ~= "number") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
         return dbify.mysql.data.get(dbify.inventory.connection.table, dataColumns, {
@@ -340,37 +340,37 @@ dbify.inventory = {
         },
 
         add = function(...)
-            local cArgs = {dbify.parseArgs(3, ...)}
+            local isAsync, cArgs = {dbify.parseArgs(3, ...)}
             local inventoryID, items, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             return dbify.inventory.item.__utilities__.pushnpop(inventoryID, items, "push", callback, imports.unpack(cArgs))
         end,
 
         remove = function(...)
-            local cArgs = {dbify.parseArgs(3, ...)}
+            local isAsync, cArgs = {dbify.parseArgs(3, ...)}
             local inventoryID, items, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             return dbify.inventory.item.__utilities__.pushnpop(inventoryID, items, "pop", callback, imports.unpack(cArgs))
         end,
 
         setProperty = function(...)
-            local cArgs = {dbify.parseArgs(4, ...)}
+            local isAsync, cArgs = {dbify.parseArgs(4, ...)}
             local inventoryID, items, properties, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             return dbify.inventory.item.__utilities__.property_setnget(inventoryID, items, properties, "set", callback, imports.unpack(cArgs))
         end,
 
         getProperty = function(...)
-            local cArgs = {dbify.parseArgs(4, ...)}
+            local isAsync, cArgs = {dbify.parseArgs(4, ...)}
             local inventoryID, items, properties, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             return dbify.inventory.item.__utilities__.property_setnget(inventoryID, items, properties, "get", callback, imports.unpack(cArgs))
         end,
 
         setData = function(...)
-            local cArgs = {dbify.parseArgs(4, ...)}
+            local isAsync, cArgs = {dbify.parseArgs(4, ...)}
             local inventoryID, items, datas, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             return dbify.inventory.item.__utilities__.data_setnget(inventoryID, items, datas, "set", callback, imports.unpack(cArgs))
         end,
 
         getData = function(...)
-            local cArgs = {dbify.parseArgs(4, ...)}
+            local isAsync, cArgs = {dbify.parseArgs(4, ...)}
             local inventoryID, items, datas, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             return dbify.inventory.item.__utilities__.data_setnget(inventoryID, items, datas, "get", callback, imports.unpack(cArgs))
         end

@@ -35,7 +35,7 @@ thread = {
 thread.__index = thread
 
 thread.__pause = imports.coroutine.yield
-thread.__await = function(self, exec, ...)
+thread.__await = function(self, exec)
     if not exec or imports.type(exec) ~= "function" then return self:resolve(exec) end
     exec(self)
     self.isScheduled = true

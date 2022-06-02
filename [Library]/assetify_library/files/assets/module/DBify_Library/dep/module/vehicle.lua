@@ -25,14 +25,14 @@ dbify.vehicle = {
 
     fetchAll = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local cArgs = {dbify.parseArgs(2, ...)}
+        local isAsync, cArgs = {dbify.parseArgs(2, ...)}
         local keyColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         return dbify.mysql.table.fetchContents(dbify.vehicle.connection.table, keyColumns, callback, imports.unpack(cArgs))
     end,
 
     create = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local cArgs = {dbify.parseArgs(1, ...)}
+        local isAsync, cArgs = {dbify.parseArgs(1, ...)}
         local callback = dbify.fetchArg(_, cArgs)
         if not callback or (imports.type(callback) ~= "function") then return false end
         imports.dbQuery(function(queryHandler, arguments)
@@ -48,7 +48,7 @@ dbify.vehicle = {
 
     delete = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local cArgs = {dbify.parseArgs(2, ...)}
+        local isAsync, cArgs = {dbify.parseArgs(2, ...)}
         local vehicleID, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not vehicleID or (imports.type(vehicleID) ~= "number") then return false end
         return dbify.vehicle.getData(vehicleID, {dbify.vehicle.connection.keyColumn}, function(result, arguments)
@@ -68,7 +68,7 @@ dbify.vehicle = {
 
     setData = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local cArgs = {dbify.parseArgs(3, ...)}
+        local isAsync, cArgs = {dbify.parseArgs(3, ...)}
         local vehicleID, dataColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not vehicleID or (imports.type(vehicleID) ~= "number") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
         return dbify.mysql.data.set(dbify.vehicle.connection.table, dataColumns, {
@@ -78,7 +78,7 @@ dbify.vehicle = {
 
     getData = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local cArgs = {dbify.parseArgs(3, ...)}
+        local isAsync, cArgs = {dbify.parseArgs(3, ...)}
         local vehicleID, dataColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not vehicleID or (imports.type(vehicleID) ~= "number") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
         return dbify.mysql.data.get(dbify.vehicle.connection.table, dataColumns, {

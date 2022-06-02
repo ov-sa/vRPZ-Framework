@@ -33,8 +33,9 @@ dbify.parseArgs = function(callbackIndex, ...)
         if not callbackIndex then return false end
         imports.table.remove(rawArgs, 1)
         imports.table.insert(rawArgs, callbackIndex, function(...) return cThread:resolve(...) end)
+        return true, imports.unpack(rawArgs)
     end
-    return imports.unpack(rawArgs)
+    return false, imports.unpack(rawArgs)
 end
 
 dbify.fetchArg = function(index, pool)
@@ -58,7 +59,7 @@ dbify.mysql = {
     table = {
         isValid = function(...)
             if not dbify.mysql.connection.instance then return false end
-            local cArgs = {dbify.parseArgs(2, ...)}
+            local isAsync, cArgs = {dbify.parseArgs(2, ...)}
             local tableName, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             if not tableName or (imports.type(tableName) ~= "string") or not callback or (imports.type(callback) ~= "function") then return false end
             imports.dbQuery(function(queryHandler, arguments)
@@ -74,7 +75,7 @@ dbify.mysql = {
 
         fetchContents = function(...)
             if not dbify.mysql.connection.instance then return false end
-            local cArgs = {dbify.parseArgs(3, ...)}
+            local isAsync, cArgs = {dbify.parseArgs(3, ...)}
             local tableName, keyColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             if not tableName or (imports.type(tableName) ~= "string") or not callback or (imports.type(callback) ~= "function") then return false end
             keyColumns = ((keyColumns and (imports.type(keyColumns) == "table") and (#keyColumns > 0)) and keyColumns) or false
@@ -144,7 +145,7 @@ dbify.mysql = {
     column = {
         isValid = function(...)
             if not dbify.mysql.connection.instance then return false end
-            local cArgs = {dbify.parseArgs(3, ...)}
+            local isAsync, cArgs = {dbify.parseArgs(3, ...)}
             local tableName, columnName, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             if not tableName or (imports.type(tableName) ~= "string") or not columnName or (imports.type(columnName) ~= "string") or not callback or (imports.type(callback) ~= "function") then return false end
             return dbify.mysql.table.isValid(tableName, function(isValid, arguments)
@@ -168,7 +169,7 @@ dbify.mysql = {
 
         areValid = function(...)
             if not dbify.mysql.connection.instance then return false end
-            local cArgs = {dbify.parseArgs(3, ...)}
+            local isAsync, cArgs = {dbify.parseArgs(3, ...)}
             local tableName, columns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             if not tableName or (imports.type(tableName) ~= "string") or not columns or (imports.type(columns) ~= "table") or (#columns <= 0) or not callback or (imports.type(callback) ~= "function") then return false end
             return dbify.mysql.table.isValid(tableName, function(isValid, arguments)
@@ -199,7 +200,7 @@ dbify.mysql = {
 
         delete = function(...)
             if not dbify.mysql.connection.instance then return false end
-            local cArgs = {dbify.parseArgs(3, ...)}
+            local isAsync, cArgs = {dbify.parseArgs(3, ...)}
             local tableName, columns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             if not tableName or (imports.type(tableName) ~= "string") or not columns or (imports.type(columns) ~= "table") or (#columns <= 0) then return false end
             return dbify.mysql.table.isValid(tableName, function(isValid, arguments)
@@ -228,7 +229,7 @@ dbify.mysql = {
     data = {
         set = function(...)
             if not dbify.mysql.connection.instance then return false end
-            local cArgs = {dbify.parseArgs(4, ...)}
+            local isAsync, cArgs = {dbify.parseArgs(4, ...)}
             local tableName, dataColumns, keyColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             if not tableName or (imports.type(tableName) ~= "string") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) or not keyColumns or (imports.type(keyColumns) ~= "table") or (#keyColumns <= 0) then return false end
             local _validateKeyColumns, validateKeyColumns = {}, {}
@@ -287,7 +288,7 @@ dbify.mysql = {
 
         get = function(...)
             if not dbify.mysql.connection.instance then return false end
-            local cArgs = {dbify.parseArgs(5, ...)}
+            local isAsync, cArgs = {dbify.parseArgs(5, ...)}
             local tableName, dataColumns, keyColumns, soloFetch, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             if not tableName or (imports.type(tableName) ~= "string") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) or not keyColumns or (imports.type(keyColumns) ~= "table") or (#keyColumns <= 0) or not callback or (imports.type(callback) ~= "function") then return false end
             soloFetch = (soloFetch and true) or false
