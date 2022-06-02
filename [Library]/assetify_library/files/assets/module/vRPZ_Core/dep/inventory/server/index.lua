@@ -31,61 +31,61 @@ CInventory.ensureItems = imports.dbify.inventory.ensureItems
 
 CInventory.create = function(cThread)
     if not cThread then return false end
-    local inventoryID = cThread:await(imports.dbify.inventory.create(cThread)
+    local inventoryID = cThread:await(imports.dbify.inventory.create(cThread))
     return inventoryID
 end
 
 CInventory.delete = function(cThread, inventoryID)
     if not cThread then return false end
-    local result = cThread:await(imports.dbify.inventory.delete(cThread, inventoryID)
+    local result = cThread:await(imports.dbify.inventory.delete(cThread, inventoryID))
     return result
 end
 
 CInventory.setData = function(cThread, inventoryID, inventoryDatas)
     if not cThread then return false end
-    local result = cThread:await(imports.dbify.inventory.setData(cThread, inventoryID, inventoryDatas)
+    local result = cThread:await(imports.dbify.inventory.setData(cThread, inventoryID, inventoryDatas))
     return result
 end
 
 CInventory.getData = function(cThread, inventoryID, inventoryDatas)
     if not cThread then return false end
-    local result = cThread:await(imports.dbify.inventory.getData(cThread, inventoryID, inventoryDatas)
+    local result = cThread:await(imports.dbify.inventory.getData(cThread, inventoryID, inventoryDatas))
     return result
 end
 
 CInventory.addItem = function(cThread, inventoryID, inventoryItems)
     if not cThread then return false end
-    local result = cThread:await(imports.dbify.inventory.item.add(cThread, inventoryID, inventoryItems)
+    local result = cThread:await(imports.dbify.inventory.item.add(cThread, inventoryID, inventoryItems))
     return result
 end
 
 CInventory.removeItem = function(cThread, inventoryID, inventoryItems)
     if not cThread then return false end
-    local result = cThread:await(imports.dbify.inventory.item.remove(cThread, inventoryID, inventoryItems)
+    local result = cThread:await(imports.dbify.inventory.item.remove(cThread, inventoryID, inventoryItems))
     return result
 end
 
 CInventory.setItemProperty = function(cThread, inventoryID, inventoryItems, itemProperties)
     if not cThread then return false end
-    local result = cThread:await(imports.dbify.inventory.item.setProperty(cThread, inventoryID, inventoryItems, itemProperties)
+    local result = cThread:await(imports.dbify.inventory.item.setProperty(cThread, inventoryID, inventoryItems, itemProperties))
     return result
 end
 
 CInventory.getItemProperty = function(cThread, inventoryID, inventoryItems, itemProperties)
     if not cThread then return false end
-    local result = cThread:await(imports.dbify.inventory.item.getProperty(cThread, inventoryID, inventoryItems, itemProperties)
+    local result = cThread:await(imports.dbify.inventory.item.getProperty(cThread, inventoryID, inventoryItems, itemProperties))
     return result
 end
 
 CInventory.setItemData = function(cThread, inventoryID, inventoryItems, itemDatas)
     if not cThread then return false end
-    local result = cThread:await(imports.dbify.inventory.item.setData(cThread, inventoryID, inventoryItems, itemDatas)
+    local result = cThread:await(imports.dbify.inventory.item.setData(cThread, inventoryID, inventoryItems, itemDatas))
     return result
 end
 
 CInventory.getItemData = function(cThread, inventoryID, inventoryItems, itemDatas)
     if not cThread then return false end
-    local result = cThread:await(imports.dbify.inventory.item.getData(cThread, inventoryID, inventoryItems, itemDatas)
+    local result = cThread:await(imports.dbify.inventory.item.getData(cThread, inventoryID, inventoryItems, itemDatas))
     return result
 end
 

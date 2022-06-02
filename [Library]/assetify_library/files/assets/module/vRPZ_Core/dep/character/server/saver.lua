@@ -80,12 +80,12 @@ end
 CCharacter.loadInventory = function(cThread, player, depDatas)
     if not cThread then return false end
     if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") then return false end
-    local DItemProperty. = cThread:await(CInventory.getItemProperty(cThread, player, depDatas.inventoryID, CInventory.CRefs.index, {imports.dbify.inventory.connection.itemFormat.counter}, true))
-    if not DItemProperty. and (#CInventory.CRefs.index > 0) then return false end
+    local DItemProperty = cThread:await(CInventory.getItemProperty(cThread, player, depDatas.inventoryID, CInventory.CRefs.index, {imports.dbify.inventory.connection.itemFormat.counter}, true))
+    if not DItemProperty and (#CInventory.CRefs.index > 0) then return false end
     local DInventoryProperty = cThread:await(CInventory.getData(cThread, depDatas.inventoryID, {"max_slots", "slots"}))
     DInventoryProperty = DInventoryProperty or {}
     DInventoryProperty.max_slots, DInventoryProperty.slots = imports.math.max(CInventory.fetchMaxSlotsMultiplier(), imports.tonumber(DInventoryProperty.max_slots) or 0), (DInventoryProperty.slots and imports.json.decode(DInventoryProperty.slots)) or {}
-    CInventory.CBuffer[depDatas.characterID)] = {
+    CInventory.CBuffer[(depDatas.characterID)] = {
         maxSlots = DInventoryProperty.max_slots,
         slots = DInventoryProperty.slots
     }

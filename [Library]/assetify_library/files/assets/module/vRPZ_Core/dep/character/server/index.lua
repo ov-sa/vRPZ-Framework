@@ -35,7 +35,7 @@ end
 CCharacter.create = function(cThread, serial)
     if not cThread then return false end
     if (not serial or (imports.type(serial) ~= "string")) then return false end
-    local characterID = cThread:await(imports.dbify.character.create(cThread)
+    local characterID = cThread:await(imports.dbify.character.create(cThread))
     CCharacter.CBuffer[characterID] = {
         {"owner", serial}
     }
@@ -52,7 +52,7 @@ end
 
 CCharacter.setData = function(cThread, characterID, characterDatas)
     if not cThread then return false end
-    local result = cThread:await(imports.dbify.character.setData(cThread, characterID, characterDatas)
+    local result = cThread:await(imports.dbify.character.setData(cThread, characterID, characterDatas))
     if result and CCharacter.CBuffer[characterID] then
         for i = 1, #characterDatas, 1 do
             local j = characterDatas[i]
@@ -64,7 +64,7 @@ end
 
 CCharacter.getData = function(cThread, characterID, characterDatas)
     if not cThread then return false end
-    local result = cThread:await(imports.dbify.character.getData(cThread, characterID, characterDatas)
+    local result = cThread:await(imports.dbify.character.getData(cThread, characterID, characterDatas))
     if result and CCharacter.CBuffer[characterID] then
         for i = 1, #characterDatas, 1 do
             local j = characterDatas[i]

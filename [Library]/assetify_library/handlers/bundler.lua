@@ -61,6 +61,7 @@ function onBundleLibrary()
                     resourceName = "]]..syncer.libraryName..[[",
                     type = type,
                     call = call,
+                    assert = assert,
                     loadstring = loadstring,
                     getResourceFromName = getResourceFromName,
                     addEventHandler = addEventHandler,
@@ -269,7 +270,7 @@ function onBundleLibrary()
                     local j = moduleTypes[i]
                     if cAsset.manifestData.assetDeps.script[j] then
                         for k = 1, #cAsset.manifestData.assetDeps.script[j], 1 do
-                            assetify.imports.loadstring(assetify.getAssetDep("module", assetName, "script", j, k))()
+                            assetify.imports.assert(assetify.imports.loadstring(assetify.getAssetDep("module", assetName, "script", j, k)))()
                         end
                     end
                 end
