@@ -23,6 +23,7 @@ local imports = {
 --[[ Module: Character ]]--
 ---------------------------
 
+--TODO: ADD ASYNC SUPPORT FOR ALL THESE...
 CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress, loadProgress)
     if isForceReset then
         imports.setElementData(player, "Player:Initialized", nil)
