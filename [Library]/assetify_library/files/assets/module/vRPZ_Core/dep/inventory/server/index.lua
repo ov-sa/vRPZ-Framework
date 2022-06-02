@@ -26,13 +26,40 @@ CInventory.fetch = function(cThread, inventoryID)
     }))
     return result
 end
---TODO: ADD ASYNC SUPPORT FOR ALL THESE...
+
 CInventory.ensureItems = imports.dbify.inventory.ensureItems
-CInventory.create = imports.dbify.inventory.create
-CInventory.delete = imports.dbify.inventory.delete
-CInventory.setData = imports.dbify.inventory.setData
-CInventory.getData = imports.dbify.inventory.getData
-CInventory.addItem = imports.dbify.inventory.item.add
+
+CInventory.create = function(cThread)
+    if not cThread then return false end
+    local inventoryID = cThread:await(imports.dbify.inventory.create(cThread)
+    return inventoryID
+end
+
+CInventory.delete = function(cThread, inventoryID)
+    if not cThread then return false end
+    local result = cThread:await(imports.dbify.inventory.delete(cThread, inventoryID)
+    return result
+end
+
+CInventory.setData = function(cThread, inventoryID, inventoryDatas)
+    if not cThread then return false end
+    local result = cThread:await(imports.dbify.inventory.setData(cThread, inventoryID, inventoryDatas)
+    return result
+end
+
+CInventory.getData = function(cThread, inventoryID, inventoryDatas)
+    if not cThread then return false end
+    local result = cThread:await(imports.dbify.inventory.getData(cThread, inventoryID, inventoryDatas)
+    return result
+end
+
+--TODO: ...
+CInventory.addItem = function(cThread, inventoryID, inventoryDatas)
+    if not cThread then return false end
+    local result = cThread:await(imports.dbify.inventory.getData(cThread, inventoryID, inventoryDatas)
+    return result
+end
+
 CInventory.removeItem = imports.dbify.inventory.item.remove
 CInventory.setItemProperty = imports.dbify.inventory.item.setProperty
 CInventory.getItemProperty = imports.dbify.inventory.item.getProperty
