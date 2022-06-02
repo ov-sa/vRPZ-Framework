@@ -25,9 +25,10 @@ end
 
 CCharacter.fetchOwned = function(cThread, serial)
     if not cThread then return false end
-    return cThread:await(imports.dbify.character.fetchAll(cThread, {
+    local result = cThread:await(imports.dbify.character.fetchAll(cThread, {
         {"owner", serial}
     }))
+    return result
 end
 
 CCharacter.create = function(cThread, serial)
