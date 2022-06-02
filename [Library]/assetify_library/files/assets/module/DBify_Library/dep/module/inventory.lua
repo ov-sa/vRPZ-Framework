@@ -43,7 +43,10 @@ dbify.inventory = {
         if not dbify.mysql.connection.instance then return false end
         local isAsync, cArgs = {dbify.parseArgs(2, ...)}
         local keyColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
-        return dbify.mysql.table.fetchContents(dbify.inventory.connection.table, keyColumns, callback, imports.unpack(cArgs))
+        local promise = function()
+            return dbify.mysql.table.fetchContents(dbify.inventory.connection.table, keyColumns, callback, imports.unpack(cArgs))
+        end
+        return (isAsync and promise) or promise()
     end,
 
     ensureItems = function(...)
@@ -51,68 +54,71 @@ dbify.inventory = {
         local isAsync, cArgs = {dbify.parseArgs(2, ...)}
         local items, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not items or (imports.type(items) ~= "table") then return false end
-        imports.dbQuery(function(queryHandler, arguments)
-            local callbackReference = callback
-            local result = imports.dbPoll(queryHandler, 0)
-            local itemsToBeAdded, itemsToBeDeleted = {}, {}
-            if result and (#result > 0) then
-                for i = 1, #result, 1 do
-                    local j = result[i]
-                    local columnName = j["column_name"] or j[(string.upper("column_name"))]
-                    local itemIndex = imports.string.gsub(columnName, "item_", "", 1)
-                    if not arguments[1].items[itemIndex] then
-                        imports.table.insert(itemsToBeDeleted, columnName)
+        local promise = function()
+            imports.dbQuery(function(queryHandler, arguments)
+                local callbackReference = callback
+                local result = imports.dbPoll(queryHandler, 0)
+                local itemsToBeAdded, itemsToBeDeleted = {}, {}
+                if result and (#result > 0) then
+                    for i = 1, #result, 1 do
+                        local j = result[i]
+                        local columnName = j["column_name"] or j[(string.upper("column_name"))]
+                        local itemIndex = imports.string.gsub(columnName, "item_", "", 1)
+                        if not arguments[1].items[itemIndex] then
+                            imports.table.insert(itemsToBeDeleted, columnName)
+                        end
                     end
                 end
-            end
-            for i, j in imports.pairs(arguments[1].items) do
-                imports.table.insert(itemsToBeAdded, "item_"..i)
-            end
-            arguments[1].items = itemsToBeAdded
-            if #itemsToBeDeleted > 0 then
-                dbify.mysql.column.delete(dbify.inventory.connection.table, itemsToBeDeleted, function(result, arguments)
-                    if result then
-                        for i = 1, #arguments[1].items, 1 do
-                            local j = arguments[1].items[i]
-                            dbify.mysql.column.isValid(dbify.inventory.connection.table, j, function(isValid, arguments)
-                                local callbackReference = callback
-                                if not isValid then
-                                    imports.dbExec(dbify.mysql.connection.instance, "ALTER TABLE `??` ADD COLUMN `??` TEXT", dbify.inventory.connection.table, arguments[1])
-                                end
-                                if arguments[2] then
-                                    if callbackReference and (imports.type(callbackReference) == "function") then
-                                        callbackReference(true, arguments[2])
+                for i, j in imports.pairs(arguments[1].items) do
+                    imports.table.insert(itemsToBeAdded, "item_"..i)
+                end
+                arguments[1].items = itemsToBeAdded
+                if #itemsToBeDeleted > 0 then
+                    dbify.mysql.column.delete(dbify.inventory.connection.table, itemsToBeDeleted, function(result, arguments)
+                        if result then
+                            for i = 1, #arguments[1].items, 1 do
+                                local j = arguments[1].items[i]
+                                dbify.mysql.column.isValid(dbify.inventory.connection.table, j, function(isValid, arguments)
+                                    local callbackReference = callback
+                                    if not isValid then
+                                        imports.dbExec(dbify.mysql.connection.instance, "ALTER TABLE `??` ADD COLUMN `??` TEXT", dbify.inventory.connection.table, arguments[1])
                                     end
-                                end
-                            end, j, ((i >= #arguments[1].items) and arguments[2]) or false)
-                        end
-                    else
-                        local callbackReference = callback
-                        if callbackReference and (imports.type(callbackReference) == "function") then
-                            callbackReference(result, arguments[2])
-                        end
-                    end
-                end, arguments[1], arguments[2])
-            else
-                for i = 1, #arguments[1].items, 1 do
-                    local j = arguments[1].items[i]
-                    dbify.mysql.column.isValid(dbify.inventory.connection.table, j, function(isValid, arguments)
-                        local callbackReference = callback
-                        if not isValid then
-                            imports.dbExec(dbify.mysql.connection.instance, "ALTER TABLE `??` ADD COLUMN `??` TEXT", dbify.inventory.connection.table, arguments[1])
-                        end
-                        if arguments[2] then
+                                    if arguments[2] then
+                                        if callbackReference and (imports.type(callbackReference) == "function") then
+                                            callbackReference(true, arguments[2])
+                                        end
+                                    end
+                                end, j, ((i >= #arguments[1].items) and arguments[2]) or false)
+                            end
+                        else
+                            local callbackReference = callback
                             if callbackReference and (imports.type(callbackReference) == "function") then
-                                callbackReference(true, arguments[2])
+                                callbackReference(result, arguments[2])
                             end
                         end
-                    end, j, ((i >= #arguments[1].items) and arguments[2]) or false)
+                    end, arguments[1], arguments[2])
+                else
+                    for i = 1, #arguments[1].items, 1 do
+                        local j = arguments[1].items[i]
+                        dbify.mysql.column.isValid(dbify.inventory.connection.table, j, function(isValid, arguments)
+                            local callbackReference = callback
+                            if not isValid then
+                                imports.dbExec(dbify.mysql.connection.instance, "ALTER TABLE `??` ADD COLUMN `??` TEXT", dbify.inventory.connection.table, arguments[1])
+                            end
+                            if arguments[2] then
+                                if callbackReference and (imports.type(callbackReference) == "function") then
+                                    callbackReference(true, arguments[2])
+                                end
+                            end
+                        end, j, ((i >= #arguments[1].items) and arguments[2]) or false)
+                    end
                 end
-            end
-        end, {{{
-            items = items
-        }, cArgs}}, dbify.mysql.connection.instance, "SELECT `column_name` FROM information_schema.columns WHERE `table_schema`=? AND `table_name`=? AND `column_name` LIKE 'item_%'", dbify.settings.credentials.database, dbify.inventory.connection.table)
-        return true
+            end, {{{
+                items = items
+            }, cArgs}}, dbify.mysql.connection.instance, "SELECT `column_name` FROM information_schema.columns WHERE `table_schema`=? AND `table_name`=? AND `column_name` LIKE 'item_%'", dbify.settings.credentials.database, dbify.inventory.connection.table)
+            return true
+        end
+        return (isAsync and promise) or promise()
     end,
 
     create = function(...)
@@ -120,15 +126,18 @@ dbify.inventory = {
         local isAsync, cArgs = {dbify.parseArgs(1, ...)}
         local callback = dbify.fetchArg(_, cArgs)
         if not callback or (imports.type(callback) ~= "function") then return false end
-        imports.dbQuery(function(queryHandler, arguments)
-            local callbackReference = callback
-            local _, _, inventoryID = imports.dbPoll(queryHandler, 0)
-            local result = inventoryID or false
-            if callbackReference and (imports.type(callbackReference) == "function") then
-                callbackReference(result, arguments)
-            end
-        end, {cArgs}, dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(NULL)", dbify.inventory.connection.table, dbify.inventory.connection.keyColumn)
-        return true
+        local promise = function()
+            imports.dbQuery(function(queryHandler, arguments)
+                local callbackReference = callback
+                local _, _, inventoryID = imports.dbPoll(queryHandler, 0)
+                local result = inventoryID or false
+                if callbackReference and (imports.type(callbackReference) == "function") then
+                    callbackReference(result, arguments)
+                end
+            end, {cArgs}, dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(NULL)", dbify.inventory.connection.table, dbify.inventory.connection.keyColumn)
+            return true
+        end
+        return (isAsync and promise) or promise()
     end,
 
     delete = function(...)
@@ -136,19 +145,22 @@ dbify.inventory = {
         local isAsync, cArgs = {dbify.parseArgs(2, ...)}
         local inventoryID, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not inventoryID or (imports.type(inventoryID) ~= "number") then return false end
-        return dbify.inventory.getData(inventoryID, {dbify.inventory.connection.keyColumn}, function(result, arguments)
-            local callbackReference = callback
-            if result then
-                result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.inventory.connection.table, dbify.inventory.connection.keyColumn, inventoryID)
-                if callbackReference and (imports.type(callbackReference) == "function") then
-                    callbackReference(result, arguments)
+        local promise = function()
+            return dbify.inventory.getData(inventoryID, {dbify.inventory.connection.keyColumn}, function(result, arguments)
+                local callbackReference = callback
+                if result then
+                    result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.inventory.connection.table, dbify.inventory.connection.keyColumn, inventoryID)
+                    if callbackReference and (imports.type(callbackReference) == "function") then
+                        callbackReference(result, arguments)
+                    end
+                else
+                    if callbackReference and (imports.type(callbackReference) == "function") then
+                        callbackReference(false, arguments)
+                    end
                 end
-            else
-                if callbackReference and (imports.type(callbackReference) == "function") then
-                    callbackReference(false, arguments)
-                end
-            end
-        end, imports.unpack(cArgs))
+            end, imports.unpack(cArgs))
+        end
+        return (isAsync and promise) or promise()
     end,
 
     setData = function(...)
@@ -156,9 +168,12 @@ dbify.inventory = {
         local isAsync, cArgs = {dbify.parseArgs(3, ...)}
         local inventoryID, dataColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not inventoryID or (imports.type(inventoryID) ~= "number") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
-        return dbify.mysql.data.set(dbify.inventory.connection.table, dataColumns, {
-            {dbify.inventory.connection.keyColumn, inventoryID}
-        }, callback, imports.unpack(cArgs))
+        local promise = function()
+            return dbify.mysql.data.set(dbify.inventory.connection.table, dataColumns, {
+                {dbify.inventory.connection.keyColumn, inventoryID}
+            }, callback, imports.unpack(cArgs))
+        end
+        return (isAsync and promise) or promise()
     end,
 
     getData = function(...)
@@ -166,9 +181,12 @@ dbify.inventory = {
         local isAsync, cArgs = {dbify.parseArgs(3, ...)}
         local inventoryID, dataColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not inventoryID or (imports.type(inventoryID) ~= "number") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
-        return dbify.mysql.data.get(dbify.inventory.connection.table, dataColumns, {
-            {dbify.inventory.connection.keyColumn, inventoryID}
-        }, true, callback, imports.unpack(cArgs))
+        local promise = function()
+            return dbify.mysql.data.get(dbify.inventory.connection.table, dataColumns, {
+                {dbify.inventory.connection.keyColumn, inventoryID}
+            }, true, callback, imports.unpack(cArgs))
+        end
+        return (isAsync and promise) or promise()
     end,
 
     item = {
@@ -342,37 +360,55 @@ dbify.inventory = {
         add = function(...)
             local isAsync, cArgs = {dbify.parseArgs(3, ...)}
             local inventoryID, items, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
-            return dbify.inventory.item.__utilities__.pushnpop(inventoryID, items, "push", callback, imports.unpack(cArgs))
+            local promise = function()
+                return dbify.inventory.item.__utilities__.pushnpop(inventoryID, items, "push", callback, imports.unpack(cArgs))
+            end
+            return (isAsync and promise) or promise()
         end,
 
         remove = function(...)
             local isAsync, cArgs = {dbify.parseArgs(3, ...)}
             local inventoryID, items, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
-            return dbify.inventory.item.__utilities__.pushnpop(inventoryID, items, "pop", callback, imports.unpack(cArgs))
+            local promise = function()
+                return dbify.inventory.item.__utilities__.pushnpop(inventoryID, items, "pop", callback, imports.unpack(cArgs))
+            end
+            return (isAsync and promise) or promise()
         end,
 
         setProperty = function(...)
             local isAsync, cArgs = {dbify.parseArgs(4, ...)}
             local inventoryID, items, properties, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
-            return dbify.inventory.item.__utilities__.property_setnget(inventoryID, items, properties, "set", callback, imports.unpack(cArgs))
+            local promise = function()
+                return dbify.inventory.item.__utilities__.property_setnget(inventoryID, items, properties, "set", callback, imports.unpack(cArgs))
+            end
+            return (isAsync and promise) or promise()
         end,
 
         getProperty = function(...)
             local isAsync, cArgs = {dbify.parseArgs(4, ...)}
             local inventoryID, items, properties, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
-            return dbify.inventory.item.__utilities__.property_setnget(inventoryID, items, properties, "get", callback, imports.unpack(cArgs))
+            local promise = function()
+                return dbify.inventory.item.__utilities__.property_setnget(inventoryID, items, properties, "get", callback, imports.unpack(cArgs))
+            end
+            return (isAsync and promise) or promise()
         end,
 
         setData = function(...)
             local isAsync, cArgs = {dbify.parseArgs(4, ...)}
             local inventoryID, items, datas, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
-            return dbify.inventory.item.__utilities__.data_setnget(inventoryID, items, datas, "set", callback, imports.unpack(cArgs))
+            local promise = function()
+                return dbify.inventory.item.__utilities__.data_setnget(inventoryID, items, datas, "set", callback, imports.unpack(cArgs))
+            end
+            return (isAsync and promise) or promise()
         end,
 
         getData = function(...)
             local isAsync, cArgs = {dbify.parseArgs(4, ...)}
             local inventoryID, items, datas, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
-            return dbify.inventory.item.__utilities__.data_setnget(inventoryID, items, datas, "get", callback, imports.unpack(cArgs))
+            local promise = function()
+                return dbify.inventory.item.__utilities__.data_setnget(inventoryID, items, datas, "get", callback, imports.unpack(cArgs))
+            end
+            return (isAsync and promise) or promise()
         end
     }
 }
