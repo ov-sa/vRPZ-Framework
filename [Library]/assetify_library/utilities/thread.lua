@@ -30,13 +30,25 @@ local imports = {
 -----------------------
 
 thread = {
-    buffer = {},
-    pause = coroutine.yield
+    buffer = {}
 }
 thread.__index = thread
 
+thread.__pause = imports.coroutine.yield
+thread.__await = function(self, exec, ...)
+    if not exec or imports.type(exec) ~= "function" then return self:resolve(exec) end
+    exec(self)
+    self.isScheduled = true
+    thread:pause()
+    local resolvedValues = self.scheduledValues
+    self.scheduledValues = nil
+    return imports.unpack(resolvedValues)
+end
+
 function thread:isInstance(cThread)
-    return (cThread and thread.buffer[cThread] and true) or false
+    if not self then return false end
+    if self == thread then return (cThread and thread.buffer[cThread] and true) or false end
+    return (thread.buffer[self] and true) or false
 end
 
 function thread:create(exec)
@@ -66,6 +78,10 @@ function thread:status()
     else
         return imports.coroutine.status(self.thread)
     end
+end
+
+function thread:pause()
+    return thread.__pause()
 end
 
 function thread:resume(syncRate)
@@ -106,14 +122,9 @@ function thread:resume(syncRate)
     return true
 end
 
-function thread:await(exec, ...)
-    if not exec or imports.type(exec) ~= "function" then return self:resolve(exec) end
-    exec(self)
-    self.isScheduled = true
-    thread.pause()
-    local resolvedValues = self.scheduledValues
-    self.scheduledValues = nil
-    return imports.unpack(resolvedValues)
+function thread:await(...)
+    if not self or (self == thread) then return false end
+    return thread.__await(self, ...)
 end
 
 function thread:resolve(...)

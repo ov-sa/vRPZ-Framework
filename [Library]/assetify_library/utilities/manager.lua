@@ -191,9 +191,9 @@ if localPlayer then
                         asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache[i][k], {
                             sound = assetPath.."sound/"..v,
                         })
-                        thread.pause()
+                        thread:pause()
                     end
-                    thread.pause()
+                    thread:pause()
                 end
             end):resume({
                 executions = downloadSettings.buildRate,
@@ -248,7 +248,7 @@ if localPlayer then
                             --TODO: DETECT IF ITS CLUMPED OR NOT...
                             cAsset.unSynced.assetCache[i].cDummy = dummy:create("object", childName, _, _, SsceneData)
                         end
-                        thread.pause()
+                        thread:pause()
                     end
                 end
             end):resume({
@@ -268,7 +268,7 @@ if localPlayer then
                         dff = clumpDFF,
                         col = clumpCOL
                     })
-                    thread.pause()
+                    thread:pause()
                 end
             end):resume({
                 executions = downloadSettings.buildRate,
@@ -297,9 +297,9 @@ if localPlayer then
                         if v.cAsset then
                             v.cAsset:destroy(cAsset.unSynced.rwCache)
                         end
-                        thread.pause()
+                        thread:pause()
                     end
-                    thread.pause()
+                    thread:pause()
                 end
                 shader:clearAssetBuffer(cAsset.unSynced.rwCache.map)
                 asset:clearAssetBuffer(cAsset.unSynced.rwCache.dep)
@@ -322,7 +322,7 @@ if localPlayer then
                     if j.cDummy then
                         j.cDummy:destroy()
                     end
-                    thread.pause()
+                    thread:pause()
                 end
                 shader:clearAssetBuffer(cAsset.unSynced.rwCache.map)
                 asset:clearAssetBuffer(cAsset.unSynced.rwCache.dep)
@@ -339,7 +339,7 @@ if localPlayer then
                     if j.cAsset then
                         j.cAsset:destroy(cAsset.unSynced.rwCache)
                     end
-                    thread.pause()
+                    thread:pause()
                 end
                 shader:clearAssetBuffer(cAsset.unSynced.rwCache.map)
                 asset:clearAssetBuffer(cAsset.unSynced.rwCache.dep)
