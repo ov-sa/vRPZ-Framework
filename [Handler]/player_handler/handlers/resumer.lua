@@ -150,7 +150,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
 
     imports.thread:create(function(self)
         local characterID, inventoryID = characters[character].id, CCharacter.CBuffer[(characters[character].id)].inventory
-        if not self:await(CCharacter.loadInventory(self, source, {characterID = characterID, inventoryID = inventoryID}) then
+        if not self:await(CCharacter.loadInventory(self, source, {characterID = characterID, inventoryID = inventoryID})) then
             imports.triggerEvent("Player:onToggleLoginUI", source)
             return false
         end
