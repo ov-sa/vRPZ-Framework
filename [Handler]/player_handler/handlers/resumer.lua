@@ -27,7 +27,8 @@ local imports = {
     setPlayerNametagShowing = setPlayerNametagShowing,
     json = json,
     table = table,
-    string = string
+    string = string,
+    thread = thread
 }
 
 
@@ -83,47 +84,47 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
     imports.setPlayerNametagShowing(source, false)
     imports.setElementFrozen(source, true)
 
-    CPlayer.fetch(serial, function(result, args)
-        result = result[1]
-        CCharacter.fetchOwned(args[2], function(result, args)
-            args[3].character = imports.tonumber(args[3].character)
-            CPlayer.CBuffer[(args[2])] = args[3]
-            for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
-                local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
-                CPlayer.CBuffer[(args[2])][j] = imports.string.parse(CPlayer.CBuffer[(args[2])][j])
-            end
-            args[3] = imports.table.clone(args[3], true)
-            args[3].character = args[3].character or 0
-            args[3].characters = {}
-            args[3].vip = (args[3].vip and true) or false
+    imports.thread:create(function(self)
+        local DPlayer = self:await(self, CPlayer.fetch(serial))
+        DPlayer = DPlayer[1]
+        DPlayer.character = imports.tonumber(DPlayer.character)
+        CPlayer.CBuffer[serial] = DPlayer
+        for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
+            local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
+            CPlayer.CBuffer[serial][j] = imports.string.parse(CPlayer.CBuffer[serial][j])
+        end
+        DPlayer = imports.table.clone(DPlayer, true)
+        DPlayer.character = DPlayer.character or 0
+        DPlayer.characters = {}
+        DPlayer.vip = (DPlayer.vip and true) or false
 
-            if (result and (#result > 0)) then
-                for i = 1, #result, 1 do
-                    local j = result[i]
-                    j.inventory = imports.tonumber(j.inventory)
-                    j.identity = imports.json.decode(j.identity)
-                    args[3].characters[i] = {
-                        id = j.id,
-                        identity = j.identity
-                    }
-                    CCharacter.CBuffer[(j.id)] = j
-                    for k = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
-                        local v = FRAMEWORK_CONFIGS["Character"]["Datas"][k]
-                        CCharacter.CBuffer[(j.id)][v] = imports.string.parse(CCharacter.CBuffer[(j.id)][v])
-                    end
-                    CCharacter.CBuffer[(j.id)].location = (CCharacter.CBuffer[(j.id)].location and imports.json.decode(CCharacter.CBuffer[(j.id)].location)) or false
+        local DCharacter = self:await(self, CCharacter.fetchOwned(serial))
+        if DCharacter and (#DCharacter > 0) then
+            for i = 1, #DCharacter, 1 do
+                local j = DCharacter[i]
+                j.inventory = imports.tonumber(j.inventory)
+                j.identity = imports.json.decode(j.identity)
+                DPlayer.characters[i] = {
+                    id = j.id,
+                    identity = j.identity
+                }
+                CCharacter.CBuffer[(j.id)] = j
+                for k = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
+                    local v = FRAMEWORK_CONFIGS["Character"]["Datas"][k]
+                    CCharacter.CBuffer[(j.id)][v] = imports.string.parse(CCharacter.CBuffer[(j.id)][v])
                 end
-                if not args[3].characters[(args[3].character)] then args[3].character = 0 end
-            else
-                args[3].character = 0
+                CCharacter.CBuffer[(j.id)].location = (CCharacter.CBuffer[(j.id)].location and imports.json.decode(CCharacter.CBuffer[(j.id)].location)) or false
             end
-            imports.triggerClientEvent(args[1], "Client:onToggleLoginUI", args[1], true, {
-                character = args[3].character,
-                characters = args[3].characters,
-                vip = args[3].vip
-            })
-        end, args[1], args[2], result)
-    end, source, serial)
+            if not DPlayer.characters[(DPlayer.character)] then DPlayer.character = 0 end
+        else
+            DPlayer.character = 0
+        end
+        imports.triggerClientEvent(args[1], "Client:onToggleLoginUI", source, true, {
+            character = DPlayer.character,
+            characters = DPlayer.characters,
+            vip = DPlayer.vip
+        })
+    end):resume()
 end)
 
 
