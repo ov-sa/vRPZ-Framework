@@ -143,5 +143,3 @@ function thread:resolve(...)
 end
 
 function async(...) return thread:create(...) end
-function await(...) return thread:await(...) end
-function sleep(...) return thread:sleep(...) end
