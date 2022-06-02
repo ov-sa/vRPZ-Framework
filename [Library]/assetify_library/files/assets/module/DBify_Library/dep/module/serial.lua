@@ -25,7 +25,7 @@ dbify.serial = {
 
     fetchAll = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local isAsync, cArgs = {dbify.parseArgs(2, ...)}
+        local isAsync, cArgs = dbify.parseArgs(2, ...)
         local keyColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         local promise = function()
             return dbify.mysql.table.fetchContents(dbify.serial.connection.table, keyColumns, callback, imports.unpack(cArgs))
@@ -35,7 +35,7 @@ dbify.serial = {
 
     create = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local isAsync, cArgs = {dbify.parseArgs(2, ...)}
+        local isAsync, cArgs = dbify.parseArgs(2, ...)
         local serial, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not serial or (imports.type(serial) ~= "string") then return false end
         local promise = function()
@@ -58,7 +58,7 @@ dbify.serial = {
 
     delete = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local isAsync, cArgs = {dbify.parseArgs(2, ...)}
+        local isAsync, cArgs = dbify.parseArgs(2, ...)
         local serial, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not serial or (imports.type(serial) ~= "string") then return false end
         local promise = function()
@@ -81,7 +81,7 @@ dbify.serial = {
 
     setData = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local isAsync, cArgs = {dbify.parseArgs(3, ...)}
+        local isAsync, cArgs = dbify.parseArgs(3, ...)
         local serial, dataColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not serial or (imports.type(serial) ~= "string") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
         local promise = function()
@@ -94,7 +94,7 @@ dbify.serial = {
 
     getData = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local isAsync, cArgs = {dbify.parseArgs(3, ...)}
+        local isAsync, cArgs = dbify.parseArgs(3, ...)
         local serial, dataColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not serial or (imports.type(serial) ~= "string") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
         local promise = function()

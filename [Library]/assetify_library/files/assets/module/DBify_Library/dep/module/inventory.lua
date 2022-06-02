@@ -213,7 +213,7 @@ dbify.inventory = {
 
     fetchAll = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local isAsync, cArgs = {dbify.parseArgs(2, ...)}
+        local isAsync, cArgs = dbify.parseArgs(2, ...)
         local keyColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         local promise = function()
             return dbify.mysql.table.fetchContents(dbify.inventory.connection.table, keyColumns, callback, imports.unpack(cArgs))
@@ -223,7 +223,7 @@ dbify.inventory = {
 
     ensureItems = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local isAsync, cArgs = {dbify.parseArgs(2, ...)}
+        local isAsync, cArgs = dbify.parseArgs(2, ...)
         local items, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not items or (imports.type(items) ~= "table") then return false end
         local promise = function()
@@ -295,7 +295,7 @@ dbify.inventory = {
 
     create = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local isAsync, cArgs = {dbify.parseArgs(1, ...)}
+        local isAsync, cArgs = dbify.parseArgs(1, ...)
         local callback = dbify.fetchArg(_, cArgs)
         if not callback or (imports.type(callback) ~= "function") then return false end
         local promise = function()
@@ -314,7 +314,7 @@ dbify.inventory = {
 
     delete = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local isAsync, cArgs = {dbify.parseArgs(2, ...)}
+        local isAsync, cArgs = dbify.parseArgs(2, ...)
         local inventoryID, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not inventoryID or (imports.type(inventoryID) ~= "number") then return false end
         local promise = function()
@@ -337,7 +337,7 @@ dbify.inventory = {
 
     setData = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local isAsync, cArgs = {dbify.parseArgs(3, ...)}
+        local isAsync, cArgs = dbify.parseArgs(3, ...)
         local inventoryID, dataColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not inventoryID or (imports.type(inventoryID) ~= "number") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
         local promise = function()
@@ -350,7 +350,7 @@ dbify.inventory = {
 
     getData = function(...)
         if not dbify.mysql.connection.instance then return false end
-        local isAsync, cArgs = {dbify.parseArgs(3, ...)}
+        local isAsync, cArgs = dbify.parseArgs(3, ...)
         local inventoryID, dataColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not inventoryID or (imports.type(inventoryID) ~= "number") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
         local promise = function()
@@ -363,7 +363,7 @@ dbify.inventory = {
 
     item = {
         add = function(...)
-            local isAsync, cArgs = {dbify.parseArgs(3, ...)}
+            local isAsync, cArgs = dbify.parseArgs(3, ...)
             local inventoryID, items, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             local promise = function()
                 return cUtility.requestPushPopItem(inventoryID, items, "push", callback, imports.unpack(cArgs))
@@ -372,7 +372,7 @@ dbify.inventory = {
         end,
 
         remove = function(...)
-            local isAsync, cArgs = {dbify.parseArgs(3, ...)}
+            local isAsync, cArgs = dbify.parseArgs(3, ...)
             local inventoryID, items, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             local promise = function()
                 return cUtility.requestPushPopItem(inventoryID, items, "pop", callback, imports.unpack(cArgs))
@@ -381,7 +381,7 @@ dbify.inventory = {
         end,
 
         setProperty = function(...)
-            local isAsync, cArgs = {dbify.parseArgs(4, ...)}
+            local isAsync, cArgs = dbify.parseArgs(4, ...)
             local inventoryID, items, properties, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             local promise = function()
                 return cUtility.requestSetGetItemProperty(inventoryID, items, properties, "set", callback, imports.unpack(cArgs))
@@ -390,7 +390,7 @@ dbify.inventory = {
         end,
 
         getProperty = function(...)
-            local isAsync, cArgs = {dbify.parseArgs(4, ...)}
+            local isAsync, cArgs = dbify.parseArgs(4, ...)
             local inventoryID, items, properties, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             local promise = function()
                 return cUtility.requestSetGetItemProperty(inventoryID, items, properties, "get", callback, imports.unpack(cArgs))
@@ -399,7 +399,7 @@ dbify.inventory = {
         end,
 
         setData = function(...)
-            local isAsync, cArgs = {dbify.parseArgs(4, ...)}
+            local isAsync, cArgs = dbify.parseArgs(4, ...)
             local inventoryID, items, datas, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             local promise = function()
                 return cUtility.requestSetGetItemData(inventoryID, items, datas, "set", callback, imports.unpack(cArgs))
@@ -408,7 +408,7 @@ dbify.inventory = {
         end,
 
         getData = function(...)
-            local isAsync, cArgs = {dbify.parseArgs(4, ...)}
+            local isAsync, cArgs = dbify.parseArgs(4, ...)
             local inventoryID, items, datas, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             local promise = function()
                 return cUtility.requestSetGetItemData(inventoryID, items, datas, "get", callback, imports.unpack(cArgs))
