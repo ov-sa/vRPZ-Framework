@@ -54,8 +54,8 @@ end)
 imports.addEvent("Player:onSaveCharacter", true)
 imports.addEventHandler("Player:onSaveCharacter", root, function(character, characters)
     if not character or not characters or not characters[character] or characters[character].id then return false end
-    local serial = CPlayer.getSerial(source)
 
+    local serial = CPlayer.getSerial(source)
     imports.thread:create(function(self)
         local characterID = self:await(CCharacter.create(self, serial))
         local inventoryID = self:await(CInventory.create(self))
@@ -83,7 +83,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
     imports.setElementFrozen(source, true)
 
     imports.thread:create(function(self)
-        local DPlayer = self:await(self, CPlayer.fetch(serial))
+        local DPlayer = self:await(CPlayer.fetch(self, serial))
         DPlayer = DPlayer[1]
         DPlayer.character = imports.tonumber(DPlayer.character)
         CPlayer.CBuffer[serial] = DPlayer
@@ -96,7 +96,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
         DPlayer.characters = {}
         DPlayer.vip = (DPlayer.vip and true) or false
 
-        local DCharacter = self:await(self, CCharacter.fetchOwned(serial))
+        local DCharacter = self:await(CCharacter.fetchOwned(self, serial))
         if DCharacter and (#DCharacter > 0) then
             for i = 1, #DCharacter, 1 do
                 local j = DCharacter[i]
@@ -139,6 +139,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         return false
     end
 
+    local serial = CPlayer.getSerial(source)
     for i = 1, #characters, 1 do
         if i ~= character then
             local j = characters[i]
@@ -146,27 +147,25 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         end
     end
     imports.collectgarbage()
-    CCharacter.loadInventory(source, {
-        characterID = characters[character].id,
-        inventoryID = CCharacter.CBuffer[(characters[character].id)].inventory
-    }, function(result, player, data)
-        if not result then
-            imports.triggerEvent("Player:onToggleLoginUI", player)
+
+    imports.thread:create(function(self)
+        local characterID, inventoryID = characters[character].id, CCharacter.CBuffer[(characters[character].id)].inventory
+        if not self:await(CCharacter.loadInventory(self, source, {characterID = characterID, inventoryID = inventoryID}) then
+            imports.triggerEvent("Player:onToggleLoginUI", source)
             return false
         end
 
-        local serial = CPlayer.getSerial(player)
-        local characterIdentity = CCharacter.CBuffer[(data.characterID)].identity
-        imports.setElementData(player, "Character:ID", data.characterID)
-        imports.setElementData(player, "Character:Identity", characterIdentity)
-        CPlayer.setData(serial, {
+        local characterIdentity = CCharacter.CBuffer[characterID].identity
+        imports.setElementData(source, "Character:ID", characterID)
+        imports.setElementData(source, "Character:Identity", characterIdentity)
+        self:await(CPlayer.setData(self, serial, {
             {"character", character}
-        })
-        resumeTicks[player] = imports.getTickCount()
-        CPlayer.setChannel(player, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"])
-        imports.bindKey(player, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Channel_ShuffleKey"], "down", shufflePlayerChannel)
-        imports.triggerClientEvent(player, "Client:onSyncInventoryBuffer", player, CInventory.CBuffer[(data.inventoryID)])
-        imports.triggerClientEvent(player, "Client:onSyncWeather", player, CGame.getNativeWeather())
-        imports.triggerEvent("Player:onSpawn", player, CCharacter.CBuffer[(data.characterID)].location, data.characterID)
-    end)
+        }))
+        resumeTicks[source] = imports.getTickCount()
+        CPlayer.setChannel(source, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"])
+        imports.bindKey(source, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Channel_ShuffleKey"], "down", shufflePlayerChannel)
+        imports.triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, CInventory.CBuffer[inventoryID])
+        imports.triggerClientEvent(source, "Client:onSyncWeather", source, CGame.getNativeWeather())
+        imports.triggerEvent("Player:onSpawn", source, CCharacter.CBuffer[characterID].location, characterID)
+    end):resume()
 end)
