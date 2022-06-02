@@ -21,21 +21,16 @@ dbify.serial = {
         table = "dbify_serials",
         keyColumn = "serial"
     },
-    async = {
-        fetchAll = 2,
-        create = 2,
-        delete = 2,
-        setData = 3,
-        getData = 3
-    },
 
-    fetchAll = function(keyColumns, callback, ...)
+    fetchAll = function(...)
         if not dbify.mysql.connection.instance then return false end
+        local keyColumns, callback, ... = dbify.parse(2, ...)
         return dbify.mysql.table.fetchContents(dbify.serial.connection.table, keyColumns, callback, ...)
     end,
 
-    create = function(serial, callback, ...)
+    create = function(...)
         if not dbify.mysql.connection.instance then return false end
+        local serial, callback, ... = dbify.parse(2, ...)
         if not serial or (imports.type(serial) ~= "string") then return false end
         return dbify.serial.getData(serial, {dbify.serial.connection.keyColumn}, function(result, arguments)
             local callbackReference = callback
@@ -52,8 +47,9 @@ dbify.serial = {
         end, ...)
     end,
 
-    delete = function(serial, callback, ...)
+    delete = function(...)
         if not dbify.mysql.connection.instance then return false end
+        local serial, callback, ... = dbify.parse(2, ...)
         if not serial or (imports.type(serial) ~= "string") then return false end
         return dbify.serial.getData(serial, {dbify.serial.connection.keyColumn}, function(result, arguments)
             local callbackReference = callback
@@ -70,23 +66,24 @@ dbify.serial = {
         end, ...)
     end,
 
-    setData = function(serial, dataColumns, callback, ...)
+    setData = function(...)
         if not dbify.mysql.connection.instance then return false end
+        local serial, dataColumns, callback, ... = dbify.parse(3, ...)
         if not serial or (imports.type(serial) ~= "string") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
         return dbify.mysql.data.set(dbify.serial.connection.table, dataColumns, {
             {dbify.serial.connection.keyColumn, serial}
         }, callback, ...)
     end,
 
-    getData = function(serial, dataColumns, callback, ...)
+    getData = function(...)
         if not dbify.mysql.connection.instance then return false end
+        local serial, dataColumns, callback, ... = dbify.parse(3, ...)
         if not serial or (imports.type(serial) ~= "string") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
         return dbify.mysql.data.get(dbify.serial.connection.table, dataColumns, {
             {dbify.serial.connection.keyColumn, serial}
         }, true, callback, ...)
     end
 }
-dbify.createAsync(dbify.serial)
 
 
 -----------------------
