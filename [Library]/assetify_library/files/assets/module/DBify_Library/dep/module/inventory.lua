@@ -339,28 +339,40 @@ dbify.inventory = {
             end
         },
 
-        add = function(inventoryID, items, callback, ...)
-            return dbify.inventory.item.__utilities__.pushnpop(inventoryID, items, "push", callback, ...)
+        add = function(...)
+            local cArgs = {dbify.parseArgs(3, ...)}
+            local inventoryID, items, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
+            return dbify.inventory.item.__utilities__.pushnpop(inventoryID, items, "push", callback, imports.unpack(cArgs))
         end,
 
-        remove = function(inventoryID, items, callback, ...)
-            return dbify.inventory.item.__utilities__.pushnpop(inventoryID, items, "pop", callback, ...)
+        remove = function(...)
+            local cArgs = {dbify.parseArgs(3, ...)}
+            local inventoryID, items, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
+            return dbify.inventory.item.__utilities__.pushnpop(inventoryID, items, "pop", callback, imports.unpack(cArgs))
         end,
 
-        setProperty = function(inventoryID, items, properties, callback, ...)        
-            return dbify.inventory.item.__utilities__.property_setnget(inventoryID, items, properties, "set", callback, ...)
+        setProperty = function(...)
+            local cArgs = {dbify.parseArgs(4, ...)}
+            local inventoryID, items, properties, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
+            return dbify.inventory.item.__utilities__.property_setnget(inventoryID, items, properties, "set", callback, imports.unpack(cArgs))
         end,
 
-        getProperty = function(inventoryID, items, properties, callback, ...)        
-            return dbify.inventory.item.__utilities__.property_setnget(inventoryID, items, properties, "get", callback, ...)
+        getProperty = function(...)
+            local cArgs = {dbify.parseArgs(4, ...)}
+            local inventoryID, items, properties, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
+            return dbify.inventory.item.__utilities__.property_setnget(inventoryID, items, properties, "get", callback, imports.unpack(cArgs))
         end,
 
-        setData = function(inventoryID, items, datas, callback, ...)        
-            return dbify.inventory.item.__utilities__.data_setnget(inventoryID, items, datas, "set", callback, ...)
+        setData = function(...)
+            local cArgs = {dbify.parseArgs(4, ...)}
+            local inventoryID, items, datas, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
+            return dbify.inventory.item.__utilities__.data_setnget(inventoryID, items, datas, "set", callback, imports.unpack(cArgs))
         end,
 
-        getData = function(inventoryID, items, datas, callback, ...)        
-            return dbify.inventory.item.__utilities__.data_setnget(inventoryID, items, datas, "get", callback, ...)
+        getData = function(...)
+            local cArgs = {dbify.parseArgs(4, ...)}
+            local inventoryID, items, datas, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
+            return dbify.inventory.item.__utilities__.data_setnget(inventoryID, items, datas, "get", callback, imports.unpack(cArgs))
         end
     }
 }
