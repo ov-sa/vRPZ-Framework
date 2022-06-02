@@ -46,8 +46,8 @@ local resumeTicks = {}
 imports.addEvent("Player:onDeleteCharacter", true)
 imports.addEventHandler("Player:onDeleteCharacter", root, function(characterID)
     imports.thread:create(function(self)
-        self:await(CInventory.delete(self, CCharacter.CBuffer[characterID].inventory))
-        self:await(CCharacter.delete(self, characterID))
+        CInventory.delete(self, CCharacter.CBuffer[characterID].inventory)
+        CCharacter.delete(self, characterID)
     end):resume()
 end)
 
@@ -57,12 +57,12 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(character, char
 
     local serial = CPlayer.getSerial(source)
     imports.thread:create(function(self)
-        local characterID = self:await(CCharacter.create(self, serial))
-        local inventoryID = self:await(CInventory.create(self))
-        local bool = await(self, CCharacter.setData(self, characterID, {
+        local characterID = CCharacter.create(self, serial)
+        local inventoryID = CInventory.create(self)
+        local bool = CCharacter.setData(self, characterID, {
             {"identity", imports.json.encode(characters[character].identity)},
             {"inventory", inventoryID}
-        }))
+        })
         if bool then CCharacter.CBuffer[characterID].identity = characters[character].identity end
         imports.triggerClientEvent(source, "Client:onSaveCharacter", source, (bool and true) or false, character, (bool and {id = characterID, identity = characters[character].identity}) or nil)
     end):resume()
@@ -83,7 +83,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
     imports.setElementFrozen(source, true)
 
     imports.thread:create(function(self)
-        local DPlayer = self:await(CPlayer.fetch(self, serial))
+        local DPlayer = CPlayer.fetch(self, serial)
         DPlayer = DPlayer[1]
         DPlayer.character = imports.tonumber(DPlayer.character)
         CPlayer.CBuffer[serial] = DPlayer
@@ -96,7 +96,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
         DPlayer.characters = {}
         DPlayer.vip = (DPlayer.vip and true) or false
 
-        local DCharacter = self:await(CCharacter.fetchOwned(self, serial))
+        local DCharacter = CCharacter.fetchOwned(self, serial)
         if DCharacter and (#DCharacter > 0) then
             for i = 1, #DCharacter, 1 do
                 local j = DCharacter[i]
@@ -150,7 +150,7 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
 
     imports.thread:create(function(self)
         local characterID, inventoryID = characters[character].id, CCharacter.CBuffer[(characters[character].id)].inventory
-        if not self:await(CCharacter.loadInventory(self, source, {characterID = characterID, inventoryID = inventoryID})) then
+        if not CCharacter.loadInventory(self, source, {characterID = characterID, inventoryID = inventoryID}) then
             imports.triggerEvent("Player:onToggleLoginUI", source)
             return false
         end
@@ -158,9 +158,9 @@ imports.addEventHandler("Player:onResume", root, function(character, characters)
         local characterIdentity = CCharacter.CBuffer[characterID].identity
         imports.setElementData(source, "Character:ID", characterID)
         imports.setElementData(source, "Character:Identity", characterIdentity)
-        self:await(CPlayer.setData(self, serial, {
+        CPlayer.setData(self, serial, {
             {"character", character}
-        }))
+        })
         resumeTicks[source] = imports.getTickCount()
         CPlayer.setChannel(source, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"])
         imports.bindKey(source, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Channel_ShuffleKey"], "down", shufflePlayerChannel)
