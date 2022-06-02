@@ -61,16 +61,16 @@ CCharacter.resetProgress = function(player, isForceReset, depDatas, saveProgress
         imports.table.insert(buffer.inventory, {"slots", imports.json.encode(CInventory.CBuffer[(depDatas.inventoryID)].slots)})
         for i, j in imports.pairs(CInventory.CItems) do
             if saveProgress then
-                self:await(CInventory.setItemProperty(self, depDatas.inventoryID, {j.ref}, {
+                CInventory.setItemProperty(self, depDatas.inventoryID, {j.ref}, {
                     {imports.dbify.inventory.connection.itemFormat.counter, imports.math.max(0, imports.tonumber(imports.getElementData(player, "Item:"..i)) or 0)}
-                }))
+                })
             end
             imports.setElementData(player, "Item:"..i, (loadProgress and 0) or nil)
         end
         if saveProgress then
-            self:await(CPlayer.setData(self, depDatas.serial, buffer.player))
-            self:await(CCharacter.setData(self, depDatas.characterID, buffer.character))
-            self:await(CInventory.setData(self, depDatas.inventoryID, buffer.inventory))
+            CPlayer.setData(self, depDatas.serial, buffer.player)
+            CCharacter.setData(self, depDatas.characterID, buffer.character)
+            CInventory.setData(self, depDatas.inventoryID, buffer.inventory)
             CPlayer.CBuffer[(depDatas.serial)], CCharacter.CBuffer[(depDatas.characterID)], CInventory.CBuffer[(depDatas.inventoryID)] = nil, nil, nil
             imports.collectgarbage()
         end
@@ -80,9 +80,9 @@ end
 CCharacter.loadInventory = function(cThread, player, depDatas)
     if not cThread then return false end
     if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") then return false end
-    local DItemProperty = cThread:await(CInventory.getItemProperty(cThread, player, depDatas.inventoryID, CInventory.CRefs.index, {imports.dbify.inventory.connection.itemFormat.counter}, true))
+    local DItemProperty = CInventory.getItemProperty(cThread, player, depDatas.inventoryID, CInventory.CRefs.index, {imports.dbify.inventory.connection.itemFormat.counter}, true)
     if not DItemProperty and (#CInventory.CRefs.index > 0) then return false end
-    local DInventoryProperty = cThread:await(CInventory.getData(cThread, depDatas.inventoryID, {"max_slots", "slots"}))
+    local DInventoryProperty = CInventory.getData(cThread, depDatas.inventoryID, {"max_slots", "slots"})
     DInventoryProperty = DInventoryProperty or {}
     DInventoryProperty.max_slots, DInventoryProperty.slots = imports.math.max(CInventory.fetchMaxSlotsMultiplier(), imports.tonumber(DInventoryProperty.max_slots) or 0), (DInventoryProperty.slots and imports.json.decode(DInventoryProperty.slots)) or {}
     CInventory.CBuffer[(depDatas.characterID)] = {

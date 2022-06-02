@@ -82,7 +82,9 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
     imports.setPlayerNametagShowing(source, false)
     imports.setElementFrozen(source, true)
 
+    local __source = source
     imports.thread:create(function(self)
+        local source = __source
         local DPlayer = CPlayer.fetch(self, serial)
         DPlayer = DPlayer[1]
         DPlayer.character = imports.tonumber(DPlayer.character)
