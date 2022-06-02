@@ -106,7 +106,7 @@ function thread:resume(syncRate)
     return true
 end
 
-function thread:wait(exec, ...)
+function thread:await(exec, ...)
     if not exec or imports.type(exec) ~= "function" then return self:resolve(exec) end
     exec(self)
     self.isScheduled = true
