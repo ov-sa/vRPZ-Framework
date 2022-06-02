@@ -54,20 +54,16 @@ imports.addEventHandler("Player:onSaveCharacter", root, function(character, char
     if not character or not characters or not characters[character] or characters[character].id then return false end
 
     local serial = CPlayer.getSerial(source)
-    CCharacter.create(serial, function(characterID, args)
-        CInventory.create(function(inventoryID, args)
-            CCharacter.setData(characterID, {
-                {"identity", imports.json.encode(args[3])},
-                {"inventory", inventoryID}
-            }, function(result, args)
-                if result then CCharacter.CBuffer[(args[3].id)].identity = args[3].identity end
-                imports.triggerClientEvent(args[1], "Client:onSaveCharacter", args[1], (result and true) or false, args[2], (result and args[3]) or nil)
-            end, args[1], args[2], {
-                id = characterID,
-                identity = args[3]
-            })
-        end, args[1], args[2], args[3])
-    end, source, character, characters[character].identity)
+    imports.thread:create(function(self)
+        local characterID = self:await(CCharacter.create(self, serial))
+        local inventoryID = self:await(CInventory.create(self))
+        local bool = await(self, CCharacter.setData(self, characterID, {
+            {"identity", imports.json.encode(characters[character].identity)},
+            {"inventory", inventoryID}
+        }))
+        if bool then CCharacter.CBuffer[characterID].identity = characters[character].identity end
+        imports.triggerClientEvent(source, "Client:onSaveCharacter", source, (bool and true) or false, character, (bool and {id = characterID, identity = characters[character].identity}) or nil)
+    end):resume()
 end)
 
 
@@ -119,7 +115,7 @@ imports.addEventHandler("Player:onToggleLoginUI", root, function()
         else
             DPlayer.character = 0
         end
-        imports.triggerClientEvent(args[1], "Client:onToggleLoginUI", source, true, {
+        imports.triggerClientEvent(source, "Client:onToggleLoginUI", source, true, {
             character = DPlayer.character,
             characters = DPlayer.characters,
             vip = DPlayer.vip
