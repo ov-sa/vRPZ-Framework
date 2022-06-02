@@ -30,16 +30,22 @@ local imports = {
 -----------------------
 
 thread = {
+    buffer = {},
     pause = coroutine.yield
 }
 thread.__index = thread
 
-function thread:create(threadFunction)
-    if not threadFunction or imports.type(threadFunction) ~= "function" then return false end
-    local createdThread = imports.setmetatable({}, {__index = self})
-    createdThread.syncRate = {}
-    createdThread.thread = imports.coroutine.create(threadFunction)
-    return createdThread
+function thread:isInstance(cThread)
+    return (cThread and thread.buffer[cThread] and true) or false
+end
+
+function thread:create(exec)
+    if not exec or imports.type(exec) ~= "function" then return false end
+    local cThread = imports.setmetatable({}, {__index = self})
+    cThread.syncRate = {}
+    cThread.thread = imports.coroutine.create(exec)
+    thread.buffer[cThread] = true
+    return cThread
 end
 
 function thread:destroy()
@@ -47,6 +53,7 @@ function thread:destroy()
     if self.timer and imports.isTimer(self.timer) then
         imports.killTimer(self.timer)
     end
+    thread.buffer[self] = nil
     self = nil
     imports.collectgarbage()
     return true
@@ -100,6 +107,7 @@ function thread:resume(syncRate)
 end
 
 function thread:wait(exec, ...)
+    if not exec or imports.type(exec) ~= "function" then return self:resolve(exec) end
     exec(self)
     self.isScheduled = true
     thread.pause()
