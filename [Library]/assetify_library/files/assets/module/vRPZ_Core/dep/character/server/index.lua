@@ -48,36 +48,26 @@ CCharacter.delete = function(cThread, characterID)
     return true
 end
 
-CCharacter.setData = function(cThread, characterID, characterDatas, callback, ...)
+CCharacter.setData = function(cThread, characterID, characterDatas)
     if not cThread then return false end
-    cThread:await(imports.dbify.character.setData(cThread, characterID, characterDatas, function(result, args)
-        if result and CCharacter.CBuffer[characterID] then
-            for i = 1, #characterDatas, 1 do
-                local j = characterDatas[i]
-                CCharacter.CBuffer[characterID][(j[1])] = j[2]
-            end
+    local result = cThread:await(imports.dbify.character.setData(cThread, characterID, characterDatas)
+    if result and CCharacter.CBuffer[characterID] then
+        for i = 1, #characterDatas, 1 do
+            local j = characterDatas[i]
+            CCharacter.CBuffer[characterID][(j[1])] = j[2]
         end
-        local cbRef = callback
-        if (cbRef and (imports.type(cbRef) == "function")) then
-            imports.table.remove(args, 1)
-            cbRef(result, args)
-        end
-    end, characterDatas, ...))
+    end
     return true
 end
 
-CCharacter.getData = function(cThread, characterID, characterDatas, callback, ...)
+CCharacter.getData = function(cThread, characterID, characterDatas)
     if not cThread then return false end
-    cThread:await(imports.dbify.character.getData(cThread, characterID, characterDatas, function(result, args)
-        local cbRef = callback
-        if (cbRef and (imports.type(cbRef) == "function")) then
-            cbRef(result, args)
+    local result = cThread:await(imports.dbify.character.getData(cThread, characterID, characterDatas)
+    if result and CCharacter.CBuffer[characterID] then
+        for i = 1, #characterDatas, 1 do
+            local j = characterDatas[i]
+            CCharacter.CBuffer[characterID][(j[1])] = result[(j[1])]
         end
-        if result and CCharacter.CBuffer[characterID] then
-            for i, j in imports.pairs(characterDatas) do
-                CCharacter.CBuffer[characterID][j] = result[j]
-            end
-        end
-    end, ...))
-    return true
+    end
+    return result
 end
