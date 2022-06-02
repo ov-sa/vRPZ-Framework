@@ -4,7 +4,6 @@
 
 local imports = {
     type = type,
-    pairs = pairs,
     unpack = unpack,
     tostring = tostring,
     tonumber = tonumber,

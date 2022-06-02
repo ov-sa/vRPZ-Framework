@@ -131,7 +131,7 @@ dbify.inventory = {
         return true
     end,
 
-    delete = function(inventoryID, callback, ...)
+    delete = function(...)
         if not dbify.mysql.connection.instance then return false end
         local cArgs = {dbify.parseArgs(2, ...)}
         local inventoryID, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
