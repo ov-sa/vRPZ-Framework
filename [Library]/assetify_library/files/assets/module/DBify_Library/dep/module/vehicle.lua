@@ -87,7 +87,6 @@ dbify.vehicle = {
         }, true, callback, ...)
     end
 }
-dbify.createAsync(dbify.vehicle)
 
 
 -----------------------
