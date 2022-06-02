@@ -18,9 +18,10 @@ CCharacter.CBuffer = {}
 
 CCharacter.fetch = function(cThread, characterID)
     if not cThread then return false end
-    return cThread:await(imports.dbify.character.fetchAll(cThread, {
+    local result = cThread:await(imports.dbify.character.fetchAll(cThread, {
         {imports.dbify.character.connection.keyColumn, characterID}
     }))
+    return result
 end
 
 CCharacter.fetchOwned = function(cThread, serial)
@@ -44,9 +45,9 @@ end
 
 CCharacter.delete = function(cThread, characterID)
     if not cThread then return false end
-    cThread:await(imports.dbify.character.delete(cThread, characterID))
-    CCharacter.CBuffer[characterID] = nil
-    return true
+    local result = cThread:await(imports.dbify.character.delete(cThread, characterID))
+    if result then CCharacter.CBuffer[characterID] = nil end
+    return result
 end
 
 CCharacter.setData = function(cThread, characterID, characterDatas)
@@ -58,7 +59,7 @@ CCharacter.setData = function(cThread, characterID, characterDatas)
             CCharacter.CBuffer[characterID][(j[1])] = j[2]
         end
     end
-    return true
+    return result
 end
 
 CCharacter.getData = function(cThread, characterID, characterDatas)

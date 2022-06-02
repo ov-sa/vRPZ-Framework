@@ -21,28 +21,23 @@ local imports = {
 
 CPlayer.CBuffer = {}
 
-CPlayer.fetch = function(serial, ...)
-    dbify.serial.fetchAll({
+CPlayer.fetch = function(cThread, serial)
+    if not cThread then return false end
+    local result = cThread:await(dbify.serial.fetchAll(cThread, {
         {dbify.serial.connection.keyColumn, serial}
-    }, ...)
-    return true
+    }))
+    return result
 end
 
-CPlayer.setData = function(serial, serialDatas, callback, ...)
-    dbify.serial.setData(serial, serialDatas, function(result, args)
-        if result and CPlayer.CBuffer[serial] then
-            for i = 1, #serialDatas, 1 do
-                local j = serialDatas[i]
-                CPlayer.CBuffer[serial][(j[1])] = j[2]
-            end
+CPlayer.setData = function(serial, serialDatas)
+    local result = cThread:await(dbify.serial.setData(cThread, serial, serialDatas))
+    if result and CPlayer.CBuffer[serial] then
+        for i = 1, #serialDatas, 1 do
+            local j = serialDatas[i]
+            CPlayer.CBuffer[serial][(j[1])] = j[2]
         end
-        local cbRef = callback
-        if (cbRef and (imports.type(cbRef) == "function")) then
-            imports.table.remove(args, 1)
-            cbRef(result, args)
-        end
-    end, serialDatas, ...)
-    return true
+    end
+    return result
 end
 
 CPlayer.getData = function(serial, serialDatas, callback, ...)
