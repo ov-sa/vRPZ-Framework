@@ -20,6 +20,178 @@ local imports = {
 }
 
 
+-----------------
+--[[ Utility ]]--
+-----------------
+
+local cUtility = {
+    requestPushPopItem = function(inventoryID, items, processType, callback, cloneTable, ...)
+        if not dbify.mysql.connection.instance then return false end
+        if not inventoryID or (imports.type(inventoryID) ~= "number") or not items or (imports.type(items) ~= "table") or (#items <= 0) or not processType or (imports.type(processType) ~= "string") or ((processType ~= "push") and (processType ~= "pop")) then return false end
+        if cloneTable then items = imports.table.clone(items, true) end
+        return dbify.inventory.fetchAll({
+            {dbify.inventory.connection.keyColumn, inventoryID},
+        }, function(result, arguments)
+            if result then
+                result = result[1]
+                for i = 1, #arguments[1].items do
+                    local j = arguments[1].items[i]
+                    j[1] = "item_"..imports.tostring(j[1])
+                    j[2] = imports.math.max(0, imports.tonumber(j[2]) or 0)
+                    local prevItemData = result[(j[1])]
+                    prevItemData = (prevItemData and imports.json.decode(prevItemData)) or false
+                    prevItemData = (prevItemData and prevItemData.data and (imports.type(prevItemData.data) == "table") and prevItemData.item and (imports.type(prevItemData.item) == "table") and prevItemData) or false
+                    if not prevItemData then
+                        prevItemData = imports.table.clone(dbify.inventory.connection.itemFormat.content, true)
+                    end
+                    prevItemData.property[(dbify.inventory.connection.itemFormat.counter)] = j[2] + (imports.math.max(0, imports.tonumber(prevItemData.property[(dbify.inventory.connection.itemFormat.counter)]) or 0)*((arguments[1].processType == "push" and 1) or -1))
+                    arguments[1].items[i][2] = imports.json.encode(prevItemData)
+                end
+                dbify.inventory.setData(arguments[1].inventoryID, arguments[1].items, function(result, arguments)
+                    local cbRef = callback
+                    if cbRef and (imports.type(cbRef) == "function") then
+                        cbRef(result, arguments)
+                    end
+                end, arguments[2])
+            else
+                local cbRef = callback
+                if cbRef and (imports.type(cbRef) == "function") then
+                    cbRef(false, arguments[2])
+                end
+            end
+        end, {
+            inventoryID = inventoryID,
+            items = items,
+            processType = processType
+        }, {...})
+    end,
+
+    requestSetGetItemProperty = function(inventoryID, items, properties, processType, callback, cloneTable, ...)
+        if not dbify.mysql.connection.instance then return false end
+        if not inventoryID or (imports.type(inventoryID) ~= "number") or not items or (imports.type(items) ~= "table") or (#items <= 0) or not properties or (imports.type(properties) ~= "table") or (#properties <= 0) or not processType or (imports.type(processType) ~= "string") or ((processType ~= "set") and (processType ~= "get")) then return false end
+        if cloneTable then items = imports.table.clone(items, true) end
+        for i = 1, #items, 1 do
+            local j = items[i]
+            items[i] = "item_"..imports.tostring(j)
+        end
+        return dbify.inventory.getData(inventoryID, items, function(result, arguments)
+            local cbRef = callback
+            if result then
+                local properties = {}
+                for i, j in imports.pairs(result) do
+                    j = (j and imports.json.decode(j)) or false
+                    j = (j and j.data and (imports.type(j.data) == "table") and j.property and (imports.type(j.property) == "table") and j) or false
+                    if arguments[1].processType == "set" then
+                        if not j then
+                            j = imports.table.clone(dbify.inventory.connection.itemFormat.content, true)
+                        end
+                        for k = 1, #arguments[1].properties, 1 do
+                            local v = arguments[1].properties[k]
+                            v[1] = imports.tostring(v[1])
+                            if v[1] == dbify.inventory.connection.itemFormat.counter then
+                                v[2] = imports.math.max(0, imports.tonumber(v[2]) or j.property[(v[1])])
+                            end
+                            j.property[(v[1])] = v[2]
+                        end
+                        imports.table.insert(properties, {i, imports.json.encode(j)})
+                    else
+                        local itemIndex = imports.string.gsub(i, "item_", "", 1)
+                        properties[itemIndex] = {}
+                        if j then
+                            for k = 1, #arguments[1].properties, 1 do
+                                local v = arguments[1].properties[k]
+                                v = imports.tostring(v)
+                                properties[itemIndex][v] = j.property[v]
+                            end
+                        end
+                    end
+                end
+                if arguments[1].processType == "set" then
+                    dbify.inventory.setData(arguments[1].inventoryID, properties, function(result, arguments)
+                        local cbRef = callback
+                        if cbRef and (imports.type(cbRef) == "function") then
+                            cbRef(result, arguments)
+                        end
+                    end, arguments[2])
+                else
+                    if cbRef and (imports.type(cbRef) == "function") then
+                        cbRef(properties, arguments[2])
+                    end
+                end
+            else
+                if cbRef and (imports.type(cbRef) == "function") then
+                    cbRef(false, arguments[2])
+                end
+            end
+        end, {
+            inventoryID = inventoryID,
+            properties = properties,
+            processType = processType
+        }, {...})
+    end,
+
+    requestSetGetItemData = function(inventoryID, items, datas, processType, callback, cloneTable, ...)
+        if not dbify.mysql.connection.instance then return false end
+        if not inventoryID or (imports.type(inventoryID) ~= "number") or not items or (imports.type(items) ~= "table") or (#items <= 0) or not datas or (imports.type(datas) ~= "table") or (#datas <= 0) or not processType or (imports.type(processType) ~= "string") or ((processType ~= "set") and (processType ~= "get")) then return false end
+        if cloneTable then items = imports.table.clone(items, true) end
+        for i = 1, #items, 1 do
+            local j = items[i]
+            items[i] = "item_"..imports.tostring(j)
+        end
+        return dbify.inventory.getData(inventoryID, items, function(result, arguments)
+            local cbRef = callback
+            if result then
+                local datas = {}
+                for i, j in imports.pairs(result) do
+                    j = (j and imports.json.decode(j)) or false
+                    j = (j and j.data and (imports.type(j.data) == "table") and j.property and (imports.type(j.property) == "table") and j) or false
+                    if arguments[1].processType == "set" then
+                        if not j then
+                            j = imports.table.clone(dbify.inventory.connection.itemFormat.content, true)
+                        end
+                        for k = 1, #arguments[1].datas, 1 do
+                            local v = arguments[1].datas[k]
+                            j.data[imports.tostring(v[1])] = v[2]
+                        end
+                        imports.table.insert(datas, {i, imports.json.encode(j)})
+                    else
+                        local itemIndex = imports.string.gsub(i, "item_", "", 1)
+                        datas[itemIndex] = {}
+                        if j then
+                            for k = 1, #arguments[1].datas, 1 do
+                                local v = arguments[1].datas[k]
+                                v = imports.tostring(v)
+                                datas[itemIndex][v] = j.data[v]
+                            end
+                        end
+                    end
+                end
+                if arguments[1].processType == "set" then
+                    dbify.inventory.setData(arguments[1].inventoryID, datas, function(result, arguments)
+                        local cbRef = callback
+                        if cbRef and (imports.type(cbRef) == "function") then
+                            cbRef(result, arguments)
+                        end
+                    end, arguments[2])
+                else
+                    if cbRef and (imports.type(cbRef) == "function") then
+                        cbRef(datas, arguments[2])
+                    end
+                end
+            else
+                if cbRef and (imports.type(cbRef) == "function") then
+                    cbRef(false, arguments[2])
+                end
+            end
+        end, {
+            inventoryID = inventoryID,
+            datas = datas,
+            processType = processType
+        }, {...})
+    end
+}
+
+
 ---------------------------
 --[[ Module: Inventory ]]--
 ---------------------------
@@ -190,178 +362,11 @@ dbify.inventory = {
     end,
 
     item = {
-        __utilities__ = {
-            pushnpop = function(inventoryID, items, processType, callback, cloneTable, ...)
-                if not dbify.mysql.connection.instance then return false end
-                if not inventoryID or (imports.type(inventoryID) ~= "number") or not items or (imports.type(items) ~= "table") or (#items <= 0) or not processType or (imports.type(processType) ~= "string") or ((processType ~= "push") and (processType ~= "pop")) then return false end
-                if cloneTable then items = imports.table.clone(items, true) end
-                return dbify.inventory.fetchAll({
-                    {dbify.inventory.connection.keyColumn, inventoryID},
-                }, function(result, arguments)
-                    if result then
-                        result = result[1]
-                        for i = 1, #arguments[1].items do
-                            local j = arguments[1].items[i]
-                            j[1] = "item_"..imports.tostring(j[1])
-                            j[2] = imports.math.max(0, imports.tonumber(j[2]) or 0)
-                            local prevItemData = result[(j[1])]
-                            prevItemData = (prevItemData and imports.json.decode(prevItemData)) or false
-                            prevItemData = (prevItemData and prevItemData.data and (imports.type(prevItemData.data) == "table") and prevItemData.item and (imports.type(prevItemData.item) == "table") and prevItemData) or false
-                            if not prevItemData then
-                                prevItemData = imports.table.clone(dbify.inventory.connection.itemFormat.content, true)
-                            end
-                            prevItemData.property[(dbify.inventory.connection.itemFormat.counter)] = j[2] + (imports.math.max(0, imports.tonumber(prevItemData.property[(dbify.inventory.connection.itemFormat.counter)]) or 0)*((arguments[1].processType == "push" and 1) or -1))
-                            arguments[1].items[i][2] = imports.json.encode(prevItemData)
-                        end
-                        dbify.inventory.setData(arguments[1].inventoryID, arguments[1].items, function(result, arguments)
-                            local cbRef = callback
-                            if cbRef and (imports.type(cbRef) == "function") then
-                                cbRef(result, arguments)
-                            end
-                        end, arguments[2])
-                    else
-                        local cbRef = callback
-                        if cbRef and (imports.type(cbRef) == "function") then
-                            cbRef(false, arguments[2])
-                        end
-                    end
-                end, {
-                    inventoryID = inventoryID,
-                    items = items,
-                    processType = processType
-                }, {...})
-            end,
-
-            property_setnget = function(inventoryID, items, properties, processType, callback, cloneTable, ...)
-                if not dbify.mysql.connection.instance then return false end
-                if not inventoryID or (imports.type(inventoryID) ~= "number") or not items or (imports.type(items) ~= "table") or (#items <= 0) or not properties or (imports.type(properties) ~= "table") or (#properties <= 0) or not processType or (imports.type(processType) ~= "string") or ((processType ~= "set") and (processType ~= "get")) then return false end
-                if cloneTable then items = imports.table.clone(items, true) end
-                for i = 1, #items, 1 do
-                    local j = items[i]
-                    items[i] = "item_"..imports.tostring(j)
-                end
-                return dbify.inventory.getData(inventoryID, items, function(result, arguments)
-                    local cbRef = callback
-                    if result then
-                        local properties = {}
-                        for i, j in imports.pairs(result) do
-                            j = (j and imports.json.decode(j)) or false
-                            j = (j and j.data and (imports.type(j.data) == "table") and j.property and (imports.type(j.property) == "table") and j) or false
-                            if arguments[1].processType == "set" then
-                                if not j then
-                                    j = imports.table.clone(dbify.inventory.connection.itemFormat.content, true)
-                                end
-                                for k = 1, #arguments[1].properties, 1 do
-                                    local v = arguments[1].properties[k]
-                                    v[1] = imports.tostring(v[1])
-                                    if v[1] == dbify.inventory.connection.itemFormat.counter then
-                                        v[2] = imports.math.max(0, imports.tonumber(v[2]) or j.property[(v[1])])
-                                    end
-                                    j.property[(v[1])] = v[2]
-                                end
-                                imports.table.insert(properties, {i, imports.json.encode(j)})
-                            else
-                                local itemIndex = imports.string.gsub(i, "item_", "", 1)
-                                properties[itemIndex] = {}
-                                if j then
-                                    for k = 1, #arguments[1].properties, 1 do
-                                        local v = arguments[1].properties[k]
-                                        v = imports.tostring(v)
-                                        properties[itemIndex][v] = j.property[v]
-                                    end
-                                end
-                            end
-                        end
-                        if arguments[1].processType == "set" then
-                            dbify.inventory.setData(arguments[1].inventoryID, properties, function(result, arguments)
-                                local cbRef = callback
-                                if cbRef and (imports.type(cbRef) == "function") then
-                                    cbRef(result, arguments)
-                                end
-                            end, arguments[2])
-                        else
-                            if cbRef and (imports.type(cbRef) == "function") then
-                                cbRef(properties, arguments[2])
-                            end
-                        end
-                    else
-                        if cbRef and (imports.type(cbRef) == "function") then
-                            cbRef(false, arguments[2])
-                        end
-                    end
-                end, {
-                    inventoryID = inventoryID,
-                    properties = properties,
-                    processType = processType
-                }, {...})
-            end,
-
-            data_setnget = function(inventoryID, items, datas, processType, callback, cloneTable, ...)
-                if not dbify.mysql.connection.instance then return false end
-                if not inventoryID or (imports.type(inventoryID) ~= "number") or not items or (imports.type(items) ~= "table") or (#items <= 0) or not datas or (imports.type(datas) ~= "table") or (#datas <= 0) or not processType or (imports.type(processType) ~= "string") or ((processType ~= "set") and (processType ~= "get")) then return false end
-                if cloneTable then items = imports.table.clone(items, true) end
-                for i = 1, #items, 1 do
-                    local j = items[i]
-                    items[i] = "item_"..imports.tostring(j)
-                end
-                return dbify.inventory.getData(inventoryID, items, function(result, arguments)
-                    local cbRef = callback
-                    if result then
-                        local datas = {}
-                        for i, j in imports.pairs(result) do
-                            j = (j and imports.json.decode(j)) or false
-                            j = (j and j.data and (imports.type(j.data) == "table") and j.property and (imports.type(j.property) == "table") and j) or false
-                            if arguments[1].processType == "set" then
-                                if not j then
-                                    j = imports.table.clone(dbify.inventory.connection.itemFormat.content, true)
-                                end
-                                for k = 1, #arguments[1].datas, 1 do
-                                    local v = arguments[1].datas[k]
-                                    j.data[imports.tostring(v[1])] = v[2]
-                                end
-                                imports.table.insert(datas, {i, imports.json.encode(j)})
-                            else
-                                local itemIndex = imports.string.gsub(i, "item_", "", 1)
-                                datas[itemIndex] = {}
-                                if j then
-                                    for k = 1, #arguments[1].datas, 1 do
-                                        local v = arguments[1].datas[k]
-                                        v = imports.tostring(v)
-                                        datas[itemIndex][v] = j.data[v]
-                                    end
-                                end
-                            end
-                        end
-                        if arguments[1].processType == "set" then
-                            dbify.inventory.setData(arguments[1].inventoryID, datas, function(result, arguments)
-                                local cbRef = callback
-                                if cbRef and (imports.type(cbRef) == "function") then
-                                    cbRef(result, arguments)
-                                end
-                            end, arguments[2])
-                        else
-                            if cbRef and (imports.type(cbRef) == "function") then
-                                cbRef(datas, arguments[2])
-                            end
-                        end
-                    else
-                        if cbRef and (imports.type(cbRef) == "function") then
-                            cbRef(false, arguments[2])
-                        end
-                    end
-                end, {
-                    inventoryID = inventoryID,
-                    datas = datas,
-                    processType = processType
-                }, {...})
-            end
-        },
-
         add = function(...)
             local isAsync, cArgs = {dbify.parseArgs(3, ...)}
             local inventoryID, items, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             local promise = function()
-                return dbify.inventory.item.__utilities__.pushnpop(inventoryID, items, "push", callback, imports.unpack(cArgs))
+                return cUtility.requestPushPopItem(inventoryID, items, "push", callback, imports.unpack(cArgs))
             end
             return (isAsync and promise) or promise()
         end,
@@ -370,7 +375,7 @@ dbify.inventory = {
             local isAsync, cArgs = {dbify.parseArgs(3, ...)}
             local inventoryID, items, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             local promise = function()
-                return dbify.inventory.item.__utilities__.pushnpop(inventoryID, items, "pop", callback, imports.unpack(cArgs))
+                return cUtility.requestPushPopItem(inventoryID, items, "pop", callback, imports.unpack(cArgs))
             end
             return (isAsync and promise) or promise()
         end,
@@ -379,7 +384,7 @@ dbify.inventory = {
             local isAsync, cArgs = {dbify.parseArgs(4, ...)}
             local inventoryID, items, properties, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             local promise = function()
-                return dbify.inventory.item.__utilities__.property_setnget(inventoryID, items, properties, "set", callback, imports.unpack(cArgs))
+                return cUtility.requestSetGetItemProperty(inventoryID, items, properties, "set", callback, imports.unpack(cArgs))
             end
             return (isAsync and promise) or promise()
         end,
@@ -388,7 +393,7 @@ dbify.inventory = {
             local isAsync, cArgs = {dbify.parseArgs(4, ...)}
             local inventoryID, items, properties, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             local promise = function()
-                return dbify.inventory.item.__utilities__.property_setnget(inventoryID, items, properties, "get", callback, imports.unpack(cArgs))
+                return cUtility.requestSetGetItemProperty(inventoryID, items, properties, "get", callback, imports.unpack(cArgs))
             end
             return (isAsync and promise) or promise()
         end,
@@ -397,7 +402,7 @@ dbify.inventory = {
             local isAsync, cArgs = {dbify.parseArgs(4, ...)}
             local inventoryID, items, datas, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             local promise = function()
-                return dbify.inventory.item.__utilities__.data_setnget(inventoryID, items, datas, "set", callback, imports.unpack(cArgs))
+                return cUtility.requestSetGetItemData(inventoryID, items, datas, "set", callback, imports.unpack(cArgs))
             end
             return (isAsync and promise) or promise()
         end,
@@ -406,7 +411,7 @@ dbify.inventory = {
             local isAsync, cArgs = {dbify.parseArgs(4, ...)}
             local inventoryID, items, datas, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             local promise = function()
-                return dbify.inventory.item.__utilities__.data_setnget(inventoryID, items, datas, "get", callback, imports.unpack(cArgs))
+                return cUtility.requestSetGetItemData(inventoryID, items, datas, "get", callback, imports.unpack(cArgs))
             end
             return (isAsync and promise) or promise()
         end
