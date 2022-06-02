@@ -26,13 +26,13 @@ string.parse = function(rawString)
     return imports.tonumber(rawString) or rawString
 end
 
-dbify.parseArgs = function(callbackIndex, ...)
+dbify.parseArgs = function(cbIndex, ...)
     local rawArgs = {...}
-    local cThread, callbackIndex = rawArgs[1], imports.tonumber(callbackIndex)
+    local cThread, cbIndex = rawArgs[1], imports.tonumber(cbIndex)
     if cThread and thread:isInstance(cThread) then
-        if not callbackIndex then return false end
+        if not cbIndex then return false end
         imports.table.remove(rawArgs, 1)
-        imports.table.insert(rawArgs, callbackIndex, function(...) return cThread:resolve(...) end)
+        imports.table.insert(rawArgs, cbIndex, function(...) return cThread:resolve(...) end)
         return true, imports.unpack(rawArgs)
     end
     return false, imports.unpack(rawArgs)
