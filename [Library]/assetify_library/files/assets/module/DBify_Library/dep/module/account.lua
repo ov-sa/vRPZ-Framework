@@ -23,21 +23,16 @@ dbify.account = {
         table = "dbify_accounts",
         keyColumn = "name"
     },
-    async = {
-        fetchAll = 2,
-        create = 2,
-        delete = 2,
-        setData = 3,
-        getData = 3
-    },
 
-    fetchAll = function(keyColumns, callback, ...)
+    fetchAll = function(...)
         if not dbify.mysql.connection.instance then return false end
+        local keyColumns, callback, ... = dbify.parseArgs(2, ...)
         return dbify.mysql.table.fetchContents(dbify.account.connection.table, keyColumns, callback, ...)
     end,
 
-    create = function(accountName, callback, ...)
+    create = function(...)
         if not dbify.mysql.connection.instance then return false end
+        local accountName, callback, ... = dbify.parse(2, ...)
         if not accountName or (imports.type(accountName) ~= "string") then return false end
         return dbify.account.getData(accountName, {dbify.account.connection.keyColumn}, function(result, arguments)
             local callbackReference = callback
@@ -54,8 +49,9 @@ dbify.account = {
         end, ...)
     end,
 
-    delete = function(accountName, callback, ...)
+    delete = function(...)
         if not dbify.mysql.connection.instance then return false end
+        local accountName, callback, ... = dbify.parse(2, ...)
         if not accountName or (imports.type(accountName) ~= "string") then return false end
         return dbify.account.getData(accountName, {dbify.account.connection.keyColumn}, function(result, arguments)
             local callbackReference = callback
@@ -72,23 +68,24 @@ dbify.account = {
         end, ...)
     end,
 
-    setData = function(accountName, dataColumns, callback, ...)
+    setData = function(...)
         if not dbify.mysql.connection.instance then return false end
+        local accountName, dataColumns, callback, ... = dbify.parse(3, ...)
         if not accountName or (imports.type(accountName) ~= "string") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
         return dbify.mysql.data.set(dbify.account.connection.table, dataColumns, {
             {dbify.account.connection.keyColumn, accountName}
         }, callback, ...)
     end,
 
-    getData = function(accountName, dataColumns, callback, ...)
+    getData = function(...)
         if not dbify.mysql.connection.instance then return false end
+        local accountName, dataColumns, callback, ... = dbify.parse(3, ...)
         if not accountName or (imports.type(accountName) ~= "string") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
         return dbify.mysql.data.get(dbify.account.connection.table, dataColumns, {
             {dbify.account.connection.keyColumn, accountName}
         }, true, callback, ...)
     end
 }
-dbify.createAsync(dbify.account)
 
 
 -----------------------
