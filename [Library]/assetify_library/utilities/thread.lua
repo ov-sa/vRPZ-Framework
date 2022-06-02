@@ -21,7 +21,8 @@ local imports = {
     setTimer = setTimer,
     isTimer = isTimer,
     killTimer = killTimer,
-    coroutine = coroutine
+    coroutine = coroutine,
+    math = math
 }
 
 
@@ -33,17 +34,6 @@ thread = {
     buffer = {}
 }
 thread.__index = thread
-
-thread.__pause = imports.coroutine.yield
-thread.__await = function(self, exec)
-    if not exec or imports.type(exec) ~= "function" then return self:resolve(exec) end
-    exec(self)
-    self.isScheduled = true
-    thread:pause()
-    local resolvedValues = self.scheduledValues
-    self.scheduledValues = nil
-    return imports.unpack(resolvedValues)
-end
 
 function thread:isInstance(cThread)
     if not self then return false end
@@ -81,7 +71,7 @@ function thread:status()
 end
 
 function thread:pause()
-    return thread.__pause()
+    return imports.coroutine.yield()
 end
 
 function thread:resume(syncRate)
@@ -122,9 +112,26 @@ function thread:resume(syncRate)
     return true
 end
 
-function thread:await(...)
+function thread:sleep(duration)
+    duration = imports.math.max(0, imports.tonumber(duration) or 0)
     if not self or (self == thread) then return false end
-    return thread.__await(self, ...)
+    if self.timer and imports.isTimer(self.timer) then return false end
+    self.timer = imports.setTimer(function()
+        self:resume()
+    end, duration, 1, self)
+    self:pause()
+    return true
+end
+
+function thread:await(exec)
+    if not self or (self == thread) then return false end
+    if not exec or imports.type(exec) ~= "function" then return self:resolve(exec) end
+    exec(self)
+    self.isScheduled = true
+    thread:pause()
+    local resolvedValues = self.scheduledValues
+    self.scheduledValues = nil
+    return imports.unpack(resolvedValues)
 end
 
 function thread:resolve(...)
@@ -134,3 +141,7 @@ function thread:resolve(...)
     self:resume()
     return true
 end
+
+function async(...) return thread:create(...) end
+function await(...) return thread:await(...) end
+function sleep(...) return thread:sleep(...) end
