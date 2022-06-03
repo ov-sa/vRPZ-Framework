@@ -107,7 +107,7 @@ function network:emit(...)
         if not isRemote then cNetwork = self end
     end
     if not cNetwork or cNetwork.isCallback then return false end
-    for i, j in imports.pairs(network.buffer[cNetwork]) do
+    for i, j in imports.pairs(cNetwork.handlers) do
         if i and (imports.type(i) == "function") then
             i(imports.unpack(cArgs))
         end
@@ -131,8 +131,8 @@ function network:emitCallback(...)
         isRemote = network.fetchArg(_, cArgs)
         if not isRemote then cNetwork = self end
     end
-    if not cNetwork or not cNetwork.isCallback or not network.buffer[cNetwork] then return false end
-    return function() return network.buffer[cNetwork](imports.unpack(cArgs)) end
+    if not cNetwork or not cNetwork.isCallback or not cNetwork.handler then return false end
+    return function() return cNetwork.handler(imports.unpack(cArgs)) end
 end
 
 
