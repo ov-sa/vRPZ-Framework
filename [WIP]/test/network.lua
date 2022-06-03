@@ -38,8 +38,18 @@ network.__index = network
 
 imports.addEvent("Assetify:Network:API")
 imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)
-    if not serial or (network.identifier ~= serial) or not payload then return false end
-    print("Got Response: "..tostring(payload))
+    if not serial or not payload or (payload.isRestricted and (serial ~= network.identifier)) then return false end
+    if payload.processType == "emit" then
+        local cNetwork = network:fetch(payload.networkName)
+        if cNetwork and not cNetwork.isCallback then
+            for i, j in imports.pairs(cNetwork.handlers) do
+                if i and (imports.type(i) == "function") then
+                    i(imports.unpack(payload.processArgs))
+                end
+            end
+        end
+    end
+    --print("Got Response: "..iprint(payload))
 end)
 
 network.fetchArg = function(index, pool)
@@ -68,6 +78,7 @@ function network:load(name, isCallback)
     if not self or (self == network) then return false end
     if not name or (imports.type(name) ~= "string") or network.buffer[name] then return false end
     self.name = name
+    self.owner = network.identifier
     self.isCallback = (isCallback and true) or false
     if not self.isCallback then self.handlers = {} end
     network.buffer[name] = self
@@ -114,24 +125,23 @@ end
 function network:emit(...)
     if not self then return false end
     local cArgs = {...}
-    local cNetwork, isRemote = false, false
+    local payload = {
+        isRemote = false,
+        isRestricted = false,
+        processType = "emit",
+        networkName = false
+    }
     if self == network then
-        local name = network.fetchArg(_, cArgs)
-        isRemote = network.fetchArg(_, cArgs)
-        cNetwork = (not isRemote and network:fetch(name)) or cNetwork
-        if isRemote then
-            --TODO: JUST TRIGGER THE EVENT TO EMIT ON SERVER SIDE
-            return true
-        end
+        payload.networkName, payload.isRemote = network.fetchArg(_, cArgs), network.fetchArg(_, cArgs)
     else
-        isRemote = network.fetchArg(_, cArgs)
-        if not isRemote then cNetwork = self end
+        payload.isRestricted = true
+        payload.networkName = self.name
     end
-    if not cNetwork or cNetwork.isCallback then return false end
-    for i, j in imports.pairs(cNetwork.handlers) do
-        if i and (imports.type(i) == "function") then
-            i(imports.unpack(cArgs))
-        end
+    payload.processArgs = cArgs
+    if not payload.isRemote then
+        imports.triggerEvent("Assetify:Network:API", root, network.identifier, payload)
+    else
+        --TODO: JUST TRIGGER THE EVENT TO EMIT ON SERVER SIDE
     end
     return true
 end
@@ -163,13 +173,15 @@ end
 --TODO: TESTING ZONE...
 -----------------------------------------------------------
 
-local cNetwork = network:create("TestEvent", true)
+local cNetwork = network:create("TestEvent", false)
 cNetwork:on(function(first, second)
-    return first + second
+    print("wew?")
+    print(first.." : "..second)
+    --return first + second
 end)
 
-local value = network:emitCallback("TestEvent", false, 1, 2)()
-iprint(value) --3
+--local value = network:emitCallback("TestEvent", false, 1, 2)()
+--iprint(value) --3
 
---cNetwork:emit(false, "Arg1", "Arg2")
+cNetwork:emit("Arg1", "Arg2")
 --network:destroy("TestEvent")
