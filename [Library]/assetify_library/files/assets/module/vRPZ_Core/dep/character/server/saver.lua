@@ -79,8 +79,8 @@ end
 
 CCharacter.loadInventory = function(cThread, player, depDatas)
     if not cThread then return false end
-    if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") then return false end
-    local DItemProperty = CInventory.getItemProperty(cThread, player, depDatas.inventoryID, CInventory.CRefs.index, {imports.dbify.inventory.connection.itemFormat.counter}, true)
+    if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") or not depDatas then return false end
+    local DItemProperty = CInventory.getItemProperty(cThread, depDatas.inventoryID, CInventory.CRefs.index, {imports.dbify.inventory.connection.itemFormat.counter}, true)
     if not DItemProperty and (#CInventory.CRefs.index > 0) then return false end
     local DInventoryProperty = CInventory.getData(cThread, depDatas.inventoryID, {"max_slots", "slots"})
     DInventoryProperty = DInventoryProperty or {}
