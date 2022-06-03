@@ -14,7 +14,6 @@ local imports = {
     tostring = tostring,
     setmetatable = setmetatable,
     getResourceName = getResourceName,
-    setTimer = setTimer,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     triggerEvent = triggerEvent,
@@ -172,9 +171,9 @@ function network:emit(...)
 end
 
 function network:emitCallback(cThread, ...)
-    if not self or not cThread then return false end
+    if not self or not cThread or not thread:isInstance(cThread) then return false end
     local cThread = cThread
-    local cArgs, cExec = {...}, function(...) local cArgs = {...} return imports.setTimer(function() cThread:resolve(imports.unpack(cArgs)) end, 1, 1) end
+    local cArgs, cExec = {...}, function(...) return cThread:resolve(...) end
     local payload = {
         isRemote = false,
         isRestricted = false,

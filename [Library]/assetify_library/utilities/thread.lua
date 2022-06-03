@@ -138,7 +138,9 @@ function thread:resolve(...)
     if not self or (self == thread) then return false end
     if not self.isScheduled then return false end
     self.scheduledValues = {...}
-    self:resume()
+    imports.setTimer(function()
+        self:resume()
+    end, 1, 1)
     return true
 end
 
