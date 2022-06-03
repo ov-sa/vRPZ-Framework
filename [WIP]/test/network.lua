@@ -28,18 +28,16 @@ local imports = {
 ------------------------
 
 network = {
-    moduleSerial = imports.md5(imports.getResourceName(resource)),
+    identifier = imports.md5(imports.getResourceName(resource)),
     buffer = {},
     cache = {
-        serial = {}
+        execSerials = {}
     }
 }
 network.__index = network
 
-imports.addEvent("Network:Current")
-imports.addEvent("Network:Remote", true)
-
-imports.addEventHandler("Network:Current", root, function(payload)
+imports.addEvent("Network:API")
+imports.addEventHandler("Network:API", root, function(payload)
     print("Got Response: "..tostring(payload))
 end)
 
@@ -90,8 +88,8 @@ end
 function network:serializeExec(exec)
     if not self or (self ~= network) then return false end
     if not exec or (imports.type(exec) ~= "function") then return false end
-    local cSerial = imports.md5(network.moduleSerial..":"..imports.tostring(exec))
-    network.cache.serial[cSerial] = exec
+    local cSerial = imports.md5(network.identifier..":"..imports.tostring(exec))
+    network.cache.execSerials[cSerial] = exec
     return cSerial
 end
 
