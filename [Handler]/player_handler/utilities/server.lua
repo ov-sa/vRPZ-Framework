@@ -39,7 +39,8 @@ local imports = {
     setGameType = setGameType,
     setMapName = setMapName,
     math = math,
-    assetify = assetify
+    assetify = assetify,
+    thread = thread
 }
 imports.assetify.execOnModuleLoad(function()
     imports.assetify.loadModule("DBify_Library", {"shared", "server"})
@@ -131,10 +132,14 @@ CGame.execOnModuleLoad(function()
                         if cooldownETA then
                             imports.triggerClientEvent(source, "Client:onNotification", source, "Please wait "..imports.math.ceil(cooldownETA/1000).."s before logging out!", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
                         else
-                            CCharacter.saveProgress(source)
-                            imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, true)
-                            imports.triggerEvent("Player:onToggleLoginUI", source)
-                            imports.outputChatBox("#C8C8C8- #5050FF"..(imports.getPlayerName(source)).."#C8C8C8 left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)    
+                            local __source = source
+                            imports.thread:create(function(self)
+                                local source = __source
+                                imports.triggerEvent("Player:onToggleLoginUI", source)
+                                imports.outputChatBox("#C8C8C8- #5050FF"..(imports.getPlayerName(source)).."#C8C8C8 left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)
+                                CCharacter.saveProgress(self, source)
+                                imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, true)
+                            end):resume()
                         end
                     end
                 end
@@ -146,8 +151,10 @@ end)
 
 imports.addEventHandler("onResourceStop", resource, function()
     local serverPlayers = imports.getElementsByType("player")
-    for i = 1, #serverPlayers, 1 do
-        local j = serverPlayers[i]
-        CCharacter.saveProgress(j)
-    end
+    imports.thread:create(function(self)
+        for i = 1, #serverPlayers, 1 do
+            local j = serverPlayers[i]
+            CCharacter.saveProgress(self, j)
+        end
+    end):resume()
 end)
