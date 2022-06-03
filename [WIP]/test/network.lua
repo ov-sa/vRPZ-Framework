@@ -14,6 +14,7 @@ local imports = {
     tostring = tostring,
     setmetatable = setmetatable,
     getResourceName = getResourceName,
+    setTimer = setTimer,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     triggerEvent = triggerEvent,
@@ -173,12 +174,13 @@ end
 function network:emitCallback(cThread, ...)
     if not self or not cThread then return false end
     local cThread = cThread
-    local cArgs = {...}
+    local cArgs, cExec = {...}, function(...) local cArgs = {...} return imports.setTimer(function() cThread:resolve(imports.unpack(cArgs)) end, 1, 1) end
     local payload = {
         isRemote = false,
         isRestricted = false,
         processType = "emitCallback",
-        networkName = false
+        networkName = false,
+        execSerial = network:serializeExec(cExec)
     }
     if self == network then
         payload.networkName, payload.isRemote = network.fetchArg(_, cArgs), network.fetchArg(_, cArgs)
@@ -187,13 +189,11 @@ function network:emitCallback(cThread, ...)
         payload.networkName = self.name
     end
     payload.processArgs = cArgs
-    payload.execSerial = network:serializeExec(function(...) print("RESUMING THREAD") return cThread:resolve(...) end)
     if not payload.isRemote then
-        imports.triggerEvent("Assetify:Network:API", resourceRoot, network.identifier, payload)
+        return function() imports.triggerEvent("Assetify:Network:API", resourceRoot, network.identifier, payload) end
     else
-        imports.triggerRemoteEvent("Assetify:Network:API", resourceRoot, network.identifier, payload)
+        return function() imports.triggerRemoteEvent("Assetify:Network:API", resourceRoot, network.identifier, payload) end
     end
-    return network.cache.execSerials[(payload.execSerial)]
 end
 
 
@@ -205,15 +205,15 @@ end
 
 local cNetwork = network:create("TestEvent", true)
 cNetwork:on(function(first, second)
-    print("wew?")
     print(first.." : "..second)
     return first + second
 end)
 
 thread:create(function(self)
-    local value = self:await(network:emitCallback(self, "TestEvent", false, 1, 2))
-    print("WOT")
-    print(value)
+    local testing = self:await(network:emitCallback(self, "TestEvent", false, 1, 2))
+    print(testing)
+    --print("WOT")
+    --print(value)
 end):resume()
 --cNetwork:emit("Arg1", "Arg2")
 --network:destroy("TestEvent")
