@@ -36,8 +36,8 @@ network = {
 }
 network.__index = network
 
-imports.addEvent("Network:API")
-imports.addEventHandler("Network:API", root, function(payload)
+imports.addEvent("Assetify:Network:API")
+imports.addEventHandler("Assetify:Network:API", root, function(payload)
     print("Got Response: "..tostring(payload))
 end)
 
