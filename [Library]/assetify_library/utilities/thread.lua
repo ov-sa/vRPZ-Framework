@@ -37,8 +37,8 @@ thread.__index = thread
 
 function thread:isInstance(cThread)
     if not self then return false end
-    if self == thread then return (cThread and thread.buffer[cThread] and true) or false end
-    return (thread.buffer[self] and true) or false
+    if self == thread then return (cThread.isThread and true) or false end
+    return (self.isThread and true) or false
 end
 
 function thread:create(exec)
