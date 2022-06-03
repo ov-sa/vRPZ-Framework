@@ -37,7 +37,8 @@ network = {
 network.__index = network
 
 imports.addEvent("Assetify:Network:API")
-imports.addEventHandler("Assetify:Network:API", root, function(payload)
+imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)
+    if not serial or (network.identifier ~= serial) or not payload then return false end
     print("Got Response: "..tostring(payload))
 end)
 
