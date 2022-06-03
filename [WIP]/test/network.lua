@@ -53,11 +53,9 @@ imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)
         if cNetwork and cNetwork.isCallback then
             if not cNetwork or not cNetwork.isCallback or not cNetwork.handler then return false end
             local cArgs = {cNetwork.handler(imports.unpack(payload.processArgs))}
-            print("VALID...")
-            iprint(cArgs)
+            --TODO: PASS BACK TO THE SOURCE NOW...
             --return function() return cNetwork.handler(imports.unpack(cArgs)) end
         end
-        --iprint(payload)
     end
 end)
 
