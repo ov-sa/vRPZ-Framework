@@ -16,8 +16,7 @@ local imports = {
     addEvent = addEvent,
     addEventHandler = addEventHandler,
     triggerEvent = triggerEvent,
-    triggerClientEvent = triggerClientEvent,
-    triggerServerEvent = triggerServerEvent,
+    triggerRemoteEvent = (localPlayer and triggerServerEvent) or triggerClientEvent,
     json = json,
     table = table
 }
@@ -139,9 +138,9 @@ function network:emit(...)
     end
     payload.processArgs = cArgs
     if not payload.isRemote then
-        imports.triggerEvent("Assetify:Network:API", root, network.identifier, payload)
+        imports.triggerEvent("Assetify:Network:API", resourceRoot, network.identifier, payload)
     else
-        --TODO: JUST TRIGGER THE EVENT TO EMIT ON SERVER SIDE
+        imports.triggerRemoteEvent("Assetify:Network:API", resourceRoot, network.identifier, payload)
     end
     return true
 end
