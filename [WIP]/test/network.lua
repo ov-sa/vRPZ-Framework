@@ -161,6 +161,7 @@ end
 
 function network:emitCallback(cThread, ...)
     if not self or not cThread then return false end
+    local cThread = cThread
     local cArgs = {...}
     local payload = {
         isRemote = false,
@@ -175,7 +176,7 @@ function network:emitCallback(cThread, ...)
         payload.networkName = self.name
     end
     payload.processArgs = cArgs
-    payload.execSerial = network:serializeExec(function(cThread, ...) cThread:resolve(...) end) --TODO: CHECK IF ITS CORRECT AS IN DBIFY @AVIRIL
+    payload.execSerial = network:serializeExec(function(...) return cThread:resolve(...) end)
     if not payload.isRemote then
         imports.triggerEvent("Assetify:Network:API", resourceRoot, network.identifier, payload)
     else
