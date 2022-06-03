@@ -1,4 +1,5 @@
 loadstring(exports.assetify_library:fetchImports())()
+loadstring(exports.assetify_library:fetchThreader())()
 
 -----------------
 --[[ Imports ]]--
@@ -51,10 +52,12 @@ imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)
         local cNetwork = network:fetch(payload.networkName)
         if cNetwork and cNetwork.isCallback then
             if not cNetwork or not cNetwork.isCallback or not cNetwork.handler then return false end
+            local cArgs = {cNetwork.handler(imports.unpack(payload.processArgs))}
             print("VALID...")
+            iprint(cArgs)
             --return function() return cNetwork.handler(imports.unpack(cArgs)) end
         end
-        iprint(payload)
+        --iprint(payload)
     end
 end)
 
@@ -111,6 +114,12 @@ function network:serializeExec(exec)
     return cSerial
 end
 
+function network:deserializeExec(serial)
+    if not self or (self ~= network) then return false end
+    network.cache.execSerials[serial] = nil
+    return true
+end
+
 function network:on(exec)
     if not self or (self == network) then return false end
     if not exec or (imports.type(exec) ~= "function") then return false end
@@ -152,8 +161,8 @@ function network:emit(...)
     return true
 end
 
-function network:emitCallback(...)
-    if not self then return false end
+function network:emitCallback(cThread, ...)
+    if not self or not cThread then return false end
     local cArgs = {...}
     local payload = {
         isRemote = false,
@@ -168,6 +177,7 @@ function network:emitCallback(...)
         payload.networkName = self.name
     end
     payload.processArgs = cArgs
+    payload.execSerial = network:serializeExec(function(cThread, ...) cThread:resolve(...) end)
     if not payload.isRemote then
         imports.triggerEvent("Assetify:Network:API", resourceRoot, network.identifier, payload)
     else
@@ -187,10 +197,12 @@ local cNetwork = network:create("TestEvent", true)
 cNetwork:on(function(first, second)
     print("wew?")
     print(first.." : "..second)
-    --return first + second
+    return first + second
 end)
 
-local value = network:emitCallback("TestEvent", false, 1, 2)
+thread:create(function(self)
+    local value = network:emitCallback(self, "TestEvent", false, 1, 2)
+end):resume()
 --iprint(value) --3
 
 --cNetwork:emit("Arg1", "Arg2")
