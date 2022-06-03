@@ -44,6 +44,7 @@ end
 function thread:create(exec)
     if not exec or imports.type(exec) ~= "function" then return false end
     local cThread = imports.setmetatable({}, {__index = self})
+    cThread.isThread = true
     cThread.syncRate = {}
     cThread.thread = imports.coroutine.create(exec)
     thread.buffer[cThread] = true
