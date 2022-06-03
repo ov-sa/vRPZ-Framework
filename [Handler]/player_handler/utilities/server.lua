@@ -135,10 +135,10 @@ CGame.execOnModuleLoad(function()
                             local __source = source
                             imports.thread:create(function(self)
                                 local source = __source
-                                imports.triggerEvent("Player:onToggleLoginUI", source)
+                                imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, true)
                                 imports.outputChatBox("#C8C8C8- #5050FF"..(imports.getPlayerName(source)).."#C8C8C8 left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)
                                 CCharacter.saveProgress(self, source)
-                                imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, true)
+                                imports.triggerEvent("Player:onToggleLoginUI", source)
                             end):resume()
                         end
                     end
