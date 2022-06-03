@@ -175,13 +175,13 @@ function network:emitCallback(cThread, ...)
         payload.networkName = self.name
     end
     payload.processArgs = cArgs
-    payload.execSerial = network:serializeExec(function(cThread, ...) cThread:resolve(...) end)
+    payload.execSerial = network:serializeExec(function(cThread, ...) print("HEY") cThread:resolve("lol") end)
     if not payload.isRemote then
         imports.triggerEvent("Assetify:Network:API", resourceRoot, network.identifier, payload)
     else
         imports.triggerRemoteEvent("Assetify:Network:API", resourceRoot, network.identifier, payload)
     end
-    return true
+    return network.cache.execSerials[(payload.execSerial)]
 end
 
 
@@ -199,9 +199,8 @@ cNetwork:on(function(first, second)
 end)
 
 thread:create(function(self)
-    local value = network:emitCallback(self, "TestEvent", false, 1, 2)
+    local value = self:await(network:emitCallback(self, "TestEvent", false, 1, 2))
+    print(value)
 end):resume()
---iprint(value) --3
-
 --cNetwork:emit("Arg1", "Arg2")
 --network:destroy("TestEvent")
