@@ -126,8 +126,8 @@ end
 function thread:await(exec)
     if not self or (self == thread) then return false end
     if not exec or imports.type(exec) ~= "function" then return self:resolve(exec) end
-    exec(self)
     self.isScheduled = true
+    exec(self)
     thread:pause()
     local resolvedValues = self.scheduledValues
     self.scheduledValues = nil
@@ -138,6 +138,7 @@ function thread:resolve(...)
     if not self or (self == thread) then return false end
     if not self.isScheduled then return false end
     self.scheduledValues = {...}
+    local self = self
     imports.setTimer(function()
         self:resume()
     end, 1, 1)
