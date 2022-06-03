@@ -39,8 +39,8 @@ network.__index = network
 imports.addEvent("Network:Current")
 imports.addEvent("Network:Remote", true)
 
-imports.addEventHandler("Network:Current", root, function(responseType)
-    print("Got Response: "..tostring(responseType))
+imports.addEventHandler("Network:Current", root, function(payload)
+    print("Got Response: "..tostring(payload))
 end)
 
 network.fetchArg = function(index, pool)
