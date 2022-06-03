@@ -157,7 +157,12 @@ function network:emitCallback(...)
 end
 
 
---TODO: TESTING...
+
+
+-----------------------------------------------------------
+--TODO: TESTING ZONE...
+-----------------------------------------------------------
+
 local cNetwork = network:create("TestEvent", true)
 cNetwork:on(function(first, second)
     return first + second
