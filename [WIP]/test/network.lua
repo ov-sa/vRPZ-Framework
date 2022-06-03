@@ -1,3 +1,5 @@
+loadstring(exports.assetify_library:fetchImports())()
+
 -----------------
 --[[ Imports ]]--
 -----------------
@@ -6,12 +8,17 @@ local imports = {
     type = type,
     pairs = pairs,
     unpack = unpack,
+    md5 = md5,
     tonumber = tonumber,
+    tostring = tostring,
     setmetatable = setmetatable,
+    getResourceName = getResourceName,
     addEvent = addEvent,
+    addEventHandler = addEventHandler,
     triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent,
     triggerServerEvent = triggerServerEvent,
+    json = json,
     table = table
 }
 
@@ -21,13 +28,20 @@ local imports = {
 ------------------------
 
 network = {
+    moduleSerial = imports.md5(imports.getResourceName(resource)),
     buffer = {},
-    cache = {}
+    cache = {
+        serial = {}
+    }
 }
 network.__index = network
 
 imports.addEvent("Network:Current")
 imports.addEvent("Network:Remote", true)
+
+imports.addEventHandler("Network:Current", root, function(responseType)
+    print("Got Response: "..tostring(responseType))
+end)
 
 network.fetchArg = function(index, pool)
     index = imports.tonumber(index) or 1
@@ -71,6 +85,14 @@ end
 function network:fetch(name)
     if not self or (self ~= network) then return false end
     return network.buffer[name] or false
+end
+
+function network:serializeExec(exec)
+    if not self or (self ~= network) then return false end
+    if not exec or (imports.type(exec) ~= "function") then return false end
+    local cSerial = imports.md5(network.moduleSerial..":"..imports.tostring(exec))
+    network.cache.serial[cSerial] = exec
+    return cSerial
 end
 
 function network:on(exec)
