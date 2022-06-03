@@ -49,12 +49,23 @@ imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)
             end
         end
     elseif payload.processType == "emitCallback" then
-        local cNetwork = network:fetch(payload.networkName)
-        if cNetwork and cNetwork.isCallback then
-            if not cNetwork or not cNetwork.isCallback or not cNetwork.handler then return false end
-            local cArgs = {cNetwork.handler(imports.unpack(payload.processArgs))}
-            --TODO: PASS BACK TO THE SOURCE NOW...
-            --return function() return cNetwork.handler(imports.unpack(cArgs)) end
+        if not payload.isSignal then
+            local cNetwork = network:fetch(payload.networkName)
+            if cNetwork and cNetwork.isCallback then
+                if not cNetwork or not cNetwork.isCallback or not cNetwork.handler then return false end
+                payload.isSignal = true
+                payload.processArgs = {cNetwork.handler(imports.unpack(payload.processArgs))}
+                if not payload.isRemote then
+                    imports.triggerEvent("Assetify:Network:API", resourceRoot, serial, payload)
+                else
+                    imports.triggerRemoteEvent("Assetify:Network:API", resourceRoot, serial, payload)
+                end
+            end
+        else
+            if network.cache.execSerials[(payload.execSerial)] then
+                network.cache.execSerials[(payload.execSerial)](imports.unpack(payload.processArgs))
+                network:deserializeExec(payload.execSerial)
+            end
         end
     end
 end)
@@ -176,7 +187,7 @@ function network:emitCallback(cThread, ...)
         payload.networkName = self.name
     end
     payload.processArgs = cArgs
-    payload.execSerial = network:serializeExec(function(...) return cThread:resolve(...) end)
+    payload.execSerial = network:serializeExec(function(...) print("RESUMING THREAD") return cThread:resolve(...) end)
     if not payload.isRemote then
         imports.triggerEvent("Assetify:Network:API", resourceRoot, network.identifier, payload)
     else
@@ -201,6 +212,7 @@ end)
 
 thread:create(function(self)
     local value = self:await(network:emitCallback(self, "TestEvent", false, 1, 2))
+    print("WOT")
     print(value)
 end):resume()
 --cNetwork:emit("Arg1", "Arg2")
