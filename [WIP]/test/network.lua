@@ -175,7 +175,7 @@ function network:emitCallback(cThread, ...)
         payload.networkName = self.name
     end
     payload.processArgs = cArgs
-    payload.execSerial = network:serializeExec(function(cThread, ...) print("HEY") cThread:resolve("lol") end)
+    payload.execSerial = network:serializeExec(function(cThread, ...) cThread:resolve(...) end) --TODO: CHECK IF ITS CORRECT AS IN DBIFY @AVIRIL
     if not payload.isRemote then
         imports.triggerEvent("Assetify:Network:API", resourceRoot, network.identifier, payload)
     else
