@@ -38,8 +38,8 @@ renderer = {
     cache = {
         isVirtualRendering = false,
         isTimeSynced = false,
-        serverTick = 3600000,
-        minuteDuration = 60000
+        serverTick = 60*60*12,
+        minuteDuration = 60
     }
 }
 renderer.resolution[1], renderer.resolution[2] = renderer.resolution[1]*rendererSettings.resolution, renderer.resolution[2]*rendererSettings.resolution
