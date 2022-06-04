@@ -36,6 +36,7 @@
     <script src="utilities/bone.lua" type="client"/>
     <script src="utilities/streamer.lua" type="client"/>
     <script src="utilities/renderer.lua" type="client"/>
+    <script src="utilities/networker.lua" type="client"/>
     <script src="utilities/light.lua" type="client"/>
     <script src="utilities/lights/planar.lua" type="client"/>
 
