@@ -27,6 +27,7 @@
     <script src="settings/server.lua" type="server"/>
     <script src="settings/client.lua" type="client"/>
     <script src="utilities/thread.lua" type="shared"/>
+    <script src="utilities/networker.lua" type="shared"/>
     <script src="utilities/asset.lua" type="shared"/>
     <script src="utilities/syncer.lua" type="shared"/>
     <script src="utilities/shader.lua" type="shared"/>
@@ -36,7 +37,6 @@
     <script src="utilities/bone.lua" type="client"/>
     <script src="utilities/streamer.lua" type="client"/>
     <script src="utilities/renderer.lua" type="client"/>
-    <script src="utilities/networker.lua" type="client"/>
     <script src="utilities/light.lua" type="client"/>
     <script src="utilities/lights/planar.lua" type="client"/>
 
