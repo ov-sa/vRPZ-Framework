@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
 --[[ Resource: Assetify Library
-     Script: utilities: thread.lua
+     Script: utilities: threader.lua
      Author: vStudio
      Developer(s): Aviril, Tron
      DOC: 19/10/2021
-     Desc: Thread Utilities ]]--
+     Desc: Threader Utilities ]]--
 ----------------------------------------------------------------
 
 

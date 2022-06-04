@@ -22,6 +22,11 @@ local imports = {
 --[[ Variables ]]--
 -------------------
 
+local bundlerData = {
+    library = false,
+    threader = false,
+
+}
 local bundlerData, threaderData = false, false
 
 
@@ -47,13 +52,17 @@ function fetchThreader()
     return threaderData or false
 end
 
+function fetchNetworker()
+    return networkerData or false
+end
+
 
 -----------------------------------
 --[[ Function: Bundles Library ]]--
 -----------------------------------
 
 function onBundleLibrary()
-    threaderData = imports.file.read("utilities/thread.lua")
+    threaderData = imports.file.read("utilities/threader.lua")
     local importedModules = {
         bundler = imports.file.read("utilities/shared.lua")..[[
             assetify = {
