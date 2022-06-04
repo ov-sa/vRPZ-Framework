@@ -22,7 +22,7 @@ local imports = {
 CInventory.fetch = function(cThread, inventoryID)
     if not cThread then return false end
     local result = cThread:await(imports.dbify.inventory.fetchAll(cThread, {
-        {imports.dbify.inventory.connection.keyColumn, inventoryID}
+        {imports.dbify.inventory.connection.key, inventoryID}
     }))
     return result
 end

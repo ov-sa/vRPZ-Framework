@@ -20,7 +20,7 @@ local imports = {
 dbify.character = {
     connection = {
         table = "dbify_characters",
-        keyColumn = "id"
+        key = "id"
     },
 
     fetchAll = function(...)
@@ -46,7 +46,7 @@ dbify.character = {
                 if cbRef and (imports.type(cbRef) == "function") then
                     cbRef(result, arguments)
                 end
-            end, {cArgs}, dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(NULL)", dbify.character.connection.table, dbify.character.connection.keyColumn)
+            end, {cArgs}, dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(NULL)", dbify.character.connection.table, dbify.character.connection.key)
             return true
         end
         return (isAsync and promise) or promise()
@@ -58,10 +58,10 @@ dbify.character = {
         local characterID, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not characterID or (imports.type(characterID) ~= "number") then return false end
         local promise = function()
-            return dbify.character.getData(characterID, {dbify.character.connection.keyColumn}, function(result, arguments)
+            return dbify.character.getData(characterID, {dbify.character.connection.key}, function(result, arguments)
                 local cbRef = callback
                 if result then
-                    result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.character.connection.table, dbify.character.connection.keyColumn, characterID)
+                    result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.character.connection.table, dbify.character.connection.key, characterID)
                     if cbRef and (imports.type(cbRef) == "function") then
                         cbRef(result, arguments)
                     end
@@ -82,7 +82,7 @@ dbify.character = {
         if not characterID or (imports.type(characterID) ~= "number") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
         local promise = function()
             return dbify.mysql.data.set(dbify.character.connection.table, dataColumns, {
-                {dbify.character.connection.keyColumn, characterID}
+                {dbify.character.connection.key, characterID}
             }, callback, imports.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
@@ -95,7 +95,7 @@ dbify.character = {
         if not characterID or (imports.type(characterID) ~= "number") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
         local promise = function()
             return dbify.mysql.data.get(dbify.character.connection.table, dataColumns, {
-                {dbify.character.connection.keyColumn, characterID}
+                {dbify.character.connection.key, characterID}
             }, true, callback, imports.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
@@ -109,5 +109,5 @@ dbify.character = {
 
 imports.assetify.execOnModuleLoad(function()
     if not dbify.mysql.connection.instance then return false end
-    imports.dbExec(dbify.mysql.connection.instance, "CREATE TABLE IF NOT EXISTS `??` (`??` INT AUTO_INCREMENT PRIMARY KEY)", dbify.character.connection.table, dbify.character.connection.keyColumn)
+    imports.dbExec(dbify.mysql.connection.instance, "CREATE TABLE IF NOT EXISTS `??` (`??` INT AUTO_INCREMENT PRIMARY KEY)", dbify.character.connection.table, dbify.character.connection.key)
 end)

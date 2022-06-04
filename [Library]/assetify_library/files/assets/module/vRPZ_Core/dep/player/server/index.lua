@@ -24,7 +24,7 @@ CPlayer.CBuffer = {}
 CPlayer.fetch = function(cThread, serial)
     if not cThread then return false end
     local result = cThread:await(dbify.serial.fetchAll(cThread, {
-        {dbify.serial.connection.keyColumn, serial}
+        {dbify.serial.connection.key, serial}
     }))
     return result
 end

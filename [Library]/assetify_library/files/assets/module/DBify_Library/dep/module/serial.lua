@@ -20,7 +20,7 @@ local imports = {
 dbify.serial = {
     connection = {
         table = "dbify_serials",
-        keyColumn = "serial"
+        key = "serial"
     },
 
     fetchAll = function(...)
@@ -39,10 +39,10 @@ dbify.serial = {
         local serial, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not serial or (imports.type(serial) ~= "string") then return false end
         local promise = function()
-            return dbify.serial.getData(serial, {dbify.serial.connection.keyColumn}, function(result, arguments)
+            return dbify.serial.getData(serial, {dbify.serial.connection.key}, function(result, arguments)
                 local cbRef = callback
                 if not result then
-                    result = imports.dbExec(dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(?)", dbify.serial.connection.table, dbify.serial.connection.keyColumn, serial)
+                    result = imports.dbExec(dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(?)", dbify.serial.connection.table, dbify.serial.connection.key, serial)
                     if cbRef and (imports.type(cbRef) == "function") then
                         cbRef(result, arguments)
                     end
@@ -62,10 +62,10 @@ dbify.serial = {
         local serial, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not serial or (imports.type(serial) ~= "string") then return false end
         local promise = function()
-            return dbify.serial.getData(serial, {dbify.serial.connection.keyColumn}, function(result, arguments)
+            return dbify.serial.getData(serial, {dbify.serial.connection.key}, function(result, arguments)
                 local cbRef = callback
                 if result then
-                    result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.serial.connection.table, dbify.serial.connection.keyColumn, serial)
+                    result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.serial.connection.table, dbify.serial.connection.key, serial)
                     if cbRef and (imports.type(cbRef) == "function") then
                         cbRef(result, arguments)
                     end
@@ -86,7 +86,7 @@ dbify.serial = {
         if not serial or (imports.type(serial) ~= "string") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
         local promise = function()
             return dbify.mysql.data.set(dbify.serial.connection.table, dataColumns, {
-                {dbify.serial.connection.keyColumn, serial}
+                {dbify.serial.connection.key, serial}
             }, callback, imports.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
@@ -99,7 +99,7 @@ dbify.serial = {
         if not serial or (imports.type(serial) ~= "string") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
         local promise = function()
             return dbify.mysql.data.get(dbify.serial.connection.table, dataColumns, {
-                {dbify.serial.connection.keyColumn, serial}
+                {dbify.serial.connection.key, serial}
             }, true, callback, imports.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
@@ -113,7 +113,7 @@ dbify.serial = {
 
 imports.assetify.execOnModuleLoad(function()
     if not dbify.mysql.connection.instance then return false end
-    imports.dbExec(dbify.mysql.connection.instance, "CREATE TABLE IF NOT EXISTS `??` (`??` VARCHAR(100) PRIMARY KEY)", dbify.serial.connection.table, dbify.serial.connection.keyColumn)
+    imports.dbExec(dbify.mysql.connection.instance, "CREATE TABLE IF NOT EXISTS `??` (`??` VARCHAR(100) PRIMARY KEY)", dbify.serial.connection.table, dbify.serial.connection.key)
     if dbify.settings.syncSerial then
         local playerList = imports.getElementsByType("player")
         for i = 1, #playerList, 1 do

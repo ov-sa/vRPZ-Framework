@@ -30,7 +30,7 @@ local cUtility = {
         if not inventoryID or (imports.type(inventoryID) ~= "number") or not items or (imports.type(items) ~= "table") or (#items <= 0) or not processType or (imports.type(processType) ~= "string") or ((processType ~= "push") and (processType ~= "pop")) then return false end
         if cloneTable then items = imports.table.clone(items, true) end
         return dbify.inventory.fetchAll({
-            {dbify.inventory.connection.keyColumn, inventoryID},
+            {dbify.inventory.connection.key, inventoryID},
         }, function(result, arguments)
             if result then
                 result = result[1]
@@ -199,7 +199,7 @@ local cUtility = {
 dbify.inventory = {
     connection = {
         table = "dbify_inventories",
-        keyColumn = "id",
+        key = "id",
         itemFormat = {
             counter = "amount",
             content = {
@@ -306,7 +306,7 @@ dbify.inventory = {
                 if cbRef and (imports.type(cbRef) == "function") then
                     cbRef(result, arguments)
                 end
-            end, {cArgs}, dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(NULL)", dbify.inventory.connection.table, dbify.inventory.connection.keyColumn)
+            end, {cArgs}, dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(NULL)", dbify.inventory.connection.table, dbify.inventory.connection.key)
             return true
         end
         return (isAsync and promise) or promise()
@@ -318,10 +318,10 @@ dbify.inventory = {
         local inventoryID, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not inventoryID or (imports.type(inventoryID) ~= "number") then return false end
         local promise = function()
-            return dbify.inventory.getData(inventoryID, {dbify.inventory.connection.keyColumn}, function(result, arguments)
+            return dbify.inventory.getData(inventoryID, {dbify.inventory.connection.key}, function(result, arguments)
                 local cbRef = callback
                 if result then
-                    result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.inventory.connection.table, dbify.inventory.connection.keyColumn, inventoryID)
+                    result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.inventory.connection.table, dbify.inventory.connection.key, inventoryID)
                     if cbRef and (imports.type(cbRef) == "function") then
                         cbRef(result, arguments)
                     end
@@ -342,7 +342,7 @@ dbify.inventory = {
         if not inventoryID or (imports.type(inventoryID) ~= "number") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
         local promise = function()
             return dbify.mysql.data.set(dbify.inventory.connection.table, dataColumns, {
-                {dbify.inventory.connection.keyColumn, inventoryID}
+                {dbify.inventory.connection.key, inventoryID}
             }, callback, imports.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
@@ -355,7 +355,7 @@ dbify.inventory = {
         if not inventoryID or (imports.type(inventoryID) ~= "number") or not dataColumns or (imports.type(dataColumns) ~= "table") or (#dataColumns <= 0) then return false end
         local promise = function()
             return dbify.mysql.data.get(dbify.inventory.connection.table, dataColumns, {
-                {dbify.inventory.connection.keyColumn, inventoryID}
+                {dbify.inventory.connection.key, inventoryID}
             }, true, callback, imports.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
@@ -425,5 +425,5 @@ dbify.inventory = {
 
 imports.assetify.execOnModuleLoad(function()
     if not dbify.mysql.connection.instance then return false end
-    imports.dbExec(dbify.mysql.connection.instance, "CREATE TABLE IF NOT EXISTS `??` (`??` INT AUTO_INCREMENT PRIMARY KEY)", dbify.inventory.connection.table, dbify.inventory.connection.keyColumn)
+    imports.dbExec(dbify.mysql.connection.instance, "CREATE TABLE IF NOT EXISTS `??` (`??` INT AUTO_INCREMENT PRIMARY KEY)", dbify.inventory.connection.table, dbify.inventory.connection.key)
 end)

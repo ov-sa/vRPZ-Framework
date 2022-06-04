@@ -19,7 +19,7 @@ CCharacter.CBuffer = {}
 CCharacter.fetch = function(cThread, characterID)
     if not cThread then return false end
     local result = cThread:await(imports.dbify.character.fetchAll(cThread, {
-        {imports.dbify.character.connection.keyColumn, characterID}
+        {imports.dbify.character.connection.key, characterID}
     }))
     return result
 end
