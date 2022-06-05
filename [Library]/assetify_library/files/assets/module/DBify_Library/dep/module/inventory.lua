@@ -42,9 +42,9 @@ local cUtility = {
                     prevItemData = (prevItemData and imports.json.decode(prevItemData)) or false
                     prevItemData = (prevItemData and prevItemData.data and (imports.type(prevItemData.data) == "table") and prevItemData.item and (imports.type(prevItemData.item) == "table") and prevItemData) or false
                     if not prevItemData then
-                        prevItemData = imports.table.clone(dbify.inventory.connection.itemFormat.content, true)
+                        prevItemData = imports.table.clone(dbify.inventory.connection.item.content, true)
                     end
-                    prevItemData.property[(dbify.inventory.connection.itemFormat.counter)] = j[2] + (imports.math.max(0, imports.tonumber(prevItemData.property[(dbify.inventory.connection.itemFormat.counter)]) or 0)*((arguments[1].processType == "push" and 1) or -1))
+                    prevItemData.property[(dbify.inventory.connection.item.counter)] = j[2] + (imports.math.max(0, imports.tonumber(prevItemData.property[(dbify.inventory.connection.item.counter)]) or 0)*((arguments[1].processType == "push" and 1) or -1))
                     arguments[1].items[i][2] = imports.json.encode(prevItemData)
                 end
                 dbify.inventory.setData(arguments[1].inventoryID, arguments[1].items, function(result, arguments)
@@ -83,12 +83,12 @@ local cUtility = {
                     j = (j and j.data and (imports.type(j.data) == "table") and j.property and (imports.type(j.property) == "table") and j) or false
                     if arguments[1].processType == "set" then
                         if not j then
-                            j = imports.table.clone(dbify.inventory.connection.itemFormat.content, true)
+                            j = imports.table.clone(dbify.inventory.connection.item.content, true)
                         end
                         for k = 1, #arguments[1].properties, 1 do
                             local v = arguments[1].properties[k]
                             v[1] = imports.tostring(v[1])
-                            if v[1] == dbify.inventory.connection.itemFormat.counter then
+                            if v[1] == dbify.inventory.connection.item.counter then
                                 v[2] = imports.math.max(0, imports.tonumber(v[2]) or j.property[(v[1])])
                             end
                             j.property[(v[1])] = v[2]
@@ -147,7 +147,7 @@ local cUtility = {
                     j = (j and j.data and (imports.type(j.data) == "table") and j.property and (imports.type(j.property) == "table") and j) or false
                     if arguments[1].processType == "set" then
                         if not j then
-                            j = imports.table.clone(dbify.inventory.connection.itemFormat.content, true)
+                            j = imports.table.clone(dbify.inventory.connection.item.content, true)
                         end
                         for k = 1, #arguments[1].datas, 1 do
                             local v = arguments[1].datas[k]
@@ -200,7 +200,7 @@ dbify.inventory = {
     connection = {
         table = "dbify_inventories",
         key = "id",
-        itemFormat = {
+        item = {
             counter = "amount",
             content = {
                 data = {},

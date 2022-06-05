@@ -61,7 +61,7 @@ local cUtility = {
         for i, j in imports.pairs(CInventory.CItems) do
             if saveProgress then
                 CInventory.setItemProperty(cThread, deps.inventoryID, {j.ref}, {
-                    {imports.dbify.inventory.connection.itemFormat.counter, imports.math.max(0, imports.tonumber(imports.getElementData(player, "Item:"..i)) or 0)}
+                    {imports.dbify.inventory.connection.item.counter, imports.math.max(0, imports.tonumber(imports.getElementData(player, "Item:"..i)) or 0)}
                 })
             end
             imports.setElementData(player, "Item:"..i, (loadProgress and 0) or nil)
@@ -85,7 +85,7 @@ local cUtility = {
 CCharacter.loadInventory = function(cThread, player, deps)
     if not cThread then return false end
     if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") or not deps then return false end
-    local DItemProperty = CInventory.getItemProperty(cThread, deps.inventoryID, CInventory.CRefs.index, {imports.dbify.inventory.connection.itemFormat.counter}, true)
+    local DItemProperty = CInventory.getItemProperty(cThread, deps.inventoryID, CInventory.CRefs.index, {imports.dbify.inventory.connection.item.counter}, true)
     if not DItemProperty and (#CInventory.CRefs.index > 0) then return false end
     local DInventoryProperty = CInventory.getData(cThread, deps.inventoryID, {"max_slots", "slots"})
     DInventoryProperty = DInventoryProperty or {}
@@ -95,7 +95,7 @@ CCharacter.loadInventory = function(cThread, player, deps)
         slots = DInventoryProperty.slots
     }
     for i, j in imports.pairs(DItemProperty) do
-        imports.setElementData(player, "Item:"..(CInventory.CRefs.ref[i]), imports.tonumber(j[(imports.dbify.inventory.connection.itemFormat.counter)]) or 0)
+        imports.setElementData(player, "Item:"..(CInventory.CRefs.ref[i]), imports.tonumber(j[(imports.dbify.inventory.connection.item.counter)]) or 0)
     end
     return true
 end
