@@ -27,7 +27,6 @@ local imports = {
     engineImportTXD = engineImportTXD,
     engineReplaceModel = engineReplaceModel,
     engineReplaceCOL = engineReplaceCOL,
-    engineSetModelLODDistance = engineSetModelLODDistance,
     engineApplyShaderToWorldTexture = engineApplyShaderToWorldTexture,
     createObject = createObject,
     setElementAlpha = setElementAlpha,
@@ -57,10 +56,8 @@ for i = 1, #light.planar.cache.validTypes, 1 do
     imports.engineImportTXD(imports.engineLoadTXD(modelPath.."dict.rw"), j.modelID)
     imports.engineReplaceModel(imports.engineLoadDFF(modelPath.."buffer.rw"), j.modelID, true)
     imports.engineReplaceCOL(imports.engineLoadCOL(modelPath.."collision.rw"), j.modelID)
-    imports.engineSetModelLODDistance(j.modelID, 300)
     imports.clearModel(j.collisionID)
     imports.engineReplaceCOL(imports.engineLoadCOL(modelPath.."collision.rw"), j.collisionID)
-    imports.engineSetModelLODDistance(j.collisionID, 300)
     light.planar.cache.validTypes[i] = nil
     light.planar.cache.validTypes[(j.index)] = j
     light.planar.cache.validTypes[(j.index)].index = nil
@@ -95,7 +92,7 @@ function light.planar:load(lightType, lightData, shaderInputs, isScoped, isDefau
     lightData.position, lightData.rotation = lightData.position or {}, lightData.rotation or {}
     lightData.position.x, lightData.position.y, lightData.position.z = imports.tonumber(lightData.position.x) or 0, imports.tonumber(lightData.position.y) or 0, imports.tonumber(lightData.position.z) or 0
     lightData.rotation.x, lightData.rotation.y, lightData.rotation.z = imports.tonumber(lightData.rotation.x) or 0, imports.tonumber(lightData.rotation.y) or 0, imports.tonumber(lightData.rotation.z) or 0
-    self.cModelInstance = imports.createObject(lightCache.modelID, lightData.position.x, lightData.position.y, lightData.position.z, lightData.rotation.x, lightData.rotation.y, lightData.rotation.z, true)
+    self.cModelInstance = imports.createObject(lightCache.modelID, lightData.position.x, lightData.position.y, lightData.position.z, lightData.rotation.x, lightData.rotation.y, lightData.rotation.z)
     self.syncRate = imports.tonumber(lightData.syncRate)
     imports.setElementDimension(self.cModelInstance, imports.tonumber(lightData.dimension) or 0)
     imports.setElementInterior(self.cModelInstance, imports.tonumber(lightData.interior) or 0)
