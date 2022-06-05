@@ -87,7 +87,7 @@ function light.planar:clearElementBuffer(element)
     return true
 end
 
-function light.planar:load(lightType, lightData, shaderInputs, isScoped)
+function light.planar:load(lightType, lightData, shaderInputs, isScoped, isDefaultStreamer)
     if not self or (self == light.planar) then return false end
     if not lightType or not lightData or not shaderInputs then return false end
     local lightCache = light.planar.cache.validTypes[lightType]
@@ -99,7 +99,7 @@ function light.planar:load(lightType, lightData, shaderInputs, isScoped)
     self.syncRate = imports.tonumber(lightData.syncRate)
     imports.setElementDimension(self.cModelInstance, imports.tonumber(lightData.dimension) or 0)
     imports.setElementInterior(self.cModelInstance, imports.tonumber(lightData.interior) or 0)
-    if lightCache.collisionID then
+    if not isDefaultStreamer and lightCache.collisionID then
         self.cCollisionInstance = imports.createObject(lightCache.collisionID, lightData.position.x, lightData.position.y, lightData.position.z, lightData.rotation.x, lightData.rotation.y, lightData.rotation.z)
         imports.setElementAlpha(self.cCollisionInstance, 0)
         self.cStreamer = streamer:create(self.cModelInstance, "light", {self.cCollisionInstance}, self.syncRate)
@@ -115,7 +115,7 @@ function light.planar:load(lightType, lightData, shaderInputs, isScoped)
     end
     self.lightData = lightData
     self.lightData.shaderInputs = shaderInputs
-    self:setResolution(1)
+    self:setResolution(self.lightData.resolution)
     self:setColor(self.lightData.color and self.lightData.color.r, self.lightData.color and self.lightData.color.g, self.lightData.color and self.lightData.color.b, self.lightData.color and self.lightData.color.a)
     imports.engineApplyShaderToWorldTexture(self.cShader, lightCache.textureName, self.cLight)
     if isScoped then manager:setElementScoped(self.cLight) end
@@ -145,7 +145,7 @@ end
 
 function light.planar:setResolution(resolution)
     if not self or (self == light.planar) then return false end
-    self.lightData.resolution = imports.math.max(0, imports.tonumber(resolution) or 0)
+    self.lightData.resolution = imports.math.max(0, imports.tonumber(resolution) or 1)
     imports.dxSetShaderValue(self.cShader, "lightResolution", self.lightData.resolution)
     return true
 end
