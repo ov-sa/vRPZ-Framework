@@ -244,6 +244,7 @@ float4x4 MTACreateTranslationMatrix(float3 InPosition) {
 float MTAGetWeatherValue() {
     float cDuration = gTimeSync ? gServerTick + gTime : gServerTick;
     cDuration = (cDuration/(60*gMinuteDuration))%24;
+    float weatherClamp = 0.02;
     float weatherValue = cDuration/12;
-    return (cDuration >= 12) ? 2 - weatherValue : weatherValue;
+    return (cDuration >= 12) ? max(weatherClamp, 2 - weatherValue) : max(weatherClamp, weatherValue);
 }
