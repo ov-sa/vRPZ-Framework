@@ -259,8 +259,8 @@ else
         return true
     end
 
-    function asset:buildShader(assetPath, shaderPack, filePointer, encryptKey)
-        for i, j in imports.pairs(shaderPack) do
+    function asset:buildShader(assetPath, shaderMaps, filePointer, encryptKey)
+        for i, j in imports.pairs(shaderMaps) do
             if j and (imports.type(j) == "table") then
                 if i == "clump" then
                     for k, v in imports.pairs(j) do
@@ -306,6 +306,33 @@ else
             thread:pause()
         end
         return true
+    end
+
+    function asset:buildDep(assetPath, assetDeps, filePointer, encryptKey)
+        local assetDeps = {}
+        for i, j in imports.pairs(assetDeps) do
+            if j and (imports.type(j) == "table") then
+                assetDeps[i] = {}
+                for k, v in imports.pairs(j) do
+                    assetDeps[i][k] = {}
+                    if i == "script" then
+                        for m, n in imports.pairs(v) do
+                            v[m] = assetPath.."dep/"..v[m]
+                            assetDeps[i][k][m] = v[m]
+                            asset:buildFile(assetDeps[i][k][m], filePointer, assetManifestData.encryptKey, filePointer.unSynced.rawData, k == "server", true)
+                            thread:pause()
+                        end
+                    else
+                        j[k] = assetPath.."dep/"..j[k]
+                        assetDeps[i][k] = j[k]
+                        asset:buildFile(assetDeps[i][k], filePointer, assetManifestData.encryptKey, filePointer.unSynced.rawData, _, true)
+                    end
+                    thread:pause()
+                end
+            end
+            thread:pause()
+        end
+        return assetDeps
     end
 
     function asset:buildPack(assetType, assetPack, callback)
@@ -453,30 +480,7 @@ else
                             end
                         end
                         if assetManifestData.assetDeps then
-                            local assetDeps = {}
-                            for i, j in imports.pairs(assetManifestData.assetDeps) do
-                                if j and (imports.type(j) == "table") then
-                                    assetDeps[i] = {}
-                                    for k, v in imports.pairs(j) do
-                                        assetDeps[i][k] = {}
-                                        if i == "script" then
-                                            for m, n in imports.pairs(v) do
-                                                v[m] = assetPath.."dep/"..v[m]
-                                                assetDeps[i][k][m] = v[m]
-                                                asset:buildFile(assetDeps[i][k][m], cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, cAssetPack.rwDatas[assetName].unSynced.rawData, k == "server", true)
-                                                thread:pause()
-                                            end
-                                        else
-                                            j[k] = assetPath.."dep/"..j[k]
-                                            assetDeps[i][k] = j[k]
-                                            asset:buildFile(assetDeps[i][k], cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, cAssetPack.rwDatas[assetName].unSynced.rawData, _, true)
-                                        end
-                                        thread:pause()
-                                    end
-                                end
-                                thread:pause()
-                            end
-                            assetManifestData.assetDeps = assetDeps
+                            assetManifestData.assetDeps = asset:buildDep(assetPath, assetManifestData.assetDeps, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                         end
                     end
                 end
