@@ -793,7 +793,7 @@ CGame.execOnModuleLoad(function()
     CGame.execOnLoad(function()
         imports.assetify.renderer.setVirtualRendering(true, {diffuse = true, emissive = true})
         imports.assetify.renderer.setTimeSync(true)
-        imports.assetify.renderer.setServerTick(CGame.getServerTick())
+        imports.assetify.renderer.setServerTick(60*60*1000*12 + CGame.getServerTick())
         imports.assetify.renderer.setMinuteDuration(FRAMEWORK_CONFIGS["Game"]["Minute_Duration"])
         for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Ambiences"]) do
             local cAsset = imports.assetify.getAsset("sound", j.assetName)
