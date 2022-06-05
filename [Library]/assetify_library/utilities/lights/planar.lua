@@ -27,10 +27,10 @@ local imports = {
     engineImportTXD = engineImportTXD,
     engineReplaceModel = engineReplaceModel,
     engineReplaceCOL = engineReplaceCOL,
+    engineSetModelLODDistance = engineSetModelLODDistance,
     engineApplyShaderToWorldTexture = engineApplyShaderToWorldTexture,
     createObject = createObject,
     setElementAlpha = setElementAlpha,
-    setElementDoubleSided = setElementDoubleSided,
     setElementDimension = setElementDimension,
     setElementInterior = setElementInterior,
     clearModel = clearModel,
@@ -45,7 +45,7 @@ local imports = {
 light.planar = {
     cache = {
         validTypes = {
-            {index = "planar_1x1", textureName = "assetify_light_planar", resolution = {1, 1}}
+            {index = "planar_1x1", textureName = "assetify_light_planar"}
         }
     },
     buffer = {}
@@ -57,8 +57,10 @@ for i = 1, #light.planar.cache.validTypes, 1 do
     imports.engineImportTXD(imports.engineLoadTXD(modelPath.."dict.rw"), j.modelID)
     imports.engineReplaceModel(imports.engineLoadDFF(modelPath.."buffer.rw"), j.modelID, true)
     imports.engineReplaceCOL(imports.engineLoadCOL(modelPath.."collision.rw"), j.modelID)
+    imports.engineSetModelLODDistance(j.modelID, 300)
     imports.clearModel(j.collisionID)
     imports.engineReplaceCOL(imports.engineLoadCOL(modelPath.."collision.rw"), j.collisionID)
+    imports.engineSetModelLODDistance(j.collisionID, 300)
     light.planar.cache.validTypes[i] = nil
     light.planar.cache.validTypes[(j.index)] = j
     light.planar.cache.validTypes[(j.index)].index = nil
@@ -93,9 +95,8 @@ function light.planar:load(lightType, lightData, shaderInputs, isScoped)
     lightData.position, lightData.rotation = lightData.position or {}, lightData.rotation or {}
     lightData.position.x, lightData.position.y, lightData.position.z = imports.tonumber(lightData.position.x) or 0, imports.tonumber(lightData.position.y) or 0, imports.tonumber(lightData.position.z) or 0
     lightData.rotation.x, lightData.rotation.y, lightData.rotation.z = imports.tonumber(lightData.rotation.x) or 0, imports.tonumber(lightData.rotation.y) or 0, imports.tonumber(lightData.rotation.z) or 0
-    self.cModelInstance = imports.createObject(lightCache.modelID, lightData.position.x, lightData.position.y, lightData.position.z, lightData.rotation.x, lightData.rotation.y, lightData.rotation.z)
+    self.cModelInstance = imports.createObject(lightCache.modelID, lightData.position.x, lightData.position.y, lightData.position.z, lightData.rotation.x, lightData.rotation.y, lightData.rotation.z, true)
     self.syncRate = imports.tonumber(lightData.syncRate)
-    imports.setElementDoubleSided(self.cModelInstance, true)
     imports.setElementDimension(self.cModelInstance, imports.tonumber(lightData.dimension) or 0)
     imports.setElementInterior(self.cModelInstance, imports.tonumber(lightData.interior) or 0)
     if lightCache.collisionID then
@@ -112,9 +113,9 @@ function light.planar:load(lightType, lightData, shaderInputs, isScoped)
     for i, j in imports.pairs(shaderInputs) do
         imports.dxSetShaderValue(self.cLight, i, j)
     end
-    imports.dxSetShaderValue(self.cShader, "lightResolution", lightCache.resolution[1], lightCache.resolution[2])
     self.lightData = lightData
     self.lightData.shaderInputs = shaderInputs
+    self:setResolution(1)
     self:setColor(self.lightData.color and self.lightData.color.r, self.lightData.color and self.lightData.color.g, self.lightData.color and self.lightData.color.b, self.lightData.color and self.lightData.color.a)
     imports.engineApplyShaderToWorldTexture(self.cShader, lightCache.textureName, self.cLight)
     if isScoped then manager:setElementScoped(self.cLight) end
@@ -139,6 +140,13 @@ function light.planar:unload()
         imports.destroyElement(self.cShader)
     end
     self = nil
+    return true
+end
+
+function light.planar:setResolution(resolution)
+    if not self or (self == light.planar) then return false end
+    self.lightData.resolution = imports.math.max(0, imports.tonumber(resolution) or 0)
+    imports.dxSetShaderValue(self.cShader, "lightResolution", self.lightData.resolution)
     return true
 end
 

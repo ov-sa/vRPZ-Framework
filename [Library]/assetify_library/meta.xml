@@ -81,6 +81,7 @@
     <export function="setRendererServerTick" type="client"/>
     <export function="setRendererMinuteDuration" type="client"/>
     <export function="createPlanarLight" type="client"/>
+    <export function="setPlanarLightResolution" type="client"/>
     <export function="setPlanarLightTexture" type="client"/>
     <export function="setPlanarLightColor" type="client"/>
 
