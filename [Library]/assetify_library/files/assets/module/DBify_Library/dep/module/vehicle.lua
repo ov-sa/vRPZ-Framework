@@ -40,11 +40,11 @@ dbify.vehicle = {
         if not callback or (imports.type(callback) ~= "function") then return false end
         local promise = function()
             imports.dbQuery(function(queryHandler, arguments)
-                local cbRef = callback
+                local callback = callback
                 local _, _, vehicleID = imports.dbPoll(queryHandler, 0)
                 local result = vehicleID or false
-                if cbRef and (imports.type(cbRef) == "function") then
-                    cbRef(result, arguments)
+                if callback and (imports.type(callback) == "function") then
+                    callback(result, arguments)
                 end
             end, {cArgs}, dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(NULL)", dbify.vehicle.connection.table, dbify.vehicle.connection.key)
             return true
@@ -59,15 +59,15 @@ dbify.vehicle = {
         if not vehicleID or (imports.type(vehicleID) ~= "number") then return false end
         local promise = function()
             return dbify.vehicle.getData(vehicleID, {dbify.vehicle.connection.key}, function(result, arguments)
-                local cbRef = callback
+                local callback = callback
                 if result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.vehicle.connection.table, dbify.vehicle.connection.key, vehicleID)
-                    if cbRef and (imports.type(cbRef) == "function") then
-                        cbRef(result, arguments)
+                    if callback and (imports.type(callback) == "function") then
+                        callback(result, arguments)
                     end
                 else
-                    if cbRef and (imports.type(cbRef) == "function") then
-                        cbRef(false, arguments)
+                    if callback and (imports.type(callback) == "function") then
+                        callback(false, arguments)
                     end
                 end
             end, imports.unpack(cArgs))

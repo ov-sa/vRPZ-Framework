@@ -40,15 +40,15 @@ dbify.serial = {
         if not serial or (imports.type(serial) ~= "string") then return false end
         local promise = function()
             return dbify.serial.getData(serial, {dbify.serial.connection.key}, function(result, arguments)
-                local cbRef = callback
+                local callback = callback
                 if not result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(?)", dbify.serial.connection.table, dbify.serial.connection.key, serial)
-                    if cbRef and (imports.type(cbRef) == "function") then
-                        cbRef(result, arguments)
+                    if callback and (imports.type(callback) == "function") then
+                        callback(result, arguments)
                     end
                 else
-                    if cbRef and (imports.type(cbRef) == "function") then
-                        cbRef(false, arguments)
+                    if callback and (imports.type(callback) == "function") then
+                        callback(false, arguments)
                     end
                 end
             end, imports.unpack(cArgs))
@@ -63,15 +63,15 @@ dbify.serial = {
         if not serial or (imports.type(serial) ~= "string") then return false end
         local promise = function()
             return dbify.serial.getData(serial, {dbify.serial.connection.key}, function(result, arguments)
-                local cbRef = callback
+                local callback = callback
                 if result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.serial.connection.table, dbify.serial.connection.key, serial)
-                    if cbRef and (imports.type(cbRef) == "function") then
-                        cbRef(result, arguments)
+                    if callback and (imports.type(callback) == "function") then
+                        callback(result, arguments)
                     end
                 else
-                    if cbRef and (imports.type(cbRef) == "function") then
-                        cbRef(false, arguments)
+                    if callback and (imports.type(callback) == "function") then
+                        callback(false, arguments)
                     end
                 end
             end, imports.unpack(cArgs))
