@@ -16,6 +16,7 @@ local imports = {
     type = type,
     pairs = pairs,
     md5 = md5,
+    print = print,
     encodeString = encodeString,
     decodeString = decodeString,
     split = split,
@@ -81,7 +82,7 @@ if localPlayer then
         end
         return cAsset
     end
-    
+
     function asset:createDep(assetDeps, rwCache, encryptKey)
         if not assetDeps or not rwCache then return false end
         for i, j in imports.pairs(assetDeps) do
@@ -236,7 +237,7 @@ if localPlayer then
         return true
     end
 else
-    function asset:buildFile(filePath, filePointer, encryptKey, rawPointer, skipSync)
+    function asset:buildFile(filePath, filePointer, encryptKey, rawPointer, skipSync, debugExistence)
         if not filePath or not filePointer then return false end
         if (not skipSync and not filePointer.unSynced.fileHash[filePath]) or (skipSync and rawPointer and not rawPointer[filePath]) then
             local builtFileData, builtFileSize = imports.file.read(filePath)
@@ -249,6 +250,10 @@ else
                     filePointer.unSynced.fileHash[filePath] = imports.md5(filePointer.unSynced.fileData[filePath])
                 end
                 if rawPointer then rawPointer[filePath] = builtFileData end
+            else
+                if debugExistence then
+                    imports.print("[Assetify] | Invalid File: "..filePath)
+                end
             end
         end
         return true
@@ -263,11 +268,11 @@ else
                             local n = v[m]
                             if n.clump then
                                 n.clump = assetPath.."map/"..n.clump
-                                asset:buildFile(n.clump, filePointer, encryptKey)
+                                asset:buildFile(n.clump, filePointer, encryptKey, _, _, true)
                             end
                             if n.bump then
                                 n.bump = assetPath.."map/"..n.bump
-                                asset:buildFile(n.bump, filePointer, encryptKey)
+                                asset:buildFile(n.bump, filePointer, encryptKey, _, _, true)
                             end
                         end
                     end
@@ -277,20 +282,20 @@ else
                             local n = v[m]
                             if n.control then
                                 n.control = assetPath.."map/"..n.control
-                                asset:buildFile(n.control, filePointer, encryptKey)
+                                asset:buildFile(n.control, filePointer, encryptKey, _, _, true)
                             end
                             if n.bump then
                                 n.bump = assetPath.."map/"..n.bump
-                                asset:buildFile(n.bump, filePointer, encryptKey)
+                                asset:buildFile(n.bump, filePointer, encryptKey, _, _, true)
                             end
                             for x = 1, #shader.cache.validChannels, 1 do
                                 local y = shader.cache.validChannels[x].index
                                 if n[y] then
                                     n[y].map = assetPath.."map/"..n[y].map
-                                    asset:buildFile(n[y].map, filePointer, encryptKey)
+                                    asset:buildFile(n[y].map, filePointer, encryptKey, _, _, true)
                                     if n[y].bump then
                                         n[y].bump = assetPath.."map/"..n[y].bump
-                                        asset:buildFile(n[y].bump, filePointer, encryptKey)
+                                        asset:buildFile(n[y].bump, filePointer, encryptKey, _, _, true)
                                     end
                                 end
                             end
@@ -355,7 +360,7 @@ else
                             assetManifestData.assetClumps = false
                             assetManifestData.assetSounds = false
                             assetManifestData.shaderMaps = false
-                            asset:buildFile(assetPath..(asset.references.asset)..".ifp", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                            asset:buildFile(assetPath..(asset.references.asset)..".ifp", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
                             thread:pause()
                         elseif assetType == "sound" then
                             assetManifestData.streamRange = false
@@ -371,7 +376,7 @@ else
                                         for k, v in imports.pairs(j) do
                                             if v then
                                                 assetSounds[i][k] = v
-                                                asset:buildFile(assetPath.."sound/"..v, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                                asset:buildFile(assetPath.."sound/"..v, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
                                                 thread:pause()
                                             end
                                         end
@@ -405,7 +410,7 @@ else
                                         local sceneIDEPath = assetPath..(asset.references.scene)..".ide"
                                         local sceneIDEData = imports.file.read(sceneIDEPath)
                                         asset:buildFile(sceneIDEPath, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
-                                        asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                        asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
                                         local unparsedIDEDatas, unparsedIPLDatas = (sceneIDEData and imports.split(sceneIDEData, "\n")) or false, imports.split(sceneIPLData, "\n")
                                         local parsedIDEDatas = (unparsedIDEDatas and {}) or false
                                         cAssetPack.rwDatas[assetName].synced.sceneIDE = (parsedIDEDatas and true) or false
@@ -419,7 +424,7 @@ else
                                         end
                                         for k = 1, #unparsedIPLDatas, 1 do
                                             local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedIPLDatas[k], 2, asset.separators.IPL)), " ", "")
-                                            asset:buildFile(assetPath.."dff/"..childName..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                            asset:buildFile(assetPath.."dff/"..childName..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
                                             asset:buildFile(assetPath.."col/"..childName..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                             if parsedIDEDatas and parsedIDEDatas[childName] then
                                                 asset:buildFile(assetPath.."txd/"..(parsedIDEDatas[childName][1])..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
@@ -429,16 +434,16 @@ else
                                     end
                                 end
                             else
-                                asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
                                 if assetManifestData.assetClumps then
                                     for i, j in imports.pairs(assetManifestData.assetClumps) do
                                         asset:buildFile(assetPath.."clump/"..j.."/"..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
-                                        asset:buildFile(assetPath.."clump/"..j.."/"..(asset.references.asset)..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                        asset:buildFile(assetPath.."clump/"..j.."/"..(asset.references.asset)..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
                                         asset:buildFile(assetPath.."clump/"..j.."/"..(asset.references.asset)..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                         thread:pause()
                                     end
                                 else
-                                    asset:buildFile(assetPath..(asset.references.asset)..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                    asset:buildFile(assetPath..(asset.references.asset)..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
                                 end
                                 asset:buildFile(assetPath..(asset.references.asset)..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                 thread:pause()
@@ -458,13 +463,13 @@ else
                                             for m, n in imports.pairs(v) do
                                                 v[m] = assetPath.."dep/"..v[m]
                                                 assetDeps[i][k][m] = v[m]
-                                                asset:buildFile(assetDeps[i][k][m], cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, cAssetPack.rwDatas[assetName].unSynced.rawData, k == "server")
+                                                asset:buildFile(assetDeps[i][k][m], cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, cAssetPack.rwDatas[assetName].unSynced.rawData, k == "server", true)
                                                 thread:pause()
                                             end
                                         else
                                             j[k] = assetPath.."dep/"..j[k]
                                             assetDeps[i][k] = j[k]
-                                            asset:buildFile(assetDeps[i][k], cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, cAssetPack.rwDatas[assetName].unSynced.rawData)
+                                            asset:buildFile(assetDeps[i][k], cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, cAssetPack.rwDatas[assetName].unSynced.rawData, _, true)
                                         end
                                         thread:pause()
                                     end
