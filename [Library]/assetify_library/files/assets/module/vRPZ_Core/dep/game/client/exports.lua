@@ -16,16 +16,16 @@ local imports = {
 --[[ Exports ]]--
 -----------------
 
-CGame.createExports({
-    {exportName = "fetchSettings", moduleName = "CGame", moduleMethod = "fetchSettings"},
-    {exportName = "updateSettings", moduleName = "CGame", moduleMethod = "updateSettings"},
-    {exportName = "loadLanguage", moduleName = "CGame", moduleMethod = "loadLanguage"},
-    {exportName = "createFont", moduleName = "CGame", moduleMethod = "createFont"},
-    {exportName = "isUIVisible", moduleName = "CGame", moduleMethod = "isUIVisible"},
-    {exportName = "loadAnim", moduleName = "CGame", moduleMethod = "loadAnim"},
-    {exportName = "unloadAnim", moduleName = "CGame", moduleMethod = "unloadAnim"},
-    {exportName = "playSound", moduleName = "CGame", moduleMethod = "playSound"},
-    {exportName = "playSound3D", moduleName = "CGame", moduleMethod = "playSound3D"}
+CGame."CGame", {
+    "fetchSettings",
+    "updateSettings",
+    "loadLanguage",
+    "createFont",
+    "isUIVisible",
+    "loadAnim",
+    "unloadAnim",
+    "playSound",
+    "playSound3D"
 })
 
 

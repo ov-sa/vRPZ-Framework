@@ -2,6 +2,6 @@
 --[[ Exports ]]--
 -----------------
 
-CGame.createExports({
-    {exportName = "fetchInventorySlotDimensions", moduleName = "CInventory", moduleMethod = "fetchSlotDimensions"}
+CGame.exportModule("CInventory", {
+    "fetchSlotDimensions"
 })

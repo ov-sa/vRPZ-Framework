@@ -11,15 +11,15 @@ local imports = {
 --[[ Exports ]]--
 -----------------
 
-CGame.createExports({
-    {exportName = "fetchPlayer", moduleName = "CPlayer", moduleMethod = "fetch"},
-    {exportName = "setPlayerData", moduleName = "CPlayer", moduleMethod = "setData"},
-    {exportName = "getPlayerData", moduleName = "CPlayer", moduleMethod = "getData"},
-    {exportName = "getPlayerSerial", moduleName = "CPlayer", moduleMethod = "getSerial"},
-    {exportName = "getPlayerFromSerial", moduleName = "CPlayer", moduleMethod = "getPlayer"},
-    {exportName = "getPlayerInventoryID", moduleName = "CPlayer", moduleMethod = "getInventoryID"},
-    {exportName = "setPlayerChannel", moduleName = "CPlayer", moduleMethod = "setChannel"},
-    {exportName = "setPlayerParty", moduleName = "CPlayer", moduleMethod = "setParty"}
+CGame.exportModule("CPlayer", {
+    "fetch",
+    "setData",
+    "getData",
+    "getSerial",
+    "getPlayer",
+    "getInventoryID",
+    "setChannel",
+    "setParty"
 })
 
 
