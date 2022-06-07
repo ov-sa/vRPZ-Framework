@@ -37,6 +37,7 @@ local imports = {
 
 network = {
     identifier = imports.md5(imports.getResourceName(resource)),
+    isServerInstance = (not localPlayer and true) or false,
     buffer = {},
     cache = {
         execSerials = {}
@@ -184,6 +185,9 @@ function network:emit(...)
     }
     if self == network then
         payload.networkName, payload.isRemote = network.fetchArg(_, cArgs), network.fetchArg(_, cArgs)
+        if payload.isRemote and network.isServerInstance then
+            payload.isReciever = network.fetchArg(_, cArgs)
+        end
     else
         payload.isRestricted = true
         payload.networkName = self.name
@@ -192,7 +196,11 @@ function network:emit(...)
     if not payload.isRemote then
         imports.triggerEvent("Assetify:Network:API", resourceRoot, network.identifier, payload)
     else
-        imports.triggerRemoteEvent("Assetify:Network:API", resourceRoot, network.identifier, payload)
+        if payload.isReciever then
+            imports.triggerRemoteEvent(payload.isReciever, "Assetify:Network:API", resourceRoot, network.identifier, payload)
+        else
+            imports.triggerRemoteEvent("Assetify:Network:API", resourceRoot, network.identifier, payload)
+        end
     end
     return true
 end
@@ -210,6 +218,9 @@ function network:emitCallback(cThread, ...)
     }
     if self == network then
         payload.networkName, payload.isRemote = network.fetchArg(_, cArgs), network.fetchArg(_, cArgs)
+        if payload.isRemote and network.isServerInstance then
+            payload.isReciever = network.fetchArg(_, cArgs)
+        end
     else
         payload.isRestricted = true
         payload.networkName = self.name
@@ -218,6 +229,10 @@ function network:emitCallback(cThread, ...)
     if not payload.isRemote then
         return function() imports.triggerEvent("Assetify:Network:API", resourceRoot, network.identifier, payload) end
     else
-        return function() imports.triggerRemoteEvent("Assetify:Network:API", resourceRoot, network.identifier, payload) end
+        if payload.isReciever then
+            return function() imports.triggerRemoteEvent(payload.isReciever, "Assetify:Network:API", resourceRoot, network.identifier, payload) end
+        else
+            return function() imports.triggerRemoteEvent("Assetify:Network:API", resourceRoot, network.identifier, payload) end
+        end
     end
 end
