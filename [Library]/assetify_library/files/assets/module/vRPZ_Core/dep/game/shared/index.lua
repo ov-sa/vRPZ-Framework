@@ -39,7 +39,8 @@ CGame = {
                 local cNetwork = network:create("]]..moduleName..[[.]]..j..[[", true)
                 --TODO: NOW CREATE HANDLER FOR THIS CALLBACK NETWORK
                 ]]..moduleName..[[.]]..j..[[ = function(...)
-                    return function() imports.triggerEvent(]]..j.exportName..[[, root, ...) end
+                    --TODO: WRONG..
+                    --return function() imports.triggerEvent(]]..j.exportName..[[, root, ...) end
                 end
             ]]
         end
