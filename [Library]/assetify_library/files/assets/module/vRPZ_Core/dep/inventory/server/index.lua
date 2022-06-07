@@ -92,11 +92,36 @@ end
 
 CInventory.equipItem = function(player, item, prevSlot, slot, isEquipped)
     local inventoryID = CPlayer.getInventoryID(player)
-    if not inventoryID then return false end
-    if CInventory.isSlotAvailableForOrdering(player, item, prevSlot, slot, isEquipped) then
+    if not inventoryID or not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] then return false end
+    local isEquippable = false
+    if isEquipped then
+        isEquippable = CInventory.isSlotAvailableForOrdering(player, item, prevSlot, slot, isEquipped)
+    else
+        --isDequipable = true
+        --TODO: WIP
+    end
+    if isEquippable then
         if isEquipped then CInventory.CBuffer[inventoryID].slot[prevSlot] = nil end
         CInventory.CBuffer[inventoryID].slot[slot] = {item = item}
         --TODO: CREATE ATTACHMENT HERE
+    end
+    imports.triggerClientEvent(player, "Client:onSyncInventoryBuffer", player, CInventory.CBuffer[inventoryID])
+    return false
+end
+
+CInventory.dequipItem = function(player, item, prevSlot, slot, isEquipped)
+    local inventoryID = CPlayer.getInventoryID(player)
+    if not inventoryID or not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot] then return false end
+    local isDequippable = false
+    if isEquipped then
+        isDequipable = CInventory.isSlotAvailableForOrdering(player, item, prevSlot, slot, isEquipped) then
+    else
+        --isDequipable = true
+        --TODO: WIP
+    end
+    if isDequipable then
+        CInventory.CBuffer[inventoryID].slot[prevSlot] = nil
+        --TODO: REMOVE ATTACHMENT HERE
     end
     imports.triggerClientEvent(player, "Client:onSyncInventoryBuffer", player, CInventory.CBuffer[inventoryID])
     return false

@@ -50,12 +50,8 @@ end)
 imports.addEvent("Player:onOrderItem", true)
 imports.addEventHandler("Player:onOrderItem", root, function(item, prevSlot, slot)
     if not CPlayer.isInitialized(source) then return false end
-
     if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] then return CInventory.equipItem(source, item, prevSlot, slot, true) end
-    if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot] then
-        --return CInventory.dequipItem(source, item, prevSlot, slot, true)
-        --TODO: WIP..
-    end
+    if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot] then return CInventory.dequipItem(source, item, prevSlot, slot, true) end
     local inventoryID = CPlayer.getInventoryID(source)
     if CInventory.isSlotAvailableForOrdering(source, item, prevSlot, slot, true) then
         CInventory.CBuffer[inventoryID].slots[prevSlot] = nil
