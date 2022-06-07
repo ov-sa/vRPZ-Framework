@@ -40,7 +40,7 @@ CGame = {
             ]])()
             CGame.CExports = CGame.CExports..[[
                 ]]..name..[[ = ]]..name..[[ or {}
-                ]]..name..[[.]]..j..[[ = network:emitCallback("]]..name..[[.]]..j..[[", false, ...)
+                ]]..name..[[.]]..j..[[ = function(cThread, ...) return network:emitCallback(cThread, "]]..name..[[.]]..j..[[", false, ...) end
             ]]
         end
         return true
