@@ -42,7 +42,6 @@ CGame = {
                 ]]..name..[[ = ]]..name..[[ or {}
                 ]]..name..[[.]]..j..[[ = function(...)
                     --TODO: WRONG..
-                    --return function() imports.triggerEvent(]]..j.exportName..[[, root, ...) end
                 end
             ]]
         end
@@ -103,46 +102,3 @@ CGame = {
         }
     end
 }
-
-
-exportModule = function(name, methods)
-    if not name or not methods then return false end
-    for i = 1, #methods, 1 do
-        local j = methods[i]
-        imports.loadstring("function "..j.exportName.."(...) return "..j.moduleName.."."..j.moduleMethod.."(...) end")()
-        local cNetwork = network:create(name.."."..j, true)
-        cNetwork:on(function()
-            return
-        end)
-        CGame.CExports = CGame.CExports..[[
-            ]]..name..[[ = ]]..name..[[ or {}
-            --TODO: NOW CREATE HANDLER FOR THIS CALLBACK NETWORK
-            ]]..name..[[.]]..j..[[ = function(...)
-                --TODO: WRONG..
-                --return function() imports.triggerEvent(]]..j.exportName..[[, root, ...) end
-            end
-        ]]
-    end
-    return true
-end
-
-exportModule = function(name, methods)
-    if not name or not methods then return false end
-    for i = 1, #methods, 1 do
-        local j = methods[i]
-        imports.loadstring([[
-            local cNetwork = network:create("]]..name..[[.]]..j..[[", true)
-            cNetwork:on(function(...)
-                return ]]..name..[[.]]..j..[[(...)
-            end)
-        ]])()
-        CGame.CExports = CGame.CExports..[[
-            ]]..name..[[ = ]]..name..[[ or {}
-            ]]..name..[[.]]..j..[[ = function(...)
-                --TODO: what to type here?..
-                --return function() imports.triggerEvent(]]..j.exportName..[[, root, ...) end
-            end
-        ]]
-    end
-    return true
-end
