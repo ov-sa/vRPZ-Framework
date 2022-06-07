@@ -57,8 +57,8 @@ syncer = {
     syncedElements = {},
     syncedLights = {}
 }
-syncer.librarySource = "https://api.github.com/repos/ov-sa/Assetify-Library/releases/latest",
-syncer.librarySerial = imports.md5(imports.getResourceName(syncer.libraryResource)..":"..imports.tostring(syncer.libraryResource)..":"..imports.json.encode(imports.getRealTime())),
+syncer.librarySource = "https://api.github.com/repos/ov-sa/Assetify-Library/releases/latest"
+syncer.librarySerial = imports.md5(imports.getResourceName(syncer.libraryResource)..":"..imports.tostring(syncer.libraryResource)..":"..imports.json.encode(imports.getRealTime()))
 syncer.__index = syncer
 
 imports.addEvent("onAssetifyLoad", true)
