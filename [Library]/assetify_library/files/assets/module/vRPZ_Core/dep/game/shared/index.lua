@@ -2,6 +2,9 @@
 --[[ Imports ]]--
 -----------------
 
+loadstring(exports.assetify_library:fetchThreader())()
+loadstring(exports.assetify_library:fetchNetworker())()
+
 local imports = {
     tonumber = tonumber,
     loadstring = loadstring,
@@ -22,6 +25,7 @@ local imports = {
 
 CGame = {
     CExports = [[
+        loadstring(exports.assetify_library:fetchImports())()
         loadstring(exports.assetify_library:fetchThreader())()
         loadstring(exports.assetify_library:fetchNetworker())()
         local imports = {}
