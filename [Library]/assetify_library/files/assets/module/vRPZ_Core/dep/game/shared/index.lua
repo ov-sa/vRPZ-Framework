@@ -30,15 +30,15 @@ CGame = {
     execOnLoad = imports.assetify.execOnLoad,
     execOnModuleLoad = imports.assetify.execOnModuleLoad,
 
-    exportModule = function(moduleName, exportDatas)
-        if not moduleName or not moduleMethods then return false end
-        for i = 1, #exportDatas, 1 do
-            local j = exportDatas[i]
+    exportModule = function(name, methods)
+        if not name or not methods then return false end
+        for i = 1, #methods, 1 do
+            local j = methods[i]
             CGame.CExports = CGame.CExports..[[
-                ]]..moduleName..[[ = ]]..moduleName..[[ or {}
-                local cNetwork = network:create("]]..moduleName..[[.]]..j..[[", true)
+                ]]..name..[[ = ]]..name..[[ or {}
+                local cNetwork = network:create("]]..name..[[.]]..j..[[", true)
                 --TODO: NOW CREATE HANDLER FOR THIS CALLBACK NETWORK
-                ]]..moduleName..[[.]]..j..[[ = function(...)
+                ]]..name..[[.]]..j..[[ = function(...)
                     --TODO: WRONG..
                     --return function() imports.triggerEvent(]]..j.exportName..[[, root, ...) end
                 end
