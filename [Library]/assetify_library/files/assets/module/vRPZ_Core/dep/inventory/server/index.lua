@@ -94,7 +94,6 @@ CInventory.equipItem = function(player, item, prevSlot, slot, isEquipped)
     local inventoryID = CPlayer.getInventoryID(player)
     if not inventoryID or not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] then return false end
     local isEquippable = CInventory.isSlotAvailableForOrdering(player, item, prevSlot, slot, isEquipped)
-    isEquippable = CInventory.isSlotAvailableForOrdering(player, item, prevSlot, slot, isEquipped)
     if isEquippable then
         if isEquipped then CInventory.CBuffer[inventoryID].slot[prevSlot] = nil end
         CInventory.CBuffer[inventoryID].slot[slot] = {item = item}
@@ -109,12 +108,11 @@ CInventory.dequipItem = function(player, item, prevSlot, slot, isEquipped)
     if not inventoryID or not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot] then return false end
     local isDequippable = false
     if isEquipped then
-        isDequipable = CInventory.isSlotAvailableForOrdering(player, item, prevSlot, slot, isEquipped) then
+        isDequippable = CInventory.isSlotAvailableForOrdering(player, item, prevSlot, slot, isEquipped) then
     else
-        --isDequipable = true
-        --TODO: WIP
+        isDequippable = true
     end
-    if isDequipable then
+    if isDequippable then
         CInventory.CBuffer[inventoryID].slot[prevSlot] = nil
         --TODO: REMOVE ATTACHMENT HERE
     end
