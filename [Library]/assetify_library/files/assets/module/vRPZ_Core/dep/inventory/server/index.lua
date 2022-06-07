@@ -6,8 +6,10 @@ local imports = {
     pairs = pairs,
     tonumber = tonumber,
     isElement = isElement,
+    destroyElement = destroyElement,
     triggerClientEvent = triggerClientEvent,
     getElementType = getElementType,
+    setElementData = setElementData,
     getElementData = getElementData,
     string = string,
     math = math,
@@ -96,9 +98,11 @@ CInventory.equipItem = function(player, item, prevSlot, slot, isEquipped)
     local isEquippable = CInventory.isSlotAvailableForOrdering(player, item, prevSlot, slot, isEquipped)
     if isEquippable then
         if isEquipped then CInventory.CBuffer[inventoryID].slot[prevSlot] = nil end
+        --CPlayer.CAttachments[player][slot] = createObject() --TODO: WIP..
         CInventory.CBuffer[inventoryID].slot[slot] = {item = item}
-        print("CREATE ATTACHMENT")
-        --TODO: CREATE ATTACHMENT HERE
+        imports.setElementData(player, "Slot:"..slot, item)
+        imports.setElementData(player, "Slot:Object:"..slot, CPlayer.CAttachments[player][slot])
+        print("CREATE ATTACHMENT")   --TODO: REMOVE..
     end
     imports.triggerClientEvent(player, "Client:onSyncInventoryBuffer", player, CInventory.CBuffer[inventoryID])
     return false
@@ -109,15 +113,20 @@ CInventory.dequipItem = function(player, item, prevSlot, slot, isEquipped)
     if not inventoryID or not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot] then return false end
     local isDequippable = false
     if isEquipped then
-        isDequippable = CInventory.isSlotAvailableForOrdering(player, item, prevSlot, slot, isEquipped) then
+        isDequippable = CInventory.isSlotAvailableForOrdering(player, item, prevSlot, slot, isEquipped)
     else
         isDequippable = true
     end
     if isDequippable then
         CInventory.CBuffer[inventoryID].slot[prevSlot] = nil
         if isEquipped then CInventory.CBuffer[inventoryID].slots[slot] = {item = item} end
-        print("REMOVE ATTACHMENT")
-        --TODO: REMOVE ATTACHMENT HERE
+        if CPlayer.CAttachments[player][prevSlot] and imports.isElement(CPlayer.CAttachments[player][prevSlot]) then
+            imports.destroyElement(CPlayer.CAttachments[player][prevSlot])
+        end
+        CPlayer.CAttachments[player][prevSlot] = nil
+        imports.setElementData(player, "Slot:"..prevSlot, nil)
+        imports.setElementData(player, "Slot:Object:"..prevSlot, nil)
+        print("REMOVE ATTACHMENT")  --TODO: REMOVE..
     end
     imports.triggerClientEvent(player, "Client:onSyncInventoryBuffer", player, CInventory.CBuffer[inventoryID])
     return false

@@ -26,14 +26,11 @@ local imports = {
 local cUtility = {
     resetProgress = function(cThread, player, isForceReset, deps, saveProgress, loadProgress)
         if isForceReset then
-            imports.setElementData(player, "Player:Initialized", nil)
             imports.setElementData(player, "Character:ID", nil)
         end
-        if CPlayer.CAttachments[player] then
-            for i, j in imports.pairs(CPlayer.CAttachments[player]) do
-                if j and imports.isElement(j) then
-                    imports.destroyElement(j)
-                end
+        for i, j in imports.pairs(CPlayer.CAttachments[player]) do
+            if j and imports.isElement(j) then
+                imports.destroyElement(j)
             end
         end
         CPlayer.CChannel[player] = nil
@@ -105,6 +102,7 @@ CCharacter.loadProgress = function(player, loadCharacterID, resetProgress)
     local characterID = loadCharacterID or CPlayer.getCharacterID(player, true)
     if loadCharacterID then
         local serial = CPlayer.getSerial(player)
+        CPlayer.CAttachments[player] = {}
         for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
             imports.setElementData(player, "Player:Data:"..j, CPlayer.CBuffer[serial][j])
