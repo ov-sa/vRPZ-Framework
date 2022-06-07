@@ -149,6 +149,7 @@
     <export function="getInventoryItemProperty" type="server"/>
     <export function="setInventoryItemData" type="server"/>
     <export function="getInventoryItemData" type="server"/>
+    <export function="equipInventoryItem" type="server"/>
     <export function="fetchInventorySlotDimensions" type="client"/>
 
     <!-- Modules: Loot -->

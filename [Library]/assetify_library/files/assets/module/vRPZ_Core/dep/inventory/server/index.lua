@@ -6,6 +6,7 @@ local imports = {
     pairs = pairs,
     tonumber = tonumber,
     isElement = isElement,
+    triggerClientEvent = triggerClientEvent,
     getElementType = getElementType,
     getElementData = getElementData,
     string = string,
@@ -89,6 +90,26 @@ CInventory.getItemData = function(cThread, inventoryID, inventoryItems, itemData
     return result
 end
 
+CInventory.equipItem = function(player, item, prevSlot, slot, isEquipped)
+    local inventoryID = CPlayer.getInventoryID(player)
+    if not inventoryID then return false end
+    if CInventory.isSlotAvailableForOrdering(player, item, prevSlot, slot, isEquipped) then
+        local prevItem = false
+        if CInventory.CBuffer[inventoryID].slot[prevSlot] then
+            prevItem = CInventory.CBuffer[inventoryID].slot[prevSlot].item
+            CInventory.CBuffer[inventoryID].slot[prevSlot] = nil
+            --TODO: REMOVE ATTACHMENT
+        end
+        CInventory.CBuffer[inventoryID].slot[slot] = {item = item}
+        if prevItem and (prevItem ~= item) then
+            --TODO: SET ATTACHMENT IF PREV ITEM IS NOT AS CURRENT ONE
+        end
+        return true
+    end
+    imports.triggerClientEvent(player, "Client:onSyncInventoryBuffer", player, CInventory.CBuffer[inventoryID])
+    return false
+end
+
 CInventory.fetchParentMaxSlots = function(parent)
     if not parent or not imports.isElement(parent) then return false end
     if imports.getElementType(parent) == "player" then
@@ -103,7 +124,6 @@ end
 
 CInventory.fetchParentAssignedSlots = function(parent)
     if not parent or not imports.isElement(parent) then return false end
-    if not CPlayer.isInitialized(parent) then return false end
     local inventoryID = CPlayer.getInventoryID(parent)
     return (inventoryID and CInventory.CBuffer[inventoryID].slots) or false
 end
@@ -147,6 +167,9 @@ CInventory.isSlotAvailableForOrdering = function(player, item, prevSlot, slot, i
     local maxSlots, usedSlots = CInventory.fetchParentMaxSlots(player), CInventory.fetchParentUsedSlots(player)
     if not maxSlots or not usedSlots or (isEquipmentSlot and (not itemData.slot or (itemData.slot ~= slot))) or (not isEquipmentSlot and (slot > maxSlots)) then return false end
     if isEquipped then
+        if not prevSlot or not usedSlots[prevSlot] then return false end
+        local inventoryID = CPlayer.getInventoryID(player)
+        if not CInventory.CBuffer[inventoryID].slot[prevSlot] or (CInventory.CBuffer[inventoryID].slot[prevSlot].item ~= item) then return false end
         if not isEquipmentSlot and not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot] then
             prevSlot = imports.tonumber(prevSlot)
             if not prevSlot then return false end

@@ -96,6 +96,8 @@ CInventory.isSlotAvailableForOrdering = function(item, prevSlot, slot, isEquippe
     local maxSlots, usedSlots = CInventory.fetchParentMaxSlots(localPlayer), CInventory.fetchParentUsedSlots(localPlayer)
     if not maxSlots or not usedSlots or (isEquipmentSlot and (not itemData.slot or (itemData.slot ~= slot))) or (not isEquipmentSlot and (slot > maxSlots)) then return false end
     if isEquipped then
+        if not prevSlot or not usedSlots[prevSlot] then return false end
+        if not CInventory.CBuffer.slot[prevSlot] or (CInventory.CBuffer.slot[prevSlot].item ~= item) then return false end
         if not isEquipmentSlot and not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot] then
             prevSlot = imports.tonumber(prevSlot)
             if not prevSlot then return false end
