@@ -19,6 +19,7 @@ local imports = {
     tostring = tostring,
     isElement = isElement,
     getRealTime = getRealTime,
+    getThisResource = getThisResource,
     getResourceName = getResourceName,
     getResourceInfo = getResourceInfo,
     getElementsByType = getElementsByType,
@@ -46,7 +47,7 @@ local imports = {
 -----------------------
 
 syncer = {
-    libraryResource = getThisResource(),
+    libraryResource = imports.getThisResource(),
     isLibraryLoaded = false,
     isModuleLoaded = false,
     libraryName = imports.getResourceName(syncer.libraryResource),
