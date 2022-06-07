@@ -97,6 +97,7 @@ CInventory.equipItem = function(player, item, prevSlot, slot, isEquipped)
     if isEquippable then
         if isEquipped then CInventory.CBuffer[inventoryID].slot[prevSlot] = nil end
         CInventory.CBuffer[inventoryID].slot[slot] = {item = item}
+        print("CREATE ATTACHMENT")
         --TODO: CREATE ATTACHMENT HERE
     end
     imports.triggerClientEvent(player, "Client:onSyncInventoryBuffer", player, CInventory.CBuffer[inventoryID])
@@ -115,6 +116,7 @@ CInventory.dequipItem = function(player, item, prevSlot, slot, isEquipped)
     if isDequippable then
         CInventory.CBuffer[inventoryID].slot[prevSlot] = nil
         if isEquipped then CInventory.CBuffer[inventoryID].slots[slot] = {item = item} end
+        print("REMOVE ATTACHMENT")
         --TODO: REMOVE ATTACHMENT HERE
     end
     imports.triggerClientEvent(player, "Client:onSyncInventoryBuffer", player, CInventory.CBuffer[inventoryID])
