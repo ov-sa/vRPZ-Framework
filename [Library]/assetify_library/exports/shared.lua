@@ -95,11 +95,22 @@ function clearBoneAttachment(element, ...)
     return syncer:syncClearBoneAttachment(element)
 end
 
+function setGlobalData(data, value)
+    if imports.type(data) ~= "string" then return false end
+    syncer.syncedGlobalDatas[data] = value
+    return true
+end
+
+function getGlobalData(data)
+    if imports.type(data) ~= "string" then return false end
+    return syncer.syncedGlobalDatas[data]
+end
+
 function setElementData(element, data, value)
     if not element or not imports.isElement(isElement) or not data or (imports.type(data) ~= "string") then return false end
     syncer.syncedElementDatas[element] = syncer.syncedElementDatas[element] or {}
     syncer.syncedElementDatas[element][data] = value
-    return 
+    return true
 end
 
 function getElementData(element, data)
