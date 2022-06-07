@@ -54,7 +54,8 @@ syncer = {
     libraryBandwidth = 0,
     syncedGlobalDatas = {},
     syncedElementDatas = {},
-    syncedElements = {}
+    syncedElements = {},
+    syncedLights = {}
 }
 syncer.__index = syncer
 
