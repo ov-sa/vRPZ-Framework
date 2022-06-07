@@ -193,6 +193,7 @@ function network:emit(...)
         payload.networkName, payload.isRemote = network.fetchArg(_, cArgs), network.fetchArg(_, cArgs)
         if payload.isRemote and network.isServerInstance then
             payload.isReciever = network.fetchArg(_, cArgs)
+            payload.isReciever = (payload.isReciever and import.isElement(payload.isReciever) and (imports.getElementType(payload.isReciever) == "player") and payload.isReciever) or false
         end
     else
         payload.isRestricted = true
