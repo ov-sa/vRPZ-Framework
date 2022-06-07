@@ -98,12 +98,9 @@ CInventory.equipItem = function(player, item, prevSlot, slot, isEquipped)
         if CInventory.CBuffer[inventoryID].slot[prevSlot] then
             prevItem = CInventory.CBuffer[inventoryID].slot[prevSlot].item
             CInventory.CBuffer[inventoryID].slot[prevSlot] = nil
-            --TODO: REMOVE ATTACHMENT
         end
         CInventory.CBuffer[inventoryID].slot[slot] = {item = item}
-        if prevItem and (prevItem ~= item) then
-            --TODO: SET ATTACHMENT IF PREV ITEM IS NOT AS CURRENT ONE
-        end
+        --TODO: CREATE ATTACHMENT HERE
         return true
     end
     imports.triggerClientEvent(player, "Client:onSyncInventoryBuffer", player, CInventory.CBuffer[inventoryID])
