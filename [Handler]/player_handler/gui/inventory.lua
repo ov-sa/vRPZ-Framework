@@ -611,7 +611,7 @@ CGame.execOnModuleLoad(function()
                     if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and (not inventoryUI.attachedItem.isPlaceable or (inventoryUI.attachedItem.isPlaceable.type == "drop")) then
                         isUIClearPlacement = false
                         local slot = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[(inventoryUI.attachedItem.item)] or inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].unassignedBuffers[(inventoryUI.attachedItem.item)]
-                        if CInventory.isVicinityAvailableForDropping(inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, inventoryUI.attachedItem.parent == inventoryUI.vicinityInventory.element) then
+                        if CInventory.isVicinityAvailableForDropping(inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, _, inventoryUI.attachedItem.parent == inventoryUI.vicinityInventory.element) then
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "drop"}
                             inventoryUI.attachedItem.isPlaceable.slot = slot
                             inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.attachedItem.isPlaceable.offsetY = inventoryUI.vicinityInventory.width - ((CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1]/CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2])*inventoryUI.vicinityInventory.slotSize), (inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(slot - 1)

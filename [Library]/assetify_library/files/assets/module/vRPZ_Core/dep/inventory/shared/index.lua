@@ -131,14 +131,16 @@ CInventory = {
         return FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns
     end,
 
-    isVicinityAvailableForDropping = function(vicinity, item, isEquipped)
+    isVicinityAvailableForDropping = function(vicinity, item, amount, isEquipped)
         if not vicinity or not imports.isElement(vicinity) or (imports.getElementType(vicinity) == "player") then return false end
         local itemData = CInventory.fetchItem(item)
         if not itemData then return false end
         if not isEquipped then
+            amount = imports.tonumber(amount)
+            if not amount or (amount <= 0) then return false end
             local maxWeight, usedWeight = CInventory.fetchParentMaxWeight(vicinity), CInventory.fetchParentUsedWeight(vicinity)
             if not maxWeight or not usedWeight then return false end
-            return itemData.data.itemWeight.weight <= (maxWeight - usedWeight)
+            return (itemData.data.itemWeight.weight*amount) <= (maxWeight - usedWeight)
         end
         return true
     end
