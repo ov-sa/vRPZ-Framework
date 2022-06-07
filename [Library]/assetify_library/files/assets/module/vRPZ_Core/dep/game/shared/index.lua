@@ -24,25 +24,22 @@ local imports = {
 
 CGame = {
     CExports = [[
-        local imports = {
-            resourceName = "]]..imports.getResourceName(imports.getThisResource())..[[",
-            call = call,
-            getResourceFromName = getResourceFromName
-        }
+        local imports = {}
     ]],
     CTickSyncer = nil,
     execOnLoad = imports.assetify.execOnLoad,
     execOnModuleLoad = imports.assetify.execOnModuleLoad,
 
-    createExports = function(data)
-        if not data then return false end
-        for i = 1, #data, 1 do
-            local j = data[i]
-            imports.loadstring("function "..j.exportName.."(...) return "..j.moduleName.."."..j.moduleMethod.."(...) end")()
+    exportModule = function(moduleName, exportDatas)
+        if not moduleName or not moduleMethods then return false end
+        for i = 1, #exportDatas, 1 do
+            local j = exportDatas[i]
             CGame.CExports = CGame.CExports..[[
-                ]]..j.moduleName..[[ = ]]..j.moduleName..[[ or {}
-                ]]..j.moduleName..[[.]]..j.moduleMethod..[[ = function(...)
-                    return imports.call(imports.getResourceFromName(imports.resourceName), "]]..j.exportName..[[", ...)
+                ]]..moduleName..[[ = ]]..moduleName..[[ or {}
+                local cNetwork = network:create("]]..moduleName..[[.]]..j..[[", true)
+                --TODO: NOW CREATE HANDLER FOR THIS CALLBACK NETWORK
+                ]]..moduleName..[[.]]..j..[[ = function(...)
+                    return function() imports.triggerEvent(]]..j.exportName..[[, root, ...) end
                 end
             ]]
         end
