@@ -97,7 +97,6 @@ CInventory.equipItem = function(player, item, prevSlot, slot, isEquipped)
         if isEquipped then CInventory.CBuffer[inventoryID].slot[prevSlot] = nil end
         CInventory.CBuffer[inventoryID].slot[slot] = {item = item}
         --TODO: CREATE ATTACHMENT HERE
-        return true
     end
     imports.triggerClientEvent(player, "Client:onSyncInventoryBuffer", player, CInventory.CBuffer[inventoryID])
     return false
