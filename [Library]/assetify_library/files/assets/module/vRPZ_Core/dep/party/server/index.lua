@@ -16,7 +16,6 @@ local imports = {
 CParty = {}
 CParty.CParties = {}
 
-
 CParty.create = function(leader)
     local partyIndex = #CParty.CParties + 1
     CParty.CParties[partyIndex] = {

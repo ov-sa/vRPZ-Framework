@@ -16,7 +16,7 @@ local imports = {
 --[[ Exports ]]--
 -----------------
 
-CGame."CGame", {
+CGame.exportModule("CGame", {
     "fetchSettings",
     "updateSettings",
     "loadLanguage",
