@@ -94,11 +94,7 @@ CInventory.equipItem = function(player, item, prevSlot, slot, isEquipped)
     local inventoryID = CPlayer.getInventoryID(player)
     if not inventoryID then return false end
     if CInventory.isSlotAvailableForOrdering(player, item, prevSlot, slot, isEquipped) then
-        local prevItem = false
-        if CInventory.CBuffer[inventoryID].slot[prevSlot] then
-            prevItem = CInventory.CBuffer[inventoryID].slot[prevSlot].item
-            CInventory.CBuffer[inventoryID].slot[prevSlot] = nil
-        end
+        if isEquipped then CInventory.CBuffer[inventoryID].slot[prevSlot] = nil end
         CInventory.CBuffer[inventoryID].slot[slot] = {item = item}
         --TODO: CREATE ATTACHMENT HERE
         return true

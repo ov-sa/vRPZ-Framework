@@ -38,22 +38,30 @@ imports.addEvent("Player:onAddItem", true)
 imports.addEventHandler("Player:onAddItem", root, function(vicinity, item, slot)
     if not CPlayer.isInitialized(source) then return false end
     local inventoryID = CPlayer.getInventoryID(source)
-    if vicinity and item and slot then
-        if CInventory.isSlotAvailableForOrdering(source, item, _, slot) then
-            CInventory.addItemCount(source, item, 1)
-            CInventory.removeItemCount(vicinity, item, 1)
-            CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
-            if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] then
-                --TODO: Add AND UPDATE ATTACHMENT...
-            end
-        end
+    if CInventory.isSlotAvailableForOrdering(source, item, _, slot) then
+        CInventory.addItemCount(source, item, 1)
+        CInventory.removeItemCount(vicinity, item, 1)
+        if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] then return CInventory.equipItem(source, item, _, slot) end
+        CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
     end
     imports.triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, CInventory.CBuffer[inventoryID])
 end)
 
 imports.addEvent("Player:onOrderItem", true)
 imports.addEventHandler("Player:onOrderItem", root, function(item, prevSlot, slot)
-    CInventory.equipItem(source, item, prevSlot, slot, true)
+    if not CPlayer.isInitialized(source) then return false end
+
+    if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] then return CInventory.equipItem(source, item, prevSlot, slot, true) end
+    if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot] then
+        --return CInventory.dequipItem(source, item, prevSlot, slot, true)
+        --TODO: WIP..
+    end
+    local inventoryID = CPlayer.getInventoryID(source)
+    if CInventory.isSlotAvailableForOrdering(source, item, prevSlot, slot, true) then
+        CInventory.CBuffer[inventoryID].slots[prevSlot] = nil
+        CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
+    end
+    imports.triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, CInventory.CBuffer[inventoryID])
 end)
 
 imports.addEvent("Player:onDropItem", true)
