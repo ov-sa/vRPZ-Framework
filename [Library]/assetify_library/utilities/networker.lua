@@ -39,7 +39,7 @@ local imports = {
 ------------------------
 
 network = {
-    identifier = imports.md5(imports.getResourceName(import.getThisResource())),
+    identifier = imports.md5(imports.getResourceName(imports.getThisResource())),
     isServerInstance = (not localPlayer and true) or false,
     buffer = {},
     cache = {
