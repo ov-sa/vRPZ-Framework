@@ -22,6 +22,8 @@ local imports = {
 
 CGame = {
     CExports = [[
+        loadstring(exports.assetify_library:fetchThreader())()
+        loadstring(exports.assetify_library:fetchNetworker())()
         local imports = {}
     ]],
     CTickSyncer = nil,
@@ -30,6 +32,9 @@ CGame = {
 
     exportModule = function(name, methods)
         if not name or not methods then return false end
+        CGame.CExports = CGame.CExports..[[
+            ]]..name..[[ = ]]..name..[[ or {}
+        ]]
         for i = 1, #methods, 1 do
             local j = methods[i]
             imports.loadstring([[
@@ -39,7 +44,6 @@ CGame = {
                 end)
             ]])()
             CGame.CExports = CGame.CExports..[[
-                ]]..name..[[ = ]]..name..[[ or {}
                 ]]..name..[[.]]..j..[[ = function(cThread, ...) return network:emitCallback(cThread, "]]..name..[[.]]..j..[[", false, ...) end
             ]]
         end
