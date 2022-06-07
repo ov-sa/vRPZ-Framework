@@ -93,13 +93,8 @@ end
 CInventory.equipItem = function(player, item, prevSlot, slot, isEquipped)
     local inventoryID = CPlayer.getInventoryID(player)
     if not inventoryID or not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] then return false end
-    local isEquippable = false
-    if isEquipped then
-        isEquippable = CInventory.isSlotAvailableForOrdering(player, item, prevSlot, slot, isEquipped)
-    else
-        --isDequipable = true
-        --TODO: WIP
-    end
+    local isEquippable = CInventory.isSlotAvailableForOrdering(player, item, prevSlot, slot, isEquipped)
+    isEquippable = CInventory.isSlotAvailableForOrdering(player, item, prevSlot, slot, isEquipped)
     if isEquippable then
         if isEquipped then CInventory.CBuffer[inventoryID].slot[prevSlot] = nil end
         CInventory.CBuffer[inventoryID].slot[slot] = {item = item}
