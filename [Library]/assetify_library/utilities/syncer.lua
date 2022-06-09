@@ -56,25 +56,25 @@ syncer.librarySource = "https://api.github.com/repos/ov-sa/Assetify-Library/rele
 syncer.librarySerial = imports.md5(imports.getResourceName(syncer.libraryResource)..":"..imports.tostring(syncer.libraryResource)..":"..imports.json.encode(imports.getRealTime()))
 syncer.__index = syncer
 
-network:create("onAssetifyLoad")
-network:create("onAssetifyUnLoad")
-network:create("onAssetifyModuleLoad")
+network:create("Assetify:onLoad")
+network:create("Assetify:onUnload")
+network:create("Assetify:onModuleLoad")
 syncer.execOnLoad = function(execFunc)
     local execWrapper = nil
     execWrapper = function()
         execFunc()
-        network:destroy("onAssetifyLoad")
+        network:destroy("Assetify:onLoad")
     end
-    network:fetch("onAssetifyLoad"):on(execWrapper)
+    network:fetch("Assetify:onLoad"):on(execWrapper)
     return true
 end
 syncer.execOnModuleLoad = function(execFunc)
     local execWrapper = nil
     execWrapper = function()
         execFunc()
-        network:destroy("onAssetifyModuleLoad")
+        network:destroy("Assetify:onModuleLoad")
     end
-    network:fetch("onAssetifyModuleLoad"):on(execWrapper)
+    network:fetch("Assetify:onModuleLoad"):on(execWrapper)
     return true
 end
 syncer.execOnLoad(function() syncer.isLibraryLoaded = true end)
@@ -83,8 +83,8 @@ syncer.execOnModuleLoad(function() syncer.isModuleLoaded = true end)
 if localPlayer then
     syncer.scheduledAssets = {}
     availableAssetPacks = {}
-    network:create("onAssetLoad")
-    network:create("onAssetUnLoad")
+    network:create("Assetify:onAssetLoad")
+    network:create("Assetify:onAssetUnload")
 
     function syncer:syncElementModel(...)
         return network:emit("Assetify:onRecieveSyncedElement", false, ...)
@@ -106,7 +106,7 @@ if localPlayer then
         return network:emit("Assetify:onRecieveClearBoneAttachment", false, ...)
     end
 
-    network:fetch("onAssetifyLoad"):on(function()
+    network:fetch("Assetify:onLoad"):on(function()
         network:emit("Assetify:onRequestSyncedPool", true, false, localPlayer)
     end)
 
@@ -198,7 +198,7 @@ if localPlayer then
                                 thread:pause()
                             end
                         end
-                        network:emit("onAssetifyModuleLoad", false)
+                        network:emit("Assetify:onModuleLoad", false)
                     end):resume({
                         executions = downloadSettings.buildRate,
                         frames = 1
@@ -218,7 +218,7 @@ if localPlayer then
                                 end
                             end
                         end
-                        network:emit("onAssetifyLoad", false)
+                        network:emit("Assetify:onLoad", false)
                     end):resume({
                         executions = downloadSettings.buildRate,
                         frames = 1
@@ -464,7 +464,7 @@ else
                         end
                     end
                     if isModuleVoid then
-                        network:emit("onAssetifyModuleLoad", true, false)
+                        network:emit("Assetify:onModuleLoad", true, false)
                         network:emit("Assetify:onRequestAssets", false, player)
                     end
                 else
@@ -488,7 +488,7 @@ else
                             end
                         end
                     end
-                    if isLibraryVoid then imports.triggerClientEvent(player, "onAssetifyLoad", resourceRoot) end
+                    if isLibraryVoid then imports.triggerClientEvent(player, "Assetify:onLoad", resourceRoot) end
                 end
             end):resume({
                 executions = downloadSettings.syncRate,

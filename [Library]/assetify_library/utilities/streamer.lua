@@ -221,7 +221,7 @@ onBoneUpdate = function(streamBuffer)
     return true
 end
 
-imports.addEventHandler("onAssetifyLoad", root, function()
+imports.addEventHandler("Assetify:onLoad", root, function()
     streamer:update(imports.getElementDimension(localPlayer))
     imports.setTimer(function()
         if streamer.cache.isCameraTranslated then return false end

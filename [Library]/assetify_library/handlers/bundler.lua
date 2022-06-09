@@ -235,9 +235,9 @@ bundler["scheduler"] = [[
                 local execWrapper = nil
                 execWrapper = function()
                     execFunc()
-                    assetify.imports.removeEventHandler("onAssetifyLoad", root, execWrapper)
+                    assetify.imports.removeEventHandler("Assetify:onLoad", root, execWrapper)
                 end
-                assetify.imports.addEventHandler("onAssetifyLoad", root, execWrapper)
+                assetify.imports.addEventHandler("Assetify:onLoad", root, execWrapper)
             end
             return true
         end,
@@ -251,9 +251,9 @@ bundler["scheduler"] = [[
                 local execWrapper = nil
                 execWrapper = function()
                     execFunc()
-                    assetify.imports.removeEventHandler("onAssetifyModuleLoad", root, execWrapper)
+                    assetify.imports.removeEventHandler("Assetify:onModuleLoad", root, execWrapper)
                 end
-                assetify.imports.addEventHandler("onAssetifyModuleLoad", root, execWrapper)
+                assetify.imports.addEventHandler("Assetify:onModuleLoad", root, execWrapper)
             end
             return true
         end,

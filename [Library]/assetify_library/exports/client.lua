@@ -56,7 +56,7 @@ end
 function loadAsset(assetType, assetName, ...)
     local state = manager:load(assetType, assetName, ...)
     if state then
-        imports.triggerEvent("onAssetLoad", localPlayer, assetType, assetName)
+        imports.triggerEvent("Assetify:onAssetLoad", localPlayer, assetType, assetName)
     end
     return state
 end
@@ -64,7 +64,7 @@ end
 function unloadAsset(assetType, assetName, ...)
     local state = manager:unload(assetType, assetName, ...)
     if state then
-        imports.triggerEvent("onAssetUnLoad", localPlayer, assetType, assetName)
+        imports.triggerEvent("Assetify:onAssetUnload", localPlayer, assetType, assetName)
     end
     return state
 end
