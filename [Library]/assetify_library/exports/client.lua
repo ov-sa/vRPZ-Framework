@@ -15,9 +15,15 @@
 local imports = {
     tonumber = tonumber,
     isElement = isElement,
+    destroyElement = destroyElement,
     engineImportTXD = engineImportTXD,
     engineReplaceModel = engineReplaceModel,
     engineRestoreModel = engineRestoreModel,
+    removeWorldModel = removeWorldModel,
+    restoreAllWorldModels = restoreAllWorldModels,
+    createWater = createWater,
+    setOcclusionsEnabled = setOcclusionsEnabled,
+    setWorldSpecialPropertyEnabled = setWorldSpecialPropertyEnabled,
     triggerEvent = triggerEvent,
     math = math
 }
@@ -82,6 +88,29 @@ end
 function createShader(...)
     local cShader = shader:create(...)
     return cShader
+end
+
+function clearWorld()
+    for i = 550, 19999, 1 do
+        imports.removeWorldModel(i, 100000, 0, 0, 0)
+    end
+    if GTAWorldSettings.waterLevel then
+        streamer.waterBuffer = imports.createWater(-3000, -3000, 0, 3000, -3000, 0, -3000, 3000, 0, 3000, 3000, 0, false)
+    end
+    imports.setOcclusionsEnabled(false)
+    imports.setWorldSpecialPropertyEnabled("randomfoliage", false)
+    return true
+end
+
+function restoreWorld()
+    if streamer.waterBuffer and imports.isElement(streamer.waterBuffer) then
+        imports.destroyElement(streamer.waterBuffer)
+    end
+    streamer.waterBuffer = nil
+    imports.restoreAllWorldModels()
+    imports.setOcclusionsEnabled(true)
+    imports.setWorldSpecialPropertyEnabled("randomfoliage", true)
+    return true
 end
 
 function clearModel(modelID)

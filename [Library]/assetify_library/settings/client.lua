@@ -13,7 +13,7 @@
 ------------------
 
 GTAWorldSettings = {
-    removeWorld = true,
+    clearWorld = true,
     waterLevel = false
 }
 
