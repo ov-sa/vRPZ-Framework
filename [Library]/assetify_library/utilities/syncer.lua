@@ -30,11 +30,8 @@ local imports = {
     addEventHandler = addEventHandler,
     getResourceRootElement = getResourceRootElement,
     fetchRemote = fetchRemote,
-    triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent,
-    triggerServerEvent = triggerServerEvent,
     triggerLatentClientEvent = triggerLatentClientEvent,
-    triggerLatentServerEvent = triggerLatentServerEvent,
     loadAsset = loadAsset,
     file = file,
     json = json
@@ -222,7 +219,7 @@ if localPlayer then
                                 end
                             end
                         end
-                        imports.triggerEvent("onAssetifyLoad", resourceRoot)
+                        network:emit("onAssetifyLoad", false)
                     end):resume({
                         executions = downloadSettings.buildRate,
                         frames = 1
