@@ -29,7 +29,6 @@ local imports = {
     addEventHandler = addEventHandler,
     getResourceRootElement = getResourceRootElement,
     fetchRemote = fetchRemote,
-    triggerClientEvent = triggerClientEvent,
     triggerLatentClientEvent = triggerLatentClientEvent,
     loadAsset = loadAsset,
     file = file,
@@ -354,7 +353,7 @@ else
                 frames = 1
             })
         else
-            imports.triggerClientEvent(targetPlayer, "Assetify:onRecieveSyncedElement", targetPlayer, element, assetType, assetName, assetClump, clumpMaps)
+            network:emit("Assetify:onRecieveSyncedElement", true, false, targetPlayer, element, assetType, assetName, assetClump, clumpMaps)
         end
         return true
     end
@@ -373,7 +372,7 @@ else
                 frames = 1
             })
         else
-            imports.triggerClientEvent(targetPlayer, "Assetify:onRecieveBoneAttachment", targetPlayer, element, parent, boneData)
+            network:emit("Assetify:onRecieveBoneAttachment", true, false, targetPlayer, element, parent, boneData)
         end
         return true
     end
@@ -392,7 +391,7 @@ else
                 frames = 1
             })
         else
-            imports.triggerClientEvent(targetPlayer, "Assetify:onRecieveBoneDetachment", targetPlayer, element)
+            network:emit("Assetify:onRecieveBoneDetachment", true, false, targetPlayer, element)
         end
         return true
     end
@@ -411,7 +410,7 @@ else
                 frames = 1
             })
         else
-            imports.triggerClientEvent(targetPlayer, "Assetify:onRecieveBoneRefreshment", targetPlayer, element, boneData)
+            network:emit("Assetify:onRecieveBoneRefreshment", true, false, targetPlayer, element, boneData)
         end
         return true
     end
@@ -437,7 +436,7 @@ else
                 frames = 1
             })
         else
-            imports.triggerClientEvent(targetPlayer, "Assetify:onRecieveClearBoneAttachment", targetPlayer, element)
+            network:emit("Assetify:onRecieveClearBoneAttachment", true, false, targetPlayer, element)
         end
         return true
     end
@@ -447,7 +446,7 @@ else
             thread:create(function(cThread)
                 if syncModules then
                     local isModuleVoid = true
-                    imports.triggerClientEvent(player, "Assetify:onRecieveBandwidth", player, syncer.libraryBandwidth)
+                    network:emit("Assetify:onRecieveBandwidth", true, false, player, syncer.libraryBandwidth)
                     if availableAssetPacks["module"] and availableAssetPacks["module"].assetPack then
                         for i, j in imports.pairs(availableAssetPacks["module"].assetPack) do
                             if i ~= "rwDatas" then
@@ -488,7 +487,7 @@ else
                             end
                         end
                     end
-                    if isLibraryVoid then imports.triggerClientEvent(player, "Assetify:onLoad", resourceRoot) end
+                    if isLibraryVoid then network:emit("Assetify:onLoad", true, false, player) end
                 end
             end):resume({
                 executions = downloadSettings.syncRate,
