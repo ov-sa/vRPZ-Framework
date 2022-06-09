@@ -61,9 +61,9 @@ syncer.librarySource = "https://api.github.com/repos/ov-sa/Assetify-Library/rele
 syncer.librarySerial = imports.md5(imports.getResourceName(syncer.libraryResource)..":"..imports.tostring(syncer.libraryResource)..":"..imports.json.encode(imports.getRealTime()))
 syncer.__index = syncer
 
-imports.addEvent("onAssetifyLoad", true)
-imports.addEvent("onAssetifyUnLoad", false)
-imports.addEvent("onAssetifyModuleLoad", true)
+network:create("onAssetifyLoad")
+network:create("onAssetifyUnLoad")
+network:create("onAssetifyModuleLoad")
 syncer.execOnLoad = function(execFunc)
     local execWrapper = nil
     execWrapper = function()
