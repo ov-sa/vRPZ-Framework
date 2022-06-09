@@ -313,7 +313,7 @@ else
                 frames = 1
             })
         else
-            network:emit("Assetify:onRecieveSyncedGlobalData", true, false, data, value)
+            network:emit("Assetify:onRecieveSyncedGlobalData", true, false, targetPlayer, data, value)
         end
         return true
     end
@@ -331,7 +331,7 @@ else
                 frames = 1
             })
         else
-            network:emit("Assetify:onRecieveSyncedElementData", true, false, element, data, value)
+            network:emit("Assetify:onRecieveSyncedElementData", true, false, targetPlayer, element, data, value)
         end
         return true
     end
