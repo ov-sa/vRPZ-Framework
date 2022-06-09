@@ -35,13 +35,15 @@ function import(...)
     local args = {...}
     if args[1] == true then
         local genImports = {}
-        imports.table.insert(genImports, bundler.core)
+        local isCompleteFetch = false
+        imports.table.insert(genImports, {rw = bundler.core})
         if args[2] and (args[2] == "*") then
+            isCompleteFetch = true
             for i, j in imports.pairs(bundler) do
                 if i ~= "core" then
                     local cImport = {index = i}
                     if imports.type(j) == "table" then
-                        cImport.isModule = (j.isModule and true) or false
+                        cImport.module = j.module or false
                         cImport.rw = j.rw
                     else
                         cImport.rw = j
@@ -56,7 +58,7 @@ function import(...)
                 if (j ~= "core") and bundler[j] and not __genImports[j] then
                     local cImport = {index = j}
                     if imports.type(bundler[j]) == "table" then
-                        cImport.isModule = (bundler[j].isModule and true) or false
+                        cImport.module = bundler[j].module or false
                         cImport.rw = bundler[j].rw
                     else
                         cImport.rw = bundler[j]
@@ -67,23 +69,26 @@ function import(...)
             end
             __genImports = nil
         end
-        return genImports
+        return genImports, isCompleteFetch
     else
         local args = {...}
         args = ((#args > 0) and ", \""..imports.table.concat(args, "\", \"").."\"") or ""
         return [[
-        local genImports, genReturns = call(getResourceFromName("]]..syncer.libraryName..[["), "import", true]]..args..[[), {}
+        local genImports, isCompleteFetch = call(getResourceFromName("]]..syncer.libraryName..[["), "import", true]]..args..[[)
+        local genReturns = (not isCompleteFetch and {}) or false
         for i = 1, #genImports, 1 do
-            loadstring(genImports[i].rw)()
-            if genImports[i].index ~= "core" then
-                if not genImports[i].isModule then
-                    table.insert(genReturns, assetify[(genImports[i].index)])
+            local j = genImports[i]
+            loadstring(j.rw)()
+            if not isCompleteFetch and j.index then
+                if not j.module then
+                    table.insert(genReturns, assetify[(j.index)])
                 else
-                    table.insert(genReturns, __G[(genImports[i].index)])
+                    table.insert(genReturns, _G[(j.module)])
                 end
             end
         end
-        return unpack(genReturns)
+        if isCompleteFetch or (#genReturns <= 0) then return true
+        else return unpack(genReturns) end
         ]]
     end
 end
@@ -93,8 +98,9 @@ end
 --[[ Bundler ]]--
 -----------------
 
-bundler["core"] = imports.file.read("utilities/shared.lua")..[[
+bundler["core"] = [[
     if not assetify then
+    ]]..imports.file.read("utilities/shared.lua")..[[
         assetify = {
             imports = {
                 resourceName = "]]..syncer.libraryName..[[",
@@ -214,8 +220,8 @@ bundler["core"] = imports.file.read("utilities/shared.lua")..[[
     end
 ]]
 
-bundler["threader"] = {isModule = true, rw = imports.file.read("utilities/threader.lua")}
-bundler["networker"] = {isModule = true, rw = imports.file.read("utilities/networker.lua")}
+bundler["threader"] = {module = "thread", rw = imports.file.read("utilities/threader.lua")}
+bundler["networker"] = {module = "network", rw = imports.file.read("utilities/networker.lua")}
 
 bundler["scheduler"] = [[
     assetify.scheduler = {
@@ -234,7 +240,7 @@ bundler["scheduler"] = [[
                 assetify.imports.addEventHandler("onAssetifyLoad", root, execWrapper)
             end
             return true
-        end
+        end,
 
         execOnModuleLoad = function(execFunc)
             if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
