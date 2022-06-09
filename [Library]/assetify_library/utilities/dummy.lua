@@ -21,8 +21,7 @@ local imports = {
     setElementAlpha = setElementAlpha,
     setElementDoubleSided = setElementDoubleSided,
     setElementDimension = setElementDimension,
-    setElementInterior = setElementInterior,
-    triggerEvent = triggerEvent
+    setElementInterior = setElementInterior
 }
 
 
@@ -70,7 +69,7 @@ function dummy:load(assetType, assetName, assetClump, clumpMaps, dummyData)
     imports.setElementDoubleSided(self.cModelInstance, true)
     imports.setElementDimension(self.cModelInstance, imports.tonumber(dummyData.dimension) or 0)
     imports.setElementInterior(self.cModelInstance, imports.tonumber(dummyData.interior) or 0)
-    imports.triggerEvent("Assetify:onRecieveElementModel", localPlayer, self.cModelInstance, assetType, assetName, assetClump, clumpMaps)
+    network:emit("Assetify:onRecieveElementModel", false, self.cModelInstance, assetType, assetName, assetClump, clumpMaps)
     if cData.collisionID then
         self.cCollisionInstance = imports.createObject(cData.collisionID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
         imports.setElementAlpha(self.cCollisionInstance, 0)
