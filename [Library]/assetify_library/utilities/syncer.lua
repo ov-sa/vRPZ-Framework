@@ -26,7 +26,6 @@ local imports = {
     setElementModel = setElementModel,
     collectgarbage = collectgarbage,
     outputDebugString = outputDebugString,
-    addEvent = addEvent,
     addEventHandler = addEventHandler,
     getResourceRootElement = getResourceRootElement,
     fetchRemote = fetchRemote,
