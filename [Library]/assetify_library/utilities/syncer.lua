@@ -285,19 +285,19 @@ else
     syncer.syncedBoneAttachments = {}
 
     function syncer:syncHash(player, ...)
-        return network:emit("Assetify:onRecieveHash", true, false, player, player, ...)
+        return network:emit("Assetify:onRecieveHash", true, false, player, ...)
     end
 
     function syncer:syncData(player, ...)
-        return network:emit("Assetify:onRecieveData", true, false, player, player, ...)
+        return network:emit("Assetify:onRecieveData", true, false, player, ...)
     end
 
     function syncer:syncContent(player, ...)
-        return network:emit("Assetify:onRecieveContent", true, false, player, player, ...)
+        return network:emit("Assetify:onRecieveContent", true, false, player, ...)
     end
 
     function syncer:syncState(player, ...)
-        return network:emit("Assetify:onRecieveState", true, false, player, player, ...)
+        return network:emit("Assetify:onRecieveState", true, false, player, ...)
     end
 
     function syncer:syncGlobalData(data, value, targetPlayer)

@@ -50,7 +50,7 @@ network = {
 }
 network.__index = network
 
-imports.addEvent("Assetify:Network:API")
+imports.addEvent("Assetify:Network:API", true)
 imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)
     if not serial or not payload or not payload.processType or (payload.isRestricted and (serial ~= network.identifier)) then return false end
     if payload.processType == "emit" then
@@ -206,7 +206,7 @@ function network:emit(...)
             payload.isLatent = network.fetchArg(_, cArgs)
             if network.isServerInstance then
                 payload.isReciever = network.fetchArg(_, cArgs)
-                payload.isReciever = (payload.isReciever and import.isElement(payload.isReciever) and (imports.getElementType(payload.isReciever) == "player") and payload.isReciever) or false
+                payload.isReciever = (payload.isReciever and imports.isElement(payload.isReciever) and (imports.getElementType(payload.isReciever) == "player") and payload.isReciever) or false
             end
         end
     else
@@ -253,7 +253,7 @@ function network:emitCallback(cThread, ...)
                 payload.isReciever = localPlayer
             else
                 payload.isReciever = network.fetchArg(_, cArgs)
-                payload.isReciever = (payload.isReciever and import.isElement(payload.isReciever) and (imports.getElementType(payload.isReciever) == "player") and payload.isReciever) or false
+                payload.isReciever = (payload.isReciever and imports.isElement(payload.isReciever) and (imports.getElementType(payload.isReciever) == "player") and payload.isReciever) or false
             end
         end
     else
