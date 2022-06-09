@@ -111,7 +111,7 @@ if localPlayer then
     end
 
     network:fetch("onAssetifyLoad"):on(function()
-        imports.triggerServerEvent("Assetify:onRequestSyncedPool", localPlayer)
+        network:emit("Assetify:onRequestSyncedPool", true, false, localPlayer)
     end)
 
     network:create("Assetify:onRecieveBandwidth"):on(function(libraryBandwidth)
@@ -534,8 +534,7 @@ else
         syncer:syncPack(source)
     end)
 
-    imports.addEvent("Assetify:onRequestSyncedPool", true)
-    imports.addEventHandler("Assetify:onRequestSyncedPool", root, function()
+    network:create("Assetify:onRequestSyncedPool"):on(function(source)
         local __source = source
         thread:create(function(cThread)
             local source = __source
