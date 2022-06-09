@@ -29,7 +29,6 @@ local imports = {
     addEventHandler = addEventHandler,
     getResourceRootElement = getResourceRootElement,
     fetchRemote = fetchRemote,
-    triggerLatentClientEvent = triggerLatentClientEvent,
     loadAsset = loadAsset,
     file = file,
     json = json
@@ -286,19 +285,19 @@ else
     syncer.syncedBoneAttachments = {}
 
     function syncer:syncHash(player, ...)
-        return imports.triggerLatentClientEvent(player, "Assetify:onRecieveHash", downloadSettings.speed, false, player, ...)
+        return network:emit("Assetify:onRecieveHash", true, false, player, player, ...)
     end
 
     function syncer:syncData(player, ...)
-        return imports.triggerLatentClientEvent(player, "Assetify:onRecieveData", downloadSettings.speed, false, player, ...)
+        return network:emit("Assetify:onRecieveData", true, false, player, player, ...)
     end
 
     function syncer:syncContent(player, ...)
-        return imports.triggerLatentClientEvent(player, "Assetify:onRecieveContent", downloadSettings.speed, false, player, ...)
+        return network:emit("Assetify:onRecieveContent", true, false, player, player, ...)
     end
 
     function syncer:syncState(player, ...)
-        return imports.triggerLatentClientEvent(player, "Assetify:onRecieveState", downloadSettings.speed, false, player, ...)
+        return network:emit("Assetify:onRecieveState", true, false, player, player, ...)
     end
 
     function syncer:syncGlobalData(data, value, targetPlayer)
