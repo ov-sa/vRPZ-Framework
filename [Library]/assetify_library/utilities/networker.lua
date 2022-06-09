@@ -192,9 +192,12 @@ function network:emit(...)
     }
     if self == network then
         payload.networkName, payload.isRemote = network.fetchArg(_, cArgs), network.fetchArg(_, cArgs)
-        if payload.isRemote and network.isServerInstance then
-            payload.isReciever = network.fetchArg(_, cArgs)
-            payload.isReciever = (payload.isReciever and import.isElement(payload.isReciever) and (imports.getElementType(payload.isReciever) == "player") and payload.isReciever) or false
+        if payload.isRemote then
+            payload.isLatent = network.fetchArg(_, cArgs)
+            if network.isServerInstance then
+                payload.isReciever = network.fetchArg(_, cArgs)
+                payload.isReciever = (payload.isReciever and import.isElement(payload.isReciever) and (imports.getElementType(payload.isReciever) == "player") and payload.isReciever) or false
+            end
         end
     else
         payload.isRestricted = true
@@ -205,9 +208,17 @@ function network:emit(...)
         imports.triggerEvent("Assetify:Network:API", resourceRoot, network.identifier, payload)
     else
         if payload.isReciever then
-            imports.triggerRemoteEvent(payload.isReciever, "Assetify:Network:API", resourceRoot, network.identifier, payload)
+            if not payload.isLatent then
+                imports.triggerRemoteEvent(payload.isReciever, "Assetify:Network:API", resourceRoot, network.identifier, payload)
+            else
+                --TODO: 
+            end
         else
-            imports.triggerRemoteEvent("Assetify:Network:API", resourceRoot, network.identifier, payload)
+            if not payload.isLatent then
+                imports.triggerRemoteEvent("Assetify:Network:API", resourceRoot, network.identifier, payload)
+            else
+                --TODO: 
+            end
         end
     end
     return true
@@ -227,6 +238,7 @@ function network:emitCallback(cThread, ...)
     if self == network then
         payload.networkName, payload.isRemote = network.fetchArg(_, cArgs), network.fetchArg(_, cArgs)
         if payload.isRemote then
+            payload.isLatent = network.fetchArg(_, cArgs)
             if not network.isServerInstance then
                 payload.isReciever = localPlayer
             else
