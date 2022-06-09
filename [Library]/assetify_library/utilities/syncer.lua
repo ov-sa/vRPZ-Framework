@@ -90,24 +90,24 @@ if localPlayer then
     network:create("onAssetLoad")
     network:create("onAssetUnLoad")
 
-    function syncer:syncElementModel(...)        
-        return imports.triggerEvent("Assetify:onRecieveSyncedElement", localPlayer, ...)
+    function syncer:syncElementModel(...)
+        return network:emit("Assetify:onRecieveSyncedElement", false, ...)
     end
 
     function syncer:syncBoneAttachment(...)
-        return imports.triggerEvent("Assetify:onRecieveBoneAttachment", localPlayer, ...)
+        return network:emit("Assetify:onRecieveBoneAttachment", false, ...)
     end
 
     function syncer:syncBoneDetachment(...)
-        return imports.triggerEvent("Assetify:onRecieveBoneDetachment", localPlayer, ...)
+        return network:emit("Assetify:onRecieveBoneDetachment", false, ...)
     end
 
     function syncer:syncBoneRefreshment(...)
-        return imports.triggerEvent("Assetify:onRecieveBoneRefreshment", localPlayer, ...)
+        return network:emit("Assetify:onRecieveBoneRefreshment", false, ...)
     end
 
     function syncer:syncClearBoneAttachment(...)
-        return imports.triggerEvent("Assetify:onRecieveClearBoneAttachment", localPlayer, ...)
+        return network:emit("Assetify:onRecieveClearBoneAttachment", false, ...)
     end
 
     network:fetch("onAssetifyLoad"):on(function()
