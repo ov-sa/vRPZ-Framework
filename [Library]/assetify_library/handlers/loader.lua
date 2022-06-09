@@ -39,5 +39,5 @@ imports.addEventHandler("onClientResourceStart", resourceRoot, function()
 end)
 
 imports.addEventHandler("onClientResourceStop", resourceRoot, function()
-    imports.triggerEvent("Assetify:onUnload", resourceRoot)
+    network:emit("Assetify:onUnload", false)
 end)
