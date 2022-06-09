@@ -136,7 +136,7 @@ if localPlayer then
                 fileData = nil
                 thread:pause()
             end
-            imports.triggerLatentServerEvent("Assetify:onRecieveHash", downloadSettings.speed, false, localPlayer, assetType, assetName, fetchFiles)
+            network:emit("Assetify:onRecieveHash", true, true, localPlayer, assetType, assetName, fetchFiles)
             imports.collectgarbage()
         end):resume({
             executions = downloadSettings.buildRate,
@@ -192,7 +192,7 @@ if localPlayer then
             end
             if isSyncDone then
                 if assetType == "module" then
-                    imports.triggerServerEvent("Assetify:onRequestAssets", localPlayer)
+                    network:emit("Assetify:onRequestAssets", true, false, localPlayer)
                     thread:create(function(cThread)
                         if availableAssetPacks["module"].autoLoad and availableAssetPacks["module"].rwDatas then
                             for i, j in imports.pairs(availableAssetPacks["module"].rwDatas) do
@@ -469,7 +469,7 @@ else
                     end
                     if isModuleVoid then
                         imports.triggerClientEvent(player, "onAssetifyModuleLoad", player)
-                        imports.triggerEvent("Assetify:onRequestAssets", player)
+                        network:emit("Assetify:onRequestAssets", false, player)
                     end
                 else
                     local isLibraryVoid = true
@@ -520,8 +520,7 @@ else
         return true
     end
 
-    imports.addEvent("Assetify:onRecieveHash", true)
-    imports.addEventHandler("Assetify:onRecieveHash", root, function(assetType, assetName, hashes)
+    network:create("Assetify:onRecieveHash"):on(function(source, assetType, assetName, hashes)
         syncer:syncPack(source, {
             type = assetType,
             name = assetName,
@@ -529,8 +528,7 @@ else
         })
     end)
 
-    imports.addEvent("Assetify:onRequestAssets", true)
-    imports.addEventHandler("Assetify:onRequestAssets", root, function()
+    network:create("Assetify:onRequestAssets"):on(function(source)
         syncer:syncPack(source)
     end)
 
