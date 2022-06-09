@@ -110,17 +110,15 @@ if localPlayer then
         return imports.triggerEvent("Assetify:onRecieveClearBoneAttachment", localPlayer, ...)
     end
 
-    imports.addEventHandler("onAssetifyLoad", root, function()
+    network:fetch("onAssetifyLoad"):on(function()
         imports.triggerServerEvent("Assetify:onRequestSyncedPool", localPlayer)
     end)
 
-    imports.addEvent("Assetify:onRecieveBandwidth", true)
-    imports.addEventHandler("Assetify:onRecieveBandwidth", root, function(libraryBandwidth)
+    network:create("Assetify:onRecieveBandwidth"):on(function(libraryBandwidth)
         syncer.libraryBandwidth = libraryBandwidth
     end)
 
-    imports.addEvent("Assetify:onRecieveHash", true)
-    imports.addEventHandler("Assetify:onRecieveHash", root, function(assetType, assetName, hashes)
+    network:create("Assetify:onRecieveHash"):on(function(assetType, assetName, hashes)
         if not syncer.scheduledAssets[assetType] then syncer.scheduledAssets[assetType] = {} end
         syncer.scheduledAssets[assetType][assetName] = syncer.scheduledAssets[assetType][assetName] or {
             assetSize = 0
@@ -146,8 +144,7 @@ if localPlayer then
         })
     end)
 
-    imports.addEvent("Assetify:onRecieveData", true)
-    imports.addEventHandler("Assetify:onRecieveData", root, function(assetType, baseIndex, subIndexes, indexData)
+    network:create("Assetify:onRecieveData"):on(function(assetType, baseIndex, subIndexes, indexData)
         if not availableAssetPacks[assetType] then availableAssetPacks[assetType] = {} end
         if not subIndexes then
             availableAssetPacks[assetType][baseIndex] = indexData
@@ -166,8 +163,7 @@ if localPlayer then
         end
     end)
 
-    imports.addEvent("Assetify:onRecieveContent", true)
-    imports.addEventHandler("Assetify:onRecieveContent", root, function(assetType, assetName, contentPath, ...)
+    network:create("Assetify:onRecieveContent"):on(function(assetType, assetName, contentPath, ...)
         if assetType and assetName then
             syncer.scheduledAssets[assetType][assetName].assetSize = syncer.scheduledAssets[assetType][assetName].assetSize + availableAssetPacks[assetType].rwDatas[assetName].assetSize.file[contentPath]
             syncer.__libraryBandwidth = (syncer.__libraryBandwidth or 0) + availableAssetPacks[assetType].rwDatas[assetName].assetSize.file[contentPath]
@@ -176,8 +172,7 @@ if localPlayer then
         imports.collectgarbage()
     end)
 
-    imports.addEvent("Assetify:onRecieveState", true)
-    imports.addEventHandler("Assetify:onRecieveState", root, function(assetType, assetName)
+    network:create("Assetify:onRecieveState"):on(function(assetType, assetName)
         local isTypeVoid = true
         syncer.scheduledAssets[assetType][assetName] = nil
         for i, j in imports.pairs(syncer.scheduledAssets[assetType]) do
@@ -247,8 +242,7 @@ if localPlayer then
         syncer.syncedElementDatas[element][data] = value
     end)
 
-    imports.addEvent("Assetify:onRecieveSyncedElement", true)
-    imports.addEventHandler("Assetify:onRecieveSyncedElement", root, function(element, assetType, assetName, assetClump, clumpMaps)
+    network:create("Assetify:onRecieveSyncedElement"):on(function(element, assetType, assetName, assetClump, clumpMaps)
         if not element or not imports.isElement(element) then return false end
         local modelID = manager:getID(assetType, assetName, assetClump)
         if modelID then
@@ -268,25 +262,21 @@ if localPlayer then
         end
     end)
 
-    imports.addEvent("Assetify:onRecieveBoneAttachment", true)
-    imports.addEventHandler("Assetify:onRecieveBoneAttachment", root, function(...)
+    network:create("Assetify:onRecieveBoneAttachment"):on(function(...)
         bone:create(...)
     end)
 
-    imports.addEvent("Assetify:onRecieveBoneDetachment", true)
-    imports.addEventHandler("Assetify:onRecieveBoneDetachment", root, function(element)
+    network:create("Assetify:onRecieveBoneDetachment"):on(function(element)
         if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
         bone.buffer.element[element]:destroy()
     end)
 
-    imports.addEvent("Assetify:onRecieveBoneRefreshment", true)
-    imports.addEventHandler("Assetify:onRecieveBoneRefreshment", root, function(element, ...)
+    network:create("Assetify:onRecieveBoneRefreshment"):on(function(element, ...)
         if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
         bone.buffer.element[element]:refresh(...)
     end)
 
-    imports.addEvent("Assetify:onRecieveClearBoneAttachment", true)
-    imports.addEventHandler("Assetify:onRecieveClearBoneAttachment", root, function(element, ...)
+    network:create("Assetify:onRecieveClearBoneAttachment"):on(function(element, ...)
         if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
         bone.buffer.element[element]:clearElementBuffer(...)
     end)
