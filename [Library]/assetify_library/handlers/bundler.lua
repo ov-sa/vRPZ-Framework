@@ -39,7 +39,14 @@ function import(...)
         if args[2] and (args[2] == "*") then
             for i, j in imports.pairs(bundler) do
                 if i ~= "core" then
-                    imports.table.insert(genImports, {index = i, rw = j])
+                    local cImport = {index = i}
+                    if imports.type(j) == "table" then
+                        cImport.isModule = (j.isModule and true) or false
+                        cImport.rw = j.rw
+                    else
+                        cImport.rw = j
+                    end
+                    imports.table.insert(genImports, cImport)
                 end
             end
         else
@@ -47,8 +54,15 @@ function import(...)
             for i = 2, #args, 1 do
                 local j = args[i]
                 if (j ~= "core") and bundler[j] and not __genImports[j] then
+                    local cImport = {index = j}
+                    if imports.type(bundler[j]) == "table" then
+                        cImport.isModule = (bundler[j].isModule and true) or false
+                        cImport.rw = bundler[j].rw
+                    else
+                        cImport.rw = bundler[j]
+                    end
                     __genImports[j] = true
-                    imports.table.insert(genImports, {index = j, rw = bundler[j]})
+                    imports.table.insert(genImports, cImport)
                 end
             end
             __genImports = nil
@@ -61,7 +75,13 @@ function import(...)
         local genImports, genReturns = call(getResourceFromName("]]..syncer.libraryName..[["), "import", true]]..args..[[), {}
         for i = 1, #genImports, 1 do
             loadstring(genImports[i].rw)()
-            if genImports[i].index ~= "core" then genReturns[(#genReturns + 1)] = assetify[(genImports[i].index)] end
+            if genImports[i].index ~= "core" then
+                if not genImports[i].isModule then
+                    table.insert(genReturns, assetify[(genImports[i].index)])
+                else
+                    table.insert(genReturns, __G[(genImports[i].index)])
+                end
+            end
         end
         return unpack(genReturns)
         ]]
@@ -194,8 +214,8 @@ bundler["core"] = imports.file.read("utilities/shared.lua")..[[
     end
 ]]
 
-bundler["threader"] = imports.file.read("utilities/threader.lua")
-bundler["networker"] = imports.file.read("utilities/networker.lua")
+bundler["threader"] = {isModule = true, rw = imports.file.read("utilities/threader.lua")}
+bundler["networker"] = {isModule = true, rw = imports.file.read("utilities/networker.lua")}
 
 bundler["scheduler"] = [[
     assetify.scheduler = {
