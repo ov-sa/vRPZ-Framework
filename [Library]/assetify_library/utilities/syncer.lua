@@ -68,18 +68,18 @@ syncer.execOnLoad = function(execFunc)
     local execWrapper = nil
     execWrapper = function()
         execFunc()
-        imports.removeEventHandler("onAssetifyLoad", root, execWrapper)
+        network:destroy("onAssetifyLoad")
     end
-    imports.addEventHandler("onAssetifyLoad", root, execWrapper)
+    network:fetch("onAssetifyLoad"):on(execWrapper)
     return true
 end
 syncer.execOnModuleLoad = function(execFunc)
     local execWrapper = nil
     execWrapper = function()
         execFunc()
-        imports.removeEventHandler("onAssetifyModuleLoad", root, execWrapper)
+        network:destroy("onAssetifyModuleLoad")
     end
-    imports.addEventHandler("onAssetifyModuleLoad", root, execWrapper)
+    network:fetch("onAssetifyModuleLoad"):on(execWrapper)
     return true
 end
 syncer.execOnLoad(function() syncer.isLibraryLoaded = true end)
