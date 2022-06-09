@@ -312,12 +312,12 @@ bundler["synced-data"] = [[
         return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getGlobalData", ...)
     end
 
-    assetify.setElementData = function(...)
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setElementData", ...)
+    assetify.setEntityData = function(...)
+        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setEntityData", ...)
     end
 
-    assetify.getElementData = function(...)
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getElementData", ...)
+    assetify.getEntityData = function(...)
+        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getEntityData", ...)
     end
 ]]
 
