@@ -29,6 +29,7 @@ local imports = {
     addEventHandler = addEventHandler,
     triggerEvent = triggerEvent,
     triggerRemoteEvent = (localPlayer and triggerServerEvent) or triggerClientEvent,
+    triggerRemoteLatentEvent = (localPlayer and triggerLatentServerEvent) or triggerLatentClientEvent,
     json = json,
     table = table
 }
@@ -41,6 +42,7 @@ local imports = {
 network = {
     identifier = imports.md5(imports.getResourceName(imports.getThisResource())),
     isServerInstance = (not localPlayer and true) or false,
+    bandwidth = 1250000,
     buffer = {},
     cache = {
         execSerials = {}
@@ -211,13 +213,13 @@ function network:emit(...)
             if not payload.isLatent then
                 imports.triggerRemoteEvent(payload.isReciever, "Assetify:Network:API", resourceRoot, network.identifier, payload)
             else
-                --TODO: 
+                imports.triggerRemoteLatentEvent(payload.isReciever, "Assetify:Network:API", network.bandwidth, false, resourceRoot, network.identifier, payload)
             end
         else
             if not payload.isLatent then
                 imports.triggerRemoteEvent("Assetify:Network:API", resourceRoot, network.identifier, payload)
             else
-                --TODO: 
+                imports.triggerRemoteLatentEvent("Assetify:Network:API", network.bandwidth, false, resourceRoot, network.identifier, payload)
             end
         end
     end
