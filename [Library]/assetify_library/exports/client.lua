@@ -24,7 +24,6 @@ local imports = {
     createWater = createWater,
     setOcclusionsEnabled = setOcclusionsEnabled,
     setWorldSpecialPropertyEnabled = setWorldSpecialPropertyEnabled,
-    triggerEvent = triggerEvent,
     math = math
 }
 
@@ -62,7 +61,7 @@ end
 function loadAsset(assetType, assetName, ...)
     local state = manager:load(assetType, assetName, ...)
     if state then
-        imports.triggerEvent("Assetify:onAssetLoad", localPlayer, assetType, assetName)
+        network:emit("Assetify:onAssetLoad", false, assetType, assetName)
     end
     return state
 end
@@ -70,7 +69,7 @@ end
 function unloadAsset(assetType, assetName, ...)
     local state = manager:unload(assetType, assetName, ...)
     if state then
-        imports.triggerEvent("Assetify:onAssetUnload", localPlayer, assetType, assetName)
+        network:emit("Assetify:onAssetUnload", false, assetType, assetName)
     end
     return state
 end
