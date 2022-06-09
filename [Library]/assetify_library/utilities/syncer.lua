@@ -462,7 +462,7 @@ else
                         end
                     end
                     if isModuleVoid then
-                        network:emit("Assetify:onModuleLoad", true, false)
+                        network:emit("Assetify:onModuleLoad", true, false, player)
                         network:emit("Assetify:onRequestAssets", false, player)
                     end
                 else
