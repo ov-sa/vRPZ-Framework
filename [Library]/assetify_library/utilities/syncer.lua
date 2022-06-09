@@ -202,7 +202,7 @@ if localPlayer then
                                 thread:pause()
                             end
                         end
-                        imports.triggerEvent("onAssetifyModuleLoad", localPlayer)
+                        network:emit("onAssetifyModuleLoad", false)
                     end):resume({
                         executions = downloadSettings.buildRate,
                         frames = 1
@@ -468,7 +468,7 @@ else
                         end
                     end
                     if isModuleVoid then
-                        imports.triggerClientEvent(player, "onAssetifyModuleLoad", player)
+                        network:emit("onAssetifyModuleLoad", true, false)
                         network:emit("Assetify:onRequestAssets", false, player)
                     end
                 else
