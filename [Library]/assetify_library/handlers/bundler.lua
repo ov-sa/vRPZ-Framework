@@ -39,7 +39,7 @@ function import(...)
         if args[2] and (args[2] == "*") then
             for i, j in imports.pairs(bundler) do
                 if i ~= "core" then
-                    imports.table.insert(genImports, j)
+                    imports.table.insert(genImports, {index = i, rw = j])
                 end
             end
         else
@@ -48,7 +48,7 @@ function import(...)
                 local j = args[i]
                 if (j ~= "core") and bundler[j] and not __genImports[j] then
                     __genImports[j] = true
-                    imports.table.insert(genImports, bundler[j])
+                    imports.table.insert(genImports, {index = j, rw = bundler[j]})
                 end
             end
             __genImports = nil
@@ -58,10 +58,12 @@ function import(...)
         local args = {...}
         args = ((#args > 0) and ", \""..imports.table.concat(args, "\", \"").."\"") or ""
         return [[
-        local genImports = call(getResourceFromName("]]..syncer.libraryName..[["), "import", true]]..args..[[)
+        local genImports, genReturns = call(getResourceFromName("]]..syncer.libraryName..[["), "import", true]]..args..[[), {}
         for i = 1, #genImports, 1 do
-            loadstring(genImports[i])()
+            loadstring(genImports[i].rw)()
+            if genImports[i].index ~= "core" then genReturns[(#genReturns + 1)] = assetify[(genImports[i].index)] end
         end
+        return unpack(genReturns)
         ]]
     end
 end
@@ -196,6 +198,7 @@ bundler["threader"] = imports.file.read("utilities/threader.lua")
 bundler["networker"] = imports.file.read("utilities/networker.lua")
 
 bundler["scheduler"] = [[
+    --TODO: PUT UNDER NAMESPACE
     assetify.execOnLoad = function(execFunc)
         if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
         local isLoaded = assetify.isLoaded()
