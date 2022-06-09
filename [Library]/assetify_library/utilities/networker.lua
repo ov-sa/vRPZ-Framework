@@ -264,6 +264,10 @@ function network:emitCallback(cThread, ...)
     if not payload.isRemote then
         return function() imports.triggerEvent("Assetify:Network:API", resourceRoot, network.identifier, payload) end
     else
-        return function() imports.triggerRemoteEvent("Assetify:Network:API", resourceRoot, network.identifier, payload) end
+        if not payload.isLatent then
+            return function() imports.triggerRemoteEvent("Assetify:Network:API", resourceRoot, network.identifier, payload) end
+        else
+            return function() imports.triggerRemoteLatentEvent("Assetify:Network:API", network.bandwidth, false, resourceRoot, network.identifier, payload) end
+        end
     end
 end
