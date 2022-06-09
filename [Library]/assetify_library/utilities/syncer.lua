@@ -28,7 +28,6 @@ local imports = {
     outputDebugString = outputDebugString,
     addEvent = addEvent,
     addEventHandler = addEventHandler,
-    removeEventHandler = removeEventHandler,
     getResourceRootElement = getResourceRootElement,
     fetchRemote = fetchRemote,
     triggerEvent = triggerEvent,
@@ -88,8 +87,8 @@ syncer.execOnModuleLoad(function() syncer.isModuleLoaded = true end)
 if localPlayer then
     syncer.scheduledAssets = {}
     availableAssetPacks = {}
-    imports.addEvent("onAssetLoad", false)
-    imports.addEvent("onAssetUnLoad", false)
+    network:create("onAssetLoad")
+    network:create("onAssetUnLoad")
 
     function syncer:syncElementModel(...)        
         return imports.triggerEvent("Assetify:onRecieveSyncedElement", localPlayer, ...)
