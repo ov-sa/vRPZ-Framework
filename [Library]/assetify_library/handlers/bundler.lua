@@ -198,75 +198,71 @@ bundler["threader"] = imports.file.read("utilities/threader.lua")
 bundler["networker"] = imports.file.read("utilities/networker.lua")
 
 bundler["scheduler"] = [[
-    --TODO: PUT UNDER NAMESPACE
-    assetify.execOnLoad = function(execFunc)
-        if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
-        local isLoaded = assetify.isLoaded()
-        if isLoaded then
-            execFunc()
-        else
-            local execWrapper = nil
-            execWrapper = function()
-                execFunc()
-                assetify.imports.removeEventHandler("onAssetifyLoad", root, execWrapper)
-            end
-            assetify.imports.addEventHandler("onAssetifyLoad", root, execWrapper)
-        end
-        return true
-    end
-
-    assetify.execOnModuleLoad = function(execFunc)
-        if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
-        local isModuleLoaded = assetify.isModuleLoaded()
-        if isModuleLoaded then
-            execFunc()
-        else
-            local execWrapper = nil
-            execWrapper = function()
-                execFunc()
-                assetify.imports.removeEventHandler("onAssetifyModuleLoad", root, execWrapper)
-            end
-            assetify.imports.addEventHandler("onAssetifyModuleLoad", root, execWrapper)
-        end
-        return true
-    end
-
-    assetify.scheduleExec = {
-        buffer = {
-            onLoad = {}, onModuleLoad = {}
-        },
-
-        boot = function()
-            assetify.execOnLoad(function()
-                if #assetify.scheduleExec.buffer.onLoad > 0 then
-                    for i = 1, #assetify.scheduleExec.buffer.onLoad, 1 do
-                        assetify.execOnLoad(assetify.scheduleExec.buffer.onLoad[i])
-                    end
-                    assetify.scheduleExec.buffer.onLoad = {}
-                end
-                return true
-            end)
-            assetify.execOnModuleLoad(function()
-                if #assetify.scheduleExec.buffer.onModuleLoad > 0 then
-                    for i = 1, #assetify.scheduleExec.buffer.onModuleLoad, 1 do
-                        assetify.execOnModuleLoad(assetify.scheduleExec.buffer.onModuleLoad[i])
-                    end
-                    assetify.scheduleExec.buffer.onModuleLoad = {}
-                end
-                return true
-            end)
-            return true
-        end,
-
+    assetify.scheduler = {
+        buffer = {onLoad = {}, onModuleLoad = {}},
         execOnLoad = function(execFunc)
             if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
-            assetify.imports.table.insert(assetify.scheduleExec.buffer.onLoad, execFunc)
+            local isLoaded = assetify.isLoaded()
+            if isLoaded then
+                execFunc()
+            else
+                local execWrapper = nil
+                execWrapper = function()
+                    execFunc()
+                    assetify.imports.removeEventHandler("onAssetifyLoad", root, execWrapper)
+                end
+                assetify.imports.addEventHandler("onAssetifyLoad", root, execWrapper)
+            end
             return true
-        end,
+        end
 
         execOnModuleLoad = function(execFunc)
             if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
-            assetify.imports.table.insert(assetify.scheduleExec.buffer.onModuleLoad, execFunc)
+            local isModuleLoaded = assetify.isModuleLoaded()
+            if isModuleLoaded then
+                execFunc()
+            else
+                local execWrapper = nil
+                execWrapper = function()
+                    execFunc()
+                    assetify.imports.removeEventHandler("onAssetifyModuleLoad", root, execWrapper)
+                end
+                assetify.imports.addEventHandler("onAssetifyModuleLoad", root, execWrapper)
+            end
+            return true
+        end,
+
+        execScheduleOnLoad = function(execFunc)
+            if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
+            assetify.imports.table.insert(assetify.scheduler.buffer.onLoad, execFunc)
+            return true
+        end,
+
+        execScheduleOnModuleLoad = function(execFunc)
+            if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
+            assetify.imports.table.insert(assetify.scheduler.buffer.onModuleLoad, execFunc)
+            return true
+        end,
+
+        boot = function()
+            assetify.scheduler.execOnLoad(function()
+                if #assetify.scheduler.buffer.onLoad > 0 then
+                    for i = 1, #assetify.scheduler.buffer.onLoad, 1 do
+                        assetify.scheduler.execOnLoad(assetify.scheduler.buffer.onLoad[i])
+                    end
+                    assetify.scheduler.buffer.onLoad = {}
+                end
+                return true
+            end)
+            assetify.scheduler.execOnModuleLoad(function()
+                if #assetify.scheduler.buffer.onModuleLoad > 0 then
+                    for i = 1, #assetify.scheduler.buffer.onModuleLoad, 1 do
+                        assetify.scheduler.execOnModuleLoad(assetify.scheduler.buffer.onModuleLoad[i])
+                    end
+                    assetify.scheduler.buffer.onModuleLoad = {}
+                end
+                return true
+            end)
             return true
         end
     }
