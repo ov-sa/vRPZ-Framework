@@ -18,7 +18,6 @@ local imports = {
     unpackColor = unpackColor,
     isElement = isElement,
     destroyElement = destroyElement,
-    addEvent = addEvent,
     addEventHandler = addEventHandler,
     collectgarbage = collectgarbage,
     triggerServerEvent = triggerServerEvent,
@@ -205,7 +204,7 @@ CGame.execOnModuleLoad(function()
         end
         return true
     end
-    imports.addEventHandler("Client:onUpdateLanguage", root, inventoryUI.updateUILang)
+    imports.network:create("Client:onUpdateLanguage"):on(inventoryUI.updateUILang)
     inventoryUI.fetchUIGridSlotFromOffset = function(offsetX, offsetY)
         if not offsetX or not offsetY then return false end
         local row, column = imports.math.ceil(offsetY/(inventoryUI.clientInventory.height/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows)), imports.math.ceil(offsetX/(inventoryUI.clientInventory.width/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns))
@@ -341,21 +340,18 @@ CGame.execOnModuleLoad(function()
     function isInventoryUIVisible() return inventoryUI.state end
     function isInventoryUIEnabled() return inventoryUI.isUIEnabled() end
 
-    imports.addEvent("Client:onEnableInventoryUI", true)
-    imports.addEventHandler("Client:onEnableInventoryUI", root, function(state, isForced)
+    imports.network:create("Client:onEnableInventoryUI"):on(function(state, isForced)
         if isForced then inventoryUI.isForcedDisabled = not state end
         inventoryUI.isEnabled = state
     end)
 
-    imports.addEvent("Client:onSyncInventoryBuffer", true)
-    imports.addEventHandler("Client:onSyncInventoryBuffer", root, function(buffer)
+    imports.network:create("Client:onSyncInventoryBuffer"):on(function(buffer)
         CInventory.CBuffer = buffer
         inventoryUI.isSynced, inventoryUI.isSyncScheduled = true, false
         imports.triggerEvent("Client:onUpdateInventory", localPlayer)
     end)
 
-    imports.addEvent("Client:onUpdateInventory", true)
-    imports.addEventHandler("Client:onUpdateInventory", root, function()
+    imports.network:create("Client:onUpdateInventory"):on(function()
         inventoryUI.detachItem(true)
         inventoryUI.updateBuffer(localPlayer)
         inventoryUI.updateBuffer(inventoryUI.vicinityInventory.element)
@@ -846,8 +842,7 @@ CGame.execOnModuleLoad(function()
         imports.showCursor(inventoryUI.state)
         return true
     end
-    imports.addEvent("Client:onToggleInventoryUI", true)
-    imports.addEventHandler("Client:onToggleInventoryUI", root, inventoryUI.toggleUI)
+    imports.network:create("Client:onToggleInventoryUI"):on(inventoryUI.toggleUI)
     imports.bindKey(FRAMEWORK_CONFIGS["UI"]["Inventory"].toggleKey, "down", function() inventoryUI.toggleUI(not inventoryUI.state) end)
     imports.addEventHandler("onClientPlayerWasted", localPlayer, function() inventoryUI.toggleUI(false) end)
 end)
