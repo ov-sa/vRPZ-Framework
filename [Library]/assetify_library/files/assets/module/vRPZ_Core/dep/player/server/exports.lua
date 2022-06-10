@@ -3,7 +3,7 @@
 -----------------
 
 local imports = {
-    addEvent = addEvent
+    network = network
 }
 
 
@@ -27,5 +27,5 @@ CGame.exportModule("CPlayer", {
 --[[ Events ]]--
 ----------------
 
-imports.addEvent("Player:onLogin", false)
-imports.addEvent("Player:onLogout", false)
+imports.network:create("Player:onLogin")
+imports.network:create("Player:onLogout")

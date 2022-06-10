@@ -3,9 +3,8 @@
 -----------------
 
 local imports = {
-    addEvent = addEvent,
-    addEventHandler = addEventHandler,
-    triggerClientEvent = triggerClientEvent
+    triggerClientEvent = triggerClientEvent,
+    network = network
 }
 
 
@@ -34,8 +33,7 @@ CGame.exportModule("CInventory", {
 --[[ Events ]]--
 ----------------
 
-imports.addEvent("Player:onAddItem", true)
-imports.addEventHandler("Player:onAddItem", root, function(vicinity, item, slot)
+network:create("Player:onAddItem"):on(function(source, vicinity, item, slot)
     if not CPlayer.isInitialized(source) then return false end
     local inventoryID = CPlayer.getInventoryID(source)
     if CInventory.isSlotAvailableForOrdering(source, item, _, slot) then
@@ -47,8 +45,7 @@ imports.addEventHandler("Player:onAddItem", root, function(vicinity, item, slot)
     imports.triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, CInventory.CBuffer[inventoryID])
 end)
 
-imports.addEvent("Player:onOrderItem", true)
-imports.addEventHandler("Player:onOrderItem", root, function(item, prevSlot, slot)
+network:create("Player:onOrderItem"):on(function(source, item, prevSlot, slot)
     if not CPlayer.isInitialized(source) then return false end
     if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] then return CInventory.equipItem(source, item, prevSlot, slot, true) end
     if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot] then return CInventory.dequipItem(source, item, prevSlot, slot, true) end
@@ -60,8 +57,7 @@ imports.addEventHandler("Player:onOrderItem", root, function(item, prevSlot, slo
     imports.triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, CInventory.CBuffer[inventoryID])
 end)
 
-imports.addEvent("Player:onDropItem", true)
-imports.addEventHandler("Player:onDropItem", root, function(vicinity, item, amount, prevSlot)
+network:create("Player:onDropItem"):on(function(source, vicinity, item, amount, prevSlot)
     if not CPlayer.isInitialized(source) then return false end
     local inventoryID = CPlayer.getInventoryID(source)
     if prevSlot and CInventory.isVicinityAvailableForDropping(vicinity, item, amount) then

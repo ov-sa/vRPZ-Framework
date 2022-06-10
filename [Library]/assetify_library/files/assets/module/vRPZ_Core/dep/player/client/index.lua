@@ -5,8 +5,7 @@
 local imports = {
     pairs = pairs,
     tonumber = tonumber,
-    addEvent = addEvent,
-    triggerEvent = triggerEvent
+    network = network
 }
 
 
@@ -33,7 +32,7 @@ CPlayer.setLanguage = function(language, isLangCode)
         language = (isCodeValid and language) or false
     end
     if not language or not FRAMEWORK_CONFIGS["Game"]["Game_Languages"][language] or (CPlayer.CLanguage == language) then return false end
-    imports.triggerEvent("Client:onUpdateLanguage", localPlayer, CPlayer.CLanguage, language)
+    imports.network:emit("Client:onUpdateLanguage", false, CPlayer.CLanguage, language)
     CPlayer.CLanguage = language
     return true 
 end

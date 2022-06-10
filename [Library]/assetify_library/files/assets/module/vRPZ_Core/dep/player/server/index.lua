@@ -10,8 +10,8 @@ local imports = {
     getElementType = getElementType,
     getElementsByType = getElementsByType,
     getPlayerSerial = getPlayerSerial,
-    triggerEvent = triggerEvent,
-    triggerClientEvent = triggerClientEvent
+    triggerClientEvent = triggerClientEvent,
+    network = network
 }
 
 
@@ -88,14 +88,14 @@ CPlayer.setLogged = function(player, state)
                 imports.triggerClientEvent(player, "Player:onLogin", i)
             end
         end
-        imports.triggerEvent("Player:onLogin", player)
+        imports.network:emit("Player:onLogin", false, player)
     else
         if not CPlayer.CLogged[player] then return false end
         for i, j in imports.pairs(CPlayer.CLogged) do
             imports.triggerClientEvent(i, "Player:onLogout", player)
         end
         CPlayer.CLogged[player] = nil
-        imports.triggerEvent("Player:onLogout", player)
+        imports.network:emit("Player:onLogout", false, player)
     end
     return true
 end

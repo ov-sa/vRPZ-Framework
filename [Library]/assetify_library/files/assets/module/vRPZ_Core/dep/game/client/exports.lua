@@ -5,10 +5,9 @@
 local imports = {
     pairs = pairs,
     destroyElement = destroyElement,
-    addEvent = addEvent,
-    addEventHandler = addEventHandler,
     table = table,
-    beautify = beautify
+    beautify = beautify,
+    network = network
 }
 
 
@@ -33,8 +32,7 @@ CGame.exportModule("CGame", {
 --[[ Events ]]--
 ----------------
 
-imports.addEvent("Client:onUpdateLanguage", false)
-imports.addEventHandler("Client:onUpdateLanguage", root, function(prevLanguage, currLanguage)
+imports.network:create("Client:onUpdateLanguage"):on(function(prevLanguage, currLanguage)
     for i, j in imports.pairs(CGame.CFont.dynamic) do
         for k, v in imports.pairs(j) do
             local cData = FRAMEWORK_CONFIGS["Templates"]["Fonts"][i]
