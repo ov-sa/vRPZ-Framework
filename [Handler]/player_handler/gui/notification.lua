@@ -14,13 +14,12 @@
 
 local imports = {
     tocolor = tocolor,
-    addEvent = addEvent,
-    addEventHandler = addEventHandler,
     interpolateBetween = interpolateBetween,
     getInterpolationProgress = getInterpolationProgress,
     table = table,
     math = math,
-    beautify = beautify
+    beautify = beautify,
+    network = network
 }
 
 
@@ -82,8 +81,7 @@ CGame.execOnModuleLoad(function()
     --[[ Client: On Notification ]]--
     ---------------------------------
 
-    imports.addEvent("Client:onNotification", true)
-    imports.addEventHandler("Client:onNotification", root, function(message, color)
+    imports.network:create("Client:onNotification"):on(function(message, color)
         if not message then return false end
 
         imports.table.insert(notifUI.buffer, {
