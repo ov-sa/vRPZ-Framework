@@ -20,7 +20,6 @@ local imports = {
     getElementType = getElementType,
     getElementsByType = getElementsByType,
     getTickCount = getTickCount,
-    addEvent = addEvent,
     addEventHandler = addEventHandler,
     cancelEvent = cancelEvent,
     triggerEvent = triggerEvent,
@@ -40,7 +39,8 @@ local imports = {
     setMapName = setMapName,
     math = math,
     assetify = assetify,
-    thread = thread
+    thread = thread,
+    network = network
 }
 imports.assetify.execOnModuleLoad(function()
     imports.assetify.loadModule("DBify_Library", {"shared", "server"})
@@ -66,7 +66,7 @@ end
 -------------------------
 
 CGame.execOnModuleLoad(function()
-    imports.addEvent("onServerRender", false)
+    imports.network:create("onServerRender")
     imports.setTimer(function(tickSyncer)
         if tickSyncer and imports.isElement(tickSyncer) then
             local cTickCount = imports.getTickCount()
