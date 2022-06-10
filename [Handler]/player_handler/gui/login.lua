@@ -24,7 +24,6 @@ local imports = {
     setElementPosition = setElementPosition,
     setElementDimension = setElementDimension,
     addEventHandler = addEventHandler,
-    triggerServerEvent = triggerServerEvent,
     isTimer = isTimer,
     setTimer = setTimer,
     killTimer = killTimer,
@@ -360,7 +359,7 @@ CGame.execOnModuleLoad(function()
                 imports.network:emit("Client:onNotification", false, errorMessage, FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
                 return false
             else
-                if loginUI.characters[(loginUI.previewCharacter)].id then imports.triggerServerEvent("Player:onDeleteCharacter", localPlayer, loginUI.characters[(loginUI.previewCharacter)].id) end
+                if loginUI.characters[(loginUI.previewCharacter)].id then imports.network:emit("Player:onDeleteCharacter", true, false, localPlayer, loginUI.characters[(loginUI.previewCharacter)].id) end
                 imports.table.remove(loginUI.characters, loginUI.previewCharacter)
                 loginUI.previewCharacter = imports.math.max(0, loginUI.previewCharacter - 1)
                 loginUI.phases[2].loadCharacter()
@@ -406,7 +405,7 @@ CGame.execOnModuleLoad(function()
                 loginUI.processCharacters[(loginUI.previewCharacter)] = true
                 loginUI.characters[(loginUI.previewCharacter)] = loginUI.characters[(loginUI.previewCharacter)] or {}
                 loginUI.characters[(loginUI.previewCharacter)].identity = characterData
-                imports.triggerServerEvent("Player:onSaveCharacter", localPlayer, loginUI.previewCharacter, loginUI.characters)
+                imports.network:emit("Player:onSaveCharacter", true, false, localPlayer, loginUI.previewCharacter, loginUI.characters)
             end
         elseif action == "play" then
             local errorMessage = false
@@ -420,7 +419,7 @@ CGame.execOnModuleLoad(function()
                 imports.network:emit("Client:onEnableLoginUI", false, false, true)
                 imports.network:emit("Client:onToggleLoadingUI", false, true)
                 imports.setTimer(function(character, characters)
-                    imports.triggerServerEvent("Player:onResume", localPlayer, character, characters)
+                    imports.network:emit("Player:onResume", true, false, localPlayer, character, characters)
                 end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration, 1, loginUI.character, loginUI.characters)
                 imports.setTimer(function()
                     loginUI.toggleUI(false)
@@ -798,6 +797,6 @@ CGame.execOnModuleLoad(function()
                 CSound.CAmbience[(j.category)] = cAsset.manifestData.assetSounds[(j.category)]
             end
         end
-        imports.triggerServerEvent("Player:onToggleLoginUI", localPlayer)
+        imports.network:emit("Player:onToggleLoginUI", true, false, localPlayer)
     end)
 end)
