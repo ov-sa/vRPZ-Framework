@@ -66,14 +66,14 @@ end
 -------------------------
 
 CGame.execOnModuleLoad(function()
-    imports.network:create("onServerRender")
-    imports.setTimer(function(tickSyncer)
+    local serverNetwork = imports.network:create("onServerRender")
+    imports.setTimer(function(tickSyncer, serverNetwork)
         if tickSyncer and imports.isElement(tickSyncer) then
             local cTickCount = imports.getTickCount()
             imports.setElementData(tickSyncer, "Server:TickSyncer", cTickCount)
-            imports.triggerEvent("onServerRender", tickSyncer, cTickCount, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"])
+            serverNetwork:emit(tickSyncer, cTickCount, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"])
         end
-    end, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"], 0, imports.createElement("Server:TickSyncer"))
+    end, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"], 0, imports.createElement("Server:TickSyncer"), serverNetwork)
     imports.setFPSLimit(FRAMEWORK_CONFIGS["Game"]["FPS_Limit"])
     imports.setMaxPlayers(FRAMEWORK_CONFIGS["Game"]["Player_Limit"])
     imports.setFarClipDistance(FRAMEWORK_CONFIGS["Game"]["Draw_Distance_Limit"][2])
@@ -110,7 +110,7 @@ CGame.execOnModuleLoad(function()
     end
     ]]--
 
-    imports.addEventHandler("onServerRender", root, function(_, deltaTick)
+    imports.network:fetch("onServerRender"):on(function(_, deltaTick)
         for i, j in imports.pairs(CPlayer.CLogged) do
             CCharacter.giveSurvivalTime(i, deltaTick)
         end
