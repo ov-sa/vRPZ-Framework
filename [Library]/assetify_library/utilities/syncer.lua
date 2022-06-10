@@ -108,8 +108,8 @@ if localPlayer then
         network:emit("Assetify:onRequestSyncedPool", true, false, localPlayer)
     end)
 
-    network:create("Assetify:onRecieveBandwidth"):on(function(libraryBandwidth)
-        syncer.libraryBandwidth = libraryBandwidth
+    network:create("Assetify:onRecieveBandwidth"):on(function(bandwidth)
+        syncer.libraryBandwidth = bandwidth
     end)
 
     network:create("Assetify:onRecieveHash"):on(function(assetType, assetName, hashes)
