@@ -58,7 +58,11 @@ imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)
         if cNetwork and not cNetwork.isCallback then
             for i, j in imports.pairs(cNetwork.handlers) do
                 if i and (imports.type(i) == "function") then
-                    i(imports.unpack(payload.processArgs))
+                    if not j.isAsync then
+                        i(imports.unpack(payload.processArgs))
+                    else
+                        --TODO: WIP ASYNC HANDLER
+                    end
                 end
             end
         end
@@ -69,23 +73,27 @@ imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)
                 if not cNetwork or not cNetwork.isCallback or not cNetwork.handler then return false end
                 payload.isSignal = true
                 payload.isRestricted = true
-                payload.processArgs = {cNetwork.handler(imports.unpack(payload.processArgs))}
-                if not payload.isRemote then
-                    imports.triggerEvent("Assetify:Network:API", resourceRoot, serial, payload)
-                else
-                    if not payload.isReceiver or not network.isServerInstance then
-                        if not payload.isLatent then
-                            imports.triggerRemoteEvent("Assetify:Network:API", resourceRoot, serial, payload)
-                        else
-                            imports.triggerRemoteLatentEvent("Assetify:Network:API", network.bandwidth, false, resourceRoot, serial, payload)
-                        end
+                if not cNetwork.handler.isAsync then
+                    payload.processArgs = {cNetwork.handler.exec(imports.unpack(payload.processArgs))}
+                    if not payload.isRemote then
+                        imports.triggerEvent("Assetify:Network:API", resourceRoot, serial, payload)
                     else
-                        if not payload.isLatent then
-                            imports.triggerRemoteEvent(payload.isReceiver, "Assetify:Network:API", resourceRoot, serial, payload)
+                        if not payload.isReceiver or not network.isServerInstance then
+                            if not payload.isLatent then
+                                imports.triggerRemoteEvent("Assetify:Network:API", resourceRoot, serial, payload)
+                            else
+                                imports.triggerRemoteLatentEvent("Assetify:Network:API", network.bandwidth, false, resourceRoot, serial, payload)
+                            end
                         else
-                            imports.triggerRemoteLatentEvent(payload.isReceiver, "Assetify:Network:API", network.bandwidth, false, resourceRoot, serial, payload)
+                            if not payload.isLatent then
+                                imports.triggerRemoteEvent(payload.isReceiver, "Assetify:Network:API", resourceRoot, serial, payload)
+                            else
+                                imports.triggerRemoteLatentEvent(payload.isReceiver, "Assetify:Network:API", network.bandwidth, false, resourceRoot, serial, payload)
+                            end
                         end
                     end
+                else
+                    --TODO: WIP ASYNC HANDLER
                 end
             end
         else
@@ -157,17 +165,18 @@ function network:deserializeExec(serial)
     return true
 end
 
-function network:on(exec)
+function network:on(exec, isAsync)
     if not self or (self == network) then return false end
     if not exec or (imports.type(exec) ~= "function") then return false end
+    isAsync = (isAsync and true) or false
     if self.isCallback then
         if not self.handler then
-            self.handler = exec
+            self.handler = {exec = exec, isAsync = isAsync}
             return true
         end
     else
         if not self.handlers[exec] then
-            self.handlers[exec] = true
+            self.handlers[exec] = {isAsync = isAsync}
             return true
         end
     end
