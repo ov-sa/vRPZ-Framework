@@ -28,6 +28,10 @@ local imports = {
     outputDebugString = outputDebugString,
     addEventHandler = addEventHandler,
     getResourceRootElement = getResourceRootElement,
+    createObject = createObject,
+    createPed = createPed,
+    createVehicle = createVehicle,
+    setElementAlpha = setElementAlpha,
     fetchRemote = fetchRemote,
     loadAsset = loadAsset,
     file = file,
@@ -357,26 +361,35 @@ else
         return true
     end
 
-    function syncer:syncDummy(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer)    
+    function syncer:syncDummy(assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, targetPlayer)    
         if not targetPlayer then
             if not dummyData then return false end
             local cAsset = manager:getData(assetType, assetName)
             if not cAsset or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
-            --TODO: WIP..
-            --[[
-            syncer.syncedDummies[element] = {parent = parent, boneData = boneData}
-            ]]
+            local dummyType = availableAssetPacks[assetType].assetType
+            if not dummyType then return false end
+            local cDummy = false
+            if dummyType == "object" then
+                cDummy = imports.createObject(availableAssetPacks[assetType].assetBase, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
+            elseif dummyType == "ped" then
+                cDummy = imports.createPed(availableAssetPacks[assetType].assetBase, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.z)
+            elseif dummyType == "vehicle" then
+                cDummy = imports.createVehicle(availableAssetPacks[assetType].assetBase, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
+            end
+            if not cDummy then return false end
+            syncer.syncedDummies[cDummy] = {assetType = assetType, assetName = assetName, assetClump = assetClump, clumpMaps = clumpMaps, dummyData = dummyData}
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncDummy(assetType, assetName, assetClump, clumpMaps, dummyData, j)
+                    syncer:syncDummy(assetType, assetName, assetClump, clumpMaps, dummyData, cDummy, j)
                     thread:pause()
                 end
             end):resume({
                 executions = downloadSettings.syncRate,
                 frames = 1
             })
+            return cDummy
         else
-            network:emit("Assetify:onRecieveDummy", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData)
+            network:emit("Assetify:onRecieveDummy", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy)
         end
         return true
     end
@@ -607,6 +620,7 @@ else
     imports.addEventHandler("onElementDestroy", root, function()
         syncer.syncedElements[source] = nil
         syncer.syncedElementDatas[source] = nil
+        syncer.syncedDummies[source] = nil
     end)
     imports.addEventHandler("onPlayerQuit", root, function()
         syncer.loadedClients[source] = nil
