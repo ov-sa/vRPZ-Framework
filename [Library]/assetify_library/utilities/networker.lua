@@ -58,13 +58,13 @@ imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)
         if cNetwork and not cNetwork.isCallback then
             for i, j in imports.pairs(cNetwork.handlers) do
                 if i and (imports.type(i) == "function") then
-                    if not j.isAsync then
-                        i(imports.unpack(payload.processArgs))
-                    else
-                        thread:create(function(self)
+                    thread:create(function(self)
+                        if not j.isAsync then
+                            i(imports.unpack(payload.processArgs))
+                        else
                             i(self, imports.unpack(payload.processArgs))
-                        end):resume()
-                    end
+                        end
+                    end):resume()
                 end
             end
         end
@@ -75,8 +75,12 @@ imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)
                 if not cNetwork or not cNetwork.isCallback or not cNetwork.handler then return false end
                 payload.isSignal = true
                 payload.isRestricted = true
-                if not cNetwork.handler.isAsync then
-                    payload.processArgs = {cNetwork.handler.exec(imports.unpack(payload.processArgs))}
+                thread:create(function(self)
+                    if not cNetwork.handler.isAsync then
+                        payload.processArgs = {cNetwork.handler.exec(imports.unpack(payload.processArgs))}
+                    else
+                        payload.processArgs = {cNetwork.handler.exec(self, imports.unpack(payload.processArgs))}
+                    end
                     if not payload.isRemote then
                         imports.triggerEvent("Assetify:Network:API", resourceRoot, serial, payload)
                     else
@@ -94,10 +98,7 @@ imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)
                             end
                         end
                     end
-                else
-                    cNetwork.handler.thread:resume()
-                    --TODO: WIP ASYNC HANDLER
-                end
+                end):resume()
             end
         else
             if network.cache.execSerials[(payload.execSerial)] then
