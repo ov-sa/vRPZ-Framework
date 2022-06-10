@@ -40,7 +40,7 @@ local resumeTicks = {}
 --[[ Player: On Delete/Save Character ]]--
 ------------------------------------------
 
-imports.network:create("Player:onDeleteCharacter"):on(function(characterID)
+imports.network:create("Player:onDeleteCharacter"):on(function(source, characterID)
     imports.thread:create(function(self)
         CInventory.delete(self, CCharacter.CBuffer[characterID].inventory)
         CCharacter.delete(self, characterID)
