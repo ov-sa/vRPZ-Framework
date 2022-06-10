@@ -16,7 +16,6 @@ loadstring(exports.beautify_library:fetchImports())()
 local imports = {
     pairs = pairs,
     tonumber = tonumber,
-    addEvent = addEvent,
     addEventHandler = addEventHandler,
     getElementType = getElementType,
     getElementsByType = getElementsByType,
@@ -32,7 +31,8 @@ local imports = {
     setCameraFieldOfView = setCameraFieldOfView,
     showChat = showChat,
     showCursor = showCursor,
-    assetify = assetify
+    assetify = assetify,
+    network = network
 }
 imports.assetify.execOnModuleLoad(function()
     imports.assetify.loadModule("vRPZ_Config", {"shared", "client"})
@@ -51,8 +51,7 @@ end
 function showCursor(bool, isForced)
     return ((isForced or bool or not CGame.isUIVisible()) and imports.showCursor(bool)) or false
 end
-imports.addEvent("Client:onToggleChat", true)
-imports.addEventHandler("Client:onToggleChat", root, showChat)
+imports.network:create("Client:onToggleChat"):on(showChat)
 
 
 ------------------------------------------------
@@ -176,8 +175,7 @@ CGame.execOnModuleLoad(function()
             imports.guiSetInputMode("allow_binds")
         end
     end)
-    imports.addEvent("Client:onSyncWeather", true)
-    imports.addEventHandler("Client:onSyncWeather", root, function(serverWeather, serverTime)
+    imports.network:create("Client:onSyncWeather"):on(function(serverWeather, serverTime)
         serverWeather = imports.tonumber(serverWeather)
         if not serverWeather or not serverTime then return false end
         imports.setWeather(serverWeather)
