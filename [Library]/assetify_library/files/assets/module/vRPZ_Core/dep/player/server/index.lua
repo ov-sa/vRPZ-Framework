@@ -59,9 +59,9 @@ end
 
 CPlayer.getPlayer = function(serial)
     if not serial then return false end
-    local players = imports.getElementsByType("player")
-    for i = 1, #players, 1 do
-        local j = players[i]
+    local serverPlayers = imports.getElementsByType("player")
+    for i = 1, #serverPlayers, 1 do
+        local j = serverPlayers[i]
         if CPlayer.isInitialized(j) then
             if CPlayer.getSerial(j) == serial then
                 return j
