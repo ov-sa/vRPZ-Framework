@@ -51,7 +51,8 @@ syncer = {
     syncedGlobalDatas = {},
     syncedElementDatas = {},
     syncedElements = {},
-    syncedDummies = {},
+    syncedAssetDummies = {},
+    syncedBoneAttachments = {},
     syncedLights = {}
 }
 syncer.libraryName = imports.getResourceName(syncer.libraryResource)
@@ -295,7 +296,6 @@ else
     syncer.libraryVersion = (syncer.libraryVersion and "v."..syncer.libraryVersion) or syncer.libraryVersion
     syncer.loadedClients = {}
     syncer.scheduledClients = {}
-    syncer.syncedBoneAttachments = {}
 
     function syncer:syncHash(player, ...)
         return network:emit("Assetify:onRecieveHash", true, false, player, ...)
@@ -387,7 +387,7 @@ else
             end
             if not cDummy then return false end
             imports.setElementAlpha(cDummy, 0)
-            syncer.syncedDummies[cDummy] = {assetType = assetType, assetName = assetName, assetClump = assetClump, clumpMaps = clumpMaps, dummyData = dummyData}
+            syncer.syncedAssetDummies[cDummy] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps, dummyData = dummyData}
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
                     syncer:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, cDummy, j)
@@ -594,6 +594,12 @@ else
                 end
                 thread:pause()
             end
+            for i, j in imports.pairs(syncer.syncedAssetDummies) do
+                if j then
+                    syncer:syncAssetDummy(j.type, j.name, j.clump, j.clumpMaps, j.dummyData, i, source)
+                end
+                thread:pause()
+            end
             for i, j in imports.pairs(syncer.syncedBoneAttachments) do
                 if j then
                     syncer:syncBoneAttachment(i, j.parent, j.boneData, source)
@@ -631,7 +637,7 @@ else
         syncer.syncedGlobalDatas[source] = nil
         syncer.syncedElementDatas[source] = nil
         syncer.syncedElements[source] = nil
-        syncer.syncedDummies[source] = nil
+        syncer.syncedAssetDummies[source] = nil
         syncer.syncedLights[source] = nil
         syncer:syncClearBoneAttachment(source)
     end)
