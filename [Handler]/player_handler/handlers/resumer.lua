@@ -16,8 +16,6 @@ local imports = {
     tonumber = tonumber,
     getTickCount = getTickCount,
     collectgarbage = collectgarbage,
-    addEvent = addEvent,
-    addEventHandler = addEventHandler,
     triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent,
     setElementFrozen = setElementFrozen,
@@ -43,16 +41,14 @@ local resumeTicks = {}
 --[[ Player: On Delete/Save Character ]]--
 ------------------------------------------
 
-imports.addEvent("Player:onDeleteCharacter", true)
-imports.addEventHandler("Player:onDeleteCharacter", root, function(characterID)
+imports.network:create("Player:onDeleteCharacter"):on(function(characterID)
     imports.thread:create(function(self)
         CInventory.delete(self, CCharacter.CBuffer[characterID].inventory)
         CCharacter.delete(self, characterID)
     end):resume()
 end)
 
-imports.addEvent("Player:onSaveCharacter", true)
-imports.addEventHandler("Player:onSaveCharacter", root, function(character, characters)
+imports.network:create("Player:onSaveCharacter"):on(function(source, character, characters)
     if not character or not characters or not characters[character] or characters[character].id then return false end
 
     local serial = CPlayer.getSerial(source)
@@ -75,8 +71,7 @@ end)
 --[[ Player: On Toggle Login UI ]]--
 ------------------------------------
 
-imports.addEvent("Player:onToggleLoginUI", true)
-imports.addEventHandler("Player:onToggleLoginUI", root, function()
+imports.network:create("Player:onToggleLoginUI"):on(function(source)
     local serial = CPlayer.getSerial(source)
     for i = 69, 79, 1 do
         imports.setPedStat(source, i, 1000)
@@ -136,8 +131,7 @@ end)
 
 function getResumeTick(player) return resumeTicks[player] or false end
 
-imports.addEvent("Player:onResume", true)
-imports.addEventHandler("Player:onResume", root, function(character, characters)
+imports.network:create("Player:onResume"):on(function(source, character, characters)
     if not character or not characters or not characters[character] or not characters[character].id then
         imports.triggerEvent("Player:onToggleLoginUI", source)
         return false
