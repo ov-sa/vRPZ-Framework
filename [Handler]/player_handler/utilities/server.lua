@@ -22,7 +22,6 @@ local imports = {
     getTickCount = getTickCount,
     addEventHandler = addEventHandler,
     cancelEvent = cancelEvent,
-    triggerClientEvent = triggerClientEvent,
     getPlayerName = getPlayerName,
     setElementData = setElementData,
     setTimer = setTimer,
@@ -55,7 +54,7 @@ end)
 
 function showChat(player, bool, isForced)
     if (not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player")) then return false end
-    imports.triggerClientEvent(player, "Client:onToggleChat", player, bool, isForced)
+    imports.network:emit("Client:onToggleChat", true, false, player, bool, isForced)
     return true
 end
 
@@ -129,12 +128,12 @@ CGame.execOnModuleLoad(function()
                             cooldownETA = ((elapsedDuration < FRAMEWORK_CONFIGS["Game"]["Logout_CoolDown_Duration"]) and (FRAMEWORK_CONFIGS["Game"]["Logout_CoolDown_Duration"] - elapsedDuration)) or false
                         end
                         if cooldownETA then
-                            imports.triggerClientEvent(source, "Client:onNotification", source, "Please wait "..imports.math.ceil(cooldownETA/1000).."s before logging out!", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
+                            imports.network:emit("Client:onNotification", true, false, source, "Please wait "..imports.math.ceil(cooldownETA/1000).."s before logging out!", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
                         else
                             local __source = source
                             imports.thread:create(function(self)
                                 local source = __source
-                                imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, true)
+                                imports.network:emit("Client:onToggleLoadingUI", true, false, source, true)
                                 imports.outputChatBox("#C8C8C8- #5050FF"..(imports.getPlayerName(source)).."#C8C8C8 left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)
                                 CCharacter.saveProgress(self, source)
                                 imports.network:emit("Player:onToggleLoginUI", false, source)
