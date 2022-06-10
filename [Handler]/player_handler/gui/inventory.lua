@@ -20,7 +20,6 @@ local imports = {
     destroyElement = destroyElement,
     addEventHandler = addEventHandler,
     collectgarbage = collectgarbage,
-    triggerServerEvent = triggerServerEvent,
     bindKey = bindKey,
     getPlayerName = getPlayerName,
     isKeyOnHold = isKeyOnHold,
@@ -291,7 +290,7 @@ CGame.execOnModuleLoad(function()
         }
         inventoryUI.updateBuffer(localPlayer)
         imports.assetify.scheduleExec.execOnModuleLoad(function()
-            imports.triggerServerEvent("Player:onAddItem", localPlayer, vicinity, item, newSlot)    
+            imports.network:emit("Player:onAddItem", true, false, localPlayer, vicinity, item, newSlot)    
         end)
         return true
     end
@@ -305,7 +304,7 @@ CGame.execOnModuleLoad(function()
         }
         inventoryUI.updateBuffer(localPlayer)
         imports.assetify.scheduleExec.execOnModuleLoad(function()
-            imports.triggerServerEvent("Player:onOrderItem", localPlayer, item, prevSlot, newSlot)        
+            imports.network:emit("Player:onOrderItem", true, false, localPlayer, item, prevSlot, newSlot)        
         end)
         return true
     end
@@ -323,7 +322,7 @@ CGame.execOnModuleLoad(function()
         inventoryUI.updateBuffer(localPlayer)
         imports.assetify.scheduleExec.execOnModuleLoad(function()
             slotBuffer.amount = slotBuffer.amount + amount
-            imports.triggerServerEvent("Player:onDropItem", localPlayer, vicinity, item, amount, prevSlot)
+            imports.network:emit("Player:onDropItem", true, false, localPlayer, vicinity, item, amount, prevSlot)
         end)
         return true
     end
