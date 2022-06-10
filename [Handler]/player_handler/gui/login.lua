@@ -23,7 +23,6 @@ local imports = {
     setElementFrozen = setElementFrozen,
     setElementPosition = setElementPosition,
     setElementDimension = setElementDimension,
-    addEvent = addEvent,
     addEventHandler = addEventHandler,
     triggerEvent = triggerEvent,
     triggerServerEvent = triggerServerEvent,
@@ -41,7 +40,8 @@ local imports = {
     math = math,
     string = string,
     beautify = beautify,
-    assetify = assetify
+    assetify = assetify,
+    network = network
 }
 
 
@@ -485,8 +485,7 @@ CGame.execOnModuleLoad(function()
 
     function isLoginUIVisible() return loginUI.state end
 
-    imports.addEvent("Client:onSetLoginUIPhase", true)
-    imports.addEventHandler("Client:onSetLoginUIPhase", root, function(phaseID)
+    imports.network:create("Client:onSetLoginUIPhase"):on(function(phaseID)
         if not phaseID or not loginUI.phases[1].optionsUI[phaseID] or (loginUI.phase and loginUI.phase == phaseID) then return false end
         for i, j in imports.pairs(loginUI.cache.timers) do
             if j and imports.isTimer(j) then
@@ -530,8 +529,7 @@ CGame.execOnModuleLoad(function()
         end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration - (FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + 250), 1)
     end)
 
-    imports.addEvent("Client:onEnableLoginUI", true)
-    imports.addEventHandler("Client:onEnableLoginUI", root, function(state, isForced)
+    imports.network:create("Client:onEnableLoginUI"):on(function(state, isForced)
         if loginUI.cache.timers.uiEnabler and imports.isTimer(loginUI.cache.timers.uiEnabler) then
             imports.killTimer(loginUI.cache.timers.uiEnabler)
             loginUI.cache.timers.uiEnabler = nil
@@ -540,8 +538,7 @@ CGame.execOnModuleLoad(function()
         loginUI.isEnabled = state
     end)
 
-    imports.addEvent("Client:onSaveCharacter", true)
-    imports.addEventHandler("Client:onSaveCharacter", root, function(state, character, characterData)
+    imports.network:create("Client:onSaveCharacter"):on(function(state, character, characterData)
         if state then
             loginUI.characters[character] = characterData
             imports.triggerEvent("Client:onNotification", localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][9][(CPlayer.CLanguage)], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
@@ -767,8 +764,7 @@ CGame.execOnModuleLoad(function()
         return true
     end
 
-    imports.addEvent("Client:onToggleLoginUI", true)
-    imports.addEventHandler("Client:onToggleLoginUI", root, function(state, args)
+    imports.network:create("Client:onToggleLoginUI"):on(function(state, args)
         if state then
             loginUI.character = args.character
             loginUI.previewCharacter = loginUI.character
