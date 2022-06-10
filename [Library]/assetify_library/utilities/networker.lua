@@ -61,7 +61,9 @@ imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)
                     if not j.isAsync then
                         i(imports.unpack(payload.processArgs))
                     else
-                        --TODO: WIP ASYNC HANDLER
+                        thread:create(function(self)
+                            i(self, imports.unpack(payload.processArgs))
+                        end):resume()
                     end
                 end
             end
@@ -93,6 +95,7 @@ imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)
                         end
                     end
                 else
+                    cNetwork.handler.thread:resume()
                     --TODO: WIP ASYNC HANDLER
                 end
             end
