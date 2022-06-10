@@ -31,8 +31,8 @@ CGame = {
         local imports = {}
     ]],
     CTickSyncer = nil,
-    execOnLoad = imports.assetify.execOnLoad,
-    execOnModuleLoad = imports.assetify.execOnModuleLoad,
+    execOnLoad = imports.assetify.scheduler.execOnLoad,
+    execOnModuleLoad = imports.assetify.scheduler.execOnModuleLoad,
 
     exportModule = function(name, methods)
         if not name or not methods then return false end

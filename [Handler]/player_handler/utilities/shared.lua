@@ -25,7 +25,10 @@ local imports = {
     math = math,
     assetify = assetify
 }
-CGame = imports.assetify.scheduleExec
+CGame = {
+    execOnLoad = imports.assetify.scheduler.execScheduleOnLoad,
+    execOnModuleLoad = imports.assetify.scheduler.execScheduleOnModuleLoad
+}
 
 
 ------------------------------
