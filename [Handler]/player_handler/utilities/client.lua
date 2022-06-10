@@ -34,10 +34,10 @@ local imports = {
     assetify = assetify,
     network = network
 }
-imports.assetify.execOnModuleLoad(function()
+imports.assetify.scheduler.execOnModuleLoad(function()
     imports.assetify.loadModule("vRPZ_Config", {"shared", "client"})
     imports.assetify.loadModule("vRPZ_Core", {"shared", "client"})
-    imports.assetify.scheduleExec.boot()
+    imports.assetify.scheduler.boot()
 end)
 
 
