@@ -16,7 +16,6 @@ local imports = {
     tonumber = tonumber,
     getTickCount = getTickCount,
     collectgarbage = collectgarbage,
-    triggerClientEvent = triggerClientEvent,
     setElementFrozen = setElementFrozen,
     setElementData = setElementData,
     bindKey = bindKey,
@@ -62,7 +61,7 @@ imports.network:create("Player:onSaveCharacter"):on(function(source, character, 
             {"inventory", inventoryID}
         })
         if bool then CCharacter.CBuffer[characterID].identity = characters[character].identity end
-        imports.triggerClientEvent(source, "Client:onSaveCharacter", source, (bool and true) or false, character, (bool and {id = characterID, identity = characters[character].identity}) or nil)
+        imports.network:emit("Client:onSaveCharacter", true, false, source, (bool and true) or false, character, (bool and {id = characterID, identity = characters[character].identity}) or nil)
     end):resume()
 end)
 
@@ -116,7 +115,7 @@ imports.network:create("Player:onToggleLoginUI"):on(function(source)
         else
             DPlayer.character = 0
         end
-        imports.triggerClientEvent(source, "Client:onToggleLoginUI", source, true, {
+        imports.network:emit("Client:onToggleLoginUI", true, false, source, true, {
             character = DPlayer.character,
             characters = DPlayer.characters,
             vip = DPlayer.vip
