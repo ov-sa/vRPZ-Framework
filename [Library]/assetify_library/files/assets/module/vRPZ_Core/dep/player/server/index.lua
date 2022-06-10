@@ -102,21 +102,24 @@ end
 CPlayer.setChannel = function(player, channelIndex)
     channelIndex = imports.tonumber(channelIndex)
     if not CPlayer.isInitialized(player) or not channelIndex or not FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][channelIndex] then return false end
-    imports.triggerClientEvent(player, "Client:onUpdateChannel", player, channelIndex)
+    imports.network:emit("Client:onUpdateChannel", false, true, player, channelIndex)
     CPlayer.CChannel[player] = channelIndex
     return true 
 end
 
 CPlayer.setParty = function(player, partyData)
     if imports.type(player) == "table" then
-        imports.triggerClientEvent(player, "Client:onUpdateParty", player[1], partyData)
+        imports.network:emit("Client:onUpdateParty", false, true, player, partyData)
         for i = 1, #player do
             CPlayer.CParty[player[i]] = partyData
         end
         return true
     else
         if not CPlayer.isInitialized(player) then return false end
-        imports.triggerClientEvent(partyData.members, "Client:onUpdateParty", player, partyData)
+        for i, #partyData.members, 1 do
+            local j = partyData.members[i]
+            imports.network:emit("Client:onUpdateParty", false, true, j, partyData)
+        end
         CPlayer.CParty[player] = partyData
         return true
     end
