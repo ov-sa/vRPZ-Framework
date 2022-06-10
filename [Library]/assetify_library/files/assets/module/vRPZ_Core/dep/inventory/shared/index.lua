@@ -146,7 +146,7 @@ CInventory = {
     end
 }
 
-imports.assetify.execOnLoad(function()
+imports.assetify.scheduler.execOnLoad(function()
     local CItems, CWeapons = imports.assetify.getAssets("inventory"), imports.assetify.getAssets("weapon")
     for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]) do
         if j.identifier == "Weapon" then

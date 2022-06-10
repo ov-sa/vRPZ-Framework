@@ -127,7 +127,7 @@ CInventory.isSlotAvailableForOrdering = function(item, prevSlot, slot, isEquippe
     return true
 end
 
-imports.assetify.execOnLoad(function()
+imports.assetify.scheduler.execOnLoad(function()
     for i, j in imports.pairs(CInventory.CItems) do
         j.icon = {
             inventory = imports.assetify.getAssetDep(j.pack, i, "texture", "inventory"),
