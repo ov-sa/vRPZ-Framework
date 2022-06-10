@@ -18,7 +18,6 @@ local imports = {
     tonumber = tonumber,
     isElement = isElement,
     destroyElement = destroyElement,
-    triggerClientEvent = triggerClientEvent,
     setElementAlpha = setElementAlpha,
     setElementFrozen = setElementFrozen,
     setElementCollisionsEnabled = setElementCollisionsEnabled,
@@ -156,10 +155,10 @@ imports.network:create("Player:onSpawn"):on(source, spawnpoint, loadCharacterID)
     if CCharacter.getHealth(source) <= 0 then
         --TODO: NEEDS TO BE IMPLEMENTED..
         --imports.triggerEvent("Player:onDeath", source, nil, false, nil, 3)
-        imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false, FRAMEWORK_CONFIGS["Spawns"]["Hint"])
+        imports.network:emit("Client:onToggleLoadingUI", true, false, source, false, FRAMEWORK_CONFIGS["Spawns"]["Hint"])
     else
         --triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, playerInventorySlots[source])
-        imports.triggerClientEvent(source, "Client:onToggleLoadingUI", source, false)
+        imports.network:emit("Client:onToggleLoadingUI", true, false, source, false)
         imports.showChat(source, true)
     end
 end)
