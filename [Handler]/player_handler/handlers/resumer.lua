@@ -26,7 +26,8 @@ local imports = {
     json = json,
     table = table,
     string = string,
-    thread = thread
+    thread = thread,
+    network = network
 }
 
 
