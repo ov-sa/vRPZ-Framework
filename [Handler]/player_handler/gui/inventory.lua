@@ -203,7 +203,7 @@ CGame.execOnModuleLoad(function()
         end
         return true
     end
-    imports.network:create("Client:onUpdateLanguage"):on(inventoryUI.updateUILang)
+    imports.network:fetch("Client:onUpdateLanguage"):on(inventoryUI.updateUILang)
     inventoryUI.fetchUIGridSlotFromOffset = function(offsetX, offsetY)
         if not offsetX or not offsetY then return false end
         local row, column = imports.math.ceil(offsetY/(inventoryUI.clientInventory.height/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows)), imports.math.ceil(offsetX/(inventoryUI.clientInventory.width/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns))
