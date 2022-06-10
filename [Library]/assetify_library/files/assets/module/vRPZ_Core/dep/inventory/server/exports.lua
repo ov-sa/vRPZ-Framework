@@ -3,7 +3,6 @@
 -----------------
 
 local imports = {
-    triggerClientEvent = triggerClientEvent,
     network = network
 }
 
@@ -42,7 +41,7 @@ network:create("Player:onAddItem"):on(function(source, vicinity, item, slot)
         if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] then return CInventory.equipItem(source, item, _, slot) end
         CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
     end
-    imports.triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, CInventory.CBuffer[inventoryID])
+    imports.network:emit("Client:onSyncInventoryBuffer", true, false, source, CInventory.CBuffer[inventoryID])
 end)
 
 network:create("Player:onOrderItem"):on(function(source, item, prevSlot, slot)
@@ -54,7 +53,7 @@ network:create("Player:onOrderItem"):on(function(source, item, prevSlot, slot)
         CInventory.CBuffer[inventoryID].slots[prevSlot] = nil
         CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
     end
-    imports.triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, CInventory.CBuffer[inventoryID])
+    imports.network:emit("Client:onSyncInventoryBuffer", true, false, source, CInventory.CBuffer[inventoryID])
 end)
 
 network:create("Player:onDropItem"):on(function(source, vicinity, item, amount, prevSlot)
@@ -66,5 +65,5 @@ network:create("Player:onDropItem"):on(function(source, vicinity, item, amount, 
         if FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot] then return CInventory.dequipItem(source, item, prevSlot) end
         CInventory.CBuffer[inventoryID].slots[prevSlot] = nil
     end
-    imports.triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, CInventory.CBuffer[inventoryID])
+    imports.network:emit("Client:onSyncInventoryBuffer", true, false, source, CInventory.CBuffer[inventoryID])
 end)
