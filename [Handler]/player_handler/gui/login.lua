@@ -266,10 +266,7 @@ CGame.execOnModuleLoad(function()
         loginUI.phases[3].updateUILang()
         return true
     end
-    imports.addEventHandler("Client:onUpdateLanguage", root, function()
-        if not loginUI.state then return false end
-        loginUI.updateUILang()
-    end)
+    imports.network:fetch("Client:onUpdateLanguage"):on(loginUI.updateUILang)
     loginUI.phases[2].fetchSelection = function()
         local tone = imports.beautify.slider.getPercent(loginUI.phases[2].categories[1].contents.tone.element)
         local gender = loginUI.phases[2].categories[1].contents.gender.contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[1].contents.gender.element))]
