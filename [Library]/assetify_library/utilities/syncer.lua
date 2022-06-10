@@ -386,6 +386,7 @@ else
                 cDummy = imports.createVehicle(availableAssetPacks[assetType].assetBase, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
             end
             if not cDummy then return false end
+            imports.setElementAlpha(cDummy, 0)
             syncer.syncedDummies[cDummy] = {assetType = assetType, assetName = assetName, assetClump = assetClump, clumpMaps = clumpMaps, dummyData = dummyData}
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
