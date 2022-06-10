@@ -19,7 +19,8 @@ local imports = {
     getInterpolationProgress = getInterpolationProgress,
     math = math,
     beautify = beautify,
-    assetify = assetify
+    assetify = assetify,
+    network = network
 }
 
 

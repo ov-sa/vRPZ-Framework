@@ -37,7 +37,8 @@ local imports = {
     table = table,
     math = math,
     beautify = beautify,
-    assetify = assetify
+    assetify = assetify,
+    network = network
 }
 
 
