@@ -21,7 +21,6 @@ local imports = {
     addEventHandler = addEventHandler,
     collectgarbage = collectgarbage,
     triggerServerEvent = triggerServerEvent,
-    triggerEvent = triggerEvent,
     bindKey = bindKey,
     getPlayerName = getPlayerName,
     isKeyOnHold = isKeyOnHold,
@@ -222,7 +221,7 @@ CGame.execOnModuleLoad(function()
     inventoryUI.createBuffer = function(parent, name)
         if not parent or not imports.isElement(parent) or inventoryUI.buffer[parent] then return false end
         if (parent ~= localPlayer) and CLoot.isLocked(parent) then
-            imports.triggerEvent("Client:onNotification", localPlayer, "Loot is locked..", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
+            imports.network:emit("Client:onNotification", false, "Loot is locked..", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
             return false
         end
         inventoryUI.buffer[parent] = {
@@ -349,7 +348,7 @@ CGame.execOnModuleLoad(function()
     imports.network:create("Client:onSyncInventoryBuffer"):on(function(buffer)
         CInventory.CBuffer = buffer
         inventoryUI.isSynced, inventoryUI.isSyncScheduled = true, false
-        imports.triggerEvent("Client:onUpdateInventory", localPlayer)
+        imports.network:emit("Client:onNotification", false)
     end)
 
     imports.network:create("Client:onUpdateInventory"):on(function()
@@ -722,7 +721,7 @@ CGame.execOnModuleLoad(function()
                                 inventoryUI.addItem()
                             end
                             --TODO: ADD LATER
-                            --triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
+                            --imports.network:emit("onClientInventorySound", false, "inventory_move_item")
                         elseif inventoryUI.attachedItem.isPlaceable.type == "drop" then
                             if inventoryUI.attachedItem.parent == localPlayer then
                                 isPlaceAttachment = true
@@ -737,7 +736,7 @@ CGame.execOnModuleLoad(function()
                                 inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY = inventoryUI.vicinityInventory.startX - inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + inventoryUI.attachedItem.isPlaceable.offsetY - (inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight*0.01)
                             end
                             --TODO: ADD LATER
-                            --triggerEvent("onClientInventorySound", localPlayer, "inventory_move_item")
+                            --imports.network:emit("onClientInventorySound", false, "inventory_move_item")
                         end
                     end
                     if isPlaceAttachment then
@@ -773,7 +772,7 @@ CGame.execOnModuleLoad(function()
                             end
                         end
                         --TODO: PLAY SOUND
-                        --triggerEvent("onClientInventorySound", localPlayer, "inventory_rollback_item")
+                        --imports.network:emit("onClientInventorySound", false, "inventory_rollback_item")
                     end
                     inventoryUI.detachItem()
                 end
@@ -811,7 +810,7 @@ CGame.execOnModuleLoad(function()
             --TODO: ENABLE LATER
             --inventoryUI.vicinityInventory.element = CCharacter.isInLoot(localPlayer)
             inventoryUI.vicinityInventory.element = getElementsByType("ped")[1] --TODO: REMOVE IT LATER AND ENABLE ^
-            imports.triggerEvent("Client:onEnableInventoryUI", localPlayer, true)
+            imports.network:emit("Client:onEnableInventoryUI", false, true)
             inventoryUI.createBuffer(localPlayer, imports.string.format(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory["Title"][(CPlayer.CLanguage)], imports.getPlayerName(localPlayer)))
             inventoryUI.createBuffer(inventoryUI.vicinityInventory.element)
             inventoryUI.opacityAdjuster.element = imports.beautify.slider.create(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, "vertical", nil, false)
