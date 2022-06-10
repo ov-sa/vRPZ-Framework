@@ -7,7 +7,6 @@ local imports = {
     tonumber = tonumber,
     isElement = isElement,
     destroyElement = destroyElement,
-    triggerClientEvent = triggerClientEvent,
     getElementType = getElementType,
     setElementData = setElementData,
     getElementData = getElementData,
@@ -104,7 +103,7 @@ CInventory.equipItem = function(player, item, prevSlot, slot, isEquipped)
         imports.setElementData(player, "Slot:Object:"..slot, CPlayer.CAttachments[player][slot])
         print("CREATE ATTACHMENT")   --TODO: REMOVE..
     end
-    imports.triggerClientEvent(player, "Client:onSyncInventoryBuffer", player, CInventory.CBuffer[inventoryID])
+    imports.network:emit("Client:onSyncInventoryBuffer", true, false, player, CInventory.CBuffer[inventoryID])
     return false
 end
 
@@ -128,7 +127,7 @@ CInventory.dequipItem = function(player, item, prevSlot, slot, isEquipped)
         imports.setElementData(player, "Slot:Object:"..prevSlot, nil)
         print("REMOVE ATTACHMENT")  --TODO: REMOVE..
     end
-    imports.triggerClientEvent(player, "Client:onSyncInventoryBuffer", player, CInventory.CBuffer[inventoryID])
+    imports.network:emit("Client:onSyncInventoryBuffer", true, false, player, CInventory.CBuffer[inventoryID])
     return false
 end
 
