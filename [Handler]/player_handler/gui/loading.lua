@@ -14,8 +14,6 @@
 
 local imports = {
     tocolor = tocolor,
-    addEvent = addEvent,
-    addEventHandler = addEventHandler,
     triggerEvent = triggerEvent,
     interpolateBetween = interpolateBetween,
     getInterpolationProgress = getInterpolationProgress,
@@ -94,8 +92,7 @@ CGame.execOnModuleLoad(function()
     --[[ Client: On Toggle Loading UI ]]--
     --------------------------------------
 
-    imports.addEvent("Client:onToggleLoadingUI", true)
-    imports.addEventHandler("Client:onToggleLoadingUI", root, function(state, hint)
+    imports.network:create("Client:onToggleLoadingUI"):on(function(state, hint)
         if state then
             if (state and (loadingUI.animStatus == "forward")) then return false end
             loadingUI.animStatus = "forward"
