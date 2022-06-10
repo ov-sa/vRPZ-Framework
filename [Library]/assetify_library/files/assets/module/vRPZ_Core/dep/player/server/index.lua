@@ -108,10 +108,13 @@ CPlayer.setChannel = function(player, channelIndex)
 end
 
 CPlayer.setParty = function(player, partyData)
+    --TODO: this is completely bugged
+    --[[
     if imports.type(player) == "table" then
-        imports.network:emit("Client:onUpdateParty", false, true, player, partyData)
         for i = 1, #player do
-            CPlayer.CParty[player[i]] = partyData
+            local j = player[i]
+            CPlayer.CParty[j] = partyData
+            imports.network:emit("Client:onUpdateParty", false, true, j, partyData)
         end
         return true
     else
@@ -123,4 +126,5 @@ CPlayer.setParty = function(player, partyData)
         CPlayer.CParty[player] = partyData
         return true
     end
+    ]]
 end
