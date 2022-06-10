@@ -107,7 +107,7 @@ dbify.character = {
 --[[ Module Booter ]]--
 -----------------------
 
-imports.assetify.execOnModuleLoad(function()
+imports.assetify.scheduler.execOnModuleLoad(function()
     if not dbify.mysql.connection.instance then return false end
     imports.dbExec(dbify.mysql.connection.instance, "CREATE TABLE IF NOT EXISTS `??` (`??` INT AUTO_INCREMENT PRIMARY KEY)", dbify.character.connection.table, dbify.character.connection.key)
 end)
