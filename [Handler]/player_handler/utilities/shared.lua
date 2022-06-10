@@ -13,7 +13,7 @@
 -----------------
 
 resource = getResourceRootElement(getThisResource())
-loadstring(exports.assetify_library:fetchImports())()
+loadstring(exports.assetify_library:import("*"))()
 local imports = {
     tonumber = tonumber,
     isElement = isElement,
