@@ -16,7 +16,6 @@ local imports = {
     tonumber = tonumber,
     getTickCount = getTickCount,
     collectgarbage = collectgarbage,
-    triggerEvent = triggerEvent,
     triggerClientEvent = triggerClientEvent,
     setElementFrozen = setElementFrozen,
     setElementData = setElementData,
@@ -134,7 +133,7 @@ function getResumeTick(player) return resumeTicks[player] or false end
 
 imports.network:create("Player:onResume"):on(function(source, character, characters)
     if not character or not characters or not characters[character] or not characters[character].id then
-        imports.triggerEvent("Player:onToggleLoginUI", source)
+        imports.network:emit("Player:onToggleLoginUI", false, source)
         return false
     end
 
@@ -152,7 +151,7 @@ imports.network:create("Player:onResume"):on(function(source, character, charact
         local source = __source
         local characterID, inventoryID = characters[character].id, CCharacter.CBuffer[(characters[character].id)].inventory
         if not CCharacter.loadInventory(self, source, {characterID = characterID, inventoryID = inventoryID}) then
-            imports.triggerEvent("Player:onToggleLoginUI", source)
+            imports.network:emit("Player:onToggleLoginUI", false, source)
             return false
         end
 
