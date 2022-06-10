@@ -93,6 +93,10 @@ if localPlayer then
         return network:emit("Assetify:onRecieveSyncedElement", false, ...)
     end
 
+    function syncer:syncAssetDummy(...)
+        return network:emit("Assetify:onRecieveAssetDummy", false, ...)
+    end
+
     function syncer:syncBoneAttachment(...)
         return network:emit("Assetify:onRecieveBoneAttachment", false, ...)
     end
@@ -261,6 +265,10 @@ if localPlayer then
         end
     end)
 
+    network:create("Assetify:onRecieveAssetDummy"):on(function(...)
+        dummy:create(...)
+    end)
+
     network:create("Assetify:onRecieveBoneAttachment"):on(function(...)
         bone:create(...)
     end)
@@ -362,7 +370,7 @@ else
         return true
     end
 
-    function syncer:syncDummy(assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, targetPlayer)    
+    function syncer:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, targetPlayer)    
         if not targetPlayer then
             if not dummyData then return false end
             local cAsset = manager:getData(assetType, assetName)
@@ -381,7 +389,7 @@ else
             syncer.syncedDummies[cDummy] = {assetType = assetType, assetName = assetName, assetClump = assetClump, clumpMaps = clumpMaps, dummyData = dummyData}
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncDummy(assetType, assetName, assetClump, clumpMaps, dummyData, cDummy, j)
+                    syncer:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, cDummy, j)
                     thread:pause()
                 end
             end):resume({
@@ -390,7 +398,7 @@ else
             })
             return cDummy
         else
-            network:emit("Assetify:onRecieveDummy", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy)
+            network:emit("Assetify:onRecieveAssetDummy", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy)
         end
         return true
     end

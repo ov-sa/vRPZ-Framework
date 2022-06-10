@@ -58,6 +58,7 @@
     <export function="getGlobalData" type="shared"/>
     <export function="setEntityData" type="shared"/>
     <export function="getEntityData" type="shared"/>
+    <export function="createAssetDummy" type="shared"/>
     <export function="setBoneAttachment" type="shared"/>
     <export function="setBoneDetachment" type="shared"/>
     <export function="setBoneRefreshment" type="shared"/>
@@ -76,7 +77,6 @@
     <export function="restoreModel" type="client"/>
     <export function="playSoundAsset" type="client"/>
     <export function="playSoundAsset3D" type="client"/>
-    <export function="createAssetDummy" type="client"/>
     <export function="isRendererVirtualRendering" type="client"/>
     <export function="setRendererVirtualRendering" type="client"/>
     <export function="getRendererVirtualSource" type="client"/>
