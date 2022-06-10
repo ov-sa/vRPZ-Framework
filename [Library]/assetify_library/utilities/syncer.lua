@@ -51,6 +51,7 @@ syncer = {
     syncedGlobalDatas = {},
     syncedElementDatas = {},
     syncedElements = {},
+    syncedDummies = {},
     syncedLights = {}
 }
 syncer.libraryName = imports.getResourceName(syncer.libraryResource)
@@ -618,19 +619,15 @@ else
         syncer.syncedElements[source] = nil
     end)
     imports.addEventHandler("onElementDestroy", root, function()
-        syncer.syncedElements[source] = nil
+        syncer.syncedGlobalDatas[source] = nil
         syncer.syncedElementDatas[source] = nil
+        syncer.syncedElements[source] = nil
         syncer.syncedDummies[source] = nil
+        syncer.syncedLights[source] = nil
+        syncer:syncClearBoneAttachment(source)
     end)
     imports.addEventHandler("onPlayerQuit", root, function()
         syncer.loadedClients[source] = nil
         syncer.scheduledClients[source] = nil
-        syncer.syncedElements[source] = nil
-        syncer:syncClearBoneAttachment(source)
-        for i, j in imports.pairs(syncer.syncedBoneAttachments) do
-            if j and (j.parent == source) then
-                syncer:syncClearBoneAttachment(i)
-            end
-        end
     end)
 end
