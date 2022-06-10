@@ -18,8 +18,6 @@ local imports = {
     tonumber = tonumber,
     isElement = isElement,
     destroyElement = destroyElement,
-    addEvent = addEvent,
-    addEventHandler = addEventHandler,
     triggerClientEvent = triggerClientEvent,
     setElementAlpha = setElementAlpha,
     setElementFrozen = setElementFrozen,
@@ -36,7 +34,8 @@ local imports = {
     killPed = killPed,
     setTimer = setTimer,
     showChat = showChat,
-    assetify = assetify
+    assetify = assetify,
+    network = network
 }
 
 
@@ -140,8 +139,7 @@ end)
 --[[ Player: On Spawn ]]--
 --------------------------
 
-imports.addEvent("Player:onSpawn", true)
-imports.addEventHandler("Player:onSpawn", root, function(spawnpoint, loadCharacterID)
+imports.network:create("Player:onSpawn"):on(source, spawnpoint, loadCharacterID)
     spawnpoint = spawnpoint or CGame.generateSpawn()
     local characterID = loadCharacterID or CPlayer.getCharacterID(source, true)
     local characterIdentity = CCharacter.CBuffer[characterID].identity
