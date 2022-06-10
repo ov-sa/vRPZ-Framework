@@ -14,7 +14,6 @@
 
 local imports = {
     tocolor = tocolor,
-    triggerEvent = triggerEvent,
     interpolateBetween = interpolateBetween,
     getInterpolationProgress = getInterpolationProgress,
     math = math,
