@@ -40,11 +40,11 @@ local imports = {
     thread = thread,
     network = network
 }
-imports.assetify.execOnModuleLoad(function()
+imports.assetify.scheduler.execOnModuleLoad(function()
     imports.assetify.loadModule("DBify_Library", {"shared", "server"})
     imports.assetify.loadModule("vRPZ_Config", {"shared", "server"})
     imports.assetify.loadModule("vRPZ_Core", {"shared", "server"})
-    imports.assetify.scheduleExec.boot()
+    imports.assetify.scheduler.boot()
 end)
 
 

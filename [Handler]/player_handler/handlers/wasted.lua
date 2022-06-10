@@ -138,7 +138,7 @@ end)
 --[[ Player: On Spawn ]]--
 --------------------------
 
-imports.network:create("Player:onSpawn"):on(source, spawnpoint, loadCharacterID)
+imports.network:create("Player:onSpawn"):on(function(source, spawnpoint, loadCharacterID)
     spawnpoint = spawnpoint or CGame.generateSpawn()
     local characterID = loadCharacterID or CPlayer.getCharacterID(source, true)
     local characterIdentity = CCharacter.CBuffer[characterID].identity
