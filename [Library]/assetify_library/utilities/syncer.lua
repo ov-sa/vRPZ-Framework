@@ -357,6 +357,30 @@ else
         return true
     end
 
+    function syncer:syncDummy(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer)    
+        if not targetPlayer then
+            if not dummyData then return false end
+            local cAsset = manager:getData(assetType, assetName)
+            if not cAsset or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
+            --TODO: WIP..
+            --[[
+            syncer.syncedDummies[element] = {parent = parent, boneData = boneData}
+            ]]
+            thread:create(function(cThread)
+                for i, j in imports.pairs(syncer.loadedClients) do
+                    syncer:syncDummy(assetType, assetName, assetClump, clumpMaps, dummyData, j)
+                    thread:pause()
+                end
+            end):resume({
+                executions = downloadSettings.syncRate,
+                frames = 1
+            })
+        else
+            network:emit("Assetify:onRecieveDummy", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData)
+        end
+        return true
+    end
+
     function syncer:syncBoneAttachment(element, parent, boneData, targetPlayer)
         if not targetPlayer then
             if not element or not imports.isElement(element) or not parent or not imports.isElement(parent) or not boneData then return false end
