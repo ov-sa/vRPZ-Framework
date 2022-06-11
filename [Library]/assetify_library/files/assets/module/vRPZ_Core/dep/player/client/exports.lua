@@ -14,7 +14,7 @@ local imports = {
 CGame.exportModule("CPlayer", {
     "setLanguage",
     "getLanguage",
-    "getParty"
+    "getChannel"
 })
 
 
