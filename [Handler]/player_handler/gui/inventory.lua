@@ -347,7 +347,7 @@ CGame.execOnModuleLoad(function()
     imports.network:create("Client:onSyncInventoryBuffer"):on(function(buffer)
         CInventory.CBuffer = buffer
         inventoryUI.isSynced, inventoryUI.isSyncScheduled = true, false
-        imports.network:emit("Client:onNotification", false)
+        imports.network:emit("Client:onUpdateInventory", false)
     end)
 
     imports.network:create("Client:onUpdateInventory"):on(function()
