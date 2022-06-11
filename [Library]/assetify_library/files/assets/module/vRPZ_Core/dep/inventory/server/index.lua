@@ -13,7 +13,8 @@ local imports = {
     string = string,
     math = math,
     assetify = assetify,
-    dbify = dbify
+    dbify = dbify,
+    network = network
 }
 
 
