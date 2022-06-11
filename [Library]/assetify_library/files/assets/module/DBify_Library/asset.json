@@ -1,7 +1,7 @@
 {
     "encryptKey": "vStudio - Aviril",
-    "authors": ["Aviril", "Tron"],
-    "version": "1.0.7",
+    "authors": ["Aviril", "Tron", "Аниса"],
+    "version": "1.0.8",
     "assetDeps": {
         "script": {
             "server": [
