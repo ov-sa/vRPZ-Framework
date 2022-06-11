@@ -37,8 +37,7 @@ CGame = {
         for i = 1, #methods, 1 do
             local j = methods[i]
             imports.loadstring([[
-                local cNetwork = network:create("]]..name..[[.]]..j..[[", true)
-                cNetwork:on(function(...)
+                network:create("]]..name..[[.]]..j..[[", true):on(function(...)
                     return ]]..name..[[.]]..j..[[(...)
                 end)
             ]])()
