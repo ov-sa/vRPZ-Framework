@@ -385,11 +385,9 @@ CGame.execOnModuleLoad(function()
                     end
                 end
                 for i, j in imports.pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
-                    if not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][i] then
-                        if not inventoryUI.isSynced then
-                            if j.translation == "inventory_add" then
-                                imports.table.insert(inventoryUI.buffer[localPlayer].bufferCache, {item = j.item, amount = 1})
-                            end
+                    if not inventoryUI.isSynced then
+                        if j.translation == "inventory_add" then
+                            imports.table.insert(inventoryUI.buffer[localPlayer].bufferCache, {item = j.item, amount = 1})
                         end
                     end
                     for k = 1, #inventoryUI.buffer[localPlayer].bufferCache, 1 do
