@@ -275,7 +275,7 @@ CGame.execOnModuleLoad(function()
         else
             inventoryUI.attachedItem = nil
             imports.assetify.execOnModuleLoad(function()
-                imports.assetify.scheduleExec.boot()
+                imports.assetify.scheduler.boot()
             end)
         end      
         return true
@@ -289,7 +289,7 @@ CGame.execOnModuleLoad(function()
             translation = "inventory_add"
         }
         inventoryUI.updateBuffer(localPlayer)
-        imports.assetify.scheduleExec.execOnModuleLoad(function()
+        imports.assetify.scheduler.execScheduleOnModuleLoad(function()
             imports.network:emit("Player:onAddItem", true, false, localPlayer, vicinity, item, newSlot)    
         end)
         return true
@@ -303,7 +303,7 @@ CGame.execOnModuleLoad(function()
             translation = "inventory_order"
         }
         inventoryUI.updateBuffer(localPlayer)
-        imports.assetify.scheduleExec.execOnModuleLoad(function()
+        imports.assetify.scheduler.execScheduleOnModuleLoad(function()
             imports.network:emit("Player:onOrderItem", true, false, localPlayer, item, prevSlot, newSlot)        
         end)
         return true
@@ -320,7 +320,7 @@ CGame.execOnModuleLoad(function()
         end
         CInventory.CBuffer.slots[prevSlot] = nil
         inventoryUI.updateBuffer(localPlayer)
-        imports.assetify.scheduleExec.execOnModuleLoad(function()
+        imports.assetify.scheduler.execScheduleOnModuleLoad(function()
             slotBuffer.amount = slotBuffer.amount + amount
             imports.network:emit("Player:onDropItem", true, false, localPlayer, vicinity, item, amount, prevSlot)
         end)
