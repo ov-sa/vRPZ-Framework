@@ -64,13 +64,13 @@ end
 
 CGame.execOnModuleLoad(function()
     imports.network:create("onServerRender")
-    imports.setTimer(function(tickSyncer)
-        if tickSyncer and imports.isElement(tickSyncer) then
-            local cTickCount = imports.getTickCount()
-            imports.assetify.syncer.setEntityData(tickSyncer, "Server:TickSyncer", cTickCount)
-            network:emit("onServerRender", false, cTickCount, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"])
-        end
-    end, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"], 0, imports.createElement("Server:TickSyncer"))
+    local serverTickSyncer = imports.createElement("Server:TickSyncer")
+    imports.assetify.syncer.setGlobalData("Server:TickSyncer", serverTickSyncer)
+    imports.setTimer(function(cSyncer)
+        local cTick = imports.getTickCount()
+        imports.assetify.syncer.setEntityData(cSyncer, "Server:TickSyncer", cTick)
+        network:emit("onServerRender", false, cTick, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"])
+    end, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"], 0, serverTickSyncer)
     imports.setFPSLimit(FRAMEWORK_CONFIGS["Game"]["FPS_Limit"])
     imports.setMaxPlayers(FRAMEWORK_CONFIGS["Game"]["Player_Limit"])
     imports.setFarClipDistance(FRAMEWORK_CONFIGS["Game"]["Draw_Distance_Limit"][2])
