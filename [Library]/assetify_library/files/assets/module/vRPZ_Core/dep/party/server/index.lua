@@ -53,7 +53,7 @@ CParty.invite = function(partyIndex, player)
     return true
 end
 
-CPlayer.remove = function(partyIndex, player)
+CParty.remove = function(partyIndex, player)
     if not CParty.CParties[partyIndex] or not CPlayer.isInitialized(player) then return false end
     if getPlayerParty(player) == nil then return false end
     local memberIndex = binsearch(CParty.CParties[partyIndex].members, player)
