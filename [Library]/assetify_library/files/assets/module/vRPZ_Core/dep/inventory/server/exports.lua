@@ -24,7 +24,14 @@ CGame.exportModule("CInventory", {
     "getItemProperty",
     "setItemData",
     "getItemData",
-    "equipItem"
+    "equipItem",
+    "dequipItem",
+    "fetchParentMaxSlots",
+    "fetchParentAssignedSlots",
+    "fetchParentUsedSlots",
+    "fetchParentMaxWeight",
+    "fetchParentUsedWeight",
+    "isSlotAvailableForOrdering"
 })
 
 

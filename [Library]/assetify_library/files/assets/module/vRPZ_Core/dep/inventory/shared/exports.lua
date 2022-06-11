@@ -20,11 +20,5 @@ CGame.exportModule("CInventory", {
     "addItemCount",
     "removeItemCount",
     "fetchMaxSlotsMultiplier",
-    "fetchParentMaxSlots",
-    "fetchParentAssignedSlots",
-    "fetchParentUsedSlots",
-    "fetchParentMaxWeight",
-    "fetchParentUsedWeight",
-    "isSlotAvailableForOrdering",
     "isVicinityAvailableForDropping"
 })

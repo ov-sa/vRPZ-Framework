@@ -3,5 +3,11 @@
 -----------------
 
 CGame.exportModule("CInventory", {
-    "fetchSlotDimensions"
+    "fetchSlotDimensions",
+    "fetchParentMaxSlots",
+    "fetchParentAssignedSlots",
+    "fetchParentUsedSlots",
+    "fetchParentMaxWeight",
+    "fetchParentUsedWeight",
+    "isSlotAvailableForOrdering"
 })
