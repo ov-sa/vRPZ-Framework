@@ -69,7 +69,7 @@ CGame.execOnModuleLoad(function()
         if tickSyncer and imports.isElement(tickSyncer) then
             local cTickCount = imports.getTickCount()
             imports.setElementData(tickSyncer, "Server:TickSyncer", cTickCount)
-            network:emit("onServerRender", false, tickSyncer, cTickCount, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"])
+            network:emit("onServerRender", false, cTickCount, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"])
         end
     end, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"], 0, imports.createElement("Server:TickSyncer"))
     imports.setFPSLimit(FRAMEWORK_CONFIGS["Game"]["FPS_Limit"])
