@@ -96,9 +96,9 @@ CInventory.equipItem = function(player, item, prevSlot, slot, isEquipped)
     if not inventoryID or not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot] then return false end
     local isEquippable = CInventory.isSlotAvailableForOrdering(player, item, prevSlot, slot, isEquipped)
     if isEquippable then
-        if isEquipped then CInventory.CBuffer[inventoryID].slot[prevSlot] = nil end
+        if isEquipped then CInventory.CBuffer[inventoryID].slots[prevSlot] = nil end
         --CPlayer.CAttachments[player][slot] = createObject() --TODO: WIP..
-        CInventory.CBuffer[inventoryID].slot[slot] = {item = item}
+        CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
         imports.setElementData(player, "Slot:"..slot, item)
         imports.setElementData(player, "Slot:Object:"..slot, CPlayer.CAttachments[player][slot])
         print("CREATE ATTACHMENT")   --TODO: REMOVE..
@@ -117,7 +117,7 @@ CInventory.dequipItem = function(player, item, prevSlot, slot, isEquipped)
         isDequippable = true
     end
     if isDequippable then
-        CInventory.CBuffer[inventoryID].slot[prevSlot] = nil
+        CInventory.CBuffer[inventoryID].slots[prevSlot] = nil
         if isEquipped then CInventory.CBuffer[inventoryID].slots[slot] = {item = item} end
         if CPlayer.CAttachments[player][prevSlot] and imports.isElement(CPlayer.CAttachments[player][prevSlot]) then
             imports.destroyElement(CPlayer.CAttachments[player][prevSlot])
@@ -190,7 +190,7 @@ CInventory.isSlotAvailableForOrdering = function(player, item, prevSlot, slot, i
     if isEquipped then
         if not prevSlot or not usedSlots[prevSlot] then return false end
         local inventoryID = CPlayer.getInventoryID(player)
-        if not CInventory.CBuffer[inventoryID].slot[prevSlot] or (CInventory.CBuffer[inventoryID].slot[prevSlot].item ~= item) then return false end
+        if not CInventory.CBuffer[inventoryID].slots[prevSlot] or (CInventory.CBuffer[inventoryID].slots[prevSlot].item ~= item) then return false end
         if not isEquipmentSlot and not FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][prevSlot] then
             prevSlot = imports.tonumber(prevSlot)
             if not prevSlot then return false end
