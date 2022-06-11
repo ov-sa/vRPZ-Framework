@@ -65,7 +65,7 @@ end
 
 CGame.isUIVisible = function()
     local uiStates = {
-        not isPlayerInitialized(localPlayer),
+        not CPlayer.isInitialized(localPlayer),
         isLoginUIVisible(),
         isInventoryUIVisible(),
         isScoreboardUIVisible()

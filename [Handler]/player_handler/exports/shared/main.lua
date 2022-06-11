@@ -74,7 +74,7 @@ end
 function getPlayerCurrentSlotItem(player, slotType)
 
     if not player or not isElement(player) or player:getType() ~= "player" or not slotType then return false end
-    if not isPlayerInitialized(player) then return false end
+    if not CPlayer.isInitialized(player) then return false end
 
     if slotType == "backpack" then
         local item = player:getData("Slot:backpack")

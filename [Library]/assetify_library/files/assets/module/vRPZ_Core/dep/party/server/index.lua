@@ -46,7 +46,7 @@ CParty.getParty = function(partyIndex)
 end
 
 CParty.invite = function(partyIndex, player)
-    if not CParty.CParties[partyIndex] or not isPlayerInitialized(player) then return false end
+    if not CParty.CParties[partyIndex] or not CPlayer.isInitialized(player) then return false end
     if getPlayerParty(player) ~= nil then return false end
     imports.table.insert(CParty.CParties[partyIndex].members, player)
     CPlayer.setParty(CParty.CParties[partyIndex].members, CParty.CParties[partyIndex])
@@ -54,7 +54,7 @@ CParty.invite = function(partyIndex, player)
 end
 
 CPlayer.remove = function(partyIndex, player)
-    if not CParty.CParties[partyIndex] or not isPlayerInitialized(player) then return false end
+    if not CParty.CParties[partyIndex] or not CPlayer.isInitialized(player) then return false end
     if getPlayerParty(player) == nil then return false end
     local memberIndex = binsearch(CParty.CParties[partyIndex].members, player)
     imports.table.remove(CParty.CParties[partyIndex].members, memberIndex[1])
