@@ -230,7 +230,12 @@ bundler["threader"] = {module = "thread", rw = imports.file.read("utilities/thre
 bundler["networker"] = {module = "network", rw = imports.file.read("utilities/networker.lua")}
 
 bundler["scheduler"] = [[
-    if not network then ]]..bundler["networker"].rw..[[ end
+    if not threader then
+    ]]..bundler["threader"].rw..[[
+    end
+    if not network then
+    ]]..bundler["networker"].rw..[[
+    end
     assetify.scheduler = {
         buffer = {onLoad = {}, onModuleLoad = {}},
         execOnLoad = function(execFunc)
@@ -242,8 +247,9 @@ bundler["scheduler"] = [[
                 local execWrapper = nil
                 execWrapper = function()
                     execFunc()
+                    network:fetch("Assetify:onLoad"):off(execWrapper)
                 end
-                network:fetch("Assetify:onLoad"):on(execWrapper)
+                network:create("Assetify:onLoad"):on(execWrapper)
             end
             return true
         end,
@@ -257,8 +263,9 @@ bundler["scheduler"] = [[
                 local execWrapper = nil
                 execWrapper = function()
                     execFunc()
+                    network:fetch("Assetify:onModuleLoad"):off(execWrapper)
                 end
-                network:fetch("Assetify:onModuleLoad"):on(execWrapper)
+                network:create("Assetify:onModuleLoad"):on(execWrapper)
             end
             return true
         end,
