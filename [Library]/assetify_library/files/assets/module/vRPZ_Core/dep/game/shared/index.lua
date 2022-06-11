@@ -7,7 +7,6 @@ local imports = {
     loadstring = loadstring,
     isElement = isElement,
     getElementsByType = getElementsByType,
-    getElementData = getElementData,
     getWeather = getWeather,
     getTime = getTime,
     string = string,
@@ -55,7 +54,7 @@ CGame = {
             CGame.CTickSyncer = tickSyncer[1]
         end
         if CGame.CTickSyncer and imports.isElement(CGame.CTickSyncer) then
-            currentTick = imports.tonumber(imports.getElementData(CGame.CTickSyncer, "Server:TickSyncer")) or 0
+            currentTick = imports.tonumber(imports.assetify.getEntityData(CGame.CTickSyncer, "Server:TickSyncer")) or 0
         end
         return currentTick
     end,
