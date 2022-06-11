@@ -98,8 +98,8 @@ CInventory.equipItem = function(player, item, prevSlot, slot, isEquipped)
         if isEquipped then CInventory.CBuffer[inventoryID].slots[prevSlot] = nil end
         --CPlayer.CAttachments[player][slot] = createObject() --TODO: WIP..
         CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
-        imports.assetify.setEntityData(player, "Slot:"..slot, item)
-        imports.assetify.setEntityData(player, "Slot:Object:"..slot, CPlayer.CAttachments[player][slot])
+        imports.assetify.syncer.setEntityData(player, "Slot:"..slot, item)
+        imports.assetify.syncer.setEntityData(player, "Slot:Object:"..slot, CPlayer.CAttachments[player][slot])
         print("CREATE ATTACHMENT")   --TODO: REMOVE..
     end
     imports.network:emit("Client:onSyncInventoryBuffer", true, false, player, CInventory.CBuffer[inventoryID])
@@ -122,8 +122,8 @@ CInventory.dequipItem = function(player, item, prevSlot, slot, isEquipped)
             imports.destroyElement(CPlayer.CAttachments[player][prevSlot])
         end
         CPlayer.CAttachments[player][prevSlot] = nil
-        imports.assetify.setEntityData(player, "Slot:"..prevSlot, nil)
-        imports.assetify.setEntityData(player, "Slot:Object:"..prevSlot, nil)
+        imports.assetify.syncer.setEntityData(player, "Slot:"..prevSlot, nil)
+        imports.assetify.syncer.setEntityData(player, "Slot:Object:"..prevSlot, nil)
         print("REMOVE ATTACHMENT")  --TODO: REMOVE..
     end
     imports.network:emit("Client:onSyncInventoryBuffer", true, false, player, CInventory.CBuffer[inventoryID])
@@ -137,7 +137,7 @@ CInventory.fetchParentMaxSlots = function(parent)
         local inventoryID = CPlayer.getInventoryID(parent)
         return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), (inventoryID and CInventory.CBuffer[inventoryID].maxSlots) or 0)
     else
-        return imports.math.max(0, imports.tonumber(imports.assetify.getEntityData(parent, "Inventory:MaxSlots")) or 0)
+        return imports.math.max(0, imports.tonumber(imports.assetify.syncer.getEntityData(parent, "Inventory:MaxSlots")) or 0)
     end
     return false
 end

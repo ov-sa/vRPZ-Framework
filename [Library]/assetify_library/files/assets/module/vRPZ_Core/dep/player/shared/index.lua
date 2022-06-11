@@ -30,7 +30,7 @@ CPlayer = {
 
     getCharacterID = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.tonumber(imports.assetify.getEntityData(player, "Character:ID")) or false
+        return imports.tonumber(imports.assetify.syncer.getEntityData(player, "Character:ID")) or false
     end,
 
     getParty = function(player)

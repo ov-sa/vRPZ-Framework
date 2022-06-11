@@ -23,7 +23,6 @@ local imports = {
     addEventHandler = addEventHandler,
     cancelEvent = cancelEvent,
     getPlayerName = getPlayerName,
-    setElementData = setElementData,
     setTimer = setTimer,
     outputChatBox = outputChatBox,
     setFPSLimit = setFPSLimit,
@@ -68,7 +67,7 @@ CGame.execOnModuleLoad(function()
     imports.setTimer(function(tickSyncer)
         if tickSyncer and imports.isElement(tickSyncer) then
             local cTickCount = imports.getTickCount()
-            imports.setElementData(tickSyncer, "Server:TickSyncer", cTickCount)
+            imports.assetify.syncer.setEntityData(tickSyncer, "Server:TickSyncer", cTickCount)
             network:emit("onServerRender", false, cTickCount, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"])
         end
     end, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"], 0, imports.createElement("Server:TickSyncer"))

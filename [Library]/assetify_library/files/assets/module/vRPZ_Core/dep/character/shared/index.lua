@@ -72,12 +72,12 @@ CCharacter = {
     setHealth = function(player, amount)
         amount = imports.tonumber(amount)
         if not CPlayer.isInitialized(player) or not amount then return false end
-        return imports.assetify.setEntityData(player, "Character:Data:blood", imports.math.max(0, imports.math.min(amount, CCharacter.getMaxHealth(player))))
+        return imports.assetify.syncer.setEntityData(player, "Character:Data:blood", imports.math.max(0, imports.math.min(amount, CCharacter.getMaxHealth(player))))
     end,
 
     getHealth = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.tonumber(imports.assetify.getEntityData(player, "Character:Data:blood")) or 0
+        return imports.tonumber(imports.assetify.syncer.getEntityData(player, "Character:Data:blood")) or 0
     end,
 
     getMaxHealth = function(player)
@@ -87,11 +87,11 @@ CCharacter = {
 
     getLevel = function(player, fetchEXP)
         if not CPlayer.isInitialized(player) then return false end
-        local characterLevel = imports.math.max(1, imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"], imports.tonumber(imports.assetify.getEntityData(player, "Character:Data:level")) or 0))
+        local characterLevel = imports.math.max(1, imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"], imports.tonumber(imports.assetify.syncer.getEntityData(player, "Character:Data:level")) or 0))
         if not fetchEXP then
             return characterLevel
         else
-            return characterLevel, imports.math.max(1, imports.math.min(CGame.getLevelEXP(characterLevel), imports.tonumber(imports.assetify.getEntityData(player, "Character:Data:experience")) or 0))
+            return characterLevel, imports.math.max(1, imports.math.min(CGame.getLevelEXP(characterLevel), imports.tonumber(imports.assetify.syncer.getEntityData(player, "Character:Data:experience")) or 0))
         end
     end,
 
@@ -116,15 +116,15 @@ CCharacter = {
         genLevel = imports.math.max(1, imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"], genLevel))
         characterEXP = imports.math.min(CGame.getLevelEXP(genLevel), characterEXP)
         if characterLevel ~= genLevel then
-            imports.assetify.setEntityData(player, "Character:Data:level", genLevel)
+            imports.assetify.syncer.setEntityData(player, "Character:Data:level", genLevel)
         end
-        imports.assetify.setEntityData(player, "Character:Data:experience", characterEXP)
+        imports.assetify.syncer.setEntityData(player, "Character:Data:experience", characterEXP)
         return true
     end,
 
     getReputation = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"], imports.tonumber(imports.assetify.getEntityData(player, "Character:Data:reputation")) or 0)
+        return imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"], imports.tonumber(imports.assetify.syncer.getEntityData(player, "Character:Data:reputation")) or 0)
     end,
 
     giveReputation = function(player, reputation)
@@ -135,14 +135,14 @@ CCharacter = {
         local genReputation = imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"], characterReputation + reputation)
         if characterReputation ~= genReputation then
             characterReputation = genReputation
-            imports.assetify.setEntityData(player, "Character:Data:reputation", characterReputation)
+            imports.assetify.syncer.setEntityData(player, "Character:Data:reputation", characterReputation)
         end
         return true
     end,
 
     getKills = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.tonumber(imports.assetify.getEntityData(player, "Character:Data:kills")) or 0
+        return imports.tonumber(imports.assetify.syncer.getEntityData(player, "Character:Data:kills")) or 0
     end,
 
     giveKills = function(player, kills)
@@ -150,13 +150,13 @@ CCharacter = {
         if not kills then return false end
         local characterKills = CCharacter.getKills(player)
         if not characterKills then return false end
-        imports.assetify.setEntityData(player, "Character:Data:kills", characterKills + kills)
+        imports.assetify.syncer.setEntityData(player, "Character:Data:kills", characterKills + kills)
         return true
     end,
 
     getDeaths = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.tonumber(imports.assetify.getEntityData(player, "Character:Data:deaths")) or 0
+        return imports.tonumber(imports.assetify.syncer.getEntityData(player, "Character:Data:deaths")) or 0
     end,
 
     giveDeaths = function(player, deaths)
@@ -164,7 +164,7 @@ CCharacter = {
         if not deaths then return false end
         local characterDeaths = CCharacter.getKills(player)
         if not characterDeaths then return false end
-        imports.assetify.setEntityData(player, "Character:Data:deaths", characterDeaths + deaths)
+        imports.assetify.syncer.setEntityData(player, "Character:Data:deaths", characterDeaths + deaths)
         return true
     end,
 
@@ -176,7 +176,7 @@ CCharacter = {
 
     getSurvivalTime = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.tonumber(imports.assetify.getEntityData(player, "Character:Data:survival_time")) or 0
+        return imports.tonumber(imports.assetify.syncer.getEntityData(player, "Character:Data:survival_time")) or 0
     end,
 
     giveSurvivalTime = function(player, time)
@@ -184,44 +184,44 @@ CCharacter = {
         if not time then return false end
         local characterSurvivalTime = CCharacter.getSurvivalTime(player)
         if not characterSurvivalTime then return false end
-        imports.assetify.setEntityData(player, "Character:Data:survival_time", characterSurvivalTime + time)
+        imports.assetify.syncer.setEntityData(player, "Character:Data:survival_time", characterSurvivalTime + time)
     end,
 
     getFaction = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.assetify.getEntityData(player, "Character:Data:faction") or false
+        return imports.assetify.syncer.getEntityData(player, "Character:Data:faction") or false
     end,
 
     getGroup = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.assetify.getEntityData(player, "Character:Data:group") or false
+        return imports.assetify.syncer.getEntityData(player, "Character:Data:group") or false
     end,
 
     setMoney = function(player, amount)
         money = imports.tonumber(money)
         if not CPlayer.isInitialized(player) or not money then return false end
-        return imports.assetify.setEntityData(player, "Character:Data:money", imports.math.max(0, money))
+        return imports.assetify.syncer.setEntityData(player, "Character:Data:money", imports.math.max(0, money))
     end,
 
     getMoney = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.tonumber(imports.assetify.getEntityData(player, "Character:Data:money")) or 0
+        return imports.tonumber(imports.assetify.syncer.getEntityData(player, "Character:Data:money")) or 0
     end,
 
     isKnocked = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.assetify.getEntityData(player, "Character:Knocked") or false
+        return imports.assetify.syncer.getEntityData(player, "Character:Knocked") or false
     end,
 
     isReloading = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.assetify.getEntityData(player, "Character:Reloading") or false
+        return imports.assetify.syncer.getEntityData(player, "Character:Reloading") or false
     end,
 
     isInLoot = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        if imports.assetify.getEntityData(player, "Character:Looting") then
-            local marker = imports.assetify.getEntityData(player, "Loot:Marker")
+        if imports.assetify.syncer.getEntityData(player, "Character:Looting") then
+            local marker = imports.assetify.syncer.getEntityData(player, "Loot:Marker")
             if marker and imports.isElement(marker) then
                 return marker
             end

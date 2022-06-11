@@ -17,13 +17,13 @@ local imports = {
     getTickCount = getTickCount,
     collectgarbage = collectgarbage,
     setElementFrozen = setElementFrozen,
-    setElementData = setElementData,
     bindKey = bindKey,
     setPedStat = setPedStat,
     setPlayerNametagShowing = setPlayerNametagShowing,
     json = json,
     table = table,
     string = string,
+    assetify = assetify
     thread = thread,
     network = network
 }
@@ -155,8 +155,8 @@ imports.network:create("Player:onResume"):on(function(source, character, charact
         end
 
         local characterIdentity = CCharacter.CBuffer[characterID].identity
-        imports.setElementData(source, "Character:ID", characterID)
-        imports.setElementData(source, "Character:Identity", characterIdentity)
+        imports.assetify.syncer.setEntityData(source, "Character:ID", characterID)
+        imports.assetify.syncer.setEntityData(source, "Character:Identity", characterIdentity)
         CPlayer.setData(self, serial, {
             {"character", character}
         })

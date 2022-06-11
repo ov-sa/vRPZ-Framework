@@ -25,7 +25,7 @@ local imports = {
 local cUtility = {
     resetProgress = function(cThread, player, isForceReset, deps, saveProgress, loadProgress)
         if isForceReset then
-            imports.assetify.setEntityData(player, "Character:ID", nil)
+            imports.assetify.syncer.setEntityData(player, "Character:ID", nil)
         end
         for i, j in imports.pairs(CPlayer.CAttachments[player]) do
             if j and imports.isElement(j) then
@@ -38,29 +38,29 @@ local cUtility = {
         if isForceReset then
             for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
                 local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
-                buffer.player[i] = {j, imports.assetify.getEntityData(player, "Player:"..j)}
-                imports.assetify.setEntityData(player, "Player:Data:"..j, nil)
+                buffer.player[i] = {j, imports.assetify.syncer.getEntityData(player, "Player:"..j)}
+                imports.assetify.syncer.setEntityData(player, "Player:Data:"..j, nil)
             end
-            imports.assetify.setEntityData(player, "Character:Identity", nil)
+            imports.assetify.syncer.setEntityData(player, "Character:Identity", nil)
         end
         for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
-            buffer.character[i] = {j, imports.assetify.getEntityData(player, "Character:Data:"..j)}
-            imports.assetify.setEntityData(player, "Character:"..j, nil)
+            buffer.character[i] = {j, imports.assetify.syncer.getEntityData(player, "Character:Data:"..j)}
+            imports.assetify.syncer.setEntityData(player, "Character:"..j, nil)
         end
         for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"]) do
-            imports.assetify.setEntityData(player, "Slot:"..i, nil)
-            imports.assetify.setEntityData(player, "Slot:Object:"..i, nil)
+            imports.assetify.syncer.setEntityData(player, "Slot:"..i, nil)
+            imports.assetify.syncer.setEntityData(player, "Slot:Object:"..i, nil)
         end
         imports.table.insert(buffer.inventory, {"max_slots", CInventory.CBuffer[(deps.inventoryID)].maxSlots})
         imports.table.insert(buffer.inventory, {"slots", imports.json.encode(CInventory.CBuffer[(deps.inventoryID)].slots)})
         for i, j in imports.pairs(CInventory.CItems) do
             if saveProgress then
                 CInventory.setItemProperty(cThread, deps.inventoryID, {j.ref}, {
-                    {imports.dbify.inventory.connection.item.counter, imports.math.max(0, imports.tonumber(imports.assetify.getEntityData(player, "Item:"..i)) or 0)}
+                    {imports.dbify.inventory.connection.item.counter, imports.math.max(0, imports.tonumber(imports.assetify.syncer.getEntityData(player, "Item:"..i)) or 0)}
                 })
             end
-            imports.assetify.setEntityData(player, "Item:"..i, (loadProgress and 0) or nil)
+            imports.assetify.syncer.setEntityData(player, "Item:"..i, (loadProgress and 0) or nil)
         end
         if saveProgress then
             CPlayer.setData(cThread, deps.serial, buffer.player)
@@ -91,7 +91,7 @@ CCharacter.loadInventory = function(cThread, player, deps)
         slots = DInventoryProperty.slots
     }
     for i, j in imports.pairs(DItemProperty) do
-        imports.assetify.setEntityData(player, "Item:"..(CInventory.CRefs.ref[i]), imports.tonumber(j[(imports.dbify.inventory.connection.item.counter)]) or 0)
+        imports.assetify.syncer.setEntityData(player, "Item:"..(CInventory.CRefs.ref[i]), imports.tonumber(j[(imports.dbify.inventory.connection.item.counter)]) or 0)
     end
     return true
 end
@@ -104,11 +104,11 @@ CCharacter.loadProgress = function(player, loadCharacterID, resetProgress)
         CPlayer.CAttachments[player] = {}
         for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
-            imports.assetify.setEntityData(player, "Player:Data:"..j, CPlayer.CBuffer[serial][j])
+            imports.assetify.syncer.setEntityData(player, "Player:Data:"..j, CPlayer.CBuffer[serial][j])
         end
         for i = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Character"]["Datas"][i]
-            imports.assetify.setEntityData(player, "Character:Data:"..j, CCharacter.CBuffer[characterID][j])
+            imports.assetify.syncer.setEntityData(player, "Character:Data:"..j, CCharacter.CBuffer[characterID][j])
         end
         CPlayer.setLogged(player, true)
     end
@@ -123,7 +123,7 @@ CCharacter.loadProgress = function(player, loadCharacterID, resetProgress)
             if j.name == "Character:blood" then
                 value = CCharacter.getMaxHealth(player)
             end
-            imports.assetify.setEntityData(player, j.name, value)
+            imports.assetify.syncer.setEntityData(player, j.name, value)
         end
     end
     return true

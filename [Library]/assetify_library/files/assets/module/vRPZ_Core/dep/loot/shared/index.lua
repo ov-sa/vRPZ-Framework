@@ -15,16 +15,16 @@ local imports = {
 CLoot = {
     fetchType = function(parent)
         if not parent or not imports.isElement(parent) then return false end
-        return imports.assetify.getEntityData(parent, "Loot:Type") or false
+        return imports.assetify.syncer.getEntityData(parent, "Loot:Type") or false
     end,
 
     fetchName = function(parent)
         if not CLoot.fetchType(parent) then return false end
-        return imports.assetify.getEntityData(parent, "Loot:Name") or "??"
+        return imports.assetify.syncer.getEntityData(parent, "Loot:Name") or "??"
     end,
 
     isLocked = function(parent)
         if not CLoot.fetchType(parent) then return false end
-        return (imports.assetify.getEntityData(parent, "Loot:Locked") and true) or false
+        return (imports.assetify.syncer.getEntityData(parent, "Loot:Locked") and true) or false
     end
 }
