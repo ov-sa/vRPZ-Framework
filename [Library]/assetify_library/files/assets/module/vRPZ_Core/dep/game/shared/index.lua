@@ -6,7 +6,6 @@ local imports = {
     tonumber = tonumber,
     loadstring = loadstring,
     isElement = isElement,
-    getElementsByType = getElementsByType,
     getWeather = getWeather,
     getTime = getTime,
     string = string,
@@ -48,15 +47,12 @@ CGame = {
     end,
 
     getServerTick = function()
-        local currentTick = 0
-        if not CGame.CTickSyncer or not imports.isElement(CGame.CTickSyncer) then
-            local tickSyncer = imports.getElementsByType("Server:TickSyncer", resourceRoot)
-            CGame.CTickSyncer = tickSyncer[1]
+        local cTick = 0
+        CGame.CTickSyncer = (CGame.CTickSyncer and import.isElement(CGame.CTickSyncer) and CGame.CTickSyncer) or imports.assetify.syncer.getGlobalData("Server:TickSyncer")
+        if CGame.CTickSyncer then
+            cTick = imports.tonumber(imports.assetify.syncer.getEntityData(CGame.CTickSyncer, "Server:TickSyncer")) or 0
         end
-        if CGame.CTickSyncer and imports.isElement(CGame.CTickSyncer) then
-            currentTick = imports.tonumber(imports.assetify.syncer.getEntityData(CGame.CTickSyncer, "Server:TickSyncer")) or 0
-        end
-        return currentTick
+        return cTick
     end,
 
     getNativeWeather = function()
