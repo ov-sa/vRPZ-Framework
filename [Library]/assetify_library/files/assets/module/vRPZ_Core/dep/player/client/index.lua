@@ -48,6 +48,11 @@ CPlayer.setChannel = function(channelIndex)
     return true 
 end
 
+CPlayer.getChannel = function()
+    if not CPlayer.isInitialized(localPlayer) then return false end
+    return (CPlayer.CChannel and FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][(CPlayer.CChannel)] and CPlayer.CChannel) or false
+end
+
 CPlayer.setParty = function(partyData)
     if not CPlayer.isInitialized(localPlayer) then return false end
     CPlayer.CParty = partyData
