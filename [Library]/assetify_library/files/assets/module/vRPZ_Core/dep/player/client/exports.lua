@@ -24,5 +24,5 @@ CGame.exportModule("CPlayer", {
 
 imports.network:create("Player:onLogin"):on(function(source) CPlayer.CLogged[source] = true end)
 imports.network:create("Player:onLogout"):on(function(source) CPlayer.CLogged[source] = nil end)
-imports.network:create("Player:onUpdateChannel"):on(CPlayer.setChannel)
-imports.network:create("Player:onUpdateParty"):on(CPlayer.setParty)
+imports.network:create("Client:onUpdateChannel"):on(CPlayer.setChannel)
+imports.network:create("Client:onUpdateParty"):on(CPlayer.setParty)
