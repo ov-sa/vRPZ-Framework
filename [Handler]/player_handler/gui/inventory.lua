@@ -491,6 +491,8 @@ CGame.execOnModuleLoad(function()
                         elseif inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and (inventoryUI.attachedItem.isPlaceable.slot == j.slot) and (inventoryUI.attachedItem.isPlaceable.type == "order") then
                             isItemVisible = false
                         end
+                    elseif inventoryUI.attachedItem.isOnTransition and inventoryUI.attachedItem.isPlaceable and (inventoryUI.attachedItem.isPlaceable.slot == j.slot) and (inventoryUI.attachedItem.isPlaceable.type == "order") then
+                        isItemVisible = false
                     end
                 end
                 local equipment_isHovered = (not client_isHovered and imports.isMouseOnPosition(j.startX, j.startY, j.width, j.height)) or false
