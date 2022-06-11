@@ -19,6 +19,7 @@ CGame.exportModule("CPlayer", {
     "getPlayer",
     "getInventoryID",
     "setChannel",
+    "getChannel",
     "setParty"
 })
 

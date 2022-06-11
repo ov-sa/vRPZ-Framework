@@ -17,7 +17,6 @@ local imports = {
 CPlayer = {
     CLogged = {},
     CParty = {},
-    CChannel = {},
     CAttachments = {},
 
     isInitialized = function(player)
@@ -32,11 +31,6 @@ CPlayer = {
     getCharacterID = function(player)
         if not CPlayer.isInitialized(player) then return false end
         return imports.tonumber(imports.getElementData(player, "Character:ID")) or false
-    end,
-
-    getChannel = function(player)
-        if not CPlayer.isInitialized(player) then return false end
-        return CPlayer.CChannel[player] or false
     end,
 
     getParty = function(player)

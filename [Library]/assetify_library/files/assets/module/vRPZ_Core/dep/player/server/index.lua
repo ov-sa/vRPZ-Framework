@@ -19,6 +19,7 @@ local imports = {
 ----------------
 
 CPlayer.CBuffer = {}
+CPlayer.CChannel = {}
 
 CPlayer.fetch = function(cThread, serial)
     if not cThread then return false end
@@ -105,6 +106,11 @@ CPlayer.setChannel = function(player, channelIndex)
     imports.network:emit("Client:onUpdateChannel", false, true, player, channelIndex)
     CPlayer.CChannel[player] = channelIndex
     return true 
+end
+
+CPlayer.getChannel = function(player)
+    if not CPlayer.isInitialized(player) then return false end
+    return CPlayer.CChannel[player] or false
 end
 
 CPlayer.setParty = function(player, partyData)

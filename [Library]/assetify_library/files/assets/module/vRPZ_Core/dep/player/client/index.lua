@@ -49,6 +49,7 @@ CPlayer.setChannel = function(channelIndex)
 end
 
 CPlayer.getChannel = function()
+    if not CPlayer.isInitialized(localPlayer) then return false end
     return CPlayer.CChannel or false
 end
 
