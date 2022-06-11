@@ -9,7 +9,6 @@ CGame.exportModule("CCharacter", {
     "delete",
     "setData",
     "getData",
-    "resetProgress",
     "loadInventory",
     "loadProgress",
     "saveProgress"

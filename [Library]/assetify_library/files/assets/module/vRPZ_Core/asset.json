@@ -22,8 +22,8 @@
                 "party/server/index.lua",
                 "party/server/exports.lua",
                 "character/server/index.lua",
-                "character/server/exports.lua",
                 "character/server/saver.lua",
+                "character/server/exports.lua",
                 "inventory/server/index.lua",
                 "inventory/server/exports.lua"
             ],
