@@ -2,6 +2,7 @@
 --[[ Imports ]]--
 -----------------
 
+if not thread then loadstring(exports.assetify_library:import("thread"))() end
 local imports = {
     type = type,
     unpack = unpack,
@@ -11,7 +12,8 @@ local imports = {
     dbQuery = dbQuery,
     dbPoll = dbPoll,
     dbExec = dbExec,
-    table = table
+    table = table,
+    thread = thread
 }
 
 string.parse = function(rawString)
@@ -29,7 +31,7 @@ end
 dbify.parseArgs = function(cbIndex, ...)
     local rawArgs = {...}
     local cThread, cbIndex = rawArgs[1], imports.tonumber(cbIndex)
-    if cThread and thread:isInstance(cThread) then
+    if cThread and imports.thread:isInstance(cThread) then
         if not cbIndex then return false end
         imports.table.remove(rawArgs, 1)
         imports.table.insert(rawArgs, cbIndex, function(...) return cThread:resolve(...) end)
