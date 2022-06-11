@@ -23,7 +23,7 @@ local imports = {
     json = json,
     table = table,
     string = string,
-    assetify = assetify
+    assetify = assetify,
     thread = thread,
     network = network
 }
