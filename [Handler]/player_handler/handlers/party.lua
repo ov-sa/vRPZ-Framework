@@ -22,8 +22,7 @@ local imports = {
     outputChatBox = outputChatBox,
     removeElementData = removeElementData,
     addCommandHandler = addCommandHandler,
-    string = string,
-    assetify = assetify
+    string = string
 }
 
 
@@ -77,18 +76,18 @@ imports.addCommandHandler("party", function(player, _, category, ...)
         imports.outputChatBox("━━ Party: Request has been sent to the player.", player, 0, 255, 0)
         imports.outputChatBox("━━ Party: Type /party accept to join " .. imports.getPlayerName(player) .. "'s party. Invite expires after " .. FRAMEWORK_CONFIGS["Party"]["Accept_Time"] .. " seconds", target, 0, 255, 0)
         local timer = imports.setTimer(function()
-            if imports.assetify.syncer.getEntityData(target, "party:request") then
+            if CGame.getEntityData(target, "party:request") then
                 imports.removeElementData(target, "party:request")
             end
         end, FRAMEWORK_CONFIGS["Party"]["Accept_Time"] * 1000, 1)
-        imports.assetify.syncer.setEntityData(target, "party:request", {player, timer})
+        CGame.setEntityData(target, "party:request", {player, timer})
     elseif category == "accept" then
-        local request = imports.assetify.syncer.getEntityData(player, "party:request")
+        local request = CGame.getEntityData(player, "party:request")
         if request then
             local party = getPlayerParty(request[1])
             if party ~= nil then
                 invitePartyMember(party.id, player)
-                imports.assetify.syncer.setEntityData(player, "party:request", nil)
+                CGame.setEntityData(player, "party:request", nil)
                 if imports.isTimer(request[2]) then imports.killTimer(request[2]) end
             end
         end

@@ -23,7 +23,6 @@ local imports = {
     json = json,
     table = table,
     string = string,
-    assetify = assetify,
     thread = thread,
     network = network
 }
@@ -155,8 +154,8 @@ imports.network:create("Player:onResume"):on(function(source, character, charact
         end
 
         local characterIdentity = CCharacter.CBuffer[characterID].identity
-        imports.assetify.syncer.setEntityData(source, "Character:ID", characterID)
-        imports.assetify.syncer.setEntityData(source, "Character:Identity", characterIdentity)
+        CGame.setEntityData(source, "Character:ID", characterID)
+        CGame.setEntityData(source, "Character:Identity", characterIdentity)
         CPlayer.setData(self, serial, {
             {"character", character}
         })
