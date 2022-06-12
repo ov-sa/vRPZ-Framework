@@ -248,8 +248,6 @@ if localPlayer then
 
     network:create("Assetify:onRecieveSyncedEntityData"):on(function(element, data, value)
         if not element or not imports.isElement(element) or not data or (imports.type(data) ~= "string") then return false end
-        print("RECIEVED TRIGGER: "..getTickCount())
-        print(tostring(element).." : "..tostring(data).." : "..tostring(value))
         syncer.syncedEntityDatas[element] = syncer.syncedEntityDatas[element] or {}
         syncer.syncedEntityDatas[element][data] = value
     end)
