@@ -316,11 +316,11 @@ else
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
                     syncer:syncGlobalData(data, value, isForceSync, i)
-                    thread:pause()
+                    if not isForceSync then thread:pause() end
                 end
             end):resume({
-                executions = downloadSettings.syncRate,
-                frames = 1
+                executions = (not isForceSync and downloadSettings.syncRate) or 1,
+                frames = (not isForceSync and 1) or 0
             })
         else
             network:emit("Assetify:onRecieveSyncedGlobalData", true, false, targetPlayer, data, value)
@@ -334,11 +334,11 @@ else
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
                     syncer:syncEntityData(element, data, value, isForceSync, i)
-                    thread:pause()
+                    if not isForceSync then thread:pause() end
                 end
             end):resume({
-                executions = downloadSettings.syncRate,
-                frames = 1
+                executions = (not isForceSync and downloadSettings.syncRate) or 1,
+                frames = (not isForceSync and 1) or 0
             })
         else
             network:emit("Assetify:onRecieveSyncedEntityData", true, false, targetPlayer, element, data, value)
