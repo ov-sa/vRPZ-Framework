@@ -116,6 +116,10 @@ bundler["core"] = [[
         }
 
         if localPlayer then
+            assetify.isSyncLoaded = function()
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isSyncLoaded")
+            end
+
             assetify.getProgress = function(...)
                 return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getLibraryProgress", ...)
             end
@@ -170,10 +174,6 @@ bundler["core"] = [[
 
             assetify.playSound3D = function(...)
                 return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "playSoundAsset3D", ...)
-            end
-
-            assetify.isSyncLoaded = function()
-                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isSyncLoaded")
             end
         end
 
