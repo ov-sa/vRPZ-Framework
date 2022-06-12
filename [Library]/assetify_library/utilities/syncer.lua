@@ -477,6 +477,7 @@ else
                 if syncModules then
                     local isModuleVoid = true
                     network:emit("Assetify:onRecieveBandwidth", true, false, player, syncer.libraryBandwidth)
+                    cThread:await(network:emitCallback(cThread, "Assetify:onRequestPreSyncPool", false, player))
                     if availableAssetPacks["module"] and availableAssetPacks["module"].assetPack then
                         for i, j in imports.pairs(availableAssetPacks["module"].assetPack) do
                             if i ~= "rwDatas" then
@@ -569,7 +570,7 @@ else
         thread:pause()
     end
 
-    network:create("Assetify:onRequestPreSyncedPool"):on(function(source)
+    network:create("Assetify:onRequestPreSyncPool", true):on(function(__cThread, source)
         local __source = source
         thread:create(function(cThread)
             local source = __source
@@ -578,17 +579,20 @@ else
                 thread:pause()
             end
             for i, j in imports.pairs(syncer.syncedEntityDatas) do
-                for k, v in pairs(j) do
+                for k, v in imports.pairs(j) do
                     syncer:syncElementData(i, k, v, source)
                     thread:pause()
                 end
                 thread:pause()
             end
+            __cThread:resume()
+            return true
         end):resume({
             executions = downloadSettings.syncRate,
             frames = 1
         })
-    end)
+        __cThread:pause()
+    end, true)
 
     network:create("Assetify:onRequestSyncedPool"):on(function(source)
         local __source = source
