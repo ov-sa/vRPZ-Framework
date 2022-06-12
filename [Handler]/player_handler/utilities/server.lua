@@ -18,7 +18,6 @@ local imports = {
     isElement = isElement,
     createElement = createElement,
     getElementType = getElementType,
-    getElementsByType = getElementsByType,
     getTickCount = getTickCount,
     addEventHandler = addEventHandler,
     cancelEvent = cancelEvent,
@@ -144,14 +143,4 @@ CGame.execOnModuleLoad(function()
             end
         end
     end)
-end)
-
-imports.addEventHandler("onResourceStop", resource, function()
-    local serverPlayers = imports.getElementsByType("player")
-    imports.thread:create(function(self)
-        for i = 1, #serverPlayers, 1 do
-            local j = serverPlayers[i]
-            CCharacter.saveProgress(self, j)
-        end
-    end):resume()
 end)
