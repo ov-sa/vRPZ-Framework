@@ -112,7 +112,7 @@ if localPlayer then
     end
 
     network:fetch("Assetify:onLoad"):on(function()
-        network:emit("Assetify:onRequestSyncedPool", true, false, localPlayer)
+        network:emit("Assetify:onRequestPostSyncPool", true, false, localPlayer)
     end)
 
     network:create("Assetify:onRecieveBandwidth"):on(function(bandwidth)
@@ -558,18 +558,6 @@ else
         syncer:syncPack(source)
     end)
 
-    for i, j in imports.pairs(syncer.syncedGlobalDatas) do
-        syncer:syncGlobalData(i, j, source)
-        thread:pause()
-    end
-    for i, j in imports.pairs(syncer.syncedEntityDatas) do
-        for k, v in pairs(j) do
-            syncer:syncEntityData(i, k, v, source)
-            thread:pause()
-        end
-        thread:pause()
-    end
-
     network:create("Assetify:onRequestPreSyncPool", true):on(function(__cThread, source)
         local __source = source
         thread:create(function(cThread)
@@ -594,7 +582,7 @@ else
         __cThread:pause()
     end, true)
 
-    network:create("Assetify:onRequestSyncedPool"):on(function(source)
+    network:create("Assetify:onRequestPostSyncPool"):on(function(source)
         local __source = source
         thread:create(function(cThread)
             local source = __source
