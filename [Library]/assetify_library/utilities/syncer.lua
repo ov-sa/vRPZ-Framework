@@ -310,17 +310,17 @@ else
         return network:emit("Assetify:onRecieveState", true, false, player, ...)
     end
 
-    function syncer:syncGlobalData(data, value, isForceSync, targetPlayer)
+    function syncer:syncGlobalData(data, value, isSync, targetPlayer)
         if not element or not imports.isElement(element) then return false end
         if not targetPlayer then
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncGlobalData(data, value, isForceSync, i)
-                    if not isForceSync then thread:pause() end
+                    syncer:syncGlobalData(data, value, isSync, i)
+                    if not isSync then thread:pause() end
                 end
             end):resume({
-                executions = (not isForceSync and downloadSettings.syncRate) or 1,
-                frames = (not isForceSync and 1) or 0
+                executions = (not isSync and downloadSettings.syncRate) or 1,
+                frames = (not isSync and 1) or 0
             })
         else
             network:emit("Assetify:onRecieveSyncedGlobalData", true, false, targetPlayer, data, value)
@@ -328,17 +328,17 @@ else
         return true
     end
 
-    function syncer:syncEntityData(element, data, value, isForceSync, targetPlayer)
+    function syncer:syncEntityData(element, data, value, isSync, targetPlayer)
         if not targetPlayer then
             if not element or not imports.isElement(element) then return false end
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncEntityData(element, data, value, isForceSync, i)
-                    if not isForceSync then thread:pause() end
+                    syncer:syncEntityData(element, data, value, isSync, i)
+                    if not isSync then thread:pause() end
                 end
             end):resume({
-                executions = (not isForceSync and downloadSettings.syncRate) or 1,
-                frames = (not isForceSync and 1) or 0
+                executions = (not isSync and downloadSettings.syncRate) or 1,
+                frames = (not isSync and 1) or 0
             })
         else
             network:emit("Assetify:onRecieveSyncedEntityData", true, false, targetPlayer, element, data, value)
