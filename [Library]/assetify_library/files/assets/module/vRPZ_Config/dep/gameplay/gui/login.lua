@@ -317,7 +317,7 @@ FRAMEWORK_CONFIGS["UI"]["Login"] = {
                 "ov | April (Designer)",
                 "ov | Tron (Developer)",
                 "ov | Neor (Developer)",
-                "ov | Аниса (Developer)",
+                "ov | Anisa (Developer)",
                 "ov | Skann (Modeler)",
                 "ov | Mazvis (Contributor)",
                 "ov | Drew (Contributor)",
