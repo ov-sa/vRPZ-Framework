@@ -24,6 +24,11 @@ CGame = {
         local imports = {}
     ]],
     CTickSyncer = nil,
+
+    setGlobalData = function(data, value) imports.assetify.syncer.setGlobalData(data, value, true) end,
+    setEntityData = function(element, data, value) imports.assetify.syncer.setEntityData(element, data, value, true) end,
+    getGlobalData = imports.assetify.syncer.getGlobalData,
+    getEntityData = imports.assetify.syncer.getEntityData,
     execOnLoad = imports.assetify.scheduler.execOnLoad,
     execOnModuleLoad = imports.assetify.scheduler.execOnModuleLoad,
 
@@ -48,9 +53,9 @@ CGame = {
 
     getServerTick = function()
         local cTick = 0
-        CGame.CTickSyncer = (CGame.CTickSyncer and import.isElement(CGame.CTickSyncer) and CGame.CTickSyncer) or imports.assetify.syncer.getGlobalData("Server:TickSyncer")
+        CGame.CTickSyncer = (CGame.CTickSyncer and import.isElement(CGame.CTickSyncer) and CGame.CTickSyncer) or CGame.getGlobalData("Server:TickSyncer")
         if CGame.CTickSyncer then
-            cTick = imports.tonumber(imports.assetify.syncer.getEntityData(CGame.CTickSyncer, "Server:TickSyncer")) or 0
+            cTick = imports.tonumber(CGame.getEntityData(CGame.CTickSyncer, "Server:TickSyncer")) or 0
         end
         return cTick
     end,

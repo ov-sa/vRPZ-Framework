@@ -5,8 +5,7 @@
 local imports = {
     tonumber = tonumber,
     isElement = isElement,
-    getElementType = getElementType,
-    assetify = assetify
+    getElementType = getElementType
 }
 
 
@@ -30,7 +29,7 @@ CPlayer = {
 
     getCharacterID = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.tonumber(imports.assetify.syncer.getEntityData(player, "Character:ID")) or false
+        return imports.tonumber(CGame.getEntityData(player, "Character:ID")) or false
     end,
 
     getParty = function(player)
