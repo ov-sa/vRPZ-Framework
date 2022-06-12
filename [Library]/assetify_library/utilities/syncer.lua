@@ -328,12 +328,12 @@ else
         return true
     end
 
-    function syncer:syncElementData(element, data, value, targetPlayer)
+    function syncer:syncEntityData(element, data, value, targetPlayer)
         if not targetPlayer then
             if not element or not imports.isElement(element) then return false end
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncElementData(element, data, value, i)
+                    syncer:syncEntityData(element, data, value, i)
                     thread:pause()
                 end
             end):resume({
@@ -564,7 +564,7 @@ else
     end
     for i, j in imports.pairs(syncer.syncedEntityDatas) do
         for k, v in pairs(j) do
-            syncer:syncElementData(i, k, v, source)
+            syncer:syncEntityData(i, k, v, source)
             thread:pause()
         end
         thread:pause()
@@ -580,7 +580,7 @@ else
             end
             for i, j in imports.pairs(syncer.syncedEntityDatas) do
                 for k, v in imports.pairs(j) do
-                    syncer:syncElementData(i, k, v, source)
+                    syncer:syncEntityData(i, k, v, source)
                     thread:pause()
                 end
                 thread:pause()

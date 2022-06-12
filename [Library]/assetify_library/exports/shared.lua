@@ -89,7 +89,7 @@ function setEntityData(element, data, value)
     if not element or not imports.isElement(element) or not data or (imports.type(data) ~= "string") then return false end
     syncer.syncedEntityDatas[element] = syncer.syncedEntityDatas[element] or {}
     syncer.syncedEntityDatas[element][data] = value
-    if not localPlayer then syncer:syncElementData(element, data, value) end
+    if not localPlayer then syncer:syncEntityData(element, data, value) end
     return true
 end
 
