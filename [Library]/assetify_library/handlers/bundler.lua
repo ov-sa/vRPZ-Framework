@@ -116,10 +116,6 @@ bundler["core"] = [[
         }
 
         if localPlayer then
-            assetify.isSyncLoaded = function()
-                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isSyncLoaded")
-            end
-
             assetify.getProgress = function(...)
                 return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getLibraryProgress", ...)
             end
@@ -241,7 +237,7 @@ bundler["scheduler"] = [[
     ]]..bundler["networker"].rw..[[
     end
     assetify.scheduler = {
-        buffer = {onLoad = {}, onModuleLoad = {}, onSyncLoad = {}},
+        buffer = {onLoad = {}, onModuleLoad = {}},
         execOnLoad = function(execFunc)
             if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
             local isLoaded = assetify.isLoaded()
@@ -305,44 +301,9 @@ bundler["scheduler"] = [[
                 end
                 return true
             end)
-            if localPlayer then
-                assetify.scheduler.execOnSyncLoad(function()
-                    if #assetify.scheduler.buffer.onSyncLoad > 0 then
-                        for i = 1, #assetify.scheduler.buffer.onSyncLoad, 1 do
-                            assetify.scheduler.execOnSyncLoad(assetify.scheduler.buffer.onSyncLoad[i])
-                        end
-                        assetify.scheduler.buffer.onSyncLoad = {}
-                    end
-                    return true
-                end)
-            end
             return true
         end
     }
-
-    if localPlayer then
-        assetify.scheduler.execOnSyncLoad = function(execFunc)
-            if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
-            local isLoaded = assetify.isSyncLoaded()
-            if isLoaded then
-                execFunc()
-            else
-                local execWrapper = nil
-                execWrapper = function()
-                    execFunc()
-                    network:fetch("Assetify:onSyncLoad"):off(execWrapper)
-                end
-                network:fetch("Assetify:onSyncLoad", true):on(execWrapper)
-            end
-            return true
-        end
-
-        assetify.scheduler.execScheduleOnSyncLoad = function(execFunc)
-            if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
-            assetify.imports.table.insert(assetify.scheduler.buffer.onSyncLoad, execFunc)
-            return true
-        end
-    end
 ]]
 
 bundler["renderer"] = [[

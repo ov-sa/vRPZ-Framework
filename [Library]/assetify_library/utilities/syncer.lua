@@ -46,7 +46,7 @@ syncer = {
     isModuleLoaded = false,
     libraryBandwidth = 0,
     syncedGlobalDatas = {},
-    syncedElementDatas = {},
+    syncedEntityDatas = {},
     syncedElements = {},
     syncedAssetDummies = {},
     syncedBoneAttachments = {},
@@ -86,17 +86,6 @@ if localPlayer then
     availableAssetPacks = {}
     network:create("Assetify:onAssetLoad")
     network:create("Assetify:onAssetUnload")
-    network:create("Assetify:onSyncLoad")
-    syncer.execOnSyncLoad = function(execFunc)
-        local execWrapper = nil
-        execWrapper = function()
-            execFunc()
-            network:fetch("Assetify:onSyncLoad"):off(execWrapper)
-        end
-        network:fetch("Assetify:onSyncLoad"):on(execWrapper)
-        return true
-    end
-    syncer.execOnSyncLoad(function() syncer.isSyncLoaded = true end)
 
     function syncer:syncElementModel(...)
         return network:emit("Assetify:onRecieveSyncedElement", false, ...)
@@ -250,8 +239,8 @@ if localPlayer then
 
     network:create("Assetify:onRecieveSyncedElementData"):on(function(element, data, value)
         if not element or not imports.isElement(element) then return false end
-        syncer.syncedElementDatas[element] = syncer.syncedElementDatas[element] or {}
-        syncer.syncedElementDatas[element][data] = value
+        syncer.syncedEntityDatas[element] = syncer.syncedEntityDatas[element] or {}
+        syncer.syncedEntityDatas[element][data] = value
     end)
 
     network:create("Assetify:onRecieveSyncedElement"):on(function(element, assetType, assetName, assetClump, clumpMaps)
@@ -568,7 +557,19 @@ else
         syncer:syncPack(source)
     end)
 
-    network:create("Assetify:onRequestSyncedPool"):on(function(source)
+    for i, j in imports.pairs(syncer.syncedGlobalDatas) do
+        syncer:syncGlobalData(i, j, source)
+        thread:pause()
+    end
+    for i, j in imports.pairs(syncer.syncedEntityDatas) do
+        for k, v in pairs(j) do
+            syncer:syncElementData(i, k, v, source)
+            thread:pause()
+        end
+        thread:pause()
+    end
+
+    network:create("Assetify:onRequestPreSyncedPool"):on(function(source)
         local __source = source
         thread:create(function(cThread)
             local source = __source
@@ -576,13 +577,23 @@ else
                 syncer:syncGlobalData(i, j, source)
                 thread:pause()
             end
-            for i, j in imports.pairs(syncer.syncedElementDatas) do
+            for i, j in imports.pairs(syncer.syncedEntityDatas) do
                 for k, v in pairs(j) do
                     syncer:syncElementData(i, k, v, source)
                     thread:pause()
                 end
                 thread:pause()
             end
+        end):resume({
+            executions = downloadSettings.syncRate,
+            frames = 1
+        })
+    end)
+
+    network:create("Assetify:onRequestSyncedPool"):on(function(source)
+        local __source = source
+        thread:create(function(cThread)
+            local source = __source
             for i, j in imports.pairs(syncer.syncedElements) do
                 if j then
                     syncer:syncElementModel(i, j.type, j.name, j.clump, j.clumpMaps, source)
@@ -601,7 +612,6 @@ else
                 end
                 thread:pause()
             end
-            network:emit("Assetify:onSyncLoad", true, false, source)
         end):resume({
             executions = downloadSettings.syncRate,
             frames = 1
@@ -631,7 +641,7 @@ else
     end)
     imports.addEventHandler("onElementDestroy", root, function()
         syncer.syncedGlobalDatas[source] = nil
-        syncer.syncedElementDatas[source] = nil
+        syncer.syncedEntityDatas[source] = nil
         syncer.syncedElements[source] = nil
         syncer.syncedAssetDummies[source] = nil
         syncer.syncedLights[source] = nil
