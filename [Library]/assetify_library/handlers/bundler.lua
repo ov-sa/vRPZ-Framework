@@ -237,7 +237,7 @@ bundler["scheduler"] = [[
     ]]..bundler["networker"].rw..[[
     end
     assetify.scheduler = {
-        buffer = {onLoad = {}, onModuleLoad = {}},
+        buffer = {onLoad = {}, onModuleLoad = {}, onSyncLoad = {}},
         execOnLoad = function(execFunc)
             if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
             local isLoaded = assetify.isLoaded()
@@ -270,6 +270,22 @@ bundler["scheduler"] = [[
             return true
         end,
 
+        execOnSyncLoad = function(execFunc)
+            if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
+            local isLoaded = assetify.isLoaded()
+            if isLoaded then
+                execFunc()
+            else
+                local execWrapper = nil
+                execWrapper = function()
+                    execFunc()
+                    network:fetch("Assetify:onSyncLoad"):off(execWrapper)
+                end
+                network:fetch("Assetify:onSyncLoad", true):on(execWrapper)
+            end
+            return true
+        end,
+
         execScheduleOnLoad = function(execFunc)
             if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
             assetify.imports.table.insert(assetify.scheduler.buffer.onLoad, execFunc)
@@ -279,6 +295,12 @@ bundler["scheduler"] = [[
         execScheduleOnModuleLoad = function(execFunc)
             if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
             assetify.imports.table.insert(assetify.scheduler.buffer.onModuleLoad, execFunc)
+            return true
+        end,
+
+        execScheduleOnSyncLoad = function(execFunc)
+            if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
+            assetify.imports.table.insert(assetify.scheduler.buffer.onSyncLoad, execFunc)
             return true
         end,
 
@@ -298,6 +320,15 @@ bundler["scheduler"] = [[
                         assetify.scheduler.execOnModuleLoad(assetify.scheduler.buffer.onModuleLoad[i])
                     end
                     assetify.scheduler.buffer.onModuleLoad = {}
+                end
+                return true
+            end)
+            assetify.scheduler.execOnSyncLoad(function()
+                if #assetify.scheduler.buffer.onSyncLoad > 0 then
+                    for i = 1, #assetify.scheduler.buffer.onSyncLoad, 1 do
+                        assetify.scheduler.execOnSyncLoad(assetify.scheduler.buffer.onSyncLoad[i])
+                    end
+                    assetify.scheduler.buffer.onSyncLoad = {}
                 end
                 return true
             end)
