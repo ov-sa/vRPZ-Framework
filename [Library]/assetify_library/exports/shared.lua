@@ -73,10 +73,10 @@ function getElementAssetInfo(element)
     return syncer.syncedElements[element].type, syncer.syncedElements[element].name, syncer.syncedElements[element].clump, syncer.syncedElements[element].clumpMaps
 end
 
-function setGlobalData(data, value)
+function setGlobalData(data, value, isForceSync)
     if imports.type(data) ~= "string" then return false end
     syncer.syncedGlobalDatas[data] = value
-    if not localPlayer then syncer:syncGlobalData(data, value) end
+    if not localPlayer then syncer:syncGlobalData(data, value, isForceSync) end
     return true
 end
 
@@ -85,11 +85,11 @@ function getGlobalData(data)
     return syncer.syncedGlobalDatas[data]
 end
 
-function setEntityData(element, data, value)
+function setEntityData(element, data, value, isForceSync)
     if not element or not imports.isElement(element) or not data or (imports.type(data) ~= "string") then return false end
     syncer.syncedEntityDatas[element] = syncer.syncedEntityDatas[element] or {}
     syncer.syncedEntityDatas[element][data] = value
-    if not localPlayer then syncer:syncEntityData(element, data, value) end
+    if not localPlayer then syncer:syncEntityData(element, data, value, isForceSync) end
     return true
 end
 

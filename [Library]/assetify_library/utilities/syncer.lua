@@ -310,12 +310,12 @@ else
         return network:emit("Assetify:onRecieveState", true, false, player, ...)
     end
 
-    function syncer:syncGlobalData(data, value, targetPlayer)
+    function syncer:syncGlobalData(data, value, isForceSync, targetPlayer)
         if not element or not imports.isElement(element) then return false end
         if not targetPlayer then
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncGlobalData(data, value, i)
+                    syncer:syncGlobalData(data, value, isForceSync, i)
                     thread:pause()
                 end
             end):resume({
@@ -328,12 +328,12 @@ else
         return true
     end
 
-    function syncer:syncEntityData(element, data, value, targetPlayer)
+    function syncer:syncEntityData(element, data, value, isForceSync, targetPlayer)
         if not targetPlayer then
             if not element or not imports.isElement(element) then return false end
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncEntityData(element, data, value, i)
+                    syncer:syncEntityData(element, data, value, isForceSync, i)
                     thread:pause()
                 end
             end):resume({
@@ -563,12 +563,12 @@ else
         thread:create(function(cThread)
             local source = __source
             for i, j in imports.pairs(syncer.syncedGlobalDatas) do
-                syncer:syncGlobalData(i, j, source)
+                syncer:syncGlobalData(i, j, false, source)
                 thread:pause()
             end
             for i, j in imports.pairs(syncer.syncedEntityDatas) do
                 for k, v in imports.pairs(j) do
-                    syncer:syncEntityData(i, k, v, source)
+                    syncer:syncEntityData(i, k, v, false, source)
                     thread:pause()
                 end
                 thread:pause()
