@@ -63,6 +63,7 @@
     <export function="setBoneDetachment" type="shared"/>
     <export function="setBoneRefreshment" type="shared"/>
     <export function="clearBoneAttachment" type="shared"/>
+    <export function="isSyncLoaded" type="client"/>
     <export function="getLibraryProgress" type="client"/>
     <export function="getAssetID" type="client"/>
     <export function="isAssetLoaded" type="client"/>

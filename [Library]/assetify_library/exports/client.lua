@@ -32,6 +32,10 @@ local imports = {
 --[[ Functions: APIs ]]--
 -------------------------
 
+function isSyncLoaded()
+    return syncer.isSyncLoaded
+end
+
 function getLibraryProgress(assetType, assetName)
     local cDownloaded, cBandwidth = nil, nil
     if assetType and assetName then

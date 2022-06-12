@@ -87,6 +87,16 @@ if localPlayer then
     network:create("Assetify:onAssetLoad")
     network:create("Assetify:onAssetUnload")
     network:create("Assetify:onSyncLoad")
+    syncer.execOnSyncLoad = function(execFunc)
+        local execWrapper = nil
+        execWrapper = function()
+            execFunc()
+            network:fetch("Assetify:onSyncLoad"):off(execWrapper)
+        end
+        network:fetch("Assetify:onSyncLoad"):on(execWrapper)
+        return true
+    end
+    syncer.execOnSyncLoad(function() syncer.isSyncLoaded = true end)
 
     function syncer:syncElementModel(...)
         return network:emit("Assetify:onRecieveSyncedElement", false, ...)
