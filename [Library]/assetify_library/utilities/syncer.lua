@@ -86,6 +86,7 @@ if localPlayer then
     availableAssetPacks = {}
     network:create("Assetify:onAssetLoad")
     network:create("Assetify:onAssetUnload")
+    network:create("Assetify:onSyncLoad")
 
     function syncer:syncElementModel(...)
         return network:emit("Assetify:onRecieveSyncedElement", false, ...)
@@ -590,6 +591,7 @@ else
                 end
                 thread:pause()
             end
+            network:emit("Assetify:onSyncLoad", true, false, source)
         end):resume({
             executions = downloadSettings.syncRate,
             frames = 1
