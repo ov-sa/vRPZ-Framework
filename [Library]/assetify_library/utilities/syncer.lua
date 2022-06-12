@@ -574,12 +574,12 @@ else
                 thread:pause()
             end
             __cThread:resume()
-            return true
         end):resume({
             executions = downloadSettings.syncRate,
             frames = 1
         })
         __cThread:pause()
+        return true
     end, true)
 
     network:create("Assetify:onRequestPostSyncPool"):on(function(source)
