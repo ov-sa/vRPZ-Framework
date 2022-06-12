@@ -193,7 +193,7 @@ if localPlayer then
             end
             if isSyncDone then
                 if assetType == "module" then
-                    network:emit("Assetify:onRequestAssets", true, false, localPlayer)
+                    network:emit("Assetify:onRequestSyncPack", true, false, localPlayer)
                     thread:create(function(cThread)
                         if availableAssetPacks["module"].autoLoad and availableAssetPacks["module"].rwDatas then
                             for i, j in imports.pairs(availableAssetPacks["module"].rwDatas) do
@@ -495,7 +495,7 @@ else
                     end
                     if isModuleVoid then
                         network:emit("Assetify:onModuleLoad", true, false, player)
-                        network:emit("Assetify:onRequestAssets", false, player)
+                        network:emit("Assetify:onRequestSyncPack", false, player)
                     end
                 else
                     local isLibraryVoid = true
@@ -554,7 +554,7 @@ else
         })
     end)
 
-    network:create("Assetify:onRequestAssets"):on(function(source)
+    network:create("Assetify:onRequestSyncPack"):on(function(source)
         syncer:syncPack(source)
     end)
 
