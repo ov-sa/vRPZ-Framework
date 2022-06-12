@@ -41,6 +41,10 @@ local imports = {
 --[[ Utils ]]--
 ---------------
 
+isElement = function(element)
+    return imports.type(element) == "userdata"
+end
+
 decodeString = function(decodeType, decodeData, decodeOptions, removeNull)
     if not decodeData or (imports.type(decodeData) ~= "string") then return false end
     local rawString = imports.decodeString(decodeType, decodeData, decodeOptions)
