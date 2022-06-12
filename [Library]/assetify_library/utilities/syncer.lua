@@ -237,7 +237,7 @@ if localPlayer then
         syncer.syncedGlobalDatas[data] = value
     end)
 
-    network:create("Assetify:onRecieveSyncedElementData"):on(function(element, data, value)
+    network:create("Assetify:onRecieveSyncedEntityData"):on(function(element, data, value)
         if not element or not imports.isElement(element) then return false end
         syncer.syncedEntityDatas[element] = syncer.syncedEntityDatas[element] or {}
         syncer.syncedEntityDatas[element][data] = value
@@ -341,7 +341,7 @@ else
                 frames = 1
             })
         else
-            network:emit("Assetify:onRecieveSyncedElementData", true, false, targetPlayer, element, data, value)
+            network:emit("Assetify:onRecieveSyncedEntityData", true, false, targetPlayer, element, data, value)
         end
         return true
     end
