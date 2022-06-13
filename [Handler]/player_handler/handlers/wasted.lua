@@ -140,7 +140,7 @@ end)
 
 imports.network:create("Player:onSpawn"):on(function(source, spawnpoint, loadCharacterID)
     spawnpoint = spawnpoint or CGame.generateSpawn()
-    local characterID = loadCharacterID or CPlayer.getCharacterID(source, true)
+    local characterID = loadCharacterID or CPlayer.getCharacterID(source)
     local characterIdentity = CCharacter.CBuffer[characterID].identity
     local characterClothing = {CCharacter.generateClothing(characterIdentity)}
     imports.spawnPlayer(source, spawnpoint.position[1], spawnpoint.position[2], spawnpoint.position[3] + 1, spawnpoint.rotation[3])

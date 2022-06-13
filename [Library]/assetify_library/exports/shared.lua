@@ -87,7 +87,7 @@ function setEntityData(...)
 end
 
 function getEntityData(element, data)
-    if not element or not imports.isElement(element) or not data or (imports.type(data) ~= "string") then return false end
+    if not element or not data or (imports.type(data) ~= "string") then return false end
     return syncer.syncedEntityDatas[element] and syncer.syncedEntityDatas[element][data]
 end
 
