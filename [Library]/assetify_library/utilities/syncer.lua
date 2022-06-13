@@ -282,6 +282,21 @@ if localPlayer then
     network:create("Assetify:onRecieveClearBoneAttachment"):on(function(...) syncer:syncClearBoneAttachment(...) end)
     imports.addEventHandler("onClientElementDimensionChange", localPlayer, function(dimension) streamer:update(dimension) end)
     imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(interior) streamer:update(_, interior) end)
+    network:create("Assetify:onElementDestroy"):on(function(source)
+        shader:clearElementBuffer(source)
+        dummy:clearElementBuffer(source)
+        bone:clearElementBuffer(source)
+        manager:clearElementBuffer(source)
+        syncer.syncedEntityDatas[source] = nil
+        for i, j in imports.pairs(light) do
+            if j and (imports.type(j) == "table") and j.clearElementBuffer then
+                j:clearElementBuffer(source)
+            end
+        end
+    end)
+    imports.addEventHandler("onClientElementDestroy", root, function()
+        network:emit("Assetify:onElementDestroy", false, source)
+    end)
 else
     syncer.libraryVersion = imports.getResourceInfo(resource, "version")
     syncer.libraryVersion = (syncer.libraryVersion and "v."..syncer.libraryVersion) or syncer.libraryVersion
@@ -621,6 +636,13 @@ else
         })
     end)
 
+    imports.fetchRemote(syncer.librarySource, function(response, status)
+        if not response or not status or (status ~= 0) then return false end
+        response = imports.json.decode(response)
+        if response and response.tag_name and (syncer.libraryVersion ~= response.tag_name) then
+            imports.outputDebugString("[Assetify]: Latest version available - "..response.tag_name, 3)
+        end
+    end)
     imports.addEventHandler("onPlayerResourceStart", root, function(resourceElement)
         if imports.getResourceRootElement(resourceElement) == resourceRoot then
             if syncer.isLibraryLoaded then
@@ -629,14 +651,6 @@ else
             else
                 syncer.scheduledClients[source] = true
             end
-        end
-    end)
-
-    imports.fetchRemote(syncer.librarySource, function(response, status)
-        if not response or not status or (status ~= 0) then return false end
-        response = imports.json.decode(response)
-        if response and response.tag_name and (syncer.libraryVersion ~= response.tag_name) then
-            imports.outputDebugString("[Assetify]: Latest version available - "..response.tag_name, 3)
         end
     end)
     imports.addEventHandler("onElementModelChange", root, function()

@@ -418,22 +418,6 @@ if localPlayer then
         end
         return cSound
     end
-
-    network:create("Assetify:onElementDestroy"):on(function(source)
-        shader:clearElementBuffer(source)
-        dummy:clearElementBuffer(source)
-        bone:clearElementBuffer(source)
-        manager:clearElementBuffer(source)
-        syncer.syncedEntityDatas[source] = nil
-        for i, j in imports.pairs(light) do
-            if j and (imports.type(j) == "table") and j.clearElementBuffer then
-                j:clearElementBuffer(source)
-            end
-        end
-    end)
-    imports.addEventHandler("onClientElementDestroy", root, function()
-        network:emit("Assetify:onElementDestroy", false, source)
-    end)
 else
     function manager:getData(assetType, assetName, isInternal)
         if not assetType or not assetName then return false end
