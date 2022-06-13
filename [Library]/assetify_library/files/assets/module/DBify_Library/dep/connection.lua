@@ -5,10 +5,10 @@
 dbify = {
     settings = {
         credentials = {
-            username = "VI6xOaUS1Q",
-            password = "KbpKWUTtUM",
-            database = "VI6xOaUS1Q",
-            host = "remotemysql.com",
+            username = "sql10499499",
+            password = "RbCyM1M5k8",
+            database = "sql10499499",
+            host = "sql10.freemysqlhosting.net",
             port = "3306",
             options = ""
         },
