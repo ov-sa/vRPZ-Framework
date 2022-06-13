@@ -89,7 +89,7 @@ function thread:resume(syncRate)
                     status = self:status()
                     if status == "dead" then
                         self:destroy()
-                        return
+                        return false
                     end
                     imports.coroutine.resume(self.thread, self)
                 end
