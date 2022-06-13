@@ -343,7 +343,6 @@ else
         if cAssetPack.manifestData then
             cAssetPack.rwDatas = {}
             thread:create(function(self)
-                local callback = callback
                 for i = 1, #cAssetPack.manifestData, 1 do
                     local assetName = cAssetPack.manifestData[i]
                     local assetPath = (asset.references.root)..imports.string.lower(assetType).."/"..assetName.."/"
