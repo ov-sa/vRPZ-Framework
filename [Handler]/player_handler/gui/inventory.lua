@@ -808,7 +808,7 @@ CGame.execOnModuleLoad(function()
             inventoryUI.updateUILang()
             --TODO: ENABLE LATER
             --inventoryUI.vicinityInventory.element = CCharacter.isInLoot(localPlayer)
-            inventoryUI.vicinityInventory.element = getElementsByType("ped")[1] --TODO: REMOVE IT LATER AND ENABLE ^
+            inventoryUI.vicinityInventory.element = CGame.getGlobalData("Loot:Test") --TODO: REMOVE LATER
             imports.network:emit("Client:onEnableInventoryUI", false, true)
             inventoryUI.createBuffer(localPlayer, imports.string.format(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory["Title"][(CPlayer.CLanguage)], imports.getPlayerName(localPlayer)))
             inventoryUI.createBuffer(inventoryUI.vicinityInventory.element)
