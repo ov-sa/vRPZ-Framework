@@ -132,7 +132,7 @@ CGame.execOnModuleLoad(function()
                             imports.thread:create(function(self)
                                 local source = __source
                                 imports.network:emit("Client:onToggleLoadingUI", true, false, source, true)
-                                imports.outputChatBox("#C8C8C8- #5050FF"..(imports.getPlayerName(source)).."#C8C8C8 left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)
+                                imports.outputChatBox("#C8C8C8- #5050FF"..imports.getPlayerName(source).."#C8C8C8 left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)
                                 CCharacter.saveProgress(self, source)
                                 imports.network:emit("Player:onToggleLoginUI", false, source)
                             end):resume()
@@ -142,5 +142,13 @@ CGame.execOnModuleLoad(function()
                 break
             end
         end
+    end)
+    imports.addEventHandler("onPlayerQuit", root, function()
+        local __source = source
+        imports.thread:create(function(self)
+            local source = __source
+            imports.outputChatBox("#C8C8C8- #5050FF"..imports.getPlayerName(source).."#C8C8C8 left. #5050FF[Reason: Quit]", root, 255, 255, 255, true)
+            CCharacter.saveProgress(self, source)
+        end):resume()
     end)
 end)
