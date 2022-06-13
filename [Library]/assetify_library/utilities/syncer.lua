@@ -584,7 +584,7 @@ else
         syncer:syncPack(source)
     end)
 
-    network:create("Assetify:onRequestPreSyncPool", true):on(function(__cThread, source)
+    network:create("Assetify:onRequestPreSyncPool", true):on(function(__self, source)
         local __source = source
         thread:create(function(self)
             local source = __source
@@ -599,12 +599,12 @@ else
                 end
                 thread:pause()
             end
-            __cThread:resume()
+            __self:resume()
         end):resume({
             executions = downloadSettings.syncRate,
             frames = 1
         })
-        __cThread:pause()
+        __self:pause()
         return true
     end, true)
 
