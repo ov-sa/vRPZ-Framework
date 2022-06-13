@@ -388,7 +388,7 @@ else
                 frames = 1
             })
         else
-            network:emit("Assetify:onRecieveSyncedElement", true, false, targetPlayer, element, assetType, assetName, assetClump, clumpMaps, true)
+            network:emit("Assetify:onRecieveSyncedElement", true, false, targetPlayer, element, assetType, assetName, assetClump, clumpMaps)
         end
         return true
     end
@@ -409,7 +409,7 @@ else
             })
             return cDummy
         else
-            network:emit("Assetify:onRecieveAssetDummy", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, true)
+            network:emit("Assetify:onRecieveAssetDummy", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy)
         end
         return true
     end
@@ -428,7 +428,7 @@ else
                 frames = 1
             })
         else
-            network:emit("Assetify:onRecieveBoneAttachment", true, false, targetPlayer, element, parent, boneData, true)
+            network:emit("Assetify:onRecieveBoneAttachment", true, false, targetPlayer, element, parent, boneData)
         end
         return true
     end
@@ -447,7 +447,7 @@ else
                 frames = 1
             })
         else
-            network:emit("Assetify:onRecieveBoneDetachment", true, false, targetPlayer, element, true)
+            network:emit("Assetify:onRecieveBoneDetachment", true, false, targetPlayer, element)
         end
         return true
     end
@@ -466,7 +466,7 @@ else
                 frames = 1
             })
         else
-            network:emit("Assetify:onRecieveBoneRefreshment", true, false, targetPlayer, element, boneData, true)
+            network:emit("Assetify:onRecieveBoneRefreshment", true, false, targetPlayer, element, boneData)
         end
         return true
     end
@@ -492,7 +492,7 @@ else
                 frames = 1
             })
         else
-            network:emit("Assetify:onRecieveClearBoneAttachment", true, false, targetPlayer, element, true)
+            network:emit("Assetify:onRecieveClearBoneAttachment", true, false, targetPlayer, element)
         end
         return true
     end
