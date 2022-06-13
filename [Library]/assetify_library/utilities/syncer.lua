@@ -649,6 +649,7 @@ else
         syncer.syncedAssetDummies[source] = nil
         syncer.syncedLights[source] = nil
         syncer:syncClearBoneAttachment(source)
+        network:emit("Assetify:onElementDestroy", true, false, false, source)
     end)
     imports.addEventHandler("onPlayerQuit", root, function()
         syncer.loadedClients[source] = nil

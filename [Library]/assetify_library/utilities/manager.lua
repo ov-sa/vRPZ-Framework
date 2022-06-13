@@ -365,19 +365,6 @@ if localPlayer then
         manager:clearElementBuffer(stoppedResource, true)
     end)
 
-    imports.addEventHandler("onClientElementDestroy", root, function()
-        shader:clearElementBuffer(source)
-        dummy:clearElementBuffer(source)
-        bone:clearElementBuffer(source)
-        manager:clearElementBuffer(source)
-        syncer.syncedEntityDatas[source] = nil
-        for i, j in imports.pairs(light) do
-            if j and (imports.type(j) == "table") and j.clearElementBuffer then
-                j:clearElementBuffer(source)
-            end
-        end
-    end)
-
     function manager:loadAnim(element, assetName)
         if not syncer.isLibraryLoaded then return false end
         if not element or not imports.isElement(element) then return false end
@@ -431,6 +418,22 @@ if localPlayer then
         end
         return cSound
     end
+
+    network:create("Assetify:onElementDestroy"):on(function(source)
+        shader:clearElementBuffer(source)
+        dummy:clearElementBuffer(source)
+        bone:clearElementBuffer(source)
+        manager:clearElementBuffer(source)
+        syncer.syncedEntityDatas[source] = nil
+        for i, j in imports.pairs(light) do
+            if j and (imports.type(j) == "table") and j.clearElementBuffer then
+                j:clearElementBuffer(source)
+            end
+        end
+    end)
+    imports.addEventHandler("onClientElementDestroy", root, function()
+        network:emit("Assetify:onElementDestroy", false, source)
+    end)
 else
     function manager:getData(assetType, assetName, isInternal)
         if not assetType or not assetName then return false end
