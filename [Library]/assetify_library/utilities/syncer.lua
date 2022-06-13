@@ -100,7 +100,7 @@ if localPlayer then
     end
 
     function syncer:syncEntityData(element, data, value)
-        return network:emit("Assetify:onRecieveSyncedEntityData", false, false, element, data, value)
+        return network:emit("Assetify:onRecieveSyncedEntityData", false, element, data, value)
     end
 
     function syncer:syncBoneAttachment(...)
@@ -249,7 +249,7 @@ if localPlayer then
         syncer.syncedGlobalDatas[data] = value
     end)
 
-    network:create("Assetify:onRecieveSyncedEntityData"):on(function(isValidated, element, data, value)
+    network:create("Assetify:onRecieveSyncedEntityData"):on(function(element, data, value, isValidated)
         if not element or (not isValidated and not imports.isElement(element)) or not data or (imports.type(data) ~= "string") then return false end
         syncer.syncedEntityDatas[element] = syncer.syncedEntityDatas[element] or {}
         syncer.syncedEntityDatas[element][data] = value
@@ -367,7 +367,7 @@ else
                 })
             end
         else
-            network:emit("Assetify:onRecieveSyncedEntityData", true, false, targetPlayer, true, element, data, value)
+            network:emit("Assetify:onRecieveSyncedEntityData", true, false, targetPlayer, element, data, value, true)
         end
         return true
     end
