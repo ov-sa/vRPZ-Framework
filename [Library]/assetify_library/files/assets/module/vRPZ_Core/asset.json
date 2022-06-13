@@ -1,7 +1,7 @@
 {
     "encryptKey": "vStudio - Mario",
     "authors": ["Mario", "Tron", "Aviril", "Аниса", "FlyingFork"],
-    "version": "1.2.1",
+    "version": "1.2.2",
     "assetDeps": {
         "script": {
             "shared": [
