@@ -70,7 +70,7 @@ function bone:destroy(...)
 end
 
 function bone:clearElementBuffer(element)
-    if not element or not imports.isElement(element) then return false end
+    if not element then return false end
     if bone.buffer.element[element] then
         bone.buffer.element[element]:destroy()
     end

@@ -53,7 +53,7 @@ if localPlayer then
     end
 
     function dummy:clearElementBuffer(element)
-        if not element or not imports.isElement(element) or not dummy.buffer[element] then return false end
+        if not element or not dummy.buffer[element] then return false end
         dummy.buffer[element]:destroy()
         return true
     end
