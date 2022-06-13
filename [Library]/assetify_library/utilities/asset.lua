@@ -342,7 +342,7 @@ else
         cAssetPack.manifestData = (cAssetPack.manifestData and imports.json.decode(cAssetPack.manifestData)) or false
         if cAssetPack.manifestData then
             cAssetPack.rwDatas = {}
-            thread:create(function(cThread)
+            thread:create(function(self)
                 local callback = callback
                 for i = 1, #cAssetPack.manifestData, 1 do
                     local assetName = cAssetPack.manifestData[i]
