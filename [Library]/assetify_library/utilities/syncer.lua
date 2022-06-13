@@ -385,7 +385,7 @@ else
             syncer.syncedAssetDummies[cDummy] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps, dummyData = dummyData}
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, cDummy, j)
+                    syncer:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, cDummy, i)
                     thread:pause()
                 end
             end):resume({
@@ -405,7 +405,7 @@ else
             syncer.syncedBoneAttachments[element] = {parent = parent, boneData = boneData}
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncBoneAttachment(element, parent, boneData, j)
+                    syncer:syncBoneAttachment(element, parent, boneData, i)
                     thread:pause()
                 end
             end):resume({
@@ -424,7 +424,7 @@ else
             syncer.syncedBoneAttachments[element] = nil
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncBoneDetachment(element, j)
+                    syncer:syncBoneDetachment(element, i)
                     thread:pause()
                 end
             end):resume({
@@ -443,7 +443,7 @@ else
             syncer.syncedBoneAttachments[element].boneData = boneData
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncBoneRefreshment(element, boneData, j)
+                    syncer:syncBoneRefreshment(element, boneData, i)
                     thread:pause()
                 end
             end):resume({
@@ -469,7 +469,7 @@ else
             end
             thread:create(function(cThread)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncClearBoneAttachment(element, j)
+                    syncer:syncClearBoneAttachment(element, i)
                     thread:pause()
                 end
             end):resume({
@@ -643,13 +643,23 @@ else
         syncer.syncedElements[source] = nil
     end)
     imports.addEventHandler("onElementDestroy", root, function()
-        syncer.syncedGlobalDatas[source] = nil
-        syncer.syncedEntityDatas[source] = nil
-        syncer.syncedElements[source] = nil
-        syncer.syncedAssetDummies[source] = nil
-        syncer.syncedLights[source] = nil
-        syncer:syncClearBoneAttachment(source)
-        network:emit("Assetify:onElementDestroy", true, false, false, source)
+        local __source = source
+        thread:create(function(cThread)
+            local source = __source
+            syncer.syncedGlobalDatas[source] = nil
+            syncer.syncedEntityDatas[source] = nil
+            syncer.syncedElements[source] = nil
+            syncer.syncedAssetDummies[source] = nil
+            syncer.syncedLights[source] = nil
+            syncer:syncClearBoneAttachment(source)
+            for i, j in imports.pairs(syncer.loadedClients) do
+                network:emit("Assetify:onElementDestroy", true, false, i, source)
+                thread:pause()
+            end
+        end):resume({
+            executions = downloadSettings.syncRate,
+            frames = 1
+        })
     end)
     imports.addEventHandler("onPlayerQuit", root, function()
         syncer.loadedClients[source] = nil
