@@ -462,10 +462,14 @@ else
     function syncer:syncBoneRefreshment(element, boneData, targetPlayer)
         if not targetPlayer then
             if not element or not imports.isElement(element) or not boneData or not syncer.syncedBoneAttachments[element] then return false end
+            remoteSignature = {
+                elementType = imports.getElementType(element),
+                elementRotation = {imports.getElementRotation(element, "ZYX")}
+            }
             syncer.syncedBoneAttachments[element].boneData = boneData
             thread:create(function(self)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncBoneRefreshment(element, boneData, i)
+                    syncer:syncBoneRefreshment(element, boneData, i, remoteSignature)
                     thread:pause()
                 end
             end):resume({
@@ -473,8 +477,7 @@ else
                 frames = 1
             })
         else
-            --TODO: WHITELIST HERE
-            network:emit("Assetify:onRecieveBoneRefreshment", true, false, targetPlayer, element, boneData)
+            network:emit("Assetify:onRecieveBoneRefreshment", true, false, targetPlayer, element, boneData, remoteSignature)
         end
         return true
     end
