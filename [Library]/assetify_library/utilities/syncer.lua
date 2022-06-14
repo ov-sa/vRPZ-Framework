@@ -256,23 +256,27 @@ if localPlayer then
         syncer.syncedEntityDatas[element][data] = value
     end)
 
-    network:create("Assetify:onRecieveSyncedElement"):on(function(element, assetType, assetName, assetClump, clumpMaps)
-        if not element or not imports.isElement(element) then return false end
+    network:create("Assetify:onRecieveSyncedElement"):on(function(element, assetType, assetName, assetClump, clumpMaps, remoteSignature)
+        if not element or (not remoteSignature and not imports.isElement(element)) then return false end
         local modelID = manager:getID(assetType, assetName, assetClump)
         if modelID then
             syncer.syncedElements[element] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps}
             shader:clearElementBuffer(element, "clump")
-            if clumpMaps then
-                local cAsset = manager:getData(assetType, assetName)
-                if cAsset and cAsset.manifestData.shaderMaps and cAsset.manifestData.shaderMaps.clump then
-                    for i, j in imports.pairs(clumpMaps) do
-                        if cAsset.manifestData.shaderMaps.clump[i] and cAsset.manifestData.shaderMaps.clump[i][j] then
-                            shader:create(element, "clump", "Assetify_TextureClumper", i, {clumpTex = cAsset.manifestData.shaderMaps.clump[i][j].clump, clumpTex_bump = cAsset.manifestData.shaderMaps.clump[i][j].bump}, {}, cAsset.unSynced.rwCache.map, cAsset.manifestData.shaderMaps.clump[i][j], cAsset.manifestData.encryptKey)
+            thread:createHeartbeat(function()
+                return not imports.isElement(element)
+            end, function()
+                if clumpMaps then
+                    local cAsset = manager:getData(assetType, assetName)
+                    if cAsset and cAsset.manifestData.shaderMaps and cAsset.manifestData.shaderMaps.clump then
+                        for i, j in imports.pairs(clumpMaps) do
+                            if cAsset.manifestData.shaderMaps.clump[i] and cAsset.manifestData.shaderMaps.clump[i][j] then
+                                shader:create(element, "clump", "Assetify_TextureClumper", i, {clumpTex = cAsset.manifestData.shaderMaps.clump[i][j].clump, clumpTex_bump = cAsset.manifestData.shaderMaps.clump[i][j].bump}, {}, cAsset.unSynced.rwCache.map, cAsset.manifestData.shaderMaps.clump[i][j], cAsset.manifestData.encryptKey)
+                            end
                         end
                     end
                 end
-            end
-            imports.setElementModel(element, modelID)
+                imports.setElementModel(element, modelID)
+            end, downloadSettings.buildRate)
         end
     end)
 
@@ -374,15 +378,16 @@ else
         return true
     end
 
-    function syncer:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, targetPlayer)
+    function syncer:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, targetPlayer, remoteSignature)
         if not targetPlayer then
             if not element or not imports.isElement(element) then return false end
             local cAsset = manager:getData(assetType, assetName)
             if not cAsset or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
+            remoteSignature = imports.getElementType(element)
             syncer.syncedElements[element] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps}
             thread:create(function(self)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, i)
+                    syncer:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, i, remoteSignature)
                     thread:pause()
                 end
             end):resume({
@@ -390,7 +395,7 @@ else
                 frames = 1
             })
         else
-            network:emit("Assetify:onRecieveSyncedElement", true, false, targetPlayer, element, assetType, assetName, assetClump, clumpMaps)
+            network:emit("Assetify:onRecieveSyncedElement", true, false, targetPlayer, element, assetType, assetName, assetClump, clumpMaps, remoteSignature)
         end
         return true
     end
@@ -459,7 +464,7 @@ else
         return true
     end
 
-    function syncer:syncBoneRefreshment(element, boneData, targetPlayer)
+    function syncer:syncBoneRefreshment(element, boneData, targetPlayer, remoteSignature)
         if not targetPlayer then
             if not element or not imports.isElement(element) or not boneData or not syncer.syncedBoneAttachments[element] then return false end
             remoteSignature = {
