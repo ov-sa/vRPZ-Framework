@@ -83,14 +83,19 @@ function bone:clearElementBuffer(element)
     return true
 end
 
-function bone:load(element, parent, boneData)
+function bone:load(element, parent, boneData, isValidated)
     if not self or (self == bone) then return false end
-    if not element or not imports.isElement(element) or not parent or not imports.isElement(parent) or not boneData or (element == parent) or bone.buffer.element[element] then return false end
+    if not element or (not isValidated and not imports.isElement(element)) or not parent or (not isValidated and not imports.isElement(parent)) or not boneData or (element == parent) or bone.buffer.element[element] then return false end
     self.element = element
     self.parent = parent
     if not self:refresh(boneData) then return false end
-    imports.setElementCollisionsEnabled(element, false)
-    self.cStreamer = streamer:create(element, "bone", {parent}, self.boneData.syncRate)
+    self.heartbeat = thread:createHeartbeat(function()
+        return not imports.isElement(element)
+    end, function()
+        imports.setElementCollisionsEnabled(element, false)
+        self.cStreamer = streamer:create(element, "bone", {parent}, self.boneData.syncRate)
+        self.heartbeat = nil
+    end, downloadSettings.buildRate)
     bone.buffer.element[element] = self
     bone.buffer.parent[parent] = bone.buffer.parent[parent] or {}
     bone.buffer.parent[parent][self] = true
@@ -100,6 +105,9 @@ end
 function bone:unload()
     if not self or (self == bone) or self.isUnloading then return false end
     self.isUnloading = true
+    if self.heartbeat then
+        self.heartbeat:destroy()
+    end
     if self.cStreamer then
         self.cStreamer:destroy()
     end
