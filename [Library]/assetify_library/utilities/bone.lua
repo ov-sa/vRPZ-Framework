@@ -149,7 +149,7 @@ function bone:refresh(boneData)
 end
 
 function bone:update()
-    if not self or (self == bone) then return false end
+    if not self or (self == bone) or self.heartbeat then return false end
     bone.cache.element[(self.parent)] = bone.cache.element[(self.parent)] or {}
     bone.cache.element[(self.parent)][(self.boneData.id)] = ((bone.cache.element[(self.parent)].streamTick == bone.cache.streamTick) and bone.cache.element[(self.parent)][(self.boneData.id)]) or imports.getElementBoneMatrix(self.parent, self.boneData.id)
     bone.cache.element[(self.parent)].streamTick = bone.cache.streamTick
