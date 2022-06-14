@@ -493,7 +493,6 @@ else
                 frames = 1
             })
         else
-            --TODO: WHITELIST HERE
             network:emit("Assetify:onRecieveClearBoneAttachment", true, false, targetPlayer, element)
         end
         return true
