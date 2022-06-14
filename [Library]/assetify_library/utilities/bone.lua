@@ -119,7 +119,7 @@ end
 
 function bone:refresh(boneData, remoteSignature)
     if not self or (self == bone) then return false end
-    local parentType = remoteSignature.parentType or imports.getElementType(self.parent)
+    self.parentType = self.parentType or remoteSignature.parentType or imports.getElementType(self.parent)
     parentType = (parentType == "player" and "ped") or parentType
     if not parentType or not bone.ids[parentType] then return false end
     boneData.id = imports.tonumber(boneData.id)
