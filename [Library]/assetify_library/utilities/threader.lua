@@ -56,7 +56,7 @@ function thread:createHeartbeat(condition, exec, rate)
     rate = imports.math.max(imports.tonumber(rate) or 0, 1)
     return thread:create(function(self)
       while(condition()) do
-        self:sleep(1)
+        self:pause()
       end
       exec()
     end):resume({
