@@ -427,8 +427,7 @@ else
                 frames = 1
             })
         else
-            --TODO: WHITELIST HERE
-            network:emit("Assetify:onRecieveBoneAttachment", true, false, targetPlayer, element, parent, boneData)
+            network:emit("Assetify:onRecieveBoneAttachment", true, false, targetPlayer, element, parent, boneData, true)
         end
         return true
     end
