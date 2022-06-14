@@ -117,9 +117,8 @@ if localPlayer then
         return bone.buffer.element[element]:refresh(...)
     end
 
-    function syncer:syncClearBoneAttachment(element, ...)
-        if not element or not bone.buffer.element[element] then return false end
-        return bone.buffer.element[element]:clearElementBuffer(...)
+    function syncer:syncClearBoneAttachment(...)
+        return bone:clearElementBuffer(...)
     end
 
     network:fetch("Assetify:onLoad"):on(function()
@@ -428,6 +427,7 @@ else
                 frames = 1
             })
         else
+            --TODO: WHITELIST HERE
             network:emit("Assetify:onRecieveBoneAttachment", true, false, targetPlayer, element, parent, boneData)
         end
         return true
@@ -466,6 +466,7 @@ else
                 frames = 1
             })
         else
+            --TODO: WHITELIST HERE
             network:emit("Assetify:onRecieveBoneRefreshment", true, false, targetPlayer, element, boneData)
         end
         return true
@@ -492,6 +493,7 @@ else
                 frames = 1
             })
         else
+            --TODO: WHITELIST HERE
             network:emit("Assetify:onRecieveClearBoneAttachment", true, false, targetPlayer, element)
         end
         return true
