@@ -349,8 +349,6 @@ bundler["syncer"] = [[
             return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getEntityData", ...)
         end
     }
-    network:create("Assetify:onGlobalDataChange", true)
-    network:create("Assetify:onEntityDataChange", true)
 ]]
 
 bundler["attacher"] = [[
