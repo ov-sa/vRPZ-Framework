@@ -19,6 +19,7 @@ local imports = {
     tonumber = tonumber,
     tostring = tostring,
     isElement = isElement,
+    getElementType = getElementType,
     getRealTime = getRealTime,
     getThisResource = getThisResource,
     getResourceName = getResourceName,
@@ -248,8 +249,8 @@ if localPlayer then
         syncer.syncedGlobalDatas[data] = value
     end)
 
-    network:create("Assetify:onRecieveSyncedEntityData"):on(function(element, data, value, isValidated)
-        if not element or (not isValidated and not imports.isElement(element)) or not data or (imports.type(data) ~= "string") then return false end
+    network:create("Assetify:onRecieveSyncedEntityData"):on(function(element, data, value, remoteSignature)
+        if not element or (not remoteSignature and not imports.isElement(element)) or not data or (imports.type(data) ~= "string") then return false end
         syncer.syncedEntityDatas[element] = syncer.syncedEntityDatas[element] or {}
         syncer.syncedEntityDatas[element][data] = value
     end)
@@ -344,9 +345,10 @@ else
         return true
     end
 
-    function syncer:syncEntityData(element, data, value, isSync, targetPlayer)
+    function syncer:syncEntityData(element, data, value, isSync, targetPlayer, remoteSignature)
         if not targetPlayer then
             if not element or not imports.isElement(element) or not data or (imports.type(data) ~= "string") then return false end
+            remoteSignature = imports.getElementType(element)
             syncer.syncedEntityDatas[element] = syncer.syncedEntityDatas[element] or {}
             syncer.syncedEntityDatas[element][data] = value
             local execWrapper = nil
@@ -366,7 +368,7 @@ else
                 })
             end
         else
-            network:emit("Assetify:onRecieveSyncedEntityData", true, false, targetPlayer, element, data, value, true)
+            network:emit("Assetify:onRecieveSyncedEntityData", true, false, targetPlayer, element, data, value, remoteSignature)
         end
         return true
     end
@@ -413,13 +415,17 @@ else
         return true
     end
 
-    function syncer:syncBoneAttachment(element, parent, boneData, targetPlayer)
+    function syncer:syncBoneAttachment(element, parent, boneData, targetPlayer, remoteSignature)
         if not targetPlayer then
             if not element or not imports.isElement(element) or not parent or not imports.isElement(parent) or not boneData then return false end
+            remoteSignature = {
+                parentType = imports.getElementType(parent),
+                elementType = imports.getElementType(element)
+            }
             syncer.syncedBoneAttachments[element] = {parent = parent, boneData = boneData}
             thread:create(function(self)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncBoneAttachment(element, parent, boneData, i)
+                    syncer:syncBoneAttachment(element, parent, boneData, i, remoteSignature)
                     thread:pause()
                 end
             end):resume({
@@ -427,7 +433,7 @@ else
                 frames = 1
             })
         else
-            network:emit("Assetify:onRecieveBoneAttachment", true, false, targetPlayer, element, parent, boneData, true)
+            network:emit("Assetify:onRecieveBoneAttachment", true, false, targetPlayer, element, parent, boneData, remoteSignature)
         end
         return true
     end
