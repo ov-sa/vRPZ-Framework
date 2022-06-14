@@ -88,7 +88,7 @@ function bone:load(element, parent, boneData, isValidated)
     if not element or (not isValidated and not imports.isElement(element)) or not parent or (not isValidated and not imports.isElement(parent)) or not boneData or (element == parent) or bone.buffer.element[element] then return false end
     self.element = element
     self.parent = parent
-    if not self:refresh(boneData) then return false end
+    if not self:refresh(boneData, isValidated) then return false end
     self.heartbeat = thread:createHeartbeat(function()
         return not imports.isElement(element)
     end, function()
@@ -117,7 +117,7 @@ function bone:unload()
     return true
 end
 
-function bone:refresh(boneData)
+function bone:refresh(boneData, isValidated)
     if not self or (self == bone) then return false end
     local parentType = imports.getElementType(self.parent)
     parentType = (parentType == "player" and "ped") or parentType
