@@ -119,7 +119,7 @@ end
 
 function bone:refresh(boneData, remoteSignature)
     if not self or (self == bone) then return false end
-    local parentType = imports.getElementType(self.parent)
+    local parentType = remoteSignature.parentType or imports.getElementType(self.parent)
     parentType = (parentType == "player" and "ped") or parentType
     if not parentType or not bone.ids[parentType] then return false end
     boneData.id = imports.tonumber(boneData.id)
@@ -130,7 +130,7 @@ function bone:refresh(boneData, remoteSignature)
     if boneData.rotation.isRelative then
         local prev_rotX, prev_rotY, prev_rotZ = nil, nil, nil
         if self.boneData then prev_rotX, prev_rotY, prev_rotZ = self.boneData.rotation.x, self.boneData.rotation.y, self.boneData.rotation.z
-        else prev_rotX, prev_rotY, prev_rotZ = imports.getElementRotation(self.element, "ZYX") end
+        else prev_rotX, prev_rotY, prev_rotZ = remoteSignature.elementRotation or imports.getElementRotation(self.element, "ZYX") end
         local rotQuat = imports.quat.new(imports.quat.fromEuler(prev_rotX, prev_rotY, prev_rotZ))
         local __rotQuat = imports.quat.fromVectorAngle(imports.Vector3(1, 0, 0), boneData.rotation.x)*imports.quat.fromVectorAngle(imports.Vector3(0, 1, 0), boneData.rotation.y)*imports.quat.fromVectorAngle(imports.Vector3(0, 0, 1), boneData.rotation.z) 
         rotQuat = __rotQuat*rotQuat

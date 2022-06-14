@@ -26,6 +26,7 @@ local imports = {
     getResourceInfo = getResourceInfo,
     getElementsByType = getElementsByType,
     setElementModel = setElementModel,
+    getElementRotation = getElementRotation,
     collectgarbage = collectgarbage,
     outputDebugString = outputDebugString,
     addEventHandler = addEventHandler,
@@ -420,7 +421,8 @@ else
             if not element or not imports.isElement(element) or not parent or not imports.isElement(parent) or not boneData then return false end
             remoteSignature = {
                 parentType = imports.getElementType(parent),
-                elementType = imports.getElementType(element)
+                elementType = imports.getElementType(element),
+                elementRotation = {imports.getElementRotation(element, "ZYX")}
             }
             syncer.syncedBoneAttachments[element] = {parent = parent, boneData = boneData}
             thread:create(function(self)
