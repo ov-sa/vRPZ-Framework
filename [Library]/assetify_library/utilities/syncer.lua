@@ -400,23 +400,24 @@ else
         return true
     end
 
-    function syncer:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, targetPlayer)    
+    function syncer:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer, targetDummy, remoteSignature)    
         if not targetPlayer then
-            cDummy = dummy:create(assetType, assetName, assetClump, clumpMaps, dummyData)
-            if not cDummy then return false end
-            syncer.syncedAssetDummies[cDummy] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps, dummyData = dummyData}
+            targetDummy = dummy:create(assetType, assetName, assetClump, clumpMaps, dummyData)
+            if not targetDummy then return false end
+            remoteSignature = imports.getElementType(targetDummy)
+            syncer.syncedAssetDummies[targetDummy] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps, dummyData = dummyData}
             thread:create(function(self)
                 for i, j in imports.pairs(syncer.loadedClients) do
-                    syncer:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, cDummy, i)
+                    syncer:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, i, targetDummy, remoteSignature)
                     thread:pause()
                 end
             end):resume({
                 executions = downloadSettings.syncRate,
                 frames = 1
             })
-            return cDummy
+            return targetDummy
         else
-            network:emit("Assetify:onRecieveAssetDummy", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy)
+            network:emit("Assetify:onRecieveAssetDummy", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, remoteSignature)
         end
         return true
     end
