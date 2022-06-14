@@ -63,7 +63,7 @@ function thread:createHeartbeat(conditionExec, exec, rate)
     end):resume({
       executions = 1,
       frame = rate
-    }
+    })
 end
 
 function thread:destroy()
