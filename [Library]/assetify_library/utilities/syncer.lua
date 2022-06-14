@@ -108,17 +108,17 @@ if localPlayer then
     end
 
     function syncer:syncBoneDetachment(element, ...)
-        if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
+        if not element or not bone.buffer.element[element] then return false end
         return bone.buffer.element[element]:destroy()
     end
 
     function syncer:syncBoneRefreshment(element, ...)
-        if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
+        if not element or not bone.buffer.element[element] then return false end
         return bone.buffer.element[element]:refresh(...)
     end
 
     function syncer:syncClearBoneAttachment(element, ...)
-        if not element or not imports.isElement(element) or not bone.buffer.element[element] then return false end
+        if not element or not bone.buffer.element[element] then return false end
         return bone.buffer.element[element]:clearElementBuffer(...)
     end
 
