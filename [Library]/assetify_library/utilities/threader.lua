@@ -59,6 +59,7 @@ function thread:createHeartbeat(condition, exec, rate)
         self:pause()
       end
       exec()
+      condition, exec = nil, nil
     end):resume({
       executions = 1,
       frame = rate
