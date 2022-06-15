@@ -2,7 +2,7 @@
 --[[ Imports ]]--
 -----------------
 
-if not thread then loadstring(exports.assetify_library:import("thread"))() end
+if not assetify then loadstring(exports.assetify_library:import("threader"))() end
 local imports = {
     type = type,
     unpack = unpack,
@@ -13,7 +13,7 @@ local imports = {
     dbPoll = dbPoll,
     dbExec = dbExec,
     table = table,
-    thread = thread
+    assetify = assetify
 }
 
 string.parse = function(rawString)
@@ -31,7 +31,7 @@ end
 dbify.parseArgs = function(cbIndex, ...)
     local rawArgs = {...}
     local cThread, cbIndex = rawArgs[1], imports.tonumber(cbIndex)
-    if cThread and imports.thread:isInstance(cThread) then
+    if cThread and imports.assetify.thread:isInstance(cThread) then
         if not cbIndex then return false end
         imports.table.remove(rawArgs, 1)
         imports.table.insert(rawArgs, cbIndex, function(...) return cThread:resolve(...) end)
