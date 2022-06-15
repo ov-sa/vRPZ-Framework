@@ -15,6 +15,7 @@
 local imports = {
     type = type,
     pairs = pairs,
+    string = string,
     table = table,
     file = file
 }
@@ -226,9 +227,7 @@ bundler["threader"] = {
     module = "thread",
     rw = [[
         if not assetify.thread then
-            ]]..imports.file.read("utilities/threader.lua")..[[
-            assetify.thread = thread
-            thread = nil
+            ]]..imports.string.gsub(imports.file.read("utilities/threader.lua"), "thread", "assetify.thread")..[[
         end
     ]]
 }
@@ -237,9 +236,7 @@ bundler["networker"] = {
     module = "network",
     rw = [[
         if not assetify.network then
-            ]]..imports.file.read("utilities/networker.lua")..[[
-            assetify.network = network
-            network = nil
+            ]]..imports.string.gsub(imports.file.read("utilities/networker.lua"), "network", "assetify.network")..[[
         end
     ]]
 }
