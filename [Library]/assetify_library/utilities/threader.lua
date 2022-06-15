@@ -137,8 +137,8 @@ function thread:await(exec)
     self.isAwaiting = "promise"
     exec(self)
     thread:pause()
-    local resolvedValues = self.scheduledValues
-    self.scheduledValues = nil
+    local resolvedValues = self.awaitingValues
+    self.awaitingValues = nil
     return imports.unpack(resolvedValues)
 end
 
@@ -146,7 +146,7 @@ function thread:resolve(...)
     if not self or (self == thread) then return false end
     if not self.isAwaiting or (self.isAwaiting ~= "promise") then return false end
     self.isAwaiting = nil
-    self.scheduledValues = {...}
+    self.awaitingValues = {...}
     local self = self
     imports.setTimer(function()
         self:resume()
