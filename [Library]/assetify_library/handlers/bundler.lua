@@ -37,7 +37,9 @@ function import(...)
         imports.table.remove(args, 1)
         local buildImports, genImports, __genImports = false, false, {}
         local isCompleteFetch = false
-        if (#args <= 0) or (args[1] == "*") then
+        if (#args <= 0) then
+            imports.table.insert(buildImports, "core")
+        elseif args[1] == "*" then
             buildImports = {}
             isCompleteFetch = true
             for i, j in imports.pairs(bundler) do
