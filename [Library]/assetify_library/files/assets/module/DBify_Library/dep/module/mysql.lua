@@ -2,7 +2,7 @@
 --[[ Imports ]]--
 -----------------
 
-if not assetify then loadstring(exports.assetify_library:import("threader"))() end
+loadstring(exports.assetify_library:import("threader"))()
 local imports = {
     type = type,
     unpack = unpack,
