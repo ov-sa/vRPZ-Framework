@@ -93,7 +93,7 @@ if localPlayer then
         end
         if not self.cModelInstance then return false end
         if self.cCollisionInstance then imports.setElementAlpha(self.cCollisionInstance, 0) end
-        self.hearbeat = thread:createHeartbeat(function()
+        self.hearbeat = threader:createHeartbeat(function()
             if not targetDummy then
                 return false
             else

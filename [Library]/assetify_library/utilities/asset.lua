@@ -303,7 +303,7 @@ else
                     end
                 end
             end
-            thread:pause()
+            threader:pause()
         end
         return true
     end
@@ -320,17 +320,17 @@ else
                             v[m] = assetPath.."dep/"..v[m]
                             __assetDeps[i][k][m] = v[m]
                             asset:buildFile(__assetDeps[i][k][m], filePointer, encryptKey, filePointer.unSynced.rawData, k == "server", true)
-                            thread:pause()
+                            threader:pause()
                         end
                     else
                         j[k] = assetPath.."dep/"..j[k]
                         __assetDeps[i][k] = j[k]
                         asset:buildFile(__assetDeps[i][k], filePointer, encryptKey, filePointer.unSynced.rawData, _, true)
                     end
-                    thread:pause()
+                    threader:pause()
                 end
             end
-            thread:pause()
+            threader:pause()
         end
         return __assetDeps
     end
@@ -342,7 +342,7 @@ else
         cAssetPack.manifestData = (cAssetPack.manifestData and imports.json.decode(cAssetPack.manifestData)) or false
         if cAssetPack.manifestData then
             cAssetPack.rwDatas = {}
-            thread:create(function(self)
+            threader:create(function(self)
                 for i = 1, #cAssetPack.manifestData, 1 do
                     local assetName = cAssetPack.manifestData[i]
                     local assetPath = (asset.references.root)..imports.string.lower(assetType).."/"..assetName.."/"
@@ -387,7 +387,7 @@ else
                             assetManifestData.assetSounds = false
                             assetManifestData.shaderMaps = false
                             asset:buildFile(assetPath..(asset.references.asset)..".ifp", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
-                            thread:pause()
+                            threader:pause()
                         elseif assetType == "sound" then
                             assetManifestData.streamRange = false
                             assetManifestData.enableLODs = false
@@ -403,14 +403,14 @@ else
                                             if v then
                                                 assetSounds[i][k] = v
                                                 asset:buildFile(assetPath.."sound/"..v, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
-                                                thread:pause()
+                                                threader:pause()
                                             end
                                         end
                                     end
                                 end
                                 assetManifestData.assetSounds = assetSounds
                             end
-                            thread:pause()
+                            threader:pause()
                         else
                             assetManifestData.assetAnimations = false
                             assetManifestData.assetSounds = false
@@ -455,7 +455,7 @@ else
                                             if parsedIDEDatas and parsedIDEDatas[childName] then
                                                 asset:buildFile(assetPath.."txd/"..(parsedIDEDatas[childName][1])..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                             end
-                                            thread:pause()
+                                            threader:pause()
                                         end
                                     end
                                 end
@@ -467,14 +467,14 @@ else
                                         asset:buildFile(assetPath.."clump/"..j.."/"..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                         asset:buildFile(assetPath.."clump/"..j.."/"..(asset.references.asset)..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
                                         asset:buildFile(assetPath.."clump/"..j.."/"..(asset.references.asset)..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
-                                        thread:pause()
+                                        threader:pause()
                                     end
                                 else
                                     asset:buildFile(assetPath..(asset.references.asset)..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
                                 end
                                 asset:buildFile(assetPath..(asset.references.asset)..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, debugTXDExistence)
                                 asset:buildFile(assetPath..(asset.references.asset)..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
-                                thread:pause()
+                                threader:pause()
                             end
                             if assetManifestData.shaderMaps then
                                 asset:buildShader(assetPath, assetManifestData.shaderMaps, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
