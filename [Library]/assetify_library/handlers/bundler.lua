@@ -34,40 +34,34 @@ local bundler = {}
 function import(...)
     local args = {...}
     if args[1] == true then
-        local genImports = {}
+        imports.table.remove(args, 1)
+        local buildImports, genImports, __genImports = false, false, {}
         local isCompleteFetch = false
-        if args[2] and (args[2] == "*") then
+        if args[1] and (args[1] == "*") then
+            buildImports = {}
             isCompleteFetch = true
             for i, j in imports.pairs(bundler) do
-                if i ~= "imports" then
-                    local cImport = {index = i}
-                    if imports.type(j) == "table" then
-                        cImport.module = j.module or false
-                        cImport.rw = bundler["imports"]..j.rw
-                    else
-                        cImport.rw = bundler["imports"]..j
-                    end
-                    imports.table.insert(genImports, cImport)
-                end
+                imports.table.insert(buildImports, i)
             end
         else
-            local __genImports = {}
-            for i = 2, #args, 1 do
-                local j = args[i]
-                if (j ~= "imports") and bundler[j] and not __genImports[j] then
-                    local cImport = {index = j}
-                    if imports.type(bundler[j]) == "table" then
-                        cImport.module = bundler[j].module or false
-                        cImport.rw = bundler["imports"]..bundler[j].rw
-                    else
-                        cImport.rw = bundler["imports"]..bundler[j]
-                    end
-                    __genImports[j] = true
-                    imports.table.insert(genImports, cImport)
-                end
-            end
-            __genImports = nil
+            buildImports = args
         end
+        for i = 1, #buildImports, 1 do
+            local j = buildImports[i]
+            if (j ~= "imports") and bundler[j] and not __genImports[j] then
+                local cImport = {index = j}
+                if imports.type(bundler[j]) == "table" then
+                    cImport.module = bundler[j].module or false
+                    cImport.rw = bundler["imports"]..bundler[j].rw
+                else
+                    cImport.rw = bundler["imports"]..bundler[j]
+                end
+                __genImports[j] = true
+                imports.table.insert(genImports, cImport)
+            end
+        end
+        __genImports = nil
+        if #genImports <= 0 then return false end
         return genImports, isCompleteFetch
     else
         local args = {...}
