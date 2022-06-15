@@ -23,8 +23,7 @@ local imports = {
     json = json,
     table = table,
     string = string,
-    thread = thread,
-    network = network
+    assetify = assetify
 }
 
 
@@ -39,19 +38,19 @@ local resumeTicks = {}
 --[[ Player: On Delete/Save Character ]]--
 ------------------------------------------
 
-imports.network:create("Player:onDeleteCharacter"):on(function(source, characterID)
-    imports.thread:create(function(self)
+imports.assetify.network:create("Player:onDeleteCharacter"):on(function(source, characterID)
+    imports.assetify.thread:create(function(self)
         CInventory.delete(self, CCharacter.CBuffer[characterID].inventory)
         CCharacter.delete(self, characterID)
     end):resume()
 end)
 
-imports.network:create("Player:onSaveCharacter"):on(function(source, character, characters)
+imports.assetify.network:create("Player:onSaveCharacter"):on(function(source, character, characters)
     if not character or not characters or not characters[character] or characters[character].id then return false end
 
     local serial = CPlayer.getSerial(source)
     local __source = source
-    imports.thread:create(function(self)
+    imports.assetify.thread:create(function(self)
         local source = __source
         local characterID = CCharacter.create(self, serial)
         local inventoryID = CInventory.create(self)
@@ -60,7 +59,7 @@ imports.network:create("Player:onSaveCharacter"):on(function(source, character, 
             {"inventory", inventoryID}
         })
         if bool then CCharacter.CBuffer[characterID].identity = characters[character].identity end
-        imports.network:emit("Client:onSaveCharacter", true, false, source, (bool and true) or false, character, (bool and {id = characterID, identity = characters[character].identity}) or nil)
+        imports.assetify.network:emit("Client:onSaveCharacter", true, false, source, (bool and true) or false, character, (bool and {id = characterID, identity = characters[character].identity}) or nil)
     end):resume()
 end)
 
@@ -69,7 +68,7 @@ end)
 --[[ Player: On Toggle Login UI ]]--
 ------------------------------------
 
-imports.network:create("Player:onToggleLoginUI"):on(function(source)
+imports.assetify.network:create("Player:onToggleLoginUI"):on(function(source)
     local serial = CPlayer.getSerial(source)
     for i = 69, 79, 1 do
         imports.setPedStat(source, i, 1000)
@@ -78,7 +77,7 @@ imports.network:create("Player:onToggleLoginUI"):on(function(source)
     imports.setElementFrozen(source, true)
 
     local __source = source
-    imports.thread:create(function(self)
+    imports.assetify.thread:create(function(self)
         local source = __source
         local DPlayer = CPlayer.fetch(self, serial)
         DPlayer = DPlayer[1]
@@ -114,7 +113,7 @@ imports.network:create("Player:onToggleLoginUI"):on(function(source)
         else
             DPlayer.character = 0
         end
-        imports.network:emit("Client:onToggleLoginUI", true, false, source, true, {
+        imports.assetify.network:emit("Client:onToggleLoginUI", true, false, source, true, {
             character = DPlayer.character,
             characters = DPlayer.characters,
             vip = DPlayer.vip
@@ -129,9 +128,9 @@ end)
 
 function getResumeTick(player) return resumeTicks[player] or false end
 
-imports.network:create("Player:onResume"):on(function(source, character, characters)
+imports.assetify.network:create("Player:onResume"):on(function(source, character, characters)
     if not character or not characters or not characters[character] or not characters[character].id then
-        imports.network:emit("Player:onToggleLoginUI", false, source)
+        imports.assetify.network:emit("Player:onToggleLoginUI", false, source)
         return false
     end
 
@@ -145,11 +144,11 @@ imports.network:create("Player:onResume"):on(function(source, character, charact
     imports.collectgarbage()
 
     local __source = source
-    imports.thread:create(function(self)
+    imports.assetify.thread:create(function(self)
         local source = __source
         local characterID, inventoryID = characters[character].id, CCharacter.CBuffer[(characters[character].id)].inventory
         if not CCharacter.loadInventory(self, source, {characterID = characterID, inventoryID = inventoryID}) then
-            imports.network:emit("Player:onToggleLoginUI", false, source)
+            imports.assetify.network:emit("Player:onToggleLoginUI", false, source)
             return false
         end
 
@@ -162,8 +161,8 @@ imports.network:create("Player:onResume"):on(function(source, character, charact
         resumeTicks[source] = imports.getTickCount()
         CPlayer.setChannel(source, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"])
         imports.bindKey(source, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Channel_ShuffleKey"], "down", shufflePlayerChannel)
-        imports.network:emit("Client:onSyncInventoryBuffer", true, false, source, CInventory.CBuffer[inventoryID])
-        imports.network:emit("Client:onSyncWeather", true, false, source, CGame.getNativeWeather())
-        imports.network:emit("Player:onSpawn", false, source, CCharacter.CBuffer[characterID].location, characterID)
+        imports.assetify.network:emit("Client:onSyncInventoryBuffer", true, false, source, CInventory.CBuffer[inventoryID])
+        imports.assetify.network:emit("Client:onSyncWeather", true, false, source, CGame.getNativeWeather())
+        imports.assetify.network:emit("Player:onSpawn", false, source, CCharacter.CBuffer[characterID].location, characterID)
     end):resume()
 end)

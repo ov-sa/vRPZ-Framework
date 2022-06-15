@@ -19,7 +19,7 @@ local imports = {
     table = table,
     math = math,
     beautify = beautify,
-    network = network
+    assetify = assetify
 }
 
 
@@ -81,7 +81,7 @@ CGame.execOnModuleLoad(function()
     --[[ Client: On Notification ]]--
     ---------------------------------
 
-    imports.network:create("Client:onNotification"):on(function(message, color)
+    imports.assetify.network:create("Client:onNotification"):on(function(message, color)
         if not message then return false end
 
         imports.table.insert(notifUI.buffer, {

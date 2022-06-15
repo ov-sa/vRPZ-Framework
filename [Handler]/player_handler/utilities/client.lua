@@ -31,8 +31,7 @@ local imports = {
     setCameraFieldOfView = setCameraFieldOfView,
     showChat = showChat,
     showCursor = showCursor,
-    assetify = assetify,
-    network = network
+    assetify = assetify
 }
 imports.assetify.scheduler.execOnModuleLoad(function()
     imports.assetify.loadModule("vRPZ_Config", {"shared", "client"})
@@ -51,7 +50,7 @@ end
 function showCursor(bool, isForced)
     return ((isForced or bool or not CGame.isUIVisible()) and imports.showCursor(bool)) or false
 end
-imports.network:create("Client:onToggleChat"):on(showChat)
+imports.assetify.network:create("Client:onToggleChat"):on(showChat)
 
 
 ------------------------------------------------
@@ -175,7 +174,7 @@ CGame.execOnModuleLoad(function()
             imports.guiSetInputMode("allow_binds")
         end
     end)
-    imports.network:create("Client:onSyncWeather"):on(function(serverWeather, serverTime)
+    imports.assetify.network:create("Client:onSyncWeather"):on(function(serverWeather, serverTime)
         serverWeather = imports.tonumber(serverWeather)
         if not serverWeather or not serverTime then return false end
         imports.setWeather(serverWeather)

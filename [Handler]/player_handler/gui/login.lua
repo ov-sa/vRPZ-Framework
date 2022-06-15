@@ -38,8 +38,7 @@ local imports = {
     math = math,
     string = string,
     beautify = beautify,
-    assetify = assetify,
-    network = network
+    assetify = assetify
 }
 
 
@@ -60,8 +59,8 @@ CGame.execOnModuleLoad(function()
                     font = CGame.createFont(1, 30), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.fontColor)),
                     embedLineColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].play.embedLineColor)),
                     {identifier = "play", exec = function() loginUI.phases[2].manageCharacter("play") end},
-                    {identifier = "characters", exec = function() imports.network:emit("Client:onSetLoginUIPhase", false, 2) end},
-                    {identifier = "credits", exec = function() imports.network:emit("Client:onSetLoginUIPhase", false, 3) end}
+                    {identifier = "characters", exec = function() imports.assetify.network:emit("Client:onSetLoginUIPhase", false, 2) end},
+                    {identifier = "credits", exec = function() imports.assetify.network:emit("Client:onSetLoginUIPhase", false, 3) end}
                 }
             },
             [2] = {
@@ -87,7 +86,7 @@ CGame.execOnModuleLoad(function()
                     {iconTexture = imports.beautify.assets["images"]["canvas/plus.rw"], tooltip = {identifier = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.tooltips.create}, exec = function() loginUI.phases[2].manageCharacter("create") end},
                     {iconTexture = imports.beautify.assets["images"]["canvas/minus.rw"], tooltip = {identifier = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.tooltips.delete}, exec = function() loginUI.phases[2].manageCharacter("delete") end},
                     {iconTexture = imports.beautify.assets["images"]["canvas/save.rw"], tooltip = {identifier = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.tooltips.save}, exec = function() loginUI.phases[2].manageCharacter("save") end},
-                    {iconTexture = imports.beautify.assets["images"]["canvas/back.rw"], tooltip = {identifier = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.tooltips.back}, exec = function() imports.network:emit("Client:onSetLoginUIPhase", false, 1) end}
+                    {iconTexture = imports.beautify.assets["images"]["canvas/back.rw"], tooltip = {identifier = FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.options.tooltips.back}, exec = function() imports.assetify.network:emit("Client:onSetLoginUIPhase", false, 1) end}
                 },
                 categories = {
                     paddingX = 20, paddingY = 5,
@@ -168,7 +167,7 @@ CGame.execOnModuleLoad(function()
                     font = CGame.createFont(1, 19), fontColor = {200, 200, 200, 255},
                     hoverStatus = "backward",
                     hoverAnimTick = CLIENT_CURRENT_TICK,
-                    exec = function() imports.network:emit("Client:onSetLoginUIPhase", false, 1) end
+                    exec = function() imports.assetify.network:emit("Client:onSetLoginUIPhase", false, 1) end
                 }
             }
         }
@@ -264,7 +263,7 @@ CGame.execOnModuleLoad(function()
         loginUI.phases[3].updateUILang()
         return true
     end
-    imports.network:fetch("Client:onUpdateLanguage"):on(loginUI.updateUILang)
+    imports.assetify.network:fetch("Client:onUpdateLanguage"):on(loginUI.updateUILang)
     loginUI.phases[2].fetchSelection = function()
         local tone = imports.beautify.slider.getPercent(loginUI.phases[2].categories[1].contents.tone.element)
         local gender = loginUI.phases[2].categories[1].contents.gender.contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[1].contents.gender.element))]
@@ -341,34 +340,34 @@ CGame.execOnModuleLoad(function()
             local errorMessage = false
             local characterLimit = (loginUI.isVIP and FRAMEWORK_CONFIGS["Game"]["Character_Limit"].vip) or FRAMEWORK_CONFIGS["Game"]["Character_Limit"].default
             if #loginUI.characters >= characterLimit then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][3][(CPlayer.CLanguage)] end
-            imports.network:emit("Client:onEnableLoginUI", false, true)
+            imports.assetify.network:emit("Client:onEnableLoginUI", false, true)
             if errorMessage then
-                imports.network:emit("Client:onNotification", false, errorMessage, FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
+                imports.assetify.network:emit("Client:onNotification", false, errorMessage, FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
                 return false
             else
                 imports.table.insert(loginUI.characters, {})
                 loginUI.previewCharacter = #loginUI.characters
                 loginUI.phases[2].loadCharacter(true)
-                imports.network:emit("Client:onNotification", false, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][4][(CPlayer.CLanguage)], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
+                imports.assetify.network:emit("Client:onNotification", false, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][4][(CPlayer.CLanguage)], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
             end
         elseif action == "delete" then
             local errorMessage = false
             if #loginUI.characters <= 0 then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][5][(CPlayer.CLanguage)] end
-            imports.network:emit("Client:onEnableLoginUI", false, true)
+            imports.assetify.network:emit("Client:onEnableLoginUI", false, true)
             if errorMessage then
-                imports.network:emit("Client:onNotification", false, errorMessage, FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
+                imports.assetify.network:emit("Client:onNotification", false, errorMessage, FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
                 return false
             else
-                if loginUI.characters[(loginUI.previewCharacter)].id then imports.network:emit("Player:onDeleteCharacter", true, false, localPlayer, loginUI.characters[(loginUI.previewCharacter)].id) end
+                if loginUI.characters[(loginUI.previewCharacter)].id then imports.assetify.network:emit("Player:onDeleteCharacter", true, false, localPlayer, loginUI.characters[(loginUI.previewCharacter)].id) end
                 imports.table.remove(loginUI.characters, loginUI.previewCharacter)
                 loginUI.previewCharacter = imports.math.max(0, loginUI.previewCharacter - 1)
                 loginUI.phases[2].loadCharacter()
-                imports.network:emit("Client:onNotification", false, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][6][(CPlayer.CLanguage)], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
+                imports.assetify.network:emit("Client:onNotification", false, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][6][(CPlayer.CLanguage)], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
             end
         elseif (action == "previous") or (action == "next") then
-            imports.network:emit("Client:onEnableLoginUI", false, true)
+            imports.assetify.network:emit("Client:onEnableLoginUI", false, true)
             if loginUI.characters[(loginUI.previewCharacter)] and not loginUI.characters[(loginUI.previewCharacter)].id then
-                imports.network:emit("Client:onNotification", false, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][11][(CPlayer.CLanguage)], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
+                imports.assetify.network:emit("Client:onNotification", false, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][11][(CPlayer.CLanguage)], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
                 return false
             else
                 if action == "previous" then
@@ -386,40 +385,40 @@ CGame.execOnModuleLoad(function()
         elseif action == "pick" then
             local errorMessage = false
             if (not loginUI.characters[(loginUI.previewCharacter)]) or not loginUI.characters[(loginUI.previewCharacter)].id then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][7][(CPlayer.CLanguage)] end
-            imports.network:emit("Client:onEnableLoginUI", false, true)
+            imports.assetify.network:emit("Client:onEnableLoginUI", false, true)
             if errorMessage then
-                imports.network:emit("Client:onNotification", false, errorMessage, FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
+                imports.assetify.network:emit("Client:onNotification", false, errorMessage, FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
                 return false
             else
                 loginUI.character = loginUI.previewCharacter
-                imports.network:emit("Client:onNotification", false, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][8][(CPlayer.CLanguage)], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
+                imports.assetify.network:emit("Client:onNotification", false, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][8][(CPlayer.CLanguage)], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
             end
         elseif action == "save" then
             if (#loginUI.characters > 0) and loginUI.characters[(loginUI.previewCharacter)].id then
-                imports.network:emit("Client:onEnableLoginUI", false, true)
+                imports.assetify.network:emit("Client:onEnableLoginUI", false, true)
                 return false
             else
-                imports.network:emit("Client:onEnableLoginUI", false, false, true)
+                imports.assetify.network:emit("Client:onEnableLoginUI", false, false, true)
                 local characterData = loginUI.phases[2].fetchSelection()
                 if #loginUI.characters <= 0 then loginUI.previewCharacter = 1 end
                 loginUI.processCharacters[(loginUI.previewCharacter)] = true
                 loginUI.characters[(loginUI.previewCharacter)] = loginUI.characters[(loginUI.previewCharacter)] or {}
                 loginUI.characters[(loginUI.previewCharacter)].identity = characterData
-                imports.network:emit("Player:onSaveCharacter", true, false, localPlayer, loginUI.previewCharacter, loginUI.characters)
+                imports.assetify.network:emit("Player:onSaveCharacter", true, false, localPlayer, loginUI.previewCharacter, loginUI.characters)
             end
         elseif action == "play" then
             local errorMessage = false
             if #loginUI.characters <= 0 then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][1][(CPlayer.CLanguage)] end
             if not loginUI.characters[loginUI.character] then errorMessage = FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][2][(CPlayer.CLanguage)] end
             if errorMessage then
-                imports.network:emit("Client:onEnableLoginUI", false, true)
-                imports.network:emit("Client:onNotification", false, errorMessage, FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
+                imports.assetify.network:emit("Client:onEnableLoginUI", false, true)
+                imports.assetify.network:emit("Client:onNotification", false, errorMessage, FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
                 return false
             else
-                imports.network:emit("Client:onEnableLoginUI", false, false, true)
-                imports.network:emit("Client:onToggleLoadingUI", false, true)
+                imports.assetify.network:emit("Client:onEnableLoginUI", false, false, true)
+                imports.assetify.network:emit("Client:onToggleLoadingUI", false, true)
                 imports.setTimer(function(character, characters)
-                    imports.network:emit("Player:onResume", true, false, localPlayer, character, characters)
+                    imports.assetify.network:emit("Player:onResume", true, false, localPlayer, character, characters)
                 end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration, 1, loginUI.character, loginUI.characters)
                 imports.setTimer(function()
                     loginUI.toggleUI(false)
@@ -480,7 +479,7 @@ CGame.execOnModuleLoad(function()
 
     function isLoginUIVisible() return loginUI.state end
 
-    imports.network:create("Client:onSetLoginUIPhase"):on(function(phaseID)
+    imports.assetify.network:create("Client:onSetLoginUIPhase"):on(function(phaseID)
         if not phaseID or not loginUI.phases[1].optionsUI[phaseID] or (loginUI.phase and loginUI.phase == phaseID) then return false end
         for i, j in imports.pairs(loginUI.cache.timers) do
             if j and imports.isTimer(j) then
@@ -488,7 +487,7 @@ CGame.execOnModuleLoad(function()
                 loginUI.cache.timers[i] = nil
             end
         end
-        imports.network:emit("Client:onToggleLoadingUI", false, true)
+        imports.assetify.network:emit("Client:onToggleLoadingUI", false, true)
         loginUI.cache.timers.phaseChanger = imports.setTimer(function()
             for i = 1, #loginUI.characters, 1 do
                 local j = loginUI.characters[i]
@@ -515,16 +514,16 @@ CGame.execOnModuleLoad(function()
                 end
             end
             loginUI.phase = phaseID
-            imports.network:emit("Client:onToggleLoadingUI", false, false)
+            imports.assetify.network:emit("Client:onToggleLoadingUI", false, false)
             loginUI.cache.timers.phaseChanger = false
         end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + 250, 1)
         loginUI.cache.timers.uiEnabler = imports.setTimer(function()
-            imports.network:emit("Client:onEnableLoginUI", false, true)
+            imports.assetify.network:emit("Client:onEnableLoginUI", false, true)
             loginUI.cache.timers.uiEnabler = false
         end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration - (FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + 250), 1)
     end)
 
-    imports.network:create("Client:onEnableLoginUI"):on(function(state, isForced)
+    imports.assetify.network:create("Client:onEnableLoginUI"):on(function(state, isForced)
         if loginUI.cache.timers.uiEnabler and imports.isTimer(loginUI.cache.timers.uiEnabler) then
             imports.killTimer(loginUI.cache.timers.uiEnabler)
             loginUI.cache.timers.uiEnabler = nil
@@ -533,15 +532,15 @@ CGame.execOnModuleLoad(function()
         loginUI.isEnabled = state
     end)
 
-    imports.network:create("Client:onSaveCharacter"):on(function(state, character, characterData)
+    imports.assetify.network:create("Client:onSaveCharacter"):on(function(state, character, characterData)
         if state then
             loginUI.characters[character] = characterData
-            imports.network:emit("Client:onNotification", false, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][9][(CPlayer.CLanguage)], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
+            imports.assetify.network:emit("Client:onNotification", false, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][9][(CPlayer.CLanguage)], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
         else
-            imports.network:emit("Client:onNotification", false, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][10][(CPlayer.CLanguage)], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
+            imports.assetify.network:emit("Client:onNotification", false, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][10][(CPlayer.CLanguage)], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
         end
         loginUI.processCharacters[character] = nil
-        imports.network:emit("Client:onEnableLoginUI", false, true, true)
+        imports.assetify.network:emit("Client:onEnableLoginUI", false, true, true)
     end)
 
 
@@ -556,7 +555,7 @@ CGame.execOnModuleLoad(function()
         if renderData.renderType == "input" then
             loginUI.cache.keys.mouse = imports.isMouseClicked()
             local weatherData = FRAMEWORK_CONFIGS["UI"]["Login"].weathers[(loginUI.phase)] or FRAMEWORK_CONFIGS["UI"]["Login"].weathers[1]
-            imports.network:emit("Client:onSyncWeather", false, weatherData.weather, weatherData.time)
+            imports.assetify.network:emit("Client:onSyncWeather", false, weatherData.weather, weatherData.time)
         elseif renderData.renderType == "render" then
             local isUIEnabled = loginUI.isEnabled and not loginUI.isForcedDisabled
             local isLMBClicked = (loginUI.cache.keys.mouse == "mouse1") and isUIEnabled
@@ -576,7 +575,7 @@ CGame.execOnModuleLoad(function()
                     local isOptionHovered = imports.isMouseOnPosition(options_offsetX, options_offsetY, option_width, option_height) and isUIEnabled
                     if isOptionHovered then
                         if isLMBClicked then
-                            imports.network:emit("Client:onEnableLoginUI", false, false)
+                            imports.assetify.network:emit("Client:onEnableLoginUI", false, false)
                             imports.setTimer(function() j.exec() end, 1, 1)
                         end
                         if j.hoverStatus ~= "forward" then
@@ -620,7 +619,7 @@ CGame.execOnModuleLoad(function()
                     local isToolTipVisible = false
                     if isOptionHovered then
                         if isLMBClicked then
-                            imports.network:emit("Client:onEnableLoginUI", false, false)
+                            imports.assetify.network:emit("Client:onEnableLoginUI", false, false)
                             imports.setTimer(function() j.exec() end, 1, 1)
                         end
                         if j.hoverStatus ~= "forward" then
@@ -668,8 +667,8 @@ CGame.execOnModuleLoad(function()
                 if (CLIENT_CURRENT_TICK - loginUI.phases[3].scrollAnimTickCounter) >= loginUI.phases[3].scrollDelayDuration then
                     credits_offsetY = view_offsetY + imports.interpolateBetween(credits_offsetY, 0, 0, view_height*1.5, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].scrollAnimTickCounter + loginUI.phases[3].scrollDelayDuration, loginUI.phases[3].scrollDuration), "Linear")
                     if (imports.math.round(credits_offsetY, 2) >= imports.math.round(view_height*1.5)) and loginUI.isEnabled then
-                        imports.network:emit("Client:onEnableLoginUI", false, false)
-                        imports.network:emit("Client:onSetLoginUIPhase", false, 1)
+                        imports.assetify.network:emit("Client:onEnableLoginUI", false, false)
+                        imports.assetify.network:emit("Client:onSetLoginUIPhase", false, 1)
                     end
                 end
                 imports.beautify.native.drawText(loginUI.phases[3].contentText, view_offsetX, credits_offsetY, view_offsetX + view_width, credits_offsetY + loginUI.phases[3].contentHeight, loginUI.phases[3].fontColor, 1, loginUI.phases[3].font.instance, "center", "center", true, false, false, false, true)
@@ -678,7 +677,7 @@ CGame.execOnModuleLoad(function()
                 local isNavigatorHovered = imports.isMouseOnPosition(navigator_offsetX, navigator_offsetY, navigator_width, navigator_height) and isUIEnabled
                 if isNavigatorHovered then
                     if isLMBClicked then
-                        imports.network:emit("Client:onEnableLoginUI", false, false)
+                        imports.assetify.network:emit("Client:onEnableLoginUI", false, false)
                         imports.setTimer(function() loginUI.phases[3].navigator.exec() end, 1, 1)
                     end
                     if loginUI.phases[3].navigator.hoverStatus ~= "forward" then
@@ -721,10 +720,10 @@ CGame.execOnModuleLoad(function()
                 loginUI.lobbySound = CGame.playSound(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.asset, FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category, imports.math.random(#cAsset.manifestData.assetSounds[(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category)]), _, true, true)
             end
             loginUI.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
-            imports.network:emit("Client:onSetLoginUIPhase", false, 1)
+            imports.assetify.network:emit("Client:onSetLoginUIPhase", false, 1)
             imports.beautify.render.create(loginUI.renderUI)
             imports.beautify.render.create(loginUI.renderUI, {renderType = "input"})
-            imports.network:emit("Sound:onToggleLogin", false, state, {
+            imports.assetify.network:emit("Sound:onToggleLogin", false, state, {
                 shuffleMusic = (args and args.shuffleMusic and true) or false
             })
         else
@@ -759,7 +758,7 @@ CGame.execOnModuleLoad(function()
         return true
     end
 
-    imports.network:create("Client:onToggleLoginUI"):on(function(state, args)
+    imports.assetify.network:create("Client:onToggleLoginUI"):on(function(state, args)
         if state then
             loginUI.character = args.character
             loginUI.previewCharacter = loginUI.character
@@ -767,12 +766,12 @@ CGame.execOnModuleLoad(function()
             loginUI.vip = args.vip
             imports.setElementPosition(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.x, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.y, FRAMEWORK_CONFIGS["UI"]["Login"].clientPoint.z)
             imports.setElementDimension(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
-            imports.network:emit("Client:onEnableLoginUI", false, true, true)
-            imports.network:emit("Client:onToggleLoadingUI", false, true)
+            imports.assetify.network:emit("Client:onEnableLoginUI", false, true, true)
+            imports.assetify.network:emit("Client:onToggleLoadingUI", false, true)
             imports.setTimer(function()
                 loginUI.toggleUI(state, args)
                 imports.fadeCamera(true)
-                imports.network:emit("Client:onToggleLoadingUI", false, false)
+                imports.assetify.network:emit("Client:onToggleLoadingUI", false, false)
             end, FRAMEWORK_CONFIGS["UI"]["Login"].fadeDelay, 1)
         else
             loginUI.toggleUI(state, args)
@@ -780,7 +779,7 @@ CGame.execOnModuleLoad(function()
     end)
 
     imports.fadeCamera(false)
-    imports.network:emit("Client:onToggleLoadingUI", false, true)
+    imports.assetify.network:emit("Client:onToggleLoadingUI", false, true)
     CGame.execOnLoad(function()
         imports.assetify.renderer.setVirtualRendering(true, {diffuse = true, emissive = true})
         imports.assetify.renderer.setTimeSync(true)
@@ -797,6 +796,6 @@ CGame.execOnModuleLoad(function()
                 CSound.CAmbience[(j.category)] = cAsset.manifestData.assetSounds[(j.category)]
             end
         end
-        imports.network:emit("Player:onToggleLoginUI", true, false, localPlayer)
+        imports.assetify.network:emit("Player:onToggleLoginUI", true, false, localPlayer)
     end)
 end)

@@ -34,9 +34,7 @@ local imports = {
     setGameType = setGameType,
     setMapName = setMapName,
     math = math,
-    assetify = assetify,
-    thread = thread,
-    network = network
+    assetify = assetify
 }
 imports.assetify.scheduler.execOnModuleLoad(function()
     imports.assetify.loadModule("DBify_Library", {"shared", "server"})
@@ -52,7 +50,7 @@ end)
 
 function showChat(player, bool, isForced)
     if (not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player")) then return false end
-    imports.network:emit("Client:onToggleChat", true, false, player, bool, isForced)
+    imports.assetify.network:emit("Client:onToggleChat", true, false, player, bool, isForced)
     return true
 end
 
@@ -62,7 +60,7 @@ end
 -------------------------
 
 CGame.execOnModuleLoad(function()
-    imports.network:create("onServerRender")
+    imports.assetify.network:create("onServerRender")
     local serverTickSyncer = imports.createElement("Server:TickSyncer")
     CGame.setGlobalData("Server:TickSyncer", serverTickSyncer)
     imports.setTimer(function(cSyncer)
@@ -106,7 +104,7 @@ CGame.execOnModuleLoad(function()
     end
     ]]--
 
-    imports.network:fetch("onServerRender"):on(function(_, deltaTick)
+    imports.assetify.network:fetch("onServerRender"):on(function(_, deltaTick)
         for i, j in imports.pairs(CPlayer.CLogged) do
             CCharacter.giveSurvivalTime(i, deltaTick)
         end
@@ -126,15 +124,15 @@ CGame.execOnModuleLoad(function()
                             cooldownETA = ((elapsedDuration < FRAMEWORK_CONFIGS["Game"]["Logout_CoolDown_Duration"]) and (FRAMEWORK_CONFIGS["Game"]["Logout_CoolDown_Duration"] - elapsedDuration)) or false
                         end
                         if cooldownETA then
-                            imports.network:emit("Client:onNotification", true, false, source, "Please wait "..imports.math.ceil(cooldownETA/1000).."s before logging out!", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
+                            imports.assetify.network:emit("Client:onNotification", true, false, source, "Please wait "..imports.math.ceil(cooldownETA/1000).."s before logging out!", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
                         else
                             local __source = source
-                            imports.thread:create(function(self)
+                            imports.assetify.thread:create(function(self)
                                 local source = __source
-                                imports.network:emit("Client:onToggleLoadingUI", true, false, source, true)
+                                imports.assetify.network:emit("Client:onToggleLoadingUI", true, false, source, true)
                                 imports.outputChatBox("#C8C8C8- #5050FF"..imports.getPlayerName(source).."#C8C8C8 left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)
                                 CCharacter.saveProgress(self, source)
-                                imports.network:emit("Player:onToggleLoginUI", false, source)
+                                imports.assetify.network:emit("Player:onToggleLoginUI", false, source)
                             end):resume()
                         end
                     end
@@ -145,7 +143,7 @@ CGame.execOnModuleLoad(function()
     end)
     imports.addEventHandler("onPlayerQuit", root, function()
         local __source = source
-        imports.thread:create(function(self)
+        imports.assetify.thread:create(function(self)
             local source = __source
             imports.outputChatBox("#C8C8C8- #5050FF"..imports.getPlayerName(source).."#C8C8C8 left. #5050FF[Reason: Quit]", root, 255, 255, 255, true)
             CCharacter.saveProgress(self, source)

@@ -18,8 +18,7 @@ local imports = {
     getInterpolationProgress = getInterpolationProgress,
     math = math,
     beautify = beautify,
-    assetify = assetify,
-    network = network
+    assetify = assetify
 }
 
 
@@ -92,7 +91,7 @@ CGame.execOnModuleLoad(function()
     --[[ Client: On Toggle Loading UI ]]--
     --------------------------------------
 
-    imports.network:create("Client:onToggleLoadingUI"):on(function(state, hint)
+    imports.assetify.network:create("Client:onToggleLoadingUI"):on(function(state, hint)
         if state then
             if (state and (loadingUI.animStatus == "forward")) then return false end
             loadingUI.animStatus = "forward"

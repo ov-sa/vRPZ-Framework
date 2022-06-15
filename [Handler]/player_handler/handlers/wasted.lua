@@ -33,8 +33,7 @@ local imports = {
     killPed = killPed,
     setTimer = setTimer,
     showChat = showChat,
-    assetify = assetify,
-    network = network
+    assetify = assetify
 }
 
 
@@ -138,7 +137,7 @@ end)
 --[[ Player: On Spawn ]]--
 --------------------------
 
-imports.network:create("Player:onSpawn"):on(function(source, spawnpoint, loadCharacterID)
+imports.assetify.network:create("Player:onSpawn"):on(function(source, spawnpoint, loadCharacterID)
     spawnpoint = spawnpoint or CGame.generateSpawn()
     local characterID = loadCharacterID or CPlayer.getCharacterID(source)
     local characterIdentity = CCharacter.CBuffer[characterID].identity
@@ -155,10 +154,10 @@ imports.network:create("Player:onSpawn"):on(function(source, spawnpoint, loadCha
     if CCharacter.getHealth(source) <= 0 then
         --TODO: NEEDS TO BE IMPLEMENTED..
         --imports.triggerEvent("Player:onDeath", source, nil, false, nil, 3)
-        imports.network:emit("Client:onToggleLoadingUI", true, false, source, false, FRAMEWORK_CONFIGS["Spawns"]["Hint"])
+        imports.assetify.network:emit("Client:onToggleLoadingUI", true, false, source, false, FRAMEWORK_CONFIGS["Spawns"]["Hint"])
     else
         --triggerClientEvent(source, "Client:onSyncInventoryBuffer", source, playerInventorySlots[source])
-        imports.network:emit("Client:onToggleLoadingUI", true, false, source, false)
+        imports.assetify.network:emit("Client:onToggleLoadingUI", true, false, source, false)
         imports.showChat(source, true)
     end
 end)
