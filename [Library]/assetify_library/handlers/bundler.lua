@@ -228,7 +228,7 @@ bundler["threader"] = {
     module = "thread",
     rw = [[
         if not assetify.thread then
-            ]]..imports.utf8.gsub(imports.file.read("utilities/threader.lua"), "thread", "assetify.thread", true, "", ".:")..[[
+            ]]..imports.utf8.gsub(imports.file.read("utilities/threader.lua"), "thread", "assetify.thread", true, "(", ".:)")..[[
         end
     ]]
 }
@@ -237,7 +237,7 @@ bundler["networker"] = {
     module = "network",
     rw = [[
         if not assetify.network then
-            ]]..imports.utf8.gsub(imports.utf8.gsub(imports.file.read("utilities/networker.lua"), "thread", "assetify.thread", true, "", ".:"), "network", "assetify.network", true, "", ".:")..[[
+            ]]..imports.utf8.gsub(imports.utf8.gsub(imports.file.read("utilities/networker.lua"), "thread", "assetify.thread", true, "(", ".:)"), "network", "assetify.network", true, "(", ".:)")..[[
         end
     ]]
 }
