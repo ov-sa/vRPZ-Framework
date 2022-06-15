@@ -64,6 +64,7 @@ function import(...)
         args = ((#args > 0) and ", \""..imports.table.concat(args, "\", \"").."\"") or ""
         return [[
         local genImports, isCompleteFetch = call(getResourceFromName("]]..syncer.libraryName..[["), "import", true]]..args..[[)
+        if not genImports then return false end
         local genReturns = (not isCompleteFetch and {}) or false
         for i = 1, #genImports, 1 do
             local j = genImports[i]
@@ -76,7 +77,7 @@ function import(...)
                 end
             end
         end
-        if isCompleteFetch or (#genReturns <= 0) then return true
+        if isCompleteFetch then return assetify
         else return unpack(genReturns) end
         ]]
     end
