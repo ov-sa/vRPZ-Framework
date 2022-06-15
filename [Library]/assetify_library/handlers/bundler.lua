@@ -50,12 +50,9 @@ function import(...)
             local j = buildImports[i]
             if (j ~= "imports") and bundler[j] and not __genImports[j] then
                 local cImport = {index = j}
-                if imports.type(bundler[j]) == "table" then
-                    cImport.module = bundler[j].module or false
-                    cImport.rw = bundler["imports"]..bundler[j].rw
-                else
-                    cImport.rw = bundler["imports"]..bundler[j]
-                end
+                local isModule = imports.type(bundler[j]) == "table"
+                cImport.module = (isModule and bundler[j].module) or false
+                cImport.rw = (isModule and bundler["imports"]..bundler[j].rw) or bundler["imports"]..bundler[j]
                 __genImports[j] = true
                 imports.table.insert(genImports, cImport)
             end
