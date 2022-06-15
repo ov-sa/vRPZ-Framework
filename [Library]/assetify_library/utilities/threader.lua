@@ -125,6 +125,7 @@ function thread:sleep(duration)
     if self.timer and imports.isTimer(self.timer) then return false end
     self.isAwaiting = "sleep"
     self.timer = imports.setTimer(function()
+        self.isAwaiting = nil
         self:resume()
     end, duration, 1)
     self:pause()
