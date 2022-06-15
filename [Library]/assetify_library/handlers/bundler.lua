@@ -193,9 +193,11 @@ bundler["core"] = {
                     if cAsset.manifestData.assetDeps.script[j] then
                         for k = 1, #cAsset.manifestData.assetDeps.script[j], 1 do
                             local rwData = assetify.getAssetDep("module", assetName, "script", j, k)
-                            if not assetify.imports.pcall(assetify.imports.loadstring(rwData)) then
+                            local status, error = assetify.imports.pcall(assetify.imports.loadstring(rwData))
+                            if not status then
                                 assetify.imports.outputDebugString("[Module: "..assetName.."] | Importing Failed: "..cAsset.manifestData.assetDeps.script[j][k].." ("..j..")")
                                 assetify.imports.assert(assetify.imports.loadstring(rwData))
+                                assetify.imports.outputDebugString(error)
                             end
                         end
                     end

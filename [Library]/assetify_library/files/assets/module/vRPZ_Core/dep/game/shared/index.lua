@@ -40,12 +40,12 @@ CGame = {
         for i = 1, #methods, 1 do
             local j = methods[i]
             imports.loadstring([[
-                network:create("]]..name..[[.]]..j..[[", true):on(function(...)
+                assetify.network:create("]]..name..[[.]]..j..[[", true):on(function(...)
                     return ]]..name..[[.]]..j..[[(...)
                 end)
             ]])()
             CGame.CExports = CGame.CExports..[[
-                ]]..name..[[.]]..j..[[ = function(cThread, ...) return network:emitCallback(cThread, "]]..name..[[.]]..j..[[", false, ...) end
+                ]]..name..[[.]]..j..[[ = function(cThread, ...) return assetify.network:emitCallback(cThread, "]]..name..[[.]]..j..[[", false, ...) end
             ]]
         end
         return true
