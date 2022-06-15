@@ -96,10 +96,10 @@ function thread:resume(syncRate)
     self.syncRate.frames = (self.syncRate.executions and syncRate and imports.tonumber(syncRate.frames)) or false
     if self.syncRate.executions and self.syncRate.frames then
         self.timer = imports.setTimer(function()
-            if self.isScheduled then return false end
+            if self.isAwaiting then return false end
             if self:status() == "suspended" then
                 for i = 1, self.syncRate.executions, 1 do
-                    if self.isScheduled then return false end
+                    if self.isAwaiting then return false end
                     if self:status() == "dead" then return self:destroy() end
                     imports.coroutine.resume(self.thread, self)
                 end
@@ -107,7 +107,7 @@ function thread:resume(syncRate)
             if self:status() == "dead" then self:destroy() end
         end, self.syncRate.frames, 0)
     else
-        if self.isScheduled then return false end
+        if self.isAwaiting then return false end
         if self.timer and imports.isTimer(self.timer) then
             imports.killTimer(self.timer)
         end
@@ -123,6 +123,7 @@ function thread:sleep(duration)
     duration = imports.math.max(0, imports.tonumber(duration) or 0)
     if not self or (self == thread) then return false end
     if self.timer and imports.isTimer(self.timer) then return false end
+    self.isAwaiting = "sleep"
     self.timer = imports.setTimer(function()
         self:resume()
     end, duration, 1)
@@ -133,7 +134,7 @@ end
 function thread:await(exec)
     if not self or (self == thread) then return false end
     if not exec or imports.type(exec) ~= "function" then return self:resolve(exec) end
-    self.isScheduled = true
+    self.isAwaiting = "promise"
     exec(self)
     thread:pause()
     local resolvedValues = self.scheduledValues
@@ -143,8 +144,8 @@ end
 
 function thread:resolve(...)
     if not self or (self == thread) then return false end
-    if not self.isScheduled then return false end
-    self.isScheduled = nil
+    if not self.isAwaiting or (self.isAwaiting ~= "promise") then return false end
+    self.isAwaiting = nil
     self.scheduledValues = {...}
     local self = self
     imports.setTimer(function()
