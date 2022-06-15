@@ -114,118 +114,120 @@ bundler["threader"] = {module = "thread", rw = imports.file.read("utilities/thre
 bundler["networker"] = {module = "network", rw = imports.file.read("utilities/networker.lua")}
 
 bundler["core"] = [[
-    assetify.__core = {}
-    if localPlayer then
-        assetify.__core.getProgress = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getLibraryProgress", ...)
+    if not assetify.__core then
+        assetify.__core = {}
+        if localPlayer then
+            assetify.__core.getProgress = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getLibraryProgress", ...)
+            end
+        
+            assetify.__core.getAssetID = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getAssetID", ...)
+            end
+        
+            assetify.__core.isAssetLoaded = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isAssetLoaded", ...)
+            end
+        
+            assetify.__core.loadAsset = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "loadAsset", ...)
+            end
+        
+            assetify.__core.unloadAsset = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "unloadAsset", ...)
+            end
+        
+            assetify.__core.loadAnim = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "loadAnim", ...)
+            end
+        
+            assetify.__core.unloadAnim = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "unloadAnim", ...)
+            end
+        
+            assetify.__core.createShader = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createShader", ...)
+            end
+        
+            assetify.__core.clearWorld = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "clearWorld", ...)
+            end
+        
+            assetify.__core.restoreWorld = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "restoreWorld", ...)
+            end
+        
+            assetify.__core.clearModel = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "clearModel", ...)
+            end
+        
+            assetify.__core.restoreModel = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "restoreModel", ...)
+            end
+        
+            assetify.__core.playSound = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "playSoundAsset", ...)
+            end
+        
+            assetify.__core.playSound3D = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "playSoundAsset3D", ...)
+            end
         end
-    
-        assetify.__core.getAssetID = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getAssetID", ...)
+        
+        assetify.__core.isLoaded = function()
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isLibraryLoaded")
         end
-    
-        assetify.__core.isAssetLoaded = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isAssetLoaded", ...)
+        
+        assetify.__core.isModuleLoaded = function()
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isModuleLoaded")
         end
-    
-        assetify.__core.loadAsset = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "loadAsset", ...)
+        
+        assetify.__core.getAssets = function(...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getLibraryAssets", ...)
         end
-    
-        assetify.__core.unloadAsset = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "unloadAsset", ...)
+        
+        assetify.__core.getAsset = function(...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getAssetData", ...)
         end
-    
-        assetify.__core.loadAnim = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "loadAnim", ...)
+        
+        assetify.__core.getAssetDep = function(...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getAssetDep", ...)
         end
-    
-        assetify.__core.unloadAnim = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "unloadAnim", ...)
-        end
-    
-        assetify.__core.createShader = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createShader", ...)
-        end
-    
-        assetify.__core.clearWorld = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "clearWorld", ...)
-        end
-    
-        assetify.__core.restoreWorld = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "restoreWorld", ...)
-        end
-    
-        assetify.__core.clearModel = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "clearModel", ...)
-        end
-    
-        assetify.__core.restoreModel = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "restoreModel", ...)
-        end
-    
-        assetify.__core.playSound = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "playSoundAsset", ...)
-        end
-    
-        assetify.__core.playSound3D = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "playSoundAsset3D", ...)
-        end
-    end
-    
-    assetify.__core.isLoaded = function()
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isLibraryLoaded")
-    end
-    
-    assetify.__core.isModuleLoaded = function()
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isModuleLoaded")
-    end
-    
-    assetify.__core.getAssets = function(...)
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getLibraryAssets", ...)
-    end
-    
-    assetify.__core.getAsset = function(...)
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getAssetData", ...)
-    end
-    
-    assetify.__core.getAssetDep = function(...)
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getAssetDep", ...)
-    end
-    
-    assetify.__core.loadModule = function(assetName, moduleTypes)
-        local cAsset = assetify.getAsset("module", assetName)
-        if not cAsset or not moduleTypes or (#moduleTypes <= 0) then return false end
-        if not cAsset.manifestData.assetDeps or not cAsset.manifestData.assetDeps.script then return false end
-        for i = 1, #moduleTypes, 1 do
-            local j = moduleTypes[i]
-            if cAsset.manifestData.assetDeps.script[j] then
-                for k = 1, #cAsset.manifestData.assetDeps.script[j], 1 do
-                    local rwData = assetify.getAssetDep("module", assetName, "script", j, k)
-                    if not assetify.imports.pcall(assetify.imports.loadstring(rwData)) then
-                        assetify.imports.outputDebugString("[Module: "..assetName.."] | Importing Failed: "..cAsset.manifestData.assetDeps.script[j][k].." ("..j..")")
-                        assetify.imports.assert(assetify.imports.loadstring(rwData))
+        
+        assetify.__core.loadModule = function(assetName, moduleTypes)
+            local cAsset = assetify.getAsset("module", assetName)
+            if not cAsset or not moduleTypes or (#moduleTypes <= 0) then return false end
+            if not cAsset.manifestData.assetDeps or not cAsset.manifestData.assetDeps.script then return false end
+            for i = 1, #moduleTypes, 1 do
+                local j = moduleTypes[i]
+                if cAsset.manifestData.assetDeps.script[j] then
+                    for k = 1, #cAsset.manifestData.assetDeps.script[j], 1 do
+                        local rwData = assetify.getAssetDep("module", assetName, "script", j, k)
+                        if not assetify.imports.pcall(assetify.imports.loadstring(rwData)) then
+                            assetify.imports.outputDebugString("[Module: "..assetName.."] | Importing Failed: "..cAsset.manifestData.assetDeps.script[j][k].." ("..j..")")
+                            assetify.imports.assert(assetify.imports.loadstring(rwData))
+                        end
                     end
                 end
             end
+            return true
         end
-        return true
-    end
-    
-    assetify.__core.setElementAsset = function(...)
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setElementAsset", ...)
-    end
-    
-    assetify.__core.getElementAssetInfo = function(...)
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getElementAssetInfo", ...)
-    end
-    
-    assetify.__core.createDummy = function(...)
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createAssetDummy", ...)
-    end
+        
+        assetify.__core.setElementAsset = function(...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setElementAsset", ...)
+        end
+        
+        assetify.__core.getElementAssetInfo = function(...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getElementAssetInfo", ...)
+        end
+        
+        assetify.__core.createDummy = function(...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createAssetDummy", ...)
+        end
 
-    for i, j in assetify.imports.pairs(assetify.__core) do
-        assetify[i] = j
+        for i, j in assetify.imports.pairs(assetify.__core) do
+            assetify[i] = j
+        end
     end
 ]]
 
