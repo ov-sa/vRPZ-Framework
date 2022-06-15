@@ -237,162 +237,172 @@ bundler["networker"] = [[
 ]]
 
 bundler["scheduler"] = [[
-    ]]..bundler["threader"]..[[
-    ]]..bundler["networker"]..[[
-    assetify.scheduler = {
-        buffer = {execOnLoad = {}, execOnModuleLoad = {}},
-        execOnLoad = function(execFunc)
-            if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
-            local isLoaded = assetify.isLoaded()
-            if isLoaded then
-                execFunc()
-            else
-                local execWrapper = nil
-                execWrapper = function()
+    if not assetify.scheduler then
+        ]]..bundler["threader"]..[[
+        ]]..bundler["networker"]..[[
+        assetify.scheduler = {
+            buffer = {execOnLoad = {}, execOnModuleLoad = {}},
+            execOnLoad = function(execFunc)
+                if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
+                local isLoaded = assetify.isLoaded()
+                if isLoaded then
                     execFunc()
-                    network:fetch("Assetify:onLoad"):off(execWrapper)
-                end
-                network:fetch("Assetify:onLoad", true):on(execWrapper)
-            end
-            return true
-        end,
-
-        execOnModuleLoad = function(execFunc)
-            if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
-            local isModuleLoaded = assetify.isModuleLoaded()
-            if isModuleLoaded then
-                execFunc()
-            else
-                local execWrapper = nil
-                execWrapper = function()
-                    execFunc()
-                    network:fetch("Assetify:onModuleLoad"):off(execWrapper)
-                end
-                network:fetch("Assetify:onModuleLoad", true):on(execWrapper)
-            end
-            return true
-        end,
-
-        execScheduleOnLoad = function(execFunc)
-            if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
-            assetify.imports.table.insert(assetify.scheduler.buffer.execOnLoad, execFunc)
-            return true
-        end,
-
-        execScheduleOnModuleLoad = function(execFunc)
-            if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
-            assetify.imports.table.insert(assetify.scheduler.buffer.execOnModuleLoad, execFunc)
-            return true
-        end,
-
-        boot = function()
-            for i, j in assetify.imports.pairs(assetify.scheduler.buffer) do
-                if #j > 0 then
-                    for k = 1, #j, 1 do
-                        assetify.scheduler[i](j[k])
+                else
+                    local execWrapper = nil
+                    execWrapper = function()
+                        execFunc()
+                        network:fetch("Assetify:onLoad"):off(execWrapper)
                     end
-                    assetify.scheduler.buffer[i] = {}
+                    network:fetch("Assetify:onLoad", true):on(execWrapper)
                 end
-            end
-            return true
-        end
-    }
-]]
-
-bundler["renderer"] = [[
-    if localPlayer then
-        assetify.renderer = {
-            isVirtualRendering = function(...)
-                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isRendererVirtualRendering", ...)
+                return true
             end,
 
-            setVirtualRendering = function(...)
-                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererVirtualRendering", ...)
+            execOnModuleLoad = function(execFunc)
+                if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
+                local isModuleLoaded = assetify.isModuleLoaded()
+                if isModuleLoaded then
+                    execFunc()
+                else
+                    local execWrapper = nil
+                    execWrapper = function()
+                        execFunc()
+                        network:fetch("Assetify:onModuleLoad"):off(execWrapper)
+                    end
+                    network:fetch("Assetify:onModuleLoad", true):on(execWrapper)
+                end
+                return true
             end,
 
-            getVirtualSource = function(...)
-                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getRendererVirtualSource", ...)
+            execScheduleOnLoad = function(execFunc)
+                if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
+                assetify.imports.table.insert(assetify.scheduler.buffer.execOnLoad, execFunc)
+                return true
             end,
 
-            getVirtualRTs = function(...)
-                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getRendererVirtualRTs", ...)
+            execScheduleOnModuleLoad = function(execFunc)
+                if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
+                assetify.imports.table.insert(assetify.scheduler.buffer.execOnModuleLoad, execFunc)
+                return true
             end,
 
-            setTimeSync = function(...)
-                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererTimeSync", ...)
-            end,
-
-            setServerTick = function(...)
-                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererServerTick", ...)
-            end,
-
-            setMinuteDuration = function(...)
-                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererMinuteDuration", ...)
+            boot = function()
+                for i, j in assetify.imports.pairs(assetify.scheduler.buffer) do
+                    if #j > 0 then
+                        for k = 1, #j, 1 do
+                            assetify.scheduler[i](j[k])
+                        end
+                        assetify.scheduler.buffer[i] = {}
+                    end
+                end
+                return true
             end
         }
     end
 ]]
 
-bundler["syncer"] = [[
-    assetify.syncer = {
-        setGlobalData = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setGlobalData", ...)
-        end,
-    
-        getGlobalData = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getGlobalData", ...)
-        end,
-    
-        setEntityData = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setEntityData", ...)
-        end,
-    
-        getEntityData = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getEntityData", ...)
+bundler["renderer"] = [[
+    if not assetify.renderer then
+        if localPlayer then
+            assetify.renderer = {
+                isVirtualRendering = function(...)
+                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isRendererVirtualRendering", ...)
+                end,
+
+                setVirtualRendering = function(...)
+                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererVirtualRendering", ...)
+                end,
+
+                getVirtualSource = function(...)
+                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getRendererVirtualSource", ...)
+                end,
+
+                getVirtualRTs = function(...)
+                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getRendererVirtualRTs", ...)
+                end,
+
+                setTimeSync = function(...)
+                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererTimeSync", ...)
+                end,
+
+                setServerTick = function(...)
+                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererServerTick", ...)
+                end,
+
+                setMinuteDuration = function(...)
+                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererMinuteDuration", ...)
+                end
+            }
         end
-    }
+    end
+]]
+
+bundler["syncer"] = [[
+    if not assetify.syncer then
+        assetify.syncer = {
+            setGlobalData = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setGlobalData", ...)
+            end,
+        
+            getGlobalData = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getGlobalData", ...)
+            end,
+        
+            setEntityData = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setEntityData", ...)
+            end,
+        
+            getEntityData = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getEntityData", ...)
+            end
+        }
+    end
 ]]
 
 bundler["attacher"] = [[
-    assetify.attacher = {
-        setBoneAttach = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setBoneAttachment", ...)
-        end,
-    
-        setBoneDetach = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setBoneDetachment", ...)
-        end,
-    
-        setBoneRefresh = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setBoneRefreshment", ...)
-        end,
-    
-        clearBoneAttach = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "clearBoneAttachment", ...)
-        end
-    }
+    if not assetify.attacher then
+        assetify.attacher = {
+            setBoneAttach = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setBoneAttachment", ...)
+            end,
+        
+            setBoneDetach = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setBoneDetachment", ...)
+            end,
+        
+            setBoneRefresh = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setBoneRefreshment", ...)
+            end,
+        
+            clearBoneAttach = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "clearBoneAttachment", ...)
+            end
+        }
+    end
 ]]
 
 bundler["lights"] = [[
-    if localPlayer then
-        assetify.light = {
-            planar = {
-                create = function(...)
-                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createPlanarLight", ...)
-                end,
+    if not assetify.light then
+        if localPlayer then
+            assetify.light = {
+                planar = {
+                    create = function(...)
+                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createPlanarLight", ...)
+                    end,
 
-                setResolution = function(...)
-                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setPlanarLightResolution", ...)
-                end,
+                    setResolution = function(...)
+                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setPlanarLightResolution", ...)
+                    end,
 
-                setTexture = function(...)
-                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setPlanarLightTexture", ...)
-                end,
+                    setTexture = function(...)
+                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setPlanarLightTexture", ...)
+                    end,
 
-                setColor = function(...)
-                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setPlanarLightColor", ...)
-                end
+                    setColor = function(...)
+                        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setPlanarLightColor", ...)
+                    end
+                }
             }
-        }
+        end
     end
 ]]
