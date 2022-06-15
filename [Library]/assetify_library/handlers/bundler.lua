@@ -98,19 +98,23 @@ end
 -----------------
 
 bundler["imports"] = imports.file.read("utilities/shared.lua")..[[
-    local imports = {
-        isAssetifyImport = true,
-        resourceName = "]]..syncer.libraryName..[[",
-        type = type,
-        pairs = pairs,
-        call = call,
-        pcall = pcall,
-        assert = assert,
-        outputDebugString = outputDebugString,
-        loadstring = loadstring,
-        getResourceFromName = getResourceFromName,
-        table = table
-    }
+    if not assetify then
+        assetify = {
+            imports = {
+                resourceName = "]]..syncer.libraryName..[[",
+                type = type,
+                pairs = pairs,
+                call = call,
+                pcall = pcall,
+                assert = assert,
+                outputDebugString = outputDebugString,
+                loadstring = loadstring,
+                getResourceFromName = getResourceFromName,
+                table = table
+            }
+        }
+    end
+
 ]]
 
 bundler["core"] = [[
@@ -119,80 +123,80 @@ bundler["core"] = [[
 
         if localPlayer then
             assetify.getProgress = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "getLibraryProgress", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getLibraryProgress", ...)
             end
 
             assetify.getAssetID = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "getAssetID", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getAssetID", ...)
             end
 
             assetify.isAssetLoaded = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "isAssetLoaded", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isAssetLoaded", ...)
             end
 
             assetify.loadAsset = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "loadAsset", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "loadAsset", ...)
             end
 
             assetify.unloadAsset = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "unloadAsset", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "unloadAsset", ...)
             end
 
             assetify.loadAnim = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "loadAnim", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "loadAnim", ...)
             end
 
             assetify.unloadAnim = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "unloadAnim", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "unloadAnim", ...)
             end
 
             assetify.createShader = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "createShader", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createShader", ...)
             end
 
             assetify.clearWorld = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "clearWorld", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "clearWorld", ...)
             end
 
             assetify.restoreWorld = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "restoreWorld", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "restoreWorld", ...)
             end
 
             assetify.clearModel = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "clearModel", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "clearModel", ...)
             end
 
             assetify.restoreModel = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "restoreModel", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "restoreModel", ...)
             end
 
             assetify.playSound = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "playSoundAsset", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "playSoundAsset", ...)
             end
 
             assetify.playSound3D = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "playSoundAsset3D", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "playSoundAsset3D", ...)
             end
         end
 
         assetify.isLoaded = function()
-            return imports.call(imports.getResourceFromName(imports.resourceName), "isLibraryLoaded")
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isLibraryLoaded")
         end
 
         assetify.isModuleLoaded = function()
-            return imports.call(imports.getResourceFromName(imports.resourceName), "isModuleLoaded")
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isModuleLoaded")
         end
 
         assetify.getAssets = function(...)
-            return imports.call(imports.getResourceFromName(imports.resourceName), "getLibraryAssets", ...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getLibraryAssets", ...)
         end
 
         assetify.getAsset = function(...)
-            return imports.call(imports.getResourceFromName(imports.resourceName), "getAssetData", ...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getAssetData", ...)
         end
 
         assetify.getAssetDep = function(...)
-            return imports.call(imports.getResourceFromName(imports.resourceName), "getAssetDep", ...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getAssetDep", ...)
         end
 
         assetify.loadModule = function(assetName, moduleTypes)
@@ -204,9 +208,9 @@ bundler["core"] = [[
                 if cAsset.manifestData.assetDeps.script[j] then
                     for k = 1, #cAsset.manifestData.assetDeps.script[j], 1 do
                         local rwData = assetify.getAssetDep("module", assetName, "script", j, k)
-                        if not imports.pcall(imports.loadstring(rwData)) then
-                            imports.outputDebugString("[Module: "..assetName.."] | Importing Failed: "..cAsset.manifestData.assetDeps.script[j][k].." ("..j..")")
-                            imports.assert(imports.loadstring(rwData))
+                        if not assetify.imports.pcall(assetify.imports.loadstring(rwData)) then
+                            assetify.imports.outputDebugString("[Module: "..assetName.."] | Importing Failed: "..cAsset.manifestData.assetDeps.script[j][k].." ("..j..")")
+                            assetify.imports.assert(assetify.imports.loadstring(rwData))
                         end
                     end
                 end
@@ -215,15 +219,15 @@ bundler["core"] = [[
         end
 
         assetify.setElementAsset = function(...)
-            return imports.call(imports.getResourceFromName(imports.resourceName), "setElementAsset", ...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setElementAsset", ...)
         end
 
         assetify.getElementAssetInfo = function(...)
-            return imports.call(imports.getResourceFromName(imports.resourceName), "getElementAssetInfo", ...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getElementAssetInfo", ...)
         end
 
         assetify.createDummy = function(...)
-            return imports.call(imports.getResourceFromName(imports.resourceName), "createAssetDummy", ...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createAssetDummy", ...)
         end
     end
 ]]
@@ -241,7 +245,7 @@ bundler["scheduler"] = [[
     assetify.scheduler = {
         buffer = {execOnLoad = {}, execOnModuleLoad = {}},
         execOnLoad = function(execFunc)
-            if not execFunc or (imports.type(execFunc) ~= "function") then return false end
+            if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
             local isLoaded = assetify.isLoaded()
             if isLoaded then
                 execFunc()
@@ -257,7 +261,7 @@ bundler["scheduler"] = [[
         end,
 
         execOnModuleLoad = function(execFunc)
-            if not execFunc or (imports.type(execFunc) ~= "function") then return false end
+            if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
             local isModuleLoaded = assetify.isModuleLoaded()
             if isModuleLoaded then
                 execFunc()
@@ -273,19 +277,19 @@ bundler["scheduler"] = [[
         end,
 
         execScheduleOnLoad = function(execFunc)
-            if not execFunc or (imports.type(execFunc) ~= "function") then return false end
-            imports.table.insert(assetify.scheduler.buffer.execOnLoad, execFunc)
+            if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
+            assetify.imports.table.insert(assetify.scheduler.buffer.execOnLoad, execFunc)
             return true
         end,
 
         execScheduleOnModuleLoad = function(execFunc)
-            if not execFunc or (imports.type(execFunc) ~= "function") then return false end
-            imports.table.insert(assetify.scheduler.buffer.execOnModuleLoad, execFunc)
+            if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
+            assetify.imports.table.insert(assetify.scheduler.buffer.execOnModuleLoad, execFunc)
             return true
         end,
 
         boot = function()
-            for i, j in imports.pairs(assetify.scheduler.buffer) do
+            for i, j in assetify.imports.pairs(assetify.scheduler.buffer) do
                 if #j > 0 then
                     for k = 1, #j, 1 do
                         assetify.scheduler[i](j[k])
@@ -302,31 +306,31 @@ bundler["renderer"] = [[
     if localPlayer then
         assetify.renderer = {
             isVirtualRendering = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "isRendererVirtualRendering", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isRendererVirtualRendering", ...)
             end,
 
             setVirtualRendering = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "setRendererVirtualRendering", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererVirtualRendering", ...)
             end,
 
             getVirtualSource = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "getRendererVirtualSource", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getRendererVirtualSource", ...)
             end,
 
             getVirtualRTs = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "getRendererVirtualRTs", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getRendererVirtualRTs", ...)
             end,
 
             setTimeSync = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "setRendererTimeSync", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererTimeSync", ...)
             end,
 
             setServerTick = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "setRendererServerTick", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererServerTick", ...)
             end,
 
             setMinuteDuration = function(...)
-                return imports.call(imports.getResourceFromName(imports.resourceName), "setRendererMinuteDuration", ...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererMinuteDuration", ...)
             end
         }
     end
@@ -335,19 +339,19 @@ bundler["renderer"] = [[
 bundler["syncer"] = [[
     assetify.syncer = {
         setGlobalData = function(...)
-            return imports.call(imports.getResourceFromName(imports.resourceName), "setGlobalData", ...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setGlobalData", ...)
         end,
     
         getGlobalData = function(...)
-            return imports.call(imports.getResourceFromName(imports.resourceName), "getGlobalData", ...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getGlobalData", ...)
         end,
     
         setEntityData = function(...)
-            return imports.call(imports.getResourceFromName(imports.resourceName), "setEntityData", ...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setEntityData", ...)
         end,
     
         getEntityData = function(...)
-            return imports.call(imports.getResourceFromName(imports.resourceName), "getEntityData", ...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getEntityData", ...)
         end
     }
 ]]
@@ -355,19 +359,19 @@ bundler["syncer"] = [[
 bundler["attacher"] = [[
     assetify.attacher = {
         setBoneAttach = function(...)
-            return imports.call(imports.getResourceFromName(imports.resourceName), "setBoneAttachment", ...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setBoneAttachment", ...)
         end,
     
         setBoneDetach = function(...)
-            return imports.call(imports.getResourceFromName(imports.resourceName), "setBoneDetachment", ...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setBoneDetachment", ...)
         end,
     
         setBoneRefresh = function(...)
-            return imports.call(imports.getResourceFromName(imports.resourceName), "setBoneRefreshment", ...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setBoneRefreshment", ...)
         end,
     
         clearBoneAttach = function(...)
-            return imports.call(imports.getResourceFromName(imports.resourceName), "clearBoneAttachment", ...)
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "clearBoneAttachment", ...)
         end
     }
 ]]
@@ -377,19 +381,19 @@ bundler["lights"] = [[
         assetify.light = {
             planar = {
                 create = function(...)
-                    return imports.call(imports.getResourceFromName(imports.resourceName), "createPlanarLight", ...)
+                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createPlanarLight", ...)
                 end,
 
                 setResolution = function(...)
-                    return imports.call(imports.getResourceFromName(imports.resourceName), "setPlanarLightResolution", ...)
+                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setPlanarLightResolution", ...)
                 end,
 
                 setTexture = function(...)
-                    return imports.call(imports.getResourceFromName(imports.resourceName), "setPlanarLightTexture", ...)
+                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setPlanarLightTexture", ...)
                 end,
 
                 setColor = function(...)
-                    return imports.call(imports.getResourceFromName(imports.resourceName), "setPlanarLightColor", ...)
+                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setPlanarLightColor", ...)
                 end
             }
         }
