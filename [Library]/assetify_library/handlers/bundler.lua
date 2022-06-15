@@ -67,7 +67,7 @@ function import(...)
         for i = 1, #genImports, 1 do
             local j = genImports[i]
             loadstring(j.rw)()
-            if not isCompleteFetch and j.index then
+            if not isCompleteFetch then
                 table.insert(genReturns, assetify[(j.index)])
             end
         end
