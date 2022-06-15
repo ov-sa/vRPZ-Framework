@@ -11,8 +11,7 @@ local imports = {
     string = string,
     math = math,
     assetify = assetify,
-    dbify = dbify,
-    assetify = assetify
+    dbify = dbify
 }
 
 

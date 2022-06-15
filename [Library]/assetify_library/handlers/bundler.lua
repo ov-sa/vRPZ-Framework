@@ -258,9 +258,9 @@ bundler["scheduler"] = {
                         local execWrapper = nil
                         execWrapper = function()
                             execFunc()
-                            network:fetch("Assetify:onLoad"):off(execWrapper)
+                            assetify.network:fetch("Assetify:onLoad"):off(execWrapper)
                         end
-                        network:fetch("Assetify:onLoad", true):on(execWrapper)
+                        assetify.network:fetch("Assetify:onLoad", true):on(execWrapper)
                     end
                     return true
                 end,
@@ -274,9 +274,9 @@ bundler["scheduler"] = {
                         local execWrapper = nil
                         execWrapper = function()
                             execFunc()
-                            network:fetch("Assetify:onModuleLoad"):off(execWrapper)
+                            assetify.network:fetch("Assetify:onModuleLoad"):off(execWrapper)
                         end
-                        network:fetch("Assetify:onModuleLoad", true):on(execWrapper)
+                        assetify.network:fetch("Assetify:onModuleLoad", true):on(execWrapper)
                     end
                     return true
                 end,
