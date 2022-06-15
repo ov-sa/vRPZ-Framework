@@ -3,7 +3,7 @@
 -----------------
 
 local imports = {
-    network = network
+    assetify = assetify
 }
 
 
@@ -28,5 +28,5 @@ CGame.exportModule("CPlayer", {
 --[[ Events ]]--
 ----------------
 
-imports.network:create("Player:onLogin")
-imports.network:create("Player:onLogout")
+imports.assetify.network:create("Player:onLogin")
+imports.assetify.network:create("Player:onLogout")

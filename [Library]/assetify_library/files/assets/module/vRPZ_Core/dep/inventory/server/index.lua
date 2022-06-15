@@ -12,7 +12,7 @@ local imports = {
     math = math,
     assetify = assetify,
     dbify = dbify,
-    network = network
+    assetify = assetify
 }
 
 
@@ -102,7 +102,7 @@ CInventory.equipItem = function(player, item, prevSlot, slot, isEquipped)
         CGame.setEntityData(player, "Slot:Object:"..slot, CPlayer.CAttachments[player][slot])
         print("CREATE ATTACHMENT")   --TODO: REMOVE..
     end
-    imports.network:emit("Client:onSyncInventoryBuffer", true, false, player, CInventory.CBuffer[inventoryID])
+    imports.assetify.network:emit("Client:onSyncInventoryBuffer", true, false, player, CInventory.CBuffer[inventoryID])
     return false
 end
 
@@ -126,7 +126,7 @@ CInventory.dequipItem = function(player, item, prevSlot, slot, isEquipped)
         CGame.setEntityData(player, "Slot:Object:"..prevSlot, nil)
         print("REMOVE ATTACHMENT")  --TODO: REMOVE..
     end
-    imports.network:emit("Client:onSyncInventoryBuffer", true, false, player, CInventory.CBuffer[inventoryID])
+    imports.assetify.network:emit("Client:onSyncInventoryBuffer", true, false, player, CInventory.CBuffer[inventoryID])
     return false
 end
 

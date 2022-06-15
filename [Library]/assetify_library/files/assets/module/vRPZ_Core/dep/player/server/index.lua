@@ -10,7 +10,7 @@ local imports = {
     getElementType = getElementType,
     getElementsByType = getElementsByType,
     getPlayerSerial = getPlayerSerial,
-    network = network
+    assetify = assetify
 }
 
 
@@ -83,19 +83,19 @@ CPlayer.setLogged = function(player, state)
         if CPlayer.CLogged[player] then return false end
         CPlayer.CLogged[player] = true
         for i, j in imports.pairs(CPlayer.CLogged) do
-            imports.network:emit("Player:onLogin", true, false, i, player)
+            imports.assetify.network:emit("Player:onLogin", true, false, i, player)
             if i ~= player then
-                imports.network:emit("Player:onLogin", true, false, player, i)
+                imports.assetify.network:emit("Player:onLogin", true, false, player, i)
             end
         end
-        imports.network:emit("Player:onLogin", false, player)
+        imports.assetify.network:emit("Player:onLogin", false, player)
     else
         if not CPlayer.CLogged[player] then return false end
         for i, j in imports.pairs(CPlayer.CLogged) do
-            imports.network:emit("Player:onLogout", true, false, i, player)
+            imports.assetify.network:emit("Player:onLogout", true, false, i, player)
         end
         CPlayer.CLogged[player] = nil
-        imports.network:emit("Player:onLogout", false, player)
+        imports.assetify.network:emit("Player:onLogout", false, player)
     end
     return true
 end
@@ -103,7 +103,7 @@ end
 CPlayer.setChannel = function(player, channelIndex)
     channelIndex = imports.tonumber(channelIndex)
     if not CPlayer.isInitialized(player) or not channelIndex or not FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Chats"][channelIndex] then return false end
-    imports.network:emit("Client:onUpdateChannel", false, true, player, channelIndex)
+    imports.assetify.network:emit("Client:onUpdateChannel", false, true, player, channelIndex)
     CPlayer.CChannel[player] = channelIndex
     return true 
 end
@@ -120,14 +120,14 @@ CPlayer.setParty = function(player, partyData)
         for i = 1, #player do
             local j = player[i]
             CPlayer.CParty[j] = partyData
-            imports.network:emit("Client:onUpdateParty", false, true, j, partyData)
+            imports.assetify.network:emit("Client:onUpdateParty", false, true, j, partyData)
         end
         return true
     else
         if not CPlayer.isInitialized(player) then return false end
         for i, #partyData.members, 1 do
             local j = partyData.members[i]
-            imports.network:emit("Client:onUpdateParty", false, true, j, partyData)
+            imports.assetify.network:emit("Client:onUpdateParty", false, true, j, partyData)
         end
         CPlayer.CParty[player] = partyData
         return true

@@ -3,7 +3,7 @@
 -----------------
 
 local imports = {
-    network = network
+    assetify = assetify
 }
 
 
@@ -22,7 +22,7 @@ CGame.exportModule("CPlayer", {
 --[[ Events ]]--
 ----------------
 
-imports.network:create("Player:onLogin"):on(function(source) CPlayer.CLogged[source] = true end)
-imports.network:create("Player:onLogout"):on(function(source) CPlayer.CLogged[source] = nil end)
-imports.network:create("Client:onUpdateChannel"):on(CPlayer.setChannel)
-imports.network:create("Client:onUpdateParty"):on(CPlayer.setParty)
+imports.assetify.network:create("Player:onLogin"):on(function(source) CPlayer.CLogged[source] = true end)
+imports.assetify.network:create("Player:onLogout"):on(function(source) CPlayer.CLogged[source] = nil end)
+imports.assetify.network:create("Client:onUpdateChannel"):on(CPlayer.setChannel)
+imports.assetify.network:create("Client:onUpdateParty"):on(CPlayer.setParty)
