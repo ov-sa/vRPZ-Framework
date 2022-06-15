@@ -116,6 +116,9 @@ bundler["imports"] = imports.file.read("utilities/shared.lua")..[[
     end
 ]]
 
+bundler["threader"] = {module = "thread", rw = imports.file.read("utilities/threader.lua")}
+bundler["networker"] = {module = "network", rw = imports.file.read("utilities/networker.lua")}
+
 bundler["core"] = [[
     if localPlayer then
         assetify.getProgress = function(...)
@@ -226,9 +229,6 @@ bundler["core"] = [[
         return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createAssetDummy", ...)
     end
 ]]
-
-bundler["threader"] = {module = "thread", rw = imports.file.read("utilities/threader.lua")}
-bundler["networker"] = {module = "network", rw = imports.file.read("utilities/networker.lua")}
 
 bundler["scheduler"] = [[
     if not threader then
