@@ -57,7 +57,6 @@ function import(...)
                 imports.table.insert(genImports, cImport)
             end
         end
-        __genImports = nil
         if #genImports <= 0 then return false end
         return genImports, isCompleteFetch
     else
