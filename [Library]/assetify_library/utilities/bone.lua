@@ -89,7 +89,7 @@ function bone:load(element, parent, boneData, remoteSignature)
     self.element = element
     self.parent = parent
     if not self:refresh(boneData, remoteSignature) then return false end
-    self.heartbeat = threader:createHeartbeat(function()
+    self.heartbeat = thread:createHeartbeat(function()
         return not imports.isElement(element)
     end, function()
         imports.setElementCollisionsEnabled(element, false)

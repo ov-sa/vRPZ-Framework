@@ -26,35 +26,35 @@ local imports = {
 }
 
 
--------------------------
---[[ Class: Threader ]]--
--------------------------
+-----------------------
+--[[ Class: Thread ]]--
+-----------------------
 
-threader = {
+thread = {
     buffer = {}
 }
-threader.__index = threader
+thread.__index = thread
 
-function threader:isInstance(cThread)
+function thread:isInstance(cThread)
     if not self or (imports.type(cThread) ~= "table") then return false end
-    if self == threader then return (cThread.isThread and true) or false end
+    if self == thread then return (cThread.isThread and true) or false end
     return (self.isThread and true) or false
 end
 
-function threader:create(exec)
+function thread:create(exec)
     if not exec or imports.type(exec) ~= "function" then return false end
     local cThread = imports.setmetatable({}, {__index = self})
     cThread.isThread = true
     cThread.syncRate = {}
-    cThread.threader = imports.coroutine.create(exec)
-    threader.buffer[cThread] = true
+    cThread.thread = imports.coroutine.create(exec)
+    thread.buffer[cThread] = true
     return cThread
 end
 
-function threader:createHeartbeat(conditionExec, exec, rate)
+function thread:createHeartbeat(conditionExec, exec, rate)
     if not conditionExec or not exec or (imports.type(conditionExec) ~= "function") or (imports.type(exec) ~= "function") then return false end
     rate = imports.math.max(imports.tonumber(rate) or 0, 1)
-    return threader:create(function(self)
+    return thread:create(function(self)
       while(conditionExec()) do
         self:pause()
       end
@@ -66,32 +66,32 @@ function threader:createHeartbeat(conditionExec, exec, rate)
     })
 end
 
-function threader:destroy()
-    if not self or (self == threader) then return false end
+function thread:destroy()
+    if not self or (self == thread) then return false end
     if self.timer and imports.isTimer(self.timer) then
         imports.killTimer(self.timer)
     end
-    threader.buffer[self] = nil
+    thread.buffer[self] = nil
     self = nil
     imports.collectgarbage()
     return true
 end
 
-function threader:status()
-    if not self or (self == threader) then return false end
-    if not self.threader then
+function thread:status()
+    if not self or (self == thread) then return false end
+    if not self.thread then
         return "dead"
     else
-        return imports.coroutine.status(self.threader)
+        return imports.coroutine.status(self.thread)
     end
 end
 
-function threader:pause()
+function thread:pause()
     return imports.coroutine.yield()
 end
 
-function threader:resume(syncRate)
-    if not self or (self == threader) then return false end
+function thread:resume(syncRate)
+    if not self or (self == thread) then return false end
     self.syncRate.executions = (syncRate and imports.tonumber(syncRate.executions)) or false
     self.syncRate.frames = (self.syncRate.executions and syncRate and imports.tonumber(syncRate.frames)) or false
     if self.syncRate.executions and self.syncRate.frames then
@@ -101,7 +101,7 @@ function threader:resume(syncRate)
                 for i = 1, self.syncRate.executions, 1 do
                     if self.isAwaiting then return false end
                     if self:status() == "dead" then return self:destroy() end
-                    imports.coroutine.resume(self.threader, self)
+                    imports.coroutine.resume(self.thread, self)
                 end
             end
             if self:status() == "dead" then self:destroy() end
@@ -112,16 +112,16 @@ function threader:resume(syncRate)
             imports.killTimer(self.timer)
         end
         if self:status() == "suspended" then
-            imports.coroutine.resume(self.threader, self)
+            imports.coroutine.resume(self.thread, self)
         end
         if self:status() == "dead" then self:destroy() end
     end
     return true
 end
 
-function threader:sleep(duration)
+function thread:sleep(duration)
     duration = imports.math.max(0, imports.tonumber(duration) or 0)
-    if not self or (self == threader) then return false end
+    if not self or (self == thread) then return false end
     if self.timer and imports.isTimer(self.timer) then return false end
     self.isAwaiting = "sleep"
     self.timer = imports.setTimer(function()
@@ -131,19 +131,19 @@ function threader:sleep(duration)
     return true
 end
 
-function threader:await(exec)
-    if not self or (self == threader) then return false end
+function thread:await(exec)
+    if not self or (self == thread) then return false end
     if not exec or imports.type(exec) ~= "function" then return self:resolve(exec) end
     self.isAwaiting = "promise"
     exec(self)
-    threader:pause()
+    thread:pause()
     local resolvedValues = self.awaitingValues
     self.awaitingValues = nil
     return imports.unpack(resolvedValues)
 end
 
-function threader:resolve(...)
-    if not self or (self == threader) then return false end
+function thread:resolve(...)
+    if not self or (self == thread) then return false end
     if not self.isAwaiting or (self.isAwaiting ~= "promise") then return false end
     self.isAwaiting = nil
     self.awaitingValues = {...}
@@ -154,4 +154,4 @@ function threader:resolve(...)
     return true
 end
 
-function async(...) return threader:create(...) end
+function async(...) return thread:create(...) end

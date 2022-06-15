@@ -51,8 +51,12 @@ function import(...)
         for i = 1, #buildImports, 1 do
             local j = buildImports[i]
             if (j ~= "imports") and bundler[j] and not __genImports[j] then
+                local cImport = {index = j}
+                local isModule = imports.type(bundler[j]) == "table"
+                cImport.module = (isModule and bundler[j].module) or false
+                cImport.rw = (isModule and bundler["imports"]..bundler[j].rw) or bundler["imports"]..bundler[j]
                 __genImports[j] = true
-                imports.table.insert(genImports, {index = j, rw = bundler["imports"]..bundler[j]})
+                imports.table.insert(genImports, cImport)
             end
         end
         if #genImports <= 0 then return false end
@@ -68,8 +72,12 @@ function import(...)
             local j = genImports[i]
             loadstring(j.rw)()
             if not isCompleteFetch and j.index then
-                j.index = ((j.index == "core") and "__core") or j.index
-                table.insert(genReturns, assetify[(j.index)])
+                if not j.module then
+                    j.index = ((j.index == "core") and "__core") or j.index
+                    table.insert(genReturns, assetify[(j.index)])
+                else
+                    table.insert(genReturns, _G[(j.module)])
+                end
             end
         end
         if isCompleteFetch then return assetify
@@ -101,6 +109,9 @@ bundler["imports"] = imports.file.read("utilities/shared.lua")..[[
         }
     end
 ]]
+
+bundler["threader"] = {module = "thread", rw = imports.file.read("utilities/threader.lua")}
+bundler["networker"] = {module = "network", rw = imports.file.read("utilities/networker.lua")}
 
 bundler["core"] = [[
     if not assetify.__core then
@@ -220,25 +231,13 @@ bundler["core"] = [[
     end
 ]]
 
-bundler["threader"] = [[
-    if not assetify.thread then
-        ]]..imports.file.read("utilities/threader.lua")..[[
-        assetify.threader = threader
-        threader = nil
-    end
-]]
-
-bundler["networker"] = [[
-    if not assetify.thread then
-        ]]..imports.file.read("utilities/networker.lua")..[[
-        assetify.networker = networker
-        networker = nil
-    end
-]]
-
 bundler["scheduler"] = [[
-    ]]..bundler["threader"]..[[
-    ]]..bundler["networker"]..[[
+    if not threader then
+    ]]..bundler["threader"].rw..[[
+    end
+    if not network then
+    ]]..bundler["networker"].rw..[[
+    end
     assetify.scheduler = {
         buffer = {execOnLoad = {}, execOnModuleLoad = {}},
         execOnLoad = function(execFunc)

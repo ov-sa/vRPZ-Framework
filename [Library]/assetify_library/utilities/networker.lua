@@ -58,7 +58,7 @@ imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)
         if cNetwork and not cNetwork.isCallback then
             for i, j in imports.pairs(cNetwork.handlers) do
                 if i and (imports.type(i) == "function") then
-                    threader:create(function(self)
+                    thread:create(function(self)
                         if not j.isAsync then
                             i(imports.unpack(payload.processArgs))
                         else
@@ -75,7 +75,7 @@ imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)
                 if not cNetwork or not cNetwork.isCallback or not cNetwork.handler then return false end
                 payload.isSignal = true
                 payload.isRestricted = true
-                threader:create(function(self)
+                thread:create(function(self)
                     if not cNetwork.handler.isAsync then
                         payload.processArgs = {cNetwork.handler.exec(imports.unpack(payload.processArgs))}
                     else
@@ -252,7 +252,7 @@ function network:emit(...)
 end
 
 function network:emitCallback(cThread, ...)
-    if not self or not cThread or not threader:isInstance(cThread) then return false end
+    if not self or not cThread or not thread:isInstance(cThread) then return false end
     local cThread = cThread
     local cArgs, cExec = {...}, function(...) return cThread:resolve(...) end
     local payload = {

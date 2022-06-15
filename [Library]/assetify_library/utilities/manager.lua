@@ -182,7 +182,7 @@ if localPlayer then
                 return true
             end
         elseif assetType == "sound" then
-            threader:create(function(self)
+            thread:create(function(self)
                 for i, j in imports.pairs(cAsset.manifestData.assetSounds) do
                     cAsset.unSynced.assetCache[i] = {}
                     for k, v in imports.pairs(j) do
@@ -190,9 +190,9 @@ if localPlayer then
                         asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache[i][k], {
                             sound = assetPath.."sound/"..v,
                         })
-                        threader:pause()
+                        thread:pause()
                     end
-                    threader:pause()
+                    thread:pause()
                 end
             end):resume({
                 executions = downloadSettings.buildRate,
@@ -200,7 +200,7 @@ if localPlayer then
             })
             return true
         elseif assetType == "scene" then
-            threader:create(function(self)
+            thread:create(function(self)
                 local sceneIPLData = imports.file.read(assetPath..(asset.references.scene)..".ipl")
                 sceneIPLData = (cAsset.manifestData.encryptKey and imports.decodeString("tea", sceneIPLData, {key = cAsset.manifestData.encryptKey})) or sceneIPLData
                 if sceneIPLData then
@@ -247,7 +247,7 @@ if localPlayer then
                             --TODO: DETECT IF ITS CLUMPED OR NOT...
                             cAsset.unSynced.assetCache[i].cDummy = dummy:create("object", childName, _, _, SsceneData)
                         end
-                        threader:pause()
+                        thread:pause()
                     end
                 end
             end):resume({
@@ -256,7 +256,7 @@ if localPlayer then
             })
             return true
         elseif cAsset.manifestData.assetClumps then
-            threader:create(function(self)
+            thread:create(function(self)
                 for i, j in imports.pairs(cAsset.manifestData.assetClumps) do
                     cAsset.unSynced.assetCache[i] = {}
                     local clumpTXD, clumpDFF, clumpCOL = assetPath.."clump/"..j.."/"..(asset.references.asset)..".txd", assetPath.."clump/"..j.."/"..(asset.references.asset)..".dff", assetPath.."clump/"..j.."/"..(asset.references.asset)..".col"
@@ -267,7 +267,7 @@ if localPlayer then
                         dff = clumpDFF,
                         col = clumpCOL
                     })
-                    threader:pause()
+                    thread:pause()
                 end
             end):resume({
                 executions = downloadSettings.buildRate,
@@ -290,15 +290,15 @@ if localPlayer then
         local cAsset, isLoaded = manager:getData(assetType, assetName, syncer.librarySerial)
         if not cAsset or not isLoaded then return false end
         if assetType == "sound" then
-            threader:create(function(self)
+            thread:create(function(self)
                 for i, j in imports.pairs(cAsset.unSynced.assetCache) do
                     for k, v in imports.pairs(j) do
                         if v.cAsset then
                             v.cAsset:destroy(cAsset.unSynced.rwCache)
                         end
-                        threader:pause()
+                        thread:pause()
                     end
-                    threader:pause()
+                    thread:pause()
                 end
                 shader:clearAssetBuffer(cAsset.unSynced.rwCache.map)
                 asset:clearAssetBuffer(cAsset.unSynced.rwCache.dep)
@@ -310,7 +310,7 @@ if localPlayer then
             })
             return true
         elseif assetType == "scene" then
-            threader:create(function(self)
+            thread:create(function(self)
                 for i, j in imports.pairs(cAsset.unSynced.assetCache) do
                     if j.cAsset then
                         if j.cAsset.cScene then
@@ -321,7 +321,7 @@ if localPlayer then
                     if j.cDummy then
                         j.cDummy:destroy()
                     end
-                    threader:pause()
+                    thread:pause()
                 end
                 shader:clearAssetBuffer(cAsset.unSynced.rwCache.map)
                 asset:clearAssetBuffer(cAsset.unSynced.rwCache.dep)
@@ -333,12 +333,12 @@ if localPlayer then
             })
             return true
         elseif cAsset.manifestData.assetClumps then
-            threader:create(function(self)
+            thread:create(function(self)
                 for i, j in imports.pairs(cAsset.unSynced.assetCache) do
                     if j.cAsset then
                         j.cAsset:destroy(cAsset.unSynced.rwCache)
                     end
-                    threader:pause()
+                    thread:pause()
                 end
                 shader:clearAssetBuffer(cAsset.unSynced.rwCache.map)
                 asset:clearAssetBuffer(cAsset.unSynced.rwCache.dep)
