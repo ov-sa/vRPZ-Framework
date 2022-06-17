@@ -12,15 +12,26 @@
 --[[ Settings ]]--
 ------------------
 
-downloadSettings = {
-    isAccessSafe = true,
-    syncRate = 50,
-    buildRate = 500
-}
+settings = {
+    GTA = {
+        clearWorld = true,
+        waterLevel = false
+    },
 
-streamerSettings = {
-    syncRate = 250,
-    cameraSyncRate = 75,
-    boneSyncRate = 25,
-    unsyncDimension = 65535
+    downloader = {
+        isAccessSafe = true,
+        syncRate = 50,
+        buildRate = 500
+    },
+
+    streamer = {
+        syncRate = 250,
+        cameraSyncRate = 75,
+        boneSyncRate = 25,
+        unsyncDimension = 65535 
+    },
+
+    renderer = {
+        resolution = 1
+    }
 }

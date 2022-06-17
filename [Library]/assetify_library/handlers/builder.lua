@@ -35,10 +35,10 @@ end
 imports.addEventHandler("onResourceStart", resourceRoot, function()
     thread:create(function(self)
         syncer.libraryModules = {}
-        if not availableAssetPacks["module"] then
+        if not settings.assetPacks["module"] then
             network:emit("Assetify:onModuleLoad", false)
         end
-        for i, j in imports.pairs(availableAssetPacks) do
+        for i, j in imports.pairs(settings.assetPacks) do
             asset:buildPack(i, j, function(state, assetType)
                 if assetType == "module" then
                     network:emit("Assetify:onModuleLoad", false)

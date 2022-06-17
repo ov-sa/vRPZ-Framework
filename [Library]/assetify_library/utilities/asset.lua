@@ -51,7 +51,7 @@ local imports = {
 
 asset = {
     references = {
-        root = ((downloadSettings.isAccessSafe and "@") or "").."files/assets/",
+        root = ((settings.downloader.isAccessSafe and "@") or "").."files/assets/",
         manifest = "manifest",
         asset = "asset",
         scene = "scene"
@@ -490,7 +490,7 @@ else
                     callback(true, assetType)
                 end
             end):resume({
-                executions = downloadSettings.buildRate,
+                executions = settings.downloader.buildRate,
                 frames = 1
             })
             return true

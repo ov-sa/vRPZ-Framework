@@ -95,7 +95,7 @@ function bone:load(element, parent, boneData, remoteSignature)
         imports.setElementCollisionsEnabled(element, false)
         self.cStreamer = streamer:create(element, "bone", {parent}, self.boneData.syncRate)
         self.heartbeat = nil
-    end, downloadSettings.buildRate)
+    end, settings.downloader.buildRate)
     bone.buffer.element[element] = self
     bone.buffer.parent[parent] = bone.buffer.parent[parent] or {}
     bone.buffer.parent[parent][self] = true
@@ -137,7 +137,7 @@ function bone:refresh(boneData, remoteSignature)
         boneData.rotation.x, boneData.rotation.y, boneData.rotation.z = imports.quat.toEuler(rotQuat[1], rotQuat[2], rotQuat[3], rotQuat[4])
     end
     boneData.rotationMatrix = imports.matrix.fromRotation(boneData.rotation.x, boneData.rotation.y, boneData.rotation.z)
-    boneData.syncRate = imports.tonumber(boneData.syncRate) or streamerSettings.boneSyncRate
+    boneData.syncRate = imports.tonumber(boneData.syncRate) or settings.streamer.boneSyncRate
     local isSyncRateModified = self.boneData and (self.boneData.syncRate ~= boneData.syncRate)
     self.boneData = boneData
     if isSyncRateModified then

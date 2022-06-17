@@ -42,7 +42,7 @@ renderer = {
         minuteDuration = 60
     }
 }
-renderer.resolution[1], renderer.resolution[2] = renderer.resolution[1]*rendererSettings.resolution, renderer.resolution[2]*rendererSettings.resolution
+renderer.resolution[1], renderer.resolution[2] = renderer.resolution[1]*settings.renderer.resolution, renderer.resolution[2]*settings.renderer.resolution
 renderer.__index = renderer
 
 renderer.render = function()

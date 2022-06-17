@@ -12,7 +12,7 @@
 --[[ Settings ]]--
 ------------------
 
-availableAssetPacks = {
+settings.assetPacks = {
     ["module"] = {
         autoLoad = true
     },
