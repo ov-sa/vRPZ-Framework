@@ -24,7 +24,6 @@ local imports = {
 -------------------
 
 local identifier = "Assetify_TextureShadower"
-local samplingIteration = 3
 local depDatas, dependencies = "", {
     helper = "utilities/shaders/helper.fx"
 }
