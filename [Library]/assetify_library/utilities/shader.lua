@@ -226,11 +226,11 @@ if localPlayer then
             bufferCache[shaderCategory] = bufferCache[shaderCategory] or {world = {}, standalone = {}}
             if textureName then
                 bufferCache[shaderCategory].world[textureName] = self
-                imports.engineApplyShaderToWorldTexture(self.cShader, textureName, element or nil)
             else
                 bufferCache[shaderCategory].standalone[self] = true
             end
         end
+        if textureName then imports.engineApplyShaderToWorldTexture(self.cShader, textureName, element or nil) end
         return true
     end
 
