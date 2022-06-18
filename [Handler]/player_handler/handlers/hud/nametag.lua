@@ -46,10 +46,17 @@ CGame.execOnModuleLoad(function()
     local roleIcon = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "role:developer")
     local rtWidth, rtHeight = 300, 500
     
-    nametagUI.createBuffer = function(player)
-        if not CPlayer.isInitialized(player) or nametagUI.buffer[player] then return false end
+    nametagUI.createBuffer = function(player, isReload)
+        if not CPlayer.isInitialized(player) then return false end
+        if not isReload then
+            if nametagUI.buffer[player] then return false end
+        else
+            nametagUI.destroyBuffer(player)
+        end
+        local width, height = nametagUI.updateBuffer(player, true)
         nametagUI.buffer[player] = {
-            rt = imports.beautify.native.createRenderTarget(300, 500, true),
+            width = width, height = height,
+            rt = imports.beautify.native.createRenderTarget(width, height, true),
             shader = imports.beautify.native.createShader("fx/nametag.fx")
         }
         imports.beautify.native.setShaderValue(nametagUI.buffer[player].shader, "baseTexture", nametagUI.buffer[player].rt)
@@ -70,9 +77,9 @@ CGame.execOnModuleLoad(function()
         return true
     end
 
-    nametagUI.updateBuffer = function(player)
-        if not nametagUI.buffer[player] then return false end
-        local playerID = 0
+    nametagUI.updateBuffer = function(player, isFetchSize)
+        if not CPlayer.isInitialized(player) or not nametagUI.buffer[player] then return false end
+        local playerID = CPlayer.getCharacterID(player)
         local playerName = CPlayer.getName(player)
         local playerGroup = "Aviation"
         local playerRank = "Survivor"
@@ -81,6 +88,11 @@ CGame.execOnModuleLoad(function()
         local rankTag = playerRank.." - "..playerLevel
         local nametagWidth, ranktagWidth = imports.beautify.native.getTextWidth(nameTag, 1, nametagUI.font.instance), imports.beautify.native.getTextWidth(rankTag, 1, nametagUI.font.instance)
         local rtWidth, rtHeight = imports.math.max(nametagWidth, ranktagWidth) + nametagUI.iconSize + (nametagUI.padding*4), (nametagUI.iconSize*2) + (nametagUI.padding*8)
+        if isFetchSize then
+            return rtWidth, rtHeight
+        elseif (nametagUI.buffer[player].width ~= rtWidth) or (nametagUI.buffer[player].height ~= rtHeight) then
+            return nametagUI.createBuffer(player, true)
+        end
         --Drawing
         imports.beautify.native.setRenderTarget(nametagUI.buffer[player].rt, true)
         local startX, startY = rtWidth*0.5 + (nametagUI.iconSize*0.5), 0
