@@ -192,6 +192,7 @@ if localPlayer then
         local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
         if not shaderCategory or not shaderName or (isExternalResource and shader.cache.remoteBlacklist[shaderName]) or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or (not isStandalone and not textureName) or not shaderTextures or not shaderInputs or not rwCache or not shaderMaps then return false end
         element = ((element and imports.isElement(element)) and element) or false
+        textureName = textureName or false
         shaderPriority = imports.tonumber(shaderPriority) or shader.cache.shaderPriority
         shaderDistance = imports.tonumber(shaderDistance) or shader.cache.shaderDistance
         self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
