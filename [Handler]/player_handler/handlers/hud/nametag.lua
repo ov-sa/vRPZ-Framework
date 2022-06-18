@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
     camera = getCamera(),
     collectgarbage = collectgarbage,
     isElement = isElement,
@@ -99,25 +100,24 @@ CGame.execOnModuleLoad(function()
     -------------------------------
 
     imports.beautify.render.create(function()
-        if not CPlayer.isInitialized(localPlayer) then return false end --TODO: REMOVE & ENABLE LATER
-        --if not CPlayer.isInitialized(localPlayer) or (CCharacter.getHealth(localPlayer) <= 0) then return false end
-        local serverPlayers = getElementsByType("player")
+        if not CPlayer.isInitialized(localPlayer) then return false end
+
         local cameraX, cameraY, cameraZ = imports.getElementPosition(imports.camera)
-        for k, v in ipairs(serverPlayers) do
-            nametagUI.createTag(v)
-            if nametagUI.buffer[v] then
-                local boneX, boneY, boneZ = getPedBonePosition(v, 7)
+        for i, j in imports.pairs(CPlayer.CLogged) do
+            nametagUI.createTag(i)
+            if nametagUI.buffer[i] then
+                local boneX, boneY, boneZ = getPedBonePosition(i, 7)
                 boneZ = boneZ + 0.25
                 local cameraDistance = getDistanceBetweenPoints3D(cameraX, cameraY, cameraZ, boneX, boneY, boneZ)
                 local nearClipDistance, farClipDistance = ((cameraDistance <= nametagUI.clipRange[2]) and (cameraDistance/nametagUI.clipRange[2])) or 1, ((cameraDistance >= nametagUI.clipRange[1]) and ((cameraDistance/nametagUI.clipRange[1]) - 1)) or 1
                 local tagAlpha = nearClipDistance*farClipDistance
-                local isAlphaChanged = nametagUI.buffer[v].alpha ~= tagAlpha
-                nametagUI.buffer[v].alpha = (isAlphaChanged and imports.interpolateBetween(nametagUI.buffer[v].alpha or 0, 0, 0, tagAlpha, 0, 0, 0.25, "InQuad")) or nametagUI.buffer[v].alpha
-                if nametagUI.buffer[v].alpha > 0 then
+                local isAlphaChanged = nametagUI.buffer[i].alpha ~= tagAlpha
+                nametagUI.buffer[i].alpha = (isAlphaChanged and imports.interpolateBetween(nametagUI.buffer[i].alpha or 0, 0, 0, tagAlpha, 0, 0, 0.25, "InQuad")) or nametagUI.buffer[i].alpha
+                if nametagUI.buffer[i].alpha > 0 then
                     local screenX, screenY = imports.getScreenFromWorldPosition(boneX, boneY, boneZ)
                     if screenX and screenY then
-                        if isAlphaChanged then imports.beautify.native.setShaderValue(nametagUI.buffer[v].shader, "baseColor", 1.25, 1.25, 1.25, nametagUI.buffer[v].alpha) end
-                        imports.beautify.native.drawImage(screenX - (rtWidth*0.5), screenY, rtWidth, rtHeight, nametagUI.buffer[v].shader, 0, 0, 0, -1)
+                        if isAlphaChanged then imports.beautify.native.setShaderValue(nametagUI.buffer[i].shader, "baseColor", 1.25, 1.25, 1.25, nametagUI.buffer[i].alpha) end
+                        imports.beautify.native.drawImage(screenX - (rtWidth*0.5), screenY, rtWidth, rtHeight, nametagUI.buffer[i].shader, 0, 0, 0, -1)
                     end
                 end
             end
