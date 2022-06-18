@@ -243,7 +243,7 @@ if localPlayer then
                 imports.destroyElement(self.cShader)
             end
         else
-            imports.engineRemoveShaderFromWorldTexture(self.cShader, self.shaderData.textureName, self.shaderData.element)
+            imports.engineRemoveShaderFromWorldTexture(self.cShader, self.shaderData.textureName, self.shaderData.element or nil)
         end
         if self.shaderData.element then
             shader.buffer.element[(self.shaderData.element)][(self.shaderData.shaderCategory)][(self.shaderData.textureName)] = nil
