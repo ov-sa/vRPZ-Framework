@@ -201,7 +201,7 @@ if localPlayer then
             renderer:syncShader(self.cShader)
         end
         shader.buffer.shader[(self.cShader)] = true
-        if not self.isPreLoaded and textureName then rwCache.shader[textureName] = self.cShader end
+        if not self.isPreLoaded and not isStandalone then rwCache.shader[textureName] = self.cShader end
         for i, j in imports.pairs(shaderTextures) do
             if j and imports.isElement(rwCache.texture[j]) then
                 imports.dxSetShaderValue(self.cShader, i, rwCache.texture[j])
