@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
 --[[ Resource: Player Handler
-     Script: handlers: hud: player.lua
+     Script: handlers: hud: nametag.lua
      Author: vStudio
      Developer(s): Mario, Tron, Aviril, Аниса
      DOC: 31/01/2022
-     Desc: Player HUD Handler ]]--
+     Desc: Nametag HUD Handler ]]--
 ----------------------------------------------------------------
 
 

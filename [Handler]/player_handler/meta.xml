@@ -19,6 +19,7 @@
     <script src="gui/scoreboard.lua" type="client"/>
 
     <!-- Handlers -->
+    <script src="handlers/hud/nametag.lua" type="client"/>
     <script src="handlers/hud/player.lua" type="client"/>
     <script src="handlers/resumer.lua" type="server"/>
     <script src="handlers/inventory.lua" type="server"/>
