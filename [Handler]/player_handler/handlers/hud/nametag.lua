@@ -25,6 +25,7 @@ local imports = {
     getScreenFromWorldPosition = getScreenFromWorldPosition,
     getDistanceBetweenPoints3D = getDistanceBetweenPoints3D,
     interpolateBetween = interpolateBetween,
+    math = math,
     beautify = beautify,
     assetify = assetify
 }
@@ -60,7 +61,10 @@ CGame.execOnModuleLoad(function()
         nametagUI.buffer[player].shader = imports.assetify.createShader(nametagUI.buffer[player].rt, "player-nametag", "Assetify_TextureShadower", nil,
             {"baseTexture"},
             {vWeatherBlendEnabled = true},
-            {baseTexture = nametagUI.buffer[player].rt},
+            {   texture = {
+                    baseTexture = nametagUI.buffer[player].rt
+                }
+            },
         nil, nil, nil, nil, true)
         nametagUI.updateUI(player)
         return true
