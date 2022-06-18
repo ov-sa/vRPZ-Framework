@@ -187,10 +187,10 @@ if localPlayer then
         return false
     end
 
-    function shader:load(element, shaderCategory, shaderName, textureName, shaderTextures, shaderInputs, rwCache, shaderMaps, encryptKey, shaderPriority, shaderDistance)
+    function shader:load(element, shaderCategory, shaderName, textureName, shaderTextures, shaderInputs, rwCache, shaderMaps, encryptKey, shaderPriority, shaderDistance, isStandalone)
         if not self or (self == shader) then return false end
         local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
-        if not shaderCategory or not shaderName or (isExternalResource and shader.cache.remoteBlacklist[shaderName]) or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or not shaderTextures or not shaderInputs or not rwCache or not shaderMaps then return false end
+        if not shaderCategory or not shaderName or (isExternalResource and shader.cache.remoteBlacklist[shaderName]) or (not shader.preLoaded[shaderName] and not shader.rwCache[shaderName]) or (not isStandalone and not textureName) or not shaderTextures or not shaderInputs or not rwCache or not shaderMaps then return false end
         element = ((element and imports.isElement(element)) and element) or false
         shaderPriority = imports.tonumber(shaderPriority) or shader.cache.shaderPriority
         shaderDistance = imports.tonumber(shaderDistance) or shader.cache.shaderDistance
@@ -224,13 +224,13 @@ if localPlayer then
             shader.buffer.element[(self.shaderData.element)] = shader.buffer.element[(self.shaderData.element)] or {}
             local bufferCache = shader.buffer.element[(self.shaderData.element)]
             bufferCache[shaderCategory] = bufferCache[shaderCategory] or {world = {}, standalone = {}}
-            if textureName then
-                bufferCache[shaderCategory].world[textureName] = self
-            else
+            if isStandalone then
                 bufferCache[shaderCategory].standalone[self] = true
+            elseif textureName then
+                bufferCache[shaderCategory].world[textureName] = self
             end
         end
-        if textureName then imports.engineApplyShaderToWorldTexture(self.cShader, textureName, element or nil) end
+        if not isStandalone then imports.engineApplyShaderToWorldTexture(self.cShader, textureName, element or nil) end
         return true
     end
 
