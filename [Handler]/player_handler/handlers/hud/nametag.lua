@@ -36,6 +36,7 @@ CGame.execOnModuleLoad(function()
     --[[ Variables ]]--
     -------------------
 
+    --TODO: INTEGRATED w/ vRPZ_Config
     local nametagUI = {
         buffer = {},
         padding = 5, iconSize = 20,
@@ -121,7 +122,7 @@ CGame.execOnModuleLoad(function()
             if nametagUI.buffer[i] then
                 if isToBeRefreshed then nametagUI.updateUI(i) end
                 local boneX, boneY, boneZ = imports.getPedBonePosition(i, 7)
-                boneZ = boneZ + 0.25
+                boneZ = boneZ + 0.27
                 local cameraDistance = imports.getDistanceBetweenPoints3D(cameraX, cameraY, cameraZ, boneX, boneY, boneZ)
                 local nearClipDistance, farClipDistance = ((cameraDistance <= nametagUI.clipRange[2]) and (cameraDistance/nametagUI.clipRange[2])) or 1, ((cameraDistance >= nametagUI.clipRange[1]) and ((cameraDistance/nametagUI.clipRange[1]) - 1)) or 1
                 local tagAlpha = nearClipDistance*farClipDistance
