@@ -59,10 +59,10 @@ CGame.execOnModuleLoad(function()
             rt = imports.beautify.native.createRenderTarget(width, height, true)
         }
         nametagUI.buffer[player].shader = imports.assetify.createShader(nametagUI.buffer[player].rt, "player-nametag", "Assetify_TextureShadower", nil,
-            {"baseTexture"},
+            {baseTexture = 1},
             {vWeatherBlendEnabled = true},
             {   texture = {
-                    baseTexture = nametagUI.buffer[player].rt
+                    [1] = nametagUI.buffer[player].rt
                 }
             },
         nil, nil, nil, nil, true)
@@ -82,11 +82,14 @@ CGame.execOnModuleLoad(function()
 
     nametagUI.updateUI = function(player, isFetchSize)
         if not CPlayer.isInitialized(player) or (not isFetchSize and not nametagUI.buffer[player]) then return false end
-        local playerID, playerName, playerGroup = CPlayer.getCharacterID(player), CPlayer.getName(player), CCharacter.getGroup(player)
-        local playerLevel, playerRank = CCharacter.getLevel(player), CCharacter.getRank(player)
+        local playerID, playerName = CPlayer.getCharacterID(player), CPlayer.getName(player)
+        local playerGroup = CCharacter.getGroup(player)
+        local playerLevel = CCharacter.getLevel(player)
+        local _, playerRank = CCharacter.getRank(player)
+        playerRank = (playerRank and playerRank.name) or playerRank
         local nameTag, rankTag = "["..playerID.."]  ━  "..((playerGroup and ""..playerGroup.." |  ") or "")..playerName, playerRank.." - "..playerLevel
-        local nameTag_width, rankTag_height = imports.beautify.native.getTextWidth(nameTag, 1, nametagUI.font.instance), imports.beautify.native.getTextWidth(rankTag, 1, nametagUI.font.instance)
-        local rtWidth, rtHeight = imports.math.max(nameTag_width, rankTag_height) + nametagUI.iconSize + (nametagUI.padding*4), (nametagUI.iconSize*2) + (nametagUI.padding*8)
+        local nameTag_width, rankTag_width = imports.beautify.native.getTextWidth(nameTag, 1, nametagUI.font.instance), imports.beautify.native.getTextWidth(rankTag, 1, nametagUI.font.instance)
+        local rtWidth, rtHeight = imports.math.max(nameTag_width, rankTag_width) + nametagUI.iconSize + (nametagUI.padding*4), (nametagUI.iconSize*2) + (nametagUI.padding*8)
         if isFetchSize then
             return rtWidth, rtHeight
         elseif (nametagUI.buffer[player].width ~= rtWidth) or (nametagUI.buffer[player].height ~= rtHeight) then
@@ -98,7 +101,7 @@ CGame.execOnModuleLoad(function()
         imports.beautify.native.drawText(nameTag, nameTag_startX, nameTag_startY, nameTag_startX, nameTag_startY, nametagUI.fontColor, 1, nametagUI.font.instance, "center", "top")
         imports.beautify.native.drawText(rankTag, nameTag_startX, rankTag_startY, nameTag_startX, rankTag_startY, nametagUI.fontColor, 1, nametagUI.font.instance, "center", "top")
         imports.beautify.native.drawImage(nameTag_startX - (nameTag_width*0.5) - nametagUI.iconSize - nametagUI.padding, nameTag_startY, nametagUI.iconSize, nametagUI.iconSize, roleIcon, 0, 0, 0, -1)
-        imports.beautify.native.drawImage(nameTag_startX - (rankTag_height*0.5) - nametagUI.iconSize - nametagUI.padding, rankTag_startY, nametagUI.iconSize, nametagUI.iconSize, roleIcon, 0, 0, 0, -1)
+        imports.beautify.native.drawImage(nameTag_startX - (rankTag_width*0.5) - nametagUI.iconSize - nametagUI.padding, rankTag_startY, nametagUI.iconSize, nametagUI.iconSize, roleIcon, 0, 0, 0, -1)
         imports.beautify.native.setRenderTarget()
         return true
     end

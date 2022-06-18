@@ -249,7 +249,7 @@ if localPlayer then
                 imports.destroyElement(self.cShader)
             end
         else
-            imports.engineRemoveShaderFromWorldTexture(self.cShader, self.shaderData.textureName, self.shaderData.element)
+            if not self.shaderData.isStandalone then imports.engineRemoveShaderFromWorldTexture(self.cShader, self.shaderData.textureName, self.shaderData.element) end
         end
         if self.shaderData.element then
             if not self.shaderData.isStandalone then 
