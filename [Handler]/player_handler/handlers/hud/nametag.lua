@@ -77,7 +77,7 @@ CGame.execOnModuleLoad(function()
     end
 
     nametagUI.updateBuffer = function(player, isFetchSize)
-        if not CPlayer.isInitialized(player) or not nametagUI.buffer[player] then return false end
+        if not CPlayer.isInitialized(player) or (not isFetchSize and not nametagUI.buffer[player]) then return false end
         local playerID, playerName, playerGroup = CPlayer.getCharacterID(player), CPlayer.getName(player), CCharacter.getGroup(player)
         local playerLevel, playerRank = CCharacter.getLevel(player), CCharacter.getRank(player)
         local nameTag, rankTag = "["..playerID.."]  ━  "..((playerGroup and ""..playerGroup.." |  ") or "")..playerName, playerRank.." - "..playerLevel
