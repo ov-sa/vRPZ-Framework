@@ -1,121 +1,55 @@
-----------------------------------------------------------------
---[[ Resource: Assetify Library
-     Script: utilities: thread.lua
-     Author: vStudio
-     Developer(s): Aviril, Tron
-     DOC: 19/10/2021
-     Desc: Thread Utilities ]]--
-----------------------------------------------------------------
+--[[
+loadstring(exports.assetify_library:import())()
+async(function(self)
+    local value = self:await(CGame.getServerTick(self))
+    print(value)
+end):resume()
+]]
 
+--local cDummy = assetify.createDummy("inventory", "vRPZ_Antibiotic", false, false, {})
+--print(cDummy)
 
------------------
---[[ Imports ]]--
------------------
+--[[
+--Async Emit
+local cNetwork = network:create("testNetwork")
 
-local imports = {
-    type = type,
-    unpack = unpack,
-    tonumber = tonumber,
-    setmetatable = setmetatable,
-    collectgarbage = collectgarbage,
-    setTimer = setTimer,
-    isTimer = isTimer,
-    killTimer = killTimer,
-    coroutine = {
-        create = coroutine.create,
-        resume = coroutine.resume,
-        status = coroutine.status
-    }
-}
+cNetwork:on(function(self, arg)
+    print("Invoked Emit: Going to sleep")
+    self:sleep(5000)
+    print("Resumed execution")
+    print(arg)
+end, true)
 
+cNetwork:emit("hi")
+]]
 
------------------------
---[[ Class: Thread ]]--
------------------------
+--[[
+--Async Emit-Callback
+local cNetwork = network:create("testNetwork", true)
 
-thread = {
-    pause = coroutine.yield
-}
-thread.__index = thread
+cNetwork:on(function(self, arg)
+    print("Invoked Emit Callback: Going to sleep")
+    self:sleep(5000)
+    print("Resumed execution")
+    print(arg)
+    return "Completed Operation"
+end, true)
 
-function thread:create(threadFunction)
-    if not threadFunction or imports.type(threadFunction) ~= "function" then return false end
-    local createdThread = imports.setmetatable({}, {__index = self})
-    createdThread.syncRate = {}
-    createdThread.thread = imports.coroutine.create(threadFunction)
-    return createdThread
-end
+thread:create(function(self)
+    local value = self:await(cNetwork:emitCallback(self, "hi"))
+    print(value)
+end):resume()
+]]
 
-function thread:destroy()
-    if not self or (self == thread) then return false end
-    if self.timer and imports.isTimer(self.timer) then
-        imports.killTimer(self.timer)
-    end
-    self = nil
-    imports.collectgarbage()
-    return true
-end
+--[[
+--Global & Entity Data
+assetify.syncer.setGlobalData("testData", "testValue")
+local value = assetify.syncer.getGlobalData("testData")
+print(value)
 
-function thread:status()
-    if not self or (self == thread) then return false end
-    if not self.thread then
-        return "dead"
-    else
-        return imports.coroutine.status(self.thread)
-    end
-end
+local element = createPed(0, 0, 0, 0)
 
-function thread:resume(syncRate)
-    if not self or (self == thread) then return false end
-    self.syncRate.executions = (syncRate and imports.tonumber(syncRate.executions)) or false
-    self.syncRate.frames = (self.syncRate.executions and syncRate and imports.tonumber(syncRate.frames)) or false
-    if self.syncRate.executions and self.syncRate.frames then
-        self.timer = imports.setTimer(function()
-            local status = self:status()
-            if status == "suspended" then
-                for i = 1, self.syncRate.executions, 1 do
-                    status = self:status()
-                    if status == "dead" then
-                        self:destroy()
-                        return
-                    end
-                    imports.coroutine.resume(self.thread, self)
-                end
-            end
-            status = self:status()
-            if status == "dead" then
-                self:destroy()
-            end
-        end, self.syncRate.frames, 0)
-    else
-        if self.timer and imports.isTimer(self.timer) then
-            imports.killTimer(self.timer)
-        end
-        local status = self:status()
-        if status == "suspended" then
-            imports.coroutine.resume(self.thread, self)
-        end
-        status = self:status()
-        if status == "dead" then
-            self:destroy()
-        end
-    end
-    return true
-end
-
-function thread:wait(exec)
-    exec(self)
-    self.isScheduled = true
-    thread.pause()
-    local resolvedValues = self.scheduledValues
-    self.scheduledValues = nil
-    return imports.unpack(resolvedValues)
-end
-
-function thread:resolve(...)
-    if not self or (self == thread) then return false end
-    if not self.isScheduled then return false end
-    self.scheduledValues = {...}
-    self:resume()
-    return true
-end
+assetify.syncer.setEntityData(element, "testElementData", "testElementValue")
+local value = assetify.syncer.getEntityData(element, "testElementData")
+print(value)
+]]
