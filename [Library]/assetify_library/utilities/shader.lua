@@ -227,7 +227,7 @@ if localPlayer then
             shader.buffer.element[(self.shaderData.element)] = shader.buffer.element[(self.shaderData.element)] or {}
             local bufferCache = shader.buffer.element[(self.shaderData.element)]
             bufferCache[shaderCategory] = bufferCache[shaderCategory] or {textured = {}, untextured = {}}
-            if not isStandalone and textureName then 
+            if not isStandalone then 
                 bufferCache[shaderCategory].textured[textureName] = self
             else
                 bufferCache[shaderCategory].untextured[self] = true
@@ -249,7 +249,7 @@ if localPlayer then
             imports.engineRemoveShaderFromWorldTexture(self.cShader, self.shaderData.textureName, self.shaderData.element)
         end
         if self.shaderData.element then
-            if not self.shaderData.isStandalone and self.shaderData.textureName then 
+            if not self.shaderData.isStandalone then 
                 shader.buffer.element[(self.shaderData.element)][(self.shaderData.shaderCategory)].textured[(self.shaderData.textureName)] = nil
             else
                 shader.buffer.element[(self.shaderData.element)][(self.shaderData.shaderCategory)].untextured[self] = nil
