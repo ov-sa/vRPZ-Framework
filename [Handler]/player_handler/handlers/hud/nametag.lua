@@ -44,7 +44,6 @@ CGame.execOnModuleLoad(function()
     }
 
     local roleIcon = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "role:developer")
-    local rtWidth, rtHeight = 300, 500
     
     nametagUI.createBuffer = function(player, isReload)
         if not CPlayer.isInitialized(player) then return false end
@@ -79,15 +78,11 @@ CGame.execOnModuleLoad(function()
 
     nametagUI.updateBuffer = function(player, isFetchSize)
         if not CPlayer.isInitialized(player) or not nametagUI.buffer[player] then return false end
-        local playerID = CPlayer.getCharacterID(player)
-        local playerName = CPlayer.getName(player)
-        local playerGroup = "Aviation"
-        local playerRank = "Survivor"
-        local playerLevel = 200
-        local nameTag = "["..playerID.."]  ━  "..((playerGroup and ""..playerGroup.." |") or "").."  "..playerName
-        local rankTag = playerRank.." - "..playerLevel
-        local nametagWidth, ranktagWidth = imports.beautify.native.getTextWidth(nameTag, 1, nametagUI.font.instance), imports.beautify.native.getTextWidth(rankTag, 1, nametagUI.font.instance)
-        local rtWidth, rtHeight = imports.math.max(nametagWidth, ranktagWidth) + nametagUI.iconSize + (nametagUI.padding*4), (nametagUI.iconSize*2) + (nametagUI.padding*8)
+        local playerID, playerName, playerGroup = CPlayer.getCharacterID(player), CPlayer.getName(player), CCharacter.getGroup(player)
+        local playerLevel, playerRank = CCharacter.getLevel(player), CCharacter.getRank(player)
+        local nameTag, rankTag = "["..playerID.."]  ━  "..((playerGroup and ""..playerGroup.." |  ") or "")..playerName, playerRank.." - "..playerLevel
+        local nameTagWidth, rankTagWidth = imports.beautify.native.getTextWidth(nameTag, 1, nametagUI.font.instance), imports.beautify.native.getTextWidth(rankTag, 1, nametagUI.font.instance)
+        local rtWidth, rtHeight = imports.math.max(nameTagWidth, rankTagWidth) + nametagUI.iconSize + (nametagUI.padding*4), (nametagUI.iconSize*2) + (nametagUI.padding*8)
         if isFetchSize then
             return rtWidth, rtHeight
         elseif (nametagUI.buffer[player].width ~= rtWidth) or (nametagUI.buffer[player].height ~= rtHeight) then
@@ -100,9 +95,9 @@ CGame.execOnModuleLoad(function()
         imports.beautify.native.drawText(nameTag, startX, startY, startX, startY, nametagUI.fontColor, 1, nametagUI.font.instance, "center", "top")
         imports.beautify.native.drawText(rankTag, startX, rankZ, startX, rankZ, nametagUI.fontColor, 1, nametagUI.font.instance, "center", "top")
         --Reputation Icon
-        imports.beautify.native.drawImage(startX - (nametagWidth*0.5) - nametagUI.iconSize - nametagUI.padding, startY, nametagUI.iconSize, nametagUI.iconSize, roleIcon, 0, 0, 0, -1)
+        imports.beautify.native.drawImage(startX - (nameTagWidth*0.5) - nametagUI.iconSize - nametagUI.padding, startY, nametagUI.iconSize, nametagUI.iconSize, roleIcon, 0, 0, 0, -1)
         --Level Icon
-        imports.beautify.native.drawImage(startX - (ranktagWidth*0.5) - nametagUI.iconSize - nametagUI.padding, rankZ, nametagUI.iconSize, nametagUI.iconSize, roleIcon, 0, 0, 0, -1)
+        imports.beautify.native.drawImage(startX - (rankTagWidth*0.5) - nametagUI.iconSize - nametagUI.padding, rankZ, nametagUI.iconSize, nametagUI.iconSize, roleIcon, 0, 0, 0, -1)
         imports.beautify.native.setRenderTarget()
         return true
     end
@@ -129,7 +124,7 @@ CGame.execOnModuleLoad(function()
                     local screenX, screenY = imports.getScreenFromWorldPosition(boneX, boneY, boneZ)
                     if screenX and screenY then
                         if isAlphaChanged then imports.beautify.native.setShaderValue(nametagUI.buffer[i].shader, "baseColor", 1.25, 1.25, 1.25, nametagUI.buffer[i].alpha) end
-                        imports.beautify.native.drawImage(screenX - (rtWidth*0.5), screenY, rtWidth, rtHeight, nametagUI.buffer[i].shader, 0, 0, 0, -1)
+                        imports.beautify.native.drawImage(screenX - (nametagUI.buffer[i].width*0.5), screenY, nametagUI.buffer[i].width, nametagUI.buffer[i].height, nametagUI.buffer[i].shader, 0, 0, 0, -1)
                     end
                 end
             end
