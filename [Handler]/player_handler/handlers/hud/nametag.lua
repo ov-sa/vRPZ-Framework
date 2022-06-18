@@ -19,7 +19,9 @@ local imports = {
     isElement = isElement,
     destroyElement = destroyElement,
     getElementPosition = getElementPosition,
+    getPedBonePosition = getPedBonePosition,
     getScreenFromWorldPosition = getScreenFromWorldPosition,
+    getDistanceBetweenPoints3D = getDistanceBetweenPoints3D,
     interpolateBetween = interpolateBetween,
     beautify = beautify
 }
@@ -43,34 +45,10 @@ CGame.execOnModuleLoad(function()
     nametagUI.createTag = function(player)
         if not player or nametagUI.buffer[player] then return false end
         nametagUI.createBuffer(player)
-        nametagUI.updateTag(player)
+        nametagUI.updateBuffer(player)
         return true
     end
-    
-    nametagUI.updateTag = function(player)
-        if not player or not nametagUI.buffer[player] then return false end
-        local playerID = 0
-        local playerName = getPlayerName(player)
-        local playerGroup = "Aviation"
-        local playerRank = "Survivor"
-        local playerLevel = 200
-        local nameTag = "["..playerID.."]  ━  "..((playerGroup and ""..playerGroup.." |") or "").."  "..playerName
-        local rankTag = playerRank.." - "..playerLevel
-        --Drawing
-        imports.beautify.native.setRenderTarget(nametagUI.buffer[player].rt, true)
-        local startX, startY = rtWidth*0.5 + (nametagUI.iconSize*0.5), 0
-        local rankZ = startY + nametagUI.iconSize + (nametagUI.padding*0.5)
-        local nametagWidth, ranktagWidth = imports.beautify.native.getTextWidth(nameTag, 1, nametagUI.font.instance), imports.beautify.native.getTextWidth(rankTag, 1, nametagUI.font.instance)
-        imports.beautify.native.drawText(nameTag, startX, startY, startX, startY, nametagUI.fontColor, 1, nametagUI.font.instance, "center", "top")
-        imports.beautify.native.drawText(rankTag, startX, rankZ, startX, rankZ, nametagUI.fontColor, 1, nametagUI.font.instance, "center", "top")
-        --Reputation Icon
-        imports.beautify.native.drawImage(startX - (nametagWidth*0.5) - nametagUI.iconSize - nametagUI.padding, startY, nametagUI.iconSize, nametagUI.iconSize, roleIcon, 0, 0, 0, -1)
-        --Level Icon
-        imports.beautify.native.drawImage(startX - (ranktagWidth*0.5) - nametagUI.iconSize - nametagUI.padding, rankZ, nametagUI.iconSize, nametagUI.iconSize, roleIcon, 0, 0, 0, -1)
-        imports.beautify.native.setRenderTarget()
-        return true
-    end
-    
+
     nametagUI.createBuffer = function(player)
         if not player or nametagUI.buffer[player] then return false end
         nametagUI.buffer[player] = {
@@ -94,6 +72,30 @@ CGame.execOnModuleLoad(function()
         return true
     end
 
+    nametagUI.updateBuffer = function(player)
+        if not player or not nametagUI.buffer[player] then return false end
+        local playerID = 0
+        local playerName = CPlayer.getName(player)
+        local playerGroup = "Aviation"
+        local playerRank = "Survivor"
+        local playerLevel = 200
+        local nameTag = "["..playerID.."]  ━  "..((playerGroup and ""..playerGroup.." |") or "").."  "..playerName
+        local rankTag = playerRank.." - "..playerLevel
+        --Drawing
+        imports.beautify.native.setRenderTarget(nametagUI.buffer[player].rt, true)
+        local startX, startY = rtWidth*0.5 + (nametagUI.iconSize*0.5), 0
+        local rankZ = startY + nametagUI.iconSize + (nametagUI.padding*0.5)
+        local nametagWidth, ranktagWidth = imports.beautify.native.getTextWidth(nameTag, 1, nametagUI.font.instance), imports.beautify.native.getTextWidth(rankTag, 1, nametagUI.font.instance)
+        imports.beautify.native.drawText(nameTag, startX, startY, startX, startY, nametagUI.fontColor, 1, nametagUI.font.instance, "center", "top")
+        imports.beautify.native.drawText(rankTag, startX, rankZ, startX, rankZ, nametagUI.fontColor, 1, nametagUI.font.instance, "center", "top")
+        --Reputation Icon
+        imports.beautify.native.drawImage(startX - (nametagWidth*0.5) - nametagUI.iconSize - nametagUI.padding, startY, nametagUI.iconSize, nametagUI.iconSize, roleIcon, 0, 0, 0, -1)
+        --Level Icon
+        imports.beautify.native.drawImage(startX - (ranktagWidth*0.5) - nametagUI.iconSize - nametagUI.padding, rankZ, nametagUI.iconSize, nametagUI.iconSize, roleIcon, 0, 0, 0, -1)
+        imports.beautify.native.setRenderTarget()
+        return true
+    end
+
 
     -------------------------------
     --[[ Function: Renders HUD ]]--
@@ -106,9 +108,9 @@ CGame.execOnModuleLoad(function()
         for i, j in imports.pairs(CPlayer.CLogged) do
             nametagUI.createTag(i)
             if nametagUI.buffer[i] then
-                local boneX, boneY, boneZ = getPedBonePosition(i, 7)
+                local boneX, boneY, boneZ = imports.getPedBonePosition(i, 7)
                 boneZ = boneZ + 0.25
-                local cameraDistance = getDistanceBetweenPoints3D(cameraX, cameraY, cameraZ, boneX, boneY, boneZ)
+                local cameraDistance = imports.getDistanceBetweenPoints3D(cameraX, cameraY, cameraZ, boneX, boneY, boneZ)
                 local nearClipDistance, farClipDistance = ((cameraDistance <= nametagUI.clipRange[2]) and (cameraDistance/nametagUI.clipRange[2])) or 1, ((cameraDistance >= nametagUI.clipRange[1]) and ((cameraDistance/nametagUI.clipRange[1]) - 1)) or 1
                 local tagAlpha = nearClipDistance*farClipDistance
                 local isAlphaChanged = nametagUI.buffer[i].alpha ~= tagAlpha
