@@ -16,6 +16,8 @@ local imports = {
     pairs = pairs,
     camera = getCamera(),
     collectgarbage = collectgarbage,
+    tocolor = tocolor,
+    unpackColor = unpackColor,
     isElement = isElement,
     destroyElement = destroyElement,
     getElementPosition = getElementPosition,
@@ -36,7 +38,7 @@ CGame.execOnModuleLoad(function()
         padding = 5, iconSize = 20,
         clipRange = {4, 6},
         font = CGame.createFont(1, 15, true),
-        fontColor = tocolor(150, 150, 150, 250)
+        fontColor = imports.tocolor(imports.unpackColor({150, 150, 150, 250}))
     }
     
     local roleIcon = assetify.getAssetDep("module", "vRPZ_HUD", "texture", "role:developer")
