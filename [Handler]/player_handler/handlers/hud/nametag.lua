@@ -58,6 +58,7 @@ CGame.execOnModuleLoad(function()
             rt = imports.beautify.native.createRenderTarget(width, height, true),
             shader = imports.beautify.native.createShader("fx/nametag.fx")
         }
+        imports.beautify.native.setShaderValue(nametagUI.buffer[player].shader, "vWeatherBlendEnabled", true)
         imports.beautify.native.setShaderValue(nametagUI.buffer[player].shader, "baseTexture", nametagUI.buffer[player].rt)
         nametagUI.updateBuffer(player)
         return true
