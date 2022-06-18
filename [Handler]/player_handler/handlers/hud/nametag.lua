@@ -105,7 +105,6 @@ CGame.execOnModuleLoad(function()
 
         local cameraX, cameraY, cameraZ = imports.getElementPosition(imports.camera)
         for i, j in imports.pairs(CPlayer.CLogged) do
-            nametagUI.createBuffer(i)
             if nametagUI.buffer[i] then
                 local boneX, boneY, boneZ = imports.getPedBonePosition(i, 7)
                 boneZ = boneZ + 0.25
