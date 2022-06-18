@@ -57,7 +57,7 @@ CGame.execOnModuleLoad(function()
             width = width, height = height,
             rt = imports.beautify.native.createRenderTarget(width, height, true)
         }
-        nametagUI.buffer[player].shader = imports.assetify.createShader(nil, "player-nametag", "Assetify_TextureShadower", nil, {baseTexture = nametagUI.buffer[player].rt}, {vWeatherBlendEnabled = true})
+        nametagUI.buffer[player].shader = imports.assetify.createShader(nil, "player-nametag", "Assetify_TextureShadower", nil, {baseTexture = nametagUI.buffer[player].rt}, {vWeatherBlendEnabled = true}, {}, {})
         nametagUI.updateUI(player)
         return true
     end
