@@ -18,7 +18,6 @@ local imports = {
     unpackColor = unpackColor,
     isElement = isElement,
     destroyElement = destroyElement,
-    getPlayerName = getPlayerName,
     getPlayerPing = getPlayerPing,
     interpolateBetween = interpolateBetween,
     getInterpolationProgress = getInterpolationProgress,
@@ -113,7 +112,7 @@ CGame.execOnModuleLoad(function()
         for i, j in imports.pairs(CPlayer.CLogged) do
             bufferCount = bufferCount + 1
             scoreboardUI.buffer[bufferCount] = scoreboardUI.buffer[bufferCount] or {}
-            scoreboardUI.buffer[bufferCount].name = imports.getPlayerName(i)
+            scoreboardUI.buffer[bufferCount].name = CPlayer.getName(i)
             scoreboardUI.buffer[bufferCount].level = CCharacter.getLevel(i)
             scoreboardUI.buffer[bufferCount].reputation = CCharacter.getReputation(i)
             scoreboardUI.buffer[bufferCount].faction = CCharacter.getFaction(i)

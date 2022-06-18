@@ -21,7 +21,6 @@ local imports = {
     getTickCount = getTickCount,
     addEventHandler = addEventHandler,
     cancelEvent = cancelEvent,
-    getPlayerName = getPlayerName,
     setTimer = setTimer,
     outputChatBox = outputChatBox,
     setFPSLimit = setFPSLimit,
@@ -130,7 +129,7 @@ CGame.execOnModuleLoad(function()
                             imports.assetify.thread:create(function(self)
                                 local source = __source
                                 imports.assetify.network:emit("Client:onToggleLoadingUI", true, false, source, true)
-                                imports.outputChatBox("#C8C8C8- #5050FF"..imports.getPlayerName(source).."#C8C8C8 left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)
+                                imports.outputChatBox("#C8C8C8- #5050FF"..CPlayer.getName(source).."#C8C8C8 left. #5050FF[Reason: Logout]", root, 255, 255, 255, true)
                                 CCharacter.saveProgress(self, source)
                                 imports.assetify.network:emit("Player:onToggleLoginUI", false, source)
                             end):resume()
@@ -145,7 +144,7 @@ CGame.execOnModuleLoad(function()
         local __source = source
         imports.assetify.thread:create(function(self)
             local source = __source
-            imports.outputChatBox("#C8C8C8- #5050FF"..imports.getPlayerName(source).."#C8C8C8 left. #5050FF[Reason: Quit]", root, 255, 255, 255, true)
+            imports.outputChatBox("#C8C8C8- #5050FF"..CPlayer.getName(source).."#C8C8C8 left. #5050FF[Reason: Quit]", root, 255, 255, 255, true)
             CCharacter.saveProgress(self, source)
         end):resume()
     end)

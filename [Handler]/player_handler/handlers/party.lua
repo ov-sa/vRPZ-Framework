@@ -18,7 +18,6 @@ local imports = {
     tostring = tostring,
     setTimer = setTimer,
     killTimer = killTimer,
-    getPlayerName = getPlayerName,
     outputChatBox = outputChatBox,
     removeElementData = removeElementData,
     addCommandHandler = addCommandHandler,
@@ -74,7 +73,7 @@ imports.addCommandHandler("party", function(player, _, category, ...)
         end
 
         imports.outputChatBox("━━ Party: Request has been sent to the player.", player, 0, 255, 0)
-        imports.outputChatBox("━━ Party: Type /party accept to join " .. imports.getPlayerName(player) .. "'s party. Invite expires after " .. FRAMEWORK_CONFIGS["Party"]["Accept_Time"] .. " seconds", target, 0, 255, 0)
+        imports.outputChatBox("━━ Party: Type /party accept to join " .. CPlayer.getName(player) .. "'s party. Invite expires after " .. FRAMEWORK_CONFIGS["Party"]["Accept_Time"] .. " seconds", target, 0, 255, 0)
         local timer = imports.setTimer(function()
             if CGame.getEntityData(target, "party:request") then
                 imports.removeElementData(target, "party:request")
@@ -126,7 +125,7 @@ imports.addCommandHandler("party", function(player, _, category, ...)
 
         removePartyMember(party.id, target)
         imports.outputChatBox("━━ Party: You have been kicked from the party.", target, 0, 255, 0)
-        imports.outputChatBox("━━ Party: You have kicked " .. imports.getPlayerName(target) .. " from the party.", player, 0, 255, 0)
+        imports.outputChatBox("━━ Party: You have kicked " .. CPlayer.getName(target) .. " from the party.", player, 0, 255, 0)
     else
         return false
     end

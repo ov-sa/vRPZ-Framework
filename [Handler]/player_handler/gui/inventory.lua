@@ -21,7 +21,6 @@ local imports = {
     addEventHandler = addEventHandler,
     collectgarbage = collectgarbage,
     bindKey = bindKey,
-    getPlayerName = getPlayerName,
     isKeyOnHold = isKeyOnHold,
     isMouseClicked = isMouseClicked,
     isMouseScrolled = isMouseScrolled,
@@ -809,7 +808,7 @@ CGame.execOnModuleLoad(function()
             --inventoryUI.vicinityInventory.element = CCharacter.isInLoot(localPlayer)
             inventoryUI.vicinityInventory.element = CGame.getGlobalData("Loot:Test") --TODO: REMOVE LATER
             imports.assetify.network:emit("Client:onEnableInventoryUI", false, true)
-            inventoryUI.createBuffer(localPlayer, imports.string.format(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory["Title"][(CPlayer.CLanguage)], imports.getPlayerName(localPlayer)))
+            inventoryUI.createBuffer(localPlayer, imports.string.format(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory["Title"][(CPlayer.CLanguage)], CPlayer.getName(localPlayer)))
             inventoryUI.createBuffer(inventoryUI.vicinityInventory.element)
             inventoryUI.opacityAdjuster.element = imports.beautify.slider.create(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, "vertical", nil, false)
             inventoryUI.opacityAdjuster.percent = inventoryUI.opacityAdjuster.percent or 100

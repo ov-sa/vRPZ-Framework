@@ -5,7 +5,8 @@
 local imports = {
     tonumber = tonumber,
     isElement = isElement,
-    getElementType = getElementType
+    getElementType = getElementType,
+    getPlayerName = getPlayerName
 }
 
 
@@ -25,6 +26,11 @@ CPlayer = {
 
     getLogged = function()
         return CPlayer.CLogged
+    end,
+
+    getName = function(player)
+        if not CPlayer.isInitialized(player) then return false end
+        return imports.getPlayerName(player)
     end,
 
     getCharacterID = function(player)

@@ -15,7 +15,6 @@
 local imports = {
     pairs = pairs,
     tocolor = tocolor,
-    getPlayerName = getPlayerName,
     addEventHandler = addEventHandler,
     beautify = beautify,
     assetify = assetify
@@ -110,7 +109,7 @@ CGame.execOnModuleLoad(function()
                 names = {}
             }
             for i, j in imports.pairs(partyData.members) do
-                cache.party.names[i] = imports.getPlayerName(j)
+                cache.party.names[i] = CPlayer.getName(j)
             end
         else
             if cache.party then

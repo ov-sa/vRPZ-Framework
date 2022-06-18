@@ -17,7 +17,6 @@ local imports = {
     addEventHandler = addEventHandler,
     getElementsByType = getElementsByType,
     getElementsWithinRange = getElementsWithinRange,
-    getPlayerName = getPlayerName,
     getPlayerNametagColor = getPlayerNametagColor,
     isPlayerMuted = isPlayerMuted,
     outputChatBox = outputChatBox,
@@ -43,7 +42,7 @@ imports.addEventHandler("onPlayerChat", root, function(message, messageType)
     end
 
     local syncPlayers = false
-    local playerName, playerTagColor = imports.getPlayerName(source), imports.rgbToHex(imports.getPlayerNametagColor(source))
+    local playerName, playerTagColor = CPlayer.getName(source), imports.rgbToHex(imports.getPlayerNametagColor(source))
     if channelIndex == 1 then
         local playerLocation = CCharacter.getLocation(source)
         syncPlayers = imports.getElementsWithinRange(playerLocation.position[1], playerLocation.position[2], playerLocation.position[3], FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Proximity_Range"], "player")
