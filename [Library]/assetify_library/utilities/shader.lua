@@ -195,6 +195,7 @@ if localPlayer then
         textureName = textureName or false
         shaderPriority = imports.tonumber(shaderPriority) or shader.cache.shaderPriority
         shaderDistance = imports.tonumber(shaderDistance) or shader.cache.shaderDistance
+        isStandalone = (isStandalone and true) or false
         self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
         self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName])
         if not self.cShader then
