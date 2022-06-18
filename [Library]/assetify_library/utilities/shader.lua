@@ -218,7 +218,8 @@ if localPlayer then
             shaderTextures = shaderTextures,
             shaderInputs = shaderInputs,
             shaderPriority = shaderPriority,
-            shaderDistance = shaderDistance
+            shaderDistance = shaderDistance,
+            isStandalone = isStandalone
         }
         if self.shaderData.element then
             shader.buffer.element[(self.shaderData.element)] = shader.buffer.element[(self.shaderData.element)] or {}
