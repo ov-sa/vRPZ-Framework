@@ -81,23 +81,20 @@ CGame.execOnModuleLoad(function()
         local playerID, playerName, playerGroup = CPlayer.getCharacterID(player), CPlayer.getName(player), CCharacter.getGroup(player)
         local playerLevel, playerRank = CCharacter.getLevel(player), CCharacter.getRank(player)
         local nameTag, rankTag = "["..playerID.."]  ━  "..((playerGroup and ""..playerGroup.." |  ") or "")..playerName, playerRank.." - "..playerLevel
-        local nameTagWidth, rankTagWidth = imports.beautify.native.getTextWidth(nameTag, 1, nametagUI.font.instance), imports.beautify.native.getTextWidth(rankTag, 1, nametagUI.font.instance)
-        local rtWidth, rtHeight = imports.math.max(nameTagWidth, rankTagWidth) + nametagUI.iconSize + (nametagUI.padding*4), (nametagUI.iconSize*2) + (nametagUI.padding*8)
+        local nameTag_width, rankTag_height = imports.beautify.native.getTextWidth(nameTag, 1, nametagUI.font.instance), imports.beautify.native.getTextWidth(rankTag, 1, nametagUI.font.instance)
+        local rtWidth, rtHeight = imports.math.max(nameTag_width, rankTag_height) + nametagUI.iconSize + (nametagUI.padding*4), (nametagUI.iconSize*2) + (nametagUI.padding*8)
         if isFetchSize then
             return rtWidth, rtHeight
         elseif (nametagUI.buffer[player].width ~= rtWidth) or (nametagUI.buffer[player].height ~= rtHeight) then
             return nametagUI.createBuffer(player, true)
         end
-        --Drawing
         imports.beautify.native.setRenderTarget(nametagUI.buffer[player].rt, true)
-        local startX, startY = rtWidth*0.5 + (nametagUI.iconSize*0.5), 0
-        local rankZ = startY + nametagUI.iconSize + (nametagUI.padding*0.5)
-        imports.beautify.native.drawText(nameTag, startX, startY, startX, startY, nametagUI.fontColor, 1, nametagUI.font.instance, "center", "top")
-        imports.beautify.native.drawText(rankTag, startX, rankZ, startX, rankZ, nametagUI.fontColor, 1, nametagUI.font.instance, "center", "top")
-        --Reputation Icon
-        imports.beautify.native.drawImage(startX - (nameTagWidth*0.5) - nametagUI.iconSize - nametagUI.padding, startY, nametagUI.iconSize, nametagUI.iconSize, roleIcon, 0, 0, 0, -1)
-        --Level Icon
-        imports.beautify.native.drawImage(startX - (rankTagWidth*0.5) - nametagUI.iconSize - nametagUI.padding, rankZ, nametagUI.iconSize, nametagUI.iconSize, roleIcon, 0, 0, 0, -1)
+        local nameTag_startX, nameTag_startY = nametagUI.buffer[player].width*0.5 + (nametagUI.iconSize*0.5), 0
+        local rankTag_startY = nameTag_startY + nametagUI.iconSize + (nametagUI.padding*0.5)
+        imports.beautify.native.drawText(nameTag, nameTag_startX, nameTag_startY, nameTag_startX, nameTag_startY, nametagUI.fontColor, 1, nametagUI.font.instance, "center", "top")
+        imports.beautify.native.drawText(rankTag, nameTag_startX, rankTag_startY, nameTag_startX, rankTag_startY, nametagUI.fontColor, 1, nametagUI.font.instance, "center", "top")
+        imports.beautify.native.drawImage(nameTag_startX - (nameTag_width*0.5) - nametagUI.iconSize - nametagUI.padding, nameTag_startY, nametagUI.iconSize, nametagUI.iconSize, roleIcon, 0, 0, 0, -1)
+        imports.beautify.native.drawImage(nameTag_startX - (rankTag_height*0.5) - nametagUI.iconSize - nametagUI.padding, rankTag_startY, nametagUI.iconSize, nametagUI.iconSize, roleIcon, 0, 0, 0, -1)
         imports.beautify.native.setRenderTarget()
         return true
     end
