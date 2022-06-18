@@ -25,7 +25,8 @@ local imports = {
     getScreenFromWorldPosition = getScreenFromWorldPosition,
     getDistanceBetweenPoints3D = getDistanceBetweenPoints3D,
     interpolateBetween = interpolateBetween,
-    beautify = beautify
+    beautify = beautify,
+    assetify = assetify
 }
 
 
@@ -42,7 +43,7 @@ CGame.execOnModuleLoad(function()
         fontColor = imports.tocolor(imports.unpackColor({150, 150, 150, 250}))
     }
     
-    local roleIcon = assetify.getAssetDep("module", "vRPZ_HUD", "texture", "role:developer")
+    local roleIcon = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "role:developer")
     local rtWidth, rtHeight = 300, 500
     
     nametagUI.createTag = function(player)
@@ -128,4 +129,7 @@ CGame.execOnModuleLoad(function()
             end
         end
     end)
+
+    imports.assetify.network:fetch("Player:onLogin", true):on(function(source) nametagUI.createBuffer(source) end)
+    imports.assetify.network:fetch("Player:onLogout", true):on(function(source) nametagUI.destroyBuffer(source) end)
 end)
