@@ -112,11 +112,14 @@ CGame.execOnModuleLoad(function()
     -------------------------------
 
     imports.beautify.render.create(function()
+        if CLIENT_MTA_MINIMIZED then nametagUI.isRefreshed = false; return false end
         if not CPlayer.isInitialized(localPlayer) then return false end
 
+        local isToBeRefreshed = (CLIENT_MTA_RESTORED and not nametagUI.isRefreshed) or false
         local cameraX, cameraY, cameraZ = imports.getElementPosition(imports.camera)
         for i, j in imports.pairs(CPlayer.CLogged) do
             if nametagUI.buffer[i] then
+                if isToBeRefreshed then nametagUI.updateUI(i) end
                 local boneX, boneY, boneZ = imports.getPedBonePosition(i, 7)
                 boneZ = boneZ + 0.25
                 local cameraDistance = imports.getDistanceBetweenPoints3D(cameraX, cameraY, cameraZ, boneX, boneY, boneZ)
@@ -133,6 +136,7 @@ CGame.execOnModuleLoad(function()
                 end
             end
         end
+        nametagUI.isRefreshed = true
     end)
 
     imports.assetify.network:fetch("Player:onLogin", true):on(function(source) nametagUI.createUI(source) end)
