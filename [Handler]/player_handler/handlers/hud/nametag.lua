@@ -45,14 +45,14 @@ CGame.execOnModuleLoad(function()
 
     local roleIcon = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "role:developer")
     
-    nametagUI.createBuffer = function(player, isReload)
+    nametagUI.createUI = function(player, isReload)
         if not CPlayer.isInitialized(player) then return false end
         if not isReload then
             if nametagUI.buffer[player] then return false end
         else
-            nametagUI.destroyBuffer(player)
+            nametagUI.destroyUI(player)
         end
-        local width, height = nametagUI.updateBuffer(player, true)
+        local width, height = nametagUI.updateUI(player, true)
         nametagUI.buffer[player] = {
             width = width, height = height,
             rt = imports.beautify.native.createRenderTarget(width, height, true),
@@ -60,11 +60,11 @@ CGame.execOnModuleLoad(function()
         }
         imports.beautify.native.setShaderValue(nametagUI.buffer[player].shader, "vWeatherBlendEnabled", true)
         imports.beautify.native.setShaderValue(nametagUI.buffer[player].shader, "baseTexture", nametagUI.buffer[player].rt)
-        nametagUI.updateBuffer(player)
+        nametagUI.updateUI(player)
         return true
     end
     
-    nametagUI.destroyBuffer = function(player)
+    nametagUI.destroyUI = function(player)
         if not nametagUI.buffer[player] then return false end
         if imports.isElement(nametagUI.buffer[player].rt) then
             imports.destroyElement(nametagUI.buffer[player].rt)
@@ -77,7 +77,7 @@ CGame.execOnModuleLoad(function()
         return true
     end
 
-    nametagUI.updateBuffer = function(player, isFetchSize)
+    nametagUI.updateUI = function(player, isFetchSize)
         if not CPlayer.isInitialized(player) or (not isFetchSize and not nametagUI.buffer[player]) then return false end
         local playerID, playerName, playerGroup = CPlayer.getCharacterID(player), CPlayer.getName(player), CCharacter.getGroup(player)
         local playerLevel, playerRank = CCharacter.getLevel(player), CCharacter.getRank(player)
@@ -87,7 +87,7 @@ CGame.execOnModuleLoad(function()
         if isFetchSize then
             return rtWidth, rtHeight
         elseif (nametagUI.buffer[player].width ~= rtWidth) or (nametagUI.buffer[player].height ~= rtHeight) then
-            return nametagUI.createBuffer(player, true)
+            return nametagUI.createUI(player, true)
         end
         imports.beautify.native.setRenderTarget(nametagUI.buffer[player].rt, true)
         local nameTag_startX, nameTag_startY = nametagUI.buffer[player].width*0.5 + (nametagUI.iconSize*0.5), 0
@@ -129,6 +129,6 @@ CGame.execOnModuleLoad(function()
         end
     end)
 
-    imports.assetify.network:fetch("Player:onLogin", true):on(function(source) nametagUI.createBuffer(source) end)
-    imports.assetify.network:fetch("Player:onLogout", true):on(function(source) nametagUI.destroyBuffer(source) end)
+    imports.assetify.network:fetch("Player:onLogin", true):on(function(source) nametagUI.createUI(source) end)
+    imports.assetify.network:fetch("Player:onLogout", true):on(function(source) nametagUI.destroyUI(source) end)
 end)
