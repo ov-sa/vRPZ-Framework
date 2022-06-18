@@ -2,7 +2,7 @@
 --[[ Configns ]]--
 ------------------
 
-FRAMEWORK_CONFIGS["Templates"][""] = {
+FRAMEWORK_CONFIGS["Templates"]["Levels"] = {
     baseEXP = 1000, expMultiplier = 1.2,
 
     ["Max_Level"] = 200,
