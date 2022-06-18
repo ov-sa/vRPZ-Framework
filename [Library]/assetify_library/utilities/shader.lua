@@ -224,14 +224,18 @@ if localPlayer then
         if self.shaderData.element then
             shader.buffer.element[(self.shaderData.element)] = shader.buffer.element[(self.shaderData.element)] or {}
             local bufferCache = shader.buffer.element[(self.shaderData.element)]
-            bufferCache[shaderCategory] = bufferCache[shaderCategory] or {world = {}, standalone = {}}
+            bufferCache[shaderCategory] = bufferCache[shaderCategory] or {world = {textured = {}, untextured = {}}, standalone = {}}
             if not isStandalone then
-                bufferCache[shaderCategory].world[textureName] = self
+                if textureName then 
+                    bufferCache[shaderCategory].world.textured[textureName] = self
+                else
+                    bufferCache[shaderCategory].world.untextured[self] = true
+                end
             else
                 bufferCache[shaderCategory].standalone[self] = true
             end
         end
-        if not isStandalone then imports.engineApplyShaderToWorldTexture(self.cShader, textureName, element or nil) end
+        if not isStandalone then imports.engineApplyShaderToWorldTexture(self.cShader, textureName, element) end
         return true
     end
 
@@ -244,10 +248,18 @@ if localPlayer then
                 imports.destroyElement(self.cShader)
             end
         else
-            imports.engineRemoveShaderFromWorldTexture(self.cShader, self.shaderData.textureName, self.shaderData.element or nil)
+            imports.engineRemoveShaderFromWorldTexture(self.cShader, self.shaderData.textureName, self.shaderData.element)
         end
         if self.shaderData.element then
-            shader.buffer.element[(self.shaderData.element)][(self.shaderData.shaderCategory)][(self.shaderData.textureName)] = nil
+            if not self.shaderData.isStandalone then
+                if self.shaderData.textureName then
+                    shader.buffer.element[(self.shaderData.element)][(self.shaderData.shaderCategory)].world.textured[(self.shaderData.textureName)] = nil
+                else
+                    shader.buffer.element[(self.shaderData.element)][(self.shaderData.shaderCategory)].world.untextured[self] = nil
+                end
+            else
+                shader.buffer.element[(self.shaderData.element)][(self.shaderData.shaderCategory)].standalone[self] = nil
+            end
         end
         self = nil
         return true
