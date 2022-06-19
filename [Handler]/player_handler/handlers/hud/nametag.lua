@@ -99,6 +99,7 @@ CGame.execOnModuleLoad(function()
         elseif (nametagUI.buffer[player].width ~= rtWidth) or (nametagUI.buffer[player].height ~= rtHeight) then
             return nametagUI.createUI(player, true)
         end
+        imports.beautify.native.setShaderValue(nametagUI.buffer[player].reputation, "baseTexture", playerRole.badge)
         imports.beautify.native.setRenderTarget(nametagUI.buffer[player].rt, true)
         local nameTag_startX, nameTag_startY = nametagUI.buffer[player].width*0.5 + (nametagUI.iconSize*0.5), 0
         local rankTag_startY = nameTag_startY + nametagUI.iconSize + (nametagUI.padding*0.5)
