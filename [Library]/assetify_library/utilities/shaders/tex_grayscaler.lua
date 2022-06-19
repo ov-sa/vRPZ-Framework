@@ -45,7 +45,7 @@ shaderRW[identifier] = function()
     -->> Variables <<--
     -------------------*/
 
-    float grayscaleValue = 1;
+    float grayscaleIntensity = 1;
     bool vWeatherBlendEnabled = false;
     texture baseTexture;
     struct PSInput {
@@ -66,7 +66,7 @@ shaderRW[identifier] = function()
         float averageTexel = (texColor.r + texColor.g + texColor.b)/3.0;
         float4 grayscaleTexel = float4(averageTexel, averageTexel, averageTexel, sampledTexel.a);
         sampledTexel.rgb = pow(sampledTexel.rgb*1.5, 1.5);
-        sampledTexel = lerp(sampledTexel, grayscaleTexel, grayscaleValue);
+        sampledTexel = lerp(sampledTexel, grayscaleTexel, grayscaleIntensity);
         if (vWeatherBlendEnabled) sampledTexel.a *= MTAGetWeatherValue();
         return saturate(sampledTexel);
     }
