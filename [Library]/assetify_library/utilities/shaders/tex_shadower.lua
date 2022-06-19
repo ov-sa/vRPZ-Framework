@@ -48,7 +48,6 @@ shaderRW[identifier] = function()
     float shadowSize = 0.006;
     float4 shadowColor = float4(0, 0, 0, 1);
     float4 baseColor = float4(1, 1, 1, 1);
-    bool vWeatherBlendEnabled = false;
     texture baseTexture;
     struct PSInput {
         float4 Position : POSITION0;

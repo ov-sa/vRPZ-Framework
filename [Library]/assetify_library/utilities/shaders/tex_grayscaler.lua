@@ -46,7 +46,6 @@ shaderRW[identifier] = function()
     -------------------*/
 
     float grayscaleIntensity = 1;
-    bool vWeatherBlendEnabled = false;
     texture baseTexture;
     struct PSInput {
         float4 Position : POSITION0;
