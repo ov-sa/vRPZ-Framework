@@ -11,6 +11,8 @@
             "role:content_designer": "roles/content_designer.png",
             "role:streamer": "roles/streamer.png",
             "role:patron": "roles/patron.png",
+            "role:vip": "roles/vip.png",
+            "role:player": "roles/player.png",
             "login:lobby": "login/lobby.png",
             "login:background": "login/background.png",
             "loader:icon": "loader/icon.png",
