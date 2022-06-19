@@ -3,5 +3,8 @@
 ------------------
 
 FRAMEWORK_CONFIGS["Player"] = {
-    ["Datas"] = {}
+    ["Datas"] = {
+        "role",
+        "vip"
+    }
 }

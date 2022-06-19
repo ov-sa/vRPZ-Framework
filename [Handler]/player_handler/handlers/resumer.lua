@@ -90,7 +90,8 @@ imports.assetify.network:create("Player:onToggleLoginUI"):on(function(source)
         DPlayer = imports.table.clone(DPlayer, true)
         DPlayer.character = DPlayer.character or 0
         DPlayer.characters = {}
-        DPlayer.vip = (DPlayer.vip and true) or false
+        DPlayer.vip = DPlayer.vip or false
+        DPlayer.role = (DPlayer.role and FRAMEWORK_CONFIGS["Templates"]["Roles"][(DPlayer.role)]) or FRAMEWORK_CONFIGS["Templates"]["Roles"].default
 
         local DCharacter = CCharacter.fetchOwned(self, serial)
         if DCharacter and (#DCharacter > 0) then

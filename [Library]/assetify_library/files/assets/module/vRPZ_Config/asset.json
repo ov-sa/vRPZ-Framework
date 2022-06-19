@@ -9,6 +9,7 @@
                 "character/player.lua",
                 "character/character.lua",
                 "templates/fonts.lua",
+                "templates/roles.lua",
                 "templates/levels.lua",
                 "templates/reputations.lua",
                 "templates/beautify.lua",
