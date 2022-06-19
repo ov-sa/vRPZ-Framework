@@ -38,10 +38,21 @@ CPlayer = {
         return imports.tonumber(CGame.getEntityData(player, "Character:ID")) or false
     end,
 
+    setRole = function(player, role)
+        if not CPlayer.isInitialized(player) or not role or not FRAMEWORK_CONFIGS["Templates"]["Roles"][role] then return false end
+        return CGame.setEntityData(player, "Player:role", role)
+    end,
+
     getRole = function(player)
         if not CPlayer.isInitialized(player) then return false end
         local playerRole = CGame.getEntityData(player, "Player:role")
-        return (playerRole and FRAMEWORK_CONFIGS["Templates"]["Roles"][(playerRole)] and playerRole) or FRAMEWORK_CONFIGS["Templates"]["Roles"].default
+        return (playerRole and FRAMEWORK_CONFIGS["Templates"]["Roles"][playerRole] and playerRole) or FRAMEWORK_CONFIGS["Templates"]["Roles"].default
+    end,
+
+    setVIPDuration = function(player, duration)
+        duration = imports.tonumber(duration) or 0
+        if not CPlayer.isInitialized(player) or (duration <= 0) then return false end
+        return CGame.setEntityData(player, "Player:vip", duration)
     end,
 
     getVIPDuration = function(player)
