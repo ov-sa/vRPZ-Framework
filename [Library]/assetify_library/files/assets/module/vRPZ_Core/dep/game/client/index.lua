@@ -3,7 +3,9 @@
 -----------------
 
 local imports = {
+    pairs = pairs,
     getLocalization = getLocalization,
+    string = string,
     file = file,
     json = json,
     beautify = beautify,
@@ -105,5 +107,10 @@ CGame.playSound3D = function(...)
     return imports.assetify.playSound3D(...)
 end
 
+for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Roles"]) do
+    if i ~= "default" then
+        j.badge = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "role:"..imports.string.gsub(imports.string.tolower(i), "_"))
+    end
+end
 CGame.CSettings.cache = imports.file.read(CGame.CSettings.path)
 CGame.CSettings.cache = (CGame.CSettings.cache and imports.json.decode(CGame.CSettings.cache)) or {}
