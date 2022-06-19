@@ -62,7 +62,7 @@ shaderRW[identifier] = function()
 
     float4 PSHandler(PSInput PS) : COLOR0 {
         float4 sampledTexel = tex2D(baseSampler, PS.TexCoord);
-        float averageTexel = (texColor.r + texColor.g + texColor.b)/3.0;
+        float averageTexel = (sampledTexel.r + sampledTexel.g + sampledTexel.b)/3;
         float4 grayscaleTexel = float4(averageTexel, averageTexel, averageTexel, sampledTexel.a);
         sampledTexel.rgb = pow(sampledTexel.rgb*1.5, 1.5);
         sampledTexel = lerp(sampledTexel, grayscaleTexel, grayscaleIntensity);
