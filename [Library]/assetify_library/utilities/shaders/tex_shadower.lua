@@ -70,7 +70,7 @@ shaderRW[identifier] = function()
         sampledTexel.rgb = pow(sampledTexel.rgb*1.5, 1.5);
         sampledTexel += shadowTexel;
         sampledTexel *= baseColor;
-        if (vWeatherBlendEnabled) sampledTexel.a *= MTAGetWeatherValue();
+        if (vWeatherBlend) sampledTexel.a *= (sampledTexel.a*vWeatherBlend) + (vWeatherBlend*MTAGetWeatherValue());
         return saturate(sampledTexel);
     }
 

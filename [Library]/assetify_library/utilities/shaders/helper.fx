@@ -46,7 +46,7 @@ bool vEmissiveSource = false;
 bool vRenderingEnabled = false;
 bool vSource1Enabled = false;
 bool vSource2Enabled = false;
-bool vWeatherBlendEnabled = false;
+float vWeatherBlend = false;
 texture vSource0;
 texture vSource1 <string renderTarget = "yes";>;
 texture vSource2 <string renderTarget = "yes";>;

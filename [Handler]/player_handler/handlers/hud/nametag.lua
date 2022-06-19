@@ -40,7 +40,7 @@ CGame.execOnModuleLoad(function()
     local nametagUI = {
         buffer = {},
         padding = 5, iconSize = 20,
-        clipRange = {4, 6},
+        clipRange = {4, 6}, weatherBlend = 0.85,
         font = CGame.createFont(1, 15, true),
         fontColor = imports.tocolor(imports.unpackColor({150, 150, 150, 250}))
     }
@@ -61,7 +61,7 @@ CGame.execOnModuleLoad(function()
         }
         nametagUI.buffer[player].shader = imports.assetify.createShader(nametagUI.buffer[player].rt, "player-nametag", "Assetify_TextureShadower", nil,
             {baseTexture = 1},
-            {vWeatherBlendEnabled = true},
+            {vWeatherBlend = nametagUI.weatherBlend},
             {   texture = {
                     [1] = nametagUI.buffer[player].rt
                 }
