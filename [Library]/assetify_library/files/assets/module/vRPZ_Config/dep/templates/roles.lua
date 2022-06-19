@@ -10,7 +10,7 @@ FRAMEWORK_CONFIGS["Templates"]["Roles"] = {
     ["Warden"] = {},
     ["Content Creator"] = {},
     ["Content Designer"] = {},
-    ["Streamer"] = {},
+    ["Streamer"] = {isVIP = true},
     ["Patron"] = {isVIP = true},
     ["VIP"] = {isVIP = true},
     ["Player"] = {}
