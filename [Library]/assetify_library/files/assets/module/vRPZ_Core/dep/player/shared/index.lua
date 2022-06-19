@@ -38,6 +38,17 @@ CPlayer = {
         return imports.tonumber(CGame.getEntityData(player, "Character:ID")) or false
     end,
 
+    getRole = function(player)
+        if not CPlayer.isInitialized(player) then return false end
+        local playerRole = CGame.getEntityData(player, "Player:role")
+        return (playerRole and FRAMEWORK_CONFIGS["Templates"]["Roles"][(playerRole)] and playerRole) or FRAMEWORK_CONFIGS["Templates"]["Roles"].default
+    end,
+
+    getVIPDuration = function(player)
+        if not CPlayer.isInitialized(player) then return false end
+        return imports.tonumber(CGame.getEntityData(player, "Player:vip")) or false
+    end,
+
     getParty = function(player)
         --TODO: WRONG CLIENT AND SERVER STORING ORDER DONT MATCH + MAKE ALL PARTY FUNCTIONS SHARED
         if not CPlayer.isInitialized(player) then return false end

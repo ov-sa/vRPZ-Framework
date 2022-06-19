@@ -7,5 +7,7 @@ CGame.exportModule("CPlayer", {
     "getLogged",
     "getName",
     "getCharacterID",
+    "getRole",
+    "getVIPDuration",
     "getParty"
 })
