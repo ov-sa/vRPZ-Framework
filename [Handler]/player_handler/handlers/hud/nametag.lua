@@ -44,8 +44,6 @@ CGame.execOnModuleLoad(function()
         font = CGame.createFont(1, 15, true),
         fontColor = imports.tocolor(imports.unpackColor({150, 150, 150, 250}))
     }
-
-    local roleIcon = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "role:developer")
     
     nametagUI.createUI = function(player, isReload)
         if not CPlayer.isInitialized(player) then return false end
@@ -83,7 +81,7 @@ CGame.execOnModuleLoad(function()
 
     nametagUI.updateUI = function(player, isFetchSize)
         if not CPlayer.isInitialized(player) or (not isFetchSize and not nametagUI.buffer[player]) then return false end
-        local playerID, playerName = CPlayer.getCharacterID(player), CPlayer.getName(player)
+        local playerID, playerName, playerRole = CPlayer.getCharacterID(player), CPlayer.getName(player), CGame.getRole(CPlayer.getRole(player))
         local playerGroup = CCharacter.getGroup(player)
         local playerLevel = CCharacter.getLevel(player)
         local _, playerRank = CCharacter.getRank(player)
@@ -101,8 +99,8 @@ CGame.execOnModuleLoad(function()
         local rankTag_startY = nameTag_startY + nametagUI.iconSize + (nametagUI.padding*0.5)
         imports.beautify.native.drawText(nameTag, nameTag_startX, nameTag_startY, nameTag_startX, nameTag_startY, nametagUI.fontColor, 1, nametagUI.font.instance, "center", "top")
         imports.beautify.native.drawText(rankTag, nameTag_startX, rankTag_startY, nameTag_startX, rankTag_startY, nametagUI.fontColor, 1, nametagUI.font.instance, "center", "top")
-        imports.beautify.native.drawImage(nameTag_startX - (nameTag_width*0.5) - nametagUI.iconSize - nametagUI.padding, nameTag_startY, nametagUI.iconSize, nametagUI.iconSize, roleIcon, 0, 0, 0, -1)
-        imports.beautify.native.drawImage(nameTag_startX - (rankTag_width*0.5) - nametagUI.iconSize - nametagUI.padding, rankTag_startY, nametagUI.iconSize, nametagUI.iconSize, roleIcon, 0, 0, 0, -1)
+        imports.beautify.native.drawImage(nameTag_startX - (nameTag_width*0.5) - nametagUI.iconSize - nametagUI.padding, nameTag_startY, nametagUI.iconSize, nametagUI.iconSize, playerRole.badge, 0, 0, 0, -1)
+        imports.beautify.native.drawImage(nameTag_startX - (rankTag_width*0.5) - nametagUI.iconSize - nametagUI.padding, rankTag_startY, nametagUI.iconSize, nametagUI.iconSize, playerRole.badge, 0, 0, 0, -1)
         imports.beautify.native.setRenderTarget()
         return true
     end

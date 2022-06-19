@@ -109,7 +109,7 @@ end
 
 for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Roles"]) do
     if i ~= "default" then
-        j.badge = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "role:"..imports.string.gsub(imports.string.tolower(i), "_"))
+        j.badge = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "role:".. imports.string.gsub(imports.string.lower(i), " ", "_"))
     end
 end
 CGame.CSettings.cache = imports.file.read(CGame.CSettings.path)
