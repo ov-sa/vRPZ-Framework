@@ -80,6 +80,10 @@ CGame = {
         return imports.string.format("%02d:%02d:%02d", hours, minutes, seconds)
     end,
 
+    getRole = function(role)
+        return (role and FRAMEWORK_CONFIGS["Templates"]["Roles"][role]) or false
+    end,
+
     getLevelEXP = function(level)
         level = imports.tonumber(level)
         if not level then return false end

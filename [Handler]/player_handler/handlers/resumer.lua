@@ -90,7 +90,7 @@ imports.assetify.network:create("Player:onToggleLoginUI"):on(function(source)
         DPlayer = imports.table.clone(DPlayer, true)
         DPlayer.character = DPlayer.character or 0
         DPlayer.characters = {}
-        DPlayer.role = (DPlayer.role and FRAMEWORK_CONFIGS["Templates"]["Roles"][(DPlayer.role)] and DPlayer.role) or FRAMEWORK_CONFIGS["Templates"]["Roles"].default
+        DPlayer.role = (DPlayer.role and CGame.getRole(DPlayer.role) and DPlayer.role) or FRAMEWORK_CONFIGS["Templates"]["Roles"].default
         DPlayer.vip = imports.tonumber(DPlayer.vip) or false
 
         local DCharacter = CCharacter.fetchOwned(self, serial)

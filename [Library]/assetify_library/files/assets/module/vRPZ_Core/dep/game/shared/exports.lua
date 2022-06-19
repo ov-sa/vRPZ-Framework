@@ -9,6 +9,7 @@ CGame.exportModule("CGame", {
     "getNativeWeather",
     "getTime",
     "formatMS",
+    "getRole",
     "getLevelEXP",
     "getLevelRank",
     "generateSpawn"
