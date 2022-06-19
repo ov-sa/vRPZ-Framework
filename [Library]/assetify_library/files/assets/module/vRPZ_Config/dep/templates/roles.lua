@@ -3,7 +3,7 @@
 ------------------
 
 FRAMEWORK_CONFIGS["Templates"]["Roles"] = {
-    default = "Player"
+    default = "Player",
     ["Developer"] = {isVIP = true},
     ["Manager"] = {isVIP = true},
     ["Assistant"] = {},
