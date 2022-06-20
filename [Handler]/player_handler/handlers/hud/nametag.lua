@@ -147,8 +147,10 @@ CGame.execOnModuleLoad(function()
     imports.assetify.network:fetch("Player:onLogin", true):on(function(source) nametagUI.createUI(source) end)
     imports.assetify.network:fetch("Player:onLogout", true):on(function(source) nametagUI.destroyUI(source) end)
     imports.assetify.network:fetch("Assetify:onEntityDataChange", true):on(function(element, data, _, value)
-        if (data == "Character:Data:reputation") and value then
-            nametagUI.updateUI(element)
+        if value then
+            if (data == "Character:Data:level") or (data == "Character:Data:reputation") then
+                nametagUI.updateUI(element)
+            end
         end
     end)
 end)

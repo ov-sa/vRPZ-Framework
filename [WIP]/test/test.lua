@@ -38,6 +38,6 @@ loadstring(exports.player_handler:import())()
 assetify.loadModule("vRPZ_Config", {"shared", "server"})
 
 async(function(self)
-    local value = self:await(CCharacter.giveReputation(self, getElementsByType("player")[1], 10000))
+    local value = self:await(CCharacter.giveEXP(self, getElementsByType("player")[1], 100000000))
     print(value)
 end):resume()
