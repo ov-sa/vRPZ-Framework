@@ -53,7 +53,7 @@ CGame = {
 
     getServerTick = function()
         local cTick = 0
-        CGame.CTickSyncer = (CGame.CTickSyncer and import.isElement(CGame.CTickSyncer) and CGame.CTickSyncer) or CGame.getGlobalData("Server:TickSyncer")
+        CGame.CTickSyncer = (CGame.CTickSyncer and imports.isElement(CGame.CTickSyncer) and CGame.CTickSyncer) or CGame.getGlobalData("Server:TickSyncer")
         if CGame.CTickSyncer then
             cTick = imports.tonumber(CGame.getEntityData(CGame.CTickSyncer, "Server:TickSyncer")) or 0
         end
