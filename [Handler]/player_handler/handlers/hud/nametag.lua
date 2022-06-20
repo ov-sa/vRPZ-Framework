@@ -90,8 +90,7 @@ CGame.execOnModuleLoad(function()
         local playerGroup = CCharacter.getGroup(player)
         local playerLevel = CCharacter.getLevel(player)
         local _, playerRank = CCharacter.getRank(player)
-        playerRank = (playerRank and playerRank.name) or playerRank
-        local nameTag, rankTag = "["..playerID.."]  ━  "..((playerGroup and ""..playerGroup.." |  ") or "")..playerName, playerRank.." - "..playerLevel
+        local nameTag, rankTag = "["..playerID.."]  ━  "..((playerGroup and ""..playerGroup.." |  ") or "")..playerName, playerRank.name.." - "..playerLevel
         local nameTag_width, rankTag_width = imports.beautify.native.getTextWidth(nameTag, 1, nametagUI.font.instance), imports.beautify.native.getTextWidth(rankTag, 1, nametagUI.font.instance)
         local rtWidth, rtHeight = imports.math.max(nameTag_width, rankTag_width) + nametagUI.iconSize + (nametagUI.padding*4), (nametagUI.iconSize*2) + (nametagUI.padding*8)
         if isFetchSize then
@@ -107,7 +106,7 @@ CGame.execOnModuleLoad(function()
         imports.beautify.native.drawText(nameTag, nameTag_startX, nameTag_startY, nameTag_startX, nameTag_startY, nametagUI.fontColor, 1, nametagUI.font.instance, "center", "top")
         imports.beautify.native.drawText(rankTag, nameTag_startX, rankTag_startY, nameTag_startX, rankTag_startY, nametagUI.fontColor, 1, nametagUI.font.instance, "center", "top")
         imports.beautify.native.drawImage(nameTag_startX - (nameTag_width*0.5) - nametagUI.iconSize - nametagUI.padding, nameTag_startY, nametagUI.iconSize, nametagUI.iconSize, nametagUI.buffer[player].reputation, 0, 0, 0, -1)
-        imports.beautify.native.drawImage(nameTag_startX - (rankTag_width*0.5) - nametagUI.iconSize - nametagUI.padding, rankTag_startY, nametagUI.iconSize, nametagUI.iconSize, playerRole.badge, 0, 0, 0, -1)
+        imports.beautify.native.drawImage(nameTag_startX - (rankTag_width*0.5) - nametagUI.iconSize - nametagUI.padding, rankTag_startY, nametagUI.iconSize, nametagUI.iconSize, playerRank.badge, 0, 0, 0, -1)
         imports.beautify.native.setRenderTarget()
         return true
     end
