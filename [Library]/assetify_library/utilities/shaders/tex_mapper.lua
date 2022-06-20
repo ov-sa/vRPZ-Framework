@@ -41,7 +41,10 @@ end
 ----------------
 
 shaderRW[identifier] = {
-    properties = {},
+    properties = {
+        disabled = {}
+    },
+
     exec = function(shaderMaps)
         if not shaderMaps or (#shaderMaps <= 0) then return false end
         local isSamplingStage = false

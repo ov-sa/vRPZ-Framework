@@ -37,7 +37,10 @@ end
 ----------------
 
 shaderRW[identifier] = {
-    properties = {},
+    properties = {
+        disabled = {}
+    },
+
     exec = function()
         return depDatas..[[
         /*-----------------

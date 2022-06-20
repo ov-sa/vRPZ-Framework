@@ -39,7 +39,10 @@ end
 ----------------
 
 shaderRW[identifier] = {
-    properties = {},
+    properties = {
+        disabled = {}
+    },
+
     exec = function(shaderMaps)
         if not shaderMaps or not shaderMaps.clump then return false end
         local controlVars, handlerBody, handlerFooter = [[

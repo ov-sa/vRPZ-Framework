@@ -37,7 +37,14 @@ end
 ----------------
 
 shaderRW[identifier] = {
-    properties = {},
+    properties = {
+        disabled = {
+            ["vSource0"] = true,
+            ["vSource1"] = true,
+            ["vSource2"] = true
+        }
+    },
+
     exec = function()
         return depDatas..[[
         /*-----------------

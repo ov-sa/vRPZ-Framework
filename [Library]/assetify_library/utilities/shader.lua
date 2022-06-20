@@ -188,6 +188,11 @@ if localPlayer then
         return false
     end
 
+    function shader:setValue(i, j)
+        if not self or (self == shader) or (shader.rwCache[(self.shaderName)].properties.disabled[i]) then return false end
+        return imports.dxSetShaderValue(self.cShader, i, j)
+    end
+
     function shader:load(element, shaderCategory, shaderName, textureName, shaderTextures, shaderInputs, rwCache, shaderMaps, encryptKey, shaderPriority, shaderDistance, isStandalone)
         if not self or (self == shader) then return false end
         local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
