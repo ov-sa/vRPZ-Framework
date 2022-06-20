@@ -34,9 +34,10 @@ end)
 ]]
 
 loadstring(exports.player_handler:import())()
---[[
+
+assetify.loadModule("vRPZ_Config", {"shared", "server"})
+
 async(function(self)
-    local value = self:await(CGame.getServerTick(self))
+    local value = self:await(CCharacter.giveReputation(self, getElementsByType("player")[1], 10000))
     print(value)
 end):resume()
-]]

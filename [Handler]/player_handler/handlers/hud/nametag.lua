@@ -100,7 +100,7 @@ CGame.execOnModuleLoad(function()
             return nametagUI.createUI(player, true)
         end
         imports.beautify.native.setShaderValue(nametagUI.buffer[player].reputation, "baseTexture", playerRole.badge)
-        imports.beautify.native.setShaderValue(nametagUI.buffer[player].reputation, "grayscaleIntensity", imports.math.max(0, imports.math.min(1, CCharacter.getReputation(player)/FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"])))
+        imports.beautify.native.setShaderValue(nametagUI.buffer[player].reputation, "grayscaleIntensity", 1 - imports.math.max(0, imports.math.min(1, CCharacter.getReputation(player)/FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"])))
         imports.beautify.native.setRenderTarget(nametagUI.buffer[player].rt, true)
         local nameTag_startX, nameTag_startY = nametagUI.buffer[player].width*0.5 + (nametagUI.iconSize*0.5), 0
         local rankTag_startY = nameTag_startY + nametagUI.iconSize + (nametagUI.padding*0.5)
