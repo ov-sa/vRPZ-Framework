@@ -18,7 +18,6 @@ local imports = {
     isElement = isElement,
     destroyElement = destroyElement,
     setmetatable = setmetatable,
-    dxCreateShader = dxCreateShader,
     engineRequestModel = engineRequestModel,
     engineLoadTXD = engineLoadTXD,
     engineLoadDFF = engineLoadDFF,
@@ -26,7 +25,6 @@ local imports = {
     engineImportTXD = engineImportTXD,
     engineReplaceModel = engineReplaceModel,
     engineReplaceCOL = engineReplaceCOL,
-    engineApplyShaderToWorldTexture = engineApplyShaderToWorldTexture,
     createObject = createObject,
     setElementAlpha = setElementAlpha,
     setElementDimension = setElementDimension,
@@ -101,19 +99,12 @@ function light.planar:load(lightType, lightData, shaderInputs, isScoped, isDefau
         self.cStreamer = streamer:create(self.cModelInstance, "light", {self.cCollisionInstance}, self.syncRate)
     end
     self.cLight = self.cModelInstance
-    --TODO: USE ASSETIFY TO CREATE THIS SHADER
-    self.cShader = imports.dxCreateShader(shader.rwCache["Assetify_LightPlanar"](), shader.cache.shaderPriority, shader.cache.shaderDistance, false, "all")
-    renderer:syncShader(self.cShader)
+    self.cShader = shader:create(self.cLight, "Assetify-Planar-Light", "Assetify_LightPlanar", lightCache.textureName, {}, shaderInputs, {})
     light.planar.buffer[(self.cLight)] = self
     self.lightType = lightType
-    for i, j in imports.pairs(shaderInputs) do
-        self.cShader:setValue(i, j)
-    end
     self.lightData = lightData
-    self.lightData.shaderInputs = shaderInputs
     self:setResolution(self.lightData.resolution)
     self:setColor(self.lightData.color and self.lightData.color.r, self.lightData.color and self.lightData.color.g, self.lightData.color and self.lightData.color.b, self.lightData.color and self.lightData.color.a)
-    imports.engineApplyShaderToWorldTexture(self.cShader, lightCache.textureName, self.cLight)
     if isScoped then manager:setElementScoped(self.cLight) end
     return true
 end
@@ -123,9 +114,6 @@ function light.planar:unload()
     self.isUnloading = true
     if self.cStreamer then
         self.cStreamer:destroy()
-    end
-    if self.cShader then
-        self.cShader:destroy()
     end
     if self.cModelInstance and imports.isElement(self.cModelInstance) then
         light.planar.buffer[(self.cModelInstance)] = nil
