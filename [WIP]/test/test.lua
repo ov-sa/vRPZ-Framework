@@ -1,3 +1,4 @@
+--[[
 loadstring(exports.assetify_library:fetchImports())()
 
 local vSource = assetify.renderer.getVirtualSource()
@@ -30,3 +31,13 @@ bindKey("z", "down", function()
     setElementStreamable(clight, false)
     print("TOTAL LIGHTS CURRENTLY: "..totalLightCreated)
 end)
+]]
+
+print("Booted")
+loadstring(exports.player_handler:fetchImports())()
+--[[
+async(function(self)
+    local value = self:await(CGame.getServerTick(self))
+    print(value)
+end):resume()
+]]
