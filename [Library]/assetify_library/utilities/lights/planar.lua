@@ -105,7 +105,6 @@ function light.planar:load(lightType, lightData, shaderInputs, isScoped, isDefau
     self.cShader = imports.dxCreateShader(shader.rwCache["Assetify_LightPlanar"](), shader.cache.shaderPriority, shader.cache.shaderDistance, false, "all")
     renderer:syncShader(self.cShader)
     light.planar.buffer[(self.cLight)] = self
-    shader.buffer.shader[(self.cShader)] = "light"
     self.lightType = lightType
     for i, j in imports.pairs(shaderInputs) do
         self.cShader:setValue(i, j)
@@ -125,16 +124,15 @@ function light.planar:unload()
     if self.cStreamer then
         self.cStreamer:destroy()
     end
+    if self.cShader then
+        self.cShader:destroy()
+    end
     if self.cModelInstance and imports.isElement(self.cModelInstance) then
         light.planar.buffer[(self.cModelInstance)] = nil
         imports.destroyElement(self.cModelInstance)
     end
     if self.cCollisionInstance and imports.isElement(self.cCollisionInstance) then
         imports.destroyElement(self.cCollisionInstance)
-    end
-    if self.cShader and imports.isElement(self.cShader) then
-        shader.buffer.shader[(self.cShader)] = nil
-        imports.destroyElement(self.cShader)
     end
     self = nil
     return true

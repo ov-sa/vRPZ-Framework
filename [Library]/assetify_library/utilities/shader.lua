@@ -199,7 +199,7 @@ if localPlayer then
             self.cShader = imports.dxCreateShader(shader.rwCache[shaderName].exec(shaderMaps), shaderPriority, shaderDistance, false, "all")
             renderer:syncShader(self.cShader)
         end
-        shader.buffer.shader[(self.cShader)] = true
+        shader.buffer.shader[self] = true
         if not self.isPreLoaded and not isStandalone then rwCache.shader[textureName] = self.cShader end
         for i, j in imports.pairs(shaderTextures) do
             if rwCache.texture then
@@ -241,7 +241,6 @@ if localPlayer then
         self.isUnloading = true
         if not self.preLoaded then
             if self.cShader and imports.isElement(self.cShader) then
-                shader.buffer.shader[(self.cShader)] = nil
                 imports.destroyElement(self.cShader)
             end
         else
@@ -254,6 +253,7 @@ if localPlayer then
                 shader.buffer.element[(self.shaderData.element)][(self.shaderData.shaderCategory)].untextured[self] = nil
             end
         end
+        shader.buffer.shader[self] = nil
         self = nil
         return true
     end
