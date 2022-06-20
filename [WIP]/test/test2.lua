@@ -337,14 +337,12 @@ local shader = [[
 
 shaderPriority = 10000
 shaderDistance = 0
-local testShader = dxCreateShader(shader, shaderPriority, shaderDistance, false, "all")
---[[
-    local testShader = assetify.createShader(testRT, "player-nametag", "Assetify_TextureGrayscaler", nil,
+--local testShader = dxCreateShader(shader, shaderPriority, shaderDistance, false, "all")
+local testShader = assetify.createShader(testRT, "player-nametag", "Assetify_TextureGrayscaler", nil,
     {},
     {},
     {},
 nil, nil, nil, nil, true)
-]]
 beautify.native.setShaderValue(testShader, "baseTexture", testImage)
 
 
