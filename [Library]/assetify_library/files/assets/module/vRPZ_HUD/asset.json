@@ -1,6 +1,6 @@
 {
     "encryptKey": "vStudio - Mario",
-    "authors": ["Mario", "Tron", "Aviril", "Аниса", "April"],
+    "authors": ["Mario", "Tron", "Aviril", "Аниса", "April", "Warstellar Interactive"],
     "assetDeps": {
         "texture": {
             "role:developer": "roles/developer.png",
