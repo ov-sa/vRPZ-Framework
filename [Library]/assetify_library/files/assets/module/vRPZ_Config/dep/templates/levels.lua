@@ -28,7 +28,7 @@ FRAMEWORK_CONFIGS["Templates"]["Levels"] = {
         {name = "Swordsman", badge = 19},
         {name = "Freelancer", badge = 20},
         {name = "Swashbuckler", badge = 21},
-        {name = "Vanquisher", badge = 22},
+        {name = "Vanquisher", badge = 21},
         {name = "Chevalier", badge = 22},
         {name = "Duelist", badge = 22},
         {name = "Gladiator", badge = 23},
