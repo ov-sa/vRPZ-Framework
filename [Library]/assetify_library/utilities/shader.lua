@@ -208,12 +208,12 @@ if localPlayer then
         for i, j in imports.pairs(shaderTextures) do
             if rwCache.texture then
                 if j and imports.isElement(rwCache.texture[j]) then
-                    imports.dxSetShaderValue(self.cShader, i, rwCache.texture[j])
+                    self:setValue(i, rwCache.texture[j])
                 end
             end
         end
         for i, j in imports.pairs(shaderInputs) do
-            imports.dxSetShaderValue(self.cShader, i, j)
+            self:setValue(i, j)
         end
         self.shaderData = {
             element = element,

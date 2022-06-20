@@ -24,8 +24,7 @@ local imports = {
     removeEventHandler = removeEventHandler,
     dxCreateScreenSource = dxCreateScreenSource,
     dxCreateRenderTarget = dxCreateRenderTarget,
-    dxUpdateScreenSource = dxUpdateScreenSource,
-    dxSetShaderValue = dxSetShaderValue
+    dxUpdateScreenSource = dxUpdateScreenSource
 }
 
 
@@ -97,13 +96,13 @@ function renderer:setVirtualRendering(state, rtModes, syncShader, isInternal)
             return false
         end
         local vSource0, vSource1, vSource2 = (renderer.cache.isVirtualRendering and renderer.cache.virtualSource) or false, (renderer.cache.isVirtualRendering and renderer.cache.virtualRTs.diffuse) or false, (renderer.cache.isVirtualRendering and renderer.cache.virtualRTs.emissive) or false
-        imports.dxSetShaderValue(syncShader, "vResolution", (renderer.cache.isVirtualRendering and renderer.resolution) or false)
-        imports.dxSetShaderValue(syncShader, "vRenderingEnabled", (renderer.cache.isVirtualRendering and true) or false)
-        imports.dxSetShaderValue(syncShader, "vSource0", vSource0)
-        imports.dxSetShaderValue(syncShader, "vSource1", vSource1)
-        imports.dxSetShaderValue(syncShader, "vSource1Enabled", (vSource1 and true) or false)
-        imports.dxSetShaderValue(syncShader, "vSource2", vSource2)
-        imports.dxSetShaderValue(syncShader, "vSource2Enabled", (vSource2 and true) or false)
+        syncShader:setValue("vResolution", (renderer.cache.isVirtualRendering and renderer.resolution) or false)
+        syncShader:setValue("vRenderingEnabled", (renderer.cache.isVirtualRendering and true) or false)
+        syncShader:setValue("vSource0", vSource0)
+        syncShader:setValue("vSource1", vSource1)
+        syncShader:setValue("vSource1Enabled", (vSource1 and true) or false)
+        syncShader:setValue("vSource2", vSource2)
+        syncShader:setValue("vSource2Enabled", (vSource2 and true) or false)
     end
     return true
 end
@@ -124,7 +123,7 @@ function renderer:setTimeSync(state, syncShader, isInternal)
         if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
             return false
         end
-        imports.dxSetShaderValue(syncShader, "gTimeSync", renderer.cache.isTimeSynced)
+        syncShader:setValue("gTimeSync", renderer.cache.isTimeSynced)
     end
     return true
 end
@@ -141,7 +140,7 @@ function renderer:setServerTick(serverTick, syncShader, isInternal)
         if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
             return false
         end
-        imports.dxSetShaderValue(syncShader, "gServerTick", renderer.cache.serverTick)
+        syncShader:setValue("gServerTick", renderer.cache.serverTick)
     end
     return true
 end
@@ -157,7 +156,7 @@ function renderer:setMinuteDuration(minuteDuration, syncShader, isInternal)
         if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
             return false
         end
-        imports.dxSetShaderValue(syncShader, "gMinuteDuration", renderer.cache.minuteDuration)
+        syncShader:setValue("gMinuteDuration", renderer.cache.minuteDuration)
     end
     return true
 end
