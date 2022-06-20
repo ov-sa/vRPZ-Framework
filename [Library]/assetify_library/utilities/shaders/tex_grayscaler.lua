@@ -41,7 +41,11 @@ end
 
 shaderRW[identifier] = {
     properties = {
-        disabled = {}
+        disabled = {
+            ["vSource0"] = true,
+            ["vSource1"] = true,
+            ["vSource2"] = true
+        }
     },
 
     exec = function()
