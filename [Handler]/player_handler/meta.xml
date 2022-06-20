@@ -28,6 +28,6 @@
     <script src="handlers/party.lua" type="server"/>
 
     <!-- Exports -->
-    <export function="fetchImports" type="shared"/>
+    <export function="import" type="shared"/>
 
 </meta>

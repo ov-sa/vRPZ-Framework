@@ -33,8 +33,7 @@ bindKey("z", "down", function()
 end)
 ]]
 
-print("Booted")
-loadstring(exports.player_handler:fetchImports())()
+loadstring(exports.player_handler:import())()
 --[[
 async(function(self)
     local value = self:await(CGame.getServerTick(self))

@@ -16,10 +16,10 @@ CGame.exportModule("CGame", {
 })
 
 
------------------------------------
---[[ Function: Fetches Imports ]]--
------------------------------------
+----------------------------------
+--[[ Function: Imports Module ]]--
+----------------------------------
 
-fetchImports = function()
+import = function()
     return CGame.CExports
 end
