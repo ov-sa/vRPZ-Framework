@@ -114,7 +114,7 @@ for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Roles"]) do
 end
 for i = 1, #FRAMEWORK_CONFIGS["Templates"]["Levels"]["Ranks"], 1 do
     local j = FRAMEWORK_CONFIGS["Templates"]["Levels"]["Ranks"][i]
-    j.badge = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "rank:"..j.badge)
+    j.badge = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "level:rank:"..j.badge)
 end
 CGame.CSettings.cache = imports.file.read(CGame.CSettings.path)
 CGame.CSettings.cache = (CGame.CSettings.cache and imports.json.decode(CGame.CSettings.cache)) or {}
