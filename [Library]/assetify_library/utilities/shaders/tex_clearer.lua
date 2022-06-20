@@ -36,30 +36,33 @@ end
 --[[ Shader ]]--
 ----------------
 
-shaderRW[identifier] = function()
-    return depDatas..[[
-    /*-----------------
-    -->> Variables <<--
-    -------------------*/
+shaderRW[identifier] = {
+    properties = {},
+    exec = function()
+        return depDatas..[[
+        /*-----------------
+        -->> Variables <<--
+        -------------------*/
 
-    texture baseTexture;
+        texture baseTexture;
 
 
-    /*------------------
-    -->> Techniques <<--
-    --------------------*/
+        /*------------------
+        -->> Techniques <<--
+        --------------------*/
 
-    technique ]]..identifier..[[
-    {
-        pass P0
+        technique ]]..identifier..[[
         {
-            AlphaBlendEnable = true;
-            Texture[0] = baseTexture;
+            pass P0
+            {
+                AlphaBlendEnable = true;
+                Texture[0] = baseTexture;
+            }
         }
-    }
 
-    technique fallback {
-        pass P0 {}
-    }
-    ]]
-end
+        technique fallback {
+            pass P0 {}
+        }
+        ]]
+    end
+}

@@ -48,7 +48,7 @@ shader = {
 }
 shader.cache.__remoteBlacklist = {}
 for i, j in imports.pairs(shader.cache.remoteBlacklist) do
-    shader.cache.__remoteBlacklist[j] = true 
+    shader.cache.__remoteBlacklist[j] = true
 end
 shader.cache.remoteBlacklist = shader.cache.__remoteBlacklist
 shader.__index = shader
@@ -66,7 +66,7 @@ if localPlayer then
     shader.rwCache = shaderRW
     shaderRW = nil
     shader.preLoaded = {
-        ["Assetify_TextureClearer"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureClearer"](), shader.cache.shaderPriority + 1, shader.cache.shaderDistance, false, "all")
+        ["Assetify_TextureClearer"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureClearer"].exec(), shader.cache.shaderPriority + 1, shader.cache.shaderDistance, false, "all")
     }
     for i, j in imports.pairs(shader.preLoaded) do
         shader.buffer.shader[j] = true
@@ -200,7 +200,7 @@ if localPlayer then
         self.isPreLoaded = (shader.preLoaded[shaderName] and true) or false
         self.cShader = (self.isPreLoaded and shader.preLoaded[shaderName])
         if not self.cShader then
-            self.cShader = imports.dxCreateShader(shader.rwCache[shaderName](shaderMaps), shaderPriority, shaderDistance, false, "all")
+            self.cShader = imports.dxCreateShader(shader.rwCache[shaderName].exec(shaderMaps), shaderPriority, shaderDistance, false, "all")
             renderer:syncShader(self.cShader)
         end
         shader.buffer.shader[(self.cShader)] = true
