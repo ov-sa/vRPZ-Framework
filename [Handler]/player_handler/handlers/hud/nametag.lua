@@ -136,6 +136,7 @@ CGame.execOnModuleLoad(function()
                     local screenX, screenY = imports.getScreenFromWorldPosition(boneX, boneY, boneZ)
                     if screenX and screenY then
                         if isAlphaChanged then imports.beautify.native.setShaderValue(nametagUI.buffer[i].shader, "baseColor", 1.25, 1.25, 1.25, nametagUI.buffer[i].alpha) end
+                        imports.beautify.native.setShaderValue(nametagUI.buffer[i].reputation, "grayscaleIntensity", 1) --TODO: ..
                         imports.beautify.native.drawImage(screenX - (nametagUI.buffer[i].width*0.5), screenY, nametagUI.buffer[i].width, nametagUI.buffer[i].height, nametagUI.buffer[i].shader, 0, 0, 0, -1)
                     end
                 end
