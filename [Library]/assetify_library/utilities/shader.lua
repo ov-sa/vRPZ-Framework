@@ -66,7 +66,7 @@ if localPlayer then
     shader.rwCache = shaderRW
     shaderRW = nil
     shader.preLoaded = {
-        ["Assetify_TextureClearer"] = shader:create(_, "Assetify-PreLoaded-Shaders", "Assetify_TextureClearer", _, {baseTexture = 1}, {}, {texture = {[1] = shader.preLoadedTex.invisibleMap}}, _, _, shader.cache.shaderPriority + 1, shader.cache.shaderDistance, true)
+        ["Assetify_TextureClearer"] = shader:create(_, "Assetify-PreLoaded", "Assetify_TextureClearer", _, {baseTexture = 1}, {}, {texture = {[1] = shader.preLoadedTex.invisibleMap}}, _, _, shader.cache.shaderPriority + 1, shader.cache.shaderDistance, true)
     }
 
     function shader:create(...)
