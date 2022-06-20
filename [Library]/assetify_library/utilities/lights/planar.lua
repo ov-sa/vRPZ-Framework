@@ -19,7 +19,6 @@ local imports = {
     destroyElement = destroyElement,
     setmetatable = setmetatable,
     dxCreateShader = dxCreateShader,
-    dxSetShaderValue = dxSetShaderValue,
     engineRequestModel = engineRequestModel,
     engineLoadTXD = engineLoadTXD,
     engineLoadDFF = engineLoadDFF,
@@ -102,13 +101,14 @@ function light.planar:load(lightType, lightData, shaderInputs, isScoped, isDefau
         self.cStreamer = streamer:create(self.cModelInstance, "light", {self.cCollisionInstance}, self.syncRate)
     end
     self.cLight = self.cModelInstance
+    --TODO: USE ASSETIFY TO CREATE THIS SHADER
     self.cShader = imports.dxCreateShader(shader.rwCache["Assetify_LightPlanar"](), shader.cache.shaderPriority, shader.cache.shaderDistance, false, "all")
     renderer:syncShader(self.cShader)
     light.planar.buffer[(self.cLight)] = self
     shader.buffer.shader[(self.cShader)] = "light"
     self.lightType = lightType
     for i, j in imports.pairs(shaderInputs) do
-        imports.dxSetShaderValue(self.cLight, i, j)
+        self.cShader:setValue(i, j)
     end
     self.lightData = lightData
     self.lightData.shaderInputs = shaderInputs
@@ -143,14 +143,14 @@ end
 function light.planar:setResolution(resolution)
     if not self or (self == light.planar) then return false end
     self.lightData.resolution = imports.math.max(0, imports.tonumber(resolution) or 1)
-    imports.dxSetShaderValue(self.cShader, "lightResolution", self.lightData.resolution)
+    self.cShader:setValue("lightResolution", self.lightData.resolution)
     return true
 end
 
 function light.planar:setTexture(texture)
     if not self or (self == light.planar) then return false end
     self.lightData.texture = (self.lightData.texture or texture) or false
-    imports.dxSetShaderValue(self.cShader, "baseTexture", self.lightData.texture)
+    self.cShader:setValue("baseTexture", self.lightData.texture)
     return true
 end
 
@@ -158,6 +158,6 @@ function light.planar:setColor(r, g, b, a)
     if not self or (self == light.planar) then return false end
     self.lightData.color = self.lightData.color or {}
     self.lightData.color[1], self.lightData.color[2], self.lightData.color[3], self.lightData.color[4] = imports.math.max(0, imports.math.min(255, imports.tonumber(r) or 255)), imports.math.max(0, imports.math.min(255, imports.tonumber(g) or 255)), imports.math.max(0, imports.math.min(255, imports.tonumber(b) or 255)), imports.math.max(0, imports.math.min(255, imports.tonumber(a) or 255))
-    imports.dxSetShaderValue(self.cShader, "lightColor", self.lightData.color[1]/255, self.lightData.color[2]/255, self.lightData.color[3]/255, self.lightData.color[4]/255)
+    self.cShader:setValue("lightColor", self.lightData.color[1]/255, self.lightData.color[2]/255, self.lightData.color[3]/255, self.lightData.color[4]/255)
     return true
 end

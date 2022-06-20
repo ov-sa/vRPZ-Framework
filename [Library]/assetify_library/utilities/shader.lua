@@ -66,12 +66,13 @@ if localPlayer then
     shader.rwCache = shaderRW
     shaderRW = nil
     shader.preLoaded = {
+        --TODO: USE ASSETIFY TO CREATE THIS SHADER
         ["Assetify_TextureClearer"] = imports.dxCreateShader(shader.rwCache["Assetify_TextureClearer"].exec(), shader.cache.shaderPriority + 1, shader.cache.shaderDistance, false, "all")
     }
     for i, j in imports.pairs(shader.preLoaded) do
         shader.buffer.shader[j] = true
     end
-    imports.dxSetShaderValue(shader.preLoaded["Assetify_TextureClearer"], "baseTexture", shader.preLoadedTex.invisibleMap)
+    shader.preLoaded["Assetify_TextureClearer"]:setValue("baseTexture", shader.preLoadedTex.invisibleMap)
 
     function shader:create(...)
         local cShader = imports.setmetatable({}, {__index = self})
