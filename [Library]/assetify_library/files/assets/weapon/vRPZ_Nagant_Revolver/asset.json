@@ -8,11 +8,13 @@
     "encryptKey": "vStudio - Аниса",
     "streamRange": 75,
     "weaponBase": {"normal": 23},
-    "weaponOffsets": {
+    "itemAttachments": {
         "bone": {
-            "id": 24,
-            "position": {"x": -0.07, "y": 0.025, "z": 0.25},
-            "rotation": {"x": -10, "y": -10, "z": 5}
+            "generic": {
+                "id": 24,
+                "position": {"x": -0.07, "y": 0.025, "z": 0.25},
+                "rotation": {"x": -10, "y": -10, "z": 5}
+            }
         }
     },
     "shaderMaps": {
