@@ -95,11 +95,19 @@ CInventory.equipItem = function(player, item, prevSlot, slot, isEquipped)
     local isEquippable = CInventory.isSlotAvailableForOrdering(player, item, prevSlot, slot, isEquipped)
     if isEquippable then
         if isEquipped then CInventory.CBuffer[inventoryID].slots[prevSlot] = nil end
-        --CPlayer.CAttachments[player][slot] = createObject() --TODO: WIP..
+        local itemData = CInventory.fetchItem(item)
+        CPlayer.CAttachments[player][slot] = imports.assetify.createDummy(itemData.pack, item, {
+            syncRate = 10
+        })
+        imports.assetify.attacher.setBoneAttachment(CPlayer.CAttachments[player][slot], player, {
+            id = 24,
+            position = itemData.data.weaponOffsets.bone.position,
+            rotation = itemData.data.weaponOffsets.bone.rotation,
+            syncRate = 10
+        })
         CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
         CGame.setEntityData(player, "Slot:"..slot, item)
         CGame.setEntityData(player, "Slot:Object:"..slot, CPlayer.CAttachments[player][slot])
-        print("CREATE ATTACHMENT")   --TODO: REMOVE..
     end
     imports.assetify.network:emit("Client:onSyncInventoryBuffer", true, false, player, CInventory.CBuffer[inventoryID])
     return false
@@ -123,7 +131,6 @@ CInventory.dequipItem = function(player, item, prevSlot, slot, isEquipped)
         CPlayer.CAttachments[player][prevSlot] = nil
         CGame.setEntityData(player, "Slot:"..prevSlot, nil)
         CGame.setEntityData(player, "Slot:Object:"..prevSlot, nil)
-        print("REMOVE ATTACHMENT")  --TODO: REMOVE..
     end
     imports.assetify.network:emit("Client:onSyncInventoryBuffer", true, false, player, CInventory.CBuffer[inventoryID])
     return false
