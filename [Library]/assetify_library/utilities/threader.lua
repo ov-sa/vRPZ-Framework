@@ -63,7 +63,7 @@ function thread:createHeartbeat(conditionExec, exec, rate)
     end)
     cThread:resume({
         executions = 1,
-        frame = rate
+        frames = rate
     })
     return cThread
 end
