@@ -100,7 +100,7 @@ CInventory.equipItem = function(player, item, prevSlot, slot, isEquipped)
             syncRate = 10
         })
         imports.assetify.attacher.setBoneAttachment(CPlayer.CAttachments[player][slot], player, {
-            id = 24,
+            id = itemData.data.weaponOffsets.bone.id,
             position = itemData.data.weaponOffsets.bone.position,
             rotation = itemData.data.weaponOffsets.bone.rotation,
             syncRate = 10

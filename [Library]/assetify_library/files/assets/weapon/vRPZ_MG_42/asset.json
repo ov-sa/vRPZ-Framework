@@ -10,6 +10,7 @@
     "weaponBase": {"normal": 33},
     "weaponOffsets": {
         "bone": {
+            "id": 24,
             "position": {"x": -0.05, "y": 0, "z": 0.28},
             "rotation": {"x": 7, "y": 0, "z": -2}
         }
