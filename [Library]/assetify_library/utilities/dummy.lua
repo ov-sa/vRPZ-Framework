@@ -93,13 +93,15 @@ if localPlayer then
         end
         if not self.cModelInstance then return false end
         if self.cCollisionInstance then imports.setElementAlpha(self.cCollisionInstance, 0) end
-        self.hearbeat = thread:createHeartbeat(function()
+        self.cHeartbeat = thread:createHeartbeat(function()
             if not targetDummy then
                 return false
             else
+                outputChatBox("EXECUTED")
                 return not imports.isElement(targetDummy)
             end
         end, function()
+            outputChatBox("EXECUTED")
             if dummyType == "object" then imports.setElementDoubleSided(self.cModelInstance, true) end
             network:emit("Assetify:onRecieveSyncedElement", false, self.cModelInstance, assetType, assetName, assetClump, clumpMaps, remoteSignature)
             if targetDummy then
@@ -111,7 +113,7 @@ if localPlayer then
             if self.cCollisionInstance then
                 self.cStreamer = streamer:create(self.cModelInstance, "dummy", {self.cCollisionInstance}, self.syncRate)
             end
-            self.hearbeat = nil
+            self.cHeartbeat = nil
         end, settings.downloader.buildRate)
         self.cDummy = self.cCollisionInstance or self.cModelInstance
         dummy.buffer[(self.cDummy)] = self
@@ -121,8 +123,8 @@ if localPlayer then
     function dummy:unload()
         if not self or (self == dummy) or self.isUnloading then return false end
         self.isUnloading = true
-        if self.hearbeat then
-            self.hearbeat:destroy()
+        if self.cHeartbeat then
+            self.cHeartbeat:destroy()
         end
         if self.cStreamer then
             self.cStreamer:destroy()
