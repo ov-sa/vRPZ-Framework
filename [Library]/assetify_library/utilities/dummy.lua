@@ -97,11 +97,9 @@ if localPlayer then
             if not targetDummy then
                 return false
             else
-                outputChatBox("EXECUTED")
                 return not imports.isElement(targetDummy)
             end
         end, function()
-            outputChatBox("EXECUTED")
             if dummyType == "object" then imports.setElementDoubleSided(self.cModelInstance, true) end
             network:emit("Assetify:onRecieveSyncedElement", false, self.cModelInstance, assetType, assetName, assetClump, clumpMaps, remoteSignature)
             if targetDummy then
