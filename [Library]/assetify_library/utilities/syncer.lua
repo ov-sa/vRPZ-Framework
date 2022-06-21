@@ -272,7 +272,7 @@ if localPlayer then
                 return not imports.isElement(element)
             end, function()
                 if clumpMaps then
-                    local cAsset = manager:getData(assetType, assetName)
+                    local cAsset = manager:getData(assetType, assetName, syncer.librarySerial)
                     if cAsset and cAsset.manifestData.shaderMaps and cAsset.manifestData.shaderMaps.clump then
                         for i, j in imports.pairs(clumpMaps) do
                             if cAsset.manifestData.shaderMaps.clump[i] and cAsset.manifestData.shaderMaps.clump[i][j] then
