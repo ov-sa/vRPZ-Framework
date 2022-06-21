@@ -139,6 +139,7 @@ if localPlayer then
     end
 else
     function dummy:create(assetType, assetName, assetClump, clumpMaps, dummyData)
+        if not dummyData then return false end
         local cAsset = manager:getData(assetType, assetName)
         if not cAsset or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
         local dummyType = settings.assetPacks[assetType].assetType

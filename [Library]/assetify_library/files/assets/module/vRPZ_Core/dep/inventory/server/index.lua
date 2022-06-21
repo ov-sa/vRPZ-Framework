@@ -96,10 +96,10 @@ CInventory.equipItem = function(player, item, prevSlot, slot, isEquipped)
     if isEquippable then
         if isEquipped then CInventory.CBuffer[inventoryID].slots[prevSlot] = nil end
         local itemData = CInventory.fetchItem(item)
-        CPlayer.CAttachments[player][slot] = imports.assetify.createDummy(itemData.pack, item, {
+        CPlayer.CAttachments[player][slot] = imports.assetify.createDummy(itemData.pack, item, false, false, {
             syncRate = 10
         })
-        imports.assetify.attacher.setBoneAttachment(CPlayer.CAttachments[player][slot], player, {
+        imports.assetify.attacher.setBoneAttach(CPlayer.CAttachments[player][slot], player, {
             id = itemData.data.itemAttachments.bone.generic.id,
             position = itemData.data.itemAttachments.bone.generic.position,
             rotation = itemData.data.itemAttachments.bone.generic.rotation,
