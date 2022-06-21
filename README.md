@@ -18,6 +18,7 @@
 * [Cinecam Handler](https://github.com/ov-sa/MTA-Cinecam_Handler) Integration
 * Highly Scalable Loot Handler
 * Built-In Slot based Inventory System (Safe & Secure)
+* Scalable & Synced Equipments/Attachments
 * Completely Performance-Friendly
 
 ## ━ Sponsors💎
