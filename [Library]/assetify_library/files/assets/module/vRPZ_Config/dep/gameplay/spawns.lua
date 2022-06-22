@@ -8,7 +8,8 @@ FRAMEWORK_CONFIGS["Spawns"] = {
             {name = "Character:hunger", amount = 100},
             {name = "Character:thirst", amount = 100},
             {name = "Character:armor", amount = 0},
-            {name = "Character:blood", amount = nil}
+            {name = "Character:blood", amount = nil},
+            {name = "Character:survival_time", amount = 0}
         }
     },
 
