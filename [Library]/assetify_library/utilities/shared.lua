@@ -19,6 +19,7 @@ local imports = {
     decodeString = decodeString,
     isElement = isElement,
     setmetatable = setmetatable,
+    collectgarbage = collectgarbage,
     getElementMatrix = getElementMatrix,
     getElementPosition = getElementPosition,
     fileExists = fileExists,
@@ -40,13 +41,6 @@ local imports = {
 ---------------
 --[[ Utils ]]--
 ---------------
-
-local __utf8_gsub = imports.utf8.gsub
-utf8.gsub = function(string, matchWord, replaceWord, isStrictcMatch, matchPrefix, matchPostfix)
-    matchPrefix, matchPostfix = matchPrefix or "", matchPostfix or ""
-    matchWord = (isStrictcMatch and "%f[^"..matchPrefix.."%z%s]"..matchWord.."%f["..matchPostfix.."%z%s]") or matchPrefix..matchWord..matchPostfix
-    return __utf8_gsub(string, matchWord, replaceWord)
-end
 
 decodeString = function(decodeType, decodeData, decodeOptions, removeNull)
     if not decodeData or (imports.type(decodeData) ~= "string") then return false end
@@ -82,6 +76,36 @@ getDistanceBetweenPoints3D = function(x1, y1, z1, x2, y2, z2)
 end
 
 
+----------------------
+--[[ Class: Class ]]--
+----------------------
+
+class = {
+    create = function(type)
+        local parent = {
+            __type = type,
+            __isClass = true,
+            buffer = {}
+        }
+        parent.__index = parent
+        parent:getType(instance)
+            if not self or ((self == parent) and (not instance or (imports.type(instance) ~= "table"))) then return false end
+            instance = ((self ~= parent) and self) or instance
+            return instance.__type or false
+        end
+        return parent
+    end,
+
+    destroy = function(instance)
+        if not instance or (imports.type(instance) ~= "table") or not instance.__isClass then return false end
+        if instance.__isChild then instance.__index.buffer[instance] = nil end
+        instance = nil
+        imports.collectgarbage()
+        return true
+    end
+}
+
+
 ---------------------
 --[[ Class: File ]]--
 ---------------------
@@ -111,14 +135,16 @@ file = {
 }
 
 
----------------------
---[[ Class: JSON ]]--
----------------------
+-----------------------
+--[[ Class: String ]]--
+-----------------------
 
-json = {
-    encode = imports.toJSON,
-    decode = imports.fromJSON
-}
+local __utf8_gsub = imports.utf8.gsub
+utf8.gsub = function(string, matchWord, replaceWord, isStrictcMatch, matchPrefix, matchPostfix)
+    matchPrefix, matchPostfix = matchPrefix or "", matchPostfix or ""
+    matchWord = (isStrictcMatch and "%f[^"..matchPrefix.."%z%s]"..matchWord.."%f["..matchPostfix.."%z%s]") or matchPrefix..matchWord..matchPostfix
+    return __utf8_gsub(string, matchWord, replaceWord)
+end
 
 
 ----------------------
@@ -138,6 +164,16 @@ table.clone = function(baseTable, isRecursive)
     end
     return clonedTable
 end
+
+
+---------------------
+--[[ Class: JSON ]]--
+---------------------
+
+json = {
+    encode = imports.toJSON,
+    decode = imports.fromJSON
+}
 
 
 ---------------------
