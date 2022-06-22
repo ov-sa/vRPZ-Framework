@@ -55,8 +55,8 @@ end
 
 function bone:create(...)
     local cBone = self:createInstance()
-    if not cBone:load(...) then
-        cBone = nil
+    if cBone and not cBone:load(...) then
+        cBone:destroyInstance()
         return false
     end
     return cBone

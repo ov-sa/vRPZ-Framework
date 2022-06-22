@@ -38,8 +38,8 @@ dummy = class.create("dummy", {
 if localPlayer then
     function dummy:create(...)
         local cDummy = self:createInstance()
-        if not cDummy:load(...) then
-            cDummy = nil
+        if cDummy and not cDummy:load(...) then
+            cDummy:destroyInstance()
             return false
         end
         return cDummy
