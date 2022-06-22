@@ -35,16 +35,16 @@ thread = {
 }
 thread.__index = thread
 
-function thread:isInstance(cThread)
-    if not self or (imports.type(cThread) ~= "table") then return false end
-    if self == thread then return (cThread.isThread and true) or false end
-    return (self.isThread and true) or false
+function thread:getType(cThread)
+    if not self or ((self == thread) and (not cThread or (imports.type(cThread) ~= "table"))) then return false end
+    cThread = ((self ~= thread) and self) or cThread
+    return cThread.type or false
 end
 
 function thread:create(exec)
     if not exec or imports.type(exec) ~= "function" then return false end
     local cThread = imports.setmetatable({}, {__index = self})
-    cThread.isThread = true
+    cThread.type = "thread"
     cThread.syncRate = {}
     cThread.thread = imports.coroutine.create(exec)
     thread.buffer[cThread] = true

@@ -251,7 +251,7 @@ function network:emit(...)
 end
 
 function network:emitCallback(cThread, ...)
-    if not self or not cThread or not thread:isInstance(cThread) then return false end
+    if not self or not cThread or (thread:getType(cThread) ~= "thread") then return false end
     local cThread = cThread
     local cArgs, cExec = {...}, function(...) return cThread:resolve(...) end
     local payload = {

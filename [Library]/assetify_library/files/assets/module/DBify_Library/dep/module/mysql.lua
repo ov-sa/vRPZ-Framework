@@ -30,7 +30,7 @@ end
 dbify.parseArgs = function(cbIndex, ...)
     local rawArgs = {...}
     local cThread, cbIndex = rawArgs[1], imports.tonumber(cbIndex)
-    if cThread and imports.assetify.thread:isInstance(cThread) then
+    if cThread and (imports.assetify.thread:getType(cThread) == "thread") then
         if not cbIndex then return false end
         imports.table.remove(rawArgs, 1)
         imports.table.insert(rawArgs, cbIndex, function(...) return cThread:resolve(...) end)
