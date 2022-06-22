@@ -15,8 +15,6 @@
 local imports = {
     type = type,
     tonumber = tonumber,
-    setmetatable = setmetatable,
-    collectgarbage = collectgarbage,
     setTimer = setTimer,
     isTimer = isTimer,
     killTimer = killTimer,
@@ -30,24 +28,13 @@ local imports = {
 --[[ Class: Thread ]]--
 -----------------------
 
-thread = {
-    buffer = {}
-}
-thread.__index = thread
-
-function thread:getType(cThread)
-    if not self or ((self == thread) and (not cThread or (imports.type(cThread) ~= "table"))) then return false end
-    cThread = ((self ~= thread) and self) or cThread
-    return cThread.type or false
-end
+thread = class.create("thread")
 
 function thread:create(exec)
-    if not exec or imports.type(exec) ~= "function" then return false end
-    local cThread = imports.setmetatable({}, {__index = self})
-    cThread.type = "thread"
+    if not exec or (imports.type(exec) ~= "function") then return false end
+    local cThread = self:createInstance()
     cThread.syncRate = {}
     cThread.thread = imports.coroutine.create(exec)
-    thread.buffer[cThread] = true
     return cThread
 end
 
@@ -73,9 +60,7 @@ function thread:destroy()
     if self.timer and imports.isTimer(self.timer) then
         imports.killTimer(self.timer)
     end
-    thread.buffer[self] = nil
-    self = nil
-    imports.collectgarbage()
+    self:destroyInstance()
     return true
 end
 
