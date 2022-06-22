@@ -135,7 +135,6 @@ function thread:resolve(...)
     if not self.isAwaiting or (self.isAwaiting ~= "promise") then return false end
     self.isAwaiting = nil
     self.awaitingValues = {...}
-    local self = self
     imports.setTimer(function()
         self:resume()
     end, 1, 1)
