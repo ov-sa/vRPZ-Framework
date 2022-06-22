@@ -5,7 +5,6 @@
 local imports = {
     type = type,
     pairs = pairs,
-    unpack = unpack,
     tonumber = tonumber,
     tostring = tostring,
     addEventHandler = addEventHandler,
@@ -15,6 +14,7 @@ local imports = {
     json = json,
     table = table,
     string = string,
+    table = table,
     math = math,
     assetify = assetify
 }
@@ -216,7 +216,7 @@ dbify.inventory = {
         local isAsync, cArgs = dbify.parseArgs(2, ...)
         local keyColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         local promise = function()
-            return dbify.mysql.table.fetchContents(dbify.inventory.connection.table, keyColumns, callback, imports.unpack(cArgs))
+            return dbify.mysql.table.fetchContents(dbify.inventory.connection.table, keyColumns, callback, imports.table.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end,
@@ -330,7 +330,7 @@ dbify.inventory = {
                         callback(false, arguments)
                     end
                 end
-            end, imports.unpack(cArgs))
+            end, imports.table.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end,
@@ -343,7 +343,7 @@ dbify.inventory = {
         local promise = function()
             return dbify.mysql.data.set(dbify.inventory.connection.table, dataColumns, {
                 {dbify.inventory.connection.key, inventoryID}
-            }, callback, imports.unpack(cArgs))
+            }, callback, imports.table.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end,
@@ -356,7 +356,7 @@ dbify.inventory = {
         local promise = function()
             return dbify.mysql.data.get(dbify.inventory.connection.table, dataColumns, {
                 {dbify.inventory.connection.key, inventoryID}
-            }, true, callback, imports.unpack(cArgs))
+            }, true, callback, imports.table.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end,
@@ -366,7 +366,7 @@ dbify.inventory = {
             local isAsync, cArgs = dbify.parseArgs(3, ...)
             local inventoryID, items, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             local promise = function()
-                return cUtility.requestPushPopItem(inventoryID, items, "push", callback, imports.unpack(cArgs))
+                return cUtility.requestPushPopItem(inventoryID, items, "push", callback, imports.table.unpack(cArgs))
             end
             return (isAsync and promise) or promise()
         end,
@@ -375,7 +375,7 @@ dbify.inventory = {
             local isAsync, cArgs = dbify.parseArgs(3, ...)
             local inventoryID, items, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             local promise = function()
-                return cUtility.requestPushPopItem(inventoryID, items, "pop", callback, imports.unpack(cArgs))
+                return cUtility.requestPushPopItem(inventoryID, items, "pop", callback, imports.table.unpack(cArgs))
             end
             return (isAsync and promise) or promise()
         end,
@@ -384,7 +384,7 @@ dbify.inventory = {
             local isAsync, cArgs = dbify.parseArgs(4, ...)
             local inventoryID, items, properties, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             local promise = function()
-                return cUtility.requestSetGetItemProperty(inventoryID, items, properties, "set", callback, imports.unpack(cArgs))
+                return cUtility.requestSetGetItemProperty(inventoryID, items, properties, "set", callback, imports.table.unpack(cArgs))
             end
             return (isAsync and promise) or promise()
         end,
@@ -393,7 +393,7 @@ dbify.inventory = {
             local isAsync, cArgs = dbify.parseArgs(4, ...)
             local inventoryID, items, properties, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             local promise = function()
-                return cUtility.requestSetGetItemProperty(inventoryID, items, properties, "get", callback, imports.unpack(cArgs))
+                return cUtility.requestSetGetItemProperty(inventoryID, items, properties, "get", callback, imports.table.unpack(cArgs))
             end
             return (isAsync and promise) or promise()
         end,
@@ -402,7 +402,7 @@ dbify.inventory = {
             local isAsync, cArgs = dbify.parseArgs(4, ...)
             local inventoryID, items, datas, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             local promise = function()
-                return cUtility.requestSetGetItemData(inventoryID, items, datas, "set", callback, imports.unpack(cArgs))
+                return cUtility.requestSetGetItemData(inventoryID, items, datas, "set", callback, imports.table.unpack(cArgs))
             end
             return (isAsync and promise) or promise()
         end,
@@ -411,7 +411,7 @@ dbify.inventory = {
             local isAsync, cArgs = dbify.parseArgs(4, ...)
             local inventoryID, items, datas, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
             local promise = function()
-                return cUtility.requestSetGetItemData(inventoryID, items, datas, "get", callback, imports.unpack(cArgs))
+                return cUtility.requestSetGetItemData(inventoryID, items, datas, "get", callback, imports.table.unpack(cArgs))
             end
             return (isAsync and promise) or promise()
         end

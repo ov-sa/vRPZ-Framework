@@ -4,11 +4,11 @@
 
 local imports = {
     type = type,
-    unpack = unpack,
     getElementsByType = getElementsByType,
     addEventHandler = addEventHandler,
     getPlayerSerial = getPlayerSerial,
     dbExec = dbExec,
+    table = table,
     assetify = assetify
 }
 
@@ -28,7 +28,7 @@ dbify.serial = {
         local isAsync, cArgs = dbify.parseArgs(2, ...)
         local keyColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         local promise = function()
-            return dbify.mysql.table.fetchContents(dbify.serial.connection.table, keyColumns, callback, imports.unpack(cArgs))
+            return dbify.mysql.table.fetchContents(dbify.serial.connection.table, keyColumns, callback, imports.table.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end,
@@ -51,7 +51,7 @@ dbify.serial = {
                         callback(false, arguments)
                     end
                 end
-            end, imports.unpack(cArgs))
+            end, imports.table.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end,
@@ -74,7 +74,7 @@ dbify.serial = {
                         callback(false, arguments)
                     end
                 end
-            end, imports.unpack(cArgs))
+            end, imports.table.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end,
@@ -87,7 +87,7 @@ dbify.serial = {
         local promise = function()
             return dbify.mysql.data.set(dbify.serial.connection.table, dataColumns, {
                 {dbify.serial.connection.key, serial}
-            }, callback, imports.unpack(cArgs))
+            }, callback, imports.table.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end,
@@ -100,7 +100,7 @@ dbify.serial = {
         local promise = function()
             return dbify.mysql.data.get(dbify.serial.connection.table, dataColumns, {
                 {dbify.serial.connection.key, serial}
-            }, true, callback, imports.unpack(cArgs))
+            }, true, callback, imports.table.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end

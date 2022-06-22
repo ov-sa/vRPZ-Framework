@@ -125,6 +125,7 @@ json = {
 --[[ Class: Table ]]--
 ----------------------
 
+table.unpack = unpack
 table.clone = function(baseTable, isRecursive)
     if not baseTable or (imports.type(baseTable) ~= "table") then return false end
     local clonedTable = {}

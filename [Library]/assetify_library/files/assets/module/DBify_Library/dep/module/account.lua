@@ -4,13 +4,13 @@
 
 local imports = {
     type = type,
-    unpack = unpack,
     getElementsByType = getElementsByType,
     addEventHandler = addEventHandler,
     getPlayerAccount = getPlayerAccount,
     isGuestAccount = isGuestAccount,
     getAccountName = getAccountName,
     dbExec = dbExec,
+    table = table,
     assetify = assetify
 }
 
@@ -30,7 +30,7 @@ dbify.account = {
         local isAsync, cArgs = dbify.parseArgs(2, ...)
         local keyColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         local promise = function()
-            return dbify.mysql.table.fetchContents(dbify.account.connection.table, keyColumns, callback, imports.unpack(cArgs))
+            return dbify.mysql.table.fetchContents(dbify.account.connection.table, keyColumns, callback, imports.table.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end,
@@ -53,7 +53,7 @@ dbify.account = {
                         callback(false, arguments)
                     end
                 end
-            end, imports.unpack(cArgs))
+            end, imports.table.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end,
@@ -76,7 +76,7 @@ dbify.account = {
                         callback(false, arguments)
                     end
                 end
-            end, imports.unpack(cArgs))
+            end, imports.table.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end,
@@ -89,7 +89,7 @@ dbify.account = {
         local promise = function()
             return dbify.mysql.data.set(dbify.account.connection.table, dataColumns, {
                 {dbify.account.connection.key, accountName}
-            }, callback, imports.unpack(cArgs))
+            }, callback, imports.table.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end,
@@ -102,7 +102,7 @@ dbify.account = {
         local promise = function()
             return dbify.mysql.data.get(dbify.account.connection.table, dataColumns, {
                 {dbify.account.connection.key, accountName}
-            }, true, callback, imports.unpack(cArgs))
+            }, true, callback, imports.table.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end

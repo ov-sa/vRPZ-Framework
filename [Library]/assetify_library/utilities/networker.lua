@@ -15,7 +15,6 @@
 local imports = {
     type = type,
     pairs = pairs,
-    unpack = unpack,
     md5 = md5,
     tonumber = tonumber,
     tostring = tostring,
@@ -60,9 +59,9 @@ imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)
                 if i and (imports.type(i) == "function") then
                     thread:create(function(self)
                         if not j.isAsync then
-                            i(imports.unpack(payload.processArgs))
+                            i(imports.table.unpack(payload.processArgs))
                         else
-                            i(self, imports.unpack(payload.processArgs))
+                            i(self, imports.table.unpack(payload.processArgs))
                         end
                     end):resume()
                 end
@@ -77,9 +76,9 @@ imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)
                 payload.isRestricted = true
                 thread:create(function(self)
                     if not cNetwork.handler.isAsync then
-                        payload.processArgs = {cNetwork.handler.exec(imports.unpack(payload.processArgs))}
+                        payload.processArgs = {cNetwork.handler.exec(imports.table.unpack(payload.processArgs))}
                     else
-                        payload.processArgs = {cNetwork.handler.exec(self, imports.unpack(payload.processArgs))}
+                        payload.processArgs = {cNetwork.handler.exec(self, imports.table.unpack(payload.processArgs))}
                     end
                     if not payload.isRemote then
                         imports.triggerEvent("Assetify:Network:API", resourceRoot, serial, payload)
@@ -102,7 +101,7 @@ imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)
             end
         else
             if network.cache.execSerials[(payload.execSerial)] then
-                network.cache.execSerials[(payload.execSerial)](imports.unpack(payload.processArgs))
+                network.cache.execSerials[(payload.execSerial)](imports.table.unpack(payload.processArgs))
                 network:deserializeExec(payload.execSerial)
             end
         end

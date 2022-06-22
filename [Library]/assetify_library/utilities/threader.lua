@@ -14,7 +14,6 @@
 
 local imports = {
     type = type,
-    unpack = unpack,
     tonumber = tonumber,
     setmetatable = setmetatable,
     collectgarbage = collectgarbage,
@@ -22,6 +21,7 @@ local imports = {
     isTimer = isTimer,
     killTimer = killTimer,
     coroutine = coroutine,
+    table = table,
     math = math
 }
 
@@ -142,7 +142,7 @@ function thread:await(exec)
     thread:pause()
     local resolvedValues = self.awaitingValues
     self.awaitingValues = nil
-    return imports.unpack(resolvedValues)
+    return imports.table.unpack(resolvedValues)
 end
 
 function thread:resolve(...)

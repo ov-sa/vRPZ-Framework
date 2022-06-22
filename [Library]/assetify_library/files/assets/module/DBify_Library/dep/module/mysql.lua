@@ -5,7 +5,6 @@
 loadstring(exports.assetify_library:import("threader"))()
 local imports = {
     type = type,
-    unpack = unpack,
     tostring = tostring,
     tonumber = tonumber,
     dbConnect = dbConnect,
@@ -112,7 +111,7 @@ dbify.mysql = {
                                 else
                                     callback(false, arguments)
                                 end
-                            end, {arguments[2]}, dbify.mysql.connection.instance, queryString, imports.unpack(queryArguments))
+                            end, {arguments[2]}, dbify.mysql.connection.instance, queryString, imports.table.unpack(queryArguments))
                         else
                             local callback = callback
                             if callback and (imports.type(callback) == "function") then
@@ -146,7 +145,7 @@ dbify.mysql = {
                                 callback(false, arguments)
                             end
                         end
-                    end, imports.unpack(cArgs))
+                    end, imports.table.unpack(cArgs))
                 end
                 return (isAsync and promise) or promise()
             end
@@ -176,7 +175,7 @@ dbify.mysql = {
                             callback(false, arguments)
                         end
                     end
-                end, imports.unpack(cArgs))
+                end, imports.table.unpack(cArgs))
             end
             return (isAsync and promise) or promise()
         end,
@@ -203,7 +202,7 @@ dbify.mysql = {
                             if callback and (imports.type(callback) == "function") then
                                 callback(result, arguments[2])
                             end
-                        end, {arguments}, dbify.mysql.connection.instance, queryString, imports.unpack(queryArguments))
+                        end, {arguments}, dbify.mysql.connection.instance, queryString, imports.table.unpack(queryArguments))
                     else
                         local callback = callback
                         if callback and (imports.type(callback) == "function") then
@@ -230,7 +229,7 @@ dbify.mysql = {
                             imports.table.insert(queryArguments, imports.tostring(j))
                             queryString = queryString.." DROP COLUMN `??`"..(((i < #arguments[1]) and ", ") or "")
                         end
-                        local result = imports.dbExec(dbify.mysql.connection.instance, queryString, imports.unpack(queryArguments))
+                        local result = imports.dbExec(dbify.mysql.connection.instance, queryString, imports.table.unpack(queryArguments))
                         if callback and (imports.type(callback) == "function") then
                             callback(result, arguments[2])
                         end
@@ -284,7 +283,7 @@ dbify.mysql = {
                                     imports.dbExec(dbify.mysql.connection.instance, "ALTER TABLE `??` ADD COLUMN `??` TEXT", arguments[1], arguments[2])
                                 end
                                 if arguments[3] then
-                                    local result = imports.dbExec(dbify.mysql.connection.instance, arguments[3].queryString, imports.unpack(arguments[3].queryArguments))
+                                    local result = imports.dbExec(dbify.mysql.connection.instance, arguments[3].queryString, imports.table.unpack(arguments[3].queryArguments))
                                     if callback and (imports.type(callback) == "function") then
                                         callback(result, arguments[4])
                                     end
@@ -357,7 +356,7 @@ dbify.mysql = {
                             if callback and (imports.type(callback) == "function") then
                                 callback(false, arguments)
                             end
-                        end, {arguments[1].soloFetch, arguments[2]}, dbify.mysql.connection.instance, queryString, imports.unpack(queryArguments))
+                        end, {arguments[1].soloFetch, arguments[2]}, dbify.mysql.connection.instance, queryString, imports.table.unpack(queryArguments))
                     else
                         local callback = callback
                         if callback and (imports.type(callback) == "function") then
