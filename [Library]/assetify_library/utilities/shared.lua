@@ -114,6 +114,11 @@ class = {
 
     destroy = function(instance)
         if not instance or (imports.type(instance) ~= "table") or not instance.__C or instance.__isChild then return false end
+        for i, j in imports.pairs(instance.__C.buffer) do
+            if j then
+                j:destroyInstance()
+            end
+        end
         instance.__C = nil
         instance = nil
         imports.collectgarbage()
