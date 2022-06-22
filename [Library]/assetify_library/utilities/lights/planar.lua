@@ -38,14 +38,14 @@ local imports = {
 --[[ Class: Shader ]]--
 -----------------------
 
-light.planar = {
+light.planar = class.create("planar", {
     cache = {
         validTypes = {
             {index = "planar_1x1", textureName = "assetify_light_planar"}
         }
     },
     buffer = {}
-}
+})
 for i = 1, #light.planar.cache.validTypes, 1 do
     local j = light.planar.cache.validTypes[i]
     local modelPath = "utilities/rw/"..j.index.."/"
@@ -59,7 +59,6 @@ for i = 1, #light.planar.cache.validTypes, 1 do
     light.planar.cache.validTypes[(j.index)] = j
     light.planar.cache.validTypes[(j.index)].index = nil
 end
-light.planar.__index = light.planar
 
 function light.planar:create(...)
     local cLight = imports.setmetatable({}, {__index = self})

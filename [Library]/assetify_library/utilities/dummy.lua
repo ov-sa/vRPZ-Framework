@@ -32,10 +32,9 @@ local imports = {
 --[[ Class: Dummy ]]--
 ----------------------
 
-dummy = {
+dummy = class.create("dummy", {
     buffer = {}
-}
-dummy.__index = dummy
+})
 
 if localPlayer then
     function dummy:create(...)

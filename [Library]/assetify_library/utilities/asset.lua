@@ -49,7 +49,7 @@ local imports = {
 --[[ Class: Asset ]]--
 ----------------------
 
-asset = {
+asset = class.create("asset", {
     references = {
         root = ((settings.downloader.isAccessSafe and "@") or "").."files/assets/",
         manifest = "manifest",
@@ -65,8 +65,7 @@ asset = {
         interior = {0, 255},
         streamRange = 170
     }
-}
-asset.__index = asset
+})
 
 if localPlayer then
     asset.rwAssets = {

@@ -34,7 +34,7 @@ local imports = {
 --[[ Class: Bone ]]--
 ---------------------
 
-bone = {
+bone = class.create("bone", {
     ids = {
         ped = {1, 2, 3, 4, 5, 6, 7, 8, 21, 22, 23, 24, 25, 26, 31, 32, 33, 34, 35, 36, 41, 42, 43, 44, 51, 52, 53, 54},
         vehicle = {}
@@ -46,8 +46,7 @@ bone = {
         element = {},
         parent = {}
     }
-}
-bone.__index = bone
+})
 
 for i, j in imports.pairs(bone.ids) do
     local indexes = {}

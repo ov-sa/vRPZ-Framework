@@ -38,7 +38,7 @@ local imports = {
 --[[ Class: Network ]]--
 ------------------------
 
-network = {
+network = class.create("network", {
     identifier = imports.md5(imports.getResourceName(imports.getThisResource())),
     isServerInstance = (not localPlayer and true) or false,
     bandwidth = 1250000,
@@ -46,8 +46,7 @@ network = {
     cache = {
         execSerials = {}
     }
-}
-network.__index = network
+})
 
 imports.addEvent("Assetify:Network:API", true)
 imports.addEventHandler("Assetify:Network:API", root, function(serial, payload)

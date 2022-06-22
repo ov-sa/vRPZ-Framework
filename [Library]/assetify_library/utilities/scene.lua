@@ -32,8 +32,7 @@ local imports = {
 --[[ Class: Scene ]]--
 ----------------------
 
-scene = {}
-scene.__index = scene
+scene = class.create("scene")
 
 function scene:create(...)
     local cScene = imports.setmetatable({}, {__index = self})
