@@ -101,12 +101,21 @@ class = {
             self.__C.buffer[instance] = true
             return instance
         end
+        function parent:destroyInstance()
+            if not self or (imports.type(self) ~= "table") or not self.__C or not self.__isChild then return false end
+            self.__C.buffer[self] = nil
+            self.__C = nil
+            self.__isChild = nil
+            self = nil
+            imports.collectgarbage()
+            return true
+        end
         return parent
     end,
 
     destroy = function(instance)
-        if not instance or (imports.type(instance) ~= "table") or not instance.__C then return false end
-        if instance.__isChild then instance.__index.__C.buffer[instance] = nil end
+        if not instance or (imports.type(instance) ~= "table") or not instance.__C or instance.__isChild then return false end
+        instance.__C = nil
         instance = nil
         imports.collectgarbage()
         return true
