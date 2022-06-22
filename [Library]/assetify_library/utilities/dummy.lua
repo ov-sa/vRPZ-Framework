@@ -133,7 +133,7 @@ if localPlayer then
         if self.cCollisionInstance and imports.isElement(self.cCollisionInstance) then
             imports.destroyElement(self.cCollisionInstance)
         end
-        dummy.buffer[self] = nil
+        dummy.buffer[self] = nil --TODO: NEEDS ATTENTION DOESN'T MATCH WITH DEF
         self = nil
         return true
     end
