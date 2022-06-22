@@ -116,8 +116,8 @@ end
 
 function network:create(...)
     local cNetwork = self:createInstance()
-    if not cNetwork:load(...) then
-        cNetwork = nil
+    if cNetwork and not cNetwork:load(...) then
+        cNetwork:destroyInstance()
         return false
     end
     return cNetwork

@@ -58,8 +58,8 @@ streamer.allocator.__validStreams = nil
 
 function streamer:create(...)
     local cStreamer = self:createInstance()
-    if not cStreamer:load(...) then
-        cStreamer = nil
+    if cStreamer and not cStreamer:load(...) then
+        cStreamer:destroyInstance()
         return false
     end
     return cStreamer

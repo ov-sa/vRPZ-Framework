@@ -61,8 +61,8 @@ end
 
 function light.planar:create(...)
     local cLight = self:createInstance()
-    if not cLight:load(...) then
-        cLight = nil
+    if cLight and not cLight:load(...) then
+        cLight:destroyInstance()
         return false
     end
     return cLight

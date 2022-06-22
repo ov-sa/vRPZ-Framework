@@ -67,8 +67,8 @@ if localPlayer then
 
     function shader:create(...)
         local cShader = self:createInstance()
-        if not cShader:load(...) then
-            cShader = nil
+        if cShader and not cShader:load(...) then
+            cShader:destroyInstance()
             return false
         end
         return cShader

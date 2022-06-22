@@ -35,8 +35,8 @@ scene = class.create("scene")
 
 function scene:create(...)
     local cScene = self:createInstance()
-    if not cScene:load(...) then
-        cScene = nil
+    if cScene and not cScene:load(...) then
+        cScene:destroyInstance()
         return false
     end
     return cScene
