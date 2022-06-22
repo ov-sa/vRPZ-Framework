@@ -82,7 +82,7 @@ end
 
 class = {
     create = function(type, parent)
-        local parent = (parent and (imports.type(parent) == "table") and parent) or {}
+        parent = (parent and (imports.type(parent) == "table") and parent) or {}
         parent.__C = {
             type = type,
             buffer = {}
@@ -91,7 +91,7 @@ class = {
         function parent:getType(instance)
             if not self or ((self == parent) and (not instance or (imports.type(instance) ~= "table"))) then return false end
             instance = ((self ~= parent) and self) or instance
-            return instance.__C.type or false
+            return (instance.__C and instance.__C.type) or false
         end
         function parent:createInstance()
             if not self or (imports.type(self) ~= "table") or not self.__C or self.__isChild then return false end
@@ -101,7 +101,7 @@ class = {
             return instance
         end
         function parent:destroyInstance()
-            if not self or (imports.type(self) ~= "table") or not self.__C or not self.__isChild then return false end
+            if not self or (imports.type(self) ~= "table") or not self.__index or not self.__C or not self.__isChild then return false end
             self.__C.buffer[self] = nil
             self.__C = nil
             self.__isChild = nil
@@ -115,8 +115,8 @@ class = {
     destroy = function(instance)
         if not instance or (imports.type(instance) ~= "table") or not instance.__C or instance.__isChild then return false end
         for i, j in imports.pairs(instance.__C.buffer) do
-            if j then
-                j:destroyInstance()
+            if i then
+                i:destroyInstance()
             end
         end
         instance.__C = nil
