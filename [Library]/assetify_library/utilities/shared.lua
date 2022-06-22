@@ -81,12 +81,11 @@ end
 ----------------------
 
 class = {
-    create = function(type)
-        local parent = {
-            __C = {
-                type = type,
-                buffer = {}
-            }
+    create = function(type, parent)
+        local parent = (parent and (imports.type(parent) == "table") and parent) or {}
+        parent.__C = {
+            type = type,
+            buffer = {}
         }
         parent.__index = parent
         function parent:getType(instance)

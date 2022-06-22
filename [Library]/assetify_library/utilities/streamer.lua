@@ -38,7 +38,7 @@ local imports = {
 --[[ Class: Streamer ]]--
 -------------------------
 
-streamer = {
+streamer = class.create("streamer", {
     buffer = {},
     cache = {
         clientCamera = imports.getCamera()
@@ -46,8 +46,7 @@ streamer = {
     allocator = {
         validStreams = {"dummy", "bone", "light"}
     }
-}
-streamer.__index = streamer
+})
 
 local onEntityStream, onBoneStream, onBoneUpdate = nil, nil, nil
 streamer.allocator.__validStreams = {}

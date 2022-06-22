@@ -32,7 +32,7 @@ local imports = {
 --[[ Class: Shader ]]--
 -----------------------
 
-shader = {
+shader = class.create("shader", {
     cache = {
         validChannels = {
             {index = "red", channel = "r"},
@@ -45,13 +45,12 @@ shader = {
         },
         remoteBlacklist = {}
     }
-}
+})
 shader.cache.__remoteBlacklist = {}
 for i, j in imports.pairs(shader.cache.remoteBlacklist) do
     shader.cache.__remoteBlacklist[j] = true
 end
 shader.cache.remoteBlacklist = shader.cache.__remoteBlacklist
-shader.__index = shader
 
 if localPlayer then
     shader.cache.shaderPriority = 10000
