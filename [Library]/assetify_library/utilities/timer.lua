@@ -18,7 +18,6 @@ local imports = {
     setTimer = setTimer,
     isTimer = isTimer,
     killTimer = killTimer,
-    table = table,
     math = math
 }
 
@@ -52,7 +51,7 @@ function timer:load(exec, interval, executions, ...)
     self.interval, self.executions = interval, executions
     self.arguments = {...}
     self.timer = imports.setTimer(function()
-        self.exec(imports.table.unpack(self.arguments))
+        self.exec(...)
     end, self.interval, self.executions)
     return self
 end
