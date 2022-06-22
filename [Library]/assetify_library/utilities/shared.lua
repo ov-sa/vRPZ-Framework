@@ -83,22 +83,30 @@ end
 class = {
     create = function(type)
         local parent = {
-            __type = type,
-            __isClass = true,
-            buffer = {}
+            __C = {
+                type = type,
+                buffer = {}
+            }
         }
         parent.__index = parent
-        parent:getType(instance)
+        function parent:getType(instance)
             if not self or ((self == parent) and (not instance or (imports.type(instance) ~= "table"))) then return false end
             instance = ((self ~= parent) and self) or instance
-            return instance.__type or false
+            return instance.__C.type or false
+        end
+        function parent:createInstance()
+            if not self or (imports.type(self) ~= "table") or not self.__C or self.__isChild then return false end
+            local instance = imports.setmetatable({}, {__index = self})
+            instance.__isChild = true
+            self.__C.buffer[instance] = true
+            return instance
         end
         return parent
     end,
 
     destroy = function(instance)
-        if not instance or (imports.type(instance) ~= "table") or not instance.__isClass then return false end
-        if instance.__isChild then instance.__index.buffer[instance] = nil end
+        if not instance or (imports.type(instance) ~= "table") or not instance.__C then return false end
+        if instance.__isChild then instance.__index.__C.buffer[instance] = nil end
         instance = nil
         imports.collectgarbage()
         return true
