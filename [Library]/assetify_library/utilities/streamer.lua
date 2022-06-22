@@ -20,7 +20,6 @@ local imports = {
     addEventHandler = addEventHandler,
     removeEventHandler = removeEventHandler,
     attachElements = attachElements,
-    setmetatable = setmetatable,
     getTickCount = getTickCount,
     isTimer = isTimer,
     setTimer = setTimer,
@@ -58,7 +57,7 @@ streamer.allocator.validStreams = streamer.allocator.__validStreams
 streamer.allocator.__validStreams = nil
 
 function streamer:create(...)
-    local cStreamer = imports.setmetatable({}, {__index = self})
+    local cStreamer = self:createInstance()
     if not cStreamer:load(...) then
         cStreamer = nil
         return false

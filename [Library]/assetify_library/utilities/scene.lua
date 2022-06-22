@@ -19,7 +19,6 @@ local imports = {
     isElement = isElement,
     attachElements = attachElements,
     destroyElement = destroyElement,
-    setmetatable = setmetatable,
     createObject = createObject,
     setElementAlpha = setElementAlpha,
     setElementDoubleSided = setElementDoubleSided,
@@ -35,7 +34,7 @@ local imports = {
 scene = class.create("scene")
 
 function scene:create(...)
-    local cScene = imports.setmetatable({}, {__index = self})
+    local cScene = self:createInstance()
     if not cScene:load(...) then
         cScene = nil
         return false

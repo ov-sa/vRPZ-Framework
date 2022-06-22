@@ -16,7 +16,6 @@ local imports = {
     tonumber = tonumber,
     isElement = isElement,
     destroyElement = destroyElement,
-    setmetatable = setmetatable,
     createObject = createObject,
     createPed = createPed,
     createVehicle = createVehicle,
@@ -38,7 +37,7 @@ dummy = class.create("dummy", {
 
 if localPlayer then
     function dummy:create(...)
-        local cDummy = imports.setmetatable({}, {__index = self})
+        local cDummy = self:createInstance()
         if not cDummy:load(...) then
             cDummy = nil
             return false

@@ -25,7 +25,6 @@ local imports = {
     tostring = tostring,
     isElement = isElement,
     destroyElement = destroyElement,
-    setmetatable = setmetatable,
     setTimer = setTimer,
     engineRequestModel = engineRequestModel,
     engineSetModelLODDistance = engineSetModelLODDistance,
@@ -74,9 +73,9 @@ if localPlayer then
     }
 
     function asset:create(...)
-        local cAsset = imports.setmetatable({}, {__index = self})
-        if not cAsset:load(...) then
-            cAsset = nil
+        local cAsset = self:createInstance()
+        if cAsset and not cAsset:load(...) then
+            cAsset:destroyInstance()
             return false
         end
         return cAsset

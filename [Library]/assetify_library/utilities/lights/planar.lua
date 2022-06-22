@@ -17,7 +17,6 @@ local imports = {
     tonumber = tonumber,
     isElement = isElement,
     destroyElement = destroyElement,
-    setmetatable = setmetatable,
     engineRequestModel = engineRequestModel,
     engineLoadTXD = engineLoadTXD,
     engineLoadDFF = engineLoadDFF,
@@ -61,7 +60,7 @@ for i = 1, #light.planar.cache.validTypes, 1 do
 end
 
 function light.planar:create(...)
-    local cLight = imports.setmetatable({}, {__index = self})
+    local cLight = self:createInstance()
     if not cLight:load(...) then
         cLight = nil
         return false

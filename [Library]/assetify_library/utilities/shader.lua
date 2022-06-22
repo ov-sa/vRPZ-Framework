@@ -18,7 +18,6 @@ local imports = {
     tonumber = tonumber,
     isElement = isElement,
     destroyElement = destroyElement,
-    setmetatable = setmetatable,
     dxCreateShader = dxCreateShader,
     dxCreateTexture = dxCreateTexture,
     dxSetShaderValue = dxSetShaderValue,
@@ -67,7 +66,7 @@ if localPlayer then
     shader.preLoaded = {}
 
     function shader:create(...)
-        local cShader = imports.setmetatable({}, {__index = self})
+        local cShader = self:createInstance()
         if not cShader:load(...) then
             cShader = nil
             return false

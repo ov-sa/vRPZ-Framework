@@ -18,7 +18,6 @@ local imports = {
     md5 = md5,
     tonumber = tonumber,
     tostring = tostring,
-    setmetatable = setmetatable,
     collectgarbage = collectgarbage,
     isElement = isElement,
     getElementType = getElementType,
@@ -116,7 +115,7 @@ network.fetchArg = function(index, pool)
 end
 
 function network:create(...)
-    local cNetwork = imports.setmetatable({}, {__index = self})
+    local cNetwork = self:createInstance()
     if not cNetwork:load(...) then
         cNetwork = nil
         return false

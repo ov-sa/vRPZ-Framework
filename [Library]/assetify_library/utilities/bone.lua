@@ -16,7 +16,6 @@ local imports = {
     pairs = pairs,
     tonumber = tonumber,
     isElement = isElement,
-    setmetatable = setmetatable,
     getElementType = getElementType,
     setElementMatrix = setElementMatrix,
     setElementPosition = setElementPosition,
@@ -55,7 +54,7 @@ for i, j in imports.pairs(bone.ids) do
 end
 
 function bone:create(...)
-    local cBone = imports.setmetatable({}, {__index = self})
+    local cBone = self:createInstance()
     if not cBone:load(...) then
         cBone = nil
         return false
