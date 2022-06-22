@@ -228,7 +228,7 @@ if localPlayer then
                 end
             end
         end
-        self = nil
+        self:destroyInstance()
         if callback and (imports.type(callback) == "function") then
             callback(true)
         end

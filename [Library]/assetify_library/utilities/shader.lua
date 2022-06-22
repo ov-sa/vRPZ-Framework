@@ -251,7 +251,7 @@ if localPlayer then
             end
         end
         shader.buffer.shader[self] = nil
-        self = nil
+        self:destroyInstance()
         return true
     end
 

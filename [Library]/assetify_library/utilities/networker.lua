@@ -18,7 +18,6 @@ local imports = {
     md5 = md5,
     tonumber = tonumber,
     tostring = tostring,
-    collectgarbage = collectgarbage,
     isElement = isElement,
     getElementType = getElementType,
     getThisResource = getThisResource,
@@ -142,8 +141,7 @@ end
 function network:unload()
     if not self or (self == network) then return false end
     network.buffer[(self.name)] = nil
-    self = nil
-    imports.collectgarbage()
+    self:destroyInstance()
     return true
 end
 

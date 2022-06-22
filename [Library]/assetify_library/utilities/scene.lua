@@ -89,6 +89,6 @@ function scene:unload()
     if self.cCollisionInstance and imports.isElement(self.cCollisionInstance) then
         imports.destroyElement(self.cCollisionInstance)
     end
-    self = nil
+    self:destroyInstance()
     return true
 end

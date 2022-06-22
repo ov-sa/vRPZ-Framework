@@ -104,7 +104,7 @@ function streamer:unload()
     local streamDimension, streamInterior = imports.getElementDimension(self.occlusions[1]), imports.getElementInterior(self.occlusions[1])
     streamer.buffer[streamDimension][streamInterior][streamType][self] = nil
     self:deallocate()
-    self = nil
+    self:destroyInstance()
     return true
 end
 

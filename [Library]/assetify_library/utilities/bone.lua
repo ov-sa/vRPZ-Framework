@@ -111,7 +111,7 @@ function bone:unload()
     end
     bone.cache.element[(self.element)] = nil
     bone.buffer.element[(self.element)] = nil
-    self = nil
+    self:destroyInstance()
     return true
 end
 
