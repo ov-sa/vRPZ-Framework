@@ -54,7 +54,7 @@ end
 
 function thread:destroy()
     if not self or (self == thread) then return false end
-    self.timer:destroyInstance()
+    if self.timer then self.timer:destroyInstance() end
     self:destroyInstance()
     return true
 end

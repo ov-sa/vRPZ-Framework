@@ -56,7 +56,7 @@ function timer:load(exec, interval, executions, ...)
         self.currentExec = self.currentExec + 1
         self.exec(imports.table.unpack(self.arguments))
         if self.currentExec >= self.executions then
-            self:destroyInstance()
+            self:destroy()
         end
     end, self.interval, self.executions)
     return self
