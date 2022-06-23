@@ -48,10 +48,15 @@ function timer:load(exec, interval, executions, ...)
     if not exec or (imports.type(exec) ~= "function") or not interval or not executions then return false end
     interval, executions = imports.math.max(1, interval), imports.math.max(0, executions)
     self.exec = exec
+    self.currentExec = 0
     self.interval, self.executions = interval, executions
     self.arguments = {...}
     self.timer = imports.setTimer(function()
+        self.currentExec = self.currentExec + 1
         self.exec(...)
+        if self.currentExec >= self.executions then
+            self:destroyInstance()
+        end
     end, self.interval, self.executions)
     return self
 end
