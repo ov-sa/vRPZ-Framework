@@ -18,6 +18,7 @@ local imports = {
     setTimer = setTimer,
     isTimer = isTimer,
     killTimer = killTimer,
+    table = table,
     math = math
 }
 
@@ -53,7 +54,7 @@ function timer:load(exec, interval, executions, ...)
     self.arguments = {...}
     self.timer = imports.setTimer(function()
         self.currentExec = self.currentExec + 1
-        self.exec(...)
+        self.exec(imports.table.unpack(self.arguments))
         if self.currentExec >= self.executions then
             self:destroyInstance()
         end
