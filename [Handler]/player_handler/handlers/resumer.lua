@@ -153,17 +153,21 @@ imports.assetify.network:create("Player:onResume"):on(function(source, character
             return false
         end
 
-        local characterIdentity = CCharacter.CBuffer[characterID].identity
         CGame.setEntityData(source, "Character:ID", characterID)
-        CGame.setEntityData(source, "Character:Identity", characterIdentity)
+        CGame.setEntityData(source, "Character:Identity", CCharacter.CBuffer[characterID].identity)
         CPlayer.setData(self, serial, {
             {"character", character}
         })
         resumeTicks[source] = imports.getTickCount()
-        CPlayer.setChannel(source, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"])
-        imports.bindKey(source, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Channel_ShuffleKey"], "down", shufflePlayerChannel)
-        imports.assetify.network:emit("Client:onSyncInventoryBuffer", true, false, source, CInventory.CBuffer[inventoryID])
         imports.assetify.network:emit("Client:onSyncWeather", true, false, source, CGame.getNativeWeather())
         imports.assetify.network:emit("Player:onSpawn", false, source, CCharacter.CBuffer[characterID].location, characterID)
     end):resume()
+end)
+
+imports.assetify.network:fetch("Player:onLogin", true):on(function(source)
+    local characterIdentity, inventoryID = CCharacter.getIdentity(source), CPlayer.getInventoryID(source)
+    CPlayer.setChannel(source, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Default_Channel"])
+    CPlayer.setWalkingStyle(source, FRAMEWORK_CONFIGS["Character"]["Identity"]["Gender"][(characterIdentity.gender)].walkingStyle)
+    imports.bindKey(source, FRAMEWORK_CONFIGS["Game"]["Chatbox"]["Channel_ShuffleKey"], "down", shufflePlayerChannel)
+    imports.assetify.network:emit("Client:onSyncInventoryBuffer", true, false, source, CInventory.CBuffer[inventoryID])
 end)
