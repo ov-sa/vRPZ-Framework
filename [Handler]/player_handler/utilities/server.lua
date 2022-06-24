@@ -21,7 +21,6 @@ local imports = {
     getTickCount = getTickCount,
     addEventHandler = addEventHandler,
     cancelEvent = cancelEvent,
-    setTimer = setTimer,
     outputChatBox = outputChatBox,
     setFPSLimit = setFPSLimit,
     setMaxPlayers = setMaxPlayers,
@@ -62,7 +61,7 @@ CGame.execOnModuleLoad(function()
     imports.assetify.network:create("onServerRender")
     local serverTickSyncer = imports.createElement("Server:TickSyncer")
     CGame.setGlobalData("Server:TickSyncer", serverTickSyncer)
-    imports.setTimer(function(cSyncer)
+    imports.assetify.timer:create(function(cSyncer)
         local cTick = imports.getTickCount()
         CGame.setEntityData(cSyncer, "Server:TickSyncer", cTick)
         imports.assetify.network:emit("onServerRender", false, cTick, FRAMEWORK_CONFIGS["Game"]["Sync_Rate"])
@@ -76,7 +75,7 @@ CGame.execOnModuleLoad(function()
     imports.setMinuteDuration(FRAMEWORK_CONFIGS["Game"]["Minute_Duration"])
     imports.setGameType(FRAMEWORK_CONFIGS["Game"]["Game_imports.type"])
     imports.setMapName(FRAMEWORK_CONFIGS["Game"]["Game_Map"])
-    imports.setTimer(function()
+    imports.assetify.timer:create(function()
         for i, j in imports.pairs(CPlayer.CLogged) do
             CCharacter.giveReputation(i, FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Regeneration_Amount"])
         end
