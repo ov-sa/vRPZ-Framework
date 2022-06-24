@@ -24,9 +24,6 @@ local imports = {
     setElementPosition = setElementPosition,
     setElementDimension = setElementDimension,
     addEventHandler = addEventHandler,
-    isTimer = isTimer,
-    setTimer = setTimer,
-    killTimer = killTimer,
     isMouseClicked = isMouseClicked,
     isMouseOnPosition = isMouseOnPosition,
     interpolateBetween = interpolateBetween,
@@ -417,10 +414,10 @@ CGame.execOnModuleLoad(function()
             else
                 imports.assetify.network:emit("Client:onEnableLoginUI", false, false, true)
                 imports.assetify.network:emit("Client:onToggleLoadingUI", false, true)
-                imports.setTimer(function(character, characters)
+                imports.assetify.timer:create(function(character, characters)
                     imports.assetify.network:emit("Player:onResume", true, false, localPlayer, character, characters)
                 end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration, 1, loginUI.character, loginUI.characters)
-                imports.setTimer(function()
+                imports.assetify.timer:create(function()
                     loginUI.toggleUI(false)
                 end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + 250, 1)
             end
@@ -482,13 +479,11 @@ CGame.execOnModuleLoad(function()
     imports.assetify.network:create("Client:onSetLoginUIPhase"):on(function(phaseID)
         if not phaseID or not loginUI.phases[1].optionsUI[phaseID] or (loginUI.phase and loginUI.phase == phaseID) then return false end
         for i, j in imports.pairs(loginUI.cache.timers) do
-            if j and imports.isTimer(j) then
-                imports.killTimer(j)
-                loginUI.cache.timers[i] = nil
-            end
+            if j then j:destroy() end
+            loginUI.cache.timers[i] = nil
         end
         imports.assetify.network:emit("Client:onToggleLoadingUI", false, true)
-        loginUI.cache.timers.phaseChanger = imports.setTimer(function()
+        loginUI.cache.timers.phaseChanger = imports.assetify.timer:create(function()
             for i = 1, #loginUI.characters, 1 do
                 local j = loginUI.characters[i]
                 if not j.id then
@@ -517,15 +512,15 @@ CGame.execOnModuleLoad(function()
             imports.assetify.network:emit("Client:onToggleLoadingUI", false, false)
             loginUI.cache.timers.phaseChanger = false
         end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + 250, 1)
-        loginUI.cache.timers.uiEnabler = imports.setTimer(function()
+        loginUI.cache.timers.uiEnabler = imports.assetify.timer:create(function()
             imports.assetify.network:emit("Client:onEnableLoginUI", false, true)
             loginUI.cache.timers.uiEnabler = false
         end, FRAMEWORK_CONFIGS["UI"]["Loading"].fadeOutDuration + FRAMEWORK_CONFIGS["UI"]["Loading"].fadeDelayDuration - (FRAMEWORK_CONFIGS["UI"]["Loading"].fadeInDuration + 250), 1)
     end)
 
     imports.assetify.network:create("Client:onEnableLoginUI"):on(function(state, isForced)
-        if loginUI.cache.timers.uiEnabler and imports.isTimer(loginUI.cache.timers.uiEnabler) then
-            imports.killTimer(loginUI.cache.timers.uiEnabler)
+        if loginUI.cache.timers.uiEnabler then
+            loginUI.cache.timers.uiEnabler:destroy()
             loginUI.cache.timers.uiEnabler = nil
         end
         if isForced then loginUI.isForcedDisabled = not state end
@@ -576,7 +571,7 @@ CGame.execOnModuleLoad(function()
                     if isOptionHovered then
                         if isLMBClicked then
                             imports.assetify.network:emit("Client:onEnableLoginUI", false, false)
-                            imports.setTimer(function() j.exec() end, 1, 1)
+                            imports.assetify.timer:create(function() j.exec() end, 1, 1)
                         end
                         if j.hoverStatus ~= "forward" then
                             j.hoverStatus = "forward"
@@ -620,7 +615,7 @@ CGame.execOnModuleLoad(function()
                     if isOptionHovered then
                         if isLMBClicked then
                             imports.assetify.network:emit("Client:onEnableLoginUI", false, false)
-                            imports.setTimer(function() j.exec() end, 1, 1)
+                            imports.assetify.timer:create(function() j.exec() end, 1, 1)
                         end
                         if j.hoverStatus ~= "forward" then
                             j.hoverStatus = "forward"
@@ -678,7 +673,7 @@ CGame.execOnModuleLoad(function()
                 if isNavigatorHovered then
                     if isLMBClicked then
                         imports.assetify.network:emit("Client:onEnableLoginUI", false, false)
-                        imports.setTimer(function() loginUI.phases[3].navigator.exec() end, 1, 1)
+                        imports.assetify.timer:create(function() loginUI.phases[3].navigator.exec() end, 1, 1)
                     end
                     if loginUI.phases[3].navigator.hoverStatus ~= "forward" then
                         loginUI.phases[3].navigator.hoverStatus = "forward"
@@ -735,10 +730,8 @@ CGame.execOnModuleLoad(function()
                 j = false
             end
             for i, j in imports.pairs(loginUI.cache.timers) do
-                if j and imports.isTimer(j) then
-                    imports.killTimer(j)
-                end
-                j = nil
+                if j then j:destroy() end
+                loginUI.cache.timers[i] = nil
             end
             for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Ambiences"]) do
                 CSound.playAmbience(i)
@@ -768,7 +761,7 @@ CGame.execOnModuleLoad(function()
             imports.setElementDimension(localPlayer, FRAMEWORK_CONFIGS["UI"]["Login"].dimension)
             imports.assetify.network:emit("Client:onEnableLoginUI", false, true, true)
             imports.assetify.network:emit("Client:onToggleLoadingUI", false, true)
-            imports.setTimer(function()
+            imports.assetify.timer:create(function()
                 loginUI.toggleUI(state, args)
                 imports.fadeCamera(true)
                 imports.assetify.network:emit("Client:onToggleLoadingUI", false, false)

@@ -31,7 +31,6 @@ local imports = {
     createMarker = createMarker,
     spawnPlayer = spawnPlayer,
     killPed = killPed,
-    setTimer = setTimer,
     showChat = showChat,
     assetify = assetify
 }
@@ -116,17 +115,17 @@ imports.addEventHandler("Player:onDeath", root, function(killer, headshot, weapo
     end
 
     imports.killPed(source)
-    imports.setTimer(function(ped, deathAnim)
+    imports.assetify.timer:create(function(ped, deathAnim)
         if ped and imports.isElement(ped) then
             imports.setPedAnimation(ped, deathAnim[1], deathAnim[2], -1, false, true, false)
         end
     end, 200, 1, ped, (bodypart and deathAnimations[bodypart]) or deathAnimations.default)
-    imports.setTimer(function(ped)
+    imports.assetify.timer:create(function(ped)
         if ped and imports.isElement(ped) then
             imports.setElementHealth(ped, 0)
         end
     end, 500, 1, ped)
-    imports.setTimer(function(ped, marker)
+    imports.assetify.timer:create(function(ped, marker)
         destroyPedLoot(ped, marker)
     end, playerDeadLootDuration, 1, ped, marker)
 end)
