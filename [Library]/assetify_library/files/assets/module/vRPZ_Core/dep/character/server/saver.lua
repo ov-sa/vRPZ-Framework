@@ -85,7 +85,7 @@ CCharacter.loadInventory = function(cThread, player, deps)
     local DInventoryProperty = CInventory.getData(cThread, deps.inventoryID, {"max_slots", "slots"})
     DInventoryProperty = DInventoryProperty or {}
     DInventoryProperty.max_slots, DInventoryProperty.slots = imports.math.max(CInventory.fetchMaxSlotsMultiplier(), imports.tonumber(DInventoryProperty.max_slots) or 0), (DInventoryProperty.slots and imports.json.decode(DInventoryProperty.slots)) or {}
-    CInventory.CBuffer[(deps.characterID)] = {
+    CInventory.CBuffer[(deps.inventoryID)] = {
         maxSlots = DInventoryProperty.max_slots,
         slots = DInventoryProperty.slots
     }
