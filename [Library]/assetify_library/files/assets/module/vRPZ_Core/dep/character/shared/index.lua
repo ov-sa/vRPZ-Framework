@@ -32,6 +32,11 @@ CCharacter = {
         return false
     end,
 
+    getIdentity = function(player)
+        if not CPlayer.isInitialized(player) then return false end
+        return CGame.getEntityData(player, "Character:Identity")
+    end,
+
     getLocation = function(player)
         if not CPlayer.isInitialized(player) then return false end
         return {

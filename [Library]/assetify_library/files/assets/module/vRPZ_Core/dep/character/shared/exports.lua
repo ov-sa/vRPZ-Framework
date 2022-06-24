@@ -4,6 +4,7 @@
 
 CGame.exportModule("CCharacter", {
     "getPlayer",
+    "getIdentity",
     "getLocation",
     "generateClothing",
     "setHealth",
