@@ -38,6 +38,7 @@ local imports = {
     string = string,
     math = math
 }
+unpack = unpack
 
 
 ---------------
