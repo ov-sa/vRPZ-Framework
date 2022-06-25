@@ -16,6 +16,8 @@ local imports = {
     type = type,
     pairs = pairs,
     tonumber = tonumber,
+    select = select,
+    unpack = unpack,
     decodeString = decodeString,
     isElement = isElement,
     setmetatable = setmetatable,
@@ -172,13 +174,18 @@ end
 --[[ Class: Table ]]--
 ----------------------
 
-table.unpack = unpack
+table.pack = function(...)
+    return {__n = imports.select("#", ...), ...}
+end
+table.unpack = function(baseTable)
+    return imports.unpack(baseTable, 1, baseTable.__n or #baseTable)
+end
 table.clone = function(baseTable, isRecursive)
     if not baseTable or (imports.type(baseTable) ~= "table") then return false end
     local clonedTable = {}
     for i, j in imports.pairs(baseTable) do
         if (imports.type(j) == "table") and isRecursive then
-            clonedTable[i] = table.clone(j, true)
+            clonedTable[i] = table.clone(j, isRecursive)
         else
             clonedTable[i] = j
         end
