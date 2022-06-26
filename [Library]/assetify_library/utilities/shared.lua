@@ -35,10 +35,11 @@ local imports = {
     toJSON = toJSON,
     fromJSON = fromJSON,
     utf8 = utf8,
+    table = table,
     string = string,
     math = math
 }
-unpack = unpack
+unpack = nil
 
 
 ---------------
@@ -175,23 +176,53 @@ end
 --[[ Class: Table ]]--
 ----------------------
 
+local __table_insert = imports.table.insert
+local __table_remove = imports.table.remove
+table.insert = function(baseTable, ...)
+    if not baseTable or (imports.type(baseTable) ~= "table") then return false end
+    baseTable.__N = baseTable.__N or #baseTable
+    __table_insert(baseTable, ...)
+    baseTable.__N = baseTable.__N + 1
+    return true
+end
+table.remove = function(baseTable, index)
+    if not baseTable or (imports.type(baseTable) ~= "table") then return false end
+    baseTable.__N = baseTable.__N or #baseTable
+    if not baseTable[index] and (index <= baseTable.__N) then
+        local __baseTable = {}
+        baseTable[index] = nil
+        for i = index + 1, baseTable.__N, 1 do
+            __baseTable[(i - 1)] = baseTable[i]
+            baseTable[i] = nil
+        end
+        for i, j in imports.pairs(__baseTable) do
+            baseTable[i] = j
+        end
+        __baseTable = nil
+        imports.collectgarbage()
+    else
+        __table_remove(baseTable, index)
+    end
+    baseTable.__N = baseTable.__N - 1
+    return true
+end
 table.pack = function(...)
-    return {__n = imports.select("#", ...), ...}
+    return {__N = imports.select("#", ...), ...}
 end
 table.unpack = function(baseTable)
-    return imports.unpack(baseTable, 1, baseTable.__n or #baseTable)
+    return imports.unpack(baseTable, 1, table.maxn(baseTable) or #baseTable)
 end
 table.clone = function(baseTable, isRecursive)
     if not baseTable or (imports.type(baseTable) ~= "table") then return false end
-    local clonedTable = {}
+    local __baseTable = {}
     for i, j in imports.pairs(baseTable) do
         if (imports.type(j) == "table") and isRecursive then
-            clonedTable[i] = table.clone(j, isRecursive)
+            __baseTable[i] = table.clone(j, isRecursive)
         else
-            clonedTable[i] = j
+            __baseTable[i] = j
         end
     end
-    return clonedTable
+    return __baseTable
 end
 
 
