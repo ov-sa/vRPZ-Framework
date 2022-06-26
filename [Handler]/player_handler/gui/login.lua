@@ -44,8 +44,7 @@ CGame.execOnModuleLoad(function()
     --[[ Variables ]]--
     -------------------
 
-    local loginUI = nil
-    loginUI = {
+    local loginUI = {
         cache = {keys = {}, timers = {}},
         bgTexture = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "login:background"),
         phases = {
@@ -186,6 +185,7 @@ CGame.execOnModuleLoad(function()
         j.tooltip.hoverStatus = "backward"
         j.hoverAnimTick = CLIENT_CURRENT_TICK
     end
+
     loginUI.phases[1].updateUILang = function()
         for i = 1, #loginUI.phases[1].optionsUI, 1 do
             local j = loginUI.phases[1].optionsUI[i]
@@ -247,10 +247,12 @@ CGame.execOnModuleLoad(function()
         end
         return true
     end
+
     loginUI.phases[3].updateUILang = function()
         loginUI.phases[3].navigator.__width = loginUI.phases[3].navigator.width + imports.beautify.native.getTextWidth(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.navigator["Title"][(CPlayer.CLanguage)], 1, loginUI.phases[3].navigator.font.instance)
         return true
     end
+
     loginUI.updateUILang = function()
         loginUI.phases[1].updateUILang()
         if loginUI.phases[2].element and imports.isElement(loginUI.phases[2].element) then
@@ -261,6 +263,7 @@ CGame.execOnModuleLoad(function()
         return true
     end
     imports.assetify.network:fetch("Client:onUpdateLanguage"):on(loginUI.updateUILang)
+
     loginUI.phases[2].fetchSelection = function()
         local tone = imports.beautify.slider.getPercent(loginUI.phases[2].categories[1].contents.tone.element)
         local gender = loginUI.phases[2].categories[1].contents.gender.contentIndex[(imports.beautify.selector.getSelection(loginUI.phases[2].categories[1].contents.gender.element))]
@@ -279,11 +282,13 @@ CGame.execOnModuleLoad(function()
             shoes = shoes
         }
     end
+
     loginUI.phases[2].updateCharacter = function()
         local characterClothing = {CCharacter.generateClothing((loginUI.phases[2].fetchSelection()))}
         imports.assetify.setElementAsset(loginUI.phases[2].character, "character", characterClothing[1], characterClothing[2], characterClothing[3])
         return true
     end
+
     loginUI.phases[2].loadCharacter = function(loadDefault)
         if not loadDefault then
             if not loginUI.characters[(loginUI.previewCharacter)] then
@@ -331,6 +336,7 @@ CGame.execOnModuleLoad(function()
         loginUI.phases[2].updateCharacter()
         return true
     end
+
     loginUI.phases[2].manageCharacter = function(action)
         if not action then return false end
         if action == "create" then
@@ -424,6 +430,7 @@ CGame.execOnModuleLoad(function()
         end
         return true
     end
+    
     loginUI.phases[2].toggleUI = function(state)
         if state then
             if loginUI.phases[2].element and imports.isElement(loginUI.phases[2].element) then return false end

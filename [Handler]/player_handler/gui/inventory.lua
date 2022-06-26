@@ -134,6 +134,7 @@ CGame.execOnModuleLoad(function()
     inventoryUI.vicinityInventory.height = inventoryUI.clientInventory.equipment[6].startY + inventoryUI.clientInventory.equipment[6].height - inventoryUI.vicinityInventory.startY - inventoryUI.titlebar.height - inventoryUI.margin
     inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY = inventoryUI.opacityAdjuster.startX + inventoryUI.clientInventory.startX + inventoryUI.clientInventory.width - inventoryUI.margin, inventoryUI.clientInventory.startY + inventoryUI.opacityAdjuster.startY - inventoryUI.margin
     inventoryUI.opacityAdjuster.height = inventoryUI.clientInventory.equipment[8].startY - inventoryUI.opacityAdjuster.startY - inventoryUI.margin - inventoryUI.titlebar.slot.height
+    
     inventoryUI.createBGTexture = function(isRefresh)
         if CLIENT_MTA_MINIMIZED then return false end
         if isRefresh then
@@ -194,6 +195,7 @@ CGame.execOnModuleLoad(function()
         end
         return true
     end
+
     inventoryUI.updateUILang = function()
         for i = 1, #inventoryUI.clientInventory.equipment, 1 do
             local j = inventoryUI.clientInventory.equipment[i]
@@ -202,6 +204,7 @@ CGame.execOnModuleLoad(function()
         return true
     end
     imports.assetify.network:fetch("Client:onUpdateLanguage"):on(inventoryUI.updateUILang)
+
     inventoryUI.fetchUIGridSlotFromOffset = function(offsetX, offsetY)
         if not offsetX or not offsetY then return false end
         local row, column = imports.math.ceil(offsetY/(inventoryUI.clientInventory.height/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows)), imports.math.ceil(offsetX/(inventoryUI.clientInventory.width/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns))
@@ -209,12 +212,14 @@ CGame.execOnModuleLoad(function()
         if not row or not column then return false end
         return row, column
     end
+
     inventoryUI.fetchUIGridOffsetFromSlot = function(slot)
         if not slot then return false end
         local row, column = CInventory.fetchSlotLocation(slot)
         if not row or not column then return false end
         return (column - 1)*(inventoryUI.clientInventory.width/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns), (row - 1)*(inventoryUI.clientInventory.height/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows)
     end
+
     inventoryUI.createBuffer = function(parent, name)
         if not parent or not imports.isElement(parent) or inventoryUI.buffer[parent] then return false end
         if (parent ~= localPlayer) and CLoot.isLocked(parent) then
@@ -230,6 +235,7 @@ CGame.execOnModuleLoad(function()
         inventoryUI.updateBuffer(parent)
         return true
     end
+
     inventoryUI.destroyBuffer = function(parent)
         if not parent or not imports.isElement(parent) then return false end
         if inventoryUI.buffer[parent] and inventoryUI.buffer[parent] then
@@ -240,6 +246,7 @@ CGame.execOnModuleLoad(function()
         inventoryUI.buffer[parent] = nil
         return true
     end
+
     inventoryUI.updateBuffer = function(parent)
         if not parent or not imports.isElement(parent) or not inventoryUI.buffer[parent] then return false end
         inventoryUI.buffer[parent].maxSlots, inventoryUI.buffer[parent].assignedSlots = CInventory.fetchParentMaxSlots(parent), CInventory.fetchParentAssignedSlots(parent)
@@ -253,6 +260,7 @@ CGame.execOnModuleLoad(function()
         end
         return true
     end
+
     inventoryUI.attachItem = function(parent, item, amount, prevSlot, prevX, prevY, prevWidth, prevHeight, offsetX, offsetY)
         if inventoryUI.attachedItem then return false end
         if not parent or not imports.isElement(parent) or not item or not amount or not prevSlot or not prevX or not prevY or not prevWidth or not prevHeight or not offsetX or not offsetY then return false end
@@ -265,6 +273,7 @@ CGame.execOnModuleLoad(function()
         }
         return true
     end
+
     inventoryUI.detachItem = function(isForced)
         if not inventoryUI.attachedItem then return false end
         if not isForced then
@@ -278,6 +287,7 @@ CGame.execOnModuleLoad(function()
         end      
         return true
     end
+
     inventoryUI.addItem = function()
         inventoryUI.isSynced, inventoryUI.isSyncScheduled = false, true
         local vicinity, item, prevSlot, newSlot = inventoryUI.attachedItem.parent, inventoryUI.attachedItem.item, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot
@@ -292,6 +302,7 @@ CGame.execOnModuleLoad(function()
         end)
         return true
     end
+
     inventoryUI.orderItem = function()
         inventoryUI.isSynced, inventoryUI.isSyncScheduled = false, true
         local item, prevSlot, newSlot = inventoryUI.attachedItem.item, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot
@@ -306,6 +317,7 @@ CGame.execOnModuleLoad(function()
         end)
         return true
     end
+    
     inventoryUI.dropItem = function()
         inventoryUI.isSynced, inventoryUI.isSyncScheduled = false, true
         local vicinity, item, amount, prevSlot, newSlot = inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, inventoryUI.attachedItem.amount, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot

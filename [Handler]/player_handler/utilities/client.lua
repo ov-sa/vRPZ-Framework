@@ -103,46 +103,6 @@ function isObjectAroundPlayer(player, distance, height, initialHeight, targetMat
 end
 ]]
 
---------------------------------------
---[[ Function: Draws Progress Bar ]]--
---------------------------------------
---TODO: NEEEDS TO BE MOVED
---[[
-local progressBarDatas = {
-    edgePaths = {
-        DxTexture("files/images/hud/curved_square/left.png", "dxt5", true, "clamp"),
-        DxTexture("files/images/hud/curved_square/right.png", "dxt5", true, "clamp")
-    },
-    borderAnimTickCounter = CLIENT_CURRENT_TICK,
-    borderAnimDuration = 2500
-}
-
-function drawProgressBar(percent, placeHolder)
-
-    percent = imports.tonumber(percent)
-    if not percent then return false end
-    percent = math.max(0, math.min(100, percent))
-    placeHolder = (placeHolder and tostring(placeHolder)) or ""
-
-    local barPadding, borderSize = 8, 2
-    local overlay_width, overlay_height = 290, 20
-    local overlay_startX, overlay_startY = (sX - overlay_width)/2, sY - overlay_height - 35
-    local barColor, borderColor, percentageColor = tocolor(0, 0, 0, 250), tocolor(50, 75, 200, 255*interpolateBetween(0.25, 0, 0, 1, 0, 0, getInterpolationProgress(progressBarDatas.borderAnimTickCounter, progressBarDatas.borderAnimDuration), "CosineCurve")), {getRGBFromPercentage(percent)}
-    local outlineWeight, outlineColor = 0.5, {0, 0, 0, 255}
-    percentageColor[4] = 75
-    dxDrawImage(overlay_startX - borderSize, overlay_startY - borderSize, overlay_height + (borderSize*2), overlay_height + (borderSize*2), progressBarDatas.edgePaths[1], 0, 0, 0, borderColor, false)
-    dxDrawImage(overlay_startX + overlay_width - overlay_height - borderSize, overlay_startY - borderSize, overlay_height + (borderSize*2), overlay_height + (borderSize*2), progressBarDatas.edgePaths[2], 0, 0, 0, borderColor, false)
-    dxDrawRectangle(overlay_startX + overlay_height + borderSize, overlay_startY - borderSize, overlay_width - (overlay_height*2) - (borderSize*2), overlay_height + (borderSize*2), borderColor, false)
-    dxDrawImage(overlay_startX, overlay_startY, overlay_height, overlay_height, progressBarDatas.edgePaths[1], 0, 0, 0, barColor, false)
-    dxDrawImage(overlay_startX + overlay_width - overlay_height, overlay_startY, overlay_height, overlay_height, progressBarDatas.edgePaths[2], 0, 0, 0, barColor, false)
-    dxDrawRectangle(overlay_startX + overlay_height, overlay_startY, overlay_width - (overlay_height*2), overlay_height, barColor, false)
-    dxDrawRectangle(overlay_startX + barPadding, overlay_startY + barPadding, (overlay_width - (barPadding*2))*(percent/100), overlay_height - (barPadding*2), tocolor(unpack(percentageColor)), false)
-    dxDrawBorderedText(outlineWeight, outlineColor, placeHolder:gsub("."," %0"):sub(2), overlay_startX, overlay_startY - (borderSize*2), overlay_startX + overlay_width, overlay_startY - (borderSize*2), borderColor, 1, CGame.createFont(1, 15), "center", "bottom", false, false, false)
-    return true
-
-end
-]]
-
 
 -----------------------------------------
 --[[ Event: On Client Resource Start ]]--
@@ -166,6 +126,7 @@ CGame.execOnModuleLoad(function()
     for i, j in imports.pairs(FRAMEWORK_CONFIGS["Game"]["Camera_FOV"]) do
         imports.setCameraFieldOfView(i, j)
     end
+
     imports.addEventHandler("onClientGUIClick", root, function()
         local guiElement = imports.getElementType(source)
         if ((guiElement == "gui-edit") or (guiElement == "gui-memo")) then

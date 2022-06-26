@@ -63,6 +63,7 @@ CGame.execOnModuleLoad(function()
 
     scoreboardUI.startX = ((CLIENT_MTA_RESOLUTION[1] - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width)*0.5)
     scoreboardUI.startY = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].marginY + ((CLIENT_MTA_RESOLUTION[2] - (FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Banner"].height + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height))*0.5)
+    
     scoreboardUI.createBGTexture = function()
         if CLIENT_MTA_MINIMIZED then return false end
         scoreboardUI.bgRT = imports.beautify.native.createRenderTarget(FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Banner"].height + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height, true)
@@ -107,6 +108,7 @@ CGame.execOnModuleLoad(function()
         end
         return true
     end
+
     scoreboardUI.updateBuffer = function()
         local bufferCount = 0
         for i, j in imports.pairs(CPlayer.CLogged) do
