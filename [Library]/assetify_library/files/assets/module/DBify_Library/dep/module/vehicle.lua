@@ -39,12 +39,12 @@ dbify.vehicle = {
         local callback = dbify.fetchArg(_, cArgs)
         if not callback or (imports.type(callback) ~= "function") then return false end
         local promise = function()
-            imports.dbQuery(function(queryHandler, arguments)
+            imports.dbQuery(function(queryHandler, cArgs)
                 local callback = callback
                 local _, _, vehicleID = imports.dbPoll(queryHandler, 0)
                 local result = vehicleID or false
                 if callback and (imports.type(callback) == "function") then
-                    callback(result, arguments)
+                    callback(result, cArgs)
                 end
             end, {cArgs}, dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(NULL)", dbify.vehicle.connection.table, dbify.vehicle.connection.key)
             return true
@@ -58,16 +58,16 @@ dbify.vehicle = {
         local vehicleID, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not vehicleID or (imports.type(vehicleID) ~= "number") then return false end
         local promise = function()
-            return dbify.vehicle.getData(vehicleID, {dbify.vehicle.connection.key}, function(result, arguments)
+            return dbify.vehicle.getData(vehicleID, {dbify.vehicle.connection.key}, function(result, cArgs)
                 local callback = callback
                 if result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.vehicle.connection.table, dbify.vehicle.connection.key, vehicleID)
                     if callback and (imports.type(callback) == "function") then
-                        callback(result, arguments)
+                        callback(result, cArgs)
                     end
                 else
                     if callback and (imports.type(callback) == "function") then
-                        callback(false, arguments)
+                        callback(false, cArgs)
                     end
                 end
             end, imports.table.unpack(cArgs))

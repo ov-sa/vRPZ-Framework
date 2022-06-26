@@ -31,11 +31,11 @@ local cUtility = {
         if cloneTable then items = imports.table.clone(items, true) end
         return dbify.inventory.fetchAll({
             {dbify.inventory.connection.key, inventoryID},
-        }, function(result, arguments)
+        }, function(result, cArgs)
             if result then
                 result = result[1]
-                for i = 1, #arguments[1].items do
-                    local j = arguments[1].items[i]
+                for i = 1, #cArgs[1].items do
+                    local j = cArgs[1].items[i]
                     j[1] = "item_"..imports.tostring(j[1])
                     j[2] = imports.math.max(0, imports.tonumber(j[2]) or 0)
                     local prevItemData = result[(j[1])]
@@ -44,19 +44,19 @@ local cUtility = {
                     if not prevItemData then
                         prevItemData = imports.table.clone(dbify.inventory.connection.item.content, true)
                     end
-                    prevItemData.property[(dbify.inventory.connection.item.counter)] = j[2] + (imports.math.max(0, imports.tonumber(prevItemData.property[(dbify.inventory.connection.item.counter)]) or 0)*((arguments[1].processType == "push" and 1) or -1))
-                    arguments[1].items[i][2] = imports.json.encode(prevItemData)
+                    prevItemData.property[(dbify.inventory.connection.item.counter)] = j[2] + (imports.math.max(0, imports.tonumber(prevItemData.property[(dbify.inventory.connection.item.counter)]) or 0)*((cArgs[1].processType == "push" and 1) or -1))
+                    cArgs[1].items[i][2] = imports.json.encode(prevItemData)
                 end
-                dbify.inventory.setData(arguments[1].inventoryID, arguments[1].items, function(result, arguments)
+                dbify.inventory.setData(cArgs[1].inventoryID, cArgs[1].items, function(result, cArgs)
                     local callback = callback
                     if callback and (imports.type(callback) == "function") then
-                        callback(result, arguments)
+                        callback(result, cArgs)
                     end
-                end, arguments[2])
+                end, cArgs[2])
             else
                 local callback = callback
                 if callback and (imports.type(callback) == "function") then
-                    callback(false, arguments[2])
+                    callback(false, cArgs[2])
                 end
             end
         end, {
@@ -74,19 +74,19 @@ local cUtility = {
             local j = items[i]
             items[i] = "item_"..imports.tostring(j)
         end
-        return dbify.inventory.getData(inventoryID, items, function(result, arguments)
+        return dbify.inventory.getData(inventoryID, items, function(result, cArgs)
             local callback = callback
             if result then
                 local properties = {}
                 for i, j in imports.pairs(result) do
                     j = (j and imports.json.decode(j)) or false
                     j = (j and j.data and (imports.type(j.data) == "table") and j.property and (imports.type(j.property) == "table") and j) or false
-                    if arguments[1].processType == "set" then
+                    if cArgs[1].processType == "set" then
                         if not j then
                             j = imports.table.clone(dbify.inventory.connection.item.content, true)
                         end
-                        for k = 1, #arguments[1].properties, 1 do
-                            local v = arguments[1].properties[k]
+                        for k = 1, #cArgs[1].properties, 1 do
+                            local v = cArgs[1].properties[k]
                             v[1] = imports.tostring(v[1])
                             if v[1] == dbify.inventory.connection.item.counter then
                                 v[2] = imports.math.max(0, imports.tonumber(v[2]) or j.property[(v[1])])
@@ -98,29 +98,29 @@ local cUtility = {
                         local itemIndex = imports.string.gsub(i, "item_", "", 1)
                         properties[itemIndex] = {}
                         if j then
-                            for k = 1, #arguments[1].properties, 1 do
-                                local v = arguments[1].properties[k]
+                            for k = 1, #cArgs[1].properties, 1 do
+                                local v = cArgs[1].properties[k]
                                 v = imports.tostring(v)
                                 properties[itemIndex][v] = j.property[v]
                             end
                         end
                     end
                 end
-                if arguments[1].processType == "set" then
-                    dbify.inventory.setData(arguments[1].inventoryID, properties, function(result, arguments)
+                if cArgs[1].processType == "set" then
+                    dbify.inventory.setData(cArgs[1].inventoryID, properties, function(result, cArgs)
                         local callback = callback
                         if callback and (imports.type(callback) == "function") then
-                            callback(result, arguments)
+                            callback(result, cArgs)
                         end
-                    end, arguments[2])
+                    end, cArgs[2])
                 else
                     if callback and (imports.type(callback) == "function") then
-                        callback(properties, arguments[2])
+                        callback(properties, cArgs[2])
                     end
                 end
             else
                 if callback and (imports.type(callback) == "function") then
-                    callback(false, arguments[2])
+                    callback(false, cArgs[2])
                 end
             end
         end, {
@@ -138,19 +138,19 @@ local cUtility = {
             local j = items[i]
             items[i] = "item_"..imports.tostring(j)
         end
-        return dbify.inventory.getData(inventoryID, items, function(result, arguments)
+        return dbify.inventory.getData(inventoryID, items, function(result, cArgs)
             local callback = callback
             if result then
                 local datas = {}
                 for i, j in imports.pairs(result) do
                     j = (j and imports.json.decode(j)) or false
                     j = (j and j.data and (imports.type(j.data) == "table") and j.property and (imports.type(j.property) == "table") and j) or false
-                    if arguments[1].processType == "set" then
+                    if cArgs[1].processType == "set" then
                         if not j then
                             j = imports.table.clone(dbify.inventory.connection.item.content, true)
                         end
-                        for k = 1, #arguments[1].datas, 1 do
-                            local v = arguments[1].datas[k]
+                        for k = 1, #cArgs[1].datas, 1 do
+                            local v = cArgs[1].datas[k]
                             j.data[imports.tostring(v[1])] = v[2]
                         end
                         imports.table.insert(datas, {i, imports.json.encode(j)})
@@ -158,29 +158,29 @@ local cUtility = {
                         local itemIndex = imports.string.gsub(i, "item_", "", 1)
                         datas[itemIndex] = {}
                         if j then
-                            for k = 1, #arguments[1].datas, 1 do
-                                local v = arguments[1].datas[k]
+                            for k = 1, #cArgs[1].datas, 1 do
+                                local v = cArgs[1].datas[k]
                                 v = imports.tostring(v)
                                 datas[itemIndex][v] = j.data[v]
                             end
                         end
                     end
                 end
-                if arguments[1].processType == "set" then
-                    dbify.inventory.setData(arguments[1].inventoryID, datas, function(result, arguments)
+                if cArgs[1].processType == "set" then
+                    dbify.inventory.setData(cArgs[1].inventoryID, datas, function(result, cArgs)
                         local callback = callback
                         if callback and (imports.type(callback) == "function") then
-                            callback(result, arguments)
+                            callback(result, cArgs)
                         end
-                    end, arguments[2])
+                    end, cArgs[2])
                 else
                     if callback and (imports.type(callback) == "function") then
-                        callback(datas, arguments[2])
+                        callback(datas, cArgs[2])
                     end
                 end
             else
                 if callback and (imports.type(callback) == "function") then
-                    callback(false, arguments[2])
+                    callback(false, cArgs[2])
                 end
             end
         end, {
@@ -227,7 +227,7 @@ dbify.inventory = {
         local items, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not items or (imports.type(items) ~= "table") then return false end
         local promise = function()
-            imports.dbQuery(function(queryHandler, arguments)
+            imports.dbQuery(function(queryHandler, cArgs)
                 local callback = callback
                 local result = imports.dbPoll(queryHandler, 0)
                 local itemsToBeAdded, itemsToBeDeleted = {}, {}
@@ -236,53 +236,53 @@ dbify.inventory = {
                         local j = result[i]
                         local columnName = j["column_name"] or j[(string.upper("column_name"))]
                         local itemIndex = imports.string.gsub(columnName, "item_", "", 1)
-                        if not arguments[1].items[itemIndex] then
+                        if not cArgs[1].items[itemIndex] then
                             imports.table.insert(itemsToBeDeleted, columnName)
                         end
                     end
                 end
-                for i, j in imports.pairs(arguments[1].items) do
+                for i, j in imports.pairs(cArgs[1].items) do
                     imports.table.insert(itemsToBeAdded, "item_"..i)
                 end
-                arguments[1].items = itemsToBeAdded
+                cArgs[1].items = itemsToBeAdded
                 if #itemsToBeDeleted > 0 then
-                    dbify.mysql.column.delete(dbify.inventory.connection.table, itemsToBeDeleted, function(result, arguments)
+                    dbify.mysql.column.delete(dbify.inventory.connection.table, itemsToBeDeleted, function(result, cArgs)
                         if result then
-                            for i = 1, #arguments[1].items, 1 do
-                                local j = arguments[1].items[i]
-                                dbify.mysql.column.isValid(dbify.inventory.connection.table, j, function(isValid, arguments)
+                            for i = 1, #cArgs[1].items, 1 do
+                                local j = cArgs[1].items[i]
+                                dbify.mysql.column.isValid(dbify.inventory.connection.table, j, function(isValid, cArgs)
                                     local callback = callback
                                     if not isValid then
-                                        imports.dbExec(dbify.mysql.connection.instance, "ALTER TABLE `??` ADD COLUMN `??` TEXT", dbify.inventory.connection.table, arguments[1])
+                                        imports.dbExec(dbify.mysql.connection.instance, "ALTER TABLE `??` ADD COLUMN `??` TEXT", dbify.inventory.connection.table, cArgs[1])
                                     end
-                                    if arguments[2] then
+                                    if cArgs[2] then
                                         if callback and (imports.type(callback) == "function") then
-                                            callback(true, arguments[2])
+                                            callback(true, cArgs[2])
                                         end
                                     end
-                                end, j, ((i >= #arguments[1].items) and arguments[2]) or false)
+                                end, j, ((i >= #cArgs[1].items) and cArgs[2]) or false)
                             end
                         else
                             local callback = callback
                             if callback and (imports.type(callback) == "function") then
-                                callback(result, arguments[2])
+                                callback(result, cArgs[2])
                             end
                         end
-                    end, arguments[1], arguments[2])
+                    end, cArgs[1], cArgs[2])
                 else
-                    for i = 1, #arguments[1].items, 1 do
-                        local j = arguments[1].items[i]
-                        dbify.mysql.column.isValid(dbify.inventory.connection.table, j, function(isValid, arguments)
+                    for i = 1, #cArgs[1].items, 1 do
+                        local j = cArgs[1].items[i]
+                        dbify.mysql.column.isValid(dbify.inventory.connection.table, j, function(isValid, cArgs)
                             local callback = callback
                             if not isValid then
-                                imports.dbExec(dbify.mysql.connection.instance, "ALTER TABLE `??` ADD COLUMN `??` TEXT", dbify.inventory.connection.table, arguments[1])
+                                imports.dbExec(dbify.mysql.connection.instance, "ALTER TABLE `??` ADD COLUMN `??` TEXT", dbify.inventory.connection.table, cArgs[1])
                             end
-                            if arguments[2] then
+                            if cArgs[2] then
                                 if callback and (imports.type(callback) == "function") then
-                                    callback(true, arguments[2])
+                                    callback(true, cArgs[2])
                                 end
                             end
-                        end, j, ((i >= #arguments[1].items) and arguments[2]) or false)
+                        end, j, ((i >= #cArgs[1].items) and cArgs[2]) or false)
                     end
                 end
             end, {{{
@@ -299,12 +299,12 @@ dbify.inventory = {
         local callback = dbify.fetchArg(_, cArgs)
         if not callback or (imports.type(callback) ~= "function") then return false end
         local promise = function()
-            imports.dbQuery(function(queryHandler, arguments)
+            imports.dbQuery(function(queryHandler, cArgs)
                 local callback = callback
                 local _, _, inventoryID = imports.dbPoll(queryHandler, 0)
                 local result = inventoryID or false
                 if callback and (imports.type(callback) == "function") then
-                    callback(result, arguments)
+                    callback(result, cArgs)
                 end
             end, {cArgs}, dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(NULL)", dbify.inventory.connection.table, dbify.inventory.connection.key)
             return true
@@ -318,16 +318,16 @@ dbify.inventory = {
         local inventoryID, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not inventoryID or (imports.type(inventoryID) ~= "number") then return false end
         local promise = function()
-            return dbify.inventory.getData(inventoryID, {dbify.inventory.connection.key}, function(result, arguments)
+            return dbify.inventory.getData(inventoryID, {dbify.inventory.connection.key}, function(result, cArgs)
                 local callback = callback
                 if result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.inventory.connection.table, dbify.inventory.connection.key, inventoryID)
                     if callback and (imports.type(callback) == "function") then
-                        callback(result, arguments)
+                        callback(result, cArgs)
                     end
                 else
                     if callback and (imports.type(callback) == "function") then
-                        callback(false, arguments)
+                        callback(false, cArgs)
                     end
                 end
             end, imports.table.unpack(cArgs))

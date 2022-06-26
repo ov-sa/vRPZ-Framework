@@ -41,16 +41,16 @@ dbify.account = {
         local accountName, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not accountName or (imports.type(accountName) ~= "string") then return false end
         local promise = function()
-            return dbify.account.getData(accountName, {dbify.account.connection.key}, function(result, arguments)
+            return dbify.account.getData(accountName, {dbify.account.connection.key}, function(result, cArgs)
                 local callback = callback
                 if not result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(?)", dbify.account.connection.table, dbify.account.connection.key, accountName)
                     if callback and (imports.type(callback) == "function") then
-                        callback(result, arguments)
+                        callback(result, cArgs)
                     end
                 else
                     if callback and (imports.type(callback) == "function") then
-                        callback(false, arguments)
+                        callback(false, cArgs)
                     end
                 end
             end, imports.table.unpack(cArgs))
@@ -64,16 +64,16 @@ dbify.account = {
         local accountName, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         if not accountName or (imports.type(accountName) ~= "string") then return false end
         local promise = function()
-            return dbify.account.getData(accountName, {dbify.account.connection.key}, function(result, arguments)
+            return dbify.account.getData(accountName, {dbify.account.connection.key}, function(result, cArgs)
                 local callback = callback
                 if result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.account.connection.table, dbify.account.connection.key, accountName)
                     if callback and (imports.type(callback) == "function") then
-                        callback(result, arguments)
+                        callback(result, cArgs)
                     end
                 else
                     if callback and (imports.type(callback) == "function") then
-                        callback(false, arguments)
+                        callback(false, cArgs)
                     end
                 end
             end, imports.table.unpack(cArgs))
