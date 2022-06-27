@@ -91,11 +91,13 @@ class = {
             buffer = {}
         }
         parent.__index = parent
+    
         function parent:getType(instance)
             if not self or ((self == parent) and (not instance or (imports.type(instance) ~= "table"))) then return false end
             instance = ((self ~= parent) and self) or instance
             return (instance.__C and instance.__C.type) or false
         end
+    
         function parent:createInstance()
             if not self or (imports.type(self) ~= "table") or not self.__C or self.__isChild then return false end
             local instance = imports.setmetatable({}, {__index = self})
@@ -103,6 +105,7 @@ class = {
             self.__C.buffer[instance] = true
             return instance
         end
+    
         function parent:destroyInstance()
             if not self or (imports.type(self) ~= "table") or not self.__index or not self.__C or not self.__isChild then return false end
             self.__C.buffer[self] = nil
@@ -137,6 +140,18 @@ class = {
 file = {
     exists = imports.fileExists,
     delete = imports.fileDelete,
+
+    parseURL = function(path, extension)
+        if not path or not extension or (imports.type(path) ~= "string") or (imports.type(extension) ~= "string") then return false end
+        local _, startN = imports.utf8.find(path, "@/")
+        local endN = imports.utf8.find(path, "."..extension)
+        startN, endN = (startN and (startN + 1)) or startN, (endN and (endN - 1)) or endN
+        if startN and endN then
+            local url = imports.utf8.sub(path, startN, endN)
+            if imports.string.match(url, "%w") then return url.."."..extension, imports.string.match(url, "(.*[/\\])") or "" end
+        end
+        return false
+    end,
 
     read = function(path)
         if not path or not imports.fileExists(path) then return false end

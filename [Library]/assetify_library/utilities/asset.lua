@@ -36,6 +36,7 @@ local imports = {
     engineReplaceModel = engineReplaceModel,
     engineReplaceCOL = engineReplaceCOL,
     file = file,
+    utf8 = utf8,
     json = json,
     table = table,
     string = string,
@@ -234,6 +235,21 @@ if localPlayer then
         return true
     end
 else
+    function asset:buildManifest(assetPath, manifestPath)
+        local manifestData = imports.file.read(assetPath..manifestPath)
+        manifestData = (manifestData and imports.json.decode(manifestData)) or false
+        if manifestData then
+            for i, j in imports.pairs(manifestData) do
+                local url, directory = imports.file.parseURL(j, "json")
+                if url and directory then
+                    url = imports.string.sub(url, #directory + 1)
+                    manifestData[i] = asset:buildManifest(assetPath..directory, url)
+                end
+            end
+        end
+        return manifestData
+    end
+
     function asset:buildFile(filePath, filePointer, encryptKey, rawPointer, skipSync, debugExistence)
         if not filePath or not filePointer then return false end
         if (not skipSync and not filePointer.unSynced.fileHash[filePath]) or (skipSync and rawPointer and not rawPointer[filePath]) then
@@ -343,9 +359,7 @@ else
                 for i = 1, #cAssetPack.manifestData, 1 do
                     local assetName = cAssetPack.manifestData[i]
                     local assetPath = (asset.references.root)..imports.string.lower(assetType).."/"..assetName.."/"
-                    local assetManifestPath = assetPath..(asset.references.asset)..".json"
-                    local assetManifestData = imports.file.read(assetManifestPath)
-                    assetManifestData = (assetManifestData and imports.json.decode(assetManifestData)) or false
+                    local assetManifestData = asset:buildManifest(assetPath, (asset.references.asset)..".json")
                     if assetManifestData then
                         assetManifestData.streamRange = imports.math.max(imports.tonumber(assetManifestData.streamRange) or 0, asset.ranges.streamRange)
                         assetManifestData.enableLODs = (assetManifestData.enableLODs and true) or false
