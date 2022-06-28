@@ -21,6 +21,7 @@
                 "gameplay/gui/login.lua",
                 "gameplay/gui/inventory.lua",
                 "gameplay/gui/scoreboard.lua",
+                "gameplay/gui/taskboard.lua",
                 "gameplay/spawns.lua",
                 "gameplay/loots.lua",
                 "gameplay/party.lua",
