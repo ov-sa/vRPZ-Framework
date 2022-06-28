@@ -70,7 +70,8 @@ CGame.isUIVisible = function()
         not CPlayer.isInitialized(localPlayer),
         isLoginUIVisible(),
         isInventoryUIVisible(),
-        isScoreboardUIVisible()
+        isScoreboardUIVisible(),
+        isTaskUIVisible()
     }
     local state = false
     for i = 1, #uiStates, 1 do
