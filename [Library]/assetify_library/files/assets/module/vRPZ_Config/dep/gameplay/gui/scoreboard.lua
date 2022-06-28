@@ -8,10 +8,8 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
     width = 1282, height = 525,
     bgColor = {0, 0, 0, 250},
     scroller = {
-        width = 2,
-        thumbHeight = 245,
-        bgColor = {0, 0, 0, 255},
-        thumbColor = {175, 175, 175, 255}
+        width = 2, thumbHeight = 245,
+        thumbColor = {175, 175, 175, 255}, bgColor = {0, 0, 0, 255}
     },
 
     ["Banner"] = {
@@ -22,7 +20,7 @@ FRAMEWORK_CONFIGS["UI"]["Scoreboard"] = {
 
     ["Columns"] = {
         height = 25, dividerSize = 2,
-        fontColor = {0, 0, 0, 255}, bgColor = {100, 100, 100, 255}, dividerColor = {15, 15, 15, 200},
+        fontColor = {0, 0, 0, 255}, dividerColor = {15, 15, 15, 200}, bgColor = {100, 100, 100, 255},
         data = {
             fontColor = {100, 100, 100, 255}, hoverFontColor = {0, 0, 0, 255},
             bgColor = {10, 10, 10, 255}, hoverBGColor = {200, 85, 85, 255},
