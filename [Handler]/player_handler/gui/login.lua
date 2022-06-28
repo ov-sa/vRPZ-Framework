@@ -194,6 +194,7 @@ CGame.execOnModuleLoad(function()
         end
         return true
     end
+
     loginUI.phases[2].updateUILang = function(gender)
         gender = gender or FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default
         loginUI.phases[2].titlebar.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar["Title"][(CPlayer.CLanguage)]))
