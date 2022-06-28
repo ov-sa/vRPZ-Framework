@@ -376,7 +376,7 @@ CGame.execOnModuleLoad(function()
     
         if renderData.renderType == "input" then
             inventoryUI.cache.keys.mouse = imports.isMouseClicked()
-            inventoryUI.cache.keys.scroll.state, inventoryUI.cache.keys.scroll.streak  = imports.isMouseScrolled()
+            inventoryUI.cache.keys.scroll.state, inventoryUI.cache.keys.scroll.streak = imports.isMouseScrolled()
             inventoryUI.cache.isEnabled = inventoryUI.isUIEnabled()
         elseif renderData.renderType == "preRender" then
             if not inventoryUI.bgTexture or not inventoryUI.gridTexture or CLIENT_MTA_RESTORED then inventoryUI.createBGTexture()
@@ -758,7 +758,7 @@ CGame.execOnModuleLoad(function()
                             --[[
                             local maxSlots = CInventory.fetchParentMaxSlots(inventoryUI.attachedItem.parent)
                             local totalContentHeight = inventoryUI.gui.itemBox.templates[1].contentWrapper.padding + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding + (math.max(0, math.ceil(maxSlots/maximumInventoryRowSlots) - 1)*(inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)) + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding
-                            local exceededContentHeight =  totalContentHeight - inventoryUI.gui.itemBox.templates[1].contentWrapper.height
+                            local exceededContentHeight = totalContentHeight - inventoryUI.gui.itemBox.templates[1].contentWrapper.height
                             if exceededContentHeight > 0 then
                                 local slotRow = math.ceil(inventoryUI.attachedItem.prevSlot/maximumInventoryRowSlots)
                                 local slot_offsetY = inventoryUI.gui.itemBox.templates[1].contentWrapper.padding + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding + (math.max(0, slotRow - 1)*(inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)) - (exceededContentHeight*inventoryUI.buffer[localPlayer].gui.scroller.percent*0.01)
