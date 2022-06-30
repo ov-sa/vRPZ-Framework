@@ -15,7 +15,7 @@
 settings = {
     GTA = {
         clearWorld = true,
-        waterLevel = false
+        waterLevel = 0.01
     },
 
     downloader = {
