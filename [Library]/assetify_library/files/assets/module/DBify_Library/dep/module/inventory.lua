@@ -63,7 +63,7 @@ local cUtility = {
             inventoryID = inventoryID,
             items = items,
             processType = processType
-        }, {...})
+        }, imports.table.pack(...))
     end,
 
     requestSetGetItemProperty = function(inventoryID, items, properties, processType, callback, cloneTable, ...)
@@ -127,7 +127,7 @@ local cUtility = {
             inventoryID = inventoryID,
             properties = properties,
             processType = processType
-        }, {...})
+        }, imports.table.pack(...))
     end,
 
     requestSetGetItemData = function(inventoryID, items, datas, processType, callback, cloneTable, ...)
@@ -187,7 +187,7 @@ local cUtility = {
             inventoryID = inventoryID,
             datas = datas,
             processType = processType
-        }, {...})
+        }, imports.table.pack(...))
     end
 }
 

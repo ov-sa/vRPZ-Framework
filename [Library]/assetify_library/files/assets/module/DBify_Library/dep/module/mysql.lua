@@ -28,7 +28,7 @@ string.parse = function(rawString)
 end
 
 dbify.parseArgs = function(cbIndex, ...)
-    local rawArgs = {...}
+    local rawArgs = imports.table.pack(...)
     local cThread, cbIndex = rawArgs[1], imports.tonumber(cbIndex)
     if cThread and (imports.assetify.thread:getType(cThread) == "thread") then
         if not cbIndex then return false end
@@ -43,7 +43,7 @@ dbify.fetchArg = function(index, pool)
     index = imports.tonumber(index) or 1
     if not pool or (imports.type(pool) ~= "table") then return false end
     local argValue = pool[index]
-    if (index > 0) and (index <= #pool) then imports.table.remove(pool, index) end
+    imports.table.remove(pool, index)
     return argValue
 end
 
