@@ -87,7 +87,7 @@ imports.assetify.network:create("Player:onToggleLoginUI"):on(function(source)
             local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
             CPlayer.CBuffer[serial][j] = imports.string.parse(CPlayer.CBuffer[serial][j])
         end
-        DPlayer = imports.table.clone(DPlayer, true)
+        DPlayer = imports.table:clone(DPlayer, true)
         DPlayer.character = DPlayer.character or 0
         DPlayer.characters = {}
         DPlayer.role = (DPlayer.role and CGame.getRole(DPlayer.role) and DPlayer.role) or FRAMEWORK_CONFIGS["Templates"]["Roles"].default

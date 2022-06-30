@@ -102,7 +102,7 @@ CGame.execOnModuleLoad(function()
     inventoryUI.clientInventory.lockStat.startX, inventoryUI.clientInventory.lockStat.startY = inventoryUI.clientInventory.width - inventoryUI.clientInventory.lockStat.size, -inventoryUI.titlebar.height + ((inventoryUI.titlebar.height - inventoryUI.clientInventory.lockStat.size)*0.5)
     for i = 1, #inventoryUI.clientInventory.equipment, 1 do
         local j = inventoryUI.clientInventory.equipment[i]
-        inventoryUI.clientInventory.equipment[i] = imports.table.clone(FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][j], true)
+        inventoryUI.clientInventory.equipment[i] = imports.table:clone(FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][j], true)
         inventoryUI.clientInventory.equipment[i].slot = j
         inventoryUI.clientInventory.equipment[i].width, inventoryUI.clientInventory.equipment[i].height = CInventory.fetchSlotDimensions(inventoryUI.clientInventory.equipment[i].slots.rows, inventoryUI.clientInventory.equipment[i].slots.columns)
     end
@@ -323,7 +323,7 @@ CGame.execOnModuleLoad(function()
         local vicinity, item, amount, prevSlot, newSlot = inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, inventoryUI.attachedItem.amount, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot
         local slotBuffer = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[newSlot]
         if not slotBuffer or (slotBuffer.item ~= item) then
-            imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, newSlot, {item = item, amount = 0})
+            imports.table:insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, newSlot, {item = item, amount = 0})
             local vicinity_bufferCount = #inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
             inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight = imports.math.max(0, (inventoryUI.vicinityInventory.slotSize*vicinity_bufferCount) + (inventoryUI.margin*imports.math.max(0, vicinity_bufferCount - 1)) - inventoryUI.vicinityInventory.height)
             slotBuffer = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[newSlot]
@@ -391,13 +391,13 @@ CGame.execOnModuleLoad(function()
                 inventoryUI.buffer[localPlayer].bufferCache, inventoryUI.buffer[localPlayer].assignedItems, inventoryUI.buffer[localPlayer].assignedBuffers = {}, {}, {}
                 for i, j in imports.pairs(inventoryUI.buffer[localPlayer].inventory) do
                     for k = 1, j, 1 do
-                        imports.table.insert(inventoryUI.buffer[localPlayer].bufferCache, {item = i, amount = 1})
+                        imports.table:insert(inventoryUI.buffer[localPlayer].bufferCache, {item = i, amount = 1})
                     end
                 end
                 for i, j in imports.pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
                     if not inventoryUI.isSynced then
                         if j.translation == "inventory_add" then
-                            imports.table.insert(inventoryUI.buffer[localPlayer].bufferCache, {item = j.item, amount = 1})
+                            imports.table:insert(inventoryUI.buffer[localPlayer].bufferCache, {item = j.item, amount = 1})
                         end
                     end
                     for k = 1, #inventoryUI.buffer[localPlayer].bufferCache, 1 do
@@ -582,7 +582,7 @@ CGame.execOnModuleLoad(function()
                             categoryPriority[j] = true
                             for k, v in imports.pairs(CInventory.CCategories[j]) do
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
-                                    imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
+                                    imports.table:insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
                                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[k] = #inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
                                 else
                                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].unassignedBuffers[k] = #inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache + 1
@@ -594,7 +594,7 @@ CGame.execOnModuleLoad(function()
                         if not categoryPriority[i] then
                             for k, v in imports.pairs(j) do
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
-                                    imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
+                                    imports.table:insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
                                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[k] = #inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
                                 else
                                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].unassignedBuffers[k] = #inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache + 1

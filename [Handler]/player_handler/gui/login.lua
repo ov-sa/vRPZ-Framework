@@ -226,8 +226,8 @@ CGame.execOnModuleLoad(function()
                             imports.addEventHandler("onClientUISelectionAltered", v.element, function() loginUI.phases[2].updateCharacter() end)
                         end
                         for m, n in imports.pairs((v.isClothing and FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Datas"][gender]) or FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Datas"]) do
-                            imports.table.insert(v.contentIndex, m)
-                            imports.table.insert(v.content, imports.string.upper(imports.string.spaceChars(n[(CPlayer.CLanguage)])))
+                            imports.table:insert(v.contentIndex, m)
+                            imports.table:insert(v.content, imports.string.upper(imports.string.spaceChars(n[(CPlayer.CLanguage)])))
                         end
                         imports.beautify.selector.setDataList(v.element, v.content)
                     end
@@ -240,8 +240,8 @@ CGame.execOnModuleLoad(function()
                     imports.addEventHandler("onClientUISelectionAltered", j.element, function() loginUI.phases[2].updateCharacter() end)
                 end
                 for k, v in imports.pairs(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)]["Datas"][gender]) do
-                    imports.table.insert(j.contentIndex, k)
-                    imports.table.insert(j.content, imports.string.upper(imports.string.spaceChars(v[(CPlayer.CLanguage)])))
+                    imports.table:insert(j.contentIndex, k)
+                    imports.table:insert(j.content, imports.string.upper(imports.string.spaceChars(v[(CPlayer.CLanguage)])))
                 end
                 imports.beautify.selector.setDataList(j.element, j.content)
             end
@@ -349,7 +349,7 @@ CGame.execOnModuleLoad(function()
                 imports.assetify.network:emit("Client:onNotification", false, errorMessage, FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
                 return false
             else
-                imports.table.insert(loginUI.characters, {})
+                imports.table:insert(loginUI.characters, {})
                 loginUI.previewCharacter = #loginUI.characters
                 loginUI.phases[2].loadCharacter(true)
                 imports.assetify.network:emit("Client:onNotification", false, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][4][(CPlayer.CLanguage)], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
@@ -363,7 +363,7 @@ CGame.execOnModuleLoad(function()
                 return false
             else
                 if loginUI.characters[(loginUI.previewCharacter)].id then imports.assetify.network:emit("Player:onDeleteCharacter", true, false, localPlayer, loginUI.characters[(loginUI.previewCharacter)].id) end
-                imports.table.remove(loginUI.characters, loginUI.previewCharacter)
+                imports.table:remove(loginUI.characters, loginUI.previewCharacter)
                 loginUI.previewCharacter = imports.math.max(0, loginUI.previewCharacter - 1)
                 loginUI.phases[2].loadCharacter()
                 imports.assetify.network:emit("Client:onNotification", false, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][6][(CPlayer.CLanguage)], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
@@ -495,7 +495,7 @@ CGame.execOnModuleLoad(function()
             for i = 1, #loginUI.characters, 1 do
                 local j = loginUI.characters[i]
                 if not j.id then
-                    imports.table.remove(loginUI.characters, i)
+                    imports.table:remove(loginUI.characters, i)
                 end
             end
             loginUI.phases[2].toggleUI(false)

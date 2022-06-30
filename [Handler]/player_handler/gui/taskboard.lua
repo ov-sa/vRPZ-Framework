@@ -64,7 +64,7 @@ CGame.execOnModuleLoad(function()
                 local j = contents[i]
                 if j and j.isCategory then
                     taskboardUI.createContents(j)
-                    imports.table.insert(j, {
+                    imports.table:insert(j, {
                         title = "Back",
                         action = "ui:back"
                     })
@@ -111,12 +111,12 @@ CGame.execOnModuleLoad(function()
             isUpdateView = true
             if not taskboardUI.contentView then
                 taskboardUI.contentView = {}
-                imports.table.insert(content, {
+                imports.table:insert(content, {
                     title = "Close",
                     action = "ui:close"
                 })
             end
-            imports.table.insert(taskboardUI.contentView, content)
+            imports.table:insert(taskboardUI.contentView, content)
         elseif content.exec and (imports.type(content.exec) == "function") then
             imports.assetify.network:emit("Client:onEnableInventoryUI", false)
             content.exec(j)
@@ -126,7 +126,7 @@ CGame.execOnModuleLoad(function()
             elseif content.action == "ui:back" then
                 if #taskboardUI.contentView > 1 then
                     isUpdateView = true
-                    imports.table.remove(taskboardUI.contentView, #taskboardUI.contentView)
+                    imports.table:remove(taskboardUI.contentView, #taskboardUI.contentView)
                 end
             end
         end

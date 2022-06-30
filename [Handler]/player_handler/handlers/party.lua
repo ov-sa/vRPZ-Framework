@@ -37,7 +37,7 @@ imports.addCommandHandler("party", function(player, _, category, ...)
     end
 
     category = imports.string.lower(imports.tostring(category))
-    local args = imports.table.pack(...)
+    local args = imports.table:pack(...)
     if category == "create" then
         if getPlayerParty(player) then
             return imports.outputChatBox("━━ Party: Couldn't create a new parte because you are already in one.", player, 255, 0, 0)

@@ -69,7 +69,7 @@ CGame.execOnModuleLoad(function()
                 imports.beautify.native.drawText(j.text, notif_offsetX, notif_offsetY, notif_offsetX + j.width, notif_offsetY + FRAMEWORK_CONFIGS["UI"]["Notification"].height, imports.tocolor(notif_fontColor[1], notif_fontColor[2], notif_fontColor[3], notif_fontColor[4]*j.alphaPercent), 1, notifUI.font.instance, "center", "center", true, false, false, false, true)
                 if j.slideStatus == "backward" then
                     if imports.math.round(j.alphaPercent, 2) == 0 then
-                        imports.table.remove(notifUI.buffer, i)
+                        imports.table:remove(notifUI.buffer, i)
                     end
                 end
             end
@@ -84,7 +84,7 @@ CGame.execOnModuleLoad(function()
     imports.assetify.network:create("Client:onNotification"):on(function(message, color)
         if not message then return false end
 
-        imports.table.insert(notifUI.buffer, {
+        imports.table:insert(notifUI.buffer, {
             text = message,
             width = imports.beautify.native.getTextWidth(message, 1, notifUI.font.instance),
             fontColor = color,

@@ -98,7 +98,7 @@ function getPlayersWithinMarker(marker)
     for i = 1, #playerList, 1 do
         local j = playerList[i]
         if CPlayer.isInitialized(j) and imports.isElementWithinMarker(j, marker) then
-            imports.table.insert(rangedPlayers, j)
+            imports.table:insert(rangedPlayers, j)
         end
     end
     return rangedPlayers
