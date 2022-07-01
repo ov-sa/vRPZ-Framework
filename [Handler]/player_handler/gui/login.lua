@@ -44,7 +44,8 @@ CGame.execOnModuleLoad(function()
     --[[ Variables ]]--
     -------------------
 
-    local loginUI = {
+    local loginUI = nil
+    loginUI = {
         cache = {keys = {}, timers = {}},
         bgTexture = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "login:background"),
         phases = {
