@@ -170,7 +170,7 @@ function getVehicleCompatibleUpgrades(vehicle)
             if not compatibleUpgrades[slotName] then
                 compatibleUpgrades[slotName] = {}
             end
-            table.insert(compatibleUpgrades[slotName], j)
+            table:insert(compatibleUpgrades[slotName], j)
         end
     end
     return compatibleUpgrades
