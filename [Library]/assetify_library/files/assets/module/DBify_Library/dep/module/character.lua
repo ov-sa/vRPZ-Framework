@@ -28,7 +28,7 @@ dbify.character = {
         local isAsync, cArgs = dbify.parseArgs(2, ...)
         local keyColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         local promise = function()
-            return dbify.mysql.table.fetchContents(dbify.character.connection.table, keyColumns, callback, imports.table.unpack(cArgs))
+            return dbify.mysql.table.fetchContents(dbify.character.connection.table, keyColumns, callback, imports.table:unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end,
@@ -70,7 +70,7 @@ dbify.character = {
                         callback(false, cArgs)
                     end
                 end
-            end, imports.table.unpack(cArgs))
+            end, imports.table:unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end,
@@ -83,7 +83,7 @@ dbify.character = {
         local promise = function()
             return dbify.mysql.data.set(dbify.character.connection.table, dataColumns, {
                 {dbify.character.connection.key, characterID}
-            }, callback, imports.table.unpack(cArgs))
+            }, callback, imports.table:unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end,
@@ -96,7 +96,7 @@ dbify.character = {
         local promise = function()
             return dbify.mysql.data.get(dbify.character.connection.table, dataColumns, {
                 {dbify.character.connection.key, characterID}
-            }, true, callback, imports.table.unpack(cArgs))
+            }, true, callback, imports.table:unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end
