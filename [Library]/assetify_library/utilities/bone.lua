@@ -22,9 +22,7 @@ local imports = {
     getElementRotation = getElementRotation,
     getElementBoneMatrix = getElementBoneMatrix,
     setElementCollisionsEnabled = setElementCollisionsEnabled,
-    Vector3 = Vector3,
     math = math,
-    quat = quat,
     matrix = matrix
 }
 
@@ -62,7 +60,7 @@ function bone.public:create(...)
 end
 
 function bone.public:destroy(...)
-    if not self or (self == bone.public) then return false end
+    if not bone.public:isInstance(self) then return false end
     return self:unload(...)
 end
 
@@ -81,7 +79,7 @@ function bone.public:clearElementBuffer(element)
 end
 
 function bone.public:load(element, parent, boneData, remoteSignature)
-    if not self or (self == bone.public) then return false end
+    if not bone.public:isInstance(self) then return false end
     if not element or (not remoteSignature and not imports.isElement(element)) or not parent or (not remoteSignature and not imports.isElement(parent)) or not boneData or (element == parent) or bone.public.buffer.element[element] then return false end
     self.element = element
     self.parent = parent
@@ -100,7 +98,7 @@ function bone.public:load(element, parent, boneData, remoteSignature)
 end
 
 function bone.public:unload()
-    if not self or (self == bone.public) or self.isUnloading then return false end
+    if not bone.public:isInstance(self) or self.isUnloading then return false end
     self.isUnloading = true
     if self.cHeartbeat then
         self.cHeartbeat:destroy()
@@ -115,7 +113,7 @@ function bone.public:unload()
 end
 
 function bone.public:refresh(boneData, remoteSignature)
-    if not self or (self == bone.public) then return false end
+    if not bone.public:isInstance(self) then return false end
     self.parentType = self.parentType or remoteSignature.parentType or imports.getElementType(self.parent)
     self.parentType = ((self.parentType == "player") and "ped") or self.parentType
     if not self.parentType or not bone.public.ids[(self.parentType)] then return false end
@@ -128,10 +126,12 @@ function bone.public:refresh(boneData, remoteSignature)
         local prev_rotX, prev_rotY, prev_rotZ = nil, nil, nil
         if self.boneData then prev_rotX, prev_rotY, prev_rotZ = self.boneData.rotation.x, self.boneData.rotation.y, self.boneData.rotation.z
         else prev_rotX, prev_rotY, prev_rotZ = remoteSignature.elementRotation or imports.getElementRotation(self.element, "ZYX") end
-        local rotQuat = imports.quat.new(imports.quat.fromEuler(prev_rotX, prev_rotY, prev_rotZ))
-        local __rotQuat = imports.quat.fromVectorAngle(imports.Vector3(1, 0, 0), boneData.rotation.x)*imports.quat.fromVectorAngle(imports.Vector3(0, 1, 0), boneData.rotation.y)*imports.quat.fromVectorAngle(imports.Vector3(0, 0, 1), boneData.rotation.z) 
+        local rotQuat = imports.math.quat:fromEuler(prev_rotX, prev_rotY, prev_rotZ)
+        local xQuat, yQuat, zQuat = imports.math.quat:fromAngleAxis(1, 0, 0, boneData.rotation.x), imports.math.quat:fromAngleAxis(0, 1, 0, boneData.rotation.y), imports.math.quat:fromAngleAxis(0, 0, 1, boneData.rotation.z)
+        local __rotQuat = xQuat*yQuat*zQuat
         rotQuat = __rotQuat*rotQuat
-        boneData.rotation.x, boneData.rotation.y, boneData.rotation.z = imports.quat.toEuler(rotQuat[1], rotQuat[2], rotQuat[3], rotQuat[4])
+        boneData.rotation.x, boneData.rotation.y, boneData.rotation.z = rotQuat:toEuler()
+        rotQuat:destroyInstance(); xQuat:destroyInstance(); yQuat:destroyInstance(); zQuat:destroyInstance()
     end
     boneData.rotationMatrix = imports.matrix.fromRotation(boneData.rotation.x, boneData.rotation.y, boneData.rotation.z)
     boneData.syncRate = imports.tonumber(boneData.syncRate) or settings.streamer.boneSyncRate
@@ -146,7 +146,7 @@ function bone.public:refresh(boneData, remoteSignature)
 end
 
 function bone.public:update()
-    if not self or (self == bone.public) or self.cHeartbeat then return false end
+    if not bone.public:isInstance(self) or self.cHeartbeat then return false end
     bone.public.cache.element[(self.parent)] = bone.public.cache.element[(self.parent)] or {}
     bone.public.cache.element[(self.parent)][(self.boneData.id)] = ((bone.public.cache.element[(self.parent)].streamTick == bone.public.cache.streamTick) and bone.public.cache.element[(self.parent)][(self.boneData.id)]) or imports.getElementBoneMatrix(self.parent, self.boneData.id)
     bone.public.cache.element[(self.parent)].streamTick = bone.public.cache.streamTick

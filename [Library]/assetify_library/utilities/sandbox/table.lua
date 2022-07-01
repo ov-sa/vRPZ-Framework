@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
 --[[ Resource: Assetify Library
-     Script: utilities: file.lua
+     Script: utilities: sandbox: table.lua
      Author: vStudio
      Developer(s): Aviril, Tron, Mario, Аниса
      DOC: 19/10/2021
@@ -28,7 +28,7 @@ local imports = {
 
 local table = class:create("table", table)
 
- function table.public:pack(...)
+function table.public:pack(...)
     return {__T = {
         length = imports.select("#", ...)
     }, ...}
@@ -51,8 +51,9 @@ function table.public:clone(baseTable, isRecursive)
     return __baseTable
 end
 
+local __table_concat = imports.table.concat
 function table.public:concat(...)
-    return imports.table.concat(...)
+    return __table_concat(...)
 end
 
 function table.public:insert(baseTable, index, value, isForced)
