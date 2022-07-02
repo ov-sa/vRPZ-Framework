@@ -56,8 +56,7 @@ end
 
 function thread.public:destroy()
     if not thread.public:isInstance(self) then return false end
-    if self.timer then print("Destroyed Timer -1"); self.timer:destroy() end
-    print("Destroyed Timer -2")
+    if self.timer and timer:isInstance(self.timer) then self.timer:destroy() end
     self:destroyInstance()
     return true
 end
@@ -74,7 +73,7 @@ end
 function thread.private.resume(cThread, abortTimer)
     if not thread.public:isInstance(cThread) or cThread.isAwaiting then return false end
     if abortTimer then
-        if cThread.timer then cThread.timer:destroy() end
+        if cThread.timer and timer:isInstance(cThread.timer) then cThread.timer:destroy() end
         cThread.syncRate.executions, cThread.syncRate.frames = false, false 
     end
     if cThread:status() == "dead" then cThread:destroy(); return false end
@@ -88,7 +87,7 @@ function thread.public:resume(syncRate)
     syncRate = (syncRate and (imports.type(syncRate) == "table") and syncRate) or false
     local executions, frames = (syncRate and imports.tonumber(syncRate.executions)) or false, (syncRate and imports.tonumber(syncRate.frames)) or false
     if not executions or not frames then return thread.private.resume(self, true) end
-    if self.timer then self.timer:destroy() end
+    if self.timer and timer:isInstance(self.timer) then self.timer:destroy() end
     self.syncRate.executions, self.syncRate.frames = executions, frames
     if not self.isAwaiting then
         for i = 1, self.syncRate.executions, 1 do
@@ -98,7 +97,6 @@ function thread.public:resume(syncRate)
     end
     if thread.public:isInstance(self) then
         self.timer = timer:create(function()
-            print("TEST 2")
             if self.isAwaiting then return false end
             for i = 1, self.syncRate.executions, 1 do
                 thread.private.resume(self)
