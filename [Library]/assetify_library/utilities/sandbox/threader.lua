@@ -80,9 +80,9 @@ function thread.private.resume(cThread, abortTimer)
         if cThread.timer then cThread.timer:destroy() end
         cThread.syncRate.executions, cThread.syncRate.frames = false, false 
     end
-    if cThread:status() == "dead" then print("Destroyed 1"); cThread:destroy(); return false end
+    if cThread:status() == "dead" then cThread:destroy(); return false end
     if cThread:status() == "suspended" then imports.coroutine.resume(cThread.thread, cThread) end
-    if cThread:status() == "dead" then print("Destroyed 1"); cThread:destroy() end
+    if cThread:status() == "dead" then cThread:destroy() end
     return true
 end
 
@@ -92,18 +92,16 @@ function thread.public:resume(syncRate)
     local executions, frames = (syncRate and imports.tonumber(syncRate.executions)) or false, (syncRate and imports.tonumber(syncRate.frames)) or false
     if not executions or not frames then return thread.private.resume(self, true) end
     if self.timer then self.timer:destroy() end
-    self.syncRate.executions, self.syncRate.frames = executions, frames 
+    self.syncRate.executions, self.syncRate.frames = executions, frames
+    self.syncRate.executions = 2
     if not self.isAwaiting then
         for i = 1, self.syncRate.executions, 1 do
-            print("TEST 0")
             thread.private.resume(self)
             if not thread.public:isInstance(self) then break end
         end
     end
-    if thread.public.isInstance(self) then
-        print("TEST 1")
+    if thread.public:isInstance(self) then
         self.timer = timer:create(function()
-            print("TEST 2")
             if self.isAwaiting then return false end
             for i = 1, self.syncRate.executions, 1 do
                 thread.private.resume(self)
