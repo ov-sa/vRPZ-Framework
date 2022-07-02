@@ -95,6 +95,43 @@ function angle.shortTarget(startAngle, targetAngle)
 end
 
 
+----------------------------------------------
+--[[ Functions: Clones Table/UI's-Outline ]]--
+----------------------------------------------
+
+function cloneUIOutline(elementType, nestedOutline)
+
+    if not elementType or not availableElements[elementType] or not availableTemplates[elementType] then return false end
+
+    local clonedOutline = {}
+    if not nestedOutline then
+        clonedOutline["__UI_CACHE__"] = {}
+        clonedOutline["__UI_INPUT_FETCH_CACHE__"] = {}
+    end
+    for i, j in imports.pairs(nestedOutline or availableTemplates[elementType]) do
+        if imports.type(j) == "table" then
+            if j.isOutLine then
+                clonedOutline[i] = cloneUIOutline(elementType, j)
+                if UI_VALID_SCROLLERS[i] then
+                    if UI_VALID_SCROLLERS[i].isHorizontal then
+                        clonedOutline[i].isHorizontal = true
+                    end
+                    clonedOutline[i].currentPercent = 0
+                    clonedOutline[i].finalPercent = 0
+                    clonedOutline[i].currentThumbSize = 0
+                    clonedOutline[i].finalThumbSize = 0
+                elseif (i == "slideBar_Horizontal") or (i == "slideBar_Vertical") then
+                    clonedOutline[i].currentPercent = 0
+                    clonedOutline[i].finalPercent = 0
+                end
+            end
+        end
+    end
+    return clonedOutline
+
+end
+
+
 ---------------------------------
 --[[ Function: Parses String ]]--
 ---------------------------------
