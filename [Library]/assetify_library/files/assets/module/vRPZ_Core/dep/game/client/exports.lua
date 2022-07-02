@@ -56,7 +56,7 @@ imports.assetify.network:create("Client:onUpdateLanguage"):on(function(prevLangu
         local isTemplateUpdated = false
         local cTemplate = imports.beautify.getUITemplate(i)
         if not cTemplate.isVRPZTemplate then
-            cTemplate = imports.table.clone(j, true)
+            cTemplate = imports.table:clone(j, true)
             cTemplate.isVRPZTemplate = true
             isTemplateUpdated = true
         end

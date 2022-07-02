@@ -178,7 +178,7 @@ imports.assetify.scheduler.execOnLoad(function()
     end
     for i, j in imports.pairs(CInventory.CItems) do
         CInventory.CRefs.ref[(j.ref)] = i
-        imports.table.insert(CInventory.CRefs.index, j.ref)
+        imports.table:insert(CInventory.CRefs.index, j.ref)
         j.data.itemWeight = j.data.itemWeight or {}
         j.data.itemWeight.rows, j.data.itemWeight.columns = imports.math.max(1, imports.tonumber(j.data.itemWeight.rows) or 0), imports.math.max(1, imports.tonumber(j.data.itemWeight.columns) or 0)        
         j.data.itemWeight.weight = j.data.itemWeight.rows*j.data.itemWeight.columns

@@ -51,8 +51,8 @@ local cUtility = {
             CGame.setEntityData(player, "Slot:"..i, nil)
             CGame.setEntityData(player, "Slot:Object:"..i, nil)
         end
-        imports.table.insert(buffer.inventory, {"max_slots", CInventory.CBuffer[(deps.inventoryID)].maxSlots})
-        imports.table.insert(buffer.inventory, {"slots", imports.json.encode(CInventory.CBuffer[(deps.inventoryID)].slots)})
+        imports.table:insert(buffer.inventory, {"max_slots", CInventory.CBuffer[(deps.inventoryID)].maxSlots})
+        imports.table:insert(buffer.inventory, {"slots", imports.json.encode(CInventory.CBuffer[(deps.inventoryID)].slots)})
         for i, j in imports.pairs(CInventory.CItems) do
             if saveProgress then
                 CInventory.setItemProperty(cThread, deps.inventoryID, {j.ref}, {
