@@ -74,34 +74,32 @@ function thread.public:pause()
     return imports.coroutine.yield()
 end
 
+function thread.private.resume(cThread)
+    if not thread.public:isInstance(cThread) or cThread.isAwaiting then return false end
+    if cThread:status() == "dead" then cThread:destroy(); return false end
+    if cThread:status() == "suspended" then imports.coroutine.resume(cThread.thread, cThread) end
+    if cThread:status() == "dead" then cThread:destroy() end
+    return true
+end
+
 function thread.public:resume(syncRate)
     if not thread.public:isInstance(self) then return false end
     self.syncRate.executions = (syncRate and imports.tonumber(syncRate.executions)) or false
     self.syncRate.frames = (self.syncRate.executions and syncRate and imports.tonumber(syncRate.frames)) or false
-    if self.syncRate.executions and self.syncRate.frames then
-        imports.coroutine.resume(self.thread, self)
-        if self:status() == "dead" then
-            self:destroy()
-        else
-            self.timer = timer:create(function()
-                if self.isAwaiting then return false end
-                if self:status() == "suspended" then
-                    for i = 1, self.syncRate.executions, 1 do
-                        if self.isAwaiting then return false end
-                        if self:status() == "dead" then return self:destroy() end
-                        imports.coroutine.resume(self.thread, self)
-                    end
-                end
-                if self:status() == "dead" then self:destroy() end
-            end, self.syncRate.frames, 0)
+    if not self.syncRate.executions or not self.syncRate.frames then return thread.private.resume(self) end
+    if self.timer then self.timer:destroy() end
+    if not self.isAwaiting then
+        for i = 1, self.syncRate.executions, 1 do
+            thread.private.resume(self)
         end
-    else
-        if self.isAwaiting then return false end
-        if self.timer then self.timer:destroy() end
-        if self:status() == "suspended" then
-            imports.coroutine.resume(self.thread, self)
-        end
-        if self:status() == "dead" then self:destroy() end
+    end
+    if thread.public.isInstance(self) then
+        self.timer = timer:create(function()
+            if self.isAwaiting then return false end
+            for i = 1, self.syncRate.executions, 1 do
+                thread.private.resume(self)
+            end
+        end, self.syncRate.frames, 0)
     end
     return true
 end
