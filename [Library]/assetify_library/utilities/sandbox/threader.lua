@@ -79,8 +79,10 @@ function thread.public:resume(syncRate)
     self.syncRate.executions = (syncRate and imports.tonumber(syncRate.executions)) or false
     self.syncRate.frames = (self.syncRate.executions and syncRate and imports.tonumber(syncRate.frames)) or false
     if self.syncRate.executions and self.syncRate.frames then
-        self:resume()
-        if self:status() == "suspended" then
+        imports.coroutine.resume(self.thread, self)
+        if self:status() == "dead" then
+            self:destroy()
+        else
             self.timer = timer:create(function()
                 if self.isAwaiting then return false end
                 if self:status() == "suspended" then
