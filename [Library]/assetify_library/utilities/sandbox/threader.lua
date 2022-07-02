@@ -56,18 +56,15 @@ end
 
 function thread.public:destroy()
     if not thread.public:isInstance(self) then return false end
-    if self.timer then self.timer:destroy() end
+    if self.timer then print("Destroyed Timer -1"); self.timer:destroy() end
+    print("Destroyed Timer -2")
     self:destroyInstance()
     return true
 end
 
 function thread.public:status()
     if not thread.public:isInstance(self) then return false end
-    if not self.thread then
-        return "dead"
-    else
-        return imports.coroutine.status(self.thread)
-    end
+    return (not self.thread and "dead") or imports.coroutine.status(self.thread)
 end
 
 function thread.public:pause()
@@ -93,7 +90,6 @@ function thread.public:resume(syncRate)
     if not executions or not frames then return thread.private.resume(self, true) end
     if self.timer then self.timer:destroy() end
     self.syncRate.executions, self.syncRate.frames = executions, frames
-    self.syncRate.executions = 2
     if not self.isAwaiting then
         for i = 1, self.syncRate.executions, 1 do
             thread.private.resume(self)
@@ -102,6 +98,7 @@ function thread.public:resume(syncRate)
     end
     if thread.public:isInstance(self) then
         self.timer = timer:create(function()
+            print("TEST 2")
             if self.isAwaiting then return false end
             for i = 1, self.syncRate.executions, 1 do
                 thread.private.resume(self)
