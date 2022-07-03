@@ -85,12 +85,11 @@ syncer.private.execOnLoad(function() syncer.public.isLibraryLoaded = true end)
 syncer.private.execOnModuleLoad(function() syncer.public.isModuleLoaded = true end)
 
 if localPlayer then
-    syncer.public.scheduledAssets = {}
     settings.assetPacks = {}
+    syncer.public.scheduledAssets = {}
     network:create("Assetify:onAssetLoad")
     network:create("Assetify:onAssetUnload")
     syncer.private.execOnLoad(function() network:emit("Assetify:onRequestPostSyncPool", true, false, localPlayer) end)
-
     function syncer.public:syncElementModel(...) return network:emit("Assetify:onRecieveSyncedElement", false, ...)end
     function syncer.public:syncAssetDummy(...) return dummy:create(...) end
     function syncer.public:syncGlobalData(...) return network:emit("Assetify:onRecieveSyncedGlobalData", false, ...) end
@@ -279,7 +278,6 @@ else
     syncer.public.libraryVersion = imports.getResourceInfo(resource, "version")
     syncer.public.libraryVersion = (syncer.public.libraryVersion and "v."..syncer.public.libraryVersion) or syncer.public.libraryVersion
     syncer.public.loadedClients, syncer.public.scheduledClients = {}, {}
-
     function syncer.public:syncHash(player, ...) return network:emit("Assetify:onRecieveHash", true, false, player, ...) end
     function syncer.public:syncData(player, ...) return network:emit("Assetify:onRecieveData", true, false, player, ...) end
     function syncer.public:syncContent(player, ...) return network:emit("Assetify:onRecieveContent", true, false, player, ...) end
