@@ -49,7 +49,7 @@
     <script src="utilities/shader.lua" type="shared"/>
     <script src="utilities/manager.lua" type="shared"/>
     <script src="utilities/scene.lua" type="client"/>
-    <script src="utilities/bone.lua" type="client"/>
+    <script src="utilities/bone.lua" type="shared"/>
     <script src="utilities/streamer.lua" type="client"/>
     <script src="utilities/light.lua" type="client"/>
     <script src="utilities/lights/planar.lua" type="client"/>
