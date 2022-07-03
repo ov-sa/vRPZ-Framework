@@ -235,11 +235,11 @@ if localPlayer then
         local modelID = manager:getID(assetType, assetName, assetClump)
         if modelID then
             syncer.public.syncedElements[element] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps}
-            shader:clearElementBuffer(element, "clump")
             thread:createHeartbeat(function()
                 return not imports.isElement(element)
             end, function()
                 if clumpMaps then
+                    shader:clearElementBuffer(element, "clump")
                     local cAsset = manager:getData(assetType, assetName, syncer.public.librarySerial)
                     if cAsset and cAsset.manifestData.shaderMaps and cAsset.manifestData.shaderMaps.clump then
                         for i, j in imports.pairs(clumpMaps) do
