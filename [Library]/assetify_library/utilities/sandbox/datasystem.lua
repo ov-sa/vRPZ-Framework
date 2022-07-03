@@ -70,7 +70,6 @@ else
         end
         return true
     end
-
     function syncer.public:syncEntityData(element, data, value, isSync, targetPlayer, remoteSignature)
         if not targetPlayer then return network:emit("Assetify:onRecieveSyncedEntityData", true, false, targetPlayer, element, data, value, remoteSignature) end
         if not element or not imports.isElement(element) or not data or (imports.type(data) ~= "string") then return false end
