@@ -140,7 +140,7 @@ function thread.public:resolve(...)
     timer:create(function(...)
         self.isAwaiting = nil
         self.awaitingValues = table:pack(...)
-        thread.private.resume(...)
+        thread.private.resume(self)
     end, 1, 1, ...)
     return true
 end
