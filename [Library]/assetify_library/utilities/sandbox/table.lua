@@ -16,6 +16,8 @@ local imports = {
     type = type,
     pairs = pairs,
     tonumber = tonumber,
+    toJSON = toJSON,
+    fromJSON = fromJSON,
     select = select,
     unpack = unpack,
     table = table
@@ -37,6 +39,14 @@ end
 function table.public:unpack(baseTable)
     if not baseTable or (imports.type(baseTable) ~= "table") then return false end
     return imports.unpack(baseTable, 1, (baseTable.__T and baseTable.__T.length) or #baseTable)
+end
+
+function table.publc:encode(baseTable)
+    return (baseTable and (imports.type(baseTable) == "table") and imports.toJSON(baseTable)) or false
+end
+
+function table.publc:decode(baseString)
+    return (baseString and (imports.type(baseString) == "string") and imports.fromJSON(baseString)) or false
 end
 
 function table.public:clone(baseTable, isRecursive)

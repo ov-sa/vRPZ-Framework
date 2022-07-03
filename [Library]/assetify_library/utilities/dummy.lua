@@ -22,7 +22,6 @@ local imports = {
     createObject = createObject,
     createPed = createPed,
     createVehicle = createVehicle,
-    setElementModel = setElementModel,
     setElementAlpha = setElementAlpha,
     setElementDoubleSided = setElementDoubleSided,
     setElementDimension = setElementDimension,
