@@ -21,6 +21,7 @@ FRAMEWORK_CONFIGS["Character"] = {
         ["Gender"] = {
             ["Male"] = {
                 assetName = "vRPZ_Male",
+                walkingStyle = 0,
                 ["EN"] = "Male",
                 ["TR"] = "Erkek",
                 ["RU"] = "Мужской",
@@ -29,6 +30,7 @@ FRAMEWORK_CONFIGS["Character"] = {
             },
             --[[["Female"] = {
                 assetName = "vRPZ_Female",
+                walkingStyle = 0,
                 ["EN"] = "Female",
                 ["TR"] = "Dişi",
                 ["RU"] = "женский",
