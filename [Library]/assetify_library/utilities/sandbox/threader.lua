@@ -63,7 +63,7 @@ end
 
 function thread.public:status()
     if not thread.public:isInstance(self) then return false end
-    return (not self.thread and "dead") or imports.coroutine.status(self.thread)
+    return imports.coroutine.status(self.thread)
 end
 
 function thread.public:pause()
@@ -89,21 +89,24 @@ function thread.public:resume(syncRate)
     if not executions or not frames then return thread.private.resume(self, true) end
     if self.timer and timer:isInstance(self.timer) then self.timer:destroy() end
     self.syncRate.executions, self.syncRate.frames = executions, frames
-    if not self.isAwaiting then
-        for i = 1, self.syncRate.executions, 1 do
-            thread.private.resume(self)
-            if not thread.public:isInstance(self) then break end
-        end
-    end
-    if thread.public:isInstance(self) then
-        self.timer = timer:create(function()
-            if self.isAwaiting then return false end
+    timer:create(function(...)
+        if not self.isAwaiting then
             for i = 1, self.syncRate.executions, 1 do
                 thread.private.resume(self)
                 if not thread.public:isInstance(self) then break end
             end
-        end, self.syncRate.frames, 0)
-    end
+        end
+        if thread.public:isInstance(self) then
+            self.timer = timer:create(function()
+                print("wot")
+                if self.isAwaiting then return false end
+                for i = 1, self.syncRate.executions, 1 do
+                    thread.private.resume(self)
+                    if not thread.public:isInstance(self) then break end
+                end
+            end, self.syncRate.frames, 0)
+        end
+    end, 1, 1)
     return true
 end
 
@@ -112,7 +115,7 @@ function thread.public:sleep(duration)
     if not thread.public:isInstance(self) then return false end
     if self.timer and timer:isInstance(self.timer) then return false end
     self.isAwaiting = "sleep"
-    self.timer = timer:create(function()
+    timer = timer:create(function()
         self.isAwaiting = nil
         self:resume()
     end, duration, 1)
@@ -122,7 +125,7 @@ end
 
 function thread.public:await(exec)
     if not thread.public:isInstance(self) then return false end
-    if not exec or imports.type(exec) ~= "function" then return self:resolve(exec) end
+    if not exec or (imports.type(exec) ~= "function") then return exec end
     self.isAwaiting = "promise"
     exec(self)
     thread.public:pause()
@@ -134,11 +137,13 @@ end
 function thread.public:resolve(...)
     if not thread.public:isInstance(self) then return false end
     if not self.isAwaiting or (self.isAwaiting ~= "promise") then return false end
-    self.isAwaiting = nil
-    self.awaitingValues = table:pack(...)
-    timer:create(function()
-        self:resume()
-    end, 1, 1)
+    timer:create(function(...)
+        self.isAwaiting = nil
+        self.awaitingValues = table:pack(...)
+        if not self.timer or not timer:isInstance(self.timer) then
+            thread.private.resume(...)
+        end
+    end, 1, 1, ...)
     return true
 end
 
