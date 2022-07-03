@@ -57,6 +57,7 @@ end
 function thread.public:destroy()
     if not thread.public:isInstance(self) then return false end
     if self.intervalTimer and timer:isInstance(self.intervalTimer) then self.intervalTimer:destroy() end
+    if self.sleepTimer and timer:isInstance(self.sleepTimer) then self.sleepTimer:destroy() end
     self:destroyInstance()
     return true
 end
@@ -111,8 +112,8 @@ end
 
 function thread.public:sleep(duration)
     duration = imports.math.max(0, imports.tonumber(duration) or 0)
-    if not thread.public:isInstance(self) then return false end
-    if self.intervalTimer and timer:isInstance(self.intervalTimer) then return false end
+    if not thread.public:isInstance(self) or self.isAwaiting then return false end
+    if self.sleepTimer and timer:isInstance(self.sleepTimer) then return false end
     self.isAwaiting = "sleep"
     self.sleepTimer = timer:create(function()
         self.isAwaiting = nil
