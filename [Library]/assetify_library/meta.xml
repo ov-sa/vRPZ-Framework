@@ -24,6 +24,8 @@
     <script src="utilities/sandbox/timer.lua" type="shared"/>
     <script src="utilities/sandbox/threader.lua" type="shared"/>
     <script src="utilities/sandbox/networker.lua" type="shared"/>
+    <script src="utilities/syncer.lua" type="shared"/>
+    <script src="utilities/sandbox/datasystem.lua" type="shared"/>
 
     <!-- Utilities: Shaders -->
     <file src="utilities/rw/dict.rw"/>
@@ -42,7 +44,6 @@
     <script src="utilities/shaders/light_planar.lua" type="client"/>
 
     <!-- Utilities -->
-    <script src="utilities/syncer.lua" type="shared"/>
     <script src="utilities/asset.lua" type="shared"/>
     <script src="utilities/dummy.lua" type="shared"/>
     <script src="utilities/renderer.lua" type="shared"/>

@@ -44,8 +44,6 @@ local syncer = class:create("syncer", {
     isLibraryLoaded = false,
     isModuleLoaded = false,
     libraryBandwidth = 0,
-    syncedGlobalDatas = {},
-    syncedEntityDatas = {},
     syncedElements = {},
     syncedAssetDummies = {},
     syncedBoneAttachments = {},
@@ -59,8 +57,6 @@ function syncer.public:import() return syncer end
 network:create("Assetify:onLoad")
 network:create("Assetify:onUnload")
 network:create("Assetify:onModuleLoad")
-network:create("Assetify:onGlobalDataChange")
-network:create("Assetify:onEntityDataChange")
 syncer.private.execOnLoad = function(execFunc)
     local execWrapper = nil
     execWrapper = function()
@@ -88,8 +84,6 @@ if localPlayer then
     network:create("Assetify:onAssetLoad")
     network:create("Assetify:onAssetUnload")
     syncer.private.execOnLoad(function() network:emit("Assetify:onRequestPostSyncPool", true, false, localPlayer) end)
-    function syncer.public:syncElementModel(...) return network:emit("Assetify:onRecieveSyncedElement", false, ...) end
-    function syncer.public:syncGlobalData(...) return network:emit("Assetify:onRecieveSyncedGlobalData", false, ...) end
     function syncer.public:syncEntityData(element, data, value) return network:emit("Assetify:onRecieveSyncedEntityData", false, element, data, value) end
 
     network:create("Assetify:onRecieveBandwidth"):on(function(bandwidth) syncer.public.libraryBandwidth = bandwidth end)
@@ -207,21 +201,6 @@ if localPlayer then
         end
     end)
 
-    network:create("Assetify:onRecieveSyncedGlobalData"):on(function(data, value)
-        if not data or (imports.type(data) ~= "string") then return false end
-        local __value = syncer.public.syncedGlobalDatas[data]
-        syncer.public.syncedGlobalDatas[data] = value
-        network:emit("Assetify:onGlobalDataChange", false, data, __value, value)
-    end)
-
-    network:create("Assetify:onRecieveSyncedEntityData"):on(function(element, data, value, remoteSignature)
-        if not element or (not remoteSignature and not imports.isElement(element)) or not data or (imports.type(data) ~= "string") then return false end
-        syncer.public.syncedEntityDatas[element] = syncer.public.syncedEntityDatas[element] or {}
-        local __value = syncer.public.syncedEntityDatas[element][data]
-        syncer.public.syncedEntityDatas[element][data] = value
-        network:emit("Assetify:onEntityDataChange", false, element, data, __value, value)
-    end)
-
     network:create("Assetify:onRecieveSyncedElement"):on(function(element, assetType, assetName, assetClump, clumpMaps, remoteSignature)
         if not element or (not remoteSignature and not imports.isElement(element)) then return false end
         local modelID = manager:getID(assetType, assetName, assetClump)
@@ -270,64 +249,6 @@ else
     function syncer.public:syncData(player, ...) return network:emit("Assetify:onRecieveData", true, false, player, ...) end
     function syncer.public:syncContent(player, ...) return network:emit("Assetify:onRecieveContent", true, false, player, ...) end
     function syncer.public:syncState(player, ...) return network:emit("Assetify:onRecieveState", true, false, player, ...) end
-
-    function syncer.public:syncGlobalData(data, value, isSync, targetPlayer)
-        if not data or (imports.type(data) ~= "string") then return false end
-        if not targetPlayer then
-            local __value = syncer.public.syncedGlobalDatas[data]
-            syncer.public.syncedGlobalDatas[data] = value
-            network:emit("Assetify:onGlobalDataChange", false, data, __value, value)
-            local execWrapper = nil
-            execWrapper = function()
-                for i, j in imports.pairs(syncer.public.loadedClients) do
-                    syncer.public:syncGlobalData(data, value, isSync, i)
-                    if not isSync then thread:pause() end
-                end
-                execWrapper = nil
-            end
-            if isSync then
-                execWrapper()
-            else
-                thread:create(execWrapper):resume({
-                    executions = settings.downloader.syncRate,
-                    frames = 1
-                })
-            end
-        else
-            network:emit("Assetify:onRecieveSyncedGlobalData", true, false, targetPlayer, data, value)
-        end
-        return true
-    end
-
-    function syncer.public:syncEntityData(element, data, value, isSync, targetPlayer, remoteSignature)
-        if not targetPlayer then
-            if not element or not imports.isElement(element) or not data or (imports.type(data) ~= "string") then return false end
-            remoteSignature = imports.getElementType(element)
-            syncer.public.syncedEntityDatas[element] = syncer.public.syncedEntityDatas[element] or {}
-            local __value = syncer.public.syncedEntityDatas[element][data]
-            syncer.public.syncedEntityDatas[element][data] = value
-            network:emit("Assetify:onEntityDataChange", false, element, data, __value, value)
-            local execWrapper = nil
-            execWrapper = function()
-                for i, j in imports.pairs(syncer.public.loadedClients) do
-                    syncer.public:syncEntityData(element, data, value, isSync, i, remoteSignature)
-                    if not isSync then thread:pause() end
-                end
-                execWrapper = nil
-            end
-            if isSync then
-                execWrapper()
-            else
-                thread:create(execWrapper):resume({
-                    executions = settings.downloader.syncRate,
-                    frames = 1
-                })
-            end
-        else
-            network:emit("Assetify:onRecieveSyncedEntityData", true, false, targetPlayer, element, data, value, remoteSignature)
-        end
-        return true
-    end
 
     function syncer.public:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, targetPlayer, remoteSignature)
         if not targetPlayer then
