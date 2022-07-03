@@ -6,7 +6,9 @@ local imports = {
     tonumber = tonumber,
     isElement = isElement,
     getElementType = getElementType,
-    getPlayerName = getPlayerName
+    getPlayerName = getPlayerName,
+    setPedWalkingStyle = setPedWalkingStyle,
+    getPedWalkingStyle = getPedWalkingStyle
 }
 
 
@@ -36,6 +38,16 @@ CPlayer = {
     getCharacterID = function(player)
         if not CPlayer.isInitialized(player) then return false end
         return imports.tonumber(CGame.getEntityData(player, "Character:ID")) or false
+    end,
+
+    setWalkingStyle = function(player, style)
+        if not CPlayer.isInitialized(player) or not style then return false end
+        return imports.setPedWalkingStyle(player, style)
+    end,
+
+    getWalkingStyle = function(player)
+        if not CPlayer.isInitialized(player) then return false end
+        return imports.getPedWalkingStyle(player)
     end,
 
     setRole = function(player, role)

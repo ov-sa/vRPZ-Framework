@@ -7,6 +7,8 @@ CGame.exportModule("CPlayer", {
     "getLogged",
     "getName",
     "getCharacterID",
+    "setWalkingStyle",
+    "getWalkingStyle",
     "setRole",
     "getRole",
     "setVIPDuration",
