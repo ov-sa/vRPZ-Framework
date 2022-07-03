@@ -57,6 +57,7 @@ local syncer = class:create("syncer", {
 syncer.public.libraryName = imports.getResourceName(syncer.public.libraryResource)
 syncer.public.librarySource = "https://api.github.com/repos/ov-sa/Assetify-Library/releases/latest"
 syncer.public.librarySerial = imports.md5(syncer.public.libraryName..":"..imports.tostring(syncer.public.libraryResource)..":"..imports.json.encode(imports.getRealTime()))
+function syncer.public:import() return syncer end
 
 network:create("Assetify:onLoad")
 network:create("Assetify:onUnload")
