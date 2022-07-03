@@ -14,6 +14,7 @@
 
 local syncer = syncer:import()
 local imports = {
+    pairs = pairs,
     tonumber = tonumber,
     isElement = isElement,
     getElementType = getElementType,
