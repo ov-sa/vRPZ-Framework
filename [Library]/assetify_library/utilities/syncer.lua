@@ -89,49 +89,18 @@ if localPlayer then
     settings.assetPacks = {}
     network:create("Assetify:onAssetLoad")
     network:create("Assetify:onAssetUnload")
+    syncer.private.execOnLoad(function() network:emit("Assetify:onRequestPostSyncPool", true, false, localPlayer) end)
 
-    function syncer.public:syncElementModel(...)
-        return network:emit("Assetify:onRecieveSyncedElement", false, ...)
-    end
+    function syncer.public:syncElementModel(...) return network:emit("Assetify:onRecieveSyncedElement", false, ...)end
+    function syncer.public:syncAssetDummy(...) return dummy:create(...) end
+    function syncer.public:syncGlobalData(...) return network:emit("Assetify:onRecieveSyncedGlobalData", false, ...) end
+    function syncer.public:syncEntityData(element, data, value) return network:emit("Assetify:onRecieveSyncedEntityData", false, element, data, value) end
+    function syncer.public:syncBoneAttachment(...) return bone:create(...) end
+    function syncer.public:syncBoneDetachment(element, ...) if not element or not bone.buffer.element[element] then return false end; return bone.buffer.element[element]:destroy() end
+    function syncer.public:syncBoneRefreshment(element, ...) if not element or not bone.buffer.element[element] then return false end; return bone.buffer.element[element]:refresh(...) end
+    function syncer.public:syncClearBoneAttachment(...) return bone:clearElementBuffer(...) end
 
-    function syncer.public:syncAssetDummy(...)
-        return dummy:create(...)
-    end
-
-    function syncer.public:syncGlobalData(...)
-        return network:emit("Assetify:onRecieveSyncedGlobalData", false, ...)
-    end
-
-    function syncer.public:syncEntityData(element, data, value)
-        return network:emit("Assetify:onRecieveSyncedEntityData", false, element, data, value)
-    end
-
-    function syncer.public:syncBoneAttachment(...)
-        return bone:create(...)
-    end
-
-    function syncer.public:syncBoneDetachment(element, ...)
-        if not element or not bone.buffer.element[element] then return false end
-        return bone.buffer.element[element]:destroy()
-    end
-
-    function syncer.public:syncBoneRefreshment(element, ...)
-        if not element or not bone.buffer.element[element] then return false end
-        return bone.buffer.element[element]:refresh(...)
-    end
-
-    function syncer.public:syncClearBoneAttachment(...)
-        return bone:clearElementBuffer(...)
-    end
-
-    network:fetch("Assetify:onLoad"):on(function()
-        network:emit("Assetify:onRequestPostSyncPool", true, false, localPlayer)
-    end)
-
-    network:create("Assetify:onRecieveBandwidth"):on(function(bandwidth)
-        syncer.public.libraryBandwidth = bandwidth
-    end)
-
+    network:create("Assetify:onRecieveBandwidth"):on(function(bandwidth) syncer.public.libraryBandwidth = bandwidth end)
     network:create("Assetify:onRecieveHash"):on(function(assetType, assetName, hashes)
         if not syncer.public.scheduledAssets[assetType] then syncer.public.scheduledAssets[assetType] = {} end
         syncer.public.scheduledAssets[assetType][assetName] = syncer.public.scheduledAssets[assetType][assetName] or {
@@ -305,29 +274,16 @@ if localPlayer then
             end
         end
     end)
-    imports.addEventHandler("onClientElementDestroy", root, function()
-        network:emit("Assetify:onElementDestroy", false, source)
-    end)
+    imports.addEventHandler("onClientElementDestroy", root, function() network:emit("Assetify:onElementDestroy", false, source) end)
 else
     syncer.public.libraryVersion = imports.getResourceInfo(resource, "version")
     syncer.public.libraryVersion = (syncer.public.libraryVersion and "v."..syncer.public.libraryVersion) or syncer.public.libraryVersion
     syncer.public.loadedClients, syncer.public.scheduledClients = {}, {}
 
-    function syncer.public:syncHash(player, ...)
-        return network:emit("Assetify:onRecieveHash", true, false, player, ...)
-    end
-
-    function syncer.public:syncData(player, ...)
-        return network:emit("Assetify:onRecieveData", true, false, player, ...)
-    end
-
-    function syncer.public:syncContent(player, ...)
-        return network:emit("Assetify:onRecieveContent", true, false, player, ...)
-    end
-
-    function syncer.public:syncState(player, ...)
-        return network:emit("Assetify:onRecieveState", true, false, player, ...)
-    end
+    function syncer.public:syncHash(player, ...) return network:emit("Assetify:onRecieveHash", true, false, player, ...) end
+    function syncer.public:syncData(player, ...) return network:emit("Assetify:onRecieveData", true, false, player, ...) end
+    function syncer.public:syncContent(player, ...) return network:emit("Assetify:onRecieveContent", true, false, player, ...) end
+    function syncer.public:syncState(player, ...) return network:emit("Assetify:onRecieveState", true, false, player, ...) end
 
     function syncer.public:syncGlobalData(data, value, isSync, targetPlayer)
         if not data or (imports.type(data) ~= "string") then return false end
