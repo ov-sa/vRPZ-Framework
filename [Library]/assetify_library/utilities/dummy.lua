@@ -12,9 +12,11 @@
 --[[ Imports ]]--
 -----------------
 
+local syncer = syncer:import()
 local imports = {
     tonumber = tonumber,
     isElement = isElement,
+    getElementType = getElementType,
     destroyElement = destroyElement,
     createObject = createObject,
     createPed = createPed,
@@ -135,6 +137,10 @@ if localPlayer then
         self:destroyInstance()
         return true
     end
+
+    --->>> API Syncer <<<---
+    function syncer.public:syncAssetDummy(...) return dummy:create(...) end
+    network:create("Assetify:onRecieveAssetDummy"):on(function(...) syncer.public:syncAssetDummy(...) end)
 else
     function dummy.public:create(assetType, assetName, assetClump, clumpMaps, dummyData)
         if not dummyData then return false end
@@ -158,5 +164,21 @@ else
         imports.setElementDimension(cDummy, imports.tonumber(dummyData.dimension) or 0)
         imports.setElementInterior(cDummy, imports.tonumber(dummyData.interior) or 0)
         return cDummy
+    end
+
+    --->>> API Syncer <<<---
+    function syncer.public:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer, targetDummy, remoteSignature)    
+        if targetPlayer then return network:emit("Assetify:onRecieveAssetDummy", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, remoteSignature) end
+        targetDummy = dummy:create(assetType, assetName, assetClump, clumpMaps, dummyData)
+        if not targetDummy then return false end
+        remoteSignature = imports.getElementType(targetDummy)
+        syncer.public.syncedAssetDummies[targetDummy] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps, dummyData = dummyData}
+        thread:create(function(self)
+            for i, j in imports.pairs(syncer.public.loadedClients) do
+                syncer.public:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, i, targetDummy, remoteSignature)
+                thread:pause()
+            end
+        end):resume({executions = settings.downloader.syncRate, frames = 1})
+        return targetDummy
     end
 end

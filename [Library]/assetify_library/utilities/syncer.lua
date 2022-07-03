@@ -92,7 +92,6 @@ if localPlayer then
     network:create("Assetify:onAssetUnload")
     syncer.private.execOnLoad(function() network:emit("Assetify:onRequestPostSyncPool", true, false, localPlayer) end)
     function syncer.public:syncElementModel(...) return network:emit("Assetify:onRecieveSyncedElement", false, ...)end
-    function syncer.public:syncAssetDummy(...) return dummy:create(...) end
     function syncer.public:syncGlobalData(...) return network:emit("Assetify:onRecieveSyncedGlobalData", false, ...) end
     function syncer.public:syncEntityData(element, data, value) return network:emit("Assetify:onRecieveSyncedEntityData", false, element, data, value) end
 
@@ -250,7 +249,6 @@ if localPlayer then
         end
     end)
 
-    network:create("Assetify:onRecieveAssetDummy"):on(function(...) syncer.public:syncAssetDummy(...) end)
     imports.addEventHandler("onClientElementDimensionChange", localPlayer, function(dimension) streamer:update(dimension) end)
     imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(interior) streamer:update(_, interior) end)
     network:create("Assetify:onElementDestroy"):on(function(source)
@@ -352,28 +350,6 @@ else
             })
         else
             network:emit("Assetify:onRecieveSyncedElement", true, false, targetPlayer, element, assetType, assetName, assetClump, clumpMaps, remoteSignature)
-        end
-        return true
-    end
-
-    function syncer.public:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer, targetDummy, remoteSignature)    
-        if not targetPlayer then
-            targetDummy = dummy:create(assetType, assetName, assetClump, clumpMaps, dummyData)
-            if not targetDummy then return false end
-            remoteSignature = imports.getElementType(targetDummy)
-            syncer.public.syncedAssetDummies[targetDummy] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps, dummyData = dummyData}
-            thread:create(function(self)
-                for i, j in imports.pairs(syncer.public.loadedClients) do
-                    syncer.public:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, i, targetDummy, remoteSignature)
-                    thread:pause()
-                end
-            end):resume({
-                executions = settings.downloader.syncRate,
-                frames = 1
-            })
-            return targetDummy
-        else
-            network:emit("Assetify:onRecieveAssetDummy", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, remoteSignature)
         end
         return true
     end
