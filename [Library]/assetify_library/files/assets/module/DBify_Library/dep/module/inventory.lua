@@ -11,7 +11,6 @@ local imports = {
     dbQuery = dbQuery,
     dbPoll = dbPoll,
     dbExec = dbExec,
-    json = json,
     table = table,
     string = string,
     table = table,
@@ -39,13 +38,13 @@ local cUtility = {
                     j[1] = "item_"..imports.tostring(j[1])
                     j[2] = imports.math.max(0, imports.tonumber(j[2]) or 0)
                     local prevItemData = result[(j[1])]
-                    prevItemData = (prevItemData and imports.json.decode(prevItemData)) or false
+                    prevItemData = (prevItemData and imports.table:decode(prevItemData)) or false
                     prevItemData = (prevItemData and prevItemData.data and (imports.type(prevItemData.data) == "table") and prevItemData.item and (imports.type(prevItemData.item) == "table") and prevItemData) or false
                     if not prevItemData then
                         prevItemData = imports.table:clone(dbify.inventory.connection.item.content, true)
                     end
                     prevItemData.property[(dbify.inventory.connection.item.counter)] = j[2] + (imports.math.max(0, imports.tonumber(prevItemData.property[(dbify.inventory.connection.item.counter)]) or 0)*((cArgs[1].processType == "push" and 1) or -1))
-                    cArgs[1].items[i][2] = imports.json.encode(prevItemData)
+                    cArgs[1].items[i][2] = imports.table:encode(prevItemData)
                 end
                 dbify.inventory.setData(cArgs[1].inventoryID, cArgs[1].items, function(result, cArgs)
                     local callback = callback
@@ -79,7 +78,7 @@ local cUtility = {
             if result then
                 local properties = {}
                 for i, j in imports.pairs(result) do
-                    j = (j and imports.json.decode(j)) or false
+                    j = (j and imports.table:decode(j)) or false
                     j = (j and j.data and (imports.type(j.data) == "table") and j.property and (imports.type(j.property) == "table") and j) or false
                     if cArgs[1].processType == "set" then
                         if not j then
@@ -93,7 +92,7 @@ local cUtility = {
                             end
                             j.property[(v[1])] = v[2]
                         end
-                        imports.table:insert(properties, {i, imports.json.encode(j)})
+                        imports.table:insert(properties, {i, imports.table:encode(j)})
                     else
                         local itemIndex = imports.string.gsub(i, "item_", "", 1)
                         properties[itemIndex] = {}
@@ -143,7 +142,7 @@ local cUtility = {
             if result then
                 local datas = {}
                 for i, j in imports.pairs(result) do
-                    j = (j and imports.json.decode(j)) or false
+                    j = (j and imports.table:decode(j)) or false
                     j = (j and j.data and (imports.type(j.data) == "table") and j.property and (imports.type(j.property) == "table") and j) or false
                     if cArgs[1].processType == "set" then
                         if not j then
@@ -153,7 +152,7 @@ local cUtility = {
                             local v = cArgs[1].datas[k]
                             j.data[imports.tostring(v[1])] = v[2]
                         end
-                        imports.table:insert(datas, {i, imports.json.encode(j)})
+                        imports.table:insert(datas, {i, imports.table:encode(j)})
                     else
                         local itemIndex = imports.string.gsub(i, "item_", "", 1)
                         datas[itemIndex] = {}

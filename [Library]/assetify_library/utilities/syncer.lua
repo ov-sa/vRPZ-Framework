@@ -31,7 +31,7 @@ local imports = {
     getResourceRootElement = getResourceRootElement,
     fetchRemote = fetchRemote,
     loadAsset = loadAsset,
-    json = json
+    table = table
 }
 
 
@@ -53,7 +53,7 @@ local syncer = class:create("syncer", {
 })
 syncer.public.libraryName = imports.getResourceName(syncer.public.libraryResource)
 syncer.public.librarySource = "https://api.github.com/repos/ov-sa/Assetify-Library/releases/latest"
-syncer.public.librarySerial = imports.md5(syncer.public.libraryName..":"..imports.tostring(syncer.public.libraryResource)..":"..imports.json.encode(imports.getRealTime()))
+syncer.public.librarySerial = imports.md5(syncer.public.libraryName..":"..imports.tostring(syncer.public.libraryResource)..":"..imports.table:encode(imports.getRealTime()))
 
 function syncer.public:import() return syncer end
 network:create("Assetify:onLoad")
@@ -497,7 +497,7 @@ else
 
     imports.fetchRemote(syncer.public.librarySource, function(response, status)
         if not response or not status or (status ~= 0) then return false end
-        response = imports.json.decode(response)
+        response = imports.table:decode(response)
         if response and response.tag_name and (syncer.public.libraryVersion ~= response.tag_name) then
             imports.outputDebugString("[Assetify]: Latest version available - "..response.tag_name, 3)
         end

@@ -20,8 +20,6 @@ local imports = {
     setmetatable = setmetatable,
     getElementMatrix = getElementMatrix,
     getElementPosition = getElementPosition,
-    toJSON = toJSON,
-    fromJSON = fromJSON,
     utf8 = utf8,
     table = table,
     string = string,
@@ -80,16 +78,6 @@ utf8.gsub = function(string, matchWord, replaceWord, matchLimit, isStrictcMatch,
     matchWord = (isStrictcMatch and "%f[^"..matchPrefix.."%z%s]"..matchWord.."%f["..matchPostfix.."%z%s]") or matchPrefix..matchWord..matchPostfix
     return __utf8_gsub(string, matchWord, replaceWord, matchLimit)
 end
-
-
----------------------
---[[ Class: JSON ]]--
----------------------
-
-json = {
-    encode = imports.toJSON,
-    decode = imports.fromJSON
-}
 
 
 ---------------------

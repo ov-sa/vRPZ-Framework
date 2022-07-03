@@ -35,8 +35,7 @@ local imports = {
     engineImportTXD = engineImportTXD,
     engineReplaceModel = engineReplaceModel,
     engineReplaceCOL = engineReplaceCOL,
-    utf8 = utf8,
-    json = json,
+    table = table,
     string = string,
     math = math
 }
@@ -236,7 +235,7 @@ else
     function asset.public:buildManifest(rootPath, localPath, manifestPath)
         localPath = localPath or rootPath
         local manifestData = file:read(localPath..manifestPath)
-        manifestData = (manifestData and imports.json.decode(manifestData)) or false
+        manifestData = (manifestData and imports.table:decode(manifestData)) or false
         if manifestData then
             for i, j in imports.pairs(manifestData) do
                 local cURL = file:parseURL(j)
@@ -354,7 +353,7 @@ else
         if not assetType or not assetPack or not callback or (imports.type(callback) ~= "function") then return false end
         local cAssetPack = table:clone(assetPack, true)
         cAssetPack.manifestData = file:read((asset.public.references.root)..imports.string.lower(assetType).."/"..(asset.public.references.manifest)..".json")
-        cAssetPack.manifestData = (cAssetPack.manifestData and imports.json.decode(cAssetPack.manifestData)) or false
+        cAssetPack.manifestData = (cAssetPack.manifestData and imports.table:decode(cAssetPack.manifestData)) or false
         if cAssetPack.manifestData then
             cAssetPack.rwDatas = {}
             thread:create(function(self)
