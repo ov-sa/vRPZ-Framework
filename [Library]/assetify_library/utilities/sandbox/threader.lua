@@ -140,9 +140,7 @@ function thread.public:resolve(...)
     timer:create(function(...)
         self.isAwaiting = nil
         self.awaitingValues = table:pack(...)
-        if not self.intervalTimer or not timer:isInstance(self.intervalTimer) then
-            thread.private.resume(...)
-        end
+        thread.private.resume(...)
     end, 1, 1, ...)
     return true
 end
