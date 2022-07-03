@@ -82,7 +82,7 @@ if localPlayer then
     network:create("Assetify:onAssetLoad")
     network:create("Assetify:onAssetUnload")
     syncer.private.execOnLoad(function() network:emit("Assetify:onRequestPostSyncPool", true, false, localPlayer) end)
-    function syncer.public:syncEntityData(element, data, value) return network:emit("Assetify:onRecieveSyncedEntityData", false, element, data, value) end
+    function syncer.public:syncElementModel(...) return network:emit("Assetify:onRecieveSyncedElement", false, ...) end
 
     network:create("Assetify:onRecieveBandwidth"):on(function(bandwidth) syncer.public.libraryBandwidth = bandwidth end)
     network:create("Assetify:onRecieveHash"):on(function(assetType, assetName, hashes)

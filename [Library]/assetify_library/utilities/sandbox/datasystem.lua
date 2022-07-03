@@ -32,8 +32,8 @@ network:create("Assetify:onEntityDataChange")
 
 if localPlayer then
     --->>> API Syncer <<<---
-    function syncer.public:syncElementModel(...) return network:emit("Assetify:onRecieveSyncedElement", false, ...) end
     function syncer.public:syncGlobalData(...) return network:emit("Assetify:onRecieveSyncedGlobalData", false, ...) end
+    function syncer.public:syncEntityData(element, data, value) return network:emit("Assetify:onRecieveSyncedEntityData", false, element, data, value) end
     network:create("Assetify:onRecieveSyncedGlobalData"):on(function(data, value)
         if not data or (imports.type(data) ~= "string") then return false end
         local __value = syncer.public.syncedGlobalDatas[data]
