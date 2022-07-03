@@ -41,11 +41,11 @@ function table.public:unpack(baseTable)
     return imports.unpack(baseTable, 1, (baseTable.__T and baseTable.__T.length) or #baseTable)
 end
 
-function table.publc:encode(baseTable)
+function table.public:encode(baseTable)
     return (baseTable and (imports.type(baseTable) == "table") and imports.toJSON(baseTable)) or false
 end
 
-function table.publc:decode(baseString)
+function table.public:decode(baseString)
     return (baseString and (imports.type(baseString) == "string") and imports.fromJSON(baseString)) or false
 end
 
