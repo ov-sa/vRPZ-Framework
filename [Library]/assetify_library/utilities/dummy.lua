@@ -142,6 +142,8 @@ if localPlayer then
     function syncer.public:syncAssetDummy(...) return dummy:create(...) end
     network:create("Assetify:onRecieveAssetDummy"):on(function(...) syncer.public:syncAssetDummy(...) end)
 else
+    syncer.public.syncedAssetDummies = {}
+
     function dummy.public:create(assetType, assetName, assetClump, clumpMaps, dummyData)
         if not dummyData then return false end
         local cAsset = manager:getData(assetType, assetName)
