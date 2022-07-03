@@ -98,7 +98,6 @@ function thread.public:resume(syncRate)
         end
         if thread.public:isInstance(self) then
             self.timer = timer:create(function()
-                print("wot")
                 if self.isAwaiting then return false end
                 for i = 1, self.syncRate.executions, 1 do
                     thread.private.resume(self)
