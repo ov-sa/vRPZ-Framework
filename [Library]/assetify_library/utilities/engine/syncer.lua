@@ -160,10 +160,7 @@ else
                 thread:pause()
             end
             __self:resume()
-        end):resume({
-            executions = settings.downloader.syncRate,
-            frames = 1
-        })
+        end):resume({executions = settings.downloader.syncRate, frames = 1})
         __self:pause()
         return true
     end, true)
@@ -173,27 +170,18 @@ else
         thread:create(function(self)
             local source = __source
             for i, j in imports.pairs(syncer.public.syncedElements) do
-                if j then
-                    syncer.public:syncElementModel(i, j.type, j.name, j.clump, j.clumpMaps, source)
-                end
+                if j then syncer.public:syncElementModel(i, j.type, j.name, j.clump, j.clumpMaps, source) end
                 thread:pause()
             end
             for i, j in imports.pairs(syncer.public.syncedAssetDummies) do
-                if j then
-                    syncer.public:syncAssetDummy(j.type, j.name, j.clump, j.clumpMaps, j.dummyData, i, source)
-                end
+                if j then syncer.public:syncAssetDummy(j.type, j.name, j.clump, j.clumpMaps, j.dummyData, i, source) end
                 thread:pause()
             end
             for i, j in imports.pairs(syncer.public.syncedBoneAttachments) do
-                if j then
-                    syncer.public:syncBoneAttachment(i, j.parent, j.boneData, source)
-                end
+                if j then syncer.public:syncBoneAttachment(i, j.parent, j.boneData, source) end
                 thread:pause()
             end
-        end):resume({
-            executions = settings.downloader.syncRate,
-            frames = 1
-        })
+        end):resume({executions = settings.downloader.syncRate, frames = 1})
     end)
 
     imports.addEventHandler("onPlayerResourceStart", root, function(resourceElement)
