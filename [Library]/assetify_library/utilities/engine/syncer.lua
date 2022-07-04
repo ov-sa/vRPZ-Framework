@@ -223,8 +223,6 @@ if localPlayer then
         end
     end)
 
-    imports.addEventHandler("onClientElementDimensionChange", localPlayer, function(dimension) streamer:update(dimension) end)
-    imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(interior) streamer:update(_, interior) end)
     network:create("Assetify:onElementDestroy"):on(function(source)
         if not source then return false end
         shader:clearElementBuffer(source)
@@ -249,24 +247,18 @@ else
     function syncer.public:syncState(player, ...) return network:emit("Assetify:onRecieveState", true, false, player, ...) end
 
     function syncer.public:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, targetPlayer, remoteSignature)
-        if not targetPlayer then
-            if not element or not imports.isElement(element) then return false end
-            local cAsset = manager:getData(assetType, assetName)
-            if not cAsset or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
-            remoteSignature = imports.getElementType(element)
-            syncer.public.syncedElements[element] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps}
-            thread:create(function(self)
-                for i, j in imports.pairs(syncer.public.loadedClients) do
-                    syncer.public:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, i, remoteSignature)
-                    thread:pause()
-                end
-            end):resume({
-                executions = settings.downloader.syncRate,
-                frames = 1
-            })
-        else
-            network:emit("Assetify:onRecieveSyncedElement", true, false, targetPlayer, element, assetType, assetName, assetClump, clumpMaps, remoteSignature)
-        end
+        if targetPlayer then return network:emit("Assetify:onRecieveSyncedElement", true, false, targetPlayer, element, assetType, assetName, assetClump, clumpMaps, remoteSignature) end
+        if not element or not imports.isElement(element) then return false end
+        local cAsset = manager:getData(assetType, assetName)
+        if not cAsset or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
+        remoteSignature = imports.getElementType(element)
+        syncer.public.syncedElements[element] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps}
+        thread:create(function(self)
+            for i, j in imports.pairs(syncer.public.loadedClients) do
+                syncer.public:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, i, remoteSignature)
+                thread:pause()
+            end
+        end):resume({executions = settings.downloader.syncRate, frames = 1})
         return true
     end
 
