@@ -7,6 +7,11 @@
     </aclrequest>
 
     <!-- Utilities: Exports & Settings -->
+    <file src="utilities/rw/dict.rw"/>
+    <file src="utilities/rw/buffer.rw"/>
+    <file src="utilities/rw/planar_1x1/dict.rw"/>
+    <file src="utilities/rw/planar_1x1/buffer.rw"/>
+    <file src="utilities/rw/planar_1x1/collision.rw"/>
     <script src="exports/shared.lua" type="shared"/>
     <script src="exports/client.lua" type="client"/>
     <script src="settings/shared.lua" type="shared"/>
@@ -24,15 +29,10 @@
     <script src="utilities/sandbox/timer.lua" type="shared"/>
     <script src="utilities/sandbox/threader.lua" type="shared"/>
     <script src="utilities/sandbox/networker.lua" type="shared"/>
-    <script src="utilities/syncer.lua" type="shared"/>
+    <script src="utilities/engine/syncer.lua" type="shared"/>
     <script src="utilities/sandbox/datasystem.lua" type="shared"/>
 
     <!-- Utilities: Shaders -->
-    <file src="utilities/rw/dict.rw"/>
-    <file src="utilities/rw/buffer.rw"/>
-    <file src="utilities/rw/planar_1x1/dict.rw"/>
-    <file src="utilities/rw/planar_1x1/buffer.rw"/>
-    <file src="utilities/rw/planar_1x1/collision.rw"/>
     <file src="utilities/shaders/helper.fx"/>
     <script src="utilities/shaders/tex_clearer.lua" type="client"/>
     <script src="utilities/shaders/tex_changer.lua" type="client"/>
@@ -44,16 +44,16 @@
     <script src="utilities/shaders/light_planar.lua" type="client"/>
 
     <!-- Utilities -->
-    <script src="utilities/asset.lua" type="shared"/>
-    <script src="utilities/dummy.lua" type="shared"/>
-    <script src="utilities/renderer.lua" type="shared"/>
-    <script src="utilities/shader.lua" type="shared"/>
-    <script src="utilities/manager.lua" type="shared"/>
-    <script src="utilities/scene.lua" type="client"/>
-    <script src="utilities/bone.lua" type="shared"/>
-    <script src="utilities/streamer.lua" type="client"/>
-    <script src="utilities/light.lua" type="client"/>
-    <script src="utilities/lights/planar.lua" type="client"/>
+    <script src="utilities/engine/asset.lua" type="shared"/>
+    <script src="utilities/engine/dummy.lua" type="shared"/>
+    <script src="utilities/engine/renderer.lua" type="shared"/>
+    <script src="utilities/engine/shader.lua" type="shared"/>
+    <script src="utilities/engine/manager.lua" type="shared"/>
+    <script src="utilities/engine/scene.lua" type="client"/>
+    <script src="utilities/engine/bone.lua" type="shared"/>
+    <script src="utilities/engine/streamer.lua" type="client"/>
+    <script src="utilities/engine/light.lua" type="client"/>
+    <script src="utilities/engine/lights/planar.lua" type="client"/>
 
     <!-- Handlers -->
     <script src="handlers/builder.lua" type="server"/>
