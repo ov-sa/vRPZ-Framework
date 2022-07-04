@@ -54,8 +54,7 @@ function setElementAsset(element, assetType, ...)
     local elementType = imports.getElementType(element)
     elementType = (((elementType == "ped") or (elementType == "player")) and "ped") or elementType
     if not settings.assetPacks[assetType] or not settings.assetPacks[assetType].assetType or (settings.assetPacks[assetType].assetType ~= elementType) then return false end
-    local cArgs = table:pack(...)
-    return syncer:syncElementModel(element, assetType, cArgs[1], cArgs[2], cArgs[3], cArgs[4])
+    return syncer:syncElementModel(element, assetType, table:unpack(table:pack(...), 4))
 end
 
 function getElementAssetInfo(element)

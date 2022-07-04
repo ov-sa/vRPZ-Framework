@@ -132,7 +132,7 @@ else
         return true
     end
 
-    --->>> Pool Syncer <<<---
+    --->>> Pool Syncers <<<---
     network:create("Assetify:onRequestPreSyncPool", true):on(function(__self, source)
         local __source = source
         thread:create(function(self)
@@ -172,7 +172,7 @@ else
         end):resume({executions = settings.downloader.syncRate, frames = 1})
     end)
 
-    --->>> State Syncer <<<---
+    --->>> State Syncers <<<---
     imports.addEventHandler("onPlayerResourceStart", root, function(resourceElement)
         if imports.getResourceRootElement(resourceElement) == resourceRoot then
             if syncer.public.isLibraryLoaded then
