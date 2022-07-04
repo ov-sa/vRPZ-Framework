@@ -52,8 +52,8 @@ end
 
 function getAssetID(...) return manager:getID(...) end
 function isAssetLoaded(...) return manager:isLoaded(...) end
-function loadAsset(assetType, assetName, ...) return manager:load(assetType, assetName, ...) end
-function unloadAsset(assetType, assetName, ...) return manager:unload(assetType, assetName, ...) end
+function loadAsset(...) return manager:load(...) end
+function unloadAsset(...) return manager:unload(...) end
 function loadAnim(element, ...) if not element or not imports.isElement(element) then return false end; return manager:loadAnim(element, ...) end
 function unloadAnim(element, ...) if not element or not imports.isElement(element) then return false end; return manager:unloadAnim(element, ...) end
 function createShader(...) local cShader = shader:create(...) return cShader.cShader end
