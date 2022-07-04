@@ -108,8 +108,7 @@ function planar.public:load(lightType, lightData, shaderInputs, isScoped, isDefa
 end
 
 function planar.public:unload()
-    if not self or (self == planar.public) or self.isUnloading then return false end
-    self.isUnloading = true
+    if not self or (self == planar.public) then return false end
     if self.cStreamer then
         self.cStreamer:destroy()
     end

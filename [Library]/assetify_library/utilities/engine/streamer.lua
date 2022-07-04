@@ -85,8 +85,7 @@ function streamer.public:load(streamerInstance, streamType, occlusionInstances, 
 end
 
 function streamer.public:unload()
-    if not streamer.public:isInstance(self) or self.isUnloading then return false end
-    self.isUnloading = true
+    if not streamer.public:isInstance(self) then return false end
     local streamType = self.streamType
     local streamDimension, streamInterior = imports.getElementDimension(self.occlusions[1]), imports.getElementInterior(self.occlusions[1])
     streamer.private.buffer[streamDimension][streamInterior][streamType][self] = nil

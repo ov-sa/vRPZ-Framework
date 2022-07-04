@@ -72,8 +72,7 @@ function scene.public:load(cAsset, sceneManifest, sceneData)
 end
 
 function scene.public:unload()
-    if not scene.public:isInstance(self) or self.isUnloading then return false end
-    self.isUnloading = true
+    if not scene.public:isInstance(self) then return false end
     if self.cStreamer then
         self.cStreamer:destroy()
     end

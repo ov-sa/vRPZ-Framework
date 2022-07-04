@@ -106,8 +106,7 @@ if localPlayer then
     end
 
     function bone.public:unload()
-        if not bone.public:isInstance(self) or self.isUnloading then return false end
-        self.isUnloading = true
+        if not bone.public:isInstance(self) then return false end
         if self.cHeartbeat then
             self.cHeartbeat:destroy()
         end

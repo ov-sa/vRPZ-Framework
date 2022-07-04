@@ -119,8 +119,7 @@ if localPlayer then
     end
 
     function dummy.public:unload()
-        if not dummy.public:isInstance(self) or self.isUnloading then return false end
-        self.isUnloading = true
+        if not dummy.public:isInstance(self) then return false end
         if self.cHeartbeat then
             self.cHeartbeat:destroy()
         end
