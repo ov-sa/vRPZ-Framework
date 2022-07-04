@@ -53,10 +53,9 @@ local function parseUtil()
             j = imports.utf8.gsub(j, k, v.namespace, _, true, "(", ".:)")
         end
         rw = rw..[[
-            if true then
+        if true then
             ]]..j..[[
-            end
-        ]]
+        end]]
     end
     return rw
 end

@@ -40,17 +40,12 @@ imports.addEventHandler("onResourceStart", resourceRoot, function()
             imports.outputDebugString("[Assetify]: Latest version available - "..response.tag_name, 3)
         end
     end)
-
     thread:create(function(self)
         syncer.libraryModules = {}
-        if not settings.assetPacks["module"] then
-            network:emit("Assetify:onModuleLoad", false)
-        end
+        if not settings.assetPacks["module"] then network:emit("Assetify:onModuleLoad", false) end
         for i, j in imports.pairs(settings.assetPacks) do
             asset:buildPack(i, j, function(state, assetType)
-                if assetType == "module" then
-                    network:emit("Assetify:onModuleLoad", false)
-                end
+                if assetType == "module" then network:emit("Assetify:onModuleLoad", false) end
                 timer:create(function()
                     self:resume()
                 end, 1, 1)
