@@ -71,8 +71,7 @@ if localPlayer then
     network:create("Assetify:onAssetLoad")
     network:create("Assetify:onAssetUnload")
 
-    function syncer.public:syncElementModel(...) return network:emit("Assetify:onRecieveSyncedElement", false, ...) end
-    network:create("Assetify:onRecieveSyncedElement"):on(function(element, assetType, assetName, assetClump, clumpMaps, remoteSignature)
+    function syncer.public:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, remoteSignature)
         if not element or (not remoteSignature and not imports.isElement(element)) then return false end
         local modelID = manager:getID(assetType, assetName, assetClump)
         if modelID then
@@ -94,7 +93,8 @@ if localPlayer then
                 imports.setElementModel(element, modelID)
             end, settings.downloader.buildRate)
         end
-    end)
+    end
+    network:create("Assetify:onRecieveSyncedElement"):on(function() syncer.public:syncElementModel(...) end)
 
     --->>> State Syncer <<<---
     network:create("Assetify:onElementDestroy"):on(function(source)
