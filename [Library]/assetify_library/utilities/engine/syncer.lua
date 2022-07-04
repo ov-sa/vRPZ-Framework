@@ -25,12 +25,10 @@ local imports = {
     getResourceName = getResourceName,
     getResourceInfo = getResourceInfo,
     setElementModel = setElementModel,
-    collectgarbage = collectgarbage,
     outputDebugString = outputDebugString,
     addEventHandler = addEventHandler,
     getResourceRootElement = getResourceRootElement,
     fetchRemote = fetchRemote,
-    loadAsset = loadAsset,
     table = table
 }
 
@@ -81,6 +79,7 @@ if localPlayer then
     syncer.public.scheduledAssets = {}
     network:create("Assetify:onAssetLoad")
     network:create("Assetify:onAssetUnload")
+
     syncer.private.execOnLoad(function() network:emit("Assetify:onRequestPostSyncPool", true, false, localPlayer) end)
     function syncer.public:syncElementModel(...) return network:emit("Assetify:onRecieveSyncedElement", false, ...) end
 
@@ -126,11 +125,15 @@ else
     syncer.public.libraryVersion = imports.getResourceInfo(resource, "version")
     syncer.public.libraryVersion = (syncer.public.libraryVersion and "v."..syncer.public.libraryVersion) or syncer.public.libraryVersion
     syncer.public.loadedClients, syncer.public.scheduledClients = {}, {}
-    function syncer.public:syncHash(player, ...) return network:emit("Assetify:Downloader:onRecieveHash", true, false, player, ...) end
-    function syncer.public:syncData(player, ...) return network:emit("Assetify:Downloader:onRecieveData", true, false, player, ...) end
-    function syncer.public:syncContent(player, ...) return network:emit("Assetify:Downloader:onRecieveContent", true, false, player, ...) end
-    function syncer.public:syncState(player, ...) return network:emit("Assetify:Downloader:onRecieveState", true, false, player, ...) end
 
+    imports.fetchRemote(syncer.public.librarySource, function(response, status)
+        if not response or not status or (status ~= 0) then return false end
+        response = imports.table:decode(response)
+        if response and response.tag_name and (syncer.public.libraryVersion ~= response.tag_name) then
+            imports.outputDebugString("[Assetify]: Latest version available - "..response.tag_name, 3)
+        end
+    end)
+    
     function syncer.public:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, targetPlayer, remoteSignature)
         if targetPlayer then return network:emit("Assetify:onRecieveSyncedElement", true, false, targetPlayer, element, assetType, assetName, assetClump, clumpMaps, remoteSignature) end
         if not element or not imports.isElement(element) then return false end
@@ -199,13 +202,6 @@ else
         })
     end)
 
-    imports.fetchRemote(syncer.public.librarySource, function(response, status)
-        if not response or not status or (status ~= 0) then return false end
-        response = imports.table:decode(response)
-        if response and response.tag_name and (syncer.public.libraryVersion ~= response.tag_name) then
-            imports.outputDebugString("[Assetify]: Latest version available - "..response.tag_name, 3)
-        end
-    end)
     imports.addEventHandler("onPlayerResourceStart", root, function(resourceElement)
         if imports.getResourceRootElement(resourceElement) == resourceRoot then
             if syncer.public.isLibraryLoaded then
@@ -216,7 +212,9 @@ else
             end
         end
     end)
+
     imports.addEventHandler("onElementModelChange", root, function() syncer.public.syncedElements[source] = nil end)
+
     imports.addEventHandler("onElementDestroy", root, function()
         local __source = source
         thread:create(function(self)
@@ -236,6 +234,7 @@ else
             end
         end):resume({executions = settings.downloader.syncRate, frames = 1})
     end)
+
     imports.addEventHandler("onPlayerQuit", root, function()
         syncer.public.loadedClients[source] = nil
         syncer.public.scheduledClients[source] = nil

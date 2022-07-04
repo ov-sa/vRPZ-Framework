@@ -144,6 +144,11 @@ if localPlayer then
         end
     end)
 else
+    function syncer.public:syncHash(player, ...) return network:emit("Assetify:Downloader:onRecieveHash", true, false, player, ...) end
+    function syncer.public:syncData(player, ...) return network:emit("Assetify:Downloader:onRecieveData", true, false, player, ...) end
+    function syncer.public:syncContent(player, ...) return network:emit("Assetify:Downloader:onRecieveContent", true, false, player, ...) end
+    function syncer.public:syncState(player, ...) return network:emit("Assetify:Downloader:onRecieveState", true, false, player, ...) end
+
     function syncer.public:syncPack(player, assetDatas, syncModules)
         if not assetDatas then
             thread:create(function(self)
