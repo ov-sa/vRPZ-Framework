@@ -57,12 +57,7 @@ function setElementAsset(element, assetType, ...)
     return syncer:syncElementModel(element, assetType, table:unpack(table:pack(...), 4))
 end
 
-function getElementAssetInfo(element)
-    if not element or not imports.isElement(element) then return false end
-    if not syncer.syncedElements[element] then return false end
-    return syncer.syncedElements[element].type, syncer.syncedElements[element].name, syncer.syncedElements[element].clump, syncer.syncedElements[element].clumpMaps
-end
-
+function getElementAssetInfo(element) if not element or not imports.isElement(element) or not syncer.syncedElements[element] then return false end return syncer.syncedElements[element].type, syncer.syncedElements[element].name, syncer.syncedElements[element].clump, syncer.syncedElements[element].clumpMaps end
 function setGlobalData(...) return syncer:syncGlobalData(...) end
 function getGlobalData(data) if not data or (imports.type(data) ~= "string") then return false end; return syncer.syncedGlobalDatas[data] end
 function setEntityData(...) return syncer:syncEntityData(table:unpack(table:pack(...), 3)) end
