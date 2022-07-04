@@ -423,9 +423,7 @@ else
             end
         end
     end)
-    imports.addEventHandler("onElementModelChange", root, function()
-        syncer.public.syncedElements[source] = nil
-    end)
+    imports.addEventHandler("onElementModelChange", root, function() syncer.public.syncedElements[source] = nil end)
     imports.addEventHandler("onElementDestroy", root, function()
         local __source = source
         thread:create(function(self)
@@ -443,10 +441,7 @@ else
                 network:emit("Assetify:onElementDestroy", true, false, i, source)
                 thread:pause()
             end
-        end):resume({
-            executions = settings.downloader.syncRate,
-            frames = 1
-        })
+        end):resume({executions = settings.downloader.syncRate, frames = 1})
     end)
     imports.addEventHandler("onPlayerQuit", root, function()
         syncer.public.loadedClients[source] = nil

@@ -13,9 +13,6 @@
 -----------------
 
 local imports = {
-    type = type,
-    pairs = pairs,
-    tonumber = tonumber,
     isElement = isElement,
     attachElements = attachElements,
     destroyElement = destroyElement,
