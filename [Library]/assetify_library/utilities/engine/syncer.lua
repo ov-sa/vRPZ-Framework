@@ -76,7 +76,6 @@ if localPlayer then
 
     syncer.private.execOnLoad(function() network:emit("Assetify:onRequestPostSyncPool", true, false, localPlayer) end)
     function syncer.public:syncElementModel(...) return network:emit("Assetify:onRecieveSyncedElement", false, ...) end
-
     network:create("Assetify:onRecieveSyncedElement"):on(function(element, assetType, assetName, assetClump, clumpMaps, remoteSignature)
         if not element or (not remoteSignature and not imports.isElement(element)) then return false end
         local modelID = manager:getID(assetType, assetName, assetClump)
@@ -120,14 +119,6 @@ else
     syncer.public.libraryVersion = (syncer.public.libraryVersion and "v."..syncer.public.libraryVersion) or syncer.public.libraryVersion
     syncer.public.loadedClients, syncer.public.scheduledClients = {}, {}
 
-    imports.fetchRemote(syncer.public.librarySource, function(response, status)
-        if not response or not status or (status ~= 0) then return false end
-        response = imports.table:decode(response)
-        if response and response.tag_name and (syncer.public.libraryVersion ~= response.tag_name) then
-            imports.outputDebugString("[Assetify]: Latest version available - "..response.tag_name, 3)
-        end
-    end)
-    
     function syncer.public:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, targetPlayer, remoteSignature)
         if targetPlayer then return network:emit("Assetify:onRecieveSyncedElement", true, false, targetPlayer, element, assetType, assetName, assetClump, clumpMaps, remoteSignature) end
         if not element or not imports.isElement(element) then return false end
@@ -194,9 +185,7 @@ else
             end
         end
     end)
-
     imports.addEventHandler("onElementModelChange", root, function() syncer.public.syncedElements[source] = nil end)
-
     imports.addEventHandler("onElementDestroy", root, function()
         local __source = source
         thread:create(function(self)
@@ -216,7 +205,6 @@ else
             end
         end):resume({executions = settings.downloader.syncRate, frames = 1})
     end)
-
     imports.addEventHandler("onPlayerQuit", root, function()
         syncer.public.loadedClients[source] = nil
         syncer.public.scheduledClients[source] = nil
