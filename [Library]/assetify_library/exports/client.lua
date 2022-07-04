@@ -54,8 +54,8 @@ function getAssetID(...) return manager:getID(...) end
 function isAssetLoaded(...) return manager:isLoaded(...) end
 function loadAsset(...) return manager:load(...) end
 function unloadAsset(...) return manager:unload(...) end
-function loadAnim(element, ...) if not element or not imports.isElement(element) then return false end; return manager:loadAnim(element, ...) end
-function unloadAnim(element, ...) if not element or not imports.isElement(element) then return false end; return manager:unloadAnim(element, ...) end
+function loadAnim(...) return manager:loadAnim(...) end
+function unloadAnim(...) return manager:unloadAnim(...) end
 function createShader(...) local cShader = shader:create(...) return cShader.cShader end
 
 function clearWorld()
