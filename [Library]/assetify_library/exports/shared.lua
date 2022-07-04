@@ -52,6 +52,7 @@ function getAssetDep(...) return manager:getDep(...) end
 function setElementAsset(element, assetType, ...)
     if not element or not imports.isElement(element) then return false end
     local elementType = imports.getElementType(element)
+    --TODO: MOVE THIS CHECK INSIDE SYNCER?
     elementType = (((elementType == "ped") or (elementType == "player")) and "ped") or elementType
     if not settings.assetPacks[assetType] or not settings.assetPacks[assetType].assetType or (settings.assetPacks[assetType].assetType ~= elementType) then return false end
     return syncer:syncElementModel(element, assetType, table:unpack(table:pack(...), 4))
@@ -62,7 +63,7 @@ function setGlobalData(...) return syncer:syncGlobalData(...) end
 function getGlobalData(data) if not data or (imports.type(data) ~= "string") then return false end; return syncer.syncedGlobalDatas[data] end
 function setEntityData(...) return syncer:syncEntityData(table:unpack(table:pack(...), 3)) end
 function getEntityData(element, data) if not element or not data or (imports.type(data) ~= "string") then return false end; return syncer.syncedEntityDatas[element] and syncer.syncedEntityDatas[element][data] end
-function createAssetDummy(...) return syncer:syncAssetDummy(table:unpack(table:pack(...), 5)) end
+function createAssetDummy(...) local cDummy = syncer:syncAssetDummy(table:unpack(table:pack(...), 5)); return (cDummy and cDummy.cDummy) or false end
 function setBoneAttachment(...) return syncer:syncBoneAttachment(table:unpack(table:pack(...), 3)) end
 function setBoneDetachment(element) return syncer:syncBoneDetachment(element) end
 function setBoneRefreshment(...) return syncer:syncBoneRefreshment(table:unpack(table:pack(...), 2)) end

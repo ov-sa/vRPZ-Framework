@@ -169,6 +169,7 @@ else
     syncer.public.syncedAssetDummies = {}
     function syncer.public:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer, targetDummy, remoteSignature)    
         if targetPlayer then return network:emit("Assetify:onRecieveAssetDummy", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, remoteSignature) end
+        --TODO:HERE SHOULD BE CLASS NOT OBJECT
         targetDummy = dummy:create(assetType, assetName, assetClump, clumpMaps, dummyData)
         if not targetDummy then return false end
         remoteSignature = imports.getElementType(targetDummy)

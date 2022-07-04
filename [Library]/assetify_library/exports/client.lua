@@ -74,20 +74,9 @@ function unloadAsset(assetType, assetName, ...)
     return state
 end
 
-function loadAnim(element, ...)
-    if not element or not imports.isElement(element) then return false end
-    return manager:loadAnim(element, ...)
-end
-
-function unloadAnim(element, ...)
-    if not element or not imports.isElement(element) then return false end
-    return manager:unloadAnim(element, ...)
-end
-
-function createShader(...)
-    local cShader = shader:create(...)
-    return cShader.cShader
-end
+function loadAnim(element, ...) if not element or not imports.isElement(element) then return false end; return manager:loadAnim(element, ...) end
+function unloadAnim(element, ...) if not element or not imports.isElement(element) then return false end; return manager:unloadAnim(element, ...) end
+function createShader(...) local cShader = shader:create(...) return cShader.cShader end
 
 function clearWorld()
     for i = 550, 19999, 1 do
@@ -128,58 +117,16 @@ function restoreModel(modelID)
     return imports.engineRestoreModel(modelID)
 end
 
-function playSoundAsset(...)
-    return manager:playSound(...)
-end
-
-function playSoundAsset3D(...)
-    return manager:playSound3D(...)
-end
-
-function isRendererVirtualRendering()
-    return renderer.cache.isVirtualRendering
-end
-
-function setRendererVirtualRendering(...)
-    return renderer:setVirtualRendering(...)
-end
-
-function getRendererVirtualSource()
-    return (renderer.cache.isVirtualRendering and renderer.cache.virtualSource) or false
-end
-
-function getRendererVirtualRTs()
-    return (renderer.cache.isVirtualRendering and renderer.cache.virtualRTs) or false
-end
-
-function setRendererTimeSync(...)
-    return renderer:setTimeSync(...)
-end
-
-function setRendererServerTick(...)
-    return renderer:setServerTick(...)
-end
-
-function setRendererMinuteDuration(...)
-    return renderer:setMinuteDuration(...)
-end
-
-function createPlanarLight(...)
-    local cLight = light.planar:create(...)
-    return (cLight and cLight.cLight) or false
-end
-
-function setPlanarLightResolution(cLight, ...)
-    if not light.planar.buffer[cLight] then return false end
-    return light.planar.buffer[cLight]:setResolution(...)
-end
-
-function setPlanarLightTexture(cLight, ...)
-    if not light.planar.buffer[cLight] then return false end
-    return light.planar.buffer[cLight]:setTexture(...)
-end
-
-function setPlanarLightColor(cLight, ...)
-    if not light.planar.buffer[cLight] then return false end
-    return light.planar.buffer[cLight]:setColor(...)
-end
+function playSoundAsset(...) return manager:playSound(...) end
+function playSoundAsset3D(...) return manager:playSound3D(...) end
+function isRendererVirtualRendering() return renderer.cache.isVirtualRendering end
+function setRendererVirtualRendering(...) return renderer:setVirtualRendering(...) end
+function getRendererVirtualSource() return (renderer.cache.isVirtualRendering and renderer.cache.virtualSource) or false end
+function getRendererVirtualRTs() return (renderer.cache.isVirtualRendering and renderer.cache.virtualRTs) or false end
+function setRendererTimeSync(...) return renderer:setTimeSync(...) end
+function setRendererServerTick(...) return renderer:setServerTick(...) end
+function setRendererMinuteDuration(...) return renderer:setMinuteDuration(...) end
+function createPlanarLight(...) local cLight = light.planar:create(...); return (cLight and cLight.cLight) or false end
+function setPlanarLightResolution(cLight, ...) if not light.planar.buffer[cLight] then return false end; return light.planar.buffer[cLight]:setResolution(...) end
+function setPlanarLightTexture(cLight, ...) if not light.planar.buffer[cLight] then return false end; return light.planar.buffer[cLight]:setTexture(...) end
+function setPlanarLightColor(cLight, ...) if not light.planar.buffer[cLight] then return false end; return light.planar.buffer[cLight]:setColor(...) end
