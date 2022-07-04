@@ -55,19 +55,13 @@ network:create("Assetify:onModuleLoad")
 function syncer.public:import() return syncer end
 syncer.private.execOnLoad = function(execFunc)
     local execWrapper = nil
-    execWrapper = function()
-        execFunc()
-        network:fetch("Assetify:onLoad"):off(execWrapper)
-    end
+    execWrapper = function() execFunc(); network:fetch("Assetify:onLoad"):off(execWrapper) end
     network:fetch("Assetify:onLoad"):on(execWrapper)
     return true
 end
 syncer.private.execOnModuleLoad = function(execFunc)
     local execWrapper = nil
-    execWrapper = function()
-        execFunc()
-        network:fetch("Assetify:onModuleLoad"):off(execWrapper)
-    end
+    execWrapper = function() execFunc(); network:fetch("Assetify:onModuleLoad"):off(execWrapper) end
     network:fetch("Assetify:onModuleLoad"):on(execWrapper)
     return true
 end
