@@ -39,6 +39,7 @@ local imports = {
 ---------------------------
 
 if localPlayer then
+    syncer.private.execOnLoad(function() network:emit("Assetify:Downloader:onRequestPostSyncPool", true, false, localPlayer) end)
     network:create("Assetify:Downloader:onRecieveBandwidth"):on(function(bandwidth) syncer.public.libraryBandwidth = bandwidth end)
     network:create("Assetify:Downloader:onRecieveHash"):on(function(assetType, assetName, hashes)
         if not syncer.public.scheduledAssets[assetType] then syncer.public.scheduledAssets[assetType] = {} end
@@ -147,6 +148,8 @@ else
     function syncer.public:syncData(player, ...) return network:emit("Assetify:Downloader:onRecieveData", true, false, player, ...) end
     function syncer.public:syncContent(player, ...) return network:emit("Assetify:Downloader:onRecieveContent", true, false, player, ...) end
     function syncer.public:syncState(player, ...) return network:emit("Assetify:Downloader:onRecieveState", true, false, player, ...) end
+    network:create("Assetify:Downloader:onRecieveHash"):on(function(source, assetType, assetName, hashes) syncer.public:syncPack(source, {type = assetType, name = assetName, hashes = hashes}) end)
+    network:create("Assetify:Downloader:onRequestSyncPack"):on(function(source) syncer.public:syncPack(source) end)
 
     function syncer.public:syncPack(player, assetDatas, syncModules)
         if not assetDatas then
@@ -221,7 +224,4 @@ else
         end
         return true
     end
-
-    network:create("Assetify:Downloader:onRecieveHash"):on(function(source, assetType, assetName, hashes) syncer.public:syncPack(source, {type = assetType, name = assetName, hashes = hashes}) end)
-    network:create("Assetify:Downloader:onRequestSyncPack"):on(function(source) syncer.public:syncPack(source) end)
 end

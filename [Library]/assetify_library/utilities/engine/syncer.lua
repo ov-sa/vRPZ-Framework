@@ -71,7 +71,6 @@ if localPlayer then
     network:create("Assetify:onAssetLoad")
     network:create("Assetify:onAssetUnload")
 
-    syncer.private.execOnLoad(function() network:emit("Assetify:onRequestPostSyncPool", true, false, localPlayer) end)
     function syncer.public:syncElementModel(...) return network:emit("Assetify:onRecieveSyncedElement", false, ...) end
     network:create("Assetify:onRecieveSyncedElement"):on(function(element, assetType, assetName, assetClump, clumpMaps, remoteSignature)
         if not element or (not remoteSignature and not imports.isElement(element)) then return false end
@@ -154,7 +153,7 @@ else
         __self:pause()
         return true
     end, true)
-    network:create("Assetify:onRequestPostSyncPool"):on(function(source)
+    network:create("Assetify:Downloader:onRequestPostSyncPool"):on(function(source)
         local __source = source
         thread:create(function(self)
             local source = __source
