@@ -28,7 +28,6 @@ local imports = {
     outputDebugString = outputDebugString,
     addEventHandler = addEventHandler,
     getResourceRootElement = getResourceRootElement,
-    fetchRemote = fetchRemote,
     table = table
 }
 
@@ -100,10 +99,11 @@ if localPlayer then
         end
     end)
 
+    --->>> State Syncer <<<---
     network:create("Assetify:onElementDestroy"):on(function(source)
         if not source then return false end
-        shader:clearElementBuffer(source)
         dummy:clearElementBuffer(source)
+        shader:clearElementBuffer(source)
         bone:clearElementBuffer(source)
         manager:clearElementBuffer(source)
         syncer.public.syncedEntityDatas[source] = nil
@@ -135,6 +135,7 @@ else
         return true
     end
 
+    --->>> Pool Syncer <<<---
     network:create("Assetify:onRequestPreSyncPool", true):on(function(__self, source)
         local __source = source
         thread:create(function(self)
@@ -155,7 +156,6 @@ else
         __self:pause()
         return true
     end, true)
-
     network:create("Assetify:onRequestPostSyncPool"):on(function(source)
         local __source = source
         thread:create(function(self)
@@ -175,6 +175,7 @@ else
         end):resume({executions = settings.downloader.syncRate, frames = 1})
     end)
 
+    --->>> State Syncer <<<---
     imports.addEventHandler("onPlayerResourceStart", root, function(resourceElement)
         if imports.getResourceRootElement(resourceElement) == resourceRoot then
             if syncer.public.isLibraryLoaded then

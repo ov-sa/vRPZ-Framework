@@ -29,7 +29,6 @@ local imports = {
     outputDebugString = outputDebugString,
     addEventHandler = addEventHandler,
     getResourceRootElement = getResourceRootElement,
-    fetchRemote = fetchRemote,
     loadAsset = loadAsset,
     table = table
 }

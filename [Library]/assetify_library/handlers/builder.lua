@@ -14,13 +14,14 @@
 
 local imports = {
     pairs = pairs,
+    fetchRemote = fetchRemote,
     addEventHandler = addEventHandler
 }
 
 
-----------------------------------
---[[ Event: On Resource Start ]]--
-----------------------------------
+--------------------------
+--[[ Builder Handlers ]]--
+--------------------------
 
 local function onLibraryLoaded()
     network:emit("Assetify:onLoad", false)
@@ -32,6 +33,14 @@ local function onLibraryLoaded()
 end
 
 imports.addEventHandler("onResourceStart", resourceRoot, function()
+    imports.fetchRemote(syncer.public.librarySource, function(response, status)
+        if not response or not status or (status ~= 0) then return false end
+        response = imports.table:decode(response)
+        if response and response.tag_name and (syncer.public.libraryVersion ~= response.tag_name) then
+            imports.outputDebugString("[Assetify]: Latest version available - "..response.tag_name, 3)
+        end
+    end)
+
     thread:create(function(self)
         syncer.libraryModules = {}
         if not settings.assetPacks["module"] then
@@ -51,7 +60,4 @@ imports.addEventHandler("onResourceStart", resourceRoot, function()
         onLibraryLoaded()
     end):resume()
 end)
-
-imports.addEventHandler("onResourceStop", resourceRoot, function()
-    network:emit("Assetify:onUnload", false)
-end)
+imports.addEventHandler("onResourceStop", resourceRoot, function() network:emit("Assetify:onUnload", false) end)
