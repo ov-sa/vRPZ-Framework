@@ -17,20 +17,8 @@ local imports = {
     type = type,
     pairs = pairs,
     md5 = md5,
-    tostring = tostring,
-    isElement = isElement,
-    getElementType = getElementType,
-    getRealTime = getRealTime,
-    getThisResource = getThisResource,
-    getResourceName = getResourceName,
-    getResourceInfo = getResourceInfo,
-    setElementModel = setElementModel,
     collectgarbage = collectgarbage,
-    outputDebugString = outputDebugString,
-    addEventHandler = addEventHandler,
-    getResourceRootElement = getResourceRootElement,
-    loadAsset = loadAsset,
-    table = table
+    loadAsset = loadAsset
 }
 
 
