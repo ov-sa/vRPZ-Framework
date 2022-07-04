@@ -54,6 +54,8 @@ syncer.public.librarySerial = imports.md5(syncer.public.libraryName..":"..import
 network:create("Assetify:onLoad")
 network:create("Assetify:onUnload")
 network:create("Assetify:onModuleLoad")
+network:create("Assetify:onAssetLoad")
+network:create("Assetify:onAssetUnload")
 function syncer.public:import() return syncer end
 syncer.private.execOnLoad = function(execFunc)
     local execWrapper = nil
@@ -79,8 +81,6 @@ syncer.private.execOnModuleLoad(function() syncer.public.isModuleLoaded = true e
 if localPlayer then
     settings.assetPacks = {}
     syncer.public.scheduledAssets = {}
-    network:create("Assetify:onAssetLoad")
-    network:create("Assetify:onAssetUnload")
     syncer.private.execOnLoad(function() network:emit("Assetify:onRequestPostSyncPool", true, false, localPlayer) end)
     function syncer.public:syncElementModel(...) return network:emit("Assetify:onRecieveSyncedElement", false, ...) end
 
