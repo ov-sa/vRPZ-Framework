@@ -8,7 +8,6 @@
 ----------------------------------------------------------------
 
 
---TODO: UPDATE
 -----------------
 --[[ Imports ]]--
 -----------------
@@ -25,7 +24,6 @@ local imports = {
     getResourceName = getResourceName,
     getResourceInfo = getResourceInfo,
     setElementModel = setElementModel,
-    outputDebugString = outputDebugString,
     addEventHandler = addEventHandler,
     getResourceRootElement = getResourceRootElement,
     table = table

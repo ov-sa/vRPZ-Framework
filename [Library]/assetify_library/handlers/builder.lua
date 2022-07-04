@@ -15,7 +15,9 @@
 local imports = {
     pairs = pairs,
     fetchRemote = fetchRemote,
-    addEventHandler = addEventHandler
+    outputDebugString = outputDebugString,
+    addEventHandler = addEventHandler,
+    table = table
 }
 
 
