@@ -288,7 +288,6 @@ if localPlayer then
                 cAsset.unSynced = nil
                 imports.collectgarbage()
             end):resume({executions = settings.downloader.buildRate, frames = 1})
-            return true
         elseif assetType == "scene" then
             thread:create(function(self)
                 for i, j in imports.pairs(cAsset.unSynced.assetCache) do
@@ -308,7 +307,6 @@ if localPlayer then
                 cAsset.unSynced = nil
                 imports.collectgarbage()
             end):resume({executions = settings.downloader.buildRate, frames = 1})
-            return true
         elseif cAsset.manifestData.assetClumps then
             thread:create(function(self)
                 for i, j in imports.pairs(cAsset.unSynced.assetCache) do
@@ -322,17 +320,16 @@ if localPlayer then
                 cAsset.unSynced = nil
                 imports.collectgarbage()
             end):resume({executions = settings.downloader.buildRate, frames = 1})
-            return true
+        elseif cAsset.cAsset then
+            cAsset.cAsset:destroy(cAsset.unSynced.rwCache)
+            shader:clearAssetBuffer(cAsset.unSynced.rwCache.map)
+            cAsset.unSynced = nil
+            imports.collectgarbage()
         else
-            if cAsset.cAsset then
-                cAsset.cAsset:destroy(cAsset.unSynced.rwCache)
-                shader:clearAssetBuffer(cAsset.unSynced.rwCache.map)
-                cAsset.unSynced = nil
-                imports.collectgarbage()
-                return true
-            end
+            return false
         end
-        return false
+        network:emit("Assetify:onAssetUnload", false, assetType, assetName)
+        return true
     end
 
     imports.addEventHandler("onClientResourceStop", root, function(stoppedResource)
