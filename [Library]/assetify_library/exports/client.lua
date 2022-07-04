@@ -52,7 +52,7 @@ end
 
 function getAssetID(...) return manager:getID(...) end
 function isAssetLoaded(...) return manager:isLoaded(...) end
-function loadAsset(assetType, assetName, ...) local state = manager:load(assetType, assetName, ...); if state then network:emit("Assetify:onAssetLoad", false, assetType, assetName) end; return state end
+function loadAsset(assetType, assetName, ...) return manager:load(assetType, assetName, ...) end
 function unloadAsset(assetType, assetName, ...) local state = manager:unload(assetType, assetName, ...); if state then network:emit("Assetify:onAssetUnload", false, assetType, assetName) end; return state end
 function loadAnim(element, ...) if not element or not imports.isElement(element) then return false end; return manager:loadAnim(element, ...) end
 function unloadAnim(element, ...) if not element or not imports.isElement(element) then return false end; return manager:unloadAnim(element, ...) end

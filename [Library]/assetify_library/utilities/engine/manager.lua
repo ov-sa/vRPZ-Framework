@@ -170,15 +170,11 @@ if localPlayer then
             end
         end
         if assetType == "module" then
-            if asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache, {}) then
-                return true
-            end
+            if not asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache, {}) then return false end
         elseif assetType == "animation" then
-            if asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache, {
-                ifp = assetPath..(asset.references.asset)..".ifp",
-            }) then
-                return true
-            end
+            if not asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache, {
+                ifp = assetPath..(asset.references.asset)..".ifp"
+            }) then return false end
         elseif assetType == "sound" then
             thread:create(function(self)
                 for i, j in imports.pairs(cAsset.manifestData.assetSounds) do
@@ -192,11 +188,7 @@ if localPlayer then
                     end
                     thread:pause()
                 end
-            end):resume({
-                executions = settings.downloader.buildRate,
-                frames = 1
-            })
-            return true
+            end):resume({executions = settings.downloader.buildRate, frames = 1})
         elseif assetType == "scene" then
             thread:create(function(self)
                 local sceneIPLData = file:read(assetPath..(asset.references.scene)..".ipl")
@@ -250,11 +242,7 @@ if localPlayer then
                         thread:pause()
                     end
                 end
-            end):resume({
-                executions = settings.downloader.buildRate,
-                frames = 1
-            })
-            return true
+            end):resume({executions = settings.downloader.buildRate, frames = 1})
         elseif cAsset.manifestData.assetClumps then
             thread:create(function(self)
                 for i, j in imports.pairs(cAsset.manifestData.assetClumps) do
@@ -269,21 +257,16 @@ if localPlayer then
                     })
                     thread:pause()
                 end
-            end):resume({
-                executions = settings.downloader.buildRate,
-                frames = 1
-            })
-            return true
+            end):resume({executions = settings.downloader.buildRate, frames = 1})
         else
-            if asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache, {
+            if not asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache, {
                 txd = assetPath..(asset.references.asset)..".txd",
                 dff = assetPath..(asset.references.asset)..".dff",
                 col = assetPath..(asset.references.asset)..".col"
-            }) then
-                return true
-            end
+            }) then return false end
         end
-        return false
+        network:emit("Assetify:onAssetLoad", false, assetType, assetName)
+        return true
     end
 
     function manager.public:unload(assetType, assetName)
@@ -304,10 +287,7 @@ if localPlayer then
                 asset:clearAssetBuffer(cAsset.unSynced.rwCache.dep)
                 cAsset.unSynced = nil
                 imports.collectgarbage()
-            end):resume({
-                executions = settings.downloader.buildRate,
-                frames = 1
-            })
+            end):resume({executions = settings.downloader.buildRate, frames = 1})
             return true
         elseif assetType == "scene" then
             thread:create(function(self)
@@ -327,10 +307,7 @@ if localPlayer then
                 asset:clearAssetBuffer(cAsset.unSynced.rwCache.dep)
                 cAsset.unSynced = nil
                 imports.collectgarbage()
-            end):resume({
-                executions = settings.downloader.buildRate,
-                frames = 1
-            })
+            end):resume({executions = settings.downloader.buildRate, frames = 1})
             return true
         elseif cAsset.manifestData.assetClumps then
             thread:create(function(self)
@@ -344,10 +321,7 @@ if localPlayer then
                 asset:clearAssetBuffer(cAsset.unSynced.rwCache.dep)
                 cAsset.unSynced = nil
                 imports.collectgarbage()
-            end):resume({
-                executions = settings.downloader.buildRate,
-                frames = 1
-            })
+            end):resume({executions = settings.downloader.buildRate, frames = 1})
             return true
         else
             if cAsset.cAsset then
