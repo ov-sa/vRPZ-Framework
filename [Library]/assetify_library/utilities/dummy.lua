@@ -138,12 +138,10 @@ if localPlayer then
         return true
     end
 
-    --->>> API Syncer <<<---
+    --->>> API Syncers <<<---
     function syncer.public:syncAssetDummy(...) return dummy:create(...) end
     network:create("Assetify:onRecieveAssetDummy"):on(function(...) syncer.public:syncAssetDummy(...) end)
 else
-    syncer.public.syncedAssetDummies = {}
-
     function dummy.public:create(assetType, assetName, assetClump, clumpMaps, dummyData)
         if not dummyData then return false end
         local cAsset = manager:getData(assetType, assetName)
@@ -168,7 +166,9 @@ else
         return cDummy
     end
 
-    --->>> API Syncer <<<---
+    --->>> API Syncers <<<---
+    syncer.public.syncedAssetDummies = {}
+
     function syncer.public:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer, targetDummy, remoteSignature)    
         if targetPlayer then return network:emit("Assetify:onRecieveAssetDummy", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, remoteSignature) end
         targetDummy = dummy:create(assetType, assetName, assetClump, clumpMaps, dummyData)

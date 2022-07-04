@@ -24,13 +24,8 @@ local imports = {
 --[[ Functions: APIs ]]--
 -------------------------
 
-function isLibraryLoaded()
-    return syncer.isLibraryLoaded
-end
-
-function isModuleLoaded()
-    return syncer.isModuleLoaded
-end
+function isLibraryLoaded() return syncer.isLibraryLoaded end
+function isModuleLoaded() return syncer.isModuleLoaded end
 
 function getLibraryAssets(assetType)
     if not syncer.isLibraryLoaded or not assetType or not settings.assetPacks[assetType] then return false end
@@ -51,13 +46,8 @@ function getLibraryAssets(assetType)
     return packAssets
 end
 
-function getAssetData(...)
-    return manager:getData(...)
-end
-
-function getAssetDep(...)
-    return manager:getDep(...)
-end
+function getAssetData(...) return manager:getData(...) end
+function getAssetDep(...) return manager:getDep(...) end
 
 function setElementAsset(element, assetType, ...)
     if not element or not imports.isElement(element) then return false end
@@ -74,43 +64,22 @@ function getElementAssetInfo(element)
     return syncer.syncedElements[element].type, syncer.syncedElements[element].name, syncer.syncedElements[element].clump, syncer.syncedElements[element].clumpMaps
 end
 
-function setGlobalData(...)
-    return syncer:syncGlobalData(...)
-end
+function setGlobalData(...) return syncer:syncGlobalData(...) end
 
 function getGlobalData(data)
     if not data or (imports.type(data) ~= "string") then return false end
     return syncer.syncedGlobalDatas[data]
 end
 
-function setEntityData(...)
-    return syncer:syncEntityData(...)
-end
+function setEntityData(...) return syncer:syncEntityData(table:unpack(table:pack(...), 3)) end
 
 function getEntityData(element, data)
     if not element or not data or (imports.type(data) ~= "string") then return false end
     return syncer.syncedEntityDatas[element] and syncer.syncedEntityDatas[element][data]
 end
 
-function createAssetDummy(...)
-    local cArgs = table:pack(...)
-    return syncer:syncAssetDummy(cArgs[1], cArgs[2], cArgs[3], cArgs[4], cArgs[5])
-end
-
-function setBoneAttachment(...)
-    local cArgs = table:pack(...)
-    return syncer:syncBoneAttachment(cArgs[1], cArgs[2], cArgs[3])
-end
-
-function setBoneDetachment(element)
-    return syncer:syncBoneDetachment(element)
-end
-
-function setBoneRefreshment(...)
-    local cArgs = table:pack(...)
-    return syncer:syncBoneRefreshment(cArgs[1], cArgs[2])
-end
-
-function clearBoneAttachment(element)
-    return syncer:syncClearBoneAttachment(element)
-end
+function createAssetDummy(...) return syncer:syncAssetDummy(table:unpack(table:pack(...), 5)) end
+function setBoneAttachment(...) return syncer:syncBoneAttachment(table:unpack(table:pack(...), 3)) end
+function setBoneDetachment(element) return syncer:syncBoneDetachment(element) end
+function setBoneRefreshment(...) return syncer:syncBoneRefreshment(table:unpack(table:pack(...), 2)) end
+function clearBoneAttachment(element) return syncer:syncClearBoneAttachment(element) end

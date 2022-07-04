@@ -31,24 +31,25 @@ network:create("Assetify:onGlobalDataChange")
 network:create("Assetify:onEntityDataChange")
 
 if localPlayer then
-    --->>> API Syncer <<<---
-    function syncer.public:syncGlobalData(...) return network:emit("Assetify:onRecieveSyncedGlobalData", false, ...) end
-    function syncer.public:syncEntityData(element, data, value) return network:emit("Assetify:onRecieveSyncedEntityData", false, element, data, value) end
-    network:create("Assetify:onRecieveSyncedGlobalData"):on(function(data, value)
+    function syncer.public:syncGlobalData(data, value)
         if not data or (imports.type(data) ~= "string") then return false end
         local __value = syncer.public.syncedGlobalDatas[data]
         syncer.public.syncedGlobalDatas[data] = value
         network:emit("Assetify:onGlobalDataChange", false, data, __value, value)
-    end)
-    network:create("Assetify:onRecieveSyncedEntityData"):on(function(element, data, value, remoteSignature)
+        return true
+    end
+
+    function syncer.public:syncEntityData(element, data, value, remoteSignature)
         if not element or (not remoteSignature and not imports.isElement(element)) or not data or (imports.type(data) ~= "string") then return false end
         syncer.public.syncedEntityDatas[element] = syncer.public.syncedEntityDatas[element] or {}
         local __value = syncer.public.syncedEntityDatas[element][data]
         syncer.public.syncedEntityDatas[element][data] = value
         network:emit("Assetify:onEntityDataChange", false, element, data, __value, value)
-    end)
+        return true
+    end
+    network:create("Assetify:onRecieveSyncedGlobalData"):on(function(...) syncer.public:syncGlobalData(...) end)
+    network:create("Assetify:onRecieveSyncedEntityData"):on(function(...) syncer.public:syncEntityData(...) end)
 else
-    --->>> API Syncer <<<---
     function syncer.public:syncGlobalData(data, value, isSync, targetPlayer)
         if not targetPlayer then return network:emit("Assetify:onRecieveSyncedGlobalData", true, false, targetPlayer, data, value) end
         if not data or (imports.type(data) ~= "string") then return false end
@@ -70,6 +71,7 @@ else
         end
         return true
     end
+
     function syncer.public:syncEntityData(element, data, value, isSync, targetPlayer, remoteSignature)
         if not targetPlayer then return network:emit("Assetify:onRecieveSyncedEntityData", true, false, targetPlayer, element, data, value, remoteSignature) end
         if not element or not imports.isElement(element) or not data or (imports.type(data) ~= "string") then return false end
