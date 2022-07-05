@@ -452,6 +452,7 @@ else
                                         for k = 1, #unparsedIPLDatas, 1 do
                                             local childName = string.gsub(imports.tostring(imports.gettok(unparsedIPLDatas[k], 2, asset.public.separators.IPL)), " ", "")
                                             if childName then
+                                                asset.public:buildFile(assetPath.."dff/lod/"..childName..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                                 asset.public:buildFile(assetPath.."dff/"..childName..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
                                                 asset.public:buildFile(assetPath.."col/"..childName..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                                 if parsedIDEDatas and parsedIDEDatas[childName] then
