@@ -80,8 +80,7 @@ if localPlayer then
         local dummyType = settings.assetPacks[assetType].assetType
         if not dummyType then return false end
         dummy.private:validateOffset(self, dummyData)
-        self.assetType, self.assetName = assetType, assetName
-        self.assetClump, self.clumpMaps = assetClump, clumpMaps
+        self.assetType, self.assetName, self.assetClump, self.clumpMaps = assetType, assetName, assetClump, clumpMaps
         self.dummyData = dummyData
         self.syncRate = imports.tonumber(dummyData.syncRate)
         self.cModelInstance = (remoteSignature and remoteSignature.element) or false
@@ -141,8 +140,7 @@ else
         local dummyType = settings.assetPacks[assetType].assetType
         if not dummyType then return false end
         dummy.private:validateOffset(self, dummyData)
-        self.assetType, self.assetName = assetType, assetName
-        self.assetClump, self.clumpMaps = assetClump, clumpMaps
+        self.assetType, self.assetName, self.assetClump, self.clumpMaps = assetType, assetName, assetClump, clumpMaps
         self.syncRate = imports.tonumber(dummyData.syncRate)
         self.dummyData = dummyData
         if dummyType == "object" then
