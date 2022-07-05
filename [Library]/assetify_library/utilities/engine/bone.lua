@@ -221,18 +221,6 @@ else
         end):resume({executions = settings.downloader.syncRate, frames = 1})
         return true
     end
-    function syncer.public:syncBoneDetachment(element)
-        if targetPlayer then return network:emit("Assetify:Bone:onRecieveDetachment", true, false, targetPlayer, element) end
-        if not element or not imports.isElement(element) or not syncer.public.syncedBoneAttachments[element] then return false end
-        syncer.public.syncedBoneAttachments[element] = nil
-        thread:create(function(self)
-            for i, j in imports.pairs(syncer.public.loadedClients) do
-                syncer.public:syncBoneDetachment(element, i)
-                thread:pause()
-            end
-        end):resume({executions = settings.downloader.syncRate, frames = 1})
-        return true
-    end
     function syncer.public:syncBoneRefreshment(element, boneData, targetPlayer, remoteSignature)
         if targetPlayer then return network:emit("Assetify:Bone:onRecieveRefreshment", true, false, targetPlayer, element, boneData, remoteSignature) end
         if not element or not imports.isElement(element) or not boneData or not syncer.public.syncedBoneAttachments[element] then return false end
