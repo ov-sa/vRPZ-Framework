@@ -214,7 +214,7 @@ else
     end
 
     function bone.public:refresh(boneData)
-        if not bone.public:isInstance(self) then return false end
+        if not bone.public:isInstance(self) or self.isUnloading then return false end
         self.parentType = self.parentType or imports.getElementType(self.parent)
         self.parentType = ((self.parentType == "player") and "ped") or self.parentType
         if not self.parentType or not bone.public.ids[(self.parentType)] then return false end
