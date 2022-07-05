@@ -42,7 +42,7 @@ if localPlayer then
     renderer.public.resolution = {imports.guiGetScreenSize()}
     renderer.public.resolution[1], renderer.public.resolution[2] = renderer.public.resolution[1]*settings.renderer.resolution, renderer.public.resolution[2]*settings.renderer.resolution
 
-    renderer.public.render = function()
+    renderer.private.render = function()
         imports.dxUpdateScreenSource(renderer.virtualSource)
         return true
     end
