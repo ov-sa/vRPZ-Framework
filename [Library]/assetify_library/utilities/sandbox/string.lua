@@ -46,7 +46,7 @@ end
 function string.public.decode(type, baseString, options, clipNull)
     if not baseString or (imports.type(baseString) ~= "string") then return false end
     baseString = imports.decodeString(type, baseString, options)
-    return (baseString and clipNull and string.public.gsub(baseString, string.char(0), "")) or baseString
+    return (baseString and clipNull and string.public.gsub(baseString, string.public.char(0), "")) or baseString
 end
 
 function string.public.split(baseString, separator)
@@ -54,7 +54,9 @@ function string.public.split(baseString, separator)
     baseString = baseString..separator
     local result = {}
     for matchValue in string.public.gmatch(baseString, "(.-)"..separator) do
-        if #matchValue > 0 then table:insert(result, matchValue) end
+        if #string.public.gsub(matchValue, "%s", "") > 0 then
+            table:insert(result, matchValue)
+        end
     end
     return result
 end
