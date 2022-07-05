@@ -63,8 +63,8 @@ function table.public:clone(baseTable, isRecursive)
 end
 
 local __table_concat = imports.table.concat
-function table.public:concat(...)
-    return __table_concat(...)
+function table.public:concat(baseTable, separator, startIndex, endIndex)
+    return __table_concat(baseTable, separator, startIndex, endIndex)
 end
 
 function table.public:keys(baseTable)
