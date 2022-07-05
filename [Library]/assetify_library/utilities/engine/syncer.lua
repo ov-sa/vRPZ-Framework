@@ -78,7 +78,7 @@ if localPlayer then
         if not element or (not remoteSignature and not imports.isElement(element)) then return false end
         local modelID = manager:getID(assetType, assetName, assetClump)
         if modelID then
-            syncer.public.syncedElements[element] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps}
+            syncer.public.syncedElements[element] = {assetType = assetType, assetName = assetName, assetClump = assetClump, clumpMaps = clumpMaps}
             thread:createHeartbeat(function()
                 return not imports.isElement(element)
             end, function()
@@ -123,7 +123,7 @@ else
         local cAsset = manager:getData(assetType, assetName)
         if not cAsset or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
         remoteSignature = imports.getElementType(element)
-        syncer.public.syncedElements[element] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps}
+        syncer.public.syncedElements[element] = {assetType = assetType, assetName = assetName, assetClump = assetClump, clumpMaps = clumpMaps}
         thread:create(function(self)
             for i, j in imports.pairs(syncer.public.loadedClients) do
                 syncer.public:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, i, remoteSignature)
@@ -158,7 +158,7 @@ else
     network:create("Assetify:Downloader:onSyncPostPool"):on(function(self, source)
         self:resume({executions = settings.downloader.syncRate, frames = 1})
         for i, j in imports.pairs(syncer.public.syncedElements) do
-            if j then syncer.public:syncElementModel(i, j.type, j.name, j.clump, j.clumpMaps, source) end
+            if j then syncer.public:syncElementModel(i, j.assetType, j.assetName, j.assetClump, j.clumpMaps, source) end
             thread:pause()
         end
     end, true)
