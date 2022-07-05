@@ -155,17 +155,14 @@ else
         __self:pause()
         return true
     end, true)
-    network:create("Assetify:Downloader:onSyncPostPool"):on(function(source)
-        --TODO: CAN MAKE THIS ASYNC I GUESS
-        local __source = source
-        thread:create(function(self)
-            local source = __source
-            for i, j in imports.pairs(syncer.public.syncedElements) do
-                if j then syncer.public:syncElementModel(i, j.type, j.name, j.clump, j.clumpMaps, source) end
-                thread:pause()
-            end
-        end):resume({executions = settings.downloader.syncRate, frames = 1})
-    end)
+
+    network:create("Assetify:Downloader:onSyncPostPool"):on(function(self, source)
+        self:resume({executions = settings.downloader.syncRate, frames = 1})
+        for i, j in imports.pairs(syncer.public.syncedElements) do
+            if j then syncer.public:syncElementModel(i, j.type, j.name, j.clump, j.clumpMaps, source) end
+            thread:pause()
+        end
+    end, true)
 
     --->>> State Syncers <<<---
     imports.addEventHandler("onPlayerResourceStart", root, function(resourceElement)

@@ -133,8 +133,6 @@ if localPlayer then
         self:destroyInstance()
         return true
     end
-
-    --->>> API Syncers <<<---
 else
     function dummy.public:create(assetType, assetName, assetClump, clumpMaps, dummyData)
         if not dummyData then return false end
