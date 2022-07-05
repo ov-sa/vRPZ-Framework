@@ -71,7 +71,7 @@ function dummy.public:clearElementBuffer(element)
 end
 
 if localPlayer then
-    function dummy.public:load(assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, remoteSignature)
+    function dummy.public:load(assetType, assetName, assetClump, clumpMaps, dummyData, remoteSignature)
         if not dummy.public:isInstance(self) then return false end
         local cAsset, cData = manager:getData(assetType, assetName, syncer.librarySerial)
         if not cAsset or not dummyData or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
@@ -79,7 +79,7 @@ if localPlayer then
         if not cAsset or not cData then return false end
         local dummyType = settings.assetPacks[assetType].assetType
         if not dummyType then return false end
-        targetDummy = (remoteSignature and targetDummy) or false
+        targetDummy = (remoteSignature and remoteSignature.element) or false
         if not targetDummy then
             dummy.private:validateOffset(self, dummyData)
         end
