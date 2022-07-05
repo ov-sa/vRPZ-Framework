@@ -222,25 +222,6 @@ else
         end
         return true
     end
-
-    --TODO: REFACTOR
-    function syncer.public:syncClearBoneAttachment(element, targetPlayer)
-        if targetPlayer then return network:emit("Assetify:Bone:onClearAttachment", true, false, targetPlayer, element) end
-        if not element or not imports.isElement(element) then return false end
-        syncer.public.syncedBoneAttachments[element] = nil
-        for i, j in imports.pairs(syncer.public.syncedBoneAttachments) do
-            if j and (j.parent == element) then
-                syncer.public.syncedBoneAttachments[i] = nil
-            end
-        end
-        thread:create(function(self)
-            for i, j in imports.pairs(syncer.public.loadedClients) do
-                syncer.public:syncClearBoneAttachment(element, i)
-                thread:pause()
-            end
-        end):resume({executions = settings.downloader.syncRate, frames = 1})
-        return true
-    end
 end
 
 --->>> API Syncers <<<---
