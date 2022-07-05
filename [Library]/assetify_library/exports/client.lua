@@ -51,9 +51,9 @@ function clearWorld(...) return manager.API:clearWorld(...) end
 function restoreWorld(...) return manager.API:restoreWorld(...) end
 function clearModel(...) return manager.API:clearModel(...) end
 function restoreModel(...) return manager.API:restoreModel(...) end
+function playSoundAsset(...) return manager.API.Sound:playSound(...) end
+function playSoundAsset3D(...) return manager.API.Sound:playSound3D(...) end
 
-function playSoundAsset(...) return manager:playSound(...) end
-function playSoundAsset3D(...) return manager:playSound3D(...) end
 function isRendererVirtualRendering() return renderer.cache.isVirtualRendering end
 function setRendererVirtualRendering(...) return renderer:setVirtualRendering(...) end
 function getRendererVirtualSource() return (renderer.cache.isVirtualRendering and renderer.cache.virtualSource) or false end

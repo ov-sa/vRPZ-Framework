@@ -22,7 +22,7 @@ local imports = {
     removeWorldModel = removeWorldModel,
     restoreAllWorldModels = restoreAllWorldModels,
     setOcclusionsEnabled = setOcclusionsEnabled,
-    setWorldSpecialPropertyEnabled = setWorldSpecialPropertyEnabled,
+    setWorldSpecialPropertyEnabled = setWorldSpecialPropertyEnabled
 }
 
 

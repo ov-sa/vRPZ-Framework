@@ -25,9 +25,6 @@ local imports = {
     addEventHandler = addEventHandler,
     engineReplaceAnimation = engineReplaceAnimation,
     engineRestoreAnimation = engineRestoreAnimation,
-    playSound = playSound,
-    playSound3D = playSound3D,
-    setSoundVolume = setSoundVolume,
     collectgarbage = collectgarbage,
     string = string,
     table = table,
@@ -382,32 +379,6 @@ if localPlayer then
             end
         end
         return true
-    end
-
-    function manager.public:playSound(assetName, soundCategory, soundIndex, soundVolume, isScoped, ...)
-        if not syncer.isLibraryLoaded then return false end
-        local cAsset, isLoaded = manager.public:getData("sound", assetName, syncer.librarySerial)
-        if not cAsset or not isLoaded then return false end
-        if not cAsset.manifestData.assetSounds or not cAsset.unSynced.assetCache[soundCategory] or not cAsset.unSynced.assetCache[soundCategory][soundIndex] or not cAsset.unSynced.assetCache[soundCategory][soundIndex].cAsset then return false end
-        local cSound = imports.playSound(cAsset.unSynced.rwCache.sound[(cAsset.unSynced.assetCache[soundCategory][soundIndex].cAsset.rwPaths.sound)], ...)
-        if cSound then
-            if soundVolume then imports.setSoundVolume(cSound, soundVolume) end
-            if isScoped then manager.public:setElementScoped(cSound) end
-        end
-        return cSound
-    end
-
-    function manager.public:playSound3D(assetName, soundCategory, soundIndex, soundVolume, isScoped, ...)
-        if not syncer.isLibraryLoaded then return false end
-        local cAsset, isLoaded = manager.public:getData("sound", assetName, syncer.librarySerial)
-        if not cAsset or not isLoaded then return false end
-        if not cAsset.manifestData.assetSounds or not cAsset.unSynced.assetCache[soundCategory] or not cAsset.unSynced.assetCache[soundCategory][soundIndex] or not cAsset.unSynced.assetCache[soundCategory][soundIndex].cAsset then return false end
-        local cSound = imports.playSound3D(cAsset.unSynced.rwCache.sound[(cAsset.unSynced.assetCache[soundCategory][soundIndex].cAsset.rwPaths.sound)], ...)
-        if cSound then
-            if soundVolume then imports.setSoundVolume(cSound, soundVolume) end
-            if isScoped then manager.public:setElementScoped(cSound) end
-        end
-        return cSound
     end
 else
     function manager.public:getData(assetType, assetName, isInternal)

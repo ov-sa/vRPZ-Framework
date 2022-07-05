@@ -13,14 +13,9 @@
 -----------------
 
 local imports = {
-    tonumber = tonumber,
-    destroyElement = destroyElement,
-    engineImportTXD = engineImportTXD,
-    engineReplaceModel = engineReplaceModel,
-    engineRestoreModel = engineRestoreModel,
-    restoreAllWorldModels = restoreAllWorldModels,
-    setOcclusionsEnabled = setOcclusionsEnabled,
-    setWorldSpecialPropertyEnabled = setWorldSpecialPropertyEnabled,
+    playSound = playSound,
+    playSound3D = playSound3D,
+    setSoundVolume = setSoundVolume
 }
 
 
@@ -28,27 +23,28 @@ local imports = {
 --[[ APIs: Sound ]]--
 ---------------------
 
-function manager.API.Sound:restoreWorld()
-    imports.destroyElement(streamer.waterBuffer)
-    streamer.waterBuffer = nil
-    imports.restoreAllWorldModels()
-    imports.setOcclusionsEnabled(true)
-    imports.setWorldSpecialPropertyEnabled("randomfoliage", true)
-    return true
-end
-
-function manager.API.Sound:clearModel(modelID)
-    modelID = imports.tonumber(modelID)
-    if modelID then
-        imports.engineImportTXD(asset.rwAssets.txd, modelID)
-        imports.engineReplaceModel(asset.rwAssets.dff, modelID, false)
-        return true
+function manager.API.Sound:playSound(assetName, soundCategory, soundIndex, soundVolume, isScoped, ...)
+    if not syncer.isLibraryLoaded then return false end
+    local cAsset, isLoaded = manager:getData("sound", assetName, syncer.librarySerial)
+    if not cAsset or not isLoaded then return false end
+    if not cAsset.manifestData.assetSounds or not cAsset.unSynced.assetCache[soundCategory] or not cAsset.unSynced.assetCache[soundCategory][soundIndex] or not cAsset.unSynced.assetCache[soundCategory][soundIndex].cAsset then return false end
+    local cSound = imports.playSound(cAsset.unSynced.rwCache.sound[(cAsset.unSynced.assetCache[soundCategory][soundIndex].cAsset.rwPaths.sound)], ...)
+    if cSound then
+        if soundVolume then imports.setSoundVolume(cSound, soundVolume) end
+        if isScoped then manager:setElementScoped(cSound) end
     end
-    return false
+    return cSound
 end
 
-function manager.API.Sound:restoreModel(modelID)
-    modelID = imports.tonumber(modelID)
-    if not modelID then return false end
-    return imports.engineRestoreModel(modelID)
+function manager.API.Sound:playSound3D(assetName, soundCategory, soundIndex, soundVolume, isScoped, ...)
+    if not syncer.isLibraryLoaded then return false end
+    local cAsset, isLoaded = manager:getData("sound", assetName, syncer.librarySerial)
+    if not cAsset or not isLoaded then return false end
+    if not cAsset.manifestData.assetSounds or not cAsset.unSynced.assetCache[soundCategory] or not cAsset.unSynced.assetCache[soundCategory][soundIndex] or not cAsset.unSynced.assetCache[soundCategory][soundIndex].cAsset then return false end
+    local cSound = imports.playSound3D(cAsset.unSynced.rwCache.sound[(cAsset.unSynced.assetCache[soundCategory][soundIndex].cAsset.rwPaths.sound)], ...)
+    if cSound then
+        if soundVolume then imports.setSoundVolume(cSound, soundVolume) end
+        if isScoped then manager:setElementScoped(cSound) end
+    end
+    return cSound
 end
