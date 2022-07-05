@@ -134,7 +134,7 @@ if localPlayer then
         return true
     end
 else
-    function dummy.public:create(assetType, assetName, assetClump, clumpMaps, dummyData)
+    function dummy.public:create(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer)
         if not dummy.public:isInstance(self) then return false end
         local cAsset = manager:getData(assetType, assetName)
         if not cAsset or not dummyData or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
@@ -160,6 +160,12 @@ else
         imports.setElementAlpha(self.cModelInstance, 0)
         imports.setElementDimension(self.cModelInstance, imports.tonumber(dummyData.dimension) or 0)
         imports.setElementInterior(self.cModelInstance, imports.tonumber(dummyData.interior) or 0)
+        thread:create(function(__self)
+            for i, j in imports.pairs(syncer.public.loadedClients) do
+                self:load(_, _, _, _, _, i)
+                thread:pause()
+            end
+        end):resume({executions = settings.downloader.syncRate, frames = 1})
         return true
     end
 
