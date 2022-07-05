@@ -87,10 +87,9 @@ if localPlayer then
     end
 
     function bone.public:load(element, parent, boneData, remoteSignature)
-        if not bone.public:isInstance(self) or (element == parent) then return false end
+        if not bone.public:isInstance(self) then return false end
         if not element or (not remoteSignature and not imports.isElement(element)) or not parent or (not remoteSignature and not imports.isElement(parent)) or not boneData or (element == parent) or bone.public.buffer.element[element] then return false end
-        self.element = element
-        self.parent = parent
+        self.element, self.parent = element, parent
         if not self:refresh(boneData, remoteSignature) then return false end
         self.cHeartbeat = thread:createHeartbeat(function()
             return not imports.isElement(element)
@@ -167,19 +166,11 @@ if localPlayer then
     network:create("Assetify:Bone:onRecieveRefreshment"):on(function(...) syncer.public:syncBoneRefreshment(...) end)
     network:create("Assetify:Bone:onRecieveClearAttachment"):on(function(...) syncer.public:syncClearBoneAttachment(...) end)
 else
-    function bone.public:load(element, parent, boneData, remoteSignature)
-        if not bone.public:isInstance(self) or (element == parent) then return false end
-        if not element or (not remoteSignature and not imports.isElement(element)) or not parent or (not remoteSignature and not imports.isElement(parent)) or not boneData or (element == parent) or bone.public.buffer.element[element] then return false end
-        self.element = element
-        self.parent = parent
-        if not self:refresh(boneData, remoteSignature) then return false end
-        self.cHeartbeat = thread:createHeartbeat(function()
-            return not imports.isElement(element)
-        end, function()
-            imports.setElementCollisionsEnabled(element, false)
-            self.cStreamer = streamer:create(element, "bone", {parent}, self.boneData.syncRate)
-            self.cHeartbeat = nil
-        end, settings.downloader.buildRate)
+    function bone.public:load(element, parent, boneData)
+        if not bone.public:isInstance(self) then return false end
+        if not element or not imports.isElement(element) or not parent or not imports.isElement(parent) or not boneData or (element == parent) or bone.public.buffer.element[element] then return false end
+        self.element, self.parent = element, parent
+        if not self:refresh(boneData) then return false end
         bone.public.buffer.element[element] = self
         bone.public.buffer.parent[parent] = bone.public.buffer.parent[parent] or {}
         bone.public.buffer.parent[parent][self] = true
