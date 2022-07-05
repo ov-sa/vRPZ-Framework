@@ -62,6 +62,8 @@
     <script src="handlers/loader.lua" type="client"/>
     <script src="handlers/api/world/shared.lua" type="shared"/>
     <script src="handlers/api/world/client.lua" type="client"/>
+    <script src="handlers/api/sound/shared.lua" type="shared"/>
+    <script src="handlers/api/sound/client.lua" type="client"/>
 
     <!-- Exports -->
     <export function="import" type="shared"/>
