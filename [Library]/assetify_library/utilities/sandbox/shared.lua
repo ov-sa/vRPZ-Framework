@@ -16,6 +16,7 @@ local imports = {
     type = type,
     tonumber = tonumber,
     decodeString = decodeString,
+    getLocalPlayer = getLocalPlayer,
     isElement = isElement,
     destroyElement = destroyElement,
     getElementMatrix = getElementMatrix,
@@ -40,13 +41,9 @@ decodeString = function(decodeType, decodeData, decodeOptions, removeNull)
     return rawString
 end
 
-isElement = function(element)
-    return (element and imports.isElement(element)) or false
-end
-
-destroyElement = function(element)
-    return (isElement(element) and imports.destroyElement(element)) or false
-end
+localPlayer = imports.getLocalPlayer()
+isElement = function(element) return (element and imports.isElement(element)) or false end
+destroyElement = function(element) return (isElement(element) and imports.destroyElement(element)) or false end
 
 getElementPosition = function(element, offX, offY, offZ)
     if not offX or not offY or not offZ then
