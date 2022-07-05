@@ -94,7 +94,7 @@ if localPlayer then
             end, settings.downloader.buildRate)
         end
     end
-    network:create("Assetify:onRecieveSyncedElement"):on(function() syncer.public:syncElementModel(...) end)
+    network:create("Assetify:onRecieveSyncedElement"):on(function(...) syncer.public:syncElementModel(...) end)
 
     --->>> State Syncer <<<---
     network:create("Assetify:onElementDestroy"):on(function(source)

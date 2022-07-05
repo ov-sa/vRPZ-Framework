@@ -35,10 +35,10 @@ local function onLibraryLoaded()
 end
 
 imports.addEventHandler("onResourceStart", resourceRoot, function()
-    imports.fetchRemote(syncer.public.librarySource, function(response, status)
+    imports.fetchRemote(syncer.librarySource, function(response, status)
         if not response or not status or (status ~= 0) then return false end
         response = imports.table:decode(response)
-        if response and response.tag_name and (syncer.public.libraryVersion ~= response.tag_name) then
+        if response and response.tag_name and (syncer.libraryVersion ~= response.tag_name) then
             imports.outputDebugString("[Assetify]: Latest version available - "..response.tag_name, 3)
         end
     end)

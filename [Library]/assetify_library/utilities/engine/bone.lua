@@ -170,7 +170,7 @@ if localPlayer then
     network:create("Assetify:onRecieveBoneDetachment"):on(function(...) syncer.public:syncBoneDetachment(...) end)
     network:create("Assetify:onRecieveBoneRefreshment"):on(function(...) syncer.public:syncBoneRefreshment(...) end)
     network:create("Assetify:onRecieveClearBoneAttachment"):on(function(...) syncer.public:syncClearBoneAttachment(...) end)
-els
+else
     --->>> API Syncers <<<---
     syncer.public.syncedBoneAttachments = {}
     function syncer.public:syncBoneAttachment(element, parent, boneData, targetPlayer, remoteSignature)
