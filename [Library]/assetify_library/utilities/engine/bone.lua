@@ -164,7 +164,7 @@ if localPlayer then
     end
 else
     function bone.public:load(element, parent, boneData, targetPlayer)
-        if not bone.public:isInstance(self) then return false end
+        if not bone.public:isInstance(self) or self.isUnloading then return false end
         if targetPlayer then return network:emit("Assetify:Bone:onAttachment", true, false, targetPlayer, self.element, self.parent, self.boneData, self.remoteSignature) end
         if not element or not parent or not imports.isElement(element) or not imports.isElement(parent) or not boneData or (element == parent) or bone.public.buffer.element[element] then return false end
         self.element, self.parent = element, parent
@@ -186,7 +186,7 @@ else
     end
 
     function bone.public:unload(targetPlayer)
-        if not bone.public:isInstance(self) then return false end
+        if not bone.public:isInstance(self) or self.isUnloading then return false end
         if targetPlayer then return network:emit("Assetify:Bone:onDetachment", true, false, targetPlayer, self.element) end
         if self.isUnloading then return false end
         self.isUnloading = true

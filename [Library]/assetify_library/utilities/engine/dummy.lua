@@ -135,7 +135,8 @@ if localPlayer then
     end
 else
     function dummy.public:create(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer)
-        if not dummy.public:isInstance(self) then return false end
+        if not dummy.public:isInstance(self) or self.isUnloading then return false end
+        if targetPlayer then return network:emit("Assetify:Dummy:onDespawn", true, false, targetPlayer, self.element) end
         local cAsset = manager:getData(assetType, assetName)
         if not cAsset or not dummyData or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
         local dummyType = settings.assetPacks[assetType].assetType
@@ -170,7 +171,7 @@ else
     end
 
     function dummy.public:unload(targetPlayer)
-        if not dummy.public:isInstance(self) then return false end
+        if not dummy.public:isInstance(self) or self.isUnloading then return false end
         if targetPlayer then return network:emit("Assetify:Dummy:onDespawn", true, false, targetPlayer, self.element) end
         if self.isUnloading then return false end
         self.isUnloading = true
