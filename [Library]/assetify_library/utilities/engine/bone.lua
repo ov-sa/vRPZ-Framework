@@ -49,20 +49,6 @@ for i, j in imports.pairs(bone.public.ids) do
     indexes = nil
 end
 
-function bone.public:create(...)
-    local cBone = self:createInstance()
-    if cBone and not cBone:load(...) then
-        cBone:destroyInstance()
-        return false
-    end
-    return cBone
-end
-
-function bone.public:destroy(...)
-    if not bone.public:isInstance(self) then return false end
-    return self:unload(...)
-end
-
 function bone.private:fetchInstance(element)
     return (element and bone.public.buffer.element[element]) or false
 end
@@ -90,24 +76,38 @@ function bone.private:validateOffset(instance, boneData)
     return true
 end
 
+function bone.public:create(...)
+    local cBone = self:createInstance()
+    if cBone and not cBone:load(...) then
+        cBone:destroyInstance()
+        return false
+    end
+    return cBone
+end
+
+function bone.public:destroy(...)
+    if not bone.public:isInstance(self) then return false end
+    return self:unload(...)
+end
+
+function bone.public:clearElementBuffer(element)
+    if not element then return false end
+    if bone.public.buffer.element[element] then
+        bone.public.buffer.element[element]:destroy()
+    end
+    if bone.public.buffer.parent[element] then
+        for i, j in imports.pairs(bone.public.buffer.parent[element]) do
+            i:destroy()
+        end
+    end
+    bone.public.buffer.parent[element] = nil
+    return true
+end
+
 if localPlayer then
     bone.public.cache = {
         element = {}
     }
-
-    function bone.public:clearElementBuffer(element)
-        if not element then return false end
-        if bone.public.buffer.element[element] then
-            bone.public.buffer.element[element]:destroy()
-        end
-        if bone.public.buffer.parent[element] then
-            for i, j in imports.pairs(bone.public.buffer.parent[element]) do
-                i:destroy()
-            end
-        end
-        bone.public.buffer.parent[element] = nil
-        return true
-    end
 
     function bone.public:load(element, parent, boneData, remoteSignature)
         if not bone.public:isInstance(self) then return false end
