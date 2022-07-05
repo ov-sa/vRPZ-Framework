@@ -71,9 +71,9 @@ if localPlayer then
                         renderer.virtualRTs.emissive = imports.dxCreateRenderTarget(renderer.public.resolution[1], renderer.public.resolution[2], false)
                     end
                 end
-                imports.addEventHandler("onClientHUDRender", root, renderer.public.render)
+                imports.addEventHandler("onClientHUDRender", root, renderer.render)
             else
-                imports.removeEventHandler("onClientHUDRender", root, renderer.public.render)
+                imports.removeEventHandler("onClientHUDRender", root, renderer.render)
                 imports.destroyElement(renderer.virtualSource)
                 renderer.virtualSource = nil
                 for i, j in imports.pairs(renderer.virtualRTs) do
