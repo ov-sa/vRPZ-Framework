@@ -39,7 +39,9 @@ local imports = {
 --[[ Class: Manager ]]--
 ------------------------
 
-local manager = class:create("manager")
+local manager = class:create("manager", {
+    API = {}
+})
 
 function manager.public:fetchAssets(assetType)
     if not syncer.isLibraryLoaded or not assetType or not settings.assetPacks[assetType] then return false end

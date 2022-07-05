@@ -13,14 +13,7 @@
 -----------------
 
 local imports = {
-    tonumber = tonumber,
-    isElement = isElement,
-    destroyElement = destroyElement,
-    engineImportTXD = engineImportTXD,
-    engineReplaceModel = engineReplaceModel,
-    engineRestoreModel = engineRestoreModel,
     removeWorldModel = removeWorldModel,
-    restoreAllWorldModels = restoreAllWorldModels,
     createWater = createWater,
     setOcclusionsEnabled = setOcclusionsEnabled,
     setWorldSpecialPropertyEnabled = setWorldSpecialPropertyEnabled,
@@ -70,30 +63,9 @@ function clearWorld()
     return true
 end
 
-function restoreWorld()
-    imports.destroyElement(streamer.waterBuffer)
-    streamer.waterBuffer = nil
-    imports.restoreAllWorldModels()
-    imports.setOcclusionsEnabled(true)
-    imports.setWorldSpecialPropertyEnabled("randomfoliage", true)
-    return true
-end
-
-function clearModel(modelID)
-    modelID = imports.tonumber(modelID)
-    if modelID then
-        imports.engineImportTXD(asset.rwAssets.txd, modelID)
-        imports.engineReplaceModel(asset.rwAssets.dff, modelID, false)
-        return true
-    end
-    return false
-end
-
-function restoreModel(modelID)
-    modelID = imports.tonumber(modelID)
-    if not modelID then return false end
-    return imports.engineRestoreModel(modelID)
-end
+function restoreWorld(...) return manager.API:restoreWorld(...) end
+function clearModel(...) return manager.API:clearModel(...) end
+function restoreModel(...) return manager.API:restoreModel(...) end
 
 function playSoundAsset(...) return manager:playSound(...) end
 function playSoundAsset3D(...) return manager:playSound3D(...) end

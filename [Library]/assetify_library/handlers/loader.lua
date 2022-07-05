@@ -19,13 +19,13 @@ local imports = {
 }
 
 
------------------------------------------------
---[[ Events: On Client Resource Start/Stop ]]--
------------------------------------------------
+----------------------
+--[[ Loader Utils ]]--
+----------------------
 
 imports.addEventHandler("onClientResourceStart", resourceRoot, function()
-    local worldExec = (settings.GTA.clearWorld and clearWorld) or restoreWorld
-    worldExec()
+    if settings.GTA.clearWorld then manager.API:clearWorld()
+    else manager.API:restoreWorld() end
     if settings.GTA.waterLevel then
         if streamer.waterBuffer then imports.setWaterLevel(streamer.waterBuffer, settings.GTA.waterLevel) end
         imports.setWaterLevel(settings.GTA.waterLevel, true, true, true, true)

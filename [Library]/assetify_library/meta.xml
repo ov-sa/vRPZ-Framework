@@ -60,6 +60,8 @@
     <script src="handlers/builder.lua" type="server"/>
     <script src="handlers/bundler.lua" type="shared"/>
     <script src="handlers/loader.lua" type="client"/>
+    <script src="handlers/api/world/shared.lua" type="shared"/>
+    <script src="handlers/api/world/client.lua" type="client"/>
 
     <!-- Exports -->
     <export function="import" type="shared"/>
