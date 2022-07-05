@@ -203,9 +203,7 @@ if localPlayer then
                 sceneIPLData = (cAsset.manifestData.encryptKey and string.decode("tea", sceneIPLData, {key = cAsset.manifestData.encryptKey})) or sceneIPLData
                 if sceneIPLData then
                     local sceneIDEData = (cAsset.sceneIDE and file:read(assetPath..(asset.references.scene)..".ide")) or false
-                    if sceneIDEData then
-                        sceneIDEData = (cAsset.manifestData.encryptKey and string.decode("tea", sceneIDEData, {key = cAsset.manifestData.encryptKey})) or sceneIDEData
-                    end
+                    sceneIDEData = (sceneIDEData and cAsset.manifestData.encryptKey and string.decode("tea", sceneIDEData, {key = cAsset.manifestData.encryptKey})) or sceneIDEData
                     local unparsedIDEDatas, unparsedIPLDatas = (sceneIDEData and imports.split(sceneIDEData, "\n")) or false, imports.split(sceneIPLData, "\n")
                     local parsedIDEDatas = (unparsedIDEDatas and {}) or false
                     if unparsedIDEDatas then
