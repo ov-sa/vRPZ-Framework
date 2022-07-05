@@ -141,25 +141,30 @@ if localPlayer then
     end
 else
     function dummy.public:create(assetType, assetName, assetClump, clumpMaps, dummyData)
+        if not dummy.public:isInstance(self) then return false end
         if not dummyData then return false end
-        local cAsset = manager:getData(assetType, assetName)
+        local cAsset = manager:getData(assetType, assetName, syncer.librarySerial)
         if not cAsset or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
+        if assetClump then cData = cAsset.unSynced.assetCache[assetClump].cAsset.synced end
+        if not cAsset or not cData then return false end
         local dummyType = settings.assetPacks[assetType].assetType
         if not dummyType then return false end
-        local cDummy = false
+        targetDummy = (remoteSignature and targetDummy) or false
+        local dummyType = settings.assetPacks[assetType].assetType
+        if not dummyType then return false end
         dummy.private:validateOffset(self, dummyData)
         if dummyType == "object" then
-            cDummy = imports.createObject(settings.assetPacks[assetType].assetBase, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
+            self.cModelInstance = imports.createObject(settings.assetPacks[assetType].assetBase, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
         elseif dummyType == "ped" then
-            cDummy = imports.createPed(settings.assetPacks[assetType].assetBase, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.z)
+            self.cModelInstance = imports.createPed(settings.assetPacks[assetType].assetBase, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.z)
         elseif dummyType == "vehicle" then
-            cDummy = imports.createVehicle(settings.assetPacks[assetType].assetBase, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
+            self.cModelInstance = imports.createVehicle(settings.assetPacks[assetType].assetBase, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
         end
-        if not cDummy then return false end
-        imports.setElementAlpha(cDummy, 0)
-        imports.setElementDimension(cDummy, imports.tonumber(dummyData.dimension) or 0)
-        imports.setElementInterior(cDummy, imports.tonumber(dummyData.interior) or 0)
-        return cDummy
+        if not self.cModelInstance then return false end
+        imports.setElementAlpha(self.cModelInstance, 0)
+        imports.setElementDimension(self.cModelInstance, imports.tonumber(dummyData.dimension) or 0)
+        imports.setElementInterior(self.cModelInstance, imports.tonumber(dummyData.interior) or 0)
+        return true
     end
 
     function dummy.public:unload()
