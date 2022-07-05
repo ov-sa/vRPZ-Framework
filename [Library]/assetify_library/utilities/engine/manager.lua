@@ -83,29 +83,34 @@ function manager.public:clearElementBuffer(element, isResource)
     manager.private.buffer.instance[element], manager.private.buffer.scoped[element] = nil, nil
     return true
 end
-imports.addEventHandler((localPlayer and "onClientResourceStop") or "onResourceStop", root, function(stoppedResource) manager.public:clearElementBuffer(stoppedResource, true) end)
+
+imports.addEventHandler((localPlayer and "onClientResourceStop") or "onResourceStop", root, function(stoppedResource)
+    manager.public:clearElementBuffer(stoppedResource, true)
+end)
 
 if localPlayer then
+    function manager.public:isLoaded(assetType, assetName)
+        local cAsset, isLoaded = manager.public:getData(assetType, assetName)
+        return (cAsset and isLoaded and true) or false
+    end
+
     function manager.public:getData(assetType, assetName, isInternal)
         if not assetType or not assetName then return false end
-        if settings.assetPacks[assetType] then
-            local cAsset = settings.assetPacks[assetType].rwDatas[assetName]
-            if cAsset then
-                local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
-                local unSynced = cAsset.unSynced
-                if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
-                    cAsset = imports.table:clone(cAsset, true)
-                    cAsset.manifestData.encryptKey = nil
-                    cAsset.unSynced = nil
-                end
-                if cAsset.manifestData.assetClumps or (assetType == "module") or (assetType == "animation") or (assetType == "sound") or (assetType == "scene") then
-                    return cAsset, (unSynced and true) or false
-                else
-                    return cAsset, (unSynced and unSynced.assetCache.cAsset and unSynced.assetCache.cAsset.synced) or false
-                end
-            end
+        if not settings.assetPacks[assetType] then return false end
+        local cAsset = settings.assetPacks[assetType].rwDatas[assetName]
+        if not cAsset then return false end
+        local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
+        local unSynced = cAsset.unSynced
+        if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
+            cAsset = imports.table:clone(cAsset, true)
+            cAsset.manifestData.encryptKey = nil
+            cAsset.unSynced = nil
         end
-        return false
+        if cAsset.manifestData.assetClumps or (assetType == "module") or (assetType == "animation") or (assetType == "sound") or (assetType == "scene") then
+            return cAsset, (unSynced and true) or false
+        else
+            return cAsset, (unSynced and unSynced.assetCache.cAsset and unSynced.assetCache.cAsset.synced) or false
+        end
     end
 
     function manager.public:getID(assetType, assetName, assetClump)
@@ -117,11 +122,6 @@ if localPlayer then
         else
             return (cAsset.unSynced.assetCache.cAsset and cAsset.unSynced.assetCache.cAsset.synced and cAsset.unSynced.assetCache.cAsset.synced.modelID) or false
         end
-    end
-
-    function manager.public:isLoaded(assetType, assetName)
-        local cAsset, isLoaded = manager.public:getData(assetType, assetName)
-        return (cAsset and isLoaded and true) or false
     end
 
     function manager.public:getDep(assetType, assetName, depType, depIndex, depSubIndex)
