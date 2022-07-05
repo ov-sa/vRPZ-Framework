@@ -50,6 +50,7 @@ syncer.public.librarySerial = imports.md5(syncer.public.libraryName..":"..import
 network:create("Assetify:onLoad")
 network:create("Assetify:onUnload")
 network:create("Assetify:onModuleLoad")
+network:create("Assetify:onElementDestroy")
 function syncer.public:import() return syncer end
 imports.addEventHandler((localPlayer and "onClientResourceStart") or "onResourceStart", resourceRoot, function() syncer.public.isLibraryBooted = true end)
 syncer.private.execOnLoad = function(execFunc)
@@ -99,7 +100,7 @@ if localPlayer then
     network:create("Assetify:onReceiveSyncedElement"):on(function(...) syncer.public:syncElementModel(...) end)
 
     --->>> State Syncer <<<---
-    network:create("Assetify:onElementDestroy"):on(function(source)
+    network:fetch("Assetify:onElementDestroy"):on(function(source)
         if not syncer.public.isLibraryBooted or not source then return false end
         shader:clearElementBuffer(source)
         manager:clearElementBuffer(source)
@@ -176,6 +177,7 @@ else
     imports.addEventHandler("onElementModelChange", root, function() syncer.public.syncedElements[source] = nil end)
     imports.addEventHandler("onElementDestroy", root, function()
         if not syncer.public.isLibraryBooted then return false end
+        network:emit("Assetify:onElementDestroy", false, source)
         local __source = source
         thread:create(function(self)
             local source = __source
