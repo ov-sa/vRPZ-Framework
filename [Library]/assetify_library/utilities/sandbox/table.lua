@@ -67,6 +67,23 @@ function table.public:concat(...)
     return __table_concat(...)
 end
 
+function table.public:keys(baseTable)
+    if not baseTable or (imports.type(baseTable) ~= "table") then return false end
+    local indexCache, __baseTable = {}, {}
+    for i, j in imports.pairs(baseTable) do
+        if i ~= "__T" then
+            indexCache[i] = true
+            table.public:insert(__baseTable, i)
+        end
+    end
+    for i = 1, (baseTable.__T and baseTable.__T.length) or #baseTable, 1 do
+        if not indexCache[i] then
+            table.public:insert(__baseTable, i)
+        end
+    end
+    return __baseTable
+end
+
 function table.public:insert(baseTable, index, value, isForced)
     if not baseTable or (imports.type(baseTable) ~= "table") then return false end
     if index and (isForced or (value ~= nil)) then
@@ -107,7 +124,7 @@ function table.public:remove(baseTable, index)
     return true
 end
 
-function table.public:foreach(baseTable, exec)
+function table.public:forEach(baseTable, exec)
     if not baseTable or (imports.type(baseTable) ~= "table") or not exec or (imports.type(exec) ~= "function") then return false end
     for i = 1, (baseTable.__T and baseTable.__T.length) or #baseTable, 1 do
         exec(i, baseTable[i])
@@ -116,3 +133,11 @@ function table.public:foreach(baseTable, exec)
 end
 
 unpack = function(...) table.public:unpack(...) end
+
+
+local test = table.public:pack(1, nil, 5)
+print(table.public:unpack(table.public:keys(test)))
+
+table.public:forEach(test, function(index, value)
+    print("INDEX: "..index.." VALUE: "..tostring(value))
+end)
