@@ -34,6 +34,12 @@ local imports = {
 local manager = class:create("manager", {
     API = {}
 })
+manager.private.rwFormat = {
+    assetCache = {},
+    rwCache = {
+        ifp = {}, sound = {}, txd = {}, dff = {}, col = {}, map = {}, dep = {}
+    }
+}
 manager.private.buffer = {
     instance = {},
     scoped = {}
@@ -94,6 +100,17 @@ if localPlayer then
         return (cAsset and isLoaded and true) or false
     end
 
+    function manager.public:getID(assetType, assetName, assetClump)
+        if (assetType == "module") or (assetType == "animation") or (assetType == "sound") then return false end
+        local cAsset, isLoaded = manager.public:getData(assetType, assetName, syncer.librarySerial)
+        if not cAsset or not isLoaded or imports.type(cAsset.unSynced) ~= "table" then return false end
+        if cAsset.manifestData.assetClumps then
+            return (assetClump and cAsset.manifestData.assetClumps[assetClump] and cAsset.unSynced.assetCache[assetClump] and cAsset.unSynced.assetCache[assetClump].cAsset and cAsset.unSynced.assetCache[assetClump].cAsset.synced and cAsset.unSynced.assetCache[assetClump].cAsset.synced.modelID) or false
+        else
+            return (cAsset.unSynced.assetCache.cAsset and cAsset.unSynced.assetCache.cAsset.synced and cAsset.unSynced.assetCache.cAsset.synced.modelID) or false
+        end
+    end
+
     function manager.public:getData(assetType, assetName, isInternal)
         if not assetType or not assetName then return false end
         if not settings.assetPacks[assetType] then return false end
@@ -113,17 +130,6 @@ if localPlayer then
         end
     end
 
-    function manager.public:getID(assetType, assetName, assetClump)
-        if (assetType == "module") or (assetType == "animation") or (assetType == "sound") then return false end
-        local cAsset, isLoaded = manager.public:getData(assetType, assetName, syncer.librarySerial)
-        if not cAsset or not isLoaded or imports.type(cAsset.unSynced) ~= "table" then return false end
-        if cAsset.manifestData.assetClumps then
-            return (assetClump and cAsset.manifestData.assetClumps[assetClump] and cAsset.unSynced.assetCache[assetClump] and cAsset.unSynced.assetCache[assetClump].cAsset and cAsset.unSynced.assetCache[assetClump].cAsset.synced and cAsset.unSynced.assetCache[assetClump].cAsset.synced.modelID) or false
-        else
-            return (cAsset.unSynced.assetCache.cAsset and cAsset.unSynced.assetCache.cAsset.synced and cAsset.unSynced.assetCache.cAsset.synced.modelID) or false
-        end
-    end
-
     function manager.public:getDep(assetType, assetName, depType, depIndex, depSubIndex)
         local cAsset, isLoaded = manager.public:getData(assetType, assetName, syncer.librarySerial)
         if not cAsset or not isLoaded then return false end
@@ -140,18 +146,7 @@ if localPlayer then
         if not cAsset or isLoaded then return false end
         local cAssetPack = settings.assetPacks[assetType]
         local assetPath = (asset.references.root)..assetType.."/"..assetName.."/"
-        cAsset.unSynced = {
-            assetCache = {},
-            rwCache = {
-                ifp = {},
-                sound = {},
-                txd = {},
-                dff = {},
-                col = {},
-                map = {},
-                dep = {}
-            }
-        }
+        cAsset.unSynced = table:clone(manager.private.rwFormat, true)
         shader:createTex(cAsset.manifestData.shaderMaps, cAsset.unSynced.rwCache.map, cAsset.manifestData.encryptKey)
         asset:createDep(cAsset.manifestData.assetDeps, cAsset.unSynced.rwCache.dep, cAsset.manifestData.encryptKey)
         if cAsset.manifestData.shaderMaps and cAsset.manifestData.shaderMaps.control then
@@ -286,9 +281,7 @@ if localPlayer then
             thread:create(function(self)
                 for i, j in imports.pairs(cAsset.unSynced.assetCache) do
                     for k, v in imports.pairs(j) do
-                        if v.cAsset then
-                            v.cAsset:destroy(cAsset.unSynced.rwCache)
-                        end
+                        if v.cAsset then v.cAsset:destroy(cAsset.unSynced.rwCache) end
                         thread:pause()
                     end
                     thread:pause()
@@ -302,14 +295,10 @@ if localPlayer then
             thread:create(function(self)
                 for i, j in imports.pairs(cAsset.unSynced.assetCache) do
                     if j.cAsset then
-                        if j.cAsset.cScene then
-                            j.cAsset.cScene:destroy()
-                        end
+                        if j.cAsset.cScene then j.cAsset.cScene:destroy() end
                         j.cAsset:destroy(cAsset.unSynced.rwCache)
                     end
-                    if j.cDummy then
-                        j.cDummy:destroy()
-                    end
+                    if j.cDummy then j.cDummy:destroy() end
                     thread:pause()
                 end
                 shader:clearAssetBuffer(cAsset.unSynced.rwCache.map)
@@ -320,9 +309,7 @@ if localPlayer then
         elseif cAsset.manifestData.assetClumps then
             thread:create(function(self)
                 for i, j in imports.pairs(cAsset.unSynced.assetCache) do
-                    if j.cAsset then
-                        j.cAsset:destroy(cAsset.unSynced.rwCache)
-                    end
+                    if j.cAsset then j.cAsset:destroy(cAsset.unSynced.rwCache) end
                     thread:pause()
                 end
                 shader:clearAssetBuffer(cAsset.unSynced.rwCache.map)
@@ -344,21 +331,18 @@ if localPlayer then
 else
     function manager.public:getData(assetType, assetName, isInternal)
         if not assetType or not assetName then return false end
-        if settings.assetPacks[assetType] then
-            local cAsset = settings.assetPacks[assetType].assetPack.rwDatas[assetName]
-            if cAsset then
-                local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
-                if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
-                    cAsset = cAsset.synced
-                    if cAsset.manifestData.encryptKey then
-                        cAsset = imports.table:clone(cAsset, true)
-                        cAsset.manifestData.encryptKey = nil
-                    end
-                end
-                return cAsset, false
+        if not settings.assetPacks[assetType] then return false end
+        local cAsset = settings.assetPacks[assetType].assetPack.rwDatas[assetName]
+        if not cAsset then return false end
+        local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
+        if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
+            cAsset = cAsset.synced
+            if cAsset.manifestData.encryptKey then
+                cAsset = imports.table:clone(cAsset, true)
+                cAsset.manifestData.encryptKey = nil
             end
         end
-        return false
+        return cAsset, false
     end
 
     function manager.public:getDep(assetType, assetName, depType, depIndex, depSubIndex)
