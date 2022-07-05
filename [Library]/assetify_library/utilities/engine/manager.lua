@@ -8,7 +8,6 @@
 ----------------------------------------------------------------
 
 
---TODO: UPDATE
 -----------------
 --[[ Imports ]]--
 -----------------
@@ -94,6 +93,32 @@ imports.addEventHandler((localPlayer and "onClientResourceStop") or "onResourceS
 end)
 
 if localPlayer then
+    function manager.private:createDep(cAsset)
+        if not cAsset then return false end
+        shader:createTex(cAsset.manifestData.shaderMaps, cAsset.unSynced.rwCache.map, cAsset.manifestData.encryptKey)
+        asset:createDep(cAsset.manifestData.assetDeps, cAsset.unSynced.rwCache.dep, cAsset.manifestData.encryptKey)
+        if cAsset.manifestData.shaderMaps and cAsset.manifestData.shaderMaps.control then
+            for i, j in imports.pairs(cAsset.manifestData.shaderMaps.control) do
+                local shaderTextures, shaderInputs = {}, {}
+                for k = 1, #j, 1 do
+                    local v = j[k]
+                    if v.control then shaderTextures[("controlTex_"..k)] = v.control end
+                    if v.bump then shaderTextures[("controlTex_"..k.."_bump")] = v.bump end
+                    for x = 1, #shader.cache.validChannels, 1 do
+                        local y = shader.cache.validChannels[x]
+                        if v[(y.index)] then
+                            shaderTextures[("controlTex_"..k.."_"..(y.index))] = v[(y.index)].map
+                            shaderInputs[("controlScale_"..k.."_"..(y.index))] = v[(y.index)].scale
+                            if v[(y.index)].bump then shaderTextures[("controlTex_"..k.."_"..(y.index).."_bump")] = v[(y.index)].bump end
+                        end
+                    end
+                end
+                shader:create(nil, "control", "Assetify_TextureMapper", i, shaderTextures, shaderInputs, cAsset.unSynced.rwCache.map, j, cAsset.manifestData.encryptKey)
+            end
+        end
+        return true
+    end
+
     function manager.private:freeAsset(cAsset)
         if not cAsset then return false end
         shader:clearAssetBuffer(cAsset.unSynced.rwCache.map)
@@ -155,27 +180,7 @@ if localPlayer then
         local cAssetPack = settings.assetPacks[assetType]
         local assetPath = (asset.references.root)..assetType.."/"..assetName.."/"
         cAsset.unSynced = table:clone(manager.private.rwFormat, true)
-        shader:createTex(cAsset.manifestData.shaderMaps, cAsset.unSynced.rwCache.map, cAsset.manifestData.encryptKey)
-        asset:createDep(cAsset.manifestData.assetDeps, cAsset.unSynced.rwCache.dep, cAsset.manifestData.encryptKey)
-        if cAsset.manifestData.shaderMaps and cAsset.manifestData.shaderMaps.control then
-            for i, j in imports.pairs(cAsset.manifestData.shaderMaps.control) do
-                local shaderTextures, shaderInputs = {}, {}
-                for k = 1, #j, 1 do
-                    local v = j[k]
-                    if v.control then shaderTextures[("controlTex_"..k)] = v.control end
-                    if v.bump then shaderTextures[("controlTex_"..k.."_bump")] = v.bump end
-                    for x = 1, #shader.cache.validChannels, 1 do
-                        local y = shader.cache.validChannels[x]
-                        if v[(y.index)] then
-                            shaderTextures[("controlTex_"..k.."_"..(y.index))] = v[(y.index)].map
-                            shaderInputs[("controlScale_"..k.."_"..(y.index))] = v[(y.index)].scale
-                            if v[(y.index)].bump then shaderTextures[("controlTex_"..k.."_"..(y.index).."_bump")] = v[(y.index)].bump end
-                        end
-                    end
-                end
-                shader:create(nil, "control", "Assetify_TextureMapper", i, shaderTextures, shaderInputs, cAsset.unSynced.rwCache.map, j, cAsset.manifestData.encryptKey)
-            end
-        end
+        manager.private:createDep(cAsset)
         if assetType == "module" then
             if not asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache, {}) then return false end
         elseif assetType == "animation" then
