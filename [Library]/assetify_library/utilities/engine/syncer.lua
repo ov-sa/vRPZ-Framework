@@ -155,7 +155,7 @@ else
         __self:pause()
         return true
     end, true)
-    network:create("Assetify:Downloader:onPostSyncPool"):on(function(source)
+    network:create("Assetify:Downloader:onSyncPostPool"):on(function(source)
         --TODO: CAN MAKE THIS ASYNC I GUESS
         local __source = source
         thread:create(function(self)

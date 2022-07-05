@@ -239,7 +239,7 @@ if localPlayer then
     network:create("Assetify:Bone:onRefreshment"):on(function(...) syncer.public:syncBoneRefreshment(2, ...) end)
     network:create("Assetify:Bone:onClearAttachment"):on(function(...) syncer.public:syncClearBoneAttachment(_, ...) end)
 else
-    network:fetch("Assetify:Downloader:onPostSyncPool", true):on(function(self, source)
+    network:fetch("Assetify:Downloader:onSyncPostPool", true):on(function(self, source)
         self:resume({executions = settings.downloader.syncRate, frames = 1})
         for i, j in imports.pairs(bone.public.buffer.element) do
             if j then network:emit("Assetify:Bone:onAttachment", true, false, source, self.element, self.parent, self.boneData, self.remoteSignature) end
