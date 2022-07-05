@@ -150,7 +150,7 @@ else
             self.cModelInstance = imports.createVehicle(settings.assetPacks[assetType].assetBase, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
         end
         if not self.cModelInstance then return false end
-        self.cDummy = self.cCollisionInstance or self.cModelInstance
+        self.cDummy = self.cModelInstance
         dummy.public.buffer[(self.cDummy)] = self
         imports.setElementAlpha(self.cModelInstance, 0)
         imports.setElementDimension(self.cModelInstance, imports.tonumber(dummyData.dimension) or 0)
