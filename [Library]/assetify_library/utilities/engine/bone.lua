@@ -73,7 +73,7 @@ function bone.private:validateOffset(instance, boneData)
     boneData.position.x, boneData.position.y, boneData.position.z = imports.tonumber(boneData.position.x) or 0, imports.tonumber(boneData.position.y) or 0, imports.tonumber(boneData.position.z) or 0
     boneData.rotation.x, boneData.rotation.y, boneData.rotation.z = imports.tonumber(boneData.rotation.x) or 0, imports.tonumber(boneData.rotation.y) or 0, imports.tonumber(boneData.rotation.z) or 0
     if boneData.rotation.isRelative then
-        local rotationData = (instance.boneData and instance.boneData.rotation) or (instance.remoteSignature and instance.remoteSignature.elementRotation) or false
+        local rotationData = (instance.boneData and instance.boneData.rotation) or false
         if not rotationData then
             local rotX, rotY, rotZ = {imports.getElementRotation(instance.element, "ZYX")}
             rotationData = {x = rotX, y = rotY, z = rotZ}
@@ -183,9 +183,7 @@ else
         if not self:refresh(boneData) then return false end
         self.remoteSignature = {
             parentType = imports.getElementType(parent),
-            elementType = imports.getElementType(element),
-            --TODO: NO USE OF THIS?
-            elementRotation = {imports.getElementRotation(element, "ZYX")}
+            elementType = imports.getElementType(element)
         }
         bone.public.buffer.element[element] = self
         bone.public.buffer.parent[parent] = bone.public.buffer.parent[parent] or {}
@@ -238,6 +236,7 @@ else
         if not element or not imports.isElement(element) or not boneData or not syncer.public.syncedBoneAttachments[element] then return false end
         remoteSignature = {
             elementType = imports.getElementType(element),
+            --TODO: REMOVE THIS
             elementRotation = {imports.getElementRotation(element, "ZYX")}
         }
         syncer.public.syncedBoneAttachments[element].boneData = boneData
