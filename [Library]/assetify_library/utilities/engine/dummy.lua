@@ -206,7 +206,7 @@ else
         end
     end, true)
 end
-network:create("Assetify:onElementDestroy"):on(function(source)
+network:fetch("Assetify:onElementDestroy"):on(function(source)
     if not syncer.public.isLibraryBooted or not source then return false end
     dummy.public:clearElementBuffer(source)
 end)
