@@ -26,9 +26,7 @@ local imports = {
     createObject = createObject,
     setElementAlpha = setElementAlpha,
     setElementDimension = setElementDimension,
-    setElementInterior = setElementInterior,
-    clearModel = clearModel,
-    math = math
+    setElementInterior = setElementInterior
 }
 
 
@@ -36,6 +34,7 @@ local imports = {
 --[[ Class: Shader ]]--
 -----------------------
 
+local syncer = syncer:import()
 local planar = class:create("planar", {
     cache = {
         validTypes = {
@@ -44,19 +43,21 @@ local planar = class:create("planar", {
     },
     buffer = {}
 }, "light")
-for i = 1, #planar.private.cache.validTypes, 1 do
-    local j = planar.private.cache.validTypes[i]
-    local modelPath = "utilities/rw/"..j.index.."/"
-    j.modelID, j.collisionID = imports.engineRequestModel("object"), imports.engineRequestModel("object")
-    imports.engineImportTXD(imports.engineLoadTXD(modelPath.."dict.rw"), j.modelID)
-    imports.engineReplaceModel(imports.engineLoadDFF(modelPath.."buffer.rw"), j.modelID, true)
-    imports.engineReplaceCOL(imports.engineLoadCOL(modelPath.."collision.rw"), j.modelID)
-    imports.clearModel(j.collisionID)
-    imports.engineReplaceCOL(imports.engineLoadCOL(modelPath.."collision.rw"), j.collisionID)
-    planar.private.cache.validTypes[i] = nil
-    planar.private.cache.validTypes[(j.index)] = j
-    planar.private.cache.validTypes[(j.index)].index = nil
-end
+syncer.private.execOnBoot(function()
+    for i = 1, #planar.private.cache.validTypes, 1 do
+        local j = planar.private.cache.validTypes[i]
+        local modelPath = "utilities/rw/"..j.index.."/"
+        j.modelID, j.collisionID = imports.engineRequestModel("object"), imports.engineRequestModel("object")
+        imports.engineImportTXD(imports.engineLoadTXD(modelPath.."dict.rw"), j.modelID)
+        imports.engineReplaceModel(imports.engineLoadDFF(modelPath.."buffer.rw"), j.modelID, true)
+        imports.engineReplaceCOL(imports.engineLoadCOL(modelPath.."collision.rw"), j.modelID)
+        manager.API.World:clearModel(j.collisionID)
+        imports.engineReplaceCOL(imports.engineLoadCOL(modelPath.."collision.rw"), j.collisionID)
+        planar.private.cache.validTypes[i] = nil
+        planar.private.cache.validTypes[(j.index)] = j
+        planar.private.cache.validTypes[(j.index)].index = nil
+    end
+end)
 
 function planar.public:create(...)
     local cLight = self:createInstance()
@@ -118,7 +119,7 @@ end
 
 function planar.public:setResolution(resolution)
     if not self or (self == planar.public) then return false end
-    self.lightData.resolution = imports.math.max(0, imports.tonumber(resolution) or 1)
+    self.lightData.resolution = math.max(0, imports.tonumber(resolution) or 1)
     self.cShader:setValue("lightResolution", self.lightData.resolution)
     return true
 end
@@ -133,7 +134,7 @@ end
 function planar.public:setColor(r, g, b, a)
     if not self or (self == planar.public) then return false end
     self.lightData.color = self.lightData.color or {}
-    self.lightData.color[1], self.lightData.color[2], self.lightData.color[3], self.lightData.color[4] = imports.math.max(0, imports.math.min(255, imports.tonumber(r) or 255)), imports.math.max(0, imports.math.min(255, imports.tonumber(g) or 255)), imports.math.max(0, imports.math.min(255, imports.tonumber(b) or 255)), imports.math.max(0, imports.math.min(255, imports.tonumber(a) or 255))
+    self.lightData.color[1], self.lightData.color[2], self.lightData.color[3], self.lightData.color[4] = math.max(0, math.min(255, imports.tonumber(r) or 255)), math.max(0, math.min(255, imports.tonumber(g) or 255)), math.max(0, math.min(255, imports.tonumber(b) or 255)), math.max(0, math.min(255, imports.tonumber(a) or 255))
     self.cShader:setValue("lightColor", self.lightData.color[1]/255, self.lightData.color[2]/255, self.lightData.color[3]/255, self.lightData.color[4]/255)
     return true
 end
