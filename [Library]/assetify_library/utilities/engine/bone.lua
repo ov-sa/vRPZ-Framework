@@ -67,6 +67,23 @@ function bone.private:fetchInstance(element)
     return (element and bone.public.buffer.element[element]) or false
 end
 
+function bone.private:calculateRotation(instance, boneData)
+    if not boneData.rotation.isRelative then return true end
+    local rotationData = (instance.boneData and instance.boneData.rotation) or (instance.remoteSignature and instance.remoteSignature.elementRotation) or false
+    if not rotationData then
+        local rotX, rotY, rotZ = {imports.getElementRotation(instance.element, "ZYX")}
+        rotationData = {x = rotX, y = rotY, z = rotZ}
+    end
+    local rotQuat = imports.math.quat:fromEuler(rotationData.x, rotationData.y, rotationData.z)
+    local xQuat, yQuat, zQuat = imports.math.quat:fromAxisAngle(1, 0, 0, boneData.rotation.x), imports.math.quat:fromAxisAngle(0, 1, 0, boneData.rotation.y), imports.math.quat:fromAxisAngle(0, 0, 1, boneData.rotation.z)
+    local __rotQuat = xQuat*yQuat*zQuat
+    rotQuat = __rotQuat*rotQuat
+    boneData.rotation.x, boneData.rotation.y, boneData.rotation.z = rotQuat:toEuler()
+    rotQuat:destroy(); xQuat:destroy(); yQuat:destroy(); zQuat:destroy()
+    boneData.rotation.isRelative = false
+    return true
+end
+
 if localPlayer then
     bone.public.cache = {
         element = {}
@@ -124,17 +141,7 @@ if localPlayer then
         boneData.position, boneData.rotation = boneData.position or {}, boneData.rotation or {}
         boneData.position.x, boneData.position.y, boneData.position.z = imports.tonumber(boneData.position.x) or 0, imports.tonumber(boneData.position.y) or 0, imports.tonumber(boneData.position.z) or 0
         boneData.rotation.x, boneData.rotation.y, boneData.rotation.z = imports.tonumber(boneData.rotation.x) or 0, imports.tonumber(boneData.rotation.y) or 0, imports.tonumber(boneData.rotation.z) or 0
-        if boneData.rotation.isRelative then
-            local prev_rotX, prev_rotY, prev_rotZ = nil, nil, nil
-            if self.boneData then prev_rotX, prev_rotY, prev_rotZ = self.boneData.rotation.x, self.boneData.rotation.y, self.boneData.rotation.z
-            else prev_rotX, prev_rotY, prev_rotZ = (remoteSignature and remoteSignature.elementRotation) or imports.getElementRotation(self.element, "ZYX") end
-            local rotQuat = imports.math.quat:fromEuler(prev_rotX, prev_rotY, prev_rotZ)
-            local xQuat, yQuat, zQuat = imports.math.quat:fromAxisAngle(1, 0, 0, boneData.rotation.x), imports.math.quat:fromAxisAngle(0, 1, 0, boneData.rotation.y), imports.math.quat:fromAxisAngle(0, 0, 1, boneData.rotation.z)
-            local __rotQuat = xQuat*yQuat*zQuat
-            rotQuat = __rotQuat*rotQuat
-            boneData.rotation.x, boneData.rotation.y, boneData.rotation.z = rotQuat:toEuler()
-            rotQuat:destroy(); xQuat:destroy(); yQuat:destroy(); zQuat:destroy()
-        end
+        bone.private:calculateRotation(self, boneData.rotation)
         boneData.rotationMatrix = imports.matrix.fromRotation(boneData.rotation.x, boneData.rotation.y, boneData.rotation.z)
         boneData.syncRate = imports.tonumber(boneData.syncRate) or settings.streamer.boneSyncRate
         local isSyncRateModified = self.boneData and (self.boneData.syncRate ~= boneData.syncRate)
@@ -171,8 +178,7 @@ else
         if targetPlayer then return network:emit("Assetify:Bone:onAttachment", true, false, targetPlayer, self.element, self.parent, self.boneData, self.remoteSignature) end
         if not element or not imports.isElement(element) or not parent or not imports.isElement(parent) or not boneData or (element == parent) or bone.public.buffer.element[element] then return false end
         self.element, self.parent = element, parent
-        --TODO: WHAT TO DO?
-        --if not self:refresh(boneData) then return false end
+        if not self:refresh(boneData) then return false end
         bone.public.buffer.element[element] = self
         bone.public.buffer.parent[parent] = bone.public.buffer.parent[parent] or {}
         bone.public.buffer.parent[parent][self] = true
@@ -196,6 +202,23 @@ else
             bone.public.buffer.element[(self.element)] = nil
             self:destroyInstance()
         end):resume({executions = settings.downloader.syncRate, frames = 1})
+        return true
+    end
+
+    function bone.public:refresh(boneData)
+        if not bone.public:isInstance(self) then return false end
+        self.parentType = self.parentType or imports.getElementType(self.parent)
+        self.parentType = ((self.parentType == "player") and "ped") or self.parentType
+        if not self.parentType or not bone.public.ids[(self.parentType)] then return false end
+        boneData.id = imports.tonumber(boneData.id)
+        if not boneData.id or not bone.public.ids[(self.parentType)][(boneData.id)] then return false end
+        boneData.position, boneData.rotation = boneData.position or {}, boneData.rotation or {}
+        boneData.position.x, boneData.position.y, boneData.position.z = imports.tonumber(boneData.position.x) or 0, imports.tonumber(boneData.position.y) or 0, imports.tonumber(boneData.position.z) or 0
+        boneData.rotation.x, boneData.rotation.y, boneData.rotation.z = imports.tonumber(boneData.rotation.x) or 0, imports.tonumber(boneData.rotation.y) or 0, imports.tonumber(boneData.rotation.z) or 0
+        bone.private:calculateRotation(self, boneData.rotation)
+        boneData.rotationMatrix = imports.matrix.fromRotation(boneData.rotation.x, boneData.rotation.y, boneData.rotation.z)
+        boneData.syncRate = imports.tonumber(boneData.syncRate) or settings.streamer.boneSyncRate
+        self.boneData = boneData
         return true
     end
 
