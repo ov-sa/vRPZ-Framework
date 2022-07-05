@@ -98,6 +98,8 @@ if localPlayer then
         end
         if not self.cModelInstance then return false end
         if self.cCollisionInstance then imports.setElementAlpha(self.cCollisionInstance, 0) end
+        self.cDummy = self.cCollisionInstance or self.cModelInstance
+        dummy.public.buffer[(self.cDummy)] = self
         self.cHeartbeat = thread:createHeartbeat(function()
             if not targetDummy then
                 return false
@@ -118,8 +120,6 @@ if localPlayer then
             end
             self.cHeartbeat = nil
         end, settings.downloader.buildRate)
-        self.cDummy = self.cCollisionInstance or self.cModelInstance
-        dummy.public.buffer[(self.cDummy)] = self
         return true
     end
 
@@ -150,6 +150,8 @@ else
             self.cModelInstance = imports.createVehicle(settings.assetPacks[assetType].assetBase, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
         end
         if not self.cModelInstance then return false end
+        self.cDummy = self.cCollisionInstance or self.cModelInstance
+        dummy.public.buffer[(self.cDummy)] = self
         imports.setElementAlpha(self.cModelInstance, 0)
         imports.setElementDimension(self.cModelInstance, imports.tonumber(dummyData.dimension) or 0)
         imports.setElementInterior(self.cModelInstance, imports.tonumber(dummyData.interior) or 0)
