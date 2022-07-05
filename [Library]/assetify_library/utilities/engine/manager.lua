@@ -43,21 +43,21 @@ local manager = class:create("manager")
 
 function manager.public:fetchAssets(assetType)
     if not syncer.isLibraryLoaded or not assetType or not settings.assetPacks[assetType] then return false end
-    local packAssets = {}
+    local cAssets = {}
     if localPlayer then
         if settings.assetPacks[assetType].rwDatas then
             for i, j in imports.pairs(settings.assetPacks[assetType].rwDatas) do
-                imports.table:insert(packAssets, i)
+                imports.table:insert(cAssets, i)
             end
         end
     else
         for i, j in imports.pairs(settings.assetPacks[assetType].assetPack.manifestData) do
             if settings.assetPacks[assetType].assetPack.rwDatas[j] then
-                imports.table:insert(packAssets, j)
+                imports.table:insert(cAssets, j)
             end
         end
     end
-    return packAssets
+    return cAssets
 end
 
 if localPlayer then
