@@ -142,6 +142,9 @@ else
         if not dummyType then return false end
         targetDummy = (remoteSignature and targetDummy) or false
         dummy.private:validateOffset(self, dummyData)
+        self.assetType, self.assetName = assetType, assetName
+        self.assetClump, self.clumpMaps = assetClump, clumpMaps
+        self.dummyData = dummyData
         if dummyType == "object" then
             self.cModelInstance = imports.createObject(settings.assetPacks[assetType].assetBase, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
         elseif dummyType == "ped" then
