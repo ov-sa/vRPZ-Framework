@@ -130,8 +130,6 @@ if localPlayer then
     end
 
     --->>> API Syncers <<<---
-    function syncer.public:syncAssetDummy(...) return dummy:create(...) end
-    network:create("Assetify:onRecieveAssetDummy"):on(function(...) syncer.public:syncAssetDummy(...) end)
 else
     function dummy.public:create(assetType, assetName, assetClump, clumpMaps, dummyData)
         if not dummyData then return false end
@@ -157,8 +155,7 @@ else
         return cDummy
     end
 
-    --->>> API Syncers <<<---
-    syncer.public.syncedAssetDummies = {}
+    --TODO: WIP..
     function syncer.public:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer, targetDummy, remoteSignature)    
         if targetPlayer then return network:emit("Assetify:onRecieveAssetDummy", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, remoteSignature) end
         --TODO:HERE SHOULD BE CLASS NOT OBJECT
@@ -175,3 +172,11 @@ else
         return targetDummy
     end
 end
+
+
+---------------------
+--[[ API Syncers ]]--
+---------------------
+
+function syncer.public:syncAssetDummy(...) return dummy:create(table:unpack(table:pack(...), 5)) end
+network:create("Assetify:onRecieveAssetDummy"):on(function(...) syncer.public:syncAssetDummy(...) end)
