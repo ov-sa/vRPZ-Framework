@@ -17,7 +17,6 @@ local imports = {
     pairs = pairs,
     tonumber = tonumber,
     getTickCount = getTickCount,
-    isElement = isElement,
     destroyElement = destroyElement,
     guiGetScreenSize = guiGetScreenSize,
     addEventHandler = addEventHandler,
@@ -77,14 +76,10 @@ if localPlayer then
                 imports.addEventHandler("onClientHUDRender", root, renderer.public.render)
             else
                 imports.removeEventHandler("onClientHUDRender", root, renderer.public.render)
-                if renderer.public.cache.virtualSource and imports.isElement(renderer.public.cache.virtualSource) then
-                    imports.destroyElement(renderer.public.cache.virtualSource)
-                end
+                imports.destroyElement(renderer.public.cache.virtualSource)
                 renderer.public.cache.virtualSource = nil
                 for i, j in imports.pairs(renderer.public.cache.virtualRTs) do
-                    if j and imports.isElement(j) then
-                        imports.destroyElement(j)
-                    end
+                    imports.destroyElement(j)
                     renderer.public.cache.virtualRTs[i] = nil
                 end
             end
