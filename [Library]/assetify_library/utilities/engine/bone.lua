@@ -224,7 +224,11 @@ else
     end
 end
 
---->>> API Syncers <<<---
+
+---------------------
+--[[ API Syncers ]]--
+---------------------
+
 function syncer.public:syncBoneAttachment(...) return bone:create(table:unpack(table:pack(...), 3)) end
 function syncer.public:syncBoneDetachment(element) local cBone = bone.private:fetchInstance(element); if not cBone then return false end; return cBone:destroy() end
 function syncer.public:syncBoneRefreshment(element, ...) local cBone = bone.private:fetchInstance(element); if not cBone then return false end; return cBone:refresh(table:unpack(table:pack(...), 1)) end
