@@ -73,18 +73,16 @@ function manager.public:clearElementBuffer(element, isResource)
     if isResource then
         local resourceScope = manager.private.buffer.scoped[element]
         if not resourceScope then return false end
-        manager.private.buffer.scoped[element] = nil
         for i, j in imports.pairs(resourceScope) do
             imports.destroyElement(i)
-            resourceScope[i] = nil
         end
     else
         if not imports.isElement(element) then return false end
         local elementScope = manager.private.buffer.instance[element]
         if not elementScope or not manager.private.buffer.scoped[elementScope] then return false end
         manager.private.buffer.scoped[elementScope][element] = nil
-        manager.private.buffer.instance[element] = nil
     end
+    manager.private.buffer.instance[element], manager.private.buffer.scoped[element] = nil, nil
     return true
 end
 
