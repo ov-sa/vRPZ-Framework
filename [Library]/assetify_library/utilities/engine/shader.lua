@@ -8,7 +8,6 @@
 ----------------------------------------------------------------
 
 
---TODO: UPDATE
 -----------------
 --[[ Imports ]]--
 -----------------
@@ -31,18 +30,18 @@ local imports = {
 -----------------------
 
 local shader = class:create("shader", {
-    cache = {
-        validChannels = {
-            {index = "red", channel = "r"},
-            {index = "green", channel = "g"},
-            {index = "blue", channel = "b"}
-        },
-        validLayers = {
-            {index = "diffuse", alpha = true},
-            {index = "emissive", alpha = false}
-        },
-        remoteBlacklist = {}
-    }
+    shaderPriority = 10000,
+    shaderDistance = 0,
+    validChannels = {
+        {index = "red", channel = "r"},
+        {index = "green", channel = "g"},
+        {index = "blue", channel = "b"}
+    },
+    validLayers = {
+        {index = "diffuse", alpha = true},
+        {index = "emissive", alpha = false}
+    },
+    remoteBlacklist = {}
 })
 shader.private.cache.__remoteBlacklist = {}
 for i = 1, #shader.public.remoteBlacklist, 1 do
@@ -53,9 +52,7 @@ shader.public.remoteBlacklist = shader.private.cache.__remoteBlacklist
 shader.private.cache.__remoteBlacklist = nil
 
 if localPlayer then
-    shader.public.shaderPriority = 10000
-    shader.public.shaderDistance = 0
-    shader.public.preLoadedTex = {
+    shader.public.preLoaded, shader.public.preLoadedTex = {}, {
         invisibleMap = imports.dxCreateTexture(2, 2, "dxt5", "clamp")
     }
     shader.public.buffer = {
@@ -64,7 +61,6 @@ if localPlayer then
     }
     shader.public.rwCache = shaderRW
     shaderRW = nil
-    shader.public.preLoaded = {}
 
     function shader.public:create(...)
         local cShader = self:createInstance()
@@ -84,31 +80,21 @@ if localPlayer then
                 for k, v in imports.pairs(j) do
                     for m = 1, #v, 1 do
                         local n = v[m]
-                        if n.clump then
-                            rwCache.texture[(n.clump)] = shader.public:loadTex(n.clump, encryptKey)
-                        end
-                        if n.bump then
-                            rwCache.texture[(n.bump)] = shader.public:loadTex(n.bump, encryptKey)
-                        end
+                        if n.clump then rwCache.texture[(n.clump)] = shader.public:loadTex(n.clump, encryptKey) end
+                        if n.bump then rwCache.texture[(n.bump)] = shader.public:loadTex(n.bump, encryptKey) end
                     end
                 end
             elseif i == "control" then
                 for k, v in imports.pairs(j) do
                     for m = 1, #v, 1 do
                         local n = v[m]
-                        if n.control then
-                            rwCache.texture[(n.control)] = shader.public:loadTex(n.control, encryptKey)
-                        end
-                        if n.bump then
-                            rwCache.texture[(n.bump)] = shader.public:loadTex(n.bump, encryptKey)
-                        end
+                        if n.control then rwCache.texture[(n.control)] = shader.public:loadTex(n.control, encryptKey) end
+                        if n.bump then rwCache.texture[(n.bump)] = shader.public:loadTex(n.bump, encryptKey) end
                         for x = 1, #shader.public.validChannels, 1 do
                             local y = n[(shader.public.validChannels[x].index)]
                             if y and y.map then
                                 rwCache.texture[(y.map)] = shader.public:loadTex(y.map, encryptKey)
-                                if y.bump then
-                                    rwCache.texture[(y.bump)] = shader.public:loadTex(y.bump, encryptKey)
-                                end
+                                if y.bump then rwCache.texture[(y.bump)] = shader.public:loadTex(y.bump, encryptKey) end
                             end
                         end
                     end
@@ -199,9 +185,7 @@ if localPlayer then
             isStandalone = isStandalone
         }
         if not self.isPreLoaded then
-            if not isStandalone then
-                rwCache.shader[textureName] = self.cShader
-            end
+            if not isStandalone then rwCache.shader[textureName] = self.cShader end
             renderer:syncShader(self)
         end
         for i, j in imports.pairs(shaderTextures) do
