@@ -186,7 +186,7 @@ else
     end
 
     function bone.public:unload(targetPlayer)
-        if not bone.public:isInstance(self) or self.isUnloading then return false end
+        if not bone.public:isInstance(self) then return false end
         if targetPlayer then return network:emit("Assetify:Bone:onDetachment", true, false, targetPlayer, self.element) end
         if self.isUnloading then return false end
         self.isUnloading = true

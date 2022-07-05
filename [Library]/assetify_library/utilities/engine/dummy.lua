@@ -170,7 +170,7 @@ else
     end
 
     function dummy.public:unload(targetPlayer)
-        if not dummy.public:isInstance(self) or self.isUnloading then return false end
+        if not dummy.public:isInstance(self) then return false end
         if targetPlayer then return network:emit("Assetify:Dummy:onDespawn", true, false, targetPlayer, self.element) end
         if self.isUnloading then return false end
         self.isUnloading = true
