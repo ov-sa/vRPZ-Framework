@@ -103,7 +103,7 @@ imports.addEventHandler("Assetify:Networker:API", root, function(serial, payload
     end
 end)
 
-network.private.fetchArg = function(index, pool)
+function network.private:fetchArg(index, pool)
     index = imports.tonumber(index) or 1
     if not pool or (imports.type(pool) ~= "table") then return false end
     local argValue = pool[index]
@@ -211,11 +211,11 @@ function network.public:emit(...)
         networkName = false
     }
     if self == network.public then
-        payload.networkName, payload.isRemote = network.private.fetchArg(_, cArgs), network.private.fetchArg(_, cArgs)
+        payload.networkName, payload.isRemote = network.private:fetchArg(_, cArgs), network.private:fetchArg(_, cArgs)
         if payload.isRemote then
-            payload.isLatent = network.private.fetchArg(_, cArgs)
+            payload.isLatent = network.private:fetchArg(_, cArgs)
             if network.public.isServerInstance then
-                payload.isReceiver = network.private.fetchArg(_, cArgs)
+                payload.isReceiver = network.private:fetchArg(_, cArgs)
                 payload.isReceiver = (payload.isReceiver and imports.isElement(payload.isReceiver) and (imports.getElementType(payload.isReceiver) == "player") and payload.isReceiver) or false
             end
         end
@@ -256,13 +256,13 @@ function network.public:emitCallback(cThread, ...)
         execSerial = network.public:serializeExec(cExec)
     }
     if self == network.public then
-        payload.networkName, payload.isRemote = network.private.fetchArg(_, cArgs), network.private.fetchArg(_, cArgs)
+        payload.networkName, payload.isRemote = network.private:fetchArg(_, cArgs), network.private:fetchArg(_, cArgs)
         if payload.isRemote then
-            payload.isLatent = network.private.fetchArg(_, cArgs)
+            payload.isLatent = network.private:fetchArg(_, cArgs)
             if not network.public.isServerInstance then
                 payload.isReceiver = localPlayer
             else
-                payload.isReceiver = network.private.fetchArg(_, cArgs)
+                payload.isReceiver = network.private:fetchArg(_, cArgs)
                 payload.isReceiver = (payload.isReceiver and imports.isElement(payload.isReceiver) and (imports.getElementType(payload.isReceiver) == "player") and payload.isReceiver) or false
             end
         end
