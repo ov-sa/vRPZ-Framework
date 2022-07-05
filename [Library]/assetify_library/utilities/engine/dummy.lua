@@ -163,18 +163,27 @@ else
         return true
     end
 
-    function dummy.public:unload()
+    function dummy.public:unload(targetPlayer)
         if not dummy.public:isInstance(self) then return false end
-        dummy.public.buffer[(self.cDummy)] = nil
-        imports.destroyElement(self.cModelInstance)
-        self:destroyInstance()
+        if targetPlayer then return network:emit("Assetify:Dummy:onDespawn", true, false, targetPlayer, self.element) end
+        if self.isUnloading then return false end
+        self.isUnloading = true
+        thread:create(function(__self)
+            for i, j in imports.pairs(syncer.public.loadedClients) do
+                self:unload(i)
+                thread:pause()
+            end
+            dummy.public.buffer[(self.cDummy)] = nil
+            imports.destroyElement(self.cModelInstance)
+            self:destroyInstance()
+        end):resume({executions = settings.downloader.syncRate, frames = 1})
         return true
     end
 
     --TODO: WIP..
     --[[
-    function syncer.public:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer, targetDummy, remoteSignature)    
-        if targetPlayer then return network:emit("Assetify:Dummy:onCreation", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, remoteSignature) end
+    function syncer.public:syncDummySpawn(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer, targetDummy, remoteSignature)    
+        if targetPlayer then return network:emit("Assetify:Dummy:onSpawn", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, remoteSignature) end
         --TODO:HERE SHOULD BE CLASS NOT OBJECT
         targetDummy = dummy:create(assetType, assetName, assetClump, clumpMaps, dummyData)
         if not targetDummy then return false end
@@ -182,7 +191,7 @@ else
         syncer.public.syncedAssetDummies[targetDummy] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps, dummyData = dummyData}
         thread:create(function(self)
             for i, j in imports.pairs(syncer.public.loadedClients) do
-                syncer.public:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, i, targetDummy, remoteSignature)
+                syncer.public:syncDummySpawn(assetType, assetName, assetClump, clumpMaps, dummyData, i, targetDummy, remoteSignature)
                 thread:pause()
             end
         end):resume({executions = settings.downloader.syncRate, frames = 1})
@@ -196,14 +205,16 @@ end
 --[[ API Syncers ]]--
 ---------------------
 
-function syncer.public:syncAssetDummy(length, ...) return dummy:create(table:unpack(table:pack(...), length or 5)) end
+function syncer.public:syncDummySpawn(length, ...) return dummy:create(table:unpack(table:pack(...), length or 5)) end
+function syncer.public:syncDummyDespawn(length, element) local cDummy = dummy.private:fetchInstance(element); if not cDummy then return false end; return cDummy:destroy() end
 if localPlayer then
-    network:create("Assetify:Dummy:onCreation"):on(function(...) syncer.public:syncAssetDummy(6, ...) end)
+    network:create("Assetify:Dummy:onSpawn"):on(function(...) syncer.public:syncDummySpawn(6, ...) end)
+    network:create("Assetify:Dummy:onDespawn"):on(function(...) syncer.public:syncDummySpawn(_, ...) end)
 else
     network:fetch("Assetify:Downloader:onSyncPostPool", true):on(function(self, source)
         self:resume({executions = settings.downloader.syncRate, frames = 1})
         for i, j in imports.pairs(dummy.public.buffer) do
-            if j and not j.isUnloading then network:emit("Assetify:Dummy:onCreation", true, false, source, self.assetType, self.assetName, self.assetClump, self.clumpMaps, self.dummyData, self.remoteSignature) end
+            if j and not j.isUnloading then network:emit("Assetify:Dummy:onSpawn", true, false, source, self.assetType, self.assetName, self.assetClump, self.clumpMaps, self.dummyData, self.remoteSignature) end
             thread:pause()
         end
     end, true)
