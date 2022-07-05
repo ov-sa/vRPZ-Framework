@@ -79,25 +79,25 @@ if localPlayer then
         elementType = (((elementType == "ped") or (elementType == "player")) and "ped") or elementType
         if not settings.assetPacks[assetType] or not settings.assetPacks[assetType].assetType or (settings.assetPacks[assetType].assetType ~= elementType) then return false end
         local modelID = manager:getID(assetType, assetName, assetClump)
-        if modelID then
-            syncer.public.syncedElements[element] = {assetType = assetType, assetName = assetName, assetClump = assetClump, clumpMaps = clumpMaps}
-            thread:createHeartbeat(function()
-                return not imports.isElement(element)
-            end, function()
-                if clumpMaps then
-                    shader:clearElementBuffer(element, "clump")
-                    local cAsset = manager:getData(assetType, assetName, syncer.public.librarySerial)
-                    if cAsset and cAsset.manifestData.shaderMaps and cAsset.manifestData.shaderMaps.clump then
-                        for i, j in imports.pairs(clumpMaps) do
-                            if cAsset.manifestData.shaderMaps.clump[i] and cAsset.manifestData.shaderMaps.clump[i][j] then
-                                shader:create(element, "clump", "Assetify_TextureClumper", i, {clumpTex = cAsset.manifestData.shaderMaps.clump[i][j].clump, clumpTex_bump = cAsset.manifestData.shaderMaps.clump[i][j].bump}, {}, cAsset.unSynced.rwCache.map, cAsset.manifestData.shaderMaps.clump[i][j], cAsset.manifestData.encryptKey)
-                            end
+        if not modelID then return false end
+        syncer.public.syncedElements[element] = {assetType = assetType, assetName = assetName, assetClump = assetClump, clumpMaps = clumpMaps}
+        thread:createHeartbeat(function()
+            return not imports.isElement(element)
+        end, function()
+            if clumpMaps then
+                shader:clearElementBuffer(element, "clump")
+                local cAsset = manager:getData(assetType, assetName, syncer.public.librarySerial)
+                if cAsset and cAsset.manifestData.shaderMaps and cAsset.manifestData.shaderMaps.clump then
+                    for i, j in imports.pairs(clumpMaps) do
+                        if cAsset.manifestData.shaderMaps.clump[i] and cAsset.manifestData.shaderMaps.clump[i][j] then
+                            shader:create(element, "clump", "Assetify_TextureClumper", i, {clumpTex = cAsset.manifestData.shaderMaps.clump[i][j].clump, clumpTex_bump = cAsset.manifestData.shaderMaps.clump[i][j].bump}, {}, cAsset.unSynced.rwCache.map, cAsset.manifestData.shaderMaps.clump[i][j], cAsset.manifestData.encryptKey)
                         end
                     end
                 end
-                imports.setElementModel(element, modelID)
-            end, settings.downloader.buildRate)
-        end
+            end
+            imports.setElementModel(element, modelID)
+        end, settings.downloader.buildRate)
+        return true
     end
 else
     syncer.public.libraryVersion = imports.getResourceInfo(resource, "version")
