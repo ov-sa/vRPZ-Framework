@@ -136,7 +136,7 @@ if localPlayer then
 else
     function dummy.public:create(assetType, assetName, assetClump, clumpMaps, dummyData)
         if not dummy.public:isInstance(self) then return false end
-        local cAsset = manager:getData(assetType, assetName, syncer.librarySerial)
+        local cAsset = manager:getData(assetType, assetName)
         if not cAsset or not dummyData or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
         local dummyType = settings.assetPacks[assetType].assetType
         if not dummyType then return false end
