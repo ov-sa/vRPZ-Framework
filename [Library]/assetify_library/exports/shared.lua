@@ -15,8 +15,7 @@
 local imports = {
     type = type,
     pairs = pairs,
-    isElement = isElement,
-    getElementType = getElementType
+    isElement = isElement
 }
 
 
@@ -48,16 +47,7 @@ end
 
 function getAssetData(...) return manager:getData(...) end
 function getAssetDep(...) return manager:getDep(...) end
-
-function setElementAsset(element, assetType, ...)
-    if not element or not imports.isElement(element) then return false end
-    local elementType = imports.getElementType(element)
-    --TODO: MOVE THIS CHECK INSIDE SYNCER?
-    elementType = (((elementType == "ped") or (elementType == "player")) and "ped") or elementType
-    if not settings.assetPacks[assetType] or not settings.assetPacks[assetType].assetType or (settings.assetPacks[assetType].assetType ~= elementType) then return false end
-    return syncer:syncElementModel(element, assetType, table:unpack(table:pack(...), 4))
-end
-
+function setElementAsset(...) return syncer:syncElementModel(_, ...) end
 function getElementAssetInfo(element) if not element or not imports.isElement(element) or not syncer.syncedElements[element] then return false end return syncer.syncedElements[element].type, syncer.syncedElements[element].name, syncer.syncedElements[element].clump, syncer.syncedElements[element].clumpMaps end
 function setGlobalData(...) return syncer:syncGlobalData(...) end
 function getGlobalData(data) if not data or (imports.type(data) ~= "string") then return false end; return syncer.syncedGlobalDatas[data] end
