@@ -14,7 +14,8 @@
 
 local imports = {
     type = type,
-    pairs = pairs
+    pairs = pairs,
+    string = string
 }
 
 
