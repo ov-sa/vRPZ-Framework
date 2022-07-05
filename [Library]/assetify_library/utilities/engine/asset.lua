@@ -46,8 +46,8 @@ local asset = class:create("asset", {
         scene = "scene"
     },
     separators = {
-        IDE = string.byte(", "),
-        IPL = string.byte(", ")
+        IDE = ", ",
+        IPL = ", "
     },
     ranges = {
         dimension = {-1, 65535},
@@ -444,17 +444,17 @@ else
                                         if unparsedIDEDatas then
                                             for k = 1, #unparsedIDEDatas, 1 do
                                                 local IDEData = string.split(unparsedIDEDatas[k], asset.public.separators.IDE)
-                                                IDEData[2] = (IDEData[2] and string.gsub(IDEData[2], " ", "")) or IDEData[2]
+                                                IDEData[2] = (IDEData[2] and string.gsub(IDEData[2], "%s", "")) or IDEData[2]
                                                 if IDEData[2] then
                                                     parsedIDEDatas[IDEData[2]] = {
-                                                        (IDEData[3] and string.gsub(IDEData[3], " ", "")) or false
+                                                        (IDEData[3] and string.gsub(IDEData[3], "%s", "")) or false
                                                     }
                                                 end
                                             end
                                         end
                                         for k = 1, #unparsedIPLDatas, 1 do
                                             local IPLData = string.split(unparsedIPLDatas[k], asset.public.separators.IPL)
-                                            IPLData[2] = (IPLData[2] and string.gsub(IPLData[2], " ", "")) or IPLData[2]
+                                            IPLData[2] = (IPLData[2] and string.gsub(IPLData[2], "%s", "")) or IPLData[2]
                                             if IPLData[2] then
                                                 asset.public:buildFile(assetPath.."dff/lod/"..IPLData[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                                 asset.public:buildFile(assetPath.."dff/"..IPLData[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
