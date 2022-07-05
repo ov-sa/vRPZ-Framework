@@ -120,19 +120,11 @@ if localPlayer then
 
     function dummy.public:unload()
         if not dummy.public:isInstance(self) then return false end
-        if self.cHeartbeat then
-            self.cHeartbeat:destroy()
-        end
-        if self.cStreamer then
-            self.cStreamer:destroy()
-        end
+        if self.cHeartbeat then self.cHeartbeat:destroy() end
+        if self.cStreamer then self.cStreamer:destroy() end
         dummy.public.buffer[(self.cDummy)] = nil
-        if self.cModelInstance and imports.isElement(self.cModelInstance) then
-            imports.destroyElement(self.cModelInstance)
-        end
-        if self.cCollisionInstance and imports.isElement(self.cCollisionInstance) then
-            imports.destroyElement(self.cCollisionInstance)
-        end
+        imports.destroyElement(self.cModelInstance)
+        imports.destroyElement(self.cCollisionInstance)
         self:destroyInstance()
         return true
     end

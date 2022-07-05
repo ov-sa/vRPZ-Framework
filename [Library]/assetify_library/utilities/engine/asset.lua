@@ -23,7 +23,6 @@ local imports = {
     gettok = gettok,
     tonumber = tonumber,
     tostring = tostring,
-    isElement = isElement,
     destroyElement = destroyElement,
     engineRequestModel = engineRequestModel,
     engineSetModelLODDistance = engineSetModelLODDistance,
@@ -106,9 +105,8 @@ if localPlayer then
     function asset.public:clearAssetBuffer(rwCache)
         if not rwCache then return false end
         for i, j in imports.pairs(rwCache) do
-            if j and imports.isElement(j) then
-                imports.destroyElement(j)
-            end
+            imports.destroyElement(j)
+            rwCache[i] = nil
         end
         return true
     end
@@ -218,10 +216,8 @@ if localPlayer then
         end
         if self.rwPaths then
             for i, j in imports.pairs(self.rwPaths) do
-                if rwCache[i] and rwCache[i][j] and imports.isElement(rwCache[i][j]) then
-                    imports.destroyElement(rwCache[i][j])
-                    rwCache[i][j] = nil
-                end
+                imports.destroyElement(rwCache[i][j])
+                rwCache[i][j] = nil
             end
         end
         self:destroyInstance()

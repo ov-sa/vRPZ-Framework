@@ -125,9 +125,7 @@ CInventory.dequipItem = function(player, item, prevSlot, slot, isEquipped)
     if isDequippable then
         CInventory.CBuffer[inventoryID].slots[prevSlot] = nil
         if isEquipped then CInventory.CBuffer[inventoryID].slots[slot] = {item = item} end
-        if CPlayer.CAttachments[player][prevSlot] and imports.isElement(CPlayer.CAttachments[player][prevSlot]) then
-            imports.destroyElement(CPlayer.CAttachments[player][prevSlot])
-        end
+        imports.destroyElement(CPlayer.CAttachments[player][prevSlot])
         CPlayer.CAttachments[player][prevSlot] = nil
         CGame.setEntityData(player, "Slot:"..prevSlot, nil)
         CGame.setEntityData(player, "Slot:Object:"..prevSlot, nil)

@@ -26,9 +26,7 @@ local cUtility = {
             CGame.setEntityData(player, "Character:ID", nil)
         end
         for i, j in imports.pairs(CPlayer.CAttachments[player]) do
-            if j and imports.isElement(j) then
-                imports.destroyElement(j)
-            end
+            imports.destroyElement(j)
         end
         CPlayer.CChannel[player] = nil
         CPlayer.CAttachments[player] = nil

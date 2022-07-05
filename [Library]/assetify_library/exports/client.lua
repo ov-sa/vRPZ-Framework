@@ -71,9 +71,7 @@ function clearWorld()
 end
 
 function restoreWorld()
-    if streamer.waterBuffer and imports.isElement(streamer.waterBuffer) then
-        imports.destroyElement(streamer.waterBuffer)
-    end
+    imports.destroyElement(streamer.waterBuffer)
     streamer.waterBuffer = nil
     imports.restoreAllWorldModels()
     imports.setOcclusionsEnabled(true)
