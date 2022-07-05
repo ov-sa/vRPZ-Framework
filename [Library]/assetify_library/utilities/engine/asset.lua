@@ -17,7 +17,6 @@ local imports = {
     pairs = pairs,
     md5 = md5,
     outputDebugString = outputDebugString,
-    split = split,
     gettok = gettok,
     tonumber = tonumber,
     tostring = tostring,
@@ -442,7 +441,7 @@ else
                                         local sceneIDEData = file:read(sceneIDEPath)
                                         asset.public:buildFile(sceneIDEPath, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                         asset.public:buildFile(assetPath..(asset.public.references.asset)..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
-                                        local unparsedIDEDatas, unparsedIPLDatas = (sceneIDEData and imports.split(sceneIDEData, "\n")) or false, imports.split(sceneIPLData, "\n")
+                                        local unparsedIDEDatas, unparsedIPLDatas = (sceneIDEData and string.split(sceneIDEData, "\n")) or false, string.split(sceneIPLData, "\n")
                                         local parsedIDEDatas = (unparsedIDEDatas and {}) or false
                                         cAssetPack.rwDatas[assetName].synced.sceneIDE = (parsedIDEDatas and true) or false
                                         if unparsedIDEDatas then

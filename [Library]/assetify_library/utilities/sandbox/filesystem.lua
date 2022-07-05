@@ -15,7 +15,6 @@
 local imports = {
     type = type,
     pairs = pairs,
-    split = split,
     collectgarbage = collectgarbage,
     fileExists = fileExists,
     fileCreate = fileCreate,
@@ -101,7 +100,7 @@ function file.public:resolveURL(path, chroot)
     local cURL = file.public:parseURL(path)
     if not cURL then return false end
     cURL.url = (cURL.pointer and imports.utf8.gsub(cURL.url, file.public.validPointers[(cURL.pointer)], "")) or cURL.url
-    local cDirs = imports.split(cURL.url, "/")
+    local cDirs = string.split(cURL.url, "/")
     if #cDirs > 0 then
         if chroot then
             chroot = file.public:parseURL(((imports.utf8.sub(chroot, #chroot) ~= "/") and chroot.."/") or chroot)

@@ -16,7 +16,6 @@
 local imports = {
     type = type,
     pairs = pairs,
-    split = split,
     gettok = gettok,
     tonumber = tonumber,
     tostring = tostring,
@@ -204,7 +203,7 @@ if localPlayer then
                 if sceneIPLData then
                     local sceneIDEData = (cAsset.sceneIDE and file:read(assetPath..(asset.references.scene)..".ide")) or false
                     sceneIDEData = (sceneIDEData and cAsset.manifestData.encryptKey and string.decode("tea", sceneIDEData, {key = cAsset.manifestData.encryptKey})) or sceneIDEData
-                    local unparsedIDEDatas, unparsedIPLDatas = (sceneIDEData and imports.split(sceneIDEData, "\n")) or false, imports.split(sceneIPLData, "\n")
+                    local unparsedIDEDatas, unparsedIPLDatas = (sceneIDEData and string.split(sceneIDEData, "\n")) or false, string.split(sceneIPLData, "\n")
                     local parsedIDEDatas = (unparsedIDEDatas and {}) or false
                     if unparsedIDEDatas then
                         for i = 1, #unparsedIDEDatas, 1 do

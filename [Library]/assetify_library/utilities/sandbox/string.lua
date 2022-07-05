@@ -47,3 +47,13 @@ function string.public.decode(type, baseString, options, clipNull)
     baseString = imports.decodeString(type, baseString, options)
     return (baseString and clipNull and string.public.gsub(baseString, string.char(0), "")) or baseString
 end
+
+function string.public.split(baseString, separator)
+    if not baseString or (imports.type(baseString) ~= "string") then return false end
+    baseString = baseString..separator
+    local result = {}
+    for matchValue in string.gmatch(baseString, "(.-)"..separator) do
+        table.insert(result, matchValue)
+    end
+    return result
+end
