@@ -166,8 +166,9 @@ if localPlayer then
     network:create("Assetify:Bone:onRecieveRefreshment"):on(function(...) syncer.public:syncBoneRefreshment(...) end)
     network:create("Assetify:Bone:onRecieveClearAttachment"):on(function(...) syncer.public:syncClearBoneAttachment(...) end)
 else
-    function bone.public:load(element, parent, boneData)
+    function bone.public:load(element, parent, boneData, targetPlayer)
         if not bone.public:isInstance(self) then return false end
+        if targetPlayer then return network:emit("Assetify:Bone:onRecieveAttachment", true, false, targetPlayer, self.element, self.parent, self.boneData, self.remoteSignature) end
         if not element or not imports.isElement(element) or not parent or not imports.isElement(parent) or not boneData or (element == parent) or bone.public.buffer.element[element] then return false end
         self.element, self.parent = element, parent
         --TODO: WHAT TO DO?
@@ -175,6 +176,12 @@ else
         bone.public.buffer.element[element] = self
         bone.public.buffer.parent[parent] = bone.public.buffer.parent[parent] or {}
         bone.public.buffer.parent[parent][self] = true
+        thread:create(function(__self)
+            for i, j in imports.pairs(syncer.public.loadedClients) do
+                self:load(_, _, _, i)
+                thread:pause()
+            end
+        end):resume({executions = settings.downloader.syncRate, frames = 1})
         return true
     end
 
@@ -183,7 +190,7 @@ else
         if targetPlayer then return network:emit("Assetify:Bone:onRecieveDetachment", true, false, targetPlayer, self.element) end
         thread:create(function(__self)
             for i, j in imports.pairs(syncer.public.loadedClients) do
-                self:destroy(i)
+                self:unload(i)
                 thread:pause()
             end
             bone.public.buffer.element[(self.element)] = nil
