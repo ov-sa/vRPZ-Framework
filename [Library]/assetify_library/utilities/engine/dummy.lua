@@ -140,10 +140,9 @@ else
         if not cAsset or not dummyData or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
         local dummyType = settings.assetPacks[assetType].assetType
         if not dummyType then return false end
-        targetDummy = (remoteSignature and targetDummy) or false
-        dummy.private:validateOffset(self, dummyData)
         self.assetType, self.assetName = assetType, assetName
         self.assetClump, self.clumpMaps = assetClump, clumpMaps
+        dummy.private:validateOffset(self, dummyData)
         self.dummyData = dummyData
         if dummyType == "object" then
             self.cModelInstance = imports.createObject(settings.assetPacks[assetType].assetBase, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
