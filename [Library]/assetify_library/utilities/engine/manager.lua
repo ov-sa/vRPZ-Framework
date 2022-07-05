@@ -16,7 +16,6 @@
 local imports = {
     type = type,
     pairs = pairs,
-    decodeString = decodeString,
     split = split,
     gettok = gettok,
     tonumber = tonumber,
@@ -191,11 +190,11 @@ if localPlayer then
         elseif assetType == "scene" then
             thread:create(function(self)
                 local sceneIPLData = file:read(assetPath..(asset.references.scene)..".ipl")
-                sceneIPLData = (cAsset.manifestData.encryptKey and imports.decodeString("tea", sceneIPLData, {key = cAsset.manifestData.encryptKey})) or sceneIPLData
+                sceneIPLData = (cAsset.manifestData.encryptKey and imports.string.decode("tea", sceneIPLData, {key = cAsset.manifestData.encryptKey})) or sceneIPLData
                 if sceneIPLData then
                     local sceneIDEData = (cAsset.sceneIDE and file:read(assetPath..(asset.references.scene)..".ide")) or false
                     if sceneIDEData then
-                        sceneIDEData = (cAsset.manifestData.encryptKey and imports.decodeString("tea", sceneIDEData, {key = cAsset.manifestData.encryptKey})) or sceneIDEData
+                        sceneIDEData = (cAsset.manifestData.encryptKey and imports.string.decode("tea", sceneIDEData, {key = cAsset.manifestData.encryptKey})) or sceneIDEData
                     end
                     local unparsedIDEDatas, unparsedIPLDatas = (sceneIDEData and imports.split(sceneIDEData, "\n")) or false, imports.split(sceneIPLData, "\n")
                     local parsedIDEDatas = (unparsedIDEDatas and {}) or false
