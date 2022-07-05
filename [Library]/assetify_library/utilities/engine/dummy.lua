@@ -178,5 +178,16 @@ end
 --[[ API Syncers ]]--
 ---------------------
 
-function syncer.public:syncAssetDummy(...) return dummy:create(table:unpack(table:pack(...), 5)) end
-network:create("Assetify:onRecieveAssetDummy"):on(function(...) syncer.public:syncAssetDummy(...) end)
+function syncer.public:syncAssetDummy(length, ...) return dummy:create(table:unpack(table:pack(...), length or 5)) end
+if localPlayer then
+    network:create("Assetify:onRecieveAssetDummy"):on(function(...) syncer.public:syncAssetDummy(6, ...) end)
+else
+    network:fetch("Assetify:Downloader:onSyncPostPool", true):on(function(self, source)
+        self:resume({executions = settings.downloader.syncRate, frames = 1})
+        --TODO: CHANGE THIS BUFFER
+        for i, j in imports.pairs(syncer.public.syncedAssetDummies) do
+            if j then syncer.public:syncAssetDummy(j.type, j.name, j.clump, j.clumpMaps, j.dummyData, i, source) end
+            thread:pause()
+        end
+    end, true)
+end
