@@ -47,10 +47,10 @@ function loadAnim(...) return manager.API.Anim:loadAnim(...) end
 function unloadAnim(...) return manager.API.Anim:unloadAnim(...) end
 function createShader(...) local cShader = shader:create(...) return cShader.cShader end
 
-function clearWorld(...) return manager.API:clearWorld(...) end
-function restoreWorld(...) return manager.API:restoreWorld(...) end
-function clearModel(...) return manager.API:clearModel(...) end
-function restoreModel(...) return manager.API:restoreModel(...) end
+function clearWorld(...) return manager.API.World:clearWorld(...) end
+function restoreWorld(...) return manager.API.World:restoreWorld(...) end
+function clearModel(...) return manager.API.World:clearModel(...) end
+function restoreModel(...) return manager.API.World:restoreModel(...) end
 function playSoundAsset(...) return manager.API.Sound:playSound(...) end
 function playSoundAsset3D(...) return manager.API.Sound:playSound3D(...) end
 
