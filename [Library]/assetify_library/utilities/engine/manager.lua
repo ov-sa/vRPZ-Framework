@@ -95,6 +95,15 @@ imports.addEventHandler((localPlayer and "onClientResourceStop") or "onResourceS
 end)
 
 if localPlayer then
+    function manager.private:freeAsset(cAsset)
+        if not cAsset then return false end
+        shader:clearAssetBuffer(cAsset.unSynced.rwCache.map)
+        asset:clearAssetBuffer(cAsset.unSynced.rwCache.dep)
+        cAsset.unSynced = nil
+        imports.collectgarbage()
+        return true
+    end
+
     function manager.public:isLoaded(assetType, assetName)
         local cAsset, isLoaded = manager.public:getData(assetType, assetName)
         return (cAsset and isLoaded and true) or false
@@ -154,20 +163,14 @@ if localPlayer then
                 local shaderTextures, shaderInputs = {}, {}
                 for k = 1, #j, 1 do
                     local v = j[k]
-                    if v.control then
-                        shaderTextures[("controlTex_"..k)] = v.control
-                    end
-                    if v.bump then
-                        shaderTextures[("controlTex_"..k.."_bump")] = v.bump
-                    end
+                    if v.control then shaderTextures[("controlTex_"..k)] = v.control end
+                    if v.bump then shaderTextures[("controlTex_"..k.."_bump")] = v.bump end
                     for x = 1, #shader.cache.validChannels, 1 do
                         local y = shader.cache.validChannels[x]
                         if v[(y.index)] then
                             shaderTextures[("controlTex_"..k.."_"..(y.index))] = v[(y.index)].map
                             shaderInputs[("controlScale_"..k.."_"..(y.index))] = v[(y.index)].scale
-                            if v[(y.index)].bump then
-                                shaderTextures[("controlTex_"..k.."_"..(y.index).."_bump")] = v[(y.index)].bump
-                            end
+                            if v[(y.index)].bump then shaderTextures[("controlTex_"..k.."_"..(y.index).."_bump")] = v[(y.index)].bump end
                         end
                     end
                 end
@@ -286,10 +289,7 @@ if localPlayer then
                     end
                     thread:pause()
                 end
-                shader:clearAssetBuffer(cAsset.unSynced.rwCache.map)
-                asset:clearAssetBuffer(cAsset.unSynced.rwCache.dep)
-                cAsset.unSynced = nil
-                imports.collectgarbage()
+                manager.private:freeAsset(cAsset)
             end):resume({executions = settings.downloader.buildRate, frames = 1})
         elseif assetType == "scene" then
             thread:create(function(self)
@@ -301,10 +301,7 @@ if localPlayer then
                     if j.cDummy then j.cDummy:destroy() end
                     thread:pause()
                 end
-                shader:clearAssetBuffer(cAsset.unSynced.rwCache.map)
-                asset:clearAssetBuffer(cAsset.unSynced.rwCache.dep)
-                cAsset.unSynced = nil
-                imports.collectgarbage()
+                manager.private:freeAsset(cAsset)
             end):resume({executions = settings.downloader.buildRate, frames = 1})
         elseif cAsset.manifestData.assetClumps then
             thread:create(function(self)
@@ -312,16 +309,10 @@ if localPlayer then
                     if j.cAsset then j.cAsset:destroy(cAsset.unSynced.rwCache) end
                     thread:pause()
                 end
-                shader:clearAssetBuffer(cAsset.unSynced.rwCache.map)
-                asset:clearAssetBuffer(cAsset.unSynced.rwCache.dep)
-                cAsset.unSynced = nil
-                imports.collectgarbage()
+                manager.private:freeAsset(cAsset)
             end):resume({executions = settings.downloader.buildRate, frames = 1})
         elseif cAsset.cAsset then
-            cAsset.cAsset:destroy(cAsset.unSynced.rwCache)
-            shader:clearAssetBuffer(cAsset.unSynced.rwCache.map)
-            cAsset.unSynced = nil
-            imports.collectgarbage()
+            manager.private:freeAsset(cAsset)
         else
             return false
         end
