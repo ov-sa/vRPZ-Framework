@@ -54,7 +54,7 @@ function string.public.split(baseString, separator)
     baseString = baseString..separator
     local result = {}
     for matchValue in string.public.gmatch(baseString, "(.-)"..separator) do
-        table.insert(result, matchValue)
+        table:insert(result, matchValue)
     end
     return result
 end
