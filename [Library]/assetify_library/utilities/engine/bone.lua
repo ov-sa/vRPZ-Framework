@@ -168,7 +168,7 @@ else
         if targetPlayer then return network:emit("Assetify:Bone:onAttachment", true, false, targetPlayer, self.element, self.parent, self.boneData, self.remoteSignature) end
         if not element or not parent or not imports.isElement(element) or not imports.isElement(parent) or not boneData or (element == parent) or bone.public.buffer.element[element] then return false end
         self.element, self.parent = element, parent
-        if not self:refresh(boneData) then return false end
+        if not self:refresh(boneData, _, true) then return false end
         self.remoteSignature = {
             parentType = imports.getElementType(parent),
             elementType = imports.getElementType(element)
@@ -201,7 +201,7 @@ else
         return true
     end
 
-    function bone.public:refresh(boneData)
+    function bone.public:refresh(boneData, targetPlayer, skipSync)
         if not bone.public:isInstance(self) or self.isUnloading then return false end
         self.parentType = self.parentType or imports.getElementType(self.parent)
         self.parentType = ((self.parentType == "player") and "ped") or self.parentType
