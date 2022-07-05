@@ -54,10 +54,10 @@ function restoreModel(...) return manager.API:restoreModel(...) end
 function playSoundAsset(...) return manager.API.Sound:playSound(...) end
 function playSoundAsset3D(...) return manager.API.Sound:playSound3D(...) end
 
-function isRendererVirtualRendering() return renderer.cache.isVirtualRendering end
+function isRendererVirtualRendering() return renderer.isVirtualRendering end
 function setRendererVirtualRendering(...) return renderer:setVirtualRendering(...) end
-function getRendererVirtualSource() return (renderer.cache.isVirtualRendering and renderer.cache.virtualSource) or false end
-function getRendererVirtualRTs() return (renderer.cache.isVirtualRendering and renderer.cache.virtualRTs) or false end
+function getRendererVirtualSource() return (renderer.isVirtualRendering and renderer.virtualSource) or false end
+function getRendererVirtualRTs() return (renderer.isVirtualRendering and renderer.virtualRTs) or false end
 function setRendererTimeSync(...) return renderer:setTimeSync(...) end
 function setRendererServerTick(...) return renderer:setServerTick(...) end
 function setRendererMinuteDuration(...) return renderer:setMinuteDuration(...) end

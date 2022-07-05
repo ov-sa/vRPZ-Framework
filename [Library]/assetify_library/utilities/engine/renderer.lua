@@ -32,12 +32,10 @@ local imports = {
 -------------------------
 
 local renderer = class:create("renderer", {
-    cache = {
-        isVirtualRendering = false,
-        isTimeSynced = false,
-        serverTick = 60*60*12,
-        minuteDuration = 60
-    }
+    isVirtualRendering = false,
+    isTimeSynced = false,
+    serverTick = 60*60*12,
+    minuteDuration = 60
 })
 
 if localPlayer then
@@ -45,7 +43,7 @@ if localPlayer then
     renderer.public.resolution[1], renderer.public.resolution[2] = renderer.public.resolution[1]*settings.renderer.resolution, renderer.public.resolution[2]*settings.renderer.resolution
 
     renderer.public.render = function()
-        imports.dxUpdateScreenSource(renderer.public.cache.virtualSource)
+        imports.dxUpdateScreenSource(renderer.virtualSource)
         return true
     end
 
@@ -62,25 +60,25 @@ if localPlayer then
         if not syncShader then
             state = (state and true) or false
             rtModes = (rtModes and (imports.type(rtModes) == "table") and rtModes) or false
-            if renderer.public.cache.isVirtualRendering == state then return false end
-            renderer.public.cache.isVirtualRendering = state
-            if renderer.public.cache.isVirtualRendering then
-                renderer.public.cache.virtualSource = imports.dxCreateScreenSource(renderer.public.resolution[1], renderer.public.resolution[2])
-                renderer.public.cache.virtualRTs = renderer.public.cache.virtualRTs or {}
+            if renderer.isVirtualRendering == state then return false end
+            renderer.isVirtualRendering = state
+            if renderer.isVirtualRendering then
+                renderer.virtualSource = imports.dxCreateScreenSource(renderer.public.resolution[1], renderer.public.resolution[2])
+                renderer.virtualRTs = renderer.virtualRTs or {}
                 if rtModes.diffuse then
-                    renderer.public.cache.virtualRTs.diffuse = imports.dxCreateRenderTarget(renderer.public.resolution[1], renderer.public.resolution[2], true)
+                    renderer.virtualRTs.diffuse = imports.dxCreateRenderTarget(renderer.public.resolution[1], renderer.public.resolution[2], true)
                     if rtModes.emissive then
-                        renderer.public.cache.virtualRTs.emissive = imports.dxCreateRenderTarget(renderer.public.resolution[1], renderer.public.resolution[2], false)
+                        renderer.virtualRTs.emissive = imports.dxCreateRenderTarget(renderer.public.resolution[1], renderer.public.resolution[2], false)
                     end
                 end
                 imports.addEventHandler("onClientHUDRender", root, renderer.public.render)
             else
                 imports.removeEventHandler("onClientHUDRender", root, renderer.public.render)
-                imports.destroyElement(renderer.public.cache.virtualSource)
-                renderer.public.cache.virtualSource = nil
-                for i, j in imports.pairs(renderer.public.cache.virtualRTs) do
+                imports.destroyElement(renderer.virtualSource)
+                renderer.virtualSource = nil
+                for i, j in imports.pairs(renderer.virtualRTs) do
                     imports.destroyElement(j)
-                    renderer.public.cache.virtualRTs[i] = nil
+                    renderer.virtualRTs[i] = nil
                 end
             end
             for i, j in imports.pairs(shader.buffer.shader) do
@@ -91,9 +89,9 @@ if localPlayer then
             if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
                 return false
             end
-            local vSource0, vSource1, vSource2 = (renderer.public.cache.isVirtualRendering and renderer.public.cache.virtualSource) or false, (renderer.public.cache.isVirtualRendering and renderer.public.cache.virtualRTs.diffuse) or false, (renderer.public.cache.isVirtualRendering and renderer.public.cache.virtualRTs.emissive) or false
-            syncShader:setValue("vResolution", (renderer.public.cache.isVirtualRendering and renderer.public.resolution) or false)
-            syncShader:setValue("vRenderingEnabled", (renderer.public.cache.isVirtualRendering and true) or false)
+            local vSource0, vSource1, vSource2 = (renderer.isVirtualRendering and renderer.virtualSource) or false, (renderer.isVirtualRendering and renderer.virtualRTs.diffuse) or false, (renderer.isVirtualRendering and renderer.virtualRTs.emissive) or false
+            syncShader:setValue("vResolution", (renderer.isVirtualRendering and renderer.public.resolution) or false)
+            syncShader:setValue("vRenderingEnabled", (renderer.isVirtualRendering and true) or false)
             syncShader:setValue("vSource0", vSource0)
             syncShader:setValue("vSource1", vSource1)
             syncShader:setValue("vSource1Enabled", (vSource1 and true) or false)
@@ -106,10 +104,10 @@ if localPlayer then
     function renderer.public:setTimeSync(state, syncShader, isInternal)
         if not syncShader then
             state = (state and true) or false
-            if renderer.public.cache.isTimeSynced == state then return false end
-            renderer.public.cache.isTimeSynced = state
-            if not renderer.public.cache.isTimeSynced then
-                renderer.public:setServerTick(((renderer.public.cache.serverTick or 0)*1000) + (imports.getTickCount() - (renderer.public.cache.__serverTick or 0)))
+            if renderer.isTimeSynced == state then return false end
+            renderer.isTimeSynced = state
+            if not renderer.isTimeSynced then
+                renderer.public:setServerTick(((renderer.serverTick or 0)*1000) + (imports.getTickCount() - (renderer.__serverTick or 0)))
             end
             for i, j in imports.pairs(shader.buffer.shader) do
                 renderer.public:setTimeSync(_, i, syncer.librarySerial)
@@ -119,15 +117,15 @@ if localPlayer then
             if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
                 return false
             end
-            syncShader:setValue("gTimeSync", renderer.public.cache.isTimeSynced)
+            syncShader:setValue("gTimeSync", renderer.isTimeSynced)
         end
         return true
     end
 
     function renderer.public:setServerTick(serverTick, syncShader, isInternal)
         if not syncShader then
-            renderer.public.cache.serverTick = (imports.tonumber(serverTick) or 0)*0.001
-            renderer.public.cache.__serverTick = imports.getTickCount()
+            renderer.serverTick = (imports.tonumber(serverTick) or 0)*0.001
+            renderer.__serverTick = imports.getTickCount()
             for i, j in imports.pairs(shader.buffer.shader) do
                 renderer.public:setServerTick(_, i, syncer.librarySerial)
             end
@@ -136,14 +134,14 @@ if localPlayer then
             if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
                 return false
             end
-            syncShader:setValue("gServerTick", renderer.public.cache.serverTick)
+            syncShader:setValue("gServerTick", renderer.serverTick)
         end
         return true
     end
 
     function renderer.public:setMinuteDuration(minuteDuration, syncShader, isInternal)
         if not syncShader then
-            renderer.public.cache.minuteDuration = (imports.tonumber(minuteDuration) or 0)*0.001
+            renderer.minuteDuration = (imports.tonumber(minuteDuration) or 0)*0.001
             for i, j in imports.pairs(shader.buffer.shader) do
                 renderer.public:setMinuteDuration(_, i, syncer.librarySerial)
             end
@@ -152,7 +150,7 @@ if localPlayer then
             if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
                 return false
             end
-            syncShader:setValue("gMinuteDuration", renderer.public.cache.minuteDuration)
+            syncShader:setValue("gMinuteDuration", renderer.minuteDuration)
         end
         return true
     end
