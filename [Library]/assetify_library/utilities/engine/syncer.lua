@@ -102,7 +102,7 @@ else
     syncer.public.loadedClients, syncer.public.scheduledClients = {}, {}
 
     function syncer.public:setElementModel(element, assetType, assetName, assetClump, clumpMaps, remoteSignature, targetPlayer)
-        if targetPlayer then return network:emit("Assetify:onReceiveSyncedElement", true, false, targetPlayer, element, assetType, assetName, assetClump, clumpMaps, remoteSignature) end
+        if targetPlayer then return network:emit("Assetify:Syncer:onSyncElementIdentity", true, false, targetPlayer, element, assetType, assetName, assetClump, clumpMaps, remoteSignature) end
         if not element or not imports.isElement(element) then return false end
         local cAsset = manager:getData(assetType, assetName)
         if not cAsset or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
@@ -125,7 +125,7 @@ end
 
 function syncer.public:syncElementModel(length, ...) return syncer.public:setElementModel(table:unpack(table:pack(...), length or 5)) end
 if localPlayer then
-    network:create("Assetify:onReceiveSyncedElement"):on(function(...) syncer.public:syncElementModel(6, ...) end)
+    network:create("Assetify:Syncer:onSyncElementIdentity"):on(function(...) syncer.public:syncElementModel(6, ...) end)
     network:fetch("Assetify:onElementDestroy"):on(function(source)
         if not syncer.public.isLibraryBooted or not source then return false end
         shader:clearElementBuffer(source)
