@@ -27,7 +27,7 @@ local imports = {
 ---------------------------
 
 if localPlayer then
-    syncer.private.execOnLoad(function() network:emit("Assetify:Downloader:onRequestPostSyncPool", true, false, localPlayer) end)
+    syncer.private.execOnLoad(function() network:emit("Assetify:Downloader:onPostSyncPool", true, false, localPlayer) end)
     network:create("Assetify:Downloader:onRecieveBandwidth"):on(function(bandwidth) syncer.public.libraryBandwidth = bandwidth end)
     network:create("Assetify:Downloader:onRecieveHash"):on(function(assetType, assetName, hashes)
         if not syncer.public.scheduledAssets[assetType] then syncer.public.scheduledAssets[assetType] = {} end
