@@ -62,9 +62,8 @@ if localPlayer then
             if not resourceScope then return false end
             manager.private.buffer.scoped[element] = nil
             for i, j in imports.pairs(resourceScope) do
-                if i and imports.isElement(i) then
-                    imports.destroyElement(i)
-                end
+                imports.destroyElement(i)
+                resourceScope[i] = nil
             end
         else
             if not imports.isElement(element) then return false end
