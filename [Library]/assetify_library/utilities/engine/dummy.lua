@@ -185,25 +185,6 @@ else
         end):resume({executions = settings.downloader.syncRate, frames = 1})
         return true
     end
-
-    --TODO: WIP..
-    --[[
-    function syncer.public:syncDummySpawn(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer, targetDummy, remoteSignature)    
-        if targetPlayer then return network:emit("Assetify:Dummy:onSpawn", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, remoteSignature) end
-        --TODO:HERE SHOULD BE CLASS NOT OBJECT
-        targetDummy = dummy:create(assetType, assetName, assetClump, clumpMaps, dummyData)
-        if not targetDummy then return false end
-        remoteSignature = imports.getElementType(targetDummy)
-        syncer.public.syncedAssetDummies[targetDummy] = {type = assetType, name = assetName, clump = assetClump, clumpMaps = clumpMaps, dummyData = dummyData}
-        thread:create(function(self)
-            for i, j in imports.pairs(syncer.public.loadedClients) do
-                syncer.public:syncDummySpawn(assetType, assetName, assetClump, clumpMaps, dummyData, i, targetDummy, remoteSignature)
-                thread:pause()
-            end
-        end):resume({executions = settings.downloader.syncRate, frames = 1})
-        return targetDummy
-    end
-    ]]
 end
 
 
