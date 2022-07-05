@@ -107,4 +107,12 @@ function table.public:remove(baseTable, index)
     return true
 end
 
+function table.public:foreach(baseTable, exec)
+    if not baseTable or (imports.type(baseTable) ~= "table") or not exec or (imports.type(exec) ~= "function") then return false end
+    for i = 1, (baseTable.__T and baseTable.__T.length) or #baseTable, 1 do
+        exec(i, baseTable[i])
+    end
+    return true
+end
+
 unpack = function(...) table.public:unpack(...) end
