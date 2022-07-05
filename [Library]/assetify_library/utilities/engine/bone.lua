@@ -203,6 +203,7 @@ else
 
     function bone.public:refresh(boneData, targetPlayer, skipSync)
         if not bone.public:isInstance(self) or self.isUnloading then return false end
+        if targetPlayer and not skipSync then return network:emit("Assetify:Bone:onRefreshment", true, false, targetPlayer, self.element, self.boneData, self.remoteSignature) end
         self.parentType = self.parentType or imports.getElementType(self.parent)
         self.parentType = ((self.parentType == "player") and "ped") or self.parentType
         if not self.parentType or not bone.public.ids[(self.parentType)] then return false end
@@ -211,46 +212,18 @@ else
         bone.private:validateOffset(self, boneData)
         boneData.syncRate = imports.tonumber(boneData.syncRate) or settings.streamer.boneSyncRate
         self.boneData = boneData
+        if not skipSync then
+            thread:create(function(__self)
+                for i, j in imports.pairs(syncer.public.loadedClients) do
+                    self:refresh(_, i)
+                    thread:pause()
+                end
+            end):resume({executions = settings.downloader.syncRate, frames = 1})
+        end
         return true
     end
 
-    function syncer.public:syncBoneRefreshment(element, boneData, targetPlayer, remignature)
-        if targetPlayer then return network:emit("Assetify:Bone:onRefreshment", true, false, targetPlayer, element, boneData, remoteSignature) end
-        if not element or not imports.isElement(element) or not boneData or not syncer.public.syncedBoneAttachments[element] then return false end
-        remoteSignature = {
-            elementType = imports.getElementType(element),
-            --TODO: REMOVE THIS
-            elementRotation = {imports.getElementRotation(element, "ZYX")}
-        }
-        syncer.public.syncedBoneAttachments[element].boneData = boneData
-        thread:create(function(self)
-            for i, j in imports.pairs(syncer.public.loadedClients) do
-                syncer.public:syncBoneRefreshment(element, boneData, i, remoteSignature)
-                thread:pause()
-            end
-        end):resume({executions = settings.downloader.syncRate, frames = 1})
-        return true
-    end
-
-    --->>> API Syncers <<<---
     --TODO: REFACTOR
-    function syncer.public:syncBoneRefreshment(element, boneData, targetPlayer, remoteSignature)
-        if targetPlayer then return network:emit("Assetify:Bone:onRefreshment", true, false, targetPlayer, element, boneData, remoteSignature) end
-        if not element or not imports.isElement(element) or not boneData or not syncer.public.syncedBoneAttachments[element] then return false end
-        remoteSignature = {
-            elementType = imports.getElementType(element),
-            --TODO: REMOVE THIS
-            elementRotation = {imports.getElementRotation(element, "ZYX")}
-        }
-        syncer.public.syncedBoneAttachments[element].boneData = boneData
-        thread:create(function(self)
-            for i, j in imports.pairs(syncer.public.loadedClients) do
-                syncer.public:syncBoneRefreshment(element, boneData, i, remoteSignature)
-                thread:pause()
-            end
-        end):resume({executions = settings.downloader.syncRate, frames = 1})
-        return true
-    end
     function syncer.public:syncClearBoneAttachment(element, targetPlayer)
         if targetPlayer then return network:emit("Assetify:Bone:onClearAttachment", true, false, targetPlayer, element) end
         if not element or not imports.isElement(element) then return false end
