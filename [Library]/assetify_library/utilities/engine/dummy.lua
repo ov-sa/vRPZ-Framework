@@ -136,7 +136,7 @@ if localPlayer then
 else
     function dummy.public:create(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer)
         if not dummy.public:isInstance(self) or self.isUnloading then return false end
-        if targetPlayer then return network:emit("Assetify:Dummy:onDespawn", true, false, targetPlayer, self.element) end
+        if targetPlayer then return network:emit("Assetify:Dummy:onSpawn", true, false, targetPlayer, self.assetType, self.assetName, self.assetClump, self.clumpMaps, self.dummyData, self.remoteSignature) end
         local cAsset = manager:getData(assetType, assetName)
         if not cAsset or not dummyData or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
         local dummyType = settings.assetPacks[assetType].assetType
@@ -145,9 +145,6 @@ else
         self.assetType, self.assetName = assetType, assetName
         self.assetClump, self.clumpMaps = assetClump, clumpMaps
         self.dummyData = dummyData
-        self.remoteSignature = {
-            elementType = dummyType
-        }
         if dummyType == "object" then
             self.cModelInstance = imports.createObject(settings.assetPacks[assetType].assetBase, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
         elseif dummyType == "ped" then
@@ -156,6 +153,10 @@ else
             self.cModelInstance = imports.createVehicle(settings.assetPacks[assetType].assetBase, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
         end
         if not self.cModelInstance then return false end
+        self.remoteSignature = {
+            element = self.cModelInstance,
+            elementType = dummyType
+        }
         self.cDummy = self.cModelInstance
         dummy.public.buffer[(self.cDummy)] = self
         imports.setElementAlpha(self.cModelInstance, 0)
