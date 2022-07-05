@@ -85,6 +85,7 @@ function manager.public:clearElementBuffer(element, isResource)
     manager.private.buffer.instance[element], manager.private.buffer.scoped[element] = nil, nil
     return true
 end
+imports.addEventHandler((localPlayer and "onClientResourceStop") or "onResourceStop", root, function(stoppedResource) manager.public:clearElementBuffer(stoppedResource, true) end)
 
 if localPlayer then
     function manager.public:getData(assetType, assetName, isInternal)
@@ -342,10 +343,6 @@ if localPlayer then
         network:emit("Assetify:onAssetUnload", false, assetType, assetName)
         return true
     end
-
-    imports.addEventHandler("onClientResourceStop", root, function(stoppedResource)
-        manager.public:clearElementBuffer(stoppedResource, true)
-    end)
 
     function manager.public:loadAnim(element, assetName)
         if not syncer.isLibraryLoaded then return false end
