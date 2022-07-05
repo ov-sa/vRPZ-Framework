@@ -23,8 +23,6 @@ local imports = {
     isElement = isElement,
     destroyElement = destroyElement,
     addEventHandler = addEventHandler,
-    engineReplaceAnimation = engineReplaceAnimation,
-    engineRestoreAnimation = engineRestoreAnimation,
     collectgarbage = collectgarbage
 }
 
@@ -341,34 +339,6 @@ if localPlayer then
             return false
         end
         network:emit("Assetify:onAssetUnload", false, assetType, assetName)
-        return true
-    end
-
-    function manager.public:loadAnim(element, assetName)
-        if not syncer.isLibraryLoaded then return false end
-        if not element or not imports.isElement(element) then return false end
-        local cAsset, isLoaded = manager.public:getData("animation", assetName)
-        if not cAsset or not isLoaded then return false end
-        if cAsset.manifestData.assetAnimations then
-            for i = 1, #cAsset.manifestData.assetAnimations, 1 do
-                local j = cAsset.manifestData.assetAnimations[i]
-                imports.engineReplaceAnimation(element, j.defaultBlock, j.defaultAnim, "animation."..assetName, j.assetAnim)
-            end
-        end
-        return true
-    end
-
-    function manager.public:unloadAnim(element, assetName)
-        if not syncer.isLibraryLoaded then return false end
-        if not element or not imports.isElement(element) then return false end
-        local cAsset, isLoaded = manager.public:getData("animation", assetName)
-        if not cAsset or not isLoaded then return false end
-        if cAsset.manifestData.assetAnimations then
-            for i = 1, #cAsset.manifestData.assetAnimations, 1 do
-                local j = cAsset.manifestData.assetAnimations[i]
-                imports.engineRestoreAnimation(element, j.defaultBlock, j.defaultAnim)
-            end
-        end
         return true
     end
 else
