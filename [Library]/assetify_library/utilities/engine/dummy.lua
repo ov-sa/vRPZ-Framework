@@ -41,6 +41,14 @@ function dummy.private:fetchInstance(element)
     return (element and dummy.public.buffer[element]) or false
 end
 
+function dummy.private:validateOffset(instance, dummyData)
+    if not dummy.public:isInstance(instance) then return false end
+    dummyData.position, dummyData.rotation = dummyData.position or {}, dummyData.rotation or {}
+    dummyData.position.x, dummyData.position.y, dummyData.position.z = imports.tonumber(dummyData.position.x) or 0, imports.tonumber(dummyData.position.y) or 0, imports.tonumber(dummyData.position.z) or 0
+    dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z = imports.tonumber(dummyData.rotation.x) or 0, imports.tonumber(dummyData.rotation.y) or 0, imports.tonumber(dummyData.rotation.z) or 0
+    return true
+end
+
 function dummy.public:create(...)
     local cDummy = self:createInstance()
     if cDummy and not cDummy:load(...) then
@@ -74,9 +82,7 @@ if localPlayer then
         if not dummyType then return false end
         targetDummy = (remoteSignature and targetDummy) or false
         if not targetDummy then
-            dummyData.position, dummyData.rotation = dummyData.position or {}, dummyData.rotation or {}
-            dummyData.position.x, dummyData.position.y, dummyData.position.z = imports.tonumber(dummyData.position.x) or 0, imports.tonumber(dummyData.position.y) or 0, imports.tonumber(dummyData.position.z) or 0
-            dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z = imports.tonumber(dummyData.rotation.x) or 0, imports.tonumber(dummyData.rotation.y) or 0, imports.tonumber(dummyData.rotation.z) or 0
+            dummy.private:validateOffset(self, dummyData)
         end
         self.assetType, self.assetName = assetType, assetName
         self.syncRate = imports.tonumber(dummyData.syncRate)
