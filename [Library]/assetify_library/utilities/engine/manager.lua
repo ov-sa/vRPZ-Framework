@@ -25,10 +25,7 @@ local imports = {
     addEventHandler = addEventHandler,
     engineReplaceAnimation = engineReplaceAnimation,
     engineRestoreAnimation = engineRestoreAnimation,
-    collectgarbage = collectgarbage,
-    string = string,
-    table = table,
-    math = math
+    collectgarbage = collectgarbage
 }
 
 
@@ -46,7 +43,7 @@ function manager.public:fetchAssets(assetType)
     if localPlayer then
         if settings.assetPacks[assetType].rwDatas then
             for i, j in imports.pairs(settings.assetPacks[assetType].rwDatas) do
-                imports.table:insert(cAssets, i)
+                table:insert(cAssets, i)
             end
         end
     else
@@ -209,25 +206,25 @@ if localPlayer then
         elseif assetType == "scene" then
             thread:create(function(self)
                 local sceneIPLData = file:read(assetPath..(asset.references.scene)..".ipl")
-                sceneIPLData = (cAsset.manifestData.encryptKey and imports.string.decode("tea", sceneIPLData, {key = cAsset.manifestData.encryptKey})) or sceneIPLData
+                sceneIPLData = (cAsset.manifestData.encryptKey and string.decode("tea", sceneIPLData, {key = cAsset.manifestData.encryptKey})) or sceneIPLData
                 if sceneIPLData then
                     local sceneIDEData = (cAsset.sceneIDE and file:read(assetPath..(asset.references.scene)..".ide")) or false
                     if sceneIDEData then
-                        sceneIDEData = (cAsset.manifestData.encryptKey and imports.string.decode("tea", sceneIDEData, {key = cAsset.manifestData.encryptKey})) or sceneIDEData
+                        sceneIDEData = (cAsset.manifestData.encryptKey and string.decode("tea", sceneIDEData, {key = cAsset.manifestData.encryptKey})) or sceneIDEData
                     end
                     local unparsedIDEDatas, unparsedIPLDatas = (sceneIDEData and imports.split(sceneIDEData, "\n")) or false, imports.split(sceneIPLData, "\n")
                     local parsedIDEDatas = (unparsedIDEDatas and {}) or false
                     if unparsedIDEDatas then
                         for i = 1, #unparsedIDEDatas, 1 do
-                            local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedIDEDatas[i], 2, asset.separators.IDE)), " ", "")
+                            local childName = string.gsub(imports.tostring(imports.gettok(unparsedIDEDatas[i], 2, asset.separators.IDE)), " ", "")
                             parsedIDEDatas[childName] = {
-                                imports.string.gsub(imports.tostring(imports.gettok(unparsedIDEDatas[i], 3, asset.separators.IDE)), " ", "")
+                                string.gsub(imports.tostring(imports.gettok(unparsedIDEDatas[i], 3, asset.separators.IDE)), " ", "")
                             }
                         end
                     end
                     for i = 1, #unparsedIPLDatas, 1 do
                         cAsset.unSynced.assetCache[i] = {}
-                        local childName = imports.string.gsub(imports.tostring(imports.gettok(unparsedIPLDatas[i], 2, asset.separators.IPL)), " ", "")
+                        local childName = string.gsub(imports.tostring(imports.gettok(unparsedIPLDatas[i], 2, asset.separators.IPL)), " ", "")
                         local sceneData = {
                             position = {
                                 x = imports.tonumber(imports.gettok(unparsedIPLDatas[i], 4, asset.separators.IPL)),
@@ -236,7 +233,7 @@ if localPlayer then
                             },
                             rotation = {}
                         }
-                        local cQuat = imports.math.quat(imports.tonumber(imports.gettok(unparsedIPLDatas[i], 7, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedIPLDatas[i], 8, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedIPLDatas[i], 9, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedIPLDatas[i], 10, asset.separators.IPL)))
+                        local cQuat = math.quat(imports.tonumber(imports.gettok(unparsedIPLDatas[i], 7, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedIPLDatas[i], 8, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedIPLDatas[i], 9, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedIPLDatas[i], 10, asset.separators.IPL)))
                         sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z = cQuat:toEuler()
                         cQuat:destroy()
                         if not cAsset.manifestData.sceneMapped then
