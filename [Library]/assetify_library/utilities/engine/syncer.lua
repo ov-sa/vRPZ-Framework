@@ -40,8 +40,7 @@ local syncer = class:create("syncer", {
     isLibraryLoaded = false,
     isModuleLoaded = false,
     libraryBandwidth = 0,
-    syncedElements = {},
-    syncedLights = {}
+    syncedElements = {}
 })
 syncer.public.libraryName = imports.getResourceName(syncer.public.libraryResource)
 syncer.public.librarySource = "https://api.github.com/repos/ov-sa/Assetify-Library/releases/latest"
@@ -189,7 +188,6 @@ else
                 end, settings.syncer.persistenceDuration, 1, source)
             end
             syncer.public.syncedElements[source] = nil
-            syncer.public.syncedLights[source] = nil
             for i, j in imports.pairs(syncer.public.loadedClients) do
                 network:emit("Assetify:onElementDestroy", true, false, i, source)
                 thread:pause()
