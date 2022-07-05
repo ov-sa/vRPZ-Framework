@@ -41,7 +41,7 @@ decodeString = function(decodeType, decodeData, decodeOptions, removeNull)
     return rawString
 end
 
-localPlayer = imports.getLocalPlayer()
+localPlayer = (imports.getLocalPlayer and imports.getLocalPlayer()) or false
 isElement = function(element) return (element and imports.isElement(element)) or false end
 destroyElement = function(element) return (isElement(element) and imports.destroyElement(element)) or false end
 
