@@ -133,11 +133,3 @@ function table.public:forEach(baseTable, exec)
 end
 
 unpack = function(...) table.public:unpack(...) end
-
-
-local test = table.public:pack(1, nil, 5)
-print(table.public:unpack(table.public:keys(test)))
-
-table.public:forEach(test, function(index, value)
-    print("INDEX: "..index.." VALUE: "..tostring(value))
-end)
