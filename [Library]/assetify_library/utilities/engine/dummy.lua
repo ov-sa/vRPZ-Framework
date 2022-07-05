@@ -37,27 +37,32 @@ local dummy = class:create("dummy", {
     buffer = {}
 })
 
+function dummy.private:fetchInstance(element)
+    return (element and dummy.public.buffer[element]) or false
+end
+
+function dummy.public:create(...)
+    local cDummy = self:createInstance()
+    if cDummy and not cDummy:load(...) then
+        cDummy:destroyInstance()
+        return false
+    end
+    return cDummy
+end
+
+function dummy.public:destroy(...)
+    if not dummy.public:isInstance(self) then return false end
+    return self:unload(...)
+end
+
+function dummy.public:clearElementBuffer(element)
+    local cDummy = dummy.private:fetchInstance(element)
+    if not cDummy then return false end
+    cDummy:destroy()
+    return true
+end
+
 if localPlayer then
-    function dummy.public:create(...)
-        local cDummy = self:createInstance()
-        if cDummy and not cDummy:load(...) then
-            cDummy:destroyInstance()
-            return false
-        end
-        return cDummy
-    end
-
-    function dummy.public:destroy(...)
-        if not dummy.public:isInstance(self) then return false end
-        return self:unload(...)
-    end
-
-    function dummy.public:clearElementBuffer(element)
-        if not element or not dummy.public.buffer[element] then return false end
-        dummy.public.buffer[element]:destroy()
-        return true
-    end
-
     function dummy.public:load(assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, remoteSignature)
         if not dummy.public:isInstance(self) then return false end
         if not dummyData then return false end
