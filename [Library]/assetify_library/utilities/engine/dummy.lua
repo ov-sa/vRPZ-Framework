@@ -167,6 +167,7 @@ else
     end
 
     --TODO: WIP..
+    --[[
     function syncer.public:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer, targetDummy, remoteSignature)    
         if targetPlayer then return network:emit("Assetify:Dummy:onCreation", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, remoteSignature) end
         --TODO:HERE SHOULD BE CLASS NOT OBJECT
@@ -182,6 +183,7 @@ else
         end):resume({executions = settings.downloader.syncRate, frames = 1})
         return targetDummy
     end
+    ]]
 end
 
 
