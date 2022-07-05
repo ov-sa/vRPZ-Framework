@@ -170,7 +170,8 @@ else
         if not bone.public:isInstance(self) then return false end
         if not element or not imports.isElement(element) or not parent or not imports.isElement(parent) or not boneData or (element == parent) or bone.public.buffer.element[element] then return false end
         self.element, self.parent = element, parent
-        if not self:refresh(boneData) then return false end
+        --TODO: WHAT TO DO?
+        --if not self:refresh(boneData) then return false end
         bone.public.buffer.element[element] = self
         bone.public.buffer.parent[parent] = bone.public.buffer.parent[parent] or {}
         bone.public.buffer.parent[parent][self] = true
