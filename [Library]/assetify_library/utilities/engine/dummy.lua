@@ -112,7 +112,7 @@ if localPlayer then
             end
         end, function()
             if dummyType == "object" then imports.setElementDoubleSided(self.cModelInstance, true) end
-            network:emit("Assetify:onRecieveSyncedElement", false, self.cModelInstance, assetType, assetName, assetClump, clumpMaps, remoteSignature)
+            network:emit("Assetify:onReceiveSyncedElement", false, self.cModelInstance, assetType, assetName, assetClump, clumpMaps, remoteSignature)
             if targetDummy then
                 imports.setElementAlpha(self.cModelInstance, 255)
             else

@@ -96,7 +96,7 @@ if localPlayer then
             end, settings.downloader.buildRate)
         end
     end
-    network:create("Assetify:onRecieveSyncedElement"):on(function(...) syncer.public:syncElementModel(...) end)
+    network:create("Assetify:onReceiveSyncedElement"):on(function(...) syncer.public:syncElementModel(...) end)
 
     --->>> State Syncer <<<---
     network:create("Assetify:onElementDestroy"):on(function(source)
@@ -117,7 +117,7 @@ else
     syncer.public.loadedClients, syncer.public.scheduledClients = {}, {}
 
     function syncer.public:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, targetPlayer, remoteSignature)
-        if targetPlayer then return network:emit("Assetify:onRecieveSyncedElement", true, false, targetPlayer, element, assetType, assetName, assetClump, clumpMaps, remoteSignature) end
+        if targetPlayer then return network:emit("Assetify:onReceiveSyncedElement", true, false, targetPlayer, element, assetType, assetName, assetClump, clumpMaps, remoteSignature) end
         if not element or not imports.isElement(element) then return false end
         local cAsset = manager:getData(assetType, assetName)
         if not cAsset or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
