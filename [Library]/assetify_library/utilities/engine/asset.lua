@@ -294,8 +294,8 @@ else
                                 n.bump = assetPath.."map/"..n.bump
                                 asset.public:buildFile(n.bump, filePointer, encryptKey, _, _, true)
                             end
-                            for x = 1, #shader.cache.validChannels, 1 do
-                                local y = shader.cache.validChannels[x].index
+                            for x = 1, #shader.validChannels, 1 do
+                                local y = shader.validChannels[x].index
                                 if n[y] then
                                     n[y].map = assetPath.."map/"..n[y].map
                                     asset.public:buildFile(n[y].map, filePointer, encryptKey, _, _, true)
