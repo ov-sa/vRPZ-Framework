@@ -66,13 +66,13 @@ if localPlayer then
     function dummy.public:load(assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, remoteSignature)
         if not dummy.public:isInstance(self) then return false end
         if not dummyData then return false end
-        targetDummy = (remoteSignature and targetDummy) or false
         local cAsset, cData = manager:getData(assetType, assetName, syncer.librarySerial)
         if not cAsset or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
         if assetClump then cData = cAsset.unSynced.assetCache[assetClump].cAsset.synced end
         if not cAsset or not cData then return false end
         local dummyType = settings.assetPacks[assetType].assetType
         if not dummyType then return false end
+        targetDummy = (remoteSignature and targetDummy) or false
         if not targetDummy then
             dummyData.position, dummyData.rotation = dummyData.position or {}, dummyData.rotation or {}
             dummyData.position.x, dummyData.position.y, dummyData.position.z = imports.tonumber(dummyData.position.x) or 0, imports.tonumber(dummyData.position.y) or 0, imports.tonumber(dummyData.position.z) or 0
