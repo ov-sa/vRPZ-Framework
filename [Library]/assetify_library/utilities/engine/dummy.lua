@@ -79,7 +79,6 @@ if localPlayer then
         if not cAsset or not cData then return false end
         local dummyType = settings.assetPacks[assetType].assetType
         if not dummyType then return false end
-
         dummy.private:validateOffset(self, dummyData)
         self.assetType, self.assetName = assetType, assetName
         self.assetClump, self.clumpMaps = assetClump, clumpMaps
