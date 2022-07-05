@@ -13,7 +13,6 @@
 -----------------
 
 local imports = {
-    isElement = isElement,
     attachElements = attachElements,
     destroyElement = destroyElement,
     createObject = createObject,
