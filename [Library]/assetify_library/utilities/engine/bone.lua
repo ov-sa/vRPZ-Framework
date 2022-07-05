@@ -229,7 +229,7 @@ else
     end
 
     --->>> API Syncers <<<---
-    function syncer.public:syncBoneDetachment(...) return bone:create(...) end
+    function syncer.public:syncBoneAttachment(...) return bone:create(...) end
     function syncer.public:syncBoneDetachment(element) local cBone = bone.private:fetchInstance(element); if not cBone then return false end; return cBone:destroy() end
 
     --TODO: REFACTOR
