@@ -16,8 +16,7 @@ local imports = {
     pairs = pairs,
     fetchRemote = fetchRemote,
     outputDebugString = outputDebugString,
-    addEventHandler = addEventHandler,
-    table = table
+    addEventHandler = addEventHandler
 }
 
 
@@ -37,7 +36,7 @@ end
 imports.addEventHandler("onResourceStart", resourceRoot, function()
     imports.fetchRemote(syncer.librarySource, function(response, status)
         if not response or not status or (status ~= 0) then return false end
-        response = imports.table:decode(response)
+        response = table:decode(response)
         if response and response.tag_name and (syncer.libraryVersion ~= response.tag_name) then
             imports.outputDebugString("[Assetify]: Latest version available - "..response.tag_name, 3)
         end

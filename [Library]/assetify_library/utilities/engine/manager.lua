@@ -30,7 +30,6 @@ local imports = {
     setSoundVolume = setSoundVolume,
     collectgarbage = collectgarbage,
     string = string,
-    table = table,
     math = math
 }
 
@@ -47,13 +46,13 @@ function manager.public:fetchAssets(assetType)
     if localPlayer then
         if settings.assetPacks[assetType].rwDatas then
             for i, j in imports.pairs(settings.assetPacks[assetType].rwDatas) do
-                imports.table:insert(cAssets, i)
+                table:insert(cAssets, i)
             end
         end
     else
         for i, j in imports.pairs(settings.assetPacks[assetType].assetPack.manifestData) do
             if settings.assetPacks[assetType].assetPack.rwDatas[j] then
-                imports.table:insert(cAssets, j)
+                table:insert(cAssets, j)
             end
         end
     end
