@@ -87,7 +87,7 @@ if localPlayer then
     end
 
     function bone.public:load(element, parent, boneData, remoteSignature)
-        if not bone.public:isInstance(self) then return false end
+        if not bone.public:isInstance(self) or (element == parent) then return false end
         if not element or (not remoteSignature and not imports.isElement(element)) or not parent or (not remoteSignature and not imports.isElement(parent)) or not boneData or (element == parent) or bone.public.buffer.element[element] then return false end
         self.element = element
         self.parent = parent
