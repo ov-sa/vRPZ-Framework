@@ -73,7 +73,7 @@ if localPlayer then
     network:create("Assetify:onAssetLoad")
     network:create("Assetify:onAssetUnload")
 
-    function syncer.public:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, remoteSignature)
+    function syncer.public:setElementModel(element, assetType, assetName, assetClump, clumpMaps, remoteSignature)
         if not element or (not remoteSignature and not imports.isElement(element)) then return false end
         local modelID = manager:getID(assetType, assetName, assetClump)
         if modelID then
@@ -101,7 +101,7 @@ else
     syncer.public.libraryVersion = (syncer.public.libraryVersion and "v."..syncer.public.libraryVersion) or syncer.public.libraryVersion
     syncer.public.loadedClients, syncer.public.scheduledClients = {}, {}
 
-    function syncer.public:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, targetPlayer, remoteSignature)
+    function syncer.public:setElementModel(element, assetType, assetName, assetClump, clumpMaps, targetPlayer, remoteSignature)
         if targetPlayer then return network:emit("Assetify:onReceiveSyncedElement", true, false, targetPlayer, element, assetType, assetName, assetClump, clumpMaps, remoteSignature) end
         if not element or not imports.isElement(element) then return false end
         local cAsset = manager:getData(assetType, assetName)
@@ -110,7 +110,7 @@ else
         syncer.public.syncedElements[element] = {assetType = assetType, assetName = assetName, assetClump = assetClump, clumpMaps = clumpMaps}
         thread:create(function(self)
             for i, j in imports.pairs(syncer.public.loadedClients) do
-                syncer.public:syncElementModel(element, assetType, assetName, assetClump, clumpMaps, i, remoteSignature)
+                syncer.public:setElementModel(element, assetType, assetName, assetClump, clumpMaps, i, remoteSignature)
                 thread:pause()
             end
         end):resume({executions = settings.downloader.syncRate, frames = 1})
@@ -123,8 +123,9 @@ end
 --[[ API Syncers ]]--
 ---------------------
 
+function syncer.public:syncElementModel(length, ...) return syncer.public:setElementModel(table:unpack(table:pack(...), length or 5)) end
 if localPlayer then
-    network:create("Assetify:onReceiveSyncedElement"):on(function(...) syncer.public:syncElementModel(...) end)
+    network:create("Assetify:onReceiveSyncedElement"):on(function(...) syncer.public:syncElementModel(6, ...) end)
     network:fetch("Assetify:onElementDestroy"):on(function(source)
         if not syncer.public.isLibraryBooted or not source then return false end
         shader:clearElementBuffer(source)
