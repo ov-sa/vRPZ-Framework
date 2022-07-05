@@ -75,6 +75,9 @@ if localPlayer then
 
     function syncer.public:setElementModel(element, assetType, assetName, assetClump, clumpMaps, remoteSignature)
         if not element or (not remoteSignature and not imports.isElement(element)) then return false end
+        local elementType = imports.getElementType(element)
+        elementType = (((elementType == "ped") or (elementType == "player")) and "ped") or elementType
+        if not settings.assetPacks[assetType] or not settings.assetPacks[assetType].assetType or (settings.assetPacks[assetType].assetType ~= elementType) then return false end
         local modelID = manager:getID(assetType, assetName, assetClump)
         if modelID then
             syncer.public.syncedElements[element] = {assetType = assetType, assetName = assetName, assetClump = assetClump, clumpMaps = clumpMaps}
@@ -104,6 +107,9 @@ else
     function syncer.public:setElementModel(element, assetType, assetName, assetClump, clumpMaps, remoteSignature, targetPlayer)
         if targetPlayer then return network:emit("Assetify:Syncer:onSyncElementIdentity", true, false, targetPlayer, element, assetType, assetName, assetClump, clumpMaps, remoteSignature) end
         if not element or not imports.isElement(element) then return false end
+        local elementType = imports.getElementType(element)
+        elementType = (((elementType == "ped") or (elementType == "player")) and "ped") or elementType
+        if not settings.assetPacks[assetType] or not settings.assetPacks[assetType].assetType or (settings.assetPacks[assetType].assetType ~= elementType) then return false end
         local cAsset = manager:getData(assetType, assetName)
         if not cAsset or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
         remoteSignature = imports.getElementType(element)
