@@ -107,12 +107,8 @@ if localPlayer then
 
     function bone.public:unload()
         if not bone.public:isInstance(self) then return false end
-        if self.cHeartbeat then
-            self.cHeartbeat:destroy()
-        end
-        if self.cStreamer then
-            self.cStreamer:destroy()
-        end
+        if self.cHeartbeat then self.cHeartbeat:destroy() end
+        if self.cStreamer then self.cStreamer:destroy() end
         bone.public.cache.element[(self.element)] = nil
         bone.public.buffer.element[(self.element)] = nil
         self:destroyInstance()
