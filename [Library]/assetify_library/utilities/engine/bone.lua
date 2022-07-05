@@ -36,6 +36,10 @@ local bone = class:create("bone", {
     ids = {
         ped = {1, 2, 3, 4, 5, 6, 7, 8, 21, 22, 23, 24, 25, 26, 31, 32, 33, 34, 35, 36, 41, 42, 43, 44, 51, 52, 53, 54},
         vehicle = {}
+    },
+    buffer = {
+        element = {},
+        parent = {}
     }
 })
 for i, j in imports.pairs(bone.public.ids) do
@@ -45,28 +49,24 @@ for i, j in imports.pairs(bone.public.ids) do
     indexes = nil
 end
 
+function bone.public:create(...)
+    local cBone = self:createInstance()
+    if cBone and not cBone:load(...) then
+        cBone:destroyInstance()
+        return false
+    end
+    return cBone
+end
+
+function bone.public:destroy(...)
+    if not bone.public:isInstance(self) then return false end
+    return self:unload(...)
+end
+
 if localPlayer then
     bone.public.cache = {
         element = {}
     }
-    bone.public.buffer = {
-        element = {},
-        parent = {}
-    }
-
-    function bone.public:create(...)
-        local cBone = self:createInstance()
-        if cBone and not cBone:load(...) then
-            cBone:destroyInstance()
-            return false
-        end
-        return cBone
-    end
-
-    function bone.public:destroy(...)
-        if not bone.public:isInstance(self) then return false end
-        return self:unload(...)
-    end
 
     function bone.private:fetchInstance(element)
         return (element and bone.public.buffer.element[element]) or false
