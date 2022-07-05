@@ -15,7 +15,9 @@
 local imports = {
     type = type,
     pairs = pairs,
-    string = string
+    string = string,
+    encodeString = encodeString,
+    decodeString = decodeString
 }
 
 
@@ -29,8 +31,14 @@ for i, j in imports.pairs(imports.string) do
 end
 
 local __string_gsub = string.public.gsub
-string.public.gsub = function(string, matchWord, replaceWord, matchLimit, isStrictcMatch, matchPrefix, matchPostfix)
+function string.public.gsub(baseString, matchWord, replaceWord, matchLimit, isStrictcMatch, matchPrefix, matchPostfix)
     matchPrefix, matchPostfix = (matchPrefix and (imports.type(matchPrefix) == "string") and matchPrefix) or "", (matchPostfix and (imports.type(matchPostfix) == "string") and matchPostfix) or ""
     matchWord = (isStrictcMatch and "%f[^"..matchPrefix.."%z%s]"..matchWord.."%f["..matchPostfix.."%z%s]") or matchPrefix..matchWord..matchPostfix
-    return __string_gsub(string, matchWord, replaceWord, matchLimit)
+    return __string_gsub(baseString, matchWord, replaceWord, matchLimit)
+end
+
+function string.public.decode(type, baseString, options, clipNull)
+    if not baseString or (imports.type(baseString) ~= "string") then return false end
+    local rawString = imports.decodeString(type, baseString, options)
+    return (rawString and clipNull and string.public.gsub(rawString, string.char(0), "")) or rawString
 end

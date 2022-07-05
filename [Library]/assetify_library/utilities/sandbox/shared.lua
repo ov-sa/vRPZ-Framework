@@ -15,7 +15,6 @@
 local imports = {
     type = type,
     tonumber = tonumber,
-    decodeString = decodeString,
     getLocalPlayer = getLocalPlayer,
     isElement = isElement,
     destroyElement = destroyElement,
@@ -31,15 +30,6 @@ local imports = {
 --[[ Utils ]]--
 ---------------
 
-decodeString = function(decodeType, decodeData, decodeOptions, removeNull)
-    if not decodeData or (imports.type(decodeData) ~= "string") then return false end
-    local rawString = imports.decodeString(decodeType, decodeData, decodeOptions)
-    if not rawString then return false end
-    if removeNull then
-        rawString = imports.string.gsub(rawString, imports.string.char(0), "")
-    end
-    return rawString
-end
 
 localPlayer = (imports.getLocalPlayer and imports.getLocalPlayer()) or false
 isElement = function(element) return (element and imports.isElement(element)) or false end

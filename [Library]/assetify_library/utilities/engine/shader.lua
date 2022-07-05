@@ -15,7 +15,6 @@
 
 local imports = {
     pairs = pairs,
-    decodeString = decodeString,
     tonumber = tonumber,
     isElement = isElement,
     destroyElement = destroyElement,
@@ -24,6 +23,7 @@ local imports = {
     dxSetShaderValue = dxSetShaderValue,
     engineApplyShaderToWorldTexture = engineApplyShaderToWorldTexture,
     engineRemoveShaderFromWorldTexture = engineRemoveShaderFromWorldTexture,
+    string = string
 }
 
 
@@ -164,7 +164,7 @@ if localPlayer then
         if texturePath then
             if encryptKey then
                 local cTexturePath = texturePath..".tmp"
-                if file:write(cTexturePath, imports.decodeString("tea", file:read(texturePath), {key = encryptKey})) then
+                if file:write(cTexturePath, imports.string.decode("tea", file:read(texturePath), {key = encryptKey})) then
                     local cTexture = imports.dxCreateTexture(cTexturePath, "dxt5", true)
                     file:delete(cTexturePath)
                     return cTexture
