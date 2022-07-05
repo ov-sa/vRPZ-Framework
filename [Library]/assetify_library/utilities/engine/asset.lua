@@ -17,7 +17,6 @@ local imports = {
     pairs = pairs,
     md5 = md5,
     outputDebugString = outputDebugString,
-    encodeString = encodeString,
     split = split,
     gettok = gettok,
     tonumber = tonumber,
@@ -254,7 +253,7 @@ else
                     filePointer.synced.assetSize.file[filePath] = builtFileSize
                     filePointer.synced.assetSize.total = filePointer.synced.assetSize.total + filePointer.synced.assetSize.file[filePath]
                     syncer.libraryBandwidth = syncer.libraryBandwidth + filePointer.synced.assetSize.file[filePath]
-                    filePointer.unSynced.fileData[filePath] = (encryptKey and imports.encodeString("tea", builtFileData, {key = encryptKey})) or builtFileData
+                    filePointer.unSynced.fileData[filePath] = (encryptKey and imports.string.encode("tea", builtFileData, {key = encryptKey})) or builtFileData
                     filePointer.unSynced.fileHash[filePath] = imports.md5(filePointer.unSynced.fileData[filePath])
                 end
                 if rawPointer then rawPointer[filePath] = builtFileData end

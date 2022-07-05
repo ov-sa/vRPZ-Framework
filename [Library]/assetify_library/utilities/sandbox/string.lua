@@ -37,6 +37,11 @@ function string.public.gsub(baseString, matchWord, replaceWord, matchLimit, isSt
     return __string_gsub(baseString, matchWord, replaceWord, matchLimit)
 end
 
+function string.public.encode(type, baseString, options)
+    if not baseString or (imports.type(baseString) ~= "string") then return false end
+    return imports.encodeString(type, baseString, options)
+end
+
 function string.public.decode(type, baseString, options, clipNull)
     if not baseString or (imports.type(baseString) ~= "string") then return false end
     baseString = imports.decodeString(type, baseString, options)
