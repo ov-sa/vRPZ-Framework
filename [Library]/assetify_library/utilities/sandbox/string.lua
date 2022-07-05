@@ -39,6 +39,6 @@ end
 
 function string.public.decode(type, baseString, options, clipNull)
     if not baseString or (imports.type(baseString) ~= "string") then return false end
-    local rawString = imports.decodeString(type, baseString, options)
-    return (rawString and clipNull and string.public.gsub(rawString, string.char(0), "")) or rawString
+    baseString = imports.decodeString(type, baseString, options)
+    return (baseString and clipNull and string.public.gsub(baseString, string.char(0), "")) or baseString
 end
