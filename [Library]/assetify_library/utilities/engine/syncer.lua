@@ -101,9 +101,7 @@ if localPlayer then
     --->>> State Syncer <<<---
     network:create("Assetify:onElementDestroy"):on(function(source)
         if not syncer.public.isLibraryBooted or not source then return false end
-        dummy:clearElementBuffer(source)
         shader:clearElementBuffer(source)
-        bone:clearElementBuffer(source)
         manager:clearElementBuffer(source)
         syncer.public.syncedEntityDatas[source] = nil
         for i, j in imports.pairs(light) do
@@ -187,9 +185,7 @@ else
                 end, settings.syncer.persistenceDuration, 1, source)
             end
             syncer.public.syncedElements[source] = nil
-            syncer.public.syncedAssetDummies[source] = nil
             syncer.public.syncedLights[source] = nil
-            syncer.public:syncClearBoneAttachment(source)
             for i, j in imports.pairs(syncer.public.loadedClients) do
                 network:emit("Assetify:onElementDestroy", true, false, i, source)
                 thread:pause()
