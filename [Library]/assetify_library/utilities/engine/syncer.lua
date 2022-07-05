@@ -36,6 +36,7 @@ local imports = {
 
 local syncer = class:create("syncer", {
     libraryResource = imports.getThisResource(),
+    isLibraryBooted = false,
     isLibraryLoaded = false,
     isModuleLoaded = false,
     libraryBandwidth = 0,
@@ -50,6 +51,7 @@ network:create("Assetify:onLoad")
 network:create("Assetify:onUnload")
 network:create("Assetify:onModuleLoad")
 function syncer.public:import() return syncer end
+imports.addEventHandler((localPlayer and "onClientResourceStart") or "onResourceStart", resourceRoot, function() syncer.public.isLibraryBooted = true end)
 syncer.private.execOnLoad = function(execFunc)
     local execWrapper = nil
     execWrapper = function() execFunc(); network:fetch("Assetify:onLoad"):off(execWrapper) end
@@ -98,7 +100,7 @@ if localPlayer then
 
     --->>> State Syncer <<<---
     network:create("Assetify:onElementDestroy"):on(function(source)
-        if not source then return false end
+        if not syncer.public.isLibraryBooted or not source then return false end
         dummy:clearElementBuffer(source)
         shader:clearElementBuffer(source)
         bone:clearElementBuffer(source)
@@ -186,6 +188,7 @@ else
     end)
     imports.addEventHandler("onElementModelChange", root, function() syncer.public.syncedElements[source] = nil end)
     imports.addEventHandler("onElementDestroy", root, function()
+        if not syncer.public.isLibraryBooted then return false end
         local __source = source
         thread:create(function(self)
             local source = __source

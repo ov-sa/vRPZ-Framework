@@ -44,7 +44,7 @@
     <script src="utilities/shaders/tex_exporter.lua" type="client"/>
     <script src="utilities/shaders/light_planar.lua" type="client"/>
 
-    <!-- Utilities -->
+    <!-- Utilities: Engin -->
     <script src="utilities/engine/asset.lua" type="shared"/>
     <script src="utilities/engine/dummy.lua" type="shared"/>
     <script src="utilities/engine/renderer.lua" type="shared"/>
