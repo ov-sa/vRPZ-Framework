@@ -109,11 +109,11 @@ if localPlayer then
         element = {}
     }
 
-    function bone.public:load(element, parent, boneData, remoteSignature)
+    function bone.public:load(element, parent, boneData, signature)
         if not bone.public:isInstance(self) then return false end
-        if not element or (not remoteSignature and not imports.isElement(element)) or not parent or (not remoteSignature and not imports.isElement(parent)) or not boneData or (element == parent) or bone.public.buffer.element[element] then return false end
+        if not element or (not signature and not imports.isElement(element)) or not parent or (not signature and not imports.isElement(parent)) or not boneData or (element == parent) or bone.public.buffer.element[element] then return false end
         self.element, self.parent = element, parent
-        if not self:refresh(boneData, remoteSignature) then return false end
+        if not self:refresh(boneData, signature) then return false end
         self.cHeartbeat = thread:createHeartbeat(function()
             return not imports.isElement(element)
         end, function()
@@ -137,9 +137,9 @@ if localPlayer then
         return true
     end
 
-    function bone.public:refresh(boneData, remoteSignature)
+    function bone.public:refresh(boneData, signature)
         if not bone.public:isInstance(self) then return false end
-        self.parentType = self.parentType or (remoteSignature and remoteSignature.parentType) or imports.getElementType(self.parent)
+        self.parentType = self.parentType or (signature and signature.parentType) or imports.getElementType(self.parent)
         self.parentType = ((self.parentType == "player") and "ped") or self.parentType
         if not self.parentType or not bone.public.ids[(self.parentType)] then return false end
         boneData.id = imports.tonumber(boneData.id)
@@ -177,11 +177,11 @@ if localPlayer then
 else
     function bone.public:load(element, parent, boneData, targetPlayer)
         if not bone.public:isInstance(self) then return false end
-        if targetPlayer then return network:emit("Assetify:Bone:onAttachment", true, false, targetPlayer, self.element, self.parent, self.boneData, self.remoteSignature) end
+        if targetPlayer then return network:emit("Assetify:Bone:onAttachment", true, false, targetPlayer, self.element, self.parent, self.boneData, self.signature) end
         if not element or not imports.isElement(element) or not parent or not imports.isElement(parent) or not boneData or (element == parent) or bone.public.buffer.element[element] then return false end
         self.element, self.parent = element, parent
         if not self:refresh(boneData) then return false end
-        self.remoteSignature = {
+        self.signature = {
             parentType = imports.getElementType(parent),
             elementType = imports.getElementType(element)
         }
@@ -231,10 +231,10 @@ else
     function syncer.public:syncBoneDetachment(element) local cBone = bone.private:fetchInstance(element); if not cBone then return false end; return cBone:destroy() end
 
     --TODO: REFACTOR
-    function syncer.public:syncBoneRefreshment(element, boneData, targetPlayer, remoteSignature)
-        if targetPlayer then return network:emit("Assetify:Bone:onRefreshment", true, false, targetPlayer, element, boneData, remoteSignature) end
+    function syncer.public:syncBoneRefreshment(element, boneData, targetPlayer, signature)
+        if targetPlayer then return network:emit("Assetify:Bone:onRefreshment", true, false, targetPlayer, element, boneData, signature) end
         if not element or not imports.isElement(element) or not boneData or not syncer.public.syncedBoneAttachments[element] then return false end
-        remoteSignature = {
+        signature = {
             elementType = imports.getElementType(element),
             --TODO: REMOVE THIS
             elementRotation = {imports.getElementRotation(element, "ZYX")}
@@ -242,7 +242,7 @@ else
         syncer.public.syncedBoneAttachments[element].boneData = boneData
         thread:create(function(self)
             for i, j in imports.pairs(syncer.public.loadedClients) do
-                syncer.public:syncBoneRefreshment(element, boneData, i, remoteSignature)
+                syncer.public:syncBoneRefreshment(element, boneData, i, signature)
                 thread:pause()
             end
         end):resume({executions = settings.downloader.syncRate, frames = 1})
