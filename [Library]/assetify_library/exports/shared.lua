@@ -64,7 +64,7 @@ function getGlobalData(data) if not data or (imports.type(data) ~= "string") the
 function setEntityData(...) return syncer:syncEntityData(table:unpack(table:pack(...), 3)) end
 function getEntityData(element, data) if not element or not data or (imports.type(data) ~= "string") then return false end; return syncer.syncedEntityDatas[element] and syncer.syncedEntityDatas[element][data] end
 function createAssetDummy(...) local cDummy = syncer:syncAssetDummy(table:unpack(table:pack(...), 5)); return (cDummy and cDummy.cDummy) or false end
-function setBoneAttachment(...) return syncer:syncBoneAttachment(table:unpack(table:pack(...), 3)) end
-function setBoneDetachment(element) return syncer:syncBoneDetachment(element) end
-function setBoneRefreshment(...) return syncer:syncBoneRefreshment(table:unpack(table:pack(...), 2)) end
+function setBoneAttachment(...) return syncer:syncBoneAttachment(...) end
+function setBoneDetachment(...) return syncer:syncBoneDetachment(...) end
+function setBoneRefreshment(...) return syncer:syncBoneRefreshment(...) end
 function clearBoneAttachment(element) return syncer:syncClearBoneAttachment(element) end

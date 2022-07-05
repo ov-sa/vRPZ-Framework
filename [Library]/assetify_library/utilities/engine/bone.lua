@@ -164,10 +164,6 @@ if localPlayer then
     end
 
     --->>> API Syncers <<<---
-    function syncer.public:syncBoneAttachment(...) return bone:create(...) end
-    function syncer.public:syncBoneDetachment(element) local cBone = bone.private:fetchInstance(element); if not cBone then return false end; return cBone:destroy() end
-    function syncer.public:syncBoneRefreshment(element, ...) local cBone = bone.private:fetchInstance(element); if not cBone then return false end; return cBone:refresh(...) end
-    function syncer.public:syncClearBoneAttachment(...) return bone:clearElementBuffer(...) end
     network:create("Assetify:Bone:onAttachment"):on(function(...) syncer.public:syncBoneAttachment(...) end)
     network:create("Assetify:Bone:onDetachment"):on(function(...) syncer.public:syncBoneDetachment(...) end)
     network:create("Assetify:Bone:onRefreshment"):on(function(...) syncer.public:syncBoneRefreshment(...) end)
@@ -225,9 +221,6 @@ else
     end
 
     --->>> API Syncers <<<---
-    function syncer.public:syncBoneAttachment(...) return bone:create(...) end
-    function syncer.public:syncBoneDetachment(element) local cBone = bone.private:fetchInstance(element); if not cBone then return false end; return cBone:destroy() end
-
     --TODO: REFACTOR
     function syncer.public:syncBoneRefreshment(element, boneData, targetPlayer, remoteSignature)
         if targetPlayer then return network:emit("Assetify:Bone:onRefreshment", true, false, targetPlayer, element, boneData, remoteSignature) end
@@ -264,3 +257,9 @@ else
         return true
     end
 end
+
+--->>> API Syncers <<<---
+function syncer.public:syncBoneAttachment(...) return bone:create(table:unpack(table:pack(...), 3)) end
+function syncer.public:syncBoneDetachment(element) local cBone = bone.private:fetchInstance(element); if not cBone then return false end; return cBone:destroy() end
+function syncer.public:syncBoneRefreshment(element, ...) local cBone = bone.private:fetchInstance(element); if not cBone then return false end; return cBone:refresh(table:unpack(table:pack(...), 1)) end
+function syncer.public:syncClearBoneAttachment(...) return bone:clearElementBuffer(...) end
