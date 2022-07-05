@@ -238,4 +238,13 @@ if localPlayer then
     network:create("Assetify:Bone:onDetachment"):on(function(...) syncer.public:syncBoneDetachment(...) end)
     network:create("Assetify:Bone:onRefreshment"):on(function(...) syncer.public:syncBoneRefreshment(...) end)
     network:create("Assetify:Bone:onClearAttachment"):on(function(...) syncer.public:syncClearBoneAttachment(...) end)
+else
+    network:fetch("Assetify:Downloader:onRequestPostSyncPool", true):on(function(self, source)
+        self:resume({executions = settings.downloader.syncRate, frames = 1})
+        --TODO: CHANGE THIS BUFFER
+        for i, j in imports.pairs(syncer.public.syncedBoneAttachments) do
+            if j then syncer.public:syncBoneAttachment(i, j.parent, j.boneData, source) end
+            thread:pause()
+        end
+    end, true)
 end

@@ -164,15 +164,6 @@ else
                 if j then syncer.public:syncElementModel(i, j.type, j.name, j.clump, j.clumpMaps, source) end
                 thread:pause()
             end
-            --TODO: MAKE THIS WITHIN THE MODULE NOW
-            for i, j in imports.pairs(syncer.public.syncedAssetDummies) do
-                if j then syncer.public:syncAssetDummy(j.type, j.name, j.clump, j.clumpMaps, j.dummyData, i, source) end
-                thread:pause()
-            end
-            for i, j in imports.pairs(syncer.public.syncedBoneAttachments) do
-                if j then syncer.public:syncBoneAttachment(i, j.parent, j.boneData, source) end
-                thread:pause()
-            end
         end):resume({executions = settings.downloader.syncRate, frames = 1})
     end)
 
