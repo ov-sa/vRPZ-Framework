@@ -443,20 +443,24 @@ else
                                         cAssetPack.rwDatas[assetName].synced.sceneIDE = (parsedIDEDatas and true) or false
                                         if unparsedIDEDatas then
                                             for k = 1, #unparsedIDEDatas, 1 do
-                                                local childName = string.gsub(imports.tostring(imports.gettok(unparsedIDEDatas[k], 2, asset.public.separators.IDE)), " ", "")
-                                                parsedIDEDatas[childName] = {
-                                                    string.gsub(imports.tostring(imports.gettok(unparsedIDEDatas[k], 3, asset.public.separators.IDE)), " ", "")
-                                                }
+                                                local IDEData = string.split(unparsedIDEDatas[k], asset.public.separators.IDE)
+                                                IDEData[2] = (IDEData[2] and string.gsub(IDEData[2], " ", "")) or IDEData[2]
+                                                if IDEData[2] then
+                                                    parsedIDEDatas[IDEData[2]] = {
+                                                        (IDEData[3] and string.gsub(IDEData[3], " ", "")) or false
+                                                    }
+                                                end
                                             end
                                         end
                                         for k = 1, #unparsedIPLDatas, 1 do
-                                            local childName = string.gsub(imports.tostring(imports.gettok(unparsedIPLDatas[k], 2, asset.public.separators.IPL)), " ", "")
-                                            if childName then
-                                                asset.public:buildFile(assetPath.."dff/lod/"..childName..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
-                                                asset.public:buildFile(assetPath.."dff/"..childName..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
-                                                asset.public:buildFile(assetPath.."col/"..childName..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
-                                                if parsedIDEDatas and parsedIDEDatas[childName] then
-                                                    asset.public:buildFile(assetPath.."txd/"..(parsedIDEDatas[childName][1])..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                            local IPLData = string.split(unparsedIPLDatas[k], asset.public.separators.IPL)
+                                            IPLData[2] = (IPLData[2] and string.gsub(IPLData[2], " ", "")) or IPLData[2]
+                                            if IPLData[2] then
+                                                asset.public:buildFile(assetPath.."dff/lod/"..IPLData[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                                asset.public:buildFile(assetPath.."dff/"..IPLData[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
+                                                asset.public:buildFile(assetPath.."col/"..IPLData[2]..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                                if parsedIDEDatas and parsedIDEDatas[(IPLData[2])] then
+                                                    asset.public:buildFile(assetPath.."txd/"..(parsedIDEDatas[(IPLData[2])][1])..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                                 end
                                             end
                                             thread:pause()
