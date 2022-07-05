@@ -128,16 +128,14 @@ if localPlayer then
         if not rwCache then return false end
         if rwCache.shader then
             for i, j in imports.pairs(rwCache.shader) do
-                if j and imports.isElement(j) then
-                    imports.destroyElement(j)
-                end
+                imports.destroyElement(j)
+                rwCache.shader[i] = nil
             end
         end
         if rwCache.texture then
             for i, j in imports.pairs(rwCache.texture) do
-                if j and imports.isElement(j) then
-                    imports.destroyElement(j)
-                end
+                imports.destroyElement(j)
+                rwCache.texture[i] = nil
             end
         end
         return true
@@ -234,9 +232,7 @@ if localPlayer then
     function shader.public:unload()
         if not shader.public:isInstance(self) then return false end
         if not self.preLoaded then
-            if self.cShader and imports.isElement(self.cShader) then
-                imports.destroyElement(self.cShader)
-            end
+            imports.destroyElement(self.cShader)
         else
             if not self.shaderData.isStandalone then imports.engineRemoveShaderFromWorldTexture(self.cShader, self.shaderData.textureName, self.shaderData.element) end
         end

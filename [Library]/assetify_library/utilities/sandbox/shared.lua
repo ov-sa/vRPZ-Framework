@@ -45,7 +45,7 @@ isElement = function(element)
 end
 
 destroyElement = function(element)
-    return (imports.isElement(element) and imports.destroyElement(element)) or false
+    return (isElement(element) and imports.destroyElement(element)) or false
 end
 
 getElementPosition = function(element, offX, offY, offZ)

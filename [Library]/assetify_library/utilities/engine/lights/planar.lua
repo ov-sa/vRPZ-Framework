@@ -15,7 +15,6 @@
 local imports = {
     pairs = pairs,
     tonumber = tonumber,
-    isElement = isElement,
     destroyElement = destroyElement,
     engineRequestModel = engineRequestModel,
     engineLoadTXD = engineLoadTXD,
@@ -109,16 +108,10 @@ end
 
 function planar.public:unload()
     if not self or (self == planar.public) then return false end
-    if self.cStreamer then
-        self.cStreamer:destroy()
-    end
-    if self.cModelInstance and imports.isElement(self.cModelInstance) then
-        planar.public.buffer[(self.cModelInstance)] = nil
-        imports.destroyElement(self.cModelInstance)
-    end
-    if self.cCollisionInstance and imports.isElement(self.cCollisionInstance) then
-        imports.destroyElement(self.cCollisionInstance)
-    end
+    if self.cStreamer then self.cStreamer:destroy() end
+    planar.public.buffer[(self.cModelInstance)] = nil
+    imports.destroyElement(self.cModelInstance)
+    imports.destroyElement(self.cCollisionInstance)
     self:destroyInstance()
     return true
 end
