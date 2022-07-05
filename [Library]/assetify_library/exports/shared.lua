@@ -13,8 +13,6 @@
 -----------------
 
 local imports = {
-    type = type,
-    pairs = pairs,
     isElement = isElement
 }
 
@@ -25,34 +23,15 @@ local imports = {
 
 function isLibraryLoaded() return syncer.isLibraryLoaded end
 function isModuleLoaded() return syncer.isModuleLoaded end
-
-function getLibraryAssets(assetType)
-    if not syncer.isLibraryLoaded or not assetType or not settings.assetPacks[assetType] then return false end
-    local packAssets = {}
-    if localPlayer then
-        if settings.assetPacks[assetType].rwDatas then
-            for i, j in imports.pairs(settings.assetPacks[assetType].rwDatas) do
-                table:insert(packAssets, i)
-            end
-        end
-    else
-        for i, j in imports.pairs(settings.assetPacks[assetType].assetPack.manifestData) do
-            if settings.assetPacks[assetType].assetPack.rwDatas[j] then
-                table:insert(packAssets, j)
-            end
-        end
-    end
-    return packAssets
-end
-
+function getLibraryAssets(...) return manager:fetchAssets(...) end
 function getAssetData(...) return manager:getData(...) end
 function getAssetDep(...) return manager:getDep(...) end
 function setElementAsset(...) return syncer:syncElementModel(_, ...) end
 function getElementAssetInfo(element) if not element or not imports.isElement(element) or not syncer.syncedElements[element] then return false end return syncer.syncedElements[element].type, syncer.syncedElements[element].name, syncer.syncedElements[element].clump, syncer.syncedElements[element].clumpMaps end
 function setGlobalData(...) return syncer:syncGlobalData(...) end
-function getGlobalData(data) if not data or (imports.type(data) ~= "string") then return false end; return syncer.syncedGlobalDatas[data] end
+function getGlobalData(data) return syncer.syncedGlobalDatas[data] end
 function setEntityData(...) return syncer:syncEntityData(table:unpack(table:pack(...), 3)) end
-function getEntityData(element, data) if not element or not data or (imports.type(data) ~= "string") then return false end; return syncer.syncedEntityDatas[element] and syncer.syncedEntityDatas[element][data] end
+function getEntityData(element, data) return syncer.syncedEntityDatas[element] and syncer.syncedEntityDatas[element][data] end
 function createAssetDummy(...) local cDummy = syncer:syncDummySpawn(_, ...); return (cDummy and cDummy.cDummy) or false end
 function setBoneAttachment(...) return syncer:syncBoneAttachment(_, ...) end
 function setBoneDetachment(...) return syncer:syncBoneDetachment(_, ...) end
