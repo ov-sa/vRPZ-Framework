@@ -53,7 +53,7 @@ function string.public.split(baseString, separator)
     if not baseString or (imports.type(baseString) ~= "string") or not separator or (imports.type(separator) ~= "string") then return false end
     baseString = baseString..separator
     local result = {}
-    for matchValue in string.gmatch(baseString, "(.-)"..separator) do
+    for matchValue in string.public.gmatch(baseString, "(.-)"..separator) do
         table.insert(result, matchValue)
     end
     return result
