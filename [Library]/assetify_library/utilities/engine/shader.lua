@@ -22,8 +22,7 @@ local imports = {
     dxCreateTexture = dxCreateTexture,
     dxSetShaderValue = dxSetShaderValue,
     engineApplyShaderToWorldTexture = engineApplyShaderToWorldTexture,
-    engineRemoveShaderFromWorldTexture = engineRemoveShaderFromWorldTexture,
-    string = string
+    engineRemoveShaderFromWorldTexture = engineRemoveShaderFromWorldTexture
 }
 
 
@@ -46,16 +45,16 @@ local shader = class:create("shader", {
     }
 })
 shader.private.cache.__remoteBlacklist = {}
-for i = 1, #shader.public.cache.remoteBlacklist, 1 do
-    local j = shader.public.cache.remoteBlacklist[i]
+for i = 1, #shader.public.remoteBlacklist, 1 do
+    local j = shader.public.remoteBlacklist[i]
     shader.private.cache.__remoteBlacklist[j] = true
 end
-shader.public.cache.remoteBlacklist = shader.private.cache.__remoteBlacklist
+shader.public.remoteBlacklist = shader.private.cache.__remoteBlacklist
 shader.private.cache.__remoteBlacklist = nil
 
 if localPlayer then
-    shader.public.cache.shaderPriority = 10000
-    shader.public.cache.shaderDistance = 0
+    shader.public.shaderPriority = 10000
+    shader.public.shaderDistance = 0
     shader.public.preLoadedTex = {
         invisibleMap = imports.dxCreateTexture(2, 2, "dxt5", "clamp")
     }
@@ -103,8 +102,8 @@ if localPlayer then
                         if n.bump then
                             rwCache.texture[(n.bump)] = shader.public:loadTex(n.bump, encryptKey)
                         end
-                        for x = 1, #shader.public.cache.validChannels, 1 do
-                            local y = n[(shader.public.cache.validChannels[x].index)]
+                        for x = 1, #shader.public.validChannels, 1 do
+                            local y = n[(shader.public.validChannels[x].index)]
                             if y and y.map then
                                 rwCache.texture[(y.map)] = shader.public:loadTex(y.map, encryptKey)
                                 if y.bump then
@@ -164,7 +163,7 @@ if localPlayer then
         if texturePath then
             if encryptKey then
                 local cTexturePath = texturePath..".tmp"
-                if file:write(cTexturePath, imports.string.decode("tea", file:read(texturePath), {key = encryptKey})) then
+                if file:write(cTexturePath, string.decode("tea", file:read(texturePath), {key = encryptKey})) then
                     local cTexture = imports.dxCreateTexture(cTexturePath, "dxt5", true)
                     file:delete(cTexturePath)
                     return cTexture
@@ -179,11 +178,11 @@ if localPlayer then
     function shader.public:load(element, shaderCategory, shaderName, textureName, shaderTextures, shaderInputs, rwCache, shaderMaps, encryptKey, shaderPriority, shaderDistance, isStandalone)
         if not shader.public:isInstance(self) then return false end
         local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
-        if not shaderCategory or not shaderName or (isExternalResource and shader.public.cache.remoteBlacklist[shaderName]) or (not shader.public.preLoaded[shaderName] and not shader.public.rwCache[shaderName]) or (not isStandalone and not textureName) or not shaderTextures or not shaderInputs or not rwCache then return false end
+        if not shaderCategory or not shaderName or (isExternalResource and shader.public.remoteBlacklist[shaderName]) or (not shader.public.preLoaded[shaderName] and not shader.public.rwCache[shaderName]) or (not isStandalone and not textureName) or not shaderTextures or not shaderInputs or not rwCache then return false end
         element = ((element and imports.isElement(element)) and element) or false
         textureName = textureName or false
-        shaderPriority = imports.tonumber(shaderPriority) or shader.public.cache.shaderPriority
-        shaderDistance = imports.tonumber(shaderDistance) or shader.public.cache.shaderDistance
+        shaderPriority = imports.tonumber(shaderPriority) or shader.public.shaderPriority
+        shaderDistance = imports.tonumber(shaderDistance) or shader.public.shaderDistance
         isStandalone = (isStandalone and true) or false
         self.isPreLoaded = (shader.public.preLoaded[shaderName] and true) or false
         self.cShader = (self.isPreLoaded and shader.public.preLoaded[shaderName]) or imports.dxCreateShader(shader.public.rwCache[shaderName].exec(shaderMaps), shaderPriority, shaderDistance, false, "all")
@@ -253,5 +252,5 @@ if localPlayer then
         return imports.dxSetShaderValue(self.cShader, i, j)
     end
 
-    shader.public.preLoaded["Assetify_TextureClearer"] = shader.public:create(_, "Assetify-PreLoaded", "Assetify_TextureClearer", _, {baseTexture = 1}, {}, {texture = {[1] = shader.public.preLoadedTex.invisibleMap}}, _, _, shader.public.cache.shaderPriority + 1, shader.public.cache.shaderDistance, true)
+    shader.public.preLoaded["Assetify_TextureClearer"] = shader.public:create(_, "Assetify-PreLoaded", "Assetify_TextureClearer", _, {baseTexture = 1}, {}, {texture = {[1] = shader.public.preLoadedTex.invisibleMap}}, _, _, shader.public.shaderPriority + 1, shader.public.shaderDistance, true)
 end
