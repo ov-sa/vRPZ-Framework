@@ -36,6 +36,10 @@ local imports = {
 local manager = class:create("manager", {
     API = {}
 })
+manager.private.buffer = {
+    instance = {},
+    scoped = {}
+}
 
 function manager.public:fetchAssets(assetType)
     if not syncer.isLibraryLoaded or not assetType or not settings.assetPacks[assetType] then return false end
@@ -57,11 +61,6 @@ function manager.public:fetchAssets(assetType)
 end
 
 if localPlayer then
-    manager.private.buffer = {
-        instance = {},
-        scoped = {}
-    }
-
     function manager.public:setElementScoped(element)
         if not sourceResource or (sourceResource == resource) then return false end
         manager.private.buffer.instance[element] = sourceResource
