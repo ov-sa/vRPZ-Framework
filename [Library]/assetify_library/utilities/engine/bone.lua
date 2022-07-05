@@ -121,7 +121,7 @@ if localPlayer then
 
     function bone.public:refresh(boneData, remoteSignature)
         if not bone.public:isInstance(self) then return false end
-        self.parentType = self.parentType or remoteSignature.parentType or imports.getElementType(self.parent)
+        self.parentType = self.parentType or (remoteSignature and remoteSignature.parentType) or imports.getElementType(self.parent)
         self.parentType = ((self.parentType == "player") and "ped") or self.parentType
         if not self.parentType or not bone.public.ids[(self.parentType)] then return false end
         boneData.id = imports.tonumber(boneData.id)
@@ -132,7 +132,7 @@ if localPlayer then
         if boneData.rotation.isRelative then
             local prev_rotX, prev_rotY, prev_rotZ = nil, nil, nil
             if self.boneData then prev_rotX, prev_rotY, prev_rotZ = self.boneData.rotation.x, self.boneData.rotation.y, self.boneData.rotation.z
-            else prev_rotX, prev_rotY, prev_rotZ = remoteSignature.elementRotation or imports.getElementRotation(self.element, "ZYX") end
+            else prev_rotX, prev_rotY, prev_rotZ = (remoteSignature and remoteSignature.elementRotation) or imports.getElementRotation(self.element, "ZYX") end
             local rotQuat = imports.math.quat:fromEuler(prev_rotX, prev_rotY, prev_rotZ)
             local xQuat, yQuat, zQuat = imports.math.quat:fromAxisAngle(1, 0, 0, boneData.rotation.x), imports.math.quat:fromAxisAngle(0, 1, 0, boneData.rotation.y), imports.math.quat:fromAxisAngle(0, 0, 1, boneData.rotation.z)
             local __rotQuat = xQuat*yQuat*zQuat
