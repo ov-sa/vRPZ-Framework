@@ -247,4 +247,7 @@ else
         end
     end, true)
 end
---TODO: ADD SYNERS FOR TRACKING DESTROY ELEMENT ON CLIENT AND SERVER SIDE...
+network:create("Assetify:onElementDestroy"):on(function(source)
+    if not syncer.public.isLibraryBooted or not source then return false end
+    bone.public:clearElementBuffer(source)
+end)
