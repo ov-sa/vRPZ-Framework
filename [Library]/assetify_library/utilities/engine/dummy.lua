@@ -85,18 +85,19 @@ if localPlayer then
         end
         self.assetType, self.assetName = assetType, assetName
         self.syncRate = imports.tonumber(dummyData.syncRate)
+        self.cModelInstance = targetDummy or false
         if dummyType == "object" then
-            self.cModelInstance = targetDummy or imports.createObject(cData.modelID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
+            self.cModelInstance = self.cModelInstance or imports.createObject(cData.modelID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
             if cData.collisionID then
                 self.cCollisionInstance = imports.createObject(cData.collisionID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
             end
         elseif dummyType == "ped" then
-            self.cModelInstance = targetDummy or imports.createPed(cData.modelID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.z)
+            self.cModelInstance = self.cModelInstance or imports.createPed(cData.modelID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.z)
             if cData.collisionID then
                 self.cCollisionInstance = imports.createPed(cData.collisionID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.z)
             end
         elseif dummyType == "vehicle" then
-            self.cModelInstance = targetDummy or imports.createVehicle(cData.modelID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
+            self.cModelInstance = self.cModelInstance or imports.createVehicle(cData.modelID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
             if cData.collisionID then
                 self.cCollisionInstance = imports.createVehicle(cData.collisionID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
             end
