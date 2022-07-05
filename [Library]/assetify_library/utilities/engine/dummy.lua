@@ -79,11 +79,13 @@ if localPlayer then
         if not cAsset or not cData then return false end
         local dummyType = settings.assetPacks[assetType].assetType
         if not dummyType then return false end
-        self.cModelInstance = (remoteSignature and remoteSignature.element) or false
+
         dummy.private:validateOffset(self, dummyData)
         self.assetType, self.assetName = assetType, assetName
+        self.assetClump, self.clumpMaps = assetClump, clumpMaps
+        self.dummyData = dummyData
         self.syncRate = imports.tonumber(dummyData.syncRate)
-        self.cModelInstance = self.cModelInstance or false
+        self.cModelInstance = (remoteSignature and remoteSignature.element) or false
         if dummyType == "object" then
             self.cModelInstance = self.cModelInstance or imports.createObject(cData.modelID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
             self.cCollisionInstance = (cData.collisionID and imports.createObject(cData.collisionID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)) or false
@@ -142,6 +144,7 @@ else
         dummy.private:validateOffset(self, dummyData)
         self.assetType, self.assetName = assetType, assetName
         self.assetClump, self.clumpMaps = assetClump, clumpMaps
+        self.syncRate = imports.tonumber(dummyData.syncRate)
         self.dummyData = dummyData
         if dummyType == "object" then
             self.cModelInstance = imports.createObject(settings.assetPacks[assetType].assetBase, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
