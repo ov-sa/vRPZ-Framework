@@ -194,7 +194,7 @@ else
     network:fetch("Assetify:Downloader:onSyncPostPool", true):on(function(self, source)
         self:resume({executions = settings.downloader.syncRate, frames = 1})
         for i, j in imports.pairs(dummy.public.buffer) do
-            if j then network:emit("Assetify:Dummy:onCreation", true, false, source, self.assetType, self.assetName, self.assetClump, self.clumpMaps, self.dummyData, self.remoteSignature) end
+            if j and not j.isUnloading then network:emit("Assetify:Dummy:onCreation", true, false, source, self.assetType, self.assetName, self.assetClump, self.clumpMaps, self.dummyData, self.remoteSignature) end
             thread:pause()
         end
     end, true)

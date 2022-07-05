@@ -242,7 +242,7 @@ else
     network:fetch("Assetify:Downloader:onSyncPostPool", true):on(function(self, source)
         self:resume({executions = settings.downloader.syncRate, frames = 1})
         for i, j in imports.pairs(bone.public.buffer.element) do
-            if j then network:emit("Assetify:Bone:onAttachment", true, false, source, self.element, self.parent, self.boneData, self.remoteSignature) end
+            if j and not j.isUnloading then network:emit("Assetify:Bone:onAttachment", true, false, source, self.element, self.parent, self.boneData, self.remoteSignature) end
             thread:pause()
         end
     end, true)
