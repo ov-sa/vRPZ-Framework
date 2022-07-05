@@ -43,13 +43,13 @@ local shader = class:create("shader", {
     },
     remoteBlacklist = {}
 })
-shader.private.cache.__remoteBlacklist = {}
+shader.cache.__remoteBlacklist = {}
 for i = 1, #shader.public.remoteBlacklist, 1 do
     local j = shader.public.remoteBlacklist[i]
-    shader.private.cache.__remoteBlacklist[j] = true
+    shader.cache.__remoteBlacklist[j] = true
 end
-shader.public.remoteBlacklist = shader.private.cache.__remoteBlacklist
-shader.private.cache.__remoteBlacklist = nil
+shader.public.remoteBlacklist = shader.cache.__remoteBlacklist
+shader.cache.__remoteBlacklist = nil
 
 if localPlayer then
     shader.public.preLoaded, shader.public.preLoadedTex = {}, {
