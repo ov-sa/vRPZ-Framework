@@ -221,33 +221,35 @@ if localPlayer then
                     for i = 1, #unparsedIPLDatas, 1 do
                         cAsset.unSynced.assetCache[i] = {}
                         local childName = string.gsub(imports.tostring(imports.gettok(unparsedIPLDatas[i], 2, asset.separators.IPL)), " ", "")
-                        local sceneData = {
-                            position = {
-                                x = imports.tonumber(imports.gettok(unparsedIPLDatas[i], 4, asset.separators.IPL)),
-                                y = imports.tonumber(imports.gettok(unparsedIPLDatas[i], 5, asset.separators.IPL)),
-                                z = imports.tonumber(imports.gettok(unparsedIPLDatas[i], 6, asset.separators.IPL))
-                            },
-                            rotation = {}
-                        }
-                        local cQuat = math.quat(imports.tonumber(imports.gettok(unparsedIPLDatas[i], 7, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedIPLDatas[i], 8, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedIPLDatas[i], 9, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedIPLDatas[i], 10, asset.separators.IPL)))
-                        sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z = cQuat:toEuler()
-                        cQuat:destroy()
-                        if not cAsset.manifestData.sceneMapped then
-                            asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache[i], {
-                                txd = (parsedIDEDatas and parsedIDEDatas[childName] and assetPath.."txd/"..(parsedIDEDatas[childName][1])..".txd") or assetPath..(asset.references.asset)..".txd",
-                                dff = assetPath.."dff/"..childName..".dff",
-                                col = assetPath.."col/"..childName..".col"
-                            }, function(state)
-                                if state then
-                                    scene:create(cAsset.unSynced.assetCache[i].cAsset, cAsset.manifestData, sceneData)
-                                end
-                            end)
-                        else
-                            sceneData.position.x, sceneData.position.y, sceneData.position.z = sceneData.position.x + ((cAsset.manifestData.sceneOffset and cAsset.manifestData.sceneOffset.x) or 0), sceneData.position.y + ((cAsset.manifestData.sceneOffset and cAsset.manifestData.sceneOffset.y) or 0), sceneData.position.z + ((cAsset.manifestData.sceneOffset and cAsset.manifestData.sceneOffset.z) or 0)
-                            sceneData.dimension = cAsset.manifestData.sceneDimension
-                            sceneData.interior = cAsset.manifestData.sceneInterior
-                            --TODO: DETECT IF ITS CLUMPED OR NOT...
-                            --cAsset.unSynced.assetCache[i].cDummy = dummy:create("object", childName, _, _, SsceneData)
+                        if childName then
+                            local sceneData = {
+                                position = {
+                                    x = imports.tonumber(imports.gettok(unparsedIPLDatas[i], 4, asset.separators.IPL)),
+                                    y = imports.tonumber(imports.gettok(unparsedIPLDatas[i], 5, asset.separators.IPL)),
+                                    z = imports.tonumber(imports.gettok(unparsedIPLDatas[i], 6, asset.separators.IPL))
+                                },
+                                rotation = {}
+                            }
+                            local cQuat = math.quat(imports.tonumber(imports.gettok(unparsedIPLDatas[i], 7, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedIPLDatas[i], 8, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedIPLDatas[i], 9, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedIPLDatas[i], 10, asset.separators.IPL)))
+                            sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z = cQuat:toEuler()
+                            cQuat:destroy()
+                            if not cAsset.manifestData.sceneMapped then
+                                asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache[i], {
+                                    txd = (parsedIDEDatas and parsedIDEDatas[childName] and assetPath.."txd/"..(parsedIDEDatas[childName][1])..".txd") or assetPath..(asset.references.asset)..".txd",
+                                    dff = assetPath.."dff/"..childName..".dff",
+                                    col = assetPath.."col/"..childName..".col"
+                                }, function(state)
+                                    if state then
+                                        scene:create(cAsset.unSynced.assetCache[i].cAsset, cAsset.manifestData, sceneData)
+                                    end
+                                end)
+                            else
+                                sceneData.position.x, sceneData.position.y, sceneData.position.z = sceneData.position.x + ((cAsset.manifestData.sceneOffset and cAsset.manifestData.sceneOffset.x) or 0), sceneData.position.y + ((cAsset.manifestData.sceneOffset and cAsset.manifestData.sceneOffset.y) or 0), sceneData.position.z + ((cAsset.manifestData.sceneOffset and cAsset.manifestData.sceneOffset.z) or 0)
+                                sceneData.dimension = cAsset.manifestData.sceneDimension
+                                sceneData.interior = cAsset.manifestData.sceneInterior
+                                --TODO: DETECT IF ITS CLUMPED OR NOT...
+                                --cAsset.unSynced.assetCache[i].cDummy = dummy:create("object", childName, _, _, SsceneData)
+                            end
                         end
                         thread:pause()
                     end
