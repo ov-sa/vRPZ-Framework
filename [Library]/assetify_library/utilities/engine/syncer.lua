@@ -45,12 +45,25 @@ syncer.public.libraryName = imports.getResourceName(syncer.public.libraryResourc
 syncer.public.librarySource = "https://api.github.com/repos/ov-sa/Assetify-Library/releases/latest"
 syncer.public.librarySerial = imports.md5(syncer.public.libraryName..":"..imports.tostring(syncer.public.libraryResource)..":"..table:encode(imports.getRealTime()))
 
+network:create("Assetify:onBoot")
 network:create("Assetify:onLoad")
 network:create("Assetify:onUnload")
 network:create("Assetify:onModuleLoad")
 network:create("Assetify:onElementDestroy")
 function syncer.public:import() return syncer end
-imports.addEventHandler((localPlayer and "onClientResourceStart") or "onResourceStart", resourceRoot, function() syncer.public.isLibraryBooted = true end)
+imports.addEventHandler((localPlayer and "onClientResourceStart") or "onResourceStart", resourceRoot, function() network:emit("Assetify:onBoot") end)
+syncer.private.execOnBoot = function(execFunc)
+    local execWrapper = nil
+    execWrapper = function() execFunc(); network:fetch("Assetify:onBoot"):off(execWrapper) end
+    network:fetch("Assetify:onBoot"):on(execWrapper)
+    return true
+end
+syncer.private.execOnLoad = function(execFunc)
+    local execWrapper = nil
+    execWrapper = function() execFunc(); network:fetch("Assetify:onLoad"):off(execWrapper) end
+    network:fetch("Assetify:onLoad"):on(execWrapper)
+    return true
+end
 syncer.private.execOnLoad = function(execFunc)
     local execWrapper = nil
     execWrapper = function() execFunc(); network:fetch("Assetify:onLoad"):off(execWrapper) end
@@ -63,6 +76,7 @@ syncer.private.execOnModuleLoad = function(execFunc)
     network:fetch("Assetify:onModuleLoad"):on(execWrapper)
     return true
 end
+syncer.private.execOnBoot(function() syncer.public.isLibraryBooted = true end)
 syncer.private.execOnLoad(function() syncer.public.isLibraryLoaded = true end)
 syncer.private.execOnModuleLoad(function() syncer.public.isModuleLoaded = true end)
 
