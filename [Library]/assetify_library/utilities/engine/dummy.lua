@@ -160,7 +160,7 @@ else
 
     --TODO: WIP..
     function syncer.public:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer, targetDummy, remoteSignature)    
-        if targetPlayer then return network:emit("Assetify:Dummy:onSync", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, remoteSignature) end
+        if targetPlayer then return network:emit("Assetify:Dummy:onCreation", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, remoteSignature) end
         --TODO:HERE SHOULD BE CLASS NOT OBJECT
         targetDummy = dummy:create(assetType, assetName, assetClump, clumpMaps, dummyData)
         if not targetDummy then return false end
@@ -183,12 +183,12 @@ end
 
 function syncer.public:syncAssetDummy(length, ...) return dummy:create(table:unpack(table:pack(...), length or 5)) end
 if localPlayer then
-    network:create("Assetify:Dummy:onSync"):on(function(...) syncer.public:syncAssetDummy(6, ...) end)
+    network:create("Assetify:Dummy:onCreation"):on(function(...) syncer.public:syncAssetDummy(6, ...) end)
 else
     network:fetch("Assetify:Downloader:onSyncPostPool", true):on(function(self, source)
         self:resume({executions = settings.downloader.syncRate, frames = 1})
         for i, j in imports.pairs(dummy.public.buffer) do
-            if j then network:emit("Assetify:Dummy:onSync", true, false, source, self.assetType, self.assetName, self.assetClump, self.clumpMaps, self.dummyData, self.remoteSignature) end
+            if j then network:emit("Assetify:Dummy:onCreation", true, false, source, self.assetType, self.assetName, self.assetClump, self.clumpMaps, self.dummyData, self.remoteSignature) end
             thread:pause()
         end
     end, true)
