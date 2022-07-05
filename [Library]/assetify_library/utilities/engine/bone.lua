@@ -162,12 +162,6 @@ if localPlayer then
         imports.setElementMatrix(self.element, imports.matrix.transform(bone.public.cache.element[(self.parent)][(self.boneData.id)], self.boneData.rotationMatrix, self.boneData.position.x, self.boneData.position.y, self.boneData.position.z))
         return true
     end
-
-    --->>> API Syncers <<<---
-    network:create("Assetify:Bone:onAttachment"):on(function(...) syncer.public:syncBoneAttachment(...) end)
-    network:create("Assetify:Bone:onDetachment"):on(function(...) syncer.public:syncBoneDetachment(...) end)
-    network:create("Assetify:Bone:onRefreshment"):on(function(...) syncer.public:syncBoneRefreshment(...) end)
-    network:create("Assetify:Bone:onClearAttachment"):on(function(...) syncer.public:syncClearBoneAttachment(...) end)
 else
     function bone.public:load(element, parent, boneData, targetPlayer)
         if not bone.public:isInstance(self) then return false end
@@ -263,3 +257,9 @@ function syncer.public:syncBoneAttachment(...) return bone:create(table:unpack(t
 function syncer.public:syncBoneDetachment(element) local cBone = bone.private:fetchInstance(element); if not cBone then return false end; return cBone:destroy() end
 function syncer.public:syncBoneRefreshment(element, ...) local cBone = bone.private:fetchInstance(element); if not cBone then return false end; return cBone:refresh(table:unpack(table:pack(...), 1)) end
 function syncer.public:syncClearBoneAttachment(...) return bone:clearElementBuffer(...) end
+if localPlayer then
+    network:create("Assetify:Bone:onAttachment"):on(function(...) syncer.public:syncBoneAttachment(...) end)
+    network:create("Assetify:Bone:onDetachment"):on(function(...) syncer.public:syncBoneDetachment(...) end)
+    network:create("Assetify:Bone:onRefreshment"):on(function(...) syncer.public:syncBoneRefreshment(...) end)
+    network:create("Assetify:Bone:onClearAttachment"):on(function(...) syncer.public:syncClearBoneAttachment(...) end)
+end
