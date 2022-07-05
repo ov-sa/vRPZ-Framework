@@ -60,35 +60,35 @@ function manager.public:fetchAssets(assetType)
     return cAssets
 end
 
-if localPlayer then
-    function manager.public:setElementScoped(element)
-        if not sourceResource or (sourceResource == resource) then return false end
-        manager.private.buffer.instance[element] = sourceResource
-        manager.private.buffer.scoped[sourceResource] = manager.private.buffer.scoped[sourceResource] or {}
-        manager.private.buffer.scoped[sourceResource][element] = true
-        return true
-    end
+function manager.public:setElementScoped(element)
+    if not sourceResource or (sourceResource == resource) then return false end
+    manager.private.buffer.instance[element] = sourceResource
+    manager.private.buffer.scoped[sourceResource] = manager.private.buffer.scoped[sourceResource] or {}
+    manager.private.buffer.scoped[sourceResource][element] = true
+    return true
+end
 
-    function manager.public:clearElementBuffer(element, isResource)
-        if not element then return false end
-        if isResource then
-            local resourceScope = manager.private.buffer.scoped[element]
-            if not resourceScope then return false end
-            manager.private.buffer.scoped[element] = nil
-            for i, j in imports.pairs(resourceScope) do
-                imports.destroyElement(i)
-                resourceScope[i] = nil
-            end
-        else
-            if not imports.isElement(element) then return false end
-            local elementScope = manager.private.buffer.instance[element]
-            if not elementScope or not manager.private.buffer.scoped[elementScope] then return false end
-            manager.private.buffer.scoped[elementScope][element] = nil
-            manager.private.buffer.instance[element] = nil
+function manager.public:clearElementBuffer(element, isResource)
+    if not element then return false end
+    if isResource then
+        local resourceScope = manager.private.buffer.scoped[element]
+        if not resourceScope then return false end
+        manager.private.buffer.scoped[element] = nil
+        for i, j in imports.pairs(resourceScope) do
+            imports.destroyElement(i)
+            resourceScope[i] = nil
         end
-        return true
+    else
+        if not imports.isElement(element) then return false end
+        local elementScope = manager.private.buffer.instance[element]
+        if not elementScope or not manager.private.buffer.scoped[elementScope] then return false end
+        manager.private.buffer.scoped[elementScope][element] = nil
+        manager.private.buffer.instance[element] = nil
     end
+    return true
+end
 
+if localPlayer then
     function manager.public:getData(assetType, assetName, isInternal)
         if not assetType or not assetName then return false end
         if settings.assetPacks[assetType] then
