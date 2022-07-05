@@ -14,13 +14,12 @@
 
 local imports = {
     type = type,
-    pairs = pairs,
     tonumber = tonumber,
     decodeString = decodeString,
-    setmetatable = setmetatable,
+    isElement = isElement,
+    destroyElement = destroyElement,
     getElementMatrix = getElementMatrix,
     getElementPosition = getElementPosition,
-    utf8 = utf8,
     table = table,
     string = string,
     math = math
@@ -36,9 +35,17 @@ decodeString = function(decodeType, decodeData, decodeOptions, removeNull)
     local rawString = imports.decodeString(decodeType, decodeData, decodeOptions)
     if not rawString then return false end
     if removeNull then
-        rawString = imports.utf8.gsub(rawString, imports.utf8.char(0), "")
+        rawString = imports.string.gsub(rawString, imports.string.char(0), "")
     end
     return rawString
+end
+
+isElement = function(element)
+    return (element and imports.isElement(element)) or false
+end
+
+destroyElement = function(element)
+    return (imports.isElement(element) and imports.destroyElement(element)) or false
 end
 
 getElementPosition = function(element, offX, offY, offZ)
@@ -62,21 +69,6 @@ getDistanceBetweenPoints3D = function(x1, y1, z1, x2, y2, z2)
     x1, y1, z1, x2, y2, z2 = imports.tonumber(x1), imports.tonumber(y1), imports.tonumber(z1), imports.tonumber(x2), imports.tonumber(y2), imports.tonumber(z2)
     if not x1 or not y1 or not z1 or not x2 or not y2 or not z2 then return false end
     return imports.math.sqrt(((x2 - x1)^2) + ((y2 - y1)^2) + ((z2 - z1)^2))
-end
-
-
----------------------
---[[ Class: UTF8 ]]--
----------------------
-
-local __utf8_gsub = imports.utf8.gsub
-utf8.gsub = function(string, matchWord, replaceWord, matchLimit, isStrictcMatch, matchPrefix, matchPostfix)
-    if not matchWord then
-        print(string)
-    end
-    matchPrefix, matchPostfix = matchPrefix or "", matchPostfix or ""
-    matchWord = (isStrictcMatch and "%f[^"..matchPrefix.."%z%s]"..matchWord.."%f["..matchPostfix.."%z%s]") or matchPrefix..matchWord..matchPostfix
-    return __utf8_gsub(string, matchWord, replaceWord, matchLimit)
 end
 
 
