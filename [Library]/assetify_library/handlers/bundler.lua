@@ -18,37 +18,34 @@ local imports = {
 }
 
 
--------------------
---[[ Variables ]]--
--------------------
+-----------------
+--[[ Bundler ]]--
+-----------------
 
-local bundler = {}
-local parseUtils = {
-    "utilities/sandbox/shared.lua",
-    "utilities/sandbox/table.lua",
-    "utilities/sandbox/math/index.lua",
-    "utilities/sandbox/math/quat.lua",
-    "utilities/sandbox/string.lua"
+local bundler = {
+    rw = {},
+    utils = {
+        "utilities/sandbox/shared.lua",
+        "utilities/sandbox/table.lua",
+        "utilities/sandbox/math/index.lua",
+        "utilities/sandbox/math/quat.lua",
+        "utilities/sandbox/string.lua"
+    },
+    modules = {
+        ["namespace"] = {module = "namespacer", namespace = "assetify.namespace", path = "utilities/sandbox/namespacer.lua", endpoints = {"namespace", "class"}},
+        ["class"] = {namespace = "assetify.class"},
+        ["file"] = {module = "filesystem", namespace = "assetify.file", path = "utilities/sandbox/filesystem.lua", endpoints = {"file"}},
+        ["timer"] = {module = "timer", namespace = "assetify.timer", path = "utilities/sandbox/timer.lua", endpoints = {"timer"}},
+        ["thread"] = {module = "threader", namespace = "assetify.thread", path = "utilities/sandbox/threader.lua", endpoints = {"thread"}},
+        ["network"] = {module = "networker", namespace = "assetify.network", path = "utilities/sandbox/networker.lua", endpoints = {"network"}}
+    }
 }
-local parseModules = {
-    ["namespace"] = {module = "namespacer", namespace = "assetify.namespace", path = "utilities/sandbox/namespacer.lua", endpoints = {"namespace", "class"}},
-    ["class"] = {namespace = "assetify.class"},
-    ["file"] = {module = "filesystem", namespace = "assetify.file", path = "utilities/sandbox/filesystem.lua", endpoints = {"file"}},
-    ["timer"] = {module = "timer", namespace = "assetify.timer", path = "utilities/sandbox/timer.lua", endpoints = {"timer"}},
-    ["thread"] = {module = "threader", namespace = "assetify.thread", path = "utilities/sandbox/threader.lua", endpoints = {"thread"}},
-    ["network"] = {module = "networker", namespace = "assetify.network", path = "utilities/sandbox/networker.lua", endpoints = {"network"}}
-}
-
-
---------------------------------------------
---[[ Functions: Imports Utils & Modules ]]--
---------------------------------------------
 
 local function parseUtil()
     local rw = ""
-    for i = 1, #parseUtils, 1 do
-        local j = file:read(parseUtils[i])
-        for k, v in imports.pairs(parseModules) do
+    for i = 1, #bundler.utils, 1 do
+        local j = file:read(bundler.utils[i])
+        for k, v in imports.pairs(bundler.modules) do
             j = string.gsub(j, k, v.namespace, _, true, "(", ".:)")
         end
         rw = rw..[[
@@ -61,10 +58,10 @@ end
 
 local function parseModule(moduleName)
     if not moduleName then return false end
-    local module = parseModules[moduleName]
+    local module = bundler.modules[moduleName]
     if not module then return false end
     local rw = file:read(module.path)
-    for i, j in imports.pairs(parseModules) do
+    for i, j in imports.pairs(bundler.modules) do
         local isBlacklisted = false
         for k = 1, #module.endpoints, 1 do
             local v = module.endpoints[k]
@@ -79,13 +76,13 @@ local function parseModule(moduleName)
     for i = 1, #module.endpoints, 1 do
         local j = module.endpoints[i]
         rw = rw..[[
-            assetify["]]..j..[["] = ]]..j..((parseModules[j] and parseModules[j].module and ".public") or "")..[[
+            assetify["]]..j..[["] = ]]..j..((bundler.modules[j] and bundler.modules[j].module and ".public") or "")..[[
         ]]
         rw = rw..[[
             _G["]]..j..[["] = nil
         ]]
     end
-    bundler[(module.module)] = {
+    bundler.rw[(module.module)] = {
         module = moduleName,
         rw = [[
         if not assetify.]]..moduleName..[[ then
@@ -94,7 +91,7 @@ local function parseModule(moduleName)
         ]]
     }
 end
-for i, j in imports.pairs(parseModules) do
+for i, j in imports.pairs(bundler.modules) do
     if j.module and j.endpoints then
         parseModule(i)
     end
@@ -110,7 +107,7 @@ function import(...)
             table:insert(buildImports, "core")
         elseif cArgs[1] == "*" then
             isCompleteFetch = true
-            for i, j in imports.pairs(bundler) do
+            for i, j in imports.pairs(bundler.rw) do
                 table:insert(buildImports, i)
             end
         else
@@ -118,13 +115,13 @@ function import(...)
         end
         for i = 1, #buildImports, 1 do
             local j = buildImports[i]
-            if (j ~= "imports") and bundler[j] and not __genImports[j] then
+            if (j ~= "imports") and bundler.rw[j] and not __genImports[j] then
                 __genImports[j] = true
-                local module = bundler[j].module or j
+                local module = bundler.rw[j].module or j
                 table:insert(genImports, {
                     index = module,
-                    rw = bundler["imports"]..[[
-                    ]]..bundler[j].rw
+                    rw = bundler.rw["imports"]..[[
+                    ]]..bundler.rw[j].rw
                 })
             end
         end
@@ -149,14 +146,14 @@ function import(...)
 end
 
 
------------------
---[[ Bundler ]]--
------------------
+--------------------
+--[[ Bundler RW ]]--
+--------------------
 
-bundler["imports"] = [[
+bundler.rw["imports"] = [[
     if not assetify then
         assetify = {}
-        ]]..bundler["namespacer"].rw..[[
+        ]]..bundler.rw["namespacer"].rw..[[
         ]]..parseUtil()..[[
         assetify.imports = {
             resourceName = "]]..syncer.libraryName..[[",
@@ -174,7 +171,7 @@ bundler["imports"] = [[
     end
 ]]
 
-bundler["core"] = {
+bundler.rw["core"] = {
     module = "__core",
     rw = [[
         assetify.__core = {}
@@ -292,9 +289,9 @@ bundler["core"] = {
     ]]
 }
 
-bundler["scheduler"] = {
+bundler.rw["scheduler"] = {
     rw = [[
-        ]]..bundler["networker"].rw..[[
+        ]]..bundler.rw["networker"].rw..[[
         assetify.scheduler = {
             buffer = {execOnLoad = {}, execOnModuleLoad = {}},
             execOnLoad = function(execFunc)
@@ -356,7 +353,7 @@ bundler["scheduler"] = {
     ]]
 }
 
-bundler["renderer"] = {
+bundler.rw["renderer"] = {
     rw = [[
         assetify.renderer = {}
         if localPlayer then
@@ -391,7 +388,7 @@ bundler["renderer"] = {
     ]]
 }
 
-bundler["syncer"] = {
+bundler.rw["syncer"] = {
     rw = [[
         assetify.syncer = {
             setGlobalData = function(...)
@@ -413,7 +410,7 @@ bundler["syncer"] = {
     ]]
 }
 
-bundler["attacher"] = {
+bundler.rw["attacher"] = {
     rw = [[
         assetify.attacher = {
             setBoneAttach = function(...)
@@ -435,7 +432,7 @@ bundler["attacher"] = {
     ]]
 }
 
-bundler["lights"] = {
+bundler.rw["lights"] = {
     module = "light",
     rw = [[
         assetify.light = {
