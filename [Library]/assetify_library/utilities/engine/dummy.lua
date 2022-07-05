@@ -164,6 +164,14 @@ else
         return cDummy
     end
 
+    function dummy.public:unload()
+        if not dummy.public:isInstance(self) then return false end
+        dummy.public.buffer[(self.cDummy)] = nil
+        imports.destroyElement(self.cModelInstance)
+        self:destroyInstance()
+        return true
+    end
+
     --TODO: WIP..
     function syncer.public:syncAssetDummy(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer, targetDummy, remoteSignature)    
         if targetPlayer then return network:emit("Assetify:Dummy:onCreation", true, false, targetPlayer, assetType, assetName, assetClump, clumpMaps, dummyData, targetDummy, remoteSignature) end
