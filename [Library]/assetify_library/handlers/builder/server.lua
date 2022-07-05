@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
 --[[ Resource: Assetify Library
-     Script: handlers: builder.lua
+     Script: handlers: builder: server.lua
      Author: vStudio
      Developer(s): Aviril, Tron, Mario, Аниса
      DOC: 19/10/2021
@@ -16,8 +16,7 @@ local imports = {
     pairs = pairs,
     fetchRemote = fetchRemote,
     outputDebugString = outputDebugString,
-    addEventHandler = addEventHandler,
-    table = table
+    addEventHandler = addEventHandler
 }
 
 
@@ -37,11 +36,12 @@ end
 imports.addEventHandler("onResourceStart", resourceRoot, function()
     imports.fetchRemote(syncer.librarySource, function(response, status)
         if not response or not status or (status ~= 0) then return false end
-        response = imports.table:decode(response)
+        response = table:decode(response)
         if response and response.tag_name and (syncer.libraryVersion ~= response.tag_name) then
             imports.outputDebugString("[Assetify]: Latest version available - "..response.tag_name, 3)
         end
     end)
+
     thread:create(function(self)
         syncer.libraryModules = {}
         if not settings.assetPacks["module"] then network:emit("Assetify:onModuleLoad", false) end
@@ -57,4 +57,7 @@ imports.addEventHandler("onResourceStart", resourceRoot, function()
         onLibraryLoaded()
     end):resume()
 end)
-imports.addEventHandler("onResourceStop", resourceRoot, function() network:emit("Assetify:onUnload", false) end)
+
+imports.addEventHandler("onResourceStop", resourceRoot, function()
+    network:emit("Assetify:onUnload", false)
+end)

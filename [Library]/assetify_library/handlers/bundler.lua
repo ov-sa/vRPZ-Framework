@@ -14,8 +14,7 @@
 
 local imports = {
     type = type,
-    pairs = pairs,
-    string = string
+    pairs = pairs
 }
 
 
@@ -50,7 +49,7 @@ local function parseUtil()
     for i = 1, #parseUtils, 1 do
         local j = file:read(parseUtils[i])
         for k, v in imports.pairs(parseModules) do
-            j = imports.string.gsub(j, k, v.namespace, _, true, "(", ".:)")
+            j = string.gsub(j, k, v.namespace, _, true, "(", ".:)")
         end
         rw = rw..[[
         if true then
@@ -74,9 +73,9 @@ local function parseModule(moduleName)
                 break
             end
         end
-        if not isBlacklisted then rw = imports.string.gsub(rw, i, j.namespace, _, true, "(", ".:)") end
+        if not isBlacklisted then rw = string.gsub(rw, i, j.namespace, _, true, "(", ".:)") end
     end
-    rw = ((moduleName == "namespace") and imports.string.gsub(rw, "class = {}", "local class = {}")) or rw
+    rw = ((moduleName == "namespace") and string.gsub(rw, "class = {}", "local class = {}")) or rw
     for i = 1, #module.endpoints, 1 do
         local j = module.endpoints[i]
         rw = rw..[[

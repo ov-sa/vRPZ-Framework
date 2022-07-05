@@ -24,13 +24,11 @@ local imports = {
 }
 
 
---------------------
---[[ API: World ]]--
---------------------
+---------------------
+--[[ APIs: Sound ]]--
+---------------------
 
-manager.API.World = {}
-
-function manager.API:restoreWorld()
+function manager.API.Sound:restoreWorld()
     imports.destroyElement(streamer.waterBuffer)
     streamer.waterBuffer = nil
     imports.restoreAllWorldModels()
@@ -39,7 +37,7 @@ function manager.API:restoreWorld()
     return true
 end
 
-function manager.API:clearModel(modelID)
+function manager.API.Sound:clearModel(modelID)
     modelID = imports.tonumber(modelID)
     if modelID then
         imports.engineImportTXD(asset.rwAssets.txd, modelID)
@@ -49,7 +47,7 @@ function manager.API:clearModel(modelID)
     return false
 end
 
-function manager.API:restoreModel(modelID)
+function manager.API.Sound:restoreModel(modelID)
     modelID = imports.tonumber(modelID)
     if not modelID then return false end
     return imports.engineRestoreModel(modelID)
