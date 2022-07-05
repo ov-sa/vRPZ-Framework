@@ -229,21 +229,20 @@ end
 --[[ API Syncers ]]--
 ---------------------
 
-function syncer.public:syncBoneAttachment(...) return bone:create(table:unpack(table:pack(...), 3)) end
-function syncer.public:syncBoneDetachment(element) local cBone = bone.private:fetchInstance(element); if not cBone then return false end; return cBone:destroy() end
-function syncer.public:syncBoneRefreshment(element, ...) local cBone = bone.private:fetchInstance(element); if not cBone then return false end; return cBone:refresh(table:unpack(table:pack(...), 1)) end
-function syncer.public:syncClearBoneAttachment(...) return bone:clearElementBuffer(...) end
+function syncer.public:syncBoneAttachment(length, ...) return bone:create(table:unpack(table:pack(...), length or 3)) end
+function syncer.public:syncBoneDetachment(length, element) local cBone = bone.private:fetchInstance(element); if not cBone then return false end; return cBone:destroy() end
+function syncer.public:syncBoneRefreshment(length, element, ...) local cBone = bone.private:fetchInstance(element); if not cBone then return false end; return cBone:refresh(table:unpack(table:pack(...), length or 1)) end
+function syncer.public:syncClearBoneAttachment(length, ...) return bone:clearElementBuffer(...) end
 if localPlayer then
-    network:create("Assetify:Bone:onAttachment"):on(function(...) syncer.public:syncBoneAttachment(...) end)
-    network:create("Assetify:Bone:onDetachment"):on(function(...) syncer.public:syncBoneDetachment(...) end)
-    network:create("Assetify:Bone:onRefreshment"):on(function(...) syncer.public:syncBoneRefreshment(...) end)
-    network:create("Assetify:Bone:onClearAttachment"):on(function(...) syncer.public:syncClearBoneAttachment(...) end)
+    network:create("Assetify:Bone:onAttachment"):on(function(...) syncer.public:syncBoneAttachment(4, ...) end)
+    network:create("Assetify:Bone:onDetachment"):on(function(...) syncer.public:syncBoneDetachment(_, ...) end)
+    network:create("Assetify:Bone:onRefreshment"):on(function(...) syncer.public:syncBoneRefreshment(2, ...) end)
+    network:create("Assetify:Bone:onClearAttachment"):on(function(...) syncer.public:syncClearBoneAttachment(_, ...) end)
 else
     network:fetch("Assetify:Downloader:onPostSyncPool", true):on(function(self, source)
         self:resume({executions = settings.downloader.syncRate, frames = 1})
-        --TODO: CHANGE THIS BUFFER
-        for i, j in imports.pairs(syncer.public.syncedBoneAttachments) do
-            if j then syncer.public:syncBoneAttachment(i, j.parent, j.boneData, source) end
+        for i, j in imports.pairs(bone.public.buffer.element) do
+            if j then network:emit("Assetify:Bone:onAttachment", true, false, source, self.element, self.parent, self.boneData, self.remoteSignature) end
             thread:pause()
         end
     end, true)
