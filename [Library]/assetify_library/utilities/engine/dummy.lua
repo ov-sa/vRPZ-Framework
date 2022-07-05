@@ -145,8 +145,7 @@ else
         if not dummyData then return false end
         local cAsset = manager:getData(assetType, assetName, syncer.librarySerial)
         if not cAsset or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
-        if assetClump then cData = cAsset.unSynced.assetCache[assetClump].cAsset.synced end
-        if not cAsset or not cData then return false end
+        if not cAsset then return false end
         local dummyType = settings.assetPacks[assetType].assetType
         if not dummyType then return false end
         targetDummy = (remoteSignature and targetDummy) or false
