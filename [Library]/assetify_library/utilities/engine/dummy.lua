@@ -79,13 +79,11 @@ if localPlayer then
         if not cAsset or not cData then return false end
         local dummyType = settings.assetPacks[assetType].assetType
         if not dummyType then return false end
-        targetDummy = (remoteSignature and remoteSignature.element) or false
-        if not targetDummy then
-            dummy.private:validateOffset(self, dummyData)
-        end
+        self.cModelInstance = (remoteSignature and remoteSignature.element) or false
+        dummy.private:validateOffset(self, dummyData)
         self.assetType, self.assetName = assetType, assetName
         self.syncRate = imports.tonumber(dummyData.syncRate)
-        self.cModelInstance = targetDummy or false
+        self.cModelInstance = self.cModelInstance or false
         if dummyType == "object" then
             self.cModelInstance = self.cModelInstance or imports.createObject(cData.modelID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
             self.cCollisionInstance = (cData.collisionID and imports.createObject(cData.collisionID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)) or false
@@ -101,15 +99,15 @@ if localPlayer then
         self.cDummy = self.cCollisionInstance or self.cModelInstance
         dummy.public.buffer[(self.cDummy)] = self
         self.cHeartbeat = thread:createHeartbeat(function()
-            if not targetDummy then
+            if not self.cModelInstance then
                 return false
             else
-                return not imports.isElement(targetDummy)
+                return not imports.isElement(self.cModelInstance)
             end
         end, function()
             if dummyType == "object" then imports.setElementDoubleSided(self.cModelInstance, true) end
             network:emit("Assetify:onReceiveSyncedElement", false, self.cModelInstance, assetType, assetName, assetClump, clumpMaps, remoteSignature)
-            if targetDummy then
+            if self.cModelInstance then
                 imports.setElementAlpha(self.cModelInstance, 255)
             else
                 imports.setElementDimension(self.cModelInstance, imports.tonumber(dummyData.dimension) or 0)
