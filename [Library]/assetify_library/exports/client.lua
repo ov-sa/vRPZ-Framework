@@ -43,8 +43,8 @@ function getAssetID(...) return manager:getID(...) end
 function isAssetLoaded(...) return manager:isLoaded(...) end
 function loadAsset(...) return manager:load(...) end
 function unloadAsset(...) return manager:unload(...) end
-function loadAnim(...) return manager:loadAnim(...) end
-function unloadAnim(...) return manager:unloadAnim(...) end
+function loadAnim(...) return manager.API.Anim:loadAnim(...) end
+function unloadAnim(...) return manager.API.Anim:unloadAnim(...) end
 function createShader(...) local cShader = shader:create(...) return cShader.cShader end
 
 function clearWorld(...) return manager.API:clearWorld(...) end
