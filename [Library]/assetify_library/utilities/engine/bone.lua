@@ -91,10 +91,8 @@ function bone.public:destroy(...)
 end
 
 function bone.public:clearElementBuffer(element)
-    if not element then return false end
-    if bone.public.buffer.element[element] then
-        bone.public.buffer.element[element]:destroy()
-    end
+    local cBone = bone.private:fetchInstance(element)
+    if not cBone then cBone:destroy() end
     if bone.public.buffer.parent[element] then
         for i, j in imports.pairs(bone.public.buffer.parent[element]) do
             i:destroy()
