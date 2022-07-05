@@ -17,8 +17,7 @@ local imports = {
     type = type,
     pairs = pairs,
     md5 = md5,
-    collectgarbage = collectgarbage,
-    loadAsset = loadAsset
+    collectgarbage = collectgarbage
 }
 
 
@@ -102,9 +101,7 @@ if localPlayer then
                     thread:create(function(self)
                         if settings.assetPacks["module"].autoLoad and settings.assetPacks["module"].rwDatas then
                             for i, j in imports.pairs(settings.assetPacks["module"].rwDatas) do
-                                if j then
-                                    imports.loadAsset("module", i)
-                                end
+                                if j then manager:load("module", i) end
                                 thread:pause()
                             end
                         end
@@ -117,9 +114,7 @@ if localPlayer then
                             if i ~= "module" then
                                 if j.autoLoad and j.rwDatas then
                                     for k, v in imports.pairs(j.rwDatas) do
-                                        if v then
-                                            imports.loadAsset(i, k)
-                                        end
+                                        if v then manager:load(i, k) end
                                         thread:pause()
                                     end
                                 end
