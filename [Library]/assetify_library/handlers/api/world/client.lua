@@ -14,10 +14,12 @@
 
 local imports = {
     tonumber = tonumber,
+    createWater = createWater,
     destroyElement = destroyElement,
     engineImportTXD = engineImportTXD,
     engineReplaceModel = engineReplaceModel,
     engineRestoreModel = engineRestoreModel,
+    removeWorldModel = removeWorldModel,
     restoreAllWorldModels = restoreAllWorldModels,
     setOcclusionsEnabled = setOcclusionsEnabled,
     setWorldSpecialPropertyEnabled = setWorldSpecialPropertyEnabled,
@@ -29,6 +31,18 @@ local imports = {
 --------------------
 
 manager.API.World = {}
+
+function manager.API:clearWorld()
+    for i = 550, 19999, 1 do
+        imports.removeWorldModel(i, 100000, 0, 0, 0)
+    end
+    if settings.GTA.waterLevel then
+        streamer.waterBuffer = imports.createWater(-3000, -3000, 0, 3000, -3000, 0, -3000, 3000, 0, 3000, 3000, 0, false)
+    end
+    imports.setOcclusionsEnabled(false)
+    imports.setWorldSpecialPropertyEnabled("randomfoliage", false)
+    return true
+end
 
 function manager.API:restoreWorld()
     imports.destroyElement(streamer.waterBuffer)

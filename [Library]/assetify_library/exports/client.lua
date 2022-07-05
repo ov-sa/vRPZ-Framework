@@ -13,10 +13,6 @@
 -----------------
 
 local imports = {
-    removeWorldModel = removeWorldModel,
-    createWater = createWater,
-    setOcclusionsEnabled = setOcclusionsEnabled,
-    setWorldSpecialPropertyEnabled = setWorldSpecialPropertyEnabled,
     math = math
 }
 
@@ -51,18 +47,7 @@ function loadAnim(...) return manager:loadAnim(...) end
 function unloadAnim(...) return manager:unloadAnim(...) end
 function createShader(...) local cShader = shader:create(...) return cShader.cShader end
 
-function clearWorld()
-    for i = 550, 19999, 1 do
-        imports.removeWorldModel(i, 100000, 0, 0, 0)
-    end
-    if settings.GTA.waterLevel then
-        streamer.waterBuffer = imports.createWater(-3000, -3000, 0, 3000, -3000, 0, -3000, 3000, 0, 3000, 3000, 0, false)
-    end
-    imports.setOcclusionsEnabled(false)
-    imports.setWorldSpecialPropertyEnabled("randomfoliage", false)
-    return true
-end
-
+function clearWorld(...) return manager.API:clearWorld(...) end
 function restoreWorld(...) return manager.API:restoreWorld(...) end
 function clearModel(...) return manager.API:clearModel(...) end
 function restoreModel(...) return manager.API:restoreModel(...) end
