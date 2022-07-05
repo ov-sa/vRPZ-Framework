@@ -15,7 +15,6 @@
 local imports = {
     pairs = pairs,
     addEventHandler = addEventHandler,
-    triggerEvent = triggerEvent,
     setWaterLevel = setWaterLevel
 }
 
@@ -25,15 +24,10 @@ local imports = {
 -----------------------------------------------
 
 imports.addEventHandler("onClientResourceStart", resourceRoot, function()
-    if settings.GTA.clearWorld then
-        clearWorld()
-    else
-        restoreWorld()
-    end
+    local worldExec = (settings.GTA.clearWorld and clearWorld) or restoreWorld
+    worldExec()
     if settings.GTA.waterLevel then
-        if streamer.waterBuffer then
-            imports.setWaterLevel(streamer.waterBuffer, settings.GTA.waterLevel)
-        end
+        if streamer.waterBuffer then imports.setWaterLevel(streamer.waterBuffer, settings.GTA.waterLevel) end
         imports.setWaterLevel(settings.GTA.waterLevel, true, true, true, true)
     end
 end)
