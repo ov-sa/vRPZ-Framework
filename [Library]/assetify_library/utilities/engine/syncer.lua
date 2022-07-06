@@ -86,7 +86,7 @@ if localPlayer then
     network:create("Assetify:onAssetLoad")
     network:create("Assetify:onAssetUnload")
 
-    function syncer.public:setElementModel(element, assetType, assetName, assetClump, clumpMaps, remoteSignature)
+    function syncer.private:setElementModel(element, assetType, assetName, assetClump, clumpMaps, remoteSignature)
         if not element or (not remoteSignature and not imports.isElement(element)) then return false end
         local elementType = imports.getElementType(element)
         elementType = (((elementType == "ped") or (elementType == "player")) and "ped") or elementType
@@ -117,7 +117,7 @@ else
     syncer.public.libraryVersion = (syncer.public.libraryVersion and "v."..syncer.public.libraryVersion) or syncer.public.libraryVersion
     syncer.public.loadedClients, syncer.public.scheduledClients = {}, {}
 
-    function syncer.public:setElementModel(element, assetType, assetName, assetClump, clumpMaps, remoteSignature, targetPlayer)
+    function syncer.private:setElementModel(element, assetType, assetName, assetClump, clumpMaps, remoteSignature, targetPlayer)
         if targetPlayer then return network:emit("Assetify:Syncer:onSyncElementModel", true, false, targetPlayer, element, assetType, assetName, assetClump, clumpMaps, remoteSignature) end
         if not element or not imports.isElement(element) then return false end
         local elementType = imports.getElementType(element)
@@ -129,7 +129,7 @@ else
         syncer.public.syncedElements[element] = {assetType = assetType, assetName = assetName, assetClump = assetClump, clumpMaps = clumpMaps}
         thread:create(function(self)
             for i, j in imports.pairs(syncer.public.loadedClients) do
-                syncer.public:setElementModel(element, assetType, assetName, assetClump, clumpMaps, remoteSignature, i)
+                syncer.private:setElementModel(element, assetType, assetName, assetClump, clumpMaps, remoteSignature, i)
                 thread:pause()
             end
         end):resume({executions = settings.downloader.syncRate, frames = 1})
@@ -142,7 +142,7 @@ end
 --[[ API Syncers ]]--
 ---------------------
 
-function syncer.public:syncElementModel(length, ...) return syncer.public:setElementModel(table:unpack(table:pack(...), length or 5)) end
+function syncer.public:syncElementModel(length, ...) return syncer.private:setElementModel(table:unpack(table:pack(...), length or 5)) end
 if localPlayer then
     network:create("Assetify:Syncer:onSyncElementModel"):on(function(...) syncer.public:syncElementModel(6, ...) end)
     network:fetch("Assetify:onElementDestroy"):on(function(source)
