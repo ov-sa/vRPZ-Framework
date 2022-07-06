@@ -175,7 +175,7 @@ function network.public:on(exec, config)
     if not exec or (imports.type(exec) ~= "function") then return false end
     config = (config and (imports.type(config) == "table") and config) or {}
     config.isAsync = (config.isAsync and true) or false
-    config.subscriptionLimit = (self.isCallback and imports.tonumber(config.subscriptionLimit)) or false
+    config.subscriptionLimit = (not self.isCallback and imports.tonumber(config.subscriptionLimit)) or false
     config.subscriptionLimit = (config.subscriptionLimit and math.max(1, config.subscriptionLimit)) or config.subscriptionLimit
     config.subscriptionCount = (config.subscriptionLimit and 0) or false
     if self.isCallback then

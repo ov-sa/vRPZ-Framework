@@ -53,27 +53,18 @@ network:create("Assetify:onElementDestroy")
 function syncer.public:import() return syncer end
 imports.addEventHandler((localPlayer and "onClientResourceStart") or "onResourceStart", resourceRoot, function() network:emit("Assetify:onBoot") end)
 syncer.private.execOnBoot = function(execFunc)
-    local execWrapper = nil
-    execWrapper = function() execFunc(); network:fetch("Assetify:onBoot"):off(execWrapper) end
-    network:fetch("Assetify:onBoot"):on(execWrapper)
+    if syncer.public.isLibraryBooted then execFunc()
+    else network:fetch("Assetify:onBoot"):on(execFunc, {subscriptionLimit = 1}) end
     return true
 end
 syncer.private.execOnLoad = function(execFunc)
-    local execWrapper = nil
-    execWrapper = function() execFunc(); network:fetch("Assetify:onLoad"):off(execWrapper) end
-    network:fetch("Assetify:onLoad"):on(execWrapper)
-    return true
-end
-syncer.private.execOnLoad = function(execFunc)
-    local execWrapper = nil
-    execWrapper = function() execFunc(); network:fetch("Assetify:onLoad"):off(execWrapper) end
-    network:fetch("Assetify:onLoad"):on(execWrapper)
+    if syncer.public.isLibraryLoaded then execFunc()
+    else network:fetch("Assetify:onLoad"):on(execFunc, {subscriptionLimit = 1}) end
     return true
 end
 syncer.private.execOnModuleLoad = function(execFunc)
-    local execWrapper = nil
-    execWrapper = function() execFunc(); network:fetch("Assetify:onModuleLoad"):off(execWrapper) end
-    network:fetch("Assetify:onModuleLoad"):on(execWrapper)
+    if syncer.public.isModuleLoaded then execFunc()
+    else network:fetch("Assetify:onModuleLoad"):on(execFunc, {subscriptionLimit = 1}) end
     return true
 end
 syncer.private.execOnBoot(function() syncer.public.isLibraryBooted = true end)
