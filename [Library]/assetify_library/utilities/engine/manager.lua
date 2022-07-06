@@ -202,13 +202,9 @@ if localPlayer then
             end):resume({executions = settings.downloader.buildRate, frames = 1})
         elseif assetType == "scene" then
             thread:create(function(self)
-                local sceneIPLDatas = file:read(assetPath..(asset.references.scene)..".ipl")
-                sceneIPLDatas = (cAsset.manifestData.encryptKey and string.decode("tea", sceneIPLDatas, {key = cAsset.manifestData.encryptKey})) or sceneIPLDatas
-                sceneIPLDatas = scene:parseIPL(sceneIPLDatas)
+                local sceneIPLDatas = scene:parseIPL(asset:loadFile(file:read(assetPath..(asset.references.scene)..".ipl"), cAsset.manifestData.encryptKey))
                 if sceneIPLDatas then
-                    local sceneIDEDatas = (cAsset.sceneIDE and file:read(assetPath..(asset.references.scene)..".ide")) or false
-                    sceneIDEDatas = (sceneIDEDatas and cAsset.manifestData.encryptKey and string.decode("tea", sceneIDEDatas, {key = cAsset.manifestData.encryptKey})) or sceneIDEDatas
-                    sceneIDEDatas = scene:parseIPL(sceneIDEDatas)
+                    local sceneIDEDatas = scene:parseIDE(asset:loadFile(file:read(assetPath..(asset.references.scene)..".ide"), cAsset.manifestData.encryptKey))
                     for i = 1, #sceneIPLDatas, 1 do
                         local j = sceneIPLDatas[i]
                         cAsset.unSynced.assetCache[i] = {}
