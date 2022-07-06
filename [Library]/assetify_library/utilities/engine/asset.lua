@@ -44,10 +44,6 @@ local asset = class:create("asset", {
         asset = "asset",
         scene = "scene"
     },
-    separators = {
-        IDE = ", ",
-        IPL = ", "
-    },
     ranges = {
         dimension = {-1, 65535},
         interior = {0, 255},
@@ -429,38 +425,22 @@ else
                                     end
                                 end
                                 local sceneIPLPath = assetPath..(asset.public.references.scene)..".ipl"
-                                local sceneIPLData = file:read(sceneIPLPath)
-                                if sceneIPLData then
+                                local sceneIPLDatas = scene:parseIPL(file:read(sceneIPLPath))
+                                if sceneIPLDatas then
                                     asset.public:buildFile(sceneIPLPath, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                     if not assetManifestData.sceneMapped then
                                         local sceneIDEPath = assetPath..(asset.public.references.scene)..".ide"
-                                        local sceneIDEData = file:read(sceneIDEPath)
+                                        local sceneIDEDatas = scene:parseIDE(file:read(sceneIDEPath))
                                         asset.public:buildFile(sceneIDEPath, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                         asset.public:buildFile(assetPath..(asset.public.references.asset)..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
-                                        local unparsedIDEDatas, unparsedIPLDatas = (sceneIDEData and string.split(sceneIDEData, "\n")) or false, string.split(sceneIPLData, "\n")
-                                        local parsedIDEDatas = (unparsedIDEDatas and {}) or false
-                                        cAssetPack.rwDatas[assetName].synced.sceneIDE = (parsedIDEDatas and true) or false
-                                        if unparsedIDEDatas then
-                                            for k = 1, #unparsedIDEDatas, 1 do
-                                                local IDEData = string.split(unparsedIDEDatas[k], asset.public.separators.IDE)
-                                                IDEData[2] = (IDEData[2] and string.gsub(IDEData[2], "%s", "")) or IDEData[2]
-                                                if IDEData[2] then
-                                                    parsedIDEDatas[(IDEData[2])] = {
-                                                        (IDEData[3] and string.gsub(IDEData[3], "%s", "")) or false
-                                                    }
-                                                end
-                                            end
-                                        end
-                                        for k = 1, #unparsedIPLDatas, 1 do
-                                            local IPLData = string.split(unparsedIPLDatas[k], asset.public.separators.IPL)
-                                            IPLData[2] = (IPLData[2] and string.gsub(IPLData[2], "%s", "")) or IPLData[2]
-                                            if IPLData[2] then
-                                                asset.public:buildFile(assetPath.."dff/lod/"..IPLData[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
-                                                asset.public:buildFile(assetPath.."dff/"..IPLData[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
-                                                asset.public:buildFile(assetPath.."col/"..IPLData[2]..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
-                                                if parsedIDEDatas and parsedIDEDatas[(IPLData[2])] then
-                                                    asset.public:buildFile(assetPath.."txd/"..(parsedIDEDatas[(IPLData[2])][1])..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
-                                                end
+                                        cAssetPack.rwDatas[assetName].synced.sceneIDE = (sceneIDEDatas and true) or false
+                                        for k = 1, #sceneIPLDatas, 1 do
+                                            local v = sceneIPLDatas[k]
+                                            asset.public:buildFile(assetPath.."dff/lod/"..v[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                            asset.public:buildFile(assetPath.."dff/"..v[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
+                                            asset.public:buildFile(assetPath.."col/"..v[2]..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                            if sceneIDEDatas and sceneIDEDatas[(v[2])] then
+                                                asset.public:buildFile(assetPath.."txd/"..(sceneIDEDatas[(v[2])][1])..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                             end
                                             thread:pause()
                                         end

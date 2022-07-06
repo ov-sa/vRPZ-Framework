@@ -28,6 +28,37 @@ local imports = {
 ----------------------
 
 local scene = class:create("scene")
+scene.private.separators = {IPL = ", ", IDE = ", "}
+
+function scene.public:parseIDE(rw)
+    rw = (rw and string.split(rw, "\n")) or rw
+    if not rw then return false end
+    local result = {}
+    for i = 1, #rw, 1 do
+        local data = string.split(rw[i], scene.private.separators.IDE)
+        data[2] = (data[2] and string.gsub(data[2], "%s", "")) or data[2]
+        if data[2] then
+            result[(data[2])] = {
+                (data[3] and string.gsub(data[3], "%s", "")) or false
+            }
+        end
+    end
+    return result
+end
+
+function scene.public:parseIPL(rw)
+    rw = (rw and string.split(rw, "\n")) or rw
+    if not rw then return false end
+    local result = {}
+    for i = 1, #rw, 1 do
+        local data = string.split(rw[i], scene.private.separators.IPL)
+        data[2] = (data[2] and string.gsub(data[2], "%s", "")) or data[2]
+        if data[2] then
+            table:insert(result, data)
+        end
+    end
+    return result
+end
 
 function scene.public:create(...)
     local cScene = self:createInstance()

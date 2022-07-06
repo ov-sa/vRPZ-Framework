@@ -354,6 +354,6 @@ end
 ---------------------
 
 network:fetch("Assetify:onElementDestroy"):on(function(source)
-    if not syncer.public.isLibraryBooted or not source then return false end
+    if not syncer.isLibraryBooted or not source then return false end
     manager.public:clearElementBuffer(source)
 end)
