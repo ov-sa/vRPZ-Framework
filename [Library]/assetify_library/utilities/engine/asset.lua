@@ -17,7 +17,6 @@ local imports = {
     pairs = pairs,
     md5 = md5,
     outputDebugString = outputDebugString,
-    gettok = gettok,
     tonumber = tonumber,
     tostring = tostring,
     destroyElement = destroyElement,
