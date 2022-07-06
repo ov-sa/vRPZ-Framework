@@ -57,7 +57,8 @@ function matrix.public:destroy()
 end
 
 matrix.public.__add = function(matrixLHS, matrixRHS)
-    return matrix.public:isInstance(matrixLHS) and matrix.public:isInstance(matrixRHS) and (matrixLHS.order == matrixRHS.order) and matrix.public(
+    if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order ~= matrixRHS.order) then return false end
+    return matrix.public(
         matrixLHS.x + matrixRHS.x,
         matrixLHS.y + matrixRHS.y,
         matrixLHS.z + matrixRHS.z,
@@ -66,7 +67,8 @@ matrix.public.__add = function(matrixLHS, matrixRHS)
 end
 
 matrix.public.__sub = function(matrixLHS, matrixRHS)
-    return matrix.public:isInstance(matrixLHS) and matrix.public:isInstance(matrixRHS) and (matrixLHS.order == matrixRHS.order) and matrix.public(
+    if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order ~= matrixRHS.order) then return false end
+    return matrix.public(
         matrixLHS.x - matrixRHS.x,
         matrixLHS.y - matrixRHS.y,
         matrixLHS.z - matrixRHS.z,
@@ -75,7 +77,8 @@ matrix.public.__sub = function(matrixLHS, matrixRHS)
 end
 
 matrix.public.__mul = function(matrixLHS, matrixRHS)
-    return matrix.public:isInstance(matrixLHS) and matrix.public:isInstance(matrixRHS) and (matrixLHS.order == matrixRHS.order) and matrix.public(
+    if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order ~= matrixRHS.order) then return false end
+    return matrix.public(
         (matrixLHS.x*matrixRHS.w) + (matrixLHS.w*matrixRHS.x) + (matrixLHS.y*matrixRHS.z) - (matrixLHS.z*matrixRHS.y),
         (matrixLHS.y*matrixRHS.w) + (matrixLHS.w*matrixRHS.y) + (matrixLHS.z*matrixRHS.x) - (matrixLHS.x*matrixRHS.z),
         (matrixLHS.z*matrixRHS.w) + (matrixLHS.w*matrixRHS.z) + (matrixLHS.x*matrixRHS.y) - (matrixLHS.y*matrixRHS.x),
@@ -84,7 +87,8 @@ matrix.public.__mul = function(matrixLHS, matrixRHS)
 end
 
 matrix.public.__div = function(matrixLHS, matrixRHS)
-    return matrix.public:isInstance(matrixLHS) and matrix.public:isInstance(matrixRHS) and (matrixLHS.order == matrixRHS.order) and matrix.public(
+    if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order ~= matrixRHS.order) then return false end
+    return matrix.public(
         matrixLHS.x/matrixRHS.x,
         matrixLHS.y/matrixRHS.y,
         matrixLHS.z/matrixRHS.z,
