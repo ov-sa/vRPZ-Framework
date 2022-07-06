@@ -116,58 +116,18 @@ function matrix.public:scale(scale)
     return self
 end
 
---[[
-function matrix.public:setAxisAngle(x, y, z, angle)
-    if not matrix.public:isInstance(self) then return false end
-    x, y, z, angle = imports.tonumber(x), imports.tonumber(y), imports.tonumber(z), imports.tonumber(angle)
-    if not x or not y or not z or not angle then return false end
-    angle = angle*0.5
-    local sine, cosine = math.sin(angle), math.cos(angle)
-    self.x, self.y, self.z, self.w = self.x*sine, self.y*sine, self.z*sine, cosine
-    return self
-end
-
-function matrix.public:fromAxisAngle(x, y, z, angle)
+function matrix.public:fromLocation(x, y, z, rotX, rotY, rotZ)
     if (self ~= matrix.public) or (self ~= matrix.private) then return false end
-    x, y, z, angle = imports.tonumber(x), imports.tonumber(y), imports.tonumber(z), imports.tonumber(angle)
-    if not x or not y or not z or not angle then return false end
-    local cMatrix = matrix.public(0, 0, 0, 0)
-    cMatrix:setAxisAngle(x, y, z, angle)
-    return cMatrix
-end
-
-function matrix.public:toEuler()
-    if not matrix.public:isInstance(self) then return false end
-    local sinX, sinY, sinZ = 2*((self.w*self.x) + (self.y*self.z)), 2*((self.w*self.y) - (self.z*self.x)), 2*((self.w*self.z) + (self.x*self.y))
-    local cosX, cosY, cosZ = 1 - (2*((self.x*self.x) + (self.y*self.y))), math.min(math.max(sinY, -1), 1), 1 - (2*((self.y*self.y) + (self.z*self.z)))
-    return math.deg(math.atan2(sinX, cosX)), math.deg(math.asin(cosY)), math.deg(math.atan2(sinZ, cosZ))
-end
-
-function matrix.public:fromEuler(x, y, z)
-    if (self ~= matrix.public) or (self ~= matrix.private) then return false end
-    x, y, z = imports.tonumber(x), imports.tonumber(y), imports.tonumber(z)
-    if not x or not y or not z then return false end
-    x, y, z = math.rad(x)*0.5, math.rad(y)*0.5, math.rad(z)*0.5
-    local sinX, sinY, sinZ = math.sin(x), math.sin(y), math.sin(z)
-    local cosX, cosY, cosZ = math.cos(x), math.cos(y), math.cos(z)
-    return matrix.public((cosZ*sinX*cosY) - (sinZ*cosX*sinY), (cosZ*cosX*sinY) + (sinZ*sinX*cosY), (sinZ*cosX*cosY) - (cosZ*sinX*sinY), (cosZ*cosX*cosY) + (sinZ*sinX*sinY))
-end
-]]
-
---TODO: WIP...
-
-function matrix.public:fromLocation(posX, posY, posZ, rotX, rotY, rotZ)
-    if (self ~= matrix.public) or (self ~= matrix.private) then return false end
-    posX, posY, posZ, rotX, rotY, rotZ = imports.tonumber(posX), imports.tonumber(posY), imports.tonumber(posZ), imports.tonumber(rotX), imports.tonumber(rotY), imports.tonumber(rotZ)
-    if not posX or not posY or not posZ or not rotX or not rotY or not rotZ then return false end
+    x, y, z, rotX, rotY, rotZ = imports.tonumber(x), imports.tonumber(y), imports.tonumber(z), imports.tonumber(rotX), imports.tonumber(rotY), imports.tonumber(rotZ)
+    if not x or not y or not z or not rotX or not rotY or not rotZ then return false end
     rotX, rotY, rotZ = math.rad(rotX), math.rad(rotY), math.rad(rotZ)
     local sYaw, sPitch, sRoll = math.sin(rotX), math.sin(rotY), math.sin(rotZ)
     local cYaw, cPitch, cRoll = math.cos(rotX), math.cos(rotY), math.cos(rotZ)
-    return matrix(
+    return matrix.public(
         {(cRoll*cPitch) - (sRoll*sYaw*sPitch), (cPitch*sRoll) + (cRoll*sYaw*sPitch), -cYaw*sPitch, 0},
         {-cYaw*sRoll, cRoll*cYaw, sYaw, 0},
         {(cRoll*sPitch) + (cPitch*sRoll*sYaw), (sRoll*sPitch) - (cRoll*cPitch*sYaw), cYaw*cPitch, 0},
-        {posX, posY, posZ, 1}
+        {x, y, z, 1}
     )
 end
 
@@ -178,7 +138,7 @@ function matrix.public:fromRotation(rotX, rotY, rotZ)
     rotX, rotY, rotZ = math.rad(rotX), math.rad(rotY), math.rad(rotZ)
     local sYaw, sPitch, sRoll = math.sin(rotX), math.sin(rotY), math.sin(rotZ)
     local cYaw, cPitch, cRoll = math.cos(rotX), math.cos(rotY), math.cos(rotZ)
-    return matrix(
+    return matrix.public(
         {(sRoll*sPitch*sYaw) + (cRoll*cYaw), sRoll*cPitch, (sRoll*sPitch*cYaw) - (cRoll*sYaw)},
         {(cRoll*sPitch*sYaw) - (sRoll*cYaw), cRoll*cPitch, (cRoll*sPitch*cYaw) + (sRoll*sYaw)},
         {cPitch*sYaw, -sPitch, cPitch*cYaw}
@@ -187,9 +147,9 @@ end
 
 --TODO: WIP..
 math.matrix = {
-    transform = function(elemMatrix, rotMatrix, posX, posY, posZ, isAbsoluteRotation, isDuplication)
+    transform = function(elemMatrix, rotMatrix, x, y, z, isAbsoluteRotation, isDuplication)
         if (self ~= matrix.public) or (self ~= matrix.private) then return false end
-        if not elemMatrix or not rotMatrix or not posX or not posY or not posZ then return false end
+        if not elemMatrix or not rotMatrix or not x or not y or not z then return false end
         if isAbsoluteRotation then
             if isDuplication then elemMatrix = table.clone(elemMatrix, true) end
             for i = 1, 3, 1 do
@@ -218,9 +178,9 @@ math.matrix = {
                 0
             },
             {
-                (posZ*elemMatrix[1][1]) + (posY*elemMatrix[2][1]) - (posX*elemMatrix[3][1]) + elemMatrix[4][1],
-                (posZ*elemMatrix[1][2]) + (posY*elemMatrix[2][2]) - (posX*elemMatrix[3][2]) + elemMatrix[4][2],
-                (posZ*elemMatrix[1][3]) + (posY*elemMatrix[2][3]) - (posX*elemMatrix[3][3]) + elemMatrix[4][3],
+                (z*elemMatrix[1][1]) + (y*elemMatrix[2][1]) - (x*elemMatrix[3][1]) + elemMatrix[4][1],
+                (z*elemMatrix[1][2]) + (y*elemMatrix[2][2]) - (x*elemMatrix[3][2]) + elemMatrix[4][2],
+                (z*elemMatrix[1][3]) + (y*elemMatrix[2][3]) - (x*elemMatrix[3][3]) + elemMatrix[4][3],
                 1
             }
         }
