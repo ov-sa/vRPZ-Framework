@@ -74,6 +74,7 @@
 
     <!-- Exports -->
     <export function="import" type="shared"/>
+    <export function="isLibraryBooted" type="shared"/>
     <export function="isLibraryLoaded" type="shared"/>
     <export function="isModuleLoaded" type="shared"/>
     <export function="getLibraryAssets" type="shared"/>

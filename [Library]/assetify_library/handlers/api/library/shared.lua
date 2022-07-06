@@ -14,6 +14,10 @@
 
 manager.API.Library = {}
 
+function manager.API.Library:isBooted()
+    return syncer.isLibraryBooted
+end
+
 function manager.API.Library:isLoaded()
     return syncer.isLibraryLoaded
 end

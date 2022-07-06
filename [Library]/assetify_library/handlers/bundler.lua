@@ -234,6 +234,10 @@ bundler.rw["core"] = {
             end
         end
         
+        assetify.__core.isBooted = function()
+            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isLibraryBooted")
+        end
+
         assetify.__core.isLoaded = function()
             return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isLibraryLoaded")
         end
