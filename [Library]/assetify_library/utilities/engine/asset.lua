@@ -446,7 +446,7 @@ else
                                                 local IDEData = string.split(unparsedIDEDatas[k], asset.public.separators.IDE)
                                                 IDEData[2] = (IDEData[2] and string.gsub(IDEData[2], "%s", "")) or IDEData[2]
                                                 if IDEData[2] then
-                                                    parsedIDEDatas[IDEData[2]] = {
+                                                    parsedIDEDatas[(IDEData[2])] = {
                                                         (IDEData[3] and string.gsub(IDEData[3], "%s", "")) or false
                                                     }
                                                 end
