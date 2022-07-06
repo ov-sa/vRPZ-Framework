@@ -157,7 +157,7 @@ end
 --TODO: WIP...
 
 function matrix.public:fromLocation(posX, posY, posZ, rotX, rotY, rotZ)
-    if matrix.public:isInstance(self) then return false end
+    if (self ~= matrix.public) or (self ~= matrix.private) then return false end
     posX, posY, posZ, rotX, rotY, rotZ = imports.tonumber(posX), imports.tonumber(posY), imports.tonumber(posZ), imports.tonumber(rotX), imports.tonumber(rotY), imports.tonumber(rotZ)
     if not posX or not posY or not posZ or not rotX or not rotY or not rotZ then return false end
     rotX, rotY, rotZ = math.rad(rotX), math.rad(rotY), math.rad(rotZ)
@@ -172,7 +172,7 @@ function matrix.public:fromLocation(posX, posY, posZ, rotX, rotY, rotZ)
 end
 
 function matrix.public:fromRotation(rotX, rotY, rotZ)
-    if matrix.public:isInstance(self) then return false end
+    if (self ~= matrix.public) or (self ~= matrix.private) then return false end
     rotX, rotY, rotZ = imports.tonumber(rotX), imports.tonumber(rotY), imports.tonumber(rotZ)
     if not rotX or not rotY or not rotZ then return false end
     rotX, rotY, rotZ = math.rad(rotX), math.rad(rotY), math.rad(rotZ)
@@ -188,6 +188,7 @@ end
 --TODO: WIP..
 math.matrix = {
     transform = function(elemMatrix, rotMatrix, posX, posY, posZ, isAbsoluteRotation, isDuplication)
+        if (self ~= matrix.public) or (self ~= matrix.private) then return false end
         if not elemMatrix or not rotMatrix or not posX or not posY or not posZ then return false end
         if isAbsoluteRotation then
             if isDuplication then elemMatrix = table.clone(elemMatrix, true) end
