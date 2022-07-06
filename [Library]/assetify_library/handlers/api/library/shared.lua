@@ -48,7 +48,6 @@ function manager.API.Library:setElementAsset(...)
 end
 
 function manager.API.Library:getElementAssetInfo(element)
-    return syncer:syncElementModel(_, ...)
     if not element or not imports.isElement(element) or not syncer.syncedElements[element] then return false end
     return syncer.syncedElements[element].type, syncer.syncedElements[element].name, syncer.syncedElements[element].clump, syncer.syncedElements[element].clumpMaps
 end
