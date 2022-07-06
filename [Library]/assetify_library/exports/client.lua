@@ -38,20 +38,3 @@ function getLibraryProgress(assetType, assetName)
     end
     return false
 end
-
-function getAssetID(...) return manager:getAssetID(...) end
-function isAssetLoaded(...) return manager:isAssetLoaded(...) end
-function loadAsset(...) return manager:loadAsset(...) end
-function unloadAsset(...) return manager:unloadAsset(...) end
-function createShader(...) local cShader = shader:create(...) return cShader.cShader end
-function isRendererVirtualRendering() return renderer.isVirtualRendering end
-function setRendererVirtualRendering(...) return renderer:setVirtualRendering(...) end
-function getRendererVirtualSource() return (renderer.isVirtualRendering and renderer.virtualSource) or false end
-function getRendererVirtualRTs() return (renderer.isVirtualRendering and renderer.virtualRTs) or false end
-function setRendererTimeSync(...) return renderer:setTimeSync(...) end
-function setRendererServerTick(...) return renderer:setServerTick(...) end
-function setRendererMinuteDuration(...) return renderer:setMinuteDuration(...) end
-function createPlanarLight(...) local cLight = light.planar:create(...); return (cLight and cLight.cLight) or false end
-function setPlanarLightResolution(cLight, ...) if not light.planar.buffer[cLight] then return false end; return light.planar.buffer[cLight]:setResolution(...) end
-function setPlanarLightTexture(cLight, ...) if not light.planar.buffer[cLight] then return false end; return light.planar.buffer[cLight]:setTexture(...) end
-function setPlanarLightColor(cLight, ...) if not light.planar.buffer[cLight] then return false end; return light.planar.buffer[cLight]:setColor(...) end

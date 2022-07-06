@@ -31,6 +31,23 @@ manager:exportAPI("Library", {
         {name = "setBoneRefreshment", API = "setBoneRefreshment"},
         {name = "clearBoneAttachment", API = "clearBoneAttachment"}
     },
-    client = {},
+    client = {
+        {name = "getAssetID", API = "getAssetID"},
+        {name = "isAssetLoaded", API = "isAssetLoaded"},
+        {name = "loadAsset", API = "loadAsset"},
+        {name = "unloadAsset", API = "unloadAsset"},
+        {name = "createShader", API = "createShader"},
+        {name = "isRendererVirtualRendering", API = "isRendererVirtualRendering"},
+        {name = "setRendererVirtualRendering", API = "setRendererVirtualRendering"},
+        {name = "getRendererVirtualSource", API = "getRendererVirtualSource"},
+        {name = "getRendererVirtualRTs", API = "getRendererVirtualRTs"},
+        {name = "setRendererTimeSync", API = "setRendererTimeSync"},
+        {name = "setRendererServerTick", API = "setRendererServerTick"},
+        {name = "setRendererMinuteDuration", API = "setRendererMinuteDuration"},
+        {name = "createPlanarLight", API = "createPlanarLight"},
+        {name = "setPlanarLightResolution", API = "setPlanarLightResolution"},
+        {name = "setPlanarLightTexture", API = "setPlanarLightTexture"},
+        {name = "setPlanarLightColor", API = "setPlanarLightColor"}
+    },
     server = {}
 })
