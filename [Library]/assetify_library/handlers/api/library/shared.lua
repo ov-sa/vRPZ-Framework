@@ -51,7 +51,7 @@ function manager.API.Library:getGlobalData(data)
     return syncer.syncedGlobalDatas[data]
 end
 
-function manager.API.Library:setEntityData(data)
+function manager.API.Library:setEntityData(...)
     return syncer:syncEntityData(table:unpack(table:pack(...), 3))
 end
 
