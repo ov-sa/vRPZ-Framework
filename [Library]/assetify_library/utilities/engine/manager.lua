@@ -347,3 +347,13 @@ else
         return (depSubIndex and cAsset.unSynced.rawData[(cAsset.synced.manifestData.assetDeps[depType][depIndex][depSubIndex])]) or cAsset.unSynced.rawData[(cAsset.synced.manifestData.assetDeps[depType][depIndex])] or false
     end
 end
+
+
+---------------------
+--[[ API Syncers ]]--
+---------------------
+
+network:fetch("Assetify:onElementDestroy"):on(function(source)
+    if not syncer.public.isLibraryBooted or not source then return false end
+    manager.public:clearElementBuffer(source)
+end)

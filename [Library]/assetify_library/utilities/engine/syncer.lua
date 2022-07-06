@@ -148,7 +148,6 @@ if localPlayer then
     network:fetch("Assetify:onElementDestroy"):on(function(source)
         if not syncer.public.isLibraryBooted or not source then return false end
         shader:clearElementBuffer(source)
-        manager:clearElementBuffer(source)
         syncer.public.syncedEntityDatas[source] = nil
         for i, j in imports.pairs(light) do
             if j and (imports.type(j) == "table") and j.clearElementBuffer then

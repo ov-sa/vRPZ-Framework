@@ -96,7 +96,8 @@ end
 --[[ Class: Matrix ]]--
 -----------------------
 
-matrix = {
+--TODO: MAKE CLASS
+math.matrix = {
     fromPosition = function(posX, posY, posZ, rotX, rotY, rotZ)
         if not posX or not posY or not posZ or not rotX or not rotY or not rotZ then return false end
         rotX, rotY, rotZ = imports.math.rad(rotX), imports.math.rad(rotY), imports.math.rad(rotZ)

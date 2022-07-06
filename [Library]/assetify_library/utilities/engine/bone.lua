@@ -22,9 +22,7 @@ local imports = {
     setElementPosition = setElementPosition,
     getElementRotation = getElementRotation,
     getElementBoneMatrix = getElementBoneMatrix,
-    setElementCollisionsEnabled = setElementCollisionsEnabled,
-    math = math,
-    matrix = matrix
+    setElementCollisionsEnabled = setElementCollisionsEnabled
 }
 
 
@@ -64,15 +62,15 @@ function bone.private:validateOffset(instance, boneData)
             local rotX, rotY, rotZ = {imports.getElementRotation(instance.element, "ZYX")}
             rotationData = {x = rotX, y = rotY, z = rotZ}
         end
-        local rotQuat = imports.math.quat:fromEuler(rotationData.x, rotationData.y, rotationData.z)
-        local xQuat, yQuat, zQuat = imports.math.quat:fromAxisAngle(1, 0, 0, boneData.rotation.x), imports.math.quat:fromAxisAngle(0, 1, 0, boneData.rotation.y), imports.math.quat:fromAxisAngle(0, 0, 1, boneData.rotation.z)
+        local rotQuat = math.quat:fromEuler(rotationData.x, rotationData.y, rotationData.z)
+        local xQuat, yQuat, zQuat = math.quat:fromAxisAngle(1, 0, 0, boneData.rotation.x), math.quat:fromAxisAngle(0, 1, 0, boneData.rotation.y), math.quat:fromAxisAngle(0, 0, 1, boneData.rotation.z)
         local __rotQuat = xQuat*yQuat*zQuat
         rotQuat = __rotQuat*rotQuat
         boneData.rotation.x, boneData.rotation.y, boneData.rotation.z = rotQuat:toEuler()
         rotQuat:destroy(); xQuat:destroy(); yQuat:destroy(); zQuat:destroy()
         boneData.rotation.isRelative = false
     end
-    boneData.rotationMatrix = imports.matrix.fromRotation(boneData.rotation.x, boneData.rotation.y, boneData.rotation.z)
+    boneData.rotationMatrix = math.matrix.fromRotation(boneData.rotation.x, boneData.rotation.y, boneData.rotation.z)
     return true
 end
 
@@ -159,7 +157,7 @@ if localPlayer then
         bone.public.cache.element[(self.parent)] = bone.public.cache.element[(self.parent)] or {}
         bone.public.cache.element[(self.parent)][(self.boneData.id)] = ((bone.public.cache.element[(self.parent)].streamTick == bone.public.cache.streamTick) and bone.public.cache.element[(self.parent)][(self.boneData.id)]) or imports.getElementBoneMatrix(self.parent, self.boneData.id)
         bone.public.cache.element[(self.parent)].streamTick = bone.public.cache.streamTick
-        imports.setElementMatrix(self.element, imports.matrix.transform(bone.public.cache.element[(self.parent)][(self.boneData.id)], self.boneData.rotationMatrix, self.boneData.position.x, self.boneData.position.y, self.boneData.position.z))
+        imports.setElementMatrix(self.element, math.matrix.transform(bone.public.cache.element[(self.parent)][(self.boneData.id)], self.boneData.rotationMatrix, self.boneData.position.x, self.boneData.position.y, self.boneData.position.z))
         return true
     end
 else
