@@ -39,10 +39,10 @@ function getLibraryProgress(assetType, assetName)
     return false
 end
 
-function getAssetID(...) return manager:getID(...) end
-function isAssetLoaded(...) return manager:isLoaded(...) end
-function loadAsset(...) return manager:load(...) end
-function unloadAsset(...) return manager:unload(...) end
+function getAssetID(...) return manager:getAssetID(...) end
+function isAssetLoaded(...) return manager:isAssetLoaded(...) end
+function loadAsset(...) return manager:loadAsset(...) end
+function unloadAsset(...) return manager:unloadAsset(...) end
 function createShader(...) local cShader = shader:create(...) return cShader.cShader end
 function isRendererVirtualRendering() return renderer.isVirtualRendering end
 function setRendererVirtualRendering(...) return renderer:setVirtualRendering(...) end
