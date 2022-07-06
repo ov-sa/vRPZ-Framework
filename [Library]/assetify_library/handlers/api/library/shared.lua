@@ -76,6 +76,6 @@ function manager.API.Library:setBoneRefreshment(...)
     return syncer:setBoneRefreshment(_, ...)
 end
 
-function manager.API.Library:clearBoneAttachment(element)
-    return syncer:syncClearBoneAttachment(_, element)
+function manager.API.Library:clearBoneAttachment(...)
+    return syncer:syncClearBoneAttachment(_, ...)
 end
