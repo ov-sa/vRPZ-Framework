@@ -45,7 +45,7 @@ matrix.public.__call = function(_, ...)
         if not isValid then break end
     end
     local cMatrix = matrix.public:createInstance()
-    cMatrix.order = order
+    cMatrix.order = {#rows, order}
     cMatrix.rows = rows
     return cMatrix
 end
@@ -57,7 +57,7 @@ function matrix.public:destroy()
 end
 
 matrix.public.__add = function(matrixLHS, matrixRHS)
-    if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order ~= matrixRHS.order) then return false end
+    if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order[1] ~= matrixRHS.order[1]) or (matrixLHS.order[2] ~= matrixRHS.order[2]) then return false end
     return matrix.public(
         matrixLHS.x + matrixRHS.x,
         matrixLHS.y + matrixRHS.y,
@@ -67,7 +67,15 @@ matrix.public.__add = function(matrixLHS, matrixRHS)
 end
 
 matrix.public.__sub = function(matrixLHS, matrixRHS)
-    if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order ~= matrixRHS.order) then return false end
+    if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order[1] ~= matrixRHS.order[1]) or (matrixLHS.order[2] ~= matrixRHS.order[2]) then return false end
+    local rows = {}
+	for i = 1,#m1 do
+		local m3i = {}
+		rows[i] = m3i
+		for j = 1,#m1[1] do
+			m3i[j] = m1[i][j] + m2[i][j]
+		end
+	end
     return matrix.public(
         matrixLHS.x - matrixRHS.x,
         matrixLHS.y - matrixRHS.y,
@@ -77,7 +85,7 @@ matrix.public.__sub = function(matrixLHS, matrixRHS)
 end
 
 matrix.public.__mul = function(matrixLHS, matrixRHS)
-    if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order ~= matrixRHS.order) then return false end
+    if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order[1] ~= matrixRHS.order[1]) or (matrixLHS.order[2] ~= matrixRHS.order[2]) then return false end
     return matrix.public(
         (matrixLHS.x*matrixRHS.w) + (matrixLHS.w*matrixRHS.x) + (matrixLHS.y*matrixRHS.z) - (matrixLHS.z*matrixRHS.y),
         (matrixLHS.y*matrixRHS.w) + (matrixLHS.w*matrixRHS.y) + (matrixLHS.z*matrixRHS.x) - (matrixLHS.x*matrixRHS.z),
@@ -87,7 +95,7 @@ matrix.public.__mul = function(matrixLHS, matrixRHS)
 end
 
 matrix.public.__div = function(matrixLHS, matrixRHS)
-    if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order ~= matrixRHS.order) then return false end
+    if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order[1] ~= matrixRHS.order[1]) or (matrixLHS.order[2] ~= matrixRHS.order[2]) then return false end
     return matrix.public(
         matrixLHS.x/matrixRHS.x,
         matrixLHS.y/matrixRHS.y,
