@@ -51,6 +51,12 @@ local asset = class:create("asset", {
     }
 })
 
+function asset.public:loadFile(filePath, encryptKey, ...)
+    if not filePath or (imports.type(filePath) ~= "string") then return false end
+    local rw = file:read(filePath)
+    return (rw and encryptKey and string.decode("tea", rw, {key = encryptKey}, ...)) or rw
+end
+
 if localPlayer then
     asset.public.rwAssets = {
         txd = imports.engineLoadTXD("utilities/rw/dict.rw"),
@@ -77,7 +83,7 @@ if localPlayer then
                     rwCache[i][k] = {}
                     if k ~= "server" then
                         for m, n in imports.pairs(v) do
-                            rwCache[i][k][m] = (encryptKey and string.decode("tea", file:read(n), {key = encryptKey}, true)) or file:read(n)
+                            rwCache[i][k][m] = asset.public:loadFile(file:read(n), encryptKey, true)
                         end
                     end
                 end
@@ -110,7 +116,7 @@ if localPlayer then
             loadState = true
         elseif assetType == "animation" then
             if rwPaths.ifp and not rwCache.ifp[(rwPaths.ifp)] then
-                rwCache.ifp[(rwPaths.ifp)] = imports.engineLoadIFP((assetManifest.encryptKey and string.decode("tea", file:read(rwPaths.ifp), {key = assetManifest.encryptKey})) or rwPaths.ifp, assetType.."."..assetName)
+                rwCache.ifp[(rwPaths.ifp)] = imports.engineLoadIFP(asset.public:loadFile(file:read(rwPaths.ifp), assetManifest.encryptKey) or rwPaths.ifp, assetType.."."..assetName)
                 if rwCache.ifp[(rwPaths.ifp)] then
                     assetData.cAsset = self
                     self.rwPaths = rwPaths
@@ -119,7 +125,7 @@ if localPlayer then
             end
         elseif assetType == "sound" then
             if rwPaths.sound and not rwCache.sound[(rwPaths.sound)] then
-                rwCache.sound[(rwPaths.sound)] = (assetManifest.encryptKey and string.decode("tea", file:read(rwPaths.sound), {key = assetManifest.encryptKey})) or rwPaths.sound
+                rwCache.sound[(rwPaths.sound)] = asset.public:loadFile(file:read(rwPaths.sound), assetManifest.encryptKey) or rwPaths.sound
                 assetData.cAsset = self
                 self.rwPaths = rwPaths
                 loadState = true
@@ -135,7 +141,7 @@ if localPlayer then
                     end
                     if not rwCache.dff[(rwPaths.dff)] and file:exists(rwPaths.dff) then
                         imports.engineSetModelLODDistance(modelID, asset.public.ranges.streamRange)
-                        rwCache.dff[(rwPaths.dff)] = imports.engineLoadDFF((assetManifest.encryptKey and string.decode("tea", file:read(rwPaths.dff), {key = assetManifest.encryptKey})) or rwPaths.dff)
+                        rwCache.dff[(rwPaths.dff)] = imports.engineLoadDFF(asset.public:loadFile(file:read(rwPaths.dff), assetManifest.encryptKey) or rwPaths.dff)
                     end
                     if not rwCache.dff[(rwPaths.dff)] then
                         imports.engineFreeModel(modelID)
@@ -149,7 +155,7 @@ if localPlayer then
                             if collisionID then
                                 imports.engineSetModelLODDistance(collisionID, asset.public.ranges.streamRange)
                             end
-                            rwCache.col[(rwPaths.col)] = imports.engineLoadCOL((assetManifest.encryptKey and string.decode("tea", file:read(rwPaths.col), {key = assetManifest.encryptKey})) or rwPaths.col)
+                            rwCache.col[(rwPaths.col)] = imports.engineLoadCOL(asset.public:loadFile(file:read(rwPaths.col), assetManifest.encryptKey) or rwPaths.col)
                         else
                             if collisionID then
                                 imports.engineFreeModel(collisionID)
@@ -161,7 +167,7 @@ if localPlayer then
             end
             if modelID then
                 if not rwCache.txd[(rwPaths.txd)] and file:exists(rwPaths.txd) then
-                    rwCache.txd[(rwPaths.txd)] = imports.engineLoadTXD((assetManifest.encryptKey and string.decode("tea", file:read(rwPaths.txd), {key = assetManifest.encryptKey})) or rwPaths.txd)
+                    rwCache.txd[(rwPaths.txd)] = imports.engineLoadTXD(asset.public:loadFile(file:read(rwPaths.txd), assetManifest.encryptKey) or rwPaths.txd)
                 end
                 if rwCache.txd[(rwPaths.txd)] then
                     imports.engineImportTXD(rwCache.txd[(rwPaths.txd)], modelID)
