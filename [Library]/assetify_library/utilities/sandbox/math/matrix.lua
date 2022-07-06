@@ -104,15 +104,19 @@ matrix.public.__div = function(matrixLHS, matrixRHS)
     return matrix.public(rows)
 end
 
---[[
 function matrix.public:scale(scale)
     if not matrix.public:isInstance(self) then return false end
     scale = imports.tonumber(scale)
     if not scale then return false end
-    self.x, self.y, self.z, self.w = self.x*scale, self.y*scale, self.z*scale, self.w*scale
+    for i = 1, #self.order[1], 1 do
+        for k = 1, #self.order[2], 1 do
+            self.rows[i][k] = self.rows[i][k]*scale
+        end
+    end
     return self
 end
 
+--[[
 function matrix.public:setAxisAngle(x, y, z, angle)
     if not matrix.public:isInstance(self) then return false end
     x, y, z, angle = imports.tonumber(x), imports.tonumber(y), imports.tonumber(z), imports.tonumber(angle)
