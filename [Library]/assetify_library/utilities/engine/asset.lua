@@ -115,17 +115,15 @@ if localPlayer then
             self.rwPaths = rwPaths
             loadState = true
         elseif assetType == "animation" then
-            if rwPaths.ifp and not rwCache.ifp[(rwPaths.ifp)] then
-                rwCache.ifp[(rwPaths.ifp)] = imports.engineLoadIFP(asset.public:readFile(file:read(rwPaths.ifp), assetManifest.encryptKey) or rwPaths.ifp, assetType.."."..assetName)
-                if rwCache.ifp[(rwPaths.ifp)] then
-                    assetData.cAsset = self
-                    self.rwPaths = rwPaths
-                    loadState = true
-                end
+            rwCache.ifp[(rwPaths.ifp)] = (rwPaths.ifp and not rwCache.ifp[(rwPaths.ifp)] and imports.engineLoadIFP(asset.public:readFile(file:read(rwPaths.ifp), assetManifest.encryptKey) or rwPaths.ifp, assetType.."."..assetName)) or false
+            if rwCache.ifp[(rwPaths.ifp)] then
+                assetData.cAsset = self
+                self.rwPaths = rwPaths
+                loadState = true
             end
         elseif assetType == "sound" then
-            if rwPaths.sound and not rwCache.sound[(rwPaths.sound)] then
-                rwCache.sound[(rwPaths.sound)] = asset.public:readFile(file:read(rwPaths.sound), assetManifest.encryptKey) or rwPaths.sound
+            rwCache.sound[(rwPaths.sound)] = (rwPaths.sound and not rwCache.sound[(rwPaths.sound)] and asset.public:readFile(file:read(rwPaths.sound), assetManifest.encryptKey) or rwPaths.sound) or false
+            if rwCache.sound[(rwPaths.sound)] then
                 assetData.cAsset = self
                 self.rwPaths = rwPaths
                 loadState = true
