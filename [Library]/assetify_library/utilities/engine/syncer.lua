@@ -186,14 +186,14 @@ else
         end):resume({executions = settings.downloader.syncRate, frames = 1})
         __self:pause()
         return true
-    end, true)
+    end, {isAsync = true})
     network:create("Assetify:Downloader:onSyncPostPool"):on(function(self, source)
         self:resume({executions = settings.downloader.syncRate, frames = 1})
         for i, j in imports.pairs(syncer.public.syncedElements) do
             if j then syncer.public:syncElementModel(i, j.assetType, j.assetName, j.assetClump, j.clumpMaps, source) end
             thread:pause()
         end
-    end, true)
+    end, {isAsync = true})
     imports.addEventHandler("onElementModelChange", root, function() syncer.public.syncedElements[source] = nil end)
     imports.addEventHandler("onElementDestroy", root, function()
         if not syncer.public.isLibraryBooted then return false end
