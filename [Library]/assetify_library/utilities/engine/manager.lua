@@ -15,7 +15,6 @@
 local imports = {
     type = type,
     pairs = pairs,
-    gettok = gettok,
     tonumber = tonumber,
     tostring = tostring,
     isElement = isElement,
@@ -210,34 +209,35 @@ if localPlayer then
                     sceneIDEData = (sceneIDEData and cAsset.manifestData.encryptKey and string.decode("tea", sceneIDEData, {key = cAsset.manifestData.encryptKey})) or sceneIDEData
                     local unparsedIDEDatas, unparsedIPLDatas = (sceneIDEData and string.split(sceneIDEData, "\n")) or false, string.split(sceneIPLData, "\n")
                     local parsedIDEDatas = (unparsedIDEDatas and {}) or false
+                    --TODO: MAKE A HELPE FUNCTION FOR THIS AND IN ASSET.LUA TO SHARE THE IDE/IPL PARSER
                     if unparsedIDEDatas then
                         for i = 1, #unparsedIDEDatas, 1 do
-                            local childName = string.gsub(imports.tostring(imports.gettok(unparsedIDEDatas[i], 2, asset.separators.IDE)), " ", "")
-                            parsedIDEDatas[childName] = {
-                                string.gsub(imports.tostring(imports.gettok(unparsedIDEDatas[i], 3, asset.separators.IDE)), " ", "")
-                            }
+                            local IDEData = string.split(unparsedIDEDatas[i], asset.separators.IDE)
+                            IDEData[2] = (IDEData[2] and string.gsub(IDEData[2], "%s", "")) or IDEData[2]
+                            if IDEData[2] then
+                                parsedIDEDatas[(IDEData[2])] = {
+                                    (IDEData[3] and string.gsub(IDEData[3], "%s", "")) or false
+                                }
+                            end
                         end
                     end
                     for i = 1, #unparsedIPLDatas, 1 do
                         cAsset.unSynced.assetCache[i] = {}
-                        local childName = string.gsub(imports.tostring(imports.gettok(unparsedIPLDatas[i], 2, asset.separators.IPL)), " ", "")
-                        if childName then
+                        local IPLData = string.split(unparsedIPLDatas[i], asset.separators.IPL)
+                        IPLData[2] = (IPLData[2] and string.gsub(IPLData[2], "%s", "")) or IPLData[2]
+                        if IPLData[2] then
                             local sceneData = {
-                                position = {
-                                    x = imports.tonumber(imports.gettok(unparsedIPLDatas[i], 4, asset.separators.IPL)),
-                                    y = imports.tonumber(imports.gettok(unparsedIPLDatas[i], 5, asset.separators.IPL)),
-                                    z = imports.tonumber(imports.gettok(unparsedIPLDatas[i], 6, asset.separators.IPL))
-                                },
+                                position = {x = imports.tonumber(IPLData[4]), y = imports.tonumber(IPLData[5]), z = imports.tonumber(IPLData[6])},
                                 rotation = {}
                             }
-                            local cQuat = math.quat(imports.tonumber(imports.gettok(unparsedIPLDatas[i], 7, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedIPLDatas[i], 8, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedIPLDatas[i], 9, asset.separators.IPL)), imports.tonumber(imports.gettok(unparsedIPLDatas[i], 10, asset.separators.IPL)))
+                            local cQuat = math.quat(imports.tonumber(IPLData[7]), imports.tonumber(IPLData[8]), imports.tonumber(IPLData[9]), imports.tonumber(IPLData[10]))
                             sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z = cQuat:toEuler()
                             cQuat:destroy()
                             if not cAsset.manifestData.sceneMapped then
                                 asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache[i], {
-                                    txd = (parsedIDEDatas and parsedIDEDatas[childName] and assetPath.."txd/"..(parsedIDEDatas[childName][1])..".txd") or assetPath..(asset.references.asset)..".txd",
-                                    dff = assetPath.."dff/"..childName..".dff",
-                                    col = assetPath.."col/"..childName..".col"
+                                    txd = (parsedIDEDatas and parsedIDEDatas[(IPLData[2])] and assetPath.."txd/"..(parsedIDEDatas[childName][1])..".txd") or assetPath..(asset.references.asset)..".txd",
+                                    dff = assetPath.."dff/"..IPLData[2]..".dff",
+                                    col = assetPath.."col/"..IPLData[2]..".col"
                                 }, function(state)
                                     if state then
                                         scene:create(cAsset.unSynced.assetCache[i].cAsset, cAsset.manifestData, sceneData)
@@ -248,7 +248,7 @@ if localPlayer then
                                 sceneData.dimension = cAsset.manifestData.sceneDimension
                                 sceneData.interior = cAsset.manifestData.sceneInterior
                                 --TODO: DETECT IF ITS CLUMPED OR NOT...
-                                --cAsset.unSynced.assetCache[i].cDummy = dummy:create("object", childName, _, _, SsceneData)
+                                --cAsset.unSynced.assetCache[i].cDummy = dummy:create("object", IPLData[2], _, _, SsceneData)
                             end
                         end
                         thread:pause()
