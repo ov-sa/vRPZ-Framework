@@ -166,9 +166,7 @@ if localPlayer then
                 end
             end
             if modelID then
-                if not rwCache.txd[(rwPaths.txd)] and file:exists(rwPaths.txd) then
-                    rwCache.txd[(rwPaths.txd)] = imports.engineLoadTXD(asset.public:readFile(file:read(rwPaths.txd), assetManifest.encryptKey) or rwPaths.txd)
-                end
+                rwCache.txd[(rwPaths.txd)] = (not rwCache.txd[(rwPaths.txd)] and file:exists(rwPaths.txd) and imports.engineLoadTXD(asset.public:readFile(file:read(rwPaths.txd), assetManifest.encryptKey) or rwPaths.txd)) or false
                 if rwCache.txd[(rwPaths.txd)] then
                     imports.engineImportTXD(rwCache.txd[(rwPaths.txd)], modelID)
                 end
