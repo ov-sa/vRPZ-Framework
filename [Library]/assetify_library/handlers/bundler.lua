@@ -297,32 +297,16 @@ bundler.rw["scheduler"] = {
             execOnLoad = function(execFunc)
                 if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
                 local isLoaded = assetify.isLoaded()
-                if isLoaded then
-                    execFunc()
-                else
-                    local execWrapper = nil
-                    execWrapper = function()
-                        execFunc()
-                        assetify.network:fetch("Assetify:onLoad"):off(execWrapper)
-                    end
-                    assetify.network:fetch("Assetify:onLoad", true):on(execWrapper)
-                end
+                if isLoaded then execFunc()
+                else assetify.network:fetch("Assetify:onLoad", true):on(execFunc, {subscriptionLimit = 1}) end
                 return true
             end,
 
             execOnModuleLoad = function(execFunc)
                 if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
                 local isModuleLoaded = assetify.isModuleLoaded()
-                if isModuleLoaded then
-                    execFunc()
-                else
-                    local execWrapper = nil
-                    execWrapper = function()
-                        execFunc()
-                        assetify.network:fetch("Assetify:onModuleLoad"):off(execWrapper)
-                    end
-                    assetify.network:fetch("Assetify:onModuleLoad", true):on(execWrapper)
-                end
+                if isModuleLoaded then execFunc()
+                else assetify.network:fetch("Assetify:onModuleLoad", true):on(execFunc, {subscriptionLimit = 1}) end
                 return true
             end,
 

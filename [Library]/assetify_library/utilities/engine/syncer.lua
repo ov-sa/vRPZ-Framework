@@ -53,16 +53,19 @@ network:create("Assetify:onElementDestroy")
 function syncer.public:import() return syncer end
 imports.addEventHandler((localPlayer and "onClientResourceStart") or "onResourceStart", resourceRoot, function() network:emit("Assetify:onBoot") end)
 syncer.private.execOnBoot = function(execFunc)
+    if not execFunc or (imports.type(execFunc) ~= "function") then return false end
     if syncer.public.isLibraryBooted then execFunc()
     else network:fetch("Assetify:onBoot"):on(execFunc, {subscriptionLimit = 1}) end
     return true
 end
 syncer.private.execOnLoad = function(execFunc)
+    if not execFunc or (imports.type(execFunc) ~= "function") then return false end
     if syncer.public.isLibraryLoaded then execFunc()
     else network:fetch("Assetify:onLoad"):on(execFunc, {subscriptionLimit = 1}) end
     return true
 end
 syncer.private.execOnModuleLoad = function(execFunc)
+    if not execFunc or (imports.type(execFunc) ~= "function") then return false end
     if syncer.public.isModuleLoaded then execFunc()
     else network:fetch("Assetify:onModuleLoad"):on(execFunc, {subscriptionLimit = 1}) end
     return true
