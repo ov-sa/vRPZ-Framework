@@ -91,7 +91,7 @@ if localPlayer then
         local elementType = imports.getElementType(element)
         elementType = (((elementType == "ped") or (elementType == "player")) and "ped") or elementType
         if not settings.assetPacks[assetType] or not settings.assetPacks[assetType].assetType or (settings.assetPacks[assetType].assetType ~= elementType) then return false end
-        local modelID = manager:getID(assetType, assetName, assetClump)
+        local modelID = manager:getAssetID(assetType, assetName, assetClump)
         if not modelID then return false end
         syncer.public.syncedElements[element] = {assetType = assetType, assetName = assetName, assetClump = assetClump, clumpMaps = clumpMaps}
         thread:createHeartbeat(function()
@@ -99,7 +99,7 @@ if localPlayer then
         end, function()
             if clumpMaps then
                 shader:clearElementBuffer(element, "clump")
-                local cAsset = manager:getData(assetType, assetName, syncer.public.librarySerial)
+                local cAsset = manager:getAssetData(assetType, assetName, syncer.public.librarySerial)
                 if cAsset and cAsset.manifestData.shaderMaps and cAsset.manifestData.shaderMaps.clump then
                     for i, j in imports.pairs(clumpMaps) do
                         if cAsset.manifestData.shaderMaps.clump[i] and cAsset.manifestData.shaderMaps.clump[i][j] then
@@ -123,7 +123,7 @@ else
         local elementType = imports.getElementType(element)
         elementType = (((elementType == "ped") or (elementType == "player")) and "ped") or elementType
         if not settings.assetPacks[assetType] or not settings.assetPacks[assetType].assetType or (settings.assetPacks[assetType].assetType ~= elementType) then return false end
-        local cAsset = manager:getData(assetType, assetName)
+        local cAsset = manager:getAssetData(assetType, assetName)
         if not cAsset or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
         remoteSignature = imports.getElementType(element)
         syncer.public.syncedElements[element] = {assetType = assetType, assetName = assetName, assetClump = assetClump, clumpMaps = clumpMaps}

@@ -22,8 +22,8 @@ local imports = {
 -------------------------
 
 function getLibraryAssets(...) return manager:fetchAssets(...) end
-function getAssetData(...) return manager:getData(...) end
-function getAssetDep(...) return manager:getDep(...) end
+function getAssetData(...) return manager:getAssetData(...) end
+function getAssetDep(...) return manager:getAssetDep(...) end
 function setElementAsset(...) return syncer:syncElementModel(_, ...) end
 function getElementAssetInfo(element) if not element or not imports.isElement(element) or not syncer.syncedElements[element] then return false end return syncer.syncedElements[element].type, syncer.syncedElements[element].name, syncer.syncedElements[element].clump, syncer.syncedElements[element].clumpMaps end
 function setGlobalData(...) return syncer:syncGlobalData(...) end

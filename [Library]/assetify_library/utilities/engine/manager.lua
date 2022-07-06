@@ -142,14 +142,14 @@ if localPlayer then
         return true
     end
 
-    function manager.public:isLoaded(assetType, assetName)
-        local cAsset, isLoaded = manager.public:getData(assetType, assetName)
+    function manager.public:isAssetLoaded(assetType, assetName)
+        local cAsset, isLoaded = manager.public:getAssetData(assetType, assetName)
         return (cAsset and isLoaded and true) or false
     end
 
-    function manager.public:getID(assetType, assetName, assetClump)
+    function manager.public:getAssetID(assetType, assetName, assetClump)
         if (assetType == "module") or (assetType == "animation") or (assetType == "sound") then return false end
-        local cAsset, isLoaded = manager.public:getData(assetType, assetName, syncer.librarySerial)
+        local cAsset, isLoaded = manager.public:getAssetData(assetType, assetName, syncer.librarySerial)
         if not cAsset or not isLoaded or imports.type(cAsset.unSynced) ~= "table" then return false end
         if cAsset.manifestData.assetClumps then
             return (assetClump and cAsset.manifestData.assetClumps[assetClump] and cAsset.unSynced.assetCache[assetClump] and cAsset.unSynced.assetCache[assetClump].cAsset and cAsset.unSynced.assetCache[assetClump].cAsset.synced and cAsset.unSynced.assetCache[assetClump].cAsset.synced.modelID) or false
@@ -158,7 +158,7 @@ if localPlayer then
         end
     end
 
-    function manager.public:getData(assetType, assetName, isInternal)
+    function manager.public:getAssetData(assetType, assetName, isInternal)
         if not assetType or not assetName then return false end
         if not settings.assetPacks[assetType] then return false end
         local cAsset = settings.assetPacks[assetType].rwDatas[assetName]
@@ -177,8 +177,8 @@ if localPlayer then
         end
     end
 
-    function manager.public:getDep(assetType, assetName, depType, depIndex, depSubIndex)
-        local cAsset, isLoaded = manager.public:getData(assetType, assetName, syncer.librarySerial)
+    function manager.public:getAssetDep(assetType, assetName, depType, depIndex, depSubIndex)
+        local cAsset, isLoaded = manager.public:getAssetData(assetType, assetName, syncer.librarySerial)
         if not cAsset or not isLoaded then return false end
         if not depType or not depIndex or not cAsset.manifestData.assetDeps or not cAsset.manifestData.assetDeps[depType] or not cAsset.manifestData.assetDeps[depType][depIndex] or ((imports.type(cAsset.manifestData.assetDeps[depType][depIndex]) == "table") and (not depSubIndex or not cAsset.manifestData.assetDeps[depType][depIndex][depSubIndex])) then return false end
         if depSubIndex then
@@ -188,8 +188,8 @@ if localPlayer then
         end
     end
 
-    function manager.public:load(assetType, assetName)
-        local cAsset, isLoaded = manager.public:getData(assetType, assetName, syncer.librarySerial)
+    function manager.public:loadAsset(assetType, assetName)
+        local cAsset, isLoaded = manager.public:getAssetData(assetType, assetName, syncer.librarySerial)
         if not cAsset or isLoaded then return false end
         local cAssetPack = settings.assetPacks[assetType]
         local assetPath = (asset.references.root)..assetType.."/"..assetName.."/"
@@ -277,8 +277,8 @@ if localPlayer then
         return true
     end
 
-    function manager.public:unload(assetType, assetName)
-        local cAsset, isLoaded = manager.public:getData(assetType, assetName, syncer.librarySerial)
+    function manager.public:unloadAsset(assetType, assetName)
+        local cAsset, isLoaded = manager.public:getAssetData(assetType, assetName, syncer.librarySerial)
         if not cAsset or not isLoaded then return false end
         if assetType == "sound" then
             thread:create(function(self)
@@ -320,7 +320,7 @@ if localPlayer then
         return true
     end
 else
-    function manager.public:getData(assetType, assetName, isInternal)
+    function manager.public:getAssetData(assetType, assetName, isInternal)
         if not assetType or not assetName then return false end
         if not settings.assetPacks[assetType] then return false end
         local cAsset = settings.assetPacks[assetType].assetPack.rwDatas[assetName]
@@ -336,8 +336,8 @@ else
         return cAsset, false
     end
 
-    function manager.public:getDep(assetType, assetName, depType, depIndex, depSubIndex)
-        local cAsset = manager.public:getData(assetType, assetName, syncer.librarySerial)
+    function manager.public:getAssetDep(assetType, assetName, depType, depIndex, depSubIndex)
+        local cAsset = manager.public:getAssetData(assetType, assetName, syncer.librarySerial)
         if not cAsset then return false end
         if not depType or not depIndex or not cAsset.synced.manifestData.assetDeps or not cAsset.synced.manifestData.assetDeps[depType] or not cAsset.synced.manifestData.assetDeps[depType][depIndex] or ((imports.type(cAsset.synced.manifestData.assetDeps[depType][depIndex]) == "table") and (not depSubIndex or not cAsset.synced.manifestData.assetDeps[depType][depIndex][depSubIndex])) then return false end
         return (depSubIndex and cAsset.unSynced.rawData[(cAsset.synced.manifestData.assetDeps[depType][depIndex][depSubIndex])]) or cAsset.unSynced.rawData[(cAsset.synced.manifestData.assetDeps[depType][depIndex])] or false
