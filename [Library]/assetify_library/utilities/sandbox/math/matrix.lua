@@ -58,50 +58,50 @@ end
 
 matrix.public.__add = function(matrixLHS, matrixRHS)
     if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order[1] ~= matrixRHS.order[1]) or (matrixLHS.order[2] ~= matrixRHS.order[2]) then return false end
-    return matrix.public(
-        matrixLHS.x + matrixRHS.x,
-        matrixLHS.y + matrixRHS.y,
-        matrixLHS.z + matrixRHS.z,
-        matrixLHS.w + matrixRHS.w
-    ) or false
+    local rows = {}
+    for i = 1, #matrixLHS.order[1], 1 do
+        for k = 1, #matrixLHS.order[2], 1 do
+            rows[i] = rows[i] or {}
+            rows[i][k] = matrixLHS.rows[i][k] + matrixRHS.rows[i][k]
+        end
+    end
+    return matrix.public(rows)
 end
 
 matrix.public.__sub = function(matrixLHS, matrixRHS)
     if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order[1] ~= matrixRHS.order[1]) or (matrixLHS.order[2] ~= matrixRHS.order[2]) then return false end
     local rows = {}
-	for i = 1,#m1 do
-		local m3i = {}
-		rows[i] = m3i
-		for j = 1,#m1[1] do
-			m3i[j] = m1[i][j] + m2[i][j]
-		end
-	end
-    return matrix.public(
-        matrixLHS.x - matrixRHS.x,
-        matrixLHS.y - matrixRHS.y,
-        matrixLHS.z - matrixRHS.z,
-        matrixLHS.w - matrixRHS.w
-    ) or false
+    for i = 1, #matrixLHS.order[1], 1 do
+        for k = 1, #matrixLHS.order[2], 1 do
+            rows[i] = rows[i] or {}
+            rows[i][k] = matrixLHS.rows[i][k] - matrixRHS.rows[i][k]
+        end
+    end
+    return matrix.public(rows)
 end
 
 matrix.public.__mul = function(matrixLHS, matrixRHS)
     if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order[1] ~= matrixRHS.order[1]) or (matrixLHS.order[2] ~= matrixRHS.order[2]) then return false end
-    return matrix.public(
-        (matrixLHS.x*matrixRHS.w) + (matrixLHS.w*matrixRHS.x) + (matrixLHS.y*matrixRHS.z) - (matrixLHS.z*matrixRHS.y),
-        (matrixLHS.y*matrixRHS.w) + (matrixLHS.w*matrixRHS.y) + (matrixLHS.z*matrixRHS.x) - (matrixLHS.x*matrixRHS.z),
-        (matrixLHS.z*matrixRHS.w) + (matrixLHS.w*matrixRHS.z) + (matrixLHS.x*matrixRHS.y) - (matrixLHS.y*matrixRHS.x),
-        (matrixLHS.w*matrixRHS.w) - (matrixLHS.x*matrixRHS.x) - (matrixLHS.y*matrixRHS.y) - (matrixLHS.z*matrixRHS.z)
-    ) or false
+    local rows = {}
+    for i = 1, #matrixLHS.order[1], 1 do
+        for k = 1, #matrixLHS.order[2], 1 do
+            rows[i] = rows[i] or {}
+            rows[i][k] = matrixLHS.rows[i][k] * matrixRHS.rows[i][k]
+        end
+    end
+    return matrix.public(rows)
 end
 
 matrix.public.__div = function(matrixLHS, matrixRHS)
     if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order[1] ~= matrixRHS.order[1]) or (matrixLHS.order[2] ~= matrixRHS.order[2]) then return false end
-    return matrix.public(
-        matrixLHS.x/matrixRHS.x,
-        matrixLHS.y/matrixRHS.y,
-        matrixLHS.z/matrixRHS.z,
-        matrixLHS.w/matrixRHS.w
-    ) or false
+    local rows = {}
+    for i = 1, #matrixLHS.order[1], 1 do
+        for k = 1, #matrixLHS.order[2], 1 do
+            rows[i] = rows[i] or {}
+            rows[i][k] = matrixLHS.rows[i][k] / matrixRHS.rows[i][k]
+        end
+    end
+    return matrix.public(rows)
 end
 
 --[[
