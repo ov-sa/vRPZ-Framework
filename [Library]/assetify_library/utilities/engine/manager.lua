@@ -202,54 +202,39 @@ if localPlayer then
             end):resume({executions = settings.downloader.buildRate, frames = 1})
         elseif assetType == "scene" then
             thread:create(function(self)
-                local sceneIPLData = file:read(assetPath..(asset.references.scene)..".ipl")
-                sceneIPLData = (cAsset.manifestData.encryptKey and string.decode("tea", sceneIPLData, {key = cAsset.manifestData.encryptKey})) or sceneIPLData
-                if sceneIPLData then
-                    local sceneIDEData = (cAsset.sceneIDE and file:read(assetPath..(asset.references.scene)..".ide")) or false
-                    sceneIDEData = (sceneIDEData and cAsset.manifestData.encryptKey and string.decode("tea", sceneIDEData, {key = cAsset.manifestData.encryptKey})) or sceneIDEData
-                    local unparsedIDEDatas, unparsedIPLDatas = (sceneIDEData and string.split(sceneIDEData, "\n")) or false, string.split(sceneIPLData, "\n")
-                    local parsedIDEDatas = (unparsedIDEDatas and {}) or false
-                    --TODO: MAKE A HELPE FUNCTION FOR THIS AND IN ASSET.LUA TO SHARE THE IDE/IPL PARSER
-                    if unparsedIDEDatas then
-                        for i = 1, #unparsedIDEDatas, 1 do
-                            local IDEData = string.split(unparsedIDEDatas[i], asset.separators.IDE)
-                            IDEData[2] = (IDEData[2] and string.gsub(IDEData[2], "%s", "")) or IDEData[2]
-                            if IDEData[2] then
-                                parsedIDEDatas[(IDEData[2])] = {
-                                    (IDEData[3] and string.gsub(IDEData[3], "%s", "")) or false
-                                }
-                            end
-                        end
-                    end
-                    for i = 1, #unparsedIPLDatas, 1 do
+                local sceneIPLDatas = file:read(assetPath..(asset.references.scene)..".ipl")
+                sceneIPLDatas = (cAsset.manifestData.encryptKey and string.decode("tea", sceneIPLDatas, {key = cAsset.manifestData.encryptKey})) or sceneIPLDatas
+                sceneIPLDatas = scene:parseIPL(sceneIPLDatas)
+                if sceneIPLDatas then
+                    local sceneIDEDatas = (cAsset.sceneIDE and file:read(assetPath..(asset.references.scene)..".ide")) or false
+                    sceneIDEDatas = (sceneIDEDatas and cAsset.manifestData.encryptKey and string.decode("tea", sceneIDEDatas, {key = cAsset.manifestData.encryptKey})) or sceneIDEDatas
+                    sceneIDEDatas = scene:parseIPL(sceneIDEDatas)
+                    for i = 1, #sceneIPLDatas, 1 do
+                        local j = sceneIPLDatas[i]
                         cAsset.unSynced.assetCache[i] = {}
-                        local IPLData = string.split(unparsedIPLDatas[i], asset.separators.IPL)
-                        IPLData[2] = (IPLData[2] and string.gsub(IPLData[2], "%s", "")) or IPLData[2]
-                        if IPLData[2] then
-                            local sceneData = {
-                                position = {x = imports.tonumber(IPLData[4]), y = imports.tonumber(IPLData[5]), z = imports.tonumber(IPLData[6])},
-                                rotation = {}
-                            }
-                            local cQuat = math.quat(imports.tonumber(IPLData[7]), imports.tonumber(IPLData[8]), imports.tonumber(IPLData[9]), imports.tonumber(IPLData[10]))
-                            sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z = cQuat:toEuler()
-                            cQuat:destroy()
-                            if not cAsset.manifestData.sceneMapped then
-                                asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache[i], {
-                                    txd = (parsedIDEDatas and parsedIDEDatas[(IPLData[2])] and assetPath.."txd/"..(parsedIDEDatas[childName][1])..".txd") or assetPath..(asset.references.asset)..".txd",
-                                    dff = assetPath.."dff/"..IPLData[2]..".dff",
-                                    col = assetPath.."col/"..IPLData[2]..".col"
-                                }, function(state)
-                                    if state then
-                                        scene:create(cAsset.unSynced.assetCache[i].cAsset, cAsset.manifestData, sceneData)
-                                    end
-                                end)
-                            else
-                                sceneData.position.x, sceneData.position.y, sceneData.position.z = sceneData.position.x + ((cAsset.manifestData.sceneOffset and cAsset.manifestData.sceneOffset.x) or 0), sceneData.position.y + ((cAsset.manifestData.sceneOffset and cAsset.manifestData.sceneOffset.y) or 0), sceneData.position.z + ((cAsset.manifestData.sceneOffset and cAsset.manifestData.sceneOffset.z) or 0)
-                                sceneData.dimension = cAsset.manifestData.sceneDimension
-                                sceneData.interior = cAsset.manifestData.sceneInterior
-                                --TODO: DETECT IF ITS CLUMPED OR NOT...
-                                --cAsset.unSynced.assetCache[i].cDummy = dummy:create("object", IPLData[2], _, _, SsceneData)
-                            end
+                        local sceneData = {
+                            position = {x = imports.tonumber(j[4]), y = imports.tonumber(j[5]), z = imports.tonumber(j[6])},
+                            rotation = {}
+                        }
+                        local cQuat = math.quat(imports.tonumber(j[7]), imports.tonumber(j[8]), imports.tonumber(j[9]), imports.tonumber(j[10]))
+                        sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z = cQuat:toEuler()
+                        cQuat:destroy()
+                        if not cAsset.manifestData.sceneMapped then
+                            asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache[i], {
+                                txd = (sceneIDEDatas and sceneIDEDatas[(j[2])] and assetPath.."txd/"..(sceneIDEDatas[(j[2])][1])..".txd") or assetPath..(asset.references.asset)..".txd",
+                                dff = assetPath.."dff/"..j[2]..".dff",
+                                col = assetPath.."col/"..j[2]..".col"
+                            }, function(state)
+                                if state then
+                                    scene:create(cAsset.unSynced.assetCache[i].cAsset, cAsset.manifestData, sceneData)
+                                end
+                            end)
+                        else
+                            sceneData.position.x, sceneData.position.y, sceneData.position.z = sceneData.position.x + ((cAsset.manifestData.sceneOffset and cAsset.manifestData.sceneOffset.x) or 0), sceneData.position.y + ((cAsset.manifestData.sceneOffset and cAsset.manifestData.sceneOffset.y) or 0), sceneData.position.z + ((cAsset.manifestData.sceneOffset and cAsset.manifestData.sceneOffset.z) or 0)
+                            sceneData.dimension = cAsset.manifestData.sceneDimension
+                            sceneData.interior = cAsset.manifestData.sceneInterior
+                            --TODO: DETECT IF ITS CLUMPED OR NOT...
+                            --cAsset.unSynced.assetCache[i].cDummy = dummy:create("object", j[2], _, _, SsceneData)
                         end
                         thread:pause()
                     end
