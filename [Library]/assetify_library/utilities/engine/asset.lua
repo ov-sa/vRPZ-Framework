@@ -134,23 +134,16 @@ if localPlayer then
             if rwPaths.dff then
                 modelID = imports.engineRequestModel(assetPack.assetType, (assetManifest.assetBase and (imports.type(assetManifest.assetBase) == "number") and assetManifest.assetBase) or assetPack.assetBase or nil)
                 if modelID then
-                    if assetManifest.assetClumps or (assetType == "scene") then
-                        collisionID = imports.engineRequestModel(assetPack.assetType, assetPack.assetBase)
-                    end
                     rwCache.dff[(rwPaths.dff)] = (not rwCache.dff[(rwPaths.dff)] and file:exists(rwPaths.dff) and imports.engineLoadDFF(asset.public:readFile(file:read(rwPaths.dff), assetManifest.encryptKey) or rwPaths.dff)) or false
                     if not rwCache.dff[(rwPaths.dff)] then
                         imports.engineFreeModel(modelID)
-                        if collisionID then imports.engineFreeModel(collisionID) end
                         return false
                     else
                         rwCache.col[(rwPaths.col)] = (not rwCache.col[(rwPaths.col)] and file:exists(rwPaths.col) and imports.engineLoadCOL(asset.public:readFile(file:read(rwPaths.col), assetManifest.encryptKey) or rwPaths.col)) or false
+                        collisionID = collisionID or (rwCache.col[(rwPaths.col)] and imports.engineRequestModel(assetPack.assetType, assetPack.assetBase)) or collisionID
                         imports.engineSetModelLODDistance(modelID, asset.public.ranges.streamRange)
-                        if not rwCache.col[(rwPaths.col)] then
-                            if collisionID then
-                                imports.engineSetModelLODDistance(collisionID, asset.public.ranges.streamRange)
-                            end
-                        else
-                            if collisionID then imports.engineFreeModel(collisionID) end
+                        if collisionID then
+                            imports.engineSetModelLODDistance(collisionID, asset.public.ranges.streamRange)
                         end
                     end
                 end
