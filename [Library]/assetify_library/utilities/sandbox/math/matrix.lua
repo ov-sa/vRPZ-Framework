@@ -155,32 +155,38 @@ end
 ]]
 
 --TODO: WIP...
+
+function matrix.public:fromLocation(posX, posY, posZ, rotX, rotY, rotZ)
+    if matrix.public:isInstance(self) then return false end
+    posX, posY, posZ, rotX, rotY, rotZ = imports.tonumber(posX), imports.tonumber(posY), imports.tonumber(posZ), imports.tonumber(rotX), imports.tonumber(rotY), imports.tonumber(rotZ)
+    if not posX or not posY or not posZ or not rotX or not rotY or not rotZ then return false end
+    rotX, rotY, rotZ = math.rad(rotX), math.rad(rotY), math.rad(rotZ)
+    local sYaw, sPitch, sRoll = math.sin(rotX), math.sin(rotY), math.sin(rotZ)
+    local cYaw, cPitch, cRoll = math.cos(rotX), math.cos(rotY), math.cos(rotZ)
+    return matrix(
+        {(cRoll*cPitch) - (sRoll*sYaw*sPitch), (cPitch*sRoll) + (cRoll*sYaw*sPitch), -cYaw*sPitch, 0},
+        {-cYaw*sRoll, cRoll*cYaw, sYaw, 0},
+        {(cRoll*sPitch) + (cPitch*sRoll*sYaw), (sRoll*sPitch) - (cRoll*cPitch*sYaw), cYaw*cPitch, 0},
+        {posX, posY, posZ, 1}
+    )
+end
+
+function matrix.public:fromRotation(rotX, rotY, rotZ)
+    if matrix.public:isInstance(self) then return false end
+    rotX, rotY, rotZ = imports.tonumber(rotX), imports.tonumber(rotY), imports.tonumber(rotZ)
+    if not rotX or not rotY or not rotZ then return false end
+    rotX, rotY, rotZ = math.rad(rotX), math.rad(rotY), math.rad(rotZ)
+    local sYaw, sPitch, sRoll = math.sin(rotX), math.sin(rotY), math.sin(rotZ)
+    local cYaw, cPitch, cRoll = math.cos(rotX), math.cos(rotY), math.cos(rotZ)
+    return matrix(
+        {(sRoll*sPitch*sYaw) + (cRoll*cYaw), sRoll*cPitch, (sRoll*sPitch*cYaw) - (cRoll*sYaw)},
+        {(cRoll*sPitch*sYaw) - (sRoll*cYaw), cRoll*cPitch, (cRoll*sPitch*cYaw) + (sRoll*sYaw)},
+        {cPitch*sYaw, -sPitch, cPitch*cYaw}
+    )
+end
+
+--TODO: WIP..
 math.matrix = {
-    fromPosition = function(posX, posY, posZ, rotX, rotY, rotZ)
-        if not posX or not posY or not posZ or not rotX or not rotY or not rotZ then return false end
-        rotX, rotY, rotZ = math.rad(rotX), math.rad(rotY), math.rad(rotZ)
-        local sYaw, sPitch, sRoll = math.sin(rotX), math.sin(rotY), math.sin(rotZ)
-        local cYaw, cPitch, cRoll = math.cos(rotX), math.cos(rotY), math.cos(rotZ)
-        return matrix(
-            {(cRoll*cPitch) - (sRoll*sYaw*sPitch), (cPitch*sRoll) + (cRoll*sYaw*sPitch), -cYaw*sPitch, 0},
-            {-cYaw*sRoll, cRoll*cYaw, sYaw, 0},
-            {(cRoll*sPitch) + (cPitch*sRoll*sYaw), (sRoll*sPitch) - (cRoll*cPitch*sYaw), cYaw*cPitch, 0},
-            {posX, posY, posZ, 1}
-        )
-    end,
-
-    fromRotation = function(rotX, rotY, rotZ)
-        if not rotX or not rotY or not rotZ then return false end
-        rotX, rotY, rotZ = math.rad(rotX), math.rad(rotY), math.rad(rotZ)
-        local sYaw, sPitch, sRoll = math.sin(rotX), math.sin(rotY), math.sin(rotZ)
-        local cYaw, cPitch, cRoll = math.cos(rotX), math.cos(rotY), math.cos(rotZ)
-        return matrix(
-            {(sRoll*sPitch*sYaw) + (cRoll*cYaw), sRoll*cPitch, (sRoll*sPitch*cYaw) - (cRoll*sYaw)},
-            {(cRoll*sPitch*sYaw) - (sRoll*cYaw), cRoll*cPitch, (cRoll*sPitch*cYaw) + (sRoll*sYaw)},
-            {cPitch*sYaw, -sPitch, cPitch*cYaw}
-        )
-    end,
-
     transform = function(elemMatrix, rotMatrix, posX, posY, posZ, isAbsoluteRotation, isDuplication)
         if not elemMatrix or not rotMatrix or not posX or not posY or not posZ then return false end
         if isAbsoluteRotation then
