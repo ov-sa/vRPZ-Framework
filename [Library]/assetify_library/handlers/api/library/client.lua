@@ -61,9 +61,22 @@ function manager.API.Library:setRendererMinuteDuration(...)
     return renderer:setMinuteDuration(...)
 end
 
+function manager.API.Library:createPlanarLight(...)
+    local cLight = light.planar:create(...)
+    return (cLight and cLight.cLight) or false
+end
 
---TODO: WIP..
-function createPlanarLight(...) local cLight = light.planar:create(...); return (cLight and cLight.cLight) or false end
-function setPlanarLightResolution(cLight, ...) if not light.planar.buffer[cLight] then return false end; return light.planar.buffer[cLight]:setResolution(...) end
-function setPlanarLightTexture(cLight, ...) if not light.planar.buffer[cLight] then return false end; return light.planar.buffer[cLight]:setTexture(...) end
-function setPlanarLightColor(cLight, ...) if not light.planar.buffer[cLight] then return false end; return light.planar.buffer[cLight]:setColor(...) end
+function manager.API.Library:setPlanarLightResolution(...)
+    if not light.planar.buffer[cLight] then return false end
+    return light.planar.buffer[cLight]:setResolution(...)
+end
+
+function manager.API.Library:setPlanarLightTexture(...)
+    if not light.planar.buffer[cLight] then return false end
+    return light.planar.buffer[cLight]:setTexture(...)
+end
+
+function manager.API.Library:setPlanarLightColor(...)
+    if not light.planar.buffer[cLight] then return false end
+    return light.planar.buffer[cLight]:setColor(...)
+end
