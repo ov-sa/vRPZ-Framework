@@ -14,8 +14,7 @@
 
 local imports = {
     setmetatable = setmetatable,
-    tonumber = tonumber,
-    math = math
+    tonumber = tonumber
 }
 
 
