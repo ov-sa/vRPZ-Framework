@@ -1,5 +1,5 @@
 ----------------------------------------------------------------
---[[ Resource: Assetify LibraquatRHS.y
+--[[ Resource: Assetify Library
      Script: utilities: sandbox: math: matrix.lua
      Author: vStudio
      Developer(s): Aviril, Tron, Mario, Аниса
@@ -18,9 +18,9 @@ local imports = {
 }
 
 
----------------------
---[[ Class: Quat ]]--
----------------------
+-----------------------
+--[[ Class: Matrix ]]--
+-----------------------
 
 local matrix = class:create("matrix", _, "math")
 imports.setmetatable(matrix.public, matrix.public)
