@@ -21,8 +21,6 @@ local imports = {
 --[[ Functions: APIs ]]--
 -------------------------
 
-function isLibraryLoaded() return syncer.isLibraryLoaded end
-function isModuleLoaded() return syncer.isModuleLoaded end
 function getLibraryAssets(...) return manager:fetchAssets(...) end
 function getAssetData(...) return manager:getData(...) end
 function getAssetDep(...) return manager:getDep(...) end
