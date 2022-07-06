@@ -20,8 +20,11 @@ manager:exportAPI("Library", {
         {name = "getAssetData", API = "getAssetData"},
         {name = "getAssetDep", API = "getAssetDep"},
         {name = "setElementAsset", API = "setElementAsset"},
-        {name = "getElementAssetInfo", API = "getElementAssetInfo"}
-
+        {name = "getElementAssetInfo", API = "getElementAssetInfo"},
+        {name = "setGlobalData", API = "setGlobalData"},
+        {name = "getGlobalData", API = "getGlobalData"},
+        {name = "setEntityData", API = "setEntityData"},
+        {name = "getEntityData", API = "getEntityData"}
     },
     client = {},
     server = {}

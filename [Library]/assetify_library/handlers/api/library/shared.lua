@@ -52,12 +52,23 @@ function manager.API.Library:getElementAssetInfo(element)
     return syncer.syncedElements[element].type, syncer.syncedElements[element].name, syncer.syncedElements[element].clump, syncer.syncedElements[element].clumpMaps
 end
 
+function manager.API.Library:setGlobalData(...)
+    return syncer:syncGlobalData(...)
+end
+
+function manager.API.Library:getGlobalData(data)
+    return syncer.syncedGlobalDatas[data]
+end
+
+function manager.API.Library:setEntityData(data)
+    return syncer:syncEntityData(table:unpack(table:pack(...), 3))
+end
+
+function manager.API.Library:getEntityData(element, data)
+    return syncer.syncedEntityDatas[element] and syncer.syncedEntityDatas[element][data]
+end
 
 --TODO: WIP..
-function setGlobalData(...) return syncer:syncGlobalData(...) end
-function getGlobalData(data) return syncer.syncedGlobalDatas[data] end
-function setEntityData(...) return syncer:syncEntityData(table:unpack(table:pack(...), 3)) end
-function getEntityData(element, data) return syncer.syncedEntityDatas[element] and syncer.syncedEntityDatas[element][data] end
 function createAssetDummy(...) local cDummy = syncer:syncDummySpawn(_, ...); return (cDummy and cDummy.cDummy) or false end
 function setBoneAttachment(...) return syncer:syncBoneAttachment(_, ...) end
 function setBoneDetachment(...) return syncer:syncBoneDetachment(_, ...) end
