@@ -8,15 +8,6 @@
 ----------------------------------------------------------------
 
 
------------------
---[[ Imports ]]--
------------------
-
-local imports = {
-    isElement = isElement
-}
-
-
 -----------------------
 --[[ APIs: Library ]]--
 -----------------------
@@ -48,7 +39,7 @@ function manager.API.Library:setElementAsset(...)
 end
 
 function manager.API.Library:getElementAssetInfo(element)
-    if not element or not imports.isElement(element) or not syncer.syncedElements[element] then return false end
+    if not syncer.syncedElements[element] then return false end
     return syncer.syncedElements[element].type, syncer.syncedElements[element].name, syncer.syncedElements[element].clump, syncer.syncedElements[element].clumpMaps
 end
 
@@ -68,9 +59,23 @@ function manager.API.Library:getEntityData(element, data)
     return syncer.syncedEntityDatas[element] and syncer.syncedEntityDatas[element][data]
 end
 
---TODO: WIP..
-function createAssetDummy(...) local cDummy = syncer:syncDummySpawn(_, ...); return (cDummy and cDummy.cDummy) or false end
-function setBoneAttachment(...) return syncer:syncBoneAttachment(_, ...) end
-function setBoneDetachment(...) return syncer:syncBoneDetachment(_, ...) end
-function setBoneRefreshment(...) return syncer:syncBoneRefreshment(_, ...) end
-function clearBoneAttachment(element) return syncer:syncClearBoneAttachment(_, element) end
+function manager.API.Library:createAssetDummy(...)
+    local cDummy = syncer:syncDummySpawn(_, ...)
+    return (cDummy and cDummy.cDummy) or false
+end
+
+function manager.API.Library:setBoneAttachment(...)
+    return syncer:syncBoneAttachment(_, ...)
+end
+
+function manager.API.Library:syncBoneDetachment(...)
+    return syncer:syncBoneDetachment(_, ...)
+end
+
+function manager.API.Library:setBoneRefreshment(...)
+    return syncer:setBoneRefreshment(_, ...)
+end
+
+function manager.API.Library:clearBoneAttachment(element)
+    return syncer:syncClearBoneAttachment(_, element)
+end
