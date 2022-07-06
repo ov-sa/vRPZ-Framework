@@ -43,17 +43,7 @@ function getAssetID(...) return manager:getID(...) end
 function isAssetLoaded(...) return manager:isLoaded(...) end
 function loadAsset(...) return manager:load(...) end
 function unloadAsset(...) return manager:unload(...) end
-function loadAnim(...) return manager.API.Anim:loadAnim(...) end
-function unloadAnim(...) return manager.API.Anim:unloadAnim(...) end
 function createShader(...) local cShader = shader:create(...) return cShader.cShader end
-
-function clearWorld(...) return manager.API.World:clearWorld(...) end
-function restoreWorld(...) return manager.API.World:restoreWorld(...) end
-function clearModel(...) return manager.API.World:clearModel(...) end
-function restoreModel(...) return manager.API.World:restoreModel(...) end
-function playSoundAsset(...) return manager.API.Sound:playSound(...) end
-function playSoundAsset3D(...) return manager.API.Sound:playSound3D(...) end
-
 function isRendererVirtualRendering() return renderer.isVirtualRendering end
 function setRendererVirtualRendering(...) return renderer:setVirtualRendering(...) end
 function getRendererVirtualSource() return (renderer.isVirtualRendering and renderer.virtualSource) or false end

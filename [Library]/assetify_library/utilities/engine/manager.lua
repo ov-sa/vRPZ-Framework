@@ -17,6 +17,7 @@ local imports = {
     pairs = pairs,
     tonumber = tonumber,
     tostring = tostring,
+    loadstring = loadstring,
     isElement = isElement,
     destroyElement = destroyElement,
     addEventHandler = addEventHandler,
@@ -41,6 +42,20 @@ manager.private.buffer = {
     instance = {},
     scoped = {}
 }
+
+function manager.public:exportAPI(moduleName, moduleAPIs)
+    if not moduleName or (imports.type(moduleName) ~= "string") or not moduleAPIs or (imports.type(moduleAPIs) ~= "table") then return false end
+    local whitelistedAPI = (localPlayer and "client") or "server"
+    for i, j in imports.pairs(moduleAPIs) do
+        if (i  == "shared") or (i == "whitelistedAPI") then
+            for k = 1, #j, 1 do
+                local v = j[k]
+                imports.loadstring([[function ]]..v.name..[[(...) return manager.]]..moduleName..[[:]]..v.API..[[(...) end]])()
+            end
+        end
+    end
+    return true
+end
 
 function manager.public:fetchAssets(assetType)
     if not syncer.isLibraryLoaded or not assetType or not settings.assetPacks[assetType] then return false end
