@@ -15,7 +15,13 @@
 manager:exportAPI("Library", {
     shared = {
         {name = "isLibraryLoaded", API = "isLoaded"},
-        {name = "isModuleLoaded", API = "isModuleLoaded"}
+        {name = "isModuleLoaded", API = "isModuleLoaded"},
+        {name = "getLibraryAssets", API = "fetchAssets"},
+        {name = "getAssetData", API = "getAssetData"},
+        {name = "getAssetDep", API = "getAssetDep"},
+        {name = "setElementAsset", API = "setElementAsset"},
+        {name = "getElementAssetInfo", API = "getElementAssetInfo"}
+
     },
     client = {},
     server = {}
