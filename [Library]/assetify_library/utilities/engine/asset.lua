@@ -202,12 +202,8 @@ if localPlayer then
         if not asset.public:isInstance(self) then return false end
         if not rwCache then return false end
         if self.synced then
-            if self.synced.modelID then
-                imports.engineFreeModel(self.synced.modelID)
-            end
-            if self.synced.collisionID then
-                imports.engineFreeModel(self.synced.collisionID)
-            end
+            if self.synced.modelID then imports.engineFreeModel(self.synced.modelID) end
+            if self.synced.collisionID then imports.engineFreeModel(self.synced.collisionID) end
         end
         if self.rwPaths then
             for i, j in imports.pairs(self.rwPaths) do
