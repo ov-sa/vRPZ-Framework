@@ -293,7 +293,15 @@ bundler.rw["scheduler"] = {
     rw = [[
         ]]..bundler.rw["networker"].rw..[[
         assetify.scheduler = {
-            buffer = {execOnLoad = {}, execOnModuleLoad = {}},
+            buffer = {execOnBoot = {}, execOnLoad = {}, execOnModuleLoad = {}},
+            execOnBoot = function(execFunc)
+                if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
+                local isBooted = assetify.isBooted()
+                if isBooted then execFunc()
+                else assetify.network:fetch("Assetify:onBoot", true):on(execFunc, {subscriptionLimit = 1}) end
+                return true
+            end,
+
             execOnLoad = function(execFunc)
                 if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
                 local isLoaded = assetify.isLoaded()
@@ -307,6 +315,12 @@ bundler.rw["scheduler"] = {
                 local isModuleLoaded = assetify.isModuleLoaded()
                 if isModuleLoaded then execFunc()
                 else assetify.network:fetch("Assetify:onModuleLoad", true):on(execFunc, {subscriptionLimit = 1}) end
+                return true
+            end,
+
+            execScheduleOnBoot = function(execFunc)
+                if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
+                assetify.imports.table:insert(assetify.scheduler.buffer.execOnBoot, execOnBoot)
                 return true
             end,
 
