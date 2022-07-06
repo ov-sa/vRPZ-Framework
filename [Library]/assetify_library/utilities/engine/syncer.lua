@@ -201,11 +201,6 @@ else
         local __source = source
         thread:create(function(self)
             local source = __source
-            if syncer.public.syncedEntityDatas[source] ~= nil then
-                timer:create(function(source)
-                    syncer.public.syncedEntityDatas[source] = nil
-                end, settings.syncer.persistenceDuration, 1, source)
-            end
             syncer.public.syncedElements[source] = nil
             for i, j in imports.pairs(syncer.public.loadedClients) do
                 network:emit("Assetify:onElementDestroy", true, false, i, source)
