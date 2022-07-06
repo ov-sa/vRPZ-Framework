@@ -59,7 +59,7 @@ imports.addEventHandler("Assetify:Networker:API", root, function(serial, payload
                             i(self, table:unpack(payload.processArgs))
                         end
                         j.config.subscriptionCount = (j.config.subscriptionLimit and (j.config.subscriptionCount + 1)) or false
-                        if j.config.subscriptionCount and (j.config.subscriptionCount >= j.config.subscriptionLimit) then
+                        if j.config.subscriptionLimit and (j.config.subscriptionCount >= j.config.subscriptionLimit) then
                             cNetwork:off(i)
                         end
                     end):resume()
