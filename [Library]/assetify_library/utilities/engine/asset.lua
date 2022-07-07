@@ -189,6 +189,7 @@ if localPlayer then
         if not rwCache then return false end
         if self.synced then
             if self.synced.modelID then imports.engineFreeModel(self.synced.modelID) end
+            if self.synced.lodID then imports.engineFreeModel(self.synced.lodID) end
             if self.synced.collisionID then imports.engineFreeModel(self.synced.collisionID) end
         end
         if self.rwPaths then
