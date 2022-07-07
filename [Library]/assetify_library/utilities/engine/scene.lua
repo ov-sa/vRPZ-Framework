@@ -18,6 +18,7 @@ local imports = {
     createObject = createObject,
     setElementAlpha = setElementAlpha,
     setElementDoubleSided = setElementDoubleSided,
+    setLowLODElement = setLowLODElement,
     setElementDimension = setElementDimension,
     setElementInterior = setElementInterior
 }
@@ -94,6 +95,8 @@ if localPlayer then
                 imports.setElementDimension(self.cModelInstance, sceneManifest.sceneDimension)
                 imports.setElementInterior(self.cModelInstance, sceneManifest.sceneInterior)
                 if self.cLODInstance then
+                    imports.setElementDoubleSided(self.cLODInstance, true)
+                    imports.setLowLODElement(self.cStreamerInstance, self.cLODInstance)
                     imports.attachElements(self.cLODInstance, self.cCollisionInstance)
                     imports.setElementDimension(self.cLODInstance, sceneManifest.sceneDimension)
                     imports.setElementInterior(self.cLODInstance, sceneManifest.sceneInterior)
