@@ -163,9 +163,7 @@ if localPlayer then
                 if collisionID then
                     imports.engineReplaceCOL(rwCache.col[(rwPaths.col)], modelID)
                     if lodID then imports.engineReplaceCOL(rwCache.col[(rwPaths.col)], lodID) end
-                    --TODO: POSSIBLY USE HELPER TO SET INVISIBLE?
-                    imports.engineImportTXD(asset.public.rwAssets.txd, collisionID)
-                    imports.engineReplaceModel(asset.public.rwAssets.dff, collisionID, false)
+                    manager.API.World:clearModel(collisionID)
                     imports.engineReplaceCOL(rwCache.col[(rwPaths.col)], collisionID)
                 end
                 assetData.cAsset = self
