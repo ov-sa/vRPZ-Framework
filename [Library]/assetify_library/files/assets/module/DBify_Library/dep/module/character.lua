@@ -43,9 +43,7 @@ dbify.character = {
                 local callback = callback
                 local _, _, characterID = imports.dbPoll(queryHandler, 0)
                 local result = characterID or false
-                if callback and (imports.type(callback) == "function") then
-                    callback(result, cArgs)
-                end
+                execFunction(callback, result, cArgs)
             end, {cArgs}, dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(NULL)", dbify.character.connection.table, dbify.character.connection.key)
             return true
         end
@@ -62,13 +60,9 @@ dbify.character = {
                 local callback = callback
                 if result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.character.connection.table, dbify.character.connection.key, characterID)
-                    if callback and (imports.type(callback) == "function") then
-                        callback(result, cArgs)
-                    end
+                    execFunction(callback, result, cArgs)
                 else
-                    if callback and (imports.type(callback) == "function") then
-                        callback(false, cArgs)
-                    end
+                    execFunction(callback, false, cArgs)
                 end
             end, imports.table:unpack(cArgs))
         end

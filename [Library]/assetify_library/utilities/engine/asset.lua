@@ -454,18 +454,14 @@ else
                     end
                 end
                 assetPack.assetPack = cAssetPack
-                if callback and (imports.type(callback) == "function") then
-                    callback(true, assetType)
-                end
+                execFunction(callback, true, assetType)
             end):resume({
                 executions = settings.downloader.buildRate,
                 frames = 1
             })
             return true
         end
-        if callback and (imports.type(callback) == "function") then
-            callback(false, assetType)
-        end
+        execFunction(callback, false, assetType)
         return false
     end
 end

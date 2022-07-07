@@ -40,16 +40,11 @@ dbify.serial = {
         if not serial or (imports.type(serial) ~= "string") then return false end
         local promise = function()
             return dbify.serial.getData(serial, {dbify.serial.connection.key}, function(result, cArgs)
-                local callback = callback
                 if not result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(?)", dbify.serial.connection.table, dbify.serial.connection.key, serial)
-                    if callback and (imports.type(callback) == "function") then
-                        callback(result, cArgs)
-                    end
+                    execFunction(callback, result, cArgs)
                 else
-                    if callback and (imports.type(callback) == "function") then
-                        callback(false, cArgs)
-                    end
+                    execFunction(callback, false, cArgs)
                 end
             end, imports.table:unpack(cArgs))
         end
@@ -63,16 +58,11 @@ dbify.serial = {
         if not serial or (imports.type(serial) ~= "string") then return false end
         local promise = function()
             return dbify.serial.getData(serial, {dbify.serial.connection.key}, function(result, cArgs)
-                local callback = callback
                 if result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.serial.connection.table, dbify.serial.connection.key, serial)
-                    if callback and (imports.type(callback) == "function") then
-                        callback(result, cArgs)
-                    end
+                    execFunction(callback, result, cArgs)
                 else
-                    if callback and (imports.type(callback) == "function") then
-                        callback(false, cArgs)
-                    end
+                    execFunction(callback, false, cArgs)
                 end
             end, imports.table:unpack(cArgs))
         end

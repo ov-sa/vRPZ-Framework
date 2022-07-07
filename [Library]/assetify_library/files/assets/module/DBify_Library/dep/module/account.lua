@@ -45,13 +45,9 @@ dbify.account = {
                 local callback = callback
                 if not result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(?)", dbify.account.connection.table, dbify.account.connection.key, accountName)
-                    if callback and (imports.type(callback) == "function") then
-                        callback(result, cArgs)
-                    end
+                    execFunction(callback, result, cArgs)
                 else
-                    if callback and (imports.type(callback) == "function") then
-                        callback(false, cArgs)
-                    end
+                    execFunction(callback, false, cArgs)
                 end
             end, imports.table:unpack(cArgs))
         end
@@ -68,13 +64,9 @@ dbify.account = {
                 local callback = callback
                 if result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.account.connection.table, dbify.account.connection.key, accountName)
-                    if callback and (imports.type(callback) == "function") then
-                        callback(result, cArgs)
-                    end
+                    execFunction(callback, result, cArgs)
                 else
-                    if callback and (imports.type(callback) == "function") then
-                        callback(false, cArgs)
-                    end
+                    execFunction(callback, false, cArgs)
                 end
             end, imports.table:unpack(cArgs))
         end

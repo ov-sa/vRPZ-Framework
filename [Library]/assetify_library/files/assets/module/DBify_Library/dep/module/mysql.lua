@@ -68,9 +68,7 @@ dbify.mysql = {
                     local callback = callback
                     local result = imports.dbPoll(queryHandler, 0)
                     result = ((result and (#result > 0)) and true) or false
-                    if callback and (imports.type(callback) == "function") then
-                        callback(result, cArgs)
-                    end
+                    execFunction(callback, result, cArgs)
                 end, {cArgs}, dbify.mysql.connection.instance, "SELECT `table_name` FROM information_schema.tables WHERE `table_schema`=? AND `table_name`=?", dbify.settings.credentials.database, tableName)
                 return true
             end
@@ -105,18 +103,13 @@ dbify.mysql = {
                                 local callback = callback
                                 local result = imports.dbPoll(queryHandler, 0)
                                 if result and (#result > 0) then
-                                    if callback and (imports.type(callback) == "function") then
-                                        callback(result, cArgs)
-                                    end
+                                    execFunction(callback, result, cArgs)
                                 else
-                                    callback(false, cArgs)
+                                    execFunction(callback, false, cArgs)
                                 end
                             end, {cArgs[2]}, dbify.mysql.connection.instance, queryString, imports.table:unpack(queryArguments))
                         else
-                            local callback = callback
-                            if callback and (imports.type(callback) == "function") then
-                                callback(false, cArgs[2])
-                            end
+                            execFunction(callback, false, cArgs[2])
                         end
                     end, {
                         tableName = tableName,
@@ -129,21 +122,15 @@ dbify.mysql = {
                     return dbify.mysql.table.isValid(tableName, function(isValid, cArgs)
                         if isValid then
                             imports.dbQuery(function(queryHandler, cArgs)
-                                local callback = callback
                                 local result = imports.dbPoll(queryHandler, 0)
                                 if result and (#result > 0) then
-                                    if callback and (imports.type(callback) == "function") then
-                                        callback(result, cArgs)
-                                    end
+                                    execFunction(callback, result, cArgs)
                                 else
-                                    callback(false, cArgs)
+                                    execFunction(callback, false, cArgs)
                                 end
                             end, {cArgs}, dbify.mysql.connection.instance, "SELECT * FROM `??`", tableName)
                         else
-                            local callback = callback
-                            if callback and (imports.type(callback) == "function") then
-                                callback(false, cArgs)
-                            end
+                            execFunction(callback, false, cArgs)
                         end
                     end, imports.table:unpack(cArgs))
                 end
@@ -162,18 +149,12 @@ dbify.mysql = {
                 return dbify.mysql.table.isValid(tableName, function(isValid, cArgs)
                     if isValid then
                         imports.dbQuery(function(queryHandler, cArgs)
-                            local callback = callback
                             local result = imports.dbPoll(queryHandler, 0)
                             result = ((result and (#result > 0)) and true) or false
-                            if callback and (imports.type(callback) == "function") then
-                                callback(result, cArgs)
-                            end
+                            execFunction(callback, result, cArgs)
                         end, {cArgs}, dbify.mysql.connection.instance, "SELECT `table_name` FROM information_schema.columns WHERE `table_schema`=? AND `table_name`=? AND `column_name`=?", dbify.settings.credentials.database, tableName, columnName)
                     else
-                        local callback = callback
-                        if callback and (imports.type(callback) == "function") then
-                            callback(false, cArgs)
-                        end
+                        execFunction(callback, false, cArgs)
                     end
                 end, imports.table:unpack(cArgs))
             end
@@ -199,15 +180,10 @@ dbify.mysql = {
                             local callback = callback
                             local result = imports.dbPoll(queryHandler, 0)
                             result = ((result and (#result >= #cArgs[1])) and true) or false
-                            if callback and (imports.type(callback) == "function") then
-                                callback(result, cArgs[2])
-                            end
+                            execFunction(callback, result, cArgs[2])
                         end, {cArgs}, dbify.mysql.connection.instance, queryString, imports.table:unpack(queryArguments))
                     else
-                        local callback = callback
-                        if callback and (imports.type(callback) == "function") then
-                            callback(false, cArgs[2])
-                        end
+                        execFunction(callback, false, cArgs[2])
                     end
                 end, columns, cArgs)
             end
@@ -222,7 +198,6 @@ dbify.mysql = {
             local promise = function()
                 return dbify.mysql.table.isValid(tableName, function(isValid, cArgs)
                     if isValid then
-                        local callback = callback
                         local queryString, queryArguments = "ALTER TABLE `??`", {tableName}
                         for i = 1, #cArgs[1], 1 do
                             local j = cArgs[1][i]
@@ -230,14 +205,9 @@ dbify.mysql = {
                             queryString = queryString.." DROP COLUMN `??`"..(((i < #cArgs[1]) and ", ") or "")
                         end
                         local result = imports.dbExec(dbify.mysql.connection.instance, queryString, imports.table:unpack(queryArguments))
-                        if callback and (imports.type(callback) == "function") then
-                            callback(result, cArgs[2])
-                        end
+                        execFunction(callback, result, cArgs[2])
                     else
-                        local callback = callback
-                        if callback and (imports.type(callback) == "function") then
-                            callback(false, cArgs[2])
-                        end
+                        execFunction(callback, false, cArgs[2])
                     end
                 end, columns, cArgs)
             end
@@ -278,15 +248,12 @@ dbify.mysql = {
                             imports.table:insert(queryArguments.cArgs, (#queryArguments.cArgs - queryArguments.subLength) + 1, imports.tostring(j[2]))
                             queryStrings[1] = queryStrings[1].." `??`=?"..(((i < #cArgs[1].dataColumns) and ",") or "")
                             dbify.mysql.column.isValid(cArgs[1].tableName, j[1], function(isValid, cArgs)
-                                local callback = callback
                                 if not isValid then
                                     imports.dbExec(dbify.mysql.connection.instance, "ALTER TABLE `??` ADD COLUMN `??` TEXT", cArgs[1], cArgs[2])
                                 end
                                 if cArgs[3] then
                                     local result = imports.dbExec(dbify.mysql.connection.instance, cArgs[3].queryString, imports.table:unpack(cArgs[3].queryArguments))
-                                    if callback and (imports.type(callback) == "function") then
-                                        callback(result, cArgs[4])
-                                    end
+                                    execFunction(callback, result, cArgs[4])
                                 end
                             end, cArgs[1].tableName, j[1], ((i >= #cArgs[1].dataColumns) and {
                                 queryString = queryStrings[1]..queryStrings[2],
@@ -294,10 +261,7 @@ dbify.mysql = {
                             }) or false, ((i >= #cArgs[1].dataColumns) and cArgs[2]) or false)
                         end
                     else
-                        local callback = callback
-                        if callback and (imports.type(callback) == "function") then
-                            callback(false, cArgs[2])
-                        end
+                        execFunction(callback, false, cArgs[2])
                     end
                 end, {
                     tableName = tableName,
@@ -345,23 +309,15 @@ dbify.mysql = {
                             queryString = queryString.." `??`=?"..(((i < #cArgs[1].keyColumns) and " AND") or "")
                         end
                         imports.dbQuery(function(queryHandler, soloFetch, cArgs)
-                            local callback = callback
                             local result = imports.dbPoll(queryHandler, 0)
                             if result and (#result > 0) then
-                                if callback and (imports.type(callback) == "function") then
-                                    callback((soloFetch and result[1]) or result, cArgs)
-                                end
+                                execFunction(callback, (soloFetch and result[1]) or result, cArgs)
                                 return true
                             end
-                            if callback and (imports.type(callback) == "function") then
-                                callback(false, cArgs)
-                            end
+                            execFunction(callback, false, cArgs)
                         end, {cArgs[1].soloFetch, cArgs[2]}, dbify.mysql.connection.instance, queryString, imports.table:unpack(queryArguments))
                     else
-                        local callback = callback
-                        if callback and (imports.type(callback) == "function") then
-                            callback(false, cArgs[2])
-                        end
+                        execFunction(callback, false, cArgs[2])
                     end
                 end, {
                     tableName = tableName,

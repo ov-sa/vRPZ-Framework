@@ -48,15 +48,10 @@ local cUtility = {
                 end
                 dbify.inventory.setData(cArgs[1].inventoryID, cArgs[1].items, function(result, cArgs)
                     local callback = callback
-                    if callback and (imports.type(callback) == "function") then
-                        callback(result, cArgs)
-                    end
+                    execFunction(callback, result, cArgs)
                 end, cArgs[2])
             else
-                local callback = callback
-                if callback and (imports.type(callback) == "function") then
-                    callback(false, cArgs[2])
-                end
+                execFunction(callback, false, cArgs[2])
             end
         end, {
             inventoryID = inventoryID,
@@ -107,20 +102,13 @@ local cUtility = {
                 end
                 if cArgs[1].processType == "set" then
                     dbify.inventory.setData(cArgs[1].inventoryID, properties, function(result, cArgs)
-                        local callback = callback
-                        if callback and (imports.type(callback) == "function") then
-                            callback(result, cArgs)
-                        end
+                        execFunction(callback, result, cArgs)
                     end, cArgs[2])
                 else
-                    if callback and (imports.type(callback) == "function") then
-                        callback(properties, cArgs[2])
-                    end
+                    execFunction(callback, properties, cArgs[2])
                 end
             else
-                if callback and (imports.type(callback) == "function") then
-                    callback(false, cArgs[2])
-                end
+                execFunction(callback, false, cArgs[2])
             end
         end, {
             inventoryID = inventoryID,
@@ -168,19 +156,13 @@ local cUtility = {
                 if cArgs[1].processType == "set" then
                     dbify.inventory.setData(cArgs[1].inventoryID, datas, function(result, cArgs)
                         local callback = callback
-                        if callback and (imports.type(callback) == "function") then
-                            callback(result, cArgs)
-                        end
+                        execFunction(callback, result, cArgs)
                     end, cArgs[2])
                 else
-                    if callback and (imports.type(callback) == "function") then
-                        callback(datas, cArgs[2])
-                    end
+                    execFunction(callback, datas, cArgs[2])
                 end
             else
-                if callback and (imports.type(callback) == "function") then
-                    callback(false, cArgs[2])
-                end
+                execFunction(callback, false, cArgs[2])
             end
         end, {
             inventoryID = inventoryID,
@@ -255,17 +237,12 @@ dbify.inventory = {
                                         imports.dbExec(dbify.mysql.connection.instance, "ALTER TABLE `??` ADD COLUMN `??` TEXT", dbify.inventory.connection.table, cArgs[1])
                                     end
                                     if cArgs[2] then
-                                        if callback and (imports.type(callback) == "function") then
-                                            callback(true, cArgs[2])
-                                        end
+                                        execFunction(callback, true, cArgs[2])
                                     end
                                 end, j, ((i >= #cArgs[1].items) and cArgs[2]) or false)
                             end
                         else
-                            local callback = callback
-                            if callback and (imports.type(callback) == "function") then
-                                callback(result, cArgs[2])
-                            end
+                            execFunction(callback, result, cArgs[2])
                         end
                     end, cArgs[1], cArgs[2])
                 else
@@ -277,9 +254,7 @@ dbify.inventory = {
                                 imports.dbExec(dbify.mysql.connection.instance, "ALTER TABLE `??` ADD COLUMN `??` TEXT", dbify.inventory.connection.table, cArgs[1])
                             end
                             if cArgs[2] then
-                                if callback and (imports.type(callback) == "function") then
-                                    callback(true, cArgs[2])
-                                end
+                                execFunction(callback, true, cArgs[2])
                             end
                         end, j, ((i >= #cArgs[1].items) and cArgs[2]) or false)
                     end
@@ -302,9 +277,7 @@ dbify.inventory = {
                 local callback = callback
                 local _, _, inventoryID = imports.dbPoll(queryHandler, 0)
                 local result = inventoryID or false
-                if callback and (imports.type(callback) == "function") then
-                    callback(result, cArgs)
-                end
+                execFunction(callback, result, cArgs)
             end, {cArgs}, dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(NULL)", dbify.inventory.connection.table, dbify.inventory.connection.key)
             return true
         end
@@ -321,13 +294,9 @@ dbify.inventory = {
                 local callback = callback
                 if result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.inventory.connection.table, dbify.inventory.connection.key, inventoryID)
-                    if callback and (imports.type(callback) == "function") then
-                        callback(result, cArgs)
-                    end
+                    execFunction(callback, result, cArgs)
                 else
-                    if callback and (imports.type(callback) == "function") then
-                        callback(false, cArgs)
-                    end
+                    execFunction(callback, false, cArgs)
                 end
             end, imports.table:unpack(cArgs))
         end
