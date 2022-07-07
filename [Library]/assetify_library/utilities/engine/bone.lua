@@ -158,7 +158,8 @@ if localPlayer then
         local isUptoDate = ((bone.public.cache.element[(self.parent)].streamTick == bone.public.cache.streamTick) and bone.public.cache.element[(self.parent)][(self.boneData.id)] and true) or false
         if not isUptoDate then
             if bone.public.cache.element[(self.parent)][(self.boneData.id)] then bone.public.cache.element[(self.parent)][(self.boneData.id)]:destroy() end
-            bone.public.cache.element[(self.parent)][(self.boneData.id)] = math.matrix(table:unpack(imports.getElementBoneMatrix(self.parent, self.boneData.id)))
+            local boneMatrix = imports.getElementBoneMatrix(self.parent, self.boneData.id)
+            bone.public.cache.element[(self.parent)][(self.boneData.id)] = math.matrix(boneMatrix[1], boneMatrix[2], boneMatrix[3], boneMatrix[4])
         end
         bone.public.cache.element[(self.parent)].streamTick = bone.public.cache.streamTick
         local cMatrix = bone.public.cache.element[(self.parent)][(self.boneData.id)]:transform(self.boneData.rotationMatrix, self.boneData.position.x, self.boneData.position.y, self.boneData.position.z)
