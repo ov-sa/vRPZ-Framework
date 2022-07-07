@@ -107,7 +107,7 @@ if localPlayer then
         return true
     end
 
-    function asset.public:load(assetType, assetName, assetPack, rwCache, assetManifest, assetData, rwPaths, callback)
+    function asset.public:load(assetType, assetName, assetPack, rwCache, assetManifest, assetData, rwPaths)
         if not asset.public:isInstance(self) then return false end
         if not assetType or not assetName or not assetPack or not rwCache or not assetManifest or not assetData or not rwPaths then return false end
         local loadState = false
@@ -175,9 +175,6 @@ if localPlayer then
                 }
                 loadState = true
             end
-        end
-        if callback and (imports.type(callback) == "function") then
-            callback(loadState)
         end
         return loadState
     end
