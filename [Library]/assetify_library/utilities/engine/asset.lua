@@ -134,6 +134,7 @@ if localPlayer then
             if rwPaths.dff then
                 modelID = imports.engineRequestModel(assetPack.assetType, (assetManifest.assetBase and (imports.type(assetManifest.assetBase) == "number") and assetManifest.assetBase) or assetPack.assetBase or nil)
                 if modelID then
+                    rwCache.lod[(rwPaths.lod)] = (not rwCache.lod[(rwPaths.lod)] and file:exists(rwPaths.lod) and imports.engineLoadDFF(asset.public:readFile(file:read(rwPaths.lod), assetManifest.encryptKey) or rwPaths.lod)) or false
                     rwCache.dff[(rwPaths.dff)] = (not rwCache.dff[(rwPaths.dff)] and file:exists(rwPaths.dff) and imports.engineLoadDFF(asset.public:readFile(file:read(rwPaths.dff), assetManifest.encryptKey) or rwPaths.dff)) or false
                     if not rwCache.dff[(rwPaths.dff)] then
                         imports.engineFreeModel(modelID)
