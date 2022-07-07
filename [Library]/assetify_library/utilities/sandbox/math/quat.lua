@@ -95,7 +95,7 @@ function quat.public:setAxisAngle(x, y, z, angle)
 end
 
 function quat.public:fromAxisAngle(x, y, z, angle)
-    if (self ~= quat.public) or (self ~= quat.private) then return false end
+    if (self ~= quat.public) and (self ~= quat.private) then return false end
     x, y, z, angle = imports.tonumber(x), imports.tonumber(y), imports.tonumber(z), imports.tonumber(angle)
     if not x or not y or not z or not angle then return false end
     local cQuat = quat.public(0, 0, 0, 0)
@@ -111,7 +111,7 @@ function quat.public:toEuler()
 end
 
 function quat.public:fromEuler(x, y, z)
-    if (self ~= quat.public) or (self ~= quat.private) then return false end
+    if (self ~= quat.public) and (self ~= quat.private) then return false end
     x, y, z = imports.tonumber(x), imports.tonumber(y), imports.tonumber(z)
     if not x or not y or not z then return false end
     x, y, z = math.rad(x)*0.5, math.rad(y)*0.5, math.rad(z)*0.5
