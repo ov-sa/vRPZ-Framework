@@ -38,7 +38,7 @@ local streamer = class:create("streamer")
 streamer.private.allocator = {
     validStreams = {
         ["dummy"] = {},
-        ["bone"] = {skipAttachment = false},
+        ["bone"] = {skipAttachment = true},
         ["light"] = {}
     }
 }
