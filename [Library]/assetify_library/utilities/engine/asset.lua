@@ -179,7 +179,7 @@ if localPlayer then
         return loadState
     end
 
-    function asset.public:unload(rwCache, callback)
+    function asset.public:unload(rwCache)
         if not asset.public:isInstance(self) then return false end
         if not rwCache then return false end
         if self.synced then
@@ -194,9 +194,6 @@ if localPlayer then
             end
         end
         self:destroyInstance()
-        if callback and (imports.type(callback) == "function") then
-            callback(true)
-        end
         return true
     end
 else
