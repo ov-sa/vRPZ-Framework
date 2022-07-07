@@ -298,61 +298,68 @@ bundler.rw["scheduler"] = {
     rw = [[
         ]]..bundler.rw["networker"].rw..[[
         assetify.scheduler = {
-            buffer = {execOnBoot = {}, execOnLoad = {}, execOnModuleLoad = {}},
-            execOnBoot = function(execFunc)
-                if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
+            buffer = {
+                pending = {execOnBoot = {}, execOnLoad = {}, execOnModuleLoad = {}}
+            },
+            execOnBoot = function(exec)
+                if not exec or (assetify.imports.type(exec) ~= "function") then return false end
                 local isBooted = assetify.isBooted()
-                if isBooted then execFunc()
-                else assetify.network:fetch("Assetify:onBoot", true):on(execFunc, {subscriptionLimit = 1}) end
+                if isBooted then exec()
+                else assetify.imports.table:insert(assetify.scheduler.buffer.pending.execOnBoot, exec) end
                 return true
             end,
 
-            execOnLoad = function(execFunc)
-                if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
+            execOnLoad = function(exec)
+                if not exec or (assetify.imports.type(exec) ~= "function") then return false end
                 local isLoaded = assetify.isLoaded()
-                if isLoaded then execFunc()
-                else assetify.network:fetch("Assetify:onLoad", true):on(execFunc, {subscriptionLimit = 1}) end
+                if isLoaded then exec()
+                else assetify.imports.table:insert(assetify.scheduler.buffer.pending.execOnLoad, exec) end
                 return true
             end,
 
-            execOnModuleLoad = function(execFunc)
-                if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
+            execOnModuleLoad = function(exec)
+                if not exec or (assetify.imports.type(exec) ~= "function") then return false end
                 local isModuleLoaded = assetify.isModuleLoaded()
-                if isModuleLoaded then execFunc()
-                else assetify.network:fetch("Assetify:onModuleLoad", true):on(execFunc, {subscriptionLimit = 1}) end
-                return true
-            end,
-
-            execScheduleOnBoot = function(execFunc)
-                if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
-                assetify.imports.table:insert(assetify.scheduler.buffer.execOnBoot, execOnBoot)
-                return true
-            end,
-
-            execScheduleOnLoad = function(execFunc)
-                if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
-                assetify.imports.table:insert(assetify.scheduler.buffer.execOnLoad, execFunc)
-                return true
-            end,
-
-            execScheduleOnModuleLoad = function(execFunc)
-                if not execFunc or (assetify.imports.type(execFunc) ~= "function") then return false end
-                assetify.imports.table:insert(assetify.scheduler.buffer.execOnModuleLoad, execFunc)
+                if isModuleLoaded then exec()
+                else assetify.imports.table:insert(assetify.scheduler.buffer.pending.execOnModuleLoad, exec) end
                 return true
             end,
 
             boot = function()
-                for i, j in assetify.imports.pairs(assetify.scheduler.buffer) do
+                for i, j in assetify.imports.pairs(assetify.scheduler.buffer.schedule) do
                     if #j > 0 then
                         for k = 1, #j, 1 do
                             assetify.scheduler[i](j[k])
                         end
-                        assetify.scheduler.buffer[i] = {}
+                        assetify.scheduler.buffer.schedule[i] = {}
                     end
                 end
                 return true
             end
         }
+        assetify.scheduler.buffer.schedule = assetify.imports.table:clone(assetify.scheduler.buffer.pending, true)
+        local bootExec = function(type)
+            if not assetify.scheduler.buffer.pending[type] then return false end
+            if #assetify.scheduler.buffer.pending[type] > 0 then
+                for i = 1, #assetify.scheduler.buffer.pending[type], 1 do
+                    assetify.scheduler.buffer.pending[type][i]()
+                end
+                assetify.scheduler.buffer.pending[type] = {}
+            end
+            return true
+        end
+        local scheduleExec = function(type, exec)
+            if not assetify.scheduler.buffer.schedule[type] then return false end
+            if not exec or (assetify.imports.type(exec) ~= "function") then return false end
+            assetify.imports.table:insert(assetify.scheduler.buffer.schedule[type], exec)
+            return true
+        end
+        assetify.scheduler.execScheduleOnBoot = function(...) return scheduleExec("execOnBoot", ...) end
+        assetify.scheduler.execScheduleOnLoad = function(...) return scheduleExec("execOnLoad", ...) end
+        assetify.scheduler.execScheduleOnModuleLoad = function(...) return scheduleExec("execOnModuleLoad", ...) end
+        assetify.network:fetch("Assetify:onBoot", true):on(function() bootExec("execOnBoot") end, {subscriptionLimit = 1})
+        assetify.network:fetch("Assetify:onLoad", true):on(function() bootExec("execOnLoad") end, {subscriptionLimit = 1})
+        assetify.network:fetch("Assetify:onModuleLoad", true):on(function() bootExec("execOnModuleLoad") end, {subscriptionLimit = 1})
     ]]
 }
 
