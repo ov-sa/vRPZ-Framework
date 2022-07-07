@@ -35,7 +35,7 @@ local manager = class:create("manager", {
 manager.private.rwFormat = {
     assetCache = {},
     rwCache = {
-        ifp = {}, sound = {}, txd = {}, lod = {}, dff = {}, col = {}, map = {}, dep = {}
+        ifp = {}, sound = {}, txd = {}, dff = {}, lod = {}, col = {}, map = {}, dep = {}
     }
 }
 manager.private.buffer = {
