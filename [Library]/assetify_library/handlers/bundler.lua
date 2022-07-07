@@ -167,7 +167,8 @@ bundler.rw["imports"] = [[
             outputDebugString = outputDebugString,
             loadstring = loadstring,
             getResourceFromName = getResourceFromName,
-            table = table
+            table = table,
+            string = string
         }
     end
 ]]
@@ -353,10 +354,10 @@ bundler.rw["scheduler"] = {
             if not exec or (assetify.imports.type(exec) ~= "function") then return false end
             assetify.imports.table:insert(assetify.scheduler.buffer.schedule[type], exec)
             return true
+        end  
+        for i, j in assetify.imports.pairs(assetify.scheduler.buffer.schedule) do
+            assetify.scheduler[(assetify.imports.string.gsub(i, "exec", "execSchedule", 1))] = function(...) return scheduleExec(i, ...) end
         end
-        assetify.scheduler.execScheduleOnBoot = function(...) return scheduleExec("execOnBoot", ...) end
-        assetify.scheduler.execScheduleOnLoad = function(...) return scheduleExec("execOnLoad", ...) end
-        assetify.scheduler.execScheduleOnModuleLoad = function(...) return scheduleExec("execOnModuleLoad", ...) end
         assetify.network:fetch("Assetify:onBoot", true):on(function() bootExec("execOnBoot") end, {subscriptionLimit = 1})
         assetify.network:fetch("Assetify:onLoad", true):on(function() bootExec("execOnLoad") end, {subscriptionLimit = 1})
         assetify.network:fetch("Assetify:onModuleLoad", true):on(function() bootExec("execOnModuleLoad") end, {subscriptionLimit = 1})
