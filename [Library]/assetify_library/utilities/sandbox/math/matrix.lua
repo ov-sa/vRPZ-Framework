@@ -121,6 +121,38 @@ function matrix.public:scale(scale)
     return self
 end
 
+function matrix.public:transform(rotationMatrix, x, y, z)
+    if not matrix.public:isInstance(self) or not matrix.public:isInstance(rotationMatrix) or (self.order[1] ~= 4) or (self.order[2] ~= 4) or (rotationMatrix.order[1] ~= 3) or (rotationMatrix.order[2] ~= 3) then return false end
+    x, y, z, rotX, rotY, rotZ = imports.tonumber(x), imports.tonumber(y), imports.tonumber(z)
+    if not x or not y or not z then return false end
+    return matrix.public(
+        {
+            (self.rows[2][1]*rotationMatrix.rows[1][2]) + (self.rows[1][1]*rotationMatrix.rows[1][1]) + (rotationMatrix.rows[1][3]*self.rows[3][1]),
+            (self.rows[3][2]*rotationMatrix.rows[1][3]) + (self.rows[1][2]*rotationMatrix.rows[1][1]) + (self.rows[2][2]*rotationMatrix.rows[1][2]),
+            (self.rows[2][3]*rotationMatrix.rows[1][2]) + (self.rows[3][3]*rotationMatrix.rows[1][3]) + (rotationMatrix.rows[1][1]*self.rows[1][3]),
+            0
+        },
+        {
+            (rotationMatrix.rows[2][3]*self.rows[3][1]) + (self.rows[2][1]*rotationMatrix.rows[2][2]) + (rotationMatrix.rows[2][1]*self.rows[1][1]),
+            (self.rows[3][2]*rotationMatrix.rows[2][3]) + (self.rows[2][2]*rotationMatrix.rows[2][2]) + (self.rows[1][2]*rotationMatrix.rows[2][1]),
+            (rotationMatrix.rows[2][1]*self.rows[1][3]) + (self.rows[3][3]*rotationMatrix.rows[2][3]) + (self.rows[2][3]*rotationMatrix.rows[2][2]),
+            0
+        },
+        {
+            (self.rows[2][1]*rotationMatrix.rows[3][2]) + (rotationMatrix.rows[3][3]*self.rows[3][1]) + (rotationMatrix.rows[3][1]*self.rows[1][1]),
+            (self.rows[3][2]*rotationMatrix.rows[3][3]) + (self.rows[2][2]*rotationMatrix.rows[3][2]) + (rotationMatrix.rows[3][1]*self.rows[1][2]),
+            (rotationMatrix.rows[3][1]*self.rows[1][3]) + (self.rows[3][3]*rotationMatrix.rows[3][3]) + (self.rows[2][3]*rotationMatrix.rows[3][2]),
+            0
+        },
+        {
+            (z*self.rows[1][1]) + (y*self.rows[2][1]) - (x*self.rows[3][1]) + self.rows[4][1],
+            (z*self.rows[1][2]) + (y*self.rows[2][2]) - (x*self.rows[3][2]) + self.rows[4][2],
+            (z*self.rows[1][3]) + (y*self.rows[2][3]) - (x*self.rows[3][3]) + self.rows[4][3],
+            1
+        }
+    )
+end
+
 function matrix.public:fromLocation(x, y, z, rotX, rotY, rotZ)
     if (self ~= matrix.public) and (self ~= matrix.private) then return false end
     x, y, z, rotX, rotY, rotZ = imports.tonumber(x), imports.tonumber(y), imports.tonumber(z), imports.tonumber(rotX), imports.tonumber(rotY), imports.tonumber(rotZ)
@@ -149,58 +181,3 @@ function matrix.public:fromRotation(rotX, rotY, rotZ)
         {cPitch*sYaw, -sPitch, cPitch*cYaw}
     )
 end
-
---TODO: WIP..
---[[
-math.matrix = {
-    transform = function(elemMatrix, rotMatrix, x, y, z, isAbsoluteRotation, isDuplication)
-        if (self ~= matrix.public) and (self ~= matrix.private) then return false end
-        if not elemMatrix or not rotMatrix or not x or not y or not z then return false end
-        if isAbsoluteRotation then
-            if isDuplication then elemMatrix = table.clone(elemMatrix, true) end
-            for i = 1, 3, 1 do
-                for k = 1, 3, 1 do
-                    elemMatrix[i][k] = 1
-                end
-            end
-        end
-        return {
-            {
-                (elemMatrix[2][1]*rotMatrix[1][2]) + (elemMatrix[1][1]*rotMatrix[1][1]) + (rotMatrix[1][3]*elemMatrix[3][1]),
-                (elemMatrix[3][2]*rotMatrix[1][3]) + (elemMatrix[1][2]*rotMatrix[1][1]) + (elemMatrix[2][2]*rotMatrix[1][2]),
-                (elemMatrix[2][3]*rotMatrix[1][2]) + (elemMatrix[3][3]*rotMatrix[1][3]) + (rotMatrix[1][1]*elemMatrix[1][3]),
-                0
-            },
-            {
-                (rotMatrix[2][3]*elemMatrix[3][1]) + (elemMatrix[2][1]*rotMatrix[2][2]) + (rotMatrix[2][1]*elemMatrix[1][1]),
-                (elemMatrix[3][2]*rotMatrix[2][3]) + (elemMatrix[2][2]*rotMatrix[2][2]) + (elemMatrix[1][2]*rotMatrix[2][1]),
-                (rotMatrix[2][1]*elemMatrix[1][3]) + (elemMatrix[3][3]*rotMatrix[2][3]) + (elemMatrix[2][3]*rotMatrix[2][2]),
-                0
-            },
-            {
-                (elemMatrix[2][1]*rotMatrix[3][2]) + (rotMatrix[3][3]*elemMatrix[3][1]) + (rotMatrix[3][1]*elemMatrix[1][1]),
-                (elemMatrix[3][2]*rotMatrix[3][3]) + (elemMatrix[2][2]*rotMatrix[3][2]) + (rotMatrix[3][1]*elemMatrix[1][2]),
-                (rotMatrix[3][1]*elemMatrix[1][3]) + (elemMatrix[3][3]*rotMatrix[3][3]) + (elemMatrix[2][3]*rotMatrix[3][2]),
-                0
-            },
-            {
-                (z*elemMatrix[1][1]) + (y*elemMatrix[2][1]) - (x*elemMatrix[3][1]) + elemMatrix[4][1],
-                (z*elemMatrix[1][2]) + (y*elemMatrix[2][2]) - (x*elemMatrix[3][2]) + elemMatrix[4][2],
-                (z*elemMatrix[1][3]) + (y*elemMatrix[2][3]) - (x*elemMatrix[3][3]) + elemMatrix[4][3],
-                1
-            }
-        }
-    end
-}
-]]
-
-
-local test1 = matrix.public:fromRotation(90, 45, 180)
---iprint(test1.rows)
-
---[[
-local test1 = matrix.public({1, 1, 1, 1}, {2, 2, 2, 2}, {2, 2, 2, 2})
-local test2 = matrix.public({1, 1, 1, 1}, {2, 2, 2, 2}, {2, 2, 2, 2})
-local resultant = test1 + test2
-print(resultant)
-]]
