@@ -13,8 +13,8 @@
 -----------------
 
 local imports = {
-    setmetatable = setmetatable,
-    tonumber = tonumber
+    tonumber = tonumber,
+    setmetatable = setmetatable
 }
 
 
@@ -29,6 +29,7 @@ quat.public.__call = function(_, x, y, z, w)
     x, y, z, w = imports.tonumber(x), imports.tonumber(y), imports.tonumber(z), imports.tonumber(w)
     if not x or not y or not z or not w then return false end
     local cQuat = quat.public:createInstance()
+    imports.setmetatable(cQuat, quat.public)
     cQuat.x, cQuat.y, cQuat.z, cQuat.w = x, y, z, w
     return cQuat
 end

@@ -13,8 +13,9 @@
 -----------------
 
 local imports = {
-    setmetatable = setmetatable,
-    tonumber = tonumber
+    type = type,
+    tonumber = tonumber,
+    setmetatable = setmetatable
 }
 
 
@@ -30,13 +31,14 @@ matrix.public.__call = function(_, ...)
     local isValid = (#rows > 0 and true) or false
     for i = 1, #rows, 1 do
         local j = rows[i]
-        local __order = #j
-        isValid = (isValid and (imports.type(j) == "table") and (not order or (order == __order)) and (__order > 0) and true) or false
+        local __order = ((imports.type(j) == "table") and #j) or false
+        __order = (__order and (__order > 0) and __order) or false
+        isValid = (isValid and __order and (not order or (order == __order)) and true) or false
         if isValid then
             order = __order
-            for k = 1, #__order, 1 do
-                __order[k] = imports.tonumber(__order[k])
-                if not __order[k] then
+            for k = 1, __order, 1 do
+                j[k] = imports.tonumber(j[k])
+                if not j[k] then
                     isValid = false
                     break
                 end
@@ -44,7 +46,9 @@ matrix.public.__call = function(_, ...)
         end
         if not isValid then break end
     end
+    if not isValid then return false end
     local cMatrix = matrix.public:createInstance()
+    imports.setmetatable(cMatrix, matrix.public)
     cMatrix.order = {#rows, order}
     cMatrix.rows = rows
     return cMatrix
@@ -59,49 +63,50 @@ end
 matrix.public.__add = function(matrixLHS, matrixRHS)
     if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order[1] ~= matrixRHS.order[1]) or (matrixLHS.order[2] ~= matrixRHS.order[2]) then return false end
     local rows = {}
-    for i = 1, #matrixLHS.order[1], 1 do
-        for k = 1, #matrixLHS.order[2], 1 do
-            rows[i] = rows[i] or {}
+    for i = 1, matrixLHS.order[1], 1 do
+        rows[i] = rows[i] or {}
+        for k = 1, matrixLHS.order[2], 1 do
+            rows[i][k] = rows[i][k] or {}
             rows[i][k] = matrixLHS.rows[i][k] + matrixRHS.rows[i][k]
         end
     end
-    return matrix.public(rows)
+    return matrix.public(table:unpack(rows))
 end
 
 matrix.public.__sub = function(matrixLHS, matrixRHS)
     if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order[1] ~= matrixRHS.order[1]) or (matrixLHS.order[2] ~= matrixRHS.order[2]) then return false end
     local rows = {}
-    for i = 1, #matrixLHS.order[1], 1 do
-        for k = 1, #matrixLHS.order[2], 1 do
+    for i = 1, matrixLHS.order[1], 1 do
+        for k = 1, matrixLHS.order[2], 1 do
             rows[i] = rows[i] or {}
             rows[i][k] = matrixLHS.rows[i][k] - matrixRHS.rows[i][k]
         end
     end
-    return matrix.public(rows)
+    return matrix.public(table:unpack(rows))
 end
 
 matrix.public.__mul = function(matrixLHS, matrixRHS)
     if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order[1] ~= matrixRHS.order[1]) or (matrixLHS.order[2] ~= matrixRHS.order[2]) then return false end
     local rows = {}
-    for i = 1, #matrixLHS.order[1], 1 do
-        for k = 1, #matrixLHS.order[2], 1 do
+    for i = 1, matrixLHS.order[1], 1 do
+        for k = 1, matrixLHS.order[2], 1 do
             rows[i] = rows[i] or {}
             rows[i][k] = matrixLHS.rows[i][k] * matrixRHS.rows[i][k]
         end
     end
-    return matrix.public(rows)
+    return matrix.public(table:unpack(rows))
 end
 
 matrix.public.__div = function(matrixLHS, matrixRHS)
     if not matrix.public:isInstance(matrixLHS) or not matrix.public:isInstance(matrixRHS) or (matrixLHS.order[1] ~= matrixRHS.order[1]) or (matrixLHS.order[2] ~= matrixRHS.order[2]) then return false end
     local rows = {}
-    for i = 1, #matrixLHS.order[1], 1 do
-        for k = 1, #matrixLHS.order[2], 1 do
+    for i = 1, matrixLHS.order[1], 1 do
+        for k = 1, matrixLHS.order[2], 1 do
             rows[i] = rows[i] or {}
             rows[i][k] = matrixLHS.rows[i][k] / matrixRHS.rows[i][k]
         end
     end
-    return matrix.public(rows)
+    return matrix.public(table:unpack(rows))
 end
 
 function matrix.public:scale(scale)
@@ -146,6 +151,7 @@ function matrix.public:fromRotation(rotX, rotY, rotZ)
 end
 
 --TODO: WIP..
+--[[
 math.matrix = {
     transform = function(elemMatrix, rotMatrix, x, y, z, isAbsoluteRotation, isDuplication)
         if (self ~= matrix.public) or (self ~= matrix.private) then return false end
@@ -186,3 +192,4 @@ math.matrix = {
         }
     end
 }
+]]
