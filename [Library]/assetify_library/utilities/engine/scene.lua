@@ -107,6 +107,7 @@ if localPlayer then
         if self.cStreamer then self.cStreamer:destroy() end
         imports.destroyElement(self.cStreamerInstance)
         imports.destroyElement(self.cModelInstance)
+        imports.destroyElement(self.cLODInstance)
         imports.destroyElement(self.cCollisionInstance)
         self:destroyInstance()
         return true
