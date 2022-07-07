@@ -159,7 +159,7 @@ if localPlayer then
         bone.public.cache.element[(self.parent)] = bone.public.cache.element[(self.parent)] or {}
         bone.public.cache.element[(self.parent)][(self.boneData.id)] = ((bone.public.cache.element[(self.parent)].streamTick == bone.public.cache.streamTick) and bone.public.cache.element[(self.parent)][(self.boneData.id)]) or imports.getElementBoneMatrix(self.parent, self.boneData.id)
         bone.public.cache.element[(self.parent)].streamTick = bone.public.cache.streamTick
-        local cMatrix, rotationMatrix = bone.public.cache.element[(self.parent)][(self.boneData.id)], self.boneData.rotationMatrix.rows
+        local cMatrix, rotationMatrix = bone.public.cache.element[(self.parent)][(self.boneData.id)], self.boneData.rotationMatrix
         local offX, offY, offZ = self.boneData.position.x, self.boneData.position.y, self.boneData.position.z
         imports.setElementMatrix(self.element, {
             {
