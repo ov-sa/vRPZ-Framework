@@ -296,7 +296,9 @@ if localPlayer then
             thread:create(function(self)
                 for i, j in imports.pairs(cAsset.unSynced.assetCache) do
                     if j.cAsset then
-                        if j.cAsset.cScene then j.cAsset.cScene:destroy() end
+                        for i, j in imports.pairs(j.cAsset.cScenes) do
+                            if i and j then i:destroy() end
+                        end
                         j.cAsset:destroy(cAsset.unSynced.rwCache)
                     end
                     if j.cDummy then j.cDummy:destroy() end
