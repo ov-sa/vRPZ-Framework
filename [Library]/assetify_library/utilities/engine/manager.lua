@@ -50,7 +50,7 @@ function manager.public:exportAPI(moduleName, moduleAPIs)
         if (i  == "shared") or (i == "whitelistedAPI") then
             for k = 1, #j, 1 do
                 local v = j[k]
-                imports.loadstring([[function ]]..v.name..[[(...) return manager.public.]]..moduleName..[[:]]..v.API..[[(...) end]])()
+                imports.loadstring([[function ]]..v.name..[[(...) return manager.API.]]..moduleName..[[:]]..v.API..[[(...) end]])()
             end
         end
     end
@@ -69,7 +69,7 @@ function manager.public:fetchAssets(assetType)
     else
         for i, j in imports.pairs(settings.assetPacks[assetType].assetPack.manifestData) do
             if settings.assetPacks[assetType].assetPack.rwDatas[j] then
-                imports.table:insert(cAssets, j)
+                table:insert(cAssets, j)
             end
         end
     end
@@ -166,7 +166,7 @@ if localPlayer then
         local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
         local unSynced = cAsset.unSynced
         if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
-            cAsset = imports.table:clone(cAsset, true)
+            cAsset = table:clone(cAsset, true)
             cAsset.manifestData.encryptKey = nil
             cAsset.unSynced = nil
         end
@@ -330,7 +330,7 @@ else
         if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
             cAsset = cAsset.synced
             if cAsset.manifestData.encryptKey then
-                cAsset = imports.table:clone(cAsset, true)
+                cAsset = table:clone(cAsset, true)
                 cAsset.manifestData.encryptKey = nil
             end
         end
