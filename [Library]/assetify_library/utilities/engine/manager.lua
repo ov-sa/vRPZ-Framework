@@ -50,7 +50,7 @@ function manager.public:exportAPI(moduleName, moduleAPIs)
         if (i  == "shared") or (i == "whitelistedAPI") then
             for k = 1, #j, 1 do
                 local v = j[k]
-                imports.loadstring([[function ]]..v.name..[[(...) return manager.]]..moduleName..[[:]]..v.API..[[(...) end]])()
+                imports.loadstring([[function ]]..v.name..[[(...) return manager.public.]]..moduleName..[[:]]..v.API..[[(...) end]])()
             end
         end
     end
