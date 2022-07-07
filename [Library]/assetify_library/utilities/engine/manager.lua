@@ -33,7 +33,7 @@ local manager = class:create("manager", {
     API = {}
 })
 manager.private.rwFormat = {
-    assetCache = {},
+    assetRef = {}, assetCache = {},
     rwCache = {
         ifp = {}, sound = {}, txd = {}, dff = {}, lod = {}, col = {}, map = {}, dep = {}
     }
@@ -230,16 +230,21 @@ if localPlayer then
                         sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z = cQuat:toEuler()
                         cQuat:destroy()
                         if not cAsset.manifestData.sceneMapped then
-                            asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache[i], {
-                                txd = (sceneIDEDatas and sceneIDEDatas[(j[2])] and assetPath.."txd/"..(sceneIDEDatas[(j[2])][1])..".txd") or assetPath..(asset.references.asset)..".txd",
-                                dff = assetPath.."dff/"..j[2]..".dff",
-                                lod = assetPath.."dff/lod/"..j[2]..".dff",
-                                col = assetPath.."col/"..j[2]..".col"
-                            }, function(state)
-                                if state then
-                                    scene:create(cAsset.unSynced.assetCache[i].cAsset, cAsset.manifestData, sceneData)
-                                end
-                            end)
+                            if cAsset.unSynced.assetRef[(j[2])] then
+                                scene:create(cAsset.unSynced.assetRef[(j[2])], cAsset.manifestData, sceneData)
+                            else
+                                asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache[i], {
+                                    txd = (sceneIDEDatas and sceneIDEDatas[(j[2])] and assetPath.."txd/"..(sceneIDEDatas[(j[2])][1])..".txd") or assetPath..(asset.references.asset)..".txd",
+                                    dff = assetPath.."dff/"..j[2]..".dff",
+                                    lod = assetPath.."dff/lod/"..j[2]..".dff",
+                                    col = assetPath.."col/"..j[2]..".col"
+                                }, function(state)
+                                    if state then
+                                        cAsset.unSynced.assetRef[(j[2])] = cAsset.unSynced.assetCache[i].cAsset
+                                        scene:create(cAsset.unSynced.assetRef[(j[2])], cAsset.manifestData, sceneData)
+                                    end
+                                end)
+                            end
                         else
                             sceneData.position.x, sceneData.position.y, sceneData.position.z = sceneData.position.x + ((cAsset.manifestData.sceneOffset and cAsset.manifestData.sceneOffset.x) or 0), sceneData.position.y + ((cAsset.manifestData.sceneOffset and cAsset.manifestData.sceneOffset.y) or 0), sceneData.position.z + ((cAsset.manifestData.sceneOffset and cAsset.manifestData.sceneOffset.z) or 0)
                             sceneData.dimension = cAsset.manifestData.sceneDimension
