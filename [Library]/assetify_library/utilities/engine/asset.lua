@@ -130,7 +130,7 @@ if localPlayer then
             end
         else
             if not assetPack.assetType then return false end
-            local modelID, collisionID = false, false
+            local modelID, lodID, collisionID = false, false, false
             if rwPaths.dff then
                 modelID = imports.engineRequestModel(assetPack.assetType, (assetManifest.assetBase and (imports.type(assetManifest.assetBase) == "number") and assetManifest.assetBase) or assetPack.assetBase or nil)
                 if modelID then
@@ -141,9 +141,10 @@ if localPlayer then
                     else
                         if rwPaths.lod then
                             rwCache.lod[(rwPaths.lod)] = (not rwCache.lod[(rwPaths.lod)] and file:exists(rwPaths.lod) and imports.engineLoadDFF(asset.public:readFile(file:read(rwPaths.lod), assetManifest.encryptKey) or rwPaths.lod)) or false
+                            lodID = (rwCache.lod[(rwPaths.lod)] and imports.engineRequestModel(assetPack.assetType, assetPack.assetBase)) or false
                         end
                         rwCache.col[(rwPaths.col)] = (not rwCache.col[(rwPaths.col)] and file:exists(rwPaths.col) and imports.engineLoadCOL(asset.public:readFile(file:read(rwPaths.col), assetManifest.encryptKey) or rwPaths.col)) or false
-                        collisionID = collisionID or (rwCache.col[(rwPaths.col)] and imports.engineRequestModel(assetPack.assetType, assetPack.assetBase)) or collisionID
+                        collisionID = (rwCache.col[(rwPaths.col)] and imports.engineRequestModel(assetPack.assetType, assetPack.assetBase)) or false
                         imports.engineSetModelLODDistance(modelID, asset.public.ranges.streamRange)
                         if collisionID then
                             imports.engineSetModelLODDistance(collisionID, asset.public.ranges.streamRange)
@@ -171,6 +172,7 @@ if localPlayer then
                 self.rwPaths = rwPaths
                 self.synced = {
                     modelID = modelID,
+                    lodID = lodID,
                     collisionID = collisionID
                 }
                 loadState = true
