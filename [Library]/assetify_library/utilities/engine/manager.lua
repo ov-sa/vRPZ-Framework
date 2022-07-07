@@ -45,9 +45,8 @@ manager.private.buffer = {
 
 function manager.public:exportAPI(moduleName, moduleAPIs)
     if not moduleName or (imports.type(moduleName) ~= "string") or not moduleAPIs or (imports.type(moduleAPIs) ~= "table") then return false end
-    local whitelistedAPI = (localPlayer and "client") or "server"
     for i, j in imports.pairs(moduleAPIs) do
-        if (i  == "shared") or (i == "whitelistedAPI") then
+        if (i  == "shared") or (i == ((localPlayer and "client") or "server")) then
             for k = 1, #j, 1 do
                 local v = j[k]
                 imports.loadstring([[function ]]..v.name..[[(...) return manager.API.]]..moduleName..[[:]]..v.API..[[(...) end]])()
