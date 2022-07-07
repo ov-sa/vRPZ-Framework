@@ -79,7 +79,7 @@ if localPlayer then
         if not scene.public:isInstance(self) then return false end
         if not cAsset or not sceneManifest or not sceneData or not cAsset.synced then return false end
         local posX, posY, posZ, rotX, rotY, rotZ = sceneData.position.x + ((sceneManifest.sceneOffset and sceneManifest.sceneOffset.x) or 0), sceneData.position.y + ((sceneManifest.sceneOffset and sceneManifest.sceneOffset.y) or 0), sceneData.position.z + ((sceneManifest.sceneOffset and sceneManifest.sceneOffset.z) or 0), sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z
-        self.cStreamerInstance = imports.createObject(cAsset.synced.modelID, posX, posY, posZ, rotX, rotY, rotZ, (sceneManifest.enableLODs and cAsset.synced.collisionID and true) or false)
+        self.cStreamerInstance = imports.createObject(cAsset.synced.modelID, posX, posY, posZ, rotX, rotY, rotZ, (sceneManifest.enableLODs and not cAsset.synced.lodID and cAsset.synced.collisionID and true) or false)
         imports.setElementDoubleSided(self.cStreamerInstance, true)
         if cAsset.synced.collisionID then
             self.cCollisionInstance = imports.createObject(cAsset.synced.collisionID, posX, posY, posZ, rotX, rotY, rotZ)
@@ -88,13 +88,20 @@ if localPlayer then
             imports.setElementInterior(self.cCollisionInstance, sceneManifest.sceneInterior)
             if sceneManifest.enableLODs then
                 self.cModelInstance = imports.createObject(cAsset.synced.collisionID, posX, posY, posZ, rotX, rotY, rotZ, true)
+                self.cLODInstance = (cAsset.synced.lodID and imports.createObject(cAsset.synced.lodID, posX, posY, posZ, rotX, rotY, rotZ, true)) or false
                 imports.attachElements(self.cModelInstance, self.cCollisionInstance)
                 imports.setElementAlpha(self.cModelInstance, 0)
                 imports.setElementDimension(self.cModelInstance, sceneManifest.sceneDimension)
                 imports.setElementInterior(self.cModelInstance, sceneManifest.sceneInterior)
+                if self.cLODInstance then
+                    imports.attachElements(self.cLODInstance, self.cCollisionInstance)
+                    imports.setElementDimension(self.cLODInstance, sceneManifest.sceneDimension)
+                    imports.setElementInterior(self.cLODInstance, sceneManifest.sceneInterior)
+                end
                 self.cStreamer = streamer:create(self.cStreamerInstance, "scene", {self.cCollisionInstance, self.cModelInstance})
             else
                 self.cModelInstance = self.cStreamerInstance
+                self.cLODInstance = false
                 self.cStreamer = streamer:create(self.cStreamerInstance, "scene", {self.cCollisionInstance})
             end
         end
@@ -107,6 +114,7 @@ if localPlayer then
         if self.cStreamer then self.cStreamer:destroy() end
         imports.destroyElement(self.cStreamerInstance)
         imports.destroyElement(self.cModelInstance)
+        imports.destroyElement(self.cLODInstance)
         imports.destroyElement(self.cCollisionInstance)
         self:destroyInstance()
         return true
