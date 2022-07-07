@@ -134,12 +134,14 @@ if localPlayer then
             if rwPaths.dff then
                 modelID = imports.engineRequestModel(assetPack.assetType, (assetManifest.assetBase and (imports.type(assetManifest.assetBase) == "number") and assetManifest.assetBase) or assetPack.assetBase or nil)
                 if modelID then
-                    rwCache.lod[(rwPaths.lod)] = (not rwCache.lod[(rwPaths.lod)] and file:exists(rwPaths.lod) and imports.engineLoadDFF(asset.public:readFile(file:read(rwPaths.lod), assetManifest.encryptKey) or rwPaths.lod)) or false
                     rwCache.dff[(rwPaths.dff)] = (not rwCache.dff[(rwPaths.dff)] and file:exists(rwPaths.dff) and imports.engineLoadDFF(asset.public:readFile(file:read(rwPaths.dff), assetManifest.encryptKey) or rwPaths.dff)) or false
                     if not rwCache.dff[(rwPaths.dff)] then
                         imports.engineFreeModel(modelID)
                         return false
                     else
+                        if rwPaths.lod then
+                            rwCache.lod[(rwPaths.lod)] = (not rwCache.lod[(rwPaths.lod)] and file:exists(rwPaths.lod) and imports.engineLoadDFF(asset.public:readFile(file:read(rwPaths.lod), assetManifest.encryptKey) or rwPaths.lod)) or false
+                        end
                         rwCache.col[(rwPaths.col)] = (not rwCache.col[(rwPaths.col)] and file:exists(rwPaths.col) and imports.engineLoadCOL(asset.public:readFile(file:read(rwPaths.col), assetManifest.encryptKey) or rwPaths.col)) or false
                         collisionID = collisionID or (rwCache.col[(rwPaths.col)] and imports.engineRequestModel(assetPack.assetType, assetPack.assetBase)) or collisionID
                         imports.engineSetModelLODDistance(modelID, asset.public.ranges.streamRange)
@@ -420,8 +422,8 @@ else
                                         cAssetPack.rwDatas[assetName].synced.sceneIDE = (sceneIDEDatas and true) or false
                                         for k = 1, #sceneIPLDatas, 1 do
                                             local v = sceneIPLDatas[k]
-                                            asset.public:buildFile(assetPath.."dff/lod/"..v[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                             asset.public:buildFile(assetPath.."dff/"..v[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
+                                            asset.public:buildFile(assetPath.."dff/lod/"..v[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                             asset.public:buildFile(assetPath.."col/"..v[2]..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                             if sceneIDEDatas and sceneIDEDatas[(v[2])] then
                                                 asset.public:buildFile(assetPath.."txd/"..(sceneIDEDatas[(v[2])][1])..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)

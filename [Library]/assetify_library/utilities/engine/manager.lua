@@ -233,8 +233,8 @@ if localPlayer then
                         if not cAsset.manifestData.sceneMapped then
                             asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache[i], {
                                 txd = (sceneIDEDatas and sceneIDEDatas[(j[2])] and assetPath.."txd/"..(sceneIDEDatas[(j[2])][1])..".txd") or assetPath..(asset.references.asset)..".txd",
-                                lod = assetPath.."dff/lod/"..j[2]..".dff",
                                 dff = assetPath.."dff/"..j[2]..".dff",
+                                lod = assetPath.."dff/lod/"..j[2]..".dff",
                                 col = assetPath.."col/"..j[2]..".col"
                             }, function(state)
                                 if state then
