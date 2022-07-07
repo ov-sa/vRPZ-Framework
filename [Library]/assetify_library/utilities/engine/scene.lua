@@ -95,7 +95,6 @@ if localPlayer then
                 self.cStreamer = streamer:create(self.cStreamerInstance, "scene", {self.cCollisionInstance, self.cModelInstance})
             else
                 self.cModelInstance = self.cStreamerInstance
-                self.cLODInstance = false
                 self.cStreamer = streamer:create(self.cStreamerInstance, "scene", {self.cCollisionInstance})
             end
         end
@@ -108,7 +107,6 @@ if localPlayer then
         if self.cStreamer then self.cStreamer:destroy() end
         imports.destroyElement(self.cStreamerInstance)
         imports.destroyElement(self.cModelInstance)
-        imports.destroyElement(self.cLODInstance)
         imports.destroyElement(self.cCollisionInstance)
         self:destroyInstance()
         return true
