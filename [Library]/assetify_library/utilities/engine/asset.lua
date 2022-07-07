@@ -156,17 +156,17 @@ if localPlayer then
                 rwCache.txd[(rwPaths.txd)] = (not rwCache.txd[(rwPaths.txd)] and file:exists(rwPaths.txd) and imports.engineLoadTXD(asset.public:readFile(file:read(rwPaths.txd), assetManifest.encryptKey) or rwPaths.txd)) or false
                 if rwCache.txd[(rwPaths.txd)] then
                     imports.engineImportTXD(rwCache.txd[(rwPaths.txd)], modelID)
+                    if lodID then imports.engineImportTXD(rwCache.txd[(rwPaths.txd)], lodID) end
                 end
                 imports.engineReplaceModel(rwCache.dff[(rwPaths.dff)], modelID, (assetManifest and assetManifest.assetTransparency and true) or assetPack.assetTransparency)
+                if lodID then imports.engineReplaceModel(rwCache.lod[(rwPaths.lod)], lodID, (assetManifest and assetManifest.assetTransparency and true) or assetPack.assetTransparency) end
                 if collisionID then
+                    imports.engineReplaceCOL(rwCache.col[(rwPaths.col)], modelID)
+                    if lodID then imports.engineReplaceCOL(rwCache.col[(rwPaths.col)], lodID) end
+                    --TODO: POSSIBLY USE HELPER TO SET INVISIBLE?
                     imports.engineImportTXD(asset.public.rwAssets.txd, collisionID)
                     imports.engineReplaceModel(asset.public.rwAssets.dff, collisionID, false)
-                end
-                if rwCache.col[(rwPaths.col)] then
-                    imports.engineReplaceCOL(rwCache.col[(rwPaths.col)], modelID)
-                    if collisionID then
-                        imports.engineReplaceCOL(rwCache.col[(rwPaths.col)], collisionID)
-                    end
+                    imports.engineReplaceCOL(rwCache.col[(rwPaths.col)], collisionID)
                 end
                 assetData.cAsset = self
                 self.rwPaths = rwPaths
