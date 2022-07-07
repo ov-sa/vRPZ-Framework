@@ -65,7 +65,6 @@ dbify.mysql = {
             if not tableName or (imports.type(tableName) ~= "string") or not callback or (imports.type(callback) ~= "function") then return false end
             local promise = function()
                 imports.dbQuery(function(queryHandler, cArgs)
-                    local callback = callback
                     local result = imports.dbPoll(queryHandler, 0)
                     result = ((result and (#result > 0)) and true) or false
                     execFunction(callback, result, cArgs)
@@ -100,7 +99,6 @@ dbify.mysql = {
                                 queryString = queryString.." `??`=?"..(((i < #cArgs[1].keyColumns) and " AND") or "")
                             end
                             imports.dbQuery(function(queryHandler, cArgs)
-                                local callback = callback
                                 local result = imports.dbPoll(queryHandler, 0)
                                 if result and (#result > 0) then
                                     execFunction(callback, result, cArgs)
@@ -177,7 +175,6 @@ dbify.mysql = {
                         end
                         queryString = queryString..")"
                         imports.dbQuery(function(queryHandler, cArgs)
-                            local callback = callback
                             local result = imports.dbPoll(queryHandler, 0)
                             result = ((result and (#result >= #cArgs[1])) and true) or false
                             execFunction(callback, result, cArgs[2])

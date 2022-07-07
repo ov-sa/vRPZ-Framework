@@ -40,7 +40,6 @@ dbify.character = {
         if not callback or (imports.type(callback) ~= "function") then return false end
         local promise = function()
             imports.dbQuery(function(queryHandler, cArgs)
-                local callback = callback
                 local _, _, characterID = imports.dbPoll(queryHandler, 0)
                 local result = characterID or false
                 execFunction(callback, result, cArgs)
@@ -57,7 +56,6 @@ dbify.character = {
         if not characterID or (imports.type(characterID) ~= "number") then return false end
         local promise = function()
             return dbify.character.getData(characterID, {dbify.character.connection.key}, function(result, cArgs)
-                local callback = callback
                 if result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.character.connection.table, dbify.character.connection.key, characterID)
                     execFunction(callback, result, cArgs)

@@ -42,7 +42,6 @@ dbify.account = {
         if not accountName or (imports.type(accountName) ~= "string") then return false end
         local promise = function()
             return dbify.account.getData(accountName, {dbify.account.connection.key}, function(result, cArgs)
-                local callback = callback
                 if not result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(?)", dbify.account.connection.table, dbify.account.connection.key, accountName)
                     execFunction(callback, result, cArgs)
@@ -61,7 +60,6 @@ dbify.account = {
         if not accountName or (imports.type(accountName) ~= "string") then return false end
         local promise = function()
             return dbify.account.getData(accountName, {dbify.account.connection.key}, function(result, cArgs)
-                local callback = callback
                 if result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.account.connection.table, dbify.account.connection.key, accountName)
                     execFunction(callback, result, cArgs)
