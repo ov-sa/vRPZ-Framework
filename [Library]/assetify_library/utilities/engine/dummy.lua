@@ -25,6 +25,7 @@ local imports = {
     setElementAlpha = setElementAlpha,
     setElementModel = setElementModel,
     setElementDoubleSided = setElementDoubleSided,
+    setElementCollisionsEnabled = setElementCollisionsEnabled,
     setElementDimension = setElementDimension,
     setElementInterior = setElementInterior
 }
@@ -115,6 +116,7 @@ if localPlayer then
             if dummyType == "object" then imports.setElementDoubleSided(self.cModelInstance, true) end
             network:emit("Assetify:Syncer:onSyncElementModel", false, self.cModelInstance, assetType, assetName, assetClump, clumpMaps, remoteSignature)
             imports.setElementAlpha(self.cModelInstance, 255)
+            imports.setElementCollisionsEnabled(self.cModelInstance, false)
             imports.setElementDimension(self.cModelInstance, dummyData.dimension)
             imports.setElementInterior(self.cModelInstance, dummyData.interior)
             if self.cCollisionInstance then
