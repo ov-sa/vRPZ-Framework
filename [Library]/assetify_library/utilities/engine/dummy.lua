@@ -132,7 +132,7 @@ if localPlayer then
         return true
     end
 else
-    function dummy.public:create(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer)
+    function dummy.public:load(assetType, assetName, assetClump, clumpMaps, dummyData, targetPlayer)
         if not dummy.public:isInstance(self) or self.isUnloading then return false end
         if targetPlayer then return network:emit("Assetify:Dummy:onSpawn", true, false, targetPlayer, self.assetType, self.assetName, self.assetClump, self.clumpMaps, self.dummyData, self.remoteSignature) end
         local cAsset = manager:getAssetData(assetType, assetName)
