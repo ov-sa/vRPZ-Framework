@@ -29,6 +29,7 @@ local bundler = {
         "utilities/sandbox/table.lua",
         "utilities/sandbox/math/index.lua",
         "utilities/sandbox/math/quat.lua",
+        "utilities/sandbox/math/matrix.lua",
         "utilities/sandbox/string.lua"
     },
     modules = {
