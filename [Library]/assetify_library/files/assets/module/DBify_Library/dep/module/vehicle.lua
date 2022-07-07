@@ -40,12 +40,9 @@ dbify.vehicle = {
         if not callback or (imports.type(callback) ~= "function") then return false end
         local promise = function()
             imports.dbQuery(function(queryHandler, cArgs)
-                local callback = callback
                 local _, _, vehicleID = imports.dbPoll(queryHandler, 0)
                 local result = vehicleID or false
-                if callback and (imports.type(callback) == "function") then
-                    callback(result, cArgs)
-                end
+                execFunction(callback, result, cArgs)
             end, {cArgs}, dbify.mysql.connection.instance, "INSERT INTO `??` (`??`) VALUES(NULL)", dbify.vehicle.connection.table, dbify.vehicle.connection.key)
             return true
         end
@@ -59,16 +56,11 @@ dbify.vehicle = {
         if not vehicleID or (imports.type(vehicleID) ~= "number") then return false end
         local promise = function()
             return dbify.vehicle.getData(vehicleID, {dbify.vehicle.connection.key}, function(result, cArgs)
-                local callback = callback
                 if result then
                     result = imports.dbExec(dbify.mysql.connection.instance, "DELETE FROM `??` WHERE `??`=?", dbify.vehicle.connection.table, dbify.vehicle.connection.key, vehicleID)
-                    if callback and (imports.type(callback) == "function") then
-                        callback(result, cArgs)
-                    end
+                    execFunction(callback, result, cArgs)
                 else
-                    if callback and (imports.type(callback) == "function") then
-                        callback(false, cArgs)
-                    end
+                    execFunction(callback, false, cArgs)
                 end
             end, imports.table:unpack(cArgs))
         end
