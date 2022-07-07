@@ -122,7 +122,7 @@ function matrix.public:scale(scale)
 end
 
 function matrix.public:fromLocation(x, y, z, rotX, rotY, rotZ)
-    if (self ~= matrix.public) or (self ~= matrix.private) then return false end
+    if (self ~= matrix.public) and (self ~= matrix.private) then return false end
     x, y, z, rotX, rotY, rotZ = imports.tonumber(x), imports.tonumber(y), imports.tonumber(z), imports.tonumber(rotX), imports.tonumber(rotY), imports.tonumber(rotZ)
     if not x or not y or not z or not rotX or not rotY or not rotZ then return false end
     rotX, rotY, rotZ = math.rad(rotX), math.rad(rotY), math.rad(rotZ)
@@ -137,7 +137,7 @@ function matrix.public:fromLocation(x, y, z, rotX, rotY, rotZ)
 end
 
 function matrix.public:fromRotation(rotX, rotY, rotZ)
-    if (self ~= matrix.public) or (self ~= matrix.private) then return false end
+    if (self ~= matrix.public) and (self ~= matrix.private) then return false end
     rotX, rotY, rotZ = imports.tonumber(rotX), imports.tonumber(rotY), imports.tonumber(rotZ)
     if not rotX or not rotY or not rotZ then return false end
     rotX, rotY, rotZ = math.rad(rotX), math.rad(rotY), math.rad(rotZ)
@@ -154,7 +154,7 @@ end
 --[[
 math.matrix = {
     transform = function(elemMatrix, rotMatrix, x, y, z, isAbsoluteRotation, isDuplication)
-        if (self ~= matrix.public) or (self ~= matrix.private) then return false end
+        if (self ~= matrix.public) and (self ~= matrix.private) then return false end
         if not elemMatrix or not rotMatrix or not x or not y or not z then return false end
         if isAbsoluteRotation then
             if isDuplication then elemMatrix = table.clone(elemMatrix, true) end
@@ -192,4 +192,15 @@ math.matrix = {
         }
     end
 }
+]]
+
+
+local test1 = matrix.public:fromRotation(90, 45, 180)
+--iprint(test1.rows)
+
+--[[
+local test1 = matrix.public({1, 1, 1, 1}, {2, 2, 2, 2}, {2, 2, 2, 2})
+local test2 = matrix.public({1, 1, 1, 1}, {2, 2, 2, 2}, {2, 2, 2, 2})
+local resultant = test1 + test2
+print(resultant)
 ]]
