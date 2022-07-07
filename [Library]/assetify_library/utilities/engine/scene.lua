@@ -95,6 +95,7 @@ if localPlayer then
                 self.cStreamer = streamer:create(self.cStreamerInstance, "scene", {self.cCollisionInstance, self.cModelInstance})
             else
                 self.cModelInstance = self.cStreamerInstance
+                self.cLODInstance = false
                 self.cStreamer = streamer:create(self.cStreamerInstance, "scene", {self.cCollisionInstance})
             end
         end
