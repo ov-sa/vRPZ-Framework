@@ -116,7 +116,6 @@ if localPlayer then
             if dummyType == "object" then imports.setElementDoubleSided(self.cModelInstance, true) end
             network:emit("Assetify:Syncer:onSyncElementModel", false, self.cModelInstance, assetType, assetName, assetClump, clumpMaps, remoteSignature)
             imports.setElementAlpha(self.cModelInstance, 255)
-            imports.setElementCollisionsEnabled(self.cModelInstance, false)
             imports.setElementDimension(self.cModelInstance, dummyData.dimension)
             imports.setElementInterior(self.cModelInstance, dummyData.interior)
             if self.cCollisionInstance then
@@ -124,6 +123,7 @@ if localPlayer then
                 imports.setElementModel(self.cCollisionInstance, cData.collisionID)
                 imports.setElementDimension(self.cCollisionInstance, dummyData.dimension)
                 imports.setElementInterior(self.cCollisionInstance, dummyData.interior)
+                imports.setElementCollisionsEnabled(self.cModelInstance, false)
                 self.cStreamer = streamer:create(self.cModelInstance, "dummy", {self.cCollisionInstance}, self.syncRate)
             end
             self.cHeartbeat = nil
