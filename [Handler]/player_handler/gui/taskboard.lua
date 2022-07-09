@@ -79,7 +79,7 @@ CGame.execOnModuleLoad(function()
         if taskboardUI.state then return false end
         if not x or not y or not width or not height or not header or not contents or (imports.type(contents) ~= "table") or (#contents <= 0) then return false end
         taskboardUI.viewContents = taskboardUI.createContents(contents)
-        taskboardUI.startX, taskboardUI.startY, taskboardUI.width, taskboardUI.height = x, y, imports.math.max(FRAMEWORK_CONFIGS["UI"]["Taskboard"]["Contents"].height, width), (height and imports.math.max(FRAMEWORK_CONFIGS["UI"]["Taskboard"]["Contents"].height + FRAMEWORK_CONFIGS["UI"]["Taskboard"]["Contents"].dividerSize, height)) or height
+        taskboardUI.startX, taskboardUI.startY, taskboardUI.width, taskboardUI.height = x, y, imports.math:max(FRAMEWORK_CONFIGS["UI"]["Taskboard"]["Contents"].height, width), (height and imports.math:max(FRAMEWORK_CONFIGS["UI"]["Taskboard"]["Contents"].height + FRAMEWORK_CONFIGS["UI"]["Taskboard"]["Contents"].dividerSize, height)) or height
         taskboardUI.header = imports.string:upper(imports.string:kern(imports.tostring(header), "  "))
         taskboardUI.viewRT = imports.beautify.native.createRenderTarget(taskboardUI.width, taskboardUI.height, true)
         taskboardUI.executeContent(taskboardUI.viewContents)
@@ -134,7 +134,7 @@ CGame.execOnModuleLoad(function()
             content = taskboardUI.contentView[(#taskboardUI.contentView)]
             taskboardUI.scroller.animPercent, taskboardUI.scroller.percent = 0, 0
             taskboardUI.contentHeight = #content*(FRAMEWORK_CONFIGS["UI"]["Taskboard"]["Contents"].height + FRAMEWORK_CONFIGS["UI"]["Taskboard"]["Contents"].dividerSize)
-            taskboardUI.viewHeight = (not taskboardUI.height and taskboardUI.contentHeight) or imports.math.min(imports.math.max(FRAMEWORK_CONFIGS["UI"]["Taskboard"]["Contents"].height, taskboardUI.height), taskboardUI.contentHeight)
+            taskboardUI.viewHeight = (not taskboardUI.height and taskboardUI.contentHeight) or imports.math:min(imports.math:max(FRAMEWORK_CONFIGS["UI"]["Taskboard"]["Contents"].height, taskboardUI.height), taskboardUI.contentHeight)
         end
         return true
     end
@@ -167,10 +167,10 @@ CGame.execOnModuleLoad(function()
             local view_contents = taskboardUI.contentView[(#taskboardUI.contentView)]
             local bufferCount = #view_contents
             local row_height = FRAMEWORK_CONFIGS["UI"]["Taskboard"]["Contents"].height + FRAMEWORK_CONFIGS["UI"]["Taskboard"]["Contents"].dividerSize
-            local view_overflownHeight = imports.math.max(0, (row_height*bufferCount) - taskboardUI.viewHeight)
+            local view_overflownHeight = imports.math:max(0, (row_height*bufferCount) - taskboardUI.viewHeight)
             local offsetY = view_overflownHeight*taskboardUI.scroller.animPercent*0.01
-            local row_startIndex = imports.math.floor(offsetY/row_height) + 1
-            local row_endIndex = imports.math.min(bufferCount, row_startIndex + imports.math.ceil(taskboardUI.viewHeight/row_height))
+            local row_startIndex = imports.math:floor(offsetY/row_height) + 1
+            local row_endIndex = imports.math:min(bufferCount, row_startIndex + imports.math:ceil(taskboardUI.viewHeight/row_height))
             imports.beautify.native.drawRectangle(view_startX, view_startY, taskboardUI.width, FRAMEWORK_CONFIGS["UI"]["Taskboard"].titlebar.height, taskboardUI.titlebar.bgColor, false)
             view_startY = view_startY + FRAMEWORK_CONFIGS["UI"]["Taskboard"].titlebar.height
             imports.beautify.native.drawRectangle(view_startX, view_startY, taskboardUI.width, FRAMEWORK_CONFIGS["UI"]["Taskboard"].titlebar.dividerSize, taskboardUI.titlebar.dividerColor, false)
@@ -223,7 +223,7 @@ CGame.execOnModuleLoad(function()
                     taskboardUI.scroller.height = taskboardUI.viewHeight
                     taskboardUI.scroller.isPositioned = true
                 end
-                if imports.math.round(taskboardUI.scroller.animPercent, 2) ~= imports.math.round(taskboardUI.scroller.percent, 2) then
+                if imports.math:round(taskboardUI.scroller.animPercent, 2) ~= imports.math:round(taskboardUI.scroller.percent, 2) then
                     taskboardUI.scroller.animPercent = imports.interpolateBetween(taskboardUI.scroller.animPercent, 0, 0, taskboardUI.scroller.percent, 0, 0, 0.5, "InQuad")
                 end
                 FRAMEWORK_CONFIGS["UI"]["Taskboard"].scroller.thumbHeight = ((FRAMEWORK_CONFIGS["UI"]["Taskboard"].scroller.thumbHeight >= taskboardUI.scroller.height) and (taskboardUI.scroller.height*0.5)) or FRAMEWORK_CONFIGS["UI"]["Taskboard"].scroller.thumbHeight
@@ -231,8 +231,8 @@ CGame.execOnModuleLoad(function()
                 imports.beautify.native.drawRectangle(view_startX + taskboardUI.scroller.startX, view_startY + taskboardUI.scroller.startY + ((taskboardUI.scroller.height - FRAMEWORK_CONFIGS["UI"]["Taskboard"].scroller.thumbHeight)*taskboardUI.scroller.animPercent*0.01), FRAMEWORK_CONFIGS["UI"]["Taskboard"].scroller.width, FRAMEWORK_CONFIGS["UI"]["Taskboard"].scroller.thumbHeight, taskboardUI.scroller.thumbColor, false)
                 isTaskboardHovered = isTaskboardHovered or imports.isMouseOnPosition(view_startX, view_startY, taskboardUI.width, taskboardUI.viewHeight)
                 if taskboardUI.cache.keys.scroll.state and isTaskboardHovered then
-                    local scrollPercent = imports.math.max(1, 100/(view_overflownHeight/row_height))
-                    taskboardUI.scroller.percent = imports.math.max(0, imports.math.min(taskboardUI.scroller.percent + (scrollPercent*imports.math.max(1, taskboardUI.cache.keys.scroll.streak)*(((taskboardUI.cache.keys.scroll.state == "down") and 1) or -1)), 100))
+                    local scrollPercent = imports.math:max(1, 100/(view_overflownHeight/row_height))
+                    taskboardUI.scroller.percent = imports.math:max(0, imports.math:min(taskboardUI.scroller.percent + (scrollPercent*imports.math:max(1, taskboardUI.cache.keys.scroll.streak)*(((taskboardUI.cache.keys.scroll.state == "down") and 1) or -1)), 100))
                     taskboardUI.cache.keys.scroll.state = false
                 end
             end

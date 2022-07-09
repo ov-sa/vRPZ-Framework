@@ -365,7 +365,7 @@ CGame.execOnModuleLoad(function()
             else
                 if loginUI.characters[(loginUI.previewCharacter)].id then imports.assetify.network:emit("Player:onDeleteCharacter", true, false, localPlayer, loginUI.characters[(loginUI.previewCharacter)].id) end
                 imports.table:remove(loginUI.characters, loginUI.previewCharacter)
-                loginUI.previewCharacter = imports.math.max(0, loginUI.previewCharacter - 1)
+                loginUI.previewCharacter = imports.math:max(0, loginUI.previewCharacter - 1)
                 loginUI.phases[2].loadCharacter()
                 imports.assetify.network:emit("Client:onNotification", false, FRAMEWORK_CONFIGS["UI"]["Login"]["Notifications"][6][(CPlayer.CLanguage)], FRAMEWORK_CONFIGS["UI"]["Notification"].presets.success)
             end
@@ -476,7 +476,7 @@ CGame.execOnModuleLoad(function()
     end
     loginUI.phases[3].width, loginUI.phases[3].height = loginUI.phases[3].width + (CLIENT_MTA_RESOLUTION[1] - loginUI.phases[3].startX), loginUI.phases[3].height + (CLIENT_MTA_RESOLUTION[2] - loginUI.phases[3].startY)
     loginUI.phases[3].contentWidth, loginUI.phases[3].contentHeight = imports.beautify.native.getTextSize(loginUI.phases[3].contentText, loginUI.phases[3].width, 1, loginUI.phases[3].font.instance, false)
-    loginUI.phases[3].scrollDuration = imports.math.max(1, imports.math.ceil((loginUI.phases[3].contentHeight + loginUI.phases[3].height)/loginUI.phases[3].height))*FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.scrollDuration
+    loginUI.phases[3].scrollDuration = imports.math:max(1, imports.math:ceil((loginUI.phases[3].contentHeight + loginUI.phases[3].height)/loginUI.phases[3].height))*FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].credits.scrollDuration
 
 
     -------------------------------
@@ -670,7 +670,7 @@ CGame.execOnModuleLoad(function()
                 local credits_offsetY = -loginUI.phases[3].contentHeight - (view_height*0.5)
                 if (CLIENT_CURRENT_TICK - loginUI.phases[3].scrollAnimTickCounter) >= loginUI.phases[3].scrollDelayDuration then
                     credits_offsetY = view_offsetY + imports.interpolateBetween(credits_offsetY, 0, 0, view_height*1.5, 0, 0, imports.getInterpolationProgress(loginUI.phases[3].scrollAnimTickCounter + loginUI.phases[3].scrollDelayDuration, loginUI.phases[3].scrollDuration), "Linear")
-                    if (imports.math.round(credits_offsetY, 2) >= imports.math.round(view_height*1.5)) and loginUI.isEnabled then
+                    if (imports.math:round(credits_offsetY, 2) >= imports.math:round(view_height*1.5)) and loginUI.isEnabled then
                         imports.assetify.network:emit("Client:onEnableLoginUI", false, false)
                         imports.assetify.network:emit("Client:onSetLoginUIPhase", false, 1)
                     end
@@ -721,9 +721,9 @@ CGame.execOnModuleLoad(function()
             loginUI.updateUILang()
             local cAsset = imports.assetify.getAsset("sound", FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.asset)
             if cAsset then
-                loginUI.lobbySound = CGame.playSound(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.asset, FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category, imports.math.random(#cAsset.manifestData.assetSounds[(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category)]), _, true, true)
+                loginUI.lobbySound = CGame.playSound(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.asset, FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category, imports.math:random(#cAsset.manifestData.assetSounds[(FRAMEWORK_CONFIGS["UI"]["Login"].lobbySound.category)]), _, true, true)
             end
-            loginUI.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[imports.math.random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
+            loginUI.cinemationData = FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations[imports.math:random(#FRAMEWORK_CONFIGS["UI"]["Login"].spawnLocations)]
             imports.assetify.network:emit("Client:onSetLoginUIPhase", false, 1)
             imports.beautify.render.create(loginUI.renderUI)
             imports.beautify.render.create(loginUI.renderUI, {renderType = "input"})

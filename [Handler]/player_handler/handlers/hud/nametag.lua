@@ -92,14 +92,14 @@ CGame.execOnModuleLoad(function()
         local _, playerRank = CCharacter.getRank(player)
         local nameTag, rankTag = "["..playerID.."]  ━  "..((playerGroup and ""..playerGroup.." |  ") or "")..playerName, playerRank.name.." - "..playerLevel
         local nameTag_width, rankTag_width = imports.beautify.native.getTextWidth(nameTag, 1, nametagUI.font.instance), imports.beautify.native.getTextWidth(rankTag, 1, nametagUI.font.instance)
-        local rtWidth, rtHeight = imports.math.max(nameTag_width, rankTag_width) + nametagUI.iconSize + (nametagUI.padding*4), (nametagUI.iconSize*2) + (nametagUI.padding*8)
+        local rtWidth, rtHeight = imports.math:max(nameTag_width, rankTag_width) + nametagUI.iconSize + (nametagUI.padding*4), (nametagUI.iconSize*2) + (nametagUI.padding*8)
         if isFetchSize then
             return rtWidth, rtHeight
         elseif (nametagUI.buffer[player].width ~= rtWidth) or (nametagUI.buffer[player].height ~= rtHeight) then
             return nametagUI.createUI(player, true)
         end
         imports.beautify.native.setShaderValue(nametagUI.buffer[player].reputation, "baseTexture", playerRole.badge)
-        imports.beautify.native.setShaderValue(nametagUI.buffer[player].reputation, "grayscaleIntensity", 1 - imports.math.max(0, imports.math.min(1, CCharacter.getReputation(player)/FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"])))
+        imports.beautify.native.setShaderValue(nametagUI.buffer[player].reputation, "grayscaleIntensity", 1 - imports.math:max(0, imports.math:min(1, CCharacter.getReputation(player)/FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"])))
         imports.beautify.native.setRenderTarget(nametagUI.buffer[player].rt, true)
         local nameTag_startX, nameTag_startY = nametagUI.buffer[player].width*0.5 + (nametagUI.iconSize*0.5), 0
         local rankTag_startY = nameTag_startY + nametagUI.iconSize + (nametagUI.padding*0.5)

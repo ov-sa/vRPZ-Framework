@@ -123,8 +123,8 @@ CGame.execOnModuleLoad(function()
             scoreboardUI.buffer[bufferCount].ping = imports.getPlayerPing(i)
             local _, rank = CCharacter.getRank(i)
             scoreboardUI.buffer[bufferCount].rank = (rank and rank.name) or rank
-            scoreboardUI.buffer[bufferCount].reputation = (scoreboardUI.buffer[bufferCount].reputation and imports.math.round(scoreboardUI.buffer[bufferCount].reputation, 2)) or scoreboardUI.buffer[bufferCount].reputation
-            scoreboardUI.buffer[bufferCount].kd = (scoreboardUI.buffer[bufferCount].kd and imports.math.round(scoreboardUI.buffer[bufferCount].kd, 2)) or scoreboardUI.buffer[bufferCount].kd
+            scoreboardUI.buffer[bufferCount].reputation = (scoreboardUI.buffer[bufferCount].reputation and imports.math:round(scoreboardUI.buffer[bufferCount].reputation, 2)) or scoreboardUI.buffer[bufferCount].reputation
+            scoreboardUI.buffer[bufferCount].kd = (scoreboardUI.buffer[bufferCount].kd and imports.math:round(scoreboardUI.buffer[bufferCount].kd, 2)) or scoreboardUI.buffer[bufferCount].kd
             scoreboardUI.buffer[bufferCount].survival_time = CCharacter.getSurvivalTime(i)
             scoreboardUI.buffer[bufferCount].survival_time = (scoreboardUI.buffer[bufferCount].survival_time and CGame.formatMS(scoreboardUI.buffer[bufferCount].survival_time)) or scoreboardUI.buffer[bufferCount].survival_time
         end
@@ -148,10 +148,10 @@ CGame.execOnModuleLoad(function()
             local startX, startY = scoreboardUI.startX, scoreboardUI.startY
             local view_height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Columns"].height
             local row_height = FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Columns"].height + (scoreboardUI.margin*0.5)
-            local view_overflowHeight = imports.math.max(0, (scoreboardUI.margin*0.5) + (row_height*bufferCount) - view_height)
+            local view_overflowHeight = imports.math:max(0, (scoreboardUI.margin*0.5) + (row_height*bufferCount) - view_height)
             local offsetY = view_overflowHeight*scoreboardUI.scroller.animPercent*0.01
-            local row_startIndex = imports.math.floor(offsetY/row_height) + 1
-            local row_endIndex = imports.math.min(bufferCount, row_startIndex + imports.math.ceil(view_height/row_height))
+            local row_startIndex = imports.math:floor(offsetY/row_height) + 1
+            local row_endIndex = imports.math:min(bufferCount, row_startIndex + imports.math:ceil(view_height/row_height))
             imports.beautify.native.drawImage(startX, startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Banner"].height + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].height, scoreboardUI.bgTexture, 0, 0, 0, -1, false)    
             imports.beautify.native.drawText(FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Banner"].title, startX + scoreboardUI.margin, startY, startX + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.margin, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Banner"].height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.font.instance, "left", "center", true, false, false, true)
             imports.beautify.native.drawText(imports.string:kern((bufferCount).."/"..FRAMEWORK_CONFIGS["Game"]["Player_Limit"]), startX + scoreboardUI.margin, startY, startX + FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width - scoreboardUI.margin, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Banner"].height, scoreboardUI.banner.fontColor, 1, scoreboardUI.banner.counterFont.instance, "right", "center", true, false, false)
@@ -217,15 +217,15 @@ CGame.execOnModuleLoad(function()
                     scoreboardUI.scroller.height = view_height
                     scoreboardUI.scroller.isPositioned = true
                 end
-                if imports.math.round(scoreboardUI.scroller.animPercent, 2) ~= imports.math.round(scoreboardUI.scroller.percent, 2) then
+                if imports.math:round(scoreboardUI.scroller.animPercent, 2) ~= imports.math:round(scoreboardUI.scroller.percent, 2) then
                     scoreboardUI.scroller.animPercent = imports.interpolateBetween(scoreboardUI.scroller.animPercent, 0, 0, scoreboardUI.scroller.percent, 0, 0, 0.5, "InQuad")
                 end
                 imports.beautify.native.drawRectangle(startX + scoreboardUI.scroller.startX, startY + scoreboardUI.scroller.startY, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.width, scoreboardUI.scroller.height, scoreboardUI.scroller.bgColor, false)
                 imports.beautify.native.drawRectangle(startX + scoreboardUI.scroller.startX, startY + scoreboardUI.scroller.startY + ((scoreboardUI.scroller.height - FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.thumbHeight)*scoreboardUI.scroller.animPercent*0.01), FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.width, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].scroller.thumbHeight, scoreboardUI.scroller.thumbColor, false)
                 isScoreboardHovered = isScoreboardHovered or imports.isMouseOnPosition(startX, startY + FRAMEWORK_CONFIGS["UI"]["Scoreboard"]["Columns"].height, FRAMEWORK_CONFIGS["UI"]["Scoreboard"].width, view_height)
                 if scoreboardUI.cache.keys.scroll.state and isScoreboardHovered then
-                    local scrollPercent = imports.math.max(1, 100/(view_overflowHeight/row_height))
-                    scoreboardUI.scroller.percent = imports.math.max(0, imports.math.min(scoreboardUI.scroller.percent + (scrollPercent*imports.math.max(1, scoreboardUI.cache.keys.scroll.streak)*(((scoreboardUI.cache.keys.scroll.state == "down") and 1) or -1)), 100))
+                    local scrollPercent = imports.math:max(1, 100/(view_overflowHeight/row_height))
+                    scoreboardUI.scroller.percent = imports.math:max(0, imports.math:min(scoreboardUI.scroller.percent + (scrollPercent*imports.math:max(1, scoreboardUI.cache.keys.scroll.streak)*(((scoreboardUI.cache.keys.scroll.state == "down") and 1) or -1)), 100))
                     scoreboardUI.cache.keys.scroll.state = false
                 end
             end

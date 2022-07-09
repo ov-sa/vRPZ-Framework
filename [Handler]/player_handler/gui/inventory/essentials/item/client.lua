@@ -92,8 +92,8 @@ function moveItemOutOfInventory(item, loot)
         setElementData(localPlayer, "Item:"..item, itemAmountData - itemAmount)
         local posVector = localPlayer:getPosition()
         local itemData = {
-            x = posVector.x + math.random(-1, 1) * math.cos(math.rad(math.random(0, 360) + 90)),
-            y = posVector.y + math.random(-1, 1) * math.sin(math.rad(math.random(0, 360) + 90)),
+            x = posVector.x + math:random(-1, 1) * math:cos(math:rad(math:random(0, 360) + 90)),
+            y = posVector.y + math:random(-1, 1) * math:sin(math:rad(math:random(0, 360) + 90)),
             z = getGroundPosition(posVector.x, posVector.y, posVector.z) + 0.1,
             item = item,
             value = itemAmount

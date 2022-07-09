@@ -54,7 +54,7 @@ CGame.execOnModuleLoad(function()
                 if j.slideStatus == "forward" then
                     notif_offsetX, notif_offsetY = imports.interpolateBetween(CLIENT_MTA_RESOLUTION[1], notifUI.startY + ((i - 1)*(FRAMEWORK_CONFIGS["UI"]["Notification"].height + notifUI.paddingY)) - FRAMEWORK_CONFIGS["UI"]["Notification"].height, 0, (CLIENT_MTA_RESOLUTION[1]) + notifUI.startX - j.width, notifUI.startY + ((i - 1)*(FRAMEWORK_CONFIGS["UI"]["Notification"].height + notifUI.paddingY)) + offsetY, 0, imports.getInterpolationProgress(j.tickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideInDuration), "InOutBack")
                     j.alphaPercent = imports.interpolateBetween(0, 0, 0, 1, 0, 0, imports.getInterpolationProgress(j.tickCounter, FRAMEWORK_CONFIGS["UI"]["Notification"].slideInDuration), "Linear")
-                    if imports.math.round(j.alphaPercent, 2) == 1 then
+                    if imports.math:round(j.alphaPercent, 2) == 1 then
                         if (CLIENT_CURRENT_TICK - j.tickCounter - FRAMEWORK_CONFIGS["UI"]["Notification"].slideInDuration) >= FRAMEWORK_CONFIGS["UI"]["Notification"].slideDelayDuration then
                             j.slideStatus = "backward"
                             j.tickCounter = CLIENT_CURRENT_TICK
@@ -68,7 +68,7 @@ CGame.execOnModuleLoad(function()
                 end
                 imports.beautify.native.drawText(j.text, notif_offsetX, notif_offsetY, notif_offsetX + j.width, notif_offsetY + FRAMEWORK_CONFIGS["UI"]["Notification"].height, imports.tocolor(notif_fontColor[1], notif_fontColor[2], notif_fontColor[3], notif_fontColor[4]*j.alphaPercent), 1, notifUI.font.instance, "center", "center", true, false, false, false, true)
                 if j.slideStatus == "backward" then
-                    if imports.math.round(j.alphaPercent, 2) == 0 then
+                    if imports.math:round(j.alphaPercent, 2) == 0 then
                         imports.table:remove(notifUI.buffer, i)
                     end
                 end
