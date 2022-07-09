@@ -76,3 +76,13 @@ function string.public:split(baseString, separator)
     end
     return result
 end
+
+function string.public:kern(baseString, kerner)
+    if not baseString or (imports.type(baseString) ~= "string") then return false end
+    return string.public:sub(string.public:gsub(baseString, ".", (kerner or " ").."%0"), 2)
+end
+
+function math.round(number, decimals)
+    decimals = decimals or 0
+    return imports.tonumber(string.public:format(("%."..decimals.."f"), number))
+end

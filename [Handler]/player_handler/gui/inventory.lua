@@ -199,7 +199,7 @@ CGame.execOnModuleLoad(function()
     inventoryUI.updateUILang = function()
         for i = 1, #inventoryUI.clientInventory.equipment, 1 do
             local j = inventoryUI.clientInventory.equipment[i]
-            j.title = imports.string:upper(imports.string:spaceChars(j["Title"][(CPlayer.CLanguage)]))
+            j.title = imports.string:upper(imports.string:kern(j["Title"][(CPlayer.CLanguage)]))
         end
         return true
     end
@@ -227,7 +227,7 @@ CGame.execOnModuleLoad(function()
             return false
         end
         inventoryUI.buffer[parent] = {
-            name = imports.string:upper(imports.string:spaceChars(name or CLoot.fetchName(parent))),
+            name = imports.string:upper(imports.string:kern(name or CLoot.fetchName(parent))),
             bufferRT = imports.beautify.native.createRenderTarget(((parent == localPlayer) and inventoryUI.clientInventory.width) or inventoryUI.vicinityInventory.width, ((parent == localPlayer) and inventoryUI.clientInventory.height) or inventoryUI.vicinityInventory.height, true),
             scroller = {percent = 0, animPercent = 0},
             inventory = {}
@@ -825,7 +825,7 @@ CGame.execOnModuleLoad(function()
             inventoryUI.opacityAdjuster.element = imports.beautify.slider.create(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, "vertical", nil, false)
             inventoryUI.opacityAdjuster.percent = inventoryUI.opacityAdjuster.percent or 100
             imports.beautify.slider.setPercent(inventoryUI.opacityAdjuster.element, inventoryUI.opacityAdjuster.percent)
-            imports.beautify.slider.setText(inventoryUI.opacityAdjuster.element, imports.string:upper(imports.string:spaceChars("Opacity")))
+            imports.beautify.slider.setText(inventoryUI.opacityAdjuster.element, imports.string:upper(imports.string:kern("Opacity")))
             imports.beautify.slider.setTextColor(inventoryUI.opacityAdjuster.element, FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.fontColor)
             imports.beautify.render.create(inventoryUI.renderUI, {elementReference = inventoryUI.opacityAdjuster.element, renderType = "preRender"})
             imports.beautify.render.create(inventoryUI.renderUI, {renderType = "input"})
