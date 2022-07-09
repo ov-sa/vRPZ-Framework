@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
 --[[ Resource: Assetify Library
-     Script: utilities: sandbox: shared.lua
+     Script: utilities: sandbox: index.lua
      Author: vStudio
      Developer(s): Aviril, Tron, Mario, Аниса
      DOC: 19/10/2021
-     Desc: Shared Utilities ]]--
+     Desc: Sandbox Utilities ]]--
 ----------------------------------------------------------------
 
 
