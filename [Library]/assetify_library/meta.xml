@@ -31,7 +31,6 @@
     <script src="utilities/engine/syncer.lua" type="shared"/>
     <script src="utilities/sandbox/datasystem.lua" type="shared"/>
     <script src="utilities/sandbox/downloader.lua" type="shared"/>
-    <script src="utilities/sandbox/test.lua" type="shared"/>
 
     <!-- Utilities: Shaders -->
     <file src="utilities/shaders/helper.fx"/>

@@ -15,11 +15,14 @@
 local imports = {
     type = type,
     pairs = pairs,
+    tostring = tostring,
     tonumber = tonumber,
     toJSON = toJSON,
     fromJSON = fromJSON,
     select = select,
     unpack = unpack,
+    print = print,
+    getmetatable = getmetatable,
     loadstring = loadstring
 }
 
@@ -37,6 +40,13 @@ for i, j in imports.pairs(table.public) do
         ]])()
     end
 end
+table.private.inspectTypes = {
+    raw = {
+        ["string"] = true,
+        ["number"] = true,
+        ["boolean"] = true
+    }
+}
 
 function table.public:pack(...)
     return {__T = {
@@ -69,6 +79,35 @@ function table.public:clone(baseTable, isRecursive)
     end
     return __baseTable
 end
+
+function table.private:inspect(baseTable, showHidden, limit, level, buffer, skipTrim)
+    local dataType = imports.type(baseTable)
+    showHidden, limit, level, buffer = (showHidden and true) or false, math:max(2, imports.tonumber(limit) or 0), math:max(1, imports.tonumber(level) or 0), buffer or table.public:pack()
+    if (dataType ~= "table") then
+        table.public:insert(buffer, ((table.private.inspectTypes.raw[dataType] and (((dataType == "string") and string:format("%q", baseTable)) or imports.tostring(baseTable))) or ("<"..imports.tostring(baseTable)..">")).."\n")
+    elseif level > limit then
+        table.public:insert(buffer, "{...}\n")
+    else
+        table.public:insert(buffer, "{\n")
+        local indent = string:rep(" ", 2*level)
+        for k, v in imports.pairs(baseTable) do
+            table.public:insert(buffer, indent..imports.tostring(k)..": ")
+            table.private:inspect(v, showHidden, limit, level + 1, buffer, true)
+        end
+        if showHidden then
+            local metadata = imports.getmetatable(baseTable)
+            if metadata then
+                table.public:insert(buffer, indent.."<metadata>: ")
+                table.private:inspect(metadata, showHidden, limit, level + 1, buffer, true)
+            end
+        end
+        indent = string:rep(" ", 2*(level - 1))
+        table.public:insert(buffer, indent.."}\n")
+    end
+    if not skipTrim then table.public:remove(buffer) end
+    return table.public:concat(buffer)
+end
+function table.public:inspect(...) return table.private:inspect(table.public:unpack(table.public:pack(...), 3)) end 
 
 function table.public:keys(baseTable)
     if not baseTable or (imports.type(baseTable) ~= "table") then return false end
@@ -136,3 +175,5 @@ function table.public:forEach(baseTable, exec)
 end
 
 unpack = function(...) table.public:unpack(...) end
+inspect = function(...) table.public:inspect(...) end
+iprint = function(...) imports.print(table.public:inspect(...)) end
