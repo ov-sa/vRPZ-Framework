@@ -71,13 +71,6 @@ math:percent = function(amount, percent)
     return amount*percent*0.01
 end
 
-math:findRotation2D = function(x1, y1, x2, y2) 
-    x1, y1, x2, y2 = imports.tonumber(x1), imports.tonumber(y1), imports.tonumber(x2), imports.tonumber(y2)
-    if not x1 or not y1 or not x2 or not y2 then return false end
-    local rotAngle = -imports.math:deg(imports.math:atan2(x2 - x1, y2 - y1))
-    return ((rotAngle < 0) and (rotAngle + 360)) or rotAngle
-end
-
 math:findDistRotationPoint2D = function(x, y, distance, angle)
     x, y, distance, angle = imports.tonumber(x), imports.tonumber(y), imports.tonumber(distance), imports.tonumber(angle)
     if not x or not y or not distance then return false end
