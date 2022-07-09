@@ -43,16 +43,3 @@ getElementPosition = function(element, offX, offY, offZ)
         return (offX*cMatrix[1][1]) + (offY*cMatrix[2][1]) + (offZ*cMatrix[3][1]) + cMatrix[4][1], (offX*cMatrix[1][2]) + (offY*cMatrix[2][2]) + (offZ*cMatrix[3][2]) + cMatrix[4][2], (offX*cMatrix[1][3]) + (offY*cMatrix[2][3]) + (offZ*cMatrix[3][3]) + cMatrix[4][3]
     end
 end
-
-
----------------------
---[[ Class: Math ]]--
----------------------
-
---[[
-math:percent = function(amount, percent)
-    amount, percent = imports.tonumber(amount), imports.tonumber(percent)
-    if not percent or not amount then return false end
-    return amount*percent*0.01
-end
-]]

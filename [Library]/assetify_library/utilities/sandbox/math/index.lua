@@ -40,6 +40,12 @@ function math.public:round(number, decimals)
     return imports.tonumber(string:format("%."..(imports.tonumber(decimals) or 0).."f", number))
 end
 
+function math.public:percent(value, percent)
+    value, percent = imports.tonumber(value), imports.tonumber(percent)
+    if not value or not percent then return false end
+    return value*percent*0.01
+end
+
 function math.public:findDistance2D(x1, y1, x2, y2)
     x1, y1, x2, y2 = imports.tonumber(x1), imports.tonumber(y1), imports.tonumber(x2), imports.tonumber(y2)
     if not x1 or not y1 or not x2 or not y2 then return false end
