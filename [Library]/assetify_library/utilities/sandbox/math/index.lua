@@ -40,6 +40,18 @@ function math.public:round(number, decimals)
     return imports.tonumber(string:format("%."..(imports.tonumber(decimals) or 0).."f", number))
 end
 
+function math.public:findDistance2D(x1, y1, x2, y2)
+    x1, y1, x2, y2 = imports.tonumber(x1), imports.tonumber(y1), imports.tonumber(x2), imports.tonumber(y2)
+    if not x1 or not y1 or not x2 or not y2 then return false end
+    return math.public:sqrt(((x2 - x1)^2) + ((y2 - y1)^2))
+end
+
+function math.public:findDistance3D(x1, y1, z1, x2, y2, z2)
+    x1, y1, z1, x2, y2, z2 = imports.tonumber(x1), imports.tonumber(y1), imports.tonumber(z1), imports.tonumber(x2), imports.tonumber(y2), imports.tonumber(z2)
+    if not x1 or not y1 or not z1 or not x2 or not y2 or not z2 then return false end
+    return math.public:sqrt(((x2 - x1)^2) + ((y2 - y1)^2) + ((z2 - z1)^2))
+end
+
 function math.public:findRotation2D(x1, y1, x2, y2) 
     x1, y1, x2, y2 = imports.tonumber(x1), imports.tonumber(y1), imports.tonumber(x2), imports.tonumber(y2)
     if not x1 or not y1 or not x2 or not y2 then return false end
@@ -47,9 +59,9 @@ function math.public:findRotation2D(x1, y1, x2, y2)
     return ((rotation < 0) and (rotation + 360)) or rotation
 end
 
-function math:findPointByRotation2D(x, y, distance, angle)
-    x, y, distance, angle = imports.tonumber(x), imports.tonumber(y), imports.tonumber(distance), imports.tonumber(angle) or 0
-    if not x or not y or not distance then return false end
-    angle = math.public:rad(90 - angle)
-    return x + (math.public:cos(angle)*distance), y + (math.public:sin(angle)*distance)
+function math.public:findPointByRotation2D(x, y, distance, rotation)
+    x, y, distance, rotation = imports.tonumber(x), imports.tonumber(y), imports.tonumber(distance), imports.tonumber(rotation)
+    if not x or not y or not distance or not rotation then return false end
+    rotation = math.public:rad(90 - rotation)
+    return x + (math.public:cos(rotation)*distance), y + (math.public:sin(rotation)*distance)
 end
