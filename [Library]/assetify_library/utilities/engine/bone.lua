@@ -154,7 +154,7 @@ if localPlayer then
         return true
     end
 
-    function bone.public:update()
+    function bone.public.update(self)
         if not bone.public:isInstance(self) or self.cHeartbeat then return false end
         bone.public.cache.element[(self.parent)] = bone.public.cache.element[(self.parent)] or {}
         bone.public.cache.element[(self.parent)][(self.boneData.id)] = ((bone.public.cache.element[(self.parent)].streamTick == bone.public.cache.streamTick) and bone.public.cache.element[(self.parent)][(self.boneData.id)]) or imports.getElementBoneMatrix(self.parent, self.boneData.id)
