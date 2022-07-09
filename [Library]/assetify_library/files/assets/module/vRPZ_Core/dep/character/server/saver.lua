@@ -53,7 +53,7 @@ local cUtility = {
         for i, j in imports.pairs(CInventory.CItems) do
             if saveProgress then
                 CInventory.setItemProperty(cThread, deps.inventoryID, {j.ref}, {
-                    {imports.dbify.inventory.connection.item.counter, imports.math.max(0, imports.tonumber(CGame.getEntityData(player, "Item:"..i)) or 0)}
+                    {imports.dbify.inventory.connection.item.counter, imports.math:max(0, imports.tonumber(CGame.getEntityData(player, "Item:"..i)) or 0)}
                 })
             end
             CGame.setEntityData(player, "Item:"..i, (loadProgress and 0) or nil)
@@ -81,7 +81,7 @@ CCharacter.loadInventory = function(cThread, player, deps)
     if not DItemProperty and (#CInventory.CRefs.index > 0) then return false end
     local DInventoryProperty = CInventory.getData(cThread, deps.inventoryID, {"max_slots", "slots"})
     DInventoryProperty = DInventoryProperty or {}
-    DInventoryProperty.max_slots, DInventoryProperty.slots = imports.math.max(CInventory.fetchMaxSlotsMultiplier(), imports.tonumber(DInventoryProperty.max_slots) or 0), (DInventoryProperty.slots and imports.table:decode(DInventoryProperty.slots)) or {}
+    DInventoryProperty.max_slots, DInventoryProperty.slots = imports.math:max(CInventory.fetchMaxSlotsMultiplier(), imports.tonumber(DInventoryProperty.max_slots) or 0), (DInventoryProperty.slots and imports.table:decode(DInventoryProperty.slots)) or {}
     CInventory.CBuffer[(deps.inventoryID)] = {
         maxSlots = DInventoryProperty.max_slots,
         slots = DInventoryProperty.slots

@@ -139,9 +139,9 @@ CInventory.fetchParentMaxSlots = function(parent)
     if imports.getElementType(parent) == "player" then
         if not CPlayer.isInitialized(parent) then return false end
         local inventoryID = CPlayer.getInventoryID(parent)
-        return imports.math.max(CInventory.fetchMaxSlotsMultiplier(), (inventoryID and CInventory.CBuffer[inventoryID].maxSlots) or 0)
+        return imports.math:max(CInventory.fetchMaxSlotsMultiplier(), (inventoryID and CInventory.CBuffer[inventoryID].maxSlots) or 0)
     else
-        return imports.math.max(0, imports.tonumber(CGame.getEntityData(parent, "Inventory:MaxSlots")) or 0)
+        return imports.math:max(0, imports.tonumber(CGame.getEntityData(parent, "Inventory:MaxSlots")) or 0)
     end
     return false
 end
@@ -179,7 +179,7 @@ CInventory.fetchParentUsedWeight = function(parent)
     for i, j in imports.pairs(CInventory.CItems) do
         usedWeight = usedWeight + (CInventory.fetchItemCount(parent, i)*CInventory.fetchItemWeight(i))
     end
-    return imports.math.min(CInventory.fetchParentMaxWeight(parent), usedWeight)
+    return imports.math:min(CInventory.fetchParentMaxWeight(parent), usedWeight)
 end
 
 CInventory.isSlotAvailableForOrdering = function(player, item, prevSlot, slot, isEquipped)

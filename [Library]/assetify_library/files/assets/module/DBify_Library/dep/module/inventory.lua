@@ -36,14 +36,14 @@ local cUtility = {
                 for i = 1, #cArgs[1].items do
                     local j = cArgs[1].items[i]
                     j[1] = "item_"..imports.tostring(j[1])
-                    j[2] = imports.math.max(0, imports.tonumber(j[2]) or 0)
+                    j[2] = imports.math:max(0, imports.tonumber(j[2]) or 0)
                     local prevItemData = result[(j[1])]
                     prevItemData = (prevItemData and imports.table:decode(prevItemData)) or false
                     prevItemData = (prevItemData and prevItemData.data and (imports.type(prevItemData.data) == "table") and prevItemData.item and (imports.type(prevItemData.item) == "table") and prevItemData) or false
                     if not prevItemData then
                         prevItemData = imports.table:clone(dbify.inventory.connection.item.content, true)
                     end
-                    prevItemData.property[(dbify.inventory.connection.item.counter)] = j[2] + (imports.math.max(0, imports.tonumber(prevItemData.property[(dbify.inventory.connection.item.counter)]) or 0)*((cArgs[1].processType == "push" and 1) or -1))
+                    prevItemData.property[(dbify.inventory.connection.item.counter)] = j[2] + (imports.math:max(0, imports.tonumber(prevItemData.property[(dbify.inventory.connection.item.counter)]) or 0)*((cArgs[1].processType == "push" and 1) or -1))
                     cArgs[1].items[i][2] = imports.table:encode(prevItemData)
                 end
                 dbify.inventory.setData(cArgs[1].inventoryID, cArgs[1].items, function(result, cArgs)
@@ -81,7 +81,7 @@ local cUtility = {
                             local v = cArgs[1].properties[k]
                             v[1] = imports.tostring(v[1])
                             if v[1] == dbify.inventory.connection.item.counter then
-                                v[2] = imports.math.max(0, imports.tonumber(v[2]) or j.property[(v[1])])
+                                v[2] = imports.math:max(0, imports.tonumber(v[2]) or j.property[(v[1])])
                             end
                             j.property[(v[1])] = v[2]
                         end

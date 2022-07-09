@@ -177,7 +177,7 @@ CCamera = {
         if CLIENT_MTA_WINDOW_ACTIVE or CLIENT_IS_CURSOR_SHOWING then return false end
         if not CPlayer.isInitialized(localPlayer) or not CCamera.CView then return false end
         aX, aY = aX - 0.5, aY - 0.5
-        CCamera.CCache.camera.rotX.value, CCamera.CCache.camera.rotY.value = CCamera.CCache.camera.rotX.value - (aX*360), imports.math.max(-0.65, imports.math.min(0.9, CCamera.CCache.camera.rotY.value - aY))
+        CCamera.CCache.camera.rotX.value, CCamera.CCache.camera.rotY.value = CCamera.CCache.camera.rotX.value - (aX*360), imports.math:max(-0.65, imports.math:min(0.9, CCamera.CCache.camera.rotY.value - aY))
         return true
     end,
 

@@ -176,7 +176,7 @@ function network.public:on(exec, config)
     config = (config and (imports.type(config) == "table") and config) or {}
     config.isAsync = (config.isAsync and true) or false
     config.subscriptionLimit = (not self.isCallback and imports.tonumber(config.subscriptionLimit)) or false
-    config.subscriptionLimit = (config.subscriptionLimit and math.max(1, config.subscriptionLimit)) or config.subscriptionLimit
+    config.subscriptionLimit = (config.subscriptionLimit and math:max(1, config.subscriptionLimit)) or config.subscriptionLimit
     config.subscriptionCount = (config.subscriptionLimit and 0) or false
     if self.isCallback then
         if not self.handler then

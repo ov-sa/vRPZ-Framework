@@ -157,9 +157,9 @@ function matrix.public:fromLocation(x, y, z, rotX, rotY, rotZ)
     if (self ~= matrix.public) and (self ~= matrix.private) then return false end
     x, y, z, rotX, rotY, rotZ = imports.tonumber(x), imports.tonumber(y), imports.tonumber(z), imports.tonumber(rotX), imports.tonumber(rotY), imports.tonumber(rotZ)
     if not x or not y or not z or not rotX or not rotY or not rotZ then return false end
-    rotX, rotY, rotZ = math.rad(rotX), math.rad(rotY), math.rad(rotZ)
-    local sYaw, sPitch, sRoll = math.sin(rotX), math.sin(rotY), math.sin(rotZ)
-    local cYaw, cPitch, cRoll = math.cos(rotX), math.cos(rotY), math.cos(rotZ)
+    rotX, rotY, rotZ = math:rad(rotX), math:rad(rotY), math:rad(rotZ)
+    local sYaw, sPitch, sRoll = math:sin(rotX), math:sin(rotY), math:sin(rotZ)
+    local cYaw, cPitch, cRoll = math:cos(rotX), math:cos(rotY), math:cos(rotZ)
     return matrix.public(
         {(cRoll*cPitch) - (sRoll*sYaw*sPitch), (cPitch*sRoll) + (cRoll*sYaw*sPitch), -cYaw*sPitch, 0},
         {-cYaw*sRoll, cRoll*cYaw, sYaw, 0},
@@ -172,9 +172,9 @@ function matrix.public:fromRotation(rotX, rotY, rotZ)
     if (self ~= matrix.public) and (self ~= matrix.private) then return false end
     rotX, rotY, rotZ = imports.tonumber(rotX), imports.tonumber(rotY), imports.tonumber(rotZ)
     if not rotX or not rotY or not rotZ then return false end
-    rotX, rotY, rotZ = math.rad(rotX), math.rad(rotY), math.rad(rotZ)
-    local sYaw, sPitch, sRoll = math.sin(rotX), math.sin(rotY), math.sin(rotZ)
-    local cYaw, cPitch, cRoll = math.cos(rotX), math.cos(rotY), math.cos(rotZ)
+    rotX, rotY, rotZ = math:rad(rotX), math:rad(rotY), math:rad(rotZ)
+    local sYaw, sPitch, sRoll = math:sin(rotX), math:sin(rotY), math:sin(rotZ)
+    local cYaw, cPitch, cRoll = math:cos(rotX), math:cos(rotY), math:cos(rotZ)
     return matrix.public(
         {(sRoll*sPitch*sYaw) + (cRoll*cYaw), sRoll*cPitch, (sRoll*sPitch*cYaw) - (cRoll*sYaw)},
         {(cRoll*sPitch*sYaw) - (sRoll*cYaw), cRoll*cPitch, (cRoll*sPitch*cYaw) + (sRoll*sYaw)},

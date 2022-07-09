@@ -50,13 +50,13 @@ end
 getDistanceBetweenPoints2D = function(x1, y1, x2, y2)
     x1, y1, x2, y2 = imports.tonumber(x1), imports.tonumber(y1), imports.tonumber(x2), imports.tonumber(y2)
     if not x1 or not y1 or not x2 or not y2 then return false end
-    return imports.math.sqrt(((x2 - x1)^2) + ((y2 - y1)^2))
+    return imports.math:sqrt(((x2 - x1)^2) + ((y2 - y1)^2))
 end
 
 getDistanceBetweenPoints3D = function(x1, y1, z1, x2, y2, z2)
     x1, y1, z1, x2, y2, z2 = imports.tonumber(x1), imports.tonumber(y1), imports.tonumber(z1), imports.tonumber(x2), imports.tonumber(y2), imports.tonumber(z2)
     if not x1 or not y1 or not z1 or not x2 or not y2 or not z2 then return false end
-    return imports.math.sqrt(((x2 - x1)^2) + ((y2 - y1)^2) + ((z2 - z1)^2))
+    return imports.math:sqrt(((x2 - x1)^2) + ((y2 - y1)^2) + ((z2 - z1)^2))
 end
 
 
@@ -64,30 +64,25 @@ end
 --[[ Class: Math ]]--
 ---------------------
 
-math.percent = function(amount, percent)
+--[[
+math:percent = function(amount, percent)
     amount, percent = imports.tonumber(amount), imports.tonumber(percent)
     if not percent or not amount then return false end
     return amount*percent*0.01
 end
 
-math.round = function(number, decimals)
-    number = imports.tonumber(number)
-    if not number then return false end
-    decimals = imports.tonumber(decimals) or 0
-    return imports.tonumber(imports.string:format("%."..decimals.."f", number))
-end
-
-math.findRotation2D = function(x1, y1, x2, y2) 
+math:findRotation2D = function(x1, y1, x2, y2) 
     x1, y1, x2, y2 = imports.tonumber(x1), imports.tonumber(y1), imports.tonumber(x2), imports.tonumber(y2)
     if not x1 or not y1 or not x2 or not y2 then return false end
-    local rotAngle = -imports.math.deg(imports.math.atan2(x2 - x1, y2 - y1))
+    local rotAngle = -imports.math:deg(imports.math:atan2(x2 - x1, y2 - y1))
     return ((rotAngle < 0) and (rotAngle + 360)) or rotAngle
 end
 
-math.findDistRotationPoint2D = function(x, y, distance, angle)
+math:findDistRotationPoint2D = function(x, y, distance, angle)
     x, y, distance, angle = imports.tonumber(x), imports.tonumber(y), imports.tonumber(distance), imports.tonumber(angle)
     if not x or not y or not distance then return false end
     angle = angle or 0
-    angle = imports.math.rad(90 - angle)
-    return x + (imports.math.cos(angle)*distance), y + (imports.math.sin(angle)*distance)
+    angle = imports.math:rad(90 - angle)
+    return x + (imports.math:cos(angle)*distance), y + (imports.math:sin(angle)*distance)
 end
+]]
