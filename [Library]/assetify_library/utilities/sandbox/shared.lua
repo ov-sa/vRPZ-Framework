@@ -74,7 +74,7 @@ math.round = function(number, decimals)
     number = imports.tonumber(number)
     if not number then return false end
     decimals = imports.tonumber(decimals) or 0
-    return imports.tonumber(imports.string.format("%."..decimals.."f", number))
+    return imports.tonumber(imports.string:format("%."..decimals.."f", number))
 end
 
 math.findRotation2D = function(x1, y1, x2, y2) 

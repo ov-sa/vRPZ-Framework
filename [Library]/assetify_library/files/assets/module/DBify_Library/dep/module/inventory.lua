@@ -87,7 +87,7 @@ local cUtility = {
                         end
                         imports.table:insert(properties, {i, imports.table:encode(j)})
                     else
-                        local itemIndex = imports.string.gsub(i, "item_", "", 1)
+                        local itemIndex = imports.string:gsub(i, "item_", "", 1)
                         properties[itemIndex] = {}
                         if j then
                             for k = 1, #cArgs[1].properties, 1 do
@@ -139,7 +139,7 @@ local cUtility = {
                         end
                         imports.table:insert(datas, {i, imports.table:encode(j)})
                     else
-                        local itemIndex = imports.string.gsub(i, "item_", "", 1)
+                        local itemIndex = imports.string:gsub(i, "item_", "", 1)
                         datas[itemIndex] = {}
                         if j then
                             for k = 1, #cArgs[1].datas, 1 do
@@ -210,8 +210,8 @@ dbify.inventory = {
                 if result and (#result > 0) then
                     for i = 1, #result, 1 do
                         local j = result[i]
-                        local columnName = j["column_name"] or j[(string.upper("column_name"))]
-                        local itemIndex = imports.string.gsub(columnName, "item_", "", 1)
+                        local columnName = j["column_name"] or j[(string:upper("column_name"))]
+                        local itemIndex = imports.string:gsub(columnName, "item_", "", 1)
                         if not cArgs[1].items[itemIndex] then
                             imports.table:insert(itemsToBeDeleted, columnName)
                         end

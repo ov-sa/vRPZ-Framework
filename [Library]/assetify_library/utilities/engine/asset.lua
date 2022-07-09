@@ -55,7 +55,7 @@ function asset.public:readFile(filePath, encryptKey, ...)
     if not filePath or (imports.type(filePath) ~= "string") or not file:exists(filePath) then return false end
     if not encryptKey then return filePath end
     local rw = file:read(filePath)
-    return (rw and string.decode("tea", rw, {key = encryptKey}, ...)) or false
+    return (rw and string:decode("tea", rw, {key = encryptKey}, ...)) or false
 end
 
 if localPlayer then
@@ -227,7 +227,7 @@ else
                     filePointer.synced.assetSize.file[filePath] = builtFileSize
                     filePointer.synced.assetSize.total = filePointer.synced.assetSize.total + filePointer.synced.assetSize.file[filePath]
                     syncer.libraryBandwidth = syncer.libraryBandwidth + filePointer.synced.assetSize.file[filePath]
-                    filePointer.unSynced.fileData[filePath] = (encryptKey and string.encode("tea", builtFileData, {key = encryptKey})) or builtFileData
+                    filePointer.unSynced.fileData[filePath] = (encryptKey and string:encode("tea", builtFileData, {key = encryptKey})) or builtFileData
                     filePointer.unSynced.fileHash[filePath] = imports.md5(filePointer.unSynced.fileData[filePath])
                 end
                 if rawPointer then rawPointer[filePath] = builtFileData end
@@ -319,14 +319,14 @@ else
     function asset.public:buildPack(assetType, assetPack, callback)
         if not assetType or not assetPack or not callback or (imports.type(callback) ~= "function") then return false end
         local cAssetPack = table:clone(assetPack, true)
-        cAssetPack.manifestData = file:read((asset.public.references.root)..string.lower(assetType).."/"..(asset.public.references.manifest)..".json")
+        cAssetPack.manifestData = file:read((asset.public.references.root)..string:lower(assetType).."/"..(asset.public.references.manifest)..".json")
         cAssetPack.manifestData = (cAssetPack.manifestData and table:decode(cAssetPack.manifestData)) or false
         if cAssetPack.manifestData then
             cAssetPack.rwDatas = {}
             thread:create(function(self)
                 for i = 1, #cAssetPack.manifestData, 1 do
                     local assetName = cAssetPack.manifestData[i]
-                    local assetPath = (asset.public.references.root)..string.lower(assetType).."/"..assetName.."/"
+                    local assetPath = (asset.public.references.root)..string:lower(assetType).."/"..assetName.."/"
                     local assetManifestData = asset.public:buildManifest(assetPath, _, (asset.public.references.asset)..".json")
                     if assetManifestData then
                         assetManifestData.streamRange = math.max(imports.tonumber(assetManifestData.streamRange) or 0, asset.public.ranges.streamRange)

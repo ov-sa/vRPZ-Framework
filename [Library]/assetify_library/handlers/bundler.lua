@@ -47,7 +47,7 @@ local function parseUtil()
     for i = 1, #bundler.utils, 1 do
         local j = file:read(bundler.utils[i])
         for k, v in imports.pairs(bundler.modules) do
-            j = string.gsub(j, k, v.namespace, _, true, "(", ".:)")
+            j = string:gsub(j, k, v.namespace, _, true, "(", ".:)")
         end
         rw = rw..[[
         if true then
@@ -71,9 +71,9 @@ local function parseModule(moduleName)
                 break
             end
         end
-        if not isBlacklisted then rw = string.gsub(rw, i, j.namespace, _, true, "(", ".:)") end
+        if not isBlacklisted then rw = string:gsub(rw, i, j.namespace, _, true, "(", ".:)") end
     end
-    rw = ((moduleName == "namespace") and string.gsub(rw, "class = {}", "local class = {}")) or rw
+    rw = ((moduleName == "namespace") and string:gsub(rw, "class = {}", "local class = {}")) or rw
     for i = 1, #module.endpoints, 1 do
         local j = module.endpoints[i]
         rw = rw..[[
@@ -356,7 +356,7 @@ bundler.rw["scheduler"] = {
             return true
         end  
         for i, j in assetify.imports.pairs(assetify.scheduler.buffer.schedule) do
-            assetify.scheduler[(assetify.imports.string.gsub(i, "exec", "execSchedule", 1))] = function(...) return scheduleExec(i, ...) end
+            assetify.scheduler[(assetify.imports.string:gsub(i, "exec", "execSchedule", 1))] = function(...) return scheduleExec(i, ...) end
         end
         assetify.network:fetch("Assetify:onBoot", true):on(function() bootExec("execOnBoot") end, {subscriptionLimit = 1})
         assetify.network:fetch("Assetify:onLoad", true):on(function() bootExec("execOnLoad") end, {subscriptionLimit = 1})

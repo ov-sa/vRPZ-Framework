@@ -66,7 +66,7 @@ CGame = {
 
     getTime = function()
         local time = {imports.getTime()}
-        return imports.string.format("%02d:%02d", time[1], time[2])
+        return imports.string:format("%02d:%02d", time[1], time[2])
     end,
 
     formatMS = function(milliseconds)
@@ -77,7 +77,7 @@ CGame = {
         local minutes = imports.math.floor(totalseconds/60)
         local hours = imports.math.floor(minutes/60)
         minutes = minutes%60
-        return imports.string.format("%02d:%02d:%02d", hours, minutes, seconds)
+        return imports.string:format("%02d:%02d:%02d", hours, minutes, seconds)
     end,
 
     getRole = function(role)

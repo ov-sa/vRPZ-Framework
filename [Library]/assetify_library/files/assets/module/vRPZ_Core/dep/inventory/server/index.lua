@@ -226,7 +226,7 @@ end
 imports.assetify.scheduler.execOnLoad(function()
     local CItems = {}
     for i, j in imports.pairs(CInventory.CItems) do
-        CItems[(imports.string.lower(i))] = true
+        CItems[(imports.string:lower(i))] = true
     end
     CInventory.ensureItems(CItems)
 end)
