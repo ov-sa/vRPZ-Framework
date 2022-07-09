@@ -199,7 +199,7 @@ CGame.execOnModuleLoad(function()
     inventoryUI.updateUILang = function()
         for i = 1, #inventoryUI.clientInventory.equipment, 1 do
             local j = inventoryUI.clientInventory.equipment[i]
-            j.title = imports.string.upper(imports.string.spaceChars(j["Title"][(CPlayer.CLanguage)]))
+            j.title = imports.string:upper(imports.string:spaceChars(j["Title"][(CPlayer.CLanguage)]))
         end
         return true
     end
@@ -227,7 +227,7 @@ CGame.execOnModuleLoad(function()
             return false
         end
         inventoryUI.buffer[parent] = {
-            name = imports.string.upper(imports.string.spaceChars(name or CLoot.fetchName(parent))),
+            name = imports.string:upper(imports.string:spaceChars(name or CLoot.fetchName(parent))),
             bufferRT = imports.beautify.native.createRenderTarget(((parent == localPlayer) and inventoryUI.clientInventory.width) or inventoryUI.vicinityInventory.width, ((parent == localPlayer) and inventoryUI.clientInventory.height) or inventoryUI.vicinityInventory.height, true),
             scroller = {percent = 0, animPercent = 0},
             inventory = {}
@@ -437,7 +437,7 @@ CGame.execOnModuleLoad(function()
                     end
                     client_isSlotHovered = (client_isHovered and isUIActionEnabled and (client_isSlotHovered or (isItemVisible and imports.isMouseOnPosition(client_startX + inventoryUI.margin + slot_offsetX, client_startY + inventoryUI.margin + slot_offsetY, slotWidth, slotHeight) and i))) or false
                     if not slotBuffer.isPositioned then
-                        slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
+                        slotBuffer.title = imports.string:upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
                         slotBuffer.width, slotBuffer.height = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
                         slotBuffer.startX, slotBuffer.startY = (slotWidth - slotBuffer.width)*0.5, (slotHeight - slotBuffer.height)*0.5
                         slotBuffer.isPositioned = true
@@ -509,7 +509,7 @@ CGame.execOnModuleLoad(function()
                 equipment_isSlotHovered = (isUIActionEnabled and (equipment_isSlotHovered or (isItemVisible and equipment_isHovered and j.slot))) or false
                 if slotBuffer and not slotBuffer.isPositioned then
                     slotBuffer.index = i
-                    slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
+                    slotBuffer.title = imports.string:upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
                     slotBuffer.width, slotBuffer.height = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
                     slotBuffer.startX, slotBuffer.startY = j.startX + (j.width - slotBuffer.width)*0.5, j.startY + (j.height - slotBuffer.height)*0.5
                     slotBuffer.isPositioned = true
@@ -637,7 +637,7 @@ CGame.execOnModuleLoad(function()
                     local isItemVisible = itemValue > 0
                     vicinity_isSlotHovered = (vicinity_isHovered and isUIActionEnabled and (vicinity_isSlotHovered or (isItemVisible and imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + slotBuffer.offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and i))) or false
                     if not slotBuffer.isPositioned then
-                        slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")
+                        slotBuffer.title = imports.string:upper(CInventory.fetchItemName(slotBuffer.item) or "")
                         slotBuffer.width, slotBuffer.height = (CInventory.CItems[(slotBuffer.item)].dimensions[1]/CInventory.CItems[(slotBuffer.item)].dimensions[2])*inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotSize
                         slotBuffer.startX, slotBuffer.startY = inventoryUI.vicinityInventory.width - slotBuffer.width, 0
                         slotBuffer.isPositioned = true
@@ -820,12 +820,12 @@ CGame.execOnModuleLoad(function()
             --inventoryUI.vicinityInventory.element = CCharacter.isInLoot(localPlayer)
             inventoryUI.vicinityInventory.element = CGame.getGlobalData("Loot:Test") --TODO: REMOVE LATER
             imports.assetify.network:emit("Client:onEnableInventoryUI", false, true)
-            inventoryUI.createBuffer(localPlayer, imports.string.format(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory["Title"][(CPlayer.CLanguage)], CPlayer.getName(localPlayer)))
+            inventoryUI.createBuffer(localPlayer, imports.string:format(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory["Title"][(CPlayer.CLanguage)], CPlayer.getName(localPlayer)))
             inventoryUI.createBuffer(inventoryUI.vicinityInventory.element)
             inventoryUI.opacityAdjuster.element = imports.beautify.slider.create(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, "vertical", nil, false)
             inventoryUI.opacityAdjuster.percent = inventoryUI.opacityAdjuster.percent or 100
             imports.beautify.slider.setPercent(inventoryUI.opacityAdjuster.element, inventoryUI.opacityAdjuster.percent)
-            imports.beautify.slider.setText(inventoryUI.opacityAdjuster.element, imports.string.upper(imports.string.spaceChars("Opacity")))
+            imports.beautify.slider.setText(inventoryUI.opacityAdjuster.element, imports.string:upper(imports.string:spaceChars("Opacity")))
             imports.beautify.slider.setTextColor(inventoryUI.opacityAdjuster.element, FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.fontColor)
             imports.beautify.render.create(inventoryUI.renderUI, {elementReference = inventoryUI.opacityAdjuster.element, renderType = "preRender"})
             imports.beautify.render.create(inventoryUI.renderUI, {renderType = "input"})

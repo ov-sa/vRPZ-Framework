@@ -36,7 +36,7 @@ imports.addCommandHandler("party", function(player, _, category, ...)
         return imports.outputChatBox("━━ Syntax: /party create/invite/accept/leave/kick", player, 255, 255, 255)
     end
 
-    category = imports.string.lower(imports.tostring(category))
+    category = imports.string:lower(imports.tostring(category))
     local args = imports.table:pack(...)
     if category == "create" then
         if getPlayerParty(player) then

@@ -15,18 +15,6 @@ local imports = {
     assetify = assetify
 }
 
-string.parse = function(rawString)
-    if not rawString then return false end
-    if imports.tostring(rawString) == "nil" then
-        rawString = nil
-    elseif imports.tostring(rawString) == "false" then
-        rawString = false
-    elseif imports.tostring(rawString) == "true" then
-        rawString = true
-    end
-    return imports.tonumber(rawString) or rawString
-end
-
 dbify.parseArgs = function(cbIndex, ...)
     local rawArgs = imports.table:pack(...)
     local cThread, cbIndex = rawArgs[1], imports.tonumber(cbIndex)

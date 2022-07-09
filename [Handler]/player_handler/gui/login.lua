@@ -190,7 +190,7 @@ CGame.execOnModuleLoad(function()
     loginUI.phases[1].updateUILang = function()
         for i = 1, #loginUI.phases[1].optionsUI, 1 do
             local j = loginUI.phases[1].optionsUI[i]
-            j.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Title"][(CPlayer.CLanguage)], "  "))
+            j.title = imports.string:upper(imports.string:spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"][(j.identifier)]["Title"][(CPlayer.CLanguage)], "  "))
             j.width = imports.beautify.native.getTextWidth(j.title, 1, loginUI.phases[1].optionsUI.font.instance) + 5
         end
         return true
@@ -198,20 +198,20 @@ CGame.execOnModuleLoad(function()
 
     loginUI.phases[2].updateUILang = function(gender)
         gender = gender or FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories["Identity"].gender.default
-        loginUI.phases[2].titlebar.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar["Title"][(CPlayer.CLanguage)]))
+        loginUI.phases[2].titlebar.title = imports.string:upper(imports.string:spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar["Title"][(CPlayer.CLanguage)]))
         for i = 1, #loginUI.phases[2].options, 1 do
             local j = loginUI.phases[2].options[i]
-            j.tooltip.text = imports.string.upper(imports.string.spaceChars(j.tooltip.identifier[(CPlayer.CLanguage)]))
+            j.tooltip.text = imports.string:upper(imports.string:spaceChars(j.tooltip.identifier[(CPlayer.CLanguage)]))
             j.tooltip.width = imports.beautify.native.getTextWidth(j.tooltip.text, 1, loginUI.phases[2].options.tooltipFont.instance) + loginUI.phases[2].options.size
         end
         for i = 1, #loginUI.phases[2].categories, 1 do
             local j = loginUI.phases[2].categories[i]
             local panel_offsetY = loginUI.phases[2].titlebar.height + loginUI.phases[2].titlebar.paddingY
-            j.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)]["Title"][(CPlayer.CLanguage)]))
+            j.title = imports.string:upper(imports.string:spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)]["Title"][(CPlayer.CLanguage)]))
             j.offsetY = (loginUI.phases[2].categories[(i - 1)] and (loginUI.phases[2].categories[(i - 1)].offsetY + loginUI.phases[2].categories.height + loginUI.phases[2].categories[(i - 1)].height + loginUI.phases[2].categories.paddingY)) or panel_offsetY
             if j.contents then
                 for k, v in imports.pairs(j.contents) do
-                    v.title = imports.string.upper(imports.string.spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Title"][(CPlayer.CLanguage)]))
+                    v.title = imports.string:upper(imports.string:spaceChars(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Title"][(CPlayer.CLanguage)]))
                     v.iconX, v.iconY = ((loginUI.phases[2].width - imports.beautify.native.getTextWidth(v.title, 1, loginUI.phases[2].categories.font.instance))*0.5) - FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.iconSize - 7, (loginUI.phases[2].categories.height - FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.titlebar.iconSize)*0.5
                     if v.isSlider then
                         if not v.element or not imports.isElement(v.element) then
@@ -228,7 +228,7 @@ CGame.execOnModuleLoad(function()
                         end
                         for m, n in imports.pairs((v.isClothing and FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Datas"][gender]) or FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)][(v.identifier)]["Datas"]) do
                             imports.table:insert(v.contentIndex, m)
-                            imports.table:insert(v.content, imports.string.upper(imports.string.spaceChars(n[(CPlayer.CLanguage)])))
+                            imports.table:insert(v.content, imports.string:upper(imports.string:spaceChars(n[(CPlayer.CLanguage)])))
                         end
                         imports.beautify.selector.setDataList(v.element, v.content)
                     end
@@ -242,7 +242,7 @@ CGame.execOnModuleLoad(function()
                 end
                 for k, v in imports.pairs(FRAMEWORK_CONFIGS["UI"]["Login"]["Options"].characters.categories[(j.identifier)]["Datas"][gender]) do
                     imports.table:insert(j.contentIndex, k)
-                    imports.table:insert(j.content, imports.string.upper(imports.string.spaceChars(v[(CPlayer.CLanguage)])))
+                    imports.table:insert(j.content, imports.string:upper(imports.string:spaceChars(v[(CPlayer.CLanguage)])))
                 end
                 imports.beautify.selector.setDataList(j.element, j.content)
             end

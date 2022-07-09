@@ -80,7 +80,7 @@ CGame.execOnModuleLoad(function()
         if not x or not y or not width or not height or not header or not contents or (imports.type(contents) ~= "table") or (#contents <= 0) then return false end
         taskboardUI.viewContents = taskboardUI.createContents(contents)
         taskboardUI.startX, taskboardUI.startY, taskboardUI.width, taskboardUI.height = x, y, imports.math.max(FRAMEWORK_CONFIGS["UI"]["Taskboard"]["Contents"].height, width), (height and imports.math.max(FRAMEWORK_CONFIGS["UI"]["Taskboard"]["Contents"].height + FRAMEWORK_CONFIGS["UI"]["Taskboard"]["Contents"].dividerSize, height)) or height
-        taskboardUI.header = imports.string.upper(imports.string.spaceChars(imports.tostring(header), "  "))
+        taskboardUI.header = imports.string:upper(imports.string:spaceChars(imports.tostring(header), "  "))
         taskboardUI.viewRT = imports.beautify.native.createRenderTarget(taskboardUI.width, taskboardUI.height, true)
         taskboardUI.executeContent(taskboardUI.viewContents)
         taskboardUI.state = true

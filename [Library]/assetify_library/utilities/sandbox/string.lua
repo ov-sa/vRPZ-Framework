@@ -15,6 +15,8 @@
 local imports = {
     type = type,
     pairs = pairs,
+    tostring = tostring,
+    tonumber = tonumber,
     string = string,
     encodeString = encodeString,
     decodeString = decodeString
@@ -42,6 +44,14 @@ function string.public:gsub(baseString, matchWord, replaceWord, matchLimit, isSt
     matchPrefix, matchPostfix = (matchPrefix and (imports.type(matchPrefix) == "string") and matchPrefix) or "", (matchPostfix and (imports.type(matchPostfix) == "string") and matchPostfix) or ""
     matchWord = (isStrictcMatch and "%f[^"..matchPrefix.."%z%s]"..matchWord.."%f["..matchPostfix.."%z%s]") or matchPrefix..matchWord..matchPostfix
     return __string_gsub(_, baseString, matchWord, replaceWord, matchLimit)
+end
+
+function string.public:parse(baseString)
+    if not baseString then return false end
+    if imports.tostring(baseString) == "nil" then return
+    elseif imports.tostring(baseString) == "false" then return false
+    elseif imports.tostring(baseString) == "true" then return true
+    else return imports.tonumber(baseString) or baseString end
 end
 
 function string.public:encode(type, baseString, options)

@@ -50,9 +50,9 @@ function rgbToHex(red, green, blue, alpha)
     if not red or not green or not blue then return false end
     red, green, blue, alpha = imports.math.min(255, imports.math.max(0, red)), imports.math.min(255, imports.math.max(0, green)), imports.math.min(255, imports.math.max(0, blue)), (alpha and imports.math.min(255, imports.math.max(0, alpha))) or false
     if alpha then
-		return imports.string.format("#%.2X%.2X%.2X%.2X", red, green, blue, alpha)
+		return imports.string:format("#%.2X%.2X%.2X%.2X", red, green, blue, alpha)
 	else
-		return imports.string.format("#%.2X%.2X%.2X", red, green, blue)
+		return imports.string:format("#%.2X%.2X%.2X", red, green, blue)
 	end
 end
 
