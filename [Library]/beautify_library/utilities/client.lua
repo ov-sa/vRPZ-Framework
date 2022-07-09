@@ -20,7 +20,6 @@ local imports = {
     tostring = tostring,
     tonumber = tonumber,
     pairs = pairs,
-    ipairs = ipairs,
     fileExists = fileExists,
     fileOpen = fileOpen,
     fileRead = fileRead,
