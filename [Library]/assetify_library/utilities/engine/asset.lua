@@ -55,7 +55,7 @@ function asset.public:readFile(filePath, encryptKey, ...)
     if not filePath or (imports.type(filePath) ~= "string") or not file:exists(filePath) then return false end
     if not encryptKey then return filePath end
     local rw = file:read(filePath)
-    return (rw and string:decode("tea", rw, {key = encryptKey}, ...)) or false
+    return (rw and string.decode("tea", rw, {key = encryptKey}, ...)) or false
 end
 
 if localPlayer then
@@ -202,7 +202,7 @@ else
     function asset.public:buildManifest(rootPath, localPath, manifestPath)
         localPath = localPath or rootPath
         local manifestData = file:read(localPath..manifestPath)
-        manifestData = (manifestData and table:decode(manifestData)) or false
+        manifestData = (manifestData and table.decode(manifestData)) or false
         if manifestData then
             for i, j in imports.pairs(manifestData) do
                 local cURL = file:parseURL(j)
@@ -227,7 +227,7 @@ else
                     filePointer.synced.assetSize.file[filePath] = builtFileSize
                     filePointer.synced.assetSize.total = filePointer.synced.assetSize.total + filePointer.synced.assetSize.file[filePath]
                     syncer.libraryBandwidth = syncer.libraryBandwidth + filePointer.synced.assetSize.file[filePath]
-                    filePointer.unSynced.fileData[filePath] = (encryptKey and string:encode("tea", builtFileData, {key = encryptKey})) or builtFileData
+                    filePointer.unSynced.fileData[filePath] = (encryptKey and string.encode("tea", builtFileData, {key = encryptKey})) or builtFileData
                     filePointer.unSynced.fileHash[filePath] = imports.md5(filePointer.unSynced.fileData[filePath])
                 end
                 if rawPointer then rawPointer[filePath] = builtFileData end
@@ -318,18 +318,18 @@ else
 
     function asset.public:buildPack(assetType, assetPack, callback)
         if not assetType or not assetPack or not callback or (imports.type(callback) ~= "function") then return false end
-        local cAssetPack = table:clone(assetPack, true)
-        cAssetPack.manifestData = file:read((asset.public.references.root)..string:lower(assetType).."/"..(asset.public.references.manifest)..".json")
-        cAssetPack.manifestData = (cAssetPack.manifestData and table:decode(cAssetPack.manifestData)) or false
+        local cAssetPack = table.clone(assetPack, true)
+        cAssetPack.manifestData = file:read((asset.public.references.root)..string.lower(assetType).."/"..(asset.public.references.manifest)..".json")
+        cAssetPack.manifestData = (cAssetPack.manifestData and table.decode(cAssetPack.manifestData)) or false
         if cAssetPack.manifestData then
             cAssetPack.rwDatas = {}
             thread:create(function(self)
                 for i = 1, #cAssetPack.manifestData, 1 do
                     local assetName = cAssetPack.manifestData[i]
-                    local assetPath = (asset.public.references.root)..string:lower(assetType).."/"..assetName.."/"
+                    local assetPath = (asset.public.references.root)..string.lower(assetType).."/"..assetName.."/"
                     local assetManifestData = asset.public:buildManifest(assetPath, _, (asset.public.references.asset)..".json")
                     if assetManifestData then
-                        assetManifestData.streamRange = math:max(imports.tonumber(assetManifestData.streamRange) or 0, asset.public.ranges.streamRange)
+                        assetManifestData.streamRange = math.max(imports.tonumber(assetManifestData.streamRange) or 0, asset.public.ranges.streamRange)
                         assetManifestData.enableLODs = (assetManifestData.enableLODs and true) or false
                         assetManifestData.encryptKey = (assetManifestData.encryptKey and imports.md5(imports.tostring(assetManifestData.encryptKey))) or false
                         assetManifestData.assetClumps = (assetManifestData.assetClumps and (imports.type(assetManifestData.assetClumps) == "table") and assetManifestData.assetClumps) or false
@@ -352,7 +352,7 @@ else
                             }
                         }
                         if assetType == "module" then
-                            table:insert(syncer.libraryModules, assetName)
+                            table.insert(syncer.libraryModules, assetName)
                             assetManifestData.streamRange = false
                             assetManifestData.enableLODs = false
                             assetManifestData.assetClumps = false
@@ -395,8 +395,8 @@ else
                             assetManifestData.assetSounds = false
                             if assetType == "scene" then
                                 assetManifestData.assetClumps = false
-                                assetManifestData.sceneDimension = math:max(asset.public.ranges.dimension[1], math:min(asset.public.ranges.dimension[2], imports.tonumber(assetManifestData.sceneDimension) or 0))
-                                assetManifestData.sceneInterior = math:max(asset.public.ranges.interior[1], math:min(asset.public.ranges.interior[2], imports.tonumber(assetManifestData.sceneInterior) or 0))
+                                assetManifestData.sceneDimension = math.max(asset.public.ranges.dimension[1], math.min(asset.public.ranges.dimension[2], imports.tonumber(assetManifestData.sceneDimension) or 0))
+                                assetManifestData.sceneInterior = math.max(asset.public.ranges.interior[1], math.min(asset.public.ranges.interior[2], imports.tonumber(assetManifestData.sceneInterior) or 0))
                                 assetManifestData.sceneMapped = (assetManifestData.sceneMapped and true) or false
                                 if assetManifestData.sceneOffset then
                                     if imports.type(assetManifestData.sceneOffset) ~= "table" then

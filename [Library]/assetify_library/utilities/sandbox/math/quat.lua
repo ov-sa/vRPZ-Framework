@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
 --[[ Resource: Assetify Library
-     Script: utilities: sandbox: math: quat.lua
+     Script: utilities: sandbox: math. quat.lua
      Author: vStudio
      Developer(s): Aviril, Tron, Mario, Аниса
      DOC: 19/10/2021
@@ -89,7 +89,7 @@ function quat.public:setAxisAngle(x, y, z, angle)
     x, y, z, angle = imports.tonumber(x), imports.tonumber(y), imports.tonumber(z), imports.tonumber(angle)
     if not x or not y or not z or not angle then return false end
     angle = angle*0.5
-    local sine, cosine = math:sin(angle), math:cos(angle)
+    local sine, cosine = math.sin(angle), math.cos(angle)
     self.x, self.y, self.z, self.w = self.x*sine, self.y*sine, self.z*sine, cosine
     return self
 end
@@ -106,16 +106,16 @@ end
 function quat.public:toEuler()
     if not quat.public:isInstance(self) then return false end
     local sinX, sinY, sinZ = 2*((self.w*self.x) + (self.y*self.z)), 2*((self.w*self.y) - (self.z*self.x)), 2*((self.w*self.z) + (self.x*self.y))
-    local cosX, cosY, cosZ = 1 - (2*((self.x*self.x) + (self.y*self.y))), math:min(math:max(sinY, -1), 1), 1 - (2*((self.y*self.y) + (self.z*self.z)))
-    return math:deg(math:atan2(sinX, cosX)), math:deg(math:asin(cosY)), math:deg(math:atan2(sinZ, cosZ))
+    local cosX, cosY, cosZ = 1 - (2*((self.x*self.x) + (self.y*self.y))), math.min(math.max(sinY, -1), 1), 1 - (2*((self.y*self.y) + (self.z*self.z)))
+    return math.deg(math.atan2(sinX, cosX)), math.deg(math.asin(cosY)), math.deg(math.atan2(sinZ, cosZ))
 end
 
 function quat.public:fromEuler(x, y, z)
     if (self ~= quat.public) and (self ~= quat.private) then return false end
     x, y, z = imports.tonumber(x), imports.tonumber(y), imports.tonumber(z)
     if not x or not y or not z then return false end
-    x, y, z = math:rad(x)*0.5, math:rad(y)*0.5, math:rad(z)*0.5
-    local sinX, sinY, sinZ = math:sin(x), math:sin(y), math:sin(z)
-    local cosX, cosY, cosZ = math:cos(x), math:cos(y), math:cos(z)
+    x, y, z = math.rad(x)*0.5, math.rad(y)*0.5, math.rad(z)*0.5
+    local sinX, sinY, sinZ = math.sin(x), math.sin(y), math.sin(z)
+    local cosX, cosY, cosZ = math.cos(x), math.cos(y), math.cos(z)
     return quat.public((cosZ*sinX*cosY) - (sinZ*cosX*sinY), (cosZ*cosX*sinY) + (sinZ*sinX*cosY), (sinZ*cosX*cosY) - (cosZ*sinX*sinY), (cosZ*cosX*cosY) + (sinZ*sinX*sinY))
 end

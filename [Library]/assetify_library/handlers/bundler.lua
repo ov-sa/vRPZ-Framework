@@ -47,7 +47,7 @@ local function parseUtil()
     for i = 1, #bundler.utils, 1 do
         local j = file:read(bundler.utils[i])
         for k, v in imports.pairs(bundler.modules) do
-            j = string:gsub(j, k, v.namespace, _, true, "(", ".:)")
+            j = string.gsub(j, k, v.namespace, _, true, "(", ".:)")
         end
         rw = rw..[[
         if true then
@@ -71,9 +71,9 @@ local function parseModule(moduleName)
                 break
             end
         end
-        if not isBlacklisted then rw = string:gsub(rw, i, j.namespace, _, true, "(", ".:)") end
+        if not isBlacklisted then rw = string.gsub(rw, i, j.namespace, _, true, "(", ".:)") end
     end
-    rw = ((moduleName == "namespace") and string:gsub(rw, "class = {}", "local class = {}")) or rw
+    rw = ((moduleName == "namespace") and string.gsub(rw, "class = {}", "local class = {}")) or rw
     for i = 1, #module.endpoints, 1 do
         local j = module.endpoints[i]
         rw = rw..[[
@@ -99,17 +99,17 @@ for i, j in imports.pairs(bundler.modules) do
 end
 
 function import(...)
-    local cArgs = table:pack(...)
+    local cArgs = table.pack(...)
     if cArgs[1] == true then
-        table:remove(cArgs, 1)
+        table.remove(cArgs, 1)
         local buildImports, genImports, __genImports = {}, {}, {}
         local isCompleteFetch = false
         if (#cArgs <= 0) then
-            table:insert(buildImports, "core")
+            table.insert(buildImports, "core")
         elseif cArgs[1] == "*" then
             isCompleteFetch = true
             for i, j in imports.pairs(bundler.rw) do
-                table:insert(buildImports, i)
+                table.insert(buildImports, i)
             end
         else
             buildImports = cArgs
@@ -119,7 +119,7 @@ function import(...)
             if (j ~= "imports") and bundler.rw[j] and not __genImports[j] then
                 __genImports[j] = true
                 local module = bundler.rw[j].module or j
-                table:insert(genImports, {
+                table.insert(genImports, {
                     index = module,
                     rw = bundler.rw["imports"]..[[
                     ]]..bundler.rw[j].rw
@@ -129,8 +129,8 @@ function import(...)
         if #genImports <= 0 then return false end
         return genImports, isCompleteFetch
     else
-        local cArgs = table:pack(...)
-        cArgs = ((#cArgs > 0) and ", \""..table:concat(cArgs, "\", \"").."\"") or ""
+        local cArgs = table.pack(...)
+        cArgs = ((#cArgs > 0) and ", \""..table.concat(cArgs, "\", \"").."\"") or ""
         return [[
         local genImports, isCompleteFetch = call(getResourceFromName("]]..syncer.libraryName..[["), "import", true]]..cArgs..[[)
         if not genImports then return false end
@@ -141,7 +141,7 @@ function import(...)
             if genReturns then genReturns[(#genReturns + 1)] = assetify[(j.index)] end
         end
         if isCompleteFetch then return assetify
-        else return table:unpack(genReturns) end
+        else return table.unpack(genReturns) end
         ]]
     end
 end
@@ -306,7 +306,7 @@ bundler.rw["scheduler"] = {
                 if not exec or (assetify.imports.type(exec) ~= "function") then return false end
                 local isBooted = assetify.isBooted()
                 if isBooted then exec()
-                else assetify.imports.table:insert(assetify.scheduler.buffer.pending.execOnBoot, exec) end
+                else assetify.imports.table.insert(assetify.scheduler.buffer.pending.execOnBoot, exec) end
                 return true
             end,
 
@@ -314,7 +314,7 @@ bundler.rw["scheduler"] = {
                 if not exec or (assetify.imports.type(exec) ~= "function") then return false end
                 local isLoaded = assetify.isLoaded()
                 if isLoaded then exec()
-                else assetify.imports.table:insert(assetify.scheduler.buffer.pending.execOnLoad, exec) end
+                else assetify.imports.table.insert(assetify.scheduler.buffer.pending.execOnLoad, exec) end
                 return true
             end,
 
@@ -322,7 +322,7 @@ bundler.rw["scheduler"] = {
                 if not exec or (assetify.imports.type(exec) ~= "function") then return false end
                 local isModuleLoaded = assetify.isModuleLoaded()
                 if isModuleLoaded then exec()
-                else assetify.imports.table:insert(assetify.scheduler.buffer.pending.execOnModuleLoad, exec) end
+                else assetify.imports.table.insert(assetify.scheduler.buffer.pending.execOnModuleLoad, exec) end
                 return true
             end,
 
@@ -338,7 +338,7 @@ bundler.rw["scheduler"] = {
                 return true
             end
         }
-        assetify.scheduler.buffer.schedule = assetify.imports.table:clone(assetify.scheduler.buffer.pending, true)
+        assetify.scheduler.buffer.schedule = assetify.imports.table.clone(assetify.scheduler.buffer.pending, true)
         local bootExec = function(type)
             if not assetify.scheduler.buffer.pending[type] then return false end
             if #assetify.scheduler.buffer.pending[type] > 0 then
@@ -352,11 +352,11 @@ bundler.rw["scheduler"] = {
         local scheduleExec = function(type, exec)
             if not assetify.scheduler.buffer.schedule[type] then return false end
             if not exec or (assetify.imports.type(exec) ~= "function") then return false end
-            assetify.imports.table:insert(assetify.scheduler.buffer.schedule[type], exec)
+            assetify.imports.table.insert(assetify.scheduler.buffer.schedule[type], exec)
             return true
         end  
         for i, j in assetify.imports.pairs(assetify.scheduler.buffer.schedule) do
-            assetify.scheduler[(assetify.imports.string:gsub(i, "exec", "execSchedule", 1))] = function(...) return scheduleExec(i, ...) end
+            assetify.scheduler[(assetify.imports.string.gsub(i, "exec", "execSchedule", 1))] = function(...) return scheduleExec(i, ...) end
         end
         assetify.network:fetch("Assetify:onBoot", true):on(function() bootExec("execOnBoot") end, {subscriptionLimit = 1})
         assetify.network:fetch("Assetify:onLoad", true):on(function() bootExec("execOnLoad") end, {subscriptionLimit = 1})

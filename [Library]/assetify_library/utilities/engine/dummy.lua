@@ -202,7 +202,7 @@ end
 --[[ API Syncers ]]--
 ---------------------
 
-function syncer.public:syncDummySpawn(length, ...) return dummy.public:create(table:unpack(table:pack(...), length or 5)) end
+function syncer.public:syncDummySpawn(length, ...) return dummy.public:create(table.unpack(table.pack(...), length or 5)) end
 function syncer.public:syncDummyDespawn(length, element) local cDummy = dummy.private:fetchInstance(element); if not cDummy then return false end; return cDummy:destroy() end
 if localPlayer then
     network:create("Assetify:Dummy:onSpawn"):on(function(...) syncer.public:syncDummySpawn(6, ...) end)

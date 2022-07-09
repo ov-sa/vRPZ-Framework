@@ -30,7 +30,7 @@ end
 
 CGame.updateSettings = function(index, data)
     CGame.CSettings.cache[index] = data
-    imports.assetify.file:write(CGame.CSettings.path, imports.table:encode(CGame.CSettings.cache))
+    imports.assetify.file:write(CGame.CSettings.path, imports.table.encode(CGame.CSettings.cache))
     return true
 end
 
@@ -109,7 +109,7 @@ end
 
 for i, j in imports.pairs(FRAMEWORK_CONFIGS["Templates"]["Roles"]) do
     if i ~= "default" then
-        j.badge = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "role:"..imports.string:gsub(imports.string:lower(i), " ", "_"))
+        j.badge = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "role:"..imports.string.gsub(imports.string.lower(i), " ", "_"))
     end
 end
 for i = 1, #FRAMEWORK_CONFIGS["Templates"]["Levels"]["Ranks"], 1 do
@@ -117,4 +117,4 @@ for i = 1, #FRAMEWORK_CONFIGS["Templates"]["Levels"]["Ranks"], 1 do
     j.badge = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "level:rank:"..j.badge)
 end
 CGame.CSettings.cache = imports.assetify.file:read(CGame.CSettings.path)
-CGame.CSettings.cache = (CGame.CSettings.cache and imports.table:decode(CGame.CSettings.cache)) or {}
+CGame.CSettings.cache = (CGame.CSettings.cache and imports.table.decode(CGame.CSettings.cache)) or {}

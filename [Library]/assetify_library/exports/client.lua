@@ -24,8 +24,8 @@ function getLibraryProgress(assetType, assetName)
         cDownloaded = syncer.__libraryBandwidth or 0
     end
     if cDownloaded and cBandwidth then
-        cDownloaded = math:min(cDownloaded, cBandwidth)
-        return cDownloaded, cBandwidth, (cDownloaded/math:max(1, cBandwidth))*100
+        cDownloaded = math.min(cDownloaded, cBandwidth)
+        return cDownloaded, cBandwidth, (cDownloaded/math.max(1, cBandwidth))*100
     end
     return false
 end

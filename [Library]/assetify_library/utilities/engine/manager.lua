@@ -62,13 +62,13 @@ function manager.public:fetchAssets(assetType)
     if localPlayer then
         if settings.assetPacks[assetType].rwDatas then
             for i, j in imports.pairs(settings.assetPacks[assetType].rwDatas) do
-                table:insert(cAssets, i)
+                table.insert(cAssets, i)
             end
         end
     else
         for i, j in imports.pairs(settings.assetPacks[assetType].assetPack.manifestData) do
             if settings.assetPacks[assetType].assetPack.rwDatas[j] then
-                table:insert(cAssets, j)
+                table.insert(cAssets, j)
             end
         end
     end
@@ -165,7 +165,7 @@ if localPlayer then
         local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
         local unSynced = cAsset.unSynced
         if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
-            cAsset = table:clone(cAsset, true)
+            cAsset = table.clone(cAsset, true)
             cAsset.manifestData.encryptKey = nil
             cAsset.unSynced = nil
         end
@@ -192,7 +192,7 @@ if localPlayer then
         if not cAsset or isLoaded then return false end
         local cAssetPack = settings.assetPacks[assetType]
         local assetPath = (asset.references.root)..assetType.."/"..assetName.."/"
-        cAsset.unSynced = table:clone(manager.private.rwFormat, true)
+        cAsset.unSynced = table.clone(manager.private.rwFormat, true)
         manager.private:createDep(cAsset)
         if assetType == "module" then
             if not asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache, {}) then return false end
@@ -332,7 +332,7 @@ else
         if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
             cAsset = cAsset.synced
             if cAsset.manifestData.encryptKey then
-                cAsset = table:clone(cAsset, true)
+                cAsset = table.clone(cAsset, true)
                 cAsset.manifestData.encryptKey = nil
             end
         end

@@ -28,7 +28,7 @@ dbify.vehicle = {
         local isAsync, cArgs = dbify.parseArgs(2, ...)
         local keyColumns, callback = dbify.fetchArg(_, cArgs), dbify.fetchArg(_, cArgs)
         local promise = function()
-            return dbify.mysql.table.fetchContents(dbify.vehicle.connection.table, keyColumns, callback, imports.table:unpack(cArgs))
+            return dbify.mysql.table.fetchContents(dbify.vehicle.connection.table, keyColumns, callback, imports.table.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end,
@@ -62,7 +62,7 @@ dbify.vehicle = {
                 else
                     execFunction(callback, false, cArgs)
                 end
-            end, imports.table:unpack(cArgs))
+            end, imports.table.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end,
@@ -75,7 +75,7 @@ dbify.vehicle = {
         local promise = function()
             return dbify.mysql.data.set(dbify.vehicle.connection.table, dataColumns, {
                 {dbify.vehicle.connection.key, vehicleID}
-            }, callback, imports.table:unpack(cArgs))
+            }, callback, imports.table.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end,
@@ -88,7 +88,7 @@ dbify.vehicle = {
         local promise = function()
             return dbify.mysql.data.get(dbify.vehicle.connection.table, dataColumns, {
                 {dbify.vehicle.connection.key, vehicleID}
-            }, true, callback, imports.table:unpack(cArgs))
+            }, true, callback, imports.table.unpack(cArgs))
         end
         return (isAsync and promise) or promise()
     end

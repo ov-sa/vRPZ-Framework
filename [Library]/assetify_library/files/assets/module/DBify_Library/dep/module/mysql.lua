@@ -16,12 +16,12 @@ local imports = {
 }
 
 dbify.parseArgs = function(cbIndex, ...)
-    local rawArgs = imports.table:pack(...)
+    local rawArgs = imports.table.pack(...)
     local cThread, cbIndex = rawArgs[1], imports.tonumber(cbIndex)
     if cThread and imports.assetify.thread:isInstance(cThread) then
         if not cbIndex then return false end
-        imports.table:remove(rawArgs, 1)
-        imports.table:insert(rawArgs, cbIndex, function(...) return cThread:resolve(...) end)
+        imports.table.remove(rawArgs, 1)
+        imports.table.insert(rawArgs, cbIndex, function(...) return cThread:resolve(...) end)
         return true, rawArgs
     end
     return false, rawArgs
@@ -31,7 +31,7 @@ dbify.fetchArg = function(index, pool)
     index = imports.tonumber(index) or 1
     if not pool or (imports.type(pool) ~= "table") then return false end
     local argValue = pool[index]
-    imports.table:remove(pool, index)
+    imports.table.remove(pool, index)
     return argValue
 end
 
@@ -73,7 +73,7 @@ dbify.mysql = {
                 for i = 1, #keyColumns, 1 do
                     local j = keyColumns[i]
                     if not _validateKeyColumns[(j[1])] then
-                        imports.table:insert(validateKeyColumns, j[1])
+                        imports.table.insert(validateKeyColumns, j[1])
                     end
                 end
                 local promise = function()
@@ -82,8 +82,8 @@ dbify.mysql = {
                             local queryString, queryArguments = "SELECT * FROM `??` WHERE", {cArgs[1].tableName}
                             for i = 1, #cArgs[1].keyColumns, 1 do
                                 local j = cArgs[1].keyColumns[i]
-                                imports.table:insert(queryArguments, imports.tostring(j[1]))
-                                imports.table:insert(queryArguments, imports.tostring(j[2]))
+                                imports.table.insert(queryArguments, imports.tostring(j[1]))
+                                imports.table.insert(queryArguments, imports.tostring(j[2]))
                                 queryString = queryString.." `??`=?"..(((i < #cArgs[1].keyColumns) and " AND") or "")
                             end
                             imports.dbQuery(function(queryHandler, cArgs)
@@ -93,7 +93,7 @@ dbify.mysql = {
                                 else
                                     execFunction(callback, false, cArgs)
                                 end
-                            end, {cArgs[2]}, dbify.mysql.connection.instance, queryString, imports.table:unpack(queryArguments))
+                            end, {cArgs[2]}, dbify.mysql.connection.instance, queryString, imports.table.unpack(queryArguments))
                         else
                             execFunction(callback, false, cArgs[2])
                         end
@@ -118,7 +118,7 @@ dbify.mysql = {
                         else
                             execFunction(callback, false, cArgs)
                         end
-                    end, imports.table:unpack(cArgs))
+                    end, imports.table.unpack(cArgs))
                 end
                 return (isAsync and promise) or promise()
             end
@@ -142,7 +142,7 @@ dbify.mysql = {
                     else
                         execFunction(callback, false, cArgs)
                     end
-                end, imports.table:unpack(cArgs))
+                end, imports.table.unpack(cArgs))
             end
             return (isAsync and promise) or promise()
         end,
@@ -158,7 +158,7 @@ dbify.mysql = {
                         local queryString, queryArguments = "SELECT `table_name` FROM information_schema.columns WHERE `table_schema`=? AND `table_name`=? AND (", {dbify.settings.credentials.database, tableName}
                         for i = 1, #cArgs[1], 1 do
                             local j = cArgs[1][i]
-                            imports.table:insert(queryArguments, imports.tostring(j))
+                            imports.table.insert(queryArguments, imports.tostring(j))
                             queryString = queryString..(((i > 1) and " ") or "").."`column_name`=?"..(((i < #cArgs[1]) and " OR") or "")
                         end
                         queryString = queryString..")"
@@ -166,7 +166,7 @@ dbify.mysql = {
                             local result = imports.dbPoll(queryHandler, 0)
                             result = ((result and (#result >= #cArgs[1])) and true) or false
                             execFunction(callback, result, cArgs[2])
-                        end, {cArgs}, dbify.mysql.connection.instance, queryString, imports.table:unpack(queryArguments))
+                        end, {cArgs}, dbify.mysql.connection.instance, queryString, imports.table.unpack(queryArguments))
                     else
                         execFunction(callback, false, cArgs[2])
                     end
@@ -186,10 +186,10 @@ dbify.mysql = {
                         local queryString, queryArguments = "ALTER TABLE `??`", {tableName}
                         for i = 1, #cArgs[1], 1 do
                             local j = cArgs[1][i]
-                            imports.table:insert(queryArguments, imports.tostring(j))
+                            imports.table.insert(queryArguments, imports.tostring(j))
                             queryString = queryString.." DROP COLUMN `??`"..(((i < #cArgs[1]) and ", ") or "")
                         end
-                        local result = imports.dbExec(dbify.mysql.connection.instance, queryString, imports.table:unpack(queryArguments))
+                        local result = imports.dbExec(dbify.mysql.connection.instance, queryString, imports.table.unpack(queryArguments))
                         execFunction(callback, result, cArgs[2])
                     else
                         execFunction(callback, false, cArgs[2])
@@ -210,7 +210,7 @@ dbify.mysql = {
             for i = 1, #keyColumns, 1 do
                 local j = keyColumns[i]
                 if not _validateKeyColumns[(j[1])] then
-                    imports.table:insert(validateKeyColumns, j[1])
+                    imports.table.insert(validateKeyColumns, j[1])
                 end
             end
             local promise = function()
@@ -220,24 +220,24 @@ dbify.mysql = {
                         for i = 1, #cArgs[1].keyColumns, 1 do
                             local j = cArgs[1].keyColumns[i]
                             j[1] = imports.tostring(j[1])
-                            imports.table:insert(queryArguments.cArgs, j[1])
-                            imports.table:insert(queryArguments.cArgs, imports.tostring(j[2]))
+                            imports.table.insert(queryArguments.cArgs, j[1])
+                            imports.table.insert(queryArguments.cArgs, imports.tostring(j[2]))
                             queryStrings[2] = queryStrings[2].." `??`=?"..(((i < #cArgs[1].keyColumns) and " AND") or "")
                         end
                         queryArguments.subLength = #queryArguments.cArgs
-                        imports.table:insert(queryArguments.cArgs, (#queryArguments.cArgs - queryArguments.subLength) + 1, cArgs[1].tableName)
+                        imports.table.insert(queryArguments.cArgs, (#queryArguments.cArgs - queryArguments.subLength) + 1, cArgs[1].tableName)
                         for i = 1, #cArgs[1].dataColumns, 1 do
                             local j = cArgs[1].dataColumns[i]
                             j[1] = imports.tostring(j[1])
-                            imports.table:insert(queryArguments.cArgs, (#queryArguments.cArgs - queryArguments.subLength) + 1, j[1])
-                            imports.table:insert(queryArguments.cArgs, (#queryArguments.cArgs - queryArguments.subLength) + 1, imports.tostring(j[2]))
+                            imports.table.insert(queryArguments.cArgs, (#queryArguments.cArgs - queryArguments.subLength) + 1, j[1])
+                            imports.table.insert(queryArguments.cArgs, (#queryArguments.cArgs - queryArguments.subLength) + 1, imports.tostring(j[2]))
                             queryStrings[1] = queryStrings[1].." `??`=?"..(((i < #cArgs[1].dataColumns) and ",") or "")
                             dbify.mysql.column.isValid(cArgs[1].tableName, j[1], function(isValid, cArgs)
                                 if not isValid then
                                     imports.dbExec(dbify.mysql.connection.instance, "ALTER TABLE `??` ADD COLUMN `??` TEXT", cArgs[1], cArgs[2])
                                 end
                                 if cArgs[3] then
-                                    local result = imports.dbExec(dbify.mysql.connection.instance, cArgs[3].queryString, imports.table:unpack(cArgs[3].queryArguments))
+                                    local result = imports.dbExec(dbify.mysql.connection.instance, cArgs[3].queryString, imports.table.unpack(cArgs[3].queryArguments))
                                     execFunction(callback, result, cArgs[4])
                                 end
                             end, cArgs[1].tableName, j[1], ((i >= #cArgs[1].dataColumns) and {
@@ -267,13 +267,13 @@ dbify.mysql = {
             for i = 1, #dataColumns, 1 do
                 local j = dataColumns[i]
                 _validateColumns[j] = true
-                imports.table:insert(validateColumns, j)
+                imports.table.insert(validateColumns, j)
             end
             for i = 1, #keyColumns, 1 do
                 local j = keyColumns[i]
                 if not _validateColumns[(j[1])] then
                     _validateColumns[(j[1])] = true
-                    imports.table:insert(validateColumns, j[1])
+                    imports.table.insert(validateColumns, j[1])
                 end
             end
             local promise = function()
@@ -282,15 +282,15 @@ dbify.mysql = {
                         local queryString, queryArguments = "SELECT", {}
                         for i = 1, #cArgs[1].dataColumns, 1 do
                             local j = cArgs[1].dataColumns[i]
-                            imports.table:insert(queryArguments, imports.tostring(j))
+                            imports.table.insert(queryArguments, imports.tostring(j))
                             queryString = queryString.." `??`"..(((i < #cArgs[1].dataColumns) and ",") or "")
                         end
-                        imports.table:insert(queryArguments, cArgs[1].tableName)
+                        imports.table.insert(queryArguments, cArgs[1].tableName)
                         queryString = queryString.." FROM `??` WHERE"
                         for i = 1, #cArgs[1].keyColumns, 1 do
                             local j = cArgs[1].keyColumns[i]
-                            imports.table:insert(queryArguments, imports.tostring(j[1]))
-                            imports.table:insert(queryArguments, imports.tostring(j[2]))
+                            imports.table.insert(queryArguments, imports.tostring(j[1]))
+                            imports.table.insert(queryArguments, imports.tostring(j[2]))
                             queryString = queryString.." `??`=?"..(((i < #cArgs[1].keyColumns) and " AND") or "")
                         end
                         imports.dbQuery(function(queryHandler, soloFetch, cArgs)
@@ -300,7 +300,7 @@ dbify.mysql = {
                                 return true
                             end
                             execFunction(callback, false, cArgs)
-                        end, {cArgs[1].soloFetch, cArgs[2]}, dbify.mysql.connection.instance, queryString, imports.table:unpack(queryArguments))
+                        end, {cArgs[1].soloFetch, cArgs[2]}, dbify.mysql.connection.instance, queryString, imports.table.unpack(queryArguments))
                     else
                         execFunction(callback, false, cArgs[2])
                     end

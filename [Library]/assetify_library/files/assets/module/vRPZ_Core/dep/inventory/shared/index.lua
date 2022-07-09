@@ -91,20 +91,20 @@ CInventory = {
     fetchSlotIndex = function(row, column)
         row, column = imports.tonumber(row), imports.tonumber(column)
         if not row or not column then return false end
-        return (imports.math:max(0, row - 1)*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns) + column
+        return (imports.math.max(0, row - 1)*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns) + column
     end,
 
     fetchSlotLocation = function(slot)
         slot = imports.tonumber(slot)
         if not slot then return false end
-        local row = imports.math:ceil(slot/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)
-        local column = slot - (imports.math:max(0, row - 1)*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)
+        local row = imports.math.ceil(slot/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)
+        local column = slot - (imports.math.max(0, row - 1)*FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)
         return row, column
     end,
 
     fetchItemCount = function(parent, item)
         if not parent or not item or not imports.isElement(parent) or not CInventory.CItems[item] then return false end
-        return imports.math:max(0, imports.tonumber(CGame.getEntityData(parent, "Item:"..item)) or 0)
+        return imports.math.max(0, imports.tonumber(CGame.getEntityData(parent, "Item:"..item)) or 0)
     end,
 
     addItemCount = function(parent, item, count)
@@ -121,7 +121,7 @@ CInventory = {
         if not count then return false end
         local itemCount = CInventory.fetchItemCount(parent, item)
         if not itemCount then return false end
-        CGame.setEntityData(parent, "Item:"..item, imports.math:max(0, itemCount - count))
+        CGame.setEntityData(parent, "Item:"..item, imports.math.max(0, itemCount - count))
         return true
     end,
 
@@ -160,7 +160,7 @@ imports.assetify.scheduler.execOnLoad(function()
             local j = CItems[i]
             local cAsset = imports.assetify.getAsset("inventory", j)
             if cAsset and cAsset.manifestData.itemSlot then
-                CInventory.CItems[j] = {pack = "inventory", ref = imports.string:lower(j), slot = cAsset.manifestData.itemSlot, data = cAsset.manifestData}
+                CInventory.CItems[j] = {pack = "inventory", ref = imports.string.lower(j), slot = cAsset.manifestData.itemSlot, data = cAsset.manifestData}
                 CInventory.CCategories[(cAsset.manifestData.itemSlot)] = CInventory.CCategories[(cAsset.manifestData.itemSlot)] or {}
                 CInventory.CCategories[(cAsset.manifestData.itemSlot)][j] = true
             end
@@ -171,16 +171,16 @@ imports.assetify.scheduler.execOnLoad(function()
             local j = CWeapons[i]
             local cAsset = imports.assetify.getAsset("weapon", j)
             if cAsset and cAsset.manifestData.itemSlot and FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)] and (FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][(cAsset.manifestData.itemSlot)].identifier == "Weapon") then
-                CInventory.CItems[j] = {pack = "weapon", ref = imports.string:lower(j), slot = cAsset.manifestData.itemSlot, data = cAsset.manifestData}
+                CInventory.CItems[j] = {pack = "weapon", ref = imports.string.lower(j), slot = cAsset.manifestData.itemSlot, data = cAsset.manifestData}
                 CInventory.CCategories[(cAsset.manifestData.itemSlot)][j] = true
             end
         end
     end
     for i, j in imports.pairs(CInventory.CItems) do
         CInventory.CRefs.ref[(j.ref)] = i
-        imports.table:insert(CInventory.CRefs.index, j.ref)
+        imports.table.insert(CInventory.CRefs.index, j.ref)
         j.data.itemWeight = j.data.itemWeight or {}
-        j.data.itemWeight.rows, j.data.itemWeight.columns = imports.math:max(1, imports.tonumber(j.data.itemWeight.rows) or 0), imports.math:max(1, imports.tonumber(j.data.itemWeight.columns) or 0)        
+        j.data.itemWeight.rows, j.data.itemWeight.columns = imports.math.max(1, imports.tonumber(j.data.itemWeight.rows) or 0), imports.math.max(1, imports.tonumber(j.data.itemWeight.columns) or 0)        
         j.data.itemWeight.weight = j.data.itemWeight.rows*j.data.itemWeight.columns
     end
 end)

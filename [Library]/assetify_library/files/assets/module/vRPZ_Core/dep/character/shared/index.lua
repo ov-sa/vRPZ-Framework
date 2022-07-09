@@ -76,7 +76,7 @@ CCharacter = {
     setHealth = function(player, amount)
         amount = imports.tonumber(amount)
         if not CPlayer.isInitialized(player) or not amount then return false end
-        return CGame.setEntityData(player, "Character:Data:blood", imports.math:max(0, imports.math:min(amount, CCharacter.getMaxHealth(player))))
+        return CGame.setEntityData(player, "Character:Data:blood", imports.math.max(0, imports.math.min(amount, CCharacter.getMaxHealth(player))))
     end,
 
     getHealth = function(player)
@@ -91,11 +91,11 @@ CCharacter = {
 
     getLevel = function(player, fetchEXP)
         if not CPlayer.isInitialized(player) then return false end
-        local characterLevel = imports.math:max(1, imports.math:min(FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"], imports.tonumber(CGame.getEntityData(player, "Character:Data:level")) or 0))
+        local characterLevel = imports.math.max(1, imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"], imports.tonumber(CGame.getEntityData(player, "Character:Data:level")) or 0))
         if not fetchEXP then
             return characterLevel
         else
-            return characterLevel, imports.math:max(1, imports.math:min(CGame.getLevelEXP(characterLevel), imports.tonumber(CGame.getEntityData(player, "Character:Data:experience")) or 0))
+            return characterLevel, imports.math.max(1, imports.math.min(CGame.getLevelEXP(characterLevel), imports.tonumber(CGame.getEntityData(player, "Character:Data:experience")) or 0))
         end
     end,
 
@@ -117,8 +117,8 @@ CCharacter = {
             genLevel = genLevel + 1
             genLevelEXP = CGame.getLevelEXP(genLevel)
         end
-        genLevel = imports.math:max(1, imports.math:min(FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"], genLevel))
-        characterEXP = imports.math:min(CGame.getLevelEXP(genLevel), characterEXP)
+        genLevel = imports.math.max(1, imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"], genLevel))
+        characterEXP = imports.math.min(CGame.getLevelEXP(genLevel), characterEXP)
         if characterLevel ~= genLevel then
             CGame.setEntityData(player, "Character:Data:level", genLevel)
         end
@@ -128,7 +128,7 @@ CCharacter = {
 
     getReputation = function(player)
         if not CPlayer.isInitialized(player) then return false end
-        return imports.math:min(FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"], imports.tonumber(CGame.getEntityData(player, "Character:Data:reputation")) or 0)
+        return imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"], imports.tonumber(CGame.getEntityData(player, "Character:Data:reputation")) or 0)
     end,
 
     giveReputation = function(player, reputation)
@@ -136,7 +136,7 @@ CCharacter = {
         if not reputation then return false end
         local characterReputation = CCharacter.getReputation(player)
         if not characterReputation then return false end
-        local genReputation = imports.math:min(FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"], characterReputation + reputation)
+        local genReputation = imports.math.min(FRAMEWORK_CONFIGS["Templates"]["Reputations"]["Max_Reputation"], characterReputation + reputation)
         if characterReputation ~= genReputation then
             characterReputation = genReputation
             CGame.setEntityData(player, "Character:Data:reputation", characterReputation)
@@ -175,7 +175,7 @@ CCharacter = {
     getKD = function(player)
         local characterKills, characterDeaths = CCharacter.getKills(player), CCharacter.getDeaths(player)
         if not characterKills or not characterDeaths then return false end
-        return characterKills/imports.math:max(1, characterDeaths)
+        return characterKills/imports.math.max(1, characterDeaths)
     end,
 
     getSurvivalTime = function(player)
@@ -204,7 +204,7 @@ CCharacter = {
     setMoney = function(player, amount)
         money = imports.tonumber(money)
         if not CPlayer.isInitialized(player) or not money then return false end
-        return CGame.setEntityData(player, "Character:Data:money", imports.math:max(0, money))
+        return CGame.setEntityData(player, "Character:Data:money", imports.math.max(0, money))
     end,
 
     getMoney = function(player)

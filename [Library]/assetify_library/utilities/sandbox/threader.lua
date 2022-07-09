@@ -39,7 +39,7 @@ end
 function thread.public:createHeartbeat(conditionExec, exec, rate)
     if self ~= thread.public then return false end
     if not conditionExec or not exec or (imports.type(conditionExec) ~= "function") or (imports.type(exec) ~= "function") then return false end
-    rate = imports.math:max(imports.tonumber(rate) or 0, 1)
+    rate = imports.math.max(imports.tonumber(rate) or 0, 1)
     local cThread = thread.public:create(function(self)
         while(conditionExec()) do
             self:pause()
@@ -108,7 +108,7 @@ function thread.public:resume(syncRate)
 end
 
 function thread.public:sleep(duration)
-    duration = imports.math:max(0, imports.tonumber(duration) or 0)
+    duration = imports.math.max(0, imports.tonumber(duration) or 0)
     if not thread.public:isInstance(self) or self.isAwaiting then return false end
     if self.sleepTimer and timer:isInstance(self.sleepTimer) then return false end
     self.isAwaiting = "sleep"
@@ -128,7 +128,7 @@ function thread.public:await(exec)
     thread.public:pause()
     local resolvedValues = self.awaitingValues
     self.awaitingValues = nil
-    return table:unpack(resolvedValues)
+    return table.unpack(resolvedValues)
 end
 
 function thread.public:resolve(...)
@@ -136,7 +136,7 @@ function thread.public:resolve(...)
     if not self.isAwaiting or (self.isAwaiting ~= "promise") then return false end
     timer:create(function(...)
         self.isAwaiting = nil
-        self.awaitingValues = table:pack(...)
+        self.awaitingValues = table.pack(...)
         thread.private.resume(self)
     end, 1, 1, ...)
     return true

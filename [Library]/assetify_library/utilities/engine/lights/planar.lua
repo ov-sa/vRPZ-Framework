@@ -119,7 +119,7 @@ end
 
 function planar.public:setResolution(resolution)
     if not self or (self == planar.public) then return false end
-    self.lightData.resolution = math:max(0, imports.tonumber(resolution) or 1)
+    self.lightData.resolution = math.max(0, imports.tonumber(resolution) or 1)
     self.cShader:setValue("lightResolution", self.lightData.resolution)
     return true
 end
@@ -134,7 +134,7 @@ end
 function planar.public:setColor(r, g, b, a)
     if not self or (self == planar.public) then return false end
     self.lightData.color = self.lightData.color or {}
-    self.lightData.color[1], self.lightData.color[2], self.lightData.color[3], self.lightData.color[4] = math:max(0, math:min(255, imports.tonumber(r) or 255)), math:max(0, math:min(255, imports.tonumber(g) or 255)), math:max(0, math:min(255, imports.tonumber(b) or 255)), math:max(0, math:min(255, imports.tonumber(a) or 255))
+    self.lightData.color[1], self.lightData.color[2], self.lightData.color[3], self.lightData.color[4] = math.max(0, math.min(255, imports.tonumber(r) or 255)), math.max(0, math.min(255, imports.tonumber(g) or 255)), math.max(0, math.min(255, imports.tonumber(b) or 255)), math.max(0, math.min(255, imports.tonumber(a) or 255))
     self.cShader:setValue("lightColor", self.lightData.color[1]/255, self.lightData.color[2]/255, self.lightData.color[3]/255, self.lightData.color[4]/255)
     return true
 end

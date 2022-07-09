@@ -48,12 +48,12 @@ local cUtility = {
             CGame.setEntityData(player, "Slot:"..i, nil)
             CGame.setEntityData(player, "Slot:Object:"..i, nil)
         end
-        imports.table:insert(buffer.inventory, {"max_slots", CInventory.CBuffer[(deps.inventoryID)].maxSlots})
-        imports.table:insert(buffer.inventory, {"slots", imports.table:encode(CInventory.CBuffer[(deps.inventoryID)].slots)})
+        imports.table.insert(buffer.inventory, {"max_slots", CInventory.CBuffer[(deps.inventoryID)].maxSlots})
+        imports.table.insert(buffer.inventory, {"slots", imports.table.encode(CInventory.CBuffer[(deps.inventoryID)].slots)})
         for i, j in imports.pairs(CInventory.CItems) do
             if saveProgress then
                 CInventory.setItemProperty(cThread, deps.inventoryID, {j.ref}, {
-                    {imports.dbify.inventory.connection.item.counter, imports.math:max(0, imports.tonumber(CGame.getEntityData(player, "Item:"..i)) or 0)}
+                    {imports.dbify.inventory.connection.item.counter, imports.math.max(0, imports.tonumber(CGame.getEntityData(player, "Item:"..i)) or 0)}
                 })
             end
             CGame.setEntityData(player, "Item:"..i, (loadProgress and 0) or nil)
@@ -81,7 +81,7 @@ CCharacter.loadInventory = function(cThread, player, deps)
     if not DItemProperty and (#CInventory.CRefs.index > 0) then return false end
     local DInventoryProperty = CInventory.getData(cThread, deps.inventoryID, {"max_slots", "slots"})
     DInventoryProperty = DInventoryProperty or {}
-    DInventoryProperty.max_slots, DInventoryProperty.slots = imports.math:max(CInventory.fetchMaxSlotsMultiplier(), imports.tonumber(DInventoryProperty.max_slots) or 0), (DInventoryProperty.slots and imports.table:decode(DInventoryProperty.slots)) or {}
+    DInventoryProperty.max_slots, DInventoryProperty.slots = imports.math.max(CInventory.fetchMaxSlotsMultiplier(), imports.tonumber(DInventoryProperty.max_slots) or 0), (DInventoryProperty.slots and imports.table.decode(DInventoryProperty.slots)) or {}
     CInventory.CBuffer[(deps.inventoryID)] = {
         maxSlots = DInventoryProperty.max_slots,
         slots = DInventoryProperty.slots
@@ -132,7 +132,7 @@ CCharacter.saveProgress = function(cThread, player)
     local characterID = CPlayer.getCharacterID(player)
     local inventoryID = CPlayer.getInventoryID(player)
     CCharacter.setData(cThread, characterID, {
-        {"location", imports.table:encode(CCharacter.getLocation(player))}
+        {"location", imports.table.encode(CCharacter.getLocation(player))}
     })
     cUtility.resetProgress(cThread, player, true, {
         serial = serial,
