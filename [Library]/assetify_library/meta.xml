@@ -25,7 +25,6 @@
     <script src="utilities/sandbox/math/quat.lua" type="shared"/>
     <script src="utilities/sandbox/math/matrix.lua" type="shared"/>
     <script src="utilities/sandbox/string.lua" type="shared"/>
-    <script src="utilities/shaders/index.lua" type="client"/>
     <script src="utilities/sandbox/timer.lua" type="shared"/>
     <script src="utilities/sandbox/threader.lua" type="shared"/>
     <script src="utilities/sandbox/networker.lua" type="shared"/>
@@ -35,6 +34,7 @@
 
     <!-- Utilities: Shaders -->
     <file src="utilities/shaders/helper.fx"/>
+    <script src="utilities/shaders/index.lua" type="client"/>
     <script src="utilities/shaders/tex_clearer.lua" type="client"/>
     <script src="utilities/shaders/tex_changer.lua" type="client"/>
     <script src="utilities/shaders/tex_shadower.lua" type="client"/>

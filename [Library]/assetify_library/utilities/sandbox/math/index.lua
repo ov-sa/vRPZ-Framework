@@ -25,7 +25,7 @@ local imports = {
 ---------------------
 
 local math = namespace:create("math", math)
-for i, j in imports.pairs(math) do
+for i, j in imports.pairs(math.public) do
     if imports.type(math.public[i]) == "function" then
         imports.loadstring([[
             local __math_]]..i..[[ = math.]]..i..[[
