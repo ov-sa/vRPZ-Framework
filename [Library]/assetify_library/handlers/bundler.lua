@@ -141,7 +141,7 @@ function import(...)
             if genReturns then genReturns[(#genReturns + 1)] = assetify[(j.index)] end
         end
         if isCompleteFetch then return assetify
-        else return table.unpack(genReturns) end
+        else return table:unpack(genReturns) end
         ]]
     end
 end
