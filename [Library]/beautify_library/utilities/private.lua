@@ -22,6 +22,31 @@ for i, j in imports.pairs(imports.string) do
 end
 imports.string = string
 
+
+function math.round(number, decimals)
+    decimals = decimals or 0
+    return imports.tonumber(imports.string.format(("%."..decimals.."f"), number))
+end
+
+function string.spaceChars(baseString, appender)
+    if baseString then
+        return imports.string.sub(imports.string.gsub(baseString, ".", (appender or " ").."%0"), 2)
+    end
+    return false
+end
+
+function string.parse(rawString)
+    if not rawString then return false end
+    if imports.tostring(rawString) == "nil" then
+        rawString = nil
+    elseif imports.tostring(rawString) == "false" then
+        rawString = false
+    elseif imports.tostring(rawString) == "true" then
+        rawString = true
+    end
+    return imports.tonumber(rawString) or rawString
+end
+
 function table.clone(recievedTable, isRecursiveMode)
 
     if not recievedTable or imports.type(recievedTable) ~= "table" then return false end

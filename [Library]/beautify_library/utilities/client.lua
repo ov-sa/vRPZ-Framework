@@ -47,32 +47,6 @@ function dxSetBlendMode(blendMode)
 end
 
 
------------------------------------
---[[ Function: Rounds A Number ]]--
------------------------------------
-
-function math.round(number, decimals)
-    
-    decimals = decimals or 0
-    return imports.tonumber(imports.string.format(("%."..decimals.."f"), number))
-
-end
-
-
-------------------------------------------------
---[[ Function: Appends Space b/w Characters ]]--
-------------------------------------------------
-
-function string.spaceChars(baseString, appender)
-
-    if baseString then
-        return imports.string.sub(imports.string.gsub(baseString, ".", (appender or " ").."%0"), 2)
-    end
-    return false
-
-end
-
-
 ---------------------------------------------------
 --[[ Function: Retrieves Shortest Target Angle ]]--
 ---------------------------------------------------
@@ -127,26 +101,6 @@ function cloneUIOutline(elementType, nestedOutline)
         end
     end
     return clonedOutline
-
-end
-
-
----------------------------------
---[[ Function: Parses String ]]--
----------------------------------
-
-function string.parse(rawString)
-
-    if not rawString then return false end
-
-    if imports.tostring(rawString) == "nil" then
-        rawString = nil
-    elseif imports.tostring(rawString) == "false" then
-        rawString = false
-    elseif imports.tostring(rawString) == "true" then
-        rawString = true
-    end
-    return imports.tonumber(rawString) or rawString
 
 end
 
