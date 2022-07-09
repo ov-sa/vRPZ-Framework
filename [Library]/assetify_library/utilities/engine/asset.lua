@@ -78,15 +78,17 @@ if localPlayer then
         for i, j in imports.pairs(assetDeps) do
             rwCache[i] = {}
             for k, v in imports.pairs(j) do
-                if i == "texture" then
-                    rwCache[i][k] = shader:loadTex(v, encryptKey)
-                elseif i == "script" then
+                if i == "script" then
                     rwCache[i][k] = {}
                     if k ~= "server" then
                         for m, n in imports.pairs(v) do
                             rwCache[i][k][m] = asset.public:readFile(n, encryptKey, true)
                         end
                     end
+                elseif i == "texture" then
+                    rwCache[i][k] = shader:loadTex(v, encryptKey)
+                else
+                    rwCache[i][k] = asset.public:readFile(v, encryptKey)
                 end
             end
         end
