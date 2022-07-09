@@ -49,7 +49,13 @@ function manager.public:exportAPI(moduleName, moduleAPIs)
         if (i  == "shared") or (i == ((localPlayer and "client") or "server")) then
             for k = 1, #j, 1 do
                 local v = j[k]
-                imports.loadstring([[function ]]..v.name..[[(...) return manager.API.]]..moduleName..[[:]]..v.API..[[(...) end]])()
+                imports.loadstring([[
+                    local ref = false
+                    function ]]..v.name..[[(...)
+                        ref = ref or manager.API.]]..moduleName..[[.]]..v.API..[[
+                        return ref(...)
+                    end
+                ]])()
             end
         end
     end

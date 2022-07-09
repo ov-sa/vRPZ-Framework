@@ -165,7 +165,7 @@ if localPlayer then
                 if collisionID then
                     imports.engineReplaceCOL(rwCache.col[(rwPaths.col)], modelID)
                     if lodID then imports.engineReplaceCOL(rwCache.col[(rwPaths.col)], lodID) end
-                    manager.API.World:clearModel(collisionID)
+                    manager.API.World.clearModel(collisionID)
                     imports.engineReplaceCOL(rwCache.col[(rwPaths.col)], collisionID)
                 end
                 assetData.cAsset = self
