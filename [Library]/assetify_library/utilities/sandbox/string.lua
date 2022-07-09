@@ -17,6 +17,7 @@ local imports = {
     pairs = pairs,
     tostring = tostring,
     tonumber = tonumber,
+    loadstring = loadstring,
     string = string,
     encodeString = encodeString,
     decodeString = decodeString
@@ -31,7 +32,7 @@ local string = class:create("string", utf8)
 for i, j in imports.pairs(imports.string) do
     string.public[i] = (not string.public[i] and j) or string.public[i]
     if imports.type(string.public[i]) == "function" then
-        loadstring([[
+        imports.loadstring([[
             local __string_]]..i..[[ = string.]]..i..[[
             function string:]]..i..[[(...) return __string_]]..i..[[(...) end
         ]])()

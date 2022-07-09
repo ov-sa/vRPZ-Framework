@@ -8,14 +8,34 @@
 ----------------------------------------------------------------
 
 
+-----------------
+--[[ Imports ]]--
+-----------------
+
+local imports = {
+    type = type,
+    pairs = pairs,
+    tonumber = tonumber,
+    loadstring = loadstring
+}
+
+
 ---------------------
 --[[ Class: Math ]]--
 ---------------------
 
 local math = namespace:create("math", math)
+for i, j in imports.pairs(math) do
+    if imports.type(math.public[i]) == "function" then
+        imports.loadstring([[
+            local __math_]]..i..[[ = math.]]..i..[[
+            function math:]]..i..[[(...) return __math_]]..i..[[(...) end
+        ]])()
+    end
+end
 
-math:round = function(number, decimals)
+function math.public:round(number, decimals)
     number = imports.tonumber(number)
     if not number then return false end
-    return imports.tonumber(imports.string:format("%."..(imports.tonumber(decimals) or 0).."f", number))
+    return imports.tonumber(string:format("%."..(imports.tonumber(decimals) or 0).."f", number))
 end
