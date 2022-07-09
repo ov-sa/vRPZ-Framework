@@ -102,7 +102,7 @@ CGame.execOnModuleLoad(function()
     inventoryUI.clientInventory.lockStat.startX, inventoryUI.clientInventory.lockStat.startY = inventoryUI.clientInventory.width - inventoryUI.clientInventory.lockStat.size, -inventoryUI.titlebar.height + ((inventoryUI.titlebar.height - inventoryUI.clientInventory.lockStat.size)*0.5)
     for i = 1, #inventoryUI.clientInventory.equipment, 1 do
         local j = inventoryUI.clientInventory.equipment[i]
-        inventoryUI.clientInventory.equipment[i] = imports.table:clone(FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][j], true)
+        inventoryUI.clientInventory.equipment[i] = imports.table.clone(FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][j], true)
         inventoryUI.clientInventory.equipment[i].slot = j
         inventoryUI.clientInventory.equipment[i].width, inventoryUI.clientInventory.equipment[i].height = CInventory.fetchSlotDimensions(inventoryUI.clientInventory.equipment[i].slots.rows, inventoryUI.clientInventory.equipment[i].slots.columns)
     end
@@ -199,7 +199,7 @@ CGame.execOnModuleLoad(function()
     inventoryUI.updateUILang = function()
         for i = 1, #inventoryUI.clientInventory.equipment, 1 do
             local j = inventoryUI.clientInventory.equipment[i]
-            j.title = imports.string:upper(imports.string:kern(j["Title"][(CPlayer.CLanguage)]))
+            j.title = imports.string.upper(imports.string.kern(j["Title"][(CPlayer.CLanguage)]))
         end
         return true
     end
@@ -207,7 +207,7 @@ CGame.execOnModuleLoad(function()
 
     inventoryUI.fetchUIGridSlotFromOffset = function(offsetX, offsetY)
         if not offsetX or not offsetY then return false end
-        local row, column = imports.math:ceil(offsetY/(inventoryUI.clientInventory.height/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows)), imports.math:ceil(offsetX/(inventoryUI.clientInventory.width/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns))
+        local row, column = imports.math.ceil(offsetY/(inventoryUI.clientInventory.height/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows)), imports.math.ceil(offsetX/(inventoryUI.clientInventory.width/FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns))
         row, column = (((row >= 1) and (row <= FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows)) and row) or false, (((column >= 1) and (column <= FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns)) and column) or false
         if not row or not column then return false end
         return row, column
@@ -227,7 +227,7 @@ CGame.execOnModuleLoad(function()
             return false
         end
         inventoryUI.buffer[parent] = {
-            name = imports.string:upper(imports.string:kern(name or CLoot.fetchName(parent))),
+            name = imports.string.upper(imports.string.kern(name or CLoot.fetchName(parent))),
             bufferRT = imports.beautify.native.createRenderTarget(((parent == localPlayer) and inventoryUI.clientInventory.width) or inventoryUI.vicinityInventory.width, ((parent == localPlayer) and inventoryUI.clientInventory.height) or inventoryUI.vicinityInventory.height, true),
             scroller = {percent = 0, animPercent = 0},
             inventory = {}
@@ -323,9 +323,9 @@ CGame.execOnModuleLoad(function()
         local vicinity, item, amount, prevSlot, newSlot = inventoryUI.vicinityInventory.element, inventoryUI.attachedItem.item, inventoryUI.attachedItem.amount, inventoryUI.attachedItem.prevSlot, inventoryUI.attachedItem.isPlaceable.slot
         local slotBuffer = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[newSlot]
         if not slotBuffer or (slotBuffer.item ~= item) then
-            imports.table:insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, newSlot, {item = item, amount = 0})
+            imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, newSlot, {item = item, amount = 0})
             local vicinity_bufferCount = #inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
-            inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight = imports.math:max(0, (inventoryUI.vicinityInventory.slotSize*vicinity_bufferCount) + (inventoryUI.margin*imports.math:max(0, vicinity_bufferCount - 1)) - inventoryUI.vicinityInventory.height)
+            inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight = imports.math.max(0, (inventoryUI.vicinityInventory.slotSize*vicinity_bufferCount) + (inventoryUI.margin*imports.math.max(0, vicinity_bufferCount - 1)) - inventoryUI.vicinityInventory.height)
             slotBuffer = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache[newSlot]
         end
         CInventory.CBuffer.slots[prevSlot] = nil
@@ -391,13 +391,13 @@ CGame.execOnModuleLoad(function()
                 inventoryUI.buffer[localPlayer].bufferCache, inventoryUI.buffer[localPlayer].assignedItems, inventoryUI.buffer[localPlayer].assignedBuffers = {}, {}, {}
                 for i, j in imports.pairs(inventoryUI.buffer[localPlayer].inventory) do
                     for k = 1, j, 1 do
-                        imports.table:insert(inventoryUI.buffer[localPlayer].bufferCache, {item = i, amount = 1})
+                        imports.table.insert(inventoryUI.buffer[localPlayer].bufferCache, {item = i, amount = 1})
                     end
                 end
                 for i, j in imports.pairs(inventoryUI.buffer[localPlayer].assignedSlots) do
                     if not inventoryUI.isSynced then
                         if j.translation == "inventory_add" then
-                            imports.table:insert(inventoryUI.buffer[localPlayer].bufferCache, {item = j.item, amount = 1})
+                            imports.table.insert(inventoryUI.buffer[localPlayer].bufferCache, {item = j.item, amount = 1})
                         end
                     end
                     for k = 1, #inventoryUI.buffer[localPlayer].bufferCache, 1 do
@@ -437,7 +437,7 @@ CGame.execOnModuleLoad(function()
                     end
                     client_isSlotHovered = (client_isHovered and isUIActionEnabled and (client_isSlotHovered or (isItemVisible and imports.isMouseOnPosition(client_startX + inventoryUI.margin + slot_offsetX, client_startY + inventoryUI.margin + slot_offsetY, slotWidth, slotHeight) and i))) or false
                     if not slotBuffer.isPositioned then
-                        slotBuffer.title = imports.string:upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
+                        slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
                         slotBuffer.width, slotBuffer.height = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
                         slotBuffer.startX, slotBuffer.startY = (slotWidth - slotBuffer.width)*0.5, (slotHeight - slotBuffer.height)*0.5
                         slotBuffer.isPositioned = true
@@ -457,7 +457,7 @@ CGame.execOnModuleLoad(function()
                         isUIClearPlacement = false
                         local slot = CInventory.fetchSlotIndex(slotRow, slotColumn)
                         local slot_offsetX, slot_offsetY = inventoryUI.fetchUIGridOffsetFromSlot(slot)
-                        local slotWidth, slotHeight = CInventory.fetchSlotDimensions(imports.math:min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - (slotRow - 1)), imports.math:min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - (slotColumn - 1)))
+                        local slotWidth, slotHeight = CInventory.fetchSlotDimensions(imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.rows, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.rows - (slotRow - 1)), imports.math.min(CInventory.CItems[(inventoryUI.attachedItem.item)].data.itemWeight.columns, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.columns - (slotColumn - 1)))
                         if CInventory.isSlotAvailableForOrdering(inventoryUI.attachedItem.item, ((inventoryUI.attachedItem.parent == localPlayer) and inventoryUI.attachedItem.prevSlot) or false, slot, inventoryUI.attachedItem.parent == localPlayer) then
                             inventoryUI.attachedItem.isPlaceable = inventoryUI.attachedItem.isPlaceable or {type = "order"}
                             inventoryUI.attachedItem.isPlaceable.slot = slot
@@ -509,7 +509,7 @@ CGame.execOnModuleLoad(function()
                 equipment_isSlotHovered = (isUIActionEnabled and (equipment_isSlotHovered or (isItemVisible and equipment_isHovered and j.slot))) or false
                 if slotBuffer and not slotBuffer.isPositioned then
                     slotBuffer.index = i
-                    slotBuffer.title = imports.string:upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
+                    slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")                    
                     slotBuffer.width, slotBuffer.height = CInventory.fetchSlotDimensions(CInventory.CItems[(slotBuffer.item)].data.itemWeight.rows, CInventory.CItems[(slotBuffer.item)].data.itemWeight.columns)
                     slotBuffer.startX, slotBuffer.startY = j.startX + (j.width - slotBuffer.width)*0.5, j.startY + (j.height - slotBuffer.height)*0.5
                     slotBuffer.isPositioned = true
@@ -556,15 +556,15 @@ CGame.execOnModuleLoad(function()
                     inventoryUI.buffer[localPlayer].scroller.height = inventoryUI.clientInventory.height
                     inventoryUI.buffer[localPlayer].scroller.isPositioned = true
                 end
-                if imports.math:round(inventoryUI.buffer[localPlayer].scroller.animPercent, 2) ~= imports.math:round(inventoryUI.buffer[localPlayer].scroller.percent, 2) then
+                if imports.math.round(inventoryUI.buffer[localPlayer].scroller.animPercent, 2) ~= imports.math.round(inventoryUI.buffer[localPlayer].scroller.percent, 2) then
                     inventoryUI.buffer[localPlayer].scroller.animPercent = imports.interpolateBetween(inventoryUI.buffer[localPlayer].scroller.animPercent, 0, 0, inventoryUI.buffer[localPlayer].scroller.percent, 0, 0, 0.5, "InQuad")
                 end
                 imports.beautify.native.drawRectangle(inventoryUI.buffer[localPlayer].scroller.startX, inventoryUI.buffer[localPlayer].scroller.startY, inventoryUI.scroller.width, inventoryUI.buffer[localPlayer].scroller.height, inventoryUI.scroller.bgColor, false)
                 imports.beautify.native.drawRectangle(inventoryUI.buffer[localPlayer].scroller.startX, inventoryUI.buffer[localPlayer].scroller.startY + ((inventoryUI.buffer[localPlayer].scroller.height - inventoryUI.scroller.thumbHeight)*inventoryUI.buffer[localPlayer].scroller.animPercent*0.01), inventoryUI.scroller.width, inventoryUI.scroller.thumbHeight, inventoryUI.scroller.thumbColor, false)
                 if inventoryUI.cache.keys.scroll.state and (not inventoryUI.attachedItem or not inventoryUI.attachedItem.isOnTransition) and client_isHovered then
                     --TODO: WIP
-                    --local client_scrollPercent = imports.math:max(1, 100/(vicinity_bufferCache.overflowHeight/(inventoryUI.clientInventory.slotSize*0.5)))
-                    inventoryUI.buffer[localPlayer].scroller.percent = imports.math:max(0, imports.math:min(inventoryUI.buffer[localPlayer].scroller.percent + (client_scrollPercent*imports.math:max(1, inventoryUI.cache.keys.scroll.streak)*(((inventoryUI.cache.keys.scroll.state == "down") and 1) or -1)), 100))
+                    --local client_scrollPercent = imports.math.max(1, 100/(vicinity_bufferCache.overflowHeight/(inventoryUI.clientInventory.slotSize*0.5)))
+                    inventoryUI.buffer[localPlayer].scroller.percent = imports.math.max(0, imports.math.min(inventoryUI.buffer[localPlayer].scroller.percent + (client_scrollPercent*imports.math.max(1, inventoryUI.cache.keys.scroll.streak)*(((inventoryUI.cache.keys.scroll.state == "down") and 1) or -1)), 100))
                     inventoryUI.cache.keys.scroll.state = false
                 end
             end
@@ -582,7 +582,7 @@ CGame.execOnModuleLoad(function()
                             categoryPriority[j] = true
                             for k, v in imports.pairs(CInventory.CCategories[j]) do
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
-                                    imports.table:insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
+                                    imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
                                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[k] = #inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
                                 else
                                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].unassignedBuffers[k] = #inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache + 1
@@ -594,7 +594,7 @@ CGame.execOnModuleLoad(function()
                         if not categoryPriority[i] then
                             for k, v in imports.pairs(j) do
                                 if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k] then
-                                    imports.table:insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
+                                    imports.table.insert(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache, {item = k, amount = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].inventory[k]})
                                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].assignedBuffers[k] = #inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
                                 else
                                     inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].unassignedBuffers[k] = #inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache + 1
@@ -606,11 +606,11 @@ CGame.execOnModuleLoad(function()
                 local vicinity_bufferCache = inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache
                 local vicinity_bufferCount = #vicinity_bufferCache
                 local vicinity_isHovered, vicinity_isSlotHovered = imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin, inventoryUI.vicinityInventory.width, inventoryUI.vicinityInventory.height), nil
-                vicinity_bufferCache.overflowHeight = imports.math:max(0, (inventoryUI.vicinityInventory.slotSize*vicinity_bufferCount) + (inventoryUI.margin*imports.math:max(0, vicinity_bufferCount - 1)) - inventoryUI.vicinityInventory.height)
+                vicinity_bufferCache.overflowHeight = imports.math.max(0, (inventoryUI.vicinityInventory.slotSize*vicinity_bufferCount) + (inventoryUI.margin*imports.math.max(0, vicinity_bufferCount - 1)) - inventoryUI.vicinityInventory.height)
                 local vicinity_offsetY = vicinity_bufferCache.overflowHeight*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.animPercent*0.01
                 local vicinity_rowHeight = inventoryUI.vicinityInventory.slotSize + inventoryUI.margin
-                local vicinity_row_startIndex = imports.math:floor(vicinity_offsetY/vicinity_rowHeight) + 1
-                local vicinity_row_endIndex = imports.math:min(vicinity_bufferCount, vicinity_row_startIndex + imports.math:ceil(inventoryUI.vicinityInventory.height/vicinity_rowHeight))
+                local vicinity_row_startIndex = imports.math.floor(vicinity_offsetY/vicinity_rowHeight) + 1
+                local vicinity_row_endIndex = imports.math.min(vicinity_bufferCount, vicinity_row_startIndex + imports.math.ceil(inventoryUI.vicinityInventory.height/vicinity_rowHeight))
                 isUIClearPlacement = true
                 if vicinity_isHovered then
                     if inventoryUI.attachedItem and not inventoryUI.attachedItem.isOnTransition and (not inventoryUI.attachedItem.isPlaceable or (inventoryUI.attachedItem.isPlaceable.type == "drop")) then
@@ -637,7 +637,7 @@ CGame.execOnModuleLoad(function()
                     local isItemVisible = itemValue > 0
                     vicinity_isSlotHovered = (vicinity_isHovered and isUIActionEnabled and (vicinity_isSlotHovered or (isItemVisible and imports.isMouseOnPosition(vicinity_startX + inventoryUI.margin, vicinity_startY + inventoryUI.margin + slotBuffer.offsetY, vicinity_width, inventoryUI.vicinityInventory.slotSize) and i))) or false
                     if not slotBuffer.isPositioned then
-                        slotBuffer.title = imports.string:upper(CInventory.fetchItemName(slotBuffer.item) or "")
+                        slotBuffer.title = imports.string.upper(CInventory.fetchItemName(slotBuffer.item) or "")
                         slotBuffer.width, slotBuffer.height = (CInventory.CItems[(slotBuffer.item)].dimensions[1]/CInventory.CItems[(slotBuffer.item)].dimensions[2])*inventoryUI.vicinityInventory.slotSize, inventoryUI.vicinityInventory.slotSize
                         slotBuffer.startX, slotBuffer.startY = inventoryUI.vicinityInventory.width - slotBuffer.width, 0
                         slotBuffer.isPositioned = true
@@ -694,14 +694,14 @@ CGame.execOnModuleLoad(function()
                         inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.height = inventoryUI.vicinityInventory.height
                         inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.isPositioned = true
                     end
-                    if imports.math:round(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.animPercent, 2) ~= imports.math:round(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent, 2) then
+                    if imports.math.round(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.animPercent, 2) ~= imports.math.round(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent, 2) then
                         inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.animPercent = imports.interpolateBetween(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.animPercent, 0, 0, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent, 0, 0, 0.5, "InQuad")
                     end
                     imports.beautify.native.drawRectangle(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startX, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startY, inventoryUI.scroller.width, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.height, inventoryUI.scroller.bgColor, false)
                     imports.beautify.native.drawRectangle(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startX, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.startY + ((inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.height - inventoryUI.scroller.thumbHeight)*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.animPercent*0.01), inventoryUI.scroller.width, inventoryUI.scroller.thumbHeight, inventoryUI.scroller.thumbColor, false)
                     if inventoryUI.cache.keys.scroll.state and (not inventoryUI.attachedItem or not inventoryUI.attachedItem.isOnTransition) and vicinity_isHovered then
-                        local vicinity_scrollPercent = imports.math:max(1, 100/(vicinity_bufferCache.overflowHeight/(inventoryUI.vicinityInventory.slotSize*0.5)))
-                        inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math:max(0, imports.math:min(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent + (vicinity_scrollPercent*imports.math:max(1, inventoryUI.cache.keys.scroll.streak)*(((inventoryUI.cache.keys.scroll.state == "down") and 1) or -1)), 100))
+                        local vicinity_scrollPercent = imports.math.max(1, 100/(vicinity_bufferCache.overflowHeight/(inventoryUI.vicinityInventory.slotSize*0.5)))
+                        inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math.max(0, imports.math.min(inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent + (vicinity_scrollPercent*imports.math.max(1, inventoryUI.cache.keys.scroll.streak)*(((inventoryUI.cache.keys.scroll.state == "down") and 1) or -1)), 100))
                         inventoryUI.cache.keys.scroll.state = false
                     end
                 end
@@ -739,7 +739,7 @@ CGame.execOnModuleLoad(function()
                                     local __slot_offsetY = inventoryUI.attachedItem.isPlaceable.offsetY - (inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight*0.01)
                                     if __slot_offsetY < 0 or ((__slot_offsetY + inventoryUI.vicinityInventory.slotSize) > inventoryUI.vicinityInventory.height) then
                                         local slot_offsetY = inventoryUI.attachedItem.isPlaceable.offsetY + inventoryUI.vicinityInventory.slotSize
-                                        inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math:max(0, imports.math:min(100, ((slot_offsetY - inventoryUI.vicinityInventory.height)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100))
+                                        inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math.max(0, imports.math.min(100, ((slot_offsetY - inventoryUI.vicinityInventory.height)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100))
                                     end
                                 end
                                 inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY = inventoryUI.vicinityInventory.startX - inventoryUI.margin + inventoryUI.attachedItem.isPlaceable.offsetX, inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + inventoryUI.attachedItem.isPlaceable.offsetY - (inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight*0.01)
@@ -757,13 +757,13 @@ CGame.execOnModuleLoad(function()
                             --TODO: LATER SCROLL LOCAL INVENTORY TOO..
                             --[[
                             local maxSlots = CInventory.fetchParentMaxSlots(inventoryUI.attachedItem.parent)
-                            local totalContentHeight = inventoryUI.gui.itemBox.templates[1].contentWrapper.padding + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding + (math:max(0, math:ceil(maxSlots/maximumInventoryRowSlots) - 1)*(inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)) + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding
+                            local totalContentHeight = inventoryUI.gui.itemBox.templates[1].contentWrapper.padding + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding + (math.max(0, math.ceil(maxSlots/maximumInventoryRowSlots) - 1)*(inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)) + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding
                             local exceededContentHeight = totalContentHeight - inventoryUI.gui.itemBox.templates[1].contentWrapper.height
                             if exceededContentHeight > 0 then
-                                local slotRow = math:ceil(inventoryUI.attachedItem.prevSlot/maximumInventoryRowSlots)
-                                local slot_offsetY = inventoryUI.gui.itemBox.templates[1].contentWrapper.padding + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding + (math:max(0, slotRow - 1)*(inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)) - (exceededContentHeight*inventoryUI.buffer[localPlayer].gui.scroller.percent*0.01)
+                                local slotRow = math.ceil(inventoryUI.attachedItem.prevSlot/maximumInventoryRowSlots)
+                                local slot_offsetY = inventoryUI.gui.itemBox.templates[1].contentWrapper.padding + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding + (math.max(0, slotRow - 1)*(inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.inventory.slotSize + inventoryUI.gui.itemBox.templates[1].contentWrapper.itemGrid.padding)) - (exceededContentHeight*inventoryUI.buffer[localPlayer].gui.scroller.percent*0.01)
                                 local slot_prevOffsetY = inventoryUI.attachedItem.prevPosY - inventoryUI.buffer[localPlayer].gui.startY - inventoryUI.gui.itemBox.templates[1].contentWrapper.startY
-                                if (math:round(slot_offsetY, 2) ~= math:round(slot_prevOffsetY, 2)) then
+                                if (math.round(slot_offsetY, 2) ~= math.round(slot_prevOffsetY, 2)) then
                                     local finalScrollPercent = inventoryUI.buffer[localPlayer].gui.scroller.percent + ((slot_offsetY - slot_prevOffsetY)/exceededContentHeight)*100
                                     inventoryUI.attachedItem.__scrollItemBox = {initial = inventoryUI.buffer[localPlayer].gui.scroller.percent, final = finalScrollPercent, tickCounter = getTickCount()}
                                 end
@@ -775,8 +775,8 @@ CGame.execOnModuleLoad(function()
                             inventoryUI.attachedItem.animTickCounter = CLIENT_CURRENT_TICK
                             if inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight > 0 then
                                 local slot_offsetY = inventoryUI.vicinityInventory.startY + inventoryUI.titlebar.height + ((inventoryUI.vicinityInventory.slotSize + inventoryUI.margin)*(inventoryUI.attachedItem.prevSlot - 1)) - (inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight*inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent*0.01)
-                                if imports.math:round(slot_offsetY, 2) ~= imports.math:round(inventoryUI.attachedItem.prevY, 2) then
-                                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math:max(0, imports.math:min(100, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent + (((slot_offsetY - inventoryUI.attachedItem.prevY)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100)))
+                                if imports.math.round(slot_offsetY, 2) ~= imports.math.round(inventoryUI.attachedItem.prevY, 2) then
+                                    inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent = imports.math.max(0, imports.math.min(100, inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].scroller.percent + (((slot_offsetY - inventoryUI.attachedItem.prevY)/inventoryUI.buffer[(inventoryUI.vicinityInventory.element)].bufferCache.overflowHeight)*100)))
                                 end
                             end
                         end
@@ -790,7 +790,7 @@ CGame.execOnModuleLoad(function()
                 inventoryUI.attachedItem.__width, inventoryUI.attachedItem.__height = imports.interpolateBetween(inventoryUI.attachedItem.prevWidth, inventoryUI.attachedItem.prevHeight, 0, inventoryUI.attachedItem.finalWidth or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[1], inventoryUI.attachedItem.finalHeight or CInventory.CItems[(inventoryUI.attachedItem.item)].dimensions[2], 0, imports.getInterpolationProgress(inventoryUI.attachedItem.animTickCounter, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration*0.35), "OutBack")
                 if inventoryUI.attachedItem.isOnTransition then
                     attachment_posX, attachment_posY = imports.interpolateBetween(inventoryUI.attachedItem.__posX, inventoryUI.attachedItem.__posY, 0, inventoryUI.attachedItem.prevX, inventoryUI.attachedItem.prevY, 0, imports.getInterpolationProgress(inventoryUI.attachedItem.transitionTickCounter, FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.animDuration), "OutQuad")
-                    if (imports.math:round(attachment_posX, 2) == imports.math:round(inventoryUI.attachedItem.prevX, 2)) and (imports.math:round(attachment_posY, 2) == imports.math:round(inventoryUI.attachedItem.prevY, 2)) then
+                    if (imports.math.round(attachment_posX, 2) == imports.math.round(inventoryUI.attachedItem.prevX, 2)) and (imports.math.round(attachment_posY, 2) == imports.math.round(inventoryUI.attachedItem.prevY, 2)) then
                         isDetachAttachment = true
                     end
                 else
@@ -820,12 +820,12 @@ CGame.execOnModuleLoad(function()
             --inventoryUI.vicinityInventory.element = CCharacter.isInLoot(localPlayer)
             inventoryUI.vicinityInventory.element = CGame.getGlobalData("Loot:Test") --TODO: REMOVE LATER
             imports.assetify.network:emit("Client:onEnableInventoryUI", false, true)
-            inventoryUI.createBuffer(localPlayer, imports.string:format(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory["Title"][(CPlayer.CLanguage)], CPlayer.getName(localPlayer)))
+            inventoryUI.createBuffer(localPlayer, imports.string.format(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory["Title"][(CPlayer.CLanguage)], CPlayer.getName(localPlayer)))
             inventoryUI.createBuffer(inventoryUI.vicinityInventory.element)
             inventoryUI.opacityAdjuster.element = imports.beautify.slider.create(inventoryUI.opacityAdjuster.startX, inventoryUI.opacityAdjuster.startY, inventoryUI.opacityAdjuster.width, inventoryUI.opacityAdjuster.height, "vertical", nil, false)
             inventoryUI.opacityAdjuster.percent = inventoryUI.opacityAdjuster.percent or 100
             imports.beautify.slider.setPercent(inventoryUI.opacityAdjuster.element, inventoryUI.opacityAdjuster.percent)
-            imports.beautify.slider.setText(inventoryUI.opacityAdjuster.element, imports.string:upper(imports.string:kern("Opacity")))
+            imports.beautify.slider.setText(inventoryUI.opacityAdjuster.element, imports.string.upper(imports.string.kern("Opacity")))
             imports.beautify.slider.setTextColor(inventoryUI.opacityAdjuster.element, FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.fontColor)
             imports.beautify.render.create(inventoryUI.renderUI, {elementReference = inventoryUI.opacityAdjuster.element, renderType = "preRender"})
             imports.beautify.render.create(inventoryUI.renderUI, {renderType = "input"})

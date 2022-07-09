@@ -36,8 +36,8 @@ imports.addCommandHandler("party", function(player, _, category, ...)
         return imports.outputChatBox("━━ Syntax: /party create/invite/accept/leave/kick", player, 255, 255, 255)
     end
 
-    category = imports.string:lower(imports.tostring(category))
-    local args = imports.table:pack(...)
+    category = imports.string.lower(imports.tostring(category))
+    local args = imports.table.pack(...)
     if category == "create" then
         if getPlayerParty(player) then
             return imports.outputChatBox("━━ Party: Couldn't create a new parte because you are already in one.", player, 255, 0, 0)

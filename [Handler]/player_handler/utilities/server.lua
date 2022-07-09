@@ -122,7 +122,7 @@ CGame.execOnModuleLoad(function()
                             cooldownETA = ((elapsedDuration < FRAMEWORK_CONFIGS["Game"]["Logout_CoolDown_Duration"]) and (FRAMEWORK_CONFIGS["Game"]["Logout_CoolDown_Duration"] - elapsedDuration)) or false
                         end
                         if cooldownETA then
-                            imports.assetify.network:emit("Client:onNotification", true, false, source, "Please wait "..imports.math:ceil(cooldownETA/1000).."s before logging out!", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
+                            imports.assetify.network:emit("Client:onNotification", true, false, source, "Please wait "..imports.math.ceil(cooldownETA/1000).."s before logging out!", FRAMEWORK_CONFIGS["UI"]["Notification"].presets.error)
                         else
                             local __source = source
                             imports.assetify.thread:create(function(self)

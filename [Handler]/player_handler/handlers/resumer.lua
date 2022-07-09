@@ -54,7 +54,7 @@ imports.assetify.network:create("Player:onSaveCharacter"):on(function(source, ch
         local characterID = CCharacter.create(self, serial)
         local inventoryID = CInventory.create(self)
         local bool = CCharacter.setData(self, characterID, {
-            {"identity", imports.table:encode(characters[character].identity)},
+            {"identity", imports.table.encode(characters[character].identity)},
             {"inventory", inventoryID}
         })
         if bool then CCharacter.CBuffer[characterID].identity = characters[character].identity end
@@ -84,9 +84,9 @@ imports.assetify.network:create("Player:onToggleLoginUI"):on(function(source)
         CPlayer.CBuffer[serial] = DPlayer
         for i = 1, #FRAMEWORK_CONFIGS["Player"]["Datas"], 1 do
             local j = FRAMEWORK_CONFIGS["Player"]["Datas"][i]
-            CPlayer.CBuffer[serial][j] = imports.string:parse(CPlayer.CBuffer[serial][j])
+            CPlayer.CBuffer[serial][j] = imports.string.parse(CPlayer.CBuffer[serial][j])
         end
-        DPlayer = imports.table:clone(DPlayer, true)
+        DPlayer = imports.table.clone(DPlayer, true)
         DPlayer.character = DPlayer.character or 0
         DPlayer.characters = {}
         DPlayer.role = (DPlayer.role and CGame.getRole(DPlayer.role) and DPlayer.role) or FRAMEWORK_CONFIGS["Templates"]["Roles"].default
@@ -97,7 +97,7 @@ imports.assetify.network:create("Player:onToggleLoginUI"):on(function(source)
             for i = 1, #DCharacter, 1 do
                 local j = DCharacter[i]
                 j.inventory = imports.tonumber(j.inventory)
-                j.identity = imports.table:decode(j.identity)
+                j.identity = imports.table.decode(j.identity)
                 DPlayer.characters[i] = {
                     id = j.id,
                     identity = j.identity
@@ -105,9 +105,9 @@ imports.assetify.network:create("Player:onToggleLoginUI"):on(function(source)
                 CCharacter.CBuffer[(j.id)] = j
                 for k = 1, #FRAMEWORK_CONFIGS["Character"]["Datas"], 1 do
                     local v = FRAMEWORK_CONFIGS["Character"]["Datas"][k]
-                    CCharacter.CBuffer[(j.id)][v] = imports.string:parse(CCharacter.CBuffer[(j.id)][v])
+                    CCharacter.CBuffer[(j.id)][v] = imports.string.parse(CCharacter.CBuffer[(j.id)][v])
                 end
-                CCharacter.CBuffer[(j.id)].location = (CCharacter.CBuffer[(j.id)].location and imports.table:decode(CCharacter.CBuffer[(j.id)].location)) or false
+                CCharacter.CBuffer[(j.id)].location = (CCharacter.CBuffer[(j.id)].location and imports.table.decode(CCharacter.CBuffer[(j.id)].location)) or false
             end
             if not DPlayer.characters[(DPlayer.character)] then DPlayer.character = 0 end
         else

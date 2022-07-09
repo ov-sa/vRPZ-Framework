@@ -148,11 +148,11 @@ function requestUseItem(item)
                 if (tonumber(getElementData(localPlayer, "Player:bleeding")) or 0) <= 0 then triggerEvent("displayClientInfo", localPlayer, "You are not bleeding.", {255, 0, 0}) return false end
             elseif itemDetails.dataName == "Heatpack" then
                 if (tonumber(getElementData(localPlayer, "Player:cold")) or 0) <= 0 then triggerEvent("displayClientInfo", localPlayer, "You don't feel cold.", {255, 0, 0}) return false end
-            elseif string:find(itemDetails.dataName, "Blood Bag") then
+            elseif string.find(itemDetails.dataName, "Blood Bag") then
                 local playerBloodGroup = getElementData(localPlayer, "Player:bloodgroup")
                 if not getItemDetails("Blood Bag ("..playerBloodGroup..")") then triggerEvent("displayClientInfo", localPlayer, "You can't transfuse.", {255, 0, 0}) return false end
-                local bloodbagType = string:gsub(itemDetails.dataName, "Blood Bag ", "", 1)
-                bloodbagType = string:sub(bloodbagType, 2, #bloodbagType - 1)
+                local bloodbagType = string.gsub(itemDetails.dataName, "Blood Bag ", "", 1)
+                bloodbagType = string.sub(bloodbagType, 2, #bloodbagType - 1)
                 if bloodbagType ~= playerBloodGroup then triggerEvent("displayClientInfo", localPlayer, "Your blood group doesn't match with the blood bag.", {255, 0, 0}) return false end
                 if getPlayerHealth(localPlayer) >= getPlayerMaximumHealth(localPlayer) then triggerEvent("displayClientInfo", localPlayer, "You can't do more transfusion.", {255, 0, 0}) return false end
             elseif itemDetails.dataName == "Blood Transfuser" then

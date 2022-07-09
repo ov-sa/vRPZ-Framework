@@ -48,11 +48,11 @@ end
 function rgbToHex(red, green, blue, alpha)
     red, green, blue, alpha = imports.tonumber(red), imports.tonumber(green), imports.tonumber(blue), imports.tonumber(alpha)
     if not red or not green or not blue then return false end
-    red, green, blue, alpha = imports.math:min(255, imports.math:max(0, red)), imports.math:min(255, imports.math:max(0, green)), imports.math:min(255, imports.math:max(0, blue)), (alpha and imports.math:min(255, imports.math:max(0, alpha))) or false
+    red, green, blue, alpha = imports.math.min(255, imports.math.max(0, red)), imports.math.min(255, imports.math.max(0, green)), imports.math.min(255, imports.math.max(0, blue)), (alpha and imports.math.min(255, imports.math.max(0, alpha))) or false
     if alpha then
-		return imports.string:format("#%.2X%.2X%.2X%.2X", red, green, blue, alpha)
+		return imports.string.format("#%.2X%.2X%.2X%.2X", red, green, blue, alpha)
 	else
-		return imports.string:format("#%.2X%.2X%.2X", red, green, blue)
+		return imports.string.format("#%.2X%.2X%.2X", red, green, blue)
 	end
 end
 
@@ -80,7 +80,7 @@ function isPlayerWithinElementInteractionRange(player, element)
     if elementRange then
         local playerPosVector = player:getPosition()
         local elementPosVector = element:getPosition()
-        return math:findDistance3D(playerPosVector.x, playerPosVector.y, playerPosVector.z, elementPosVector.x, elementPosVector.y, elementPosVector.z) <= elementRange
+        return math.findDistance3D(playerPosVector.x, playerPosVector.y, playerPosVector.z, elementPosVector.x, elementPosVector.y, elementPosVector.z) <= elementRange
     end
     return false
 
@@ -98,7 +98,7 @@ function getPlayersWithinMarker(marker)
     for i = 1, #playerList, 1 do
         local j = playerList[i]
         if CPlayer.isInitialized(j) and imports.isElementWithinMarker(j, marker) then
-            imports.table:insert(rangedPlayers, j)
+            imports.table.insert(rangedPlayers, j)
         end
     end
     return rangedPlayers
@@ -170,7 +170,7 @@ function getVehicleCompatibleUpgrades(vehicle)
             if not compatibleUpgrades[slotName] then
                 compatibleUpgrades[slotName] = {}
             end
-            table:insert(compatibleUpgrades[slotName], j)
+            table.insert(compatibleUpgrades[slotName], j)
         end
     end
     return compatibleUpgrades
@@ -209,7 +209,7 @@ function binsearch(tbl,value,fcompval,reversed)
     local fcomp = reversed and fcompr or fcompf
     local iStart,iEnd,iMid = 1, #tbl, 0
     while iStart <= iEnd do
-        iMid = math:floor((iStart+iEnd)/2)
+        iMid = math.floor((iStart+iEnd)/2)
         local value2 = fcompval(tbl[iMid])
 
         if value == value2 then
