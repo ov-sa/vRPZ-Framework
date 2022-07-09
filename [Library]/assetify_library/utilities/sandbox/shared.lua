@@ -34,7 +34,7 @@ destroyElement = function(element) return (isElement(element) and imports.destro
 execFunction = function(exec, ...) if not exec or (imports.type(exec) ~= "function") then return false end return exec(...) end
 
 getElementPosition = function(element, offX, offY, offZ)
-    if not element or not imports.isElement(element) then return false end
+    if not element or not isElement(element) then return false end
     if not offX or not offY or not offZ then
         return imports.getElementPosition(element)
     else
