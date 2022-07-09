@@ -25,7 +25,7 @@ local imports = {
 local bundler = {
     rw = {},
     utils = {
-        "utilities/sandbox/shared.lua",
+        "utilities/sandbox/index.lua",
         "utilities/sandbox/table.lua",
         "utilities/sandbox/math/index.lua",
         "utilities/sandbox/math/quat.lua",

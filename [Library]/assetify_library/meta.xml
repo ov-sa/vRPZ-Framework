@@ -17,7 +17,7 @@
     <script src="settings/server.lua" type="server"/>
 
     <!-- Utilities: Sandbox -->
-    <script src="utilities/sandbox/shared.lua" type="shared"/>
+    <script src="utilities/sandbox/index.lua" type="shared"/>
     <script src="utilities/sandbox/namespacer.lua" type="shared"/>
     <script src="utilities/sandbox/table.lua" type="shared"/>
     <script src="utilities/sandbox/filesystem.lua" type="shared"/>
