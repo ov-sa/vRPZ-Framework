@@ -19,7 +19,8 @@ local imports = {
     toJSON = toJSON,
     fromJSON = fromJSON,
     select = select,
-    unpack = unpack
+    unpack = unpack,
+    loadstring = loadstring
 }
 
 
@@ -28,6 +29,14 @@ local imports = {
 ----------------------
 
 local table = class:create("table", table)
+for i, j in imports.pairs(table.public) do
+    if imports.type(table.public[i]) == "function" then
+        imports.loadstring([[
+            local __table_]]..i..[[ = table.]]..i..[[
+            function table:]]..i..[[(...) return __table_]]..i..[[(...) end
+        ]])()
+    end
+end
 
 function table.public:pack(...)
     return {__T = {
@@ -59,11 +68,6 @@ function table.public:clone(baseTable, isRecursive)
         end
     end
     return __baseTable
-end
-
-local __table_concat = table.public.concat
-function table.public:concat(baseTable, separator, startIndex, endIndex)
-    return __table_concat(baseTable, separator, startIndex, endIndex)
 end
 
 function table.public:keys(baseTable)
