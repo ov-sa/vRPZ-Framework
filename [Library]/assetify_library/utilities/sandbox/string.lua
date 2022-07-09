@@ -63,7 +63,7 @@ end
 function string.public:decode(type, baseString, options, clipNull)
     if not baseString or (imports.type(baseString) ~= "string") then return false end
     baseString = imports.decodeString(type, baseString, options)
-    return (baseString and clipNull and string.public:gsub(baseString, string.public.char(0), "")) or baseString
+    return (baseString and clipNull and string.public:gsub(baseString, string.public:char(0), "")) or baseString
 end
 
 function string.public:split(baseString, separator)
