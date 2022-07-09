@@ -23,7 +23,6 @@ local imports = {
     getElementPosition = getElementPosition,
     getPedBonePosition = getPedBonePosition,
     getScreenFromWorldPosition = getScreenFromWorldPosition,
-    getDistanceBetweenPoints3D = getDistanceBetweenPoints3D,
     interpolateBetween = interpolateBetween,
     math = math,
     beautify = beautify,
@@ -127,7 +126,7 @@ CGame.execOnModuleLoad(function()
                 if isToBeRefreshed then nametagUI.updateUI(i) end
                 local boneX, boneY, boneZ = imports.getPedBonePosition(i, 7)
                 boneZ = boneZ + 0.27
-                local cameraDistance = imports.getDistanceBetweenPoints3D(cameraX, cameraY, cameraZ, boneX, boneY, boneZ)
+                local cameraDistance = imports.math:findDistance3D(cameraX, cameraY, cameraZ, boneX, boneY, boneZ)
                 local nearClipDistance, farClipDistance = ((cameraDistance <= nametagUI.clipRange[2]) and (cameraDistance/nametagUI.clipRange[2])) or 1, ((cameraDistance >= nametagUI.clipRange[1]) and ((cameraDistance/nametagUI.clipRange[1]) - 1)) or 1
                 local tagAlpha = nearClipDistance*farClipDistance
                 local isAlphaChanged = nametagUI.buffer[i].alpha ~= tagAlpha

@@ -80,7 +80,7 @@ function isPlayerWithinElementInteractionRange(player, element)
     if elementRange then
         local playerPosVector = player:getPosition()
         local elementPosVector = element:getPosition()
-        return getDistanceBetweenPoints3D(playerPosVector.x, playerPosVector.y, playerPosVector.z, elementPosVector.x, elementPosVector.y, elementPosVector.z) <= elementRange
+        return math:findDistance3D(playerPosVector.x, playerPosVector.y, playerPosVector.z, elementPosVector.x, elementPosVector.y, elementPosVector.z) <= elementRange
     end
     return false
 
