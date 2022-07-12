@@ -83,7 +83,7 @@ function streamer.public:unload()
 end
 
 function streamer.public:resume()
-    if not streamer.public:isInstance(self) then return false end
+    if not streamer.public:isInstance(self) or not self.isPaused then return false end
     if self.streamer ~= self.occlusions[1] then
         if not streamer.private.allocator.validStreams[(self.streamType)] or not streamer.private.allocator.validStreams[(self.streamType)].skipAttachment then
             imports.attachElements(self.streamer, self.occlusions[1])
@@ -91,6 +91,7 @@ function streamer.public:resume()
         imports.setElementDimension(self.streamer, self.dimension)
         imports.setElementInterior(self.streamer, self.interior)
     end
+    self.isPaused = false
     streamer.private.buffer[(self.dimension)] = streamer.private.buffer[(self.dimension)] or {}
     streamer.private.buffer[(self.dimension)][(self.interior)] = streamer.private.buffer[(self.dimension)][(self.interior)] or {}
     streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)] = streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)] or {}
@@ -101,6 +102,7 @@ end
 
 function streamer.public:pause()
     if not streamer.public:isInstance(self) then return false end
+    self.isPaused = true
     self:deallocate()
     return true
 end
