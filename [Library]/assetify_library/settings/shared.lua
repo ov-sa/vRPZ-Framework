@@ -28,7 +28,7 @@ settings = {
         syncRate = 250,
         streamRate = 150,
         cameraSyncRate = 75,
-        streamDelimiter = {8, 20},
+        streamDelimiter = {8, 20, 10},
         unsyncDimension = 65535 
     },
 
