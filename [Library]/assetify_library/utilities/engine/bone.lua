@@ -119,7 +119,7 @@ if localPlayer then
             self.cDummy = dummy:fetchInstance(element)
             if self.cDummy then self.cDummy:pause() end
             self.cElement = (self.cDummy and self.cDummy.cModelInstance) or element
-            self.cStreamer = streamer:create(element, "bone", {parent}, self.boneData.syncRate)
+            self.cStreamer = streamer:create(self.cElement, "bone", {parent}, self.boneData.syncRate)
             self.cHeartbeat = nil
         end, settings.downloader.buildRate)
         bone.public.buffer.element[element] = self
