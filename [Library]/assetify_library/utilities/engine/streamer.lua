@@ -209,7 +209,10 @@ streamer.private.onEntityStream = function(streamBuffer)
                     break
                 end
             end
-            imports.setElementDimension(i.streamer, (j.isStreamed and streamer.private.cache.clientWorld.dimension) or settings.streamer.unsyncDimension)
+            if j.__isStreamed ~= j.isStreamed then
+                imports.setElementDimension(i.streamer, (j.isStreamed and streamer.private.cache.clientWorld.dimension) or settings.streamer.unsyncDimension)
+            end
+            j.__isStreamed = j.isStreamed
         end
     end
     return true
