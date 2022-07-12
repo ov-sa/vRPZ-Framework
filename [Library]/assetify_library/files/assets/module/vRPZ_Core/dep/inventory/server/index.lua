@@ -102,8 +102,7 @@ CInventory.equipItem = function(player, item, prevSlot, slot, isEquipped)
         imports.assetify.attacher.setBoneAttach(CPlayer.CAttachments[player][slot], player, {
             id = itemData.data.itemAttachments.bone.generic.id,
             position = itemData.data.itemAttachments.bone.generic.position,
-            rotation = itemData.data.itemAttachments.bone.generic.rotation,
-            syncRate = 0
+            rotation = itemData.data.itemAttachments.bone.generic.rotation
         })
         CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
         CGame.setEntityData(player, "Slot:"..slot, item)
