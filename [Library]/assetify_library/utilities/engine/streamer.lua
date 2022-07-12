@@ -215,7 +215,7 @@ streamer.private.onEntityStream = function(streamBuffer)
             end
             if streamer.private.allocator.validStreams[(i.streamType)] and streamer.private.allocator.validStreams[(i.streamType)].dynamicStreamSync then
                 local viewDistance = math.findDistance3D(streamer.private.cache.cameraLocation.x, streamer.private.cache.cameraLocation.y, streamer.private.cache.cameraLocation.z, imports.getElementPosition(i.streamer)) - settings.streamer.streamDelimiter[1]
-                local syncRate = ((viewDistance <= 0) and 0) or math.round(((viewDistance/settings.streamer.streamDelimiter[2])*settings.streamer.streamRate)/settings.streamer.streamDelimiter[3])*settings.streamer.streamDelimiter[3]
+                local syncRate = ((viewDistance <= 0) and 0) or math.min(settings.streamer.streamRate, math.round(((viewDistance/settings.streamer.streamDelimiter[2])*settings.streamer.streamRate)/settings.streamer.streamDelimiter[3])*settings.streamer.streamDelimiter[3])
                 if syncRate ~= i.syncRate then
                     i:deallocate()
                     i.syncRate = syncRate
