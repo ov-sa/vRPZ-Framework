@@ -93,6 +93,16 @@ function streamer.public:unload()
     return true
 end
 
+function streamer.public:resume()
+    if not streamer.public:isInstance(self) then return false end
+    return true
+end
+
+function streamer.public:pause()
+    if not streamer.public:isInstance(self) then return false end
+    return true
+end
+
 function streamer.public:update(clientDimension, clientInterior)
     if not clientDimension and not clientInterior then return false end
     local currentDimension, currentInterior = imports.getElementDimension(localPlayer), imports.getElementInterior(localPlayer)
