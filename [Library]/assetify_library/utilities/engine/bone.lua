@@ -119,7 +119,7 @@ if localPlayer then
             if self.cDummy and self.cDummy.cStreamer then self.cDummy.cStreamer:pause() end
             self.cElement = (self.cDummy and self.cDummy.cModelInstance) or self.element
             imports.setElementCollisionsEnabled(self.cElement, false)
-            self.cStreamer = streamer:create(self.cElement, "bone", {parent}, self.boneData.syncRate)
+            self.cStreamer = streamer:create(self.cElement, "bone", {parent})
             bone.public.buffer.element[(self.cElement)] = self
             self.cHeartbeat = nil
         end, settings.downloader.buildRate)
@@ -150,14 +150,7 @@ if localPlayer then
         boneData.id = imports.tonumber(boneData.id)
         if not boneData.id or not bone.public.ids[(self.parentType)][(boneData.id)] then return false end
         bone.private:validateOffset(self, boneData)
-        boneData.syncRate = imports.tonumber(boneData.syncRate) or settings.streamer.boneSyncRate
-        local isSyncRateModified = self.boneData and (self.boneData.syncRate ~= boneData.syncRate)
         self.boneData = boneData
-        if isSyncRateModified then
-            self.cStreamer.syncRate = self.boneData.syncRate
-            self.cStreamer:deallocate()
-            self.cStreamer:allocate()
-        end
         return true
     end
 
@@ -243,7 +236,6 @@ else
         boneData.id = imports.tonumber(boneData.id)
         if not boneData.id or not bone.public.ids[(self.parentType)][(boneData.id)] then return false end
         bone.private:validateOffset(self, boneData)
-        boneData.syncRate = imports.tonumber(boneData.syncRate) or settings.streamer.boneSyncRate
         self.boneData = boneData
         if not skipSync then
             thread:create(function(__self)
