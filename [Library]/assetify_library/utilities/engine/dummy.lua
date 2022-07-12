@@ -104,7 +104,7 @@ if localPlayer then
             self.cCollisionInstance = self.cCollisionInstance or (cData.collisionID and imports.createVehicle(cData.collisionID, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)) or false
         end
         if not self.cModelInstance then return false end
-        self.cDummy = self.cCollisionInstance or self.cModelInstance
+        self.cDummy = (remoteSignature and remoteSignature.element) or self.cCollisionInstance or self.cModelInstance
         dummy.public.buffer[(self.cDummy)] = self
         self.cHeartbeat = thread:createHeartbeat(function()
             if not self.cModelInstance then
