@@ -85,7 +85,7 @@ end
 function streamer.public:resume()
     if not streamer.public:isInstance(self) then return false end
     if self.streamer ~= self.occlusions[1] then
-        if not streamer.private.allocator.validStreams[streamType] or not streamer.private.allocator.validStreams[streamType].skipAttachment then
+        if not streamer.private.allocator.validStreams[(self.streamType)] or not streamer.private.allocator.validStreams[(self.streamType)].skipAttachment then
             imports.attachElements(self.streamer, self.occlusions[1])
         end
         imports.setElementDimension(self.streamer, self.dimension)
@@ -93,8 +93,8 @@ function streamer.public:resume()
     end
     streamer.private.buffer[(self.dimension)] = streamer.private.buffer[(self.dimension)] or {}
     streamer.private.buffer[(self.dimension)][(self.interior)] = streamer.private.buffer[(self.dimension)][(self.interior)] or {}
-    streamer.private.buffer[(self.dimension)][(self.interior)][streamType] = streamer.private.buffer[(self.dimension)][(self.interior)][streamType] or {}
-    streamer.private.buffer[(self.dimension)][(self.interior)][streamType][self] = {isStreamed = false}
+    streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)] = streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)] or {}
+    streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)][self] = {isStreamed = false}
     self:allocate()
     return true
 end
