@@ -118,7 +118,7 @@ if localPlayer then
             self.cDummy = dummy:fetchInstance(self.element)
             if self.cDummy and self.cDummy.cStreamer then self.cDummy.cStreamer:pause() end
             self.cElement = (self.cDummy and self.cDummy.cModelInstance) or self.element
-            imports.setElementCollisionsEnabled(self.cElement, false) --TODO: WHEN DEATTACHING LOAD COLLISION BACK?
+            imports.setElementCollisionsEnabled(self.cElement, false)
             self.cStreamer = streamer:create(self.cElement, "bone", {parent}, self.boneData.syncRate)
             bone.public.buffer.element[(self.cElement)] = self
             self.cHeartbeat = nil
