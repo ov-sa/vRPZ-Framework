@@ -92,6 +92,11 @@ function streamer.public:resume()
         imports.setElementDimension(self.streamer, self.dimension)
         imports.setElementInterior(self.streamer, self.interior)
     end
+    if streamer.private.allocator.validStreams[(self.streamType)] and streamer.private.allocator.validStreams[(self.streamType)].desyncOccclusionOnPause then
+        for i = 1, #self.occlusions do
+            imports.setElementDimension(self.occlusions[i], self.dimension)
+        end
+    end
     self.isResumed = true
     streamer.private.buffer[(self.dimension)] = streamer.private.buffer[(self.dimension)] or {}
     streamer.private.buffer[(self.dimension)][(self.interior)] = streamer.private.buffer[(self.dimension)][(self.interior)] or {}
