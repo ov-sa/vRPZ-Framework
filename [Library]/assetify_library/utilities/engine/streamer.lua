@@ -19,6 +19,7 @@ local imports = {
     addEventHandler = addEventHandler,
     removeEventHandler = removeEventHandler,
     attachElements = attachElements,
+    detachElements = detachElements,
     getTickCount = getTickCount,
     isElementOnScreen = isElementOnScreen,
     getElementDimension = getElementDimension,
@@ -103,6 +104,13 @@ end
 function streamer.public:pause()
     if not streamer.public:isInstance(self) or not self.isResumed then return false end
     self.isResumed = false
+    if self.streamer ~= self.occlusions[1] then
+        if not streamer.private.allocator.validStreams[(self.streamType)] or not streamer.private.allocator.validStreams[(self.streamType)].skipAttachment then
+            Imports.detachElements(self.streamer, self.occlusions[1])
+        end
+        imports.setElementDimension(self.streamer, self.unsyncDimension)
+        --TODO: UNSYNC IF ITS A DUMMY COL INSTANCE AS WELL
+    end
     self:deallocate()
     streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)][self] = nil
     return true
