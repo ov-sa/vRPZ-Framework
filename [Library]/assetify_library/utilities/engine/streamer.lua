@@ -37,9 +37,9 @@ local imports = {
 local streamer = class:create("streamer")
 streamer.private.allocator = {
     validStreams = {
-        ["dummy"] = {desyncOccclusionOnPause = true},
+        ["dummy"] = {desyncOccclusionsOnPause = true},
         ["bone"] = {skipAttachment = true},
-        ["light"] = {desyncOccclusionOnPause = true}
+        ["light"] = {desyncOccclusionsOnPause = true}
     }
 }
 streamer.private.buffer = {}
@@ -92,7 +92,7 @@ function streamer.public:resume()
         imports.setElementDimension(self.streamer, self.dimension)
         imports.setElementInterior(self.streamer, self.interior)
     end
-    if streamer.private.allocator.validStreams[(self.streamType)] and streamer.private.allocator.validStreams[(self.streamType)].desyncOccclusionOnPause then
+    if streamer.private.allocator.validStreams[(self.streamType)] and streamer.private.allocator.validStreams[(self.streamType)].desyncOccclusionsOnPause then
         for i = 1, #self.occlusions do
             imports.setElementDimension(self.occlusions[i], self.dimension)
         end
@@ -117,7 +117,7 @@ function streamer.public:pause()
         end
         imports.setElementDimension(self.streamer, self.unsyncDimension)
     end
-    if streamer.private.allocator.validStreams[(self.streamType)] and streamer.private.allocator.validStreams[(self.streamType)].desyncOccclusionOnPause then
+    if streamer.private.allocator.validStreams[(self.streamType)] and streamer.private.allocator.validStreams[(self.streamType)].desyncOccclusionsOnPause then
         for i = 1, #self.occlusions do
             imports.setElementDimension(self.occlusions[i], self.unsyncDimension)
         end
