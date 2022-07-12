@@ -123,9 +123,10 @@ if localPlayer then
             bone.public.buffer.element[(self.cElement)] = self
             self.cHeartbeat = nil
         end, settings.downloader.buildRate)
-        bone.public.buffer.element[element] = self
-        bone.public.buffer.parent[parent] = bone.public.buffer.parent[parent] or {}
-        bone.public.buffer.parent[parent][self] = true
+        bone.public.buffer.element[(self.element)] = self
+        bone.public.cache.element[(self.parent)] = bone.public.cache.element[(self.parent)] or {}
+        bone.public.buffer.parent[(self.parent)] = bone.public.buffer.parent[(self.parent)] or {}
+        bone.public.buffer.parent[(self.parent)][self] = true
         return true
     end
 
@@ -162,7 +163,6 @@ if localPlayer then
 
     function bone.public.update(self)
         if not bone.public:isInstance(self) or self.cHeartbeat then return false end
-        bone.public.cache.element[(self.parent)] = bone.public.cache.element[(self.parent)] or {}
         bone.public.cache.element[(self.parent)][(self.boneData.id)] = ((bone.public.cache.element[(self.parent)].streamTick == bone.public.cache.streamTick) and bone.public.cache.element[(self.parent)][(self.boneData.id)]) or imports.getElementBoneMatrix(self.parent, self.boneData.id)
         bone.public.cache.element[(self.parent)].streamTick = bone.public.cache.streamTick
         local cMatrix, rotationMatrix = bone.public.cache.element[(self.parent)][(self.boneData.id)], self.boneData.rotationMatrix
