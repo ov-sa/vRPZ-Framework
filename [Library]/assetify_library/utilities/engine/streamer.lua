@@ -24,6 +24,7 @@ local imports = {
     isElementOnScreen = isElementOnScreen,
     getElementCollisionsEnabled = getElementCollisionsEnabled,
     setElementCollisionsEnabled = setElementCollisionsEnabled,
+    getElementPosition = getElementPosition,
     getElementDimension = getElementDimension,
     setElementDimension = setElementDimension,
     getElementInterior = getElementInterior,
@@ -213,9 +214,8 @@ streamer.private.onEntityStream = function(streamBuffer)
                 imports.setElementDimension(i.streamer, (j.isStreamed and streamer.private.cache.clientWorld.dimension) or settings.streamer.unsyncDimension)
             end
             if streamer.private.allocator.validStreams[(i.streamType)] and streamer.private.allocator.validStreams[(i.streamType)].dynamicStreamSync then
-                --TODO: WIP..
-                local camLocation, parentLocation = {getElementPosition(streamer.private.cache.clientCamera)}, {getElementPosition(i.streamer)}
-                local viewDistance = math.findDistance3D(camLocation[1], camLocation[2], camLocation[3], parentLocation[1], parentLocation[2], parentLocation[3]) - settings.streamer.streamDelimiter[1]
+                --TODO: WIP..  MAKE IT MULTIPLE OF 10
+                local viewDistance = math.findDistance3D(streamer.private.cache.cameraLocation.x, streamer.private.cache.cameraLocation.y, streamer.private.cache.cameraLocation.z, imports.getElementPosition(i.streamer)) - settings.streamer.streamDelimiter[1]
                 local syncRate = ((viewDistance <= 0) and 0) or math.floor((viewDistance/settings.streamer.streamDelimiter[2])*settings.streamer.streamRate)
                 if syncRate ~= i.syncRate then
                     i:deallocate()
@@ -259,6 +259,8 @@ network:fetch("Assetify:onLoad"):on(function()
     end, settings.streamer.cameraSyncRate, 0)
     timer:create(function()
         if not streamer.private.cache.isCameraTranslated then return false end
+        streamer.private.cache.cameraLocation = streamer.private.cache.cameraLocation or {}
+        streamer.private.cache.cameraLocation.x, streamer.private.cache.cameraLocation.y, streamer.private.cache.cameraLocation.z = imports.getElementPosition(streamer.private.cache.clientCamera)
         local clientDimension, clientInterior = streamer.private.cache.clientWorld.dimension, streamer.private.cache.clientWorld.interior
         if streamer.private.buffer[clientDimension] and streamer.private.buffer[clientDimension][clientInterior] then
             for i, j in imports.pairs(streamer.private.buffer[clientDimension][clientInterior]) do
