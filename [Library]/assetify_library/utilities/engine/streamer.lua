@@ -84,12 +84,12 @@ end
 
 function streamer.public:resume()
     if not streamer.public:isInstance(self) then return false end
-    if streamerInstance ~= occlusionInstances[1] then
+    if self.streamer ~= occlusionInstances[1] then
         if not streamer.private.allocator.validStreams[streamType] or not streamer.private.allocator.validStreams[streamType].skipAttachment then
-            imports.attachElements(streamerInstance, occlusionInstances[1])
+            imports.attachElements(self.streamer, occlusionInstances[1])
         end
-        imports.setElementDimension(streamerInstance, self.dimension)
-        imports.setElementInterior(streamerInstance, self.interior)
+        imports.setElementDimension(self.streamer, self.dimension)
+        imports.setElementInterior(self.streamer, self.interior)
     end
     streamer.private.buffer[(self.dimension)] = streamer.private.buffer[(self.dimension)] or {}
     streamer.private.buffer[(self.dimension)][(self.interior)] = streamer.private.buffer[(self.dimension)][(self.interior)] or {}
