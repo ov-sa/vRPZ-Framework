@@ -85,7 +85,6 @@ if localPlayer then
         dummy.private:validateOffset(self, dummyData)
         self.assetType, self.assetName, self.assetClump, self.clumpMaps = assetType, assetName, assetClump, clumpMaps
         self.dummyData = dummyData
-        self.syncRate = imports.tonumber(dummyData.syncRate)
         if remoteSignature then
             if cData.collisionID then
                 self.cCollisionInstance = remoteSignature.element
@@ -124,7 +123,7 @@ if localPlayer then
                 imports.setElementDimension(self.cCollisionInstance, dummyData.dimension)
                 imports.setElementInterior(self.cCollisionInstance, dummyData.interior)
                 imports.setElementCollisionsEnabled(self.cModelInstance, false)
-                self.cStreamer = streamer:create(self.cModelInstance, "dummy", {self.cCollisionInstance}, self.syncRate)
+                self.cStreamer = streamer:create(self.cModelInstance, "dummy", {self.cCollisionInstance})
             end
             self.cHeartbeat = nil
         end, settings.downloader.buildRate)
@@ -151,7 +150,6 @@ else
         if not dummyType then return false end
         dummy.private:validateOffset(self, dummyData)
         self.assetType, self.assetName, self.assetClump, self.clumpMaps = assetType, assetName, assetClump, clumpMaps
-        self.syncRate = imports.tonumber(dummyData.syncRate)
         self.dummyData = dummyData
         if dummyType == "object" then
             self.cModelInstance = imports.createObject(settings.assetPacks[assetType].assetBase, dummyData.position.x, dummyData.position.y, dummyData.position.z, dummyData.rotation.x, dummyData.rotation.y, dummyData.rotation.z)
