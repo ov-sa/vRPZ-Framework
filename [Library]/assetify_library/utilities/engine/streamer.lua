@@ -103,7 +103,6 @@ end
 
 function streamer.public:pause()
     if not streamer.public:isInstance(self) or not self.isResumed then return false end
-    self.isResumed = false
     if self.streamer ~= self.occlusions[1] then
         if not streamer.private.allocator.validStreams[(self.streamType)] or not streamer.private.allocator.validStreams[(self.streamType)].skipAttachment then
             Imports.detachElements(self.streamer, self.occlusions[1])
@@ -112,6 +111,7 @@ function streamer.public:pause()
         --TODO: UNSYNC IF ITS A DUMMY COL INSTANCE AS WELL
     end
     self:deallocate()
+    self.isResumed = false
     streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)][self] = nil
     return true
 end
@@ -138,7 +138,7 @@ imports.addEventHandler("onClientElementDimensionChange", localPlayer, function(
 imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(interior) streamer.public:update(_, interior) end)
 
 function streamer.public:allocate()
-    if not streamer.public:isInstance(self) or self.isAllocated then return false end
+    if not streamer.public:isInstance(self) or not self.isResumed or self.isAllocated then return false end
     if not streamer.private.allocator.validStreams[(self.streamType)] then return false end
     self.isAllocated = true
     streamer.private.allocator[(self.syncRate)] = streamer.private.allocator[(self.syncRate)] or {}
@@ -163,7 +163,7 @@ function streamer.public:allocate()
 end
 
 function streamer.public:deallocate()
-    if not streamer.public:isInstance(self) or not self.isAllocated then return false end
+    if not streamer.public:isInstance(self) or not self.isResumed or not self.isAllocated then return false end
     if not streamer.private.allocator.validStreams[(self.streamType)] then return false end
     if not streamer.private.allocator[(self.syncRate)] or not streamer.private.allocator[(self.syncRate)][(self.streamType)] or not streamer.private.allocator[(self.syncRate)][(self.streamType)][(self.dimension)] or not streamer.private.allocator[(self.syncRate)][(self.streamType)][(self.dimension)][(self.interior)] then return false end
     local isAllocatorVoid = true
