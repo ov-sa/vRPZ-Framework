@@ -136,6 +136,7 @@ if localPlayer then
         if self.cDummy and self.cDummy.cStreamer then self.cDummy.cStreamer:resume() end
         bone.public.cache.element[(self.element)] = nil
         bone.public.buffer.element[(self.element)] = nil
+        bone.public.buffer.element[(self.cElement)] = nil
         self:destroyInstance()
         return true
     end
@@ -228,7 +229,6 @@ else
                 thread:pause()
             end
             bone.public.buffer.element[(self.element)] = nil
-            bone.public.buffer.element[(self.cElement)] = nil
             self:destroyInstance()
         end):resume({executions = settings.downloader.syncRate, frames = 1})
         return true
