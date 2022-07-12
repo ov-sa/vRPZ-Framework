@@ -26,8 +26,9 @@ settings = {
 
     streamer = {
         syncRate = 250,
+        streamRate = 150,
         cameraSyncRate = 75,
-        boneSyncRate = 0,
+        streamDelimiter = {8, 20},
         unsyncDimension = 65535 
     },
 
