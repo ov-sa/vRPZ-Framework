@@ -29,7 +29,7 @@ local function onLibraryLoaded()
     network:emit("Assetify:onLoad", false)
     for i, j in imports.pairs(syncer.private.scheduledClients) do
         syncer.private:syncPack(i, _, true)
-        syncer.private.loadedClients[i] = true
+        syncer.public.loadedClients[i] = true
         syncer.private.scheduledClients[i] = nil
     end
 end

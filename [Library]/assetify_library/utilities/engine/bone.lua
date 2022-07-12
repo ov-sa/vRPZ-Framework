@@ -208,7 +208,7 @@ else
         bone.public.buffer.parent[parent] = bone.public.buffer.parent[parent] or {}
         bone.public.buffer.parent[parent][self] = true
         thread:create(function(__self)
-            for i, j in imports.pairs(syncer.private.loadedClients) do
+            for i, j in imports.pairs(syncer.public.loadedClients) do
                 self:load(_, _, _, i)
                 thread:pause()
             end
@@ -222,7 +222,7 @@ else
         if self.isUnloading then return false end
         self.isUnloading = true
         thread:create(function(__self)
-            for i, j in imports.pairs(syncer.private.loadedClients) do
+            for i, j in imports.pairs(syncer.public.loadedClients) do
                 self:unload(i)
                 thread:pause()
             end
@@ -245,7 +245,7 @@ else
         self.boneData = boneData
         if not skipSync then
             thread:create(function(__self)
-                for i, j in imports.pairs(syncer.private.loadedClients) do
+                for i, j in imports.pairs(syncer.public.loadedClients) do
                     self:refresh(_, i)
                     thread:pause()
                 end
