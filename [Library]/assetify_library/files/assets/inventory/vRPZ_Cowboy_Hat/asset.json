@@ -4,6 +4,15 @@
     "itemWeight": {"rows": 2, "columns": 2},
     "encryptKey": "vStudio - Aviril",
     "streamRange": 75,
+    "itemAttachments": {
+        "bone": {
+            "generic": {
+                "id": 7,
+                "position": {"x": -0.032, "y": -0.131, "z": 0.045},
+                "rotation": {"x": -25, "y": 90, "z": 90}
+            }
+        }
+    },
     "shaderMaps": {
         "control": {
             "cwbyhat01_a": [
