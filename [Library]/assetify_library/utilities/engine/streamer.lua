@@ -130,8 +130,9 @@ imports.addEventHandler("onClientElementDimensionChange", localPlayer, function(
 imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(interior) streamer.public:update(_, interior) end)
 
 function streamer.public:allocate()
-    if not streamer.public:isInstance(self) then return false end
+    if not streamer.public:isInstance(self) or self.isAllocated then return false end
     if not streamer.private.allocator.validStreams[(self.streamType)] then return false end
+    self.isAllocated = true
     streamer.private.allocator[(self.syncRate)] = streamer.private.allocator[(self.syncRate)] or {}
     streamer.private.allocator[(self.syncRate)][(self.streamType)] = streamer.private.allocator[(self.syncRate)][(self.streamType)] or {}
     streamer.private.allocator[(self.syncRate)][(self.streamType)][(self.dimension)] = streamer.private.allocator[(self.syncRate)][(self.streamType)][(self.dimension)] or {}
@@ -154,10 +155,11 @@ function streamer.public:allocate()
 end
 
 function streamer.public:deallocate()
-    if not streamer.public:isInstance(self) then return false end
+    if not streamer.public:isInstance(self) or not self.isAllocated then return false end
     if not streamer.private.allocator.validStreams[(self.streamType)] then return false end
     if not streamer.private.allocator[(self.syncRate)] or not streamer.private.allocator[(self.syncRate)][(self.streamType)] or not streamer.private.allocator[(self.syncRate)][(self.streamType)][(self.dimension)] or not streamer.private.allocator[(self.syncRate)][(self.streamType)][(self.dimension)][(self.interior)] then return false end
     local isAllocatorVoid = true
+    self.isAllocated = false
     streamer.private.allocator[(self.syncRate)][(self.streamType)][(self.dimension)][(self.interior)][self] = nil
     for i, j in imports.pairs(streamer.private.allocator[(self.syncRate)][(self.streamType)][(self.dimension)][(self.interior)]) do
         isAllocatorVoid = false
