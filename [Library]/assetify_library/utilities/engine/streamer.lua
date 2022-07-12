@@ -92,6 +92,7 @@ function streamer.public:resume()
         imports.setElementInterior(self.streamer, self.interior)
     end
     self.isPaused = false
+    --TODO: THIS SHOULD PROBABLY BE DELETED FROM BUFFER
     streamer.private.buffer[(self.dimension)] = streamer.private.buffer[(self.dimension)] or {}
     streamer.private.buffer[(self.dimension)][(self.interior)] = streamer.private.buffer[(self.dimension)][(self.interior)] or {}
     streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)] = streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)] or {}
@@ -104,6 +105,7 @@ function streamer.public:pause()
     if not streamer.public:isInstance(self) then return false end
     self.isPaused = true
     self:deallocate()
+    streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)][self] = nil
     return true
 end
 
