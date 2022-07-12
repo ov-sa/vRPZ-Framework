@@ -110,7 +110,7 @@ function streamer.public:pause()
     streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)][self] = nil
     if self.streamer ~= self.occlusions[1] then
         if not streamer.private.allocator.validStreams[(self.streamType)] or not streamer.private.allocator.validStreams[(self.streamType)].skipAttachment then
-            imports.detachElements(self.streamer, self.occlusions[1])
+            imports.detachElements(self.streamer)
         end
         imports.setElementDimension(self.streamer, settings.streamer.unsyncDimension)
     end
