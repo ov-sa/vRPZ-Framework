@@ -75,9 +75,7 @@ end
 
 function streamer.public:unload()
     if not streamer.public:isInstance(self) then return false end
-    local streamType = self.streamType
-    local streamDimension, streamInterior = imports.getElementDimension(self.occlusions[1]), imports.getElementInterior(self.occlusions[1])
-    streamer.private.buffer[streamDimension][streamInterior][streamType][self] = nil
+    streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)][self] = nil
     self:pause()
     self:destroyInstance()
     return true
