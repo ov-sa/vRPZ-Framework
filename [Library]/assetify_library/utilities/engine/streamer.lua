@@ -115,11 +115,11 @@ function streamer.public:pause()
         if not streamer.private.allocator.validStreams[(self.streamType)] or not streamer.private.allocator.validStreams[(self.streamType)].skipAttachment then
             imports.detachElements(self.streamer, self.occlusions[1])
         end
-        imports.setElementDimension(self.streamer, self.unsyncDimension)
+        imports.setElementDimension(self.streamer, settings.streamer.unsyncDimension)
     end
     if streamer.private.allocator.validStreams[(self.streamType)] and streamer.private.allocator.validStreams[(self.streamType)].desyncOccclusionsOnPause then
         for i = 1, #self.occlusions do
-            imports.setElementDimension(self.occlusions[i], self.unsyncDimension)
+            imports.setElementDimension(self.occlusions[i], settings.streamer.unsyncDimension)
         end
     end
     return true
