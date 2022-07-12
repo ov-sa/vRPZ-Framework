@@ -39,14 +39,14 @@ local imports = {
 local streamer = class:create("streamer")
 streamer.private.allocator = {
     validStreams = {
-        ["dummy"] = {desyncOccclusionsOnPause = true},
-        ["bone"] = {skipAttachment = true},
-        ["light"] = {desyncOccclusionsOnPause = true}
+        ["dummy"] = {desyncOccclusionsOnPause = true, dynamicStreamSync = true},
+        ["bone"] = {skipAttachment = true, dynamicStreamSync = true},
+        ["light"] = {desyncOccclusionsOnPause = true, dynamicStreamSync = true}
     }
 }
 streamer.private.buffer = {}
 streamer.private.cache = {
-    clientCamera = imports.getCamera()
+    clientCamera = getCamera()
 }
 
 function streamer.public:create(...)
@@ -69,7 +69,7 @@ function streamer.public:load(streamerInstance, streamType, occlusionInstances, 
     self.streamer, self.isStreamerCollidable = streamerInstance, imports.getElementCollisionsEnabled(streamerInstance)
     self.streamType, self.occlusions = streamType, occlusionInstances
     self.dimension, self.interior = imports.getElementDimension(occlusionInstances[1]), imports.getElementInterior(occlusionInstances[1])
-    self.syncRate = syncRate or settings.streamer.syncRate
+    self.syncRate = settings.streamer.streamRate
     self:resume()
     return true
 end
@@ -211,6 +211,17 @@ streamer.private.onEntityStream = function(streamBuffer)
             end
             if j.__isStreamed ~= j.isStreamed then
                 imports.setElementDimension(i.streamer, (j.isStreamed and streamer.private.cache.clientWorld.dimension) or settings.streamer.unsyncDimension)
+            end
+            if streamer.private.allocator.validStreams[(i.streamType)] and streamer.private.allocator.validStreams[(i.streamType)].dynamicStreamSync then
+                --TODO: WIP..
+                local camLocation, parentLocation = {getElementPosition(streamer.private.cache.clientCamera)}, {getElementPosition(i.streamer)}
+                local viewDistance = math.findDistance3D(camLocation[1], camLocation[2], camLocation[3], parentLocation[1], parentLocation[2], parentLocation[3]) - settings.streamer.streamDelimiter[1]
+                local syncRate = ((viewDistance <= 0) and 0) or math.floor((viewDistance/settings.streamer.streamDelimiter[2])*settings.streamer.streamRate)
+                if syncRate ~= i.syncRate then
+                    i:deallocate()
+                    i.syncRate = syncRate
+                    i:allocate()
+                end
             end
             j.__isStreamed = j.isStreamed
         end
