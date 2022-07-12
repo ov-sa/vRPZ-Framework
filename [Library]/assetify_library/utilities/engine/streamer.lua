@@ -210,9 +210,7 @@ streamer.private.onEntityStream = function(streamBuffer)
                     break
                 end
             end
-            if j.__isStreamed ~= j.isStreamed then
-                imports.setElementDimension(i.streamer, (j.isStreamed and streamer.private.cache.clientWorld.dimension) or settings.streamer.unsyncDimension)
-            end
+            imports.setElementDimension(i.streamer, (j.isStreamed and streamer.private.cache.clientWorld.dimension) or settings.streamer.unsyncDimension)
             if streamer.private.allocator.validStreams[(i.streamType)] and streamer.private.allocator.validStreams[(i.streamType)].dynamicStreamAllocation then
                 local viewDistance = math.findDistance3D(streamer.private.cache.cameraLocation.x, streamer.private.cache.cameraLocation.y, streamer.private.cache.cameraLocation.z, imports.getElementPosition(i.streamer)) - settings.streamer.streamDelimiter[1]
                 local syncRate = ((viewDistance <= 0) and 0) or math.min(settings.streamer.streamRate, math.round(((viewDistance/settings.streamer.streamDelimiter[2])*settings.streamer.streamRate)/settings.streamer.streamDelimiter[3])*settings.streamer.streamDelimiter[3])
@@ -222,7 +220,6 @@ streamer.private.onEntityStream = function(streamBuffer)
                     i:allocate()
                 end
             end
-            j.__isStreamed = j.isStreamed
         end
     end
     return true
