@@ -115,11 +115,12 @@ if localPlayer then
         self.cHeartbeat = thread:createHeartbeat(function()
             return not imports.isElement(element)
         end, function()
-            imports.setElementCollisionsEnabled(element, false)
-            self.cDummy = dummy:fetchInstance(element)
+            self.cDummy = dummy:fetchInstance(self.element)
             if self.cDummy and self.cDummy.cStreamer then self.cDummy.cStreamer:pause() end
-            self.cElement = (self.cDummy and self.cDummy.cModelInstance) or element
+            self.cElement = (self.cDummy and self.cDummy.cModelInstance) or self.element
+            imports.setElementCollisionsEnabled(self.cElement, false) --TODO: WHEN DEATTACHING LOAD COLLISION BACK?
             self.cStreamer = streamer:create(self.cElement, "bone", {parent}, self.boneData.syncRate)
+            bone.public.buffer.element[(self.cElement)] = self
             self.cHeartbeat = nil
         end, settings.downloader.buildRate)
         bone.public.buffer.element[element] = self
@@ -227,6 +228,7 @@ else
                 thread:pause()
             end
             bone.public.buffer.element[(self.element)] = nil
+            bone.public.buffer.element[(self.cElement)] = nil
             self:destroyInstance()
         end):resume({executions = settings.downloader.syncRate, frames = 1})
         return true
