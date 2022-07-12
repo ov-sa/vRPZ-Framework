@@ -68,18 +68,7 @@ function streamer.public:load(streamerInstance, streamType, occlusionInstances, 
     self.streamType, self.occlusions = streamType, occlusionInstances
     self.dimension, self.interior = streamDimension, streamInterior
     self.syncRate = syncRate or settings.streamer.syncRate
-    if streamerInstance ~= occlusionInstances[1] then
-        if not streamer.private.allocator.validStreams[streamType] or not streamer.private.allocator.validStreams[streamType].skipAttachment then
-            imports.attachElements(streamerInstance, occlusionInstances[1])
-        end
-        imports.setElementDimension(streamerInstance, streamDimension)
-        imports.setElementInterior(streamerInstance, streamInterior)
-    end
-    streamer.private.buffer[streamDimension] = streamer.private.buffer[streamDimension] or {}
-    streamer.private.buffer[streamDimension][streamInterior] = streamer.private.buffer[streamDimension][streamInterior] or {}
-    streamer.private.buffer[streamDimension][streamInterior][streamType] = streamer.private.buffer[streamDimension][streamInterior][streamType] or {}
-    streamer.private.buffer[streamDimension][streamInterior][streamType][self] = {isStreamed = false}
-    self:allocate()
+    self:resume()
     return true
 end
 
@@ -88,18 +77,31 @@ function streamer.public:unload()
     local streamType = self.streamType
     local streamDimension, streamInterior = imports.getElementDimension(self.occlusions[1]), imports.getElementInterior(self.occlusions[1])
     streamer.private.buffer[streamDimension][streamInterior][streamType][self] = nil
-    self:deallocate()
+    self:pause()
     self:destroyInstance()
     return true
 end
 
 function streamer.public:resume()
     if not streamer.public:isInstance(self) then return false end
+    if streamerInstance ~= occlusionInstances[1] then
+        if not streamer.private.allocator.validStreams[streamType] or not streamer.private.allocator.validStreams[streamType].skipAttachment then
+            imports.attachElements(streamerInstance, occlusionInstances[1])
+        end
+        imports.setElementDimension(streamerInstance, self.dimension)
+        imports.setElementInterior(streamerInstance, self.interior)
+    end
+    streamer.private.buffer[(self.dimension)] = streamer.private.buffer[(self.dimension)] or {}
+    streamer.private.buffer[(self.dimension)][(self.interior)] = streamer.private.buffer[(self.dimension)][(self.interior)] or {}
+    streamer.private.buffer[(self.dimension)][(self.interior)][streamType] = streamer.private.buffer[(self.dimension)][(self.interior)][streamType] or {}
+    streamer.private.buffer[(self.dimension)][(self.interior)][streamType][self] = {isStreamed = false}
+    self:allocate()
     return true
 end
 
 function streamer.public:pause()
     if not streamer.public:isInstance(self) then return false end
+    self:deallocate()
     return true
 end
 
