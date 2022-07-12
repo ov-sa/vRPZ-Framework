@@ -37,9 +37,9 @@ local imports = {
 local streamer = class:create("streamer")
 streamer.private.allocator = {
     validStreams = {
-        ["dummy"] = {},
+        ["dummy"] = {desyncOccclusionOnPause = true},
         ["bone"] = {skipAttachment = true},
-        ["light"] = {}
+        ["light"] = {desyncOccclusionOnPause = true}
     }
 }
 streamer.private.buffer = {}
@@ -108,7 +108,11 @@ function streamer.public:pause()
             Imports.detachElements(self.streamer, self.occlusions[1])
         end
         imports.setElementDimension(self.streamer, self.unsyncDimension)
-        --TODO: UNSYNC IF ITS A DUMMY COL INSTANCE AS WELL
+    end
+    if streamer.private.allocator.validStreams[(self.streamType)] and streamer.private.allocator.validStreams[(self.streamType)].desyncOccclusionOnPause then
+        for i = 1, #self.occlusions do
+            imports.setElementDimension(self.occlusions[i], self.unsyncDimension)
+        end
     end
     self:deallocate()
     self.isResumed = false
