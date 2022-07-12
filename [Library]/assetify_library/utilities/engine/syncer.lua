@@ -155,7 +155,7 @@ else
         if imports.getResourceRootElement(resourceElement) == resourceRoot then
             if syncer.public.isLibraryLoaded then
                 syncer.public.loadedClients[source] = true
-                syncer.public:syncPack(source, _, true)
+                syncer.private:syncPack(source, _, true)
             else
                 syncer.public.scheduledClients[source] = true
             end

@@ -131,10 +131,10 @@ else
     function syncer.private:syncData(player, ...) return network:emit("Assetify:Downloader:onRecieveData", true, false, player, ...) end
     function syncer.private:syncContent(player, ...) return network:emit("Assetify:Downloader:onRecieveContent", true, false, player, ...) end
     function syncer.private:syncState(player, ...) return network:emit("Assetify:Downloader:onRecieveState", true, false, player, ...) end
-    network:create("Assetify:Downloader:onRecieveHash"):on(function(source, assetType, assetName, hashes) syncer.public:syncPack(source, {type = assetType, name = assetName, hashes = hashes}) end)
-    network:create("Assetify:Downloader:onRequestSyncPack"):on(function(source) syncer.public:syncPack(source) end)
+    network:create("Assetify:Downloader:onRecieveHash"):on(function(source, assetType, assetName, hashes) syncer.private:syncPack(source, {type = assetType, name = assetName, hashes = hashes}) end)
+    network:create("Assetify:Downloader:onRequestSyncPack"):on(function(source) syncer.private:syncPack(source) end)
 
-    function syncer.public:syncPack(player, assetDatas, syncModules)
+    function syncer.private:syncPack(player, assetDatas, syncModules)
         if not assetDatas then
             thread:create(function(self)
                 local isLibraryVoid = true
