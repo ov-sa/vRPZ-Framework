@@ -163,10 +163,10 @@ if localPlayer then
 
     function bone.public.update(self)
         if not bone.public:isInstance(self) or self.cHeartbeat then return false end
-        bone.public.cache.element[(self.parent)][(self.boneData.id)] = ((bone.public.cache.element[(self.parent)].streamTick == bone.public.cache.streamTick) and bone.public.cache.element[(self.parent)][(self.boneData.id)]) or imports.getElementBoneMatrix(self.parent, self.boneData.id)
-        bone.public.cache.element[(self.parent)].streamTick = bone.public.cache.streamTick
+        bone.public.cache.element[(self.parent)][(self.boneData.id)] = (bone.public.cache.element[(self.parent)][(self.boneData.id)] and (bone.public.cache.element[(self.parent)][(self.boneData.id)].streamTick == bone.public.cache.streamTick) and bone.public.cache.element[(self.parent)][(self.boneData.id)]) or imports.getElementBoneMatrix(self.parent, self.boneData.id)
         local cMatrix, rotationMatrix = bone.public.cache.element[(self.parent)][(self.boneData.id)], self.boneData.rotationMatrix
         local offX, offY, offZ = self.boneData.position.x, self.boneData.position.y, self.boneData.position.z
+        cMatrix.streamTick = bone.public.cache.streamTick
         imports.setElementMatrix(self.cElement, {
             {
                 (cMatrix[2][1]*rotationMatrix[1][2]) + (cMatrix[1][1]*rotationMatrix[1][1]) + (rotationMatrix[1][3]*cMatrix[3][1]),
