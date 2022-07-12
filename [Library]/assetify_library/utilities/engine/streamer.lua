@@ -83,7 +83,7 @@ function streamer.public:unload()
 end
 
 function streamer.public:resume()
-    if not streamer.public:isInstance(self) or not self.isPaused then return false end
+    if not streamer.public:isInstance(self) or self.isResumed then return false end
     if self.streamer ~= self.occlusions[1] then
         if not streamer.private.allocator.validStreams[(self.streamType)] or not streamer.private.allocator.validStreams[(self.streamType)].skipAttachment then
             imports.attachElements(self.streamer, self.occlusions[1])
@@ -91,7 +91,7 @@ function streamer.public:resume()
         imports.setElementDimension(self.streamer, self.dimension)
         imports.setElementInterior(self.streamer, self.interior)
     end
-    self.isPaused = false
+    self.isResumed = true
     streamer.private.buffer[(self.dimension)] = streamer.private.buffer[(self.dimension)] or {}
     streamer.private.buffer[(self.dimension)][(self.interior)] = streamer.private.buffer[(self.dimension)][(self.interior)] or {}
     streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)] = streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)] or {}
@@ -101,8 +101,8 @@ function streamer.public:resume()
 end
 
 function streamer.public:pause()
-    if not streamer.public:isInstance(self) then return false end
-    self.isPaused = true
+    if not streamer.public:isInstance(self) or not self.isResumed then return false end
+    self.isResumed = false
     self:deallocate()
     streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)][self] = nil
     return true
@@ -118,15 +118,12 @@ function streamer.public:update(clientDimension, clientInterior)
     end
     if streamer.private.buffer[clientDimension] and streamer.private.buffer[clientDimension][clientInterior] then
         for i, j in imports.pairs(streamer.private.buffer[clientDimension][clientInterior]) do
-            if j then
-                imports.setElementDimension(i.streamer.public, settings.streamer.unsyncDimension)
-            end
+            if j then imports.setElementDimension(i.streamer.public, settings.streamer.unsyncDimension) end
         end
     end
     streamer.private.cache.isCameraTranslated = true
     streamer.private.cache.clientWorld = streamer.private.cache.clientWorld or {}
-    streamer.private.cache.clientWorld.dimension = currentDimension
-    streamer.private.cache.clientWorld.interior = currentInterior
+    streamer.private.cache.clientWorld.dimension, streamer.private.cache.clientWorld.interior = currentDimension, currentInterior
     return true
 end
 imports.addEventHandler("onClientElementDimensionChange", localPlayer, function(dimension) streamer.public:update(dimension) end)
