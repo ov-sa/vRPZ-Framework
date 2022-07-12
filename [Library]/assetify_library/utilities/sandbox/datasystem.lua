@@ -58,7 +58,7 @@ else
         network:emit("Assetify:onGlobalDataChange", false, data, __value, value)
         local execWrapper = nil
         execWrapper = function()
-            for i, j in imports.pairs(syncer.public.loadedClients) do
+            for i, j in imports.pairs(syncer.private.loadedClients) do
                 syncer.public.syncGlobalData(data, value, _, i)
                 if not isSync then thread:pause() end
             end
@@ -84,7 +84,7 @@ else
         network:emit("Assetify:onEntityDataChange", false, element, data, __value, value)
         local execWrapper = nil
         execWrapper = function()
-            for i, j in imports.pairs(syncer.public.loadedClients) do
+            for i, j in imports.pairs(syncer.private.loadedClients) do
                 syncer.public.syncEntityData(element, data, value, _, i, remoteSignature)
                 if not isSync then thread:pause() end
             end
