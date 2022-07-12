@@ -103,7 +103,7 @@ CInventory.equipItem = function(player, item, prevSlot, slot, isEquipped)
             id = itemData.data.itemAttachments.bone.generic.id,
             position = itemData.data.itemAttachments.bone.generic.position,
             rotation = itemData.data.itemAttachments.bone.generic.rotation,
-            syncRate = 1
+            syncRate = 0
         })
         CInventory.CBuffer[inventoryID].slots[slot] = {item = item}
         CGame.setEntityData(player, "Slot:"..slot, item)
