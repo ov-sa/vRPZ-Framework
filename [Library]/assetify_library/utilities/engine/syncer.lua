@@ -43,6 +43,7 @@ local syncer = class:create("syncer", {
 })
 syncer.public.libraryName = imports.getResourceName(syncer.public.libraryResource)
 syncer.public.librarySource = "https://api.github.com/repos/ov-sa/Assetify-Library/releases/latest"
+syncer.public.libraryResources = {"assetify_library"}
 syncer.public.librarySerial = imports.md5(syncer.public.libraryName..":"..imports.tostring(syncer.public.libraryResource)..":"..table.encode(imports.getRealTime()))
 
 network:create("Assetify:onBoot")
@@ -107,9 +108,25 @@ if localPlayer then
         return true
     end
 else
-    syncer.public.libraryVersion = imports.getResourceInfo(resource, "version")
-    syncer.public.libraryVersion = (syncer.public.libraryVersion and "v."..syncer.public.libraryVersion) or syncer.public.libraryVersion
+    syncer.private.libraryUpdateTags = {"file", "script"}
+    syncer.private.libraryVersion = imports.getResourceInfo(resource, "version")
+    syncer.private.libraryVersion = (syncer.private.libraryVersion and "v."..syncer.private.libraryVersion) or syncer.private.libraryVersion
     syncer.public.loadedClients, syncer.private.scheduledClients = {}, {}
+
+    function syncer.private:updateLibrary(resourceName, resourcePointer)
+        local resourceMeta = syncer.public.rawURL..resourceName.."/meta.xml"
+        imports.fetchRemote(resourceMeta, function(response, status)
+            for i = 1, #syncer.private.libraryUpdateTags, 1 do
+                for j in string.gmatch(response, "<"..syncer.private.libraryUpdateTags[i].." src=\"(.-)\"(.-)/>") do
+                    if #string.gsub(j, "%s", "") > 0 then
+                        updateFile(syncer.public.rawURL..resourceName.."/"..j, resourcePointer..j)
+                    end
+                end
+            end
+            updateFile(resourceMeta, resourcePointer.."meta.xml", response)
+        end)
+        return true
+    end
 
     function syncer.private:setElementModel(element, assetType, assetName, assetClump, clumpMaps, remoteSignature, targetPlayer)
         if targetPlayer then return network:emit("Assetify:Syncer:onSyncElementModel", true, false, targetPlayer, element, assetType, assetName, assetClump, clumpMaps, remoteSignature) end
