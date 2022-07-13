@@ -18,6 +18,7 @@ local imports = {
     md5 = md5,
     tostring = tostring,
     isElement = isElement,
+    fetchRemote = fetchRemote,
     getElementType = getElementType,
     getRealTime = getRealTime,
     getThisResource = getThisResource,
@@ -112,16 +113,17 @@ else
         {name = syncer.public.libraryName, ref = "assetify_library"}
     }
     syncer.private.libraryVersion = imports.getResourceInfo(resource, "version")
-    syncer.private.libraryVersion = (syncer.private.libraryVersion and "v."..syncer.private.libraryVersion) or syncer.private.libraryVersion
+    syncer.private.libraryVersion = (syncer.private.libraryVersion and "v."..syncer.private.libraryVersion) or "N/A"
+    syncer.private.libraryVersionSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/"..syncer.private.libraryVersion.."/[Library]/"
     syncer.public.loadedClients, syncer.private.scheduledClients = {}, {}
 
     function syncer.private:updateLibrary(resourceName, resourcePointer)
-        local resourceMeta = syncer.public.rawURL..resourceName.."/meta.xml"
+        local resourceMeta = syncer.private.libraryVersionSource..resourceName.."/meta.xml"
         imports.fetchRemote(resourceMeta, function(response, status)
             for i = 1, #syncer.private.libraryResources.updateTags, 1 do
                 for j in string.gmatch(response, "<".. syncer.private.libraryResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
                     if #string.gsub(j, "%s", "") > 0 then
-                        updateFile(syncer.public.rawURL..resourceName.."/"..j, resourcePointer..j)
+                        updateFile(syncer.private.libraryVersionSource..resourceName.."/"..j, resourcePointer..j)
                     end
                 end
             end
