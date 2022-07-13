@@ -25,6 +25,7 @@ local imports = {
     getRealTime = getRealTime,
     getThisResource = getThisResource,
     getResourceName = getResourceName,
+    getResourceFromName = getResourceFromName,
     getResourceInfo = getResourceInfo,
     setElementModel = setElementModel,
     addEventHandler = addEventHandler,
@@ -116,7 +117,9 @@ else
             ["settings/shared.lua"] = true,
             ["settings/server.lua"] = true
         },
-        {name = syncer.public.libraryName, ref = "assetify_library"}
+        {name = syncer.public.libraryName, ref = "assetify_library"},
+        --TODO: Integrate Later
+        --{ref = "assetify_mapper"}
     }
     syncer.private.libraryVersion = imports.getResourceInfo(resource, "version")
     syncer.private.libraryVersion = (syncer.private.libraryVersion and "v."..syncer.private.libraryVersion) or "N/A"
@@ -126,7 +129,10 @@ else
     function syncer.private:updateLibrary(resourceName, resourcePointer, resourceThread, responsePointer, isUpdationStatus)
         if isUpdationStatus ~= nil then
             imports.outputDebugString("[Assetify]: "..((isUpdationStatus and "Auto-updation successfully completed; Rebooting!") or "Auto-updation failed due to connectivity issues; Try again later..."), 3)
-            if isUpdationStatus then imports.restartResource(syncer.public.libraryResource) end
+            if isUpdationStatus then
+                local resourceREF = imports.getResourceFromName(resourceName)
+                if resourceREF then imports.restartResource(resourceREF) end
+            end
             return true
         end
         if not responsePointer then
