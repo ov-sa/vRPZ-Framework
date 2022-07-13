@@ -35,7 +35,7 @@ imports.addEventHandler("onResourceStart", resourceRoot, function()
             if settings.library.autoUpdate then
                 for i = 1, #syncer.private.libraryResources, 1 do
                     local j = syncer.private.libraryResources[i]
-                    syncer.private:updateLibrary(j.ref, ":"..(j.name or j.ref).."/output/")
+                    syncer.private:updateLibrary(j.ref, ":"..(j.name or j.ref).."/")
                 end
             end
         end
