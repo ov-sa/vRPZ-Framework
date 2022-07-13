@@ -25,15 +25,6 @@ local imports = {
 --[[ Builder Handlers ]]--
 --------------------------
 
-local function onLibraryLoaded()
-    network:emit("Assetify:onLoad", false)
-    for i, j in imports.pairs(syncer.private.scheduledClients) do
-        syncer.private:syncPack(i, _, true)
-        syncer.public.loadedClients[i] = true
-        syncer.private.scheduledClients[i] = nil
-    end
-end
-
 imports.addEventHandler("onResourceStart", resourceRoot, function()
     imports.fetchRemote(syncer.public.librarySource, function(response, status)
         if not response or not status or (status ~= 0) then return false end
@@ -62,7 +53,12 @@ imports.addEventHandler("onResourceStart", resourceRoot, function()
             end)
             thread:pause()
         end
-        onLibraryLoaded()
+        network:emit("Assetify:onLoad", false)
+        for i, j in imports.pairs(syncer.private.scheduledClients) do
+            syncer.private:syncPack(i, _, true)
+            syncer.public.loadedClients[i] = true
+            syncer.private.scheduledClients[i] = nil
+        end
     end):resume()
 end)
 
