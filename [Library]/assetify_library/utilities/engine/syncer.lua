@@ -19,6 +19,7 @@ local imports = {
     tostring = tostring,
     isElement = isElement,
     fetchRemote = fetchRemote,
+    restartResource = restartResource,
     outputDebugString = outputDebugString,
     getElementType = getElementType,
     getRealTime = getRealTime,
@@ -125,9 +126,7 @@ else
     function syncer.private:updateLibrary(resourceName, resourcePointer, resourceThread, responsePointer, isUpdationStatus)
         if isUpdationStatus ~= nil then
             imports.outputDebugString("[Assetify]: "..((isUpdationStatus and "Auto-updation successfully completed; Rebooting!") or "Auto-updation failed due to connectivity issues; Try again later..."), 3)
-            if isUpdationStatus then
-                print("RESTART RESOURCE: "..tostring(resourceName))
-            end
+            if isUpdationStatus then imports.restartResource(syncer.public.libraryResource) end
             return true
         end
         if not responsePointer then
