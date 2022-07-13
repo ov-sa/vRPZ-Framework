@@ -17,7 +17,6 @@ settings.assetPacks = {
         autoLoad = true
     },
 
-    --[[
     ["animation"] = {
         autoLoad = true
     },
@@ -74,5 +73,4 @@ settings.assetPacks = {
         assetBase = 1337,
         assetTransparency = false
     }
-    ]]
 }
