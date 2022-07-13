@@ -43,7 +43,6 @@ local syncer = class:create("syncer", {
 })
 syncer.public.libraryName = imports.getResourceName(syncer.public.libraryResource)
 syncer.public.librarySource = "https://api.github.com/repos/ov-sa/Assetify-Library/releases/latest"
-syncer.public.libraryResources = {"assetify_library"}
 syncer.public.librarySerial = imports.md5(syncer.public.libraryName..":"..imports.tostring(syncer.public.libraryResource)..":"..table.encode(imports.getRealTime()))
 
 network:create("Assetify:onBoot")
@@ -108,7 +107,10 @@ if localPlayer then
         return true
     end
 else
-    syncer.private.libraryUpdateTags = {"file", "script"}
+    syncer.private.libraryResources = {
+        updateTags = {"file", "script"},
+        {name = syncer.public.libraryName, ref = "assetify_library"}
+    }
     syncer.private.libraryVersion = imports.getResourceInfo(resource, "version")
     syncer.private.libraryVersion = (syncer.private.libraryVersion and "v."..syncer.private.libraryVersion) or syncer.private.libraryVersion
     syncer.public.loadedClients, syncer.private.scheduledClients = {}, {}
@@ -116,8 +118,8 @@ else
     function syncer.private:updateLibrary(resourceName, resourcePointer)
         local resourceMeta = syncer.public.rawURL..resourceName.."/meta.xml"
         imports.fetchRemote(resourceMeta, function(response, status)
-            for i = 1, #syncer.private.libraryUpdateTags, 1 do
-                for j in string.gmatch(response, "<"..syncer.private.libraryUpdateTags[i].." src=\"(.-)\"(.-)/>") do
+            for i = 1, #syncer.private.libraryResources.updateTags, 1 do
+                for j in string.gmatch(response, "<".. syncer.private.libraryResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
                     if #string.gsub(j, "%s", "") > 0 then
                         updateFile(syncer.public.rawURL..resourceName.."/"..j, resourcePointer..j)
                     end
