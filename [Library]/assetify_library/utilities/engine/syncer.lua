@@ -117,14 +117,12 @@ else
     syncer.private.libraryVersionSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/"..syncer.private.libraryVersion.."/[Library]/"
     syncer.public.loadedClients, syncer.private.scheduledClients = {}, {}
 
-    function syncer.private:updateLibrary(resourceName, resourcePointer, resourceThread, responsePointer)
+    function syncer.private:updateLibrary(resourceName, resourcePointer, resourceThread, responsePointer, isUpdationFailed)
+        if isUpdationFailed then return imports.outputDebugString("[Assetify]: Auto-updation failed due to connectivity issues; Try again later...", 3) end
         if not responsePointer then
             local resourceMeta = syncer.private.libraryVersionSource..resourceName.."/meta.xml"
             imports.fetchRemote(resourceMeta, function(response, status)
-                if not response or not status or (status ~= 0) then
-                    --TODO: SHOW MESSAGE FAILED TO UPDATE
-                    return false
-                end
+                if not response or not status or (status ~= 0) then return syncer.private:updateLibrary(_, _, _, _, true) end
                 thread:create(function(self)
                     for i = 1, #syncer.private.libraryResources.updateTags, 1 do
                         for j in string.gmatch(response, "<".. syncer.private.libraryResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
@@ -143,11 +141,7 @@ else
                 resourceThread:resume()
             else
                 imports.fetchRemote(responsePointer[1], function(response, status)
-                    if not response or not status or (status ~= 0) then
-                        --TODO: SHOW MESSAGE FAILED TO UPDATE
-                        resourceThread:destroy()
-                        return false
-                    end
+                    if not response or not status or (status ~= 0) then syncer.private:updateLibrary(_, _, _, _, true); return resourceThread:destroy() end
                     file:write(responsePointer[2], response)
                     resourceThread:resume()
                 end)
