@@ -34,16 +34,6 @@ local function onLibraryLoaded()
     end
 end
 
-function updateFile(path, name, data)
-    if not data then
-        imports.fetchRemote(path, function(response, status)
-            file:write(name, response)
-        end)
-    else
-        file:write(name, data)
-    end
-end
-
 imports.addEventHandler("onResourceStart", resourceRoot, function()
     imports.fetchRemote(syncer.public.librarySource, function(response, status)
         if not response or not status or (status ~= 0) then return false end
