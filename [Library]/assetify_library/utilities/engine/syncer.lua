@@ -117,18 +117,28 @@ else
     syncer.private.libraryVersionSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/"..syncer.private.libraryVersion.."/[Library]/"
     syncer.public.loadedClients, syncer.private.scheduledClients = {}, {}
 
-    function syncer.private:updateLibrary(resourceName, resourcePointer)
-        local resourceMeta = syncer.private.libraryVersionSource..resourceName.."/meta.xml"
-        imports.fetchRemote(resourceMeta, function(response, status)
-            for i = 1, #syncer.private.libraryResources.updateTags, 1 do
-                for j in string.gmatch(response, "<".. syncer.private.libraryResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
-                    if #string.gsub(j, "%s", "") > 0 then
-                        updateFile(syncer.private.libraryVersionSource..resourceName.."/"..j, resourcePointer..j)
+    function syncer.private:updateLibrary(resourceName, resourcePointer, responsePointer)
+        if not responsePointer then
+            local resourceMeta = syncer.private.libraryVersionSource..resourceName.."/meta.xml"
+            imports.fetchRemote(resourceMeta, function(response, status)
+                for i = 1, #syncer.private.libraryResources.updateTags, 1 do
+                    for j in string.gmatch(response, "<".. syncer.private.libraryResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
+                        if #string.gsub(j, "%s", "") > 0 then
+                            syncer.private:updateLibrary(_, _, {syncer.private.libraryVersionSource..resourceName.."/"..j, resourcePointer..j})
+                        end
                     end
                 end
+                syncer.private:updateLibrary(_, _, {resourceMeta, resourcePointer.."meta.xml", response})
+            end)
+        else
+            if responsePointer[3] then 
+                file:write(responsePointer[2], responsePointer[3])
+            else
+                imports.fetchRemote(responsePointer[1], function(response, status)
+                    file:write(responsePointer[2], responsePointer[3])
+                end)
             end
-            updateFile(resourceMeta, resourcePointer.."meta.xml", response)
-        end)
+        end
         return true
     end
 
