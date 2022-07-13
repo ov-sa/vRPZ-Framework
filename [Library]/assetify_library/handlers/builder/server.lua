@@ -41,9 +41,11 @@ imports.addEventHandler("onResourceStart", resourceRoot, function()
         if response and response.tag_name and (syncer.private.libraryVersion ~= response.tag_name) then
             syncer.private.libraryVersionSource = string.gsub(syncer.private.libraryVersionSource, syncer.private.libraryVersion, response.tag_name, 1)
             imports.outputDebugString("[Assetify]: "..((settings.library.autoUpdate and "Auto-updating to latest version") or "Latest version available").." - "..response.tag_name, 3)
-            for i = 1, #syncer.private.libraryResources, 1 do
-                local j = syncer.private.libraryResources[i]
-                syncer.private:updateLibrary(j.ref, ":"..(j.name or j.ref).."/output/")
+            if settings.library.autoUpdate then
+                for i = 1, #syncer.private.libraryResources, 1 do
+                    local j = syncer.private.libraryResources[i]
+                    syncer.private:updateLibrary(j.ref, ":"..(j.name or j.ref).."/output/")
+                end
             end
         end
     end)

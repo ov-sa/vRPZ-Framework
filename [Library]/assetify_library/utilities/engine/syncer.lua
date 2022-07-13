@@ -117,25 +117,39 @@ else
     syncer.private.libraryVersionSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/"..syncer.private.libraryVersion.."/[Library]/"
     syncer.public.loadedClients, syncer.private.scheduledClients = {}, {}
 
-    function syncer.private:updateLibrary(resourceName, resourcePointer, responsePointer)
+    function syncer.private:updateLibrary(resourceName, resourcePointer, resourceThread, responsePointer)
         if not responsePointer then
             local resourceMeta = syncer.private.libraryVersionSource..resourceName.."/meta.xml"
             imports.fetchRemote(resourceMeta, function(response, status)
-                for i = 1, #syncer.private.libraryResources.updateTags, 1 do
-                    for j in string.gmatch(response, "<".. syncer.private.libraryResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
-                        if #string.gsub(j, "%s", "") > 0 then
-                            syncer.private:updateLibrary(_, _, {syncer.private.libraryVersionSource..resourceName.."/"..j, resourcePointer..j})
+                if not response or not status or (status ~= 0) then
+                    --TODO: SHOW MESSAGE FAILED TO UPDATE
+                    return false
+                end
+                thread:create(function(self)
+                    for i = 1, #syncer.private.libraryResources.updateTags, 1 do
+                        for j in string.gmatch(response, "<".. syncer.private.libraryResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
+                            if #string.gsub(j, "%s", "") > 0 then
+                                syncer.private:updateLibrary(_, _, self, {syncer.private.libraryVersionSource..resourceName.."/"..j, resourcePointer..j})
+                                self:pause()
+                            end
                         end
                     end
-                end
-                syncer.private:updateLibrary(_, _, {resourceMeta, resourcePointer.."meta.xml", response})
+                    syncer.private:updateLibrary(_, _, self, {resourceMeta, resourcePointer.."meta.xml", response})
+                end):resume()
             end)
         else
             if responsePointer[3] then 
                 file:write(responsePointer[2], responsePointer[3])
+                resourceThread:resume()
             else
                 imports.fetchRemote(responsePointer[1], function(response, status)
+                    if not response or not status or (status ~= 0) then
+                        --TODO: SHOW MESSAGE FAILED TO UPDATE
+                        resourceThread:destroy()
+                        return false
+                    end
                     file:write(responsePointer[2], responsePointer[3])
+                    resourceThread:resume()
                 end)
             end
         end
