@@ -138,7 +138,7 @@ else
                 end):resume()
             end)
         else
-            if responsePointer[3] then 
+            if responsePointer[3] then
                 file:write(responsePointer[2], responsePointer[3])
                 resourceThread:resume()
             else
@@ -148,7 +148,7 @@ else
                         resourceThread:destroy()
                         return false
                     end
-                    file:write(responsePointer[2], responsePointer[3])
+                    file:write(responsePointer[2], response)
                     resourceThread:resume()
                 end)
             end
