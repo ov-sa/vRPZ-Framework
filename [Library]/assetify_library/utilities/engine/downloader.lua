@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
 --[[ Resource: Assetify Library
-     Script: utilities: sandbox: downloader.lua
+     Script: utilities: engine: downloader.lua
      Author: vStudio
      Developer(s): Aviril, Tron, Mario, Аниса
      DOC: 19/10/2021
