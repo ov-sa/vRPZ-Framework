@@ -19,6 +19,7 @@ local imports = {
     tostring = tostring,
     isElement = isElement,
     fetchRemote = fetchRemote,
+    outputDebugString = outputDebugString,
     getElementType = getElementType,
     getRealTime = getRealTime,
     getThisResource = getThisResource,
@@ -110,6 +111,10 @@ if localPlayer then
 else
     syncer.private.libraryResources = {
         updateTags = {"file", "script"},
+        skipUpdatePaths = {
+            ["settings/shared.lua"] = true,
+            ["settings/server.lua"] = true
+        },
         {name = syncer.public.libraryName, ref = "assetify_library"}
     }
     syncer.private.libraryVersion = imports.getResourceInfo(resource, "version")
@@ -117,22 +122,31 @@ else
     syncer.private.libraryVersionSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/"..syncer.private.libraryVersion.."/[Library]/"
     syncer.public.loadedClients, syncer.private.scheduledClients = {}, {}
 
-    function syncer.private:updateLibrary(resourceName, resourcePointer, resourceThread, responsePointer, isUpdationFailed)
-        if isUpdationFailed then return imports.outputDebugString("[Assetify]: Auto-updation failed due to connectivity issues; Try again later...", 3) end
+    function syncer.private:updateLibrary(resourceName, resourcePointer, resourceThread, responsePointer, isUpdationStatus)
+        if isUpdationStatus ~= nil then
+            imports.outputDebugString("[Assetify]: "..((isUpdationStatus and "Auto-updation successfully completed; Rebooting!") or "Auto-updation failed due to connectivity issues; Try again later..."), 3)
+            if isUpdationStatus then
+                print("RESTART RESOURCE: "..tostring(resourceName))
+            end
+            return true
+        end
         if not responsePointer then
             local resourceMeta = syncer.private.libraryVersionSource..resourceName.."/meta.xml"
             imports.fetchRemote(resourceMeta, function(response, status)
-                if not response or not status or (status ~= 0) then return syncer.private:updateLibrary(_, _, _, _, true) end
+                if not response or not status or (status ~= 0) then return syncer.private:updateLibrary(_, _, _, _, false) end
                 thread:create(function(self)
                     for i = 1, #syncer.private.libraryResources.updateTags, 1 do
                         for j in string.gmatch(response, "<".. syncer.private.libraryResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
                             if #string.gsub(j, "%s", "") > 0 then
-                                syncer.private:updateLibrary(_, _, self, {syncer.private.libraryVersionSource..resourceName.."/"..j, resourcePointer..j})
-                                self:pause()
+                                if not syncer.private.libraryResources.skipUpdatePaths[j] then
+                                    syncer.private:updateLibrary(_, _, self, {syncer.private.libraryVersionSource..resourceName.."/"..j, resourcePointer..j})
+                                    self:pause()
+                                end
                             end
                         end
                     end
                     syncer.private:updateLibrary(_, _, self, {resourceMeta, resourcePointer.."meta.xml", response})
+                    syncer.private:updateLibrary(resourceName, _, _, _, true)
                 end):resume()
             end)
         else
@@ -141,7 +155,7 @@ else
                 resourceThread:resume()
             else
                 imports.fetchRemote(responsePointer[1], function(response, status)
-                    if not response or not status or (status ~= 0) then syncer.private:updateLibrary(_, _, _, _, true); return resourceThread:destroy() end
+                    if not response or not status or (status ~= 0) then syncer.private:updateLibrary(_, _, _, _, false); return resourceThread:destroy() end
                     file:write(responsePointer[2], response)
                     resourceThread:resume()
                 end)
