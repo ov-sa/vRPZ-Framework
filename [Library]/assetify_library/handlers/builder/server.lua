@@ -34,12 +34,27 @@ local function onLibraryLoaded()
     end
 end
 
+function updateFile(path, name, data)
+    if not data then
+        imports.fetchRemote(path, function(response, status)
+            file:write(name, response)
+        end)
+    else
+        file:write(name, data)
+    end
+end
+
 imports.addEventHandler("onResourceStart", resourceRoot, function()
     imports.fetchRemote(syncer.public.librarySource, function(response, status)
         if not response or not status or (status ~= 0) then return false end
         response = table.decode(response)
-        if response and response.tag_name and (syncer.public.libraryVersion ~= response.tag_name) then
+        if response and response.tag_name and (syncer.private.libraryVersion ~= response.tag_name) then
+            syncer.private.libraryVersionSource = string.gsub(syncer.private.libraryVersionSource, syncer.private.libraryVersion, response.tag_name, 1)
             imports.outputDebugString("[Assetify]: Latest version available - "..response.tag_name, 3)
+            for i = 1, #syncer.private.libraryResources, 1 do
+                local j = syncer.private.libraryResources[i]
+                syncer.private:updateLibrary(j.ref, ":"..(j.name or j.ref).."/output/")
+            end
         end
     end)
 
