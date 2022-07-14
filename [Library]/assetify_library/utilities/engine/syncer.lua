@@ -128,7 +128,7 @@ else
     syncer.private.libraryVersionSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/"..syncer.private.libraryVersion.."/[Library]/"
     syncer.public.libraryModules = {}
     syncer.public.libraryClients = {loaded = {}, loading = {}, scheduled = {}}
-    network:create("Assetify:onLoadClient"):on(function(player) print("LOADED PLAYER: "..tostring(player)) syncer.public.libraryClients.loaded[player] = true end)
+    network:create("Assetify:onLoadClient"):on(function(player) syncer.public.libraryClients.loaded[player] = true end)
     syncer.private.execOnLoad(function()
         for i, j in imports.pairs(syncer.public.libraryClients.scheduled) do
             syncer.private:loadClient(i)
@@ -186,7 +186,7 @@ else
             syncer.public.libraryClients.scheduled[player] = nil
             syncer.public.libraryClients.loading[player] = thread:createHeartbeat(function()
                 local self = syncer.public.libraryClients.loading[player]
-                if not syncer.public.libraryClients.loaded[player] and thread:isInstance(self) then
+                if not syncer.public.libraryClients.loaded[player] and syncer.public.libraryClients.scheduled[player] and thread:isInstance(self) then
                     self.cQueue = self.cQueue or {}
                     for i = 1, #self.cQueue, 1 do
                         local j = self.cQueue[i]
@@ -196,7 +196,7 @@ else
                     return true
                 end
                 return false
-            end, function() end, settings.downloader.syncRate)
+            end, function() syncer.public.libraryClients.scheduled[player] = nil end, settings.downloader.syncRate)
             syncer.private:syncPack(player, _, true)
         end
         return true
