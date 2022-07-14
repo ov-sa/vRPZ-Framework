@@ -33,7 +33,7 @@ if localPlayer then
             if settings.assetPacks[assetType] and settings.assetPacks[assetType].rwDatas[assetName] then
                 local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
                 cBandwidth = cPointer.bandwidthData.total
-                cDownloaded = (cPointer.bandwidthData and cPointer.bandwidthData.status and (cPointer.bandwidthData.status.total or 0)) or cBandwidth
+                cDownloaded = (cPointer.bandwidthData.isDownloaded and cBandwidth) or (cPointer.bandwidthData.status and cPointer.bandwidthData.status.total) or 0
             end
         else
             cBandwidth = syncer.libraryBandwidth
@@ -113,8 +113,10 @@ if localPlayer then
 
     network:create("Assetify:Downloader:onSyncState"):on(function(assetType, assetName)
         local isPackVoid = true
+        local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
         syncer.private.scheduledAssets[assetType][assetName] = nil
-        settings.assetPacks[assetType].rwDatas[assetName].bandwidthData.status = nil
+        cPointer.bandwidthData.isDownloaded = true
+        cPointer.bandwidthData.status = nil
         for i, j in imports.pairs(syncer.private.scheduledAssets[assetType]) do
             if j then
                 isPackVoid = false
