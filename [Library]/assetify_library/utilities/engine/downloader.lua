@@ -49,8 +49,11 @@ if localPlayer then
 
     network:create("Assetify:Downloader:onSyncProgress"):on(function(assetType, assetName, file, progress)
         print("Client: Received every 1 sec")
+        print(assetType..", "..assetName..", "..file)
         local _, _, cProgress = syncer.private:getDownloadProgress(assetType, assetName)
         if cProgress ~= 100 then
+            settings.assetPacks[assetType].rwDatas[assetName].bandwidthData.downloaded = settings.assetPacks[assetType].rwDatas[assetName].bandwidthData.downloaded or {}
+            
             syncer.private.scheduledAssets[assetType] = syncer.private.scheduledAssets[assetType] or {}
             syncer.private.scheduledAssets[assetType][assetName] = syncer.private.scheduledAssets[assetType][assetName] or {bandwidthData = 0}
             syncer.private.scheduledAssets[assetType][assetName].bandwidthProgress = progress
@@ -229,7 +232,7 @@ else
                 end
                 for i, j in imports.pairs(assetDatas.hashes) do
                     syncer.private:syncContent(player, assetDatas.type, assetDatas.name, i, cAsset.unSynced.fileData[i])
-                    local cQueue = imports.getLatentEventHandles()
+                    local cQueue = imports.getLatentEventHandles(player)
                     table.insert(syncer.public.libraryClients.loading[player].cQueue, {assetType = assetDatas.type, assetName = assetDatas.name, file = i, handler = cQueue[#cQueue]})
                     thread:pause()
                 end
