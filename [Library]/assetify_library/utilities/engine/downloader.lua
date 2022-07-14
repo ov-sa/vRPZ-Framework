@@ -50,7 +50,6 @@ if localPlayer then
 
     network:create("Assetify:Downloader:onSyncProgress"):on(function(assetType, assetName, file, status)
         local _, _, cProgress = syncer.private:getDownloadProgress(assetType, assetName)
-        print("Asset: "..assetName.." | "..cProgress.."/100")
         if cProgress and (cProgress ~= 100) then
             local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
             cPointer.bandwidthData.status = cPointer.bandwidthData.status or {total = 0, file = {}}
@@ -58,7 +57,6 @@ if localPlayer then
             local currentETA, currentSize = status.tickEnd, status.percentComplete*0.01*cPointer.bandwidthData.file[file]
             cPointer.bandwidthData.status.total = cPointer.bandwidthData.status.total + (currentSize - (cPointer.bandwidthData.status.file[file].size or 0))
             cPointer.bandwidthData.status.file[file].eta, cPointer.bandwidthData.status.file[file].size = currentETA, currentSize
-            print(cPointer.bandwidthData.status.total.."/"..cPointer.bandwidthData.total)
         end
     end)
 
