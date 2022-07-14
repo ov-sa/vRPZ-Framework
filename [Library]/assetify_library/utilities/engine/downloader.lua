@@ -180,10 +180,10 @@ else
 
     function syncer.private:syncPack(player, assetDatas, syncModules, syncPack)
         if syncPack then
-            local packData = settings.assetPacks[syncPack] and settings.assetPacks[syncPack].assetPack
-            if not packData then return false end
+            local cPack = (settings.assetPacks[syncPack] and settings.assetPacks[syncPack].assetPack) or false
+            if not cPack then return false end
             local isModule = syncPack == "module"
-            for i, j in imports.pairs(packData) do
+            for i, j in imports.pairs(cPack) do
                 if i ~= "rwDatas" then
                     if isModule or syncModules then syncer.private:syncData(player, syncPack, i, false, j) end
                 else
@@ -208,14 +208,9 @@ else
                     end
                 end
                 if syncModules then
-                    local isModuleVoid = true
                     network:emit("Assetify:Downloader:onSyncBandwidth", true, true, player, syncer.public.libraryBandwidth)
                     self:await(network:emitCallback(self, "Assetify:onRequestPreSyncPool", false, player))
-                    if settings.assetPacks["module"] and settings.assetPacks["module"].assetPack then
-                        if i ~= "module" then syncer.private:syncPack(player, _, syncModules, i) end
-                        isModuleVoid = syncer.private:syncPack(player, _, syncModules, "module")
-                    end
-                    if isModuleVoid then
+                    if not syncer.private:syncPack(player, _, syncModules, "module") then
                         network:emit("Assetify:onModuleLoad", true, true, player)
                         network:emit("Assetify:Downloader:onSyncPack", false, player)
                     end
