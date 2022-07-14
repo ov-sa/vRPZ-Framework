@@ -26,11 +26,30 @@ local imports = {
 ---------------------------
 
 if localPlayer then
+    function syncer.private:getDownloadProgress(assetType, assetName)
+        local cDownloaded, cBandwidth = nil, nil
+        if assetType and assetName then
+            if settings.assetPacks[assetType] and settings.assetPacks[assetType].rwDatas[assetName] then
+                cBandwidth = settings.assetPacks[assetType].rwDatas[assetName].assetSize.total
+                cDownloaded = (syncer.private.scheduledAssets and syncer.private.scheduledAssets[assetType] and syncer.private.scheduledAssets[assetType][assetName] and syncer.private.scheduledAssets[assetType][assetName].assetSize) or cBandwidth
+            end
+        else
+            cBandwidth = syncer.libraryBandwidth
+            cDownloaded = syncer.__libraryBandwidth or 0
+        end
+        if cDownloaded and cBandwidth then
+            cDownloaded = math.min(cDownloaded, cBandwidth)
+            return cDownloaded, cBandwidth, (cDownloaded/math.max(1, cBandwidth))*100
+        end
+        return false
+    end
     syncer.private.execOnLoad(function() network:emit("Assetify:Downloader:onPostSyncPool", true, false, localPlayer) end)
     network:create("Assetify:Downloader:onSyncBandwidth"):on(function(bandwidth) syncer.public.libraryBandwidth = bandwidth end)
 
     network:create("Assetify:Downloader:onSyncProgress"):on(function(assetType, assetName)
+        --TODO: THIS SHOULD BE VERIFIED SOMEHOW...
         syncer.private.scheduledAssets[assetType] = syncer.private.scheduledAssets[assetType] or {}
+        syncer.private.scheduledAssets[assetType][assetName] = syncer.private.scheduledAssets[assetType][assetName] or {assetSize = 0}
         syncer.public.libraryBandwidth = bandwidth
     end)
 
@@ -213,28 +232,4 @@ else
         end
         return true
     end
-end
-
-
-
--------------------------
---[[ TODO: ]]--
--------------------------
-
-function getLibraryProgress(assetType, assetName)
-    local cDownloaded, cBandwidth = nil, nil
-    if assetType and assetName then
-        if settings.assetPacks[assetType] and settings.assetPacks[assetType].rwDatas[assetName] then
-            cBandwidth = settings.assetPacks[assetType].rwDatas[assetName].assetSize.total
-            cDownloaded = (syncer.private.scheduledAssets and syncer.private.scheduledAssets[assetType] and syncer.private.scheduledAssets[assetType][assetName] and syncer.private.scheduledAssets[assetType][assetName].assetSize) or cBandwidth
-        end
-    else
-        cBandwidth = syncer.libraryBandwidth
-        cDownloaded = syncer.__libraryBandwidth or 0
-    end
-    if cDownloaded and cBandwidth then
-        cDownloaded = math.min(cDownloaded, cBandwidth)
-        return cDownloaded, cBandwidth, (cDownloaded/math.max(1, cBandwidth))*100
-    end
-    return false
 end
