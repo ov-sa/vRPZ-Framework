@@ -186,7 +186,7 @@ else
             syncer.public.libraryClients.scheduled[player] = nil
             syncer.public.libraryClients.loading[player] = thread:createHeartbeat(function()
                 local self = syncer.public.libraryClients.loading[player]
-                if not syncer.public.libraryClients.loaded[player] and thread:isInstance(self) then
+                if self and not syncer.public.libraryClients.loaded[player] and thread:isInstance(self) then
                     self.cQueue = self.cQueue or {}
                     for i = 1, #self.cQueue, 1 do
                         local j = self.cQueue[i]

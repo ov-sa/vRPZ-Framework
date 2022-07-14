@@ -130,19 +130,13 @@ if localPlayer then
         cPointer.bandwidthData.status = nil
         syncer.private.scheduledAssets[assetType][assetName] = nil
         for i, j in imports.pairs(syncer.private.scheduledAssets[assetType]) do
-            if j then
-                isPackVoid = false
-                break
-            end
+            if j then isPackVoid = false; break end
         end
         if isPackVoid then
             local isSyncDone = true
             syncer.private.scheduledAssets[assetType] = nil
             for i, j in imports.pairs(syncer.private.scheduledAssets) do
-                if j then
-                    isSyncDone = false
-                    break
-                end
+                if j then isSyncDone = false; break end
             end
             if isSyncDone then
                 if assetType == "module" then
@@ -184,30 +178,32 @@ else
     network:create("Assetify:Downloader:onSyncHash"):on(function(source, assetType, assetName, hashes) syncer.private:syncPack(source, {type = assetType, name = assetName, hashes = hashes}) end)
     network:create("Assetify:Downloader:onSyncPack"):on(function(source) syncer.private:syncPack(source) end)
 
-    function syncer.private:syncPack(player, assetDatas, syncModules)
+    function syncer.private:syncPack(player, assetDatas, syncModules, syncPack)
+        if syncPack then
+            local packData = settings.assetPacks[syncPack] and settings.assetPacks[syncPack].assetPack
+            if not packData then return false end
+            local isModule = syncPack == "module"
+            for i, j in imports.pairs(packData) do
+                if i ~= "rwDatas" then
+                    if isModule or syncModules then syncer.private:syncData(player, syncPack, i, false, j) end
+                else
+                    for k, v in imports.pairs(j) do
+                        if isModule or syncModules then syncer.private:syncData(player, syncPack, i, {k, "bandwidthData"}, v.synced.bandwidthData) end
+                        if isModule or not syncModules then syncer.private:syncHash(player, syncPack, k, v.unSynced.fileHash) end
+                        thread:pause()
+                    end
+                end
+                thread:pause()
+            end
+            return true
+        end
         if not assetDatas then
             thread:create(function(self)
                 local isLibraryVoid = true
-                --TODO: MAKE HELPER FUNCTION
                 for i, j in imports.pairs(settings.assetPacks) do
-                    if i ~= "module" and j.assetPack then
-                        for k, v in imports.pairs(j.assetPack) do
-                            if k ~= "rwDatas" then
-                                if syncModules then
-                                    syncer.private:syncData(player, i, k, false, v)
-                                end
-                            else
-                                for m, n in imports.pairs(v) do
-                                    isLibraryVoid = false
-                                    if syncModules then
-                                        syncer.private:syncData(player, i, "rwDatas", {m, "bandwidthData"}, n.synced.bandwidthData)
-                                    else
-                                        syncer.private:syncHash(player, i, m, n.unSynced.fileHash)
-                                    end
-                                    thread:pause()
-                                end
-                            end
-                            thread:pause()
+                    if i ~= "module" then
+                        if syncer.private:syncPack(player, _, syncModules, i) then
+                            isLibraryVoid = false
                         end
                     end
                 end
@@ -216,19 +212,8 @@ else
                     network:emit("Assetify:Downloader:onSyncBandwidth", true, true, player, syncer.public.libraryBandwidth)
                     self:await(network:emitCallback(self, "Assetify:onRequestPreSyncPool", false, player))
                     if settings.assetPacks["module"] and settings.assetPacks["module"].assetPack then
-                        for i, j in imports.pairs(settings.assetPacks["module"].assetPack) do
-                            if i ~= "rwDatas" then
-                                syncer.private:syncData(player, "module", i, false, j)
-                            else
-                                for k, v in imports.pairs(j) do
-                                    isModuleVoid = false
-                                    syncer.private:syncData(player, "module", "rwDatas", {k, "bandwidthData"}, v.synced.bandwidthData)
-                                    syncer.private:syncHash(player, "module", k, v.unSynced.fileHash)
-                                    thread:pause()
-                                end
-                            end
-                            thread:pause()
-                        end
+                        if i ~= "module" then syncer.private:syncPack(player, _, syncModules, i) end
+                        isModuleVoid = syncer.private:syncPack(player, _, syncModules, "module")
                     end
                     if isModuleVoid then
                         network:emit("Assetify:onModuleLoad", true, true, player)
