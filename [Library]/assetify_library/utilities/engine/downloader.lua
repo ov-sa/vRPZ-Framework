@@ -33,21 +33,16 @@ if localPlayer then
     function syncer.private:getDownloadProgress(assetType, assetName)
         local cDownloaded, cBandwidth, cETA = nil, nil, nil
         if assetType and assetName then
-            if settings.assetPacks[assetType] and settings.assetPacks[assetType].rwDatas[assetName] then
-                local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
-                cBandwidth = cPointer.bandwidthData.total
-                cDownloaded = (cPointer.bandwidthData.isDownloaded and cBandwidth) or (cPointer.bandwidthData.status and cPointer.bandwidthData.status.total) or 0
-                cETA = (cPointer.bandwidthData.status and ((cPointer.bandwidthData.status.eta/cPointer.bandwidthData.status.eta_count)*0.001)) or false
-            end
+            if not settings.assetPacks[assetType] or not settings.assetPacks[assetType].rwDatas[assetName] then return false end
+            local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
+            cBandwidth = cPointer.bandwidthData.total
+            cDownloaded = (cPointer.bandwidthData.isDownloaded and cBandwidth) or (cPointer.bandwidthData.status and cPointer.bandwidthData.status.total) or 0
+            cETA = (cPointer.bandwidthData.status and ((cPointer.bandwidthData.status.eta/cPointer.bandwidthData.status.eta_count)*0.001)) or false
         else
             cBandwidth = syncer.libraryBandwidth
             cDownloaded = syncer.__libraryBandwidth or 0
         end
-        if cDownloaded and cBandwidth then
-            cDownloaded = math.min(cDownloaded, cBandwidth)
-            return cDownloaded, cBandwidth, (cDownloaded/math.max(1, cBandwidth))*100, cETA
-        end
-        return false
+        return cDownloaded, cBandwidth, (cDownloaded/math.max(1, cBandwidth))*100, cETA
     end
 
     network:create("Assetify:Downloader:onSyncProgress"):on(function(assetType, assetName, file, status)
