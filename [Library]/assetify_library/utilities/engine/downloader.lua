@@ -169,26 +169,24 @@ else
             thread:create(function(self)
                 local isLibraryVoid = true
                 for i, j in imports.pairs(settings.assetPacks) do
-                    if i ~= "module" then
-                        if j.assetPack then
-                            for k, v in imports.pairs(j.assetPack) do
-                                if k ~= "rwDatas" then
-                                    if syncModules then
-                                        syncer.private:syncData(player, i, k, false, v)
-                                    end
-                                else
-                                    for m, n in imports.pairs(v) do
-                                        isLibraryVoid = false
-                                        if syncModules then
-                                            syncer.private:syncData(player, i, "rwDatas", {m, "bandwidthData"}, n.synced.bandwidthData)
-                                        else
-                                            syncer.private:syncHash(player, i, m, n.unSynced.fileHash)
-                                        end
-                                        thread:pause()
-                                    end
+                    if i ~= "module" and j.assetPack then
+                        for k, v in imports.pairs(j.assetPack) do
+                            if k ~= "rwDatas" then
+                                if syncModules then
+                                    syncer.private:syncData(player, i, k, false, v)
                                 end
-                                thread:pause()
+                            else
+                                for m, n in imports.pairs(v) do
+                                    isLibraryVoid = false
+                                    if syncModules then
+                                        syncer.private:syncData(player, i, "rwDatas", {m, "bandwidthData"}, n.synced.bandwidthData)
+                                    else
+                                        syncer.private:syncHash(player, i, m, n.unSynced.fileHash)
+                                    end
+                                    thread:pause()
+                                end
                             end
+                            thread:pause()
                         end
                     end
                 end
