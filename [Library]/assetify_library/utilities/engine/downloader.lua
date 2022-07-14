@@ -115,8 +115,7 @@ if localPlayer then
         local isPackVoid = true
         local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
         syncer.private.scheduledAssets[assetType][assetName] = nil
-        cPointer.bandwidthData.isDownloaded = true
-        cPointer.bandwidthData.status = nil
+        cPointer.bandwidthData.isDownloaded, cPointer.bandwidthData.status = true, nil
         for i, j in imports.pairs(syncer.private.scheduledAssets[assetType]) do
             if j then
                 isPackVoid = false
