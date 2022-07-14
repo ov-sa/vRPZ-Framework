@@ -28,9 +28,12 @@ local imports = {
 if localPlayer then
     syncer.private.execOnLoad(function() network:emit("Assetify:Downloader:onPostSyncPool", true, false, localPlayer) end)
     network:create("Assetify:Downloader:onSyncBandwidth"):on(function(bandwidth) syncer.public.libraryBandwidth = bandwidth end)
+    network:create("Assetify:Downloader:onSyncProgress"):on(function(assetName, assetType)
+        syncer.public.libraryBandwidth = bandwidth
+    end)
     network:create("Assetify:Downloader:onSyncHash"):on(function(assetType, assetName, hashes)
-        if not syncer.public.scheduledAssets[assetType] then syncer.public.scheduledAssets[assetType] = {} end
-        syncer.public.scheduledAssets[assetType][assetName] = syncer.public.scheduledAssets[assetType][assetName] or {assetSize = 0}
+        syncer.private.scheduledAssets[assetType] = syncer.private.scheduledAssets[assetType] or {}
+        syncer.private.scheduledAssets[assetType][assetName] = syncer.private.scheduledAssets[assetType][assetName] or {assetSize = 0}
         thread:create(function(self)
             local fetchFiles = {}
             for i, j in imports.pairs(hashes) do
@@ -38,7 +41,7 @@ if localPlayer then
                 if not fileData or (imports.md5(fileData) ~= j) then
                     fetchFiles[i] = true
                 else
-                    syncer.public.scheduledAssets[assetType][assetName].assetSize = syncer.public.scheduledAssets[assetType][assetName].assetSize + settings.assetPacks[assetType].rwDatas[assetName].assetSize.file[i]
+                    syncer.private.scheduledAssets[assetType][assetName].assetSize = syncer.private.scheduledAssets[assetType][assetName].assetSize + settings.assetPacks[assetType].rwDatas[assetName].assetSize.file[i]
                     syncer.public.__libraryBandwidth = (syncer.public.__libraryBandwidth or 0) + settings.assetPacks[assetType].rwDatas[assetName].assetSize.file[i]
                 end
                 fileData = nil
@@ -50,7 +53,7 @@ if localPlayer then
     end)
 
     network:create("Assetify:Downloader:onSyncData"):on(function(assetType, baseIndex, subIndexes, indexData)
-        if not settings.assetPacks[assetType] then settings.assetPacks[assetType] = {} end
+        settings.assetPacks[assetType] = settings.assetPacks[assetType] or {}
         if not subIndexes then
             settings.assetPacks[assetType][baseIndex] = indexData
         else
@@ -70,7 +73,7 @@ if localPlayer then
 
     network:create("Assetify:Downloader:onSyncContent"):on(function(assetType, assetName, contentPath, ...)
         if assetType and assetName then
-            syncer.public.scheduledAssets[assetType][assetName].assetSize = syncer.public.scheduledAssets[assetType][assetName].assetSize + settings.assetPacks[assetType].rwDatas[assetName].assetSize.file[contentPath]
+            syncer.private.scheduledAssets[assetType][assetName].assetSize = syncer.private.scheduledAssets[assetType][assetName].assetSize + settings.assetPacks[assetType].rwDatas[assetName].assetSize.file[contentPath]
             syncer.public.__libraryBandwidth = (syncer.public.__libraryBandwidth or 0) + settings.assetPacks[assetType].rwDatas[assetName].assetSize.file[contentPath]
         end
         file:write(contentPath, ...)
@@ -79,8 +82,8 @@ if localPlayer then
 
     network:create("Assetify:Downloader:onSyncState"):on(function(assetType, assetName)
         local isPackVoid = true
-        syncer.public.scheduledAssets[assetType][assetName] = nil
-        for i, j in imports.pairs(syncer.public.scheduledAssets[assetType]) do
+        syncer.private.scheduledAssets[assetType][assetName] = nil
+        for i, j in imports.pairs(syncer.private.scheduledAssets[assetType]) do
             if j then
                 isPackVoid = false
                 break
@@ -88,8 +91,8 @@ if localPlayer then
         end
         if isPackVoid then
             local isSyncDone = true
-            syncer.public.scheduledAssets[assetType] = nil
-            for i, j in imports.pairs(syncer.public.scheduledAssets) do
+            syncer.private.scheduledAssets[assetType] = nil
+            for i, j in imports.pairs(syncer.private.scheduledAssets) do
                 if j then
                     isSyncDone = false
                     break
@@ -108,7 +111,7 @@ if localPlayer then
                         network:emit("Assetify:onModuleLoad", false)
                     end):resume({executions = settings.downloader.buildRate, frames = 1})
                 else
-                    syncer.public.scheduledAssets = nil
+                    syncer.private.scheduledAssets = nil
                     thread:create(function(self)
                         for i, j in imports.pairs(settings.assetPacks) do
                             if i ~= "module" then
@@ -207,4 +210,28 @@ else
         end
         return true
     end
+end
+
+
+
+-------------------------
+--[[ TODO: ]]--
+-------------------------
+
+function getLibraryProgress(assetType, assetName)
+    local cDownloaded, cBandwidth = nil, nil
+    if assetType and assetName then
+        if settings.assetPacks[assetType] and settings.assetPacks[assetType].rwDatas[assetName] then
+            cBandwidth = settings.assetPacks[assetType].rwDatas[assetName].assetSize.total
+            cDownloaded = (syncer.private.scheduledAssets and syncer.private.scheduledAssets[assetType] and syncer.private.scheduledAssets[assetType][assetName] and syncer.private.scheduledAssets[assetType][assetName].assetSize) or cBandwidth
+        end
+    else
+        cBandwidth = syncer.libraryBandwidth
+        cDownloaded = syncer.__libraryBandwidth or 0
+    end
+    if cDownloaded and cBandwidth then
+        cDownloaded = math.min(cDownloaded, cBandwidth)
+        return cDownloaded, cBandwidth, (cDownloaded/math.max(1, cBandwidth))*100
+    end
+    return false
 end

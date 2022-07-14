@@ -6,15 +6,16 @@
         <right name="function.fetchRemote" access="true"/>
     </aclrequest>
 
-    <!-- Utilities: Exports & Settings -->
+    <!-- Settings -->
+    <script src="settings/shared.lua" type="shared"/>
+    <script src="settings/server.lua" type="server"/>
+
+    <!-- Utilities: RW -->
     <file src="utilities/rw/dict.rw"/>
     <file src="utilities/rw/buffer.rw"/>
     <file src="utilities/rw/planar_1x1/dict.rw"/>
     <file src="utilities/rw/planar_1x1/buffer.rw"/>
     <file src="utilities/rw/planar_1x1/collision.rw"/>
-    <script src="exports/client.lua" type="client"/>
-    <script src="settings/shared.lua" type="shared"/>
-    <script src="settings/server.lua" type="server"/>
 
     <!-- Utilities: Sandbox -->
     <script src="utilities/sandbox/index.lua" type="shared"/>

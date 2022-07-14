@@ -80,7 +80,7 @@ syncer.private.execOnModuleLoad(function() syncer.public.isModuleLoaded = true e
 
 if localPlayer then
     settings.assetPacks = {}
-    syncer.public.scheduledAssets = {}
+    syncer.private.scheduledAssets = {}
     network:create("Assetify:onAssetLoad")
     network:create("Assetify:onAssetUnload")
 
