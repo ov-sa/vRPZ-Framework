@@ -55,17 +55,22 @@ if localPlayer then
     network:create("Assetify:Downloader:onSyncProgress"):on(function(assetType, assetName, file, status)
         --print(syncer.private:getDownloadProgress())
         local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
-        if cPointer.bandwidthData.isDownloaded then return false end
+        if cPointer.bandwidthData.isDownloaded then
+            print("YA")
+            return false
+        end
         cPointer.bandwidthData.status = cPointer.bandwidthData.status or {total = 0, eta = 0, eta_count = 0, file = {}}
         cPointer.bandwidthData.status.file[file] = cPointer.bandwidthData.status.file[file] or {}
         local currentETA, currentSize = status.tickEnd, status.percentComplete*0.01*cPointer.bandwidthData.file[file]
-        local prevTotalETA = cPointer.bandwidthData.status.eta or 0
-        cPointer.bandwidthData.status.eta = cPointer.bandwidthData.status.eta - (cPointer.bandwidthData.status.file[file].eta or 0) + currentETA
+        local prevETA, prevSize = cPointer.bandwidthData.status.file[file].eta or 0, cPointer.bandwidthData.status.file[file].size or 0
+        local prevTotalETA, prevTotalSize = cPointer.bandwidthData.status.eta or 0, cPointer.bandwidthData.status.total or 0, 
+        cPointer.bandwidthData.status.eta = cPointer.bandwidthData.status.eta - prevETA + currentETA
         cPointer.bandwidthData.status.eta_count = cPointer.bandwidthData.status.eta_count + ((not cPointer.bandwidthData.status.file[file].eta and 1) or 0)
-        cPointer.bandwidthData.status.total = cPointer.bandwidthData.status.total - (cPointer.bandwidthData.status.file[file].size or 0) + currentSize
+        cPointer.bandwidthData.status.total = cPointer.bandwidthData.status.total - prevSize + currentSize
         cPointer.bandwidthData.status.file[file].eta, cPointer.bandwidthData.status.file[file].size = currentETA, currentSize
         syncer.public.libraryBandwidth.status.eta = syncer.public.libraryBandwidth.status.eta - prevTotalETA + cPointer.bandwidthData.status.eta
         syncer.public.libraryBandwidth.status.eta_count = syncer.public.libraryBandwidth.status.eta_count + ((not cPointer.bandwidthData.status.isLibraryETACounted and 1) or 0)
+        syncer.public.libraryBandwidth.status.total = syncer.public.libraryBandwidth.status.total - prevTotalSize + cPointer.bandwidthData.status.total
         cPointer.bandwidthData.status.isLibraryETACounted = true
     end)
 
