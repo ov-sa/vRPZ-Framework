@@ -84,7 +84,7 @@ if localPlayer then
     syncer.private.scheduledAssets = {}
     network:create("Assetify:onAssetLoad")
     network:create("Assetify:onAssetUnload")
-    syncer.private.execOnLoad(function() network:emit("Assetify:onLoadClient", true, false, player) end)
+    syncer.private.execOnLoad(function() network:emit("Assetify:onLoadClient", true, false, localPlayer) end)
 
     function syncer.private:setElementModel(element, assetType, assetName, assetClump, clumpMaps, remoteSignature)
         if not element or (not remoteSignature and not imports.isElement(element)) then return false end
