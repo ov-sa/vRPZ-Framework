@@ -28,7 +28,6 @@ local imports = {
 
 if localPlayer then
     syncer.private.execOnLoad(function() network:emit("Assetify:Downloader:onPostSyncPool", true, false, localPlayer) end)
-    network:create("Assetify:Downloader:onSyncBandwidth"):on(function(bandwidth) syncer.public.libraryBandwidth = bandwidth end)
 
     function syncer.private:getDownloadProgress(assetType, assetName)
         local cDownloaded, cBandwidth, cETA = nil, nil, nil
@@ -44,6 +43,13 @@ if localPlayer then
         end
         return cDownloaded, cBandwidth, (cDownloaded/math.max(1, cBandwidth))*100, cETA
     end
+
+    network:create("Assetify:Downloader:onSyncBandwidth"):on(function(bandwidth)
+        syncer.public.libraryBandwidth = {
+            total = bandwidth,
+            status = {total = 0, eta = 0, eta_count = 0}
+        }
+    end)
 
     network:create("Assetify:Downloader:onSyncProgress"):on(function(assetType, assetName, file, status)
         local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
