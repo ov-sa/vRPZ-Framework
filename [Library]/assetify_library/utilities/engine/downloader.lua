@@ -38,25 +38,8 @@ if localPlayer then
     end
     syncer.private.execOnLoad(function() network:emit("Assetify:Downloader:onPostSyncPool", true, false, localPlayer) end)
 
-    function syncer.private:getDownloadProgress(assetType, assetName)
-        local cDownloaded, cBandwidth, cETA = nil, nil, nil
-        if assetType and assetName then
-            if not settings.assetPacks[assetType] or not settings.assetPacks[assetType].rwDatas[assetName] then return false end
-            local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
-            cBandwidth = cPointer.bandwidthData.total
-            cDownloaded = (cPointer.bandwidthData.isDownloaded and cBandwidth) or (cPointer.bandwidthData.status and cPointer.bandwidthData.status.total) or 0
-            cETA = (cPointer.bandwidthData.status and ((cPointer.bandwidthData.status.eta/math.max(1, cPointer.bandwidthData.status.eta_count))*0.001)) or false
-        else
-            cBandwidth = syncer.public.libraryBandwidth.total
-            cDownloaded = (syncer.public.libraryBandwidth.status and syncer.public.libraryBandwidth.status.total) or cBandwidth
-            cETA = (syncer.public.libraryBandwidth.status and ((syncer.public.libraryBandwidth.status.eta/math.max(1, syncer.public.libraryBandwidth.status.eta_count))*0.001)) or false
-        end
-        return cDownloaded, cBandwidth, (cDownloaded/math.max(1, cBandwidth))*100, cETA
-    end
-
     network:create("Assetify:Downloader:onSyncBandwidth"):on(function(bandwidth)
-        syncer.public.libraryBandwidth = {
-            total = bandwidth,
+        syncer.public.libraryBandwidth = {total = bandwidth,
             status = {total = 0, eta = 0, eta_count = 0}
         }
     end)
