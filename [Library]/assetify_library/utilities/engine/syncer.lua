@@ -125,8 +125,12 @@ else
     syncer.private.libraryVersion = imports.getResourceInfo(resource, "version")
     syncer.private.libraryVersion = (syncer.private.libraryVersion and "v."..syncer.private.libraryVersion) or "N/A"
     syncer.private.libraryVersionSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/"..syncer.private.libraryVersion.."/[Library]/"
-    syncer.public.loadedClients, syncer.private.scheduledClients = {}, {}
     syncer.public.libraryModules = {}
+    syncer.public.libraryClients = {
+        loaded = {},
+        loading = {},
+        scheduled = {}
+    }
     syncer.private.execOnLoad(function()
         for i, j in imports.pairs(syncer.private.scheduledClients) do
             syncer.private:loadClient(i)
@@ -181,8 +185,8 @@ else
             syncer.private.scheduledClients[player] = true
         else
             syncer.private.scheduledClients[player] = nil
-            syncer.public.loadedClients[player] = thread:createHeartbeat(function()
-                local self = syncer.public.loadedClients[player]
+            syncer.public.libraryClients.loaded[player] = thread:createHeartbeat(function()
+                local self = syncer.public.libraryClients.loaded[player]
                 if thread:isInstance(self) then
                     self.cQueue = self.cQueue or {}
                     for i = 1, #self.cQueue, 1 do
@@ -212,7 +216,7 @@ else
         remoteSignature = imports.getElementType(element)
         syncer.public.syncedElements[element] = {assetType = assetType, assetName = assetName, assetClump = assetClump, clumpMaps = clumpMaps}
         thread:create(function(self)
-            for i, j in imports.pairs(syncer.public.loadedClients) do
+            for i, j in imports.pairs(syncer.public.libraryClients.loaded) do
                 syncer.private:setElementModel(element, assetType, assetName, assetClump, clumpMaps, remoteSignature, i)
                 thread:pause()
             end
@@ -280,15 +284,15 @@ else
         thread:create(function(self)
             local source = __source
             syncer.public.syncedElements[source] = nil
-            for i, j in imports.pairs(syncer.public.loadedClients) do
+            for i, j in imports.pairs(syncer.public.libraryClients.loaded) do
                 network:emit("Assetify:onElementDestroy", true, false, i, source)
                 thread:pause()
             end
         end):resume({executions = settings.downloader.syncRate, frames = 1})
     end)
     imports.addEventHandler("onPlayerQuit", root, function()
-        if syncer.public.loadedClients[source] then syncer.public.loadedClients[source]:destroy() end
-        syncer.public.loadedClients[source] = nil
+        if syncer.public.libraryClients.loaded[source] then syncer.public.libraryClients.loaded[source]:destroy() end
+        syncer.public.libraryClients.loaded[source] = nil
         syncer.private.scheduledClients[source] = nil
     end)
 end

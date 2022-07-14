@@ -169,7 +169,7 @@ else
         imports.setElementDimension(self.cModelInstance, dummyData.dimension)
         imports.setElementInterior(self.cModelInstance, dummyData.interior)
         thread:create(function(__self)
-            for i, j in imports.pairs(syncer.public.loadedClients) do
+            for i, j in imports.pairs(syncer.public.libraryClients.loaded) do
                 self:load(_, _, _, _, _, i)
                 thread:pause()
             end
@@ -183,7 +183,7 @@ else
         if self.isUnloading then return false end
         self.isUnloading = true
         thread:create(function(__self)
-            for i, j in imports.pairs(syncer.public.loadedClients) do
+            for i, j in imports.pairs(syncer.public.libraryClients.loaded) do
                 self:unload(i)
                 thread:pause()
             end
