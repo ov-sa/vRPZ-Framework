@@ -56,9 +56,9 @@ if localPlayer then
             cPointer.bandwidthData.status = cPointer.bandwidthData.status or {total = 0, eta = 0, eta_count = 0, file = {}}
             cPointer.bandwidthData.status.file[file] = cPointer.bandwidthData.status.file[file] or {}
             local currentETA, currentSize = status.tickEnd, status.percentComplete*0.01*cPointer.bandwidthData.file[file]
-            cPointer.bandwidthData.status.eta_count = cPointer.bandwidthData.status.eta_count + ((not cPointer.bandwidthData.status.file[file].isETAIncluded and 1) or 0)
+            cPointer.bandwidthData.status.eta_count = cPointer.bandwidthData.status.eta_count + ((not cPointer.bandwidthData.status.file[file].eta and 1) or 0)
             cPointer.bandwidthData.status.total = cPointer.bandwidthData.status.total + (currentSize - (cPointer.bandwidthData.status.file[file].size or 0))
-            cPointer.bandwidthData.status.file[file].isETAIncluded, cPointer.bandwidthData.status.file[file].eta, cPointer.bandwidthData.status.file[file].size = true, currentETA, currentSize
+            cPointer.bandwidthData.status.file[file].eta, cPointer.bandwidthData.status.file[file].size = currentETA, currentSize
         end
     end)
 
