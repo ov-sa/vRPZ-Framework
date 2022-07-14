@@ -31,12 +31,13 @@ if localPlayer then
     network:create("Assetify:Downloader:onSyncBandwidth"):on(function(bandwidth) syncer.public.libraryBandwidth = bandwidth end)
 
     function syncer.private:getDownloadProgress(assetType, assetName)
-        local cDownloaded, cBandwidth = nil, nil
+        local cDownloaded, cBandwidth, cETA = nil, nil, nil
         if assetType and assetName then
             if settings.assetPacks[assetType] and settings.assetPacks[assetType].rwDatas[assetName] then
                 local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
                 cBandwidth = cPointer.bandwidthData.total
                 cDownloaded = (cPointer.bandwidthData.isDownloaded and cBandwidth) or (cPointer.bandwidthData.status and cPointer.bandwidthData.status.total) or 0
+                cETA = (cPointer.bandwidthData.status and ((cPointer.bandwidthData.status.eta/cPointer.bandwidthData.status.eta_count)*0.001)) or false
             end
         else
             cBandwidth = syncer.libraryBandwidth
@@ -44,7 +45,7 @@ if localPlayer then
         end
         if cDownloaded and cBandwidth then
             cDownloaded = math.min(cDownloaded, cBandwidth)
-            return cDownloaded, cBandwidth, (cDownloaded/math.max(1, cBandwidth))*100
+            return cDownloaded, cBandwidth, (cDownloaded/math.max(1, cBandwidth))*100, cETA
         end
         return false
     end
@@ -56,6 +57,7 @@ if localPlayer then
             cPointer.bandwidthData.status = cPointer.bandwidthData.status or {total = 0, eta = 0, eta_count = 0, file = {}}
             cPointer.bandwidthData.status.file[file] = cPointer.bandwidthData.status.file[file] or {}
             local currentETA, currentSize = status.tickEnd, status.percentComplete*0.01*cPointer.bandwidthData.file[file]
+            cPointer.bandwidthData.status.eta = cPointer.bandwidthData.status.eta + (currentETA - (cPointer.bandwidthData.status.file[file].eta or 0))
             cPointer.bandwidthData.status.eta_count = cPointer.bandwidthData.status.eta_count + ((not cPointer.bandwidthData.status.file[file].eta and 1) or 0)
             cPointer.bandwidthData.status.total = cPointer.bandwidthData.status.total + (currentSize - (cPointer.bandwidthData.status.file[file].size or 0))
             cPointer.bandwidthData.status.file[file].eta, cPointer.bandwidthData.status.file[file].size = currentETA, currentSize
