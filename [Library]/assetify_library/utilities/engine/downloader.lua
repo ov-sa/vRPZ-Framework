@@ -46,11 +46,11 @@ if localPlayer then
     syncer.private.execOnLoad(function() network:emit("Assetify:Downloader:onPostSyncPool", true, false, localPlayer) end)
     network:create("Assetify:Downloader:onSyncBandwidth"):on(function(bandwidth) syncer.public.libraryBandwidth = bandwidth end)
 
-    network:create("Assetify:Downloader:onSyncProgress"):on(function(assetType, assetName)
+    network:create("Assetify:Downloader:onSyncProgress"):on(function(assetType, assetName, progress)
         --TODO: THIS SHOULD BE VERIFIED SOMEHOW...
         syncer.private.scheduledAssets[assetType] = syncer.private.scheduledAssets[assetType] or {}
         syncer.private.scheduledAssets[assetType][assetName] = syncer.private.scheduledAssets[assetType][assetName] or {assetSize = 0}
-        syncer.public.libraryBandwidth = bandwidth
+        syncer.private.scheduledAssets[assetType][assetName].assetProgress = progress
     end)
 
     network:create("Assetify:Downloader:onSyncHash"):on(function(assetType, assetName, hashes)
