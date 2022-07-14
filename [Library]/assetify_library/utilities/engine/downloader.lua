@@ -27,6 +27,15 @@ local imports = {
 ---------------------------
 
 if localPlayer then
+    local function bootPack(packName)
+        local cPointer = settings.assetPacks[packName]
+        if not cPointer or not cPointer.autoLoad or not cPointer.rwDatas then return false end
+        for i, j in imports.pairs(cPointer.rwDatas) do
+            if j then manager:loadAsset(packName, i) end
+            thread:pause()
+        end
+        return true
+    end
     syncer.private.execOnLoad(function() network:emit("Assetify:Downloader:onPostSyncPool", true, false, localPlayer) end)
 
     function syncer.private:getDownloadProgress(assetType, assetName)
@@ -142,12 +151,7 @@ if localPlayer then
                 if assetType == "module" then
                     network:emit("Assetify:Downloader:onSyncPack", true, false, localPlayer)
                     thread:create(function(self)
-                        if settings.assetPacks["module"].autoLoad and settings.assetPacks["module"].rwDatas then
-                            for i, j in imports.pairs(settings.assetPacks["module"].rwDatas) do
-                                if j then manager:loadAsset("module", i) end
-                                thread:pause()
-                            end
-                        end
+                        bootPack("module")
                         network:emit("Assetify:onModuleLoad", false)
                     end):resume({executions = settings.downloader.buildRate, frames = 1})
                 else
@@ -155,14 +159,7 @@ if localPlayer then
                     syncer.public.libraryBandwidth.status = nil
                     thread:create(function(self)
                         for i, j in imports.pairs(settings.assetPacks) do
-                            if i ~= "module" then
-                                if j.autoLoad and j.rwDatas then
-                                    for k, v in imports.pairs(j.rwDatas) do
-                                        if v then manager:loadAsset(i, k) end
-                                        thread:pause()
-                                    end
-                                end
-                            end
+                            if i ~= "module" then bootPack(i) end
                         end
                         network:emit("Assetify:onLoad", false)
                     end):resume({executions = settings.downloader.buildRate, frames = 1})
@@ -178,18 +175,18 @@ else
     network:create("Assetify:Downloader:onSyncHash"):on(function(source, assetType, assetName, hashes) syncer.private:syncPack(source, {type = assetType, name = assetName, hashes = hashes}) end)
     network:create("Assetify:Downloader:onSyncPack"):on(function(source) syncer.private:syncPack(source) end)
 
-    function syncer.private:syncPack(player, assetDatas, syncModules, syncPack)
-        if syncPack then
-            local cPack = (settings.assetPacks[syncPack] and settings.assetPacks[syncPack].assetPack) or false
+    function syncer.private:syncPack(player, assetDatas, syncModules, packName)
+        if packName then
+            local cPack = (settings.assetPacks[packName] and settings.assetPacks[packName].assetPack) or false
             if not cPack then return false end
-            local isModule = syncPack == "module"
+            local isModule = packName == "module"
             for i, j in imports.pairs(cPack) do
                 if i ~= "rwDatas" then
-                    if isModule or syncModules then syncer.private:syncData(player, syncPack, i, false, j) end
+                    if isModule or syncModules then syncer.private:syncData(player, packName, i, false, j) end
                 else
                     for k, v in imports.pairs(j) do
-                        if isModule or syncModules then syncer.private:syncData(player, syncPack, i, {k, "bandwidthData"}, v.synced.bandwidthData) end
-                        if isModule or not syncModules then syncer.private:syncHash(player, syncPack, k, v.unSynced.fileHash) end
+                        if isModule or syncModules then syncer.private:syncData(player, packName, i, {k, "bandwidthData"}, v.synced.bandwidthData) end
+                        if isModule or not syncModules then syncer.private:syncHash(player, packName, k, v.unSynced.fileHash) end
                         thread:pause()
                     end
                 end
@@ -202,9 +199,7 @@ else
                 local isLibraryVoid = true
                 for i, j in imports.pairs(settings.assetPacks) do
                     if i ~= "module" then
-                        if syncer.private:syncPack(player, _, syncModules, i) then
-                            isLibraryVoid = false
-                        end
+                        if syncer.private:syncPack(player, _, syncModules, i) then isLibraryVoid = false end
                     end
                 end
                 if syncModules then
@@ -222,9 +217,7 @@ else
             thread:create(function(self)
                 local cAsset = settings.assetPacks[(assetDatas.type)].assetPack.rwDatas[(assetDatas.name)]
                 for i, j in imports.pairs(cAsset.synced) do
-                    if i ~= "bandwidthData" then
-                        syncer.private:syncData(player, assetDatas.type, "rwDatas", {assetDatas.name, i}, j)
-                    end
+                    if i ~= "bandwidthData" then syncer.private:syncData(player, assetDatas.type, "rwDatas", {assetDatas.name, i}, j) end
                     thread:pause()
                 end
                 for i, j in imports.pairs(assetDatas.hashes) do
