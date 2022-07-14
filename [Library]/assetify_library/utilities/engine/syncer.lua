@@ -184,12 +184,11 @@ else
             syncer.public.loadedClients[player] = thread:createHeartbeat(function()
                 local self = syncer.public.loadedClients[player]
                 if thread:isInstance(self) then
-                    --print("Server: Triggered every 1 sec")
                     self.cQueue = self.cQueue or {}
                     for i = 1, #self.cQueue, 1 do
                         local j = self.cQueue[i]
-                        iprint(imports.getLatentEventStatus(player, j.handler))
-                        network:emit("Assetify:Downloader:onSyncProgress", true, false, player, j.assetType, j.assetName, j.file, imports.getLatentEventStatus(player, j.handler))
+                        local queueStatus = imports.getLatentEventStatus(player, j.handler)
+                        if queueStatus then network:emit("Assetify:Downloader:onSyncProgress", true, false, player, j.assetType, j.assetName, j.file, queueStatus) end
                     end
                     return true
                 end
