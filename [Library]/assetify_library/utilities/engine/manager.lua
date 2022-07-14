@@ -107,10 +107,6 @@ function manager.public:clearElementBuffer(element, isResource)
     return true
 end
 
-imports.addEventHandler((localPlayer and "onClientResourceStop") or "onResourceStop", root, function(stoppedResource)
-    manager.public:clearElementBuffer(stoppedResource, true)
-end)
-
 if localPlayer then
     function manager.private:createDep(cAsset)
         if not cAsset then return false end
@@ -358,6 +354,9 @@ end
 --[[ API Syncers ]]--
 ---------------------
 
+imports.addEventHandler((localPlayer and "onClientResourceStop") or "onResourceStop", root, function(stoppedResource)
+    manager.public:clearElementBuffer(stoppedResource, true)
+end)
 network:fetch("Assetify:onElementDestroy"):on(function(source)
     if not syncer.isLibraryBooted or not source then return false end
     manager.public:clearElementBuffer(source)
