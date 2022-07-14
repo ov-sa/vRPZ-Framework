@@ -38,9 +38,9 @@ if localPlayer then
             cDownloaded = (cPointer.bandwidthData.isDownloaded and cBandwidth) or (cPointer.bandwidthData.status and cPointer.bandwidthData.status.total) or 0
             cETA = (cPointer.bandwidthData.status and ((cPointer.bandwidthData.status.eta/cPointer.bandwidthData.status.eta_count)*0.001)) or false
         else
-            cBandwidth = syncer.libraryBandwidth.total
-            cDownloaded = (syncer.libraryBandwidth.status and syncer.libraryBandwidth.status.total) or cBandwidth
-            cETA = (syncer.bandwidthData.status and ((syncer.bandwidthData.status.eta/syncer.bandwidthData.status.eta_count)*0.001)) or false
+            cBandwidth = syncer.public.libraryBandwidth.total
+            cDownloaded = (syncer.public.libraryBandwidth.status and syncer.public.libraryBandwidth.status.total) or cBandwidth
+            cETA = (syncer.public.bandwidthData.status and ((syncer.public.bandwidthData.status.eta/syncer.public.bandwidthData.status.eta_count)*0.001)) or false
         end
         return cDownloaded, cBandwidth, (cDownloaded/math.max(1, cBandwidth))*100, cETA
     end
@@ -58,10 +58,13 @@ if localPlayer then
         cPointer.bandwidthData.status = cPointer.bandwidthData.status or {total = 0, eta = 0, eta_count = 0, file = {}}
         cPointer.bandwidthData.status.file[file] = cPointer.bandwidthData.status.file[file] or {}
         local currentETA, currentSize = status.tickEnd, status.percentComplete*0.01*cPointer.bandwidthData.file[file]
+        local prevTotalETA = cPointer.bandwidthData.status.eta
         cPointer.bandwidthData.status.eta = cPointer.bandwidthData.status.eta + (currentETA - (cPointer.bandwidthData.status.file[file].eta or 0))
         cPointer.bandwidthData.status.eta_count = cPointer.bandwidthData.status.eta_count + ((not cPointer.bandwidthData.status.file[file].eta and 1) or 0)
         cPointer.bandwidthData.status.total = cPointer.bandwidthData.status.total + (currentSize - (cPointer.bandwidthData.status.file[file].size or 0))
         cPointer.bandwidthData.status.file[file].eta, cPointer.bandwidthData.status.file[file].size = currentETA, currentSize
+        syncer.public.bandwidthData.status.eta = syncer.public.bandwidthData.status.eta + ((prevTotalETA or 0) - cPointer.bandwidthData.status.eta)
+
     end)
 
     network:create("Assetify:Downloader:onSyncHash"):on(function(assetType, assetName, hashes)
