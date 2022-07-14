@@ -168,6 +168,7 @@ else
         if not assetDatas then
             thread:create(function(self)
                 local isLibraryVoid = true
+                --TODO: MAKE HELPER FUNCTION
                 for i, j in imports.pairs(settings.assetPacks) do
                     if i ~= "module" and j.assetPack then
                         for k, v in imports.pairs(j.assetPack) do
