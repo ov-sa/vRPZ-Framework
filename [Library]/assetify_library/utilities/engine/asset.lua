@@ -224,9 +224,9 @@ else
             local builtFileData, builtFileSize = file:read(filePath)
             if builtFileData then
                 if not skipSync then
-                    filePointer.synced.assetSize.file[filePath] = builtFileSize
-                    filePointer.synced.assetSize.total = filePointer.synced.assetSize.total + filePointer.synced.assetSize.file[filePath]
-                    syncer.libraryBandwidth = syncer.libraryBandwidth + filePointer.synced.assetSize.file[filePath]
+                    filePointer.synced.bandwidthData.file[filePath] = builtFileSize
+                    filePointer.synced.bandwidthData.total = filePointer.synced.bandwidthData.total + filePointer.synced.bandwidthData.file[filePath]
+                    syncer.libraryBandwidth = syncer.libraryBandwidth + filePointer.synced.bandwidthData.file[filePath]
                     filePointer.unSynced.fileData[filePath] = (encryptKey and string.encode(builtFileData, "tea", {key = encryptKey})) or builtFileData
                     filePointer.unSynced.fileHash[filePath] = imports.md5(filePointer.unSynced.fileData[filePath])
                 end
@@ -340,7 +340,7 @@ else
                         cAssetPack.rwDatas[assetName] = {
                             synced = {
                                 manifestData = assetManifestData,
-                                assetSize = {
+                                bandwidthData = {
                                     total = 0,
                                     file = {}
                                 }
