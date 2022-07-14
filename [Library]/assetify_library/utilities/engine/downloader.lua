@@ -147,6 +147,7 @@ if localPlayer then
                     end):resume({executions = settings.downloader.buildRate, frames = 1})
                 else
                     syncer.private.scheduledAssets = nil
+                    syncer.public.libraryBandwidth.status = nil
                     thread:create(function(self)
                         for i, j in imports.pairs(settings.assetPacks) do
                             if i ~= "module" then
