@@ -94,8 +94,9 @@
     <export function="setBoneRefreshment" type="shared"/>
     <export function="clearBoneAttachment" type="shared"/>
     <export function="getLibraryProgress" type="client"/>
-    <export function="getAssetID" type="client"/>
+    <export function="getDownloadProgress" type="client"/>
     <export function="isAssetLoaded" type="client"/>
+    <export function="getAssetID" type="client"/>
     <export function="loadAsset" type="client"/>
     <export function="unloadAsset" type="client"/>
     <export function="createShader" type="client"/>
