@@ -52,7 +52,7 @@ if localPlayer then
         local _, _, cProgress = syncer.private:getDownloadProgress(assetType, assetName)
         print("Asset: "..assetName.." | "..cProgress.."/100")
         if cProgress and (cProgress ~= 100) then
-            local cPointer = settings.assetPacks[assetType].rwDatas[assetName].bandwidthData.status
+            local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
             cPointer.bandwidthData.status = cPointer.bandwidthData.status or {total = 0, file = {}}
             cPointer.bandwidthData.status.file[file] = cPointer.bandwidthData.status.file[file] or {}
             local currentETA, currentSize = status.tickEnd, status.percentComplete*0.01*cPointer.bandwidthData.file[file]
