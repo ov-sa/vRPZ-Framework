@@ -126,6 +126,12 @@ else
     syncer.private.libraryVersion = (syncer.private.libraryVersion and "v."..syncer.private.libraryVersion) or "N/A"
     syncer.private.libraryVersionSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/"..syncer.private.libraryVersion.."/[Library]/"
     syncer.public.loadedClients, syncer.private.scheduledClients = {}, {}
+    syncer.public.libraryModules = {}
+    syncer.private.execOnLoad(function()
+        for i, j in imports.pairs(syncer.private.scheduledClients) do
+            syncer.private:loadClient(i)
+        end
+    end)
 
     function syncer.private:updateLibrary(resourceName, resourcePointer, resourceThread, responsePointer, isUpdationStatus)
         if isUpdationStatus ~= nil then
@@ -166,6 +172,32 @@ else
                     resourceThread:resume()
                 end)
             end
+        end
+        return true
+    end
+
+    function syncer.private:loadClient(player)
+        if not syncer.public.isLibraryLoaded then
+            syncer.private.scheduledClients[player] = true
+        else
+            syncer.private.scheduledClients[player] = nil
+            syncer.public.loadedClients[player] = thread:createHeartbeat(function()
+                local self = syncer.public.loadedClients[player]
+                if thread:isInstance(self) then
+                    --print("Server: Triggered every 1 sec")
+                    self.cQueue = self.cQueue or {}
+                    for i = 1, #self.cQueue, 1 do
+                        local j = self.cQueue[i]
+                        iprint(imports.getLatentEventStatus(player, j.handler))
+                        network:emit("Assetify:Downloader:onSyncProgress", true, false, player, j.assetType, j.assetName, j.file, imports.getLatentEventStatus(player, j.handler))
+                    end
+                    return true
+                end
+                return false
+            end, function()
+                print("LOADED LIB")
+            end, 1)
+            syncer.private:syncPack(player, _, true)
         end
         return true
     end
@@ -211,23 +243,8 @@ if localPlayer then
     imports.addEventHandler("onClientElementDestroy", root, function() network:emit("Assetify:onElementDestroy", false, source) end)
 else
     imports.addEventHandler("onPlayerResourceStart", root, function(resourceElement)
-        if imports.getResourceRootElement(resourceElement) == resourceRoot then
-            if syncer.public.isLibraryLoaded then
-                local __source = source
-                syncer.public.loadedClients[__source] = thread:createHeartbeat(function() return syncer.public.loadedClients[__source] end, function()
-                    local self = syncer.public.loadedClients[__source]
-                    self.cQueue = self.cQueue or {}
-                    print("Server: Triggered every 1 sec")
-                    for i = 1, #self.cQueue, 1 do
-                        local j = self.cQueue[i]
-                        network:emit("Assetify:Downloader:onSyncProgress", true, false, __source, j.assetType, j.assetName, j.file, imports.getLatentEventStatus(j.handler))
-                    end
-                end, 1000)
-                syncer.private:syncPack(source, _, true)
-            else
-                syncer.private.scheduledClients[source] = true
-            end
-        end
+        if imports.getResourceRootElement(resourceElement) ~= resourceRoot then return false end
+        syncer.private:loadClient(source)
     end)
     network:create("Assetify:onRequestPreSyncPool", true):on(function(__self, source)
         local __source = source
