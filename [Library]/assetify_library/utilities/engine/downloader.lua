@@ -36,7 +36,7 @@ if localPlayer then
             local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
             cBandwidth = cPointer.bandwidthData.total
             cDownloaded = (cPointer.bandwidthData.isDownloaded and cBandwidth) or (cPointer.bandwidthData.status and cPointer.bandwidthData.status.total) or 0
-            cETA = (cPointer.bandwidthData.status and ((cPointer.bandwidthData.status.eta/cPointer.bandwidthData.status.eta_count)*0.001)) or false
+            cETA = (cPointer.bandwidthData.status and ((cPointer.bandwidthData.status.eta/math.max(1, cPointer.bandwidthData.status.eta_count))*0.001)) or false
         else
             cBandwidth = syncer.public.libraryBandwidth.total
             cDownloaded = (syncer.public.libraryBandwidth.status and syncer.public.libraryBandwidth.status.total) or cBandwidth
@@ -64,7 +64,7 @@ if localPlayer then
         cPointer.bandwidthData.status.total = cPointer.bandwidthData.status.total + (currentSize - (cPointer.bandwidthData.status.file[file].size or 0))
         cPointer.bandwidthData.status.file[file].eta, cPointer.bandwidthData.status.file[file].size = currentETA, currentSize
         syncer.public.bandwidthData.status.eta = syncer.public.bandwidthData.status.eta + ((prevTotalETA or 0) - cPointer.bandwidthData.status.eta)
-
+        syncer.public.bandwidthData.status.eta_count = syncer.public.bandwidthData.status.eta_count + ((not cPointer.bandwidthData.status.file[file].eta and 1) or 0)
     end)
 
     network:create("Assetify:Downloader:onSyncHash"):on(function(assetType, assetName, hashes)
