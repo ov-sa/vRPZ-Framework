@@ -33,7 +33,7 @@ if localPlayer then
             if settings.assetPacks[assetType] and settings.assetPacks[assetType].rwDatas[assetName] then
                 local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
                 cBandwidth = cPointer.bandwidthData.total
-                cDownloaded = (cPointer.bandwidthData and cPointer.bandwidthData.progress and cPointer.bandwidthData.progress.total) or cBandwidth
+                cDownloaded = (cPointer.bandwidthData and cPointer.bandwidthData.status and cPointer.bandwidthData.status.total) or cBandwidth
             end
         else
             cBandwidth = syncer.libraryBandwidth
@@ -48,14 +48,16 @@ if localPlayer then
     syncer.private.execOnLoad(function() network:emit("Assetify:Downloader:onPostSyncPool", true, false, localPlayer) end)
     network:create("Assetify:Downloader:onSyncBandwidth"):on(function(bandwidth) syncer.public.libraryBandwidth = bandwidth end)
 
-    network:create("Assetify:Downloader:onSyncProgress"):on(function(assetType, assetName, file, progress)
+    network:create("Assetify:Downloader:onSyncProgress"):on(function(assetType, assetName, file, status)
         local _, _, cProgress = syncer.private:getDownloadProgress(assetType, assetName)
         if cProgress and (cProgress ~= 100) then
-            local cPointer = settings.assetPacks[assetType].rwDatas[assetName].bandwidthData.progress = nil
-            cPointer.bandwidthData.progress = cPointer.bandwidthData.progress or {total = 0, file = {}}
-            local currentSize = progress.percentComplete*0.01*cPointer.bandwidthData.file[file]
-            cPointer.bandwidthData.progress.total = cPointer.bandwidthData.progress.total + (currentSize - (cPointer.bandwidthData.progress.file[file] or 0))
-            cPointer.bandwidthData.progress.file[file] = currentSize
+            local cPointer = settings.assetPacks[assetType].rwDatas[assetName].bandwidthData.status
+            cPointer.bandwidthData.status = cPointer.bandwidthData.status or {total = 0, file = {}}
+            cPointer.bandwidthData.status.file[file] = cPointer.bandwidthData.status.file[file] or {}
+            local currentSize, currentETA = status.percentComplete*0.01*cPointer.bandwidthData.file[file], status.tickEnd
+            cPointer.bandwidthData.status.total = cPointer.bandwidthData.status.total + (currentSize - (cPointer.bandwidthData.status.file[file].size or 0))
+            cPointer.bandwidthData.status.file[file].size = currentSize
+            cPointer.bandwidthData.status.file[file].eta = currentETA
         end
     end)
 
@@ -111,7 +113,7 @@ if localPlayer then
     network:create("Assetify:Downloader:onSyncState"):on(function(assetType, assetName)
         local isPackVoid = true
         syncer.private.scheduledAssets[assetType][assetName] = nil
-        settings.assetPacks[assetType].rwDatas[assetName].bandwidthData.progress = nil
+        settings.assetPacks[assetType].rwDatas[assetName].bandwidthData.status = nil
         for i, j in imports.pairs(syncer.private.scheduledAssets[assetType]) do
             if j then
                 isPackVoid = false
