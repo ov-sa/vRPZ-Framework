@@ -40,7 +40,7 @@ if localPlayer then
         else
             cBandwidth = syncer.public.libraryBandwidth.total
             cDownloaded = (syncer.public.libraryBandwidth.status and syncer.public.libraryBandwidth.status.total) or cBandwidth
-            cETA = (syncer.public.bandwidthData.status and ((syncer.public.bandwidthData.status.eta/syncer.public.bandwidthData.status.eta_count)*0.001)) or false
+            cETA = (syncer.public.libraryBandwidth.status and ((syncer.public.libraryBandwidth.status.eta/math.max(1, syncer.public.libraryBandwidth.status.eta_count))*0.001)) or false
         end
         return cDownloaded, cBandwidth, (cDownloaded/math.max(1, cBandwidth))*100, cETA
     end
@@ -53,18 +53,20 @@ if localPlayer then
     end)
 
     network:create("Assetify:Downloader:onSyncProgress"):on(function(assetType, assetName, file, status)
+        --print(syncer.private:getDownloadProgress())
         local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
-        if not cPointer.bandwidthData.isDownloaded then return false end
+        if cPointer.bandwidthData.isDownloaded then return false end
         cPointer.bandwidthData.status = cPointer.bandwidthData.status or {total = 0, eta = 0, eta_count = 0, file = {}}
         cPointer.bandwidthData.status.file[file] = cPointer.bandwidthData.status.file[file] or {}
         local currentETA, currentSize = status.tickEnd, status.percentComplete*0.01*cPointer.bandwidthData.file[file]
-        local prevTotalETA = cPointer.bandwidthData.status.eta
-        cPointer.bandwidthData.status.eta = cPointer.bandwidthData.status.eta + (currentETA - (cPointer.bandwidthData.status.file[file].eta or 0))
+        local prevTotalETA = cPointer.bandwidthData.status.eta or 0
+        cPointer.bandwidthData.status.eta = cPointer.bandwidthData.status.eta - (cPointer.bandwidthData.status.file[file].eta or 0) + currentETA
         cPointer.bandwidthData.status.eta_count = cPointer.bandwidthData.status.eta_count + ((not cPointer.bandwidthData.status.file[file].eta and 1) or 0)
-        cPointer.bandwidthData.status.total = cPointer.bandwidthData.status.total + (currentSize - (cPointer.bandwidthData.status.file[file].size or 0))
+        cPointer.bandwidthData.status.total = cPointer.bandwidthData.status.total - (cPointer.bandwidthData.status.file[file].size or 0) + currentSize
         cPointer.bandwidthData.status.file[file].eta, cPointer.bandwidthData.status.file[file].size = currentETA, currentSize
-        syncer.public.bandwidthData.status.eta = syncer.public.bandwidthData.status.eta + ((prevTotalETA or 0) - cPointer.bandwidthData.status.eta)
-        syncer.public.bandwidthData.status.eta_count = syncer.public.bandwidthData.status.eta_count + ((not cPointer.bandwidthData.status.file[file].eta and 1) or 0)
+        syncer.public.libraryBandwidth.status.eta = syncer.public.libraryBandwidth.status.eta - prevTotalETA + cPointer.bandwidthData.status.eta
+        syncer.public.libraryBandwidth.status.eta_count = syncer.public.libraryBandwidth.status.eta_count + ((not cPointer.bandwidthData.status.isLibraryETACounted and 1) or 0)
+        cPointer.bandwidthData.status.isLibraryETACounted = true
     end)
 
     network:create("Assetify:Downloader:onSyncHash"):on(function(assetType, assetName, hashes)
