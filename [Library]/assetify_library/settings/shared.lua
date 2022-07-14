@@ -19,13 +19,14 @@ settings = {
     },
 
     library = {
-        autoUpdate = true
+        autoUpdate = false
     },
 
     downloader = {
         isAccessSafe = true,
         syncRate = 50,
-        buildRate = 500
+        buildRate = 500,
+        trackRate = 50
     },
 
     streamer = {

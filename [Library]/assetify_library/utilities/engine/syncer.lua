@@ -196,7 +196,7 @@ else
                     return true
                 end
                 return false
-            end, function() syncer.public.libraryClients.loading[player] = nil end, settings.downloader.syncRate)
+            end, function() syncer.public.libraryClients.loading[player] = nil end, settings.downloader.trackRate)
             syncer.private:syncPack(player, _, true)
         end
         return true
