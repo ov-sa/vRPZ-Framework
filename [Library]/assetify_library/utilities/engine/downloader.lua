@@ -231,7 +231,7 @@ else
                 for i, j in imports.pairs(assetDatas.hashes) do
                     syncer.private:syncContent(player, assetDatas.type, assetDatas.name, i, cAsset.unSynced.fileData[i])
                     local cQueue = imports.getLatentEventHandles()
-                    table.insert(syncer.public.libraryClients.loaded[player].cQueue, {assetType = assetDatas.type, assetName = assetDatas.name, file = i, handler = cQueue[#cQueue]})
+                    table.insert(syncer.public.libraryClients.loading[player].cQueue, {assetType = assetDatas.type, assetName = assetDatas.name, file = i, handler = cQueue[#cQueue]})
                     thread:pause()
                 end
                 syncer.private:syncState(player, assetDatas.type, assetDatas.name)

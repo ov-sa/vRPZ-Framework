@@ -132,7 +132,7 @@ else
         scheduled = {}
     }
     syncer.private.execOnLoad(function()
-        for i, j in imports.pairs(syncer.private.scheduledClients) do
+        for i, j in imports.pairs(syncer.public.libraryClients.scheduled) do
             syncer.private:loadClient(i)
         end
     end)
@@ -181,13 +181,14 @@ else
     end
 
     function syncer.private:loadClient(player)
+        if syncer.public.libraryClients.loaded[player] then return false end
         if not syncer.public.isLibraryLoaded then
-            syncer.private.scheduledClients[player] = true
+            syncer.public.libraryClients.scheduled[player] = true
         else
-            syncer.private.scheduledClients[player] = nil
-            syncer.public.libraryClients.loaded[player] = thread:createHeartbeat(function()
-                local self = syncer.public.libraryClients.loaded[player]
-                if thread:isInstance(self) then
+            syncer.public.libraryClients.scheduled[player] = nil
+            syncer.public.libraryClients.loading[player] = thread:createHeartbeat(function()
+                local self = syncer.public.libraryClients.loading[player]
+                if not syncer.public.libraryClients.loaded[player] and thread:isInstance(self) then
                     self.cQueue = self.cQueue or {}
                     for i = 1, #self.cQueue, 1 do
                         local j = self.cQueue[i]
@@ -197,9 +198,7 @@ else
                     return true
                 end
                 return false
-            end, function()
-                print("LOADED LIB")
-            end, settings.downloader.syncRate)
+            end, function() end, settings.downloader.syncRate)
             syncer.private:syncPack(player, _, true)
         end
         return true
@@ -291,8 +290,9 @@ else
         end):resume({executions = settings.downloader.syncRate, frames = 1})
     end)
     imports.addEventHandler("onPlayerQuit", root, function()
-        if syncer.public.libraryClients.loaded[source] then syncer.public.libraryClients.loaded[source]:destroy() end
+        if syncer.public.libraryClients.loading[source] then syncer.public.libraryClients.loading[source]:destroy() end
         syncer.public.libraryClients.loaded[source] = nil
-        syncer.private.scheduledClients[source] = nil
+        syncer.public.libraryClients.loading[source] = nil
+        syncer.public.libraryClients.scheduled[source] = nil
     end)
 end
