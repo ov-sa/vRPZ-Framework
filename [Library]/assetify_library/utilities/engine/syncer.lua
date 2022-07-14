@@ -196,7 +196,7 @@ else
                 return false
             end, function()
                 print("LOADED LIB")
-            end, 1)
+            end, settings.downloader.syncRate)
             syncer.private:syncPack(player, _, true)
         end
         return true
