@@ -53,17 +53,13 @@ if localPlayer then
     end)
 
     network:create("Assetify:Downloader:onSyncProgress"):on(function(assetType, assetName, file, status)
-        --print(syncer.private:getDownloadProgress())
         local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
-        if cPointer.bandwidthData.isDownloaded then
-            print("YA")
-            return false
-        end
+        if cPointer.bandwidthData.isDownloaded then return false end
         cPointer.bandwidthData.status = cPointer.bandwidthData.status or {total = 0, eta = 0, eta_count = 0, file = {}}
         cPointer.bandwidthData.status.file[file] = cPointer.bandwidthData.status.file[file] or {}
         local currentETA, currentSize = status.tickEnd, status.percentComplete*0.01*cPointer.bandwidthData.file[file]
         local prevETA, prevSize = cPointer.bandwidthData.status.file[file].eta or 0, cPointer.bandwidthData.status.file[file].size or 0
-        local prevTotalETA, prevTotalSize = cPointer.bandwidthData.status.eta or 0, cPointer.bandwidthData.status.total or 0, 
+        local prevTotalETA, prevTotalSize = cPointer.bandwidthData.status.eta or 0, cPointer.bandwidthData.status.total or 0
         cPointer.bandwidthData.status.eta = cPointer.bandwidthData.status.eta - prevETA + currentETA
         cPointer.bandwidthData.status.eta_count = cPointer.bandwidthData.status.eta_count + ((not cPointer.bandwidthData.status.file[file].eta and 1) or 0)
         cPointer.bandwidthData.status.total = cPointer.bandwidthData.status.total - prevSize + currentSize
@@ -126,8 +122,13 @@ if localPlayer then
     network:create("Assetify:Downloader:onSyncState"):on(function(assetType, assetName)
         local isPackVoid = true
         local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
+        cPointer.bandwidthData.isDownloaded = true
+        if cPointer.bandwidthData.status and cPointer.bandwidthData.status.isLibraryETACounted then
+            syncer.public.libraryBandwidth.status.eta = syncer.public.libraryBandwidth.status.eta - cPointer.bandwidthData.status.eta
+            syncer.public.libraryBandwidth.status.eta_count = syncer.public.libraryBandwidth.status.eta_count - 1
+        end
+        cPointer.bandwidthData.status = nil
         syncer.private.scheduledAssets[assetType][assetName] = nil
-        cPointer.bandwidthData.isDownloaded, cPointer.bandwidthData.status = true, nil
         for i, j in imports.pairs(syncer.private.scheduledAssets[assetType]) do
             if j then
                 isPackVoid = false
