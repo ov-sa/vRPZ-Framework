@@ -27,6 +27,9 @@ local imports = {
 ---------------------------
 
 if localPlayer then
+    syncer.private.execOnLoad(function() network:emit("Assetify:Downloader:onPostSyncPool", true, false, localPlayer) end)
+    network:create("Assetify:Downloader:onSyncBandwidth"):on(function(bandwidth) syncer.public.libraryBandwidth = bandwidth end)
+
     function syncer.private:getDownloadProgress(assetType, assetName)
         local cDownloaded, cBandwidth = nil, nil
         if assetType and assetName then
@@ -45,8 +48,6 @@ if localPlayer then
         end
         return false
     end
-    syncer.private.execOnLoad(function() network:emit("Assetify:Downloader:onPostSyncPool", true, false, localPlayer) end)
-    network:create("Assetify:Downloader:onSyncBandwidth"):on(function(bandwidth) syncer.public.libraryBandwidth = bandwidth end)
 
     network:create("Assetify:Downloader:onSyncProgress"):on(function(assetType, assetName, file, status)
         local _, _, cProgress = syncer.private:getDownloadProgress(assetType, assetName)
