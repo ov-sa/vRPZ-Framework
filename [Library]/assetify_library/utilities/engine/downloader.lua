@@ -38,8 +38,9 @@ if localPlayer then
             cDownloaded = (cPointer.bandwidthData.isDownloaded and cBandwidth) or (cPointer.bandwidthData.status and cPointer.bandwidthData.status.total) or 0
             cETA = (cPointer.bandwidthData.status and ((cPointer.bandwidthData.status.eta/cPointer.bandwidthData.status.eta_count)*0.001)) or false
         else
-            cBandwidth = syncer.libraryBandwidth
-            cDownloaded = syncer.__libraryBandwidth or 0
+            cBandwidth = syncer.libraryBandwidth.total
+            cDownloaded = (syncer.libraryBandwidth.status and syncer.libraryBandwidth.status.total) or cBandwidth
+            cETA = (syncer.bandwidthData.status and ((syncer.bandwidthData.status.eta/syncer.bandwidthData.status.eta_count)*0.001)) or false
         end
         return cDownloaded, cBandwidth, (cDownloaded/math.max(1, cBandwidth))*100, cETA
     end
