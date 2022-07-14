@@ -33,7 +33,7 @@ if localPlayer then
             if settings.assetPacks[assetType] and settings.assetPacks[assetType].rwDatas[assetName] then
                 local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
                 cBandwidth = cPointer.bandwidthData.total
-                cDownloaded = (cPointer.bandwidthData and cPointer.bandwidthData.status and cPointer.bandwidthData.status.total) or cBandwidth
+                cDownloaded = (cPointer.bandwidthData and cPointer.bandwidthData.status and (cPointer.bandwidthData.status.total or 0)) or cBandwidth
             end
         else
             cBandwidth = syncer.libraryBandwidth
@@ -50,14 +50,15 @@ if localPlayer then
 
     network:create("Assetify:Downloader:onSyncProgress"):on(function(assetType, assetName, file, status)
         local _, _, cProgress = syncer.private:getDownloadProgress(assetType, assetName)
+        print("Asset: "..assetName.." | "..cProgress.."/100")
         if cProgress and (cProgress ~= 100) then
             local cPointer = settings.assetPacks[assetType].rwDatas[assetName].bandwidthData.status
             cPointer.bandwidthData.status = cPointer.bandwidthData.status or {total = 0, file = {}}
             cPointer.bandwidthData.status.file[file] = cPointer.bandwidthData.status.file[file] or {}
-            local currentSize, currentETA = status.percentComplete*0.01*cPointer.bandwidthData.file[file], status.tickEnd
+            local currentETA, currentSize = status.tickEnd, status.percentComplete*0.01*cPointer.bandwidthData.file[file]
             cPointer.bandwidthData.status.total = cPointer.bandwidthData.status.total + (currentSize - (cPointer.bandwidthData.status.file[file].size or 0))
-            cPointer.bandwidthData.status.file[file].size = currentSize
-            cPointer.bandwidthData.status.file[file].eta = currentETA
+            cPointer.bandwidthData.status.file[file].eta, cPointer.bandwidthData.status.file[file].size = currentETA, currentSize
+            print(cPointer.bandwidthData.status.total.."/"..cPointer.bandwidthData.total)
         end
     end)
 
