@@ -29,6 +29,7 @@ local imports = {
     getResourceInfo = getResourceInfo,
     setElementModel = setElementModel,
     addEventHandler = addEventHandler,
+    getLatentEventStatus = getLatentEventStatus,
     getResourceRootElement = getResourceRootElement
 }
 
@@ -212,7 +213,16 @@ else
     imports.addEventHandler("onPlayerResourceStart", root, function(resourceElement)
         if imports.getResourceRootElement(resourceElement) == resourceRoot then
             if syncer.public.isLibraryLoaded then
-                syncer.public.loadedClients[source] = true
+                local __source = source
+                syncer.public.loadedClients[__source] = thread:createHeartbeat(function() return syncer.public.loadedClients[__source] end, function()
+                    local self = syncer.public.loadedClients[__source]
+                    self.cQueue = self.cQueue or {}
+                    print("Server: Triggered every 1 sec")
+                    for i = 1, #self.cQueue, 1 do
+                        local j = self.cQueue[i]
+                        network:emit("Assetify:Downloader:onSyncProgress", true, false, __source, j.assetType, j.assetName, j.file, imports.getLatentEventStatus(j.handler))
+                    end
+                end, 1000)
                 syncer.private:syncPack(source, _, true)
             else
                 syncer.private.scheduledClients[source] = true
@@ -261,6 +271,7 @@ else
         end):resume({executions = settings.downloader.syncRate, frames = 1})
     end)
     imports.addEventHandler("onPlayerQuit", root, function()
+        if syncer.public.loadedClients[source] then syncer.public.loadedClients[source]:destroy() end
         syncer.public.loadedClients[source] = nil
         syncer.private.scheduledClients[source] = nil
     end)

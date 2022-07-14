@@ -112,7 +112,7 @@ CCharacter = {
         if not characterLevel or not characterEXP then return false end
         characterEXP = characterEXP + experience
         local genLevel, genLevelEXP = characterLevel, CGame.getLevelEXP(characterLevel)
-        while (genLevelEXP and (characterEXP > genLevelEXP) and (characterLevel < FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"]) and (genLevel <= FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"])) do
+        while(genLevelEXP and (characterEXP > genLevelEXP) and (characterLevel < FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"]) and (genLevel <= FRAMEWORK_CONFIGS["Templates"]["Levels"]["Max_Level"])) do
             characterEXP = characterEXP - genLevelEXP
             genLevel = genLevel + 1
             genLevelEXP = CGame.getLevelEXP(genLevel)
