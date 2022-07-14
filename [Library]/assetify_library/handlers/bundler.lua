@@ -179,8 +179,8 @@ bundler.rw["core"] = {
         assetify.__core = {}
         assetify.imports.setmetatable(assetify, {__index = assetify.__core})
         if localPlayer then
-            assetify.__core.getProgress = function(...)
-                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getLibraryProgress", ...)
+            assetify.__core.getDownloadProgress = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getDownloadProgress", ...)
             end
         
             assetify.__core.getAssetID = function(...)
