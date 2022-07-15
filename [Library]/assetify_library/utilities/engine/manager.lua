@@ -136,8 +136,8 @@ if localPlayer then
 
     function manager.private:freeAsset(cAsset)
         if not cAsset then return false end
-        shader:clearAssetBuffer(cAsset.unSynced.rwCache.map)
-        asset:clearAssetBuffer(cAsset.unSynced.rwCache.dep)
+        shader.clearAssetBuffer(cAsset.unSynced.rwCache.map)
+        asset.clearAssetBuffer(cAsset.unSynced.rwCache.dep)
         cAsset.unSynced = nil
         imports.collectgarbage()
         return true

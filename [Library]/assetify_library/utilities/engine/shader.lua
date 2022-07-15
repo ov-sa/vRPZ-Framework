@@ -109,7 +109,7 @@ if localPlayer then
         return self:unload(...)
     end
 
-    function shader.public:clearAssetBuffer(rwCache)
+    function shader.public.clearAssetBuffer(rwCache)
         if not rwCache then return false end
         if rwCache.shader then
             for i, j in imports.pairs(rwCache.shader) do

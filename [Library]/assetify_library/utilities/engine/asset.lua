@@ -100,7 +100,7 @@ if localPlayer then
         return self:unload(...)
     end
 
-    function asset.public:clearAssetBuffer(rwCache)
+    function asset.public.clearAssetBuffer(rwCache)
         if not rwCache then return false end
         for i, j in imports.pairs(rwCache) do
             imports.destroyElement(j)
