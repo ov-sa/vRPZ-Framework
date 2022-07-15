@@ -242,7 +242,7 @@ if localPlayer then
     end)
     imports.addEventHandler("onClientElementDestroy", root, function() network:emit("Assetify:onElementDestroy", false, source) end)
 else
-    network:create("Assetify:Syncer:onSyncPrePool"):on(function(__self, source)
+    network:create("Assetify:Syncer:onSyncPrePool", true):on(function(__self, source)
         local __source = source
         thread:create(function(self)
             local source = __source
@@ -260,6 +260,7 @@ else
             __self:resume()
         end):resume({executions = settings.downloader.syncRate, frames = 1})
         __self:pause()
+        return true
     end, {isAsync = true})
     network:create("Assetify:Syncer:onSyncPostPool"):on(function(self, source)
         self:resume({executions = settings.downloader.syncRate, frames = 1})

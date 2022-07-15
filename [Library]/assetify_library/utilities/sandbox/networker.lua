@@ -61,8 +61,7 @@ imports.addEventHandler("Assetify:Networker:API", root, function(serial, payload
     elseif payload.processType == "emitCallback" then
         if not payload.isSignal then
             local cNetwork = network.public:fetch(payload.networkName)
-            if cNetwork and cNetwork.isCallback then
-                if not cNetwork or not cNetwork.isCallback or not cNetwork.handler then return false end
+            if cNetwork and cNetwork.isCallback and cNetwork.handler then
                 payload.isSignal = true
                 payload.isRestricted = true
                 if not cNetwork.handler.config.isAsync then
@@ -128,7 +127,6 @@ function network.private.execNetwork(cNetwork, exec, cThread, serial, payload)
 end
 
 function network.private.serializeExec(exec)
-    if self ~= network.public then return false end
     if not exec or (imports.type(exec) ~= "function") then return false end
     local cSerial = imports.md5(network.public.identifier..":"..imports.tostring(exec))
     network.private.cache.execSerials[cSerial] = exec
@@ -136,7 +134,6 @@ function network.private.serializeExec(exec)
 end
 
 function network.private.deserializeExec(serial)
-    if self ~= network.public then return false end
     network.private.cache.execSerials[serial] = nil
     return true
 end
@@ -275,6 +272,7 @@ function network.public:emitCallback(cThread, ...)
         networkName = false,
         execSerial = network.private.serializeExec(cExec)
     }
+    iprint(payload)
     if self == network.public then
         payload.networkName, payload.isRemote = network.private.fetchArg(_, cArgs), network.private.fetchArg(_, cArgs)
         if payload.isRemote then
