@@ -44,7 +44,6 @@ if localPlayer then
         }
     end)
 
-    testAsset = false
     network:create("Assetify:Downloader:onSyncProgress"):on(function(status)
         for assetType, i in imports.pairs(status) do
             for assetName, j in imports.pairs(i) do
