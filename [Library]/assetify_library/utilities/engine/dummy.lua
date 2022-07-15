@@ -206,7 +206,7 @@ if localPlayer then
     network:create("Assetify:Dummy:onSpawn"):on(function(...) syncer.public.syncDummySpawn(6, ...) end)
     network:create("Assetify:Dummy:onDespawn"):on(function(...) syncer.public.syncDummySpawn(_, ...) end)
 else
-    network:fetch("Assetify:Downloader:onSyncPostPool"):on(function(self, source)
+    network:fetch("Assetify:Syncer:onSyncPostPool"):on(function(self, source)
         self:resume({executions = settings.downloader.syncRate, frames = 1})
         for i, j in imports.pairs(dummy.public.buffer) do
             if j and not j.isUnloading then network:emit("Assetify:Dummy:onSpawn", true, false, source, self.assetType, self.assetName, self.assetClump, self.clumpMaps, self.dummyData, self.remoteSignature) end

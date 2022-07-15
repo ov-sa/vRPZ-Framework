@@ -187,7 +187,7 @@ else
                 end
                 if syncModules then
                     network:emit("Assetify:Downloader:onSyncBandwidth", true, true, player, syncer.public.libraryBandwidth)
-                    self:await(network:emitCallback(self, "Assetify:onRequestPreSyncPool", false, player))
+                    self:await(network:emitCallback(self, "Assetify:Syncer:onSyncPrePool", false, player))
                     if not syncer.private:syncPack(player, _, syncModules, "module") then
                         network:emit("Assetify:onModuleLoad", true, true, player)
                         network:emit("Assetify:Downloader:onSyncPack", false, player)
