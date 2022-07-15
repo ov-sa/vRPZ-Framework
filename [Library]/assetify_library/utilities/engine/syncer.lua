@@ -135,6 +135,37 @@ else
         end
     end)
 
+    network:create("Assetify:Syncer:onSyncPrePool", true):on(function(__self, source)
+        local __source = source
+        thread:create(function(self)
+            local source = __source
+            for i, j in imports.pairs(syncer.public.syncedGlobalDatas) do
+                syncer.public.syncGlobalData(i, j, false, source)
+                thread:pause()
+            end
+            for i, j in imports.pairs(syncer.public.syncedEntityDatas) do
+                for k, v in imports.pairs(j) do
+                    syncer.public.syncEntityData(i, k, v, false, source)
+                    thread:pause()
+                end
+                thread:pause()
+            end
+            __self:resume()
+        end):resume({executions = settings.downloader.syncRate, frames = 1})
+        __self:pause()
+        return true
+    end, {isAsync = true})
+
+    network:create("Assetify:Syncer:onSyncPostPool"):on(function(self, source)
+        self:resume({executions = settings.downloader.syncRate, frames = 1})
+        for i, j in imports.pairs(syncer.public.syncedElements) do
+            if j then
+                syncer.public.syncElementModel(i, j.assetType, j.assetName, j.assetClump, j.clumpMaps, source)
+            end
+            thread:pause()
+        end
+    end, {isAsync = true})
+
     function syncer.private:updateLibrary(resourceName, resourcePointer, resourceThread, responsePointer, isUpdationStatus)
         if isUpdationStatus ~= nil then
             imports.outputDebugString("[Assetify]: "..((isUpdationStatus and "Auto-updation successfully completed; Rebooting!") or "Auto-updation failed due to connectivity issues; Try again later..."), 3)
@@ -243,35 +274,6 @@ if localPlayer then
     end)
     imports.addEventHandler("onClientElementDestroy", root, function() network:emit("Assetify:onElementDestroy", false, source) end)
 else
-    network:create("Assetify:Syncer:onSyncPrePool", true):on(function(__self, source)
-        local __source = source
-        thread:create(function(self)
-            local source = __source
-            for i, j in imports.pairs(syncer.public.syncedGlobalDatas) do
-                syncer.public.syncGlobalData(i, j, false, source)
-                thread:pause()
-            end
-            for i, j in imports.pairs(syncer.public.syncedEntityDatas) do
-                for k, v in imports.pairs(j) do
-                    syncer.public.syncEntityData(i, k, v, false, source)
-                    thread:pause()
-                end
-                thread:pause()
-            end
-            __self:resume()
-        end):resume({executions = settings.downloader.syncRate, frames = 1})
-        __self:pause()
-        return true
-    end, {isAsync = true})
-    network:create("Assetify:Syncer:onSyncPostPool"):on(function(self, source)
-        self:resume({executions = settings.downloader.syncRate, frames = 1})
-        for i, j in imports.pairs(syncer.public.syncedElements) do
-            if j then
-                syncer.public.syncElementModel(i, j.assetType, j.assetName, j.assetClump, j.clumpMaps, source)
-            end
-            thread:pause()
-        end
-    end, {isAsync = true})
     imports.addEventHandler("onPlayerResourceStart", root, function(resourceElement)
         if imports.getResourceRootElement(resourceElement) ~= resourceRoot then return false end
         syncer.private:loadClient(source)
