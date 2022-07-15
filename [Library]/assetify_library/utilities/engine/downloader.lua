@@ -122,9 +122,6 @@ if localPlayer then
         local isPackVoid = true
         local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
         cPointer.bandwidthData.isDownloaded = true
-        if testAsset == assetName then
-            print("COMPLETED DOWNLOAD...")
-        end
         if cPointer.bandwidthData.status and cPointer.bandwidthData.status.isLibraryETACounted then
             syncer.public.libraryBandwidth.status.eta = syncer.public.libraryBandwidth.status.eta - cPointer.bandwidthData.status.eta
             syncer.public.libraryBandwidth.status.eta_count = syncer.public.libraryBandwidth.status.eta_count - 1
