@@ -38,10 +38,10 @@ if localPlayer then
     end
     syncer.private.execOnLoad(function() network:emit("Assetify:Downloader:onPostSyncPool", true, false, localPlayer) end)
 
-    network:create("Assetify:Downloader:onSyncProgress"):on(function(status, initBandwidth)
-        if initBandwidth then
+    network:create("Assetify:Downloader:onSyncProgress"):on(function(status, bandwidth)
+        if bandwidth then
             syncer.public.libraryBandwidth = {
-                total = initBandwidth,
+                total = bandwidth,
                 status = {total = 0, eta = 0, eta_count = 0}
             }
             return true
