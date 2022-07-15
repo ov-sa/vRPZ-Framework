@@ -218,13 +218,21 @@ else
             syncer.public.libraryClients.loading[player] = thread:createHeartbeat(function()
                 local self = syncer.public.libraryClients.loading[player]
                 if self and not syncer.public.libraryClients.loaded[player] and thread:isInstance(self) then
-                    self.cQueue = self.cQueue or {}
-                    for i = 1, #self.cQueue, 1 do
-                        local j = self.cQueue[i]
-                        local queueStatus = imports.getLatentEventStatus(player, j.handler)
-                        if queueStatus then network:emit("Assetify:Downloader:onSyncProgress", true, false, player, j.assetType, j.assetName, j.file, queueStatus) end
-                        self:sleep(settings.downloader.trackRate)
+                    self.cStatus, self.cQueue = self.cStatus or {}, self.cQueue or {}
+                    for i, j in imports.pairs(self.cQueue) do
+                        local queueStatus = imports.getLatentEventStatus(player, i)
+                        if queueStatus then
+                            self.cStatus[(j.assetType)] = self.cStatus[(j.assetType)] or {}
+                            self.cStatus[(j.assetType)][(j.assetName)] = self.cStatus[(j.assetType)][(j.assetName)] or {}
+                            self.cStatus[(j.assetType)][(j.assetName)][(j.file)] = queueStatus
+                        else
+                            self.cQueue[i] = nil
+                            if self.cStatus[(j.assetType)] and self.cStatus[(j.assetType)][(j.assetName)] then
+                                self.cStatus[(j.assetType)][(j.assetName)][(j.file)] = (self.cStatus[(j.assetType)][(j.assetName)][(j.file)] and {tickEnd = 0, percentComplete = 100}) or nil
+                            end
+                        end
                     end
+                    network:emit("Assetify:Downloader:onSyncProgress", true, false, player, self.cStatus)
                     return true
                 end
                 return false
