@@ -26,7 +26,7 @@ settings = {
         isAccessSafe = true,
         syncRate = 50,
         buildRate = 500,
-        trackRate = 50
+        trackRate = 100
     },
 
     streamer = {
