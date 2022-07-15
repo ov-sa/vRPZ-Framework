@@ -89,7 +89,7 @@ function manager.public:setElementScoped(element)
     return true
 end
 
-function manager.public:clearElementBuffer(element, isResource)
+function manager.public.clearElementBuffer(element, isResource)
     if not element then return false end
     if isResource then
         local resourceScope = manager.private.buffer.scoped[element]
@@ -371,9 +371,9 @@ end
 ---------------------
 
 imports.addEventHandler((localPlayer and "onClientResourceStop") or "onResourceStop", root, function(stoppedResource)
-    manager.public:clearElementBuffer(stoppedResource, true)
+    manager.public.clearElementBuffer(stoppedResource, true)
 end)
 network:fetch("Assetify:onElementDestroy"):on(function(source)
     if not syncer.isLibraryBooted or not source then return false end
-    manager.public:clearElementBuffer(source)
+    manager.public.clearElementBuffer(source)
 end)

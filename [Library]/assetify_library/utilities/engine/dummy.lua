@@ -66,7 +66,7 @@ function dummy.public:destroy(...)
     return self:unload(...)
 end
 
-function dummy.public:clearElementBuffer(element)
+function dummy.public.clearElementBuffer(element)
     local cDummy = dummy.public:fetchInstance(element)
     if not cDummy then return false end
     cDummy:destroy()
@@ -216,5 +216,5 @@ else
 end
 network:fetch("Assetify:onElementDestroy"):on(function(source)
     if not syncer.public.isLibraryBooted or not source then return false end
-    dummy.public:clearElementBuffer(source)
+    dummy.public.clearElementBuffer(source)
 end)

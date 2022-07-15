@@ -90,7 +90,7 @@ function bone.public:destroy(...)
     return self:unload(...)
 end
 
-function bone.public:clearElementBuffer(element)
+function bone.public.clearElementBuffer(element)
     local cBone = bone.private:fetchInstance(element)
     if cBone then cBone:destroy() end
     if bone.public.buffer.parent[element] then
@@ -257,7 +257,7 @@ end
 function syncer.public.syncBoneAttachment(length, ...) return bone.public:create(table.unpack(table.pack(...), length or 3)) end
 function syncer.public.syncBoneDetachment(length, element) local cBone = bone.private:fetchInstance(element); if not cBone then return false end; return cBone:destroy() end
 function syncer.public.syncBoneRefreshment(length, element, ...) local cBone = bone.private:fetchInstance(element); if not cBone then return false end; return cBone:refresh(table.unpack(table.pack(...), length or 1)) end
-function syncer.public.syncClearBoneAttachment(length, ...) return bone.public:clearElementBuffer(...) end
+function syncer.public.syncClearBoneAttachment(length, ...) return bone.public.clearElementBuffer(...) end
 if localPlayer then
     network:create("Assetify:Bone:onAttachment"):on(function(...) syncer.public.syncBoneAttachment(4, ...) end)
     network:create("Assetify:Bone:onDetachment"):on(function(...) syncer.public.syncBoneDetachment(_, ...) end)
@@ -274,5 +274,5 @@ else
 end
 network:fetch("Assetify:onElementDestroy"):on(function(source)
     if not syncer.public.isLibraryBooted or not source then return false end
-    bone.public:clearElementBuffer(source)
+    bone.public.clearElementBuffer(source)
 end)

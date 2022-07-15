@@ -98,7 +98,7 @@ if localPlayer then
             return not imports.isElement(element)
         end, function()
             if clumpMaps then
-                shader:clearElementBuffer(element, "clump")
+                shader.clearElementBuffer(element, "clump")
                 local cAsset = manager:getAssetData(assetType, assetName, syncer.public.librarySerial)
                 if cAsset and cAsset.manifestData.shaderMaps and cAsset.manifestData.shaderMaps.clump then
                     for i, j in imports.pairs(clumpMaps) do
@@ -232,11 +232,11 @@ if localPlayer then
     network:create("Assetify:Syncer:onSyncElementModel"):on(function(...) syncer.public.syncElementModel(6, ...) end)
     network:fetch("Assetify:onElementDestroy"):on(function(source)
         if not syncer.public.isLibraryBooted or not source then return false end
-        shader:clearElementBuffer(source)
+        shader.clearElementBuffer(source)
         syncer.public.syncedEntityDatas[source] = nil
         for i, j in imports.pairs(light) do
             if j and (imports.type(j) == "table") and j.clearElementBuffer then
-                j:clearElementBuffer(source)
+                j.clearElementBuffer(source)
             end
         end
     end)
