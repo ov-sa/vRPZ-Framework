@@ -144,6 +144,7 @@ if localPlayer then
                     end):resume({executions = settings.downloader.buildRate, frames = 1})
                 else
                     syncer.private.scheduledAssets = nil
+                    syncer.public.libraryBandwidth.isDownloaded = true
                     syncer.public.libraryBandwidth.status = nil
                     network:emit("Assetify:onLoadClient", true, false, localPlayer)
                     thread:create(function(self)
