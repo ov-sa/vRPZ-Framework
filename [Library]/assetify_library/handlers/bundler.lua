@@ -183,14 +183,14 @@ bundler.rw["core"] = {
                 return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getDownloadProgress", ...)
             end
         
-            assetify.__core.getAssetID = function(...)
-                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getAssetID", ...)
-            end
-        
             assetify.__core.isAssetLoaded = function(...)
                 return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isAssetLoaded", ...)
             end
         
+            assetify.__core.getAssetID = function(...)
+                return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getAssetID", ...)
+            end
+
             assetify.__core.loadAsset = function(...)
                 return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "loadAsset", ...)
             end
