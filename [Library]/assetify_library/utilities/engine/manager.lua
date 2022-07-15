@@ -150,11 +150,11 @@ if localPlayer then
             local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
             cBandwidth = cPointer.bandwidthData.total
             cDownloaded = (cPointer.bandwidthData.isDownloaded and cBandwidth) or (cPointer.bandwidthData.status and cPointer.bandwidthData.status.total) or 0
-            cETA = (cPointer.bandwidthData.status and ((cPointer.bandwidthData.status.eta/math.max(1, cPointer.bandwidthData.status.eta_count))*0.001)) or false
+            cETA = (not cPointer.bandwidthData.isDownloaded and cPointer.bandwidthData.status and ((cPointer.bandwidthData.status.eta/math.max(1, cPointer.bandwidthData.status.eta_count))*0.001)) or false
         else
             cBandwidth = syncer.libraryBandwidth.total
-            cDownloaded = (syncer.libraryBandwidth.status and syncer.libraryBandwidth.status.total) or cBandwidth
-            cETA = (syncer.libraryBandwidth.status and ((syncer.libraryBandwidth.status.eta/math.max(1, syncer.libraryBandwidth.status.eta_count))*0.001)) or false
+            cDownloaded = (syncer.isLibraryLoaded and cBandwidth) or (syncer.libraryBandwidth.status and syncer.libraryBandwidth.status.total) or 0
+            cETA = (not syncer.isLibraryLoaded and syncer.libraryBandwidth.status and ((syncer.libraryBandwidth.status.eta/math.max(1, syncer.libraryBandwidth.status.eta_count))*0.001)) or false
         end
         return cDownloaded, cBandwidth, (cDownloaded/math.max(1, cBandwidth))*100, cETA
     end

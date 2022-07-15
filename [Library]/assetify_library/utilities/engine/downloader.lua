@@ -80,11 +80,11 @@ if localPlayer then
                     fetchFiles[i] = true
                 else
                     syncer.private.scheduledAssets[assetType][assetName].bandwidthData = syncer.private.scheduledAssets[assetType][assetName].bandwidthData + settings.assetPacks[assetType].rwDatas[assetName].bandwidthData.file[i]
-                    syncer.public.__libraryBandwidth = (syncer.public.__libraryBandwidth or 0) + settings.assetPacks[assetType].rwDatas[assetName].bandwidthData.file[i]
                 end
                 fileData = nil
                 thread:pause()
             end
+            cPointer.bandwidthData.status = cPointer.bandwidthData.status or {total = 0, eta = 0, eta_count = 0, file = {}}
             network:emit("Assetify:Downloader:onSyncHash", true, true, localPlayer, assetType, assetName, fetchFiles)
             imports.collectgarbage()
         end):resume({executions = settings.downloader.buildRate, frames = 1})
@@ -112,7 +112,6 @@ if localPlayer then
     network:create("Assetify:Downloader:onSyncContent"):on(function(assetType, assetName, contentPath, ...)
         if assetType and assetName then
             syncer.private.scheduledAssets[assetType][assetName].bandwidthData = syncer.private.scheduledAssets[assetType][assetName].bandwidthData + settings.assetPacks[assetType].rwDatas[assetName].bandwidthData.file[contentPath]
-            syncer.public.__libraryBandwidth = (syncer.public.__libraryBandwidth or 0) + settings.assetPacks[assetType].rwDatas[assetName].bandwidthData.file[contentPath]
         end
         file:write(contentPath, ...)
         imports.collectgarbage()
