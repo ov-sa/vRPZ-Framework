@@ -115,13 +115,19 @@ if localPlayer then
 else
     syncer.private.libraryResources = {
         updateTags = {"file", "script"},
-        skipUpdatePaths = {
-            ["settings/shared.lua"] = true,
-            ["settings/server.lua"] = true
+        {
+            resourceName = syncer.public.libraryName,
+            resourceBackup = {
+                ["settings/shared.lua"] = true,
+                ["settings/server.lua"] = true
+            }
         },
-        {resourceName = syncer.public.libraryName},
         --TODO: Integrate Later
-        --{resourceName = "assetify_mapper"}
+        --[[
+        {
+            resourceName = "assetify_mapper"
+        }
+        ]]
     }
     for i = 1, #syncer.private.libraryResources, 1 do
         local j = syncer.private.libraryResources[i]
@@ -187,7 +193,7 @@ else
                     for i = 1, #syncer.private.libraryResources.updateTags, 1 do
                         for j in string.gmatch(response, "<".. syncer.private.libraryResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
                             if #string.gsub(j, "%s", "") > 0 then
-                                if not syncer.private.libraryResources.skipUpdatePaths[j] then
+                                if not isBackwardsCompatible or not resourceREF.resourceBackup or not resourceREF.resourceBackup[j] then
                                     syncer.private:updateLibrary(resourceREF, isBackwardsCompatible, self, {syncer.private.libraryVersionSource..(resourceREF.resourceName).."/"..j, resourceREF.resourcePointer..j})
                                     self:pause()
                                 end
@@ -199,14 +205,15 @@ else
                 end):resume()
             end)
         else
+            local isBackupToBeCreated = (resourceREF.resourceBackup and resourceREF.resourceBackup[(responsePointer[2])] and true) or false
             if responsePointer[3] then
-                if not isBackwardsCompatible then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
+                if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
                 file:write(responsePointer[2], responsePointer[3])
                 resourceThread:resume()
             else
                 imports.fetchRemote(responsePointer[1], function(response, status)
                     if not response or not status or (status ~= 0) then syncer.private:updateLibrary(resourceREF, isBackwardsCompatible, _, _, false); return resourceThread:destroy() end
-                    if not isBackwardsCompatible then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
+                    if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
                     file:write(responsePointer[2], response)
                     resourceThread:resume()
                 end)
