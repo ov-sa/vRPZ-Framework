@@ -272,7 +272,6 @@ function network.public:emitCallback(cThread, ...)
         networkName = false,
         execSerial = network.private.serializeExec(cExec)
     }
-    iprint(payload)
     if self == network.public then
         payload.networkName, payload.isRemote = network.private.fetchArg(_, cArgs), network.private.fetchArg(_, cArgs)
         if payload.isRemote then
