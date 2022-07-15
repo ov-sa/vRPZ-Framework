@@ -44,22 +44,29 @@ if localPlayer then
         }
     end)
 
-    network:create("Assetify:Downloader:onSyncProgress"):on(function(assetType, assetName, file, status)
-        local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
-        if cPointer.bandwidthData.isDownloaded then return false end
-        cPointer.bandwidthData.status = cPointer.bandwidthData.status or {total = 0, eta = 0, eta_count = 0, file = {}}
-        cPointer.bandwidthData.status.file[file] = cPointer.bandwidthData.status.file[file] or {}
-        local currentETA, currentSize = status.tickEnd, status.percentComplete*0.01*cPointer.bandwidthData.file[file]
-        local prevETA, prevSize = cPointer.bandwidthData.status.file[file].eta or 0, cPointer.bandwidthData.status.file[file].size or 0
-        local prevTotalETA, prevTotalSize = cPointer.bandwidthData.status.eta or 0, cPointer.bandwidthData.status.total or 0
-        cPointer.bandwidthData.status.eta = cPointer.bandwidthData.status.eta - prevETA + currentETA
-        cPointer.bandwidthData.status.eta_count = cPointer.bandwidthData.status.eta_count + ((not cPointer.bandwidthData.status.file[file].eta and 1) or 0)
-        cPointer.bandwidthData.status.total = cPointer.bandwidthData.status.total - prevSize + currentSize
-        cPointer.bandwidthData.status.file[file].eta, cPointer.bandwidthData.status.file[file].size = currentETA, currentSize
-        syncer.public.libraryBandwidth.status.eta = syncer.public.libraryBandwidth.status.eta - prevTotalETA + cPointer.bandwidthData.status.eta
-        syncer.public.libraryBandwidth.status.eta_count = syncer.public.libraryBandwidth.status.eta_count + ((not cPointer.bandwidthData.status.isLibraryETACounted and 1) or 0)
-        syncer.public.libraryBandwidth.status.total = syncer.public.libraryBandwidth.status.total - prevTotalSize + cPointer.bandwidthData.status.total
-        cPointer.bandwidthData.status.isLibraryETACounted = true
+    testAsset = false
+    network:create("Assetify:Downloader:onSyncProgress"):on(function(status)
+        for assetType, i in imports.pairs(status) do
+            for assetName, j in imports.pairs(i) do
+                local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
+                if cPointer.bandwidthData.isDownloaded then return false end
+                cPointer.bandwidthData.status = cPointer.bandwidthData.status or {total = 0, eta = 0, eta_count = 0, file = {}}
+                for file, status in imports.pairs(j) do
+                    cPointer.bandwidthData.status.file[file] = cPointer.bandwidthData.status.file[file] or {}
+                    local currentETA, currentSize = status.tickEnd, status.percentComplete*0.01*cPointer.bandwidthData.file[file]
+                    local prevETA, prevSize = cPointer.bandwidthData.status.file[file].eta or 0, cPointer.bandwidthData.status.file[file].size or 0
+                    local prevTotalETA, prevTotalSize = cPointer.bandwidthData.status.eta or 0, cPointer.bandwidthData.status.total or 0
+                    cPointer.bandwidthData.status.eta = cPointer.bandwidthData.status.eta - prevETA + currentETA
+                    cPointer.bandwidthData.status.eta_count = cPointer.bandwidthData.status.eta_count + ((not cPointer.bandwidthData.status.file[file].eta and 1) or 0)
+                    cPointer.bandwidthData.status.total = cPointer.bandwidthData.status.total - prevSize + currentSize
+                    cPointer.bandwidthData.status.file[file].eta, cPointer.bandwidthData.status.file[file].size = currentETA, currentSize
+                    syncer.public.libraryBandwidth.status.eta = syncer.public.libraryBandwidth.status.eta - prevTotalETA + cPointer.bandwidthData.status.eta
+                    syncer.public.libraryBandwidth.status.eta_count = syncer.public.libraryBandwidth.status.eta_count + ((not cPointer.bandwidthData.status.isLibraryETACounted and 1) or 0)
+                    syncer.public.libraryBandwidth.status.total = syncer.public.libraryBandwidth.status.total - prevTotalSize + cPointer.bandwidthData.status.total
+                    cPointer.bandwidthData.status.isLibraryETACounted = true
+                end
+            end
+        end
     end)
 
     network:create("Assetify:Downloader:onSyncHash"):on(function(assetType, assetName, hashes)
@@ -115,6 +122,9 @@ if localPlayer then
         local isPackVoid = true
         local cPointer = settings.assetPacks[assetType].rwDatas[assetName]
         cPointer.bandwidthData.isDownloaded = true
+        if testAsset == assetName then
+            print("COMPLETED DOWNLOAD...")
+        end
         if cPointer.bandwidthData.status and cPointer.bandwidthData.status.isLibraryETACounted then
             syncer.public.libraryBandwidth.status.eta = syncer.public.libraryBandwidth.status.eta - cPointer.bandwidthData.status.eta
             syncer.public.libraryBandwidth.status.eta_count = syncer.public.libraryBandwidth.status.eta_count - 1
@@ -206,7 +216,7 @@ else
                 for i, j in imports.pairs(assetDatas.hashes) do
                     syncer.private:syncContent(player, assetDatas.type, assetDatas.name, i, cAsset.unSynced.fileData[i])
                     local cQueue = imports.getLatentEventHandles(player)
-                    table.insert(syncer.public.libraryClients.loading[player].cQueue, {assetType = assetDatas.type, assetName = assetDatas.name, file = i, handler = cQueue[#cQueue]})
+                    syncer.public.libraryClients.loading[player].cQueue[(cQueue[#cQueue])] = {assetType = assetDatas.type, assetName = assetDatas.name, file = i}
                     thread:pause()
                 end
                 syncer.private:syncState(player, assetDatas.type, assetDatas.name)
