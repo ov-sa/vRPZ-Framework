@@ -192,6 +192,7 @@ else
                         local j = self.cQueue[i]
                         local queueStatus = imports.getLatentEventStatus(player, j.handler)
                         if queueStatus then network:emit("Assetify:Downloader:onSyncProgress", true, false, player, j.assetType, j.assetName, j.file, queueStatus) end
+                        self:sleep(1)
                     end
                     return true
                 end
