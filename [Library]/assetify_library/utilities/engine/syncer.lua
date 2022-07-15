@@ -260,7 +260,6 @@ else
             __self:resume()
         end):resume({executions = settings.downloader.syncRate, frames = 1})
         __self:pause()
-        return true
     end, {isAsync = true})
     network:create("Assetify:Syncer:onSyncPostPool"):on(function(self, source)
         self:resume({executions = settings.downloader.syncRate, frames = 1})
