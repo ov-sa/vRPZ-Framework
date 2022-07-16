@@ -249,28 +249,30 @@ end
 network:fetch("Assetify:onLoad"):on(function()
     streamer.public:update(imports.getElementDimension(localPlayer))
     thread:createHeartbeat(function()
-        if streamer.private.cache.isCameraTranslated then return false end
-        local velX, velY, velZ = imports.getElementVelocity(streamer.private.cache.clientCamera)
-        streamer.private.cache.isCameraTranslated = ((velX ~= 0) and true) or ((velY ~= 0) and true) or ((velZ ~= 0) and true) or false
+        if not streamer.private.cache.isCameraTranslated then
+            local velX, velY, velZ = imports.getElementVelocity(streamer.private.cache.clientCamera)
+            streamer.private.cache.isCameraTranslated = ((velX ~= 0) and true) or ((velY ~= 0) and true) or ((velZ ~= 0) and true) or false
+        end
         return true
     end, function() end, settings.streamer.cameraSyncRate)
     streamer.private.cache.clientThread = thread:createHeartbeat(function()
         print("executed...")
-        if not streamer.private.cache.isCameraTranslated then return false end
-        streamer.private.cache.cameraLocation = streamer.private.cache.cameraLocation or {}
-        streamer.private.cache.cameraLocation.x, streamer.private.cache.cameraLocation.y, streamer.private.cache.cameraLocation.z = imports.getElementPosition(streamer.private.cache.clientCamera)
-        local clientDimension, clientInterior = streamer.private.cache.clientWorld.dimension, streamer.private.cache.clientWorld.interior
-        if streamer.private.buffer[clientDimension] and streamer.private.buffer[clientDimension][clientInterior] then
-            for i, j in imports.pairs(streamer.private.buffer[clientDimension][clientInterior]) do
-                streamer.private.onEntityStream(j)
+        if streamer.private.cache.isCameraTranslated then
+            streamer.private.cache.cameraLocation = streamer.private.cache.cameraLocation or {}
+            streamer.private.cache.cameraLocation.x, streamer.private.cache.cameraLocation.y, streamer.private.cache.cameraLocation.z = imports.getElementPosition(streamer.private.cache.clientCamera)
+            local clientDimension, clientInterior = streamer.private.cache.clientWorld.dimension, streamer.private.cache.clientWorld.interior
+            if streamer.private.buffer[clientDimension] and streamer.private.buffer[clientDimension][clientInterior] then
+                for i, j in imports.pairs(streamer.private.buffer[clientDimension][clientInterior]) do
+                    streamer.private.onEntityStream(j)
+                end
             end
-        end
-        if streamer.private.buffer[-1] and streamer.private.buffer[-1][clientInterior] then
-            for i, j in imports.pairs(streamer.private.buffer[-1][clientInterior]) do
-                streamer.private.onEntityStream(j)
+            if streamer.private.buffer[-1] and streamer.private.buffer[-1][clientInterior] then
+                for i, j in imports.pairs(streamer.private.buffer[-1][clientInterior]) do
+                    streamer.private.onEntityStream(j)
+                end
             end
+            streamer.private.cache.isCameraTranslated = false
         end
-        streamer.private.cache.isCameraTranslated = false
         return true
     end, function() end, settings.streamer.syncRate)
 end)
