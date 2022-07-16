@@ -45,6 +45,7 @@ streamer.private.allocator = {
         ["light"] = {desyncOccclusionsOnPause = true}
     }
 }
+streamer.private.ref = {}
 streamer.private.buffer = {}
 streamer.private.cache = {
     clientCamera = getCamera()
@@ -79,6 +80,10 @@ function streamer.public:unload()
     if not streamer.public:isInstance(self) then return false end
     streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)][self] = nil
     self:pause()
+    for i = 1, #self.occlusions do
+        local j = self.occlusions[i]
+        streamer.private.ref[j][self] = nil
+    end
     self:destroyInstance()
     return true
 end
@@ -94,7 +99,10 @@ function streamer.public:resume()
     end
     if streamer.private.allocator.validStreams[(self.streamType)] and streamer.private.allocator.validStreams[(self.streamType)].desyncOccclusionsOnPause then
         for i = 1, #self.occlusions do
-            imports.setElementDimension(self.occlusions[i], self.dimension)
+            local j = self.occlusions[i]
+            streamer.private.ref[j] = streamer.private.ref[j] or {}
+            streamer.private.ref[j][self] = true
+            imports.setElementDimension(j, self.dimension)
         end
     end
     self.isResumed = true
@@ -120,7 +128,8 @@ function streamer.public:pause()
     end
     if streamer.private.allocator.validStreams[(self.streamType)] and streamer.private.allocator.validStreams[(self.streamType)].desyncOccclusionsOnPause then
         for i = 1, #self.occlusions do
-            imports.setElementDimension(self.occlusions[i], settings.streamer.unsyncDimension)
+            local j = self.occlusions[i]
+            imports.setElementDimension(j, settings.streamer.unsyncDimension)
         end
     end
     return true
