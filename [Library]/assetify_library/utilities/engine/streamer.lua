@@ -80,10 +80,6 @@ function streamer.public:unload()
     if not streamer.public:isInstance(self) then return false end
     streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)][self] = nil
     self:pause()
-    for i = 1, #self.occlusions do
-        local j = self.occlusions[i]
-        streamer.private.ref[j][self] = nil
-    end
     self:destroyInstance()
     return true
 end
@@ -129,6 +125,7 @@ function streamer.public:pause()
     if streamer.private.allocator.validStreams[(self.streamType)] and streamer.private.allocator.validStreams[(self.streamType)].desyncOccclusionsOnPause then
         for i = 1, #self.occlusions do
             local j = self.occlusions[i]
+            streamer.private.ref[j][self] = nil
             imports.setElementDimension(j, settings.streamer.unsyncDimension)
         end
     end
