@@ -260,7 +260,6 @@ network:fetch("Assetify:onLoad"):on(function()
         return true
     end, function() end, settings.streamer.cameraSyncRate)
     streamer.private.cache.clientThread = thread:createHeartbeat(function()
-        print("executed...")
         if streamer.private.cache.isCameraTranslated then
             streamer.private.cache.cameraLocation = streamer.private.cache.cameraLocation or {}
             streamer.private.cache.cameraLocation.x, streamer.private.cache.cameraLocation.y, streamer.private.cache.cameraLocation.z = imports.getElementPosition(streamer.private.cache.clientCamera)
