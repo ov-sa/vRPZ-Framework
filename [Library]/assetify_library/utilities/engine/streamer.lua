@@ -141,10 +141,12 @@ function streamer.public:update(clientDimension, clientInterior)
         imports.setElementInterior(streamer.public.waterBuffer, currentInterior)
     end
     if streamer.private.buffer[clientDimension] and streamer.private.buffer[clientDimension][clientInterior] then
-        for i, j in imports.pairs(streamer.private.buffer[clientDimension][clientInterior].streamed) do
-            if j then
-                i.isStreamed = nil
-                imports.setElementDimension(i.streamer, settings.streamer.unsyncDimension)
+        for i, j in imports.pairs(streamer.private.buffer[clientDimension][clientInterior]) do
+            for k, v in imports.pairs(j) do
+                if k then
+                    k.isStreamed = nil
+                    imports.setElementDimension(k.streamer, settings.streamer.unsyncDimension)
+                end
             end
         end
     end
