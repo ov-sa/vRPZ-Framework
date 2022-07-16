@@ -248,12 +248,14 @@ end
 
 network:fetch("Assetify:onLoad"):on(function()
     streamer.public:update(imports.getElementDimension(localPlayer))
-    timer:create(function()
+    thread:createHeartbeat(function()
         if streamer.private.cache.isCameraTranslated then return false end
         local velX, velY, velZ = imports.getElementVelocity(streamer.private.cache.clientCamera)
         streamer.private.cache.isCameraTranslated = ((velX ~= 0) and true) or ((velY ~= 0) and true) or ((velZ ~= 0) and true) or false
-    end, settings.streamer.cameraSyncRate, 0)
-    timer:create(function()
+        return true
+    end, function() end, settings.streamer.cameraSyncRate)
+    streamer.private.cache.clientThread = thread:createHeartbeat(function()
+        print("executed...")
         if not streamer.private.cache.isCameraTranslated then return false end
         streamer.private.cache.cameraLocation = streamer.private.cache.cameraLocation or {}
         streamer.private.cache.cameraLocation.x, streamer.private.cache.cameraLocation.y, streamer.private.cache.cameraLocation.z = imports.getElementPosition(streamer.private.cache.clientCamera)
@@ -269,5 +271,6 @@ network:fetch("Assetify:onLoad"):on(function()
             end
         end
         streamer.private.cache.isCameraTranslated = false
-    end, settings.streamer.syncRate, 0)
+        return true
+    end, function() end, settings.streamer.syncRate)
 end)
