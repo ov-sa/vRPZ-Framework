@@ -93,11 +93,11 @@ function streamer.public:resume()
         imports.setElementDimension(self.streamer, self.dimension)
         imports.setElementInterior(self.streamer, self.interior)
     end
-    if streamer.private.allocator.validStreams[(self.streamType)] and streamer.private.allocator.validStreams[(self.streamType)].desyncOccclusionsOnPause then
-        for i = 1, #self.occlusions do
-            local j = self.occlusions[i]
-            streamer.private.ref[j] = streamer.private.ref[j] or {}
-            streamer.private.ref[j][self] = true
+    for i = 1, #self.occlusions do
+        local j = self.occlusions[i]
+        streamer.private.ref[j] = streamer.private.ref[j] or {}
+        streamer.private.ref[j][self] = true
+        if streamer.private.allocator.validStreams[(self.streamType)] and streamer.private.allocator.validStreams[(self.streamType)].desyncOccclusionsOnPause then
             imports.setElementDimension(j, self.dimension)
         end
     end
@@ -105,8 +105,8 @@ function streamer.public:resume()
     imports.setElementCollisionsEnabled(self.streamer, self.isStreamerCollidable)
     streamer.private.buffer[(self.dimension)] = streamer.private.buffer[(self.dimension)] or {}
     streamer.private.buffer[(self.dimension)][(self.interior)] = streamer.private.buffer[(self.dimension)][(self.interior)] or {}
-    streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)] = streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)] or {}
-    streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)][self] = {}
+    streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)] = streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)] or {streamed = {}, nonstreamed = {}}
+    streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)].streamed[self] = true
     self:allocate()
     return true
 end
@@ -122,10 +122,10 @@ function streamer.public:pause()
         end
         imports.setElementDimension(self.streamer, settings.streamer.unsyncDimension)
     end
-    if streamer.private.allocator.validStreams[(self.streamType)] and streamer.private.allocator.validStreams[(self.streamType)].desyncOccclusionsOnPause then
-        for i = 1, #self.occlusions do
-            local j = self.occlusions[i]
-            streamer.private.ref[j][self] = nil
+    for i = 1, #self.occlusions do
+        local j = self.occlusions[i]
+        streamer.private.ref[j][self] = nil
+        if streamer.private.allocator.validStreams[(self.streamType)] and streamer.private.allocator.validStreams[(self.streamType)].desyncOccclusionsOnPause then
             imports.setElementDimension(j, settings.streamer.unsyncDimension)
         end
     end
@@ -141,9 +141,9 @@ function streamer.public:update(clientDimension, clientInterior)
         imports.setElementInterior(streamer.public.waterBuffer, currentInterior)
     end
     if streamer.private.buffer[clientDimension] and streamer.private.buffer[clientDimension][clientInterior] then
-        for i, j in imports.pairs(streamer.private.buffer[clientDimension][clientInterior]) do
+        for i, j in imports.pairs(streamer.private.buffer[clientDimension][clientInterior].streamed) do
             if j then
-                j.isStreamed = nil
+                i.isStreamed = nil
                 imports.setElementDimension(i.streamer, settings.streamer.unsyncDimension)
             end
         end
@@ -153,8 +153,6 @@ function streamer.public:update(clientDimension, clientInterior)
     streamer.private.cache.clientWorld.dimension, streamer.private.cache.clientWorld.interior = currentDimension, currentInterior
     return true
 end
-imports.addEventHandler("onClientElementDimensionChange", localPlayer, function(dimension) streamer.public:update(dimension) end)
-imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(interior) streamer.public:update(_, interior) end)
 
 function streamer.public:allocate()
     if not streamer.public:isInstance(self) or not self.isResumed or self.isAllocated then return false end
@@ -207,10 +205,10 @@ function streamer.public:deallocate()
     return true
 end
 
-streamer.private.onEntityStream = function(streamBuffer)
+streamer.private.onEntityStream = function(streamBuffer, isCheckNonStreamBuffer)
     if not streamBuffer then return false end
-    for i, j in imports.pairs(streamBuffer) do
-        local isStreamVoid = true
+    local __streamBuffer = (isCheckNonStreamBuffer and streamBuffer.streamed) or streamBuffer.nonstreamed
+    for i, j in imports.pairs(__streamBuffer) do
         if j then
             local isStreamed = false
             for k = 1, #i.occlusions, 1 do
@@ -220,7 +218,7 @@ streamer.private.onEntityStream = function(streamBuffer)
                     break
                 end
             end
-            local isStreamAltered = isStreamed ~= j.isStreamed
+            local isStreamAltered = isStreamed ~= i.isStreamed
             if isStreamAltered then imports.setElementDimension(i.streamer, (isStreamed and streamer.private.cache.clientWorld.dimension) or settings.streamer.unsyncDimension) end
             if streamer.private.allocator.validStreams[(i.streamType)] and streamer.private.allocator.validStreams[(i.streamType)].dynamicStreamAllocation then
                 if not isStreamed then
@@ -237,10 +235,10 @@ streamer.private.onEntityStream = function(streamBuffer)
                     end
                 end
             end
-            j.isStreamed = isStreamed
-            if isStreamed then isStreamVoid = false end
+            i.isStreamed = isStreamed
         end
-        if isStreamVoid then streamBuffer[i] = nil end
+        --TODO: MAKE STREAMED/NONSTREAMED ALLOCATORS FOR THIS
+        --if isStreamVoid then streamBuffer[i] = nil end
         if settings.streamer.syncCoolDownRate then streamer.private.cache.clientThread:sleep(settings.streamer.syncCoolDownRate) end
     end
     return true
@@ -250,7 +248,7 @@ streamer.private.onBoneStream = function(streamBuffer)
     if not streamBuffer then return false end
     bone.cache.streamTick = imports.getTickCount()
     for i, j in imports.pairs(streamBuffer) do
-        if j and j.isStreamed then
+        if j and i.isStreamed then
             bone.update(bone.buffer.element[(i.streamer)])
         end
     end
@@ -276,18 +274,19 @@ network:fetch("Assetify:onLoad"):on(function()
         end
         return true
     end, function() end, settings.streamer.cameraRate)
+
     streamer.private.cache.clientThread = thread:createHeartbeat(function()
         if streamer.private.cache.isCameraTranslated then
             streamer.private.cache.cameraLocation = streamer.private.cache.cameraLocation or {}
             streamer.private.cache.cameraLocation.x, streamer.private.cache.cameraLocation.y, streamer.private.cache.cameraLocation.z = imports.getElementPosition(streamer.private.cache.clientCamera)
             local clientDimension, clientInterior = streamer.private.cache.clientWorld.dimension, streamer.private.cache.clientWorld.interior
             if streamer.private.buffer[clientDimension] and streamer.private.buffer[clientDimension][clientInterior] then
-                for i, j in imports.pairs(streamer.private.buffer[clientDimension][clientInterior]) do
+                for i, j in imports.pairs(streamer.private.buffer[clientDimension][clientInterior].streamed) do
                     streamer.private.onEntityStream(j)
                 end
             end
             if streamer.private.buffer[-1] and streamer.private.buffer[-1][clientInterior] then
-                for i, j in imports.pairs(streamer.private.buffer[-1][clientInterior]) do
+                for i, j in imports.pairs(streamer.private.buffer[-1][clientInterior].streamed) do
                     streamer.private.onEntityStream(j)
                 end
             end
@@ -296,3 +295,11 @@ network:fetch("Assetify:onLoad"):on(function()
         return true
     end, function() end, settings.streamer.syncRate)
 end)
+
+
+---------------------
+--[[ API Syncers ]]--
+---------------------
+
+imports.addEventHandler("onClientElementDimensionChange", localPlayer, function(dimension) streamer.public:update(dimension) end)
+imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(interior) streamer.public:update(_, interior) end)
