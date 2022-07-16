@@ -232,7 +232,7 @@ streamer.private.onEntityStream = function(streamBuffer)
             end
             j.isStreamed = isStreamed
         end
-        if settings.streamer.syncDelayRate then streamer.private.cache.clientThread:sleep(settings.streamer.syncDelayRate) end
+        if settings.streamer.syncCoolDownRate then streamer.private.cache.clientThread:sleep(settings.streamer.syncCoolDownRate) end
     end
     return true
 end
