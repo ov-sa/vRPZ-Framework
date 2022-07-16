@@ -209,7 +209,7 @@ end
 
 streamer.private.onEntityStream = function(streamBuffer, isCheckNonStreamBuffer)
     if not streamBuffer then return false end
-    local __streamBuffer = (isCheckNonStreamBuffer and streamBuffer.streamed) or streamBuffer.nonstreamed
+    local __streamBuffer = (isCheckNonStreamBuffer and streamBuffer.nonstreamed) or streamBuffer.streamed
     for i, j in imports.pairs(__streamBuffer) do
         if j then
             local isStreamed = false
@@ -283,13 +283,13 @@ network:fetch("Assetify:onLoad"):on(function()
             streamer.private.cache.cameraLocation.x, streamer.private.cache.cameraLocation.y, streamer.private.cache.cameraLocation.z = imports.getElementPosition(streamer.private.cache.clientCamera)
             local clientDimension, clientInterior = streamer.private.cache.clientWorld.dimension, streamer.private.cache.clientWorld.interior
             if streamer.private.buffer[clientDimension] and streamer.private.buffer[clientDimension][clientInterior] then
-                for i, j in imports.pairs(streamer.private.buffer[clientDimension][clientInterior].streamed) do
-                    streamer.private.onEntityStream(j)
+                for i, j in imports.pairs(streamer.private.buffer[clientDimension][clientInterior]) do
+                    streamer.private.onEntityStream(j, false)
                 end
             end
             if streamer.private.buffer[-1] and streamer.private.buffer[-1][clientInterior] then
-                for i, j in imports.pairs(streamer.private.buffer[-1][clientInterior].streamed) do
-                    streamer.private.onEntityStream(j)
+                for i, j in imports.pairs(streamer.private.buffer[-1][clientInterior]) do
+                    streamer.private.onEntityStream(j, false)
                 end
             end
             streamer.private.cache.isCameraTranslated = false
