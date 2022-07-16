@@ -105,7 +105,7 @@ function streamer.public:resume()
     imports.setElementCollisionsEnabled(self.streamer, self.isStreamerCollidable)
     streamer.private.buffer[(self.dimension)] = streamer.private.buffer[(self.dimension)] or {}
     streamer.private.buffer[(self.dimension)][(self.interior)] = streamer.private.buffer[(self.dimension)][(self.interior)] or {}
-    streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)] = streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)] or {streamed = {}, nonstreamed = {}}
+    streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)] = streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)] or {streamed = {}, unstreamed = {}}
     streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)].streamed[self] = true
     self:allocate()
     return true
@@ -207,10 +207,9 @@ function streamer.public:deallocate()
     return true
 end
 
-streamer.private.onEntityStream = function(streamBuffer, isCheckNonStreamBuffer)
+streamer.private.onEntityStream = function(streamBuffer, useNonStreamed)
     if not streamBuffer then return false end
-    local __streamBuffer = (isCheckNonStreamBuffer and streamBuffer.nonstreamed) or streamBuffer.streamed
-    for i, j in imports.pairs(__streamBuffer) do
+    for i, j in imports.pairs((useNonStreamed and streamBuffer.unstreamed) or streamBuffer.streamed) do
         if j then
             local isStreamed = false
             for k = 1, #i.occlusions, 1 do
@@ -238,9 +237,12 @@ streamer.private.onEntityStream = function(streamBuffer, isCheckNonStreamBuffer)
                 end
             end
             i.isStreamed = isStreamed
+            if isStreamed then
+                if useNonStreamed then streamBuffer.streamed[i], streamBuffer.unstreamed[i] = true, nil end
+            else
+                if not useNonStreamed then streamBuffer.streamed[i], streamBuffer.unstreamed[i] = nil, true end
+            end
         end
-        --TODO: MAKE STREAMED/NONSTREAMED ALLOCATORS FOR THIS
-        --if isStreamVoid then streamBuffer[i] = nil end
         if settings.streamer.syncCoolDownRate then streamer.private.cache.clientThread:sleep(settings.streamer.syncCoolDownRate) end
     end
     return true
@@ -284,18 +286,33 @@ network:fetch("Assetify:onLoad"):on(function()
             local clientDimension, clientInterior = streamer.private.cache.clientWorld.dimension, streamer.private.cache.clientWorld.interior
             if streamer.private.buffer[clientDimension] and streamer.private.buffer[clientDimension][clientInterior] then
                 for i, j in imports.pairs(streamer.private.buffer[clientDimension][clientInterior]) do
-                    streamer.private.onEntityStream(j, false)
+                    streamer.private.onEntityStream(j, true)
                 end
             end
             if streamer.private.buffer[-1] and streamer.private.buffer[-1][clientInterior] then
                 for i, j in imports.pairs(streamer.private.buffer[-1][clientInterior]) do
-                    streamer.private.onEntityStream(j, false)
+                    streamer.private.onEntityStream(j, true)
                 end
             end
             streamer.private.cache.isCameraTranslated = false
         end
         return true
     end, function() end, settings.streamer.syncRate)
+
+    thread:createHeartbeat(function()
+        local clientDimension, clientInterior = streamer.private.cache.clientWorld.dimension, streamer.private.cache.clientWorld.interior
+        if streamer.private.buffer[clientDimension] and streamer.private.buffer[clientDimension][clientInterior] then
+            for i, j in imports.pairs(streamer.private.buffer[clientDimension][clientInterior]) do
+                streamer.private.onEntityStream(j)
+            end
+        end
+        if streamer.private.buffer[-1] and streamer.private.buffer[-1][clientInterior] then
+            for i, j in imports.pairs(streamer.private.buffer[-1][clientInterior]) do
+                streamer.private.onEntityStream(j)
+            end
+        end
+        return true
+    end, function() end, settings.streamer.syncRate*3)
 end)
 
 
