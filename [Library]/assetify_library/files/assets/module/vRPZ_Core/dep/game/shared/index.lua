@@ -72,6 +72,7 @@ CGame = {
     formatMS = function(milliseconds)
         milliseconds = imports.tonumber(milliseconds)
         if not milliseconds then return false end
+        milliseconds = imports.math.floor(milliseconds)
         local totalseconds = imports.math.floor(milliseconds/1000)
         local seconds = totalseconds%60
         local minutes = imports.math.floor(totalseconds/60)
