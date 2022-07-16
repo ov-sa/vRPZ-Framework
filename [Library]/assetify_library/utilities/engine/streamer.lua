@@ -210,6 +210,7 @@ end
 streamer.private.onEntityStream = function(streamBuffer)
     if not streamBuffer then return false end
     for i, j in imports.pairs(streamBuffer) do
+        local isStreamVoid = true
         if j then
             local isStreamed = false
             for k = 1, #i.occlusions, 1 do
@@ -237,7 +238,9 @@ streamer.private.onEntityStream = function(streamBuffer)
                 end
             end
             j.isStreamed = isStreamed
+            if isStreamed then isStreamVoid = false end
         end
+        if isStreamVoid then streamBuffer[i] = nil end
         if settings.streamer.syncCoolDownRate then streamer.private.cache.clientThread:sleep(settings.streamer.syncCoolDownRate) end
     end
     return true
