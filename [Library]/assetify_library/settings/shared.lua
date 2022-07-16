@@ -30,10 +30,10 @@ settings = {
     },
 
     streamer = {
-        syncRate = 125,
+        syncRate = 250,
         streamRate = 75,
         cameraRate = 75,
-        syncDelayRate = 1,
+        syncDelayRate = false,
         streamDelimiter = {8, 30, 5},
         unsyncDimension = 65535 
     },
