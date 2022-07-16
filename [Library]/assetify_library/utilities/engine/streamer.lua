@@ -232,6 +232,7 @@ streamer.private.onEntityStream = function(streamBuffer)
             end
             j.isStreamed = isStreamed
         end
+        if settings.streamer.syncDelayRate then streamer.private.cache.clientThread:sleep(settings.streamer.syncDelayRate) end
     end
     return true
 end
@@ -265,7 +266,7 @@ network:fetch("Assetify:onLoad"):on(function()
             streamer.private.cache.isCameraTranslated = ((velX ~= 0) and true) or ((velY ~= 0) and true) or ((velZ ~= 0) and true) or false
         end
         return true
-    end, function() end, settings.streamer.cameraSyncRate)
+    end, function() end, settings.streamer.cameraRate)
     streamer.private.cache.clientThread = thread:createHeartbeat(function()
         if streamer.private.cache.isCameraTranslated then
             streamer.private.cache.cameraLocation = streamer.private.cache.cameraLocation or {}
