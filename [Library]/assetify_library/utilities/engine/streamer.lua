@@ -22,6 +22,7 @@ local imports = {
     addEventHandler = addEventHandler,
     removeEventHandler = removeEventHandler,
     getTickCount = getTickCount,
+    getElementMatrix = getElementMatrix,
     isElementOnScreen = isElementOnScreen,
     getElementCollisionsEnabled = getElementCollisionsEnabled,
     setElementCollisionsEnabled = setElementCollisionsEnabled,
@@ -99,9 +100,16 @@ end
 
 function streamer.private.updateAttachments(parent)
     if not parent or not streamer.private.attached.parent[parent] then return false end
+    local cMatrix = math.matrix(table.unpack(imports.getElementMatrix(parent)))
     for i, j in imports.pairs(streamer.private.attached.parent[parent]) do
-        print("UPDATE: "..tostring(i))
+        if j and streamer.private.attached.element[i] then
+            local __cMatrix = cMatrix:transform(streamer.private.attached.element[i].rotation.matrix, streamer.private.attached.element[i].position.x, streamer.private.attached.element[i].position.y, streamer.private.attached.element[i].position.z)
+            imports.setElementMatrix(i, table.unpack(__cMatrix.rows))
+            __cMatrix:destroyInstance()
+            print("UPDATE: "..tostring(i))
+        end
     end
+    cMatrix:destroyInstance()
     return true
 end
 
