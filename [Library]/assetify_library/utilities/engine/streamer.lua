@@ -87,7 +87,7 @@ function streamer.public:resume()
     if not streamer.public:isInstance(self) or self.isResumed then return false end
     if self.streamer ~= self.occlusions[1] then
         if not streamer.private.allocator.validStreams[(self.streamType)] or not streamer.private.allocator.validStreams[(self.streamType)].skipAttachment then
-            streamer.public:attachElements(self.streamer, self.occlusions[1])
+            attacher:attachElements(self.streamer, self.occlusions[1])
         end
         imports.setElementDimension(self.streamer, self.dimension)
         imports.setElementInterior(self.streamer, self.interior)
@@ -117,7 +117,7 @@ function streamer.public:pause()
     streamer.private.buffer[(self.dimension)][(self.interior)][(self.streamType)][self] = nil
     if self.streamer ~= self.occlusions[1] then
         if not streamer.private.allocator.validStreams[(self.streamType)] or not streamer.private.allocator.validStreams[(self.streamType)].skipAttachment then
-            streamer.public:detachElements(self.streamer)
+            attacher:detachElements(self.streamer)
         end
         imports.setElementDimension(self.streamer, settings.streamer.unsyncDimension)
     end
