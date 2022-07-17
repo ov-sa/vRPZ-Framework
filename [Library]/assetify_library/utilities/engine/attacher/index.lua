@@ -49,20 +49,12 @@ function attacher.public:attachElements(element, parent, offX, offY, offZ, rotX,
 end
 
 function attacher.public:detachElements(element)
-    if not element or (not attacher.private.buffer.element[element] and not attacher.private.buffer.parent[element]) then return false end
-    if attacher.private.buffer.parent[element] then
-        for i, j in imports.pairs(attacher.private.buffer.parent[element]) do
-            attacher.public:detachElements(i)
-        end
+    if not element or not attacher.private.buffer.element[element] then return false end
+    if attacher.private.buffer.parent[(attacher.private.buffer.element[element].parent)] then
+        attacher.private.buffer.parent[(attacher.private.buffer.element[element].parent)][element] = nil
     end
-    if attacher.private.buffer.element[element] then
-        if attacher.private.buffer.parent[(attacher.private.buffer.element[element].parent)] then
-            attacher.private.buffer.parent[(attacher.private.buffer.element[element].parent)][element] = nil
-        end
-        attacher.private.buffer.element[element].rotation.matrix:destroyInstance()
-    end
+    attacher.private.buffer.element[element].rotation.matrix:destroyInstance()
     attacher.private.buffer.element[element] = nil
-    attacher.private.buffer.parent[element] = nil
     imports.collectgarbage()
     return true
 end
