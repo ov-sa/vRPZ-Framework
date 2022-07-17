@@ -44,7 +44,7 @@ end
 
 function manager.API.Library.getElementAssetInfo(element)
     if not syncer.syncedElements[element] then return false end
-    return syncer.syncedElements[element].type, syncer.syncedElements[element].name, syncer.syncedElements[element].clump, syncer.syncedElements[element].clumpMaps
+    return syncer.syncedElements[element].assetType, syncer.syncedElements[element].assetName, syncer.syncedElements[element].assetClump, syncer.syncedElements[element].clumpMaps
 end
 
 function manager.API.Library.setGlobalData(...)

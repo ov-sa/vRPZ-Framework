@@ -251,9 +251,9 @@ if localPlayer then
                                 cAsset.unSynced.assetCache[i] = {}
                                 asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache[i], {
                                     txd = (sceneIDEDatas and sceneIDEDatas[(j[2])] and assetPath.."txd/"..(sceneIDEDatas[(j[2])][1])..".txd") or assetPath..(asset.references.asset)..".txd",
-                                    dff = assetPath.."dff/"..j[2]..".dff",
-                                    lod = assetPath.."dff/lod/"..j[2]..".dff",
-                                    col = assetPath.."col/"..j[2]..".col"
+                                    dff = assetPath..(asset.references.dff).."/"..j[2]..".dff",
+                                    lod = assetPath..(asset.references.dff).."/"..(asset.references.lod).."/"..j[2]..".dff",
+                                    col = assetPath..(asset.references.col).."/"..j[2]..".col"
                                 })
                                 cAsset.unSynced.assetRef[(j[2])] = cAsset.unSynced.assetCache[i].cAsset
                             end

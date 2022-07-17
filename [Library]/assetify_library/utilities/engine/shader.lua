@@ -33,7 +33,7 @@ local shader = class:create("shader", {
     shaderPriority = 10000,
     shaderDistance = 0,
     validTypes = {
-        ["clump"] = true,
+        [(asset.references.clump)] = true,
         ["control"] = true
     },
     validChannels = {

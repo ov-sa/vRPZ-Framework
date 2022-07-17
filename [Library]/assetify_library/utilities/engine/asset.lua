@@ -44,6 +44,9 @@ local asset = class:create("asset", {
         asset = "asset",
         scene = "scene",
         clump = "clump",
+        lod = "lod",
+        dff = "dff",
+        col = "col",
         map = "map"
     },
     ranges = {
@@ -74,7 +77,7 @@ function asset.private:fetchMap(assetPath, shaderMaps)
             for k, v in imports.pairs(mapData) do
                 for m = 1, #v, 1 do
                     local n = v[m]
-                    if i == "clump" then
+                    if i == asset.public.references.clump then
                         n.clump = asset.private:validateMap(cPointer, n.clump, cMaps)
                         n.bump = asset.private:validateMap(cPointer, n.bump, cMaps)
                     elseif i == "control" then
@@ -421,9 +424,9 @@ else
                                         cAssetPack.rwDatas[assetName].synced.sceneIDE = (sceneIDEDatas and true) or false
                                         for k = 1, #sceneIPLDatas, 1 do
                                             local v = sceneIPLDatas[k]
-                                            asset.public:buildFile(assetPath.."dff/"..v[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
-                                            asset.public:buildFile(assetPath.."dff/lod/"..v[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
-                                            asset.public:buildFile(assetPath.."col/"..v[2]..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                            asset.public:buildFile(assetPath..(asset.public.references.dff).."/"..v[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
+                                            asset.public:buildFile(assetPath..(asset.public.references.dff).."/"..(asset.public.references.lod).."/"..v[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                            asset.public:buildFile(assetPath..(asset.public.references.col).."/"..v[2]..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                             if sceneIDEDatas and sceneIDEDatas[(v[2])] then
                                                 asset.public:buildFile(assetPath.."txd/"..(sceneIDEDatas[(v[2])][1])..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                             end
