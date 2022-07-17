@@ -76,7 +76,7 @@ function streamer.public:attachElements(element, parent, offX, offY, offZ, rotX,
     streamer.private.attached.element[element] = {
         parent = parent,
         position = {x = offX, y = offY, z = offZ},
-        rotation = {x = rotX, y = rotY, z = rotZ}
+        rotation = {x = rotX, y = rotY, z = rotZ, matrix = math.matrix:fromRotation(rotX, rotY, rotZ)}
     }
     return true
 end
