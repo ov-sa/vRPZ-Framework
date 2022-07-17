@@ -15,6 +15,7 @@
 local imports = {
     pairs = pairs,
     tonumber = tonumber,
+    collectgarbage = collectgarbage,
     getCamera = getCamera,
     isElement = isElement,
     addDebugHook = addDebugHook,
@@ -92,6 +93,7 @@ function streamer.public:detachElements(element)
     end
     streamer.private.attached.element[element] = nil
     streamer.private.attached.parent[element] = nil
+    imports.collectgarbage()
     return true
 end
 
@@ -344,5 +346,5 @@ imports.addDebugHook("postFunction", root, function(_, _, _, _, _, element)
 end, {"setElementMatrix", "setElementPosition", "setElementRotation"})
 network:fetch("Assetify:onElementDestroy"):on(function(source)
     if not syncer.public.isLibraryBooted or not source then return false end
-    streamer.public.detachElements(source)
+    streamer.public:detachElements(source)
 end)

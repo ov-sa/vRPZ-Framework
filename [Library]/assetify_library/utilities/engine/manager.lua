@@ -18,10 +18,10 @@ local imports = {
     tonumber = tonumber,
     tostring = tostring,
     loadstring = loadstring,
+    collectgarbage = collectgarbage,
     isElement = isElement,
     destroyElement = destroyElement,
-    addEventHandler = addEventHandler,
-    collectgarbage = collectgarbage
+    addEventHandler = addEventHandler
 }
 
 
