@@ -46,13 +46,13 @@
 
     <!-- Utilities: Engine -->
     <script src="utilities/engine/asset.lua" type="shared"/>
-    <script src="utilities/engine/dummy.lua" type="shared"/>
     <script src="utilities/engine/renderer.lua" type="shared"/>
+    <script src="utilities/engine/streamer.lua" type="client"/>
     <script src="utilities/engine/shader.lua" type="shared"/>
     <script src="utilities/engine/manager.lua" type="shared"/>
     <script src="utilities/engine/scene.lua" type="shared"/>
+    <script src="utilities/engine/dummy.lua" type="shared"/>
     <script src="utilities/engine/bone.lua" type="shared"/>
-    <script src="utilities/engine/streamer.lua" type="client"/>
     <script src="utilities/engine/downloader.lua" type="shared"/>
     <script src="utilities/engine/light.lua" type="client"/>
     <script src="utilities/engine/lights/planar.lua" type="client"/>
