@@ -14,8 +14,10 @@
 
 local imports = {
     pairs = pairs,
+    tonumber = tonumber,
     getCamera = getCamera,
     isElement = isElement,
+    addDebugHook = addDebugHook,
     addEventHandler = addEventHandler,
     removeEventHandler = removeEventHandler,
     attachElements = attachElements,
@@ -46,6 +48,7 @@ streamer.private.allocator = {
     }
 }
 streamer.private.ref = {}
+streamer.private.attached = {element = {}, parent = {}}
 streamer.private.buffer = {}
 streamer.private.cache = {
     clientCamera = getCamera()
@@ -63,6 +66,35 @@ end
 function streamer.public:destroy(...)
     if not streamer.public:isInstance(self) then return false end
     return self:unload(...)
+end
+
+function streamer.public:attachElements(element, parent, offX, offY, offZ, rotX, rotY, rotZ)
+    offX, offY, offZ, rotX, rotY, rotZ = imports.tonumber(offX) or 0, imports.tonumber(offY) or 0, imports.tonumber(offZ) or 0, imports.tonumber(rotX) or 0, imports.tonumber(rotY) or 0, imports.tonumber(rotZ) or 0
+    if not imports.isElement(element) or not imports.isElement(parent) then return false end
+    detachElements(element)
+    streamer.private.attached.parent[parent] = streamer.private.attached.parent[parent] or {}
+    streamer.private.attached.parent[parent][element] = true
+    streamer.private.attached.element[element] = {
+        parent = parent,
+        position = {x = offX, y = offY, z = offZ},
+        rotation = {x = rotX, y = rotY, z = rotZ}
+    }
+    return true
+end
+
+function streamer.public:detachElements(element)
+    if not element or not streamer.private.attached.element[element] then return false end
+    streamer.private.attached.parent[(streamer.private.attached.element[element].parent)] = nil
+    streamer.private.attached.element[element] = nil
+    return true
+end
+
+function streamer.private.updateAttachments(parent)
+    if not parent or not streamer.private.attached.parent[parent] then return false end
+    for i, j in imports.pairs(streamer.private.attached.parent[parent]) do
+        print("UPDATE: "..tostring(i))
+    end
+    return true
 end
 
 function streamer.public:load(streamerInstance, streamType, occlusionInstances, syncRate)
@@ -300,3 +332,7 @@ end)
 
 imports.addEventHandler("onClientElementDimensionChange", localPlayer, function(dimension) streamer.public:update(dimension) end)
 imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(interior) streamer.public:update(_, interior) end)
+imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(interior) streamer.public:update(_, interior) end)
+imports.addDebugHook("postFunction", root, function(_, _, _, _, _, element)
+    streamer.private.updateAttachments(element)
+end, {"setElementMatrix", "setElementPosition", "setElementRotation"})
