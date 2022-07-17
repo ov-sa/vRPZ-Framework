@@ -67,6 +67,25 @@ function attacher.public:detachElements(element)
     return true
 end
 
+function attacher.public:clearAttachments(element)
+    if not element or (not attacher.private.buffer.element[element] and not attacher.private.buffer.parent[element]) then return false end
+    if attacher.private.buffer.parent[element] then
+        for i, j in imports.pairs(attacher.private.buffer.parent[element]) do
+            attacher.public:detachElements(i)
+        end
+    end
+    if attacher.private.buffer.element[element] then
+        if attacher.private.buffer.parent[(attacher.private.buffer.element[element].parent)] then
+            attacher.private.buffer.parent[(attacher.private.buffer.element[element].parent)][element] = nil
+        end
+        attacher.private.buffer.element[element].rotation.matrix:destroyInstance()
+    end
+    attacher.private.buffer.element[element] = nil
+    attacher.private.buffer.parent[element] = nil
+    imports.collectgarbage()
+    return true
+end
+
 function attacher.private.updateAttachments(parent, element, parentMatrix)
     if not parent or not attacher.private.buffer.parent[parent] then return false end
     parentMatrix = parentMatrix or imports.getElementMatrix(parent)
@@ -122,5 +141,5 @@ imports.addDebugHook("postFunction", function(_, _, _, _, _, element)
 end, {"setElementMatrix", "setElementPosition", "setElementRotation"})
 network:fetch("Assetify:onElementDestroy"):on(function(source)
     if not syncer.isLibraryBooted or not source then return false end
-    attacher.public:detachElements(source)
+    attacher.public:clearAttachments(source)
 end)

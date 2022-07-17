@@ -67,8 +67,12 @@ function manager.API.Library.setAttachment(...)
     return attacher:attachElements(...)
 end
 
-function manager.API.Library.clearAttachment(...)
+function manager.API.Library.setDetachment(...)
     return attacher:detachElements(...)
+end
+
+function manager.API.Library.clearAttachment(...)
+    return attacher:clearAttachment(...)
 end
 
 function manager.API.Library.createAssetDummy(...)

@@ -27,6 +27,7 @@ manager:exportAPI("Library", {
         {name = "setEntityData", API = "setEntityData"},
         {name = "getEntityData", API = "getEntityData"},
         {name = "setAttachment", API = "setAttachment"},
+        {name = "setDetachment", API = "setDetachment"},
         {name = "clearAttachment", API = "clearAttachment"},
         {name = "createAssetDummy", API = "createAssetDummy"},
         {name = "setBoneAttachment", API = "setBoneAttachment"},

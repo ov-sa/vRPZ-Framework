@@ -90,6 +90,7 @@
     <export function="setEntityData" type="shared"/>
     <export function="getEntityData" type="shared"/>
     <export function="setAttachment" type="shared"/>
+    <export function="setDetachment" type="shared"/>
     <export function="clearAttachment" type="shared"/>
     <export function="createAssetDummy" type="shared"/>
     <export function="setBoneAttachment" type="shared"/>
