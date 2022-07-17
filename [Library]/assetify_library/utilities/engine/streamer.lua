@@ -15,15 +15,11 @@
 local imports = {
     pairs = pairs,
     tonumber = tonumber,
-    collectgarbage = collectgarbage,
     getCamera = getCamera,
     isElement = isElement,
-    addDebugHook = addDebugHook,
     addEventHandler = addEventHandler,
     removeEventHandler = removeEventHandler,
     getTickCount = getTickCount,
-    setElementMatrix = setElementMatrix,
-    getElementMatrix = getElementMatrix,
     isElementOnScreen = isElementOnScreen,
     getElementCollisionsEnabled = getElementCollisionsEnabled,
     setElementCollisionsEnabled = setElementCollisionsEnabled,
@@ -49,7 +45,6 @@ streamer.private.allocator = {
     }
 }
 streamer.private.ref = {}
-streamer.private.attached = {element = {}, parent = {}}
 streamer.private.buffer = {}
 streamer.private.cache = {
     clientCamera = getCamera()
@@ -67,85 +62,6 @@ end
 function streamer.public:destroy(...)
     if not streamer.public:isInstance(self) then return false end
     return self:unload(...)
-end
-
-function streamer.public:attachElements(element, parent, offX, offY, offZ, rotX, rotY, rotZ)
-    offX, offY, offZ, rotX, rotY, rotZ = imports.tonumber(offX) or 0, imports.tonumber(offY) or 0, imports.tonumber(offZ) or 0, imports.tonumber(rotX) or 0, imports.tonumber(rotY) or 0, imports.tonumber(rotZ) or 0
-    if not imports.isElement(element) or not imports.isElement(parent) or (element == parent) then return false end
-    streamer.public:detachElements(element)
-    streamer.private.attached.parent[parent] = streamer.private.attached.parent[parent] or {}
-    streamer.private.attached.parent[parent][element] = true
-    streamer.private.attached.element[element] = {
-        parent = parent,
-        position = {x = offX, y = offY, z = offZ},
-        rotation = {x = rotX, y = rotY, z = rotZ, matrix = math.matrix:fromRotation(rotX, rotY, rotZ)}
-    }
-    streamer.private.updateAttachments(parent, element)
-    return true
-end
-
-function streamer.public:detachElements(element)
-    if not element or (not streamer.private.attached.element[element] and not streamer.private.attached.parent[element]) then return false end
-    if streamer.private.attached.parent[element] then
-        for i, j in imports.pairs(streamer.private.attached.parent[element]) do
-            streamer.public:detachElements(i)
-        end
-    end
-    if streamer.private.attached.element[element] then
-        if streamer.private.attached.parent[(streamer.private.attached.element[element].parent)] then
-            streamer.private.attached.parent[(streamer.private.attached.element[element].parent)][element] = nil
-        end
-        streamer.private.attached.element[element].rotation.matrix:destroyInstance()
-    end
-    streamer.private.attached.element[element] = nil
-    streamer.private.attached.parent[element] = nil
-    imports.collectgarbage()
-    return true
-end
-
-function streamer.private.updateAttachments(parent, element, parentMatrix)
-    if not parent or not streamer.private.attached.parent[parent] then return false end
-    parentMatrix = parentMatrix or imports.getElementMatrix(parent)
-    if element then
-        local cPointer = streamer.private.attached.element[element]
-        if cPointer then
-            local rotationMatrix = cPointer.rotation.matrix.rows
-            local offX, offY, offZ = cPointer.position.x, cPointer.position.y, cPointer.position.z
-            imports.setElementMatrix(element, {
-                {
-                    (parentMatrix[2][1]*rotationMatrix[1][2]) + (parentMatrix[1][1]*rotationMatrix[1][1]) + (rotationMatrix[1][3]*parentMatrix[3][1]),
-                    (parentMatrix[3][2]*rotationMatrix[1][3]) + (parentMatrix[1][2]*rotationMatrix[1][1]) + (parentMatrix[2][2]*rotationMatrix[1][2]),
-                    (parentMatrix[2][3]*rotationMatrix[1][2]) + (parentMatrix[3][3]*rotationMatrix[1][3]) + (rotationMatrix[1][1]*parentMatrix[1][3]),
-                    0
-                },
-                {
-                    (rotationMatrix[2][3]*parentMatrix[3][1]) + (parentMatrix[2][1]*rotationMatrix[2][2]) + (rotationMatrix[2][1]*parentMatrix[1][1]),
-                    (parentMatrix[3][2]*rotationMatrix[2][3]) + (parentMatrix[2][2]*rotationMatrix[2][2]) + (parentMatrix[1][2]*rotationMatrix[2][1]),
-                    (rotationMatrix[2][1]*parentMatrix[1][3]) + (parentMatrix[3][3]*rotationMatrix[2][3]) + (parentMatrix[2][3]*rotationMatrix[2][2]),
-                    0
-                },
-                {
-                    (parentMatrix[2][1]*rotationMatrix[3][2]) + (rotationMatrix[3][3]*parentMatrix[3][1]) + (rotationMatrix[3][1]*parentMatrix[1][1]),
-                    (parentMatrix[3][2]*rotationMatrix[3][3]) + (parentMatrix[2][2]*rotationMatrix[3][2]) + (rotationMatrix[3][1]*parentMatrix[1][2]),
-                    (rotationMatrix[3][1]*parentMatrix[1][3]) + (parentMatrix[3][3]*rotationMatrix[3][3]) + (parentMatrix[2][3]*rotationMatrix[3][2]),
-                    0
-                },
-                {
-                    (offZ*parentMatrix[1][1]) + (offY*parentMatrix[2][1]) - (offX*parentMatrix[3][1]) + parentMatrix[4][1],
-                    (offZ*parentMatrix[1][2]) + (offY*parentMatrix[2][2]) - (offX*parentMatrix[3][2]) + parentMatrix[4][2],
-                    (offZ*parentMatrix[1][3]) + (offY*parentMatrix[2][3]) - (offX*parentMatrix[3][3]) + parentMatrix[4][3],
-                    1
-                }
-            })
-        end
-    else
-        for i, j in imports.pairs(streamer.private.attached.parent[parent]) do
-            if j and streamer.private.attached.element[i] then
-                streamer.private.updateAttachments(parent, i, parentMatrix)
-            end
-        end
-    end
-    return true
 end
 
 function streamer.public:load(streamerInstance, streamType, occlusionInstances, syncRate)
@@ -384,10 +300,3 @@ end)
 imports.addEventHandler("onClientElementDimensionChange", localPlayer, function(dimension) streamer.public:update(dimension) end)
 imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(interior) streamer.public:update(_, interior) end)
 imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(interior) streamer.public:update(_, interior) end)
-imports.addDebugHook("postFunction", function(_, _, _, _, _, element)
-    streamer.private.updateAttachments(element)
-end, {"setElementMatrix", "setElementPosition", "setElementRotation"})
-network:fetch("Assetify:onElementDestroy"):on(function(source)
-    if not syncer.isLibraryBooted or not source then return false end
-    streamer.public:detachElements(source)
-end)

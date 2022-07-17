@@ -64,11 +64,11 @@ function manager.API.Library.getEntityData(element, data)
 end
 
 function manager.API.Library.setAttachment(...)
-    return syncer.syncAttachment(...)
+    return attacher:attachElements(...)
 end
 
 function manager.API.Library.clearAttachment(...)
-    return syncer.syncClearAttachment(...)
+    return attacher:detachElements(...)
 end
 
 function manager.API.Library.createAssetDummy(...)
