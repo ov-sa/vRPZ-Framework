@@ -274,7 +274,7 @@ if localPlayer then
             thread:create(function(self)
                 for i, j in imports.pairs(cAsset.manifestData.assetClumps) do
                     cAsset.unSynced.assetCache[i] = {}
-                    local clumpTXD, clumpDFF, clumpCOL = assetPath.."clump/"..j.."/"..(asset.references.asset)..".txd", assetPath.."clump/"..j.."/"..(asset.references.asset)..".dff", assetPath.."clump/"..j.."/"..(asset.references.asset)..".col"
+                    local clumpTXD, clumpDFF, clumpCOL = assetPath..(asset.references.clump).."/"..j.."/"..(asset.references.asset)..".txd", assetPath..(asset.references.clump).."/"..j.."/"..(asset.references.asset)..".dff", assetPath..(asset.references.clump).."/"..j.."/"..(asset.references.asset)..".col"
                     clumpTXD = (file:exists(clumpTXD) and clumpTXD) or assetPath..(asset.references.asset)..".txd"
                     clumpCOL = (file:exists(clumpCOL) and clumpCOL) or assetPath..(asset.references.asset)..".col"
                     asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache[i], {

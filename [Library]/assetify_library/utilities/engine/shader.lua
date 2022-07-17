@@ -32,6 +32,10 @@ local imports = {
 local shader = class:create("shader", {
     shaderPriority = 10000,
     shaderDistance = 0,
+    validTypes = {
+        ["clump"] = true,
+        ["control"] = true
+    },
     validChannels = {
         {index = "red", channel = "r"},
         {index = "green", channel = "g"},
@@ -73,32 +77,10 @@ if localPlayer then
 
     function shader.public:createTex(shaderMaps, rwCache, encryptKey)
         if not shaderMaps or not rwCache then return false end
-        rwCache.shader = {}
-        rwCache.texture = {}
-        for i, j in imports.pairs(shaderMaps) do
-            if i == "clump" then
-                for k, v in imports.pairs(j) do
-                    for m = 1, #v, 1 do
-                        local n = v[m]
-                        if n.clump then rwCache.texture[(n.clump)] = shader.public:loadTex(n.clump, encryptKey) end
-                        if n.bump then rwCache.texture[(n.bump)] = shader.public:loadTex(n.bump, encryptKey) end
-                    end
-                end
-            elseif i == "control" then
-                for k, v in imports.pairs(j) do
-                    for m = 1, #v, 1 do
-                        local n = v[m]
-                        if n.control then rwCache.texture[(n.control)] = shader.public:loadTex(n.control, encryptKey) end
-                        if n.bump then rwCache.texture[(n.bump)] = shader.public:loadTex(n.bump, encryptKey) end
-                        for x = 1, #shader.public.validChannels, 1 do
-                            local y = n[(shader.public.validChannels[x].index)]
-                            if y and y.map then
-                                rwCache.texture[(y.map)] = shader.public:loadTex(y.map, encryptKey)
-                                if y.bump then rwCache.texture[(y.bump)] = shader.public:loadTex(y.bump, encryptKey) end
-                            end
-                        end
-                    end
-                end
+        rwCache.shader, rwCache.texture = {}, {}
+        for i, j in imports.pairs(asset:buildShader(shaderMaps)) do
+            if j then
+                rwCache.texture[i] = shader.public:loadTex(i, encryptKey)
             end
         end
         return true
