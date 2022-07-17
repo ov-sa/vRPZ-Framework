@@ -70,7 +70,7 @@ end
 
 function streamer.public:attachElements(element, parent, offX, offY, offZ, rotX, rotY, rotZ)
     offX, offY, offZ, rotX, rotY, rotZ = imports.tonumber(offX) or 0, imports.tonumber(offY) or 0, imports.tonumber(offZ) or 0, imports.tonumber(rotX) or 0, imports.tonumber(rotY) or 0, imports.tonumber(rotZ) or 0
-    if not imports.isElement(element) or not imports.isElement(parent) then return false end
+    if not imports.isElement(element) or not imports.isElement(parent) or (element == parent) then return false end
     detachElements(element)
     streamer.private.attached.parent[parent] = streamer.private.attached.parent[parent] or {}
     streamer.private.attached.parent[parent][element] = true
@@ -83,9 +83,17 @@ function streamer.public:attachElements(element, parent, offX, offY, offZ, rotX,
 end
 
 function streamer.public:detachElements(element)
-    if not element or not streamer.private.attached.element[element] then return false end
-    streamer.private.attached.parent[(streamer.private.attached.element[element].parent)] = nil
+    if not element or (not streamer.private.attached.element[element] and not streamer.private.attached.parent[element]) then return false end
+    if streamer.private.attached.parent[element] then
+        for i, j in imports.pairs(streamer.private.attached.parent[element]) do
+            streamer.public:detachElements(i)
+        end
+    end
+    if streamer.private.attached.element[element] and streamer.private.attached.parent[(streamer.private.attached.element[element].parent)] then
+        streamer.private.attached.parent[(streamer.private.attached.element[element].parent)][element] = nil
+    end
     streamer.private.attached.element[element] = nil
+    streamer.private.attached.parent[element] = nil
     return true
 end
 
@@ -336,3 +344,7 @@ imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(i
 imports.addDebugHook("postFunction", root, function(_, _, _, _, _, element)
     streamer.private.updateAttachments(element)
 end, {"setElementMatrix", "setElementPosition", "setElementRotation"})
+network:fetch("Assetify:onElementDestroy"):on(function(source)
+    if not syncer.public.isLibraryBooted or not source then return false end
+    streamer.public.detachElements(source)
+end)
