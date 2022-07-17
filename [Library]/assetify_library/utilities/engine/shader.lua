@@ -220,3 +220,13 @@ if localPlayer then
 
     shader.public.preLoaded["Assetify_TextureClearer"] = shader.public:create(_, "Assetify-PreLoaded", "Assetify_TextureClearer", _, {baseTexture = 1}, {}, {texture = {[1] = shader.public.preLoadedTex.invisibleMap}}, _, _, shader.public.shaderPriority + 1, shader.public.shaderDistance, true)
 end
+
+
+---------------------
+--[[ API Syncers ]]--
+---------------------
+
+network:fetch("Assetify:onElementDestroy"):on(function(source)
+    if not syncer.isLibraryBooted or not source then return false end
+    shader.public.clearElementBuffer(source)
+end)
