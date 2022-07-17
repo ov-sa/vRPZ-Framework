@@ -71,7 +71,7 @@ end
 function streamer.public:attachElements(element, parent, offX, offY, offZ, rotX, rotY, rotZ)
     offX, offY, offZ, rotX, rotY, rotZ = imports.tonumber(offX) or 0, imports.tonumber(offY) or 0, imports.tonumber(offZ) or 0, imports.tonumber(rotX) or 0, imports.tonumber(rotY) or 0, imports.tonumber(rotZ) or 0
     if not imports.isElement(element) or not imports.isElement(parent) or (element == parent) then return false end
-    detachElements(element)
+    streamer.public:detachElements(element)
     streamer.private.attached.parent[parent] = streamer.private.attached.parent[parent] or {}
     streamer.private.attached.parent[parent][element] = true
     streamer.private.attached.element[element] = {
