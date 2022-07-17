@@ -285,16 +285,6 @@ end
 function syncer.public.syncElementModel(length, ...) return syncer.private:setElementModel(table.unpack(table.pack(...), length or 5)) end
 if localPlayer then
     network:create("Assetify:Syncer:onSyncElementModel"):on(function(...) syncer.public.syncElementModel(6, ...) end)
-    network:fetch("Assetify:onElementDestroy"):on(function(source)
-        --TODO: ...
-        if not syncer.public.isLibraryBooted or not source then return false end
-        syncer.public.syncedEntityDatas[source] = nil
-        for i, j in imports.pairs(light) do
-            if j and (imports.type(j) == "table") and j.clearElementBuffer then
-                j.clearElementBuffer(source)
-            end
-        end
-    end)
     imports.addEventHandler("onClientElementDestroy", root, function() network:emit("Assetify:onElementDestroy", false, source) end)
 else
     imports.addEventHandler("onPlayerResourceStart", root, function(resourceElement)
