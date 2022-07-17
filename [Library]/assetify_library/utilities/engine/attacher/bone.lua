@@ -90,6 +90,7 @@ function bone.public:destroy(...)
 end
 
 function bone.public.clearElementBuffer(element)
+    if not element then return false end
     local cBone = bone.private:fetchInstance(element)
     if cBone then cBone:destroy() end
     if bone.public.buffer.parent[element] then
