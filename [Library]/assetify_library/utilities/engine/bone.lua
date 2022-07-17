@@ -19,7 +19,6 @@ local imports = {
     isElement = isElement,
     getElementType = getElementType,
     setElementMatrix = setElementMatrix,
-    setElementPosition = setElementPosition,
     getElementRotation = getElementRotation,
     getElementBoneMatrix = getElementBoneMatrix,
     setElementCollisionsEnabled = setElementCollisionsEnabled
