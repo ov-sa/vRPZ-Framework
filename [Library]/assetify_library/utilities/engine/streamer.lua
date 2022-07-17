@@ -105,13 +105,38 @@ end
 
 function streamer.private.updateAttachments(parent, element, parentMatrix)
     if not parent or not streamer.private.attached.parent[parent] then return false end
-    parentMatrix = parentMatrix or math.matrix(table.unpack(imports.getElementMatrix(parent)))
+    parentMatrix = parentMatrix or imports.getElementMatrix(parent)
     if element then
         local cPointer = streamer.private.attached.element[element]
         if cPointer then
-            local cMatrix = parentMatrix:transform(cPointer.rotation.matrix, cPointer.position.x, cPointer.position.y, cPointer.position.z)
-            imports.setElementMatrix(element, cMatrix.rows)
-            cMatrix:destroyInstance()
+            local rotationMatrix = cPointer.rotation.matrix.rows
+            local offX, offY, offZ = cPointer.position.x, cPointer.position.y, cPointer.position.z
+            imports.setElementMatrix(element, {
+                {
+                    (parentMatrix[2][1]*rotationMatrix[1][2]) + (parentMatrix[1][1]*rotationMatrix[1][1]) + (rotationMatrix[1][3]*parentMatrix[3][1]),
+                    (parentMatrix[3][2]*rotationMatrix[1][3]) + (parentMatrix[1][2]*rotationMatrix[1][1]) + (parentMatrix[2][2]*rotationMatrix[1][2]),
+                    (parentMatrix[2][3]*rotationMatrix[1][2]) + (parentMatrix[3][3]*rotationMatrix[1][3]) + (rotationMatrix[1][1]*parentMatrix[1][3]),
+                    0
+                },
+                {
+                    (rotationMatrix[2][3]*parentMatrix[3][1]) + (parentMatrix[2][1]*rotationMatrix[2][2]) + (rotationMatrix[2][1]*parentMatrix[1][1]),
+                    (parentMatrix[3][2]*rotationMatrix[2][3]) + (parentMatrix[2][2]*rotationMatrix[2][2]) + (parentMatrix[1][2]*rotationMatrix[2][1]),
+                    (rotationMatrix[2][1]*parentMatrix[1][3]) + (parentMatrix[3][3]*rotationMatrix[2][3]) + (parentMatrix[2][3]*rotationMatrix[2][2]),
+                    0
+                },
+                {
+                    (parentMatrix[2][1]*rotationMatrix[3][2]) + (rotationMatrix[3][3]*parentMatrix[3][1]) + (rotationMatrix[3][1]*parentMatrix[1][1]),
+                    (parentMatrix[3][2]*rotationMatrix[3][3]) + (parentMatrix[2][2]*rotationMatrix[3][2]) + (rotationMatrix[3][1]*parentMatrix[1][2]),
+                    (rotationMatrix[3][1]*parentMatrix[1][3]) + (parentMatrix[3][3]*rotationMatrix[3][3]) + (parentMatrix[2][3]*rotationMatrix[3][2]),
+                    0
+                },
+                {
+                    (offZ*parentMatrix[1][1]) + (offY*parentMatrix[2][1]) - (offX*parentMatrix[3][1]) + parentMatrix[4][1],
+                    (offZ*parentMatrix[1][2]) + (offY*parentMatrix[2][2]) - (offX*parentMatrix[3][2]) + parentMatrix[4][2],
+                    (offZ*parentMatrix[1][3]) + (offY*parentMatrix[2][3]) - (offX*parentMatrix[3][3]) + parentMatrix[4][3],
+                    1
+                }
+            })
         end
     else
         for i, j in imports.pairs(streamer.private.attached.parent[parent]) do
@@ -120,7 +145,6 @@ function streamer.private.updateAttachments(parent, element, parentMatrix)
             end
         end
     end
-    parentMatrix:destroyInstance()
     return true
 end
 
@@ -366,18 +390,4 @@ end, {"setElementMatrix", "setElementPosition", "setElementRotation"})
 network:fetch("Assetify:onElementDestroy"):on(function(source)
     if not syncer.isLibraryBooted or not source then return false end
     streamer.public:detachElements(source)
-end)
-
-addEventHandler("onClientResourceStart", root, function()
-    local x, y, z = getElementPosition(localPlayer)
-    local testParent = createObject(1337, x + 1, y, z)
-    local testChild = createObject(1337, 0, 0, 0)
-    streamer.public:attachElements(testChild, testParent, 0, 0, 0, 90, 0, 0)
-    timer:create(function()
-        print("Translating parent")
-        local x, y, z = getElementPosition(testParent)
-        local rx, ry, rz = getElementRotation(testParent)
-        setElementPosition(testParent, x + 1, y, z)
-        setElementRotation(testParent, rx, ry, rz + 5)
-    end, 1000, 0)
 end)
