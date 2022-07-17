@@ -107,11 +107,11 @@ function streamer.private.updateAttachments(parent, element, parentMatrix)
     if not parent or not streamer.private.attached.parent[parent] then return false end
     parentMatrix = parentMatrix or math.matrix(table.unpack(imports.getElementMatrix(parent)))
     if element then
-        if streamer.private.attached.element[i] then
-            local cMatrix = parentMatrix:transform(streamer.private.attached.element[i].rotation.matrix, streamer.private.attached.element[i].position.x, streamer.private.attached.element[i].position.y, streamer.private.attached.element[i].position.z)
-            imports.setElementMatrix(i, table.unpack(cMatrix.rows))
+        local cPointer = streamer.private.attached.element[element]
+        if cPointer then
+            local cMatrix = parentMatrix:transform(cPointer.rotation.matrix, cPointer.position.x, cPointer.position.y, cPointer.position.z)
+            imports.setElementMatrix(element, cMatrix.rows)
             cMatrix:destroyInstance()
-            print("UPDATE: "..tostring(i))
         end
     else
         for i, j in imports.pairs(streamer.private.attached.parent[parent]) do
@@ -120,7 +120,7 @@ function streamer.private.updateAttachments(parent, element, parentMatrix)
             end
         end
     end
-    cMatrix:destroyInstance()
+    parentMatrix:destroyInstance()
     return true
 end
 
@@ -360,10 +360,24 @@ end)
 imports.addEventHandler("onClientElementDimensionChange", localPlayer, function(dimension) streamer.public:update(dimension) end)
 imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(interior) streamer.public:update(_, interior) end)
 imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(interior) streamer.public:update(_, interior) end)
-imports.addDebugHook("postFunction", root, function(_, _, _, _, _, element)
+imports.addDebugHook("postFunction", function(_, _, _, _, _, element)
     streamer.private.updateAttachments(element)
 end, {"setElementMatrix", "setElementPosition", "setElementRotation"})
 network:fetch("Assetify:onElementDestroy"):on(function(source)
-    if not syncer.public.isLibraryBooted or not source then return false end
+    if not syncer.isLibraryBooted or not source then return false end
     streamer.public:detachElements(source)
+end)
+
+addEventHandler("onClientResourceStart", root, function()
+    local x, y, z = getElementPosition(localPlayer)
+    local testParent = createObject(1337, x + 1, y, z)
+    local testChild = createObject(1337, 0, 0, 0)
+    streamer.public:attachElements(testChild, testParent, 0, 0, 0, 90, 0, 0)
+    timer:create(function()
+        print("Translating parent")
+        local x, y, z = getElementPosition(testParent)
+        local rx, ry, rz = getElementRotation(testParent)
+        setElementPosition(testParent, x + 1, y, z)
+        setElementRotation(testParent, rx, ry, rz + 5)
+    end, 1000, 0)
 end)
