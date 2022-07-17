@@ -226,7 +226,9 @@ end
 --[[ API Syncers ]]--
 ---------------------
 
-network:fetch("Assetify:onElementDestroy"):on(function(source)
-    if not syncer.isLibraryBooted or not source then return false end
-    shader.public.clearElementBuffer(source)
-end)
+if localPlayer then
+    network:fetch("Assetify:onElementDestroy"):on(function(source)
+        if not syncer.isLibraryBooted or not source then return false end
+        shader.public.clearElementBuffer(source)
+    end)
+end
