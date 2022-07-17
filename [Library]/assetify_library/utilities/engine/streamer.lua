@@ -326,10 +326,10 @@ end
 
 streamer.private.onBoneStream = function(streamBuffer)
     if not streamBuffer then return false end
-    bone.cache.streamTick = imports.getTickCount()
+    attacher.bone.cache.streamTick = imports.getTickCount()
     for i, j in imports.pairs(streamBuffer) do
         if j and i.isStreamed then
-            bone.update(bone.buffer.element[(i.streamer)])
+            attacher.bone.update(attacher.bone.buffer.element[(i.streamer)])
         end
     end
     return true

@@ -1,15 +1,15 @@
 ----------------------------------------------------------------
 --[[ Resource: Assetify Library
-     Script: utilities: engine: light.lua
+     Script: utilities: engine: attacher.lua
      Author: vStudio
      Developer(s): Aviril, Tron, Mario, Аниса
      DOC: 19/10/2021
-     Desc: Light Utilities ]]--
+     Desc: Attacher Utilities ]]--
 ----------------------------------------------------------------
 
 
---------------------------
---[[ Namespace: Light ]]--
---------------------------
+-----------------------------
+--[[ Namespace: Attacher ]]--
+-----------------------------
 
-local light = namespace:create("light")
+local attacher = namespace:create("attacher")

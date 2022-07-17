@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
 --[[ Resource: Assetify Library
-     Script: utilities: engine: bone.lua
+     Script: utilities: engine: attacher: bone.lua
      Author: vStudio
      Developer(s): Aviril, Tron, Mario, Аниса
      DOC: 19/10/2021
-     Desc: Bone Utilities ]]--
+     Desc: Bone Attachment Utilities ]]--
 ----------------------------------------------------------------
 
 
@@ -38,7 +38,7 @@ local bone = class:create("bone", {
         element = {},
         parent = {}
     }
-})
+}, "attacher")
 for i, j in imports.pairs(bone.public.ids) do
     local indexes = {}
     for k = 1, #j, 1 do indexes[(j[k])] = true end
