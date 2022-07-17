@@ -22,6 +22,7 @@ local imports = {
     addEventHandler = addEventHandler,
     removeEventHandler = removeEventHandler,
     getTickCount = getTickCount,
+    setElementMatrix = setElementMatrix,
     getElementMatrix = getElementMatrix,
     isElementOnScreen = isElementOnScreen,
     getElementCollisionsEnabled = getElementCollisionsEnabled,
@@ -79,6 +80,7 @@ function streamer.public:attachElements(element, parent, offX, offY, offZ, rotX,
         position = {x = offX, y = offY, z = offZ},
         rotation = {x = rotX, y = rotY, z = rotZ, matrix = math.matrix:fromRotation(rotX, rotY, rotZ)}
     }
+    streamer.private.updateAttachments(parent, element)
     return true
 end
 
@@ -89,8 +91,11 @@ function streamer.public:detachElements(element)
             streamer.public:detachElements(i)
         end
     end
-    if streamer.private.attached.element[element] and streamer.private.attached.parent[(streamer.private.attached.element[element].parent)] then
-        streamer.private.attached.parent[(streamer.private.attached.element[element].parent)][element] = nil
+    if streamer.private.attached.element[element] then
+        if streamer.private.attached.parent[(streamer.private.attached.element[element].parent)] then
+            streamer.private.attached.parent[(streamer.private.attached.element[element].parent)][element] = nil
+        end
+        streamer.private.attached.element[element].rotation.matrix:destroyInstance()
     end
     streamer.private.attached.element[element] = nil
     streamer.private.attached.parent[element] = nil
@@ -102,10 +107,12 @@ function streamer.private.updateAttachments(parent, element, parentMatrix)
     if not parent or not streamer.private.attached.parent[parent] then return false end
     parentMatrix = parentMatrix or math.matrix(table.unpack(imports.getElementMatrix(parent)))
     if element then
-        local cMatrix = parentMatrix:transform(streamer.private.attached.element[i].rotation.matrix, streamer.private.attached.element[i].position.x, streamer.private.attached.element[i].position.y, streamer.private.attached.element[i].position.z)
-        imports.setElementMatrix(i, table.unpack(cMatrix.rows))
-        cMatrix:destroyInstance()
-        print("UPDATE: "..tostring(i))
+        if streamer.private.attached.element[i] then
+            local cMatrix = parentMatrix:transform(streamer.private.attached.element[i].rotation.matrix, streamer.private.attached.element[i].position.x, streamer.private.attached.element[i].position.y, streamer.private.attached.element[i].position.z)
+            imports.setElementMatrix(i, table.unpack(cMatrix.rows))
+            cMatrix:destroyInstance()
+            print("UPDATE: "..tostring(i))
+        end
     else
         for i, j in imports.pairs(streamer.private.attached.parent[parent]) do
             if j and streamer.private.attached.element[i] then
