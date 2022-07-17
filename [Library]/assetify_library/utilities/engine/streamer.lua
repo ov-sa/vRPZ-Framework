@@ -98,15 +98,19 @@ function streamer.public:detachElements(element)
     return true
 end
 
-function streamer.private.updateAttachments(parent)
+function streamer.private.updateAttachments(parent, element, parentMatrix)
     if not parent or not streamer.private.attached.parent[parent] then return false end
-    local cMatrix = math.matrix(table.unpack(imports.getElementMatrix(parent)))
-    for i, j in imports.pairs(streamer.private.attached.parent[parent]) do
-        if j and streamer.private.attached.element[i] then
-            local __cMatrix = cMatrix:transform(streamer.private.attached.element[i].rotation.matrix, streamer.private.attached.element[i].position.x, streamer.private.attached.element[i].position.y, streamer.private.attached.element[i].position.z)
-            imports.setElementMatrix(i, table.unpack(__cMatrix.rows))
-            __cMatrix:destroyInstance()
-            print("UPDATE: "..tostring(i))
+    parentMatrix = parentMatrix or math.matrix(table.unpack(imports.getElementMatrix(parent)))
+    if element then
+        local cMatrix = parentMatrix:transform(streamer.private.attached.element[i].rotation.matrix, streamer.private.attached.element[i].position.x, streamer.private.attached.element[i].position.y, streamer.private.attached.element[i].position.z)
+        imports.setElementMatrix(i, table.unpack(cMatrix.rows))
+        cMatrix:destroyInstance()
+        print("UPDATE: "..tostring(i))
+    else
+        for i, j in imports.pairs(streamer.private.attached.parent[parent]) do
+            if j and streamer.private.attached.element[i] then
+                streamer.private.updateAttachments(parent, i, parentMatrix)
+            end
         end
     end
     cMatrix:destroyInstance()
