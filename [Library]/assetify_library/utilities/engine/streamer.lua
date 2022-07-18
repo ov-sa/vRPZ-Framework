@@ -299,4 +299,3 @@ end)
 
 imports.addEventHandler("onClientElementDimensionChange", localPlayer, function(dimension) streamer.public:update(dimension) end)
 imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(interior) streamer.public:update(_, interior) end)
-imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(interior) streamer.public:update(_, interior) end)
