@@ -133,31 +133,44 @@ end
 
 function streamer.public:update(clientDimension, clientInterior)
     if not clientDimension and not clientInterior then return false end
-    local currentDimension, currentInterior = imports.getElementDimension(localPlayer), imports.getElementInterior(localPlayer)
-    clientDimension, clientInterior = clientDimension or _clientDimension, clientInterior or clientInterior
+    clientDimension, clientInterior = clientDimension or imports.getElementDimension(localPlayer), clientInterior or imports.getElementInterior(localPlayer)
     if streamer.public.waterBuffer then
-        imports.setElementDimension(streamer.public.waterBuffer, currentDimension)
-        imports.setElementInterior(streamer.public.waterBuffer, currentInterior)
+        imports.setElementDimension(streamer.public.waterBuffer, clientDimension)
+        imports.setElementInterior(streamer.public.waterBuffer, clientInterior)
     end
-    if streamer.private.buffer[clientDimension] and streamer.private.buffer[clientDimension][clientInterior] then
-        for i, j in imports.pairs(streamer.private.buffer[clientDimension][clientInterior]) do
-            if j then
-                i.isStreamed = nil
-                imports.setElementDimension(i.streamer, settings.streamer.unsyncDimension)
+    if streamer.private.cache.clientWorld then
+        local __clientDimension, __clientInterior = streamer.private.cache.clientWorld.dimension, streamer.private.cache.clientWorld.interior
+        if streamer.private.buffer[__clientDimension] and streamer.private.buffer[__clientDimension][__clientInterior] then
+            for i, j in imports.pairs(streamer.private.buffer[__clientDimension][__clientInterior]) do
+                if j then
+                    for k, v in imports.pairs(j) do
+                        if k then
+                            k.isStreamed = nil
+                            imports.setElementDimension(k.streamer, settings.streamer.unsyncDimension)
+                        end
+                    end
+                end
             end
         end
-    end
-    if streamer.private.buffer[-1] and streamer.private.buffer[-1][clientInterior] then
-        for i, j in imports.pairs(streamer.private.buffer[-1][clientInterior]) do
-            if j then
-                i.isStreamed = nil
-                imports.setElementDimension(i.streamer, settings.streamer.unsyncDimension)
+        if streamer.private.buffer[-1] then
+            if streamer.private.buffer[-1][__clientInterior] then
+                for i, j in imports.pairs(streamer.private.buffer[-1][__clientInterior]) do
+                    if j then
+                        for k, v in imports.pairs(j) do
+                            if k then
+                                k.isStreamed = nil
+                                imports.setElementDimension(k.streamer, settings.streamer.unsyncDimension)
+                            end
+                        end
+                    end
+                end
             end
+            if streamer.private.buffer[-1][clientInterior] then streamer.private.buffer[-1][clientInterior].isForcedUpdate = true end
         end
     end
     streamer.private.cache.isCameraTranslated = true
     streamer.private.cache.clientWorld = streamer.private.cache.clientWorld or {}
-    streamer.private.cache.clientWorld.dimension, streamer.private.cache.clientWorld.interior = currentDimension, currentInterior
+    streamer.private.cache.clientWorld.dimension, streamer.private.cache.clientWorld.interior = clientDimension, clientInterior
     return true
 end
 
@@ -212,7 +225,7 @@ function streamer.public:deallocate()
     return true
 end
 
-streamer.private.onEntityStream = function(streamBuffer)
+streamer.private.onEntityStream = function(streamBuffer, isStreamAltered)
     if not streamBuffer then return false end
     for i, j in imports.pairs(streamBuffer) do
         if j then
@@ -224,7 +237,8 @@ streamer.private.onEntityStream = function(streamBuffer)
                     break
                 end
             end
-            local isStreamAltered = isStreamed ~= i.isStreamed
+
+            isStreamAltered = isStreamAltered or (isStreamed ~= i.isStreamed)
             if isStreamAltered then imports.setElementDimension(i.streamer, (isStreamed and streamer.private.cache.clientWorld.dimension) or settings.streamer.unsyncDimension) end
             if streamer.private.allocator.validStreams[(i.streamType)] and streamer.private.allocator.validStreams[(i.streamType)].dynamicStreamAllocation then
                 if not isStreamed then
@@ -290,8 +304,10 @@ network:fetch("Assetify:onLoad"):on(function()
                 end
             end
             if streamer.private.buffer[-1] and streamer.private.buffer[-1][clientInterior] then
+                local isForcedUpdate = streamer.private.buffer[-1][clientInterior].isForcedUpdate
+                streamer.private.buffer[-1][clientInterior].isForcedUpdate = nil
                 for i, j in imports.pairs(streamer.private.buffer[-1][clientInterior]) do
-                    streamer.private.onEntityStream(j)
+                    streamer.private.onEntityStream(j, isForcedUpdate)
                 end
             end
             streamer.private.cache.isCameraTranslated = false
