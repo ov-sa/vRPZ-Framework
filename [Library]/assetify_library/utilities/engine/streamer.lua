@@ -154,7 +154,7 @@ function streamer.private:update(destreamBuffer)
         local __clientDimension, __clientInterior = streamer.private.cache.clientWorld.dimension, streamer.private.cache.clientWorld.interior
         if streamer.private.buffer[__clientDimension] and streamer.private.buffer[__clientDimension][__clientInterior] then streamer.private:update(streamer.private.buffer[__clientDimension][__clientInterior]) end
         if streamer.private.buffer[-1] then
-            if streamer.private.buffer[-1][__clientInterior] then streamer.private:update(streamer.private.buffer[-1][__clientInterior]) end
+            if (__clientInterior ~= clientInterior) and streamer.private.buffer[-1][__clientInterior] then streamer.private:update(streamer.private.buffer[-1][__clientInterior]) end
             if streamer.private.buffer[-1][clientInterior] then streamer.private.buffer[-1][clientInterior].isForcedUpdate = true end
         end
     end
