@@ -147,6 +147,14 @@ function streamer.public:update(clientDimension, clientInterior)
             end
         end
     end
+    if streamer.private.buffer[-1] and streamer.private.buffer[-1][clientInterior] then
+        for i, j in imports.pairs(streamer.private.buffer[-1][clientInterior]) do
+            if j then
+                i.isStreamed = nil
+                imports.setElementDimension(i.streamer, settings.streamer.unsyncDimension)
+            end
+        end
+    end
     streamer.private.cache.isCameraTranslated = true
     streamer.private.cache.clientWorld = streamer.private.cache.clientWorld or {}
     streamer.private.cache.clientWorld.dimension, streamer.private.cache.clientWorld.interior = currentDimension, currentInterior
