@@ -230,7 +230,7 @@ streamer.private.onEntityStream = function(streamBuffer, isStreamAltered)
                 end
             end
             isStreamAltered = isStreamAltered or (isStreamed ~= i.isStreamed)
-            if isStreamAltered then imports.setElementDimension(i.streamer, (isStreamed and streamer.private.cache.clientWorld.dimension) or settings.streamer.unsyncDimension) end
+            if isStreamAltered then imports.setElementDimension(i.streamer, (isStreamed and i.dimension) or settings.streamer.unsyncDimension) end
             if streamer.private.allocator.validStreams[(i.streamType)] and streamer.private.allocator.validStreams[(i.streamType)].dynamicStreamAllocation then
                 if not isStreamed then
                     if isStreamAltered then
