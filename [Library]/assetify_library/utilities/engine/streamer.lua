@@ -131,40 +131,30 @@ function streamer.public:pause()
     return true
 end
 
-function streamer.public:update(clientDimension, clientInterior)
-    if not clientDimension and not clientInterior then return false end
-    clientDimension, clientInterior = clientDimension or imports.getElementDimension(localPlayer), clientInterior or imports.getElementInterior(localPlayer)
+function streamer.private:update(destreamBuffer)
+    if destreamBuffer then
+        for i, j in imports.pairs(destreamBuffer) do
+            if j then
+                for k, v in imports.pairs(j) do
+                    if k then
+                        k.isStreamed = nil
+                        imports.setElementDimension(k.streamer, settings.streamer.unsyncDimension)
+                    end
+                end
+            end
+        end
+        return true
+    end
+    local clientDimension, clientInterior = imports.getElementDimension(localPlayer), imports.getElementInterior(localPlayer)
     if streamer.public.waterBuffer then
         imports.setElementDimension(streamer.public.waterBuffer, clientDimension)
         imports.setElementInterior(streamer.public.waterBuffer, clientInterior)
     end
     if streamer.private.cache.clientWorld then
         local __clientDimension, __clientInterior = streamer.private.cache.clientWorld.dimension, streamer.private.cache.clientWorld.interior
-        if streamer.private.buffer[__clientDimension] and streamer.private.buffer[__clientDimension][__clientInterior] then
-            for i, j in imports.pairs(streamer.private.buffer[__clientDimension][__clientInterior]) do
-                if j then
-                    for k, v in imports.pairs(j) do
-                        if k then
-                            k.isStreamed = nil
-                            imports.setElementDimension(k.streamer, settings.streamer.unsyncDimension)
-                        end
-                    end
-                end
-            end
-        end
+        if streamer.private.buffer[__clientDimension] and streamer.private.buffer[__clientDimension][__clientInterior] then streamer.private:update(streamer.private.buffer[__clientDimension][__clientInterior]) end
         if streamer.private.buffer[-1] then
-            if streamer.private.buffer[-1][__clientInterior] then
-                for i, j in imports.pairs(streamer.private.buffer[-1][__clientInterior]) do
-                    if j then
-                        for k, v in imports.pairs(j) do
-                            if k then
-                                k.isStreamed = nil
-                                imports.setElementDimension(k.streamer, settings.streamer.unsyncDimension)
-                            end
-                        end
-                    end
-                end
-            end
+            if streamer.private.buffer[-1][__clientInterior] then streamer.private:update(streamer.private.buffer[-1][__clientInterior]) end
             if streamer.private.buffer[-1][clientInterior] then streamer.private.buffer[-1][clientInterior].isForcedUpdate = true end
         end
     end
@@ -237,7 +227,6 @@ streamer.private.onEntityStream = function(streamBuffer, isStreamAltered)
                     break
                 end
             end
-
             isStreamAltered = isStreamAltered or (isStreamed ~= i.isStreamed)
             if isStreamAltered then imports.setElementDimension(i.streamer, (isStreamed and streamer.private.cache.clientWorld.dimension) or settings.streamer.unsyncDimension) end
             if streamer.private.allocator.validStreams[(i.streamType)] and streamer.private.allocator.validStreams[(i.streamType)].dynamicStreamAllocation then
@@ -284,7 +273,7 @@ streamer.private.onBoneUpdate = function(syncRate, streamType)
 end
 
 network:fetch("Assetify:onLoad"):on(function()
-    streamer.public:update(imports.getElementDimension(localPlayer))
+    streamer.private:update()
     thread:createHeartbeat(function()
         if not streamer.private.cache.isCameraTranslated then
             local velX, velY, velZ = imports.getElementVelocity(streamer.private.cache.clientCamera)
@@ -321,5 +310,5 @@ end)
 --[[ API Syncers ]]--
 ---------------------
 
-imports.addEventHandler("onClientElementDimensionChange", localPlayer, function(dimension) streamer.public:update(dimension) end)
-imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(interior) streamer.public:update(_, interior) end)
+imports.addEventHandler("onClientElementDimensionChange", localPlayer, function(dimension) streamer.private:update() end)
+imports.addEventHandler("onClientElementInteriorChange", localPlayer, function(interior) streamer.private:update() end)
