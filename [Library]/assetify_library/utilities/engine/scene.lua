@@ -15,7 +15,6 @@
 local imports = {
     destroyElement = destroyElement,
     createObject = createObject,
-    engineGetModelIDFromName = engineGetModelIDFromName,
     setElementAlpha = setElementAlpha,
     setElementDoubleSided = setElementDoubleSided,
     setElementCollisionsEnabled = setElementCollisionsEnabled,
@@ -35,7 +34,7 @@ scene.private.native = {
     models = loadstring(file:read("utilities/rw/native/buffer.rw"))()
 }
 
-function scene.public:isNativeObject(modelName)
+function scene.public:fetchNativeModelID(modelName)
     return scene.private.native[modelName] or false
 end
 
@@ -84,14 +83,14 @@ if localPlayer then
         return self:unload(...)
     end
 
-    function scene.public:load(cAsset, sceneManifest, sceneData, isNativeObject)
+    function scene.public:load(cAsset, sceneManifest, sceneData, isNativeModel)
         if not scene.public:isInstance(self) then return false end
         if not cAsset or not sceneManifest or not sceneData or not cAsset.synced then return false end
         local posX, posY, posZ, rotX, rotY, rotZ = sceneData.position.x + ((sceneManifest.sceneOffsets and sceneManifest.sceneOffsets.x) or 0), sceneData.position.y + ((sceneManifest.sceneOffsets and sceneManifest.sceneOffsets.y) or 0), sceneData.position.z + ((sceneManifest.sceneOffsets and sceneManifest.sceneOffsets.z) or 0), sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z
-        self.cStreamerInstance = imports.createObject(isNativeObject or cAsset.synced.modelID, posX, posY, posZ, rotX, rotY, rotZ, (sceneManifest.enableLODs and not isNativeObject and not cAsset.synced.lodID and cAsset.synced.collisionID and true) or false) or false
+        self.cStreamerInstance = imports.createObject(isNativeModel or cAsset.synced.modelID, posX, posY, posZ, rotX, rotY, rotZ, (sceneManifest.enableLODs and not isNativeModel and not cAsset.synced.lodID and cAsset.synced.collisionID and true) or false) or false
         if not self.cStreamerInstance then return false end
         imports.setElementDoubleSided(self.cStreamerInstance, true)
-        if not isNativeObject then
+        if not isNativeModel then
             imports.setElementCollisionsEnabled(self.cStreamerInstance, false)
             self.cCollisionInstance = (cAsset.synced.collisionID and imports.createObject(cAsset.synced.collisionID, posX, posY, posZ, rotX, rotY, rotZ)) or false
             if self.cCollisionInstance then
@@ -118,7 +117,7 @@ if localPlayer then
                 end
             end
         else
-            self.cLODInstance = (sceneManifest.enableLODs and imports.createObject(isNativeObject, posX, posY, posZ, rotX, rotY, rotZ, true)) or false
+            self.cLODInstance = (sceneManifest.enableLODs and imports.createObject(isNativeModel, posX, posY, posZ, rotX, rotY, rotZ, true)) or false
             self.cCollisionInstance = self.cStreamerInstance
             if self.cLODInstance then
                 imports.setElementDoubleSided(self.cLODInstance, true)

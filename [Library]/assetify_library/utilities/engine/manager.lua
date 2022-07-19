@@ -247,8 +247,8 @@ if localPlayer then
                         sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z = cQuat:toEuler()
                         cQuat:destroy()
                         if not cAsset.manifestData.sceneMapped then
-                            local isNativeObject = (cAsset.manifestData.sceneNativeObjects and scene:isNativeObject(j[2])) or false
-                            if not isNativeObject and not cAsset.unSynced.assetRef[(j[2])] then
+                            local isNativeModel = (cAsset.manifestData.sceneNativeObjects and scene:fetchNativeModelID(j[2])) or false
+                            if not isNativeModel and not cAsset.unSynced.assetRef[(j[2])] then
                                 cAsset.unSynced.assetCache[i] = {}
                                 asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache[i], {
                                     txd = (sceneIDEDatas and sceneIDEDatas[(j[2])] and assetPath.."txd/"..(sceneIDEDatas[(j[2])][1])..".txd") or assetPath..(asset.references.asset)..".txd",
@@ -258,7 +258,7 @@ if localPlayer then
                                 })
                                 cAsset.unSynced.assetRef[(j[2])] = cAsset.unSynced.assetCache[i].cAsset
                             end
-                            scene:create(cAsset.unSynced.assetRef[(j[2])], cAsset.manifestData, sceneData, isNativeObject)
+                            scene:create(cAsset.unSynced.assetRef[(j[2])], cAsset.manifestData, sceneData, isNativeModel)
                         else
                             cAsset.unSynced.assetCache[i] = {}
                             sceneData.position.x, sceneData.position.y, sceneData.position.z = sceneData.position.x + ((cAsset.manifestData.sceneOffsets and cAsset.manifestData.sceneOffsets.x) or 0), sceneData.position.y + ((cAsset.manifestData.sceneOffsets and cAsset.manifestData.sceneOffsets.y) or 0), sceneData.position.z + ((cAsset.manifestData.sceneOffsets and cAsset.manifestData.sceneOffsets.z) or 0)
