@@ -3,5 +3,5 @@
     "sceneDimension": -1,
     "sceneInterior": 0,
     "sceneMapped": true,
-    "sceneOffset": {"x": 0, "y": 0, "z": 0}
+    "sceneOffsets": {"x": 0, "y": 0, "z": 0}
 }

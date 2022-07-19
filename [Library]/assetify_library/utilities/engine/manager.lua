@@ -260,7 +260,7 @@ if localPlayer then
                             scene:create(cAsset.unSynced.assetRef[(j[2])], cAsset.manifestData, sceneData)
                         else
                             cAsset.unSynced.assetCache[i] = {}
-                            sceneData.position.x, sceneData.position.y, sceneData.position.z = sceneData.position.x + ((cAsset.manifestData.sceneOffset and cAsset.manifestData.sceneOffset.x) or 0), sceneData.position.y + ((cAsset.manifestData.sceneOffset and cAsset.manifestData.sceneOffset.y) or 0), sceneData.position.z + ((cAsset.manifestData.sceneOffset and cAsset.manifestData.sceneOffset.z) or 0)
+                            sceneData.position.x, sceneData.position.y, sceneData.position.z = sceneData.position.x + ((cAsset.manifestData.sceneOffsets and cAsset.manifestData.sceneOffsets.x) or 0), sceneData.position.y + ((cAsset.manifestData.sceneOffsets and cAsset.manifestData.sceneOffsets.y) or 0), sceneData.position.z + ((cAsset.manifestData.sceneOffsets and cAsset.manifestData.sceneOffsets.z) or 0)
                             sceneData.dimension = cAsset.manifestData.sceneDimension
                             sceneData.interior = cAsset.manifestData.sceneInterior
                             --TODO: DETECT IF ITS CLUMPED OR NOT...

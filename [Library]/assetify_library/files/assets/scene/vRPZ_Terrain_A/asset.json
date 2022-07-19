@@ -4,7 +4,7 @@
     "enableLODs": true,
     "sceneDimension": -1,
     "sceneInterior": 0,
-    "sceneOffset": {"x": 0, "y": 0, "z": 0},
+    "sceneOffsets": {"x": 0, "y": 0, "z": 0},
     "shaderMaps": {
         "control": {
             "isld_1_trn": [

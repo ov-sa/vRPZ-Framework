@@ -245,12 +245,12 @@ if localPlayer then
     end
 else
     asset.private.properties = {
-        reserved = {"streamRange", "enableLODs", "assetClumps", "assetAnimations", "assetSounds", "shaderMaps"},
+        reserved = {"streamRange", "enableLODs", "assetClumps", "assetAnimations", "assetSounds", "shaderMaps", "sceneDimension", "sceneInterior", "sceneOffsets", "sceneMapped", "sceneNativeObject"},
         whitelisted = {
             ["module"] = {},
             ["animation"] = {"assetAnimations"},
             ["sound"] = {"assetSounds"},
-            ["scene"] = {"streamRange", "enableLODs", "shaderMaps"},
+            ["scene"] = {"streamRange", "enableLODs", "shaderMaps", "sceneDimension", "sceneInterior", "sceneOffsets", "sceneMapped", "sceneNativeObject"},
             ["*"] = {"streamRange", "enableLODs", "assetClumps", "shaderMaps"}
         }
     }
@@ -402,17 +402,14 @@ else
                         end
                         thread:pause()
                     elseif assetType == "scene" then
-                        assetManifestData.assetClumps = false
                         assetManifestData.sceneDimension = math.max(asset.public.ranges.dimension[1], math.min(asset.public.ranges.dimension[2], imports.tonumber(assetManifestData.sceneDimension) or 0))
                         assetManifestData.sceneInterior = math.max(asset.public.ranges.interior[1], math.min(asset.public.ranges.interior[2], imports.tonumber(assetManifestData.sceneInterior) or 0))
                         assetManifestData.sceneMapped = (assetManifestData.sceneMapped and true) or false
-                        if assetManifestData.sceneOffset then
-                            if imports.type(assetManifestData.sceneOffset) ~= "table" then
-                                assetManifestData.sceneOffset = false
-                            else
-                                for i, j in imports.pairs(assetManifestData.sceneOffset) do
-                                    assetManifestData.sceneOffset[i] = imports.tonumber(j)
-                                end
+                        assetManifestData.sceneNativeObject = (assetManifestData.sceneNativeObject and true) or false
+                        assetManifestData.sceneOffsets = (assetManifestData.sceneOffsets and (imports.type(assetManifestData.sceneOffsets) == "table") and assetManifestData.sceneOffsets) or false
+                        if assetManifestData.sceneOffsets then
+                            for i, j in imports.pairs(assetManifestData.sceneOffsets) do
+                                assetManifestData.sceneOffsets[i] = imports.tonumber(j)
                             end
                         end
                         local sceneIPLPath = assetPath..(asset.public.references.scene)..".ipl"
