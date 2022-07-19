@@ -314,30 +314,30 @@ else
 
     function asset.public:buildDep(assetPath, assetDeps, filePointer, encryptKey)
         if not assetPath or not assetDeps or not filePointer then return false end
-        local __assetDeps = {}
+        local cAssetDeps = {}
         for i, j in imports.pairs(assetDeps) do
             if j and (imports.type(j) == "table") then
-                __assetDeps[i] = {}
+                cAssetDeps[i] = {}
                 for k, v in imports.pairs(j) do
-                    __assetDeps[i][k] = {}
+                    cAssetDeps[i][k] = {}
                     if i == "script" then
                         for m, n in imports.pairs(v) do
                             v[m] = assetPath.."dep/"..v[m]
-                            __assetDeps[i][k][m] = v[m]
-                            asset.public:buildFile(__assetDeps[i][k][m], filePointer, encryptKey, filePointer.unSynced.rawData, k == "server", true)
+                            cAssetDeps[i][k][m] = v[m]
+                            asset.public:buildFile(cAssetDeps[i][k][m], filePointer, encryptKey, filePointer.unSynced.rawData, k == "server", true)
                             thread:pause()
                         end
                     else
                         j[k] = assetPath.."dep/"..j[k]
-                        __assetDeps[i][k] = j[k]
-                        asset.public:buildFile(__assetDeps[i][k], filePointer, encryptKey, filePointer.unSynced.rawData, _, true)
+                        cAssetDeps[i][k] = j[k]
+                        asset.public:buildFile(cAssetDeps[i][k], filePointer, encryptKey, filePointer.unSynced.rawData, _, true)
                     end
                     thread:pause()
                 end
             end
             thread:pause()
         end
-        return __assetDeps
+        return cAssetDeps
     end
 
     function asset.public:buildPack(assetType, assetPack, callback)
