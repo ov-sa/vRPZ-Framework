@@ -243,6 +243,24 @@ if localPlayer then
         return true
     end
 else
+    asset.private.properties = {
+        reserved = {"streamRange", "enableLODs", "assetClumps", "assetAnimations", "assetSounds", "shaderMaps"},
+        whitelisted = {
+            ["module"] = {},
+            ["animation"] = {"assetAnimations"},
+            ["sound"] = {"assetSounds"},
+            ["scene"] = {"streamRange", "enableLODs", "shaderMaps"},
+            ["*"] = {"streamRange", "enableLODs", "assetClumps", "shaderMaps"}
+        }
+    }
+    for i, j in imports.pairs(asset.private.properties.whitelisted) do
+        for k = 1, #j, 1 do
+            local v = j[k]
+            j[v] = true
+            j[k] = nil
+        end
+    end
+
     function asset.public:buildManifest(rootPath, localPath, manifestPath)
         localPath = localPath or rootPath
         local manifestData = file:read(localPath..manifestPath)
@@ -357,15 +375,11 @@ else
                             }
                         }
                         if assetType == "module" then
-                            disabledProperties = {"streamRange", "enableLODs", "assetClumps", "assetAnimations", "assetSounds", "shaderMaps"}
                             table.insert(syncer.libraryModules, assetName)
-                            disabledProperties = {"streamRange", "enableLODs", "assetClumps", "assetAnimations", "assetSounds", "shaderMaps"}
                         elseif assetType == "animation" then
-                            disabledProperties = {"streamRange", "enableLODs", "assetClumps", "assetSounds", "shaderMaps"}
                             asset.public:buildFile(assetPath..(asset.public.references.asset)..".ifp", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
                             thread:pause()
                         elseif assetType == "sound" then
-                            disabledProperties = {"streamRange", "enableLODs", "assetClumps", "assetAnimations", "shaderMaps"}
                             if assetManifestData.assetSounds then
                                 local assetSounds = {}
                                 for i, j in imports.pairs(assetManifestData.assetSounds) do
@@ -384,7 +398,6 @@ else
                             end
                             thread:pause()
                         elseif assetType == "scene" then
-                            disabledProperties = {"assetAnimations", "assetSounds", "assetClumps"}
                             assetManifestData.assetClumps = false
                             assetManifestData.sceneDimension = math.max(asset.public.ranges.dimension[1], math.min(asset.public.ranges.dimension[2], imports.tonumber(assetManifestData.sceneDimension) or 0))
                             assetManifestData.sceneInterior = math.max(asset.public.ranges.interior[1], math.min(asset.public.ranges.interior[2], imports.tonumber(assetManifestData.sceneInterior) or 0))
