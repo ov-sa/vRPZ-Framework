@@ -47,7 +47,8 @@ local asset = class:create("asset", {
         lod = "lod",
         dff = "dff",
         col = "col",
-        map = "map"
+        map = "map",
+        dep = "dep"
     },
     ranges = {
         dimension = {-1, 65535},
@@ -322,13 +323,13 @@ else
                     cAssetDeps[i][k] = {}
                     if i == "script" then
                         for m, n in imports.pairs(v) do
-                            v[m] = assetPath.."dep/"..v[m]
+                            v[m] = assetPath..(asset.public.references.dep).."/"..v[m]
                             cAssetDeps[i][k][m] = v[m]
                             asset.public:buildFile(cAssetDeps[i][k][m], filePointer, encryptKey, filePointer.unSynced.rawData, k == "server", true)
                             thread:pause()
                         end
                     else
-                        j[k] = assetPath.."dep/"..j[k]
+                        j[k] = assetPath..(asset.public.references.dep).."/"..j[k]
                         cAssetDeps[i][k] = j[k]
                         asset.public:buildFile(cAssetDeps[i][k], filePointer, encryptKey, filePointer.unSynced.rawData, _, true)
                     end
