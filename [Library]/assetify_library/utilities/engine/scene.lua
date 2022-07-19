@@ -31,9 +31,12 @@ local imports = {
 
 local scene = class:create("scene")
 scene.private.separators = {IPL = ", ", IDE = ", "}
+scene.private.native = {
+    models = loadstring(file:read("utilities/rw/native/buffer.rw"))()
+}
 
 function scene.public:isNativeObject(modelName)
-    return (modelName and imports.engineGetModelIDFromName(modelName)) or false
+    return scene.private.native[modelName] or false
 end
 
 function scene.public:parseIDE(rw)
