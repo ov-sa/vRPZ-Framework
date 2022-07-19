@@ -15,6 +15,7 @@
 local imports = {
     destroyElement = destroyElement,
     createObject = createObject,
+    engineGetModelIDFromName = engineGetModelIDFromName,
     setElementAlpha = setElementAlpha,
     setElementDoubleSided = setElementDoubleSided,
     setElementCollisionsEnabled = setElementCollisionsEnabled,
@@ -30,6 +31,10 @@ local imports = {
 
 local scene = class:create("scene")
 scene.private.separators = {IPL = ", ", IDE = ", "}
+
+function scene.public:isNativeObject(modelName)
+    return (modelName and imports.engineGetModelIDFromName(modelName)) or false
+end
 
 function scene.public:parseIDE(rw)
     rw = (rw and string.split(rw, "\n")) or rw

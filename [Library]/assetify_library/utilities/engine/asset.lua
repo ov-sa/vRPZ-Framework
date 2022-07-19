@@ -424,8 +424,8 @@ else
                                 cAssetPack.rwDatas[assetName].synced.sceneIDE = (sceneIDEDatas and true) or false
                                 for k = 1, #sceneIPLDatas, 1 do
                                     local v = sceneIPLDatas[k]
-                                    local isNativeObject = (assetManifestData.sceneNativeObjects and imports.engineGetModelIDFromName(v[2]) and true) or false
-                                    if not isNativeObject) then
+                                    local isNativeObject = (assetManifestData.sceneNativeObjects and scene:isNativeObject(v[2])) or false
+                                    if not isNativeObject then
                                         asset.public:buildFile(assetPath..(asset.public.references.dff).."/"..v[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
                                         asset.public:buildFile(assetPath..(asset.public.references.dff).."/"..(asset.public.references.lod).."/"..v[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                         asset.public:buildFile(assetPath..(asset.public.references.col).."/"..v[2]..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
