@@ -85,33 +85,48 @@ if localPlayer then
         if not scene.public:isInstance(self) then return false end
         if not cAsset or not sceneManifest or not sceneData or not cAsset.synced then return false end
         local posX, posY, posZ, rotX, rotY, rotZ = sceneData.position.x + ((sceneManifest.sceneOffsets and sceneManifest.sceneOffsets.x) or 0), sceneData.position.y + ((sceneManifest.sceneOffsets and sceneManifest.sceneOffsets.y) or 0), sceneData.position.z + ((sceneManifest.sceneOffsets and sceneManifest.sceneOffsets.z) or 0), sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z
-        self.cStreamerInstance = imports.createObject(cAsset.synced.modelID, posX, posY, posZ, rotX, rotY, rotZ, (sceneManifest.enableLODs and not cAsset.synced.lodID and cAsset.synced.collisionID and true) or false) or false
+        self.cStreamerInstance = imports.createObject(isNativeObject or cAsset.synced.modelID, posX, posY, posZ, rotX, rotY, rotZ, (sceneManifest.enableLODs and not cAsset.synced.lodID and cAsset.synced.collisionID and true) or false) or false
         imports.setElementDoubleSided(self.cStreamerInstance, true)
-        imports.setElementCollisionsEnabled(self.cStreamerInstance, false)
-        if cAsset.synced.collisionID then
-            self.cCollisionInstance = imports.createObject(cAsset.synced.collisionID, posX, posY, posZ, rotX, rotY, rotZ) or false
-            imports.setElementAlpha(self.cCollisionInstance, 0)
-            imports.setElementDimension(self.cCollisionInstance, sceneManifest.sceneDimension)
-            imports.setElementInterior(self.cCollisionInstance, sceneManifest.sceneInterior)
-            if sceneManifest.enableLODs then
-                self.cModelInstance = imports.createObject(cAsset.synced.collisionID, posX, posY, posZ, rotX, rotY, rotZ, true) or false
-                self.cLODInstance = (cAsset.synced.lodID and imports.createObject(cAsset.synced.lodID, posX, posY, posZ, rotX, rotY, rotZ, true)) or false
-                attacher:attachElements(self.cModelInstance, self.cCollisionInstance)
-                imports.setElementAlpha(self.cModelInstance, 0)
-                imports.setElementDimension(self.cModelInstance, sceneManifest.sceneDimension)
-                imports.setElementInterior(self.cModelInstance, sceneManifest.sceneInterior)
-                if self.cLODInstance then
-                    imports.setElementDoubleSided(self.cLODInstance, true)
-                    imports.setLowLODElement(self.cStreamerInstance, self.cLODInstance)
-                    attacher:attachElements(self.cLODInstance, self.cCollisionInstance)
-                    imports.setElementDimension(self.cLODInstance, sceneManifest.sceneDimension)
-                    imports.setElementInterior(self.cLODInstance, sceneManifest.sceneInterior)
+        if not isNativeObject then
+            imports.setElementCollisionsEnabled(self.cStreamerInstance, false)
+            if cAsset.synced.collisionID then
+                self.cCollisionInstance = imports.createObject(cAsset.synced.collisionID, posX, posY, posZ, rotX, rotY, rotZ) or false
+                imports.setElementAlpha(self.cCollisionInstance, 0)
+                imports.setElementDimension(self.cCollisionInstance, sceneManifest.sceneDimension)
+                imports.setElementInterior(self.cCollisionInstance, sceneManifest.sceneInterior)
+                if sceneManifest.enableLODs then
+                    self.cModelInstance = imports.createObject(cAsset.synced.collisionID, posX, posY, posZ, rotX, rotY, rotZ, true) or false
+                    self.cLODInstance = (cAsset.synced.lodID and imports.createObject(cAsset.synced.lodID, posX, posY, posZ, rotX, rotY, rotZ, true)) or false
+                    attacher:attachElements(self.cModelInstance, self.cCollisionInstance)
+                    imports.setElementAlpha(self.cModelInstance, 0)
+                    imports.setElementDimension(self.cModelInstance, sceneManifest.sceneDimension)
+                    imports.setElementInterior(self.cModelInstance, sceneManifest.sceneInterior)
+                    if self.cLODInstance then
+                        imports.setElementDoubleSided(self.cLODInstance, true)
+                        imports.setLowLODElement(self.cStreamerInstance, self.cLODInstance)
+                        attacher:attachElements(self.cLODInstance, self.cCollisionInstance)
+                        imports.setElementDimension(self.cLODInstance, sceneManifest.sceneDimension)
+                        imports.setElementInterior(self.cLODInstance, sceneManifest.sceneInterior)
+                    end
+                    self.cStreamer = streamer:create(self.cStreamerInstance, "scene", {self.cCollisionInstance, self.cModelInstance})
+                else
+                    self.cModelInstance = self.cStreamerInstance
+                    self.cLODInstance = false
+                    self.cStreamer = streamer:create(self.cStreamerInstance, "scene", {self.cCollisionInstance})
                 end
-                self.cStreamer = streamer:create(self.cStreamerInstance, "scene", {self.cCollisionInstance, self.cModelInstance})
             else
-                self.cModelInstance = self.cStreamerInstance
-                self.cLODInstance = false
-                self.cStreamer = streamer:create(self.cStreamerInstance, "scene", {self.cCollisionInstance})
+                self.cCollisionInstance = false
+            end
+        else
+            self.cModelInstance = self.cStreamerInstance
+            self.cCollisionInstance = false
+            self.cLODInstance = (sceneManifest.enableLODs and imports.createObject(isNativeObject, posX, posY, posZ, rotX, rotY, rotZ, true)) or false
+            if self.cLODInstance then
+                imports.setElementDoubleSided(self.cLODInstance, true)
+                imports.setLowLODElement(self.cStreamerInstance, self.cLODInstance)
+                attacher:attachElements(self.cLODInstance, self.cStreamerInstance)
+                imports.setElementDimension(self.cLODInstance, sceneManifest.sceneDimension)
+                imports.setElementInterior(self.cLODInstance, sceneManifest.sceneInterior)
             end
         end
         cAsset.cScenes = cAsset.cScenes or {}
