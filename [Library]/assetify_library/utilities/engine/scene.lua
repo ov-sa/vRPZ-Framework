@@ -86,6 +86,7 @@ if localPlayer then
         if not cAsset or not sceneManifest or not sceneData or not cAsset.synced then return false end
         local posX, posY, posZ, rotX, rotY, rotZ = sceneData.position.x + ((sceneManifest.sceneOffsets and sceneManifest.sceneOffsets.x) or 0), sceneData.position.y + ((sceneManifest.sceneOffsets and sceneManifest.sceneOffsets.y) or 0), sceneData.position.z + ((sceneManifest.sceneOffsets and sceneManifest.sceneOffsets.z) or 0), sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z
         self.cStreamerInstance = imports.createObject(isNativeObject or cAsset.synced.modelID, posX, posY, posZ, rotX, rotY, rotZ, (sceneManifest.enableLODs and not isNativeObject and not cAsset.synced.lodID and cAsset.synced.collisionID and true) or false) or false
+        if not self.cStreamerInstance then return false end
         imports.setElementDoubleSided(self.cStreamerInstance, true)
         if not isNativeObject then
             imports.setElementCollisionsEnabled(self.cStreamerInstance, false)
@@ -110,15 +111,10 @@ if localPlayer then
                     end
                     self.cStreamer = streamer:create(self.cStreamerInstance, "scene", {self.cCollisionInstance, self.cModelInstance})
                 else
-                    self.cModelInstance = self.cStreamerInstance
-                    self.cLODInstance = false
                     self.cStreamer = streamer:create(self.cStreamerInstance, "scene", {self.cCollisionInstance})
                 end
-            else
-                self.cCollisionInstance = false
             end
         else
-            self.cModelInstance = self.cStreamerInstance
             self.cLODInstance = (sceneManifest.enableLODs and imports.createObject(isNativeObject, posX, posY, posZ, rotX, rotY, rotZ, true)) or false
             self.cCollisionInstance = self.cStreamerInstance
             if self.cLODInstance then
@@ -129,6 +125,9 @@ if localPlayer then
                 imports.setElementInterior(self.cLODInstance, sceneManifest.sceneInterior)
             end
         end
+        self.cModelInstance = (self.cModelInstance or self.cStreamerInstance) or false
+        self.cLODInstance = self.cLODInstance or false
+        self.cCollisionInstance = self.cCollisionInstance or false
         cAsset.cScenes = cAsset.cScenes or {}
         cAsset.cScenes[self] = true
         return true
