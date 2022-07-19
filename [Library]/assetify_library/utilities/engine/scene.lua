@@ -90,8 +90,8 @@ if localPlayer then
         imports.setElementDoubleSided(self.cStreamerInstance, true)
         if not isNativeObject then
             imports.setElementCollisionsEnabled(self.cStreamerInstance, false)
-            if cAsset.synced.collisionID then
-                self.cCollisionInstance = imports.createObject(cAsset.synced.collisionID, posX, posY, posZ, rotX, rotY, rotZ) or false
+            self.cCollisionInstance = (cAsset.synced.collisionID and imports.createObject(cAsset.synced.collisionID, posX, posY, posZ, rotX, rotY, rotZ)) or false
+            if self.cCollisionInstance then
                 imports.setElementAlpha(self.cCollisionInstance, 0)
                 imports.setElementDimension(self.cCollisionInstance, sceneManifest.sceneDimension)
                 imports.setElementInterior(self.cCollisionInstance, sceneManifest.sceneInterior)
