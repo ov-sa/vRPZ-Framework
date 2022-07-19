@@ -81,7 +81,7 @@ if localPlayer then
         return self:unload(...)
     end
 
-    function scene.public:load(cAsset, sceneManifest, sceneData)
+    function scene.public:load(cAsset, sceneManifest, sceneData, isNativeObject)
         if not scene.public:isInstance(self) then return false end
         if not cAsset or not sceneManifest or not sceneData or not cAsset.synced then return false end
         local posX, posY, posZ, rotX, rotY, rotZ = sceneData.position.x + ((sceneManifest.sceneOffsets and sceneManifest.sceneOffsets.x) or 0), sceneData.position.y + ((sceneManifest.sceneOffsets and sceneManifest.sceneOffsets.y) or 0), sceneData.position.z + ((sceneManifest.sceneOffsets and sceneManifest.sceneOffsets.z) or 0), sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z
