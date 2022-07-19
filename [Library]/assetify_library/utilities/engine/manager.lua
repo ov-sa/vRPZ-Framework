@@ -234,7 +234,7 @@ if localPlayer then
             end):resume({executions = settings.downloader.buildRate, frames = 1})
         elseif assetType == "scene" then
             thread:create(function(self)
-                local sceneIPLDatas = scene:parseIPL(asset:readFile(assetPath..(asset.references.scene)..".ipl", cAsset.manifestData.encryptKey))
+                local sceneIPLDatas = scene:parseIPL(asset:readFile(assetPath..(asset.references.scene)..".ipl", cAsset.manifestData.encryptKey), cAsset.manifestData.sceneNativeObjects)
                 if sceneIPLDatas then
                     local sceneIDEDatas = scene:parseIDE(asset:readFile(assetPath..(asset.references.scene)..".ide", cAsset.manifestData.encryptKey))
                     for i = 1, #sceneIPLDatas, 1 do
@@ -247,8 +247,7 @@ if localPlayer then
                         sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z = cQuat:toEuler()
                         cQuat:destroy()
                         if not cAsset.manifestData.sceneMapped then
-                            local isNativeModel = (cAsset.manifestData.sceneNativeObjects and scene:fetchNativeModelID(j[2])) or false
-                            if not isNativeModel and not cAsset.unSynced.assetRef[(j[2])] then
+                            if not j.nativeID and not cAsset.unSynced.assetRef[(j[2])] then
                                 cAsset.unSynced.assetCache[i] = {}
                                 asset:create(assetType, assetName, cAssetPack, cAsset.unSynced.rwCache, cAsset.manifestData, cAsset.unSynced.assetCache[i], {
                                     txd = (sceneIDEDatas and sceneIDEDatas[(j[2])] and assetPath.."txd/"..(sceneIDEDatas[(j[2])][1])..".txd") or assetPath..(asset.references.asset)..".txd",
@@ -258,7 +257,7 @@ if localPlayer then
                                 })
                                 cAsset.unSynced.assetRef[(j[2])] = cAsset.unSynced.assetCache[i].cAsset
                             end
-                            scene:create(cAsset.unSynced.assetRef[(j[2])], cAsset.manifestData, sceneData, isNativeModel)
+                            scene:create(cAsset.unSynced.assetRef[(j[2])], cAsset.manifestData, sceneData, j.nativeID)
                         else
                             cAsset.unSynced.assetCache[i] = {}
                             sceneData.position.x, sceneData.position.y, sceneData.position.z = sceneData.position.x + ((cAsset.manifestData.sceneOffsets and cAsset.manifestData.sceneOffsets.x) or 0), sceneData.position.y + ((cAsset.manifestData.sceneOffsets and cAsset.manifestData.sceneOffsets.y) or 0), sceneData.position.z + ((cAsset.manifestData.sceneOffsets and cAsset.manifestData.sceneOffsets.z) or 0)

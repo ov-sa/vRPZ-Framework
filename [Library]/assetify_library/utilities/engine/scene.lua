@@ -34,7 +34,7 @@ scene.private.native = {
     models = loadstring(file:read("utilities/rw/native/buffer.rw"))()
 }
 
-function scene.public:fetchNativeModelID(modelName)
+function scene.private:fetchNativeModelID(modelName)
     return scene.private.native[modelName] or false
 end
 
@@ -54,7 +54,7 @@ function scene.public:parseIDE(rw)
     return result
 end
 
-function scene.public:parseIPL(rw)
+function scene.public:parseIPL(rw, isNativeModelsEnabled)
     rw = (rw and string.split(rw, "\n")) or rw
     if not rw then return false end
     local result = {}
@@ -62,6 +62,7 @@ function scene.public:parseIPL(rw)
         local data = string.split(rw[i], scene.private.separators.IPL)
         data[2] = (data[2] and string.gsub(data[2], "%s", "")) or data[2]
         if data[2] then
+            data.nativeID = (isNativeModelsEnabled and scene.private:fetchNativeModelID(data[2])) or nil
             table.insert(result, data)
         end
     end
@@ -83,14 +84,14 @@ if localPlayer then
         return self:unload(...)
     end
 
-    function scene.public:load(cAsset, sceneManifest, sceneData, isNativeModel)
+    function scene.public:load(cAsset, sceneManifest, sceneData, nativeID)
         if not scene.public:isInstance(self) then return false end
         if not cAsset or not sceneManifest or not sceneData or not cAsset.synced then return false end
         local posX, posY, posZ, rotX, rotY, rotZ = sceneData.position.x + ((sceneManifest.sceneOffsets and sceneManifest.sceneOffsets.x) or 0), sceneData.position.y + ((sceneManifest.sceneOffsets and sceneManifest.sceneOffsets.y) or 0), sceneData.position.z + ((sceneManifest.sceneOffsets and sceneManifest.sceneOffsets.z) or 0), sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z
-        self.cStreamerInstance = imports.createObject(isNativeModel or cAsset.synced.modelID, posX, posY, posZ, rotX, rotY, rotZ, (sceneManifest.enableLODs and not isNativeModel and not cAsset.synced.lodID and cAsset.synced.collisionID and true) or false) or false
+        self.cStreamerInstance = imports.createObject(nativeID or cAsset.synced.modelID, posX, posY, posZ, rotX, rotY, rotZ, (sceneManifest.enableLODs and not nativeID and not cAsset.synced.lodID and cAsset.synced.collisionID and true) or false) or false
         if not self.cStreamerInstance then return false end
         imports.setElementDoubleSided(self.cStreamerInstance, true)
-        if not isNativeModel then
+        if not nativeID then
             imports.setElementCollisionsEnabled(self.cStreamerInstance, false)
             self.cCollisionInstance = (cAsset.synced.collisionID and imports.createObject(cAsset.synced.collisionID, posX, posY, posZ, rotX, rotY, rotZ)) or false
             if self.cCollisionInstance then
@@ -117,7 +118,7 @@ if localPlayer then
                 end
             end
         else
-            self.cLODInstance = (sceneManifest.enableLODs and imports.createObject(isNativeModel, posX, posY, posZ, rotX, rotY, rotZ, true)) or false
+            self.cLODInstance = (sceneManifest.enableLODs and imports.createObject(nativeID, posX, posY, posZ, rotX, rotY, rotZ, true)) or false
             self.cCollisionInstance = self.cStreamerInstance
             if self.cLODInstance then
                 imports.setElementDoubleSided(self.cLODInstance, true)

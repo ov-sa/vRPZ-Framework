@@ -413,7 +413,7 @@ else
                             end
                         end
                         local sceneIPLPath = assetPath..(asset.public.references.scene)..".ipl"
-                        local sceneIPLDatas = scene:parseIPL(file:read(sceneIPLPath))
+                        local sceneIPLDatas = scene:parseIPL(file:read(sceneIPLPath), assetManifestData.sceneNativeObjects)
                         if sceneIPLDatas then
                             asset.public:buildFile(sceneIPLPath, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                             if not assetManifestData.sceneMapped then
@@ -424,8 +424,7 @@ else
                                 cAssetPack.rwDatas[assetName].synced.sceneIDE = (sceneIDEDatas and true) or false
                                 for k = 1, #sceneIPLDatas, 1 do
                                     local v = sceneIPLDatas[k]
-                                    local isNativeModel = (assetManifestData.sceneNativeObjects and scene:fetchNativeModelID(v[2])) or false
-                                    if not isNativeModel then
+                                    if not v.nativeID then
                                         asset.public:buildFile(assetPath..(asset.public.references.dff).."/"..v[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
                                         asset.public:buildFile(assetPath..(asset.public.references.dff).."/"..(asset.public.references.lod).."/"..v[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                         asset.public:buildFile(assetPath..(asset.public.references.col).."/"..v[2]..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
