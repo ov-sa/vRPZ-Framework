@@ -245,12 +245,12 @@ if localPlayer then
     end
 else
     asset.private.properties = {
-        reserved = {"streamRange", "enableLODs", "assetClumps", "assetAnimations", "assetSounds", "shaderMaps", "sceneDimension", "sceneInterior", "sceneOffsets", "sceneMapped", "sceneNativeObject"},
+        reserved = {"streamRange", "enableLODs", "assetClumps", "assetAnimations", "assetSounds", "shaderMaps", "sceneDimension", "sceneInterior", "sceneOffsets", "sceneMapped", "sceneNativeObjects"},
         whitelisted = {
             ["module"] = {},
             ["animation"] = {"assetAnimations"},
             ["sound"] = {"assetSounds"},
-            ["scene"] = {"streamRange", "enableLODs", "shaderMaps", "sceneDimension", "sceneInterior", "sceneOffsets", "sceneMapped", "sceneNativeObject"},
+            ["scene"] = {"streamRange", "enableLODs", "shaderMaps", "sceneDimension", "sceneInterior", "sceneOffsets", "sceneMapped", "sceneNativeObjects"},
             ["*"] = {"streamRange", "enableLODs", "assetClumps", "shaderMaps"}
         }
     }
@@ -404,9 +404,9 @@ else
                     elseif assetType == "scene" then
                         assetManifestData.sceneDimension = math.max(asset.public.ranges.dimension[1], math.min(asset.public.ranges.dimension[2], imports.tonumber(assetManifestData.sceneDimension) or 0))
                         assetManifestData.sceneInterior = math.max(asset.public.ranges.interior[1], math.min(asset.public.ranges.interior[2], imports.tonumber(assetManifestData.sceneInterior) or 0))
-                        assetManifestData.sceneMapped = (assetManifestData.sceneMapped and true) or false
-                        assetManifestData.sceneNativeObject = (assetManifestData.sceneNativeObject and true) or false
                         assetManifestData.sceneOffsets = (assetManifestData.sceneOffsets and (imports.type(assetManifestData.sceneOffsets) == "table") and assetManifestData.sceneOffsets) or false
+                        assetManifestData.sceneMapped = (assetManifestData.sceneMapped and true) or false
+                        assetManifestData.sceneNativeObjects = (assetManifestData.sceneNativeObjects and true) or false
                         if assetManifestData.sceneOffsets then
                             for i, j in imports.pairs(assetManifestData.sceneOffsets) do
                                 assetManifestData.sceneOffsets[i] = imports.tonumber(j)
