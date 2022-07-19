@@ -16,9 +16,9 @@ local imports = {
     type = type,
     pairs = pairs,
     md5 = md5,
-    outputDebugString = outputDebugString,
     tonumber = tonumber,
     tostring = tostring,
+    outputDebugString = outputDebugString,
     destroyElement = destroyElement,
     engineRequestModel = engineRequestModel,
     engineSetModelLODDistance = engineSetModelLODDistance,
@@ -295,9 +295,7 @@ else
                 end
                 if rawPointer then rawPointer[filePath] = builtFileData end
             else
-                if debugExistence then
-                    imports.outputDebugString("[Assetify] | Invalid File: "..filePath)
-                end
+                if debugExistence then imports.outputDebugString("[Assetify] | Invalid File: "..filePath) end
             end
         end
         return true
