@@ -85,7 +85,7 @@ if localPlayer then
         if not scene.public:isInstance(self) then return false end
         if not cAsset or not sceneManifest or not sceneData or not cAsset.synced then return false end
         local posX, posY, posZ, rotX, rotY, rotZ = sceneData.position.x + ((sceneManifest.sceneOffsets and sceneManifest.sceneOffsets.x) or 0), sceneData.position.y + ((sceneManifest.sceneOffsets and sceneManifest.sceneOffsets.y) or 0), sceneData.position.z + ((sceneManifest.sceneOffsets and sceneManifest.sceneOffsets.z) or 0), sceneData.rotation.x, sceneData.rotation.y, sceneData.rotation.z
-        self.cStreamerInstance = imports.createObject(isNativeObject or cAsset.synced.modelID, posX, posY, posZ, rotX, rotY, rotZ, (sceneManifest.enableLODs and not cAsset.synced.lodID and cAsset.synced.collisionID and true) or false) or false
+        self.cStreamerInstance = imports.createObject(isNativeObject or cAsset.synced.modelID, posX, posY, posZ, rotX, rotY, rotZ, (sceneManifest.enableLODs and not isNativeObject and not cAsset.synced.lodID and cAsset.synced.collisionID and true) or false) or false
         imports.setElementDoubleSided(self.cStreamerInstance, true)
         if not isNativeObject then
             imports.setElementCollisionsEnabled(self.cStreamerInstance, false)
@@ -119,8 +119,8 @@ if localPlayer then
             end
         else
             self.cModelInstance = self.cStreamerInstance
-            self.cCollisionInstance = false
             self.cLODInstance = (sceneManifest.enableLODs and imports.createObject(isNativeObject, posX, posY, posZ, rotX, rotY, rotZ, true)) or false
+            self.cCollisionInstance = self.cStreamerInstance
             if self.cLODInstance then
                 imports.setElementDoubleSided(self.cLODInstance, true)
                 imports.setLowLODElement(self.cStreamerInstance, self.cLODInstance)
