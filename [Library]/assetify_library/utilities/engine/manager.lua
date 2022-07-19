@@ -257,7 +257,7 @@ if localPlayer then
                                 })
                                 cAsset.unSynced.assetRef[(j[2])] = cAsset.unSynced.assetCache[i].cAsset
                             end
-                            scene:create(cAsset.unSynced.assetRef[(j[2])], cAsset.manifestData, sceneData, j.nativeID)
+                            scene:create(cAsset.unSynced.assetRef[(j[2])], cAsset.manifestData, sceneData, j.nativeID, j.nativeLOD)
                         else
                             cAsset.unSynced.assetCache[i] = {}
                             sceneData.position.x, sceneData.position.y, sceneData.position.z = sceneData.position.x + ((cAsset.manifestData.sceneOffsets and cAsset.manifestData.sceneOffsets.x) or 0), sceneData.position.y + ((cAsset.manifestData.sceneOffsets and cAsset.manifestData.sceneOffsets.y) or 0), sceneData.position.z + ((cAsset.manifestData.sceneOffsets and cAsset.manifestData.sceneOffsets.z) or 0)
