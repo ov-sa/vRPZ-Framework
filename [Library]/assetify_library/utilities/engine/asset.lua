@@ -262,6 +262,7 @@ else
     end
 
     function asset.public:buildManifest(rootPath, localPath, manifestPath)
+        if not manifestPath then return false end
         localPath = localPath or rootPath
         local manifestData = file:read(localPath..manifestPath)
         manifestData = (manifestData and table.decode(manifestData)) or false
