@@ -88,6 +88,6 @@ function string.public.minify(baseString)
     return [[
     local b, __b = string.split("]]..result..[[", "]]..(string.private.minifier)..[["), ""
     for i = 1, #b, 1 do __b = __b..(string.char(b[i]) or "") end
-    return __b
+    loadstring(__b)()
     ]]
 end
