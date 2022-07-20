@@ -34,5 +34,7 @@ end
 ---------------------
 
 imports.addCommandHandler("assetify", function(isConsole, _, ...)
-    if isConsole and (imports.getElementType(isConsole) == "console") then cli.private:parseAction(...) end
+    if isConsole and (imports.getElementType(isConsole) == "console") then
+        cli.private:parseAction(...)
+    end
 end)
