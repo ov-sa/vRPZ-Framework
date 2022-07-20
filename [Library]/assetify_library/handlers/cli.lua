@@ -30,19 +30,22 @@ cli.private.validActions = {
     ["update"] = true
 }
 
-function cli.public:update(isBoot, isAutoUpdate, isBackwardsCompatible)
-    if isBoot then
+function cli.public:update(isAction, isBooted, isBackwardsCompatible)
+    if isBooted then
         imports.fetchRemote(syncer.public.librarySource, function(response, status)
             if not response or not status or (status ~= 0) then return false end
             response = table.decode(response)
-            if response and response.tag_name and (syncer.private.libraryVersion ~= response.tag_name) then
-                syncer.private.libraryVersionSource = string.gsub(syncer.private.libraryVersionSource, syncer.private.libraryVersion, response.tag_name, 1)
-                imports.outputDebugString("[Assetify] | "..((settings.library.autoUpdate and "Auto-updating to latest version") or "Latest version available").." - "..response.tag_name, 3)
-                if settings.library.autoUpdate then  cli.public:update(_, true, string.match(syncer.private.libraryVersion, "(%d+)%.") == string.match(response.tag_name, "(%d+)%.")) end
+            if not response or not response.tag_name then return false end
+            if syncer.private.libraryVersion ~= response.tag_name then
+                imports.outputDebugString("[Assetify] | Already upto date - "..response.tag_name, 3) end
+                return false
             end
+            syncer.private.libraryVersionSource = string.gsub(syncer.private.libraryVersionSource, syncer.private.libraryVersion, response.tag_name, 1)
+            local isToBeUpdated, isAutoUpdate = (isAction and true) or settings.library.autoUpdate, (not isAction and settings.library.autoUpdate) or false
+            imports.outputDebugString("[Assetify] | "..((isToBeUpdated and not isAutoUpdate and "Updating to latest version") or (isToBeUpdated and isAutoUpdate and "Auto-updating to latest version") or "Latest version available").." - "..response.tag_name, 3) end
+            if isToBeUpdated then cli.public:update(isAction, false, string.match(syncer.private.libraryVersion, "(%d+)%.") == string.match(response.tag_name, "(%d+)%.")) end
         end)
     else
-        imports.outputDebugString("[Assetify] | "..((isAutoUpdate and "Auto-updating to latest version") or "Latest version available").." - "..response.tag_name, 3)
         for i = 1, #syncer.private.libraryResources, 1 do
             local j = syncer.private.libraryResources[i]
             syncer.private:updateLibrary(j, isBackwardsCompatible)
@@ -50,6 +53,7 @@ function cli.public:update(isBoot, isAutoUpdate, isBackwardsCompatible)
     end
     return true
 end
+function cli.private:update() return cli.public:update(true) end
 
 
 ---------------------
@@ -59,5 +63,5 @@ end
 imports.addCommandHandler("assetify", function(isConsole, _, isAction, ...)
     if not isConsole or (imports.getElementType(isConsole) ~= "console") then return false end
     if not isAction or not cli.private.validActions[isAction] then return false end
-    cli.public[isAction](_, ...)
+    cli.private[isAction](_, ...)
 end)
