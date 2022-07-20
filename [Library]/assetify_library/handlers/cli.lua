@@ -37,7 +37,7 @@ end
 ---------------------
 
 imports.addCommandHandler("assetify", function(isConsole, _, action, ...)
-    if isConsole and (imports.getElementType(isConsole) == "console") and action and cli.private.validActions[action] then
-        cli.public[action](_, ...)
+    if isConsole and (imports.getElementType(isConsole) == "console") and isAction and cli.private.validActions[isAction] then
+        cli.public[isAction](_, ...)
     end
 end)
