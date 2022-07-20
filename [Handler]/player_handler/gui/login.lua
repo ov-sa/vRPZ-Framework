@@ -480,7 +480,7 @@ CGame.execOnModuleLoad(function()
     --[[ Functions: UI Helpers ]]--
     -------------------------------
 
-    function isLoginUIVisible() return loginUI.private.state end
+    function loginUI.public.isVisible() return loginUI.private.state end
 
     imports.assetify.network:create("Client:onSetLoginUIPhase"):on(function(phaseID)
         if not phaseID or not loginUI.private.phases[1].optionsUI[phaseID] or (loginUI.private.phase and loginUI.private.phase == phaseID) then return false end
