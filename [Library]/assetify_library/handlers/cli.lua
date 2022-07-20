@@ -32,6 +32,7 @@ cli.private.validActions = {
 
 function cli.public:update(isAction, isBooted, isBackwardsCompatible)
     if isBooted then
+        if isAction then imports.outputDebugString("[Assetify] | Fetching latest version; Hold up..", 3) end
         imports.fetchRemote(syncer.public.librarySource, function(response, status)
             if not response or not status or (status ~= 0) then return false end
             response = table.decode(response)
