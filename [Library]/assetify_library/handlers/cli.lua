@@ -14,6 +14,7 @@
 
 local imports = {
     type = type,
+    getElementType = getElementType,
     addCommandHandler = addCommandHandler
 }
 
@@ -22,7 +23,17 @@ local imports = {
 --[[ CLI ]]--
 -------------
 
-imports.addCommandHandler("assetify", function(player)
-    print("executed assetify command")
-    print(tostring(player))
+local cli = class:create("cli")
+
+function cli.private:parseAction(action, ...)
+
+end
+
+
+---------------------
+--[[ API Syncers ]]--
+---------------------
+
+imports.addCommandHandler("assetify", function(isConsole, _, ...)
+    if isConsole and (imports.getElementType(isConsole) == "console") then cli.private:parseAction(...) end
 end)
