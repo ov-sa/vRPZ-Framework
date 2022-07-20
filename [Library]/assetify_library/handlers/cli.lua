@@ -36,14 +36,11 @@ function cli.public:update(isAction, isBooted, isBackwardsCompatible)
             if not response or not status or (status ~= 0) then return false end
             response = table.decode(response)
             if not response or not response.tag_name then return false end
-            if syncer.private.libraryVersion ~= response.tag_name then
-                imports.outputDebugString("[Assetify] | Already upto date - "..response.tag_name, 3) end
-                return false
-            end
+            if syncer.private.libraryVersion == response.tag_name then imports.outputDebugString("[Assetify] | Already upto date - "..response.tag_name, 3); return false end
             syncer.private.libraryVersionSource = string.gsub(syncer.private.libraryVersionSource, syncer.private.libraryVersion, response.tag_name, 1)
             local isToBeUpdated, isAutoUpdate = (isAction and true) or settings.library.autoUpdate, (not isAction and settings.library.autoUpdate) or false
-            imports.outputDebugString("[Assetify] | "..((isToBeUpdated and not isAutoUpdate and "Updating to latest version") or (isToBeUpdated and isAutoUpdate and "Auto-updating to latest version") or "Latest version available").." - "..response.tag_name, 3) end
-            if isToBeUpdated then cli.public:update(isAction, false, string.match(syncer.private.libraryVersion, "(%d+)%.") == string.match(response.tag_name, "(%d+)%.")) end
+            imports.outputDebugString("[Assetify] | "..((isToBeUpdated and not isAutoUpdate and "Updating to latest version") or (isToBeUpdated and isAutoUpdate and "Auto-updating to latest version") or "Latest version available").." - "..response.tag_name, 3)
+            if isToBeUpdated then cli.public:update(isAction, false, string.match(syncer.private.libraryVersion, "(%d+)%.") ~= string.match(response.tag_name, "(%d+)%.")) end
         end)
     else
         for i = 1, #syncer.private.libraryResources, 1 do
