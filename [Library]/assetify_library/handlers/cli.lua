@@ -36,7 +36,7 @@ end
 --[[ API Syncers ]]--
 ---------------------
 
-imports.addCommandHandler("assetify", function(isConsole, _, action, ...)
+imports.addCommandHandler("assetify", function(isConsole, _, isAction, ...)
     if not isConsole or (imports.getElementType(isConsole) ~= "console") then return false end
     if not isAction or not cli.private.validActions[isAction] then return false end
     cli.public[isAction](_, ...)
