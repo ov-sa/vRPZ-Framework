@@ -70,7 +70,7 @@ CGame.isUIVisible = function()
         loginUI:isVisible(),
         isInventoryUIVisible(),
         isScoreboardUIVisible(),
-        isTaskUIVisible()
+        taskboardUI:isVisible()
     }
     local state = false
     for i = 1, #uiStates, 1 do
