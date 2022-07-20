@@ -45,8 +45,8 @@ local imports = {
 
 local loginUI = assetify.namespace:create("loginUI")
 CGame.execOnModuleLoad(function()
-    loginUI.private.cache = {keys = {}, timers = {}},
-    loginUI.private.bgTexture = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "login:background"),
+    loginUI.private.cache = {keys = {}, timers = {}}
+    loginUI.private.bgTexture = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "login:background")
     loginUI.private.phases = {
         [1] = {
             bgTexture = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "login:lobby"),
