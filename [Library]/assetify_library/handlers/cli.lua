@@ -36,7 +36,9 @@ function cli.public:update(isAction, isBooted, isBackwardsCompatible)
             if not response or not status or (status ~= 0) then return false end
             response = table.decode(response)
             if not response or not response.tag_name then return false end
-            if syncer.private.libraryVersion == response.tag_name then imports.outputDebugString("[Assetify] | Already upto date - "..response.tag_name, 3); return false end
+            if syncer.private.libraryVersion == response.tag_name then
+                if isAction then imports.outputDebugString("[Assetify] | Already upto date - "..response.tag_name, 3) end
+                return false end
             syncer.private.libraryVersionSource = string.gsub(syncer.private.libraryVersionSource, syncer.private.libraryVersion, response.tag_name, 1)
             local isToBeUpdated, isAutoUpdate = (isAction and true) or settings.library.autoUpdate, (not isAction and settings.library.autoUpdate) or false
             imports.outputDebugString("[Assetify] | "..((isToBeUpdated and not isAutoUpdate and "Updating to latest version") or (isToBeUpdated and isAutoUpdate and "Auto-updating to latest version") or "Latest version available").." - "..response.tag_name, 3)
@@ -50,7 +52,7 @@ function cli.public:update(isAction, isBooted, isBackwardsCompatible)
     end
     return true
 end
-function cli.private:update() return cli.public:update(true) end
+function cli.private:update() return cli.public:update(true, true) end
 
 
 ---------------------
