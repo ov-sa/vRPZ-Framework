@@ -23,9 +23,12 @@ local imports = {
 -------------
 
 local cli = class:create("cli")
+cli.private.validActions = {
+    ["update"] = true
+}
 
-function cli.private:parseAction(action, ...)
-
+function cli.public:update(...)
+    print("EXECUTED UPDATA ACTION")
 end
 
 
@@ -33,8 +36,8 @@ end
 --[[ API Syncers ]]--
 ---------------------
 
-imports.addCommandHandler("assetify", function(isConsole, _, ...)
-    if isConsole and (imports.getElementType(isConsole) == "console") then
-        cli.private:parseAction(...)
+imports.addCommandHandler("assetify", function(isConsole, _, action, ...)
+    if isConsole and (imports.getElementType(isConsole) == "console") and action and cli.private.validActions[action] then
+        cli.public[action](_, ...)
     end
 end)
