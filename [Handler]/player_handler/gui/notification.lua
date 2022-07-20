@@ -28,7 +28,6 @@ local imports = {
 -------------------
 
 local notifUI = assetify.namespace:create("notifUI")
-
 CGame.execOnModuleLoad(function()
 notifUI.private.buffer = {}
 notifUI.private.startX, notifUI.private.startY, notifUI.private.paddingY, notifUI.private.offsetY = -5, 5, 10, 0
