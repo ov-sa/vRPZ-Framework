@@ -346,8 +346,8 @@ inventoryUI.private.isUIEnabled = function()
     return (inventoryUI.private.isSynced and inventoryUI.private.isEnabled and not inventoryUI.private.isForcedDisabled) or false
 end
 
-function isInventoryUIVisible() return inventoryUI.private.state end
-function isInventoryUIEnabled() return inventoryUI.private.isUIEnabled() end
+function inventoryUI.public:isVisible() return inventoryUI.private.state end
+function inventoryUI.public:isEnabled() return inventoryUI.private.isUIEnabled() end
 
 imports.assetify.network:create("Client:onEnableInventoryUI"):on(function(state, isForced)
     if isForced then inventoryUI.private.isForcedDisabled = not state end

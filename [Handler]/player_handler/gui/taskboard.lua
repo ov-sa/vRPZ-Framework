@@ -156,7 +156,7 @@ taskboardUI.private.renderUI = function(renderData)
     if renderData.renderType == "input" then
         taskboardUI.private.cache.keys.mouse = imports.isMouseClicked()
         taskboardUI.private.cache.keys.scroll.state, taskboardUI.private.cache.keys.scroll.streak = imports.isMouseScrolled()
-        taskboardUI.private.cache.isEnabled = isInventoryUIEnabled()
+        taskboardUI.private.cache.isEnabled = inventoryUI:isEnabled()
     elseif renderData.renderType == "render" then
         local isLMBClicked = false
         local isUIEnabled = taskboardUI.private.cache.isEnabled
