@@ -30,15 +30,20 @@ cli.private.validActions = {
     ["update"] = true
 }
 
+
+----------------------
+--[[ CLI Handlers ]]--
+----------------------
+
 function cli.public:uid(isAction)
     imports.outputServerLog("[Assetify] | Your UID: "..syncer.librarySerial)
     return true
 end
 
 
-----------------------
---[[ CLI Handlers ]]--
-----------------------
+---------------------
+--[[ CLI Syncers ]]--
+---------------------
 
 imports.addCommandHandler("assetify", function(isConsole, _, isAction, ...)
     if not isConsole or (imports.getElementType(isConsole) ~= "console") then return false end
