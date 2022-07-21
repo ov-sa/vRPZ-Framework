@@ -62,12 +62,7 @@ end
 
 function cli.private:update(resourcePointer, responsePointer, isUpdationStatus)
     if isUpdationStatus ~= nil then
-        imports.outputDebugString("[Assetify] | "..((isUpdationStatus and "Auto-updation successfully completed; Rebooting!") or "Auto-updation failed due to connectivity issues; Try again later..."), 3)
-        if isUpdationStatus then
-            print("YA")
-            --local __resource = imports.getResourceFromName(resourcePointer.resourceName)
-            --if __resource then imports.restartResource(__resource) end
-        end
+        imports.outputDebugString("[Assetify] | "..((isUpdationStatus and "Updation successfully completed; Rebooting!") or "Updation failed due to connectivity issues; Try again later..."), 3)
         updateResources.onUpdateCB(isUpdationStatus)
         return true
     end
