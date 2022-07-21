@@ -127,9 +127,9 @@ function cli.public:update(isAction)
     cli.public.isLibraryBeingUpdated = true
     if isAction then imports.outputDebugString("[Assetify] | Fetching latest version; Hold up...", 3) end
     imports.fetchRemote(syncer.librarySource, function(response, status)
-        if not response or not status or (status ~= 0) then return updateResources.onUpdateCallback() end
+        if not response or not status or (status ~= 0) then return updateResources.onUpdateCallback(false, true) end
         response = table.decode(response)
-        if not response or not response.tag_name then return updateResources.onUpdateCallback() end
+        if not response or not response.tag_name then return updateResources.onUpdateCallback(false, true) end
         if syncer.libraryVersion == response.tag_name then
             if isAction then imports.outputDebugString("[Assetify] | Already upto date - "..response.tag_name, 3) end
             return updateResources.onUpdateCallback()
