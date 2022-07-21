@@ -96,7 +96,6 @@ function cli.private:update(resourcePointer, responsePointer, isUpdationStatus)
                 isLastIndex = true
                 cli.private:update(resourcePointer, {resourceMeta, "meta.xml", resoureResponse[1]})
                 cli.private:update(resourcePointer, _, true)
-                print("wow")
             end
         end)
         updateResources.updateThread:resume()
