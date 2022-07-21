@@ -32,10 +32,12 @@ cli.private.validActions = {
 
 function cli.public:update(isAction)
     if syncer.private.isLibraryBeingUpdated then return imports.outputDebugString("[Assetify] | An update request is already being processed; Kindly have patience...", 3) end
-    syncer.private.isLibraryBeingUpdated, syncer.private.onLibraryUpdateCB = true, syncer.private.onLibraryUpdateCB or function()
-        syncer.private.libraryVersionSource = syncer.private.libraryUpdateCache.libraryVersionSource
-        syncer.private.isLibraryBeingUpdated = nil
+    syncer.private.isLibraryBeingUpdated, syncer.private.onLibraryUpdateCB = true, syncer.private.onLibraryUpdateCB or function(isSuccess)
+        if isSuccess then
+            syncer.private.libraryVersionSource = syncer.private.libraryUpdateCache.libraryVersionSource
+        end
         syncer.private.libraryUpdateCache = nil
+        syncer.private.isLibraryBeingUpdated = nil
     end
     if isAction then imports.outputDebugString("[Assetify] | Fetching latest version; Hold up...", 3) end
     imports.fetchRemote(syncer.public.librarySource, function(response, status)
