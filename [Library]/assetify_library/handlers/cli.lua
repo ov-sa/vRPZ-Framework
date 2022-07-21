@@ -32,15 +32,15 @@ cli.private.validActions = {
 
 function cli.public:update(isAction)
     if syncer.private.isLibraryBeingUpdated then return imports.outputDebugString("[Assetify] | An update is already in progress; Kindly have patience...", 3) end
-    syncer.private.isLibraryBeingUpdated, syncer.private.onUpdateCallBack = true, syncer.private.onUpdateCallBack or function() syncer.private.isLibraryBeingUpdated = false end
+    syncer.private.isLibraryBeingUpdated, syncer.private.onLibraryUpdateCB = true, syncer.private.onLibraryUpdateCB or function() syncer.private.isLibraryBeingUpdated = false end
     if isAction then imports.outputDebugString("[Assetify] | Fetching latest version; Hold up...", 3) end
     imports.fetchRemote(syncer.public.librarySource, function(response, status)
-        if not response or not status or (status ~= 0) then return syncer.private.onUpdateCallBack() end
+        if not response or not status or (status ~= 0) then return syncer.private.onLibraryUpdateCB() end
         response = table.decode(response)
-        if not response or not response.tag_name then return syncer.private.onUpdateCallBack() end
+        if not response or not response.tag_name then return syncer.private.onLibraryUpdateCB() end
         if syncer.private.libraryVersion == response.tag_name then
             if isAction then imports.outputDebugString("[Assetify] | Already upto date - "..response.tag_name, 3) end
-            return syncer.private.onUpdateCallBack()
+            return syncer.private.onLibraryUpdateCB()
         end
         syncer.private.libraryVersionSource = string.gsub(syncer.private.libraryVersionSource, syncer.private.libraryVersion, response.tag_name, 1)
         local isToBeUpdated, isAutoUpdate = (isAction and true) or settings.library.autoUpdate, (not isAction and settings.library.autoUpdate) or false
