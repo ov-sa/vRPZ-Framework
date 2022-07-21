@@ -285,70 +285,31 @@ bundler.private:createBuffer("syncer", _, [[
 ]])
 
 bundler.private:createBuffer("attacher", _, [[
-    assetify.attacher = {
-        setAttachment = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setAttachment", ...)
-        end,
-
-        setDetachment = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setDetachment", ...)
-        end,
-
-        clearAttachment = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "clearAttachment", ...)
-        end,
-
-        setBoneAttach = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setBoneAttachment", ...)
-        end,
-    
-        setBoneDetach = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setBoneDetachment", ...)
-        end,
-    
-        setBoneRefresh = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setBoneRefreshment", ...)
-        end,
-    
-        clearBoneAttach = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "clearBoneAttachment", ...)
-        end
-    }
+    assetify.attacher = {}
+    ]]..bundler.private:createExports({
+        shared = {
+            {exportIndex = "assetify.attacher.setAttachment", exportName = "setAttachment"},
+            {exportIndex = "assetify.attacher.setDetachment", exportName = "setDetachment"},
+            {exportIndex = "assetify.attacher.clearAttachment", exportName = "clearAttachment"},
+            {exportIndex = "assetify.attacher.setBoneAttach", exportName = "setBoneAttachment"},
+            {exportIndex = "assetify.attacher.setBoneDetach", exportName = "setBoneDetachment"},
+            {exportIndex = "assetify.attacher.setBoneRefresh", exportName = "setBoneRefreshment"},
+            {exportIndex = "assetify.attacher.clearBoneAttach", exportName = "clearBoneAttachment"}
+        }
+    })..[[
 ]])
 
-local cExports = bundler.private:createExports({
-    shared = {
-        {exportIndex = "sharedwew", exportName = "sharedxDDD1"}
-    },
-    client = {
-        {exportIndex = "wew", exportName = "xDDD2"}
-    },
-    server = {
-        {exportIndex = "serverwew", exportName = "serverxDDD2"},
-        {exportIndex = "serverwew 2333", exportName = "serverxDDD2  22333"}
-    }
-})
-print(cExports)
 
 bundler.private:createBuffer("lights", "light", [[
     assetify.light = {
         planar = {}
     }
-    if localPlayer then
-        assetify.light.planar.create = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createPlanarLight", ...)
-        end
-
-        assetify.light.planar.setResolution = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setPlanarLightResolution", ...)
-        end
-
-        assetify.light.planar.setTexture = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setPlanarLightTexture", ...)
-        end
-
-        assetify.light.planar.setColor = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setPlanarLightColor", ...)
-        end
-    end
+    ]]..bundler.private:createExports({
+        client = {
+            {exportIndex = "assetify.light.planar.create", exportName = "createPlanarLight"},
+            {exportIndex = "assetify.light.planar.setResolution", exportName = "setPlanarLightResolution"},
+            {exportIndex = "assetify.light.planar.setTexture", exportName = "setPlanarLightTexture"},
+            {exportIndex = "assetify.light.planar.setColor", exportName = "setPlanarLightColor"}
+        }
+    })..[[
 ]])
