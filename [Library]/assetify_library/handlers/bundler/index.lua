@@ -23,7 +23,7 @@ local imports = {
 ------------------------
 
 local bundler = class:create("bundler")
-function bundler.private.public:import() return bundler end
+function bundler.public:import() return bundler end
 bundler.private.buffer = {}
 bundler.private.utils = {
     "utilities/sandbox/index.lua",
