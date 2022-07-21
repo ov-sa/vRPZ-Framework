@@ -61,12 +61,11 @@ function bundler.public:createUtils()
 end
 
 function bundler.private:createBuffer(index, data, name)
-    if bundler.private.buffer[moduleName] then return false end
-    bundler.private.buffer[moduleName] = {
+    if bundler.private.buffer[index] then return false end
+    bundler.private.buffer[index] = {
         module = name,
         rw = data
     }
-
     return true
 end
 
