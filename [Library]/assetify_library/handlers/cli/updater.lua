@@ -79,12 +79,12 @@ function cli.private:update(resourcePointer, responsePointer, isUpdationStatus)
                 imports.fetchRemote(resourceMeta, function(...) resoureResponse = table.pack(...); updateResources.updateThread:resume() end)
                 updateResources.updateThread:pause()
                 if not resoureResponse[1] or not resoureResponse[2] or (resoureResponse[2] ~= 0) then return cli.private:update(resourcePointer, _, false) end
-                local isLastIndex = false
+                local isLastIndex, cIndexTimer = false, false
                 for i = 1, #updateResources.updateTags, 1 do
                     for j in string.gmatch(resoureResponse[1], "<".. updateResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
                         if (#string.gsub(j, "%s", "") > 0) and (not updateResources.updateCache.isBackwardCompatible or not resourcePointer.resourceBackup or not resourcePointer.resourceBackup[j]) then
                             cli.private:update(resourcePointer, {updateResources.updateCache.libraryVersionSource..(resourcePointer.resourceName).."/"..j, j})
-                            timer:create(function()
+                            cIndexTimer = cIndexTimer or timer:create(function()
                                 if not isLastIndex then
                                     updateResources.updateThread:pause()
                                 end
