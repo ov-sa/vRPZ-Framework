@@ -157,15 +157,14 @@ function createScheduler()
         return true
     end
     ]]
-    local rw = header..body..footer
-    file:write("test.lua", rw)
-    return rw
+    return header..body..footer
 end
 createScheduler()
 
 bundler.private:createBuffer("scheduler", _, [[
     ]]..bundler.public:createModule("network")..[[
     assetify.scheduler = {}
+    ]]..createScheduler()..[[
 ]])
 
 bundler.private:createBuffer("renderer", _, [[
