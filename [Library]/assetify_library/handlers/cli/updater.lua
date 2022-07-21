@@ -26,7 +26,8 @@ local imports = {
 --[[ CLI: Helpers ]]--
 ----------------------
 
-local updateResources = {
+local updateResources = nil
+updateResources = {
     updateTags = {"file", "script"},
     fetchSource = function(base, version, ...) return (base and version and string.format(base, version, ...)) or false end,
     onUpdateCallback = function(isCompleted)
@@ -38,7 +39,8 @@ local updateResources = {
                 if __resource then restartResource(__resource) end
             end
         end
-        cli.public.isLibraryBeingUpdated, updateResources.updateCache = nil, nil
+        updateResources.updateCache = nil
+        cli.public.isLibraryBeingUpdated = nil
         imports.collectgarbage()
         return true
     end,
