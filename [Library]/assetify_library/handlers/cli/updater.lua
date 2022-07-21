@@ -14,6 +14,7 @@
 
 local cli = cli:import()
 local imports = {
+    pairs = pairs,
     collectgarbage = collectgarbage,
     fetchRemote = fetchRemote,
     restartResource = restartResource,
@@ -33,7 +34,7 @@ updateResources = {
     onUpdateCallback = function(isCompleted)
         if isCompleted then
             syncer.libraryVersion = updateResources.updateCache.libraryVersion
-            for i, j in pairs(updateResources.updateCache.output) do
+            for i, j in imports.pairs(updateResources.updateCache.output) do
                 file:write(i, j)
             end
             for i = 1, #updateResources, 1 do
