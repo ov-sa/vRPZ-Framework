@@ -22,7 +22,7 @@ local imports = {
 
 
 ----------------------
---[[ CLI: Updater ]]--
+--[[ CLI: Helpers ]]--
 ----------------------
 
 --TODO: WIP...
@@ -56,6 +56,11 @@ local updateCache, onUpdateCB = nil, function(isSuccess)
     updateCache = nil
     cli.private.isBeingUpdated = nil
 end
+
+
+-----------------------
+--[[ CLI: Handlers ]]--
+-----------------------
 
 function cli.private:update(resourceREF, isBackwardsCompatible, resourceThread, responsePointer, isUpdationStatus)
     if isUpdationStatus ~= nil then
