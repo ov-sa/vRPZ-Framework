@@ -44,8 +44,8 @@ updateResources = {
             imports.outputDebugString("[Assetify] | Update successfully completed; Rebooting!", 3)
             for i = 1, #updateResources, 1 do
                 local j = updateResources[i]
-                if not j.isSilentResource then
-                    local cResource = imports.getResourceFromName(j.resourceName)
+                if not j.isSilentResource and j.resourceREF then
+                    local cResource = imports.getResourceFromName(j.resourceREF)
                     if cResource then imports.restartResource(cResource) end
                 end
             end
@@ -60,18 +60,26 @@ updateResources = {
     end,
     {
         isSilentResource = false,
-        resourceName = syncer.libraryName,
+        resourceREF = syncer.libraryName,
+        resourceName = "assetify_library",
         resourceSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/%s/[Library]/",
         resourceBackup = {
             ["settings/shared.lua"] = true,
             ["settings/server.lua"] = true
         }
+    },
+    --[[
+    {
+        isSilentResource = true,
+        resourceName = "assetify_mapper",
+        resourceSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/mapper/[Library]/"
     }
+    ]]
 }
 for i = 1, #updateResources, 1 do
     local j = updateResources[i]
     if j.isSilentResource then j.buffer = {} end
-    j.resourcePointer = ":"..j.resourceName.."/"
+    if j.resourceREF then j.resourcePointer = ":"..j.resourceREF.."/" end
 end
 
 
