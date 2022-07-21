@@ -31,7 +31,7 @@ local updateResources = nil
 updateResources = {
     updateTags = {"file", "script"},
     fetchSource = function(base, version, ...) return (base and version and string.format(base, version, ...)) or false end,
-    onUpdateCallback = function(isCompleted)
+    onUpdateCallback = function(isCompleted, isNotification)
         if isCompleted then
             syncer.libraryVersion = updateResources.updateCache.libraryVersion
             for i, j in imports.pairs(updateResources.updateCache.backup) do
@@ -41,12 +41,14 @@ updateResources = {
             for i, j in imports.pairs(updateResources.updateCache.output) do
                 file:write(i, j)
             end
+            imports.outputDebugString("[Assetify] | Update successfully completed; Rebooting!", 3)
             for i = 1, #updateResources, 1 do
                 local j = updateResources[i]
                 local cResource = imports.getResourceFromName(j.resourceName)
                 if cResource then imports.restartResource(cResource) end
             end
         end
+        if isNotification and not isCompleted then imports.outputDebugString("[Assetify] | Update failed due to connectivity issues; Try again later...", 3) end
         if updateResources.updateThread then updateResources.updateThread:destroy() end
         updateResources.updateCache = nil
         updateResources.updateThread = nil
@@ -74,10 +76,6 @@ end
 -----------------------
 
 function cli.private:update(resourcePointer, responsePointer, isUpdateStatus)
-    if isUpdateStatus ~= nil then
-        imports.outputDebugString("[Assetify] | "..((isUpdateStatus and "Update successfully completed; Rebooting!") or "Update failed due to connectivity issues; Try again later..."), 3)
-        return updateResources.onUpdateCallback(isUpdateStatus)
-    end
     if not responsePointer then
         updateResources.updateThread = thread:create(function()
             for i = 1, #updateResources, 1 do
@@ -85,7 +83,7 @@ function cli.private:update(resourcePointer, responsePointer, isUpdateStatus)
                 local resourceMeta = updateResources.updateCache.libraryVersionSource..(resourcePointer.resourceName).."/meta.xml"
                 imports.fetchRemote(resourceMeta, function(...) resoureResponse = table.pack(...); updateResources.updateThread:resume() end)
                 updateResources.updateThread:pause()
-                if not resoureResponse[1] or not resoureResponse[2] or (resoureResponse[2] ~= 0) then return cli.private:update(_, _, false) end
+                if not resoureResponse[1] or not resoureResponse[2] or (resoureResponse[2] ~= 0) then return updateResources.onUpdateCallback(false, true) end
                 local isLastIndex = false
                 for i = 1, #updateResources.updateTags, 1 do
                     for j in string.gmatch(resoureResponse[1], "<".. updateResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
@@ -103,7 +101,7 @@ function cli.private:update(resourcePointer, responsePointer, isUpdateStatus)
                 isLastIndex = true
                 cli.private:update(resourcePointer, {resourceMeta, "meta.xml", resoureResponse[1]})
             end
-            cli.private:update(_, _, true)
+            updateResources.onUpdateCallback(true, true)
         end)
         updateResources.updateThread:resume()
     else
@@ -115,7 +113,7 @@ function cli.private:update(resourcePointer, responsePointer, isUpdateStatus)
             updateResources.updateThread:resume()
         else
             imports.fetchRemote(responsePointer[1], function(response, status)
-                if not response or not status or (status ~= 0) then return cli.private:update(_, _, false) end
+                if not response or not status or (status ~= 0) then return updateResources.onUpdateCallback(false, true) end
                 if isBackupToBeCreated then updateResources.updateCache.backup[(responsePointer[2]..".backup")] = file:read(responsePointer[2]) end
                 updateResources.updateCache.output[(responsePointer[2])] = response
                 updateResources.updateThread:resume()
