@@ -27,7 +27,6 @@ local imports = {
 
 --TODO: WIP...
 cli.private.libraryResources = {
-    updateTags = {"file", "script"},
     {
         resourceName = syncer.libraryName,
         resourceSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/%s/[Library]/",
@@ -96,14 +95,14 @@ function cli.private:update(resourceREF, isBackwardsCompatible, resourceThread, 
         responsePointer[2] = resourceREF.resourcePointer..responsePointer[2]
         if isBackupToBeCreated then imports.outputDebugString("[Assetify] | Backed up <"..responsePointer[2].."> due to compatibility breaking changes; Kindly update it accordingly!", 3) end
         if responsePointer[3] then
-            if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
-            file:write(responsePointer[2], responsePointer[3])
+            --if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
+            --file:write(responsePointer[2], responsePointer[3])
             resourceThread:resume()
         else
             imports.fetchRemote(responsePointer[1], function(response, status)
                 if not response or not status or (status ~= 0) then cli.private:update(resourceREF, isBackwardsCompatible, _, _, false); return resourceThread:destroy() end
                 if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
-                file:write(responsePointer[2], response)
+                --file:write(responsePointer[2], response)
                 resourceThread:resume()
             end)
         end
