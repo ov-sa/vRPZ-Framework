@@ -26,7 +26,9 @@ local imports = {
 ----------------------
 
 --TODO: WIP...
-cli.private.libraryResources = {
+local updateResources = {
+    updateTags = {"file", "script"},
+    fetchSource = function(base, version, ...) return (base and version and string.format(base, version, ...)) or false end,
     {
         resourceName = syncer.libraryName,
         resourceSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/%s/[Library]/",
@@ -36,20 +38,18 @@ cli.private.libraryResources = {
         }
     }
 }
-for i = 1, #cli.private.libraryResources, 1 do
-    local j = cli.private.libraryResources[i]
+for i = 1, #updateResources, 1 do
+    local j = updateResources[i]
     j.resourcePointer = ":"..j.resourceName.."/"
 end
 
-local updateTags = {"file", "script"}
-local fetchSource = function(base, version, ...) return (base and version and string.format(base, version, ...)) or false end
-local updateCache, onUpdateCB = nil, function(isSuccess)
+updateResources.onUpdateCB = function(isSuccess)
     if isSuccess then
         print("Library update successfully completed")
-        syncer.libraryVersion = updateCache.libraryVersion
+        syncer.libraryVersion = updateResources.updateCache.libraryVersion
     end
     print("Finished library update")
-    updateCache = nil
+    updateResources.updateCache = nil
     cli.public.isLibraryBeingUpdated = nil
 end
 
@@ -66,32 +66,32 @@ function cli.private:update(resourceREF, isBackwardsCompatible, resourceThread, 
             --local __resource = imports.getResourceFromName(resourceREF.resourceName)
             --if __resource then imports.restartResource(__resource) end
         end
-        onUpdateCB(isUpdationStatus)
+        updateResources.onUpdateCB(isUpdationStatus)
         return true
     end
     if not responsePointer then
-        --TODO: ...WIP
-        for i = 1, #cli.private.libraryResources, 1 do
-            local j = cli.private.libraryResources[i]
-        end
-        local resourceMeta = updateCache.libraryVersionSource..(resourceREF.resourceName).."/meta.xml"
-        imports.fetchRemote(resourceMeta, function(response, status)
-            if not response or not status or (status ~= 0) then return cli.private:update(resourceREF, isBackwardsCompatible, _, _, false) end
-            thread:create(function(self)
-                for i = 1, #updateTags, 1 do
-                    for j in string.gmatch(response, "<".. updateTags[i].." src=\"(.-)\"(.-)/>") do
-                        if #string.gsub(j, "%s", "") > 0 then
-                            if not isBackwardsCompatible or not resourceREF.resourceBackup or not resourceREF.resourceBackup[j] then
-                                cli.private:update(resourceREF, isBackwardsCompatible, self, {updateCache.libraryVersionSource..(resourceREF.resourceName).."/"..j, j})
-                                self:pause()
+        thread:create(function(self)
+            for i = 1, #updateResources, 1 do
+                --TODO: ...WIP
+                local resourceREF = updateResources[i]
+                local resourceMeta = updateResources.updateCache.libraryVersionSource..(resourceREF.resourceName).."/meta.xml"
+                imports.fetchRemote(resourceMeta, function(response, status)
+                    if not response or not status or (status ~= 0) then return cli.private:update(resourceREF, isBackwardsCompatible, _, _, false) end
+                    for i = 1, #updateResources.updateTags, 1 do
+                        for j in string.gmatch(response, "<".. updateResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
+                            if #string.gsub(j, "%s", "") > 0 then
+                                if not isBackwardsCompatible or not resourceREF.resourceBackup or not resourceREF.resourceBackup[j] then
+                                    cli.private:update(resourceREF, isBackwardsCompatible, self, {updateResources.updateCache.libraryVersionSource..(resourceREF.resourceName).."/"..j, j})
+                                    self:pause()
+                                end
                             end
                         end
                     end
-                end
-                cli.private:update(resourceREF, isBackwardsCompatible, self, {resourceMeta, "meta.xml", response})
-                cli.private:update(resourceREF, isBackwardsCompatible, _, _, true)
-            end):resume()
-        end)
+                    cli.private:update(resourceREF, isBackwardsCompatible, self, {resourceMeta, "meta.xml", response})
+                    cli.private:update(resourceREF, isBackwardsCompatible, _, _, true)
+                end)
+            end
+        end):resume()
     else
         local isBackupToBeCreated = (resourceREF.resourceBackup and resourceREF.resourceBackup[(responsePointer[2])] and true) or false
         responsePointer[2] = resourceREF.resourcePointer..responsePointer[2]
@@ -118,20 +118,20 @@ function cli.public:update(isAction)
     cli.public.isLibraryBeingUpdated = true
     if isAction then imports.outputDebugString("[Assetify] | Fetching latest version; Hold up...", 3) end
     imports.fetchRemote(syncer.librarySource, function(response, status)
-        if not response or not status or (status ~= 0) then return onUpdateCB() end
+        if not response or not status or (status ~= 0) then return updateResources.onUpdateCB() end
         response = table.decode(response)
-        if not response or not response.tag_name then return onUpdateCB() end
+        if not response or not response.tag_name then return updateResources.onUpdateCB() end
         if syncer.libraryVersion == response.tag_name then
             if isAction then imports.outputDebugString("[Assetify] | Already upto date - "..response.tag_name, 3) end
-            return onUpdateCB()
+            return updateResources.onUpdateCB()
         end
         local isToBeUpdated, isAutoUpdate = (isAction and true) or settings.library.autoUpdate, (not isAction and settings.library.autoUpdate) or false
         imports.outputDebugString("[Assetify] | "..((isToBeUpdated and not isAutoUpdate and "Updating to latest version") or (isToBeUpdated and isAutoUpdate and "Auto-updating to latest version") or "Latest version available").." - "..response.tag_name, 3)
-        if not isToBeUpdated then return onUpdateCB() end
-        updateCache = {
+        if not isToBeUpdated then return updateResources.onUpdateCB() end
+        updateResources.updateCache = {
             isAutoUpdate = isAutoUpdate,
             libraryVersion = response.tag_name,
-            libraryVersionSource = fetchSource(resourceREF.resourceSource, response.tag_name),
+            libraryVersionSource = updateResources.fetchSource(resourceREF.resourceSource, response.tag_name),
             isBackwardsCompatible = string.match(syncer.libraryVersion, "(%d+)%.") ~= string.match(response.tag_name, "(%d+)%.")
         }
         cli.private:update()
