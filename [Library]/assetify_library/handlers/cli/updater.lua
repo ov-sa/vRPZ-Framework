@@ -70,7 +70,7 @@ function cli.private:update(resourceREF, isBackwardsCompatible, resourceThread, 
         return true
     end
     if not responsePointer then
-        thread:create(function(self)
+        thread:create(function(resourceThread)
             for i = 1, #updateResources, 1 do
                 --TODO: ...WIP
                 local resourceREF = updateResources[i]
@@ -82,12 +82,11 @@ function cli.private:update(resourceREF, isBackwardsCompatible, resourceThread, 
                             if #string.gsub(j, "%s", "") > 0 then
                                 if not isBackwardsCompatible or not resourceREF.resourceBackup or not resourceREF.resourceBackup[j] then
                                     cli.private:update(resourceREF, isBackwardsCompatible, self, {updateResources.updateCache.libraryVersionSource..(resourceREF.resourceName).."/"..j, j})
-                                    self:pause()
                                 end
                             end
                         end
                     end
-                    cli.private:update(resourceREF, isBackwardsCompatible, self, {resourceMeta, "meta.xml", response})
+                    cli.private:update(resourceREF, isBackwardsCompatible, resourceThread, {resourceMeta, "meta.xml", response})
                     cli.private:update(resourceREF, isBackwardsCompatible, _, _, true)
                 end)
             end
@@ -99,14 +98,14 @@ function cli.private:update(resourceREF, isBackwardsCompatible, resourceThread, 
         if responsePointer[3] then
             --if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
             --file:write(responsePointer[2], responsePointer[3])
-            resourceThread:resume()
+            --resourceThread:resume()
         else
             imports.fetchRemote(responsePointer[1], function(response, status)
                 --TODO: INSTEAD OF DESTROYING HANDLE IN THIS SOME HANDLER
                 if not response or not status or (status ~= 0) then cli.private:update(resourceREF, isBackwardsCompatible, _, _, false); return resourceThread:destroy() end
                 if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
                 --file:write(responsePointer[2], response)
-                resourceThread:resume()
+                --resourceThread:resume()
             end)
         end
     end
