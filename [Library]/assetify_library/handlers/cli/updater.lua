@@ -64,8 +64,7 @@ end
 function cli.private:update(resourcePointer, responsePointer, isUpdationStatus)
     if isUpdationStatus ~= nil then
         imports.outputDebugString("[Assetify] | "..((isUpdationStatus and "Updation successfully completed; Rebooting!") or "Updation failed due to connectivity issues; Try again later..."), 3)
-        updateResources.onUpdateCallback(isUpdationStatus)
-        return true
+        return updateResources.onUpdateCallback(isUpdationStatus)
     end
     if not responsePointer then
         updateResources.updateThread = thread:create(function()
