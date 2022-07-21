@@ -30,31 +30,22 @@ cli.private.libraryResources = {
     updateTags = {"file", "script"},
     {
         resourceName = syncer.libraryName,
+        resourceSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/%s/[Library]/",
         resourceBackup = {
             ["settings/shared.lua"] = true,
             ["settings/server.lua"] = true
         }
-    },
-    --TODO: Integrate Later
-    --[[
-    {
-        resourceName = "assetify_mapper"
     }
-    ]]
 }
 for i = 1, #cli.private.libraryResources, 1 do
     local j = cli.private.libraryResources[i]
     j.resourcePointer = ":"..j.resourceName.."/"
 end
-cli.private.libraryVersionSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/"..syncer.libraryVersion.."/[Library]/"
 
-local fetchSource = function(version)
-    return (version and "https://raw.githubusercontent.com/ov-sa/Assetify-Library/"..version.."/[Library]/") or false
-end
+local fetchSource = function(base, version, ...) return (base and version and string.format(base, version, ...)) or false end
 local updateCache, onUpdateCB = nil, function(isSuccess)
     if isSuccess then
         syncer.libraryVersion = updateCache.libraryVersion
-        cli.private.libraryVersionSource = updateCache.libraryVersionSource
     end
     updateCache = nil
     cli.private.isBeingUpdated = nil
@@ -137,7 +128,7 @@ function cli.public:update(isAction)
         updateCache = {
             isAutoUpdate = isAutoUpdate,
             libraryVersion = response.tag_name,
-            libraryVersionSource = string.gsub(cli.private.libraryVersionSource, syncer.libraryVersion, response.tag_name, 1),
+            libraryVersionSource = fetchSource(resourceREF.resourceSource, response.tag_name),
             isBackwardsCompatible = string.match(syncer.libraryVersion, "(%d+)%.") ~= string.match(response.tag_name, "(%d+)%.")
         }
         cli.private:update()
