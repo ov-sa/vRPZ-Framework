@@ -63,10 +63,10 @@ end
 --[[ CLI: Handlers ]]--
 -----------------------
 
-function cli.private:update(resourcePointer, responsePointer, isUpdationStatus)
-    if isUpdationStatus ~= nil then
-        imports.outputDebugString("[Assetify] | "..((isUpdationStatus and "Updation successfully completed; Rebooting!") or "Updation failed due to connectivity issues; Try again later..."), 3)
-        return updateResources.onUpdateCallback(isUpdationStatus)
+function cli.private:update(resourcePointer, responsePointer, isUpdateStatus)
+    if isUpdateStatus ~= nil then
+        imports.outputDebugString("[Assetify] | "..((isUpdateStatus and "Update successfully completed; Rebooting!") or "Update failed due to connectivity issues; Try again later..."), 3)
+        return updateResources.onUpdateCallback(isUpdateStatus)
     end
     if not responsePointer then
         updateResources.updateThread = thread:create(function()
