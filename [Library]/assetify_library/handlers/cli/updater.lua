@@ -43,7 +43,9 @@ updateResources = {
                 if cResource then imports.restartResource(cResource) end
             end
         end
+        if updateResources.updateThread then updateResources.updateThread:destroy() end
         updateResources.updateCache = nil
+        updateResources.updateThread = nil
         cli.public.isLibraryBeingUpdated = nil
         imports.collectgarbage()
         return true
