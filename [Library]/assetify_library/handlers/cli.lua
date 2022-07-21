@@ -28,6 +28,7 @@ local imports = {
 -------------
 
 local cli = class:create("cli")
+function cli.public:import() return cli end
 cli.private.validActions = {
     ["update"] = true
 }

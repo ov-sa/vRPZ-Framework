@@ -42,6 +42,7 @@ local syncer = class:create("syncer", {
     libraryBandwidth = 0,
     syncedElements = {}
 })
+function syncer.public:import() return syncer end
 syncer.public.libraryName = imports.getResourceName(syncer.public.libraryResource)
 syncer.public.librarySource = "https://api.github.com/repos/ov-sa/Assetify-Library/releases/latest"
 syncer.public.librarySerial = imports.md5(syncer.public.libraryName..":"..imports.tostring(syncer.public.libraryResource)..":"..table.encode(imports.getRealTime()))
@@ -51,7 +52,6 @@ network:create("Assetify:onLoad")
 network:create("Assetify:onUnload")
 network:create("Assetify:onModuleLoad")
 network:create("Assetify:onElementDestroy")
-function syncer.public:import() return syncer end
 syncer.private.execOnBoot = function(execFunc)
     if not execFunc or (imports.type(execFunc) ~= "function") then return false end
     if syncer.public.isLibraryBooted then execFunc()
