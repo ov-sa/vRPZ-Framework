@@ -4,7 +4,7 @@
      Author: vStudio
      Developer(s): Aviril, Tron, Mario, Аниса
      DOC: 19/10/2021
-     Desc: Bundler: Shared Handler ]]--
+     Desc: Bundler: Shared Utilities ]]--
 ----------------------------------------------------------------
 
 
