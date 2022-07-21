@@ -58,54 +58,58 @@ end
 --[[ CLI: Handlers ]]--
 -----------------------
 
-function cli.private:update(resourceREF, isBackwardsCompatible, resourceThread, responsePointer, isUpdationStatus)
+function cli.private:update(resourcePointer, isBackwardCompatible, responsePointer, isUpdationStatus)
     if isUpdationStatus ~= nil then
         imports.outputDebugString("[Assetify] | "..((isUpdationStatus and "Auto-updation successfully completed; Rebooting!") or "Auto-updation failed due to connectivity issues; Try again later..."), 3)
         if isUpdationStatus then
             print("YA")
-            --local __resource = imports.getResourceFromName(resourceREF.resourceName)
+            --local __resource = imports.getResourceFromName(resourcePointer.resourceName)
             --if __resource then imports.restartResource(__resource) end
         end
         updateResources.onUpdateCB(isUpdationStatus)
         return true
     end
     if not responsePointer then
-        thread:create(function(resourceThread)
+        updateResources.updateThread = thread:create(function()
             for i = 1, #updateResources, 1 do
                 --TODO: ...WIP
-                local resourceREF = updateResources[i]
-                local resourceMeta = updateResources.updateCache.libraryVersionSource..(resourceREF.resourceName).."/meta.xml"
+                local resourcePointer = updateResources[i]
+                local resourceMeta = updateResources.updateCache.libraryVersionSource..(resourcePointer.resourceName).."/meta.xml"
                 imports.fetchRemote(resourceMeta, function(response, status)
-                    if not response or not status or (status ~= 0) then return cli.private:update(resourceREF, isBackwardsCompatible, _, _, false) end
+                    if not response or not status or (status ~= 0) then return cli.private:update(resourcePointer, isBackwardCompatible, _, false) end
                     for i = 1, #updateResources.updateTags, 1 do
                         for j in string.gmatch(response, "<".. updateResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
                             if #string.gsub(j, "%s", "") > 0 then
-                                if not isBackwardsCompatible or not resourceREF.resourceBackup or not resourceREF.resourceBackup[j] then
-                                    cli.private:update(resourceREF, isBackwardsCompatible, self, {updateResources.updateCache.libraryVersionSource..(resourceREF.resourceName).."/"..j, j})
+                                if not isBackwardCompatible or not resourcePointer.resourceBackup or not resourcePointer.resourceBackup[j] then
+                                    cli.private:update(resourcePointer, isBackwardCompatible, {updateResources.updateCache.libraryVersionSource..(resourcePointer.resourceName).."/"..j, j})
                                 end
                             end
                         end
                     end
-                    cli.private:update(resourceREF, isBackwardsCompatible, resourceThread, {resourceMeta, "meta.xml", response})
-                    cli.private:update(resourceREF, isBackwardsCompatible, _, _, true)
+                    cli.private:update(resourcePointer, isBackwardCompatible, {resourceMeta, "meta.xml", response})
+                    cli.private:update(resourcePointer, isBackwardCompatible, _, true)
                 end)
             end
-        end):resume()
+        end)
+        updateResources.updateThread:resume()
     else
-        local isBackupToBeCreated = (resourceREF.resourceBackup and resourceREF.resourceBackup[(responsePointer[2])] and true) or false
-        responsePointer[2] = resourceREF.resourcePointer..responsePointer[2]
+        local isBackupToBeCreated = (resourcePointer.resourceBackup and resourcePointer.resourceBackup[(responsePointer[2])] and true) or false
+        responsePointer[2] = resourcePointer.resourcePointer..responsePointer[2]
         if isBackupToBeCreated then imports.outputDebugString("[Assetify] | Backed up <"..responsePointer[2].."> due to compatibility breaking changes; Kindly update it accordingly!", 3) end
         if responsePointer[3] then
             --if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
             --file:write(responsePointer[2], responsePointer[3])
-            --resourceThread:resume()
+            updateResources.updateThread:resume()
         else
             imports.fetchRemote(responsePointer[1], function(response, status)
                 --TODO: INSTEAD OF DESTROYING HANDLE IN THIS SOME HANDLER
-                if not response or not status or (status ~= 0) then cli.private:update(resourceREF, isBackwardsCompatible, _, _, false); return resourceThread:destroy() end
+                if not response or not status or (status ~= 0) then
+                    cli.private:update(resourcePointer, isBackwardCompatible, _, false)
+                    return updateResources.updateThread:destroy()
+                end
                 if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
                 --file:write(responsePointer[2], response)
-                --resourceThread:resume()
+                updateResources.updateThread:resume()
             end)
         end
     end
@@ -131,7 +135,7 @@ function cli.public:update(isAction)
             isAutoUpdate = isAutoUpdate,
             libraryVersion = response.tag_name,
             libraryVersionSource = updateResources.fetchSource(updateResources[1].resourceSource, response.tag_name),
-            isBackwardsCompatible = string.match(syncer.libraryVersion, "(%d+)%.") ~= string.match(response.tag_name, "(%d+)%.")
+            isBackwardCompatible = string.match(syncer.libraryVersion, "(%d+)%.") ~= string.match(response.tag_name, "(%d+)%.")
         }
         cli.private:update()
     end)
