@@ -57,6 +57,7 @@ updateResources = {
         return true
     end,
     {
+        isSilentResource = false,
         resourceName = syncer.libraryName,
         resourceSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/%s/[Library]/",
         resourceBackup = {
