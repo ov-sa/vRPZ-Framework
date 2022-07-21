@@ -45,10 +45,12 @@ local updateTags = {"file", "script"}
 local fetchSource = function(base, version, ...) return (base and version and string.format(base, version, ...)) or false end
 local updateCache, onUpdateCB = nil, function(isSuccess)
     if isSuccess then
+        print("Library update successfully completed")
         syncer.libraryVersion = updateCache.libraryVersion
     end
+    print("Finished library update")
     updateCache = nil
-    cli.private.isBeingUpdated = nil
+    cli.public.isLibraryBeingUpdated = nil
 end
 
 
@@ -111,8 +113,8 @@ function cli.private:update(resourceREF, isBackwardsCompatible, resourceThread, 
 end
 
 function cli.public:update(isAction)
-    if cli.private.isBeingUpdated then return imports.outputDebugString("[Assetify] | An update request is already being processed; Kindly have patience...", 3) end
-    cli.private.isBeingUpdated = true
+    if cli.public.isLibraryBeingUpdated then return imports.outputDebugString("[Assetify] | An update request is already being processed; Kindly have patience...", 3) end
+    cli.public.isLibraryBeingUpdated = true
     if isAction then imports.outputDebugString("[Assetify] | Fetching latest version; Hold up...", 3) end
     imports.fetchRemote(syncer.librarySource, function(response, status)
         if not response or not status or (status ~= 0) then return onUpdateCB() end
