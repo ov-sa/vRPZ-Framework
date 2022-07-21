@@ -53,6 +53,7 @@ function cli.public:update(isAction)
         imports.outputDebugString("[Assetify] | "..((isToBeUpdated and not isAutoUpdate and "Updating to latest version") or (isToBeUpdated and isAutoUpdate and "Auto-updating to latest version") or "Latest version available").." - "..response.tag_name, 3)
         if isToBeUpdated then
             syncer.private.libraryUpdateCache = {
+                isAutoUpdate = isAutoUpdate,
                 libraryVersion = response.tag_name,
                 libraryVersionSource = string.gsub(syncer.private.libraryVersionSource, syncer.private.libraryVersion, response.tag_name, 1),
                 isBackwardsCompatible = string.match(syncer.private.libraryVersion, "(%d+)%.") ~= string.match(response.tag_name, "(%d+)%.")
