@@ -265,23 +265,15 @@ bundler.private:createBuffer("renderer", _, [[
 ]])
 
 bundler.private:createBuffer("syncer", _, [[
-    assetify.syncer = {
-        setGlobalData = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setGlobalData", ...)
-        end,
-    
-        getGlobalData = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getGlobalData", ...)
-        end,
-    
-        setEntityData = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setEntityData", ...)
-        end,
-    
-        getEntityData = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getEntityData", ...)
-        end
-    }
+    assetify.syncer = {}
+    ]]..bundler.private:createExports({
+        shared = {
+            {exportIndex = "assetify.syncer.setGlobalData", exportName = "setGlobalData"},
+            {exportIndex = "assetify.syncer.getGlobalData", exportName = "getGlobalData"},
+            {exportIndex = "assetify.syncer.setEntityData", exportName = "setEntityData"},
+            {exportIndex = "assetify.syncer.getEntityData", exportName = "getEntityData"}
+        }
+    })..[[
 ]])
 
 bundler.private:createBuffer("attacher", _, [[
