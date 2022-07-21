@@ -27,7 +27,7 @@ bundler.private.rw["imports"] = [[
     if not assetify then
         assetify = {}
         ]]..bundler.private.rw["namespacer"].rw..[[
-        ]]..bundler.private:parseUtils()..[[
+        ]]..bundler.private:createUtils()..[[
         assetify.imports = {
             resourceName = "]]..syncer.libraryName..[[",
             type = type,

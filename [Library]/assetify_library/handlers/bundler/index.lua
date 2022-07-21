@@ -41,7 +41,7 @@ bundler.private.modules = {
     ["network"] = {module = "networker", namespace = "assetify.network", path = "utilities/sandbox/networker.lua", endpoints = {"network"}}
 }
 
-function bundler.private:parseUtils()
+function bundler.private:createUtils()
     local rw = ""
     for i = 1, #bundler.private.utils, 1 do
         local j = file:read(bundler.private.utils[i])
@@ -56,7 +56,7 @@ function bundler.private:parseUtils()
     return rw
 end
 
-function bundler.private:parseModules(moduleName)
+function bundler.private:createModule(moduleName)
     if not moduleName then return false end
     local module = bundler.private.modules[moduleName]
     if not module then return false end
@@ -93,7 +93,7 @@ function bundler.private:parseModules(moduleName)
 end
 for i, j in imports.pairs(bundler.private.modules) do
     if j.module and j.endpoints then
-        bundler.private:parseModules(i)
+        bundler.private:createModule(i)
     end
 end
 
