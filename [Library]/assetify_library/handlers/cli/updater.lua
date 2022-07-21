@@ -115,7 +115,7 @@ function cli.private:update(resourcePointer, responsePointer, isUpdationStatus)
                     return updateResources.updateThread:destroy()
                 end
                 if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
-                --file:write(responsePointer[2], response)
+                file:write(responsePointer[2], response)
                 updateResources.updateThread:resume()
             end)
         end
