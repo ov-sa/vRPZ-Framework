@@ -43,13 +43,11 @@ for i = 1, #syncer.private.libraryResources, 1 do
     local j = syncer.private.libraryResources[i]
     j.resourcePointer = ":"..j.resourceName.."/"
 end
-syncer.private.libraryVersion = imports.getResourceInfo(resource, "version")
-syncer.private.libraryVersion = (syncer.private.libraryVersion and "v."..syncer.private.libraryVersion) or "N/A"
-syncer.private.libraryVersionSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/"..syncer.private.libraryVersion.."/[Library]/"
+syncer.private.libraryVersionSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/"..syncer.public.libraryVersion.."/[Library]/"
 
 local updateCache, onUpdateCB = nil, function(isSuccess)
     if isSuccess then
-        syncer.private.libraryVersion = updateCache.libraryVersion
+        syncer.public.libraryVersion = updateCache.libraryVersion
         syncer.private.libraryVersionSource = updateCache.libraryVersionSource
     end
     updateCache = nil
@@ -123,7 +121,7 @@ function cli.public:update(isAction)
         if not response or not status or (status ~= 0) then return onUpdateCB() end
         response = table.decode(response)
         if not response or not response.tag_name then return onUpdateCB() end
-        if syncer.private.libraryVersion == response.tag_name then
+        if syncer.public.libraryVersion == response.tag_name then
             if isAction then imports.outputDebugString("[Assetify] | Already upto date - "..response.tag_name, 3) end
             return onUpdateCB()
         end
@@ -133,8 +131,8 @@ function cli.public:update(isAction)
         updateCache = {
             isAutoUpdate = isAutoUpdate,
             libraryVersion = response.tag_name,
-            libraryVersionSource = string.gsub(syncer.private.libraryVersionSource, syncer.private.libraryVersion, response.tag_name, 1),
-            isBackwardsCompatible = string.match(syncer.private.libraryVersion, "(%d+)%.") ~= string.match(response.tag_name, "(%d+)%.")
+            libraryVersionSource = string.gsub(syncer.private.libraryVersionSource, syncer.public.libraryVersion, response.tag_name, 1),
+            isBackwardsCompatible = string.match(syncer.public.libraryVersion, "(%d+)%.") ~= string.match(response.tag_name, "(%d+)%.")
         }
         cli.private:update()
     end)

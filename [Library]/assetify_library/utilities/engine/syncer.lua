@@ -109,6 +109,8 @@ if localPlayer then
         return true
     end
 else
+    syncer.public.libraryVersion = imports.getResourceInfo(resource, "version")
+    syncer.public.libraryVersion = (syncer.public.libraryVersion and "v."..syncer.public.libraryVersion) or false
     syncer.public.libraryModules = {}
     syncer.public.libraryClients = {loaded = {}, loading = {}, scheduled = {}}
     network:create("Assetify:onLoadClient"):on(function(player) syncer.public.libraryClients.loaded[player] = true end)
