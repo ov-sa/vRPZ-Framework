@@ -15,7 +15,7 @@
 local imports = {
     getElementType = getElementType,
     addCommandHandler = addCommandHandler,
-    outputDebugString = outputDebugString
+    outputServerLog = outputServerLog
 }
 
 
@@ -31,7 +31,7 @@ cli.private.validActions = {
 }
 
 function cli.public:uid(isAction)
-    imports.outputDebugString("Your Assetify UID: "..syncer.librarySerial)
+    imports.outputServerLog("[Assetify] | Your UID: "..syncer.librarySerial)
     return true
 end
 
