@@ -51,7 +51,7 @@ cli.private.libraryVersionSource = "https://raw.githubusercontent.com/ov-sa/Asse
 local fetchSource = function(version)
     return (version and "https://raw.githubusercontent.com/ov-sa/Assetify-Library/"..version.."/[Library]/") or false
 end
-local updateCache, fetchSource, onUpdateCB = nil, function(isSuccess)
+local updateCache, onUpdateCB = nil, function(isSuccess)
     if isSuccess then
         syncer.libraryVersion = updateCache.libraryVersion
         cli.private.libraryVersionSource = updateCache.libraryVersionSource
