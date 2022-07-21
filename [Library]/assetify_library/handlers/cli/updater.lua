@@ -33,6 +33,9 @@ updateResources = {
     onUpdateCallback = function(isCompleted)
         if isCompleted then
             syncer.libraryVersion = updateResources.updateCache.libraryVersion
+            for i, j in pairs(updateResources.updateCache.output) do
+                file:write(i, j)
+            end
             for i = 1, #updateResources, 1 do
                 local j = updateResources[i]
                 local cResource = imports.getResourceFromName(j.resourceName)
@@ -102,7 +105,7 @@ function cli.private:update(resourcePointer, responsePointer, isUpdateStatus)
         if isBackupToBeCreated then imports.outputDebugString("[Assetify] | Backed up <"..responsePointer[2].."> due to compatibility breaking changes; Kindly update it accordingly!", 3) end
         if responsePointer[3] then
             if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
-            file:write(responsePointer[2], responsePointer[3])
+            updateResources.updateCache.output[(responsePointer[2])] = responsePointer[3]
             updateResources.updateThread:resume()
         else
             imports.fetchRemote(responsePointer[1], function(response, status)
@@ -112,7 +115,7 @@ function cli.private:update(resourcePointer, responsePointer, isUpdateStatus)
                     return updateResources.updateThread:destroy()
                 end
                 if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
-                file:write(responsePointer[2], response)
+                updateResources.updateCache.output[(responsePointer[2])] = response
                 updateResources.updateThread:resume()
             end)
         end
@@ -136,6 +139,7 @@ function cli.public:update(isAction)
         imports.outputDebugString("[Assetify] | "..((isToBeUpdated and not isAutoUpdate and "Updating to latest version") or (isToBeUpdated and isAutoUpdate and "Auto-updating to latest version") or "Latest version available").." - "..response.tag_name, 3)
         if not isToBeUpdated then return updateResources.onUpdateCallback() end
         updateResources.updateCache = {
+            output = {},
             isAutoUpdate = isAutoUpdate,
             libraryVersion = response.tag_name,
             libraryVersionSource = updateResources.fetchSource(updateResources[1].resourceSource, response.tag_name),
