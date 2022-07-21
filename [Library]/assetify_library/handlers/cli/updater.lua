@@ -104,8 +104,8 @@ function cli.private:update(resourcePointer, responsePointer, isUpdationStatus)
         responsePointer[2] = resourcePointer.resourcePointer..responsePointer[2]
         if isBackupToBeCreated then imports.outputDebugString("[Assetify] | Backed up <"..responsePointer[2].."> due to compatibility breaking changes; Kindly update it accordingly!", 3) end
         if responsePointer[3] then
-            --if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
-            --file:write(responsePointer[2], responsePointer[3])
+            if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
+            file:write(responsePointer[2], responsePointer[3])
             updateResources.updateThread:resume()
         else
             imports.fetchRemote(responsePointer[1], function(response, status)
