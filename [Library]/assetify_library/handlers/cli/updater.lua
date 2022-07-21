@@ -107,7 +107,8 @@ function cli.private:update(resourcePointer, responsePointer, isUpdateStatus)
         end)
         updateResources.updateThread:resume()
     else
-        local isBackupToBeCreated = (resourcePointer.resourceBackup and resourcePointer.resourceBackup[(responsePointer[2])] and true) or false
+        if resourcePointer.isSilentResource then resourcePointer.__buffer = resourcePointer.__buffer or {} end
+        local isBackupToBeCreated = (not resourcePointer.isSilentResource and resourcePointer.resourceBackup and resourcePointer.resourceBackup[(responsePointer[2])] and true) or false
         responsePointer[2] = resourcePointer.resourcePointer..responsePointer[2]
         if isBackupToBeCreated then updateResources.updateCache.backup[(responsePointer[2]..".backup")] = file:read(responsePointer[2]) end
         if responsePointer[3] then
