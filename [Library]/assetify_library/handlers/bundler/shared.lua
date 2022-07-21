@@ -51,7 +51,12 @@ bundler.private:createBuffer("core", "__core", [[
 
     ]]..bundler.private:createAPIs({
         shared = {
-
+            {exportIndex = "assetify.__core.isBooted", exportName = "isLibraryBooted"},
+            {exportIndex = "assetify.__core.isLoaded", exportName = "isLibraryLoaded"},
+            {exportIndex = "assetify.__core.isModuleLoaded", exportName = "isModuleLoaded"},
+            {exportIndex = "assetify.__core.getAssets", exportName = "getLibraryAssets"},
+            {exportIndex = "assetify.__core.getAsset", exportName = "getAssetData"},
+            {exportIndex = "assetify.__core.getAssetDep", exportName = "getAssetDep"},
         },
         client = {
             {exportIndex = "assetify.__core.getDownloadProgress", exportName = "getDownloadProgress"},
@@ -70,31 +75,7 @@ bundler.private:createBuffer("core", "__core", [[
             {exportIndex = "assetify.__core.playSound3D", exportName = "playSoundAsset3D"}
         }
     })..[[
-        --TODO: SHARED APIS ADD
-    assetify.__core.isBooted = function()
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isLibraryBooted")
-    end
-
-    assetify.__core.isLoaded = function()
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isLibraryLoaded")
-    end
-    
-    assetify.__core.isModuleLoaded = function()
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isModuleLoaded")
-    end
-    
-    assetify.__core.getAssets = function(...)
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getLibraryAssets", ...)
-    end
-    
-    assetify.__core.getAsset = function(...)
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getAssetData", ...)
-    end
-    
-    assetify.__core.getAssetDep = function(...)
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getAssetDep", ...)
-    end
-    
+        --TODO: SHARED APIS 
     assetify.__core.loadModule = function(assetName, moduleTypes)
         local cAsset = assetify.getAsset("module", assetName)
         if not cAsset or not moduleTypes or (#moduleTypes <= 0) then return false end
