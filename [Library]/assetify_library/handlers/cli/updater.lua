@@ -22,6 +22,33 @@ local imports = {
 }
 
 
+--TODO: WIP...
+syncer.private.libraryResources = {
+    updateTags = {"file", "script"},
+    {
+        resourceName = syncer.public.libraryName,
+        resourceBackup = {
+            ["settings/shared.lua"] = true,
+            ["settings/server.lua"] = true
+        }
+    },
+    --TODO: Integrate Later
+    --[[
+    {
+        resourceName = "assetify_mapper"
+    }
+    ]]
+}
+for i = 1, #syncer.private.libraryResources, 1 do
+    local j = syncer.private.libraryResources[i]
+    j.resourcePointer = ":"..j.resourceName.."/"
+end
+syncer.private.libraryVersion = imports.getResourceInfo(resource, "version")
+syncer.private.libraryVersion = (syncer.private.libraryVersion and "v."..syncer.private.libraryVersion) or "N/A"
+syncer.private.libraryVersionSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/"..syncer.private.libraryVersion.."/[Library]/"
+
+
+
 ----------------------
 --[[ CLI: Updater ]]--
 ----------------------
