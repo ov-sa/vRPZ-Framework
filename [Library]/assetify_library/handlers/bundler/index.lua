@@ -88,16 +88,13 @@ function bundler.public:createModule(name)
             local j = module.endpoints[i]
             rw = rw..[[
                 assetify["]]..j..[["] = ]]..j..((bundler.private.modules[j] and bundler.private.modules[j].module and ".public") or "")..[[
-            ]]
-            rw = rw..[[
                 _G["]]..j..[["] = nil
             ]]
         end
         bundler.private:createBuffer(module.module, name, [[
         if not assetify.]]..name..[[ then
             ]]..rw..[[
-        end
-        ]])
+        end]])
     end
     return bundler.private.buffer[(module.module)].rw
 end
