@@ -113,8 +113,6 @@ function cli.private:update(resourcePointer, responsePointer, isUpdateStatus)
         else
             imports.fetchRemote(responsePointer[1], function(response, status)
                 if not response or not status or (status ~= 0) then return cli.private:update(_, _, false) end
-                if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
-                --TOOD: ..
                 if isBackupToBeCreated then updateResources.updateCache.output[(responsePointer[2]..".backup")] = file:read(responsePointer[2] end
                 updateResources.updateCache.output[(responsePointer[2])] = response
                 updateResources.updateThread:resume()
