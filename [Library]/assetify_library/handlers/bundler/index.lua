@@ -111,7 +111,7 @@ function import(...)
     local cArgs = table.pack(...)
     if cArgs[1] == true then
         table.remove(cArgs, 1)
-        local buildImports, genImports, __genImports = {}, {}, {}
+        local buildImports, cImports, __cImports = {}, {}, {}
         local isCompleteFetch = false
         if (#cArgs <= 0) then
             table.insert(buildImports, "core")
@@ -125,25 +125,25 @@ function import(...)
         end
         for i = 1, #buildImports, 1 do
             local j = buildImports[i]
-            if (j ~= "imports") and bundler.private.buffer[j] and not __genImports[j] then
-                __genImports[j] = true
-                table.insert(genImports, {
+            if (j ~= "imports") and bundler.private.buffer[j] and not __cImports[j] then
+                __cImports[j] = true
+                table.insert(cImports, {
                     index = bundler.private.buffer[j].module or j,
                     rw = bundler.private.buffer["imports"]..[[
                     ]]..bundler.private.buffer[j].rw
                 })
             end
         end
-        if #genImports <= 0 then return false end
-        return genImports, isCompleteFetch
+        if #cImports <= 0 then return false end
+        return cImports, isCompleteFetch
     else
         cArgs = ((#cArgs > 0) and ", \""..table.concat(cArgs, "\", \"").."\"") or ""
         return [[
-        local genImports, isCompleteFetch = call(getResourceFromName("]]..syncer.libraryName..[["), "import", true]]..cArgs..[[)
-        if not genImports then return false end
+        local cImports, isCompleteFetch = call(getResourceFromName("]]..syncer.libraryName..[["), "import", true]]..cArgs..[[)
+        if not cImports then return false end
         local genReturns = (not isCompleteFetch and {}) or false
-        for i = 1, #genImports, 1 do
-            local j = genImports[i]
+        for i = 1, #cImports, 1 do
+            local j = cImports[i]
             assert(loadstring(j.rw))()
             if genReturns then genReturns[(#genReturns + 1)] = assetify[(j.index)] end
         end
