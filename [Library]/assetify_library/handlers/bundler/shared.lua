@@ -19,9 +19,9 @@ local imports = {
 }
 
 
------------------
---[[ Bundler ]]--
------------------
+---------------------------
+--[[ Bundler: Handlers ]]--
+---------------------------
 
 bundler.private:createBuffer("imports", _, [[
     if not assetify then
