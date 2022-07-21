@@ -107,7 +107,7 @@ for i, j in imports.pairs(bundler.private.modules) do
     end
 end
 
-function bundler.private:createExports(exports)
+function bundler.private:createAPIs(exports)
     if not exports or (imports.type(exports) ~= "table") then return false end
     local rw = ""
     for i, j in imports.pairs(exports) do

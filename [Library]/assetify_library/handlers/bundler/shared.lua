@@ -49,7 +49,7 @@ bundler.private:createBuffer("core", "__core", [[
     assetify.__core = {}
     assetify.imports.setmetatable(assetify, {__index = assetify.__core})
 
-    ]]..bundler.private:createExports({
+    ]]..bundler.private:createAPIs({
         shared = {
 
         },
@@ -198,7 +198,7 @@ bundler.private:createBuffer("scheduler", _, [[
 
 bundler.private:createBuffer("renderer", _, [[
     assetify.renderer = {}
-    ]]..bundler.private:createExports({
+    ]]..bundler.private:createAPIs({
         client = {
             {exportIndex = "assetify.renderer.isVirtualRendering", exportName = "isRendererVirtualRendering"},
             {exportIndex = "assetify.renderer.setVirtualRendering", exportName = "setRendererVirtualRendering"},
@@ -213,7 +213,7 @@ bundler.private:createBuffer("renderer", _, [[
 
 bundler.private:createBuffer("syncer", _, [[
     assetify.syncer = {}
-    ]]..bundler.private:createExports({
+    ]]..bundler.private:createAPIs({
         shared = {
             {exportIndex = "assetify.syncer.setGlobalData", exportName = "setGlobalData"},
             {exportIndex = "assetify.syncer.getGlobalData", exportName = "getGlobalData"},
@@ -225,7 +225,7 @@ bundler.private:createBuffer("syncer", _, [[
 
 bundler.private:createBuffer("attacher", _, [[
     assetify.attacher = {}
-    ]]..bundler.private:createExports({
+    ]]..bundler.private:createAPIs({
         shared = {
             {exportIndex = "assetify.attacher.setAttachment", exportName = "setAttachment"},
             {exportIndex = "assetify.attacher.setDetachment", exportName = "setDetachment"},
@@ -243,7 +243,7 @@ bundler.private:createBuffer("lights", "light", [[
     assetify.light = {
         planar = {}
     }
-    ]]..bundler.private:createExports({
+    ]]..bundler.private:createAPIs({
         client = {
             {exportIndex = "assetify.light.planar.create", exportName = "createPlanarLight"},
             {exportIndex = "assetify.light.planar.setResolution", exportName = "setPlanarLightResolution"},
