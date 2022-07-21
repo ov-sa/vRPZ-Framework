@@ -24,7 +24,7 @@ local imports = {
 
 local bundler = class:create("bundler")
 function bundler.private.public:import() return bundler end
-bundler.private.rw = {}
+bundler.private.buffer = {}
 bundler.private.utils = {
     "utilities/sandbox/index.lua",
     "utilities/sandbox/table.lua",
@@ -64,7 +64,7 @@ function bundler.public:createModule(moduleName)
     if not moduleName then return false end
     local module = bundler.private.modules[moduleName]
     if not module then return false end
-    if not bundler.private.rw[(module.module)] then
+    if not bundler.private.buffer[(module.module)] then
         local rw = file:read(module.path)
         for i, j in imports.pairs(bundler.private.modules) do
             local isBlacklisted = false
@@ -87,7 +87,7 @@ function bundler.public:createModule(moduleName)
                 _G["]]..j..[["] = nil
             ]]
         end
-        bundler.private.rw[(module.module)] = {
+        bundler.private.buffer[(module.module)] = {
             module = moduleName,
             rw = [[
             if not assetify.]]..moduleName..[[ then
@@ -96,7 +96,7 @@ function bundler.public:createModule(moduleName)
             ]]
         }
     end
-    return bundler.private.rw[(module.module)].rw
+    return bundler.private.buffer[(module.module)].rw
 end
 for i, j in imports.pairs(bundler.private.modules) do
     if j.module and j.endpoints then
@@ -114,7 +114,7 @@ function import(...)
             table.insert(buildImports, "core")
         elseif cArgs[1] == "*" then
             isCompleteFetch = true
-            for i, j in imports.pairs(bundler.private.rw) do
+            for i, j in imports.pairs(bundler.private.buffer) do
                 table.insert(buildImports, i)
             end
         else
@@ -122,13 +122,13 @@ function import(...)
         end
         for i = 1, #buildImports, 1 do
             local j = buildImports[i]
-            if (j ~= "imports") and bundler.private.rw[j] and not __genImports[j] then
+            if (j ~= "imports") and bundler.private.buffer[j] and not __genImports[j] then
                 __genImports[j] = true
-                local module = bundler.private.rw[j].module or j
+                local module = bundler.private.buffer[j].module or j
                 table.insert(genImports, {
                     index = module,
-                    rw = bundler.private.rw["imports"]..[[
-                    ]]..bundler.private.rw[j].rw
+                    rw = bundler.private.buffer["imports"]..[[
+                    ]]..bundler.private.buffer[j].rw
                 })
             end
         end

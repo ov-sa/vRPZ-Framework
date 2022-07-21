@@ -23,7 +23,7 @@ local imports = {
 --[[ Bundler ]]--
 -----------------
 
-bundler.private.rw["imports"] = [[
+bundler.private.buffer["imports"] = [[
     if not assetify then
         assetify = {}
         ]]..bundler.public:createModule("namespacer")..[[
@@ -45,7 +45,7 @@ bundler.private.rw["imports"] = [[
     end
 ]]
 
-bundler.private.rw["core"] = {
+bundler.private.buffer["core"] = {
     module = "__core",
     rw = [[
         assetify.__core = {}
@@ -167,7 +167,7 @@ bundler.private.rw["core"] = {
     ]]
 }
 
-bundler.private.rw["scheduler"] = {
+bundler.private.buffer["scheduler"] = {
     rw = [[
         ]]..bundler.public:createModule("networker")..[[
         assetify.scheduler = {
@@ -236,7 +236,7 @@ bundler.private.rw["scheduler"] = {
     ]]
 }
 
-bundler.private.rw["renderer"] = {
+bundler.private.buffer["renderer"] = {
     rw = [[
         assetify.renderer = {}
         if localPlayer then
@@ -271,7 +271,7 @@ bundler.private.rw["renderer"] = {
     ]]
 }
 
-bundler.private.rw["syncer"] = {
+bundler.private.buffer["syncer"] = {
     rw = [[
         assetify.syncer = {
             setGlobalData = function(...)
@@ -293,7 +293,7 @@ bundler.private.rw["syncer"] = {
     ]]
 }
 
-bundler.private.rw["attacher"] = {
+bundler.private.buffer["attacher"] = {
     rw = [[
         assetify.attacher = {
             setAttachment = function(...)
@@ -327,7 +327,7 @@ bundler.private.rw["attacher"] = {
     ]]
 }
 
-bundler.private.rw["lights"] = {
+bundler.private.buffer["lights"] = {
     module = "light",
     rw = [[
         assetify.light = {
