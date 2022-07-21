@@ -23,7 +23,7 @@ local imports = {
 --[[ Bundler ]]--
 -----------------
 
-bundler.private.buffer["imports"] = [[
+bundler.private:createBuffer("imports", _, [[
     if not assetify then
         assetify = {}
         ]]..bundler.public:createModule("namespacer")..[[
@@ -43,7 +43,7 @@ bundler.private.buffer["imports"] = [[
             string = string
         }
     end
-]]
+]])
 
 bundler.private:createBuffer("core", "__core", [[
     assetify.__core = {}
