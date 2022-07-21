@@ -50,6 +50,9 @@ bundler.private:createBuffer("core", "__core", [[
     assetify.imports.setmetatable(assetify, {__index = assetify.__core})
 
     ]]..bundler.private:createExports({
+        shared = {
+
+        },
         client = {
             {exportIndex = "assetify.__core.getDownloadProgress", exportName = "getDownloadProgress"},
             {exportIndex = "assetify.__core.isAssetLoaded", exportName = "isAssetLoaded"},
@@ -67,6 +70,7 @@ bundler.private:createBuffer("core", "__core", [[
             {exportIndex = "assetify.__core.playSound3D", exportName = "playSoundAsset3D"}
         }
     })..[[
+        --TODO: SHARED APIS ADD
     assetify.__core.isBooted = function()
         return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isLibraryBooted")
     end
