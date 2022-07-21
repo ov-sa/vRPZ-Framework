@@ -316,6 +316,20 @@ bundler.private:createBuffer("attacher", _, [[
     }
 ]])
 
+local cExports = bundler.private:createExports({
+    shared = {
+        {exportIndex = "sharedwew", exportName = "sharedxDDD1"}
+    },
+    client = {
+        {exportIndex = "wew", exportName = "xDDD2"}
+    },
+    server = {
+        {exportIndex = "serverwew", exportName = "serverxDDD2"},
+        {exportIndex = "serverwew 2333", exportName = "serverxDDD2  22333"}
+    }
+})
+print(cExports)
+
 bundler.private:createBuffer("lights", "light", [[
     assetify.light = {
         planar = {}

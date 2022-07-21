@@ -24,6 +24,7 @@ local imports = {
 
 local bundler = class:create("bundler")
 function bundler.public:import() return bundler end
+bundler.private.platform = (localPlayer and "client") or "server"
 bundler.private.buffer = {}
 bundler.private.utils = {
     "utilities/sandbox/index.lua",
@@ -105,6 +106,29 @@ for i, j in imports.pairs(bundler.private.modules) do
         bundler.public:createModule(i)
     end
 end
+
+function bundler.private:createExports(exports)
+    if not exports or (imports.type(exports) ~= "table") then return false end
+    local rw = ""
+    for i, j in imports.pairs(exports) do
+        if (i == bundler.private.platform) or (i == "shared") then
+            for k = 1, #j, 1 do
+                local v = j[k]
+                rw = rw..[[
+                ]]..v.exportIndex..[[ = function(...)
+                    return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), ]]..v.exportName..[[, ...)
+                end
+                ]]
+            end
+        end
+    end
+    return rw
+end
+
+
+-------------------------
+--[[ Bundler Syncers ]]--
+-------------------------
 
 function import(...)
     local cArgs = table.pack(...)
