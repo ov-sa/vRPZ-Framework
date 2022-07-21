@@ -60,6 +60,12 @@ function bundler.public:createUtils()
     return bundler.private.utils
 end
 
+function bundler.private:createBuffer(moduleName, moduleData)
+    if bundler.private.buffer[moduleName] then return false end
+    bundler.private.buffer[moduleName] = moduleData
+    return true
+end
+
 function bundler.public:createModule(moduleName)
     if not moduleName then return false end
     local module = bundler.private.modules[moduleName]
@@ -87,14 +93,14 @@ function bundler.public:createModule(moduleName)
                 _G["]]..j..[["] = nil
             ]]
         end
-        bundler.private.buffer[(module.module)] = {
+        bundler.private:createBuffer(module.module, {
             module = moduleName,
             rw = [[
             if not assetify.]]..moduleName..[[ then
                 ]]..rw..[[
             end
             ]]
-        }
+        })
     end
     return bundler.private.buffer[(module.module)].rw
 end
