@@ -47,7 +47,7 @@ end
 updateResources.onUpdateCB = function(isCompleted)
     if isCompleted then
         syncer.libraryVersion = updateResources.updateCache.libraryVersion
-        for i = #updateResources, 1, -1 do
+        for i = 1, #updateResources, 1 do
             local j = updateResources[i]
             local __resource = getResourceFromName(j.resourceName)
             if __resource then restartResource(__resource) end
