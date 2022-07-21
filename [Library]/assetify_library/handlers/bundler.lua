@@ -129,7 +129,6 @@ function import(...)
         if #genImports <= 0 then return false end
         return genImports, isCompleteFetch
     else
-        local cArgs = table.pack(...)
         cArgs = ((#cArgs > 0) and ", \""..table.concat(cArgs, "\", \"").."\"") or ""
         return [[
         local genImports, isCompleteFetch = call(getResourceFromName("]]..syncer.libraryName..[["), "import", true]]..cArgs..[[)
