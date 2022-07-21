@@ -44,8 +44,10 @@ updateResources = {
             imports.outputDebugString("[Assetify] | Update successfully completed; Rebooting!", 3)
             for i = 1, #updateResources, 1 do
                 local j = updateResources[i]
-                local cResource = imports.getResourceFromName(j.resourceName)
-                if cResource then imports.restartResource(cResource) end
+                if not j.isSilentResource then
+                    local cResource = imports.getResourceFromName(j.resourceName)
+                    if cResource then imports.restartResource(cResource) end
+                end
             end
         end
         if isNotification and not isCompleted then imports.outputDebugString("[Assetify] | Update failed due to connectivity issues; Try again later...", 3) end
