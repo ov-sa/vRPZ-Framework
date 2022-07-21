@@ -53,7 +53,8 @@ function bundler.public:createUtils()
             rw = rw..[[
             if true then
                 ]]..j..[[
-            end]]
+            end
+            ]]
         end
         bundler.private.utils = rw
     end
@@ -87,14 +88,15 @@ function bundler.public:createModule(name)
         for i = 1, #module.endpoints, 1 do
             local j = module.endpoints[i]
             rw = rw..[[
-                assetify["]]..j..[["] = ]]..j..((bundler.private.modules[j] and bundler.private.modules[j].module and ".public") or "")..[[
-                _G["]]..j..[["] = nil
+            assetify["]]..j..[["] = ]]..j..((bundler.private.modules[j] and bundler.private.modules[j].module and ".public") or "")..[[
+            _G["]]..j..[["] = nil
             ]]
         end
         bundler.private:createBuffer(module.module, name, [[
         if not assetify.]]..name..[[ then
             ]]..rw..[[
-        end]])
+        end
+        ]])
     end
     return bundler.private.buffer[(module.module)].rw
 end
