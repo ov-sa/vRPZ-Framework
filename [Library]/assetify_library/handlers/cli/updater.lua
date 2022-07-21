@@ -68,6 +68,7 @@ updateResources = {
 }
 for i = 1, #updateResources, 1 do
     local j = updateResources[i]
+    if j.isSilentResource then j.buffer = {} end
     j.resourcePointer = ":"..j.resourceName.."/"
 end
 
