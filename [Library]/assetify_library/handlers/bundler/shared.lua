@@ -132,8 +132,7 @@ function createScheduler()
         body = body..[[
         assetify.scheduler.]]..i..[[ = function(exec)
             if not exec or (assetify.imports.type(exec) ~= "function") then return false end
-            local isImmediate = ]]..j.exec..[[()
-            if isImmediate then exec()
+            if ]]..j.exec..[[() then exec()
             else assetify.imports.table.insert(assetify.scheduler.buffer.pending.]]..i..[[, exec) end
             return true
         end
