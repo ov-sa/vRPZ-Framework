@@ -130,9 +130,8 @@ function import(...)
             local j = buildImports[i]
             if (j ~= "imports") and bundler.private.buffer[j] and not __genImports[j] then
                 __genImports[j] = true
-                local module = bundler.private.buffer[j].module or j
                 table.insert(genImports, {
-                    index = module,
+                    index = bundler.private.buffer[j].module or j,
                     rw = bundler.private.buffer["imports"]..[[
                     ]]..bundler.private.buffer[j].rw
                 })
