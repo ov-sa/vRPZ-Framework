@@ -46,8 +46,12 @@ end
 
 updateResources.onUpdateCB = function(isCompleted)
     if isCompleted then
-        print("Library update successfully completed")
         syncer.libraryVersion = updateResources.updateCache.libraryVersion
+        for i = #updateResources, 1, -1 do
+            local j = updateResources[i]
+            local __resource = getResourceFromName(j.resourceName)
+            if __resource then restartResource(__resource) end
+        end
     end
     updateResources.updateCache = nil
     cli.public.isLibraryBeingUpdated = nil
