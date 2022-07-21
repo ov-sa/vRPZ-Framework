@@ -58,7 +58,7 @@ end
 --[[ CLI: Handlers ]]--
 -----------------------
 
-function cli.private:update(resourcePointer, isBackwardCompatible, responsePointer, isUpdationStatus)
+function cli.private:update(resourcePointer, responsePointer, isUpdationStatus)
     if isUpdationStatus ~= nil then
         imports.outputDebugString("[Assetify] | "..((isUpdationStatus and "Auto-updation successfully completed; Rebooting!") or "Auto-updation failed due to connectivity issues; Try again later..."), 3)
         if isUpdationStatus then
@@ -76,18 +76,21 @@ function cli.private:update(resourcePointer, isBackwardCompatible, responsePoint
                 local resourcePointer = updateResources[i]
                 local resourceMeta = updateResources.updateCache.libraryVersionSource..(resourcePointer.resourceName).."/meta.xml"
                 imports.fetchRemote(resourceMeta, function(response, status)
-                    if not response or not status or (status ~= 0) then return cli.private:update(resourcePointer, isBackwardCompatible, _, false) end
+                    if not response or not status or (status ~= 0) then
+                        return cli.private:update(resourcePointer, _, false)
+                    end
                     for i = 1, #updateResources.updateTags, 1 do
                         for j in string.gmatch(response, "<".. updateResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
                             if #string.gsub(j, "%s", "") > 0 then
-                                if not isBackwardCompatible or not resourcePointer.resourceBackup or not resourcePointer.resourceBackup[j] then
-                                    cli.private:update(resourcePointer, isBackwardCompatible, {updateResources.updateCache.libraryVersionSource..(resourcePointer.resourceName).."/"..j, j})
+                                if not updateResources.updateCache.isBackwardCompatible or not resourcePointer.resourceBackup or not resourcePointer.resourceBackup[j] then
+                                    --cli.private:update(resourcePointer, {updateResources.updateCache.libraryVersionSource..(resourcePointer.resourceName).."/"..j, j})
+                                    updateResources.updateThread:pause()
                                 end
                             end
                         end
                     end
-                    cli.private:update(resourcePointer, isBackwardCompatible, {resourceMeta, "meta.xml", response})
-                    cli.private:update(resourcePointer, isBackwardCompatible, _, true)
+                    --cli.private:update(resourcePointer, {resourceMeta, "meta.xml", response})
+                    --cli.private:update(resourcePointer, _, true)
                 end)
             end
         end)
@@ -99,17 +102,17 @@ function cli.private:update(resourcePointer, isBackwardCompatible, responsePoint
         if responsePointer[3] then
             --if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
             --file:write(responsePointer[2], responsePointer[3])
-            updateResources.updateThread:resume()
+            --updateResources.updateThread:resume()
         else
             imports.fetchRemote(responsePointer[1], function(response, status)
                 --TODO: INSTEAD OF DESTROYING HANDLE IN THIS SOME HANDLER
                 if not response or not status or (status ~= 0) then
-                    cli.private:update(resourcePointer, isBackwardCompatible, _, false)
+                    cli.private:update(resourcePointer, _, false)
                     return updateResources.updateThread:destroy()
                 end
                 if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
                 --file:write(responsePointer[2], response)
-                updateResources.updateThread:resume()
+                --updateResources.updateThread:resume()
             end)
         end
     end
