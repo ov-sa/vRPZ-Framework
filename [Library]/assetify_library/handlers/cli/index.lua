@@ -14,7 +14,8 @@
 
 local imports = {
     getElementType = getElementType,
-    addCommandHandler = addCommandHandler
+    addCommandHandler = addCommandHandler,
+    outputDebugString = outputDebugString
 }
 
 
@@ -25,8 +26,14 @@ local imports = {
 local cli = class:create("cli")
 function cli.public:import() return cli end
 cli.private.validActions = {
+    ["uid"] = true,
     ["update"] = true
 }
+
+function cli.public:uid(isAction)
+    imports.outputDebugString("Your Assetify UID: "..syncer.librarySerial)
+    return true
+end
 
 
 ----------------------
