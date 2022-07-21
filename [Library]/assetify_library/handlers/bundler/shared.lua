@@ -48,64 +48,25 @@ bundler.private:createBuffer("imports", _, [[
 bundler.private:createBuffer("core", "__core", [[
     assetify.__core = {}
     assetify.imports.setmetatable(assetify, {__index = assetify.__core})
-    if localPlayer then
-        assetify.__core.getDownloadProgress = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getDownloadProgress", ...)
-        end
-    
-        assetify.__core.isAssetLoaded = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isAssetLoaded", ...)
-        end
-    
-        assetify.__core.getAssetID = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getAssetID", ...)
-        end
 
-        assetify.__core.loadAsset = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "loadAsset", ...)
-        end
-    
-        assetify.__core.unloadAsset = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "unloadAsset", ...)
-        end
-    
-        assetify.__core.loadAnim = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "loadAnim", ...)
-        end
-    
-        assetify.__core.unloadAnim = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "unloadAnim", ...)
-        end
-    
-        assetify.__core.createShader = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createShader", ...)
-        end
-    
-        assetify.__core.clearWorld = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "clearWorld", ...)
-        end
-    
-        assetify.__core.restoreWorld = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "restoreWorld", ...)
-        end
-    
-        assetify.__core.clearModel = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "clearModel", ...)
-        end
-    
-        assetify.__core.restoreModel = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "restoreModel", ...)
-        end
-    
-        assetify.__core.playSound = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "playSoundAsset", ...)
-        end
-    
-        assetify.__core.playSound3D = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "playSoundAsset3D", ...)
-        end
-    end
-    
+    ]]..bundler.private:createExports({
+        client = {
+            {exportIndex = "assetify.__core.getDownloadProgress", exportName = "getDownloadProgress"},
+            {exportIndex = "assetify.__core.isAssetLoaded", exportName = "isAssetLoaded"},
+            {exportIndex = "assetify.__core.getAssetID", exportName = "getAssetID"},
+            {exportIndex = "assetify.__core.loadAsset", exportName = "loadAsset"},
+            {exportIndex = "assetify.__core.unloadAsset", exportName = "unloadAsset"},
+            {exportIndex = "assetify.__core.loadAnim", exportName = "loadAnim"},
+            {exportIndex = "assetify.__core.unloadAnim", exportName = "unloadAnim"},
+            {exportIndex = "assetify.__core.createShader", exportName = "createShader"},
+            {exportIndex = "assetify.__core.clearWorld", exportName = "clearWorld"},
+            {exportIndex = "assetify.__core.restoreWorld", exportName = "restoreWorld"},
+            {exportIndex = "assetify.__core.clearModel", exportName = "clearModel"},
+            {exportIndex = "assetify.__core.restoreModel", exportName = "restoreModel"},
+            {exportIndex = "assetify.__core.playSound", exportName = "playSoundAsset"},
+            {exportIndex = "assetify.__core.playSound3D", exportName = "playSoundAsset3D"}
+        }
+    })..[[
     assetify.__core.isBooted = function()
         return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isLibraryBooted")
     end
