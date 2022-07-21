@@ -26,7 +26,7 @@ local imports = {
 bundler.private:createBuffer("imports", _, [[
     if not assetify then
         assetify = {}
-        ]]..bundler.public:createModule("namespacer")..[[
+        ]]..bundler.public:createModule("namespace")..[[
         ]]..bundler.public:createUtils()..[[
         assetify.imports = {
             resourceName = "]]..syncer.libraryName..[[",
@@ -165,7 +165,7 @@ bundler.private:createBuffer("core", "__core", [[
 ]])
 
 bundler.private:createBuffer("scheduler", _, [[
-    ]]..bundler.public:createModule("networker")..[[
+    ]]..bundler.public:createModule("network")..[[
     assetify.scheduler = {
         buffer = {
             pending = {execOnBoot = {}, execOnLoad = {}, execOnModuleLoad = {}}
@@ -230,7 +230,6 @@ bundler.private:createBuffer("scheduler", _, [[
     assetify.network:fetch("Assetify:onLoad", true):on(function() bootExec("execOnLoad") end, {subscriptionLimit = 1})
     assetify.network:fetch("Assetify:onModuleLoad", true):on(function() bootExec("execOnModuleLoad") end, {subscriptionLimit = 1})
 ]])
-
 
 bundler.private:createBuffer("renderer", _, [[
     assetify.renderer = {}
