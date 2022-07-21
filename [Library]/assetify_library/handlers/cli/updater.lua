@@ -131,7 +131,7 @@ function cli.public:update(isAction)
         updateResources.updateCache = {
             isAutoUpdate = isAutoUpdate,
             libraryVersion = response.tag_name,
-            libraryVersionSource = updateResources.fetchSource(resourceREF.resourceSource, response.tag_name),
+            libraryVersionSource = updateResources.fetchSource(updateResources[1].resourceSource, response.tag_name),
             isBackwardsCompatible = string.match(syncer.libraryVersion, "(%d+)%.") ~= string.match(response.tag_name, "(%d+)%.")
         }
         cli.private:update()
