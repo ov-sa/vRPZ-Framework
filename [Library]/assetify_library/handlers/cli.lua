@@ -34,6 +34,7 @@ function cli.public:update(isAction)
     if syncer.private.isLibraryBeingUpdated then return imports.outputDebugString("[Assetify] | An update request is already being processed; Kindly have patience...", 3) end
     syncer.private.isLibraryBeingUpdated, syncer.private.onLibraryUpdateCB = true, syncer.private.onLibraryUpdateCB or function(isSuccess)
         if isSuccess then
+            syncer.private.libraryVersion = syncer.private.libraryUpdateCache.libraryVersion
             syncer.private.libraryVersionSource = syncer.private.libraryUpdateCache.libraryVersionSource
         end
         syncer.private.libraryUpdateCache = nil
