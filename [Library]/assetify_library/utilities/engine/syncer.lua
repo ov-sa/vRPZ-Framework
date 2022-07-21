@@ -18,14 +18,10 @@ local imports = {
     md5 = md5,
     tostring = tostring,
     isElement = isElement,
-    fetchRemote = fetchRemote,
-    restartResource = restartResource,
-    outputDebugString = outputDebugString,
     getElementType = getElementType,
     getRealTime = getRealTime,
     getThisResource = getThisResource,
     getResourceName = getResourceName,
-    getResourceFromName = getResourceFromName,
     getResourceInfo = getResourceInfo,
     setElementModel = setElementModel,
     addEventHandler = addEventHandler,
@@ -175,60 +171,6 @@ else
             thread:pause()
         end
     end, {isAsync = true})
-
-    function syncer.private:updateLibrary(resourceREF, isBackwardsCompatible, resourceThread, responsePointer, isUpdationStatus)
-        if isUpdationStatus ~= nil then
-            imports.outputDebugString("[Assetify] | "..((isUpdationStatus and "Auto-updation successfully completed; Rebooting!") or "Auto-updation failed due to connectivity issues; Try again later..."), 3)
-            if isUpdationStatus then
-                local __resource = imports.getResourceFromName(resourceREF.resourceName)
-                if __resource then imports.restartResource(__resource) end
-            end
-            syncer.private.onLibraryUpdateCB(isUpdationStatus)
-            return true
-        end
-        if not responsePointer then
-            --TODO: ...WIP
-            for i = 1, #syncer.private.libraryResources, 1 do
-                local j = syncer.private.libraryResources[i]
-
-            end
-            local resourceMeta = syncer.private.libraryUpdateCache.libraryVersionSource..(resourceREF.resourceName).."/meta.xml"
-            imports.fetchRemote(resourceMeta, function(response, status)
-                if not response or not status or (status ~= 0) then return syncer.private:updateLibrary(resourceREF, isBackwardsCompatible, _, _, false) end
-                thread:create(function(self)
-                    for i = 1, #syncer.private.libraryResources.updateTags, 1 do
-                        for j in string.gmatch(response, "<".. syncer.private.libraryResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
-                            if #string.gsub(j, "%s", "") > 0 then
-                                if not isBackwardsCompatible or not resourceREF.resourceBackup or not resourceREF.resourceBackup[j] then
-                                    syncer.private:updateLibrary(resourceREF, isBackwardsCompatible, self, {syncer.private.libraryUpdateCache.libraryVersionSource..(resourceREF.resourceName).."/"..j, j})
-                                    self:pause()
-                                end
-                            end
-                        end
-                    end
-                    syncer.private:updateLibrary(resourceREF, isBackwardsCompatible, self, {resourceMeta, "meta.xml", response})
-                    syncer.private:updateLibrary(resourceREF, isBackwardsCompatible, _, _, true)
-                end):resume()
-            end)
-        else
-            local isBackupToBeCreated = (resourceREF.resourceBackup and resourceREF.resourceBackup[(responsePointer[2])] and true) or false
-            responsePointer[2] = resourceREF.resourcePointer..responsePointer[2]
-            if isBackupToBeCreated then imports.outputDebugString("[Assetify] | Backed up <"..responsePointer[2].."> due to compatibility breaking changes; Kindly update it accordingly!", 3) end
-            if responsePointer[3] then
-                if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
-                file:write(responsePointer[2], responsePointer[3])
-                resourceThread:resume()
-            else
-                imports.fetchRemote(responsePointer[1], function(response, status)
-                    if not response or not status or (status ~= 0) then syncer.private:updateLibrary(resourceREF, isBackwardsCompatible, _, _, false); return resourceThread:destroy() end
-                    if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
-                    file:write(responsePointer[2], response)
-                    resourceThread:resume()
-                end)
-            end
-        end
-        return true
-    end
 
     function syncer.private:loadClient(player)
         if syncer.public.libraryClients.loaded[player] then return false end
