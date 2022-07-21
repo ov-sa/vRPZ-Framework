@@ -47,7 +47,6 @@ syncer.private.libraryVersion = imports.getResourceInfo(resource, "version")
 syncer.private.libraryVersion = (syncer.private.libraryVersion and "v."..syncer.private.libraryVersion) or "N/A"
 syncer.private.libraryVersionSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/"..syncer.private.libraryVersion.."/[Library]/"
 
-
 local updateCache, onUpdateCB = nil, function(isSuccess)
     if isSuccess then
         syncer.private.libraryVersion = updateCache.libraryVersion
@@ -130,17 +129,14 @@ function cli.public:update(isAction)
         end
         local isToBeUpdated, isAutoUpdate = (isAction and true) or settings.library.autoUpdate, (not isAction and settings.library.autoUpdate) or false
         imports.outputDebugString("[Assetify] | "..((isToBeUpdated and not isAutoUpdate and "Updating to latest version") or (isToBeUpdated and isAutoUpdate and "Auto-updating to latest version") or "Latest version available").." - "..response.tag_name, 3)
-        if isToBeUpdated then
-            updateCache = {
-                isAutoUpdate = isAutoUpdate,
-                libraryVersion = response.tag_name,
-                libraryVersionSource = string.gsub(syncer.private.libraryVersionSource, syncer.private.libraryVersion, response.tag_name, 1),
-                isBackwardsCompatible = string.match(syncer.private.libraryVersion, "(%d+)%.") ~= string.match(response.tag_name, "(%d+)%.")
-            }
-            cli.private:update()
-        else
-            onUpdateCB()
-        end
+        if not isToBeUpdated then return onUpdateCB() end
+        updateCache = {
+            isAutoUpdate = isAutoUpdate,
+            libraryVersion = response.tag_name,
+            libraryVersionSource = string.gsub(syncer.private.libraryVersionSource, syncer.private.libraryVersion, response.tag_name, 1),
+            isBackwardsCompatible = string.match(syncer.private.libraryVersion, "(%d+)%.") ~= string.match(response.tag_name, "(%d+)%.")
+        }
+        cli.private:update()
     end)
     return true
 end
