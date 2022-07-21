@@ -105,8 +105,7 @@ local validSchedulerTypes = {
     ["execOnModuleLoad"] = {exec = "assetify.isModuleLoaded", network = "Assetify:onModuleLoad"}
 }
 function createScheduler()
-    local header = [[assetify.scheduler.buffer = {pending = {]]
-    local body = ""
+    local header, body = [[assetify.scheduler.buffer = {pending = {]], ""
     local footer = [[
     local bootExec = function(type)
         if not assetify.scheduler.buffer.pending[type] then return false end
