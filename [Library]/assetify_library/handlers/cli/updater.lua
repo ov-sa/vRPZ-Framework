@@ -29,7 +29,7 @@ local imports = {
 local updateResources = {
     updateTags = {"file", "script"},
     fetchSource = function(base, version, ...) return (base and version and string.format(base, version, ...)) or false end,
-    onUpdateCB = function(isCompleted)
+    onUpdateCallback = function(isCompleted)
         if isCompleted then
             syncer.libraryVersion = updateResources.updateCache.libraryVersion
             for i = 1, #updateResources, 1 do
@@ -64,7 +64,7 @@ end
 function cli.private:update(resourcePointer, responsePointer, isUpdationStatus)
     if isUpdationStatus ~= nil then
         imports.outputDebugString("[Assetify] | "..((isUpdationStatus and "Updation successfully completed; Rebooting!") or "Updation failed due to connectivity issues; Try again later..."), 3)
-        updateResources.onUpdateCB(isUpdationStatus)
+        updateResources.onUpdateCallback(isUpdationStatus)
         return true
     end
     if not responsePointer then
@@ -124,16 +124,16 @@ function cli.public:update(isAction)
     cli.public.isLibraryBeingUpdated = true
     if isAction then imports.outputDebugString("[Assetify] | Fetching latest version; Hold up...", 3) end
     imports.fetchRemote(syncer.librarySource, function(response, status)
-        if not response or not status or (status ~= 0) then return updateResources.onUpdateCB() end
+        if not response or not status or (status ~= 0) then return updateResources.onUpdateCallback() end
         response = table.decode(response)
-        if not response or not response.tag_name then return updateResources.onUpdateCB() end
+        if not response or not response.tag_name then return updateResources.onUpdateCallback() end
         if syncer.libraryVersion == response.tag_name then
             if isAction then imports.outputDebugString("[Assetify] | Already upto date - "..response.tag_name, 3) end
-            return updateResources.onUpdateCB()
+            return updateResources.onUpdateCallback()
         end
         local isToBeUpdated, isAutoUpdate = (isAction and true) or settings.library.autoUpdate, (not isAction and settings.library.autoUpdate) or false
         imports.outputDebugString("[Assetify] | "..((isToBeUpdated and not isAutoUpdate and "Updating to latest version") or (isToBeUpdated and isAutoUpdate and "Auto-updating to latest version") or "Latest version available").." - "..response.tag_name, 3)
-        if not isToBeUpdated then return updateResources.onUpdateCB() end
+        if not isToBeUpdated then return updateResources.onUpdateCallback() end
         updateResources.updateCache = {
             isAutoUpdate = isAutoUpdate,
             libraryVersion = response.tag_name,
