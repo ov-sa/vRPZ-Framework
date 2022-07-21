@@ -34,6 +34,10 @@ updateResources = {
     onUpdateCallback = function(isCompleted)
         if isCompleted then
             syncer.libraryVersion = updateResources.updateCache.libraryVersion
+            for i, j in imports.pairs(updateResources.updateCache.backup) do
+                imports.outputDebugString("[Assetify] | Backed up <"..i.."> due to compatibility breaking changes; Kindly acknowledge it accordingly!", 3)
+                file:write(i, j)
+            end
             for i, j in imports.pairs(updateResources.updateCache.output) do
                 file:write(i, j)
             end
@@ -105,15 +109,14 @@ function cli.private:update(resourcePointer, responsePointer, isUpdateStatus)
     else
         local isBackupToBeCreated = (resourcePointer.resourceBackup and resourcePointer.resourceBackup[(responsePointer[2])] and true) or false
         responsePointer[2] = resourcePointer.resourcePointer..responsePointer[2]
-        if isBackupToBeCreated then imports.outputDebugString("[Assetify] | Backed up <"..responsePointer[2].."> due to compatibility breaking changes; Kindly update it accordingly!", 3) end
         if responsePointer[3] then
-            if isBackupToBeCreated then updateResources.updateCache.output[(responsePointer[2]..".backup")] = file:read(responsePointer[2] end
+            if isBackupToBeCreated then updateResources.updateCache.output[(responsePointer[2]..".backup")] = file:read(responsePointer[2]) end
             updateResources.updateCache.output[(responsePointer[2])] = responsePointer[3]
             updateResources.updateThread:resume()
         else
             imports.fetchRemote(responsePointer[1], function(response, status)
                 if not response or not status or (status ~= 0) then return cli.private:update(_, _, false) end
-                if isBackupToBeCreated then updateResources.updateCache.output[(responsePointer[2]..".backup")] = file:read(responsePointer[2] end
+                if isBackupToBeCreated then updateResources.updateCache.output[(responsePointer[2]..".backup")] = file:read(responsePointer[2]) end
                 updateResources.updateCache.output[(responsePointer[2])] = response
                 updateResources.updateThread:resume()
             end)
