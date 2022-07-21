@@ -43,8 +43,8 @@ for i = 1, #updateResources, 1 do
     j.resourcePointer = ":"..j.resourceName.."/"
 end
 
-updateResources.onUpdateCB = function(isSuccess)
-    if isSuccess then
+updateResources.onUpdateCB = function(isCompleted)
+    if isCompleted then
         print("Library update successfully completed")
         syncer.libraryVersion = updateResources.updateCache.libraryVersion
     end
