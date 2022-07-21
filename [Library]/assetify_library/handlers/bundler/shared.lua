@@ -48,7 +48,6 @@ bundler.private:createBuffer("imports", _, [[
 bundler.private:createBuffer("core", "__core", [[
     assetify.__core = {}
     assetify.imports.setmetatable(assetify, {__index = assetify.__core})
-
     ]]..bundler.private:createAPIs({
         shared = {
             {exportIndex = "assetify.__core.isBooted", exportName = "isLibraryBooted"},
@@ -57,6 +56,9 @@ bundler.private:createBuffer("core", "__core", [[
             {exportIndex = "assetify.__core.getAssets", exportName = "getLibraryAssets"},
             {exportIndex = "assetify.__core.getAsset", exportName = "getAssetData"},
             {exportIndex = "assetify.__core.getAssetDep", exportName = "getAssetDep"},
+            {exportIndex = "assetify.__core.setElementAsset", exportName = "setElementAsset"},
+            {exportIndex = "assetify.__core.getElementAssetInfo", exportName = "getElementAssetInfo"},
+            {exportIndex = "assetify.__core.createDummy", exportName = "createAssetDummy"}
         },
         client = {
             {exportIndex = "assetify.__core.getDownloadProgress", exportName = "getDownloadProgress"},
@@ -75,7 +77,6 @@ bundler.private:createBuffer("core", "__core", [[
             {exportIndex = "assetify.__core.playSound3D", exportName = "playSoundAsset3D"}
         }
     })..[[
-        --TODO: SHARED APIS 
     assetify.__core.loadModule = function(assetName, moduleTypes)
         local cAsset = assetify.getAsset("module", assetName)
         if not cAsset or not moduleTypes or (#moduleTypes <= 0) then return false end
@@ -95,18 +96,6 @@ bundler.private:createBuffer("core", "__core", [[
             end
         end
         return true
-    end
-    
-    assetify.__core.setElementAsset = function(...)
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setElementAsset", ...)
-    end
-    
-    assetify.__core.getElementAssetInfo = function(...)
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getElementAssetInfo", ...)
-    end
-    
-    assetify.__core.createDummy = function(...)
-        return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "createAssetDummy", ...)
     end
 ]])
 
