@@ -74,26 +74,25 @@ function cli.private:update(resourcePointer, responsePointer, isUpdationStatus)
     if not responsePointer then
         updateResources.updateThread = thread:create(function()
             for i = 1, #updateResources, 1 do
-                --TODO: ...WIP
-                local resourcePointer = updateResources[i]
+                local resourcePointer, resoureResponse = updateResources[i], false
                 local resourceMeta = updateResources.updateCache.libraryVersionSource..(resourcePointer.resourceName).."/meta.xml"
-                imports.fetchRemote(resourceMeta, function(response, status)
-                    if not response or not status or (status ~= 0) then
-                        return cli.private:update(resourcePointer, _, false)
-                    end
-                    for i = 1, #updateResources.updateTags, 1 do
-                        for j in string.gmatch(response, "<".. updateResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
-                            if #string.gsub(j, "%s", "") > 0 then
-                                if not updateResources.updateCache.isBackwardCompatible or not resourcePointer.resourceBackup or not resourcePointer.resourceBackup[j] then
-                                    --cli.private:update(resourcePointer, {updateResources.updateCache.libraryVersionSource..(resourcePointer.resourceName).."/"..j, j})
-                                    updateResources.updateThread:pause()
-                                end
-                            end
+                imports.fetchRemote(resourceMeta, function(...)
+                    resoureResponse = table.pack(...)
+                    updateResources.updateThread:resume()
+                end)
+                updateResources.updateThread:pause()
+                if not resoureResponse[1] or not resoureResponse[2] or (resoureResponse[2] ~= 0) then return cli.private:update(resourcePointer, _, false) end
+                for i = 1, #updateResources.updateTags, 1 do
+                    for j in string.gmatch(resoureResponse[1], "<".. updateResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
+                        if (#string.gsub(j, "%s", "") > 0) and (not updateResources.updateCache.isBackwardCompatible or not resourcePointer.resourceBackup or not resourcePointer.resourceBackup[j]) then
+                            cli.private:update(resourcePointer, {updateResources.updateCache.libraryVersionSource..(resourcePointer.resourceName).."/"..j, j})
+                            updateResources.updateThread:pause()
                         end
                     end
-                    --cli.private:update(resourcePointer, {resourceMeta, "meta.xml", response})
-                    --cli.private:update(resourcePointer, _, true)
-                end)
+                end
+                cli.private:update(resourcePointer, {resourceMeta, "meta.xml", resoureResponse[1]})
+                cli.private:update(resourcePointer, _, true)
+                print("wow")
             end
         end)
         updateResources.updateThread:resume()
@@ -104,7 +103,7 @@ function cli.private:update(resourcePointer, responsePointer, isUpdationStatus)
         if responsePointer[3] then
             --if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
             --file:write(responsePointer[2], responsePointer[3])
-            --updateResources.updateThread:resume()
+            updateResources.updateThread:resume()
         else
             imports.fetchRemote(responsePointer[1], function(response, status)
                 --TODO: INSTEAD OF DESTROYING HANDLE IN THIS SOME HANDLER
@@ -114,7 +113,7 @@ function cli.private:update(resourcePointer, responsePointer, isUpdationStatus)
                 end
                 if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
                 --file:write(responsePointer[2], response)
-                --updateResources.updateThread:resume()
+                updateResources.updateThread:resume()
             end)
         end
     end
