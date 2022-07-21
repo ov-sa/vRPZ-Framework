@@ -13,7 +13,6 @@
 -----------------
 
 local cli = cli:import()
-local syncer = syncer:import()
 local imports = {
     fetchRemote = fetchRemote,
     restartResource = restartResource,
@@ -22,11 +21,15 @@ local imports = {
 }
 
 
+----------------------
+--[[ CLI: Updater ]]--
+----------------------
+
 --TODO: WIP...
-syncer.private.libraryResources = {
+cli.private.libraryResources = {
     updateTags = {"file", "script"},
     {
-        resourceName = syncer.public.libraryName,
+        resourceName = syncer.libraryName,
         resourceBackup = {
             ["settings/shared.lua"] = true,
             ["settings/server.lua"] = true
@@ -39,25 +42,20 @@ syncer.private.libraryResources = {
     }
     ]]
 }
-for i = 1, #syncer.private.libraryResources, 1 do
-    local j = syncer.private.libraryResources[i]
+for i = 1, #cli.private.libraryResources, 1 do
+    local j = cli.private.libraryResources[i]
     j.resourcePointer = ":"..j.resourceName.."/"
 end
-syncer.private.libraryVersionSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/"..syncer.public.libraryVersion.."/[Library]/"
+cli.private.libraryVersionSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/"..syncer.libraryVersion.."/[Library]/"
 
 local updateCache, onUpdateCB = nil, function(isSuccess)
     if isSuccess then
-        syncer.public.libraryVersion = updateCache.libraryVersion
-        syncer.private.libraryVersionSource = updateCache.libraryVersionSource
+        syncer.libraryVersion = updateCache.libraryVersion
+        cli.private.libraryVersionSource = updateCache.libraryVersionSource
     end
     updateCache = nil
     cli.private.isBeingUpdated = nil
 end
-
-
-----------------------
---[[ CLI: Updater ]]--
-----------------------
 
 function cli.private:update(resourceREF, isBackwardsCompatible, resourceThread, responsePointer, isUpdationStatus)
     if isUpdationStatus ~= nil then
@@ -71,16 +69,16 @@ function cli.private:update(resourceREF, isBackwardsCompatible, resourceThread, 
     end
     if not responsePointer then
         --TODO: ...WIP
-        for i = 1, #syncer.private.libraryResources, 1 do
-            local j = syncer.private.libraryResources[i]
+        for i = 1, #cli.private.libraryResources, 1 do
+            local j = cli.private.libraryResources[i]
 
         end
         local resourceMeta = updateCache.libraryVersionSource..(resourceREF.resourceName).."/meta.xml"
         imports.fetchRemote(resourceMeta, function(response, status)
             if not response or not status or (status ~= 0) then return cli.private:update(resourceREF, isBackwardsCompatible, _, _, false) end
             thread:create(function(self)
-                for i = 1, #syncer.private.libraryResources.updateTags, 1 do
-                    for j in string.gmatch(response, "<".. syncer.private.libraryResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
+                for i = 1, #cli.private.libraryResources.updateTags, 1 do
+                    for j in string.gmatch(response, "<".. cli.private.libraryResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
                         if #string.gsub(j, "%s", "") > 0 then
                             if not isBackwardsCompatible or not resourceREF.resourceBackup or not resourceREF.resourceBackup[j] then
                                 cli.private:update(resourceREF, isBackwardsCompatible, self, {updateCache.libraryVersionSource..(resourceREF.resourceName).."/"..j, j})
@@ -117,11 +115,11 @@ function cli.public:update(isAction)
     if cli.private.isBeingUpdated then return imports.outputDebugString("[Assetify] | An update request is already being processed; Kindly have patience...", 3) end
     cli.private.isBeingUpdated = true
     if isAction then imports.outputDebugString("[Assetify] | Fetching latest version; Hold up...", 3) end
-    imports.fetchRemote(syncer.public.librarySource, function(response, status)
+    imports.fetchRemote(syncer.librarySource, function(response, status)
         if not response or not status or (status ~= 0) then return onUpdateCB() end
         response = table.decode(response)
         if not response or not response.tag_name then return onUpdateCB() end
-        if syncer.public.libraryVersion == response.tag_name then
+        if syncer.libraryVersion == response.tag_name then
             if isAction then imports.outputDebugString("[Assetify] | Already upto date - "..response.tag_name, 3) end
             return onUpdateCB()
         end
@@ -131,8 +129,8 @@ function cli.public:update(isAction)
         updateCache = {
             isAutoUpdate = isAutoUpdate,
             libraryVersion = response.tag_name,
-            libraryVersionSource = string.gsub(syncer.private.libraryVersionSource, syncer.public.libraryVersion, response.tag_name, 1),
-            isBackwardsCompatible = string.match(syncer.public.libraryVersion, "(%d+)%.") ~= string.match(response.tag_name, "(%d+)%.")
+            libraryVersionSource = string.gsub(cli.private.libraryVersionSource, syncer.libraryVersion, response.tag_name, 1),
+            isBackwardsCompatible = string.match(syncer.libraryVersion, "(%d+)%.") ~= string.match(response.tag_name, "(%d+)%.")
         }
         cli.private:update()
     end)
