@@ -178,6 +178,7 @@ else
 
     function syncer.private:updateLibrary(resourceREF, isBackwardsCompatible, resourceThread, responsePointer, isUpdationStatus)
         if isUpdationStatus ~= nil then
+            syncer.private.isLibraryBeingUpdated = false
             imports.outputDebugString("[Assetify] | "..((isUpdationStatus and "Auto-updation successfully completed; Rebooting!") or "Auto-updation failed due to connectivity issues; Try again later..."), 3)
             if isUpdationStatus then
                 local __resource = imports.getResourceFromName(resourceREF.resourceName)
