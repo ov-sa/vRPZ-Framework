@@ -14,7 +14,6 @@
 
 local bundler = bundler:import()
 local imports = {
-    type = type,
     pairs = pairs
 }
 
