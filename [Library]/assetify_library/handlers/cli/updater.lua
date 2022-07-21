@@ -26,10 +26,22 @@ local imports = {
 --[[ CLI: Helpers ]]--
 ----------------------
 
---TODO: WIP...
 local updateResources = {
     updateTags = {"file", "script"},
     fetchSource = function(base, version, ...) return (base and version and string.format(base, version, ...)) or false end,
+    onUpdateCB = function(isCompleted)
+        if isCompleted then
+            syncer.libraryVersion = updateResources.updateCache.libraryVersion
+            for i = 1, #updateResources, 1 do
+                local j = updateResources[i]
+                local __resource = getResourceFromName(j.resourceName)
+                if __resource then restartResource(__resource) end
+            end
+        end
+        cli.public.isLibraryBeingUpdated, updateResources.updateCache = nil, nil
+        imports.collectgarbage()
+        return true
+    end,
     {
         resourceName = syncer.libraryName,
         resourceSource = "https://raw.githubusercontent.com/ov-sa/Assetify-Library/%s/[Library]/",
@@ -42,20 +54,6 @@ local updateResources = {
 for i = 1, #updateResources, 1 do
     local j = updateResources[i]
     j.resourcePointer = ":"..j.resourceName.."/"
-end
-
-updateResources.onUpdateCB = function(isCompleted)
-    if isCompleted then
-        syncer.libraryVersion = updateResources.updateCache.libraryVersion
-        for i = 1, #updateResources, 1 do
-            local j = updateResources[i]
-            local __resource = getResourceFromName(j.resourceName)
-            if __resource then restartResource(__resource) end
-        end
-    end
-    updateResources.updateCache = nil
-    cli.public.isLibraryBeingUpdated = nil
-    imports.collectgarbage()
 end
 
 
