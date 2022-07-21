@@ -49,7 +49,6 @@ updateResources.onUpdateCB = function(isCompleted)
         print("Library update successfully completed")
         syncer.libraryVersion = updateResources.updateCache.libraryVersion
     end
-    print("Finished library update")
     updateResources.updateCache = nil
     cli.public.isLibraryBeingUpdated = nil
     imports.collectgarbage()
