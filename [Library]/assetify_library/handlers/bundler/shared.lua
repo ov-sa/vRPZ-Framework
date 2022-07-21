@@ -99,49 +99,15 @@ bundler.private:createBuffer("core", "__core", [[
     end
 ]])
 
-bundler.private:createBuffer("scheduler", _, [[
-    ]]..bundler.public:createModule("network")..[[
-    assetify.scheduler = {
-        buffer = {
-            pending = {execOnBoot = {}, execOnLoad = {}, execOnModuleLoad = {}}
-        },
-        execOnBoot = function(exec)
-            if not exec or (assetify.imports.type(exec) ~= "function") then return false end
-            local isBooted = assetify.isBooted()
-            if isBooted then exec()
-            else assetify.imports.table.insert(assetify.scheduler.buffer.pending.execOnBoot, exec) end
-            return true
-        end,
-
-        execOnLoad = function(exec)
-            if not exec or (assetify.imports.type(exec) ~= "function") then return false end
-            local isLoaded = assetify.isLoaded()
-            if isLoaded then exec()
-            else assetify.imports.table.insert(assetify.scheduler.buffer.pending.execOnLoad, exec) end
-            return true
-        end,
-
-        execOnModuleLoad = function(exec)
-            if not exec or (assetify.imports.type(exec) ~= "function") then return false end
-            local isModuleLoaded = assetify.isModuleLoaded()
-            if isModuleLoaded then exec()
-            else assetify.imports.table.insert(assetify.scheduler.buffer.pending.execOnModuleLoad, exec) end
-            return true
-        end,
-
-        boot = function()
-            for i, j in assetify.imports.pairs(assetify.scheduler.buffer.schedule) do
-                if #j > 0 then
-                    for k = 1, #j, 1 do
-                        assetify.scheduler[i](j[k])
-                    end
-                    assetify.scheduler.buffer.schedule[i] = {}
-                end
-            end
-            return true
-        end
-    }
-    assetify.scheduler.buffer.schedule = assetify.imports.table.clone(assetify.scheduler.buffer.pending, true)
+local validSchedulerTypes = {
+    ["execOnBoot"] = {exec = "assetify.isBooted", network = "Assetify:onBoot"},
+    ["execOnLoad"] = {exec = "assetify.isLoaded", network = "Assetify:onLoad"},
+    ["execOnModuleLoad"] = {exec = "assetify.isModuleLoaded", network = "Assetify:onModuleLoad"}
+}
+function createScheduler()
+    local header = [[assetify.scheduler.buffer = {pending = {]]
+    local body = ""
+    local footer = [[
     local bootExec = function(type)
         if not assetify.scheduler.buffer.pending[type] then return false end
         if #assetify.scheduler.buffer.pending[type] > 0 then
@@ -161,9 +127,45 @@ bundler.private:createBuffer("scheduler", _, [[
     for i, j in assetify.imports.pairs(assetify.scheduler.buffer.schedule) do
         assetify.scheduler[(assetify.imports.string.gsub(i, "exec", "execSchedule", 1))] = function(...) return scheduleExec(i, ...) end
     end
-    assetify.network:fetch("Assetify:onBoot", true):on(function() bootExec("execOnBoot") end, {subscriptionLimit = 1})
-    assetify.network:fetch("Assetify:onLoad", true):on(function() bootExec("execOnLoad") end, {subscriptionLimit = 1})
-    assetify.network:fetch("Assetify:onModuleLoad", true):on(function() bootExec("execOnModuleLoad") end, {subscriptionLimit = 1})
+    ]]
+    for i, j in pairs(validSchedulerTypes) do
+        header = header..i..[[ = {}, ]]
+        body = body..[[
+        assetify.scheduler.]]..i..[[ = function(exec)
+            if not exec or (assetify.imports.type(exec) ~= "function") then return false end
+            local isImmediate = ]]..j.exec..[[()
+            if isImmediate then exec()
+            else assetify.imports.table.insert(assetify.scheduler.buffer.pending.]]..i..[[, exec) end
+            return true
+        end
+        ]]
+        footer = footer..[[
+        assetify.network:fetch("]]..j.network..[[", true):on(function() bootExec("]]..i..[[") end, {subscriptionLimit = 1})
+        ]]
+    end
+    header = header..[[}}
+    assetify.scheduler.buffer.schedule = assetify.imports.table.clone(assetify.scheduler.buffer.pending, true)
+    assetify.scheduler.boot = function()
+        for i, j in assetify.imports.pairs(assetify.scheduler.buffer.schedule) do
+            if #j > 0 then
+                for k = 1, #j, 1 do
+                    assetify.scheduler[i](j[k])
+                end
+                assetify.scheduler.buffer.schedule[i] = {}
+            end
+        end
+        return true
+    end
+    ]]
+    local rw = header..body..footer
+    file:write("test.lua", rw)
+    return rw
+end
+createScheduler()
+
+bundler.private:createBuffer("scheduler", _, [[
+    ]]..bundler.public:createModule("network")..[[
+    assetify.scheduler = {}
 ]])
 
 bundler.private:createBuffer("renderer", _, [[
