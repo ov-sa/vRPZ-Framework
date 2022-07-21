@@ -13,6 +13,7 @@
 -----------------
 
 local imports = {
+    type = type,
     pairs = pairs
 }
 
@@ -42,54 +43,60 @@ bundler.private.modules = {
 }
 
 function bundler.private:createUtils()
-    local rw = ""
-    for i = 1, #bundler.private.utils, 1 do
-        local j = file:read(bundler.private.utils[i])
-        for k, v in imports.pairs(bundler.private.modules) do
-            j = string.gsub(j, k, v.namespace, _, true, "(", ".:)")
+    if imports.type(bundler.private.utils) == "table" then
+        local rw = ""
+        for i = 1, #bundler.private.utils, 1 do
+            local j = file:read(bundler.private.utils[i])
+            for k, v in imports.pairs(bundler.private.modules) do
+                j = string.gsub(j, k, v.namespace, _, true, "(", ".:)")
+            end
+            rw = rw..[[
+            if true then
+                ]]..j..[[
+            end]]
         end
-        rw = rw..[[
-        if true then
-            ]]..j..[[
-        end]]
+        bundler.private.utils = rw
     end
-    return rw
+    return bundler.private.utils
 end
 
 function bundler.private:createModule(moduleName)
     if not moduleName then return false end
     local module = bundler.private.modules[moduleName]
     if not module then return false end
-    local rw = file:read(module.path)
-    for i, j in imports.pairs(bundler.private.modules) do
-        local isBlacklisted = false
-        for k = 1, #module.endpoints, 1 do
-            local v = module.endpoints[k]
-            if i == v then
-                isBlacklisted = true
-                break
+    if not bundler.private.rw[(module.module)] then
+        local rw = file:read(module.path)
+        for i, j in imports.pairs(bundler.private.modules) do
+            local isBlacklisted = false
+            for k = 1, #module.endpoints, 1 do
+                local v = module.endpoints[k]
+                if i == v then
+                    isBlacklisted = true
+                    break
+                end
             end
+            if not isBlacklisted then rw = string.gsub(rw, i, j.namespace, _, true, "(", ".:)") end
         end
-        if not isBlacklisted then rw = string.gsub(rw, i, j.namespace, _, true, "(", ".:)") end
-    end
-    rw = ((moduleName == "namespace") and string.gsub(rw, "class = {}", "local class = {}")) or rw
-    for i = 1, #module.endpoints, 1 do
-        local j = module.endpoints[i]
-        rw = rw..[[
-            assetify["]]..j..[["] = ]]..j..((bundler.private.modules[j] and bundler.private.modules[j].module and ".public") or "")..[[
-        ]]
-        rw = rw..[[
-            _G["]]..j..[["] = nil
-        ]]
-    end
-    bundler.private.rw[(module.module)] = {
-        module = moduleName,
-        rw = [[
-        if not assetify.]]..moduleName..[[ then
-            ]]..rw..[[
+        rw = ((moduleName == "namespace") and string.gsub(rw, "class = {}", "local class = {}")) or rw
+        for i = 1, #module.endpoints, 1 do
+            local j = module.endpoints[i]
+            rw = rw..[[
+                assetify["]]..j..[["] = ]]..j..((bundler.private.modules[j] and bundler.private.modules[j].module and ".public") or "")..[[
+            ]]
+            rw = rw..[[
+                _G["]]..j..[["] = nil
+            ]]
         end
-        ]]
-    }
+        bundler.private.rw[(module.module)] = {
+            module = moduleName,
+            rw = [[
+            if not assetify.]]..moduleName..[[ then
+                ]]..rw..[[
+            end
+            ]]
+        }
+    end
+    return bundler.private.rw[(module.module)].rw
 end
 for i, j in imports.pairs(bundler.private.modules) do
     if j.module and j.endpoints then
@@ -142,4 +149,5 @@ function import(...)
         else return table.unpack(genReturns) end
         ]]
     end
+    return false
 end
