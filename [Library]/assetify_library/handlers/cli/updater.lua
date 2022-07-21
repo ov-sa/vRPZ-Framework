@@ -14,6 +14,7 @@
 
 local cli = cli:import()
 local imports = {
+    collectgarbage = collectgarbage,
     fetchRemote = fetchRemote,
     restartResource = restartResource,
     getResourceFromName = getResourceFromName,
@@ -51,6 +52,7 @@ updateResources.onUpdateCB = function(isCompleted)
     print("Finished library update")
     updateResources.updateCache = nil
     cli.public.isLibraryBeingUpdated = nil
+    imports.collectgarbage()
 end
 
 
