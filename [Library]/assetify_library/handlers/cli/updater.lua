@@ -62,8 +62,9 @@ function cli.private:update(resourceREF, isBackwardsCompatible, resourceThread, 
     if isUpdationStatus ~= nil then
         imports.outputDebugString("[Assetify] | "..((isUpdationStatus and "Auto-updation successfully completed; Rebooting!") or "Auto-updation failed due to connectivity issues; Try again later..."), 3)
         if isUpdationStatus then
-            local __resource = imports.getResourceFromName(resourceREF.resourceName)
-            if __resource then imports.restartResource(__resource) end
+            print("YA")
+            --local __resource = imports.getResourceFromName(resourceREF.resourceName)
+            --if __resource then imports.restartResource(__resource) end
         end
         onUpdateCB(isUpdationStatus)
         return true
@@ -72,7 +73,6 @@ function cli.private:update(resourceREF, isBackwardsCompatible, resourceThread, 
         --TODO: ...WIP
         for i = 1, #cli.private.libraryResources, 1 do
             local j = cli.private.libraryResources[i]
-
         end
         local resourceMeta = updateCache.libraryVersionSource..(resourceREF.resourceName).."/meta.xml"
         imports.fetchRemote(resourceMeta, function(response, status)
@@ -102,6 +102,7 @@ function cli.private:update(resourceREF, isBackwardsCompatible, resourceThread, 
             resourceThread:resume()
         else
             imports.fetchRemote(responsePointer[1], function(response, status)
+                --TODO: INSTEAD OF DESTROYING HANDLE IN THIS SOME HANDLER
                 if not response or not status or (status ~= 0) then cli.private:update(resourceREF, isBackwardsCompatible, _, _, false); return resourceThread:destroy() end
                 if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
                 --file:write(responsePointer[2], response)
