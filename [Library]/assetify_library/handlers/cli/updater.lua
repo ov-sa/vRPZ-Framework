@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
 --[[ Resource: Assetify Library
-     Script: handlers: cli.lua
+     Script: handlers: cli: updater.lua
      Author: vStudio
      Developer(s): Aviril, Tron, Mario, Аниса
      DOC: 19/10/2021
-     Desc: CLI Handler ]]--
+     Desc: CLI Update Handler ]]--
 ----------------------------------------------------------------
 
 
@@ -12,26 +12,19 @@
 --[[ Imports ]]--
 -----------------
 
+local cli = cli:import()
 local syncer = syncer:import()
 local imports = {
     fetchRemote = fetchRemote,
     restartResource = restartResource,
-    getElementType = getElementType,
     getResourceFromName = getResourceFromName,
-    outputDebugString = outputDebugString,
-    addCommandHandler = addCommandHandler
+    outputDebugString = outputDebugString
 }
 
 
 -------------
 --[[ CLI ]]--
 -------------
-
-local cli = class:create("cli")
-function cli.public:import() return cli end
-cli.private.validActions = {
-    ["update"] = true
-}
 
 
 function cli.private:update(resourceREF, isBackwardsCompatible, resourceThread, responsePointer, isUpdationStatus)
@@ -123,14 +116,3 @@ function cli.public:update(isAction)
     end)
     return true
 end
-
-
----------------------
---[[ API Syncers ]]--
----------------------
-
-imports.addCommandHandler("assetify", function(isConsole, _, isAction, ...)
-    if not isConsole or (imports.getElementType(isConsole) ~= "console") then return false end
-    if not isAction or not cli.private.validActions[isAction] then return false end
-    cli.public[isAction](_, true, ...)
-end)
