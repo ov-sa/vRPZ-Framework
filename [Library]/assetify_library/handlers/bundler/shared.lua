@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
 --[[ Resource: Assetify Library
-     Script: handlers: bundler: index.lua
+     Script: handlers: bundler: shared.lua
      Author: vStudio
      Developer(s): Aviril, Tron, Mario, Аниса
      DOC: 19/10/2021
-     Desc: Bundler Handler ]]--
+     Desc: Bundler: Shared Handler ]]--
 ----------------------------------------------------------------
 
 
