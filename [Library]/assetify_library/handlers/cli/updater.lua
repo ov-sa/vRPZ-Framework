@@ -78,7 +78,7 @@ function cli.private:update(resourcePointer, responsePointer, isUpdationStatus)
                 local resourceMeta = updateResources.updateCache.libraryVersionSource..(resourcePointer.resourceName).."/meta.xml"
                 imports.fetchRemote(resourceMeta, function(...) resoureResponse = table.pack(...); updateResources.updateThread:resume() end)
                 updateResources.updateThread:pause()
-                if not resoureResponse[1] or not resoureResponse[2] or (resoureResponse[2] ~= 0) then return cli.private:update(resourcePointer, _, false) end
+                if not resoureResponse[1] or not resoureResponse[2] or (resoureResponse[2] ~= 0) then return cli.private:update(_, _, false) end
                 local isLastIndex = false
                 for i = 1, #updateResources.updateTags, 1 do
                     for j in string.gmatch(resoureResponse[1], "<".. updateResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
@@ -95,8 +95,8 @@ function cli.private:update(resourcePointer, responsePointer, isUpdationStatus)
                 end
                 isLastIndex = true
                 cli.private:update(resourcePointer, {resourceMeta, "meta.xml", resoureResponse[1]})
-                cli.private:update(resourcePointer, _, true)
             end
+            cli.private:update(_, _, true)
         end)
         updateResources.updateThread:resume()
     else
@@ -111,7 +111,7 @@ function cli.private:update(resourcePointer, responsePointer, isUpdationStatus)
             imports.fetchRemote(responsePointer[1], function(response, status)
                 --TODO: INSTEAD OF DESTROYING HANDLE IN THIS SOME HANDLER
                 if not response or not status or (status ~= 0) then
-                    cli.private:update(resourcePointer, _, false)
+                    cli.private:update(_, _, false)
                     return updateResources.updateThread:destroy()
                 end
                 if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
