@@ -85,7 +85,9 @@ function cli.private:update(resourcePointer, responsePointer, isUpdationStatus)
                         if (#string.gsub(j, "%s", "") > 0) and (not updateResources.updateCache.isBackwardCompatible or not resourcePointer.resourceBackup or not resourcePointer.resourceBackup[j]) then
                             cli.private:update(resourcePointer, {updateResources.updateCache.libraryVersionSource..(resourcePointer.resourceName).."/"..j, j})
                             timer:create(function()
-                                if not isLastIndex then updateResources.updateThread:pause() end
+                                if not isLastIndex then
+                                    updateResources.updateThread:pause()
+                                end
                             end, 1, 1)
                         end
                     end
