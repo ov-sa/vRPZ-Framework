@@ -26,7 +26,7 @@ local imports = {
 bundler.private.rw["imports"] = [[
     if not assetify then
         assetify = {}
-        ]]..bundler.private.rw["namespacer"].rw..[[
+        ]]..bundler.public:createModule("namespacer")..[[
         ]]..bundler.public:createUtils()..[[
         assetify.imports = {
             resourceName = "]]..syncer.libraryName..[[",
@@ -169,7 +169,7 @@ bundler.private.rw["core"] = {
 
 bundler.private.rw["scheduler"] = {
     rw = [[
-        ]]..bundler.private.rw["networker"].rw..[[
+        ]]..bundler.public:createModule("networker")..[[
         assetify.scheduler = {
             buffer = {
                 pending = {execOnBoot = {}, execOnLoad = {}, execOnModuleLoad = {}}
