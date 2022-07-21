@@ -42,6 +42,7 @@ for i = 1, #cli.private.libraryResources, 1 do
     j.resourcePointer = ":"..j.resourceName.."/"
 end
 
+local updateTags = {"file", "script"}
 local fetchSource = function(base, version, ...) return (base and version and string.format(base, version, ...)) or false end
 local updateCache, onUpdateCB = nil, function(isSuccess)
     if isSuccess then
@@ -76,8 +77,8 @@ function cli.private:update(resourceREF, isBackwardsCompatible, resourceThread, 
         imports.fetchRemote(resourceMeta, function(response, status)
             if not response or not status or (status ~= 0) then return cli.private:update(resourceREF, isBackwardsCompatible, _, _, false) end
             thread:create(function(self)
-                for i = 1, #cli.private.libraryResources.updateTags, 1 do
-                    for j in string.gmatch(response, "<".. cli.private.libraryResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
+                for i = 1, #updateTags, 1 do
+                    for j in string.gmatch(response, "<".. updateTags[i].." src=\"(.-)\"(.-)/>") do
                         if #string.gsub(j, "%s", "") > 0 then
                             if not isBackwardsCompatible or not resourceREF.resourceBackup or not resourceREF.resourceBackup[j] then
                                 cli.private:update(resourceREF, isBackwardsCompatible, self, {updateCache.libraryVersionSource..(resourceREF.resourceName).."/"..j, j})
