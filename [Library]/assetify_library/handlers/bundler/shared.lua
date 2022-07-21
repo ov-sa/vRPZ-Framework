@@ -233,35 +233,17 @@ bundler.private:createBuffer("scheduler", _, [[
 
 bundler.private:createBuffer("renderer", _, [[
     assetify.renderer = {}
-    if localPlayer then
-        assetify.renderer.isVirtualRendering = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "isRendererVirtualRendering", ...)
-        end
-
-        assetify.renderer.setVirtualRendering = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererVirtualRendering", ...)
-        end
-
-        assetify.renderer.getVirtualSource = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getRendererVirtualSource", ...)
-        end
-
-        assetify.renderer.getVirtualRTs = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "getRendererVirtualRTs", ...)
-        end
-
-        assetify.renderer.setTimeSync = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererTimeSync", ...)
-        end
-
-        assetify.renderer.setServerTick = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererServerTick", ...)
-        end
-
-        assetify.renderer.setMinuteDuration = function(...)
-            return assetify.imports.call(assetify.imports.getResourceFromName(assetify.imports.resourceName), "setRendererMinuteDuration", ...)
-        end
-    end
+    ]]..bundler.private:createExports({
+        client = {
+            {exportIndex = "assetify.renderer.isVirtualRendering", exportName = "isRendererVirtualRendering"},
+            {exportIndex = "assetify.renderer.setVirtualRendering", exportName = "setRendererVirtualRendering"},
+            {exportIndex = "assetify.renderer.getVirtualSource", exportName = "getRendererVirtualSource"},
+            {exportIndex = "assetify.renderer.getVirtualRTs", exportName = "getRendererVirtualRTs"},
+            {exportIndex = "assetify.renderer.setTimeSync", exportName = "setRendererTimeSync"},
+            {exportIndex = "assetify.renderer.setServerTick", exportName = "setRendererServerTick"},
+            {exportIndex = "assetify.renderer.setMinuteDuration", exportName = "setRendererMinuteDuration"}
+        }
+    })..[[
 ]])
 
 bundler.private:createBuffer("syncer", _, [[
