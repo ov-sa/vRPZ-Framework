@@ -187,7 +187,12 @@ else
             return true
         end
         if not responsePointer then
-            local resourceMeta = syncer.private.libraryVersionSource..(resourceREF.resourceName).."/meta.xml"
+            --TODO: ...WIP
+            for i = 1, #syncer.private.libraryResources, 1 do
+                local j = syncer.private.libraryResources[i]
+
+            end
+            local resourceMeta = syncer.private.libraryUpdateCache.libraryVersionSource..(resourceREF.resourceName).."/meta.xml"
             imports.fetchRemote(resourceMeta, function(response, status)
                 if not response or not status or (status ~= 0) then return syncer.private:updateLibrary(resourceREF, isBackwardsCompatible, _, _, false) end
                 thread:create(function(self)
@@ -195,7 +200,7 @@ else
                         for j in string.gmatch(response, "<".. syncer.private.libraryResources.updateTags[i].." src=\"(.-)\"(.-)/>") do
                             if #string.gsub(j, "%s", "") > 0 then
                                 if not isBackwardsCompatible or not resourceREF.resourceBackup or not resourceREF.resourceBackup[j] then
-                                    syncer.private:updateLibrary(resourceREF, isBackwardsCompatible, self, {syncer.private.libraryVersionSource..(resourceREF.resourceName).."/"..j, j})
+                                    syncer.private:updateLibrary(resourceREF, isBackwardsCompatible, self, {syncer.private.libraryUpdateCache.libraryVersionSource..(resourceREF.resourceName).."/"..j, j})
                                     self:pause()
                                 end
                             end
@@ -208,7 +213,7 @@ else
         else
             local isBackupToBeCreated = (resourceREF.resourceBackup and resourceREF.resourceBackup[(responsePointer[2])] and true) or false
             responsePointer[2] = resourceREF.resourcePointer..responsePointer[2]
-            if isBackupToBeCreated then imports.outputDebugString("[Assetify] | Backed up <"..responsePointer[2].."> due to compatability breaking changes; Kindly update it accordingly!", 3) end
+            if isBackupToBeCreated then imports.outputDebugString("[Assetify] | Backed up <"..responsePointer[2].."> due to compatibility breaking changes; Kindly update it accordingly!", 3) end
             if responsePointer[3] then
                 if isBackupToBeCreated then file:write(responsePointer[2]..".backup", file:read(responsePointer[2])) end
                 file:write(responsePointer[2], responsePointer[3])
