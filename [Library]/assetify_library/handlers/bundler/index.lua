@@ -60,15 +60,15 @@ function bundler.public:createUtils()
     return bundler.private.utils
 end
 
-function bundler.private:createBuffer(index, module, rw)
+function bundler.private:createBuffer(index, name, rw)
     if bundler.private.buffer[index] then return false end
-    bundler.private.buffer[index] = {module = module, rw = rw}
+    bundler.private.buffer[index] = {module = name, rw = rw}
     return true
 end
 
-function bundler.public:createModule(moduleName)
-    if not moduleName then return false end
-    local module = bundler.private.modules[moduleName]
+function bundler.public:createModule(name)
+    if not name then return false end
+    local module = bundler.private.modules[name]
     if not module then return false end
     if not bundler.private.buffer[(module.module)] then
         local rw = file:read(module.path)
@@ -83,7 +83,7 @@ function bundler.public:createModule(moduleName)
             end
             if not isBlacklisted then rw = string.gsub(rw, i, j.namespace, _, true, "(", ".:)") end
         end
-        rw = ((moduleName == "namespace") and string.gsub(rw, "class = {}", "local class = {}")) or rw
+        rw = ((name == "namespace") and string.gsub(rw, "class = {}", "local class = {}")) or rw
         for i = 1, #module.endpoints, 1 do
             local j = module.endpoints[i]
             rw = rw..[[
@@ -93,8 +93,8 @@ function bundler.public:createModule(moduleName)
                 _G["]]..j..[["] = nil
             ]]
         end
-        bundler.private:createBuffer(module.module, moduleName, [[
-        if not assetify.]]..moduleName..[[ then
+        bundler.private:createBuffer(module.module, name, [[
+        if not assetify.]]..name..[[ then
             ]]..rw..[[
         end
         ]])
@@ -129,7 +129,7 @@ function import(...)
                 __cImports[j] = true
                 table.insert(cImports, {
                     index = bundler.private.buffer[j].module or j,
-                    rw = bundler.private.buffer["imports"]..[[
+                    rw = bundler.private.buffer["imports"].rw..[[
                     ]]..bundler.private.buffer[j].rw
                 })
             end
@@ -141,14 +141,14 @@ function import(...)
         return [[
         local cImports, isCompleteFetch = call(getResourceFromName("]]..syncer.libraryName..[["), "import", true]]..cArgs..[[)
         if not cImports then return false end
-        local genReturns = (not isCompleteFetch and {}) or false
+        local cReturns = (not isCompleteFetch and {}) or false
         for i = 1, #cImports, 1 do
             local j = cImports[i]
             assert(loadstring(j.rw))()
-            if genReturns then genReturns[(#genReturns + 1)] = assetify[(j.index)] end
+            if cReturns then cReturns[(#cReturns + 1)] = assetify[(j.index)] end
         end
         if isCompleteFetch then return assetify
-        else return table.unpack(genReturns) end
+        else return table.unpack(cReturns) end
         ]]
     end
     return false
