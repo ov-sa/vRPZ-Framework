@@ -21,7 +21,6 @@ angle = {}
 local imports = {
     type = type,
     pairs = pairs,
-    unpack = unpack,
     getElementType = getElementType,
     dxSetBlendMode = dxSetBlendMode,
     outputDebugString = outputDebugString,
