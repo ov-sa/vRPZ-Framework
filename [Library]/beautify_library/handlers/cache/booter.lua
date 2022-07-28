@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
 --[[ Resource: Beautify Library
-     Script: handlers: cache: asset.lua
+     Script: handlers: cache: booter.lua
      Server: -
      Author: vStudio
      Developer: -
      DOC: 01/02/2021
-     Desc: Asset's Cache Handler ]]--
+     Desc: Booter Handler ]]--
 ----------------------------------------------------------------
 
 
@@ -16,10 +16,12 @@
 local imports = {
     pairs = pairs,
     ipairs = ipairs,
+    addEvent = addEvent,
     addEventHandler = addEventHandler,
-    fileExists = fileExists,
-    dxCreateTexture = dxCreateTexture
+    dxCreateTexture = dxCreateTexture,
+    assetify = assetify
 }
+
 
 
 -------------------
@@ -46,11 +48,16 @@ end
 
 imports.addEventHandler("onClientResourceStart", resource, function()
 
+    for i, j in imports.pairs(availableEvents) do
+        for k, v in imports.ipairs(j) do
+            imports.addEvent(v, false)
+        end
+    end
     for i, j in imports.pairs(availableAssets) do
         createdAssets[i] = {}
         for k, v in imports.ipairs(j) do
             local assetPath = "files/assets/"..i.."/"..v
-            if imports.fileExists(assetPath) then
+            if imports.assetify.file:exists(assetPath) then
                 if i == "images" then
                     createdAssets[i][v] = imports.dxCreateTexture(assetPath, "argb", true, "clamp")
                 end

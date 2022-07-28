@@ -23,8 +23,7 @@
 
     <!-- Handlers -->
     <script src="handlers/logger/client.lua" type="client"/>
-    <script src="handlers/cache/asset.lua" type="client"/>
-    <script src="handlers/cache/event.lua" type="client"/>
+    <script src="handlers/cache/booter.lua" type="client"/>
     <script src="handlers/cache/template.lua" type="client"/>
     <script src="handlers/cache/bundler.lua" type="client"/>
     <script src="handlers/element/input.lua" type="client"/>

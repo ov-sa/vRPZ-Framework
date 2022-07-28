@@ -22,11 +22,11 @@ local imports = {
     isElement = isElement,
     destroyElement = destroyElement,
     collectgarbage = collectgarbage,
-    fileExists = fileExists,
     dxCreateFont = dxCreateFont,
     table = table,
     math = math,
-    string = string
+    string = string,
+    assetify = assetify
 }
 
 
@@ -95,7 +95,7 @@ local function __createTemplate(elementType, defaultTemplate, customTemplate)
                     if currentDataType == "table" and (#customTemplate[i] >= 2) then
                         local resourceName = imports.getResourceName(sourceResource)
                         local fontPath = ":"..(customTemplate[i][3] or resourceName).."/"..customTemplate[i][1]
-                        if imports.fileExists(fontPath) then
+                        if imports.assetify.file:exists(fontPath) then
                             local fontScale = imports.tonumber(customTemplate[i][2]) or 0
                             if fontScale > 0 then
                                 local createdFont = imports.dxCreateFont(fontPath, fontScale)
