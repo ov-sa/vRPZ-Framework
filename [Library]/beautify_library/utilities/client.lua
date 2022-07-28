@@ -25,6 +25,7 @@ local imports = {
     getElementType = getElementType,
     dxSetBlendMode = dxSetBlendMode,
     outputDebugString = outputDebugString,
+    table = table,
     string = string
 }
 
@@ -67,7 +68,7 @@ function outputUILog(logMessage, logType)
 
     if not logMessage or not logType or not logTypes[logType] then return false end
 
-    imports.outputDebugString("[Beautify Library] | "..logMessage, 4, imports.unpack(logTypes[logType].color))
+    imports.outputDebugString("[Beautify Library] | "..logMessage, 4, imports.table.unpack(logTypes[logType].color))
     return true
     
 end

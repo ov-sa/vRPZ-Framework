@@ -28,7 +28,8 @@ local imports = {
     dxSetRenderTarget = dxSetRenderTarget,
     dxDrawRectangle = dxDrawRectangle,
     dxDrawText = dxDrawText,
-    math = math
+    math = math,
+    table = table
 }
 
 
@@ -104,7 +105,7 @@ function renderCheckbox(element, isActiveMode, isFetchingInput, mouseReference)
             elementReference.gui["__UI_INPUT_FETCH_CACHE__"]["Tick Box"].height = elementReference.gui["__UI_CACHE__"]["Tick Box"].icon.offsets.height
             if isElementToBeReloaded then
                 elementReference.gui["__UI_CACHE__"]["Tick Box"].color = imports.tocolor(imports.unpackColor(elementTemplate.tickBox.color))
-                elementReference.gui["__UI_CACHE__"]["Tick Box"].iconColor = imports.tocolor(imports.unpack(elementTemplate.tickBox.iconColor))
+                elementReference.gui["__UI_CACHE__"]["Tick Box"].iconColor = imports.tocolor(imports.table.unpack(elementTemplate.tickBox.iconColor))
             end
             if not CLIENT_MTA_MINIMIZED then
                 elementReference.gui["__UI_CACHE__"].reloadElement = nil
