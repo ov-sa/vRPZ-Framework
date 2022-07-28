@@ -25,7 +25,6 @@ local imports = {
     setPlayerHudComponentVisible = setPlayerHudComponentVisible,
     showChat = showChat,
     table = table,
-    quat = quat,
     assetify = assetify,
     beautify = beautify
 }

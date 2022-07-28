@@ -21,7 +21,8 @@ local imports = {
 ------------------
 
 availableFonts = {
-    [1] = imports.beautify.native.createFont(":beautify_library/files/assets/fonts/signika_semibold.rw", 10)
+    [1] = imports.beautify.native.createFont(":beautify_library/files/assets/fonts/signika_semibold.rw", 11),
+    [2] = imports.beautify.native.createFont(":beautify_library/files/assets/fonts/signika_semibold.rw", 12)
 }
 
 availableTemplates = {

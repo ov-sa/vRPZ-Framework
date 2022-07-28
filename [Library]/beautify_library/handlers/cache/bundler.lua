@@ -19,7 +19,8 @@ local imports = {
     getResourceName = getResourceName,
     addEventHandler = addEventHandler,
     table = table,
-    string = string
+    string = string,
+    assetify = assetify
 }
 
 
@@ -57,16 +58,15 @@ end
 
 imports.addEventHandler("onClientResourceStart", resource, function(resourceSource)
 
-    imports.fetchFileData = fetchFileData
     local resourceName = imports.getResourceName(resourceSource)
     local importedFiles = {
-        utilities = imports.string.gsub(fetchFileData("utilities/client.lua"), "if CLIENT_ATTACHED_ELEMENT then return false end", ""),
-        settings = fetchFileData("settings/client.lua")..[[
+        utilities = imports.string.gsub(imports.assetify.file:read("utilities/client.lua"), "if CLIENT_ATTACHED_ELEMENT then return false end", ""),
+        settings = imports.assetify.file:read("settings/client.lua")..[[
             UI_VALID_ALIGNMENT = nil
             UI_VALID_SCROLLERS = nil
         ]],
         handlers = {
-            input = fetchFileData("handlers/element/input.lua")..[[
+            input = imports.assetify.file:read("handlers/element/input.lua")..[[
                 CLIENT_HOVERED_ELEMENT = nil
                 imports.tonumber = tonumber
                 imports.gettok = gettok

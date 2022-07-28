@@ -1,0 +1,33 @@
+<meta>
+
+    <info author="OvileAmriam" name="Beautify Library (Example)" type="Example (Library)" version="1.0.0"/>
+    <oop>true</oop>
+
+    <!-- Imports -->
+    <include resource="beautify_library"/>
+
+    <!-- Settings & Utilities -->
+    <script src="utilities/client.lua" type="client" cache="false"/>
+
+    <!-- Configurations -->
+    <script src="configurations/templates/initial.lua" type="client" cache="false"/>
+    <script src="configurations/templates/scrollbar.lua" type="client" cache="false"/>
+    <script src="configurations/templates/window.lua" type="client" cache="false"/>
+    <script src="configurations/templates/gridlist.lua" type="client" cache="false"/>
+    <script src="configurations/templates/button.lua" type="client" cache="false"/>
+    <script src="configurations/templates/label.lua" type="client" cache="false"/>
+    <script src="configurations/templates/slider.lua" type="client" cache="false"/>
+    <script src="configurations/templates/selector.lua" type="client" cache="false"/>
+    <script src="configurations/templates/checkbox.lua" type="client" cache="false"/>
+    <script src="configurations/templates/deck.lua" type="client" cache="false"/>
+    <script src="configurations/templates/card.lua" type="client" cache="false"/>
+
+    <!-- GUIs -->
+    <script src="gui/ui_1.lua" type="client" cache="false"/>
+    <script src="gui/ui_2.lua" type="client" cache="false"/>
+    <script src="gui/ui_3.lua" type="client" cache="false"/>
+
+    <!-- Handlers -->
+    <script src="handlers/initial.lua" type="client" cache="false"/>
+
+</meta>

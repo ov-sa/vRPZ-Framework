@@ -1,84 +1,9 @@
 local imports = {
     type = type,
-    tostring = tostring,
-    tonumber = tonumber,
     pairs = pairs,
     ipairs = ipairs,
-    fileExists = fileExists,
-    fileOpen = fileOpen,
-    fileRead = fileRead,
-    fileGetSize = fileGetSize,
-    fileClose = fileClose,
-    getElementType = getElementType,
-    dxSetBlendMode = dxSetBlendMode,
-    string = string
+    getElementType = getElementType
 }
-
-string = utf8
-for i, j in imports.pairs(imports.string) do
-    if not string[i] then
-        string[i] = j
-    end
-end
-imports.string = string
-
-
-function math.round(number, decimals)
-    decimals = decimals or 0
-    return imports.tonumber(imports.string.format(("%."..decimals.."f"), number))
-end
-
-function string.spaceChars(baseString, appender)
-    if baseString then
-        return imports.string.sub(imports.string.gsub(baseString, ".", (appender or " ").."%0"), 2)
-    end
-    return false
-end
-
-function string.parse(rawString)
-    if not rawString then return false end
-    if imports.tostring(rawString) == "nil" then
-        rawString = nil
-    elseif imports.tostring(rawString) == "false" then
-        rawString = false
-    elseif imports.tostring(rawString) == "true" then
-        rawString = true
-    end
-    return imports.tonumber(rawString) or rawString
-end
-
-function table.clone(recievedTable, isRecursiveMode)
-
-    if not recievedTable or imports.type(recievedTable) ~= "table" then return false end
-
-    local clonedTable = {}
-    for i, j in imports.pairs(recievedTable) do
-        if imports.type(j) == "table" and isRecursiveMode then
-            clonedTable[i] = table.clone(j, true)
-        else
-            clonedTable[i] = j
-        end
-    end
-    return clonedTable
-
-end
-
-
----------------------------------------
---[[ Function: Fetches File's Data ]]--
----------------------------------------
-
-function fetchFileData(filePath)
-
-    if not filePath or not imports.fileExists(filePath) then return false end
-    local file = imports.fileOpen(filePath, true)
-    if not file then return false end
-
-    local fileData = imports.fileRead(file, imports.fileGetSize(file))
-    imports.fileClose(file)
-    return fileData
-
-end
 
 
 --------------------------------------------

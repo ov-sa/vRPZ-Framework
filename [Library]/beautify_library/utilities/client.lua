@@ -10,6 +10,9 @@
 ----------------------------------------------------------------
 
 
+loadstring(exports.assetify_library:import("*"))()
+
+
 -----------------
 --[[ Imports ]]--
 -----------------
@@ -17,14 +20,7 @@
 angle = {}
 local imports = {
     type = type,
-    tostring = tostring,
-    tonumber = tonumber,
     pairs = pairs,
-    fileExists = fileExists,
-    fileOpen = fileOpen,
-    fileRead = fileRead,
-    fileGetSize = fileGetSize,
-    fileClose = fileClose,
     getElementType = getElementType,
     dxSetBlendMode = dxSetBlendMode,
     string = string

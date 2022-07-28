@@ -15,8 +15,7 @@
 if localPlayer then
     loadstring(exports.beautify_library:fetchImports())()
 end
-loadstring(exports.assetify_library:fetchImports())()
-loadstring(exports.assetify_library:fetchThreader())()
+loadstring(exports.assetify_library:import("*"))()
 
 local imports = {
     isElement = isElement,

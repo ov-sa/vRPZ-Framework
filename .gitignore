@@ -9,3 +9,7 @@ shader_loader/
 tex_names/
 dlight/
 light_test/
+cah/
+grass/
+pbr/
+test/

@@ -14,20 +14,21 @@
     <file src="utilities/rw/axis/ring/buffer.rw"/>
     <file src="utilities/rw/axis/ring/collision.rw"/>
     <script src="utilities/shared.lua" type="shared"/>
-    <script src="utilities/shaders/index.lua" type="client"/>
+    <!--script src="utilities/shaders/index.lua" type="client"/>
     <file src="utilities/shaders/helper.fx"/>
-    <script src="utilities/shaders/axis_mapper.lua" type="client"/>
+    <script src="utilities/shaders/axis_mapper.lua" type="client"/-->
     <script src="settings/shared.lua" type="shared"/>
     <script src="settings/client.lua" type="client"/>
-    <script src="utilities/mapper.lua" type="shared"/>
-    <script src="utilities/camera.lua" type="client"/>
+    <!--script src="utilities/mapper.lua" type="shared"/>
+    <script src="utilities/camera.lua" type="client"/-->
 
     <!-- GUIs -->
-    <script src="gui/scene.lua" type="client"/>
+    <!--script src="gui/scene.lua" type="client"/>
     <script src="gui/tool.lua" type="client"/>
-    <script src="gui/notif.lua" type="client"/>
+    <script src="gui/notif.lua" type="client"/-->
 
     <!-- Handlers -->
-    <script src="handlers/loader.lua" type="client"/>
+    <!--script src="handlers/loader.lua" type="client"/-->
 
+    <script src="gui/test/test.lua" type="client"/>
 </meta>
