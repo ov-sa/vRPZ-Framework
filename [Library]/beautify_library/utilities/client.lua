@@ -21,9 +21,25 @@ angle = {}
 local imports = {
     type = type,
     pairs = pairs,
+    unpack = unpack,
     getElementType = getElementType,
     dxSetBlendMode = dxSetBlendMode,
+    outputDebugString = outputDebugString,
     string = string
+}
+
+
+-------------------
+--[[ Variables ]]--
+-------------------
+
+local logTypes = {
+    ["info"] = {
+        color = {200, 200, 200}
+    },
+    ["error"] = {
+        color = {255, 0, 0}
+    }
 }
 
 
@@ -40,6 +56,20 @@ function dxSetBlendMode(blendMode)
     end
     return imports.dxSetBlendMode(blendMode)
 
+end
+
+
+----------------------------------
+--[[ Function: Outputs UI Log ]]--
+----------------------------------
+
+function outputUILog(logMessage, logType)
+
+    if not logMessage or not logType or not logTypes[logType] then return false end
+
+    imports.outputDebugString("[Beautify Library] | "..logMessage, 4, imports.unpack(logTypes[logType].color))
+    return true
+    
 end
 
 
