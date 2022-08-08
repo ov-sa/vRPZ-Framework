@@ -14,7 +14,6 @@
 
 settings.libraryUID = false
 settings.assetPacks = {
-    --[[
     ["module"] = {
         autoLoad = true
     },
@@ -23,9 +22,11 @@ settings.assetPacks = {
         autoLoad = true
     },
 
+    --[[
     ["sound"] = {
         autoLoad = true
     },
+    ]]--
 
     ["scene"] = {
         autoLoad = true,
@@ -34,6 +35,7 @@ settings.assetPacks = {
         assetTransparency = false
     },
 
+    --[[
     ["character"] = {
         autoLoad = true,
         assetType = "ped",
