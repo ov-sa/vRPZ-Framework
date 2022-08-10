@@ -50,7 +50,6 @@ float vWeatherBlend = false;
 texture vSource0;
 texture vSource1 <string renderTarget = "yes";>;
 texture vSource2 <string renderTarget = "yes";>;
-texture gDepthBuffer : DEPTHBUFFER;
 texture gTexture0           <string textureState="0,Texture";>;
 texture gTexture1           <string textureState="1,Texture";>;
 texture gTexture2           <string textureState="2,Texture";>;
@@ -239,26 +238,8 @@ void MTAFixUpNormal(in out float3 OutNormal) {
         OutNormal = float3(0,0,1);
 }
 
-float4x4 MTACreateMatrix(float3 position, float3 rotation) {
-    float sYaw = sin(rotation.x), sPitch = sin(rotation.y), sRoll = sin(rotation.z);
-    float cYaw = cos(rotation.x), cPitch = cos(rotation.y), cRoll = cos(rotation.z);
-    float4x4 cMatrix = {
-        float4((cRoll*cPitch) - (sRoll*sYaw*sPitch), (cPitch*sRoll) + (cRoll*sYaw*sPitch), -cYaw*sPitch, 0),
-        float4(-cYaw*sRoll, cRoll*cYaw, sYaw, 0),
-        float4((cRoll*sPitch) + (cPitch*sRoll*sYaw), (sRoll*sPitch) - (cRoll*cPitch*sYaw), cYaw*cPitch, 0),
-        float4(position.x, position.y, position.z, 1)
-    };
-    return cMatrix;
-}
-
-float4x4 MTACreatePositionMatrix(float3 position) {
-    float4x4 cMatrix = (
-        float4(1, 0, 0, 0),
-        float4(0, 1, 0, 0),
-        float4(0, 0, 1, 0),
-        float4(position.x, position.y, position.z, 1)
-    );
-    return cMatrix;
+float4x4 MTACreateTranslationMatrix(float3 InPosition) {
+    return float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, InPosition.x, InPosition.y, InPosition.z, 1);
 }
 
 float MTAGetWeatherValue() {
@@ -267,8 +248,4 @@ float MTAGetWeatherValue() {
     float weatherClamp = 0.0025;
     float weatherValue = cDuration/12;
     return (cDuration >= 12) ? max(weatherClamp, 2 - weatherValue) : max(weatherClamp, weatherValue);
-}
-
-float3 MTAGetWeatherColor() {
-    return float3(1, 1, 1);
 }
