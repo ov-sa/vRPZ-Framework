@@ -34,7 +34,7 @@ end
 
 function manager.API.Library.createShader(...)
     local cShader = shader:create(...)
-    return cShader.cShader
+    return (cShader and cShader.cShader) or false
 end
 
 function manager.API.Library.isRendererVirtualRendering()
@@ -63,6 +63,14 @@ end
 
 function manager.API.Library.setRendererMinuteDuration(...)
     return renderer:setMinuteDuration(...)
+end
+
+function manager.API.Library.setRendererAntiAliasing(...)
+    return renderer:setAntiAliasing(...)
+end
+
+function manager.API.Library.getRendererAntiAliasing(...)
+    return renderer:getAntiAliasing(...)
 end
 
 function manager.API.Library.createPlanarLight(...)

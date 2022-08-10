@@ -60,7 +60,7 @@ shaderRW[identifier] = {
             float4 Emissive : COLOR2;
         };
         sampler baseSampler = sampler_state {
-            Texture = (gTexture0);
+            Texture = gTexture0;
         };
 
 
@@ -93,10 +93,8 @@ shaderRW[identifier] = {
         -->> Techniques <<--
         --------------------*/
 
-        technique ]]..identifier..[[
-        {
-            pass P0
-            {
+        technique ]]..identifier..[[ {
+            pass P0 {
                 AlphaBlendEnable = true;
                 PixelShader = compile ps_2_0 PSHandler();
             }

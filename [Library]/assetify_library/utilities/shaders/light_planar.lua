@@ -70,10 +70,10 @@ shaderRW[identifier] = {
             Texture = baseTexture;
         };
         sampler vSource0Sampler = sampler_state {
-            Texture = (vSource0);
+            Texture = vSource0;
         };
         sampler vSource1Sampler = sampler_state {
-            Texture = (vSource1);
+            Texture = vSource1;
         };
 
         
@@ -84,7 +84,7 @@ shaderRW[identifier] = {
         PSInput VSHandler(VSInput VS) {
             PSInput PS = (PSInput)0;
             float4 position = VS.Position*lightResolution;
-            float4x4 positionMatrix = MTACreateTranslationMatrix(lightOffset);
+            float4x4 positionMatrix = MTACreatePositionMatrix(lightOffset);
             float4x4 gWorldFix = mul(gWorld, positionMatrix);
             float4x4 worldViewMatrix = mul(gWorldFix, gView);
             float4 worldViewPosition = float4(worldViewMatrix[3].xyz + position.xzy - lightOffset.xzy, 1);
@@ -117,10 +117,8 @@ shaderRW[identifier] = {
         -->> Techniques <<--
         --------------------*/
 
-        technique ]]..identifier..[[
-        {
-            pass P0
-            {
+        technique ]]..identifier..[[ {
+            pass P0 {
                 AlphaRef = 1;
                 AlphaBlendEnable = true;
                 FogEnable = false;

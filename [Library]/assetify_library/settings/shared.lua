@@ -15,11 +15,12 @@
 settings = {
     GTA = {
         clearWorld = true,
+        disableOcclusions = false,
         waterLevel = 0.01
     },
 
     library = {
-        autoUpdate = false
+        autoUpdate = true
     },
 
     downloader = {

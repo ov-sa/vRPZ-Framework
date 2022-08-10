@@ -48,7 +48,7 @@ shaderRW[identifier] = {
         local isSamplingStage = false
         local controlVars, handlerBody, handlerFooter = [[
             sampler baseSampler = sampler_state {
-                Texture = (gTexture0);
+                Texture = gTexture0;
                 MipFilter = Linear;
                 MaxAnisotropy = gMaxAnisotropy*anisotropy;
                 MinFilter = Anisotropic;
@@ -196,10 +196,8 @@ shaderRW[identifier] = {
         -->> Techniques <<--
         --------------------*/
 
-        technique ]]..identifier..[[
-        {
-            pass P0
-            {
+        technique ]]..identifier..[[ {
+            pass P0 {
                 SRGBWriteEnable = false;
                 PixelShader = compile ps_2_0 PSHandler();
             }
