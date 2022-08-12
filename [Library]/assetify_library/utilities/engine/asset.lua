@@ -441,8 +441,9 @@ else
                         local debugTXDExistence = false
                         if assetManifestData.assetClumps then
                             for i, j in imports.pairs(assetManifestData.assetClumps) do
-                                debugTXDExistence = (not debugTXDExistence and not file:exists(assetPath..(asset.public.references.clump).."/"..j.."/"..(asset.public.references.asset)..".txd") and true) or debugTXDExistence
-                                asset.public:buildFile(assetPath..(asset.public.references.clump).."/"..j.."/"..(asset.public.references.asset)..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                local childTXDPath = assetPath..(asset.public.references.clump).."/"..j.."/"..(asset.public.references.asset)..".txd"
+                                debugTXDExistence = (not debugTXDExistence and not file:exists(childTXDPath) and true) or debugTXDExistence
+                                asset.public:buildFile(childTXDPath, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                 asset.public:buildFile(assetPath..(asset.public.references.clump).."/"..j.."/"..(asset.public.references.asset)..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
                                 asset.public:buildFile(assetPath..(asset.public.references.clump).."/"..j.."/"..(asset.public.references.asset)..".col", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                 thread:pause()
