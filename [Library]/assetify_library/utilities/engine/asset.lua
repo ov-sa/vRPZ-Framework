@@ -425,8 +425,9 @@ else
                                         if sceneIDEDatas and sceneIDEDatas[(v[2])] then
                                             asset.public:buildFile(assetPath..(asset.public.references.txd).."/"..(sceneIDEDatas[(v[2])][1])..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
                                         else
-                                            debugTXDExistence = (not debugTXDExistence and not file:exists(assetPath..(asset.public.references.txd).."/"..v[2]..".txd") and true) or debugTXDExistence
-                                            asset.public:buildFile(assetPath..(asset.public.references.txd).."/"..v[2]..".txd", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
+                                            local childTXDPath = assetPath..(asset.public.references.txd).."/"..v[2]..".txd"
+                                            debugTXDExistence = (not debugTXDExistence and not file:exists(childTXDPath) and true) or debugTXDExistence
+                                            asset.public:buildFile(childTXDPath, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                         end
                                         asset.public:buildFile(assetPath..(asset.public.references.dff).."/"..v[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey, _, _, true)
                                         asset.public:buildFile(assetPath..(asset.public.references.dff).."/"..(asset.public.references.lod).."/"..v[2]..".dff", cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
