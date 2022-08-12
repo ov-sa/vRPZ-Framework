@@ -63,7 +63,7 @@ if localPlayer then
         element = {},
         shader = {}
     }
-    shader.public.rwCache = shaderRW
+    shader.public.rwCache = shaderRW.buffer
     shaderRW = nil
 
     function shader.public:create(...)
