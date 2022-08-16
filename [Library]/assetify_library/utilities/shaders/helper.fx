@@ -22,24 +22,24 @@ float3 gLightDirection : LIGHTDIRECTION;
 float3 gCameraPosition : CAMERAPOSITION;
 float3 gCameraDirection : CAMERADIRECTION;
 
-int gLighting                      <string renderState="LIGHTING";>;
-float4 gGlobalAmbient              <string renderState="AMBIENT";>;
+int gLighting <string renderState="LIGHTING";>;
+float4 gGlobalAmbient <string renderState="AMBIENT";>;
 
-int gDiffuseMaterialSource         <string renderState="DIFFUSEMATERIALSOURCE";>;
-int gSpecularMaterialSource        <string renderState="SPECULARMATERIALSOURCE";>;
-int gAmbientMaterialSource         <string renderState="AMBIENTMATERIALSOURCE";>;
-int gEmissiveMaterialSource        <string renderState="EMISSIVEMATERIALSOURCE";>;
+int gDiffuseMaterialSource <string renderState="DIFFUSEMATERIALSOURCE";>;
+int gSpecularMaterialSource <string renderState="SPECULARMATERIALSOURCE";>;
+int gAmbientMaterialSource <string renderState="AMBIENTMATERIALSOURCE";>;
+int gEmissiveMaterialSource <string renderState="EMISSIVEMATERIALSOURCE";>;
 
-int gFogEnable                     <string renderState="FOGENABLE";>;
-float4 gFogColor                   <string renderState="FOGCOLOR";>;
-float gFogStart                    <string renderState="FOGSTART";>;
-float gFogEnd                      <string renderState="FOGEND";>;
+int gFogEnable <string renderState="FOGENABLE";>;
+float4 gFogColor <string renderState="FOGCOLOR";>;
+float gFogStart <string renderState="FOGSTART";>;
+float gFogEnd <string renderState="FOGEND";>;
 
-float4 gMaterialAmbient     <string materialState="Ambient";>;
-float4 gMaterialDiffuse     <string materialState="Diffuse";>;
-float4 gMaterialSpecular    <string materialState="Specular";>;
-float4 gMaterialEmissive    <string materialState="Emissive";>;
-float gMaterialSpecPower    <string materialState="Power";>;
+float4 gMaterialAmbient <string materialState="Ambient";>;
+float4 gMaterialDiffuse <string materialState="Diffuse";>;
+float4 gMaterialSpecular <string materialState="Specular";>;
+float4 gMaterialEmissive <string materialState="Emissive";>;
+float gMaterialSpecPower <string materialState="Power";>;
 
 float2 vResolution = false;
 bool vEmissiveSource = false;
@@ -51,53 +51,53 @@ texture vSource0;
 texture vSource1 <string renderTarget = "yes";>;
 texture vSource2 <string renderTarget = "yes";>;
 texture gDepthBuffer : DEPTHBUFFER;
-texture gTexture0           <string textureState="0,Texture";>;
-texture gTexture1           <string textureState="1,Texture";>;
-texture gTexture2           <string textureState="2,Texture";>;
-texture gTexture3           <string textureState="3,Texture";>;
+texture gTexture0 <string textureState="0,Texture";>;
+texture gTexture1 <string textureState="1,Texture";>;
+texture gTexture2 <string textureState="2,Texture";>;
+texture gTexture3 <string textureState="3,Texture";>;
 
-int gDeclNormal             <string vertexDeclState="Normal";>;
+int gDeclNormal <string vertexDeclState="Normal";>;
 
-int gLight0Enable           <string lightEnableState="0,Enable";>;
-int gLight1Enable           <string lightEnableState="1,Enable";>;
-int gLight2Enable           <string lightEnableState="2,Enable";>;
-int gLight3Enable           <string lightEnableState="3,Enable";>;
-int gLight4Enable           <string lightEnableState="4,Enable";>;
+int gLight0Enable <string lightEnableState="0,Enable";>;
+int gLight1Enable <string lightEnableState="1,Enable";>;
+int gLight2Enable <string lightEnableState="2,Enable";>;
+int gLight3Enable <string lightEnableState="3,Enable";>;
+int gLight4Enable <string lightEnableState="4,Enable";>;
 
-int gLight0Type                 <string lightState="0,Type";>;
-float4 gLight0Diffuse           <string lightState="0,Diffuse";>;
-float4 gLight0Specular          <string lightState="0,Specular";>;
-float4 gLight0Ambient           <string lightState="0,Ambient";>;
-float3 gLight0Position          <string lightState="0,Position";>;
-float3 gLight0Direction         <string lightState="0,Direction";>;
+int gLight0Type <string lightState="0,Type";>;
+float4 gLight0Diffuse <string lightState="0,Diffuse";>;
+float4 gLight0Specular <string lightState="0,Specular";>;
+float4 gLight0Ambient <string lightState="0,Ambient";>;
+float3 gLight0Position <string lightState="0,Position";>;
+float3 gLight0Direction <string lightState="0,Direction";>;
 
-int gLight1Type                 <string lightState="1,Type";>;
-float4 gLight1Diffuse           <string lightState="1,Diffuse";>;
-float4 gLight1Specular          <string lightState="1,Specular";>;
-float4 gLight1Ambient           <string lightState="1,Ambient";>;
-float3 gLight1Position          <string lightState="1,Position";>;
-float3 gLight1Direction         <string lightState="1,Direction";>;
+int gLight1Type <string lightState="1,Type";>;
+float4 gLight1Diffuse <string lightState="1,Diffuse";>;
+float4 gLight1Specular <string lightState="1,Specular";>;
+float4 gLight1Ambient <string lightState="1,Ambient";>;
+float3 gLight1Position <string lightState="1,Position";>;
+float3 gLight1Direction <string lightState="1,Direction";>;
 
-int gLight2Type                 <string lightState="2,Type";>;
-float4 gLight2Diffuse           <string lightState="2,Diffuse";>;
-float4 gLight2Specular          <string lightState="2,Specular";>;
-float4 gLight2Ambient           <string lightState="2,Ambient";>;
-float3 gLight2Position          <string lightState="2,Position";>;
-float3 gLight2Direction         <string lightState="2,Direction";>;
+int gLight2Type <string lightState="2,Type";>;
+float4 gLight2Diffuse <string lightState="2,Diffuse";>;
+float4 gLight2Specular <string lightState="2,Specular";>;
+float4 gLight2Ambient <string lightState="2,Ambient";>;
+float3 gLight2Position <string lightState="2,Position";>;
+float3 gLight2Direction <string lightState="2,Direction";>;
 
-int gLight3Type                 <string lightState="3,Type";>;
-float4 gLight3Diffuse           <string lightState="3,Diffuse";>;
-float4 gLight3Specular          <string lightState="3,Specular";>;
-float4 gLight3Ambient           <string lightState="3,Ambient";>;
-float3 gLight3Position          <string lightState="3,Position";>;
-float3 gLight3Direction         <string lightState="3,Direction";>;
+int gLight3Type <string lightState="3,Type";>;
+float4 gLight3Diffuse <string lightState="3,Diffuse";>;
+float4 gLight3Specular <string lightState="3,Specular";>;
+float4 gLight3Ambient <string lightState="3,Ambient";>;
+float3 gLight3Position <string lightState="3,Position";>;
+float3 gLight3Direction <string lightState="3,Direction";>;
 
-int gLight4Type                 <string lightState="4,Type";>;
-float4 gLight4Diffuse           <string lightState="4,Diffuse";>;
-float4 gLight4Specular          <string lightState="4,Specular";>;
-float4 gLight4Ambient           <string lightState="4,Ambient";>;
-float3 gLight4Position          <string lightState="4,Position";>;
-float3 gLight4Direction         <string lightState="4,Direction";>;
+int gLight4Type <string lightState="4,Type";>;
+float4 gLight4Diffuse <string lightState="4,Diffuse";>;
+float4 gLight4Specular <string lightState="4,Specular";>;
+float4 gLight4Ambient <string lightState="4,Ambient";>;
+float3 gLight4Position <string lightState="4,Position";>;
+float3 gLight4Direction <string lightState="4,Direction";>;
 
 int gMaxAnisotropy <string deviceCaps="MaxAnisotropy";>;
 
