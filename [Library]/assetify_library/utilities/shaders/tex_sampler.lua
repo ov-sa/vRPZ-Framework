@@ -134,13 +134,13 @@ shaderRW.buffer[(identity.name)] = {
             float3 viewDirection = normalize(worldPosition - viewMatrix[3].xyz);
             float2 viewCoord = GetViewCoord(-viewDirection.xzy, float2(1, 1));
             float2 screenCoord = float2(uv.x*(vResolution.x/vResolution.y), uv.y);
-            // Base
+            // Sample Base
             float3 result = skyGradient[0]*1.1 - (viewCoord.y*viewCoord.y*0.5);
             result = lerp(result, 0.85*skyGradient[1], pow(1 - max(viewCoord.y, 0), 4));
-            // Clouds
+            // Sample Clouds
             float cloudID = sin(2)*0.1 + 0.7;
             result = lerp(result, cloudColor, smoothstep(cloudID, cloudID + 0.1, CreatePerlinNoise(viewCoord*cloudScale, cloudDensity)));
-            // Sun
+            // Sample Sun
             float2 sunCoord = vSunViewOffset/vResolution;
             sunCoord.x *= vResolution.x/vResolution.y;
             float sunPoint = clamp(1 - distance(screenCoord, sunCoord), 0, 1);
