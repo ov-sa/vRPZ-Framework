@@ -40,6 +40,10 @@ shaderRW.buffer[(identity.name)] = {
 
         float sampleOffset = 0.001;
         float sampleIntensity = 2;
+        float2x4 skyGradient = {
+            float3(0.7, 0.75, 0.85),
+            float3(0.2, 0.5, 0.85)
+        };
         float cloudDensity = 10;
         float cloudScale = 15;
         float3 cloudColor = 0.85 * float3(1, 1, 1);
@@ -131,8 +135,8 @@ shaderRW.buffer[(identity.name)] = {
             float2 viewCoord = GetViewCoord(-viewDirection.xzy, float2(1, 1));
             float2 screenCoord = float2(uv.x*(vResolution.x/vResolution.y), uv.y);
             // Base
-            float3 result = float3(0.7, 0.75, 0.85)*1.1 - (viewCoord.y*viewCoord.y*0.5);
-            result = lerp(result, 0.85*float3(0.2, 0.5, 0.85), pow(1 - max(viewCoord.y, 0), 4));
+            float3 result = skyGradient[0]*1.1 - (viewCoord.y*viewCoord.y*0.5);
+            result = lerp(result, 0.85*skyGradient[1], pow(1 - max(viewCoord.y, 0), 4));
             // Clouds
             float cloudID = sin(2)*0.1 + 0.7;
             result = lerp(result, cloudColor, smoothstep(cloudID, cloudID + 0.1, CreatePerlinNoise(viewCoord*cloudScale, cloudDensity)));
