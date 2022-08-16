@@ -40,6 +40,10 @@ shaderRW.buffer[(identity.name)] = {
 
         float sampleOffset = 0.001;
         float sampleIntensity = 2;
+        float cloudDensity = 10;
+        float cloudScale = 15;
+        float3 cloudColor = 0.85 * float3(1, 1, 1);
+        float3 sunColor = float3(1, 0.7, 0.4);
         struct VSInput {
             float3 Position : POSITION0;
             float2 TexCoord : TEXCOORD0;
@@ -118,7 +122,7 @@ shaderRW.buffer[(identity.name)] = {
             return result;
         }
     
-        float2x4 SampleSky(float2 uv) {
+        float4 SampleSky(float2 uv) {
             float2 viewAdd = - 1/float2(gProjectionMainScene[0][0], gProjectionMainScene[1][1]);	
             float2 viewMul = -2*viewAdd.xy;
             float4x4 viewMatrix = GetViewMatrix(gViewMainScene);
@@ -126,10 +130,22 @@ shaderRW.buffer[(identity.name)] = {
             float3 viewDirection = normalize(worldPosition - viewMatrix[3].xyz);
             float2 viewCoord = GetViewCoord(-viewDirection.xzy, float2(1, 1));
             float2 screenCoord = float2(uv.x*(vResolution.x/vResolution.y), uv.y);
-
-
-            // TODO: ..
-            return result;
+            // Base
+            float3 result = float3(0.7, 0.75, 0.85)*1.1 - (viewCoord.y*viewCoord.y*0.5);
+            result = lerp( result, 0.85*float3(0.2, 0.5, 0.85), pow(1 - max(viewCoord.y, 0), 4));
+            // Clouds
+            float cloudStep = sin(2)*0.1 + 0.7;
+            result = lerp(result, cloudColor, smoothstep(cloudStep, cloudStep + 0.1, CreatePerlinNoise(viewCoord*cloudScale, cloudDensity)));
+            // Draws Sun
+            float2 sunCoord = vSunViewOffset/vResolution;
+            sunCoord.x *= vResolution.x/vResolution.y;
+            float sundot = clamp(1 - distance(screenCoord, sunCoord), 0, 1);
+            float glow = clamp(pow(sundot, screenCoord.y*vResolution.y), 0, 1);
+            sundot = clamp(pow(sundot, 100)*100, 0, 1);
+            result += sunColor*sundot*pow(dot(screenCoord.y, screenCoord.y), 1/5);
+            result += lerp(sunColor, sunColor - 0.25, 0.25)*glow*pow(dot(screenCoord.y, screenCoord.y), 1/64);
+            result += lerp(sunColor, sunColor - 0.4, 0.4)*glow*pow(dot(screenCoord.y, screenCoord.y), 1/512);
+            return float4(result, 1);
         }
 
         PSInput VSHandler(VSInput VS) {
