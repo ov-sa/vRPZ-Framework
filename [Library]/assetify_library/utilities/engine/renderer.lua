@@ -55,6 +55,7 @@ if localPlayer then
         renderer.public:setTimeSync(_, syncShader, syncer.librarySerial)
         renderer.public:setServerTick(_, syncShader, syncer.librarySerial)
         renderer.public:setMinuteDuration(_, syncShader, syncer.librarySerial)
+        renderer.public:setDynamicSky(_, syncShader, syncer.librarySerial)
         return true
     end
 
