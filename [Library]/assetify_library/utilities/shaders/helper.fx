@@ -260,11 +260,11 @@ float4x4 MTACreatePositionMatrix(float3 position) {
 }
 
 float MTAGetWeatherValue() {
-    float cDuration = gTimeSync ? gServerTick + gTime : gServerTick;
-    cDuration = (cDuration/(60*gMinuteDuration))%24;
+    float duration = gTimeSync ? gServerTick + gTime : gServerTick;
+    duration = (duration/(60*gMinuteDuration))%24;
     float weatherClamp = 0.0025;
-    float weatherValue = cDuration/12;
-    return (cDuration >= 12) ? max(weatherClamp, 2 - weatherValue) : max(weatherClamp, weatherValue);
+    float weatherValue = duration/12;
+    return (duration >= 12) ? max(weatherClamp, 2 - weatherValue) : max(weatherClamp, weatherValue);
 }
 
 float3 MTAGetWeatherColor() {
