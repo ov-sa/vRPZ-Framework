@@ -12,9 +12,6 @@ float4x4 gWorldInverseTranspose : WORLDINVERSETRANSPOSE;
 float4x4 gViewInverseTranspose : VIEWINVERSETRANSPOSE;
 
 float gTime : TIME;
-bool gTimeSync = false;
-float gServerTick = 60*60*12;
-float gMinuteDuration = 60;
 float4 gLightAmbient : LIGHTAMBIENT;
 float4 gLightDiffuse : LIGHTDIFFUSE;
 float4 gLightSpecular : LIGHTSPECULAR;
@@ -45,7 +42,12 @@ bool vEmissiveSource = false;
 bool vRenderingEnabled = false;
 bool vSource1Enabled = false;
 bool vSource2Enabled = false;
+bool vTimeSync = false;
+float vServerTick = 60*60*12;
+float vMinuteDuration = 60;
 float vWeatherBlend = false;
+float3 vSunOffset = false;
+float2 vSunViewOffset = false;
 texture vSource0;
 texture vSource1 <string renderTarget = "yes";>;
 texture vSource2 <string renderTarget = "yes";>;
@@ -257,8 +259,8 @@ float4x4 MTACreatePositionMatrix(float3 position) {
 }
 
 float MTAGetWeatherValue() {
-    float duration = gTimeSync ? gServerTick + gTime : gServerTick;
-    duration = (duration/(60*gMinuteDuration))%24;
+    float duration = vTimeSync ? vServerTick + gTime : vServerTick;
+    duration = (duration/(60*vMinuteDuration))%24;
     float weatherClamp = 0.0025;
     float weatherValue = duration/12;
     return (duration >= 12) ? max(weatherClamp, 2 - weatherValue) : max(weatherClamp, weatherValue);
