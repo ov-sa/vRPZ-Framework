@@ -22,14 +22,13 @@ float3 gLightDirection : LIGHTDIRECTION;
 float3 gCameraPosition : CAMERAPOSITION;
 float3 gCameraDirection : CAMERADIRECTION;
 
-int gLighting <string renderState="LIGHTING";>;
-float4 gGlobalAmbient <string renderState="AMBIENT";>;
-
 int gDiffuseMaterialSource <string renderState="DIFFUSEMATERIALSOURCE";>;
 int gSpecularMaterialSource <string renderState="SPECULARMATERIALSOURCE";>;
 int gAmbientMaterialSource <string renderState="AMBIENTMATERIALSOURCE";>;
 int gEmissiveMaterialSource <string renderState="EMISSIVEMATERIALSOURCE";>;
 
+int gLighting <string renderState="LIGHTING";>;
+float4 gGlobalAmbient <string renderState="AMBIENT";>;
 int gFogEnable <string renderState="FOGENABLE";>;
 float4 gFogColor <string renderState="FOGCOLOR";>;
 float gFogStart <string renderState="FOGSTART";>;
