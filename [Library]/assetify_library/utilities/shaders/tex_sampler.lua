@@ -140,7 +140,7 @@ shaderRW.buffer[(identity.name)] = {
             // Clouds
             float cloudID = sin(2)*0.1 + 0.7;
             result = lerp(result, cloudColor, smoothstep(cloudID, cloudID + 0.1, CreatePerlinNoise(viewCoord*cloudScale, cloudDensity)));
-            // Draws Sun
+            // Sun
             float2 sunCoord = vSunViewOffset/vResolution;
             sunCoord.x *= vResolution.x/vResolution.y;
             float sunPoint = clamp(1 - distance(screenCoord, sunCoord), 0, 1);
