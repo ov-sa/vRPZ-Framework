@@ -90,16 +90,34 @@ shaderRW.buffer[(identity.name)] = {
             );
             #undef minor
             return transpose(cofactors)/determinant(matrixInput);
-       }
+        }
        
-       float3 GetViewClipPosition(float2 coords, float4 view) {
-           return float3((coords.x*view.x) + view.z, (1 - coords.y)*view.y + view.w, 1)*(gProjectionMainScene[3][2]/(1 - gProjectionMainScene[2][2]));
-       }
+        float3 GetViewClipPosition(float2 coords, float4 view) {
+            return float3((coords.x*view.x) + view.z, (1 - coords.y)*view.y + view.w, 1)*(gProjectionMainScene[3][2]/(1 - gProjectionMainScene[2][2]));
+        }
        
-       float2 GetViewCoord(float3 dir, float2 div) {
-           return float2(((atan2(dir.x, dir.z)/(PI*div.x)) + 1)/2, (acos(- dir.y)/(PI*div.y)));
-       }
-       
+        float2 GetViewCoord(float3 dir, float2 div) {
+            return float2(((atan2(dir.x, dir.z)/(PI*div.x)) + 1)/2, (acos(- dir.y)/(PI*div.y)));
+        }
+
+        float FetchNoise(float2 p) {
+            return frac(sin((p.x*83.876) + (p.y*76.123))*3853.875);
+        }
+      
+        float CreatePerlinNoise(float2 uv, float iterations) {
+            float c = 1;
+            for (float i = 0; i < iterations; i++) {
+            float power = pow(2, i + 1);
+            float2 luv = uv * float2(power, power) + (gTime*0.2);
+            float2 gv = smoothstep(0, 1, frac(luv));
+            float2 id = floor(luv);
+            float b = lerp(FetchNoise(id + float2(0, 0)), FetchNoise(id + float2(1, 0)), gv.x);
+            float t = lerp(FetchNoise(id + float2(0, 1)), FetchNoise(id + float2(1, 1)), gv.x);
+            c += 1/power*lerp(b, t, gv.y);
+            }
+            return c*0.5;
+        }
+    
         PSInput VSHandler(VSInput VS) {
             PSInput PS = (PSInput)0;
             PS.Position = MTACalcScreenPosition(VS.Position);
