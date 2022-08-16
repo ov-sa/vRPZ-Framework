@@ -223,9 +223,7 @@ float MTACalculateSpecular(float3 CamDir, float3 LightDir, float3 SurfNormal, fl
 }
 
 float3 MTAApplyFog(float3 texel, float linDistance) {
-    if (!gFogEnable)
-        return texel;
-
+    if (!gFogEnable) return texel;
     float FogAmount = (linDistance - gFogStart)/(gFogEnd - gFogStart);
     texel.rgb = lerp(texel.rgb, gFogColor.rgb, saturate(FogAmount));
     return texel;
