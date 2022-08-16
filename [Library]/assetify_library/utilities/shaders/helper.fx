@@ -117,13 +117,11 @@ float MTAUnlerp(float from, float to, float pos) {
 }
 
 float4 MTACalcScreenPosition(float3 InPosition) {
-    float4 posWorld = mul(float4(InPosition,1), gWorld);
-    float4 posWorldView = mul(posWorld, gView);
-    return mul(posWorldView, gProjection);
+    return mul(float4(InPosition, 1), gWorldViewProjection);
 }
 
 float3 MTACalcWorldPosition(float3 InPosition) {
-    return mul(float4(InPosition,1), gWorld).xyz;
+    return mul(float4(InPosition, 1), gWorld).xyz;
 }
 
 float3 MTACalcWorldNormal(float3 InNormal) {
@@ -236,7 +234,7 @@ float3 MTAApplyFog(float3 texel, float linDistance) {
 
 void MTAFixUpNormal(in out float3 OutNormal) {
     if (OutNormal.x == 0 && OutNormal.y == 0 && OutNormal.z == 0)
-        OutNormal = float3(0,0,1);
+        OutNormal = float3(0, 0, 1);
 }
 
 float4x4 MTACreateMatrix(float3 position, float3 rotation) {
