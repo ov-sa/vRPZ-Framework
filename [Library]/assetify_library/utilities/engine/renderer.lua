@@ -150,12 +150,23 @@ if localPlayer then
     end
 
     function renderer.public:setAntiAliasing(intensity)
-        renderer.public.antialiasing = imports.tonumber(intensity) or 0
-        shader.preLoaded["Assetify_TextureSampler"]:setValue("sampleIntensity", renderer.public.antialiasing)
+        renderer.public.isAntiAliased = imports.tonumber(intensity) or 0
+        shader.preLoaded["Assetify_TextureSampler"]:setValue("sampleIntensity", renderer.public.isAntiAliased)
         return true
     end
 
     function renderer.public:getAntiAliasing()
-        return renderer.public.antialiasing or 0
+        return renderer.public.isAntiAliased or 0
+    end
+
+    function renderer.public:isDynamicSky()
+        return renderer.public.isSkyDynamic or false
+    end
+
+    function renderer.public:setDynamicSky(state)
+        state = (state and true) or false
+        if (renderer.public.isSkyDynamic == state) then return false end
+        renderer.public.isSkyDynamic = true
+        return true
     end
 end
