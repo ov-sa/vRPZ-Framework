@@ -68,9 +68,41 @@ shaderRW.buffer[(identity.name)] = {
             return result;
         }
     
+        float4x4 GetViewMatrix(float4x4 matrixInput) {
+            #define minor(a, b, c) determinant(float3x3(matrixInput.a, matrixInput.b, matrixInput.c))
+            float4x4 cofactors = float4x4(
+               minor(_22_23_24, _32_33_34, _42_43_44), 
+               -minor(_21_23_24, _31_33_34, _41_43_44),
+               minor(_21_22_24, _31_32_34, _41_42_44),
+               -minor(_21_22_23, _31_32_33, _41_42_43),
+               -minor(_12_13_14, _32_33_34, _42_43_44),
+               minor(_11_13_14, _31_33_34, _41_43_44),
+               -minor(_11_12_14, _31_32_34, _41_42_44),
+               minor(_11_12_13, _31_32_33, _41_42_43),
+               minor(_12_13_14, _22_23_24, _42_43_44),
+               -minor(_11_13_14, _21_23_24, _41_43_44),
+               minor(_11_12_14, _21_22_24, _41_42_44),
+               -minor(_11_12_13, _21_22_23, _41_42_43),
+               -minor(_12_13_14, _22_23_24, _32_33_34),
+               minor(_11_13_14, _21_23_24, _31_33_34),
+               -minor(_11_12_14, _21_22_24, _31_32_34),
+               minor(_11_12_13, _21_22_23, _31_32_33)
+            );
+            #undef minor
+            return transpose(cofactors)/determinant(matrixInput);
+       }
+       
+       float3 GetViewClipPosition(float2 coords, float4 view) {
+           return float3((coords.x*view.x) + view.z, (1 - coords.y)*view.y + view.w, 1)*(gProjectionMainScene[3][2]/(1 - gProjectionMainScene[2][2]));
+       }
+       
+       float2 GetViewCoord(float3 dir, float2 div) {
+           return float2(((atan2(dir.x, dir.z)/(PI*div.x)) + 1)/2, (acos(- dir.y)/(PI*div.y)));
+       }
+       
         PSInput VSHandler(VSInput VS) {
             PSInput PS = (PSInput)0;
-            PS.Position = mul(float4(VS.Position, 1), gWorldViewProjection);
+            PS.Position = MTACalcScreenPosition(VS.Position);
             PS.TexCoord = VS.TexCoord;
             return PS;
         }
