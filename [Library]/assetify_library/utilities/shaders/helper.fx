@@ -129,8 +129,7 @@ float3 MTACalcWorldNormal(float3 InNormal) {
 
 float4 MTACalcGTABuildingDiffuse(float4 InDiffuse) {
     float4 OutDiffuse;
-    if (!gLighting)
-        OutDiffuse = InDiffuse;
+    if (!gLighting) OutDiffuse = InDiffuse;
     else
     {
         float4 ambient  = gAmbientMaterialSource  == 0 ? gMaterialAmbient  : InDiffuse;
@@ -147,7 +146,7 @@ float4 MTACalcGTAVehicleDiffuse(float3 WorldNormal, float4 InDiffuse) {
     float4 diffuse  = gDiffuseMaterialSource  == 0 ? gMaterialDiffuse  : InDiffuse;
     float4 emissive = gEmissiveMaterialSource == 0 ? gMaterialEmissive : InDiffuse;
     float4 TotalAmbient = ambient * (gGlobalAmbient + gLightAmbient);
-    float DirectionFactor = max(0,dot(WorldNormal, -gLightDirection));
+    float DirectionFactor = max(0, dot(WorldNormal, -gLightDirection));
     float4 TotalDiffuse = (diffuse * gLightDiffuse * DirectionFactor);
     float4 OutDiffuse = saturate(TotalDiffuse + TotalAmbient + emissive);
     OutDiffuse.a *= diffuse.a;
@@ -159,23 +158,23 @@ float4 MTACalcGTACompleteDiffuse(float3 WorldNormal, float4 InDiffuse) {
     float4 diffuse  = gDiffuseMaterialSource  == 0 ? gMaterialDiffuse  : InDiffuse;
     float4 emissive = gEmissiveMaterialSource == 0 ? gMaterialEmissive : InDiffuse;
     float4 TotalAmbient = ambient * (gGlobalAmbient + gLightAmbient);
-    float DirectionFactor=0;
-    float4 TotalDiffuse=0;
+    float DirectionFactor = 0;
+    float4 TotalDiffuse = 0;
     if (gLight1Enable) {
-        DirectionFactor = max(0,dot(WorldNormal, -gLight1Direction));
-        TotalDiffuse += (gLight1Diffuse * DirectionFactor);
+        DirectionFactor = max(0, dot(WorldNormal, -gLight1Direction));
+        TotalDiffuse += (gLight1Diffuse*DirectionFactor);
     }
     if (gLight2Enable) {
-        DirectionFactor = max(0,dot(WorldNormal, -gLight2Direction));
-        TotalDiffuse += (gLight2Diffuse * DirectionFactor);
+        DirectionFactor = max(0, dot(WorldNormal, -gLight2Direction));
+        TotalDiffuse += (gLight2Diffuse*DirectionFactor);
     }
     if (gLight3Enable) {
-        DirectionFactor = max(0,dot(WorldNormal, -gLight3Direction));
-        TotalDiffuse += (gLight3Diffuse * DirectionFactor);
+        DirectionFactor = max(0, dot(WorldNormal, -gLight3Direction));
+        TotalDiffuse += (gLight3Diffuse*DirectionFactor);
     }
     if (gLight4Enable) {
-        DirectionFactor = max(0,dot(WorldNormal, -gLight4Direction));
-        TotalDiffuse += (gLight4Diffuse * DirectionFactor);
+        DirectionFactor = max(0, dot(WorldNormal, -gLight4Direction));
+        TotalDiffuse += (gLight4Diffuse*DirectionFactor);
     }	
     TotalDiffuse *= diffuse;
     float4 OutDiffuse = saturate(TotalDiffuse + TotalAmbient + emissive);
@@ -184,23 +183,23 @@ float4 MTACalcGTACompleteDiffuse(float3 WorldNormal, float4 InDiffuse) {
 }
 
 float4 MTACalcGTADynamicDiffuse(float3 WorldNormal) {
-    float DirectionFactor=0;
-    float4 TotalDiffuse=0;
+    float DirectionFactor = 0;
+    float4 TotalDiffuse = 0;
     if (gLight1Enable) {
-        DirectionFactor = max(0,dot(WorldNormal, -gLight1Direction));
-        TotalDiffuse += (gLight1Diffuse * DirectionFactor);
+        DirectionFactor = max(0, dot(WorldNormal, -gLight1Direction));
+        TotalDiffuse += (gLight1Diffuse*DirectionFactor);
     }
     if (gLight2Enable) {
-    DirectionFactor = max(0,dot(WorldNormal, -gLight2Direction));
-    TotalDiffuse += (gLight2Diffuse * DirectionFactor);
+    DirectionFactor = max(0, dot(WorldNormal, -gLight2Direction));
+    TotalDiffuse += (gLight2Diffuse*DirectionFactor);
                      }
     if (gLight3Enable) {
-        DirectionFactor = max(0,dot(WorldNormal, -gLight3Direction));
-        TotalDiffuse += (gLight3Diffuse * DirectionFactor);
+        DirectionFactor = max(0, dot(WorldNormal, -gLight3Direction));
+        TotalDiffuse += (gLight3Diffuse*DirectionFactor);
     }
     if (gLight4Enable) {
-        DirectionFactor = max(0,dot(WorldNormal, -gLight4Direction));
-        TotalDiffuse += (gLight4Diffuse * DirectionFactor);
+        DirectionFactor = max(0, dot(WorldNormal, -gLight4Direction));
+        TotalDiffuse += (gLight4Diffuse*DirectionFactor);
     }	
     float4 OutDiffuse = saturate(TotalDiffuse);
     return OutDiffuse;
