@@ -134,17 +134,17 @@ shaderRW.buffer[(identity.name)] = {
             float3 result = float3(0.7, 0.75, 0.85)*1.1 - (viewCoord.y*viewCoord.y*0.5);
             result = lerp(result, 0.85*float3(0.2, 0.5, 0.85), pow(1 - max(viewCoord.y, 0), 4));
             // Clouds
-            float cloudStep = sin(2)*0.1 + 0.7;
-            result = lerp(result, cloudColor, smoothstep(cloudStep, cloudStep + 0.1, CreatePerlinNoise(viewCoord*cloudScale, cloudDensity)));
+            float cloudID = sin(2)*0.1 + 0.7;
+            result = lerp(result, cloudColor, smoothstep(cloudID, cloudID + 0.1, CreatePerlinNoise(viewCoord*cloudScale, cloudDensity)));
             // Draws Sun
             float2 sunCoord = vSunViewOffset/vResolution;
             sunCoord.x *= vResolution.x/vResolution.y;
-            float sundot = clamp(1 - distance(screenCoord, sunCoord), 0, 1);
-            float glow = clamp(pow(sundot, screenCoord.y*vResolution.y), 0, 1);
-            sundot = clamp(pow(sundot, 100)*100, 0, 1);
-            result += sunColor*sundot*pow(dot(screenCoord.y, screenCoord.y), 1/5);
-            result += lerp(sunColor, sunColor - 0.25, 0.25)*glow*pow(dot(screenCoord.y, screenCoord.y), 1/64);
-            result += lerp(sunColor, sunColor - 0.4, 0.4)*glow*pow(dot(screenCoord.y, screenCoord.y), 1/512);
+            float sunPoint = clamp(1 - distance(screenCoord, sunCoord), 0, 1);
+            float sunGlow = clamp(pow(sunPoint, screenCoord.y*vResolution.y), 0, 1);
+            sunPoint = clamp(pow(sunPoint, 100)*100, 0, 1);
+            result += sunColor*sunPoint*pow(dot(screenCoord.y, screenCoord.y), 1/5);
+            result += lerp(sunColor, sunColor - 0.25, 0.25)*sunGlow*pow(dot(screenCoord.y, screenCoord.y), 1/64);
+            result += lerp(sunColor, sunColor - 0.4, 0.4)*sunGlow*pow(dot(screenCoord.y, screenCoord.y), 1/512);
             return float4(result, 1);
         }
 
