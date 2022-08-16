@@ -110,7 +110,7 @@ shaderRW.buffer[(identity.name)] = {
             return c*0.5;
         }
     
-        float2x4 SampleHandler(float2 TexCoord) {
+        float2x4 SampleSource(float2 TexCoord) {
             float4 baseTexel = tex2D(vSource0Sampler, TexCoord);
             float4 depthTexel = tex2D(depthSampler, TexCoord);
             float4 weatherTexel = ((depthTexel.r + depthTexel.g + depthTexel.b)/3) >= 1 ? baseTexel*float4(MTAGetWeatherColor(), 0.75) : float4(0, 0, 0, 0);
@@ -118,14 +118,7 @@ shaderRW.buffer[(identity.name)] = {
             return result;
         }
     
-        PSInput VSHandler(VSInput VS) {
-            PSInput PS = (PSInput)0;
-            PS.Position = MTACalcScreenPosition(VS.Position);
-            PS.TexCoord = VS.TexCoord;
-            return PS;
-        }
-    
-        float4 PSHandler(PSInput PS) : COLOR0 {
+        float2x4 SampleSky(float2 TexCoord) {
             float2 viewAdd = - 1/float2(gProjectionMainScene[0][0], gProjectionMainScene[1][1]);	
             float2 viewMul = -2*viewAdd.xy;
             float4x4 viewMatrix = GetViewMatrix(gViewMainScene);
@@ -134,13 +127,26 @@ shaderRW.buffer[(identity.name)] = {
             float2 viewCoord = GetViewCoord(-viewDirection.xzy, float2(1, 1));
             float2 screenCoord = float2(PS.TexCoord.x*(vResolution.x/vResolution.y), PS.TexCoord.y);
 
-            float2x4 rawTexel = SampleHandler(PS.TexCoord + float2(sampleOffset, sampleOffset));
-            rawTexel += SampleHandler(PS.TexCoord + float2(-sampleOffset, -sampleOffset));
-            rawTexel += SampleHandler(PS.TexCoord + float2(-sampleOffset, sampleOffset));
-            rawTexel += SampleHandler(PS.TexCoord + float2(sampleOffset, -sampleOffset));
+
+            // TODO: ..
+            return result;
+        }
+
+        PSInput VSHandler(VSInput VS) {
+            PSInput PS = (PSInput)0;
+            PS.Position = MTACalcScreenPosition(VS.Position);
+            PS.TexCoord = VS.TexCoord;
+            return PS;
+        }
+    
+        float4 PSHandler(PSInput PS) : COLOR0 {
+            float2x4 rawTexel = SampleSource(PS.TexCoord + float2(sampleOffset, sampleOffset));
+            rawTexel += SampleSource(PS.TexCoord + float2(-sampleOffset, -sampleOffset));
+            rawTexel += SampleSource(PS.TexCoord + float2(-sampleOffset, sampleOffset));
+            rawTexel += SampleSource(PS.TexCoord + float2(sampleOffset, -sampleOffset));
             rawTexel *= 0.25;
             float4 sampledTexel = rawTexel[0];
-            if (rawTexel[1].a > 0) sampledTexel = rawTexel[1];
+            if (rawTexel[1].a > 0) sampledTexel = vDynamicSkyEnabled ? SampleSky(PS.TexCoord) : rawTexel[1];
             else {
                 float edgeIntensity = length(sampledTexel.rgb);
                 sampledTexel.a = pow(length(float2(ddx(edgeIntensity), ddy(edgeIntensity))), 0.5)*sampleIntensity;
