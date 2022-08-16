@@ -160,13 +160,22 @@ if localPlayer then
     end
 
     function renderer.public:isDynamicSky()
-        return renderer.public.isSkyDynamic or false
+        return renderer.public.isDynamicSkyEnabled or false
     end
 
-    function renderer.public:setDynamicSky(state)
-        state = (state and true) or false
-        if (renderer.public.isSkyDynamic == state) then return false end
-        renderer.public.isSkyDynamic = true
+    function renderer.public:setDynamicSky(state, syncShader, isInternal)
+        if not syncShader then
+            state = (state and true) or false
+            if (renderer.public.isDynamicSkyEnabled == state) then return false end
+            renderer.public.isDynamicSkyEnabled = state
+            for i, j in imports.pairs(shader.buffer.shader) do
+                renderer.public:setDynamicSky(_, i, syncer.librarySerial)
+            end
+        else
+            local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
+            if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then return false end
+            syncShader:setValue("vDynamicSkyEnabled", renderer.public.isDynamicSkyEnabled)
+        end
         return true
     end
 end
