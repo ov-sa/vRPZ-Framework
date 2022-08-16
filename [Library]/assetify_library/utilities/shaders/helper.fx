@@ -111,10 +111,8 @@ int CUSTOMFLAGS
 >;
 
 float MTAUnlerp(float from, float to, float pos) {
-    if (from == to)
-        return 1.0;
-    else
-        return (pos - from) / (to - from);
+    if (from == to) return 1;
+    else return (pos - from) / (to - from);
 }
 
 float4 MTACalcScreenPosition(float3 InPosition) {
