@@ -51,12 +51,12 @@ texture vSource0;
 texture vSource1 <string renderTarget = "yes";>;
 texture vSource2 <string renderTarget = "yes";>;
 texture gDepthBuffer : DEPTHBUFFER;
+int gMaxAnisotropy <string deviceCaps="MaxAnisotropy";>;
+int gDeclNormal <string vertexDeclState="Normal";>;
 texture gTexture0 <string textureState="0,Texture";>;
 texture gTexture1 <string textureState="1,Texture";>;
 texture gTexture2 <string textureState="2,Texture";>;
 texture gTexture3 <string textureState="3,Texture";>;
-
-int gDeclNormal <string vertexDeclState="Normal";>;
 
 int gLight0Enable <string lightEnableState="0,Enable";>;
 int gLight1Enable <string lightEnableState="1,Enable";>;
@@ -98,8 +98,6 @@ float4 gLight4Specular <string lightState="4,Specular";>;
 float4 gLight4Ambient <string lightState="4,Ambient";>;
 float3 gLight4Position <string lightState="4,Position";>;
 float3 gLight4Direction <string lightState="4,Direction";>;
-
-int gMaxAnisotropy <string deviceCaps="MaxAnisotropy";>;
 
 int CUSTOMFLAGS
 <
