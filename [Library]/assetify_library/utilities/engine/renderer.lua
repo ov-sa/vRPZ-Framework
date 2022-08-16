@@ -175,7 +175,7 @@ if localPlayer then
         else
             local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
             if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then return false end
-            syncShader:setValue("vDynamicSkyEnabled", renderer.public.isDynamicSkyEnabled)
+            syncShader:setValue("vDynamicSkyEnabled", renderer.public.isDynamicSkyEnabled or false)
         end
         return true
     end
