@@ -33,6 +33,12 @@ shaderRW.buffer[(identity.name)] = {
     },
 
     exec = function()
+        local controlVars = ""
+        for i = 1, 24, 1 do
+            controlVars = controlVars..[[
+                float3x4 timeCycle_]]..i..[[ = false;
+            ]]
+        end
         return identity.deps..[[
         /*-----------------
         -->> Variables <<--
@@ -48,6 +54,7 @@ shaderRW.buffer[(identity.name)] = {
         float cloudScale = 15;
         float3 cloudColor = 0.85 * float3(1, 1, 1);
         float3 sunColor = float3(1, 0.7, 0.4);
+        ]]..controlVars..[[
         struct VSInput {
             float3 Position : POSITION0;
             float2 TexCoord : TEXCOORD0;
