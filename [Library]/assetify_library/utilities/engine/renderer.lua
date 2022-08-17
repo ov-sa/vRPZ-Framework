@@ -69,7 +69,7 @@ if localPlayer then
             if renderer.public.isVirtualRendering then
                 renderer.public.virtualSource = imports.dxCreateScreenSource(renderer.public.resolution[1], renderer.public.resolution[2])
                 renderer.public.virtualRTs = renderer.public.virtualRTs or {}
-                if rtModes.diffuse then
+                if rtModes and rtModes.diffuse then
                     renderer.public.virtualRTs.diffuse = imports.dxCreateRenderTarget(renderer.public.resolution[1], renderer.public.resolution[2], true)
                     if rtModes.emissive then
                         renderer.public.virtualRTs.emissive = imports.dxCreateRenderTarget(renderer.public.resolution[1], renderer.public.resolution[2], false)
@@ -175,4 +175,26 @@ if localPlayer then
         end
         return true
     end
+end
+
+function renderer.public:setTimeCycle(cycle)
+    state = (state and true) or false
+    cycle = (cycle and (imports.type(cycle) == "table") and cycle) or false
+    if not cycle then return false end
+    local isCycleValid = false
+    for i = 1, 24, 1 do
+        if not cycle[i] then
+            for k = i - 1, i - 23, -1 do
+                local v = ((k > 0) and k) or (24 + k)
+                if cycle[v] then
+                    cycle[i] = cycle[v]
+                    break
+                end
+            end
+        else
+            isCycleValid = true
+        end
+    end
+    if isCycleValid then renderer.public.timeCycle = cycle end
+    return isCycleValid
 end
