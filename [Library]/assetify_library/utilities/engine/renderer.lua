@@ -175,26 +175,30 @@ if localPlayer then
         end
         return true
     end
-end
 
-function renderer.public:setTimeCycle(cycle)
-    state = (state and true) or false
-    cycle = (cycle and (imports.type(cycle) == "table") and cycle) or false
-    if not cycle then return false end
-    local isCycleValid = false
-    for i = 1, 24, 1 do
-        if not cycle[i] then
-            for k = i - 1, i - 23, -1 do
-                local v = ((k > 0) and k) or (24 + k)
-                if cycle[v] then
-                    cycle[i] = cycle[v]
-                    break
-                end
-            end
-        else
-            isCycleValid = true
-        end
+    function renderer.public:getTimeCycle()
+        return renderer.public.timeCycle
     end
-    if isCycleValid then renderer.public.timeCycle = cycle end
-    return isCycleValid
+    
+    function renderer.public:setTimeCycle(cycle)
+        state = (state and true) or false
+        cycle = (cycle and (imports.type(cycle) == "table") and cycle) or false
+        if not cycle then return false end
+        local isCycleValid = false
+        for i = 1, 24, 1 do
+            if not cycle[i] then
+                for k = i - 1, i - 23, -1 do
+                    local v = ((k > 0) and k) or (24 + k)
+                    if cycle[v] then
+                        cycle[i] = cycle[v]
+                        break
+                    end
+                end
+            else
+                isCycleValid = true
+            end
+        end
+        if isCycleValid then renderer.public.timeCycle = cycle end
+        return isCycleValid
+    end
 end
