@@ -134,6 +134,8 @@
     <export function="getRendererAntiAliasing" type="client"/>
     <export function="isRendererDynamicSky" type="client"/>
     <export function="setRendererDynamicSky" type="client"/>
+    <export function="getRendererTimeCycle" type="client"/>
+    <export function="setRendererTimeCycle" type="client"/>
     <export function="createPlanarLight" type="client"/>
     <export function="setPlanarLightResolution" type="client"/>
     <export function="setPlanarLightTexture" type="client"/>
