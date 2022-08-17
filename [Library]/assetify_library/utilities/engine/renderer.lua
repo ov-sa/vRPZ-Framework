@@ -189,10 +189,7 @@ if localPlayer then
             if cycle[i] and (imports.type(cycle[i]) == "table") then
                 for k = 1, 3, 1 do
                     cycle[i][k] = (cycle[i][k] and (imports.type(cycle[i][k]) == "table") and cycle[i][k].color and (imports.type(cycle[i][k].position) == "number") and cycle[i][k]) or false
-                    if cycle[i][k] then
-                        cycle[i][k].color = {string.parseHex(cycle[i][k].color)}
-                        isCycleValid = true
-                    end
+                    isCycleValid = (cycle[i][k] and true) or isCycleValid
                 end
             end
         end
@@ -205,6 +202,17 @@ if localPlayer then
                         break
                     end
                 end
+                local genCycle = {}
+                for k = 1, 3, 1 do
+                    local v = cycle[i][k]
+                    local color = (v and {string.parseHex(v.color)}) or false
+                    local position = (v and v.position) or false
+                    table.insert(genCycle, (color and color[1]/255) or -1)
+                    table.insert(genCycle, (color and color[2]/255) or -1)
+                    table.insert(genCycle, (color and color[3]/255) or -1)
+                    table.insert(genCycle, (position and position/100) or -1)
+                end
+                shader.preLoaded["Assetify_TextureSampler"]:setValue("timeCycle_"..i, table.unpack(genCycle) or false)
             end
             renderer.public.timeCycle = cycle
         end
