@@ -186,9 +186,14 @@ if localPlayer then
         if not cycle then return false end
         local isCycleValid = false
         for i = 1, 24, 1 do
-            if cycle[i] and (imports.type(cycle[i]) == "table") and (#cycle[i] > 0) then
-                --TODO: CHECK ALL THREE GRADIENTS AND SET IT
-                isCycleValid = true
+            if cycle[i] and (imports.type(cycle[i]) == "table") then
+                for k = 1, 3, 1 do
+                    cycle[i][k] = (cycle[i][k] and (imports.type(cycle[i][k]) == "table") and cycle[i][k].color and (imports.type(cycle[i][k].position) == "number") and cycle[i][k]) or false
+                    if cycle[i][k] then
+                        cycle[i][k].color = {string.parseHex(cycle[i][k].color)}
+                        isCycleValid = true
+                    end
+                end
             end
         end
         if isCycleValid then
