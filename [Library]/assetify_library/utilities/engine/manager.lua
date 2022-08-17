@@ -43,6 +43,11 @@ manager.private.buffer = {
     scoped = {}
 }
 
+function manager.public:isInternal(serial)
+    local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
+    return (not isExternalResource and true) or (serial and (serial == syncer.librarySerial)) or false
+end
+
 function manager.public:exportAPI(moduleName, moduleAPIs)
     if not moduleName or (imports.type(moduleName) ~= "string") or not moduleAPIs or (imports.type(moduleAPIs) ~= "table") then return false end
     for i, j in imports.pairs(moduleAPIs) do
