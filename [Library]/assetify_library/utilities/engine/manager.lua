@@ -185,9 +185,8 @@ if localPlayer then
         if not settings.assetPacks[assetType] then return false end
         local cAsset = settings.assetPacks[assetType].rwDatas[assetName]
         if not cAsset then return false end
-        local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
         local unSynced = cAsset.unSynced
-        if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
+        if not manager.public:isInternal(isInternal) then
             cAsset = table.clone(cAsset, true)
             cAsset.manifestData.encryptKey = nil
             cAsset.unSynced = nil
@@ -352,8 +351,7 @@ else
         if not settings.assetPacks[assetType] then return false end
         local cAsset = settings.assetPacks[assetType].assetPack.rwDatas[assetName]
         if not cAsset then return false end
-        local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
-        if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then
+        if not manager.public:isInternal(isInternal) then
             cAsset = cAsset.synced
             if cAsset.manifestData.encryptKey then
                 cAsset = table.clone(cAsset, true)
