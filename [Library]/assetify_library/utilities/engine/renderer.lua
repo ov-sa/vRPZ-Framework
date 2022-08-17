@@ -37,7 +37,7 @@ local renderer = class:create("renderer", {
     isTimeSynced = false,
     serverTick = 60*60*12,
     minuteDuration = 60,
-    timeCycle = table.decode("utilities/rw/timecyc.rw")
+    timeCycle = table.decode(file:read("utilities/rw/timecyc.rw"))
 })
 
 if localPlayer then
@@ -176,5 +176,3 @@ if localPlayer then
         return true
     end
 end
-
-print(table.decode("utilities/rw/timecyc.rw"))
