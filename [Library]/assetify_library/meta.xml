@@ -14,6 +14,7 @@
     <!-- Utilities: RW -->
     <file src="utilities/rw/dict.rw"/>
     <file src="utilities/rw/buffer.rw"/>
+    <file src="utilities/rw/timecyc.rw"/>
     <file src="utilities/rw/native/buffer.rw"/>
     <file src="utilities/rw/native/buffer_lod.rw"/>
     <file src="utilities/rw/planar_1x1/dict.rw"/>
