@@ -88,8 +88,7 @@ if localPlayer then
                 renderer.public:setVirtualRendering(_, _, i, syncer.librarySerial)
             end
         else
-            local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
-            if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then return false end
+            if not manager.public:isInternal(isInternal) return false end
             local vSource0, vSource1, vSource2 = (renderer.public.isVirtualRendering and renderer.public.virtualSource) or false, (renderer.public.isVirtualRendering and renderer.public.virtualRTs.diffuse) or false, (renderer.public.isVirtualRendering and renderer.public.virtualRTs.emissive) or false
             syncShader:setValue("vResolution", (renderer.public.isVirtualRendering and renderer.public.resolution) or false)
             syncShader:setValue("vRenderingEnabled", (renderer.public.isVirtualRendering and true) or false)
@@ -114,8 +113,7 @@ if localPlayer then
                 renderer.public:setTimeSync(_, i, syncer.librarySerial)
             end
         else
-            local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
-            if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then return false end
+            if not manager.public:isInternal(isInternal) return false end
             syncShader:setValue("vTimeSync", renderer.public.isTimeSynced)
         end
         return true
@@ -129,8 +127,7 @@ if localPlayer then
                 renderer.public:setServerTick(_, i, syncer.librarySerial)
             end
         else
-            local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
-            if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then return false end
+            if not manager.public:isInternal(isInternal) return false end
             syncShader:setValue("vServerTick", renderer.public.serverTick)
         end
         return true
@@ -143,8 +140,7 @@ if localPlayer then
                 renderer.public:setMinuteDuration(_, i, syncer.librarySerial)
             end
         else
-            local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
-            if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then return false end
+            if not manager.public:isInternal(isInternal) return false end
             syncShader:setValue("vMinuteDuration", renderer.public.minuteDuration)
         end
         return true
@@ -173,8 +169,7 @@ if localPlayer then
                 renderer.public:setDynamicSky(_, i, syncer.librarySerial)
             end
         else
-            local isExternalResource = sourceResource and (sourceResource ~= syncer.libraryResource)
-            if (not isInternal or (isInternal ~= syncer.librarySerial)) and isExternalResource then return false end
+            if not manager.public:isInternal(isInternal) return false end
             syncShader:setValue("vDynamicSkyEnabled", renderer.public.isDynamicSkyEnabled or false)
         end
         return true
