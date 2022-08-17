@@ -186,7 +186,12 @@ if localPlayer then
         if not cycle then return false end
         local isCycleValid = false
         for i = 1, 24, 1 do
-            if not cycle[i] then
+            if cycle[i] then
+                isCycleValid = true
+            end
+        end
+        if isCycleValid then
+            for i = 1, 24, 1 do
                 for k = i - 1, i - 23, -1 do
                     local v = ((k > 0) and k) or (24 + k)
                     if cycle[v] then
@@ -194,11 +199,9 @@ if localPlayer then
                         break
                     end
                 end
-            else
-                isCycleValid = true
             end
+            renderer.public.timeCycle = cycle
         end
-        if isCycleValid then renderer.public.timeCycle = cycle end
         return isCycleValid
     end
 end
