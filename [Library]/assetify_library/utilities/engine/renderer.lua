@@ -186,7 +186,8 @@ if localPlayer then
         if not cycle then return false end
         local isCycleValid = false
         for i = 1, 24, 1 do
-            if cycle[i] then
+            if cycle[i] and (imports.type(cycle[i]) == "table") and (#cycle[i] > 0) then
+                --TODO: CHECK ALL THREE GRADIENTS AND SET IT
                 isCycleValid = true
             end
         end
