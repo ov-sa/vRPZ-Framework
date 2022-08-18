@@ -165,11 +165,9 @@ shaderRW.buffer[(identity.name)] = {
             float2 viewCoord = GetViewCoord(-viewDirection.xzy, float2(1, 1));
             float2 screenCoord = float2(uv.x*(vResolution.x/vResolution.y), uv.y);
             // Sample Base
-            // TODO: CHANGE HOUR...
-            float hour = floor(cos(gTime)/(60*60*1000));
-            float duration = cos(gTime);
-            // TODO: ^^
-            float3 result = lerp(SampleCycle(viewCoord, FetchTimeCycle(hour)), SampleCycle(viewCoord, FetchTimeCycle(hour > 0 ? hour - 1 : 23)), duration);
+            float cycle = MTAGetWeatherCycle();
+            float hour = floor(cycle);
+            float3 result = lerp(SampleCycle(viewCoord, FetchTimeCycle(hour)), SampleCycle(viewCoord, FetchTimeCycle(hour > 0 ? hour - 1 : 23)), cycle - hour);
             // Sample Clouds
             float cloudID = sin(2)*0.1 + 0.7;
             result = lerp(result, cloudColor, smoothstep(cloudID, cloudID + 0.1, CreatePerlinNoise(viewCoord*cloudScale, cloudDensity)));
