@@ -224,7 +224,7 @@ if localPlayer then
                 table.insert(bCycle, (color and color[3]/255) or -1)
                 table.insert(bCycle, (position and position/100) or -1)
             end
-            shader.preLoaded["Assetify_TextureSampler"]:setValue("timecycle_"..i, bCycle or false)
+            shader.preLoaded["Assetify_TextureSampler"]:setValue("timecycle_"..i, bCycle)
         end
         renderer.public.timeCycle = cycle
         return true
