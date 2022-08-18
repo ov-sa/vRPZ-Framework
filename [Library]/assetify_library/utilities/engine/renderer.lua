@@ -48,6 +48,10 @@ if localPlayer then
     renderer.private.render = function()
         imports.dxUpdateScreenSource(renderer.public.virtualSource)
         imports.dxDrawImage(0, 0, renderer.public.resolution[1], renderer.public.resolution[2], shader.preLoaded["Assetify_TextureSampler"].cShader)
+        --TODO: IT SHOULD BE DYNAMIC LATER
+        local cameraX, cameraY, cameraZ, cameraLookX, cameraLookY, cameraLookZ = getCameraMatrix()
+        local sunX, sunY = getScreenFromWorldPosition(0, 0, cameraLookZ + 50, 1, true)
+        if sunX and sunY then shader.preLoaded["Assetify_TextureSampler"]:setValue("vSunViewOffset", {sunX, sunY}) end
         return true
     end
 
