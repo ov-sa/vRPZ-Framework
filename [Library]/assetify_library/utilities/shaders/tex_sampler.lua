@@ -33,12 +33,23 @@ shaderRW.buffer[(identity.name)] = {
     },
 
     exec = function()
-        local controlVars = ""
+        local controlVars, controlHandlers = "", [[
+            float3x4 FetchTimeCycle(float hour) {
+                float3x4 cycles[24] = {
+        ]]
         for i = 1, 24, 1 do
             controlVars = controlVars..[[
-                float3x4 timeCycle_]]..i..[[ = false;
+                float3x4 timecycle_]]..i..[[ = false;
+            ]]
+            controlHandlers = controlHandlers..[[
+                timecycle_]]..i..[[,
             ]]
         end
+        controlHandlers = controlHandlers..[[
+                };
+                return cycles[hour];
+            }
+        ]]
         return identity.deps..[[
         /*-----------------
         -->> Variables <<--
@@ -75,8 +86,9 @@ shaderRW.buffer[(identity.name)] = {
         -->> Handlers <<--
         ------------------*/
 
-        float4x4 GetViewMatrix(float4x4 matrixInput) {
-            #define minor(a, b, c) determinant(float3x3(matrixInput.a, matrixInput.b, matrixInput.c))
+        ]]..controlHandlers..[[
+        float4x4 GetViewMatrix(float4x4 matrix) {
+            #define minor(a, b, c) determinant(float3x3(matrix.a, matrix.b, matrix.c))
             float4x4 cofactors = float4x4(
                minor(_22_23_24, _32_33_34, _42_43_44), 
                -minor(_21_23_24, _31_33_34, _41_43_44),
@@ -96,7 +108,7 @@ shaderRW.buffer[(identity.name)] = {
                minor(_11_12_13, _21_22_23, _31_32_33)
             );
             #undef minor
-            return transpose(cofactors)/determinant(matrixInput);
+            return transpose(cofactors)/determinant(matrix);
         }
        
         float3 GetViewClipPosition(float2 uv, float4 view) {
@@ -105,15 +117,6 @@ shaderRW.buffer[(identity.name)] = {
        
         float2 GetViewCoord(float3 dir, float2 div) {
             return float2(((atan2(dir.x, dir.z)/(PI*div.x)) + 1)/2, (acos(- dir.y)/(PI*div.y)));
-        }
-
-        float3x4 FetchTimeCycle(float hour) {
-            float3x4 cycles[24] = {
-                timecycle_1,
-                timecycle_2
-                // TODO: .....24..
-            };
-            return cycles[hour];
         }
 
         float FetchNoise(float2 uv) {
