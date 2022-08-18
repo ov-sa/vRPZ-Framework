@@ -61,9 +61,9 @@ shaderRW.buffer[(identity.name)] = {
             float3(0.7, 0.75, 0.85),
             float3(0.2, 0.5, 0.85)
         };
-        float cloudDensity = 10;
-        float cloudScale = 15;
-        float3 cloudColor = 0.85 * float3(1, 1, 1);
+        float cloudDensity = 18;
+        float cloudScale = 13;
+        float3 cloudColor = 0.75 * float3(1, 1, 1);
         float3 sunColor = float3(1, 0.7, 0.4);
         ]]..controlVars..[[
         struct VSInput {
@@ -168,9 +168,6 @@ shaderRW.buffer[(identity.name)] = {
             float cycle = MTAGetWeatherCycle();
             float hour = floor(cycle);
             float3 result = lerp(SampleCycle(viewCoord, FetchTimeCycle(hour > 0 ? hour - 1 : 23)), SampleCycle(viewCoord, FetchTimeCycle(hour)), cycle - hour);
-            // Sample Clouds
-            float cloudID = sin(2)*0.1 + 0.7;
-            result = lerp(result, cloudColor, smoothstep(cloudID, cloudID + 0.1, CreatePerlinNoise(viewCoord*cloudScale, cloudDensity)));
             // Sample Sun
             float2 sunCoord = vSunViewOffset/vResolution;
             sunCoord.x *= vResolution.x/vResolution.y;
@@ -180,6 +177,9 @@ shaderRW.buffer[(identity.name)] = {
             result += sunColor*sunPoint*pow(dot(screenCoord.y, screenCoord.y), 1/5);
             result += lerp(sunColor, sunColor - 0.25, 0.25)*sunGlow*pow(dot(screenCoord.y, screenCoord.y), 1/64);
             result += lerp(sunColor, sunColor - 0.4, 0.4)*sunGlow*pow(dot(screenCoord.y, screenCoord.y), 1/512);
+            // Sample Clouds
+            float cloudID = sin(2)*0.1 + 0.7;
+            result = lerp(result, cloudColor, smoothstep(cloudID, cloudID + 0.1, CreatePerlinNoise(viewCoord*cloudScale, cloudDensity)));
             return float4(result, 1);
         }
 
