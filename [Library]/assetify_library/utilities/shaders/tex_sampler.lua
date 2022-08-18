@@ -56,7 +56,7 @@ shaderRW.buffer[(identity.name)] = {
         -------------------*/
 
         float sampleOffset = 0.001;
-        float sampleIntensity = 2;
+        float sampleIntensity = 0;
         float2x3 skyGradient = {
             float3(0.7, 0.75, 0.85),
             float3(0.2, 0.5, 0.85)
