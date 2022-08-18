@@ -76,7 +76,6 @@ if localPlayer then
                         renderer.public.virtualRTs.emissive = imports.dxCreateRenderTarget(renderer.public.resolution[1], renderer.public.resolution[2], false)
                     end
                 end
-                renderer.public:setTimeCycle(renderer.public.timeCycle)
                 imports.addEventHandler("onClientHUDRender", root, renderer.private.render)
             else
                 imports.removeEventHandler("onClientHUDRender", root, renderer.private.render)
@@ -168,6 +167,7 @@ if localPlayer then
             state = (state and true) or false
             if (renderer.public.isDynamicSkyEnabled == state) then return false end
             renderer.public.isDynamicSkyEnabled = state
+            renderer.public:setTimeCycle(renderer.public.timeCycle)
             for i, j in imports.pairs(shader.buffer.shader) do
                 renderer.public:setDynamicSky(_, i, syncer.librarySerial)
             end
