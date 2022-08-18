@@ -123,9 +123,9 @@ shaderRW.buffer[(identity.name)] = {
             return frac(sin((uv.x*83.876) + (uv.y*76.123))*3853.875);
         }
       
-        float CreatePerlinNoise(float2 uv, float iterations) {
+        float CreatePerlinNoise(float2 uv, float iteration) {
             float c = 1;
-            for (float i = 0; i < iterations; i++) {
+            for (float i = 0; i < iteration; i++) {
                 float power = pow(2, i + 1);
                 float2 luv = uv * float2(power, power) + (gTime*0.2);
                 float2 gv = smoothstep(0, 1, frac(luv));
