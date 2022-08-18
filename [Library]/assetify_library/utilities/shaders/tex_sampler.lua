@@ -87,8 +87,8 @@ shaderRW.buffer[(identity.name)] = {
         ------------------*/
 
         ]]..controlHandlers..[[
-        float4x4 GetViewMatrix(float4x4 matrix) {
-            #define minor(a, b, c) determinant(float3x3(matrix.a, matrix.b, matrix.c))
+        float4x4 GetViewMatrix(float4x4 viewMatrix) {
+            #define minor(a, b, c) determinant(float3x3(viewMatrix.a, viewMatrix.b, viewMatrix.c))
             float4x4 cofactors = float4x4(
                minor(_22_23_24, _32_33_34, _42_43_44), 
                -minor(_21_23_24, _31_33_34, _41_43_44),
@@ -108,7 +108,7 @@ shaderRW.buffer[(identity.name)] = {
                minor(_11_12_13, _21_22_23, _31_32_33)
             );
             #undef minor
-            return transpose(cofactors)/determinant(matrix);
+            return transpose(cofactors)/determinant(viewMatrix);
         }
        
         float3 GetViewClipPosition(float2 uv, float4 view) {
