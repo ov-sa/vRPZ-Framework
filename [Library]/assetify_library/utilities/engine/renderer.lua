@@ -15,6 +15,7 @@
 local imports = {
     type = type,
     pairs = pairs,
+    tostring = tostring,
     tonumber = tonumber,
     getTickCount = getTickCount,
     destroyElement = destroyElement,
@@ -179,43 +180,52 @@ if localPlayer then
     function renderer.public:getTimeCycle()
         return renderer.public.timeCycle
     end
-    
-    function renderer.public:setTimeCycle(cycle)
-        state = (state and true) or false
+
+    function renderer.private.isTimeCycleValid(cycle)
         cycle = (cycle and (imports.type(cycle) == "table") and cycle) or false
         if not cycle then return false end
-        local isCycleValid = false
+        local isValid = false
         for i = 1, 24, 1 do
-            if cycle[i] and (imports.type(cycle[i]) == "table") then
+            local j = imports.tostring(i)
+            cycle[j] = (cycle[j] and (imports.type(cycle[j]) == "table") and cycle[j]) or false
+            if cycle[j] then
                 for k = 1, 3, 1 do
-                    cycle[i][k] = (cycle[i][k] and (imports.type(cycle[i][k]) == "table") and cycle[i][k].color and (imports.type(cycle[i][k].position) == "number") and cycle[i][k]) or false
-                    isCycleValid = (cycle[i][k] and true) or isCycleValid
+                    cycle[j][k] = (cycle[j][k] and (imports.type(cycle[j][k]) == "table") and (imports.type(cycle[j][k].color) == "string") and (imports.type(cycle[j][k].position) == "number") and cycle[j][k]) or false
+                    isValid = (cycle[j][k] and true) or isValid
                 end
             end
         end
-        if isCycleValid then
-            for i = 1, 24, 1 do
+        return isValid
+    end
+
+    function renderer.public:setTimeCycle(cycle)
+        state = (state and true) or false
+        if not renderer.private.isTimeCycleValid(cycle) return false end
+        for i = 1, 24, 1 do
+            local j = imports.tostring(i)
+            local vCycle, bCycle = cycle[j], {}
+            if not vCycle then
                 for k = i - 1, i - 23, -1 do
                     local v = ((k > 0) and k) or (24 + k)
-                    if cycle[v] then
-                        cycle[i] = cycle[v]
+                    local __vCycle = cycle[(imports.tostring(v))]
+                    if __vCycle then
+                        vCycle = __vCycle
                         break
                     end
                 end
-                local genCycle = {}
-                for k = 1, 3, 1 do
-                    local v = cycle[i][k]
-                    local color = (v and {string.parseHex(v.color)}) or false
-                    local position = (v and v.position) or false
-                    table.insert(genCycle, (color and color[1]/255) or -1)
-                    table.insert(genCycle, (color and color[2]/255) or -1)
-                    table.insert(genCycle, (color and color[3]/255) or -1)
-                    table.insert(genCycle, (position and position/100) or -1)
-                end
-                shader.preLoaded["Assetify_TextureSampler"]:setValue("timeCycle_"..i, table.unpack(genCycle) or false)
             end
-            renderer.public.timeCycle = cycle
+            for k = 1, 3, 1 do
+                local v = vCycle[k]
+                local color = (v and {string.parseHex(v.color)}) or false
+                local position = (v and v.position) or false
+                table.insert(bCycle, (color and color[1]/255) or -1)
+                table.insert(bCycle, (color and color[2]/255) or -1)
+                table.insert(bCycle, (color and color[3]/255) or -1)
+                table.insert(bCycle, (position and position/100) or -1)
+            end
+            shader.preLoaded["Assetify_TextureSampler"]:setValue("timeCycle_"..i, table.unpack(bCycle) or false)
         end
-        return isCycleValid
+        renderer.public.timeCycle = cycle
+        return true
     end
 end
