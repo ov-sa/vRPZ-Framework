@@ -201,7 +201,7 @@ if localPlayer then
 
     function renderer.public:setTimeCycle(cycle)
         state = (state and true) or false
-        if not renderer.private.isTimeCycleValid(cycle) return false end
+        if not renderer.private.isTimeCycleValid(cycle) then return false end
         for i = 1, 24, 1 do
             local j = imports.tostring(i)
             local vCycle, bCycle = cycle[j], {}
