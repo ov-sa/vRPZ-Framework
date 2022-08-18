@@ -20,6 +20,7 @@ local imports = {
     getTickCount = getTickCount,
     destroyElement = destroyElement,
     guiGetScreenSize = guiGetScreenSize,
+    setSkyGradient = setSkyGradient,
     addEventHandler = addEventHandler,
     removeEventHandler = removeEventHandler,
     dxCreateScreenSource = dxCreateScreenSource,
@@ -172,6 +173,7 @@ if localPlayer then
             if (renderer.public.isDynamicSkyEnabled == state) then return false end
             renderer.public.isDynamicSkyEnabled = state
             renderer.public:setTimeCycle(renderer.public.timeCycle)
+            imports.setSkyGradient(50, 50, 50, 50, 50, 50)
             for i, j in imports.pairs(shader.buffer.shader) do
                 renderer.public:setDynamicSky(_, i, syncer.librarySerial)
             end
