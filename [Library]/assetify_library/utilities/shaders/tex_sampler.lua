@@ -99,12 +99,21 @@ shaderRW.buffer[(identity.name)] = {
             return transpose(cofactors)/determinant(matrixInput);
         }
        
-        float3 GetViewClipPosition(float2 coords, float4 view) {
-            return float3((coords.x*view.x) + view.z, (1 - coords.y)*view.y + view.w, 1)*(gProjectionMainScene[3][2]/(1 - gProjectionMainScene[2][2]));
+        float3 GetViewClipPosition(float2 uv, float4 view) {
+            return float3((uv.x*view.x) + view.z, (1 - uv.y)*view.y + view.w, 1)*(gProjectionMainScene[3][2]/(1 - gProjectionMainScene[2][2]));
         }
        
         float2 GetViewCoord(float3 dir, float2 div) {
             return float2(((atan2(dir.x, dir.z)/(PI*div.x)) + 1)/2, (acos(- dir.y)/(PI*div.y)));
+        }
+
+        float3x4 FetchTimeCycle(float hour) {
+            float3x4 cycles[24] = {
+                timecycle_1,
+                timecycle_2
+                // TODO: .....24..
+            };
+            return cycles[hour];
         }
 
         float FetchNoise(float2 uv) {
@@ -133,6 +142,17 @@ shaderRW.buffer[(identity.name)] = {
             return result;
         }
     
+        float3 SampleCycle(float2 uv, float3x4 cycle) {
+              float4 result = cycle[0];
+              float alpha = 1.57079633;
+              float step = (uv.x*cos(-alpha)) - (uv.y*sin(-alpha)), length = -sin(-alpha);
+              for (int i = 0; i < 2; i++) {
+                  if (cycle[i].a >= 0) result = lerp(result, cycle[(i + 1)], smoothstep(cycle[i].a*length, (cycle[(i + 1)].a >= 0 ? cycle[(i + 1)].a : 1)*length, step));
+                  else break;
+              }
+              return result.rgb;
+          }
+          
         float4 SampleSky(float2 uv) {
             float2 viewAdd = - 1/float2(gProjectionMainScene[0][0], gProjectionMainScene[1][1]);	
             float2 viewMul = -2*viewAdd.xy;
@@ -142,8 +162,11 @@ shaderRW.buffer[(identity.name)] = {
             float2 viewCoord = GetViewCoord(-viewDirection.xzy, float2(1, 1));
             float2 screenCoord = float2(uv.x*(vResolution.x/vResolution.y), uv.y);
             // Sample Base
-            float3 result = skyGradient[0]*1.1 - (viewCoord.y*viewCoord.y*0.5);
-            result = lerp(result, 0.85*skyGradient[1], pow(1 - max(viewCoord.y, 0), 4));
+            // TODO: CHANGE HOUR...
+            float hour = floor(cos(gTime)/(60*60*1000));
+            float duration = cos(gTime);
+            // TODO: ^^
+            float3 result = lerp(SampleCycle(viewCoord, FetchTimeCycle(hour)), SampleCycle(viewCoord, FetchTimeCycle(hour > 0 ? hour - 1 : 23)), duration);
             // Sample Clouds
             float cloudID = sin(2)*0.1 + 0.7;
             result = lerp(result, cloudColor, smoothstep(cloudID, cloudID + 0.1, CreatePerlinNoise(viewCoord*cloudScale, cloudDensity)));
