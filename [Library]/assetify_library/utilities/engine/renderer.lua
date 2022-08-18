@@ -141,13 +141,13 @@ if localPlayer then
 
     function renderer.public:setMinuteDuration(minuteDuration, syncShader, isInternal)
         if not syncShader then
-            renderer.public.minuteDuration = (imports.tonumber(minuteDuration) or 0)*0.001
+            renderer.public.minuteDuration = imports.tonumber(minuteDuration) or 0
             for i, j in imports.pairs(shader.buffer.shader) do
                 renderer.public:setMinuteDuration(_, i, syncer.librarySerial)
             end
         else
             if not manager:isInternal(isInternal) then return false end
-            syncShader:setValue("vMinuteDuration", renderer.public.minuteDuration)
+            syncShader:setValue("vMinuteDuration", renderer.public.minuteDuration*0.001)
         end
         return true
     end

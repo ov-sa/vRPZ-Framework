@@ -167,7 +167,7 @@ shaderRW.buffer[(identity.name)] = {
             // Sample Base
             float cycle = MTAGetWeatherCycle();
             float hour = floor(cycle);
-            float3 result = lerp(SampleCycle(viewCoord, FetchTimeCycle(hour)), SampleCycle(viewCoord, FetchTimeCycle(hour > 0 ? hour - 1 : 23)), cycle - hour);
+            float3 result = lerp(SampleCycle(viewCoord, FetchTimeCycle(hour > 0 ? hour - 1 : 23)), SampleCycle(viewCoord, FetchTimeCycle(hour)), cycle - hour);
             // Sample Clouds
             float cloudID = sin(2)*0.1 + 0.7;
             result = lerp(result, cloudColor, smoothstep(cloudID, cloudID + 0.1, CreatePerlinNoise(viewCoord*cloudScale, cloudDensity)));
