@@ -45,18 +45,18 @@ local shader = class:create("shader", {
         {index = "diffuse", alpha = true},
         {index = "emissive", alpha = false}
     },
-    remoteBlacklist = {}
+    remoteWhitelist = {}
 })
-shader.private.__remoteBlacklist = {
+shader.private.__remoteWhitelist = {
     "Assetify_TextureSampler",
     "Assetify_OverlayGoogle"
 }
-for i = 1, #shader.public.remoteBlacklist, 1 do
-    local j = shader.public.remoteBlacklist[i]
-    shader.private.__remoteBlacklist[j] = true
+for i = 1, #shader.public.remoteWhitelist, 1 do
+    local j = shader.public.remoteWhitelist[i]
+    shader.private.__remoteWhitelist[j] = true
 end
-shader.public.remoteBlacklist = shader.private.__remoteBlacklist
-shader.private.__remoteBlacklist = nil
+shader.public.remoteWhitelist = shader.private.__remoteWhitelist
+shader.private.__remoteWhitelist = nil
 
 if localPlayer then
     shader.public.preLoaded, shader.public.preLoadedTex = {}, {
@@ -148,7 +148,7 @@ if localPlayer then
 
     function shader.public:load(element, shaderCategory, shaderName, textureName, shaderTextures, shaderInputs, rwCache, shaderMaps, encryptKey, shaderPriority, shaderDistance, isStandalone)
         if not shader.public:isInstance(self) then return false end
-        if not shaderCategory or not shaderName or (not manager:isInternal() and shader.public.remoteBlacklist[shaderName]) or (not shader.public.preLoaded[shaderName] and not shader.public.rwCache[shaderName]) or (not isStandalone and not textureName) or not shaderTextures or not shaderInputs or not rwCache then return false end
+        if not shaderCategory or not shaderName or (not manager:isInternal() and not shader.public.remoteWhitelist[shaderName]) or (not shader.public.preLoaded[shaderName] and not shader.public.rwCache[shaderName]) or (not isStandalone and not textureName) or not shaderTextures or not shaderInputs or not rwCache then return false end
         element = ((element and imports.isElement(element)) and element) or false
         textureName = textureName or false
         shaderPriority = imports.tonumber(shaderPriority) or shader.public.shaderPriority
