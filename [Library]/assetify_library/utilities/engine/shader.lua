@@ -48,7 +48,8 @@ local shader = class:create("shader", {
     remoteBlacklist = {}
 })
 shader.private.__remoteBlacklist = {
-    "Assetify_TextureSampler"
+    "Assetify_TextureSampler",
+    "Assetify_OverlayGoogle"
 }
 for i = 1, #shader.public.remoteBlacklist, 1 do
     local j = shader.public.remoteBlacklist[i]
