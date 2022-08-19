@@ -48,8 +48,11 @@ local shader = class:create("shader", {
     remoteWhitelist = {}
 })
 shader.private.__remoteWhitelist = {
-    "Assetify_TextureSampler",
-    "Assetify_OverlayGoogle"
+    "Assetify_TextureClearer",
+    "Assetify_TextureChanger",
+    "Assetify_TextureExporter",
+    "Assetify_TextureGrayscaler",
+    "Assetify_TextureShadower"
 }
 for i = 1, #shader.public.remoteWhitelist, 1 do
     local j = shader.public.remoteWhitelist[i]
