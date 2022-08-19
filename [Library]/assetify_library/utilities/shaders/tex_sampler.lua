@@ -70,13 +70,13 @@ shaderRW.buffer[(identity.name)] = {
             float4 Position : POSITION0;
             float2 TexCoord : TEXCOORD0;
         };
-        sampler vDepth0Sampler = sampler_state {
-            Texture = vDepth0;
-        };
         sampler vSource0Sampler = sampler_state {
             Texture = vSource0;
         };
-
+        sampler vDepth0Sampler = sampler_state {
+            Texture = vDepth0;
+        };
+    
 
         /*----------------
         -->> Handlers <<--
