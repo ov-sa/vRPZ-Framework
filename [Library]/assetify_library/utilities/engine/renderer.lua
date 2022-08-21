@@ -20,10 +20,10 @@ local imports = {
     getTickCount = getTickCount,
     destroyElement = destroyElement,
     guiGetScreenSize = guiGetScreenSize,
-    getSkyGradient = getSkyGradient,
     setSkyGradient = setSkyGradient,
-    getCloudsEnabled = getCloudsEnabled,
+    getSkyGradient = getSkyGradient,
     setCloudsEnabled = setCloudsEnabled,
+    getCloudsEnabled = getCloudsEnabled,
     addEventHandler = addEventHandler,
     removeEventHandler = removeEventHandler,
     dxCreateScreenSource = dxCreateScreenSource,
@@ -192,10 +192,6 @@ if localPlayer then
         renderer.public.isDynamicSkyStarsEnabled = state
         shader.preLoaded["Assetify_TextureSampler"]:setValue("isStarsEnabled", renderer.public.isDynamicSkyStarsEnabled)
         return true
-    end
-
-    function renderer.public:isDynamicSkyStarsEnabled()
-        return renderer.public.isDynamicSkyStarsEnabled
     end
 
     function renderer.private.isTimeCycleValid(cycle)

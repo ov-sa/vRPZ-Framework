@@ -85,6 +85,14 @@ function manager.API.Library.getRendererTimeCycle()
     return renderer.timecycle
 end
 
+function manager.API.Library.setRendererDynamicSkyStars(...)
+    return renderer:setDynamicSkyStars(...)
+end
+
+function manager.API.Library.isRendererDynamicSkyStars()
+    return renderer.isDynamicSkyStarsEnabled or false
+end
+
 function manager.API.Library.setRendererTimeCycle(...)
     return renderer:setTimeCycle(...)
 end
