@@ -53,6 +53,10 @@ function manager.API.Library.getRendererVirtualRTs()
     return (renderer.isVirtualRendering and renderer.virtualRTs) or false
 end
 
+function manager.API.Library.isRendererTimeSynced(...)
+    return renderer.isTimeSynced
+end
+
 function manager.API.Library.setRendererTimeSync(...)
     return renderer:setTimeSync(...)
 end
@@ -74,7 +78,7 @@ function manager.API.Library.setRendererAntiAliasing(...)
 end
 
 function manager.API.Library.isRendererDynamicSky()
-    return renderer.isDynamicSkyEnabled or false
+    return renderer.isDynamicSkyEnabled
 end
 
 function manager.API.Library.setRendererDynamicSky(...)
@@ -90,7 +94,7 @@ function manager.API.Library.setRendererDynamicSunColor(...)
 end
 
 function manager.API.Library.isRendererDynamicStars()
-    return renderer.isDynamicStarsEnabled or false
+    return renderer.isDynamicStarsEnabled
 end
 
 function manager.API.Library.setRendererDynamicStars(...)
