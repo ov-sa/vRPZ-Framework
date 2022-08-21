@@ -196,11 +196,27 @@ if localPlayer then
         return true
     end
 
-    function renderer.public:setDynamicCloudsDensity(density)
+    function renderer.public:setDynamicCloudDensity(density)
         density = imports.tonumber(density) or 0
-        if renderer.public.isDynamicCloudsDensity == density then return false end
-        renderer.public.isDynamicCloudsDensity = density
-        shader.preLoaded["Assetify_TextureSampler"]:setValue("cloudDensity", renderer.public.isDynamicCloudsDensity)
+        if renderer.public.isDynamicCloudDensity == density then return false end
+        renderer.public.isDynamicCloudDensity = density
+        shader.preLoaded["Assetify_TextureSampler"]:setValue("cloudDensity", renderer.public.isDynamicCloudDensity)
+        return true
+    end
+
+    function renderer.public:setDynamicCloudScale(scale)
+        density = imports.tonumber(scale) or 0
+        if renderer.public.isDynamicCloudScale == scale then return false end
+        renderer.public.isDynamicCloudScale = scale
+        shader.preLoaded["Assetify_TextureSampler"]:setValue("cloudScale", renderer.public.isDynamicCloudDensity)
+        return true
+    end
+
+    function renderer.public:setDynamicCloudColor(r, g, b)
+        r, g, b = imports.tonumber(r) or 0, imports.tonumber(g) or 0, imports.tonumber(b) or 0
+        if renderer.public.isDynamicCloudScale == scale then return false end
+        renderer.public.isDynamicCloudScale = scale
+        shader.preLoaded["Assetify_TextureSampler"]:setValue("cloudScale", renderer.public.isDynamicCloudDensity)
         return true
     end
 
