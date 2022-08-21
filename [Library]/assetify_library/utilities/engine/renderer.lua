@@ -42,7 +42,7 @@ local renderer = class:create("renderer", {
     isTimeSynced = false,
     timecycle = table.decode(file:read("utilities/rw/timecyc.rw")),
     isDynamicSkyEnabled = false,
-    isDynamicSkyStarsEnabled = true
+    isDynamicStarsEnabled = true
 })
 renderer.private.serverTick = 60*60*12
 renderer.private.minuteDuration = 60
@@ -186,11 +186,19 @@ if localPlayer then
         return true
     end
 
-    function renderer.public:setDynamicSkyStars(state)
+    function renderer.public:setDynamicStars(state)
         state = (state and true) or false
-        if renderer.public.isDynamicSkyStarsEnabled == state then return false end
-        renderer.public.isDynamicSkyStarsEnabled = state
-        shader.preLoaded["Assetify_TextureSampler"]:setValue("isStarsEnabled", renderer.public.isDynamicSkyStarsEnabled)
+        if renderer.public.isDynamicStarsEnabled == state then return false end
+        renderer.public.isDynamicStarsEnabled = state
+        shader.preLoaded["Assetify_TextureSampler"]:setValue("isStarsEnabled", renderer.public.isDynamicStarsEnabled)
+        return true
+    end
+
+    function renderer.public:setDynamicSkyCloudsDensity(state)
+        state = (state and true) or false
+        if renderer.public.isDynamicStarsEnabled == state then return false end
+        renderer.public.isDynamicStarsEnabled = state
+        shader.preLoaded["Assetify_TextureSampler"]:setValue("isStarsEnabled", renderer.public.isDynamicStarsEnabled)
         return true
     end
 

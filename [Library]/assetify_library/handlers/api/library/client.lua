@@ -81,12 +81,12 @@ function manager.API.Library.setRendererDynamicSky(...)
     return renderer:setDynamicSky(...)
 end
 
-function manager.API.Library.isRendererDynamicSkyStars()
-    return renderer.isDynamicSkyStarsEnabled or false
+function manager.API.Library.isRendererDynamicStars()
+    return renderer.isDynamicStarsEnabled or false
 end
 
-function manager.API.Library.setRendererDynamicSkyStars(...)
-    return renderer:setDynamicSkyStars(...)
+function manager.API.Library.setRendererDynamicStars(...)
+    return renderer:setDynamicStars(...)
 end
 
 function manager.API.Library.getRendererTimeCycle()
