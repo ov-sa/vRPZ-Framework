@@ -215,7 +215,7 @@ if localPlayer then
         density = imports.tonumber(scale) or 0
         if renderer.public.isDynamicCloudScale == scale then return false end
         renderer.public.isDynamicCloudScale = scale
-        shader.preLoaded["Assetify_TextureSampler"]:setValue("cloudScale", renderer.public.isDynamicCloudDensity)
+        shader.preLoaded["Assetify_TextureSampler"]:setValue("cloudScale", renderer.public.isDynamicCloudScale)
         return true
     end
 
