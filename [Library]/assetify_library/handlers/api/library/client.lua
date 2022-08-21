@@ -81,6 +81,14 @@ function manager.API.Library.setRendererDynamicSky(...)
     return renderer:setDynamicSky(...)
 end
 
+function manager.API.Library.getRendererDynamicSunColor()
+    return table.unpack(renderer.isDynamicSunColor)
+end
+
+function manager.API.Library.setRendererDynamicSunColor(...)
+    return renderer:setDynamicSunColor(...)
+end
+
 function manager.API.Library.isRendererDynamicStars()
     return renderer.isDynamicStarsEnabled or false
 end
