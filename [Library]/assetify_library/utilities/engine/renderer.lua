@@ -39,7 +39,9 @@ local imports = {
 
 local renderer = class:create("renderer", {
     isVirtualRendering = false,
-    isTimeSynced = false
+    isTimeSynced = false,
+    isDynamicSkyEnabled = false,
+    isDynamicSkyStarsEnabled = true
 })
 renderer.private.serverTick = 60*60*12
 renderer.private.minuteDuration = 60
@@ -173,7 +175,7 @@ if localPlayer then
     function renderer.public:setDynamicSky(state, syncShader, isInternal)
         if not syncShader then
             state = (state and true) or false
-            if (renderer.public.isDynamicSkyEnabled == state) then return false end
+            if renderer.public.isDynamicSkyEnabled == state then return false end
             renderer.public.isDynamicSkyEnabled = state
             renderer.public:setTimeCycle(renderer.private.timecycle)
             if state then
@@ -190,6 +192,18 @@ if localPlayer then
             syncShader:setValue("vDynamicSkyEnabled", renderer.public.isDynamicSkyEnabled or false)
         end
         return true
+    end
+
+    function renderer.public:setDynamicSkyStars(state)
+        state = (state and true) or false
+        if renderer.public.isDynamicSkyStarsEnabled == state then return false end
+        renderer.public.isDynamicSkyStarsEnabled = state
+        shader.preLoaded["Assetify_TextureSampler"]:setValue("isStarsEnabled", renderer.public.isDynamicSkyStarsEnabled)
+        return true
+    end
+
+    function renderer.public:isDynamicSkyStarsEnabled()
+        return renderer.public.isDynamicSkyStarsEnabled
     end
 
     function renderer.public:getTimeCycle()
