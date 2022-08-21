@@ -191,7 +191,7 @@ if localPlayer then
         renderer.public.isDynamicSunColor = renderer.public.isDynamicSunColor or {}
         if ((renderer.public.isDynamicSunColor[1] == r) and (renderer.public.isDynamicSunColor[2] == g) and (renderer.public.isDynamicSunColor[3] == b)) then return false end
         renderer.public.isDynamicSunColor[1], renderer.public.isDynamicSunColor[2], renderer.public.isDynamicSunColor[3] = r, g, b
-        shader.preLoaded["Assetify_TextureSampler"]:setValue("sunColor", table.unpack(renderer.public.isDynamicSunColor))
+        shader.preLoaded["Assetify_TextureSampler"]:setValue("sunColor", renderer.public.isDynamicSunColor)
         return true
     end
 
@@ -224,7 +224,8 @@ if localPlayer then
         renderer.public.isDynamicCloudColor = renderer.public.isDynamicCloudColor or {}
         if ((renderer.public.isDynamicCloudColor[1] == r) and (renderer.public.isDynamicCloudColor[2] == g) and (renderer.public.isDynamicCloudColor[3] == b)) then return false end
         renderer.public.isDynamicCloudColor[1], renderer.public.isDynamicCloudColor[2], renderer.public.isDynamicCloudColor[3] = r, g, b
-        shader.preLoaded["Assetify_TextureSampler"]:setValue("cloudColor", table.unpack(renderer.public.isDynamicCloudColor))
+        iprint(renderer.public.isDynamicCloudColor)
+        shader.preLoaded["Assetify_TextureSampler"]:setValue("cloudColor", renderer.public.isDynamicCloudColor)
         return true
     end
 
