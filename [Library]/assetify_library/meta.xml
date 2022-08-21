@@ -134,6 +134,8 @@
     <export function="getRendererAntiAliasing" type="client"/>
     <export function="isRendererDynamicSky" type="client"/>
     <export function="setRendererDynamicSky" type="client"/>
+    <export function="getRendererDynamicSunColor" type="client"/>
+    <export function="setRendererDynamicSunColor" type="client"/>
     <export function="isRendererDynamicStars" type="client"/>
     <export function="setRendererDynamicStars" type="client"/>
     <export function="getRendererTimeCycle" type="client"/>
