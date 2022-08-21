@@ -38,11 +38,11 @@ local imports = {
 
 local renderer = class:create("renderer", {
     isVirtualRendering = false,
-    isTimeSynced = false,
-    serverTick = 60*60*12,
-    minuteDuration = 60,
-    timeCycle = table.decode(file:read("utilities/rw/timecyc.rw"))
+    isTimeSynced = false
 })
+renderer.private.serverTick = 60*60*12
+renderer.private.minuteDuration = 60
+renderer.private.timecycle = table.decode(file:read("utilities/rw/timecyc.rw"))
 
 if localPlayer then
     renderer.public.resolution = {imports.guiGetScreenSize()}
@@ -116,7 +116,7 @@ if localPlayer then
             if renderer.public.isTimeSynced == state then return false end
             renderer.public.isTimeSynced = state
             if not renderer.public.isTimeSynced then
-                renderer.public:setServerTick(((renderer.public.serverTick or 0)*1000) + (imports.getTickCount() - (renderer.public.__serverTick or 0)))
+                renderer.public:setServerTick(((renderer.private.serverTick or 0)*1000) + (imports.getTickCount() - (renderer.public.__serverTick or 0)))
             end
             for i, j in imports.pairs(shader.buffer.shader) do
                 renderer.public:setTimeSync(_, i, syncer.librarySerial)
@@ -130,27 +130,27 @@ if localPlayer then
 
     function renderer.public:setServerTick(serverTick, syncShader, isInternal)
         if not syncShader then
-            renderer.public.serverTick = (imports.tonumber(serverTick) or 0)*0.001
+            renderer.private.serverTick = (imports.tonumber(serverTick) or 0)*0.001
             renderer.public.__serverTick = imports.getTickCount()
             for i, j in imports.pairs(shader.buffer.shader) do
                 renderer.public:setServerTick(_, i, syncer.librarySerial)
             end
         else
             if not manager:isInternal(isInternal) then return false end
-            syncShader:setValue("vServerTick", renderer.public.serverTick)
+            syncShader:setValue("vServerTick", renderer.private.serverTick)
         end
         return true
     end
 
     function renderer.public:setMinuteDuration(minuteDuration, syncShader, isInternal)
         if not syncShader then
-            renderer.public.minuteDuration = imports.tonumber(minuteDuration) or 0
+            renderer.private.minuteDuration = imports.tonumber(minuteDuration) or 0
             for i, j in imports.pairs(shader.buffer.shader) do
                 renderer.public:setMinuteDuration(_, i, syncer.librarySerial)
             end
         else
             if not manager:isInternal(isInternal) then return false end
-            syncShader:setValue("vMinuteDuration", renderer.public.minuteDuration*0.001)
+            syncShader:setValue("vMinuteDuration", renderer.private.minuteDuration*0.001)
         end
         return true
     end
@@ -174,7 +174,7 @@ if localPlayer then
             state = (state and true) or false
             if (renderer.public.isDynamicSkyEnabled == state) then return false end
             renderer.public.isDynamicSkyEnabled = state
-            renderer.public:setTimeCycle(renderer.public.timeCycle)
+            renderer.public:setTimeCycle(renderer.private.timecycle)
             if state then imports.setSkyGradient(50, 50, 50, 50, 50, 50)
             else imports.resetSkyGradient() end
             imports.setCloudsEnabled(not state)
@@ -189,7 +189,7 @@ if localPlayer then
     end
 
     function renderer.public:getTimeCycle()
-        return renderer.public.timeCycle
+        return renderer.private.timecycle
     end
 
     function renderer.private.isTimeCycleValid(cycle)
@@ -236,7 +236,7 @@ if localPlayer then
             end
             shader.preLoaded["Assetify_TextureSampler"]:setValue("timecycle_"..i, bCycle)
         end
-        renderer.public.timeCycle = cycle
+        renderer.private.timecycle = cycle
         return true
     end
 end
