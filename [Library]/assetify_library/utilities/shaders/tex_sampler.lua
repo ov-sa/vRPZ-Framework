@@ -57,6 +57,7 @@ shaderRW.buffer[(identity.name)] = {
 
         float sampleOffset = 0.001;
         float sampleIntensity = 0;
+        bool isStarsEnabled = true;
         float cloudDensity = 18;
         float cloudScale = 13;
         float3 cloudColor = 0.75*float3(1, 1, 1);
@@ -152,14 +153,6 @@ shaderRW.buffer[(identity.name)] = {
             return result.rgb;
         }
 
-
-        // TODO: WIP
-        float hash(float2 uv) {
-            float3 p3  = frac(float3(uv.x*0.1031, uv.y*0.11369, uv.x*0.13787));
-            p3 += dot(p3, p3.yzx + 19.19);
-            return frac((p3.x + p3.y)*p3.z);
-        }
-    
         float SampleStars(float2 uv, float cycle) {
             cycle = cycle < 18 ? cycle + 24 : cycle;
             float alpha = 0;
@@ -169,7 +162,9 @@ shaderRW.buffer[(identity.name)] = {
             float t = gTime/7;
             float a = sin((uv.x - t + cos(uv.y*20 + t))*10);
             a *= cos((uv.y*0.234 - t*3.24 + sin(uv.x*12.3 + t*0.243))*7.34);
-            return pow(hash(uv), 1000)*(a*0.5 + 0.15)*alpha;
+            float3 p = frac(float3(uv.x*0.1031, uv.y*0.11369, uv.x*0.13787));
+            p += dot(p, p.yzx + 19.19);
+            return pow(frac((p.x + p.y)*p.z), 1000)*(a*0.5 + 0.15)*alpha;
         }
 
         float4 SampleSky(float2 uv) {
@@ -186,7 +181,7 @@ shaderRW.buffer[(identity.name)] = {
             float3 skyBase = lerp(SampleCycle(viewCoord, FetchTimeCycle(hour > 0 ? hour - 1 : 23)), SampleCycle(viewCoord, FetchTimeCycle(hour)), cycle - hour);
             float3 result = skyBase;
             // Sample Stars
-            result += SampleStars(viewCoord, cycle);
+            if (isStarsEnabled) result += SampleStars(viewCoord, cycle);
             // Sample Sun
             float2 sunCoord = vSunViewOffset/vResolution;
             sunCoord.x *= vResolution.x/vResolution.y;
