@@ -20,8 +20,9 @@ local imports = {
     getTickCount = getTickCount,
     destroyElement = destroyElement,
     guiGetScreenSize = guiGetScreenSize,
+    getSkyGradient = getSkyGradient,
     setSkyGradient = setSkyGradient,
-    resetSkyGradient = resetSkyGradient,
+    getCloudsEnabled = getCloudsEnabled,
     setCloudsEnabled = setCloudsEnabled,
     addEventHandler = addEventHandler,
     removeEventHandler = removeEventHandler,
@@ -175,9 +176,12 @@ if localPlayer then
             if (renderer.public.isDynamicSkyEnabled == state) then return false end
             renderer.public.isDynamicSkyEnabled = state
             renderer.public:setTimeCycle(renderer.private.timecycle)
-            if state then imports.setSkyGradient(50, 50, 50, 50, 50, 50)
-            else imports.resetSkyGradient() end
-            imports.setCloudsEnabled(not state)
+            if state then
+                renderer.private.prevNativeSkyGradient = table.pack(imports.getSkyGradient())
+                renderer.private.prevNativeClouds = imports.getCloudsEnabled()
+            end
+            imports.setSkyGradient(table.unpack((not state and renderer.private.prevNativeSkyGradient) or {50, 50, 50, 50, 50, 50}))
+            imports.setCloudsEnabled((not state and renderer.private.prevNativeClouds) or false)
             for i, j in imports.pairs(shader.buffer.shader) do
                 renderer.public:setDynamicSky(_, i, syncer.librarySerial)
             end
