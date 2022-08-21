@@ -139,6 +139,12 @@
     <export function="setRendererDynamicSunColor" type="client"/>
     <export function="isRendererDynamicStars" type="client"/>
     <export function="setRendererDynamicStars" type="client"/>
+    <export function="getRendererDynamicCloudDensity" type="client"/>
+    <export function="setRendererDynamicCloudDensity" type="client"/>
+    <export function="getRendererDynamicCloudScale" type="client"/>
+    <export function="setRendererDynamicCloudScale" type="client"/>
+    <export function="getRendererDynamicCloudColor" type="client"/>
+    <export function="setRendererDynamicCloudColor" type="client"/>
     <export function="getRendererTimeCycle" type="client"/>
     <export function="setRendererTimeCycle" type="client"/>
     <export function="createPlanarLight" type="client"/>

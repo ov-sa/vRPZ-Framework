@@ -101,6 +101,30 @@ function manager.API.Library.setRendererDynamicStars(...)
     return renderer:setDynamicStars(...)
 end
 
+function manager.API.Library.getRendererDynamicCloudDensity()
+    return renderer.isDynamicCloudDensity
+end
+
+function manager.API.Library.setRendererDynamicCloudDensity(...)
+    return renderer:setDynamicCloudDensity(...)
+end
+
+function manager.API.Library.getRendererDynamicCloudScale()
+    return renderer.isDynamicCloudScale
+end
+
+function manager.API.Library.setRendererDynamicCloudScale(...)
+    return renderer:setDynamicCloudScale(...)
+end
+
+function manager.API.Library.getRendererDynamicCloudColor()
+    return table.unpack(renderer.isDynamicCloudColor)
+end
+
+function manager.API.Library.setRendererDynamicCloudColor(...)
+    return renderer:setDynamicCloudColor(...)
+end
+
 function manager.API.Library.getRendererTimeCycle()
     return renderer.timecycle
 end
