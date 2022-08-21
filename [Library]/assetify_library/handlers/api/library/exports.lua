@@ -46,6 +46,7 @@ manager:exportAPI("Library", {
         {name = "setRendererVirtualRendering", API = "setRendererVirtualRendering"},
         {name = "getRendererVirtualSource", API = "getRendererVirtualSource"},
         {name = "getRendererVirtualRTs", API = "getRendererVirtualRTs"},
+        {name = "isRendererTimeSynced", API = "isRendererTimeSynced"},
         {name = "setRendererTimeSync", API = "setRendererTimeSync"},
         {name = "setRendererServerTick", API = "setRendererServerTick"},
         {name = "setRendererMinuteDuration", API = "setRendererMinuteDuration"},

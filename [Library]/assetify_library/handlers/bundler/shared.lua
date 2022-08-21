@@ -114,6 +114,7 @@ bundler.private:createBuffer("renderer", _, [[
             {exportIndex = "assetify.renderer.setVirtualRendering", exportName = "setRendererVirtualRendering"},
             {exportIndex = "assetify.renderer.getVirtualSource", exportName = "getRendererVirtualSource"},
             {exportIndex = "assetify.renderer.getVirtualRTs", exportName = "getRendererVirtualRTs"},
+            {exportIndex = "assetify.renderer.isTimeSynced", exportName = "isRendererTimeSynced"},
             {exportIndex = "assetify.renderer.setTimeSync", exportName = "setRendererTimeSync"},
             {exportIndex = "assetify.renderer.setServerTick", exportName = "setRendererServerTick"},
             {exportIndex = "assetify.renderer.setMinuteDuration", exportName = "setRendererMinuteDuration"},
