@@ -159,7 +159,9 @@ if localPlayer then
     end
 
     function renderer.public:setAntiAliasing(intensity)
-        renderer.public.isAntiAliased = imports.tonumber(intensity) or 0
+        intensity = imports.tonumber(intensity) or 0
+        if renderer.public.isAntiAliased == intensity then return false end
+        renderer.public.isAntiAliased = intensity
         shader.preLoaded["Assetify_TextureSampler"]:setValue("sampleIntensity", renderer.public.isAntiAliased)
         return true
     end
@@ -194,11 +196,11 @@ if localPlayer then
         return true
     end
 
-    function renderer.public:setDynamicSkyCloudsDensity(state)
-        state = (state and true) or false
-        if renderer.public.isDynamicStarsEnabled == state then return false end
-        renderer.public.isDynamicStarsEnabled = state
-        shader.preLoaded["Assetify_TextureSampler"]:setValue("isStarsEnabled", renderer.public.isDynamicStarsEnabled)
+    function renderer.public:setDynamicCloudsDensity(density)
+        density = imports.tonumber(density) or 0
+        if renderer.public.isDynamicCloudsDensity == density then return false end
+        renderer.public.isDynamicCloudsDensity = density
+        shader.preLoaded["Assetify_TextureSampler"]:setValue("cloudDensity", renderer.public.isDynamicCloudsDensity)
         return true
     end
 
