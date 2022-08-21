@@ -40,12 +40,12 @@ local imports = {
 local renderer = class:create("renderer", {
     isVirtualRendering = false,
     isTimeSynced = false,
+    timecycle = table.decode(file:read("utilities/rw/timecyc.rw")),
     isDynamicSkyEnabled = false,
     isDynamicSkyStarsEnabled = true
 })
 renderer.private.serverTick = 60*60*12
 renderer.private.minuteDuration = 60
-renderer.private.timecycle = table.decode(file:read("utilities/rw/timecyc.rw"))
 
 if localPlayer then
     renderer.public.resolution = {imports.guiGetScreenSize()}
@@ -164,20 +164,12 @@ if localPlayer then
         return true
     end
 
-    function renderer.public:getAntiAliasing()
-        return renderer.public.isAntiAliased or 0
-    end
-
-    function renderer.public:isDynamicSky()
-        return renderer.public.isDynamicSkyEnabled or false
-    end
-
     function renderer.public:setDynamicSky(state, syncShader, isInternal)
         if not syncShader then
             state = (state and true) or false
             if renderer.public.isDynamicSkyEnabled == state then return false end
             renderer.public.isDynamicSkyEnabled = state
-            renderer.public:setTimeCycle(renderer.private.timecycle)
+            renderer.public:setTimeCycle(renderer.public.timecycle)
             if state then
                 renderer.private.prevNativeSkyGradient = table.pack(imports.getSkyGradient())
                 renderer.private.prevNativeClouds = imports.getCloudsEnabled()
@@ -204,10 +196,6 @@ if localPlayer then
 
     function renderer.public:isDynamicSkyStarsEnabled()
         return renderer.public.isDynamicSkyStarsEnabled
-    end
-
-    function renderer.public:getTimeCycle()
-        return renderer.private.timecycle
     end
 
     function renderer.private.isTimeCycleValid(cycle)
@@ -254,7 +242,7 @@ if localPlayer then
             end
             shader.preLoaded["Assetify_TextureSampler"]:setValue("timecycle_"..i, bCycle)
         end
-        renderer.private.timecycle = cycle
+        renderer.public.timecycle = cycle
         return true
     end
 end
