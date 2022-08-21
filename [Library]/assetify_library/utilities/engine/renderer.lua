@@ -40,13 +40,7 @@ local imports = {
 local renderer = class:create("renderer", {
     isVirtualRendering = false,
     isTimeSynced = false,
-    timecycle = table.decode(file:read("utilities/rw/timecyc.rw")),
-    isDynamicSkyEnabled = false,
-    isDynamicSunColor = {1, 0.7, 0.4,
-    isDynamicStarsEnabled = true,
-    isDynamicCloudDensity = 1,
-    isDynamicCloudScale = 1,
-    isDynamicCloudColor = {0.75, 0.75, 0.75}
+    isDynamicSkyEnabled = false
 })
 renderer.private.serverTick = 60*60*12
 renderer.private.minuteDuration = 60
@@ -276,7 +270,7 @@ if localPlayer then
             end
             shader.preLoaded["Assetify_TextureSampler"]:setValue("timecycle_"..i, bCycle)
         end
-        renderer.public.timecycle = cycle
+        renderer.public.isDynamicTimeCycle = cycle
         return true
     end
 end

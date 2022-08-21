@@ -126,7 +126,7 @@ function manager.API.Library.setRendererDynamicCloudColor(...)
 end
 
 function manager.API.Library.getRendererTimeCycle()
-    return renderer.timecycle
+    return renderer.isDynamicTimeCycle
 end
 
 function manager.API.Library.setRendererTimeCycle(...)
