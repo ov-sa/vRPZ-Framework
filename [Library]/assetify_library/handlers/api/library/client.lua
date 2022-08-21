@@ -65,12 +65,12 @@ function manager.API.Library.setRendererMinuteDuration(...)
     return renderer:setMinuteDuration(...)
 end
 
-function manager.API.Library.setRendererAntiAliasing(...)
-    return renderer:setAntiAliasing(...)
-end
-
 function manager.API.Library.getRendererAntiAliasing()
     return renderer.isAntiAliased or 0
+end
+
+function manager.API.Library.setRendererAntiAliasing(...)
+    return renderer:setAntiAliasing(...)
 end
 
 function manager.API.Library.isRendererDynamicSky()
@@ -81,16 +81,16 @@ function manager.API.Library.setRendererDynamicSky(...)
     return renderer:setDynamicSky(...)
 end
 
-function manager.API.Library.getRendererTimeCycle()
-    return renderer.timecycle
+function manager.API.Library.isRendererDynamicSkyStars()
+    return renderer.isDynamicSkyStarsEnabled or false
 end
 
 function manager.API.Library.setRendererDynamicSkyStars(...)
     return renderer:setDynamicSkyStars(...)
 end
 
-function manager.API.Library.isRendererDynamicSkyStars()
-    return renderer.isDynamicSkyStarsEnabled or false
+function manager.API.Library.getRendererTimeCycle()
+    return renderer.timecycle
 end
 
 function manager.API.Library.setRendererTimeCycle(...)
