@@ -54,7 +54,6 @@ function vcl.private.parse(buffer, index, isChild)
                         parsedDatas.index = ""
                     else
                         parsedDatas.isChildErrored = true
-                        parsedDatas.isParsed, parsedDatas.isErrored = false, string.format(parsedDatas.isErrored, "TODO:LINE", "Invalid object format")
                         break
                     end
                 end
