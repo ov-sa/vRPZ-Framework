@@ -24,12 +24,12 @@ local imports = {
 
 local vcl = class:create("vcl")
 
-function vcl.private.isEmpty(baseString)
-    return (not baseString or (imports.type(baseString) ~= "string") or not string.match(baseString, "%w") and true) or false
+function vcl.private.isEmpty(rw)
+    return (not rw or (imports.type(rw) ~= "string") or not string.match(rw, "%w") and true) or false
 end
 
-function vcl.private.fetchChar(baseString, index)
-    return string.sub(baseString, index, index)
+function vcl.private.fetchChar(rw, index)
+    return string.sub(rw, index, index)
 end
 
 function vcl.private.parse(config, index, isChild)
