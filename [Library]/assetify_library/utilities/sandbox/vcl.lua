@@ -82,8 +82,7 @@ function vcl.private.parse(buffer, index, isChild)
                 end
                 if not parsedDatas.isType or (parsedDatas.isType == "number") then
                     local isNumber = imports.tonumber(char)
-                    if not parsedDatas.isType and isNumber then
-                        parsedDatas.isType = "number"
+                    if not parsedDatas.isType and isNumber then parsedDatas.isType = "number"
                     elseif parsedDatas.isType then
                         if char == "." then
                             if not parsedDatas.isTypeFloat then parsedDatas.isTypeFloat = true
