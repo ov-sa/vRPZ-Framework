@@ -39,7 +39,7 @@ end
 
 function vcl.private.decode(buffer, index, isChild)
     index = index or 1
-    local __p = {
+    local parser = {
         ref = index, index = "", pointer = {}, value = "",
         isErrored = "Failed to decode vcl. [Line: %s] [Reason: %s]"
     }
@@ -47,38 +47,38 @@ function vcl.private.decode(buffer, index, isChild)
         local char = vcl.private.fetch(buffer, index)
         if isChild then
             local isSkipAppend = false
-            if not __p.isType or (__p.isType == "string") then
-                if (not __p.isTypeChar and ((char == "\"") or (char == "\'"))) or (__p.isTypeChar and (__p.isTypeChar == char)) then
-                    if not __p.isType then isSkipAppend, __p.isType, __p.isTypeChar = true, "string", char
-                    else __p.isParsed = true end
+            if not parser.isType or (parser.isType == "string") then
+                if (not parser.isTypeChar and ((char == "\"") or (char == "\'"))) or (parser.isTypeChar and (parser.isTypeChar == char)) then
+                    if not parser.isType then isSkipAppend, parser.isType, parser.isTypeChar = true, "string", char
+                    else parser.isParsed = true end
                 end
             end
-            if not __p.isType or (__p.isType == "number") then
+            if not parser.isType or (parser.isType == "number") then
                 local isNumber = imports.tonumber(char)
-                if not __p.isType and isNumber then __p.isType = "number"
-                elseif __p.isType then
+                if not parser.isType and isNumber then parser.isType = "number"
+                elseif parser.isType then
                     if char == "." then
-                        if not __p.isTypeFloat then __p.isTypeFloat = true
+                        if not parser.isTypeFloat then parser.isTypeFloat = true
                         else break end
-                    elseif (char == " ") or (char == "\n") then __p.isParsed = true
+                    elseif (char == " ") or (char == "\n") then parser.isParsed = true
                     elseif not isNumber then break end
                 end
             end
-            if __p.isType and not isSkipAppend and not __p.isParsed then __p.value = __p.value..char end
+            if parser.isType and not isSkipAppend and not parser.isParsed then parser.value = parser.value..char end
         end
-        __p.isType = ((not __p.isType and not vcl.private.isVoid(char)) and "object") or  __p.isType
-        if __p.isType == "object" then
+        parser.isType = ((not parser.isType and not vcl.private.isVoid(char)) and "object") or  parser.isType
+        if parser.isType == "object" then
             if not vcl.private.isVoid(char) then
-                __p.index = __p.index..char
-            elseif not vcl.private.isVoid(__p.index) then
+                parser.index = parser.index..char
+            elseif not vcl.private.isVoid(parser.index) then
                 if char == ":" then
                     local value, __index, error = vcl.private.decode(buffer, index + 1, true)
                     if not error then
-                        __p.isParsed = true
-                        __p.pointer[(__p.index)], index = value, __index - 1
-                        __p.index = ""
+                        parser.isParsed = true
+                        parser.pointer[(parser.index)], index = value, __index - 1
+                        parser.index = ""
                     else
-                        __p.isChildErrored = true
+                        parser.isChildErrored = true
                         break
                     end
                 else
@@ -87,23 +87,23 @@ function vcl.private.decode(buffer, index, isChild)
             end
         end
         index = index + 1
-        if isChild and __p.isParsed then break end
+        if isChild and parser.isParsed then break end
     end
-    __p.isParsed = (not __p.isChildErrored and __p.isParsed) or __p.isParsed
-    if not __p.isParsed then
-        if not __p.isChildErrored then
-            __p.isErrored = string.format(
-                __p.isErrored,
-                vcl.private.fetchLine(buffer, __p.ref),
-                ((__p.isType == "string") and "Unterminated string") or
-                ((__p.isType == "number") and "Malformed number") or
+    parser.isParsed = (not parser.isChildErrored and parser.isParsed) or parser.isParsed
+    if not parser.isParsed then
+        if not parser.isChildErrored then
+            parser.isErrored = string.format(
+                parser.isErrored,
+                vcl.private.fetchLine(buffer, parser.ref),
+                ((parser.isType == "string") and "Unterminated string") or
+                ((parser.isType == "number") and "Malformed number") or
                 "Invalid declaration"
             )
-            imports.outputDebugString(__p.isErrored)
+            imports.outputDebugString(parser.isErrored)
         end
         return false, false, true
-    elseif (__p.isType == "object") then return __p.pointer, index
-    else return ((__p.isType == "number" and imports.tonumber(__p.value)) or __p.value), index end
+    elseif (parser.isType == "object") then return parser.pointer, index
+    else return ((parser.isType == "number" and imports.tonumber(parser.value)) or parser.value), index end
 end
 
 vcl.public.decode = function(buffer)
