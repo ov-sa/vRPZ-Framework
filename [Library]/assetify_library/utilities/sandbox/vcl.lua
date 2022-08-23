@@ -87,6 +87,8 @@ function vcl.private.parse(buffer, index, isChild)
                     if imports.tonumber(char) then
                         parsedDatas.isType = "number"
                     elseif not vcl.private.isVoid(parsedDatas.value) then
+                        --Match if its decimal or space
+                        --if char == "."
                         parsedDatas.isParsed = true
                     end
                 end
