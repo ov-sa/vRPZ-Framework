@@ -66,16 +66,16 @@ function vcl.private.decode(buffer, index, isChild)
             end
             if __p.isType and not isSkipAppend and not __p.isParsed then __p.value = __p.value..char end
         end
-        if not __p.isType and not vcl.private.isVoid(char) then print("TRYING TO PARSE NEW OBJ") __p.isType, __p.isParsed = "object", true end
+        __p.isType = ((not __p.isType and not vcl.private.isVoid(char)) and "object") or  __p.isType
         if __p.isType == "object" then
             if not vcl.private.isVoid(char) then
                 __p.index = __p.index..char
             elseif not vcl.private.isVoid(__p.index) then
-                if char == ":" then
-                    index = index + 1
-                    local value, __index, error = vcl.private.decode(buffer, index, true)
-                    print(tostring(__p.index).." : "..tostring(value))
+                if not __p.isTypeDeclared and (char == ":") then
+                    __p.isTypeDeclared = true
+                    local value, __index, error = vcl.private.decode(buffer, index + 1, true)
                     if not error then
+                        __p.isParsed = true
                         __p.pointer[(__p.index)], index = value, __index - 1
                         __p.index = ""
                     else
@@ -83,12 +83,10 @@ function vcl.private.decode(buffer, index, isChild)
                         break
                     end
                 else
-                    __p.isParsed = false
                     break
                 end
             end
         end
-        print("current index: "..index.." - "..tostring(char))
         index = index + 1
         if isChild and __p.isParsed then break end
     end
@@ -118,7 +116,8 @@ end
 setTimer(function()
 local test2 = [[
 indexA:
-indexB: "valueB"
+    indexB: "valueB"
+indexC: "valueC"
 ]]
 local result = vcl.public.decode(test2)
 iprint(result)
