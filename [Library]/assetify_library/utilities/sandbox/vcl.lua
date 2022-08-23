@@ -127,7 +127,7 @@ end
 setTimer(function()
 
     local test2 = [[
-        index1: 1
+        index1: 12.34
         index2: "value2"
         index3: "value3"
         index4: "value4"
