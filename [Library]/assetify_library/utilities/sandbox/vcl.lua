@@ -40,9 +40,8 @@ end
 function vcl.private.decode(buffer, index, isChild)
     index = index or 1
     local __p = {
-        isType = false,
-        isParsed = (not isChild and true) or false, isErrored = "Failed to decode vcl. [Line: %s] [Reason: %s]",
-        ref = (isChild and index) or false, index = "", pointer = {}, value = ""
+        ref = (isChild and index) or false, index = "", pointer = {}, value = "",
+        isType = false, isParsed = (not isChild and true) or false, isErrored = "Failed to decode vcl. [Line: %s] [Reason: %s]"
     }
     while(index <= #buffer) do
         local char = vcl.private.fetch(buffer, index)
