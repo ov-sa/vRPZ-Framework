@@ -119,7 +119,6 @@ setTimer(function()
     local test2 = [[
         indexC:
             subindexC1: "valueA"
-                subindexC2: "valueB"
     ]]
     local result = vcl.public.decode(test2)
     iprint(result)
