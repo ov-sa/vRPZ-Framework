@@ -71,8 +71,7 @@ function vcl.private.decode(buffer, index, isChild)
             if not vcl.private.isVoid(char) then
                 __p.index = __p.index..char
             elseif not vcl.private.isVoid(__p.index) then
-                if not __p.isTypeDeclared and (char == ":") then
-                    __p.isTypeDeclared = true
+                if char == ":" then
                     local value, __index, error = vcl.private.decode(buffer, index + 1, true)
                     if not error then
                         __p.isParsed = true
