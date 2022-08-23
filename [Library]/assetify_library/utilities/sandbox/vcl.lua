@@ -40,7 +40,7 @@ end
 function vcl.private.decode(buffer, index, isChild)
     index = index or 1
     local __p = {
-        ref = (isChild and index) or false, index = "", pointer = {}, value = "",
+        ref = index, index = "", pointer = {}, value = "",
         isErrored = "Failed to decode vcl. [Line: %s] [Reason: %s]"
     }
     while(index <= #buffer) do
@@ -96,7 +96,7 @@ function vcl.private.decode(buffer, index, isChild)
         if not __p.isChildErrored then
             __p.isErrored = string.format(
                 __p.isErrored,
-                vcl.private.fetchLine(buffer, __p.ref or index),
+                vcl.private.fetchLine(buffer, (isChild and __p.ref) or index),
                 ((__p.isType == "string") and "Unterminated string") or
                 ((__p.isType == "number") and "Malformed number") or
                 "Invalid declaration"
