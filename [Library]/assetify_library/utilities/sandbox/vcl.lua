@@ -52,7 +52,7 @@ function vcl.private.parse(buffer, index, isChild)
                         parsedDatas.pointer[parsedDatas.index], index = value, __index
                         parsedDatas.index = ""
                     else
-                        parsedDatas.isParsed, parsedDatas.isErrored = false, string.format(parsedDatas.isErrored, "TODO:LINE", "TODO:Reason")
+                        parsedDatas.isParsed, parsedDatas.isErrored = false, string.format(parsedDatas.isErrored, "TODO:LINE", "Invalid object format")
                         break
                     end
                 end
@@ -89,14 +89,14 @@ function vcl.private.parse(buffer, index, isChild)
                 if parsedDatas.isType and not isSkipAppend and not parsedDatas.isParsed then parsedDatas.value = parsedDatas.value..char end
             end
         elseif (parsedDatas.isType == "object") and not vcl.private.isVoid(parsedDatas.index) then
-            parsedDatas.isErrored, parsedDatas.isErrored = false, "Invalid object initialization"
+            parsedDatas.isErrored, parsedDatas.isErrored = false, string.format(parsedDatas.isErrored, "TODO:LINE", "TODO:Invalid object declaration")
             break
         end
         index = index + 1
         if isChild and parsedDatas.isParsed then break end
     end
 
-    if not parsedDatas.isParsed then print(parsedDatas.isErrored); return parsedDatas.isParsed, false
+    if not parsedDatas.isParsed then print(string.format(parsedDatas.isErrored, "N/A", "N/A")); return parsedDatas.isParsed, false
     elseif (parsedDatas.isType == "object") then return parsedDatas.pointer, index
     else return ((parsedDatas.isType == "number" and imports.tonumber(parsedDatas.value)) or parsedDatas.value), index end
 end
@@ -107,7 +107,7 @@ vcl.public.parse = function(buffer) return vcl.private.parse(buffer) end
 
 local test2 = [[
     index1: 1
-    index2: 'value2'
+    index2: 'value2"
     index3: "value3"
     index4: "value4"
     index5: "value5"
