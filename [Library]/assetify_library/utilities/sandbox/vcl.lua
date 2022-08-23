@@ -37,11 +37,11 @@ function vcl.private.fetchLine(rw, index)
     return #string.split(string.sub(rw, 0, index), "\n")
 end
 
-function vcl.private.parse(buffer, index, isChild)
+function vcl.private.decode(buffer, index, isChild)
     index = index or 1
     local __p = {
         isType = (not isChild and "object") or false,
-        isParsed = (not isChild and true) or false, isErrored = "Failed to parse vcl. [Line: %s] [Reason: %s]",
+        isParsed = (not isChild and true) or false, isErrored = "Failed to decode vcl. [Line: %s] [Reason: %s]",
         ref = (isChild and index) or false, index = "", pointer = {}, value = ""
     }
     while(index <= #buffer) do
@@ -51,7 +51,7 @@ function vcl.private.parse(buffer, index, isChild)
                 __p.index = __p.index..char
                 local __char = vcl.private.fetch(buffer, index + 1)
                 if __char and (__char == ":") then
-                    local value, __index = vcl.private.parse(buffer, index + 2, true)
+                    local value, __index = vcl.private.decode(buffer, index + 2, true)
                     if value then
                         __p.pointer[(__p.index)], index = value, __index
                         __p.index = ""
@@ -117,8 +117,8 @@ function vcl.private.parse(buffer, index, isChild)
     else return ((__p.isType == "number" and imports.tonumber(__p.value)) or __p.value), index end
 end
 
-vcl.public.parse = function(buffer)
-    return vcl.private.parse(buffer)
+vcl.public.decode = function(buffer)
+    return vcl.private.decode(buffer)
 end
 
 --TESTS
@@ -134,7 +134,7 @@ setTimer(function()
         index6: "value6"
         index7: "value7"
     ]]
-    local result = vcl.public.parse(test2)
+    local result = vcl.public.decode(test2)
     iprint(result)
 
 end, 1000, 1)
