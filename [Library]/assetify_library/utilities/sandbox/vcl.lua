@@ -72,11 +72,9 @@ function vcl.private.decode(buffer, index, isChild)
                 __p.index = __p.index..char
             elseif not vcl.private.isVoid(__p.index) then
                 if char == ":" then
-                    print("Fetching | "..__p.index)
                     local value, __index, error = vcl.private.decode(buffer, index + 1, true)
                     if not error then
                         print(tostring(__p.index).." : "..tostring(value))
-                        print(index.." : "..__index)
                         __p.pointer[(__p.index)], index = value, __index
                         __p.index = ""
                     else
@@ -97,7 +95,7 @@ function vcl.private.decode(buffer, index, isChild)
         if not __p.isChildErrored then
             __p.isErrored = string.format(
                 __p.isErrored,
-                vcl.private.fetchLine(buffer, (isChild and __p.ref) or index),
+                vcl.private.fetchLine(buffer, __p.ref),
                 ((__p.isType == "string") and "Unterminated string") or
                 ((__p.isType == "number") and "Malformed number") or
                 "Invalid declaration"
@@ -105,8 +103,8 @@ function vcl.private.decode(buffer, index, isChild)
             imports.outputDebugString(__p.isErrored)
         end
         return false, false, true
-    elseif (__p.isType == "object") then return __p.pointer, index
-    else return ((__p.isType == "number" and imports.tonumber(__p.value)) or __p.value), index end
+    elseif (__p.isType == "object") then return __p.pointer, __p.ref
+    else return ((__p.isType == "number" and imports.tonumber(__p.value)) or __p.value), __p.ref end
 end
 
 vcl.public.decode = function(buffer)
