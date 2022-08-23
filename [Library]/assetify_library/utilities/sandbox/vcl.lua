@@ -101,7 +101,6 @@ function vcl.private.parse(buffer, index, isChild)
         index = index + 1
         if isChild and parsedDatas.isParsed then break end
     end
-
     parsedDatas.isParsed = (not parsedDatas.isChildErrored and parsedDatas.isParsed) or parsedDatas.isParsed
     if not parsedDatas.isParsed then
         if not parsedDatas.isChildErrored then
