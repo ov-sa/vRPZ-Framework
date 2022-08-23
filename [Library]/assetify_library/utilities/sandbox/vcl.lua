@@ -96,7 +96,7 @@ function vcl.private.parse(buffer, index, isChild)
         if isChild and parsedDatas.isParsed then break end
     end
 
-    if not parsedDatas.isParsed then print(string.format(parsedDatas.isErrored, "N/A", "N/A")); return parsedDatas.isParsed, false
+    if not parsedDatas.isParsed then print(string.format(parsedDatas.isErrored, "N/A", ((parsedDatas.isType == "string") and "Unterminated string") or "N/A")); return parsedDatas.isParsed, false
     elseif (parsedDatas.isType == "object") then return parsedDatas.pointer, index
     else return ((parsedDatas.isType == "number" and imports.tonumber(parsedDatas.value)) or parsedDatas.value), index end
 end
@@ -107,7 +107,7 @@ vcl.public.parse = function(buffer) return vcl.private.parse(buffer) end
 
 local test2 = [[
     index1: 1
-    index2: 'value2'
+    index2: 'value2"
     index3: "value3"
     index4: "value4"
     index5: "value5"
