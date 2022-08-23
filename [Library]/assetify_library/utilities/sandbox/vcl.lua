@@ -116,7 +116,7 @@ setTimer(function()
 local test2 = [[
 indexA:
     indexB: "valueB"
-indexC: "valueC"
+    indexC: "valueC"
 ]]
 local result = vcl.public.decode(test2)
 iprint(result)
