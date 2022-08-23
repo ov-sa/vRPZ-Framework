@@ -70,13 +70,13 @@ function vcl.private.decode(buffer, index, isChild)
         if __p.isType == "object" then
             if not vcl.private.isVoid(char) then
                 __p.index = __p.index..char
-                print(__p.index.." - "..char)
             elseif not vcl.private.isVoid(__p.index) then
                 if char == ":" then
                     print("Fetching | "..__p.index)
                     local value, __index, error = vcl.private.decode(buffer, index + 1, true)
                     if not error then
                         print(tostring(__p.index).." : "..tostring(value))
+                        print(index.." : "..__index)
                         __p.pointer[(__p.index)], index = value, __index
                         __p.index = ""
                     else
@@ -116,11 +116,10 @@ end
 --TESTS
 
 setTimer(function()
-
-    local test2 = [[
-        indexC:
-            subindexC1: "valueA"
-    ]]
-    local result = vcl.public.decode(test2)
-    iprint(result)
+local test2 = [[
+indexA:
+indexB: "valueB"
+]]
+local result = vcl.public.decode(test2)
+iprint(result)
 end, 1000, 1)
