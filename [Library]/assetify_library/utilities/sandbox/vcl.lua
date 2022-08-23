@@ -24,11 +24,11 @@ local imports = {
 
 local vcl = class:create("vcl")
 
-function vcl.private.isEmpty(rw)
+function vcl.private.isVoid(rw)
     return (not rw or (imports.type(rw) ~= "string") or not string.match(rw, "%w") and true) or false
 end
 
-function vcl.private.fetchChar(rw, index)
+function vcl.private.fetch(rw, index)
     return string.sub(rw, index, index)
 end
 
@@ -36,23 +36,23 @@ function vcl.private.parse(buffer, index, isChild)
     local index = index or 1
     local parsedDatas = {
         isType = (not isChild and "object") or false,
-        isParsed = (not isChild and true) or false, isErrored = false,
+        isParsed = (not isChild and true) or false, isErrored = "Failed to parse...",
         index = "", pointer = {}, value = ""
     }
 
     while(index <= #buffer) do
-        local char = vcl.private.fetchChar(buffer, index)
-        if (parsedDatas.isType ~= "object") or not vcl.private.isEmpty(char) then
+        local char = vcl.private.fetch(buffer, index)
+        if (parsedDatas.isType ~= "object") or not vcl.private.isVoid(char) then
             if parsedDatas.isType == "object" then
                 parsedDatas.index = parsedDatas.index..char
-                local __char = vcl.private.fetchChar(buffer, index + 1)
+                local __char = vcl.private.fetch(buffer, index + 1)
                 if __char and (__char == ":") then
                     local value, __index = vcl.private.parse(buffer, index + 2, true)
                     if value then
                         parsedDatas.pointer[parsedDatas.index], index = value, __index
                         parsedDatas.index = ""
                     else
-                        parsedDatas.isParsed, parsedDatas.isErrored = false, "Failed to parse..."
+                        parsedDatas.isParsed = false
                         break
                     end
                 end
@@ -82,13 +82,13 @@ function vcl.private.parse(buffer, index, isChild)
                 if not parsedDatas.isType or (parsedDatas.isType == "number") then
                     if imports.tonumber(char) then
                         parsedDatas.isType = "number"
-                    elseif not vcl.private.isEmpty(parsedDatas.value) then
+                    elseif not vcl.private.isVoid(parsedDatas.value) then
                         parsedDatas.isParsed = true
                     end
                 end
                 if parsedDatas.isType and not isSkipAppend and not parsedDatas.isParsed then parsedDatas.value = parsedDatas.value..char end
             end
-        elseif (parsedDatas.isType == "object") and not vcl.private.isEmpty(parsedDatas.index) then
+        elseif (parsedDatas.isType == "object") and not vcl.private.isVoid(parsedDatas.index) then
             parsedDatas.isErrored = "Unexpected trail.."
             break
         end
@@ -102,8 +102,6 @@ function vcl.private.parse(buffer, index, isChild)
 end
 
 vcl.public.parse = function(buffer) return vcl.private.parse(buffer) end
-
-
 
 --TESTS
 
