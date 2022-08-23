@@ -54,11 +54,10 @@ function vcl.private.parse(buffer, index, isChild)
                 if __char and (__char == ":") then
                     local value, __index = vcl.private.parse(buffer, index + 2, true)
                     if value then
-                        print(index.." : "..__index)
                         parsedDatas.pointer[(parsedDatas.index)], index = value, __index
                         parsedDatas.index = ""
                     else
-                        parsedDatas.isParsed, parsedDatas.isChildErrored = false, true
+                        parsedDatas.isChildErrored = true
                         break
                     end
                 end
@@ -102,6 +101,7 @@ function vcl.private.parse(buffer, index, isChild)
         if isChild and parsedDatas.isParsed then break end
     end
 
+    parsedDatas.isParsed = (not parsedDatas.isChildErrored and parsedDatas.isParsed) or parsedDatas.isParsed
     if not parsedDatas.isParsed then
         if not parsedDatas.isChildErrored then
             parsedDatas.isErrored = string.format(
@@ -127,11 +127,11 @@ setTimer(function()
 
     local test2 = [[
         index1: 1
-        index2: "value2"
+        index2: "value2'
         index3: "value3"
         index4: "value4"
         index5: "value5"
-        index6: "value6'
+        index6: "value6"
         index7: "value7"
     ]]
     local result = vcl.public.parse(test2)
