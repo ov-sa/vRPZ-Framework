@@ -53,6 +53,7 @@ function vcl.private.parse(buffer, index, isChild)
                         parsedDatas.pointer[parsedDatas.index], index = value, __index
                         parsedDatas.index = ""
                     else
+                        parsedDatas.isChildErrored = true
                         parsedDatas.isParsed, parsedDatas.isErrored = false, string.format(parsedDatas.isErrored, "TODO:LINE", "Invalid object format")
                         break
                     end
@@ -97,12 +98,16 @@ function vcl.private.parse(buffer, index, isChild)
         if isChild and parsedDatas.isParsed then break end
     end
 
-    if not parsedDatas.isParsed then imports.outputDebugString(string.format(parsedDatas.isErrored, "N/A", ((parsedDatas.isType == "string") and "Unterminated string") or "N/A")); return parsedDatas.isParsed, false
+    if not parsedDatas.isParsed then
+        if not parsedDatas.isChildErrored then imports.outputDebugString(string.format(parsedDatas.isErrored, "N/A", ((parsedDatas.isType == "string") and "Unterminated string") or "N/A")) end
+        return parsedDatas.isParsed, false, parsedDatas.isErrored
     elseif (parsedDatas.isType == "object") then return parsedDatas.pointer, index
     else return ((parsedDatas.isType == "number" and imports.tonumber(parsedDatas.value)) or parsedDatas.value), index end
 end
 
-vcl.public.parse = function(buffer) return vcl.private.parse(buffer) end
+vcl.public.parse = function(buffer)
+    return vcl.private.parse(buffer)
+end
 
 --TESTS
 
