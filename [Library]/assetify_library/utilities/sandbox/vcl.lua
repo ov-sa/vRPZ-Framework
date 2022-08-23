@@ -36,7 +36,7 @@ function vcl.private.parse(buffer, index, isChild)
     local index = index or 1
     local parsedDatas = {
         isType = (not isChild and "object") or false,
-        isParsed = (not isChild and true) or false, isErrored = "Failed to parse...",
+        isParsed = (not isChild and true) or false, isErrored = "Failed to parse vcl. [Line: %s] [Reason: %s]",
         index = "", pointer = {}, value = ""
     }
 
@@ -52,7 +52,7 @@ function vcl.private.parse(buffer, index, isChild)
                         parsedDatas.pointer[parsedDatas.index], index = value, __index
                         parsedDatas.index = ""
                     else
-                        parsedDatas.isParsed = false
+                        parsedDatas.isParsed, parsedDatas.isErrored = false, string.format(parsedDatas.isErrored, "TODO:LINE", "TODO:Reason")
                         break
                     end
                 end
@@ -89,7 +89,7 @@ function vcl.private.parse(buffer, index, isChild)
                 if parsedDatas.isType and not isSkipAppend and not parsedDatas.isParsed then parsedDatas.value = parsedDatas.value..char end
             end
         elseif (parsedDatas.isType == "object") and not vcl.private.isVoid(parsedDatas.index) then
-            parsedDatas.isErrored = "Unexpected trail.."
+            parsedDatas.isErrored, parsedDatas.isErrored = false, "Invalid object initialization"
             break
         end
         index = index + 1
