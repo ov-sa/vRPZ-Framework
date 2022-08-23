@@ -103,8 +103,8 @@ function vcl.private.decode(buffer, index, isChild)
             imports.outputDebugString(__p.isErrored)
         end
         return false, false, true
-    elseif (__p.isType == "object") then return __p.pointer, __p.ref
-    else return ((__p.isType == "number" and imports.tonumber(__p.value)) or __p.value), __p.ref end
+    elseif (__p.isType == "object") then return __p.pointer, index
+    else return ((__p.isType == "number" and imports.tonumber(__p.value)) or __p.value), index end
 end
 
 vcl.public.decode = function(buffer)
