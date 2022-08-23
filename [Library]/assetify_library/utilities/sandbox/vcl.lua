@@ -74,7 +74,7 @@ function vcl.private.decode(buffer, index, isChild)
             elseif not vcl.private.isVoid(__p.index) then
                 if char == ":" then
                     print("Fetching | "..__p.index)
-                    local value, __index, error = vcl.private.decode(buffer, index + 1, __p.pointer)
+                    local value, __index, error = vcl.private.decode(buffer, index + 1, true)
                     if not error then
                         print(tostring(__p.index).." : "..tostring(value))
                         __p.pointer[(__p.index)], index = value, __index
