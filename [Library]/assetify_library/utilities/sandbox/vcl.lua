@@ -76,11 +76,8 @@ function vcl.private.parse(buffer, index, isChild)
                 end
                 if not parsedDatas.isType or (parsedDatas.isType == "string") then
                     if (not parsedDatas.isTypeChar and ((char == "\"") or (char == "\'"))) or (parsedDatas.isTypeChar and (parsedDatas.isTypeChar == char)) then
-                        if not parsedDatas.isType then
-                            isSkipAppend, parsedDatas.isType, parsedDatas.isTypeChar = true, "string", char
-                        else
-                            parsedDatas.isParsed = true
-                        end
+                        if not parsedDatas.isType then isSkipAppend, parsedDatas.isType, parsedDatas.isTypeChar = true, "string", char
+                        else parsedDatas.isParsed = true end
                     end
                 end
                 if not parsedDatas.isType or (parsedDatas.isType == "number") then
