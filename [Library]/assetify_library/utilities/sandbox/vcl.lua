@@ -73,9 +73,9 @@ function vcl.private.decode(buffer, index, isChild)
             elseif not vcl.private.isVoid(__p.index) then
                 if char == ":" then
                     local value, __index, error = vcl.private.decode(buffer, index + 1, true)
+                    print(tostring(__p.index).." : "..tostring(value))
                     if not error then
-                        print(tostring(__p.index).." : "..tostring(value))
-                        __p.pointer[(__p.index)], index = value, __index
+                        __p.pointer[(__p.index)], index = value, __index - 1
                         __p.index = ""
                     else
                         __p.isChildErrored = true
@@ -88,6 +88,7 @@ function vcl.private.decode(buffer, index, isChild)
             end
         end
         index = index + 1
+        print("current index: "..index)
         if isChild and __p.isParsed then break end
     end
     __p.isParsed = (not __p.isChildErrored and __p.isParsed) or __p.isParsed
