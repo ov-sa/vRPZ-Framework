@@ -66,13 +66,14 @@ function vcl.private.decode(buffer, index, isChild)
             end
             if __p.isType and not isSkipAppend and not __p.isParsed then __p.value = __p.value..char end
         end
-        if not __p.isType and not vcl.private.isVoid(char) then __p.isType, __p.isParsed = "object", true end
+        if not __p.isType and not vcl.private.isVoid(char) then print("TRYING TO PARSE NEW OBJ") __p.isType, __p.isParsed = "object", true end
         if __p.isType == "object" then
             if not vcl.private.isVoid(char) then
                 __p.index = __p.index..char
             elseif not vcl.private.isVoid(__p.index) then
                 if char == ":" then
-                    local value, __index, error = vcl.private.decode(buffer, index + 1, true)
+                    index = index + 1
+                    local value, __index, error = vcl.private.decode(buffer, index, true)
                     print(tostring(__p.index).." : "..tostring(value))
                     if not error then
                         __p.pointer[(__p.index)], index = value, __index - 1
@@ -87,8 +88,8 @@ function vcl.private.decode(buffer, index, isChild)
                 end
             end
         end
+        print("current index: "..index.." - "..tostring(char))
         index = index + 1
-        print("current index: "..index.." - "..char)
         if isChild and __p.isParsed then break end
     end
     __p.isParsed = (not __p.isChildErrored and __p.isParsed) or __p.isParsed
