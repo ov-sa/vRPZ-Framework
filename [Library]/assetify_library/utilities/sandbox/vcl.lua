@@ -40,7 +40,7 @@ end
 function vcl.private.decode(buffer, index, isChild)
     index = index or 1
     local __p = {
-        ref = index, index = "", pointer = isChild or {}, value = "",
+        ref = index, index = "", pointer = {}, value = "",
         isErrored = "Failed to decode vcl. [Line: %s] [Reason: %s]"
     }
     while(index <= #buffer) do
