@@ -39,82 +39,82 @@ end
 
 function vcl.private.parse(buffer, index, isChild)
     index = index or 1
-    local parsedDatas = {
+    local __P = {
         isType = (not isChild and "object") or false,
         isParsed = (not isChild and true) or false, isErrored = "Failed to parse vcl. [Line: %s] [Reason: %s]",
         ref = (isChild and index) or false, index = "", pointer = {}, value = ""
     }
     while(index <= #buffer) do
         local char = vcl.private.fetch(buffer, index)
-        if (parsedDatas.isType ~= "object") or not vcl.private.isVoid(char) then
-            if parsedDatas.isType == "object" then
-                parsedDatas.index = parsedDatas.index..char
+        if (__P.isType ~= "object") or not vcl.private.isVoid(char) then
+            if __P.isType == "object" then
+                __P.index = __P.index..char
                 local __char = vcl.private.fetch(buffer, index + 1)
                 if __char and (__char == ":") then
                     local value, __index = vcl.private.parse(buffer, index + 2, true)
                     if value then
-                        parsedDatas.pointer[(parsedDatas.index)], index = value, __index
-                        parsedDatas.index = ""
+                        __P.pointer[(__P.index)], index = value, __index
+                        __P.index = ""
                     else
-                        parsedDatas.isChildErrored = true
+                        __P.isChildErrored = true
                         break
                     end
                 end
             else
                 local isSkipAppend = false
-                if not parsedDatas.isType or (parsedDatas.isType == "object") then
+                if not __P.isType or (__P.isType == "object") then
                     --TODO: CHECK IF ITS OVJECT???
                     --[[
                     if (char == "\"") or (char == "\'") then
-                        if not parsedDatas.isType then
-                            isSkipAppend, parsedDatas.isType = true, "object"
+                        if not __P.isType then
+                            isSkipAppend, __P.isType = true, "object"
                         else
-                            parsedDatas.isParsed = true
+                            __P.isParsed = true
                         end
                     end
                     ]]
                 end
-                if not parsedDatas.isType or (parsedDatas.isType == "string") then
-                    if (not parsedDatas.isTypeChar and ((char == "\"") or (char == "\'"))) or (parsedDatas.isTypeChar and (parsedDatas.isTypeChar == char)) then
-                        if not parsedDatas.isType then isSkipAppend, parsedDatas.isType, parsedDatas.isTypeChar = true, "string", char
-                        else parsedDatas.isParsed = true end
+                if not __P.isType or (__P.isType == "string") then
+                    if (not __P.isTypeChar and ((char == "\"") or (char == "\'"))) or (__P.isTypeChar and (__P.isTypeChar == char)) then
+                        if not __P.isType then isSkipAppend, __P.isType, __P.isTypeChar = true, "string", char
+                        else __P.isParsed = true end
                     end
                 end
-                if not parsedDatas.isType or (parsedDatas.isType == "number") then
+                if not __P.isType or (__P.isType == "number") then
                     local isNumber = imports.tonumber(char)
-                    if not parsedDatas.isType and isNumber then parsedDatas.isType = "number"
-                    elseif parsedDatas.isType then
+                    if not __P.isType and isNumber then __P.isType = "number"
+                    elseif __P.isType then
                         if char == "." then
-                            if not parsedDatas.isTypeFloat then parsedDatas.isTypeFloat = true
+                            if not __P.isTypeFloat then __P.isTypeFloat = true
                             else break end
-                        elseif (char == " ") or (char == "\n") then parsedDatas.isParsed = true
+                        elseif (char == " ") or (char == "\n") then __P.isParsed = true
                         elseif not isNumber then break end
                     end
                 end
-                if parsedDatas.isType and not isSkipAppend and not parsedDatas.isParsed then parsedDatas.value = parsedDatas.value..char end
+                if __P.isType and not isSkipAppend and not __P.isParsed then __P.value = __P.value..char end
             end
-        elseif (parsedDatas.isType == "object") and not vcl.private.isVoid(parsedDatas.index) then
-            parsedDatas.isParsed = false
+        elseif (__P.isType == "object") and not vcl.private.isVoid(__P.index) then
+            __P.isParsed = false
             break
         end
         index = index + 1
-        if isChild and parsedDatas.isParsed then break end
+        if isChild and __P.isParsed then break end
     end
-    parsedDatas.isParsed = (not parsedDatas.isChildErrored and parsedDatas.isParsed) or parsedDatas.isParsed
-    if not parsedDatas.isParsed then
-        if not parsedDatas.isChildErrored then
-            parsedDatas.isErrored = string.format(
-                parsedDatas.isErrored,
-                vcl.private.fetchLine(buffer, parsedDatas.ref or index),
-                ((parsedDatas.isType == "string") and "Unterminated string") or
-                ((parsedDatas.isType == "number") and "Malformed number") or
+    __P.isParsed = (not __P.isChildErrored and __P.isParsed) or __P.isParsed
+    if not __P.isParsed then
+        if not __P.isChildErrored then
+            __P.isErrored = string.format(
+                __P.isErrored,
+                vcl.private.fetchLine(buffer, __P.ref or index),
+                ((__P.isType == "string") and "Unterminated string") or
+                ((__P.isType == "number") and "Malformed number") or
                 "Invalid declaration"
             )
-            imports.outputDebugString(parsedDatas.isErrored)
+            imports.outputDebugString(__P.isErrored)
         end
-        return parsedDatas.isParsed, false, parsedDatas.isErrored
-    elseif (parsedDatas.isType == "object") then return parsedDatas.pointer, index
-    else return ((parsedDatas.isType == "number" and imports.tonumber(parsedDatas.value)) or parsedDatas.value), index end
+        return __P.isParsed, false, __P.isErrored
+    elseif (__P.isType == "object") then return __P.pointer, index
+    else return ((__P.isType == "number" and imports.tonumber(__P.value)) or __P.value), index end
 end
 
 vcl.public.parse = function(buffer)
