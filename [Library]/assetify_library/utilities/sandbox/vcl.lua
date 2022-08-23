@@ -55,7 +55,7 @@ function vcl.private.parse(buffer, index, isChild)
                     local value, __index = vcl.private.parse(buffer, index + 2, true)
                     if value then
                         print(index.." : "..__index)
-                        parsedDatas.pointer[parsedDatas.index], index = value, __index
+                        parsedDatas.pointer[(parsedDatas.index)], index = value, __index
                         parsedDatas.index = ""
                     else
                         parsedDatas.isParsed, parsedDatas.isChildErrored = false, true
