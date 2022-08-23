@@ -44,7 +44,6 @@ function vcl.private.parse(buffer, index, isChild)
         isParsed = (not isChild and true) or false, isErrored = "Failed to parse vcl. [Line: %s] [Reason: %s]",
         ref = (isChild and index) or false, index = "", pointer = {}, value = ""
     }
-
     while(index <= #buffer) do
         local char = vcl.private.fetch(buffer, index)
         if (parsedDatas.isType ~= "object") or not vcl.private.isVoid(char) then
@@ -127,7 +126,7 @@ setTimer(function()
 
     local test2 = [[
         index1: 1
-        index2: "value2'
+        index2: "value2"
         index3: "value3"
         index4: "value4"
         index5: "value5"
