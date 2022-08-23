@@ -88,7 +88,7 @@ function vcl.private.decode(buffer, index, isChild)
             end
         end
         index = index + 1
-        print("current index: "..index)
+        print("current index: "..index.." - "..char)
         if isChild and __p.isParsed then break end
     end
     __p.isParsed = (not __p.isChildErrored and __p.isParsed) or __p.isParsed
