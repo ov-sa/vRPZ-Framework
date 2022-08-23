@@ -32,25 +32,22 @@ function vcl.private.fetchChar(rw, index)
     return string.sub(rw, index, index)
 end
 
-function vcl.private.parse(config, index, isChild)
+function vcl.private.parse(buffer, index, isChild)
     local index = index or 1
     local parsedDatas = {
         isType = (not isChild and "object") or false,
-        isParsed = (not isChild and true) or false,
-        isErrored = false,
-        index = "",
-        pointer = {},
-        value = ""
+        isParsed = (not isChild and true) or false, isErrored = false,
+        index = "", pointer = {}, value = ""
     }
 
-    while(index <= #config) do
-        local char = vcl.private.fetchChar(config, index)
+    while(index <= #buffer) do
+        local char = vcl.private.fetchChar(buffer, index)
         if (parsedDatas.isType ~= "object") or not vcl.private.isEmpty(char) then
             if parsedDatas.isType == "object" then
                 parsedDatas.index = parsedDatas.index..char
-                local __char = vcl.private.fetchChar(config, index + 1)
+                local __char = vcl.private.fetchChar(buffer, index + 1)
                 if __char and (__char == ":") then
-                    local value, __index = vcl.private.parse(config, index + 2, true)
+                    local value, __index = vcl.private.parse(buffer, index + 2, true)
                     if value then
                         parsedDatas.pointer[parsedDatas.index], index = value, __index
                         parsedDatas.index = ""
@@ -104,7 +101,7 @@ function vcl.private.parse(config, index, isChild)
     else return ((parsedDatas.isType == "number" and imports.tonumber(parsedDatas.value)) or parsedDatas.value), index end
 end
 
-vcl.public.parse = function(config) return vcl.private.parse(config) end
+vcl.public.parse = function(buffer) return vcl.private.parse(buffer) end
 
 
 
