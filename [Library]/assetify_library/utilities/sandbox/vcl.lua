@@ -44,35 +44,35 @@ function vcl.private.decode(buffer, index, isChild)
         isErrored = "Failed to decode vcl. [Line: %s] [Reason: %s]"
     }
     while(index <= #buffer) do
-        local char = vcl.private.fetch(buffer, index)
+        local character = vcl.private.fetch(buffer, index)
         local isChildValid = (isChild and true) or false
         if isChildValid then
             local isSkipAppend = false
             if not parser.isType or (parser.isType == "string") then
-                if (not parser.isTypeChar and ((char == "\"") or (char == "\'"))) or (parser.isTypeChar and (parser.isTypeChar == char)) then
-                    if not parser.isType then isSkipAppend, parser.isType, parser.isTypeChar = true, "string", char
+                if (not parser.isTypeChar and ((character == "\"") or (character == "\'"))) or (parser.isTypeChar and (parser.isTypeChar == character)) then
+                    if not parser.isType then isSkipAppend, parser.isType, parser.isTypeChar = true, "string", character
                     else parser.isParsed = true end
                 end
             end
             if not parser.isType or (parser.isType == "number") then
-                local isNumber = imports.tonumber(char)
+                local isNumber = imports.tonumber(character)
                 if not parser.isType and isNumber then parser.isType = "number"
                 elseif parser.isType then
-                    if char == "." then
+                    if character == "." then
                         if not parser.isTypeFloat then parser.isTypeFloat = true
                         else break end
-                    elseif (char == " ") or (char == "\n") then parser.isParsed = true
+                    elseif (character == " ") or (character == "\n") then parser.isParsed = true
                     elseif not isNumber then break end
                 end
             end
-            if parser.isType and not isSkipAppend and not parser.isParsed then parser.value = parser.value..char end
+            if parser.isType and not isSkipAppend and not parser.isParsed then parser.value = parser.value..character end
         end
-        parser.isType = ((not isChild or isChildValid) and (not parser.isType and not vcl.private.isVoid(char)) and "object") or parser.isType
+        parser.isType = ((not isChild or isChildValid) and (not parser.isType and not vcl.private.isVoid(character)) and "object") or parser.isType
         if parser.isType == "object" then
-            if not vcl.private.isVoid(char) then
-                parser.index = parser.index..char
+            if not vcl.private.isVoid(character) then
+                parser.index = parser.index..character
             elseif not vcl.private.isVoid(parser.index) then
-                if char == ":" then
+                if character == ":" then
                     print("FETCHING: "..parser.index)
                     local value, __index, error = vcl.private.decode(buffer, index + 1, true)
                     if not error then
