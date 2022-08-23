@@ -45,7 +45,8 @@ function vcl.private.decode(buffer, index, isChild)
     }
     while(index <= #buffer) do
         local char = vcl.private.fetch(buffer, index)
-        if isChild then
+        local isChildValid = (isChild and true) or false
+        if isChildValid then
             local isSkipAppend = false
             if not parser.isType or (parser.isType == "string") then
                 if (not parser.isTypeChar and ((char == "\"") or (char == "\'"))) or (parser.isTypeChar and (parser.isTypeChar == char)) then
@@ -66,7 +67,7 @@ function vcl.private.decode(buffer, index, isChild)
             end
             if parser.isType and not isSkipAppend and not parser.isParsed then parser.value = parser.value..char end
         end
-        parser.isType = ((not parser.isType and not vcl.private.isVoid(char)) and "object") or parser.isType
+        parser.isType = ((not isChild or isChildValid) and (not parser.isType and not vcl.private.isVoid(char)) and "object") or parser.isType
         if parser.isType == "object" then
             if not vcl.private.isVoid(char) then
                 parser.index = parser.index..char
@@ -79,18 +80,15 @@ function vcl.private.decode(buffer, index, isChild)
                         parser.pointer[(parser.index)], index = value, __index - 1
                         parser.index = ""
                         iprint(value)
-                    else
-                        parser.isChildErrored = true
-                        break
-                    end
-                else break end
+                    else parser.isChildErrored = true end
+                else parser.isChildErrored = true end
+                if parser.isChildErrored then break end
             end
         end
         index = index + 1
         if isChild and not parser.isChildErrored and parser.isParsed then break end
     end
-    --if isChild then parser.isParsed = true end
-    parser.isParsed = (not parser.isChildErrored and parser.isParsed) or false
+    parser.isParsed = (not parser.isChildErrored and ((parser.isType == "object") or parser.isParsed) and true) or false
     if not parser.isParsed then
         if not parser.isChildErrored then
             parser.isErrored = string.format(
@@ -116,7 +114,7 @@ end
 setTimer(function()
 local test2 = [[
 indexA:
-    indexB: "valueB"
+    indexB: 1
     indexC: "valueC"
 ]]
 local result = vcl.public.decode(test2)
