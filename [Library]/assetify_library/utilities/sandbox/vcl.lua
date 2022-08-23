@@ -83,9 +83,7 @@ function vcl.private.decode(buffer, index, isChild)
                         parser.isChildErrored = true
                         break
                     end
-                else
-                    break
-                end
+                else break end
             end
         end
         index = index + 1
