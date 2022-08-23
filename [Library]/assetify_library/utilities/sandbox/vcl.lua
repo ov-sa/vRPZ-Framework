@@ -67,8 +67,8 @@ function vcl.private.decode(buffer, index, isChild)
             end
             if __p.isType and not isSkipAppend and not __p.isParsed then __p.value = __p.value..char end
         end
-        if not __p.isType or (__p.isType == "object") then
-            __p.isType = "object"
+        __p.isType = __p.isType or "object"
+        if __p.isType == "object" then
             __p.index = __p.index..char
             local __char = vcl.private.fetch(buffer, index + 1)
             if __char and (__char == ":") then
