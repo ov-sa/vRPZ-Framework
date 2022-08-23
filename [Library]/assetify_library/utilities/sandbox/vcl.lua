@@ -61,6 +61,18 @@ function vcl.private.parse(config, index, isChild)
                 end
             else
                 local isSkipAppend = false
+                if not parsedDatas.isType or (parsedDatas.isType == "object") then
+                    --TODO: CHECK IF ITS OVJECT???
+                    --[[
+                    if (char == "\"") or (char == "\'") then
+                        if not parsedDatas.isType then
+                            isSkipAppend, parsedDatas.isType = true, "object"
+                        else
+                            parsedDatas.isParsed = true
+                        end
+                    end
+                    ]]
+                end
                 if not parsedDatas.isType or (parsedDatas.isType == "string") then
                     if (char == "\"") or (char == "\'") then
                         if not parsedDatas.isType then
