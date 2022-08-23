@@ -40,7 +40,7 @@ end
 function vcl.private.decode(buffer, index, isChild)
     index = index or 1
     local __p = {
-        ref = index, index = "", pointer = {}, value = "",
+        ref = index, index = "", pointer = isChild or {}, value = "",
         isErrored = "Failed to decode vcl. [Line: %s] [Reason: %s]"
     }
     while(index <= #buffer) do
@@ -70,10 +70,11 @@ function vcl.private.decode(buffer, index, isChild)
         if __p.isType == "object" then
             if not vcl.private.isVoid(char) then
                 __p.index = __p.index..char
+                print(__p.index.." - "..char)
             elseif not vcl.private.isVoid(__p.index) then
                 if char == ":" then
                     print("Fetching | "..__p.index)
-                    local value, __index, error = vcl.private.decode(buffer, index + 1, true)
+                    local value, __index, error = vcl.private.decode(buffer, index + 1, __p.pointer)
                     if not error then
                         print(tostring(__p.index).." : "..tostring(value))
                         __p.pointer[(__p.index)], index = value, __index
