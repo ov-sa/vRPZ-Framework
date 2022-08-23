@@ -41,7 +41,7 @@ function vcl.private.decode(buffer, index, isChild)
     index = index or 1
     local __p = {
         ref = (isChild and index) or false, index = "", pointer = {}, value = "",
-        isType = false, isParsed = (not isChild and true) or false, isErrored = "Failed to decode vcl. [Line: %s] [Reason: %s]"
+        isErrored = "Failed to decode vcl. [Line: %s] [Reason: %s]"
     }
     while(index <= #buffer) do
         local char = vcl.private.fetch(buffer, index)
@@ -66,15 +66,16 @@ function vcl.private.decode(buffer, index, isChild)
             end
             if __p.isType and not isSkipAppend and not __p.isParsed then __p.value = __p.value..char end
         end
-        __p.isType = ((not __p.isType and not vcl.private.isVoid(char)) and "object") or __p.isType
+        if not __p.isType and not vcl.private.isVoid(char) then __p.isType, __p.isParsed = "object", true end
         if __p.isType == "object" then
             if not vcl.private.isVoid(char) then
                 __p.index = __p.index..char
             elseif not vcl.private.isVoid(__p.index) then
                 if char == ":" then
+                    print("Fetching | "..__p.index)
                     local value, __index = vcl.private.decode(buffer, index + 1, true)
                     if value then
-                        print(__p.index)
+                        print(tostring(__p.index).." : "..tostring(value))
                         __p.pointer[(__p.index)], index = value, __index
                         __p.index = ""
                     else
@@ -116,8 +117,8 @@ end
 setTimer(function()
 
     local test2 = [[
-        indexB: 1
-        indexA: "XD"
+        indexC:
+            indexC1: "xD2"
     ]]
     local result = vcl.public.decode(test2)
     iprint(result)
