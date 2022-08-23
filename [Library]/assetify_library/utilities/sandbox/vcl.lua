@@ -14,7 +14,8 @@
 
 local imports = {
     type = type,
-    tonumber = tonumber
+    tonumber = tonumber,
+    outputDebugString = outputDebugString
 }
 
 
@@ -96,7 +97,7 @@ function vcl.private.parse(buffer, index, isChild)
         if isChild and parsedDatas.isParsed then break end
     end
 
-    if not parsedDatas.isParsed then print(string.format(parsedDatas.isErrored, "N/A", ((parsedDatas.isType == "string") and "Unterminated string") or "N/A")); return parsedDatas.isParsed, false
+    if not parsedDatas.isParsed then imports.outputDebugString(string.format(parsedDatas.isErrored, "N/A", ((parsedDatas.isType == "string") and "Unterminated string") or "N/A")); return parsedDatas.isParsed, false
     elseif (parsedDatas.isType == "object") then return parsedDatas.pointer, index
     else return ((parsedDatas.isType == "number" and imports.tonumber(parsedDatas.value)) or parsedDatas.value), index end
 end
