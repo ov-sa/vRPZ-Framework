@@ -53,7 +53,7 @@ function vcl.private.parse(buffer, index, isChild)
                         parsedDatas.pointer[parsedDatas.index], index = value, __index
                         parsedDatas.index = ""
                     else
-                        parsedDatas.isChildErrored = true
+                        parsedDatas.isParsed, parsedDatas.isChildErrored = false, true
                         break
                     end
                 end
