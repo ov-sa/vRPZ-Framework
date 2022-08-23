@@ -106,7 +106,7 @@ function vcl.private.parse(buffer, index, isChild)
         if not parsedDatas.isChildErrored then
             parsedDatas.isErrored = string.format(
                 parsedDatas.isErrored,
-                vcl.private.fetchLine(buffer, parsedDatas.ref or parsedDatas.index),
+                vcl.private.fetchLine(buffer, parsedDatas.ref or index),
                 ((parsedDatas.isType == "string") and "Unterminated string") or
                 "Invalid declaration"
             )
@@ -127,7 +127,7 @@ setTimer(function()
 
     local test2 = [[
         index1: 1
-        index2: 'value2"
+        index2: "value2"
         index3: "value3"
         index4: "value4"
         index5: "value5"
