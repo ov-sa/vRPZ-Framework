@@ -33,12 +33,16 @@ function vcl.private.fetch(rw, index)
     return string.sub(rw, index, index)
 end
 
+function vcl.private.fetchLine(rw, index)
+    return #string.split(string.sub(rw, 0, index), "\n")
+end
+
 function vcl.private.parse(buffer, index, isChild)
-    local index = index or 1
+    index = index or 1
     local parsedDatas = {
         isType = (not isChild and "object") or false,
         isParsed = (not isChild and true) or false, isErrored = "Failed to parse vcl. [Line: %s] [Reason: %s]",
-        index = "", pointer = {}, value = ""
+        ref = (isChild and index) or false, index = "", pointer = {}, value = ""
     }
 
     while(index <= #buffer) do
@@ -90,7 +94,7 @@ function vcl.private.parse(buffer, index, isChild)
                 if parsedDatas.isType and not isSkipAppend and not parsedDatas.isParsed then parsedDatas.value = parsedDatas.value..char end
             end
         elseif (parsedDatas.isType == "object") and not vcl.private.isVoid(parsedDatas.index) then
-            parsedDatas.isErrored, parsedDatas.isErrored = false, string.format(parsedDatas.isErrored, "TODO:LINE", "TODO:Invalid object declaration")
+            parsedDatas.isParsed = false
             break
         end
         index = index + 1
@@ -98,7 +102,14 @@ function vcl.private.parse(buffer, index, isChild)
     end
 
     if not parsedDatas.isParsed then
-        if not parsedDatas.isChildErrored then imports.outputDebugString(string.format(parsedDatas.isErrored, "N/A", ((parsedDatas.isType == "string") and "Unterminated string") or "N/A")) end
+        if not parsedDatas.isChildErrored then
+            if parsedDatas.isType == "string" then
+                parsedDatas.isErrored = string.format(parsedDatas.isErrored, vcl.private.fetchLine(buffer, parsedDatas.ref or parsedDatas.index), "Unterminated string")
+            else
+                parsedDatas.isErrored = string.format(parsedDatas.isErrored, vcl.private.fetchLine(buffer, parsedDatas.ref or parsedDatas.index), "Invalid declaration")
+            end
+            imports.outputDebugString(parsedDatas.isErrored)
+        end
         return parsedDatas.isParsed, false, parsedDatas.isErrored
     elseif (parsedDatas.isType == "object") then return parsedDatas.pointer, index
     else return ((parsedDatas.isType == "number" and imports.tonumber(parsedDatas.value)) or parsedDatas.value), index end
@@ -110,14 +121,14 @@ end
 
 --TESTS
 
-local test2 = [[
-    index1: 1
-    index2: 'value2"
-    index3: "value3"
-    index4: "value4"
-    index5: "value5"
-    index6: "value6"
-]]
+setTimer(function()
 
-local result = vcl.public.parse(test2)
-iprint(result)
+    local test2 = [[
+        index1: 1
+        index2: 'value2"
+        index3: "value3"
+    ]]
+    local result = vcl.public.parse(test2)
+    --iprint(result)
+
+end, 1000, 1)
