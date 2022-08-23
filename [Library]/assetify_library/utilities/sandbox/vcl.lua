@@ -81,12 +81,15 @@ function vcl.private.parse(buffer, index, isChild)
                     end
                 end
                 if not parsedDatas.isType or (parsedDatas.isType == "number") then
-                    if imports.tonumber(char) then
+                    local isNumber = imports.tonumber(char)
+                    if not parsedDatas.isType and isNumber then
                         parsedDatas.isType = "number"
-                    elseif not vcl.private.isVoid(parsedDatas.value) then
-                        --Match if its decimal or space
-                        --if char == "."
-                        parsedDatas.isParsed = true
+                    elseif parsedDatas.isType then
+                        if char == "." then
+                            if not parsedDatas.isTypeFloat then parsedDatas.isTypeFloat = true
+                            else break end
+                        elseif (char == " ") or (char == "\n") then parsedDatas.isParsed = true
+                        elseif not isNumber then break end
                     end
                 end
                 if parsedDatas.isType and not isSkipAppend and not parsedDatas.isParsed then parsedDatas.value = parsedDatas.value..char end
@@ -106,6 +109,7 @@ function vcl.private.parse(buffer, index, isChild)
                 parsedDatas.isErrored,
                 vcl.private.fetchLine(buffer, parsedDatas.ref or index),
                 ((parsedDatas.isType == "string") and "Unterminated string") or
+                ((parsedDatas.isType == "number") and "Malformed number") or
                 "Invalid declaration"
             )
             imports.outputDebugString(parsedDatas.isErrored)
@@ -124,7 +128,7 @@ end
 setTimer(function()
 
     local test2 = [[
-        index1: 12.34
+        index1: 1.02.
         index2: "value2"
         index3: "value3"
         index4: "value4"
