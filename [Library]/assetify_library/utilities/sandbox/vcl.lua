@@ -103,11 +103,12 @@ function vcl.private.parse(buffer, index, isChild)
 
     if not parsedDatas.isParsed then
         if not parsedDatas.isChildErrored then
-            if parsedDatas.isType == "string" then
-                parsedDatas.isErrored = string.format(parsedDatas.isErrored, vcl.private.fetchLine(buffer, parsedDatas.ref or parsedDatas.index), "Unterminated string")
-            else
-                parsedDatas.isErrored = string.format(parsedDatas.isErrored, vcl.private.fetchLine(buffer, parsedDatas.ref or parsedDatas.index), "Invalid declaration")
-            end
+            parsedDatas.isErrored = string.format(
+                parsedDatas.isErrored,
+                vcl.private.fetchLine(buffer, parsedDatas.ref or parsedDatas.index),
+                ((parsedDatas.isType == "string") and "Unterminated string") or
+                "Invalid declaration"
+            )
             imports.outputDebugString(parsedDatas.isErrored)
         end
         return parsedDatas.isParsed, false, parsedDatas.isErrored
