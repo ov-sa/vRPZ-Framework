@@ -107,7 +107,7 @@ vcl.public.parse = function(buffer) return vcl.private.parse(buffer) end
 
 local test2 = [[
     index1: 1
-    index2: 'value2"
+    index2: 'value2'
     index3: "value3"
     index4: "value4"
     index5: "value5"
