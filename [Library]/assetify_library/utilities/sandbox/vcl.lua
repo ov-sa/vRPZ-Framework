@@ -68,10 +68,10 @@ function vcl.private.decode(buffer, index, isChild)
             if __p.isType and not isSkipAppend and not __p.isParsed then __p.value = __p.value..char end
         end
         if not __p.isType or (__p.isType == "object") then
+            __p.isType = "object"
             __p.index = __p.index..char
             local __char = vcl.private.fetch(buffer, index + 1)
             if __char and (__char == ":") then
-                print(__p.index)
                 local value, __index = vcl.private.decode(buffer, index + 2, true)
                 if value then
                     __p.pointer[(__p.index)], index = value, __index
