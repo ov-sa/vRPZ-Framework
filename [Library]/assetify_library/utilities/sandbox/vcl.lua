@@ -74,9 +74,8 @@ function vcl.private.decode(buffer, index, isChild)
                 if char == ":" then
                     local value, __index, error = vcl.private.decode(buffer, index + 1, true)
                     if not error then
-                        parser.isParsed = true
                         parser.pointer[(parser.index)], index = value, __index - 1
-                        parser.index = ""
+                        parser.index, parser.isParsed = "", true
                     else
                         parser.isChildErrored = true
                         break
