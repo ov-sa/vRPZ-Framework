@@ -46,56 +46,44 @@ function vcl.private.decode(buffer, index, isChild)
     }
     while(index <= #buffer) do
         local char = vcl.private.fetch(buffer, index)
-        if (__p.isType ~= "object") or not vcl.private.isVoid(char) then
-            if __p.isType == "object" then
-                __p.index = __p.index..char
-                local __char = vcl.private.fetch(buffer, index + 1)
-                if __char and (__char == ":") then
-                    local value, __index = vcl.private.decode(buffer, index + 2, true)
-                    if value then
-                        __p.pointer[(__p.index)], index = value, __index
-                        __p.index = ""
-                    else
-                        __p.isChildErrored = true
-                        break
-                    end
+        if __p.isType ~= "object" then
+            local isSkipAppend = false
+            if not __p.isType or (__p.isType == "string") then
+                if (not __p.isTypeChar and ((char == "\"") or (char == "\'"))) or (__p.isTypeChar and (__p.isTypeChar == char)) then
+                    if not __p.isType then isSkipAppend, __p.isType, __p.isTypeChar = true, "string", char
+                    else __p.isParsed = true end
                 end
-            else
-                local isSkipAppend = false
-                if not __p.isType or (__p.isType == "object") then
-                    --TODO: CHECK IF ITS OVJECT???
-                    --[[
-                    if (char == "\"") or (char == "\'") then
-                        if not __p.isType then
-                            isSkipAppend, __p.isType = true, "object"
-                        else
-                            __p.isParsed = true
-                        end
-                    end
-                    ]]
-                end
-                if not __p.isType or (__p.isType == "string") then
-                    if (not __p.isTypeChar and ((char == "\"") or (char == "\'"))) or (__p.isTypeChar and (__p.isTypeChar == char)) then
-                        if not __p.isType then isSkipAppend, __p.isType, __p.isTypeChar = true, "string", char
-                        else __p.isParsed = true end
-                    end
-                end
-                if not __p.isType or (__p.isType == "number") then
-                    local isNumber = imports.tonumber(char)
-                    if not __p.isType and isNumber then __p.isType = "number"
-                    elseif __p.isType then
-                        if char == "." then
-                            if not __p.isTypeFloat then __p.isTypeFloat = true
-                            else break end
-                        elseif (char == " ") or (char == "\n") then __p.isParsed = true
-                        elseif not isNumber then break end
-                    end
-                end
-                if __p.isType and not isSkipAppend and not __p.isParsed then __p.value = __p.value..char end
             end
-        elseif (__p.isType == "object") and not vcl.private.isVoid(__p.index) then
-            __p.isParsed = false
-            break
+            if not __p.isType or (__p.isType == "number") then
+                local isNumber = imports.tonumber(char)
+                if not __p.isType and isNumber then __p.isType = "number"
+                elseif __p.isType then
+                    if char == "." then
+                        if not __p.isTypeFloat then __p.isTypeFloat = true
+                        else break end
+                    elseif (char == " ") or (char == "\n") then __p.isParsed = true
+                    elseif not isNumber then break end
+                end
+            end
+            if __p.isType and not isSkipAppend and not __p.isParsed then __p.value = __p.value..char end
+        end
+        if not __p.isType or (__p.isType == "object") then
+            __p.index = __p.index..char
+            local __char = vcl.private.fetch(buffer, index + 1)
+            if __char and (__char == ":") then
+                print(__p.index)
+                local value, __index = vcl.private.decode(buffer, index + 2, true)
+                if value then
+                    __p.pointer[(__p.index)], index = value, __index
+                    __p.index = ""
+                else
+                    __p.isChildErrored = true
+                    break
+                end
+            elseif vcl.private.isVoid(char) and not vcl.private.isVoid(__p.index) then
+                __p.isParsed = false
+                break
+            end
         end
         index = index + 1
         if isChild and __p.isParsed then break end
@@ -126,13 +114,8 @@ end
 setTimer(function()
 
     local test2 = [[
-        index1: 1.02
-        index2: "value2"
-        index3: "value3"
-        index4: "value4"
-        index5: "value5"
-        index6: "value6"
-        index7: "value7"
+        index1: 1
+        indexA: "valueA"
     ]]
     local result = vcl.public.decode(test2)
     iprint(result)
