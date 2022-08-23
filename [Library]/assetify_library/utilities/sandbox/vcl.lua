@@ -77,7 +77,7 @@ function vcl.private.decode(buffer, index, isChild)
                     if not error then
                         print("RECEIVED: "..parser.index)
                         parser.pointer[(parser.index)], index = value, __index - 1
-                        parser.index = ""
+                        parser.index, parser.isParsed = "", true
                         iprint(value)
                     else
                         parser.isChildErrored = true
