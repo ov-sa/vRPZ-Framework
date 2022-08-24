@@ -151,7 +151,7 @@ rootA: 1.222
 # Comment B
 indexA:
     # Comment C
-    indexB: 1.222dd
+    indexB: 1.222
     indexC: "valueC"
 # Comment D
 rootB: "wew"
