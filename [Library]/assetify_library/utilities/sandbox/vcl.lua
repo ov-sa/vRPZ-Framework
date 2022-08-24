@@ -101,8 +101,7 @@ function vcl.private.parseObject(parser, buffer, rw, isTypePadding, isChild)
                         print("Ignored Index: "..parser.index.." | Parent: "..(isTypePadding or "-").." | Child: "..parser.isTypePadding)
                     end
                     parser.ref = parser.ref - #parser.index
-                    --print(string.sub(buffer, parser.ref, #buffer))
-                    return -1
+                    return false
                 end
                 local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, true)
                 if not error then
