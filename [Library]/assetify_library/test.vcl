@@ -1,15 +1,26 @@
+# Generic asset configs
 encryptKey: "vStudio - Aviril"
 streamRange: 170
+
+# TODO: Add boolean support
 enableLODs: 1
+
+# Scene configs
 sceneDimension: -1
 sceneInterior: 0
 sceneOffsets:
     x: 0
     y: 0
     z: 0
+
+# All shader related textures goes here
 shaderMaps:
+    # Control maps
     control:
+        # Your texture name
         isld_1_trn:
+            # Your attached control textures here
+            # TODO: Add numeric index support
             __1:
                 control: "control/isld_1_trn/road/control.png"
                 bump: "control/isld_1_trn/road/bump.jpg"
