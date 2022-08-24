@@ -62,14 +62,35 @@ function vcl.private.parseNumber(parser, buffer, rw)
     return true
 end
 
+function vcl.private.parseObject(parser, buffer, rw)
+    if parser.isType == "object" then
+        if not vcl.private.isVoid(rw) then
+            parser.index = parser.index..rw
+        elseif not vcl.private.isVoid(parser.index) then
+            if rw == ":" then
+                print("FETCHING: "..parser.index)
+                local value, __index, error = vcl.private.decode(buffer, parser.__index + 1, true)
+                if not error then
+                    print("RECEIVED: "..parser.index)
+                    parser.pointer[(parser.index)], parser.__index = value, __index - 1
+                    parser.index = ""
+                    iprint(value)
+                else parser.isChildErrored = 1 end
+            else parser.isChildErrored = 0 end
+            if parser.isChildErrored then return false end
+        end
+    end
+    return true
+end
+
 function vcl.private.decode(buffer, index, isChild)
-    index = index or 1
     local parser = {
+        __index = index or 1,
         ref = index, index = "", pointer = {}, value = "",
         isErrored = "Failed to decode vcl. [Line: %s] [Reason: %s]"
     }
-    while(index <= #buffer) do
-        local character = vcl.private.fetch(buffer, index)
+    while(parser.__index <= #buffer) do
+        local character = vcl.private.fetch(buffer, parser.__index)
         local isChildValid = (isChild and true) or false
         if isChildValid then
             parser.isSkipAppend = false
@@ -78,27 +99,11 @@ function vcl.private.decode(buffer, index, isChild)
             if parser.isType and not parser.isSkipAppend and not parser.isParsed then parser.value = parser.value..character end
         end
         parser.isType = ((not isChild or isChildValid) and (not parser.isType and not vcl.private.isVoid(character)) and "object") or parser.isType
-        if parser.isType == "object" then
-            if not vcl.private.isVoid(character) then
-                parser.index = parser.index..character
-            elseif not vcl.private.isVoid(parser.index) then
-                if character == ":" then
-                    print("FETCHING: "..parser.index)
-                    local value, __index, error = vcl.private.decode(buffer, index + 1, true)
-                    if not error then
-                        print("RECEIVED: "..parser.index)
-                        parser.pointer[(parser.index)], index = value, __index - 1
-                        parser.index = ""
-                        iprint(value)
-                    else parser.isChildErrored = 1 end
-                else parser.isChildErrored = 0 end
-                if parser.isChildErrored then break end
-            end
-        end
+        if not vcl.private.parseObject(parser, buffer, character) then break end
         if not parser.isType and character == "#" then
             print("COMMENT!")
         end
-        index = index + 1
+        parser.__index = parser.__index + 1
         if isChild and not parser.isChildErrored and parser.isParsed then break end
     end
     parser.isParsed = (not parser.isChildErrored and ((parser.isType == "object") or parser.isParsed) and true) or false
@@ -114,8 +119,8 @@ function vcl.private.decode(buffer, index, isChild)
             imports.outputDebugString(parser.isErrored)
         end
         return false, false, true
-    elseif (parser.isType == "object") then return parser.pointer, index
-    else return ((parser.isType == "number" and imports.tonumber(parser.value)) or parser.value), index end
+    elseif (parser.isType == "object") then return parser.pointer, parser.__index
+    else return ((parser.isType == "number" and imports.tonumber(parser.value)) or parser.value), parser.__index end
 end
 
 vcl.public.decode = function(buffer)
