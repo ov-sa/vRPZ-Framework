@@ -83,6 +83,24 @@ function vcl.private.parseObject(parser, buffer, rw)
     return true
 end
 
+function vcl.private.parseReturn(parser, buffer)
+    parser.isParsed = (not parser.isChildErrored and ((parser.isType == "object") or parser.isParsed) and true) or false
+    if not parser.isParsed then
+        if not parser.isChildErrored or (parser.isChildErrored == 0) then
+            parser.isErrored = string.format(
+                parser.isErrored,
+                vcl.private.fetchLine(buffer, parser.refOn),
+                ((parser.isType == "string") and "Unterminated string") or
+                ((parser.isType == "number") and "Malformed number") or
+                "Invalid declaration"
+            )
+            imports.outputDebugString(parser.isErrored)
+        end
+        return false, false, true
+    elseif (parser.isType == "object") then return parser.pointer, parser.refAt
+    else return ((parser.isType == "number" and imports.tonumber(parser.value)) or parser.value), parser.refAt end
+end
+
 function vcl.private.decode(buffer, index, isChild)
     index = index or 1
     local parser = {
@@ -107,21 +125,7 @@ function vcl.private.decode(buffer, index, isChild)
         parser.refAt = parser.refAt + 1
         if isChild and not parser.isChildErrored and parser.isParsed then break end
     end
-    parser.isParsed = (not parser.isChildErrored and ((parser.isType == "object") or parser.isParsed) and true) or false
-    if not parser.isParsed then
-        if not parser.isChildErrored or (parser.isChildErrored == 0) then
-            parser.isErrored = string.format(
-                parser.isErrored,
-                vcl.private.fetchLine(buffer, parser.refOn),
-                ((parser.isType == "string") and "Unterminated string") or
-                ((parser.isType == "number") and "Malformed number") or
-                "Invalid declaration"
-            )
-            imports.outputDebugString(parser.isErrored)
-        end
-        return false, false, true
-    elseif (parser.isType == "object") then return parser.pointer, parser.refAt
-    else return ((parser.isType == "number" and imports.tonumber(parser.value)) or parser.value), parser.refAt end
+    return vcl.private.parseReturn(parser, buffer)
 end
 
 vcl.public.decode = function(buffer)
