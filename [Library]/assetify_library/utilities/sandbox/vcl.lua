@@ -25,6 +25,7 @@ local imports = {
 
 local vcl = class:create("vcl")
 vcl.private.types = {
+    newline = "\n",
     string = {
         ["`"] = true,
         ["'"] = true,
@@ -41,7 +42,7 @@ function vcl.private.fetch(rw, index)
 end
 
 function vcl.private.fetchLine(rw, index)
-    local rwLines = string.split(string.sub(rw, 0, index), "\n")
+    local rwLines = string.split(string.sub(rw, 0, index), vcl.private.types.newline)
     return math.max(1, #rwLines), rwLines[(#rwLines)] or ""
 end
 
@@ -61,7 +62,7 @@ function vcl.private.parseString(parser, buffer, rw)
                 if not parser.isTypeParsed then parser.isSkipAppend, parser.isTypeParsed = true, true
                 else return false end
             elseif parser.isTypeParsed then
-                if rw == "\n" then parser.isParsed = true
+                if rw == vcl.private.types.newline then parser.isParsed = true
                 else return false end
             end
         end
@@ -77,7 +78,7 @@ function vcl.private.parseNumber(parser, buffer, rw)
             if rw == "." then
                 if not parser.isTypeFloat then parser.isTypeFloat = true
                 else return false end
-            elseif rw == "\n" then parser.isParsed = true
+            elseif rw == vcl.private.types.newline then parser.isParsed = true
             elseif not isNumber then return false end
         end
     end
