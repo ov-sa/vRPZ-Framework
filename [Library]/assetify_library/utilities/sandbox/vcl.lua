@@ -26,6 +26,8 @@ local imports = {
 local vcl = class:create("vcl")
 vcl.private.types = {
     newline = "\n",
+    init = ":",
+    decimal = ".",
     string = {
         ["`"] = true,
         ["'"] = true,
@@ -75,7 +77,7 @@ function vcl.private.parseNumber(parser, buffer, rw)
         local isNumber = imports.tonumber(rw)
         if not parser.isType and isNumber then parser.isType = "number"
         elseif parser.isType then
-            if rw == "." then
+            if rw == vcl.private.types.decimal then
                 if not parser.isTypeFloat then parser.isTypeFloat = true
                 else return false end
             elseif rw == vcl.private.types.newline then parser.isParsed = true
@@ -90,7 +92,7 @@ function vcl.private.parseObject(parser, buffer, rw, isChild)
         if not vcl.private.isVoid(rw) then
             parser.index = parser.index..rw
         elseif not vcl.private.isVoid(parser.index) then
-            if rw == ":" then
+            if rw == vcl.private.types.init then
                 local _, indexLine = vcl.private.fetchLine(string.sub(buffer, 0, parser.ref))
                 local indexPadding = #indexLine - #parser.index - 1
                 parser.padding = parser.padding or indexPadding - 1
