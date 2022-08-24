@@ -41,7 +41,9 @@ function vcl.private.parseString(parser, buffer, rw)
     if not parser.isType or (parser.isType == "string") then
         if (not parser.isTypeChar and ((rw == "\"") or (rw == "\'"))) or parser.isTypeChar then
             if not parser.isType then parser.isSkipAppend, parser.isType, parser.isTypeChar = true, "string", rw
-            elseif rw == parser.isTypeChar then parser.isSkipAppend, parser.__isParsed = true, true
+            elseif rw == parser.isTypeChar then
+                if not parser.__isParsed then parser.isSkipAppend, parser.__isParsed = true, true
+                else return false end
             elseif parser.__isParsed then
                 if rw == "\n" then parser.isParsed = true
                 else return false end
