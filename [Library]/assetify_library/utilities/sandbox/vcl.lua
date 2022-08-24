@@ -80,14 +80,6 @@ end
 function vcl.private.parseObject(parser, buffer, rw)
     if not parser.isComment and (parser.isType == "object") then
         if not vcl.private.isVoid(rw) then
-            if vcl.private.isVoid(parser.index) then
-                parser.__length = parser.ref
-                local currentLength = parser.ref
-                --local prevLength = #string.sub(buffer, 0, parser.ref - 1)
-                --print("PREV: "..prevLength.." - CURR: "..currentLength)
-                --print("LENGTH: "..(currentLength - prevLength))
-                --print("IS VOID FETCH ALL..")
-            end
             parser.index = parser.index..rw
         elseif not vcl.private.isVoid(parser.index) then
             if rw == ":" then
