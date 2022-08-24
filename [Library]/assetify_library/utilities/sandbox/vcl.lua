@@ -80,8 +80,8 @@ function vcl.private.decode(buffer, index, isChild)
                         parser.pointer[(parser.index)], index = value, __index - 1
                         parser.index = ""
                         iprint(value)
-                    else parser.isChildErrored = true end
-                else parser.isChildErrored = true end
+                    else parser.isChildErrored = 1 end
+                else parser.isChildErrored = 0 end
                 if parser.isChildErrored then break end
             end
         end
@@ -90,7 +90,7 @@ function vcl.private.decode(buffer, index, isChild)
     end
     parser.isParsed = (not parser.isChildErrored and ((parser.isType == "object") or parser.isParsed) and true) or false
     if not parser.isParsed then
-        if not parser.isChildErrored then
+        if not parser.isChildErrored or (parser.isChildErrored == 0) then
             parser.isErrored = string.format(
                 parser.isErrored,
                 vcl.private.fetchLine(buffer, parser.ref),
@@ -113,9 +113,12 @@ end
 
 setTimer(function()
 local test2 = [[
+# comment
+rootA: 1.222
 indexA:
-    indexB: 1
+    indexB: 1.222
     indexC: "valueC"
+rootB: 1.222
 ]]
 local result = vcl.public.decode(test2)
 iprint(result)
