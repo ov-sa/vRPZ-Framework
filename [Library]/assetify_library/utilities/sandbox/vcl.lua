@@ -41,7 +41,7 @@ function vcl.private.parseComment(parser, buffer, rw)
     local isCommentLine = parser.isCommentLine
     parser.isCommentLine = vcl.private.fetchLine(buffer, parser.ref)
     parser.isComment = ((isCommentLine == parser.isCommentLine) and parser.isComment) or false
-    parser.isComment = ((not parser.isType or vcl.private.isVoid(parser.index)) and not parser.isComment and (rw == "#") and true) or parser.isComment
+    parser.isComment = (not parser.isComment and (not parser.isType or vcl.private.isVoid(parser.index)) and not parser.isComment and (rw == "#") and true) or parser.isComment
     return true
 end
 
