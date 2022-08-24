@@ -85,8 +85,8 @@ function vcl.private.parseObject(parser, buffer, rw, isChild)
             if rw == ":" then
                 local _, indexLine = vcl.private.fetchLine(string.sub(buffer, 0, parser.ref))
                 parser.isTypePadding = #indexLine - #parser.index - 1
-                parser.isPadding = parser.isPadding or parser.isTypePadding - 1
-                if parser.isTypePadding <= parser.isPadding then
+                parser.padding = parser.padding or parser.isTypePadding - 1
+                if parser.isTypePadding <= parser.padding then
                     parser.ref = parser.ref - #parser.index
                     return false
                 end
@@ -120,10 +120,10 @@ function vcl.private.parseReturn(parser, buffer)
     else return ((parser.isType == "number" and imports.tonumber(parser.value)) or parser.value), parser.ref end
 end
 
-function vcl.private.decode(buffer, ref, isChild, isPadding)
+function vcl.private.decode(buffer, ref, isChild, padding)
     local parser = {
-        ref = ref or 1, index = "", pointer = {}, value = "",
-        isPadding = isPadding,
+        ref = ref or 1, padding = padding,
+        index = "", pointer = {}, value = "",
         isErrored = "Failed to decode vcl. [Line: %s] [Reason: %s]"
     }
     while(parser.ref <= #buffer) do
