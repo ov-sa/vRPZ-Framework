@@ -134,8 +134,8 @@ function vcl.private.decode(buffer, index, isChild)
         end
         parser.isType = ((not isChild or isChildValid) and (not parser.isType and not vcl.private.isVoid(character)) and "object") or parser.isType
         if not vcl.private.parseObject(parser, buffer, character) then break end
-        parser.ref = parser.ref + 1
         if isChild and not parser.isChildErrored and parser.isParsed then break end
+        parser.ref = parser.ref + 1
     end
     return vcl.private.parseReturn(parser, buffer)
 end
@@ -153,7 +153,7 @@ rootA: 1.222
 # Comment B
 indexA:
     # Comment C
-    indexB: 1.222
+    indexB: 1.222dd
     indexC: "valueC"
 # Comment D
 rootB: "wew"
