@@ -164,7 +164,7 @@ end
 setTimer(function()
 local test = [[
 # Comment A
-
+ 
 A:
 
 # Comment B
@@ -181,7 +181,7 @@ A:
     # Comment E
 
     C: "vC"
-    
+
 #Comment F
 ]]
 local result = vcl.public.decode(test)

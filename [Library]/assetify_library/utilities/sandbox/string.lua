@@ -73,9 +73,7 @@ function string.public.split(baseString, separator)
     baseString = baseString..separator
     local result = {}
     for matchValue in string.public.gmatch(baseString, "(.-)"..separator) do
-        if #string.public.gsub(matchValue, "%s", "") > 0 then
-            table.insert(result, matchValue)
-        end
+        table.insert(result, matchValue)
     end
     return result
 end
