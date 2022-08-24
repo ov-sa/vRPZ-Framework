@@ -166,29 +166,7 @@ end
 --TESTS
 
 setTimer(function()
-local test = [[
-# Comment A
- 
-A:
-
-# Comment B
-    D:
-
-    # Comment C
-
-        B: "vB"
-
-        # Comment D
-
-        B2: 1.222d
-
-    # Comment E
-
-    C: "vC"
-
-#Comment F
-]]
-local data = tostring(file:read("test.vcl"))
+local data = file:read("test.vcl")
 local result = vcl.public.decode(data)
 iprint(result)
 end, 1000, 1)
