@@ -61,6 +61,22 @@ function vcl.private.parseComment(parser, buffer, rw)
     return true
 end
 
+function vcl.private.parseBoolean(parser, buffer, rw)
+    if not parser.isType or (parser.isType == "string") then
+        if vcl.private.types.parseBoolean[rw] ~= nil then
+            if not parser.isType then parser.isSkipAppend, parser.isType = true, "string", rw
+            elseif rw == parser.isTypeChar then
+                if not parser.isTypeParsed then parser.isSkipAppend, parser.isTypeParsed = true, true
+                else return false end
+            elseif parser.isTypeParsed then
+                if rw == vcl.private.types.newline then parser.isParsed = true
+                else return false end
+            end
+        end
+    end
+    return true
+end
+
 function vcl.private.parseString(parser, buffer, rw)
     if not parser.isType or (parser.isType == "string") then
         if (not parser.isTypeChar and vcl.private.types.string[rw]) or parser.isTypeChar then
@@ -121,13 +137,7 @@ function vcl.private.parseReturn(parser, buffer)
     parser.isParsed = (not parser.isChildErrored and ((parser.isType == "object") or parser.isParsed) and true) or false
     if not parser.isParsed then
         if not parser.isChildErrored or (parser.isChildErrored == 0) then
-            parser.isErrored = string.format(
-                parser.isErrored,
-                vcl.private.fetchLine(buffer, parser.ref),
-                ((parser.isType == "string") and "Malformed string") or
-                ((parser.isType == "number") and "Malformed number") or
-                "Invalid declaration"
-            )
+            parser.isErrored = string.format(parser.isErrored, vcl.private.fetchLine(buffer, parser.ref), (parser.isType and "Malformed "..parser.isType) or "Invalid declaration")
             imports.outputDebugString(parser.isErrored)
         end
         return false, false, true
@@ -151,8 +161,9 @@ function vcl.private.decode(buffer, ref, isChild, padding)
         local isChildValid = (not parser.isComment and isChild and true) or false
         if isChildValid then
             parser.isSkipAppend = false
-            if not vcl.private.parseString(parser, buffer, character) then break end
+            if not vcl.private.parseBoolean(parser, buffer, character) then break end
             if not vcl.private.parseNumber(parser, buffer, character) then break end
+            if not vcl.private.parseString(parser, buffer, character) then break end
             if parser.isType and not parser.isSkipAppend and not parser.isParsed then parser.value = parser.value..character end
         end
         parser.isType = ((not isChild or isChildValid) and (not parser.isType and not vcl.private.isVoid(character)) and "object") or parser.isType
@@ -171,6 +182,9 @@ end
 
 setTimer(function()
 local data = file:read("test.vcl")
+local test = [[
+    test: true
+]]
 local result = vcl.public.decode(data)
 iprint(result)
 end, 1000, 1)
