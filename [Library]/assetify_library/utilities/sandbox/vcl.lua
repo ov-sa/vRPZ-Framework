@@ -142,6 +142,7 @@ function vcl.private.parseReturn(parser, buffer)
         end
         return false, false, true
     elseif (parser.isType == "object") then return parser.pointer, parser.ref
+    elseif (parser.isType == "boolean") then return ((parser.value == true) and true) or false, parser.ref
     else return ((parser.isType == "number" and imports.tonumber(parser.value)) or parser.value), parser.ref end
 end
 
