@@ -42,9 +42,9 @@ function vcl.private.parseString(parser, buffer, rw)
         if (not parser.isTypeChar and ((rw == "\"") or (rw == "\'"))) or parser.isTypeChar then
             if not parser.isType then parser.isSkipAppend, parser.isType, parser.isTypeChar = true, "string", rw
             elseif rw == parser.isTypeChar then
-                if not parser.__isParsed then parser.isSkipAppend, parser.__isParsed = true, true
+                if not parser.isTypeParsed then parser.isSkipAppend, parser.isTypeParsed = true, true
                 else return false end
-            elseif parser.__isParsed then
+            elseif parser.isTypeParsed then
                 if rw == "\n" then parser.isParsed = true
                 else return false end
             end
@@ -142,7 +142,11 @@ end
 
 setTimer(function()
 local test2 = [[
-indexC: "valueC"
+    rootA: 1.222
+    indexA:
+        indexB: 1.222
+        indexC: "valueC" SOMETHING INVALID EXISTS HERE FAIL TO LOAD??
+    rootB: 1.222
 ]]
 local result = vcl.public.decode(test2)
 iprint(result)
