@@ -84,13 +84,13 @@ function vcl.private.parseObject(parser, buffer, rw, isChild)
         elseif not vcl.private.isVoid(parser.index) then
             if rw == ":" then
                 local _, indexLine = vcl.private.fetchLine(string.sub(buffer, 0, parser.ref))
-                parser.isTypePadding = #indexLine - #parser.index - 1
-                parser.padding = parser.padding or parser.isTypePadding - 1
-                if parser.isTypePadding <= parser.padding then
+                local indexPadding = #indexLine - #parser.index - 1
+                parser.padding = parser.padding or indexPadding - 1
+                if indexPadding <= parser.padding then
                     parser.ref = parser.ref - #parser.index
                     return false
                 end
-                local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, true, parser.isTypePadding)
+                local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, true, indexPadding)
                 if not error then
                     parser.pointer[(parser.index)], parser.ref, parser.index = value, __index - 1, ""
                     vcl.private.parseComment(parser, buffer, vcl.private.fetch(buffer, parser.ref))
