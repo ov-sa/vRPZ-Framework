@@ -77,18 +77,19 @@ function vcl.private.parseNumber(parser, buffer, rw)
     return true
 end
 
-function vcl.private.parseObject(parser, buffer, rw)
+function vcl.private.parseObject(parser, buffer, rw, isTypePadding)
     if not parser.isComment and (parser.isType == "object") then
         if not vcl.private.isVoid(rw) then
             parser.index = parser.index..rw
         elseif not vcl.private.isVoid(parser.index) then
             if rw == ":" then
                 local _, indexLine = vcl.private.fetchLine(string.sub(buffer, 0, parser.ref))
-                parser.isTypePadding = #indexLine - #parser.index - 1
-                print("Index: "..parser.index.." | Padding: "..parser.isTypePadding)
+                --parser.isTypePadding = #indexLine - #parser.index - 1
+                parser.isTypePadding = indexLine
+                print("Fetched Index: "..parser.index.." | Parent: "..(isTypePadding or "-").." | Child: "..parser.isTypePadding)
                 local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, true)
                 if not error then
-                    --print("RECEIVED: "..parser.index)
+                    --print("Received Index: "..parser.index)
                     --iprint(value)
                     parser.pointer[(parser.index)], parser.ref, parser.index = value, __index - 1, ""
                     vcl.private.parseComment(parser, buffer, vcl.private.fetch(buffer, parser.ref))
@@ -134,7 +135,14 @@ function vcl.private.decode(buffer, ref, isChild)
             if parser.isType and not parser.isSkipAppend and not parser.isParsed then parser.value = parser.value..character end
         end
         parser.isType = ((not isChild or isChildValid) and (not parser.isType and not vcl.private.isVoid(character)) and "object") or parser.isType
-        if not vcl.private.parseObject(parser, buffer, character) then break end
+        if parser.isType == "object" then
+            --print("INDEX PARENT: "..(parser.isTypePadding or "-"))
+            --local _, indexLine = vcl.private.fetchLine(string.sub(buffer, 0, parser.ref))
+            --print("INDEX CHILD: "..indexLine)
+            --parser.isTypePadding = #indexLine - #parser.index - 1
+            --print("Fetched Index: "..parser.index.." | Padding: "..parser.isTypePadding)
+        end
+        if not vcl.private.parseObject(parser, buffer, character, parser.isTypePadding) then break end
         if isChild and not parser.isChildErrored and parser.isParsed then break end
         parser.ref = parser.ref + 1
     end
@@ -150,8 +158,8 @@ end
 setTimer(function()
 local test = [[
 rootA:
-    testA: 1
-testB: 2
+    testA: "valueA"
+testB: "valueB"
 ]]
 local result = vcl.public.decode(test)
 --iprint(result)
