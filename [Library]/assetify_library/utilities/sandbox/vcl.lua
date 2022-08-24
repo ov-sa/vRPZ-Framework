@@ -39,15 +39,12 @@ end
 
 function vcl.private.parseString(parser, buffer, rw)
     if not parser.isType or (parser.isType == "string") then
-        if (not parser.isTypeChar and ((rw == "\"") or (rw == "\'"))) or (parser.isTypeChar and (parser.isTypeChar == rw)) then
+        if (not parser.isTypeChar and ((rw == "\"") or (rw == "\'"))) or parser.isTypeChar then
             if not parser.isType then parser.isSkipAppend, parser.isType, parser.isTypeChar = true, "string", rw
-            elseif rw == parser.isTypeChar then parser.__isParsed = true
-            elseif parser.__isParsed and (rw == "\n") then
-                print("aua")
-                parser.isParsed = true
-            else
-                print("wow: "..rw)
-                return false
+            elseif rw == parser.isTypeChar then parser.isSkipAppend, parser.__isParsed = true, true
+            elseif parser.__isParsed then
+                if rw == "\n" then parser.isParsed = true
+                else return false end
             end
         end
     end
@@ -143,11 +140,7 @@ end
 
 setTimer(function()
 local test2 = [[
-rootA: 1.222
-indexA:
-    indexB: 1.222
-    indexC: "valueC"
-rootB: 1.222
+indexC: "valueC"
 ]]
 local result = vcl.public.decode(test2)
 iprint(result)
