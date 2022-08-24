@@ -163,10 +163,26 @@ end
 
 setTimer(function()
 local test = [[
+# Comment A
+
 A:
-  D:
-   B: "vB"
-C: "vC"
+
+# Comment B
+    D:
+
+    # Comment C
+
+        B: "vB"
+
+        # Comment D
+
+        B2: 1.222d
+
+    # Comment E
+
+    C: "vC"
+    
+#Comment F
 ]]
 local result = vcl.public.decode(test)
 iprint(result)
