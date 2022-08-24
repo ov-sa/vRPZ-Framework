@@ -75,10 +75,10 @@ function vcl.private.parseObject(parser, buffer, rw)
         elseif not vcl.private.isVoid(parser.index) then
             if rw == ":" then
                 print("FETCHING: "..parser.index)
-                local value, __index, error = vcl.private.decode(buffer, parser.refAt + 1, true)
+                local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, true)
                 if not error then
                     print("RECEIVED: "..parser.index)
-                    parser.pointer[(parser.index)], parser.refAt = value, __index - 1
+                    parser.pointer[(parser.index)], parser.ref = value, __index - 1
                     parser.index = ""
                     iprint(value)
                 else parser.isChildErrored = 1 end
@@ -95,7 +95,7 @@ function vcl.private.parseReturn(parser, buffer)
         if not parser.isChildErrored or (parser.isChildErrored == 0) then
             parser.isErrored = string.format(
                 parser.isErrored,
-                vcl.private.fetchLine(buffer, parser.refAt),
+                vcl.private.fetchLine(buffer, parser.ref),
                 ((parser.isType == "string") and "Malformed string") or
                 ((parser.isType == "number") and "Malformed number") or
                 "Invalid declaration"
@@ -103,14 +103,14 @@ function vcl.private.parseReturn(parser, buffer)
             imports.outputDebugString(parser.isErrored)
         end
         return false, false, true
-    elseif (parser.isType == "object") then return parser.pointer, parser.refOn
-    else return ((parser.isType == "number" and imports.tonumber(parser.value)) or parser.value), parser.refOn end
+    elseif (parser.isType == "object") then return parser.pointer, parser.ref
+    else return ((parser.isType == "number" and imports.tonumber(parser.value)) or parser.value), parser.ref end
 end
 
 function vcl.private.parseComment(parser, buffer, rw)
     if not parser.isType then
         local prevLine = parser.currentLine
-        parser.currentLine = vcl.private.fetchLine(buffer, parser.refAt)
+        parser.currentLine = vcl.private.fetchLine(buffer, parser.ref)
         local isNewLine = prevLine ~= parser.currentLine
         if isNewLine then parser.isComment = false end
         if rw == "#" then
@@ -126,12 +126,12 @@ end
 function vcl.private.decode(buffer, index, isChild)
     index = index or 1
     local parser = {
-        refOn = index, refAt = index,
+        ref = index,
         index = "", pointer = {}, value = "",
         isErrored = "Failed to decode vcl. [Line: %s] [Reason: %s]"
     }
-    while(parser.refAt <= #buffer) do
-        local character = vcl.private.fetch(buffer, parser.refAt)
+    while(parser.ref <= #buffer) do
+        local character = vcl.private.fetch(buffer, parser.ref)
         vcl.private.parseComment(parser, buffer, character)
         local isChildValid = (not parser.isComment and isChild and true) or false
         if isChildValid then
@@ -142,7 +142,7 @@ function vcl.private.decode(buffer, index, isChild)
         end
         parser.isType = (not parser.isComment and (not isChild or isChildValid) and (not parser.isType and not vcl.private.isVoid(character)) and "object") or parser.isType
         if not vcl.private.parseObject(parser, buffer, character) then print("TEST C") break end
-        parser.refAt = parser.refAt + 1
+        parser.ref = parser.ref + 1
         if isChild and not parser.isChildErrored and parser.isParsed then break end
     end
     return vcl.private.parseReturn(parser, buffer)
@@ -156,7 +156,9 @@ end
 
 setTimer(function()
 local test2 = [[
+    # Some comment here A
     rootA: 1.222
+    # Some comment here A
     indexA:
         indexB: 1.222
         indexC: "valueC"
