@@ -37,6 +37,14 @@ function vcl.private.fetchLine(rw, index)
     return math.max(1, #string.split(string.sub(rw, 0, index), "\n"))
 end
 
+function vcl.private.parseComment(parser, buffer, rw)
+    local isCommentLine = parser.isCommentLine
+    parser.isCommentLine = vcl.private.fetchLine(buffer, parser.ref)
+    parser.isComment = ((isCommentLine == parser.isCommentLine) and parser.isComment) or false
+    parser.isComment = ((not parser.isType or vcl.private.isVoid(parser.index)) and not parser.isComment and (rw == "#") and true) or parser.isComment
+    return true
+end
+
 function vcl.private.parseString(parser, buffer, rw)
     if not parser.isType or (parser.isType == "string") then
         if (not parser.isTypeChar and ((rw == "\"") or (rw == "\'"))) or parser.isTypeChar then
@@ -105,14 +113,6 @@ function vcl.private.parseReturn(parser, buffer)
         return false, false, true
     elseif (parser.isType == "object") then return parser.pointer, parser.ref
     else return ((parser.isType == "number" and imports.tonumber(parser.value)) or parser.value), parser.ref end
-end
-
-function vcl.private.parseComment(parser, buffer, rw)
-    local isCommentLine = parser.isCommentLine
-    parser.isCommentLine = vcl.private.fetchLine(buffer, parser.ref)
-    parser.isComment = ((isCommentLine == parser.isCommentLine) and parser.isComment) or false
-    parser.isComment = ((not parser.isType or vcl.private.isVoid(parser.index)) and not parser.isComment and (rw == "#") and true) or parser.isComment
-    return true
 end
 
 function vcl.private.decode(buffer, index, isChild)
