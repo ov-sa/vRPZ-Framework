@@ -147,16 +147,17 @@ end
 --TESTS
 
 setTimer(function()
-local test2 = [[
-    # Comment A
-    rootA: 1.222
-    # Comment B
-    indexA:
+local test = [[
+# Comment A
+rootA: 1.222
+# Comment B
+indexA:
     # Comment C
-        indexB: 1.222
-        indexC: "valueC"
-    rootB: 1.222
+    indexB: 1.222
+    indexC: "valueC"
+# Comment D
+rootB: "wew"
 ]]
-local result = vcl.public.decode(test2)
+local result = vcl.public.decode(test)
 iprint(result)
 end, 1000, 1)
