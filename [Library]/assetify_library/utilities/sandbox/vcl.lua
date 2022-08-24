@@ -137,8 +137,7 @@ function vcl.private.decode(buffer, ref, isChild, isPadding)
             if parser.isType and not parser.isSkipAppend and not parser.isParsed then parser.value = parser.value..character end
         end
         parser.isType = ((not isChild or isChildValid) and (not parser.isType and not vcl.private.isVoid(character)) and "object") or parser.isType
-        local result = vcl.private.parseObject(parser, buffer, character, isChild)
-        if not result or (result == -1) then break end
+        if not vcl.private.parseObject(parser, buffer, character, isChild) then break end
         if isChild and not parser.isChildErrored and parser.isParsed then break end
         parser.ref = parser.ref + 1
     end
