@@ -78,9 +78,9 @@ function vcl.private.parseObject(parser, buffer, rw)
                 local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, true)
                 if not error then
                     print("RECEIVED: "..parser.index)
-                    parser.pointer[(parser.index)], parser.ref = value, __index - 1
-                    parser.index = ""
                     iprint(value)
+                    parser.pointer[(parser.index)], parser.ref, parser.index = value, __index - 1, ""
+                    vcl.private.parseComment(parser, buffer, vcl.private.fetch(buffer, parser.ref))
                 else parser.isChildErrored = 1 end
             else parser.isChildErrored = 0 end
             if parser.isChildErrored then return false end
@@ -108,17 +108,18 @@ function vcl.private.parseReturn(parser, buffer)
 end
 
 function vcl.private.parseComment(parser, buffer, rw)
-    if not parser.isType then
-        local prevLine = parser.currentLine
-        parser.currentLine = vcl.private.fetchLine(buffer, parser.ref)
-        local isNewLine = prevLine ~= parser.currentLine
-        if isNewLine then parser.isComment = false end
-        if rw == "#" then
+    local prevLine = parser.currentLine
+    parser.currentLine = vcl.private.fetchLine(buffer, parser.ref)
+    local isNewLine = prevLine ~= parser.currentLine
+    if isNewLine then parser.isComment = false end
+    if rw == "#" then
+        print('YES: Found COmment: L'..parser.currentLine)
+        if not parser.isType then
             parser.isComment = true
-            print('YES: '..rw)
+            print("MARKED AS COMMENT")
+        else
+            parser.isComment = false
         end
-    else
-        parser.isComment = false
     end
     return true
 end
@@ -156,9 +157,9 @@ end
 
 setTimer(function()
 local test2 = [[
-    # Some comment here A
+    # A
     rootA: 1.222
-    # Some comment here A
+    # B
     indexA:
         indexB: 1.222
         indexC: "valueC"
