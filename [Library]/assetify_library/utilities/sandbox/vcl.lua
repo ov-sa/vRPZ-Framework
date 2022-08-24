@@ -84,13 +84,21 @@ function vcl.private.parseObject(parser, buffer, rw, isTypePadding)
         elseif not vcl.private.isVoid(parser.index) then
             if rw == ":" then
                 local _, indexLine = vcl.private.fetchLine(string.sub(buffer, 0, parser.ref))
-                --parser.isTypePadding = #indexLine - #parser.index - 1
-                parser.isTypePadding = indexLine
-                print("Fetched Index: "..parser.index.." | Parent: "..(isTypePadding or "-").." | Child: "..parser.isTypePadding)
+                parser.isTypePadding = #indexLine - #parser.index - 1
+                --parser.isTypePadding = indexLine
+                local isAllowed = false
+                if not isTypePadding then isAllowed = true
+                elseif parser.isTypePadding > isTypePadding then isAllowed = true end
+                if isAllowed then
+                    print("Fetched Index: "..parser.index.." | Parent: "..(isTypePadding or "-").." | Child: "..parser.isTypePadding)
+                else
+                    print("Ignored Index: "..parser.index.." | Parent: "..(isTypePadding or "-").." | Child: "..parser.isTypePadding)
+                    return -1
+                end
                 local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, true)
                 if not error then
-                    --print("Received Index: "..parser.index)
-                    --iprint(value)
+                    print("Received Index: "..parser.index)
+                    iprint(value)
                     parser.pointer[(parser.index)], parser.ref, parser.index = value, __index - 1, ""
                     vcl.private.parseComment(parser, buffer, vcl.private.fetch(buffer, parser.ref))
                 else parser.isChildErrored = 1 end
@@ -142,7 +150,8 @@ function vcl.private.decode(buffer, ref, isChild)
             --parser.isTypePadding = #indexLine - #parser.index - 1
             --print("Fetched Index: "..parser.index.." | Padding: "..parser.isTypePadding)
         end
-        if not vcl.private.parseObject(parser, buffer, character, parser.isTypePadding) then break end
+        local result = vcl.private.parseObject(parser, buffer, character, parser.isTypePadding)
+        if not result or result == -1 then break end
         if isChild and not parser.isChildErrored and parser.isParsed then break end
         parser.ref = parser.ref + 1
     end
