@@ -86,29 +86,12 @@ function vcl.private.parseObject(parser, buffer, rw, isChild)
                 local _, indexLine = vcl.private.fetchLine(string.sub(buffer, 0, parser.ref))
                 parser.isTypePadding = #indexLine - #parser.index - 1
                 parser.isPadding = parser.isPadding or parser.isTypePadding - 1
-                if not isChild then
-                    print(parser.index)
-                    print(string.sub(buffer, parser.ref, #buffer))
-                end
-                local isAllowed = false
-                if parser.isTypePadding > parser.isPadding then isAllowed = true end
-                if isAllowed then
-                    if not isChild then
-                        print("Fetched Index: "..parser.index.." | Parent: "..(parser.isPadding or "-").." | Child: "..parser.isTypePadding)
-                    end
-                else
-                    --if not isChild then
-                        print("Ignored Index: "..parser.index.." | Parent: "..(parser.isPadding or "-").." | Child: "..parser.isTypePadding.." | SUB CHILD? "..tostring(isChild))
-                    --end
+                if parser.isTypePadding <= parser.isPadding then
                     parser.ref = parser.ref - #parser.index
                     return false
                 end
                 local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, true, parser.isTypePadding)
                 if not error then
-                    if not isChild then
-                        --print("Received Index: "..parser.index)
-                        --iprint(value)
-                    end
                     parser.pointer[(parser.index)], parser.ref, parser.index = value, __index - 1, ""
                     vcl.private.parseComment(parser, buffer, vcl.private.fetch(buffer, parser.ref))
                 else parser.isChildErrored = 1 end
@@ -171,8 +154,9 @@ end
 setTimer(function()
 local test = [[
 A:
-  B: "vB"
-C: "vC"
+  D:
+   B: "vB"
+    C: "vC"
 ]]
 local result = vcl.public.decode(test)
 iprint(result)
