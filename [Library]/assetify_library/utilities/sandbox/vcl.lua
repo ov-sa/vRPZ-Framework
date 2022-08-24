@@ -95,7 +95,7 @@ function vcl.private.parseReturn(parser, buffer)
         if not parser.isChildErrored or (parser.isChildErrored == 0) then
             parser.isErrored = string.format(
                 parser.isErrored,
-                vcl.private.fetchLine(buffer, parser.refOn),
+                vcl.private.fetchLine(buffer, parser.refAt),
                 ((parser.isType == "string") and "Malformed string") or
                 ((parser.isType == "number") and "Malformed number") or
                 "Invalid declaration"
@@ -142,10 +142,11 @@ end
 
 setTimer(function()
 local test2 = [[
+    #XD
     rootA: 1.222
     indexA:
         indexB: 1.222
-        indexC: "valueC" SOMETHING INVALID EXISTS HERE FAIL TO LOAD??
+        indexC: "valueC"
     rootB: 1.222
 ]]
 local result = vcl.public.decode(test2)
