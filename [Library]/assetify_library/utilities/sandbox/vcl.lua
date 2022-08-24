@@ -29,6 +29,10 @@ vcl.private.types = {
     comment = "#",
     newline = "\n",
     decimal = ".",
+    bool = {
+        ["true"] = true,
+        ["false"] = false
+    },
     string = {
         ["`"] = true,
         ["'"] = true,
