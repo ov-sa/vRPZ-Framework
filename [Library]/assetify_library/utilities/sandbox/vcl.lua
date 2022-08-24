@@ -63,11 +63,8 @@ end
 
 function vcl.private.parseBoolean(parser, buffer, rw)
     if not parser.isType or (parser.isType == "string") then
-        if vcl.private.types.parseBoolean[rw] ~= nil then
-            if not parser.isType then parser.isSkipAppend, parser.isType = true, "string", rw
-            elseif rw == parser.isTypeChar then
-                if not parser.isTypeParsed then parser.isSkipAppend, parser.isTypeParsed = true, true
-                else return false end
+        if vcl.private.types.bool[rw] ~= nil then
+            if not parser.isType then parser.isType, parser.isTypeParsed = "bool", true
             elseif parser.isTypeParsed then
                 if rw == vcl.private.types.newline then parser.isParsed = true
                 else return false end
@@ -142,7 +139,7 @@ function vcl.private.parseReturn(parser, buffer)
         end
         return false, false, true
     elseif (parser.isType == "object") then return parser.pointer, parser.ref
-    elseif (parser.isType == "boolean") then return ((parser.value == true) and true) or false, parser.ref
+    elseif (parser.isType == "bool") then return ((parser.value == true) and true) or false, parser.ref
     else return ((parser.isType == "number" and imports.tonumber(parser.value)) or parser.value), parser.ref end
 end
 
@@ -186,6 +183,6 @@ local data = file:read("test.vcl")
 local test = [[
     test: true
 ]]
-local result = vcl.public.decode(data)
+local result = vcl.public.decode(test)
 iprint(result)
 end, 1000, 1)
