@@ -69,7 +69,7 @@ function vcl.private.parseNumber(parser, buffer, rw)
 end
 
 function vcl.private.parseObject(parser, buffer, rw)
-    if parser.isType == "object" then
+    if not parser.isComment and (parser.isType == "object") then
         if not vcl.private.isVoid(rw) then
             parser.index = parser.index..rw
         elseif not vcl.private.isVoid(parser.index) then
@@ -108,19 +108,10 @@ function vcl.private.parseReturn(parser, buffer)
 end
 
 function vcl.private.parseComment(parser, buffer, rw)
-    local prevLine = parser.line
-    parser.line = vcl.private.fetchLine(buffer, parser.ref)
-    local isNewLine = prevLine ~= parser.line
-    if isNewLine then parser.isComment = false end
-    if rw == "#" then
-        print('YES: Found COmment: L'..parser.line)
-        if not parser.isType or vcl.private.isVoid(parser.index) then
-            parser.isComment = true
-            print("MARKED AS COMMENT")
-        else
-            parser.isComment = false
-        end
-    end
+    local isCommentLine = parser.isCommentLine
+    parser.isCommentLine = vcl.private.fetchLine(buffer, parser.ref)
+    parser.isComment = ((isCommentLine == parser.isCommentLine) and parser.isComment) or false
+    parser.isComment = ((not parser.isType or vcl.private.isVoid(parser.index)) and not parser.isComment and (rw == "#") and true) or parser.isComment
     return true
 end
 
@@ -141,8 +132,8 @@ function vcl.private.decode(buffer, index, isChild)
             if not vcl.private.parseNumber(parser, buffer, character) then break end
             if parser.isType and not parser.isSkipAppend and not parser.isParsed then parser.value = parser.value..character end
         end
-        parser.isType = (not parser.isComment and (not isChild or isChildValid) and (not parser.isType and not vcl.private.isVoid(character)) and "object") or parser.isType
-        if not vcl.private.parseObject(parser, buffer, character) then print("TEST C") break end
+        parser.isType = ((not isChild or isChildValid) and (not parser.isType and not vcl.private.isVoid(character)) and "object") or parser.isType
+        if not vcl.private.parseObject(parser, buffer, character) then break end
         parser.ref = parser.ref + 1
         if isChild and not parser.isChildErrored and parser.isParsed then break end
     end
