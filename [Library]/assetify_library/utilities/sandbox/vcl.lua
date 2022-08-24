@@ -108,13 +108,13 @@ function vcl.private.parseReturn(parser, buffer)
 end
 
 function vcl.private.parseComment(parser, buffer, rw)
-    local prevLine = parser.currentLine
-    parser.currentLine = vcl.private.fetchLine(buffer, parser.ref)
-    local isNewLine = prevLine ~= parser.currentLine
+    local prevLine = parser.line
+    parser.line = vcl.private.fetchLine(buffer, parser.ref)
+    local isNewLine = prevLine ~= parser.line
     if isNewLine then parser.isComment = false end
     if rw == "#" then
-        print('YES: Found COmment: L'..parser.currentLine)
-        if not parser.isType then
+        print('YES: Found COmment: L'..parser.line)
+        if not parser.isType or vcl.private.isVoid(parser.index) then
             parser.isComment = true
             print("MARKED AS COMMENT")
         else
