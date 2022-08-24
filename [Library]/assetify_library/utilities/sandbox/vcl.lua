@@ -24,6 +24,13 @@ local imports = {
 --------------------
 
 local vcl = class:create("vcl")
+vcl.private.types = {
+    string = {
+        ["`"] = true,
+        ["'"] = true,
+        ["\""] = true
+    }
+}
 
 function vcl.private.isVoid(rw)
     return (not rw or (imports.type(rw) ~= "string") or not string.match(rw, "%w") and true) or false
@@ -48,7 +55,7 @@ end
 
 function vcl.private.parseString(parser, buffer, rw)
     if not parser.isType or (parser.isType == "string") then
-        if (not parser.isTypeChar and ((rw == "\"") or (rw == "\'"))) or parser.isTypeChar then
+        if (not parser.isTypeChar and vcl.private.types.string[rw]) or parser.isTypeChar then
             if not parser.isType then parser.isSkipAppend, parser.isType, parser.isTypeChar = true, "string", rw
             elseif rw == parser.isTypeChar then
                 if not parser.isTypeParsed then parser.isSkipAppend, parser.isTypeParsed = true, true
@@ -155,7 +162,7 @@ local test = [[
 A:
   D:
    B: "vB"
-    C: "vC"
+C: "vC"
 ]]
 local result = vcl.public.decode(test)
 iprint(result)
