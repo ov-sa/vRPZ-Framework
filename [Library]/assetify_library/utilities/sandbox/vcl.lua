@@ -34,7 +34,8 @@ function vcl.private.fetch(rw, index)
 end
 
 function vcl.private.fetchLine(rw, index)
-    return math.max(1, #string.split(string.sub(rw, 0, index), "\n"))
+    local rwLines = string.split(string.sub(rw, 0, index), "\n")
+    return math.max(1, #rwLines), rwLines[#rwLines] or ""
 end
 
 function vcl.private.parseComment(parser, buffer, rw)
@@ -79,14 +80,24 @@ end
 function vcl.private.parseObject(parser, buffer, rw)
     if not parser.isComment and (parser.isType == "object") then
         if not vcl.private.isVoid(rw) then
+            if vcl.private.isVoid(parser.index) then
+                parser.__length = parser.ref
+                local currentLength = parser.ref
+                --local prevLength = #string.sub(buffer, 0, parser.ref - 1)
+                --print("PREV: "..prevLength.." - CURR: "..currentLength)
+                --print("LENGTH: "..(currentLength - prevLength))
+                --print("IS VOID FETCH ALL..")
+            end
             parser.index = parser.index..rw
         elseif not vcl.private.isVoid(parser.index) then
             if rw == ":" then
-                print("FETCHING: "..parser.index)
+                local _, indexLine = vcl.private.fetchLine(string.sub(buffer, 0, parser.ref))
+                parser.isTypePadding = #indexLine - #parser.index - 1
+                print("Index: "..parser.index.." | Padding: "..parser.isTypePadding)
                 local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, true)
                 if not error then
-                    print("RECEIVED: "..parser.index)
-                    iprint(value)
+                    --print("RECEIVED: "..parser.index)
+                    --iprint(value)
                     parser.pointer[(parser.index)], parser.ref, parser.index = value, __index - 1, ""
                     vcl.private.parseComment(parser, buffer, vcl.private.fetch(buffer, parser.ref))
                 else parser.isChildErrored = 1 end
@@ -146,16 +157,10 @@ end
 
 setTimer(function()
 local test = [[
-# Comment A
-rootA: 1.222
-# Comment B
-indexA:
-    # Comment C
-    indexB: 1.222
-    indexC: "valueC"
-# Comment D
-rootB: "wew"
+rootA:
+    testA: 1
+testB: 2
 ]]
 local result = vcl.public.decode(test)
-iprint(result)
+--iprint(result)
 end, 1000, 1)
