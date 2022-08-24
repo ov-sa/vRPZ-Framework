@@ -137,6 +137,10 @@ function vcl.private.decode(buffer, ref, isChild, padding)
         index = "", pointer = {}, value = "",
         isErrored = "Failed to decode vcl. [Line: %s] [Reason: %s]"
     }
+    if not isChild then
+        buffer = string.gsub(buffer, "\r", "")
+        buffer = (not isChild and (vcl.private.fetch(buffer, #buffer) ~= "\n") and buffer.."\n") or buffer
+    end
     while(parser.ref <= #buffer) do
         local character = vcl.private.fetch(buffer, parser.ref)
         vcl.private.parseComment(parser, buffer, character)
@@ -184,6 +188,7 @@ A:
 
 #Comment F
 ]]
-local result = vcl.public.decode(test)
+local data = tostring(file:read("test.vcl"))
+local result = vcl.public.decode(data)
 iprint(result)
 end, 1000, 1)
