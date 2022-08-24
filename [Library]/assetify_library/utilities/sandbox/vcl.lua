@@ -115,11 +115,9 @@ function vcl.private.parseReturn(parser, buffer)
     else return ((parser.isType == "number" and imports.tonumber(parser.value)) or parser.value), parser.ref end
 end
 
-function vcl.private.decode(buffer, index, isChild)
-    index = index or 1
+function vcl.private.decode(buffer, ref, isChild)
     local parser = {
-        ref = index,
-        index = "", pointer = {}, value = "",
+        ref = ref or 1, index = "", pointer = {}, value = "",
         isErrored = "Failed to decode vcl. [Line: %s] [Reason: %s]"
     }
     while(parser.ref <= #buffer) do
