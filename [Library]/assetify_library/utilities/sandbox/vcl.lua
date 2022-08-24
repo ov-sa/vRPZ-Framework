@@ -37,6 +37,31 @@ function vcl.private.fetchLine(rw, index)
     return #string.split(string.sub(rw, 0, index), "\n")
 end
 
+function vcl.private.parseString(parser, buffer, rw)
+    if not parser.isType or (parser.isType == "string") then
+        if (not parser.isTypeChar and ((rw == "\"") or (rw == "\'"))) or (parser.isTypeChar and (parser.isTypeChar == rw)) then
+            if not parser.isType then parser.isSkipAppend, parser.isType, parser.isTypeChar = true, "string", rw
+            else parser.isParsed = true end
+        end
+    end
+    return true
+end
+
+function vcl.private.parseNumber(parser, buffer, rw)
+    if not parser.isType or (parser.isType == "number") then
+        local isNumber = imports.tonumber(rw)
+        if not parser.isType and isNumber then parser.isType = "number"
+        elseif parser.isType then
+            if rw == "." then
+                if not parser.isTypeFloat then parser.isTypeFloat = true
+                else return false end
+            elseif (rw == " ") or (rw == "\n") then parser.isParsed = true
+            elseif not isNumber then return false end
+        end
+    end
+    return true
+end
+
 function vcl.private.decode(buffer, index, isChild)
     index = index or 1
     local parser = {
@@ -47,25 +72,10 @@ function vcl.private.decode(buffer, index, isChild)
         local character = vcl.private.fetch(buffer, index)
         local isChildValid = (isChild and true) or false
         if isChildValid then
-            local isSkipAppend = false
-            if not parser.isType or (parser.isType == "string") then
-                if (not parser.isTypeChar and ((character == "\"") or (character == "\'"))) or (parser.isTypeChar and (parser.isTypeChar == character)) then
-                    if not parser.isType then isSkipAppend, parser.isType, parser.isTypeChar = true, "string", character
-                    else parser.isParsed = true end
-                end
-            end
-            if not parser.isType or (parser.isType == "number") then
-                local isNumber = imports.tonumber(character)
-                if not parser.isType and isNumber then parser.isType = "number"
-                elseif parser.isType then
-                    if character == "." then
-                        if not parser.isTypeFloat then parser.isTypeFloat = true
-                        else break end
-                    elseif (character == " ") or (character == "\n") then parser.isParsed = true
-                    elseif not isNumber then break end
-                end
-            end
-            if parser.isType and not isSkipAppend and not parser.isParsed then parser.value = parser.value..character end
+            parser.isSkipAppend = false
+            if not vcl.private.parseString(parser, buffer, character) then break end
+            if not vcl.private.parseNumber(parser, buffer, character) then break end
+            if parser.isType and not parser.isSkipAppend and not parser.isParsed then parser.value = parser.value..character end
         end
         parser.isType = ((not isChild or isChildValid) and (not parser.isType and not vcl.private.isVoid(character)) and "object") or parser.isType
         if parser.isType == "object" then
@@ -84,6 +94,9 @@ function vcl.private.decode(buffer, index, isChild)
                 else parser.isChildErrored = 0 end
                 if parser.isChildErrored then break end
             end
+        end
+        if not parser.isType and character == "#" then
+            print("COMMENT!")
         end
         index = index + 1
         if isChild and not parser.isChildErrored and parser.isParsed then break end
@@ -113,7 +126,6 @@ end
 
 setTimer(function()
 local test2 = [[
-# comment
 rootA: 1.222
 indexA:
     indexB: 1.222
