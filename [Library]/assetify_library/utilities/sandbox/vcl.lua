@@ -41,7 +41,14 @@ function vcl.private.parseString(parser, buffer, rw)
     if not parser.isType or (parser.isType == "string") then
         if (not parser.isTypeChar and ((rw == "\"") or (rw == "\'"))) or (parser.isTypeChar and (parser.isTypeChar == rw)) then
             if not parser.isType then parser.isSkipAppend, parser.isType, parser.isTypeChar = true, "string", rw
-            else parser.isParsed = true end
+            elseif rw == parser.isTypeChar then parser.__isParsed = true
+            elseif parser.__isParsed and (rw == "\n") then
+                print("aua")
+                parser.isParsed = true
+            else
+                print("wow: "..rw)
+                return false
+            end
         end
     end
     return true
@@ -55,7 +62,7 @@ function vcl.private.parseNumber(parser, buffer, rw)
             if rw == "." then
                 if not parser.isTypeFloat then parser.isTypeFloat = true
                 else return false end
-            elseif (rw == " ") or (rw == "\n") then parser.isParsed = true
+            elseif rw == "\n" then parser.isParsed = true
             elseif not isNumber then return false end
         end
     end
@@ -90,7 +97,7 @@ function vcl.private.parseReturn(parser, buffer)
             parser.isErrored = string.format(
                 parser.isErrored,
                 vcl.private.fetchLine(buffer, parser.refOn),
-                ((parser.isType == "string") and "Unterminated string") or
+                ((parser.isType == "string") and "Malformed string") or
                 ((parser.isType == "number") and "Malformed number") or
                 "Invalid declaration"
             )
