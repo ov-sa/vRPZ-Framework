@@ -103,8 +103,14 @@ function vcl.private.parseReturn(parser, buffer)
             imports.outputDebugString(parser.isErrored)
         end
         return false, false, true
-    elseif (parser.isType == "object") then return parser.pointer, parser.refAt
-    else return ((parser.isType == "number" and imports.tonumber(parser.value)) or parser.value), parser.refAt end
+    elseif (parser.isType == "object") then return parser.pointer, parser.refOn
+    else return ((parser.isType == "number" and imports.tonumber(parser.value)) or parser.value), parser.refOn end
+end
+
+function vcl.private.parseComment(parser, buffer, rw)
+    parser.isComment = parser.isComment or ((not parser.isType) and (character == "#") and true) or false
+    parser.isComment = (parser.isComment and (character ~= "\n") and parser.isComment) or false
+    return true
 end
 
 function vcl.private.decode(buffer, index, isChild)
@@ -116,18 +122,17 @@ function vcl.private.decode(buffer, index, isChild)
     }
     while(parser.refAt <= #buffer) do
         local character = vcl.private.fetch(buffer, parser.refAt)
-        local isChildValid = (isChild and true) or false
+
+        local isChildValid = (not parser.isComment and isChild and true) or false
         if isChildValid then
+            vcl.private.parseComment(parser, buffer, rw)
             parser.isSkipAppend = false
             if not vcl.private.parseString(parser, buffer, character) then break end
             if not vcl.private.parseNumber(parser, buffer, character) then break end
             if parser.isType and not parser.isSkipAppend and not parser.isParsed then parser.value = parser.value..character end
         end
-        parser.isType = ((not isChild or isChildValid) and (not parser.isType and not vcl.private.isVoid(character)) and "object") or parser.isType
-        if not vcl.private.parseObject(parser, buffer, character) then break end
-        if not parser.isType and character == "#" then
-            print("COMMENT!")
-        end
+        parser.isType = (not parser.isComment and (not isChild or isChildValid) and (not parser.isType and not vcl.private.isVoid(character)) and "object") or parser.isType
+        if not vcl.private.parseObject(parser, buffer, character) then print("TEST C") break end
         parser.refAt = parser.refAt + 1
         if isChild and not parser.isChildErrored and parser.isParsed then break end
     end
@@ -142,8 +147,9 @@ end
 
 setTimer(function()
 local test2 = [[
-    #XD
+    # Some comment here A
     rootA: 1.222
+    # Some comment here B
     indexA:
         indexB: 1.222
         indexC: "valueC"
