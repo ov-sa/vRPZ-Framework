@@ -148,10 +148,11 @@ end
 
 setTimer(function()
 local test2 = [[
-    # A
+    # Comment A
     rootA: 1.222
-    # B
+    # Comment B
     indexA:
+    # Comment C
         indexB: 1.222
         indexC: "valueC"
     rootB: 1.222
