@@ -110,7 +110,6 @@ function vcl.private.parseNumber(parser, buffer, rw)
                 if not parser.isTypeFloat then parser.isTypeFloat = true
                 else return false end
             elseif rw == vcl.private.types.newline then parser.isParsed = true
-            elseif not parser.isTypeFloat and (rw == vcl.private.types.init) then parser.ref, parser.isType = parser.ref - #parser.value - 1, "object"
             elseif not isNumber then return false end
         end
     end
@@ -119,8 +118,8 @@ end
 
 function vcl.private.parseObject(parser, buffer, rw, isChild)
     if not parser.isComment and (parser.isType == "object") then
-        if not vcl.private.isVoid(rw) then
-            parser.index = parser.index..rw
+        if vcl.private.isVoid(parser.index) and (rw == "-") then parser.isTypeID = true
+        elseif not vcl.private.isVoid(rw) then parser.index = parser.index..rw
         elseif not vcl.private.isVoid(parser.index) then
             if rw == vcl.private.types.init then
                 local _, indexLine = vcl.private.fetchLine(string.sub(buffer, 0, parser.ref))
@@ -132,7 +131,7 @@ function vcl.private.parseObject(parser, buffer, rw, isChild)
                 end
                 local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, indexPadding, true)
                 if not error then
-                    parser.pointer[(imports.tonumber(parser.index) or parser.index)], parser.ref, parser.index = value, __index - 1, ""
+                    parser.pointer[((parser.isTypeID and imports.tonumber(parser.index)) or parser.index)], parser.ref, parser.index = value, __index - 1, ""
                     vcl.private.parseComment(parser, buffer, vcl.private.fetch(buffer, parser.ref))
                 else parser.isChildErrored = 1 end
             else parser.isChildErrored = 0 end
@@ -193,7 +192,7 @@ function vcl.private.decode(buffer, ref, padding, isChild)
             if not vcl.private.parseString(parser, buffer, vcl.private.fetch(buffer, parser.ref)) then break end
             if parser.isType and not parser.isSkipAppend and not parser.isParsed then parser.value = parser.value..vcl.private.fetch(buffer, parser.ref) end
         end
-        parser.isType = ((not isChild or isChildValid) and (not parser.isType and not vcl.private.isVoid(vcl.private.fetch(buffer, parser.ref))) and "object") or parser.isType
+        parser.isType = ((not isChild or isChildValid) and (not parser.isType and ((vcl.private.fetch(buffer, parser.ref) == "-") or not vcl.private.isVoid(vcl.private.fetch(buffer, parser.ref)))) and "object") or parser.isType
         if not vcl.private.parseObject(parser, buffer, vcl.private.fetch(buffer, parser.ref), isChild) then break end
         if isChild and not parser.isChildErrored and parser.isParsed then break end
         parser.ref = parser.ref + 1
@@ -206,18 +205,12 @@ function vcl.public.decode(buffer) return vcl.private.decode(buffer) end
 --TESTS
 setTimer(function()
 local data = file:read("test.vcl")
-local result = vcl.public.decode(data)
-local __result = table.decode([[
-    A: 1
-    B: 2
-    C:
-        D: 4
-        E: 5
-        F:
-            G: 6
-            H: 7
+--local result = vcl.public.decode(data)
+result = table.decode([[
+A: 
+    - 1: "HEY"
 ]])
---iprint(result)
+iprint(result)
 --local result2 = vcl.public.encode(result)
 --file:write("lol.vcl", result2)
 --print(result2)
