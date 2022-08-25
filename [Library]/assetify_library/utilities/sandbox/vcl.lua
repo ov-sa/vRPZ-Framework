@@ -152,6 +152,12 @@ function vcl.private.parseReturn(parser, buffer)
     else return ((parser.isType == "number" and imports.tonumber(parser.value)) or parser.value), parser.ref end
 end
 
+function vcl.private.encode(buffer)
+    print("uo")
+    return 1
+end
+function vcl.public.encode(buffer) return vcl.private.encode(buffer) end
+
 function vcl.private.decode(buffer, ref, padding, isChild)
     local parser = {
         ref = ref or 1, padding = padding,
@@ -180,15 +186,8 @@ function vcl.private.decode(buffer, ref, padding, isChild)
     end
     return vcl.private.parseReturn(parser, buffer)
 end
+function vcl.public.decode(buffer) return vcl.private.decode(buffer) end
 
-vcl.public.encode = function(buffer)
-    --return vcl.private.encode(buffer)
-    return "TODO:"
-end
-
-vcl.public.decode = function(buffer)
-    return vcl.private.decode(buffer)
-end
 
 --TESTS
 
