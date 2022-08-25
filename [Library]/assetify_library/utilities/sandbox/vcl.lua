@@ -181,6 +181,11 @@ function vcl.private.decode(buffer, ref, padding, isChild)
     return vcl.private.parseReturn(parser, buffer)
 end
 
+vcl.public.encode = function(buffer)
+    --return vcl.private.encode(buffer)
+    return "TODO:"
+end
+
 vcl.public.decode = function(buffer)
     return vcl.private.decode(buffer)
 end
