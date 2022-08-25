@@ -201,6 +201,7 @@ function vcl.private.decode(buffer, ref, padding, isChild)
         isErrored = "Failed to decode vcl. [Line: %s] [Reason: %s]"
     }
     if not isChild then
+        buffer = string.gsub(buffer, vcl.private.types.tab, "  ")
         buffer = string.gsub(buffer, vcl.private.types.carriageline, "")
         buffer = (not isChild and (vcl.private.fetch(buffer, #buffer) ~= vcl.private.types.newline) and buffer..vcl.private.types.newline) or buffer
     end
