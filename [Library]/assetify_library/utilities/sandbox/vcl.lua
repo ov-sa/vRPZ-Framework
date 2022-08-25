@@ -166,18 +166,26 @@ function vcl.private.parseReturn(parser, buffer)
 end
 
 function vcl.private.encode(buffer, padding)
+    if not buffer or (imports.type(buffer) ~= "table") then return false end
     padding = padding or ""
-    local result, indexes = "", {}
+    local result, indexes = "", {numeric = {}, index = {}}
     for i, j in imports.pairs(buffer) do
-        i = ((imports.type(i) == "number") and "- "..imports.tostring(i)) or i
-        if imports.type(j) == "table" then indexes[i] = j
+        if imports.type(j) == "table" then
+            table.insert(((imports.type(i) == "number") and indexes.numeric) or indexes.index, i)
         else
+            i = ((imports.type(i) == "number") and "- "..imports.tostring(i)) or i
             if imports.type(j) == "string" then j = "\""..j.."\"" end
             result = result..vcl.private.types.newline..padding..i..":".." "..imports.tostring(j)
         end
     end
-    for i, j in imports.pairs(indexes) do
-        result = result..vcl.private.types.newline..padding..i..":"..vcl.private.encode(j, padding..vcl.private.types.tab)
+    table.sort(indexes.numeric, function(a, b) return a < b end)
+    for i = 1, #indexes.numeric, 1 do
+        local j = indexes.numeric[i]
+        result = result..vcl.private.types.newline..padding..("- "..j)..":"..vcl.private.encode(buffer[j], padding..vcl.private.types.tab)
+    end
+    for i = 1, #indexes.index, 1 do
+        local j = indexes.index[i]
+        result = result..vcl.private.types.newline..padding..j..":"..vcl.private.encode(buffer[j], padding..vcl.private.types.tab)
     end
     return result
 end
@@ -212,3 +220,17 @@ function vcl.private.decode(buffer, ref, padding, isChild)
     return vcl.private.parseReturn(parser, buffer)
 end
 function vcl.public.decode(buffer) return vcl.private.decode(buffer) end
+
+
+--TESTS
+setTimer(function()
+local data = file:read("utilities/rw/timecyc.rw")
+local result = table.decode(data, "json")
+local result2 = vcl.public.encode(result)
+print(result2)
+--local result2 = vcl.public.decode(result2)
+--iprint(result)
+
+file:write("lol.vcl", result2)
+--print(result2)
+end, 1000, 1)
