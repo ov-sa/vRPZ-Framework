@@ -341,15 +341,16 @@ else
     function asset.public:buildPack(assetType, assetPack, callback)
         if not assetType or not assetPack or not callback or (imports.type(callback) ~= "function") then return false end
         local cAssetPack = table.clone(assetPack, true)
-        cAssetPack.manifestData = file:read((asset.public.references.root)..string.lower(assetType).."/"..(asset.public.references.manifest)..".json")
+        local manifestPath = (asset.public.references.root)..string.lower(assetType).."/"..(asset.public.references.manifest)
+        cAssetPack.manifestData = file:read((file:exists(manifestPath..".json") and manifestPath..".json") or manifestPath..".vcl")
         cAssetPack.manifestData = (cAssetPack.manifestData and table.decode(cAssetPack.manifestData)) or false
         if not cAssetPack.manifestData then execFunction(callback, false, assetType); return false end
         thread:create(function(self)
             cAssetPack.rwDatas = {}
             for i = 1, #cAssetPack.manifestData, 1 do
                 local assetName = cAssetPack.manifestData[i]
-                local assetPath = (asset.public.references.root)..string.lower(assetType).."/"..assetName.."/"
-                local assetManifestData = asset.public:buildManifest(assetPath, _, (asset.public.references.asset)..".json")
+                local assetPath, manifestPath = (asset.public.references.root)..string.lower(assetType).."/"..assetName.."/", asset.public.references.asset
+                local assetManifestData = asset.public:buildManifest(assetPath, _, (file:exists(manifestPath..".json") and manifestPath..".json") or manifestPath..".vcl")
                 if assetManifestData then
                     local assetProperties = asset.private.properties.whitelisted[assetType] or asset.private.properties.whitelisted["*"]
                     for k = 1, #asset.private.properties.reserved, 1 do
