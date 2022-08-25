@@ -262,8 +262,7 @@ else
     function asset.public:buildManifest(rootPath, localPath, manifestPath)
         if not manifestPath then return false end
         localPath = localPath or rootPath
-        local manifestData = file:read(localPath..manifestPath)
-        manifestData = (manifestData and table.decode(manifestData, file:parseURL(manifestPath).extension)) or false
+        local manifestData = table.decode(file:read(localPath..manifestPath), file:parseURL(manifestPath).extension)
         if manifestData then
             for i, j in imports.pairs(manifestData) do
                 local cURL = file:parseURL(j)
@@ -342,15 +341,15 @@ else
         if not assetType or not assetPack or not callback or (imports.type(callback) ~= "function") then return false end
         local cAssetPack = table.clone(assetPack, true)
         local manifestPath = (asset.public.references.root)..string.lower(assetType).."/"..(asset.public.references.manifest)
-        cAssetPack.manifestData = file:read((file:exists(manifestPath..".json") and manifestPath..".json") or manifestPath..".vcl")
-        cAssetPack.manifestData = (cAssetPack.manifestData and table.decode(cAssetPack.manifestData)) or false
+        manifestPath = manifestPath..((file:exists(manifestPath..".json") and ".json") or ".vcl")
+        cAssetPack.manifestData = table.decode(file:read(manifestPath), file:parseURL(manifestPath).extension)
         if not cAssetPack.manifestData then execFunction(callback, false, assetType); return false end
         thread:create(function(self)
             cAssetPack.rwDatas = {}
             for i = 1, #cAssetPack.manifestData, 1 do
                 local assetName = cAssetPack.manifestData[i]
-                local assetPath, manifestPath = (asset.public.references.root)..string.lower(assetType).."/"..assetName.."/", asset.public.references.asset
-                local assetManifestData = asset.public:buildManifest(assetPath, _, (file:exists(assetPath..manifestPath..".json") and manifestPath..".json") or manifestPath..".vcl")
+                local assetPath = (asset.public.references.root)..string.lower(assetType).."/"..assetName.."/"
+                local assetManifestData = asset.public:buildManifest(assetPath, _, asset.public.references.asset..((file:exists(assetPath..(asset.public.references.asset)..".json") and ".json") or ".vcl"))
                 if assetManifestData then
                     local assetProperties = asset.private.properties.whitelisted[assetType] or asset.private.properties.whitelisted["*"]
                     for k = 1, #asset.private.properties.reserved, 1 do

@@ -61,7 +61,7 @@ function table.public.encode(baseTable, encoding)
 end
 
 function table.public.decode(baseString, encoding)
-    if not baseTable or (imports.type(baseTable) ~= "string") then return false end
+    if not baseString or (imports.type(baseString) ~= "string") then return false end
     if encoding == "json" then return imports.fromJSON(baseString)
     else return imports.vcl.decode(baseString) end
 end
