@@ -262,7 +262,9 @@ else
     function asset.public:buildManifest(rootPath, localPath, manifestPath)
         if not manifestPath then return false end
         localPath = localPath or rootPath
-        local manifestData = table.decode(file:read(localPath..manifestPath), file:parseURL(manifestPath).extension)
+        manifestPath = localPath..manifestPath
+        local manifestData = file:read(manifestPath)
+        manifestData = (manifestData and table.decode(manifestData, file:parseURL(manifestPath).extension)) or false
         if manifestData then
             for i, j in imports.pairs(manifestData) do
                 local cURL = file:parseURL(j)
