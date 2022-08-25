@@ -169,6 +169,7 @@ function vcl.private.encode(buffer, padding)
     padding = padding or ""
     local result, indexes = "", {}
     for i, j in imports.pairs(buffer) do
+        i = ((imports.type(i) == "number") and "- "..imports.tostring(i)) or i
         if imports.type(j) == "table" then indexes[i] = j
         else
             if imports.type(j) == "string" then j = "\""..j.."\"" end
@@ -211,24 +212,3 @@ function vcl.private.decode(buffer, ref, padding, isChild)
     return vcl.private.parseReturn(parser, buffer)
 end
 function vcl.public.decode(buffer) return vcl.private.decode(buffer) end
-
-
---TESTS
-setTimer(function()
-local data = file:read("test.vcl")
---local result = vcl.public.decode(data)
-result = table.decode([[
-A: 
-    - 1: 
-        xD: "hey"
-        -: "lol"
-    -: "xD"
-    -: "xD"
-    -: "xD"
-    -: "xD"
-]])
-iprint(result)
---local result2 = vcl.public.encode(result)
---file:write("lol.vcl", result2)
---print(result2)
-end, 1000, 1)
