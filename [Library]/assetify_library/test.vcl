@@ -1,9 +1,7 @@
 # Generic asset configs
 encryptKey: "vStudio - Aviril"
 streamRange: 170
-
-# TODO: Add boolean support
-enableLODs: 1
+enableLODs: true
 
 # Scene configs
 sceneDimension: -1

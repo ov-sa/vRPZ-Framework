@@ -14,6 +14,7 @@
 
 local imports = {
     type = type,
+    pairs = pairs,
     tonumber = tonumber,
     outputDebugString = outputDebugString
 }
@@ -30,8 +31,8 @@ vcl.private.types = {
     newline = "\n",
     decimal = ".",
     bool = {
-        ["true"] = true,
-        ["false"] = false
+        ["true"] = "true",
+        ["false"] = "false"
     },
     string = {
         ["`"] = true,
@@ -62,13 +63,20 @@ function vcl.private.parseComment(parser, buffer, rw)
 end
 
 function vcl.private.parseBoolean(parser, buffer, rw)
-    if not parser.isType or (parser.isType == "string") then
-        if vcl.private.types.bool[rw] ~= nil then
-            if not parser.isType then parser.isType, parser.isTypeParsed = "bool", true
-            elseif parser.isTypeParsed then
-                if rw == vcl.private.types.newline then parser.isParsed = true
-                else return false end
+    if not parser.isType or (parser.isType == "bool") then
+        if not parser.isType then
+            for i, j in imports.pairs(vcl.private.types.bool) do
+                if string.sub(buffer, parser.ref, parser.ref + #i - 1) == i then
+                    rw = i
+                    break
+                end
             end
+        end
+        if not parser.isType and vcl.private.types.bool[rw] then
+            parser.isSkipAppend, parser.ref, parser.isType, parser.value = true, parser.ref + #rw - 1, "bool", rw
+        elseif parser.isType then
+            if rw == vcl.private.types.newline then parser.isSkipAppend, parser.isParsed = true, true
+            else return false end
         end
     end
     return true
@@ -139,7 +147,7 @@ function vcl.private.parseReturn(parser, buffer)
         end
         return false, false, true
     elseif (parser.isType == "object") then return parser.pointer, parser.ref
-    elseif (parser.isType == "bool") then return ((parser.value == true) and true) or false, parser.ref
+    elseif (parser.isType == "bool") then return ((parser.value == "true") and true) or false, parser.ref
     else return ((parser.isType == "number" and imports.tonumber(parser.value)) or parser.value), parser.ref end
 end
 
@@ -181,7 +189,8 @@ end
 setTimer(function()
 local data = file:read("test.vcl")
 local test = [[
-    test: true
+    test: false
+    test2: 1
 ]]
 local result = vcl.public.decode(test)
 iprint(result)
