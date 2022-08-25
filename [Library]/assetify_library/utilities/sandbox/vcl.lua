@@ -129,7 +129,7 @@ function vcl.private.parseObject(parser, buffer, rw, isChild)
                 end
                 local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, indexPadding, true)
                 if not error then
-                    parser.pointer[(parser.index)], parser.ref, parser.index = value, __index - 1, ""
+                    parser.pointer[(imports.tonumber(parser.index) or parser.index)], parser.ref, parser.index = value, __index - 1, ""
                     vcl.private.parseComment(parser, buffer, vcl.private.fetch(buffer, parser.ref))
                 else parser.isChildErrored = 1 end
             else parser.isChildErrored = 0 end
@@ -190,10 +190,11 @@ end
 setTimer(function()
 local data = file:read("test.vcl")
 local test = [[
-    test: false
-    test2:
-        1: "lol"
+    1: "lol"
 ]]
-local result = vcl.public.decode(data)
+local result = vcl.public.decode(test)
+for i, j in pairs(result) do
+    print(i.." : "..type(i))
+end
 iprint(result)
 end, 1000, 1)
