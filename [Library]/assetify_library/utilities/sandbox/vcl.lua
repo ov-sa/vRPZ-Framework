@@ -62,7 +62,7 @@ function vcl.private.parseComment(parser, buffer, rw)
     local isCommentLine = parser.isCommentLine
     parser.isCommentLine = vcl.private.fetchLine(buffer, parser.ref)
     parser.isComment = ((isCommentLine == parser.isCommentLine) and parser.isComment) or false
-    parser.isComment = (not parser.isComment and (not parser.isType or vcl.private.isVoid(parser.index)) and (rw == vcl.private.types.comment) and true) or parser.isComment
+    parser.isComment = (not parser.isComment and (not parser.isType or ((parser.isType ~= "string") and vcl.private.isVoid(parser.index))) and (rw == vcl.private.types.comment) and true) or parser.isComment
     return true
 end
 
@@ -135,7 +135,9 @@ function vcl.private.parseObject(parser, buffer, rw, isChild)
                             parser.ref = parser.ref - #parser.index
                             return false
                         end
+                        print("PRE INDEX: "..tostring(parser.index)..", IS TYPEID: "..tostring(parser.isTypeID))
                         if parser.isTypeID then parser.isTypeID, parser.index = false, imports.tonumber(parser.index) end
+                        print("POST INDEX: "..type(parser.index))
                         if not vcl.private.isVoid(parser.index) then
                             local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, indexPadding, true)
                             if not error then
@@ -225,12 +227,11 @@ function vcl.public.decode(buffer) return vcl.private.decode(buffer) end
 --TESTS
 setTimer(function()
 local data = file:read("utilities/rw/timecyc.rw")
-local result = table.decode(data, "json")
-local result2 = vcl.public.encode(result)
-print(result2)
---local result2 = vcl.public.decode(result2)
---iprint(result)
-
-file:write("lol.vcl", result2)
---print(result2)
+--TODO: SHOULD CONSIDER TABS TOO
+result = table.decode(data)
+for i, j in pairs(result) do
+    print(i.." : "..type(i))
+end
+---print(result)
+--iprint("lenght: "..#result)
 end, 1000, 1)
