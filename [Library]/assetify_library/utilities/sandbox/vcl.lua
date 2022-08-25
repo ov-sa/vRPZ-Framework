@@ -95,6 +95,7 @@ function vcl.private.parseString(parser, buffer, rw)
                 else return false end
             elseif parser.isTypeParsed then
                 if rw == vcl.private.types.newline then parser.isParsed = true
+                elseif not parser.isTypeFloat and (rw == vcl.private.types.init) then parser.ref, parser.isType = parser.ref - #parser.value - 1, "object"
                 else return false end
             end
         end
@@ -215,7 +216,8 @@ local data = file:read("test.vcl")
 --local result = vcl.public.decode(data)
 result = table.decode([[
 A: 
-    - "HEY"
+    - 1: "HEY"
+    xD: "lol"
 ]])
 iprint(result)
 --local result2 = vcl.public.encode(result)
