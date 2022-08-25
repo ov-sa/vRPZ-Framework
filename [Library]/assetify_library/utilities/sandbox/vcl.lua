@@ -46,7 +46,7 @@ vcl.private.types = {
 }
 
 function vcl.private.isVoid(rw)
-    return (not rw or (imports.type(rw) ~= "string") or not string.match(rw, "%w") and true) or false
+    return (not rw or not string.match(rw, "%w") and true) or false
 end
 
 function vcl.private.fetch(rw, index)
@@ -130,11 +130,17 @@ function vcl.private.parseObject(parser, buffer, rw, isChild)
                     parser.ref = parser.ref - #parser.index
                     return false
                 end
-                local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, indexPadding, true)
-                if not error then
-                    parser.pointer[((parser.isTypeID and imports.tonumber(parser.index)) or parser.index)], parser.ref, parser.index = value, __index - 1, ""
-                    vcl.private.parseComment(parser, buffer, vcl.private.fetch(buffer, parser.ref))
-                else parser.isChildErrored = 1 end
+                if parser.isTypeID then
+                    parser.index = imports.tonumber(parser.index)
+                    print("HEY : "..tostring(parser.index))
+                end
+                if not vcl.private.isVoid(parser.index) then
+                    local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, indexPadding, true)
+                    if not error then
+                        parser.pointer[(parser.index)], parser.ref, parser.index = value, __index - 1, ""
+                        vcl.private.parseComment(parser, buffer, vcl.private.fetch(buffer, parser.ref))
+                    else parser.isChildErrored = 1 end
+                else parser.isChildErrored = 0 end
             else parser.isChildErrored = 0 end
             if parser.isChildErrored then return false end
         end
@@ -209,7 +215,7 @@ local data = file:read("test.vcl")
 --local result = vcl.public.decode(data)
 result = table.decode([[
 A: 
-    - 1: "HEY"
+    - "HEY"
 ]])
 iprint(result)
 --local result2 = vcl.public.encode(result)
