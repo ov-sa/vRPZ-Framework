@@ -21,7 +21,7 @@ local imports = {
 
 
 --------------------
---[[ Class: vcl ]]--
+--[[ Class: VCL ]]--
 --------------------
 
 local vcl = class:create("vcl")
