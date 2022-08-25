@@ -190,5 +190,5 @@ end
 setTimer(function()
 local data = file:read("test.vcl")
 local result = vcl.public.decode(data)
-iprint(result)
+--iprint(result)
 end, 1000, 1)

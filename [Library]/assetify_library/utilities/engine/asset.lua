@@ -263,11 +263,11 @@ else
         if not manifestPath then return false end
         localPath = localPath or rootPath
         local manifestData = file:read(localPath..manifestPath)
-        manifestData = (manifestData and table.decode(manifestData)) or false
+        manifestData = (manifestData and table.decode(manifestData, file:parseURL(manifestPath).extension)) or false
         if manifestData then
             for i, j in imports.pairs(manifestData) do
                 local cURL = file:parseURL(j)
-                if cURL and cURL.url and cURL.extension and cURL.pointer and (cURL.extension == "json") then
+                if cURL and cURL.url and cURL.extension and cURL.pointer and ((cURL.extension == "vcl") or (cURL.extension == "json")) then
                     local pointerPath = ((cURL.pointer == "rootDir") and rootPath) or ((cURL.pointer == "localDir") and localPath) or false
                     if pointerPath then
                         local __cURL = file:parseURL(file:resolveURL(pointerPath..(cURL.directory or "")..cURL.file, file.validPointers["localDir"]..rootPath))
@@ -350,7 +350,7 @@ else
             for i = 1, #cAssetPack.manifestData, 1 do
                 local assetName = cAssetPack.manifestData[i]
                 local assetPath, manifestPath = (asset.public.references.root)..string.lower(assetType).."/"..assetName.."/", asset.public.references.asset
-                local assetManifestData = asset.public:buildManifest(assetPath, _, (file:exists(manifestPath..".json") and manifestPath..".json") or manifestPath..".vcl")
+                local assetManifestData = asset.public:buildManifest(assetPath, _, (file:exists(assetPath..manifestPath..".json") and manifestPath..".json") or manifestPath..".vcl")
                 if assetManifestData then
                     local assetProperties = asset.private.properties.whitelisted[assetType] or asset.private.properties.whitelisted["*"]
                     for k = 1, #asset.private.properties.reserved, 1 do

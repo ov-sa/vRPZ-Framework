@@ -26,14 +26,13 @@ settings.assetPacks = {
     ["sound"] = {
         autoLoad = true
     },
-
+    ]]--
     ["scene"] = {
         autoLoad = true,
         assetType = "object",
         assetBase = 1337,
         assetTransparency = false
     },
-    ]]--
 
     --[[
     ["character"] = {
