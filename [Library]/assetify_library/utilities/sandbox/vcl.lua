@@ -167,7 +167,7 @@ function vcl.private.decode(buffer, ref, padding, isChild)
     }
     if not isChild then
         buffer = string.gsub(buffer, vcl.private.types.carriageline, "")
-        buffer = (not isChild and (vcl.private.fetch(buffer, #buffer) ~= "\n") and buffer.."\n") or buffer
+        buffer = (not isChild and (vcl.private.fetch(buffer, #buffer) ~= vcl.private.types.newline) and buffer..vcl.private.types.newline) or buffer
     end
     while(parser.ref <= #buffer) do
         vcl.private.parseComment(parser, buffer, vcl.private.fetch(buffer, parser.ref))
@@ -192,9 +192,6 @@ function vcl.public.decode(buffer) return vcl.private.decode(buffer) end
 --TESTS
 
 setTimer(function()
-local preTick = getTickCount()
 local data = file:read("test.vcl")
 local result = vcl.public.decode(data)
-print("VCL Difference: "..getTickCount() - preTick)
---iprint(result)
 end, 1000, 1)
