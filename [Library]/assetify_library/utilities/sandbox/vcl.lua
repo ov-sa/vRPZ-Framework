@@ -126,7 +126,7 @@ function vcl.private.parseObject(parser, buffer, rw, isChild)
                     parser.ref = parser.ref - #parser.index
                     return false
                 end
-                local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, true, indexPadding)
+                local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, indexPadding, true)
                 if not error then
                     parser.pointer[(parser.index)], parser.ref, parser.index = value, __index - 1, ""
                     vcl.private.parseComment(parser, buffer, vcl.private.fetch(buffer, parser.ref))
@@ -151,7 +151,7 @@ function vcl.private.parseReturn(parser, buffer)
     else return ((parser.isType == "number" and imports.tonumber(parser.value)) or parser.value), parser.ref end
 end
 
-function vcl.private.decode(buffer, ref, isChild, padding)
+function vcl.private.decode(buffer, ref, padding, isChild)
     local parser = {
         ref = ref or 1, padding = padding,
         index = "", pointer = {}, value = "",
