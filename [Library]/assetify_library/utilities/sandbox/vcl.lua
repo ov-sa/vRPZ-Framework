@@ -15,6 +15,7 @@
 local imports = {
     type = type,
     pairs = pairs,
+    tostring = tostring,
     tonumber = tonumber,
     outputDebugString = outputDebugString
 }
@@ -28,6 +29,7 @@ local vcl = class:create("vcl")
 vcl.private.types = {
     init = ":",
     comment = "#",
+    tab = "\t",
     newline = "\n",
     carriageline = "\r",
     decimal = ".",
@@ -153,13 +155,25 @@ function vcl.private.parseReturn(parser, buffer)
     else return ((parser.isType == "number" and imports.tonumber(parser.value)) or parser.value), parser.ref end
 end
 
-function vcl.private.encode(buffer)
-    print("uo")
-    return 1
+function vcl.private.encode(buffer, padding)
+    padding = padding or ""
+    local result, indexes = "", {}
+    for i, j in imports.pairs(buffer) do
+        if imports.type(j) == "table" then indexes[i] = j
+        else
+            if imports.type(j) == "string" then j = "\""..j.."\"" end
+            result = result..vcl.private.types.newline..padding..i..":".." "..imports.tostring(j)
+        end
+    end
+    for i, j in imports.pairs(indexes) do
+        result = result..vcl.private.types.newline..padding..i..":"..vcl.private.encode(j, padding..vcl.private.types.tab)
+    end
+    return result
 end
 function vcl.public.encode(buffer) return vcl.private.encode(buffer) end
 
 function vcl.private.decode(buffer, ref, padding, isChild)
+    if not buffer or (imports.type(buffer) ~= "string") then return false end
     local parser = {
         ref = ref or 1, padding = padding,
         index = "", pointer = {}, value = "",
@@ -190,8 +204,21 @@ function vcl.public.decode(buffer) return vcl.private.decode(buffer) end
 
 
 --TESTS
-
 setTimer(function()
 local data = file:read("test.vcl")
 local result = vcl.public.decode(data)
+local __result = table.decode([[
+    A: 1
+    B: 2
+    C:
+        D: 4
+        E: 5
+        F:
+            G: 6
+            H: 7
+]])
+--iprint(result)
+--local result2 = vcl.public.encode(result)
+--file:write("lol.vcl", result2)
+--print(result2)
 end, 1000, 1)
