@@ -344,7 +344,8 @@ else
         local cAssetPack = table.clone(assetPack, true)
         local manifestPath = (asset.public.references.root)..string.lower(assetType).."/"..(asset.public.references.manifest)
         manifestPath = manifestPath..((file:exists(manifestPath..".json") and ".json") or ".vcl")
-        cAssetPack.manifestData = table.decode(file:read(manifestPath), file:parseURL(manifestPath).extension)
+        cAssetPack.manifestData = file:read(manifestPath)
+        cAssetPack.manifestData = (cAssetPack.manifestData and table.decode(cAssetPack.manifestData, file:parseURL(manifestPath).extension)) or false
         if not cAssetPack.manifestData then execFunction(callback, false, assetType); return false end
         thread:create(function(self)
             cAssetPack.rwDatas = {}
