@@ -189,12 +189,6 @@ end
 
 setTimer(function()
 local data = file:read("test.vcl")
-local test = [[
-    1: "lol"
-]]
-local result = vcl.public.decode(test)
-for i, j in pairs(result) do
-    print(i.." : "..type(i))
-end
+local result = vcl.public.decode(data)
 iprint(result)
 end, 1000, 1)
