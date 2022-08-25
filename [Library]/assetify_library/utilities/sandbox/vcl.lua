@@ -131,10 +131,7 @@ function vcl.private.parseObject(parser, buffer, rw, isChild)
                     parser.ref = parser.ref - #parser.index
                     return false
                 end
-                if parser.isTypeID then
-                    parser.index = imports.tonumber(parser.index)
-                    print("HEY : "..tostring(parser.index))
-                end
+                if parser.isTypeID then parser.isTypeID, parser.index = false, imports.tonumber(parser.index) end
                 if not vcl.private.isVoid(parser.index) then
                     local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, indexPadding, true)
                     if not error then
@@ -217,7 +214,7 @@ local data = file:read("test.vcl")
 result = table.decode([[
 A: 
     - 1: "HEY"
-    xD: "lol"
+    1: "lol"
 ]])
 iprint(result)
 --local result2 = vcl.public.encode(result)
