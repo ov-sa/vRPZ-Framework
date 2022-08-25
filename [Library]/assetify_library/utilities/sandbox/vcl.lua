@@ -58,22 +58,9 @@ function vcl.private.parseComment(parser, buffer, rw)
     local isCommentLine = parser.isCommentLine
     parser.isCommentLine = vcl.private.fetchLine(buffer, parser.ref)
     parser.isComment = ((isCommentLine == parser.isCommentLine) and parser.isComment) or false
-    parser.isComment = (not parser.isComment and (not parser.isType or vcl.private.isVoid(parser.index)) and not parser.isComment and (rw == vcl.private.types.comment) and true) or parser.isComment
+    parser.isComment = (not parser.isComment and (not parser.isType or vcl.private.isVoid(parser.index)) and (rw == vcl.private.types.comment) and true) or parser.isComment
     return true
 end
---[[
-function vcl.private.parseComment(parser, buffer, rw)
-    local isCommentLine = parser.isCommentLine
-    parser.isCommentLine = vcl.private.fetchLine(buffer, parser.ref)
-    parser.isComment = (not parser.isType or vcl.private.isVoid(parser.index)) and (rw == vcl.private.types.comment)
-    if (isCommentLine ~= parser.isCommentLine) then
-        local line, indexLine = vcl.private.fetchLine(string.sub(buffer, 0, parser.ref))
-        local rwLines = string.split(string.sub(buffer, 0, #buffer), vcl.private.types.newline)
-        parser.ref =  parser.ref - #indexLine + #rwLines[line] + 1
-    end
-    return true
-end
-]]
 
 function vcl.private.parseBoolean(parser, buffer, rw)
     if not parser.isType or (parser.isType == "bool") then
