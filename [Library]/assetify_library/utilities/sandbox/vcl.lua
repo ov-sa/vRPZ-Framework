@@ -32,6 +32,7 @@ vcl.private.types = {
     tab = "\t",
     newline = "\n",
     carriageline = "\r",
+    list = "-",
     decimal = ".",
     bool = {
         ["true"] = "true",
@@ -118,7 +119,7 @@ end
 
 function vcl.private.parseObject(parser, buffer, rw, isChild)
     if not parser.isComment and (parser.isType == "object") then
-        if vcl.private.isVoid(parser.index) and (rw == "-") then parser.isTypeID = true
+        if vcl.private.isVoid(parser.index) and (rw == vcl.private.types.list) then parser.isTypeID = true
         elseif not vcl.private.isVoid(rw) then parser.index = parser.index..rw
         elseif not vcl.private.isVoid(parser.index) then
             if rw == vcl.private.types.init then
