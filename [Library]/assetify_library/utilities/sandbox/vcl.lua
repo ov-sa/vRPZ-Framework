@@ -123,7 +123,7 @@ function vcl.private.parseObject(parser, buffer, rw, isChild)
         if vcl.private.isVoid(parser.index) and (rw == vcl.private.types.list) then parser.isTypeID = true
         elseif not vcl.private.isVoid(rw) then parser.index = parser.index..rw
         else
-            if parser.isTypeID and vcl.private.isVoid(parser.index) then parser.index = imports.tostring(#parser.pointer + 1) end
+            if parser.isTypeID and vcl.private.isVoid(parser.index) and (rw == vcl.private.types.init) then parser.index = imports.tostring(#parser.pointer + 1) end
             if not vcl.private.isVoid(parser.index) then
                 if parser.isTypeID and (rw == vcl.private.types.newline) then parser.pointer[(#parser.pointer + 1)] = parser.index
                 else
@@ -219,8 +219,13 @@ local data = file:read("test.vcl")
 --local result = vcl.public.decode(data)
 result = table.decode([[
 A: 
-    -:
-       LOL: "xD"
+    - 1: 
+        xD: "hey"
+        -: "lol"
+    -: "xD"
+    -: "xD"
+    -: "xD"
+    -: "xD"
 ]])
 iprint(result)
 --local result2 = vcl.public.encode(result)

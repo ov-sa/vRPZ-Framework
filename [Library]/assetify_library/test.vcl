@@ -18,14 +18,14 @@ shaderMaps:
         # Your texture name
         isld_1_trn:
             # Your attached control textures here
-            1:
+            - 1:
                 control: "control/isld_1_trn/road/control.png"
                 bump: "control/isld_1_trn/road/bump.jpg"
                 red:
                     map: "control/texture/grass/2/albedo.jpg"
                     bump: "control/texture/grass/2/bump.jpg"
                     scale: 600
-            2:
+            - 2:
                 bump: "control/isld_1_trn/bump.jpg"
                 red:
                     map: "control/texture/sand/1/albedo_50a.png"
