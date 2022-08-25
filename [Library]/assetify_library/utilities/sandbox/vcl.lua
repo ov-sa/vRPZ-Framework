@@ -107,6 +107,7 @@ function vcl.private.parseNumber(parser, buffer, rw)
                 if not parser.isTypeFloat then parser.isTypeFloat = true
                 else return false end
             elseif rw == vcl.private.types.newline then parser.isParsed = true
+            elseif not parser.isTypeFloat and (rw == vcl.private.types.init) then parser.ref, parser.isType = parser.ref - #parser.value - 1, "object"
             elseif not isNumber then return false end
         end
     end
@@ -190,8 +191,9 @@ setTimer(function()
 local data = file:read("test.vcl")
 local test = [[
     test: false
-    test2: 1
+    test2:
+        1: "lol"
 ]]
-local result = vcl.public.decode(test)
+local result = vcl.public.decode(data)
 iprint(result)
 end, 1000, 1)
