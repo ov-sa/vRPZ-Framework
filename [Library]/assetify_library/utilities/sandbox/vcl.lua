@@ -29,6 +29,7 @@ vcl.private.types = {
     init = ":",
     comment = "#",
     newline = "\n",
+    carriageline = "\r",
     decimal = ".",
     bool = {
         ["true"] = "true",
@@ -165,7 +166,7 @@ function vcl.private.decode(buffer, ref, padding, isChild)
         isErrored = "Failed to decode vcl. [Line: %s] [Reason: %s]"
     }
     if not isChild then
-        buffer = string.gsub(buffer, "\r", "")
+        buffer = string.gsub(buffer, vcl.private.types.carriageline, "")
         buffer = (not isChild and (vcl.private.fetch(buffer, #buffer) ~= "\n") and buffer.."\n") or buffer
     end
     while(parser.ref <= #buffer) do
