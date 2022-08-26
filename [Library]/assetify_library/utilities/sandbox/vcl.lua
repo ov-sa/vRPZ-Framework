@@ -33,6 +33,7 @@ vcl.private.types = {
     newline = "\n",
     carriageline = "\r",
     list = "-",
+    negative = "-",
     decimal = ".",
     bool = {
         ["true"] = "true",
@@ -95,7 +96,6 @@ function vcl.private.parseString(parser, buffer, rw)
                 else return false end
             elseif parser.isTypeParsed then
                 if rw == vcl.private.types.newline then parser.isParsed = true
-                elseif not parser.isTypeFloat and (rw == vcl.private.types.init) then parser.ref, parser.isType = parser.ref - #parser.value - 1, "object"
                 else return false end
             end
         end
@@ -106,11 +106,19 @@ end
 function vcl.private.parseNumber(parser, buffer, rw)
     if not parser.isType or (parser.isType == "number") then
         local isNumber = imports.tonumber(rw)
-        if not parser.isType and isNumber then parser.isType = "number"
-        elseif parser.isType then
+        if not parser.isType then
+            local isNegative = rw == vcl.private.types.negative
+            if isNegative or isNumber then parser.isType, parser.isTypeNegative = "number", (isNegative and parser.ref) or false end
+        else
             if rw == vcl.private.types.decimal then
                 if not parser.isTypeFloat then parser.isTypeFloat = true
                 else return false end
+            elseif not parser.isTypeFloat and parser.isTypeNegative and (rw == vcl.private.types.init) then
+                print("YO XD")
+                parser.isType = "object"
+                parser.isTypeFloat = false
+                parser.ref = parser.isTypeNegative
+                parser.isNegative = false
             elseif rw == vcl.private.types.newline then parser.isParsed = true
             elseif not isNumber then return false end
         end
@@ -227,7 +235,7 @@ function vcl.public.decode(buffer) return vcl.private.decode(buffer) end
 --TESTS
 setTimer(function()
 local data = [[
-sceneDimension:
+sceneDimension: -1:
 XDDDDDDDDDDDDDDDDDDDDDDDDDD: "xd"
 ]]
 --local data = file:read("files/assets/scene/vRPZ_Terrain_A/asset.vcl")
