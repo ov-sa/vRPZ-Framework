@@ -223,16 +223,3 @@ function vcl.private.decode(buffer, ref, padding, isChild)
     return vcl.private.parseReturn(parser, buffer)
 end
 function vcl.public.decode(buffer) return vcl.private.decode(buffer) end
-
-
---TESTS
-
-setTimer(function()
-local data = file:read("utilities/rw/timecyc.rw")
-result = table.decode(data)
-iprint(result)
-for i, j in pairs(result) do
-    --print("CHECK: "..i.." : "..type(i))
-end
-print("Length: "..#result)
-end, 1000, 1)
