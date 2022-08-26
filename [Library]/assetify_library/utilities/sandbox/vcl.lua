@@ -120,7 +120,9 @@ end
 
 function vcl.private.parseObject(parser, buffer, rw, isChild)
     if not parser.isComment and (parser.isType == "object") then
-        if vcl.private.isVoid(parser.index) and (rw == vcl.private.types.list) then parser.isTypeID = parser.ref
+        if vcl.private.isVoid(parser.index) and (rw == vcl.private.types.list) then
+            parser.isTypeID = parser.ref
+            print("CAHCED TYPE: "..string.sub(buffer, parser.ref, 3).." : "..parser.isTypeID)
         elseif not vcl.private.isVoid(rw) then parser.index = parser.index..rw
         else
             if parser.isTypeID and vcl.private.isVoid(parser.index) and (rw == vcl.private.types.init) then parser.index = imports.tostring(#parser.pointer + 1) end
@@ -133,13 +135,7 @@ function vcl.private.parseObject(parser, buffer, rw, isChild)
                         local indexPadding = #indexLine - #parser.index - 1
                         parser.padding = parser.padding or indexPadding - 1
                         if indexPadding <= parser.padding then
-                            print(indexLine)
-                            print(string.sub(buffer, parser.ref, #buffer))
-                            parser.ref = parser.ref - #parser.index
-                            if parser.isTypeID then
-                                parser.ref = parser.ref - 2
-                                print("YES THIS IS THE ISSUE")
-                            end
+                            parser.ref = parser.ref - #parser.index - ((parser.isTypeID and (parser.ref - parser.isTypeID)) or 0)
                             print("RETURNING!")
                             print(string.sub(buffer, parser.ref, #buffer))
                             return false
@@ -236,10 +232,9 @@ function vcl.public.decode(buffer) return vcl.private.decode(buffer) end
 setTimer(function()
 local data = file:read("utilities/rw/timecyc.rw")
 result = table.decode(data)
---iprint(result)
-print("-----------")
+iprint(result)
 for i, j in pairs(result) do
-    print("CHECK: "..i.." : "..type(i))
+    --print("CHECK: "..i.." : "..type(i))
 end
-print("Length: "..#result[1])
+--print("Length: "..#result[1])
 end, 1000, 1)
