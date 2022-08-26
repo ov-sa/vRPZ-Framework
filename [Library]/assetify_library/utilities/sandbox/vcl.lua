@@ -228,13 +228,9 @@ function vcl.public.decode(buffer) return vcl.private.decode(buffer) end
 
 setTimer(function()
 local data = file:read("utilities/rw/timecyc.rw")
---print(data)
---print(string.detab(data))
 result = table.decode(data)
 iprint(result)
---for i, j in pairs(result) do
-    --print(i.." : "..type(i))
---end
----print(result)
---iprint("lenght: "..#result)
+for i, j in pairs(result) do
+    print(i.." : "..type(i))
+end
 end, 1000, 1)
