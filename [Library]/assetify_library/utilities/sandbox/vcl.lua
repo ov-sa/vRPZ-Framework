@@ -120,36 +120,34 @@ end
 
 function vcl.private.parseObject(parser, buffer, rw, isChild)
     if not parser.isComment and (parser.isType == "object") then
-        if vcl.private.isVoid(parser.index) and (rw == vcl.private.types.list) then
-            print("YES GOT IT! "..string.sub(buffer, parser.ref, parser.ref + 3).." : "..tostring(parser))
-            parser.isTypeID = parser
+        if vcl.private.isVoid(parser.index) and (rw == vcl.private.types.list) then parser.isTypeID = parser.ref
         elseif not vcl.private.isVoid(rw) then parser.index = parser.index..rw
         else
             if parser.isTypeID and vcl.private.isVoid(parser.index) and (rw == vcl.private.types.init) then parser.index = imports.tostring(#parser.pointer + 1) end
             if not vcl.private.isVoid(parser.index) then
-                if parser.isTypeID and (rw == vcl.private.types.newline) then print("LOL: ") parser.pointer[(#parser.pointer + 1)] = parser.index
+                if parser.isTypeID and (rw == vcl.private.types.newline) then parser.pointer[(#parser.pointer + 1)] = parser.index
                 else
                     if rw == vcl.private.types.init then
+                        print("TRYING TO FETCH: "..parser.index.." : "..tostring(parser).." IS TYPID: "..((parser.isTypeID and "true") or "false"))
                         local _, indexLine = vcl.private.fetchLine(string.sub(buffer, 0, parser.ref))
                         local indexPadding = #indexLine - #parser.index - 1
                         parser.padding = parser.padding or indexPadding - 1
                         if indexPadding <= parser.padding then
+                            print(indexLine)
+                            print(string.sub(buffer, parser.ref, #buffer))
                             parser.ref = parser.ref - #parser.index
+                            if parser.isTypeID then
+                                parser.ref = parser.ref - 2
+                                print("YES THIS IS THE ISSUE")
+                            end
+                            print("RETURNING!")
+                            print(string.sub(buffer, parser.ref, #buffer))
                             return false
                         end
-                        if parser.isTypeID then
-                            parser.isTypeID = false
-                            parser.index = imports.tonumber(parser.index)
-                            --parser.isTypeID = parser.index
-                            --print("TYPE TABLE: "..tostring(parser.index).." : "..tostring(parser.isTypeID).." : "..tostring(parser))
-                        end
+                        if parser.isTypeID then parser.isTypeID, parser.index = false, imports.tonumber(parser.index) end
                         if not vcl.private.isVoid(parser.index) then
                             local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, indexPadding, true)
                             if not error then
-                                --print("\n-----------------------------------")
-                                print("YES RECEIVED! "..parser.index.." : "..tostring(parser))
-                                --print("IS TYPE ID XD: "..tostring(parser.index))
-                                --print("\n-----------------------------------")
                                 parser.pointer[(parser.index)], parser.ref, parser.index = value, __index - 1, ""
                                 vcl.private.parseComment(parser, buffer, vcl.private.fetch(buffer, parser.ref))
                             else parser.isChildErrored = 1 end
@@ -224,7 +222,6 @@ function vcl.private.decode(buffer, ref, padding, isChild)
             if parser.isType and not parser.isSkipAppend and not parser.isParsed then parser.value = parser.value..vcl.private.fetch(buffer, parser.ref) end
         end
         parser.isType = ((not isChild or isChildValid) and (not parser.isType and ((vcl.private.fetch(buffer, parser.ref) == "-") or not vcl.private.isVoid(vcl.private.fetch(buffer, parser.ref)))) and "object") or parser.isType
-        --print(string.sub(buffer, parser.ref, #buffer - 1).." : "..tostring(parser))
         if not vcl.private.parseObject(parser, buffer, vcl.private.fetch(buffer, parser.ref), isChild) then break end
         if isChild and not parser.isChildErrored and parser.isParsed then break end
         parser.ref = parser.ref + 1
