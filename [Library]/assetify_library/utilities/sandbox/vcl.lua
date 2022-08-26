@@ -120,9 +120,7 @@ end
 
 function vcl.private.parseObject(parser, buffer, rw, isChild)
     if not parser.isComment and (parser.isType == "object") then
-        if vcl.private.isVoid(parser.index) and (rw == vcl.private.types.list) then
-            parser.isTypeID = parser.ref
-            print("CAHCED TYPE: "..string.sub(buffer, parser.ref, 3).." : "..parser.isTypeID)
+        if vcl.private.isVoid(parser.index) and (rw == vcl.private.types.list) then parser.isTypeID = parser.ref
         elseif not vcl.private.isVoid(rw) then parser.index = parser.index..rw
         else
             if parser.isTypeID and vcl.private.isVoid(parser.index) and (rw == vcl.private.types.init) then parser.index = imports.tostring(#parser.pointer + 1) end
