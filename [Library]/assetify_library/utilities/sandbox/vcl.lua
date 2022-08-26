@@ -130,14 +130,12 @@ function vcl.private.parseObject(parser, buffer, rw, isChild)
                 if parser.isTypeID and (rw == vcl.private.types.newline) then parser.pointer[(#parser.pointer + 1)] = parser.index
                 else
                     if rw == vcl.private.types.init then
-                        print("TRYING TO FETCH: "..parser.index.." : "..tostring(parser).." IS TYPID: "..((parser.isTypeID and "true") or "false"))
                         local _, indexLine = vcl.private.fetchLine(string.sub(buffer, 0, parser.ref))
-                        local indexPadding = #indexLine - #parser.index - 1
+                        local indexTypePadding = (parser.isTypeID and (parser.ref - parser.isTypeID)) or 0
+                        local indexPadding = #indexLine - #parser.index - indexTypePadding - 1
                         parser.padding = parser.padding or indexPadding - 1
                         if indexPadding <= parser.padding then
-                            parser.ref = parser.ref - #parser.index - ((parser.isTypeID and (parser.ref - parser.isTypeID)) or 0)
-                            print("RETURNING!")
-                            print(string.sub(buffer, parser.ref, #buffer))
+                            parser.ref = parser.ref - #parser.index - indexTypePadding
                             return false
                         end
                         if parser.isTypeID then parser.isTypeID, parser.index = false, imports.tonumber(parser.index) end
@@ -236,5 +234,5 @@ iprint(result)
 for i, j in pairs(result) do
     --print("CHECK: "..i.." : "..type(i))
 end
---print("Length: "..#result[1])
+print("Length: "..#result)
 end, 1000, 1)
