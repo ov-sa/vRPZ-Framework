@@ -226,13 +226,3 @@ function vcl.private.decode(buffer, ref, padding, isChild)
     return vcl.private.parseReturn(parser, buffer)
 end
 function vcl.public.decode(buffer) return vcl.private.decode(buffer) end
-
-
---TESTS
-setTimer(function()
-local prev = getTickCount()
-local data = file:read("files/assets/scene/vRPZ_Terrain_A/asset.vcl")
-result = table.decode(data)
---iprint(result)
-print(getTickCount() - prev)
-end, 1000, 1)
