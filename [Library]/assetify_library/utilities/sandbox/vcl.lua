@@ -131,10 +131,12 @@ function vcl.private.parseObject(parser, buffer, rw, isChild)
                         local _, indexLine = vcl.private.fetchLine(string.sub(buffer, 0, parser.ref))
                         local indexTypePadding = (parser.isTypeID and (parser.ref - parser.isTypeID)) or 0
                         local indexPadding = #indexLine - #parser.index - indexTypePadding - 1
-                        parser.padding = parser.padding or indexPadding - 1
-                        if indexPadding <= parser.padding then
-                            parser.ref = parser.ref - #parser.index - indexTypePadding
-                            return false
+                        if isChild then
+                            parser.padding = parser.padding or indexPadding - 1
+                            if indexPadding <= parser.padding then
+                                parser.ref = parser.ref - #parser.index - indexTypePadding
+                                return false
+                            end
                         end
                         if parser.isTypeID then parser.isTypeID, parser.index = false, imports.tonumber(parser.index) end
                         if not vcl.private.isVoid(parser.index) then
