@@ -37,8 +37,8 @@ string.private.minifier = imports.md5("vStudio")
 
 function string.public.isVoid(baseString)
     if not baseString or (imports.type(baseString) ~= "string") then return false end
-    baseString = string.public.gsub(test, "[\n\r\t%s]", "")
-    return string.public.match(tesbaseStringt, "[%W%w]")
+    baseString = string.public.gsub(baseString, "[\n\r\t%s]", "")
+    return (not string.public.match(baseString, "[%W%w]") and true) or false
 end
 
 local __string_gsub = string.public.gsub

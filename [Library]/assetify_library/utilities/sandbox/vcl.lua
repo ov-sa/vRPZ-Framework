@@ -201,6 +201,7 @@ function vcl.public.encode(buffer) return vcl.private.encode(buffer) end
 
 function vcl.private.decode(buffer, ref, padding, isChild)
     if not buffer or (imports.type(buffer) ~= "string") then return false end
+    if string.isVoid(buffer) then return {} end
     local parser = {
         ref = ref or 1, padding = padding,
         index = "", pointer = {}, value = "",
@@ -227,13 +228,3 @@ function vcl.private.decode(buffer, ref, padding, isChild)
     return vcl.private.parseReturn(parser, buffer)
 end
 function vcl.public.decode(buffer) return vcl.private.decode(buffer) end
-
-
---TESTS
-setTimer(function()
-local prev = getTickCount()
-local data = file:read("files/assets/scene/vRPZ_Terrain_A/asset.vcl")
-result = table.decode([[]])
-iprint(result)
-print(getTickCount() - prev)
-end, 1000, 1)
