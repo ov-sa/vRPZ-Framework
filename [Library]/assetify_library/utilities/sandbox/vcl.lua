@@ -140,7 +140,6 @@ function vcl.private.parseObject(parser, buffer, rw, isChild)
                         if not vcl.private.isVoid(parser.index) then
                             local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, indexPadding, true)
                             if not error then
-                                --print("POST INDEX: "..tostring(parser.index)..", TYPE: "..type(parser.index))
                                 parser.pointer[(parser.index)], parser.ref, parser.index = value, __index - 1, ""
                                 vcl.private.parseComment(parser, buffer, vcl.private.fetch(buffer, parser.ref))
                             else parser.isChildErrored = 1 end
@@ -230,7 +229,8 @@ setTimer(function()
 local data = file:read("utilities/rw/timecyc.rw")
 result = table.decode(data)
 iprint(result)
-for i, j in pairs(result) do
-    print(i.." : "..type(i))
+for i, j in pairs(result[1]) do
+    print("CHECK: "..i.." : "..type(i))
 end
+print("Length: "..#result[1])
 end, 1000, 1)
