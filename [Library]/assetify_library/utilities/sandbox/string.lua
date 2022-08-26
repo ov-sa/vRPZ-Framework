@@ -83,6 +83,11 @@ function string.public.kern(baseString, kerner)
     return string.public.sub(string.public.gsub(baseString, ".", (kerner or " ").."%0"), 2)
 end
 
+function string.public.detab(baseString)
+    if not baseString or (imports.type(baseString) ~= "string") then return false end
+    return string.public.gsub(baseString, "\t", "    ")
+end
+
 function string.public.minify(baseString)
     if not baseString or (imports.type(baseString) ~= "string") then return false end
     local result = ""

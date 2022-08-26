@@ -125,7 +125,7 @@ function vcl.private.parseObject(parser, buffer, rw, isChild)
         else
             if parser.isTypeID and vcl.private.isVoid(parser.index) and (rw == vcl.private.types.init) then parser.index = imports.tostring(#parser.pointer + 1) end
             if not vcl.private.isVoid(parser.index) then
-                if parser.isTypeID and (rw == vcl.private.types.newline) then parser.pointer[(#parser.pointer + 1)] = parser.index
+                if parser.isTypeID and (rw == vcl.private.types.newline) then print("a: "..rw) parser.pointer[(#parser.pointer + 1)] = parser.index
                 else
                     if rw == vcl.private.types.init then
                         local _, indexLine = vcl.private.fetchLine(string.sub(buffer, 0, parser.ref))
@@ -135,12 +135,12 @@ function vcl.private.parseObject(parser, buffer, rw, isChild)
                             parser.ref = parser.ref - #parser.index
                             return false
                         end
-                        print("PRE INDEX: "..tostring(parser.index)..", IS TYPEID: "..tostring(parser.isTypeID))
                         if parser.isTypeID then parser.isTypeID, parser.index = false, imports.tonumber(parser.index) end
-                        print("POST INDEX: "..type(parser.index))
+                        print("PRE INDEX: "..tostring(parser.index)..", TYPE: "..type(parser.index))
                         if not vcl.private.isVoid(parser.index) then
                             local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, indexPadding, true)
                             if not error then
+                                --print("POST INDEX: "..tostring(parser.index)..", TYPE: "..type(parser.index))
                                 parser.pointer[(parser.index)], parser.ref, parser.index = value, __index - 1, ""
                                 vcl.private.parseComment(parser, buffer, vcl.private.fetch(buffer, parser.ref))
                             else parser.isChildErrored = 1 end
@@ -201,8 +201,7 @@ function vcl.private.decode(buffer, ref, padding, isChild)
         isErrored = "Failed to decode vcl. [Line: %s] [Reason: %s]"
     }
     if not isChild then
-        buffer = string.gsub(buffer, vcl.private.types.tab, "  ")
-        buffer = string.gsub(buffer, vcl.private.types.carriageline, "")
+        buffer = string.gsub(string.detab(buffer), vcl.private.types.carriageline, "")
         buffer = (not isChild and (vcl.private.fetch(buffer, #buffer) ~= vcl.private.types.newline) and buffer..vcl.private.types.newline) or buffer
     end
     while(parser.ref <= #buffer) do
@@ -226,13 +225,16 @@ function vcl.public.decode(buffer) return vcl.private.decode(buffer) end
 
 
 --TESTS
+
 setTimer(function()
 local data = file:read("utilities/rw/timecyc.rw")
---TODO: SHOULD CONSIDER TABS TOO
+--print(data)
+--print(string.detab(data))
 result = table.decode(data)
-for i, j in pairs(result) do
-    print(i.." : "..type(i))
-end
+iprint(result)
+--for i, j in pairs(result) do
+    --print(i.." : "..type(i))
+--end
 ---print(result)
 --iprint("lenght: "..#result)
 end, 1000, 1)
