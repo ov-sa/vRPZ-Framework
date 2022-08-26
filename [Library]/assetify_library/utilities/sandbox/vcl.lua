@@ -119,7 +119,7 @@ function vcl.private.parseNumber(parser, buffer, rw)
 end
 
 function vcl.private.parseObject(parser, buffer, rw, isChild)
-    if not parser.isComment and (parser.isType == "object") then
+    if parser.isType == "object" then
         if vcl.private.isVoid(parser.index) and (rw == vcl.private.types.list) then parser.isTypeID = parser.ref
         elseif not vcl.private.isVoid(rw) then parser.index = parser.index..rw
         else
