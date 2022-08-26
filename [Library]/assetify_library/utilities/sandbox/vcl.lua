@@ -241,7 +241,7 @@ local data = file:read("utilities/rw/timecyc.rw")
 result = table.decode(data)
 --iprint(result)
 print("-----------")
-for i, j in pairs(result[1]) do
+for i, j in pairs(result) do
     print("CHECK: "..i.." : "..type(i))
 end
 print("Length: "..#result[1])
