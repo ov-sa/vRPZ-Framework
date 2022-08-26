@@ -178,17 +178,17 @@ function vcl.private.encode(buffer, padding)
         else
             i = ((imports.type(i) == "number") and "- "..imports.tostring(i)) or i
             if imports.type(j) == "string" then j = "\""..j.."\"" end
-            result = result..vcl.private.types.newline..padding..i..":".." "..imports.tostring(j)
+            result = result..vcl.private.types.newline..padding..i..vcl.private.types.init.." "..imports.tostring(j)
         end
     end
     table.sort(indexes.numeric, function(a, b) return a < b end)
     for i = 1, #indexes.numeric, 1 do
         local j = indexes.numeric[i]
-        result = result..vcl.private.types.newline..padding..("- "..j)..":"..vcl.private.encode(buffer[j], padding..vcl.private.types.tab)
+        result = result..vcl.private.types.newline..padding..vcl.private.types.list.." "..j..vcl.private.types.init..vcl.private.encode(buffer[j], padding..vcl.private.types.tab)
     end
     for i = 1, #indexes.index, 1 do
         local j = indexes.index[i]
-        result = result..vcl.private.types.newline..padding..j..":"..vcl.private.encode(buffer[j], padding..vcl.private.types.tab)
+        result = result..vcl.private.types.newline..padding..j..vcl.private.types.init..vcl.private.encode(buffer[j], padding..vcl.private.types.tab)
     end
     return result
 end
@@ -215,7 +215,7 @@ function vcl.private.decode(buffer, ref, padding, isChild)
             if not vcl.private.parseString(parser, buffer, vcl.private.fetch(buffer, parser.ref)) then break end
             if parser.isType and not parser.isSkipAppend and not parser.isParsed then parser.value = parser.value..vcl.private.fetch(buffer, parser.ref) end
         end
-        parser.isType = ((not isChild or isChildValid) and (not parser.isType and ((vcl.private.fetch(buffer, parser.ref) == "-") or not vcl.private.isVoid(vcl.private.fetch(buffer, parser.ref)))) and "object") or parser.isType
+        parser.isType = ((not isChild or isChildValid) and (not parser.isType and ((vcl.private.fetch(buffer, parser.ref) == vcl.private.types.list) or not vcl.private.isVoid(vcl.private.fetch(buffer, parser.ref)))) and "object") or parser.isType
         if not vcl.private.parseObject(parser, buffer, vcl.private.fetch(buffer, parser.ref), isChild) then break end
         if isChild and not parser.isChildErrored and parser.isParsed then break end
         parser.ref = parser.ref + 1
@@ -223,3 +223,16 @@ function vcl.private.decode(buffer, ref, padding, isChild)
     return vcl.private.parseReturn(parser, buffer)
 end
 function vcl.public.decode(buffer) return vcl.private.decode(buffer) end
+
+
+--TESTS
+setTimer(function()
+local data = [[
+sceneDimension: -1
+XDDDDDDDDDDDDDDDDDDDDDDDDDD: "xd"
+]]
+--local data = file:read("files/assets/scene/vRPZ_Terrain_A/asset.vcl")
+--iprint(data)
+result = table.decode(data)
+iprint(result)
+end, 1000, 1)
