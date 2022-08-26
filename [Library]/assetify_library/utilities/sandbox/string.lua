@@ -35,6 +35,12 @@ for i, j in imports.pairs(imports.string) do
 end
 string.private.minifier = imports.md5("vStudio")
 
+function string.public.isVoid(baseString)
+    if not baseString or (imports.type(baseString) ~= "string") then return false end
+    baseString = string.public.gsub(test, "[\n\r\t%s]", "")
+    return string.public.match(tesbaseStringt, "[%W%w]")
+end
+
 local __string_gsub = string.public.gsub
 function string.public.gsub(baseString, matchWord, replaceWord, matchLimit, isStrictcMatch, matchPrefix, matchPostfix)
     if not baseString or (imports.type(baseString) ~= "string") or not matchWord or (imports.type(matchWord) ~= "string") or not replaceWord or (imports.type(replaceWord) ~= "string") then return false end
