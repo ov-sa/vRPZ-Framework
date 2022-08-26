@@ -114,11 +114,7 @@ function vcl.private.parseNumber(parser, buffer, rw)
                 if not parser.isTypeFloat then parser.isTypeFloat = true
                 else return false end
             elseif not parser.isTypeFloat and parser.isTypeNegative and (rw == vcl.private.types.init) then
-                print("YO XD")
-                parser.isType = "object"
-                parser.isTypeFloat = false
-                parser.ref = parser.isTypeNegative
-                parser.isNegative = false
+                parser.ref, parser.isType, parser.isTypeFloat, parser.isTypeNegative = parser.isTypeNegative, "object", false, false
             elseif rw == vcl.private.types.newline then parser.isParsed = true
             elseif not isNumber then return false end
         end
@@ -236,7 +232,7 @@ function vcl.public.decode(buffer) return vcl.private.decode(buffer) end
 setTimer(function()
 local data = [[
 sceneDimension: -1:
-XDDDDDDDDDDDDDDDDDDDDDDDDDD: "xd"
+                    XDDDDDDDDDDDDDDDDDDDDDDDDDD: "xd"
 ]]
 --local data = file:read("files/assets/scene/vRPZ_Terrain_A/asset.vcl")
 --iprint(data)
