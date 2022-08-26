@@ -60,10 +60,12 @@ function vcl.private.fetchLine(rw, index)
 end
 
 function vcl.private.parseComment(parser, buffer, rw)
-    local isCommentLine = parser.isCommentLine
-    parser.isCommentLine = vcl.private.fetchLine(buffer, parser.ref)
-    parser.isComment = ((isCommentLine == parser.isCommentLine) and parser.isComment) or false
-    parser.isComment = (not parser.isComment and (not parser.isType or ((parser.isType ~= "string") and vcl.private.isVoid(parser.index))) and (rw == vcl.private.types.comment) and true) or parser.isComment
+    local isComment = (not parser.isType or vcl.private.isVoid(parser.index)) and (rw == vcl.private.types.comment)
+    if isComment then
+        local line, indexLine = vcl.private.fetchLine(string.sub(buffer, 0, parser.ref))
+        local rwLines = string.split(string.sub(buffer, 0, #buffer), vcl.private.types.newline)
+        parser.ref =  parser.ref - #indexLine + #rwLines[line] + 2
+    end
     return true
 end
 
@@ -209,15 +211,14 @@ function vcl.private.decode(buffer, ref, padding, isChild)
     end
     while(parser.ref <= #buffer) do
         vcl.private.parseComment(parser, buffer, vcl.private.fetch(buffer, parser.ref))
-        local isChildValid = (not parser.isComment and isChild and true) or false
-        if isChildValid then
+        if isChild then
             parser.isSkipAppend = false
             if not vcl.private.parseBoolean(parser, buffer, vcl.private.fetch(buffer, parser.ref)) then break end
             if not vcl.private.parseNumber(parser, buffer, vcl.private.fetch(buffer, parser.ref)) then break end
             if not vcl.private.parseString(parser, buffer, vcl.private.fetch(buffer, parser.ref)) then break end
             if parser.isType and not parser.isSkipAppend and not parser.isParsed then parser.value = parser.value..vcl.private.fetch(buffer, parser.ref) end
         end
-        parser.isType = (not parser.isType and not parser.isComment and (not isChild or isChildValid) and ((vcl.private.fetch(buffer, parser.ref) == vcl.private.types.list) or not vcl.private.isVoid(vcl.private.fetch(buffer, parser.ref))) and "object") or parser.isType
+        parser.isType = (not parser.isType and (not isChild or isChild) and ((vcl.private.fetch(buffer, parser.ref) == vcl.private.types.list) or not vcl.private.isVoid(vcl.private.fetch(buffer, parser.ref))) and "object") or parser.isType
         if not vcl.private.parseObject(parser, buffer, vcl.private.fetch(buffer, parser.ref), isChild) then break end
         if isChild and not parser.isChildErrored and parser.isParsed then break end
         parser.ref = parser.ref + 1
@@ -229,12 +230,9 @@ function vcl.public.decode(buffer) return vcl.private.decode(buffer) end
 
 --TESTS
 setTimer(function()
-local data = [[
-sceneDimension: -1:
-XDDDDDDDDDDDDDDDDDDDDDDDDDD: "xd"
-]]
---local data = file:read("files/assets/scene/vRPZ_Terrain_A/asset.vcl")
---iprint(data)
+local prev = getTickCount()
+local data = file:read("files/assets/scene/vRPZ_Terrain_A/asset.vcl")
 result = table.decode(data)
-iprint(result)
+--iprint(result)
+print(getTickCount() - prev)
 end, 1000, 1)
