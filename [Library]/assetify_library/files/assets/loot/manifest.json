@@ -1,6 +1,4 @@
-[[
-    "vRPZ_Medical_Box",
-    "vRPZ_Military_Box",
-    "vRPZ_Resource_Box",
-    "vRPZ_Weapon_Box"
-]]
+-: "vRPZ_Medical_Box"
+-: "vRPZ_Military_Box"
+-: "vRPZ_Resource_Box"
+-: "vRPZ_Weapon_Box"

@@ -126,7 +126,8 @@ end
 
 function vcl.private.parseObject(parser, buffer, rw, isChild)
     if parser.isType == "object" then
-        if not vcl.private.isVoid(rw) then parser.index = parser.index..rw
+        if vcl.private.isVoid(parser.index) and (rw == vcl.private.types.list) then parser.isTypeID = parser.ref
+        elseif not vcl.private.isVoid(rw) then parser.index = parser.index..rw
         else
             if parser.isTypeID and vcl.private.isVoid(parser.index) and (rw == vcl.private.types.init) then parser.index = imports.tostring(#parser.pointer + 1) end
             if not vcl.private.isVoid(parser.index) then
@@ -226,3 +227,13 @@ function vcl.private.decode(buffer, ref, padding, isChild)
     return vcl.private.parseReturn(parser, buffer)
 end
 function vcl.public.decode(buffer) return vcl.private.decode(buffer) end
+
+
+--TESTS
+setTimer(function()
+local prev = getTickCount()
+local data = file:read("files/assets/scene/vRPZ_Terrain_A/asset.vcl")
+result = table.decode([[]])
+iprint(result)
+print(getTickCount() - prev)
+end, 1000, 1)
