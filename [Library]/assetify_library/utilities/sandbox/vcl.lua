@@ -30,6 +30,7 @@ vcl.private.types = {
     init = ":",
     comment = "#",
     tab = "\t",
+    space = " ",
     newline = "\n",
     carriageline = "\r",
     list = "-",
@@ -98,7 +99,7 @@ function vcl.private.parseNumber(parser, buffer, rw)
             if rw == vcl.private.types.decimal then
                 if not parser.isTypeFloat then parser.isTypeFloat = true
                 else return false end
-            elseif not parser.isTypeFloat and parser.isTypeNegative and ((vcl.private.isVoid(parser.index) and (rw == " ")) or (rw == vcl.private.types.init)) then
+            elseif not parser.isTypeFloat and parser.isTypeNegative and ((vcl.private.isVoid(parser.index) and (rw == vcl.private.types.space)) or (rw == vcl.private.types.init)) then
                 parser.ref, parser.index, parser.isType, parser.isTypeFloat, parser.isTypeNegative = parser.isTypeNegative - 1, "", "object", false, false
             elseif rw == vcl.private.types.newline then parser.isParsed = true
             elseif not isNumber then return false end
@@ -182,13 +183,13 @@ function vcl.private.encode(buffer, padding)
         else
             i = ((imports.type(i) == "number") and "- "..imports.tostring(i)) or i
             if imports.type(j) == "string" then j = "\""..j.."\"" end
-            result = result..vcl.private.types.newline..padding..i..vcl.private.types.init.." "..imports.tostring(j)
+            result = result..vcl.private.types.newline..padding..i..vcl.private.types.init..vcl.private.types.space..imports.tostring(j)
         end
     end
     table.sort(indexes.numeric, function(a, b) return a < b end)
     for i = 1, #indexes.numeric, 1 do
         local j = indexes.numeric[i]
-        result = result..vcl.private.types.newline..padding..vcl.private.types.list.." "..j..vcl.private.types.init..vcl.private.encode(buffer[j], padding..vcl.private.types.tab)
+        result = result..vcl.private.types.newline..padding..vcl.private.types.list..vcl.private.types.space..j..vcl.private.types.init..vcl.private.encode(buffer[j], padding..vcl.private.types.tab)
     end
     for i = 1, #indexes.index, 1 do
         local j = indexes.index[i]
