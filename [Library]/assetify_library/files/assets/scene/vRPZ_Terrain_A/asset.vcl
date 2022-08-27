@@ -11,7 +11,6 @@ sceneOffsets:
 shaderMaps:
     control:
         isld_1_trn:
-            # Your attached control textures here
             -:
                 control: "control/isld_1_trn/road/control.png"
                 bump: "control/isld_1_trn/road/bump.jpg"
