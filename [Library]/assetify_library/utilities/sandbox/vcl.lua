@@ -132,27 +132,25 @@ function vcl.private.parseObject(parser, buffer, rw, isChild)
             if parser.isTypeID and vcl.private.isVoid(parser.index) and (rw == vcl.private.types.init) then parser.index = imports.tostring(#parser.pointer + 1) end
             if not vcl.private.isVoid(parser.index) then
                 if parser.isTypeID and (rw == vcl.private.types.newline) then parser.pointer[(#parser.pointer + 1)] = parser.index
-                else
-                    if rw == vcl.private.types.init then
-                        local _, indexLine = vcl.private.fetchLine(string.sub(buffer, 0, parser.ref))
-                        local indexTypePadding = (parser.isTypeID and (parser.ref - parser.isTypeID - 1)) or 0
-                        local indexPadding = #indexLine - #parser.index - indexTypePadding - 1
-                        if isChild then
-                            parser.padding = parser.padding or indexPadding - 1
-                            if indexPadding <= parser.padding then
-                                parser.ref = parser.ref - #parser.index - indexTypePadding
-                                return false
-                            end
+                elseif rw == vcl.private.types.init then
+                    local _, indexLine = vcl.private.fetchLine(string.sub(buffer, 0, parser.ref))
+                    local indexTypePadding = (parser.isTypeID and (parser.ref - parser.isTypeID - 1)) or 0
+                    local indexPadding = #indexLine - #parser.index - indexTypePadding - 1
+                    if isChild then
+                        parser.padding = parser.padding or indexPadding - 1
+                        if indexPadding <= parser.padding then
+                            parser.ref = parser.ref - #parser.index - indexTypePadding
+                            return false
                         end
-                        if parser.isTypeID then parser.isTypeID, parser.index = false, imports.tonumber(parser.index) end
-                        if not vcl.private.isVoid(parser.index) then
-                            local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, indexPadding, true)
-                            if not error then
-                                parser.pointer[(parser.index)], parser.ref, parser.index = value, __index - 1, ""
-                            else parser.isChildErrored = 1 end
-                        else parser.isChildErrored = 0 end
+                    end
+                    if parser.isTypeID then parser.isTypeID, parser.index = false, imports.tonumber(parser.index) end
+                    if not vcl.private.isVoid(parser.index) then
+                        local value, __index, error = vcl.private.decode(buffer, parser.ref + 1, indexPadding, true)
+                        if not error then
+                            parser.pointer[(parser.index)], parser.ref, parser.index = value, __index - 1, ""
+                        else parser.isChildErrored = 1 end
                     else parser.isChildErrored = 0 end
-                end
+                else parser.isChildErrored = 0 end
             end
             if parser.isChildErrored then return false end
         end
