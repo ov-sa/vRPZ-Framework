@@ -265,9 +265,10 @@ float MTAGetWeatherCycle() {
 
 float MTAGetWeatherValue() {
     float cycle = MTAGetWeatherCycle();
-    float weatherClamp = 0.0025;
+    float weatherClamp = 0.25;
     float weatherValue = cycle/12;
-    return (cycle >= 12) ? max(weatherClamp, 2 - weatherValue) : max(weatherClamp, weatherValue);
+    weatherValue = (cycle >= 12) ? 2 - weatherValue : weatherValue;
+    return weatherClamp + ((1 - clamp(0, 1, weatherClamp))*weatherValue);
 }
 
 float3 MTAGetWeatherColor() {
