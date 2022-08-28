@@ -268,7 +268,7 @@ float MTAGetWeatherValue() {
     float weatherClamp = 0.25;
     float weatherValue = cycle/12;
     weatherValue = (cycle >= 12) ? 2 - weatherValue : weatherValue;
-    return weatherClamp + ((1 - clamp(0, 1, weatherClamp))*weatherValue);
+    return weatherClamp + ((1 - weatherClamp)*weatherValue);
 }
 
 float3 MTAGetWeatherColor() {
