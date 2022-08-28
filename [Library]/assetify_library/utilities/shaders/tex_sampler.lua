@@ -27,8 +27,7 @@ local identity = {
 shaderRW.buffer[(identity.name)] = {
     properties = {
         disabled = {
-            ["vSource1"] = true,
-            ["vSource2"] = true
+            ["vSource1"] = true
         }
     },
 
@@ -58,7 +57,7 @@ shaderRW.buffer[(identity.name)] = {
         float sampleOffset = 0.001;
         float sampleIntensity = 0;
         float3 sunColor = false;
-        bool isStarsEnabled = true;
+        bool isStarsEnabled = false;
         float cloudDensity = false;
         float cloudScale = false;
         float3 cloudColor = false;
@@ -197,6 +196,20 @@ shaderRW.buffer[(identity.name)] = {
             return float4(result, 1);
         }
 
+        float4 SampleEmissive(float2 uv) {
+            float viewPI = PI*2;
+            float viewIterations = 26, viewQuality = 4;
+            float2 viewRadius = 20/vResolution;
+            float4 result = tex2D(vSource0Sampler, PS.TexCoord);
+            for(float i = 0; i < viewPI; i += viewPI/viewIterations) {
+                for(float j = 1/viewQuality; j <= 1; j += 1/viewQuality) {
+                    result += tex2D(vSource0Sampler, PS.TexCoord + (float2(cos(i), sin(i))*viewRadius*j));		
+                }
+            }
+            result /= (viewQuality*viewIterations) - 15;
+            return result;
+        }
+    
         PSInput VSHandler(VSInput VS) {
             PSInput PS = (PSInput)0;
             PS.Position = MTACalcScreenPosition(VS.Position);
@@ -216,6 +229,7 @@ shaderRW.buffer[(identity.name)] = {
                 float edgeIntensity = length(sampledTexel.rgb);
                 sampledTexel.a = pow(length(float2(ddx(edgeIntensity), ddy(edgeIntensity))), 0.5)*sampleIntensity;
             }
+            if (vSource2Enabled) sampledTexel += SampleEmissive(PS.TexCoord);
             return saturate(sampledTexel);
         }
 
