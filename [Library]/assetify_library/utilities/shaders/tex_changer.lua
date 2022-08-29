@@ -8,27 +8,18 @@
 ----------------------------------------------------------------
 
 
--------------------
---[[ Variables ]]--
--------------------
-
-local identity = {
-    name = "Assetify_TextureChanger",
-    deps = shaderRW.createDeps({})
-}
-
-
 ----------------
 --[[ Shader ]]--
 ----------------
 
-shaderRW.buffer[(identity.name)] = {
+local identity = "Assetify_TextureChanger"
+shaderRW.buffer[identity] = {
     properties = {
         disabled = {}
     },
 
     exec = function()
-        return identity.deps..[[
+        return shaderRW.createHelper()..[[
         /*-----------------
         -->> Variables <<--
         -------------------*/
@@ -78,7 +69,7 @@ shaderRW.buffer[(identity.name)] = {
         -->> Techniques <<--
         --------------------*/
 
-        technique ]]..identity.name..[[ {
+        technique ]]..identity..[[ {
             pass P0 {
                 PixelShader = compile ps_2_0 PSHandler();
             }

@@ -296,13 +296,3 @@ function shaderRW.createHelper(rtModes)
         }
     ]]
 end
-
-function shaderRW.createDeps(deps)
-    if not deps then return false end
-    local cDeps = ""
-    for i = 1, #deps, 1 do
-        local j = file:read(deps[i])
-        cDeps = (j and cDeps.."\n"..j) or ""
-    end
-    return cDeps
-end
