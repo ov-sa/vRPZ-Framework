@@ -226,7 +226,7 @@ shaderRW.buffer[identity] = {
             if (vSource2Enabled) sampledTexel += SampleEmissive(PS.TexCoord);
             sampledTexel = saturate(sampledTexel);
             output.World = sampledTexel;
-            output.Sky = float4(1, 0, 0, 1);
+            output.Sky = sampledTexel;
             return output;
         }
 
