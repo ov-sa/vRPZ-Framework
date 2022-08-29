@@ -16,7 +16,7 @@ shaderRW = {
     buffer = {}
 }
 
-function shaderRW.createHelper(rtModes)
+function shaderRW.create(rtModes)
     return [[
         static const float PI = 3.141592653589793f;
         float4x4 gWorld : WORLD;

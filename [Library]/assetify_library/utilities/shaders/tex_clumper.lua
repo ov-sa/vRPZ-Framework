@@ -51,7 +51,7 @@ shaderRW.buffer[identity] = {
                 sampledTexel.rgb *= clumpTexel_bump.rgb;
             ]]
         end
-        return shaderRW.createHelper({diffuse = true, emissive = true})..[[
+        return shaderRW.create({diffuse = true, emissive = true})..[[
         /*-----------------
         -->> Variables <<--
         -------------------*/

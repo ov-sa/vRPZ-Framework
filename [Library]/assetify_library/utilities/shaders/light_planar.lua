@@ -19,7 +19,7 @@ shaderRW.buffer[identity] = {
     },
 
     exec = function()
-        return shaderRW.createHelper({emissive = true})..[[
+        return shaderRW.create({emissive = true})..[[
         /*-----------------
         -->> Variables <<--
         -------------------*/

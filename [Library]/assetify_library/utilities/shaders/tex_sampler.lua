@@ -38,7 +38,7 @@ shaderRW.buffer[identity] = {
                 return cycles[hour];
             }
         ]]
-        return shaderRW.createHelper()..[[
+        return shaderRW.create()..[[
         /*-----------------
         -->> Variables <<--
         -------------------*/
