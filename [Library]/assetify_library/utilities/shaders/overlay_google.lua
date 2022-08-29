@@ -14,13 +14,6 @@
 
 local identity = "Assetify_OverlayGoogle"
 shaderRW.buffer[identity] = {
-    properties = {
-        disabled = {
-            ["vSource1"] = true,
-            ["vSource2"] = true
-        }
-    },
-
     exec = function()
         return shaderRW.create()..[[
         /*-----------------

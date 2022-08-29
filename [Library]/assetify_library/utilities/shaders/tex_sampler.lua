@@ -14,12 +14,6 @@
 
 local identity = "Assetify_TextureSampler"
 shaderRW.buffer[identity] = {
-    properties = {
-        disabled = {
-            ["vSource1"] = true
-        }
-    },
-
     exec = function()
         local controlVars, controlHandlers = "", [[
             float3x4 FetchTimeCycle(float hour) {

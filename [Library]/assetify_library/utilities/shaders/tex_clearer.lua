@@ -14,14 +14,6 @@
 
 local identity = "Assetify_TextureClearer"
 shaderRW.buffer[identity] = {
-    properties = {
-        disabled = {
-            ["vSource0"] = true,
-            ["vSource1"] = true,
-            ["vSource2"] = true
-        }
-    },
-
     exec = function()
         return shaderRW.create()..[[
         /*-----------------

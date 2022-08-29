@@ -14,10 +14,6 @@
 
 local identity = "Assetify_TextureChanger"
 shaderRW.buffer[identity] = {
-    properties = {
-        disabled = {}
-    },
-
     exec = function()
         return shaderRW.create({diffuse = true, emissive = true})..[[
         /*-----------------

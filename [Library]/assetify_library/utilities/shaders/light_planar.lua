@@ -14,10 +14,6 @@
 
 local identity = "Assetify_LightPlanar"
 shaderRW.buffer[identity] = {
-    properties = {
-        disabled = {}
-    },
-
     exec = function()
         return shaderRW.create({emissive = true})..[[
         /*-----------------

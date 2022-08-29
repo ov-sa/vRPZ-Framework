@@ -14,10 +14,6 @@
 
 local identity = "Assetify_TextureClumper"
 shaderRW.buffer[identity] = {
-    properties = {
-        disabled = {}
-    },
-
     exec = function(shaderMaps)
         if not shaderMaps or not shaderMaps[(asset.references.clump)] then return false end
         local controlVars, handlerBody, handlerFooter = [[

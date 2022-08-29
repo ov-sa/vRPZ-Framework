@@ -15,10 +15,6 @@
 local identity = "Assetify_TextureMapper"
 local iteration = 3
 shaderRW.buffer[identity] = {
-    properties = {
-        disabled = {}
-    },
-
     exec = function(shaderMaps)
         if not shaderMaps or (#shaderMaps <= 0) then return false end
         local isSamplingStage = false

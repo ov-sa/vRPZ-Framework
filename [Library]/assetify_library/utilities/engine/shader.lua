@@ -219,7 +219,7 @@ if localPlayer then
     end
 
     function shader.public:setValue(i, j)
-        if not shader.public:isInstance(self) or not i or (shader.public.rwCache[(self.shaderData.shaderName)].properties.disabled[i]) then return false end
+        if not shader.public:isInstance(self) or not i then return false end
         return imports.dxSetShaderValue(self.cShader, i, j)
     end
 
