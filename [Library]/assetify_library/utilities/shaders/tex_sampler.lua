@@ -67,6 +67,9 @@ shaderRW.buffer[identity] = {
         sampler vSource0Sampler = sampler_state {
             Texture = vSource0;
         };
+        sampler vSource2Sampler = sampler_state {
+            Texture = vSource2;
+        };
         sampler vDepth0Sampler = sampler_state {
             Texture = vDepth0;
         };
@@ -204,10 +207,10 @@ shaderRW.buffer[identity] = {
             float viewPI = PI*2;
             float2 viewRadius = 20/vResolution;
             float viewIterations = 26, viewQuality = 4, viewBrightness = 1.5;
-            float4 result = tex2Dlod(vSource0Sampler, float4(uv, 0, 0))*viewBrightness;
+            float4 result = tex2Dlod(vSource2Sampler, float4(uv, 0, 0))*viewBrightness;
             for(float i = 0; i < viewPI; i += viewPI/viewIterations) {
                 for(float j = 1/viewQuality; j <= 1; j += 1/viewQuality) {
-                    result += tex2Dlod(vSource0Sampler, float4(uv + (float2(cos(i), sin(i))*viewRadius*j), 0, 0))*viewBrightness;
+                    result += tex2Dlod(vSource2Sampler, float4(uv + (float2(cos(i), sin(i))*viewRadius*j), 0, 0))*viewBrightness;
                 }
             }
             result /= (viewQuality*viewIterations) - 15;
