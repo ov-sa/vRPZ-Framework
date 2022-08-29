@@ -8,23 +8,12 @@
 ----------------------------------------------------------------
 
 
--------------------
---[[ Variables ]]--
--------------------
-
-local identity = {
-    name = "Assetify_TextureSampler",
-    deps = shaderRW.createDeps({
-        "utilities/shaders/helper.fx"
-    })
-}
-
-
 ----------------
 --[[ Shader ]]--
 ----------------
 
-shaderRW.buffer[(identity.name)] = {
+local identity = "Assetify_TextureSampler"
+shaderRW.buffer[identity] = {
     properties = {
         disabled = {
             ["vSource1"] = true
@@ -49,7 +38,7 @@ shaderRW.buffer[(identity.name)] = {
                 return cycles[hour];
             }
         ]]
-        return identity.deps..[[
+        return shaderRW.createHelper()..[[
         /*-----------------
         -->> Variables <<--
         -------------------*/
@@ -71,14 +60,15 @@ shaderRW.buffer[(identity.name)] = {
             float4 Position : POSITION0;
             float2 TexCoord : TEXCOORD0;
         };
+        struct Export {
+            float4 World : COLOR0;
+            float4 Sky : COLOR1;
+        };
         sampler vSource0Sampler = sampler_state {
             Texture = vSource0;
         };
         sampler vDepth0Sampler = sampler_state {
             Texture = vDepth0;
-        };
-        sampler vSky0Sampler = sampler_state {
-            Texture = vSky0;
         };
     
 
@@ -231,12 +221,16 @@ shaderRW.buffer[(identity.name)] = {
             return PS;
         }
     
-        float4 PSHandler(PSInput PS) : COLOR0 {
+        Export PSHandler(PSInput PS) : COLOR0 {
+            Export output;
             float2x4 rawTexel = SampleSource(PS.TexCoord);
             float4 sampledTexel = rawTexel[0];
             if (rawTexel[1].a > 0) sampledTexel = vDynamicSkyEnabled ? SampleSky(PS.TexCoord) : rawTexel[1];
             if (vSource2Enabled) sampledTexel += SampleEmissive(PS.TexCoord);
-            return saturate(sampledTexel);
+            sampledTexel = saturate(sampledTexel);
+            output.World = sampledTexel;
+            output.Sky = float4(1, 0, 0, 1);
+            return output;
         }
 
 
@@ -244,7 +238,7 @@ shaderRW.buffer[(identity.name)] = {
         -->> Techniques <<--
         --------------------*/
 
-        technique ]]..identity.name..[[ {
+        technique ]]..identity..[[ {
             pass P0 {
                 AlphaBlendEnable = true;
                 VertexShader = compile vs_3_0 VSHandler();
