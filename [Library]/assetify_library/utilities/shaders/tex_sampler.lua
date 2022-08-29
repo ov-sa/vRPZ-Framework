@@ -134,9 +134,19 @@ shaderRW.buffer[(identity.name)] = {
         }
     
         float2x4 SampleSource(float2 uv) {
-            float4 baseTexel = tex2D(vSource0Sampler, uv);
-            float4 depthTexel = tex2D(vDepth0Sampler, uv);
-            float4 weatherTexel = ((depthTexel.r + depthTexel.g + depthTexel.b)/3) >= 1 ? baseTexel*float4(MTAGetWeatherColor(), 0.75) : float4(0, 0, 0, 0);
+            float4 baseTexel = tex2Dlod(vSource0Sampler, float4(uv, 0, 0));
+            float4 depthTexel = tex2Dlod(vDepth0Sampler, float4(uv, 0, 0));
+            float4 weatherTexel = ((depthTexel.r + depthTexel.g + depthTexel.b)/3) >= 1 ? 1 : 0;
+            if ((sampleOffset > 0) && (weatherTexel.a <= 0)) {
+                float4 sampledTexel = tex2Dlod(vSource0Sampler, float4(uv + float2(sampleOffset, sampleOffset), 0, 0));
+                sampledTexel += tex2Dlod(vSource0Sampler, float4(uv + float2(-sampleOffset, -sampleOffset), 0, 0));
+                sampledTexel += tex2Dlod(vSource0Sampler, float4(uv + float2(-sampleOffset, sampleOffset), 0, 0));
+                sampledTexel += tex2Dlod(vSource0Sampler, float4(uv + float2(sampleOffset, -sampleOffset), 0, 0));
+                sampledTexel *= 0.25;
+                float edgeIntensity = length(sampledTexel.rgb);
+                edgeIntensity = pow(length(float2(ddx(edgeIntensity), ddy(edgeIntensity))), 0.5)*sampleIntensity;
+                baseTexel = lerp(baseTexel, sampledTexel, edgeIntensity);
+            }
             float2x4 result = {baseTexel, weatherTexel};
             return result;
         }
@@ -218,17 +228,9 @@ shaderRW.buffer[(identity.name)] = {
         }
     
         float4 PSHandler(PSInput PS) : COLOR0 {
-            float2x4 rawTexel = SampleSource(PS.TexCoord + float2(sampleOffset, sampleOffset));
-            rawTexel += SampleSource(PS.TexCoord + float2(-sampleOffset, -sampleOffset));
-            rawTexel += SampleSource(PS.TexCoord + float2(-sampleOffset, sampleOffset));
-            rawTexel += SampleSource(PS.TexCoord + float2(sampleOffset, -sampleOffset));
-            rawTexel *= 0.25;
+            float2x4 rawTexel = SampleSource(PS.TexCoord);
             float4 sampledTexel = rawTexel[0];
             if (rawTexel[1].a > 0) sampledTexel = vDynamicSkyEnabled ? SampleSky(PS.TexCoord) : rawTexel[1];
-            else {
-                float edgeIntensity = length(sampledTexel.rgb);
-                sampledTexel.a = pow(length(float2(ddx(edgeIntensity), ddy(edgeIntensity))), 0.5)*sampleIntensity;
-            }
             if (vSource2Enabled) sampledTexel += SampleEmissive(PS.TexCoord);
             return saturate(sampledTexel);
         }
