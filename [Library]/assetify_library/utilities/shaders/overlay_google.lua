@@ -8,23 +8,12 @@
 ----------------------------------------------------------------
 
 
--------------------
---[[ Variables ]]--
--------------------
-
-local identity = {
-    name = "Assetify_OverlayGoogle",
-    deps = shaderRW.createDeps({
-        "utilities/shaders/helper.fx"
-    })
-}
-
-
 ----------------
 --[[ Shader ]]--
 ----------------
 
-shaderRW.buffer[(identity.name)] = {
+local identity = "Assetify_OverlayGoogle"
+shaderRW.buffer[identity] = {
     properties = {
         disabled = {
             ["vSource1"] = true,
@@ -33,7 +22,7 @@ shaderRW.buffer[(identity.name)] = {
     },
 
     exec = function()
-        return identity.deps..[[
+        return shaderRW.createHelper()..[[
         /*-----------------
         -->> Variables <<--
         -------------------*/
@@ -92,7 +81,7 @@ shaderRW.buffer[(identity.name)] = {
         -->> Techniques <<--
         --------------------*/
 
-        technique ]]..identity.name..[[ {
+        technique ]]..identity..[[ {
             pass P0 {
                 AlphaBlendEnable = true;
                 VertexShader = compile vs_3_0 VSHandler();
