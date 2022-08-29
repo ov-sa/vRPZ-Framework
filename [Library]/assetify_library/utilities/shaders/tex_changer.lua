@@ -19,7 +19,7 @@ shaderRW.buffer[identity] = {
     },
 
     exec = function()
-        return shaderRW.createHelper()..[[
+        return shaderRW.createHelper({diffuse = true, emissive = true})..[[
         /*-----------------
         -->> Variables <<--
         -------------------*/
@@ -51,11 +51,13 @@ shaderRW.buffer[identity] = {
                 if (vEmissiveSource) {
                     output.Diffuse = 0;
                     output.Emissive = sampledTexel;
-                } else {
+                }
+                else {
                     output.Diffuse = sampledTexel;
                     output.Emissive = 0;
                 }
-            } else {
+            }
+            else {
                 output.Diffuse = 0;
                 output.Emissive = 0;
             }
