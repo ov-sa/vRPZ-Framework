@@ -13,7 +13,6 @@
 ----------------
 
 local identity = "Assetify_TextureClearer"
-
 shaderRW.buffer[identity] = {
     properties = {
         disabled = {
