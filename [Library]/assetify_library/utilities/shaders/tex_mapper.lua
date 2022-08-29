@@ -8,24 +8,13 @@
 ----------------------------------------------------------------
 
 
--------------------
---[[ Variables ]]--
--------------------
-
-local identity = {
-    name = "Assetify_TextureMapper",
-    iteration = 3,
-    deps = shaderRW.createDeps({
-        "utilities/shaders/helper.fx"
-    })
-}
-
-
 ----------------
 --[[ Shader ]]--
 ----------------
 
-shaderRW.buffer[(identity.name)] = {
+local identity = "Assetify_TextureMapper"
+local iteration = 3
+shaderRW.buffer[identity] = {
     properties = {
         disabled = {}
     },
@@ -105,7 +94,7 @@ shaderRW.buffer[(identity.name)] = {
                             float4 controlTexel_]]..i..[[_]]..v..[[_bump = tex2D(controlSampler_]]..i..[[_]]..v..[[_bump, PS.TexCoord*controlScale_]]..i..[[_]]..v..[[);
                         ]]
                     end
-                    for m = 1, identity.iteration, 1 do
+                    for m = 1, iteration, 1 do
                         handlerBody = handlerBody..[[
                             sampledTexel_]]..i..[[ = lerp(sampledTexel_]]..i..[[, controlTexel_]]..i..[[_]]..v..[[, controlTexel_]]..i..[[.]]..channel..[[);
                         ]]
@@ -118,7 +107,7 @@ shaderRW.buffer[(identity.name)] = {
                 end
             end
             handlerBody = handlerBody..[[
-                sampledTexel_]]..i..[[.rgb *= ]]..(1/identity.iteration)..[[;
+                sampledTexel_]]..i..[[.rgb *= ]]..(1/iteration)..[[;
             ]]
             if j.bump then
                 handlerBody = handlerBody..[[
@@ -135,7 +124,7 @@ shaderRW.buffer[(identity.name)] = {
             ]])
             isSamplingStage = true
         end
-        return identity.deps..[[
+        return shaderRW.createHelper({diffuse = true, emissive = true})..[[
         /*-----------------
         -->> Variables <<--
         -------------------*/
@@ -165,11 +154,13 @@ shaderRW.buffer[(identity.name)] = {
                 if (vEmissiveSource) {
                     output.Diffuse = 0;
                     output.Emissive = sampledTexel;
-                } else {
+                }
+                else {
                     output.Diffuse = sampledTexel;
                     output.Emissive = 0;
                 }
-            } else {
+            }
+            else {
                 output.Diffuse = 0;
                 output.Emissive = 0;
             }
@@ -183,7 +174,7 @@ shaderRW.buffer[(identity.name)] = {
         -->> Techniques <<--
         --------------------*/
 
-        technique ]]..identity.name..[[ {
+        technique ]]..identity..[[ {
             pass P0 {
                 SRGBWriteEnable = false;
                 PixelShader = compile ps_2_0 PSHandler();
