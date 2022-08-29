@@ -8,34 +8,23 @@
 ----------------------------------------------------------------
 
 
--------------------
---[[ Variables ]]--
--------------------
-
-local identity = {
-    name = "Assetify_TextureExporter",
-    deps = shaderRW.createDeps({
-        "utilities/shaders/helper.fx"
-    })
-}
-
-
 ----------------
 --[[ Shader ]]--
 ----------------
 
-shaderRW.buffer[(identity.name)] = {
+local identity = "Assetify_TextureExporter"
+shaderRW.buffer[identity] = {
     properties = {
         disabled = {}
     },
 
     exec = function()
-        return identity.deps..[[
+        return shaderRW.createHelper()..[[
         /*-----------------
         -->> Variables <<--
         -------------------*/
 
-        texture renderLayer <string renderTarget = "yes";>;
+        texture vRender0 <string renderTarget = "yes";>;
         struct PSInput {
             float4 Position : POSITION0;
             float4 Diffuse : COLOR0;
@@ -43,8 +32,7 @@ shaderRW.buffer[(identity.name)] = {
         };
         struct Export {
             float4 World : COLOR0;
-            float4 Diffuse : COLOR1;
-            float4 Emissive : COLOR2;
+            float4 Render : COLOR1;
         };
         sampler baseSampler = sampler_state {
             Texture = gTexture0;
@@ -58,18 +46,7 @@ shaderRW.buffer[(identity.name)] = {
         Export PSHandler(PSInput PS) {
             Export output;
             float4 sampledTexel = tex2D(baseSampler, PS.TexCoord);
-            if (vRenderingEnabled) {
-                if (vEmissiveSource) {
-                    output.Diffuse = 0;
-                    output.Emissive = sampledTexel;
-                } else {
-                    output.Diffuse = sampledTexel;
-                    output.Emissive = 0;
-                }
-            } else {
-                output.Diffuse = 0;
-                output.Emissive = 0;
-            }
+            output.Render = sampledTexel;
             sampledTexel.rgb *= MTAGetWeatherValue();
             output.World = saturate(sampledTexel);
             return output;
@@ -80,7 +57,7 @@ shaderRW.buffer[(identity.name)] = {
         -->> Techniques <<--
         --------------------*/
 
-        technique ]]..identity.name..[[ {
+        technique ]]..identity..[[ {
             pass P0 {
                 AlphaBlendEnable = true;
                 PixelShader = compile ps_2_0 PSHandler();
