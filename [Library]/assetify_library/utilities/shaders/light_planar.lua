@@ -8,29 +8,18 @@
 ----------------------------------------------------------------
 
 
--------------------
---[[ Variables ]]--
--------------------
-
-local identity = {
-    name = "Assetify_LightPlanar",
-    deps = shaderRW.createDeps({
-        "utilities/shaders/helper.fx"
-    })
-}
-
-
 ----------------
 --[[ Shader ]]--
 ----------------
 
-shaderRW.buffer[(identity.name)] = {
+local identity = "Assetify_LightPlanar"
+shaderRW.buffer[identity] = {
     properties = {
         disabled = {}
     },
 
     exec = function()
-        return identity.deps..[[
+        return shaderRW.createHelper({emissive = true})..[[
         /*-----------------
         -->> Variables <<--
         -------------------*/
@@ -50,8 +39,7 @@ shaderRW.buffer[(identity.name)] = {
         };
         struct Export {
             float4 World : COLOR0;
-            float4 Diffuse : COLOR1;
-            float4 Emissive : COLOR2;
+            float4 Emissive : COLOR1;
         };
         sampler baseSampler = sampler_state {
             Texture = baseTexture;
@@ -85,13 +73,11 @@ shaderRW.buffer[(identity.name)] = {
             Export output;
             float4 sampledTexel = tex2D(baseSampler, PS.TexCoord);
             sampledTexel.rgb = pow(sampledTexel.rgb*1.5, 1.5);
-            output.Diffuse = 0;
             if (vRenderingEnabled) {
                 float4 sourceTex = vSource1Enabled ? tex2D(vSource1Sampler, PS.TexCoord) : tex2D(vSource0Sampler, PS.TexCoord);
                 sampledTexel.rgb *= lerp(sampledTexel.rgb, sourceTex.rgb*2.5, 0.95);
-            } else {
-                output.Emissive = 0;
             }
+            else output.Emissive = 0;
             sampledTexel *= lightColor;
             sampledTexel.rgb *= 1 + (1 - MTAGetWeatherValue());
             if (vRenderingEnabled) output.Emissive = sampledTexel;
@@ -104,7 +90,7 @@ shaderRW.buffer[(identity.name)] = {
         -->> Techniques <<--
         --------------------*/
 
-        technique ]]..identity.name..[[ {
+        technique ]]..identity..[[ {
             pass P0 {
                 AlphaRef = 1;
                 AlphaBlendEnable = true;
