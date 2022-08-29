@@ -38,7 +38,6 @@
     <script src="utilities/sandbox/datasystem.lua" type="shared"/>
 
     <!-- Utilities: Shaders -->
-    <file src="utilities/shaders/helper.fx"/>
     <script src="utilities/shaders/index.lua" type="client"/>
     <script src="utilities/shaders/tex_clearer.lua" type="client"/>
     <script src="utilities/shaders/tex_changer.lua" type="client"/>
