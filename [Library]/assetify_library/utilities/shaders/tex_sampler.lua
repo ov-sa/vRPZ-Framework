@@ -61,6 +61,7 @@ shaderRW.buffer[(identity.name)] = {
         float cloudDensity = false;
         float cloudScale = false;
         float3 cloudColor = false;
+        texture vSky0 <string renderTarget = "yes";>;
         ]]..controlVars..[[
         struct VSInput {
             float3 Position : POSITION0;
@@ -75,6 +76,9 @@ shaderRW.buffer[(identity.name)] = {
         };
         sampler vDepth0Sampler = sampler_state {
             Texture = vDepth0;
+        };
+        sampler vSky0Sampler = sampler_state {
+            Texture = vSky0;
         };
     
 

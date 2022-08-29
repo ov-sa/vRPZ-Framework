@@ -56,6 +56,7 @@ if localPlayer then
         local cameraX, cameraY, cameraZ, cameraLookX, cameraLookY, cameraLookZ = getCameraMatrix()
         local sunX, sunY = getScreenFromWorldPosition(0, 0, cameraLookZ + 200, 1, true)
         if sunX and sunY then shader.preLoaded["Assetify_TextureSampler"]:setValue("vSunViewOffset", {sunX, sunY}) end
+        imports.dxDrawImage(0, 0, renderer.public.resolution[1]*0.45, renderer.public.resolution[2]*0.45, renderer.private.skyRT)
         return true
     end
 
@@ -173,6 +174,10 @@ if localPlayer then
             if state then
                 renderer.private.prevNativeSkyGradient = table.pack(imports.getSkyGradient())
                 renderer.private.prevNativeClouds = imports.getCloudsEnabled()
+                renderer.private.skyRT = imports.dxCreateRenderTarget(renderer.public.resolution[1], renderer.public.resolution[2])
+                shader.preLoaded["Assetify_TextureSampler"]:setValue("vSky0", renderer.private.skyRT)
+            else
+                destroyElement(renderer.private.skyRT)
             end
             imports.setSkyGradient(table.unpack((not state and renderer.private.prevNativeSkyGradient) or {50, 50, 50, 50, 50, 50}))
             imports.setCloudsEnabled((not state and renderer.private.prevNativeClouds) or false)
