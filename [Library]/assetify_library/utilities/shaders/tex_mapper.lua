@@ -143,6 +143,13 @@ shaderRW.buffer[identity] = {
         -->> Handlers <<--
         ------------------*/
 
+        PSInput VSHandler(VSInput VS) {
+            PSInput PS = (PSInput)0;
+            PS.Position = MTACalcScreenPosition(VS.Position);
+            PS.TexCoord = VS.TexCoord;
+            return PS;
+        }
+    
         Export PSHandler(PSInput PS) : COLOR0 {
             Export output;
             ]]..handlerBody..handlerFooter..[[
@@ -173,6 +180,7 @@ shaderRW.buffer[identity] = {
         technique ]]..identity..[[ {
             pass P0 {
                 SRGBWriteEnable = false;
+                VertexShader = compile vs_2_0 VSHandler();
                 PixelShader = compile ps_2_0 PSHandler();
             }
         }
