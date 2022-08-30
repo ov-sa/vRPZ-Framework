@@ -8,6 +8,11 @@
 ----------------------------------------------------------------
 
 
+local imports = {
+    tonumber = tonumber
+}
+
+
 ----------------
 --[[ Shader ]]--
 ----------------
@@ -130,11 +135,12 @@ shaderRW.buffer[identity] = {
         struct VSInput {
             float3 Position : POSITION0;
             float2 TexCoord : TEXCOORD0;
+            float4 Diffuse : COLOR0;
         };
         struct PSInput {
             float4 Position : POSITION0;
-            float4 Diffuse : COLOR0;
             float2 TexCoord : TEXCOORD0;
+            float4 Diffuse : COLOR0;
         };
         struct Export {
             float4 World : COLOR0;
@@ -150,8 +156,8 @@ shaderRW.buffer[identity] = {
         PSInput VSHandler(VSInput VS) {
             PSInput PS = (PSInput)0;
             PS.Position = MTACalcScreenPosition(VS.Position);
-            PS.Diffuse = MTACalcGTABuildingDiffuse(VS.Diffuse);
             PS.TexCoord = VS.TexCoord;
+            PS.Diffuse = MTACalcGTABuildingDiffuse(VS.Diffuse);
             return PS;
         }
     
@@ -172,7 +178,10 @@ shaderRW.buffer[identity] = {
                 output.Diffuse = 0;
                 output.Emissive = 0;
             }
-            sampledTexel.rgb *= PS.Diffuse.rgb;
+            ]]..((shaderMaps.prelight and shaderMaps.prelight.vertexshading and [[sampledTexel.rgb *= PS.Diffuse.rgb;]]) or [[]])..[[
+            ]]..((shaderMaps.prelight and shaderMaps.prelight.brightness and [[sampledTexel.rgb += ]]..shaderMaps.prelight.brightness..[[;]]) or [[]])..[[
+            ]]..((shaderMaps.prelight and shaderMaps.prelight.contrast and [[sampledTexel.rgb *= ]]..shaderMaps.prelight.contrast..[[;]]) or [[]])..[[
+            ]]..((shaderMaps.prelight and shaderMaps.prelight.filter and [[sampledTexel.rgb *= float3(]]..((imports.tonumber(shaderMaps.prelight.filter.red) or 255)/255)..[[, ]]..((imports.tonumber(shaderMaps.prelight.filter.green) or 255)/255)..[[, ]]..((imports.tonumber(shaderMaps.prelight.filter.blue) or 255)/255)..[[);]]) or [[]])..[[
             sampledTexel.rgb *= MTAGetWeatherValue();
             output.World = saturate(sampledTexel);
             return output;
