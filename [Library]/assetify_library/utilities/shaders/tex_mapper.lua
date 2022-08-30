@@ -150,6 +150,7 @@ shaderRW.buffer[identity] = {
         PSInput VSHandler(VSInput VS) {
             PSInput PS = (PSInput)0;
             PS.Position = MTACalcScreenPosition(VS.Position);
+            PS.Diffuse = MTACalcGTABuildingDiffuse(VS.Diffuse);
             PS.TexCoord = VS.TexCoord;
             return PS;
         }
@@ -171,6 +172,7 @@ shaderRW.buffer[identity] = {
                 output.Diffuse = 0;
                 output.Emissive = 0;
             }
+            sampledTexel.rgb *= PS.Diffuse.rgb;
             sampledTexel.rgb *= MTAGetWeatherValue();
             output.World = saturate(sampledTexel);
             return output;
