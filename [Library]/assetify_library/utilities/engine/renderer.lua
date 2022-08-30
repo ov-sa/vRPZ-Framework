@@ -268,6 +268,7 @@ if localPlayer then
     function renderer.public:setTimeCycle(cycle)
         state = (state and true) or false
         if not renderer.private.isTimeCycleValid(cycle) then return false end
+        renderer.public.isDynamicTimeCycle, renderer.private.serverTimeCycleColor = cycle, {}
         for i = 1, 24, 1 do
             local vCycle, bCycle = cycle[i], {}
             if not vCycle then
@@ -284,14 +285,15 @@ if localPlayer then
                 local v = vCycle[k]
                 local color = (v and {string.parseHex(v.color)}) or false
                 local position = (v and v.position) or false
+                renderer.private.serverTimeCycleColor[i] = (v.position and (v.position <= 50) and color) or renderer.private.serverTimeCycleColor[i]
                 table.insert(bCycle, (color and color[1]/255) or -1)
                 table.insert(bCycle, (color and color[2]/255) or -1)
                 table.insert(bCycle, (color and color[3]/255) or -1)
                 table.insert(bCycle, (position and position/100) or -1)
             end
+            renderer.private.serverTimeCycleColor[i] = renderer.private.serverTimeCycleColor[i] or {255, 255, 255}
             shader.preLoaded["Assetify_TextureSampler"]:setValue("timecycle_"..i, bCycle)
         end
-        renderer.public.isDynamicTimeCycle = cycle
         return true
     end
 end
