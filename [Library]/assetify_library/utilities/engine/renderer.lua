@@ -57,7 +57,22 @@ if localPlayer then
         local sunX, sunY = getScreenFromWorldPosition(0, 0, cameraLookZ + 200, 1, true)
         if sunX and sunY then shader.preLoaded["Assetify_TextureSampler"]:setValue("vSunViewOffset", {sunX, sunY}) end
         --TODO: JUST TESTING..
-        imports.dxDrawImage(0, 0, renderer.public.resolution[1]*0.45, renderer.public.resolution[2]*0.45, renderer.private.skyRT)
+        --imports.dxDrawImage(0, 0, renderer.public.resolution[1]*0.45, renderer.public.resolution[2]*0.45, renderer.private.skyRT)
+        if renderer.public.isTimeSynced then
+            renderer.private.currentTick = getTickCount()
+            local cycle = ((renderer.private.serverTick + renderer.private.currentTick)/(60*renderer.private.minuteDuration))%24
+            outputChatBox(cycle)
+            --[[
+            if not testTick or ((currentTick - testTick) >= renderer.private.minuteDuration*30) then
+                testTick = currentTick
+                local skyPixels = dxGetTexturePixels(renderer.private.skyRT, renderer.public.resolution[1]*0.5, renderer.public.resolution[2]*0.5, 1, 1)
+                local r, g, b = dxGetPixelColor(skyPixels, 0, 0)
+                --dxDrawRectangle(renderer.public.resolution[1] - 100, 0, 100, 100, tocolor(175, 175, 175, 255))
+                --dxDrawRectangle(renderer.public.resolution[1] - 100 + 5, 5, 100 - 20, 100 - 10, tocolor(r, g, b, 255))
+                setSkyGradient(r, g, b, r*0.35, g*0.35, b*0.35)
+            end
+            ]]
+        end
         return true
     end
 
@@ -119,7 +134,7 @@ if localPlayer then
             if renderer.public.isTimeSynced == state then return false end
             renderer.public.isTimeSynced = state
             if not renderer.public.isTimeSynced then
-                renderer.public:setServerTick(((renderer.private.serverTick or 0)*1000) + (imports.getTickCount() - (renderer.public.__serverTick or 0)))
+                renderer.public:setServerTick((renderer.private.serverTick or 0) + (imports.getTickCount() - (renderer.private.serverTickFrame or 0)))
             end
             for i, j in imports.pairs(shader.buffer.shader) do
                 renderer.public:setTimeSync(_, i, syncer.librarySerial)
@@ -133,14 +148,14 @@ if localPlayer then
 
     function renderer.public:setServerTick(serverTick, syncShader, isInternal)
         if not syncShader then
-            renderer.private.serverTick = (imports.tonumber(serverTick) or 0)*0.001
-            renderer.public.__serverTick = imports.getTickCount()
+            renderer.private.serverTick = imports.tonumber(serverTick) or 0
+            renderer.private.serverTickFrame = imports.getTickCount()
             for i, j in imports.pairs(shader.buffer.shader) do
                 renderer.public:setServerTick(_, i, syncer.librarySerial)
             end
         else
             if not manager:isInternal(isInternal) then return false end
-            syncShader:setValue("vServerTick", renderer.private.serverTick)
+            syncShader:setValue("vServerTick", renderer.private.serverTick*0.001)
         end
         return true
     end

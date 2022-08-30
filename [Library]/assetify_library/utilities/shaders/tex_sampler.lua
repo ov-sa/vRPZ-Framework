@@ -218,15 +218,26 @@ shaderRW.buffer[identity] = {
             return PS;
         }
     
+        Export BufferHandler(PSInput PS) : COLOR0 {
+            Export output;
+            output.Sky = 1;
+            output.World = 1;
+            return output;
+        }
+
         Export PSHandler(PSInput PS) : COLOR0 {
             Export output;
             float2x4 rawTexel = SampleSource(PS.TexCoord);
             float4 sampledTexel = rawTexel[0];
-            if (rawTexel[1].a > 0) sampledTexel = vDynamicSkyEnabled ? SampleSky(PS.TexCoord) : rawTexel[1];
+            if (rawTexel[1].a > 0) {
+                sampledTexel = vDynamicSkyEnabled ? SampleSky(PS.TexCoord) : rawTexel[1];
+                if (PS.TexCoord.x >= 0.5 && PS.TexCoord.y >= 0.5) {
+                    output.Sky = sampledTexel;
+                }
+                else output.Sky = 1;
+            }
             if (vSource2Enabled) sampledTexel += SampleEmissive(PS.TexCoord);
-            sampledTexel = saturate(sampledTexel);
-            output.World = sampledTexel;
-            output.Sky = sampledTexel;
+            output.World = saturate(sampledTexel);
             return output;
         }
 
@@ -237,6 +248,11 @@ shaderRW.buffer[identity] = {
 
         technique ]]..identity..[[ {
             pass P0 {
+                AlphaBlendEnable = true;
+                VertexShader = compile vs_3_0 VSHandler();
+                PixelShader  = compile ps_3_0 BufferHandler();
+            }
+            pass P1 {
                 AlphaBlendEnable = true;
                 VertexShader = compile vs_3_0 VSHandler();
                 PixelShader  = compile ps_3_0 PSHandler();
