@@ -29,6 +29,8 @@ local imports = {
     dxCreateScreenSource = dxCreateScreenSource,
     dxCreateRenderTarget = dxCreateRenderTarget,
     dxUpdateScreenSource = dxUpdateScreenSource,
+    dxGetTexturePixels = dxGetTexturePixels,
+    dxGetPixelColor = dxGetPixelColor,
     dxDrawImage = dxDrawImage
 }
 
@@ -65,7 +67,7 @@ if localPlayer then
             local currentTick = imports.getTickCount()
             if not renderer.private.serverTimeCycleTick or ((currentTick - renderer.private.serverTimeCycleTick) >= renderer.private.minuteDuration*30) then
                 renderer.private.serverTimeCycleTick = currentTick
-                local r, g, b = dxGetPixelColor(dxGetTexturePixels(renderer.private.skyRT, renderer.public.resolution[1]*0.5, renderer.public.resolution[2]*0.5, 1, 1), 0, 0)
+                local r, g, b = imports.dxGetPixelColor(imports.dxGetTexturePixels(renderer.private.skyRT, renderer.public.resolution[1]*0.5, renderer.public.resolution[2]*0.5, 1, 1), 0, 0)
                 r, g, b = r*0.5, g*0.5, b*0.5
                 imports.setSkyGradient(r, g, b, r, g, b)
             end
