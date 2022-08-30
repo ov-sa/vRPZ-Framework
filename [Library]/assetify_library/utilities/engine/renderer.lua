@@ -59,19 +59,16 @@ if localPlayer then
         --TODO: JUST TESTING..
         --imports.dxDrawImage(0, 0, renderer.public.resolution[1]*0.45, renderer.public.resolution[2]*0.45, renderer.private.skyRT)
         if renderer.public.isTimeSynced then
-            renderer.private.currentTick = getTickCount()
-            local cycle = ((renderer.private.serverTick + renderer.private.currentTick)/(60*renderer.private.minuteDuration))%24
-            outputChatBox(cycle)
-            --[[
-            if not testTick or ((currentTick - testTick) >= renderer.private.minuteDuration*30) then
-                testTick = currentTick
-                local skyPixels = dxGetTexturePixels(renderer.private.skyRT, renderer.public.resolution[1]*0.5, renderer.public.resolution[2]*0.5, 1, 1)
-                local r, g, b = dxGetPixelColor(skyPixels, 0, 0)
-                --dxDrawRectangle(renderer.public.resolution[1] - 100, 0, 100, 100, tocolor(175, 175, 175, 255))
-                --dxDrawRectangle(renderer.public.resolution[1] - 100 + 5, 5, 100 - 20, 100 - 10, tocolor(r, g, b, 255))
-                setSkyGradient(r, g, b, r*0.35, g*0.35, b*0.35)
+            --TODO: OPTIMIZE LATER
+            --local cycle = ((renderer.private.serverTick + renderer.private.currentTick)/(60*renderer.private.minuteDuration))%24
+            --outputChatBox(cycle)
+            local currentTick = imports.getTickCount()
+            if not renderer.private.serverTimeCycleTick or ((currentTick - renderer.private.serverTimeCycleTick) >= renderer.private.minuteDuration*30) then
+                renderer.private.serverTimeCycleTick = currentTick
+                local r, g, b = dxGetPixelColor(dxGetTexturePixels(renderer.private.skyRT, renderer.public.resolution[1]*0.5, renderer.public.resolution[2]*0.5, 1, 1), 0, 0)
+                r, g, b = r*0.5, g*0.5, b*0.5
+                imports.setSkyGradient(r, g, b, r, g, b)
             end
-            ]]
         end
         return true
     end
@@ -194,8 +191,8 @@ if localPlayer then
                 shader.preLoaded["Assetify_TextureSampler"]:setValue("vSky0", renderer.private.skyRT)
             else
                 destroyElement(renderer.private.skyRT)
+                imports.setSkyGradient(table.upack(renderer.private.prevNativeSkyGradient))
             end
-            imports.setSkyGradient(table.unpack((not state and renderer.private.prevNativeSkyGradient) or {50, 50, 50, 50, 50, 50}))
             imports.setCloudsEnabled((not state and renderer.private.prevNativeClouds) or false)
             for i, j in imports.pairs(shader.buffer.shader) do
                 renderer.public:setDynamicSky(_, i, syncer.librarySerial)
@@ -285,7 +282,9 @@ if localPlayer then
                 local v = vCycle[k]
                 local color = (v and {string.parseHex(v.color)}) or false
                 local position = (v and v.position) or false
-                renderer.private.serverTimeCycleColor[i] = (v.position and (v.position <= 50) and color) or renderer.private.serverTimeCycleColor[i]
+                if k == 1 then
+                    renderer.private.serverTimeCycleColor[i] = (color) or renderer.private.serverTimeCycleColor[i]
+                end
                 table.insert(bCycle, (color and color[1]/255) or -1)
                 table.insert(bCycle, (color and color[2]/255) or -1)
                 table.insert(bCycle, (color and color[3]/255) or -1)
