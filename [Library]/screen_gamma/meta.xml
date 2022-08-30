@@ -1,0 +1,4 @@
+<meta>
+    <script src="screen.lua" type="client" cache="false"/>
+    <file src="data/screen.fx"/>
+</meta>
