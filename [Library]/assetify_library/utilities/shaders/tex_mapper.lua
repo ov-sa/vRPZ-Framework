@@ -127,6 +127,10 @@ shaderRW.buffer[identity] = {
 
         float anisotropy = 1;
         ]]..controlVars..[[
+        struct VSInput {
+            float3 Position : POSITION0;
+            float2 TexCoord : TEXCOORD0;
+        };
         struct PSInput {
             float4 Position : POSITION0;
             float4 Diffuse : COLOR0;
