@@ -58,12 +58,9 @@ if localPlayer then
         local cameraX, cameraY, cameraZ, cameraLookX, cameraLookY, cameraLookZ = getCameraMatrix()
         local sunX, sunY = getScreenFromWorldPosition(0, 0, cameraLookZ + 200, 1, true)
         if sunX and sunY then shader.preLoaded["Assetify_TextureSampler"]:setValue("vSunViewOffset", {sunX, sunY}) end
-        --TODO: JUST TESTING..
-        --imports.dxDrawImage(0, 0, renderer.public.resolution[1]*0.45, renderer.public.resolution[2]*0.45, renderer.private.skyRT)
         if renderer.public.isTimeSynced then
-            --TODO: OPTIMIZE LATER
+            --TODO: FINALIZE LATER
             --local cycle = ((renderer.private.serverTick + renderer.private.currentTick)/(60*renderer.private.minuteDuration))%24
-            --outputChatBox(cycle)
             local currentTick = imports.getTickCount()
             if not renderer.private.serverTimeCycleTick or ((currentTick - renderer.private.serverTimeCycleTick) >= renderer.private.minuteDuration*30) then
                 renderer.private.serverTimeCycleTick = currentTick
