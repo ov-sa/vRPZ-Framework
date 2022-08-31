@@ -166,7 +166,7 @@ shaderRW.buffer[identity] = {
             return pow(frac((p.x + p.y)*p.z), 1000)*(a*0.5 + 0.15)*alpha;
         }
 
-        float2x4 SampleSky(float2 uv) {
+        float2x4 SampleSky(float2 uv, bool isFetchBase) {
             float2 viewAdd = - 1/float2(gProjectionMainScene[0][0], gProjectionMainScene[1][1]);	
             float2 viewMul = -2*viewAdd.xy;
             float4x4 viewMatrix = GetViewMatrix(gViewMainScene);
@@ -179,6 +179,7 @@ shaderRW.buffer[identity] = {
             float hour = floor(cycle);
             float3 skyBase = lerp(SampleCycle(viewCoord, FetchTimeCycle(hour > 0 ? hour - 1 : 23)), SampleCycle(viewCoord, FetchTimeCycle(hour)), cycle - hour);
             float3 result = skyBase;
+            if (isFetchBase) return float2x4(float4(0, 0, 0, 0), float4(skyBase, 1));;
             // Sample Stars
             if (isStarsEnabled) result += SampleStars(viewCoord, cycle);
             // Sample Sun
@@ -233,12 +234,9 @@ shaderRW.buffer[identity] = {
             bool isSkyVisible = rawTexel[1].a > 0;
             if (!vDynamicSkyEnabled && isSkyVisible) sampledTexel = rawTexel[1];
             else if (vDynamicSkyEnabled && (isViewCenter || isSkyVisible)) {
-                if (isSkyVisible) {
-                    float2x4 skyTexel = SampleSky(PS.TexCoord);
-                    sampledTexel = skyTexel[0];
-                    output.Sky = skyTexel[1];
-                }
-                else output.Sky = FetchSkyBase(PS.TexCoord);
+                float2x4 skyTexel = SampleSky(PS.TexCoord, !isSkyVisible);
+                sampledTexel = isSkyVisible ? skyTexel[0] : sampledTexel;
+                output.Sky = skyTexel[1];
             } 
             if (vSource2Enabled) sampledTexel += SampleEmissive(PS.TexCoord);
             // Sample Gamma & Vignette
