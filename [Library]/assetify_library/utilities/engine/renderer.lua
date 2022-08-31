@@ -60,7 +60,7 @@ if localPlayer then
         if sunX and sunY then shader.preLoaded["Assetify_TextureSampler"]:setValue("vSunViewOffset", {sunX, sunY}) end
         if renderer.public.isTimeSynced then
             --TODO: FINALIZE LATER
-            --local cycle = ((renderer.private.serverTick + renderer.private.currentTick)/(60*renderer.private.minuteDuration))%24
+            --imports.dxDrawImage(0, 0, renderer.public.resolution[1]*0.45, renderer.public.resolution[2]*0.45, renderer.private.skyRT)
             local currentTick = imports.getTickCount()
             if not renderer.private.serverTimeCycleTick or ((currentTick - renderer.private.serverTimeCycleTick) >= renderer.private.minuteDuration*30) then
                 renderer.private.serverTimeCycleTick = currentTick
