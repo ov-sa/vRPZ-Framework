@@ -231,7 +231,8 @@ shaderRW.buffer[identity] = {
             float4 sampledTexel = rawTexel[0];
             if (rawTexel[1].a > 0) {
                 sampledTexel = vDynamicSkyEnabled ? SampleSky(PS.TexCoord) : rawTexel[1];
-                if (PS.TexCoord.x >= 0.5 && PS.TexCoord.y >= 0.5) {
+                float2 viewCenter = float2(0.5 + 1/vResolution.x, 0.5 + 1/vResolution.y);
+                if ((PS.TexCoord.x >= 0.5) && (PS.TexCoord.x <= viewCenter.x) && (PS.TexCoord.y >= 0.5) && (PS.TexCoord.y <= viewCenter.y)) {
                     output.Sky = sampledTexel;
                 }
                 else output.Sky = 1;

@@ -64,10 +64,11 @@ if localPlayer then
             local currentTick = imports.getTickCount()
             if not renderer.private.serverTimeCycleTick or ((currentTick - renderer.private.serverTimeCycleTick) >= renderer.private.minuteDuration*30) then
                 renderer.private.serverTimeCycleTick = currentTick
-                local r, g, b = imports.dxGetPixelColor(imports.dxGetTexturePixels(renderer.private.skyRT, renderer.public.resolution[1]*0.5, renderer.public.resolution[2]*0.5, 1, 1), 0, 0)
-                r, g, b = r*0.5, g*0.5, b*0.5
+                r, g, b = imports.dxGetPixelColor(imports.dxGetTexturePixels(renderer.private.skyRT, renderer.public.resolution[1]*0.5, renderer.public.resolution[2]*0.5, 1, 1), 0, 0)
+                ---r, g, b = r*0.5, g*0.5, b*0.5
                 imports.setSkyGradient(r, g, b, r, g, b)
             end
+            dxDrawRectangle(renderer.public.resolution[1] - 100, 0, 100, 100, tocolor(r, g, b, 255))
         end
         return true
     end
