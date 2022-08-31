@@ -138,8 +138,7 @@ shaderRW.buffer[identity] = {
                 edgeIntensity = pow(length(float2(ddx(edgeIntensity), ddy(edgeIntensity))), 0.5)*sampleIntensity;
                 baseTexel = lerp(baseTexel, sampledTexel, edgeIntensity);
             }
-            float2x4 result = {baseTexel, weatherTexel};
-            return result;
+            return float2x4(baseTexel, weatherTexel);
         }
     
         float3 SampleCycle(float2 uv, float3x4 cycle) {
@@ -167,7 +166,7 @@ shaderRW.buffer[identity] = {
             return pow(frac((p.x + p.y)*p.z), 1000)*(a*0.5 + 0.15)*alpha;
         }
 
-        float4 SampleSky(float2 uv) {
+        float2x4 SampleSky(float2 uv) {
             float2 viewAdd = - 1/float2(gProjectionMainScene[0][0], gProjectionMainScene[1][1]);	
             float2 viewMul = -2*viewAdd.xy;
             float4x4 viewMatrix = GetViewMatrix(gViewMainScene);
@@ -194,7 +193,7 @@ shaderRW.buffer[identity] = {
             // Sample Clouds
             float cloudID = sin(2)*0.1 + 0.7;
             result = lerp(result, cloudColor, length(skyBase)*smoothstep(cloudID, cloudID + 0.1, CreatePerlinNoise(viewCoord*cloudScale, cloudDensity)));
-            return float4(result, 1);
+            return float2x4(float4(result, 1), float4(skyBase, 1));
         }
 
         float4 SampleEmissive(float2 uv) {
@@ -229,13 +228,15 @@ shaderRW.buffer[identity] = {
             Export output;
             float2x4 rawTexel = SampleSource(PS.TexCoord);
             float4 sampledTexel = rawTexel[0];
+            output.Sky = 1;
             if (rawTexel[1].a > 0) {
-                sampledTexel = vDynamicSkyEnabled ? SampleSky(PS.TexCoord) : rawTexel[1];
-                float2 viewCenter = float2(0.5 + 1/vResolution.x, 0.5 + 1/vResolution.y);
-                if ((PS.TexCoord.x >= 0.5) && (PS.TexCoord.x <= viewCenter.x) && (PS.TexCoord.y >= 0.5) && (PS.TexCoord.y <= viewCenter.y)) {
-                    output.Sky = sampledTexel;
+                if (!vDynamicSkyEnabled) sampledTexel = rawTexel[1];
+                else {
+                    float2x4 skyTexel = SampleSky(PS.TexCoord);
+                    sampledTexel = skyTexel[0];
+                    float2 viewCenter = float2(0.5 + 1/vResolution.x, 0.5 + 1/vResolution.y);
+                    output.Sky = (PS.TexCoord.x >= 0.5) && (PS.TexCoord.x <= viewCenter.x) && (PS.TexCoord.y >= 0.5) && (PS.TexCoord.y <= viewCenter.y) ? skyTexel[1] : output.Sky;
                 }
-                else output.Sky = 1;
             }
             if (vSource2Enabled) sampledTexel += SampleEmissive(PS.TexCoord);
             sampledTexel.rgb *= lerp(1, float3(0.8, 0.9, 1.3), sin(gTime + 3)*0.5 + 0.5);
