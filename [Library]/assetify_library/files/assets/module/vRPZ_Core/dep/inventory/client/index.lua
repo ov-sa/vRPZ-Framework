@@ -89,7 +89,7 @@ end
 CInventory.isSlotAvailableForOrdering = function(item, prevSlot, slot, isEquipped)
     local isEquipmentSlot = FRAMEWORK_CONFIGS["Templates"]["Inventory"]["Slots"][slot]
     if not isEquipmentSlot then slot = imports.tonumber(slot) end
-    if not CPlayer.isInitialized(localPlayer) or not item or not slot or not isInventoryUIEnabled() then return false end
+    if not CPlayer.isInitialized(localPlayer) or not item or not slot or not inventoryUI:isEnabled() then return false end
     local itemData = CInventory.fetchItem(item)
     if not itemData then return false end
     local maxSlots, usedSlots = CInventory.fetchParentMaxSlots(localPlayer), CInventory.fetchParentUsedSlots(localPlayer)
