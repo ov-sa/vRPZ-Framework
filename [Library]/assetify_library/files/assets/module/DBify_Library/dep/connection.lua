@@ -5,9 +5,9 @@
 dbify = {
     settings = {
         credentials = {
-            username = "sql10506977",
-            password = "9Um2TpVgrx",
-            database = "sql10506977",
+            username = "sql10516775",
+            password = "TGaLMrPnD8",
+            database = "sql10516775",
             host = "sql10.freemysqlhosting.net",
             port = "3306",
             options = ""

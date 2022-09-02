@@ -50,49 +50,47 @@ local vicinity_slotSize = inventory_offsetY
 inventory_offsetY = inventory_offsetY + FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height + inventory_margin    
 local inventory_slotColor, inventory_slotAvailableColor, inventory_slotUnavailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[3], 75*0.15), imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[3], 100*0.15), imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[3], 100*0.15)
 local inventory_rt_slotColor, inventory_rt_slotAvailableColor, inventory_rt_slotUnavailableColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotColor[3], 75), imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotAvailableColor[3], 100), imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotUnavailableColor[3], 100)
-local inventoryUI = {
-    cache = {keys = {scroll = {}}},
-    buffer = {},
-    margin = inventory_margin,
-    titlebar = {
-        height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.height,
-        font = CGame.createFont(1, 19), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.fontColor)),
-        bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.bgColor)),
-        slot = {
-            height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height,
-            fontPaddingY = 2, font = CGame.createFont(1, 16), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.fontColor)),
-            bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.bgColor))
-        }
-    },
-    scroller = {
-        width = FRAMEWORK_CONFIGS["UI"]["Inventory"].scroller.width, thumbHeight = FRAMEWORK_CONFIGS["UI"]["Inventory"].scroller.thumbHeight,
-        bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].scroller.bgColor)), thumbColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].scroller.thumbColor))
-    },
-    clientInventory = {
-        startX = 0, startY = -inventory_offsetY,
-        bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor)), dividerColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor[3], 255),
-        slotColor = inventory_rt_slotColor, slotAvailableColor = inventory_rt_slotAvailableColor, slotUnavailableColor = inventory_rt_slotUnavailableColor,
-        lockStat = {
-            lockTexture = imports.beautify.assets["images"]["canvas/lock.rw"], unlockTexture = imports.beautify.assets["images"]["canvas/unlock.rw"]
-        },
-        equipment = {
-            slotColor = inventory_slotColor, slotAvailableColor = inventory_slotAvailableColor, slotUnavailableColor = inventory_slotUnavailableColor,
-            "Helmet", "Vest", "Upper", "Lower", "Shoes", "Primary", "Secondary", "Backpack"
-        }
-    },
-    vicinityInventory = {
-        width = inventory_offsetX,
-        slotNameTexture = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "inventory:vicinity:slot_name"),
-        slotNameFont = CGame.createFont(1, 18), slotNameFontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotNameFontColor)),
-        slotCounterFont = CGame.createFont(1, 16, true), slotCounterFontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotCounterFontColor)),
-        slotSize = vicinity_slotSize, slotColor = inventory_rt_slotColor, slotAvailableColor = inventory_rt_slotAvailableColor, slotUnavailableColor = inventory_rt_slotUnavailableColor,
-        bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor))
-    },
-    opacityAdjuster = {
-        startX = 10, startY = 0,
-        width = 27,
-        range = {50, 100}
+inventoryUI.private.cache = {keys = {scroll = {}}}
+inventoryUI.private.buffer = {}
+inventoryUI.private.margin = inventory_margin
+inventoryUI.private.titlebar = {
+    height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.height,
+    font = CGame.createFont(1, 19), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.fontColor)),
+    bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.bgColor)),
+    slot = {
+        height = FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.height,
+        fontPaddingY = 2, font = CGame.createFont(1, 16), fontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.fontColor)),
+        bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].titlebar.slot.bgColor))
     }
+}
+inventoryUI.private.scroller = {
+    width = FRAMEWORK_CONFIGS["UI"]["Inventory"].scroller.width, thumbHeight = FRAMEWORK_CONFIGS["UI"]["Inventory"].scroller.thumbHeight,
+    bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].scroller.bgColor)), thumbColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].scroller.thumbColor))
+}
+inventoryUI.private.clientInventory = {
+    startX = 0, startY = -inventory_offsetY,
+    bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor)), dividerColor = imports.tocolor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor[1], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor[2], FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.dividerColor[3], 255),
+    slotColor = inventory_rt_slotColor, slotAvailableColor = inventory_rt_slotAvailableColor, slotUnavailableColor = inventory_rt_slotUnavailableColor,
+    lockStat = {
+        lockTexture = imports.beautify.assets["images"]["canvas/lock.rw"], unlockTexture = imports.beautify.assets["images"]["canvas/unlock.rw"]
+    },
+    equipment = {
+        slotColor = inventory_slotColor, slotAvailableColor = inventory_slotAvailableColor, slotUnavailableColor = inventory_slotUnavailableColor,
+        "Helmet", "Vest", "Upper", "Lower", "Shoes", "Primary", "Secondary", "Backpack"
+    }
+}
+inventoryUI.private.vicinityInventory = {
+    width = inventory_offsetX,
+    slotNameTexture = imports.assetify.getAssetDep("module", "vRPZ_HUD", "texture", "inventory:vicinity:slot_name"),
+    slotNameFont = CGame.createFont(1, 18), slotNameFontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotNameFontColor)),
+    slotCounterFont = CGame.createFont(1, 16, true), slotCounterFontColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.slotCounterFontColor)),
+    slotSize = vicinity_slotSize, slotColor = inventory_rt_slotColor, slotAvailableColor = inventory_rt_slotAvailableColor, slotUnavailableColor = inventory_rt_slotUnavailableColor,
+    bgColor = imports.tocolor(imports.unpackColor(FRAMEWORK_CONFIGS["UI"]["Inventory"].inventory.bgColor))
+}
+inventoryUI.private.opacityAdjuster = {
+    startX = 10, startY = 0,
+    width = 27,
+    range = {50, 100}
 }
 inventory_margin, inventory_offsetX, inventory_offsetY, vicinity_slotSize = nil, nil, nil, nil
 inventory_slotColor, inventory_slotAvailableColor, inventory_slotUnavailableColor, inventory_rt_slotColor, inventory_rt_slotAvailableColor, inventory_rt_slotUnavailableColor = nil, nil, nil, nil, nil, nil
