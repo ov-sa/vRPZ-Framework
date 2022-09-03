@@ -113,7 +113,10 @@ else
     syncer.public.libraryVersion = (syncer.public.libraryVersion and "v."..syncer.public.libraryVersion) or false
     syncer.public.libraryModules = {}
     syncer.public.libraryClients = {loaded = {}, loading = {}, scheduled = {}}
-    network:create("Assetify:onLoadClient"):on(function(player) syncer.public.libraryClients.loaded[player] = true end)
+    network:create("Assetify:onLoadClient"):on(function(player)
+        syncer.public.libraryClients.loaded[player] = true
+        network:emit("Assetify:Syncer:onSyncPostPool", false, player)
+    end)
     syncer.private.execOnLoad(function()
         for i, j in imports.pairs(syncer.public.libraryClients.scheduled) do
             syncer.private:loadClient(i)
@@ -144,9 +147,7 @@ else
     network:create("Assetify:Syncer:onSyncPostPool"):on(function(self, source)
         self:resume({executions = settings.downloader.syncRate, frames = 1})
         for i, j in imports.pairs(syncer.public.syncedElements) do
-            if j then
-                syncer.public.syncElementModel(i, j.assetType, j.assetName, j.assetClump, j.clumpMaps, source)
-            end
+            if j then syncer.private:setElementModel(i, j.assetType, j.assetName, j.assetClump, j.clumpMaps, j.remoteSignature, source) end
             thread:pause()
         end
     end, {isAsync = true})
@@ -193,7 +194,7 @@ else
         local cAsset = manager:getAssetData(assetType, assetName)
         if not cAsset or (cAsset.manifestData.assetClumps and (not assetClump or not cAsset.manifestData.assetClumps[assetClump])) then return false end
         remoteSignature = imports.getElementType(element)
-        syncer.public.syncedElements[element] = {assetType = assetType, assetName = assetName, assetClump = assetClump, clumpMaps = clumpMaps}
+        syncer.public.syncedElements[element] = {assetType = assetType, assetName = assetName, assetClump = assetClump, clumpMaps = clumpMaps, remoteSignature = remoteSignature}
         thread:create(function(self)
             for i, j in imports.pairs(syncer.public.libraryClients.loaded) do
                 syncer.private:setElementModel(element, assetType, assetName, assetClump, clumpMaps, remoteSignature, i)
