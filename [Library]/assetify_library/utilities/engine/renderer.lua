@@ -80,7 +80,8 @@ if localPlayer then
             local _, _, _, _, _, cameraLookZ = imports.getCameraMatrix()
             local sunX, sunY = imports.getScreenFromWorldPosition(0, 0, cameraLookZ + 200, 1, true)
             local isSunInView = (sunX and sunY and true) or false
-            shader.preLoaded["Assetify_TextureSampler"]:setValue("vSunViewOffset", {(isSunInView and sunX) or 0, (isSunInView and sunY) or 0})
+            if (renderer.private.isSunInView and not isSunInView) or isSunInView then shader.preLoaded["Assetify_TextureSampler"]:setValue("vSunViewOffset", {(isSunInView and sunX) or 0, (isSunInView and sunY) or 0}) end
+            renderer.private.isSunInView = isSunInView
         end
         return true
     end
