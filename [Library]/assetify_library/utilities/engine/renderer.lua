@@ -72,13 +72,11 @@ if localPlayer then
                     imports.setSkyGradient(r, g, b, r, g, b)
                 end
 
-                if renderer.private.serverNativeTimePercent then
-                    --outputChatBox("SKY COLOR - OLD: "..renderer.private.serverNativeTimePercent[1].." NEW: "..renderer.private.serverNativeTimePercent[2])
-                end
+                local currentTimePercent = imports.interpolateBetween(renderer.private.serverNativeTimePercent[1], 0, 0, renderer.private.serverNativeTimePercent[2], 0, 0, getInterpolationProgress(renderer.private.serverTimeCycleTick, renderer.private.minuteDuration*30), "OutQuad")
+                outputChatBox("TIME PERCENT: "..currentTimePercent)
                 --[[
                 local tickElapsed = renderer.private.serverTick + getTickCount()
                 local cycle = (tickElapsed/(60*renderer.private.minuteDuration))%24;
-
                 local hour = math.floor(cycle)
                 local minute = (cycle - hour)*60
                 outputChatBox("Hour: "..hour.." | Minute: "..minute)
