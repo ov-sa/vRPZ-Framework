@@ -20,6 +20,7 @@ local imports = {
     getTickCount = getTickCount,
     destroyElement = destroyElement,
     guiGetScreenSize = guiGetScreenSize,
+    setTime = setTime,
     setSkyGradient = setSkyGradient,
     getSkyGradient = getSkyGradient,
     setCloudsEnabled = setCloudsEnabled,
@@ -31,7 +32,9 @@ local imports = {
     dxUpdateScreenSource = dxUpdateScreenSource,
     dxGetTexturePixels = dxGetTexturePixels,
     dxGetPixelColor = dxGetPixelColor,
-    dxDrawImage = dxDrawImage
+    dxDrawImage = dxDrawImage,
+    interpolateBetween = interpolateBetween,
+    math = math
 }
 
 
@@ -65,23 +68,16 @@ if localPlayer then
                     renderer.private.serverTimeCycleTick = currentTick
                     renderer.private.serverNativeSkyColor, renderer.private.serverNativeTimePercent = renderer.private.serverNativeSkyColor or {}, renderer.private.serverNativeTimePercent or {}
                     local r, g, b = imports.dxGetPixelColor(imports.dxGetTexturePixels(renderer.private.skyRT, renderer.public.resolution[1]*0.5, renderer.public.resolution[2]*0.5, 1, 1), 0, 0)
-                    renderer.private.serverNativeTimePercent[1] = ((renderer.private.serverNativeSkyColor[1] or r) + (renderer.private.serverNativeSkyColor[2] or g) + (renderer.private.serverNativeSkyColor[3] or b))/3
+                    renderer.private.serverNativeTimePercent[1] = ((renderer.private.serverNativeSkyColor[1] or r) + (renderer.private.serverNativeSkyColor[2] or g) + (renderer.private.serverNativeSkyColor[3] or b))/(3*255)
                     renderer.private.serverNativeSkyColor[1], renderer.private.serverNativeSkyColor[2], renderer.private.serverNativeSkyColor[3] = r, g, b
-                    renderer.private.serverNativeTimePercent[2] = (renderer.private.serverNativeSkyColor[1] + renderer.private.serverNativeSkyColor[2] + renderer.private.serverNativeSkyColor[3])/3
+                    renderer.private.serverNativeTimePercent[2] = (renderer.private.serverNativeSkyColor[1] + renderer.private.serverNativeSkyColor[2] + renderer.private.serverNativeSkyColor[3])/(3*255)
                     r, g, b = r*0.5, g*0.5, b*0.5
                     imports.setSkyGradient(r, g, b, r, g, b)
                 end
-
-                local currentTimePercent = imports.interpolateBetween(renderer.private.serverNativeTimePercent[1], 0, 0, renderer.private.serverNativeTimePercent[2], 0, 0, getInterpolationProgress(renderer.private.serverTimeCycleTick, renderer.private.minuteDuration*30), "OutQuad")
-                outputChatBox("TIME PERCENT: "..currentTimePercent)
-                --[[
-                local tickElapsed = renderer.private.serverTick + getTickCount()
-                local cycle = (tickElapsed/(60*renderer.private.minuteDuration))%24;
-                local hour = math.floor(cycle)
-                local minute = (cycle - hour)*60
-                outputChatBox("Hour: "..hour.." | Minute: "..minute)
-                setTime(hour, minute)
-                ]]
+                local currentTime = 12*imports.interpolateBetween(renderer.private.serverNativeTimePercent[1], 0, 0, renderer.private.serverNativeTimePercent[2], 0, 0, 0.25, "OutQuad")
+                local currentHour = imports.math.floor(currentTime)
+                local currentMinute = (currentTime - currentHour)*30
+                imports.setTime(currentHour, currentMinute)
             end
         end
         return true
