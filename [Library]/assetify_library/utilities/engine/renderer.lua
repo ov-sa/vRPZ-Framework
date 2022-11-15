@@ -63,10 +63,27 @@ if localPlayer then
                 local currentTick = imports.getTickCount()
                 if not renderer.private.serverTimeCycleTick or ((currentTick - renderer.private.serverTimeCycleTick) >= renderer.private.minuteDuration*30) then
                     renderer.private.serverTimeCycleTick = currentTick
+                    renderer.private.serverNativeSkyColor, renderer.private.serverNativeTimePercent = renderer.private.serverNativeSkyColor or {}, renderer.private.serverNativeTimePercent or {}
                     local r, g, b = imports.dxGetPixelColor(imports.dxGetTexturePixels(renderer.private.skyRT, renderer.public.resolution[1]*0.5, renderer.public.resolution[2]*0.5, 1, 1), 0, 0)
+                    renderer.private.serverNativeTimePercent[1] = ((renderer.private.serverNativeSkyColor[1] or r) + (renderer.private.serverNativeSkyColor[2] or g) + (renderer.private.serverNativeSkyColor[3] or b))/3
+                    renderer.private.serverNativeSkyColor[1], renderer.private.serverNativeSkyColor[2], renderer.private.serverNativeSkyColor[3] = r, g, b
+                    renderer.private.serverNativeTimePercent[2] = (renderer.private.serverNativeSkyColor[1] + renderer.private.serverNativeSkyColor[2] + renderer.private.serverNativeSkyColor[3])/3
                     r, g, b = r*0.5, g*0.5, b*0.5
                     imports.setSkyGradient(r, g, b, r, g, b)
                 end
+
+                if renderer.private.serverNativeTimePercent then
+                    --outputChatBox("SKY COLOR - OLD: "..renderer.private.serverNativeTimePercent[1].." NEW: "..renderer.private.serverNativeTimePercent[2])
+                end
+                --[[
+                local tickElapsed = renderer.private.serverTick + getTickCount()
+                local cycle = (tickElapsed/(60*renderer.private.minuteDuration))%24;
+
+                local hour = math.floor(cycle)
+                local minute = (cycle - hour)*60
+                outputChatBox("Hour: "..hour.." | Minute: "..minute)
+                setTime(hour, minute)
+                ]]
             end
         end
         return true
