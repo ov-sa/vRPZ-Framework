@@ -25,6 +25,8 @@ local imports = {
     getSkyGradient = getSkyGradient,
     setCloudsEnabled = setCloudsEnabled,
     getCloudsEnabled = getCloudsEnabled,
+    getCameraMatrix = getCameraMatrix,
+    getScreenFromWorldPosition = getScreenFromWorldPosition,
     addEventHandler = addEventHandler,
     removeEventHandler = removeEventHandler,
     dxCreateScreenSource = dxCreateScreenSource,
@@ -58,10 +60,6 @@ if localPlayer then
         imports.dxUpdateScreenSource(renderer.public.virtualSource)
         imports.dxDrawImage(0, 0, renderer.public.resolution[1], renderer.public.resolution[2], shader.preLoaded["Assetify_TextureSampler"].cShader)
         if renderer.public.isDynamicSkyEnabled then
-            --TODO: SUN POSITION SHOULD BE DYNAMIC LATER
-            local cameraX, cameraY, cameraZ, cameraLookX, cameraLookY, cameraLookZ = getCameraMatrix()
-            local sunX, sunY = getScreenFromWorldPosition(0, 0, cameraLookZ + 200, 1, true)
-            if sunX and sunY then shader.preLoaded["Assetify_TextureSampler"]:setValue("vSunViewOffset", {sunX, sunY}) end
             if renderer.public.isTimeSynced then
                 local currentTick = imports.getTickCount()
                 if not renderer.private.serverTimeCycleTick or ((currentTick - renderer.private.serverTimeCycleTick) >= renderer.private.minuteDuration*30) then
@@ -79,6 +77,10 @@ if localPlayer then
                 local currentMinute = (currentTime - currentHour)*30
                 imports.setTime(currentHour, currentMinute)
             end
+            local _, _, _, _, _, cameraLookZ = imports.getCameraMatrix()
+            local sunX, sunY = imports.getScreenFromWorldPosition(0, 0, cameraLookZ + 200, 1, true)
+            local isSunInView = (sunX and sunY and true) or false
+            shader.preLoaded["Assetify_TextureSampler"]:setValue("vSunViewOffset", {(isSunInView and sunX) or 0, (isSunInView and sunY) or 0})
         end
         return true
     end
