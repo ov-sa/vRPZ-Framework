@@ -18,41 +18,41 @@ CCharacter.CBuffer = {}
 
 CCharacter.fetch = function(cThread, characterID)
     if not cThread then return false end
-    local result = cThread:await(imports.dbify.character.fetchAll(cThread, {
-        {imports.dbify.character.connection.key, characterID}
-    }))
+    local result = imports.dbify.module.character.fetchAll({
+        {dbify.module.character.__TMP.structure.key, characterID}
+    })
     return result
 end
 
 CCharacter.fetchOwned = function(cThread, serial)
     if not cThread then return false end
-    local result = cThread:await(imports.dbify.character.fetchAll(cThread, {
+    local result = imports.dbify.module.character.fetchAll({
         {"owner", serial}
-    }))
+    })
     return result
 end
 
 CCharacter.create = function(cThread, serial)
     if not cThread then return false end
     if (not serial or (imports.type(serial) ~= "string")) then return false end
-    local characterID = cThread:await(imports.dbify.character.create(cThread))
+    local characterID = imports.dbify.module.character.create(cThread)
     CCharacter.CBuffer[characterID] = {
         {"owner", serial}
     }
-    cThread:await(imports.dbify.character.setData(cThread, characterID, CCharacter.CBuffer[characterID]))
+    imports.dbify.module.character.setData(characterID, CCharacter.CBuffer[characterID])
     return characterID
 end
 
 CCharacter.delete = function(cThread, characterID)
     if not cThread then return false end
-    local result = cThread:await(imports.dbify.character.delete(cThread, characterID))
+    local result = imports.dbify.module.character.delete(characterID)
     if result then CCharacter.CBuffer[characterID] = nil end
     return result
 end
 
 CCharacter.setData = function(cThread, characterID, characterDatas)
     if not cThread then return false end
-    local result = cThread:await(imports.dbify.character.setData(cThread, characterID, characterDatas))
+    local result = imports.dbify.module.character.setData(characterID, characterDatas)
     if result and CCharacter.CBuffer[characterID] then
         for i = 1, #characterDatas, 1 do
             local j = characterDatas[i]
@@ -64,7 +64,7 @@ end
 
 CCharacter.getData = function(cThread, characterID, characterDatas)
     if not cThread then return false end
-    local result = cThread:await(imports.dbify.character.getData(cThread, characterID, characterDatas))
+    local result = imports.dbify.module.character.getData(characterID, characterDatas)
     if result and CCharacter.CBuffer[characterID] then
         for i = 1, #characterDatas, 1 do
             local j = characterDatas[i]

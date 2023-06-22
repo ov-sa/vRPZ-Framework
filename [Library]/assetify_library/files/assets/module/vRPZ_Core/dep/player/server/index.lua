@@ -10,7 +10,8 @@ local imports = {
     getElementType = getElementType,
     getElementsByType = getElementsByType,
     getPlayerSerial = getPlayerSerial,
-    assetify = assetify
+    assetify = assetify,
+    dbify = dbify
 }
 
 
@@ -23,15 +24,15 @@ CPlayer.CChannel = {}
 
 CPlayer.fetch = function(cThread, serial)
     if not cThread then return false end
-    local result = cThread:await(dbify.serial.fetchAll(cThread, {
-        {dbify.serial.connection.key, serial}
-    }))
+    local result = imports.module.serial.fetchAll({
+        {imports.module.serial.__TMP.structure.key, serial}
+    })
     return result
 end
 
 CPlayer.setData = function(cThread, serial, serialDatas)
     if not cThread then return false end
-    local result = cThread:await(dbify.serial.setData(cThread, serial, serialDatas))
+    local result = imports.module.serial.setData(serial, serialDatas)
     if result and CPlayer.CBuffer[serial] then
         for i = 1, #serialDatas, 1 do
             local j = serialDatas[i]
@@ -43,7 +44,7 @@ end
 
 CPlayer.getData = function(cThread, serial, serialDatas)
     if not cThread then return false end
-    local result = cThread:await(dbify.serial.getData(cThread, serial, serialDatas))
+    local result = imports.module.serial.getData(serial, serialDatas)
     if result and CPlayer.CBuffer[serial] then
         for i = 1, #serialDatas, 1 do
             local j = serialDatas[i]

@@ -52,16 +52,16 @@ local cUtility = {
         imports.table.insert(buffer.inventory, {"slots", imports.table.encode(CInventory.CBuffer[(deps.inventoryID)].slots)})
         for i, j in imports.pairs(CInventory.CItems) do
             if saveProgress then
-                CInventory.setItemProperty(cThread, deps.inventoryID, {j.ref}, {
-                    {imports.dbify.inventory.connection.item.counter, imports.math.max(0, imports.tonumber(CGame.getEntityData(player, "Item:"..i)) or 0)}
+                CInventory.setItemProperty(deps.inventoryID, {j.ref}, {
+                    {imports.dbify.module.inventory.connection.item.counter, imports.math.max(0, imports.tonumber(CGame.getEntityData(player, "Item:"..i)) or 0)}
                 })
             end
             CGame.setEntityData(player, "Item:"..i, (loadProgress and 0) or nil)
         end
         if saveProgress then
-            CPlayer.setData(cThread, deps.serial, buffer.player)
-            CCharacter.setData(cThread, deps.characterID, buffer.character)
-            CInventory.setData(cThread, deps.inventoryID, buffer.inventory)
+            CPlayer.setData(deps.serial, buffer.player)
+            CCharacter.setData(deps.characterID, buffer.character)
+            CInventory.setData(deps.inventoryID, buffer.inventory)
             CPlayer.CBuffer[(deps.serial)], CCharacter.CBuffer[(deps.characterID)], CInventory.CBuffer[(deps.inventoryID)] = nil, nil, nil
             imports.collectgarbage()
         end
@@ -77,9 +77,9 @@ local cUtility = {
 CCharacter.loadInventory = function(cThread, player, deps)
     if not cThread then return false end
     if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") or not deps then return false end
-    local DItemProperty = CInventory.getItemProperty(cThread, deps.inventoryID, CInventory.CRefs.index, {imports.dbify.inventory.connection.item.counter}, true)
+    local DItemProperty = CInventory.getItemProperty(deps.inventoryID, CInventory.CRefs.index, {imports.dbify.module.inventory.connection.item.counter}, true)
     if not DItemProperty and (#CInventory.CRefs.index > 0) then return false end
-    local DInventoryProperty = CInventory.getData(cThread, deps.inventoryID, {"max_slots", "slots"})
+    local DInventoryProperty = CInventory.getData(deps.inventoryID, {"max_slots", "slots"})
     DInventoryProperty = DInventoryProperty or {}
     DInventoryProperty.max_slots, DInventoryProperty.slots = imports.math.max(CInventory.fetchMaxSlotsMultiplier(), imports.tonumber(DInventoryProperty.max_slots) or 0), (DInventoryProperty.slots and imports.table.decode(DInventoryProperty.slots)) or {}
     CInventory.CBuffer[(deps.inventoryID)] = {
@@ -87,7 +87,7 @@ CCharacter.loadInventory = function(cThread, player, deps)
         slots = DInventoryProperty.slots
     }
     for i, j in imports.pairs(DItemProperty) do
-        CGame.setEntityData(player, "Item:"..(CInventory.CRefs.ref[i]), imports.tonumber(j[(imports.dbify.inventory.connection.item.counter)]) or 0)
+        CGame.setEntityData(player, "Item:"..(CInventory.CRefs.ref[i]), imports.tonumber(j[(imports.dbify.module.inventory.connection.item.counter)]) or 0)
     end
     return true
 end
@@ -131,7 +131,7 @@ CCharacter.saveProgress = function(cThread, player)
     local serial = CPlayer.getSerial(player)
     local characterID = CPlayer.getCharacterID(player)
     local inventoryID = CPlayer.getInventoryID(player)
-    CCharacter.setData(cThread, characterID, {
+    CCharacter.setData(characterID, {
         {"location", imports.table.encode(CCharacter.getLocation(player))}
     })
     cUtility.resetProgress(cThread, player, true, {
