@@ -35,7 +35,7 @@ end
 CCharacter.create = function(cThread, serial)
     if not cThread then return false end
     if (not serial or (imports.type(serial) ~= "string")) then return false end
-    local characterID = imports.dbify.module.character.create(cThread)
+    local characterID = imports.dbify.module.character.create()
     CCharacter.CBuffer[characterID] = {
         {"owner", serial}
     }

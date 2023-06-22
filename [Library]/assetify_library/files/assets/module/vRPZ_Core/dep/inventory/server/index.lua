@@ -31,7 +31,7 @@ CInventory.ensureItems = imports.dbify.module.inventory.ensureItems
 
 CInventory.create = function(cThread)
     if not cThread then return false end
-    local inventoryID = imports.dbify.module.inventory.create(cThread)
+    local inventoryID = imports.dbify.module.inventory.create()
     return inventoryID
 end
 
