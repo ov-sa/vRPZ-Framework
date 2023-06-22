@@ -17,15 +17,22 @@ manager:exportAPI("Library", {
         {name = "isLibraryBooted", API = "isBooted"},
         {name = "isLibraryLoaded", API = "isLoaded"},
         {name = "isModuleLoaded"},
+        {name = "isResourceLoaded"},
+        {name = "isResourceFlushed"},
+        {name = "isResourceUnloaded"},
         {name = "getLibraryAssets", API = "fetchAssets"},
         {name = "getAssetData"},
         {name = "getAssetDep"},
         {name = "setElementAsset"},
-        {name = "getElementAssetInfo"},
+        {name = "getElementAsset"},
+        {name = "setElementAssetTone"},
+        {name = "getElementAssetTone"},
         {name = "setGlobalData"},
         {name = "getGlobalData"},
+        {name = "getAllGlobalDatas"},
         {name = "setEntityData"},
         {name = "getEntityData"},
+        {name = "getAllEntityDatas"},
         {name = "setAttachment"},
         {name = "setDetachment"},
         {name = "clearAttachment"},
@@ -37,6 +44,7 @@ manager:exportAPI("Library", {
     },
     client = {
         {name = "getDownloadProgress"},
+        {name = "getResourceDownloadProgress"},
         {name = "isAssetLoaded"},
         {name = "getAssetID"},
         {name = "loadAsset"},
@@ -52,8 +60,12 @@ manager:exportAPI("Library", {
         {name = "setRendererMinuteDuration"},
         {name = "setRendererAntiAliasing"},
         {name = "getRendererAntiAliasing"},
+        {name = "isRendererEmissiveMode"},
+        {name = "setRendererEmissiveMode"},
         {name = "isRendererDynamicSky"},
         {name = "setRendererDynamicSky"},
+        {name = "isRendererDynamicPrelights"},
+        {name = "setRendererDynamicPrelights"},
         {name = "getRendererDynamicSunColor"},
         {name = "setRendererDynamicSunColor"},
         {name = "isRendererDynamicStars"},
@@ -71,5 +83,7 @@ manager:exportAPI("Library", {
         {name = "setPlanarLightTexture"},
         {name = "setPlanarLightColor"}
     },
-    server = {}
+    server = {
+        {name = "loadResource"}
+    }
 })

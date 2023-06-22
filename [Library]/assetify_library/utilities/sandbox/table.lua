@@ -43,6 +43,11 @@ table.private.inspectTypes = {
     }
 }
 
+function table.public.length(baseTable)
+    if not baseTable or (imports.type(baseTable) ~= "table") then return false end
+    return (baseTable.__T and baseTable.__T.length) or #baseTable
+end
+
 function table.public.pack(...)
     return {__T = {
         length = imports.select("#", ...)
@@ -51,7 +56,7 @@ end
 
 function table.public.unpack(baseTable)
     if not baseTable or (imports.type(baseTable) ~= "table") then return false end
-    return imports.unpack(baseTable, 1, (baseTable.__T and baseTable.__T.length) or #baseTable)
+    return imports.unpack(baseTable, 1, table.public.length(baseTable))
 end
 
 function table.public.encode(baseTable, encoding)
@@ -108,6 +113,10 @@ function table.private.inspect(baseTable, showHidden, limit, level, buffer, skip
 end
 function table.public.inspect(...) return table.private.inspect(table.public.unpack(table.public.pack(...), 3)) end 
 
+function table.public.print(...)
+    return imports.print(table.public.inspect(...))
+end
+
 function table.public.keys(baseTable)
     if not baseTable or (imports.type(baseTable) ~= "table") then return false end
     local indexCache, __baseTable = {}, {}
@@ -117,7 +126,7 @@ function table.public.keys(baseTable)
             table.public.insert(__baseTable, i)
         end
     end
-    for i = 1, (baseTable.__T and baseTable.__T.length) or #baseTable, 1 do
+    for i = 1, table.public.length(baseTable), 1 do
         if not indexCache[i] then
             table.public.insert(__baseTable, i)
         end
@@ -134,7 +143,7 @@ function table.public.insert(baseTable, index, value, isForced)
         value, index = index, nil
     end
     baseTable.__T = baseTable.__T or {}
-    baseTable.__T.length = baseTable.__T.length or #baseTable
+    baseTable.__T.length = table.public.length(baseTable)
     index = index or (baseTable.__T.length + 1)
     if (index <= 0) or (index > (baseTable.__T.length + 1)) then return false end
     if index <= baseTable.__T.length then
@@ -152,7 +161,7 @@ function table.public.remove(baseTable, index)
     index = imports.tonumber(index)
     if not baseTable or (imports.type(baseTable) ~= "table") or not index then return false end
     baseTable.__T = baseTable.__T or {}
-    baseTable.__T.length = baseTable.__T.length or #baseTable
+    baseTable.__T.length = table.public.length(baseTable)
     if (index <= 0) or (index > baseTable.__T.length) then return false end
     baseTable[index] = nil
     if index < baseTable.__T.length then
@@ -167,7 +176,7 @@ end
 
 function table.public.forEach(baseTable, exec)
     if not baseTable or (imports.type(baseTable) ~= "table") or not exec or (imports.type(exec) ~= "function") then return false end
-    for i = 1, (baseTable.__T and baseTable.__T.length) or #baseTable, 1 do
+    for i = 1, table.public.length(baseTable), 1 do
         exec(i, baseTable[i])
     end
     return true

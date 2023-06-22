@@ -16,6 +16,10 @@ function manager.API.Library.getDownloadProgress(...)
     return manager:getDownloadProgress(...)
 end
 
+function manager.API.Library.getResourceDownloadProgress(...)
+    return manager:getResourceDownloadProgress(...)
+end
+
 function manager.API.Library.isAssetLoaded(...)
     return manager:isAssetLoaded(...)
 end
@@ -77,12 +81,28 @@ function manager.API.Library.setRendererAntiAliasing(...)
     return renderer:setAntiAliasing(...)
 end
 
+function manager.API.Library.isRendererEmissiveMode()
+    return renderer.isEmissiveModeEnabled
+end
+
+function manager.API.Library.setRendererEmissiveMode(...)
+    return renderer:setEmissiveMode(...)
+end
+
 function manager.API.Library.isRendererDynamicSky()
     return renderer.isDynamicSkyEnabled
 end
 
 function manager.API.Library.setRendererDynamicSky(...)
     return renderer:setDynamicSky(...)
+end
+
+function manager.API.Library.isRendererDynamicPrelights()
+    return renderer.isDynamicPrelightsEnabled
+end
+
+function manager.API.Library.setRendererDynamicPrelights(...)
+    return renderer:setDynamicPrelights(...)
 end
 
 function manager.API.Library.getRendererDynamicSunColor()

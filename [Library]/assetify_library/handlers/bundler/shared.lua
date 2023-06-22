@@ -38,6 +38,7 @@ bundler.private:createBuffer("imports", _, [[
             setmetatable = setmetatable,
             outputDebugString = outputDebugString,
             loadstring = loadstring,
+            getThisResource = getThisResource,
             getResourceFromName = getResourceFromName,
             table = table,
             string = string
@@ -53,15 +54,21 @@ bundler.private:createBuffer("core", "__core", [[
             {exportIndex = "assetify.__core.isBooted", exportName = "isLibraryBooted"},
             {exportIndex = "assetify.__core.isLoaded", exportName = "isLibraryLoaded"},
             {exportIndex = "assetify.__core.isModuleLoaded", exportName = "isModuleLoaded"},
+            {exportIndex = "assetify.__core.isResourceLoaded", exportName = "isResourceLoaded"},
+            {exportIndex = "assetify.__core.isResourceFlushed", exportName = "isResourceFlushed"},
+            {exportIndex = "assetify.__core.isResourceUnloaded", exportName = "isResourceUnloaded"},
             {exportIndex = "assetify.__core.getAssets", exportName = "getLibraryAssets"},
             {exportIndex = "assetify.__core.getAsset", exportName = "getAssetData"},
             {exportIndex = "assetify.__core.getAssetDep", exportName = "getAssetDep"},
             {exportIndex = "assetify.__core.setElementAsset", exportName = "setElementAsset"},
-            {exportIndex = "assetify.__core.getElementAssetInfo", exportName = "getElementAssetInfo"},
+            {exportIndex = "assetify.__core.getElementAsset", exportName = "getElementAsset"},
+            {exportIndex = "assetify.__core.setElementAssetTone", exportName = "setElementAssetTone"},
+            {exportIndex = "assetify.__core.getElementAssetTone", exportName = "getElementAssetTone"},
             {exportIndex = "assetify.__core.createDummy", exportName = "createAssetDummy"}
         },
         client = {
             {exportIndex = "assetify.__core.getDownloadProgress", exportName = "getDownloadProgress"},
+            {exportIndex = "assetify.__core.getResourceDownloadProgress", exportName = "getResourceDownloadProgress"},
             {exportIndex = "assetify.__core.isAssetLoaded", exportName = "isAssetLoaded"},
             {exportIndex = "assetify.__core.getAssetID", exportName = "getAssetID"},
             {exportIndex = "assetify.__core.loadAsset", exportName = "loadAsset"},
@@ -76,20 +83,23 @@ bundler.private:createBuffer("core", "__core", [[
             {exportIndex = "assetify.__core.restoreModel", exportName = "restoreModel"},
             {exportIndex = "assetify.__core.playSound", exportName = "playSoundAsset"},
             {exportIndex = "assetify.__core.playSound3D", exportName = "playSoundAsset3D"}
+        },
+        server = {
+            {exportIndex = "assetify.__core.loadResource", exportName = "loadResource"}
         }
     })..[[
     assetify.__core.loadModule = function(assetName, moduleTypes)
         local cAsset = assetify.getAsset("module", assetName)
-        if not cAsset or not moduleTypes or (#moduleTypes <= 0) then return false end
+        if not cAsset or not moduleTypes or (table.length(moduleTypes) <= 0) then return false end
         if not cAsset.manifestData.assetDeps or not cAsset.manifestData.assetDeps.script then return false end
-        for i = 1, #moduleTypes, 1 do
+        for i = 1, table.length(moduleTypes), 1 do
             local j = moduleTypes[i]
             if cAsset.manifestData.assetDeps.script[j] then
-                for k = 1, #cAsset.manifestData.assetDeps.script[j], 1 do
+                for k = 1, table.length(cAsset.manifestData.assetDeps.script[j]), 1 do
                     local rwData = assetify.getAssetDep("module", assetName, "script", j, k)
                     local status, error = assetify.imports.pcall(assetify.imports.loadstring(rwData))
                     if not status then
-                        assetify.imports.outputDebugString("[Module: "..assetName.."] | Importing Failed: "..cAsset.manifestData.assetDeps.script[j][k].." ("..j..")")
+                        assetify.imports.outputDebugString("Module - "..assetName..": Importing Failed ━│  "..cAsset.manifestData.assetDeps.script[j][k].." ("..j..")")
                         assetify.imports.assert(assetify.imports.loadstring(rwData))
                         assetify.imports.outputDebugString(error)
                     end
@@ -121,8 +131,12 @@ bundler.private:createBuffer("renderer", _, [[
             {exportIndex = "assetify.renderer.setMinuteDuration", exportName = "setRendererMinuteDuration"},
             {exportIndex = "assetify.renderer.getAntiAliasing", exportName = "getRendererAntiAliasing"},
             {exportIndex = "assetify.renderer.setAntiAliasing", exportName = "setRendererAntiAliasing"},
+            {exportIndex = "assetify.renderer.isEmissiveMode", exportName = "isRendererEmissiveMode"},
+            {exportIndex = "assetify.renderer.setEmissiveMode", exportName = "setRendererEmissiveMode"},
             {exportIndex = "assetify.renderer.isDynamicSky", exportName = "isRendererDynamicSky"},
             {exportIndex = "assetify.renderer.setDynamicSky", exportName = "setRendererDynamicSky"},
+            {exportIndex = "assetify.renderer.isDynamicPrelights", exportName = "isRendererDynamicPrelights"},
+            {exportIndex = "assetify.renderer.setDynamicPrelights", exportName = "setRendererDynamicPrelights"},
             {exportIndex = "assetify.renderer.getDynamicSunColor", exportName = "getRendererDynamicSunColor"},
             {exportIndex = "assetify.renderer.setDynamicSunColor", exportName = "setRendererDynamicSunColor"},
             {exportIndex = "assetify.renderer.isDynamicStars", exportName = "isRendererDynamicStars"},
@@ -145,8 +159,10 @@ bundler.private:createBuffer("syncer", _, [[
         shared = {
             {exportIndex = "assetify.syncer.setGlobalData", exportName = "setGlobalData"},
             {exportIndex = "assetify.syncer.getGlobalData", exportName = "getGlobalData"},
+            {exportIndex = "assetify.syncer.getAllGlobalDatas", exportName = "getAllGlobalDatas"},
             {exportIndex = "assetify.syncer.setEntityData", exportName = "setEntityData"},
-            {exportIndex = "assetify.syncer.getEntityData", exportName = "getEntityData"}
+            {exportIndex = "assetify.syncer.getEntityData", exportName = "getEntityData"},
+            {exportIndex = "assetify.syncer.getAllEntityDatas", exportName = "getAllEntityDatas"}
         }
     })..[[
 ]])

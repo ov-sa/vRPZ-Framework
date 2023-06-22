@@ -73,7 +73,7 @@ function asset.private:fetchMap(assetPath, shaderMaps)
         local mapData = shaderMaps[i] 
         if j and mapData then
             for k, v in imports.pairs(mapData) do
-                for m = 1, #v, 1 do
+                for m = 1, table.length(v), 1 do
                     local n = v[m]
                     if i == asset.public.references.clump then
                         n.clump = asset.private:validateMap(cPointer, n.clump, cMaps)
@@ -81,7 +81,7 @@ function asset.private:fetchMap(assetPath, shaderMaps)
                     elseif i == "control" then
                         n.control = asset.private:validateMap(cPointer, n.control, cMaps)
                         n.bump = asset.private:validateMap(cPointer, n.bump, cMaps)
-                        for x = 1, #shader.validChannels, 1 do
+                        for x = 1, table.length(shader.validChannels), 1 do
                             local y = shader.validChannels[x].index
                             if n[y] then
                                 n[y].map = asset.private:validateMap(cPointer, n[y].map, cMaps)
@@ -242,17 +242,17 @@ if localPlayer then
     end
 else
     asset.private.properties = {
-        reserved = {"streamRange", "enableLODs", "assetClumps", "assetAnimations", "assetSounds", "shaderMaps", "sceneDimension", "sceneInterior", "sceneOffsets", "sceneMapped", "sceneNativeObjects"},
+        reserved = {"enableLODs", "enableDoublefaces", "streamRange", "assetClumps", "assetAnimations", "assetSounds", "shaderMaps", "sceneDimension", "sceneInterior", "sceneOffsets", "sceneMapped", "sceneNativeObjects"},
         whitelisted = {
             ["module"] = {},
             ["animation"] = {"assetAnimations"},
             ["sound"] = {"assetSounds"},
-            ["scene"] = {"streamRange", "enableLODs", "shaderMaps", "sceneDimension", "sceneInterior", "sceneOffsets", "sceneMapped", "sceneNativeObjects"},
-            ["*"] = {"streamRange", "enableLODs", "assetClumps", "shaderMaps"}
+            ["scene"] = {"enableLODs", "enableDoublefaces", "streamRange", "shaderMaps", "sceneDimension", "sceneInterior", "sceneOffsets", "sceneMapped", "sceneNativeObjects"},
+            ["*"] = {"enableLODs", "enableDoublefaces", "streamRange", "assetClumps", "shaderMaps"}
         }
     }
     for i, j in imports.pairs(asset.private.properties.whitelisted) do
-        for k = 1, #j, 1 do
+        for k = 1, table.length(j), 1 do
             local v = j[k]
             j[v] = true
             j[k] = nil
@@ -294,7 +294,7 @@ else
                 end
                 if rawPointer then rawPointer[filePath] = builtFileData end
             else
-                if debugExistence then imports.outputDebugString("[Assetify] | Invalid File: "..filePath) end
+                if debugExistence then imports.outputDebugString("Assetify: Invalid File ━│  "..filePath) end
             end
         end
         return true
@@ -349,19 +349,20 @@ else
         if not cAssetPack.manifestData then execFunction(callback, false, assetType); return false end
         thread:create(function(self)
             cAssetPack.rwDatas = {}
-            for i = 1, #cAssetPack.manifestData, 1 do
+            for i = 1, table.length(cAssetPack.manifestData), 1 do
                 local assetName = cAssetPack.manifestData[i]
                 local assetPath = (asset.public.references.root)..string.lower(assetType).."/"..assetName.."/"
                 local assetManifestData = asset.public:buildManifest(assetPath, _, asset.public.references.asset..((file:exists(assetPath..(asset.public.references.asset)..".json") and ".json") or ".vcl"))
                 if assetManifestData then
                     local assetProperties = asset.private.properties.whitelisted[assetType] or asset.private.properties.whitelisted["*"]
-                    for k = 1, #asset.private.properties.reserved, 1 do
+                    for k = 1, table.length(asset.private.properties.reserved), 1 do
                         local v = asset.private.properties.reserved[k]
                         assetManifestData[v] = (assetProperties[v] and assetManifestData[v]) or false
                     end
-                    assetManifestData.streamRange = math.max(imports.tonumber(assetManifestData.streamRange) or 0, asset.public.ranges.streamRange)
-                    assetManifestData.enableLODs = (assetManifestData.enableLODs and true) or false
                     assetManifestData.encryptKey = (assetManifestData.encryptKey and imports.md5(imports.tostring(assetManifestData.encryptKey))) or false
+                    assetManifestData.enableLODs = (assetManifestData.enableLODs and true) or false
+                    assetManifestData.enableDoublefaces = (assetManifestData.enableDoublefaces and true) or false
+                    assetManifestData.streamRange = math.max(imports.tonumber(assetManifestData.streamRange) or 0, asset.public.ranges.streamRange)
                     assetManifestData.assetClumps = (assetManifestData.assetClumps and (imports.type(assetManifestData.assetClumps) == "table") and assetManifestData.assetClumps) or false
                     assetManifestData.assetAnimations = (assetManifestData.assetAnimations and (imports.type(assetManifestData.assetAnimations) == "table") and assetManifestData.assetAnimations) or false
                     assetManifestData.assetSounds = (assetManifestData.assetSounds and (imports.type(assetManifestData.assetSounds) == "table") and assetManifestData.assetSounds) or false
@@ -422,7 +423,7 @@ else
                                 local sceneIDEDatas = scene:parseIDE(file:read(sceneIDEPath))
                                 asset.public:buildFile(sceneIDEPath, cAssetPack.rwDatas[assetName], assetManifestData.encryptKey)
                                 cAssetPack.rwDatas[assetName].synced.sceneIDE = (sceneIDEDatas and true) or false
-                                for k = 1, #sceneIPLDatas, 1 do
+                                for k = 1, table.length(sceneIPLDatas), 1 do
                                     local v = sceneIPLDatas[k]
                                     if not v.nativeID then
                                         if sceneIDEDatas and sceneIDEDatas[(v[2])] then

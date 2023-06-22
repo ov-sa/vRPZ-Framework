@@ -20,6 +20,7 @@ local imports = {
     loadstring = loadstring,
     collectgarbage = collectgarbage,
     isElement = isElement,
+    getElementType = getElementType,
     destroyElement = destroyElement,
     addEventHandler = addEventHandler
 }
@@ -45,14 +46,14 @@ manager.private.buffer = {
 
 function manager.public:isInternal(serial)
     local isExternal = sourceResource and (sourceResource ~= syncer.libraryResource)
-    return (not isExternal and true) or (serial and (serial == syncer.librarySerial)) or false
+    return (not isExternal and not serial and true) or (serial and (serial == syncer.librarySerial)) or false
 end
 
 function manager.public:exportAPI(moduleName, moduleAPIs)
     if not moduleName or (imports.type(moduleName) ~= "string") or not moduleAPIs or (imports.type(moduleAPIs) ~= "table") then return false end
     for i, j in imports.pairs(moduleAPIs) do
         if (i  == "shared") or (i == ((localPlayer and "client") or "server")) then
-            for k = 1, #j, 1 do
+            for k = 1, table.length(j), 1 do
                 local v = j[k]
                 imports.loadstring([[
                     local ref = false
@@ -87,7 +88,7 @@ function manager.public:fetchAssets(assetType)
 end
 
 function manager.public:setElementScoped(element)
-    if not sourceResource or (sourceResource == resource) then return false end
+    if manager.public:isInternal() then return false end
     manager.private.buffer.instance[element] = sourceResource
     manager.private.buffer.scoped[sourceResource] = manager.private.buffer.scoped[sourceResource] or {}
     manager.private.buffer.scoped[sourceResource][element] = true
@@ -120,11 +121,11 @@ if localPlayer then
         if cAsset.manifestData.shaderMaps and cAsset.manifestData.shaderMaps.control then
             for i, j in imports.pairs(cAsset.manifestData.shaderMaps.control) do
                 local shaderTextures, shaderInputs = {}, {}
-                for k = 1, #j, 1 do
+                for k = 1, table.length(j), 1 do
                     local v = j[k]
                     if v.control then shaderTextures[("controlTex_"..k)] = v.control end
                     if v.bump then shaderTextures[("controlTex_"..k.."_bump")] = v.bump end
-                    for x = 1, #shader.validChannels, 1 do
+                    for x = 1, table.length(shader.validChannels), 1 do
                         local y = shader.validChannels[x]
                         if v[(y.index)] then
                             shaderTextures[("controlTex_"..k.."_"..(y.index))] = v[(y.index)].map
@@ -162,6 +163,11 @@ if localPlayer then
             cETA = (not syncer.libraryBandwidth.isDownloaded and not syncer.isLibraryLoaded and syncer.libraryBandwidth.status and (syncer.libraryBandwidth.status.eta/math.max(1, syncer.libraryBandwidth.status.eta_count))) or false
         end
         return cDownloaded, cBandwidth, (cDownloaded/math.max(1, cBandwidth))*100, cETA
+    end
+
+    function manager.public:getResourceDownloadProgress()
+        if manager.public:isInternal() then return false end
+        return resource:getDownloadProgress(sourceResource)
     end
 
     function manager.public:isAssetLoaded(assetType, assetName)
@@ -241,7 +247,7 @@ if localPlayer then
                 local sceneIPLDatas = scene:parseIPL(asset:readFile(assetPath..(asset.references.scene)..".ipl", cAsset.manifestData.encryptKey), cAsset.manifestData.sceneNativeObjects)
                 if sceneIPLDatas then
                     local sceneIDEDatas = scene:parseIDE(asset:readFile(assetPath..(asset.references.scene)..".ide", cAsset.manifestData.encryptKey))
-                    for i = 1, #sceneIPLDatas, 1 do
+                    for i = 1, table.length(sceneIPLDatas), 1 do
                         local j = sceneIPLDatas[i]
                         local sceneData = {
                             position = {x = imports.tonumber(j[4]), y = imports.tonumber(j[5]), z = imports.tonumber(j[6])},
@@ -367,6 +373,13 @@ else
         if not depType or not depIndex or not cAsset.synced.manifestData.assetDeps or not cAsset.synced.manifestData.assetDeps[depType] or not cAsset.synced.manifestData.assetDeps[depType][depIndex] or ((imports.type(cAsset.synced.manifestData.assetDeps[depType][depIndex]) == "table") and (not depSubIndex or not cAsset.synced.manifestData.assetDeps[depType][depIndex][depSubIndex])) then return false end
         return (depSubIndex and cAsset.unSynced.rawData[(cAsset.synced.manifestData.assetDeps[depType][depIndex][depSubIndex])]) or cAsset.unSynced.rawData[(cAsset.synced.manifestData.assetDeps[depType][depIndex])] or false
     end
+
+    function manager.public:loadResource(player, resourceFiles, ...)
+        if manager.public:isInternal() then return false end
+        if player and (not imports.isElement(player) or (imports.getElementType(player) ~= "player")) then return false end
+        if not player and (not resourceFiles or (imports.type(resourceFiles) ~= "table")) then return false end
+        return syncer:syncResource(player, sourceResource, resourceFiles, ...)
+    end
 end
 
 
@@ -374,8 +387,8 @@ end
 --[[ API Syncers ]]--
 ---------------------
 
-imports.addEventHandler((localPlayer and "onClientResourceStop") or "onResourceStop", root, function(stoppedResource)
-    manager.public.clearElementBuffer(stoppedResource, true)
+network:fetch("Assetify:onResourceUnload"):on(function(_, resourceSource)
+    manager.public.clearElementBuffer(resourceSource, true)
 end)
 network:fetch("Assetify:onElementDestroy"):on(function(source)
     if not syncer.isLibraryBooted or not source then return false end

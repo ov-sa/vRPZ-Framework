@@ -19,9 +19,16 @@ local imports = {
 }
 
 bundler.private.schedulers = {
-    ["execOnBoot"] = {exec = "assetify.isBooted", network = "Assetify:onBoot"},
-    ["execOnLoad"] = {exec = "assetify.isLoaded", network = "Assetify:onLoad"},
-    ["execOnModuleLoad"] = {exec = "assetify.isModuleLoaded", network = "Assetify:onModuleLoad"}
+    library = {
+        ["execOnBoot"] = {exec = "assetify.isBooted", network = "Assetify:onBoot"},
+        ["execOnLoad"] = {exec = "assetify.isLoaded", network = "Assetify:onLoad"},
+        ["execOnModuleLoad"] = {exec = "assetify.isModuleLoaded", network = "Assetify:onModuleLoad"},
+    },
+    resource = {
+        ["execOnResourceLoad"] = {exec = "assetify.isResourceLoaded", network = "Assetify:onResourceLoad"},
+        ["execOnResourceFlush"] = {exec = "assetify.isResourceFlushed", network = "Assetify:onResourceFlush"},
+        ["execOnResourceUnload"] = {exec = "assetify.isResourceUnloaded", network = "Assetify:onResourceUnload"}
+    }
 }
 
 
@@ -35,8 +42,8 @@ function bundler.private:createScheduler()
         local footer = [[
         local bootExec = function(type)
             if not assetify.scheduler.buffer.pending[type] then return false end
-            if #assetify.scheduler.buffer.pending[type] > 0 then
-                for i = 1, #assetify.scheduler.buffer.pending[type], 1 do
+            if table.length(assetify.scheduler.buffer.pending[type]) > 0 then
+                for i = 1, table.length(assetify.scheduler.buffer.pending[type]), 1 do
                     assetify.scheduler.buffer.pending[type][i]()
                 end
                 assetify.scheduler.buffer.pending[type] = {}
@@ -54,25 +61,35 @@ function bundler.private:createScheduler()
         end
         ]]
         for i, j in imports.pairs(bundler.private.schedulers) do
-            header = header..i..[[ = {}, ]]
-            body = body..[[
-            assetify.scheduler.]]..i..[[ = function(exec)
-                if not exec or (assetify.imports.type(exec) ~= "function") then return false end
-                if ]]..j.exec..[[() then exec()
-                else assetify.imports.table.insert(assetify.scheduler.buffer.pending.]]..i..[[, exec) end
-                return true
+            for k, v in imports.pairs(j) do
+                header = header..k..[[ = {}, ]]
+                body = body..[[
+                assetify.scheduler.]]..k..[[ = function(exec)
+                    if not exec or (assetify.imports.type(exec) ~= "function") then return false end
+                    ]]..((v.exec and [[if ]]..v.exec..[[() then exec()]]) or [[if false then]])..[[
+                    else assetify.imports.table.insert(assetify.scheduler.buffer.pending.]]..k..[[, exec) end
+                    return true
+                end
+                ]]
+                if i == "library" then
+                    footer = footer..[[
+                    assetify.network:fetch("]]..v.network..[[", true):on(function() bootExec("]]..k..[[") end, {subscriptionLimit = 1})
+                    ]]
+                elseif i == "resource" then
+                    footer = footer..[[
+                    assetify.network:fetch("]]..v.network..[[", true):on(function(_, resource)
+                        if assetify.imports.getThisResource() == resource then bootExec("]]..k..[[") end
+                    end, {subscriptionLimit = 1})
+                    ]]
+                end
             end
-            ]]
-            footer = footer..[[
-            assetify.network:fetch("]]..j.network..[[", true):on(function() bootExec("]]..i..[[") end, {subscriptionLimit = 1})
-            ]]
         end
         header = header..[[}}
         assetify.scheduler.buffer.schedule = assetify.imports.table.clone(assetify.scheduler.buffer.pending, true)
         assetify.scheduler.boot = function()
             for i, j in assetify.imports.pairs(assetify.scheduler.buffer.schedule) do
-                if #j > 0 then
-                    for k = 1, #j, 1 do
+                if table.length(j) > 0 then
+                    for k = 1, table.length(j), 1 do
                         assetify.scheduler[i](j[k])
                     end
                     assetify.scheduler.buffer.schedule[i] = {}

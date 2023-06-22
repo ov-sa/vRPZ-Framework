@@ -54,7 +54,7 @@ shader.private.__remoteWhitelist = {
     "Assetify_TextureGrayscaler",
     "Assetify_TextureShadower"
 }
-for i = 1, #shader.public.remoteWhitelist, 1 do
+for i = 1, table.length(shader.public.remoteWhitelist), 1 do
     local j = shader.public.remoteWhitelist[i]
     shader.private.__remoteWhitelist[j] = true
 end
@@ -112,6 +112,15 @@ if localPlayer then
         return true
     end
 
+    function shader.public:fetchInstance(element, shaderCategory, textureName)
+        if element and shaderCategory and textureName then
+            if shader.public.buffer.element[element] and shader.public.buffer.element[element][shaderCategory] and shader.public.buffer.element[element][shaderCategory].textured[textureName] then
+                return shader.public.buffer.element[element][shaderCategory].textured[textureName]
+            end
+        end
+        return false
+    end
+
     function shader.public.clearElementBuffer(element, shaderCategory)
         if not element or not shader.public.buffer.element[element] or (shaderCategory and not shader.public.buffer.element[element][shaderCategory]) then return false end
         if not shaderCategory then
@@ -147,9 +156,9 @@ if localPlayer then
         return false
     end
 
-    function shader.public:load(element, shaderCategory, shaderName, textureName, shaderTextures, shaderInputs, rwCache, shaderMaps, encryptKey, shaderPriority, shaderDistance, isStandalone)
+    function shader.public:load(element, shaderCategory, shaderName, textureName, shaderTextures, shaderInputs, rwCache, shaderMaps, encryptKey, shaderPriority, shaderDistance, isStandalone, isInternal)
         if not shader.public:isInstance(self) then return false end
-        if not shaderCategory or not shaderName or (not manager:isInternal() and not shader.public.remoteWhitelist[shaderName]) or (not shader.public.preLoaded[shaderName] and not shaderRW.buffer[shaderName]) or (not isStandalone and not textureName) or not shaderTextures or not shaderInputs or not rwCache then return false end
+        if not shaderCategory or not shaderName or (not manager:isInternal(isInternal) and not shader.public.remoteWhitelist[shaderName]) or (not shader.public.preLoaded[shaderName] and not shaderRW.buffer[shaderName]) or (not isStandalone and not textureName) or not shaderTextures or not shaderInputs or not rwCache then return false end
         element = ((element and imports.isElement(element)) and element) or false
         textureName = textureName or false
         shaderPriority = imports.tonumber(shaderPriority) or shader.public.shaderPriority
@@ -197,39 +206,42 @@ if localPlayer then
         return true
     end
 
-    function shader.public:unload()
+    function shader.public:unload(isForced, isInternal)
         if not shader.public:isInstance(self) then return false end
-        if not self.preLoaded then
-            imports.destroyElement(self.cShader)
-        else
-            if not self.shaderData.isStandalone then imports.engineRemoveShaderFromWorldTexture(self.cShader, self.shaderData.textureName, self.shaderData.element) end
-        end
-        if self.shaderData.element then
-            if not self.shaderData.isStandalone then 
-                shader.public.buffer.element[(self.shaderData.element)][(self.shaderData.shaderCategory)].textured[(self.shaderData.textureName)] = nil
-            else
-                shader.public.buffer.element[(self.shaderData.element)][(self.shaderData.shaderCategory)].untextured[self] = nil
+        local isToBeUnloaded = (isForced and isInternal and manager:isInternal(isInternal) and true) or not self.preLoaded
+        if not self.shaderData.isStandalone then imports.engineRemoveShaderFromWorldTexture(self.cShader, self.shaderData.textureName, self.shaderData.element) end
+        if isToBeUnloaded then
+            shader.public.preLoaded[(self.shaderData.shaderName)] = nil
+            if self.shaderData.element then
+                if not self.shaderData.isStandalone then 
+                    shader.public.buffer.element[(self.shaderData.element)][(self.shaderData.shaderCategory)].textured[(self.shaderData.textureName)] = nil
+                else
+                    shader.public.buffer.element[(self.shaderData.element)][(self.shaderData.shaderCategory)].untextured[self] = nil
+                end
             end
+            shader.public.buffer.shader[self] = nil
+            imports.destroyElement(self.cShader)
+            self:destroyInstance()
         end
-        shader.public.buffer.shader[self] = nil
-        self:destroyInstance()
         return true
     end
 
     function shader.public:setValue(i, j)
         if not shader.public:isInstance(self) or not i then return false end
-        return imports.dxSetShaderValue(self.cShader, i, j)
+        return imports.dxSetShaderValue(self.cShader, i, j or false)
     end
 
     shader.public.preLoaded["Assetify_TextureClearer"] = shader.public:create(_, "Assetify-PreLoaded", "Assetify_TextureClearer", _, {baseTexture = 1}, {}, {texture = {[1] = shader.public.preLoadedTex.invisibleMap}}, _, _, shader.public.shaderPriority + 1, shader.public.shaderDistance, true)
-    shader.public.preLoaded["Assetify_TextureSampler"] = shader.public:create(_, "Assetify-PreLoaded", "Assetify_TextureSampler", _, {}, {}, {}, _, _, shader.public.shaderPriority + 1, shader.public.shaderDistance, true)
     shader.public.preLoaded["Assetify_OverlayGoogle"] = shader.public:create(_, "Assetify-PreLoaded", "Assetify_OverlayGoogle", _, {}, {}, {}, _, _, shader.public.shaderPriority + 1, shader.public.shaderDistance, true)
+    renderer:setAntiAliasing(0)
+    renderer:setDynamicPrelights(true)
     renderer:setDynamicSunColor(1*255, 0.7*255, 0.4*255)
     renderer:setDynamicStars(true)
     renderer:setDynamicCloudDensity(18)
     renderer:setDynamicCloudScale(13)
     renderer:setDynamicCloudColor(0.75*255, 0.75*255, 0.75*255)
-    renderer:setTimeCycle(table.decode(file:read("utilities/rw/timecyc.rw")))
+    local rwTimeCycle = table.decode(file:read("utilities/rw/timecyc.rw"))
+    renderer:setTimeCycle(rwTimeCycle)
 end
 
 

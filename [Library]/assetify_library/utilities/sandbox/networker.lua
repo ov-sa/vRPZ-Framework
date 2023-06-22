@@ -50,6 +50,14 @@ imports.addEventHandler("Assetify:Networker:API", root, function(serial, payload
     if payload.processType == "emit" then
         local cNetwork = network.public:fetch(payload.networkName)
         if cNetwork and not cNetwork.isCallback then
+            for i = 1, table.length(cNetwork.priority.index), 1 do
+                local j = cNetwork.priority.index[i]
+                if not cNetwork.priority.handlers[j].config.isAsync then
+                    network.private.execNetwork(cNetwork, j, _, serial, payload)
+                else
+                    thread:create(function(self) network.private.execNetwork(cNetwork, j, self, serial, payload) end):resume()
+                end
+            end
             for i, j in imports.pairs(cNetwork.handlers) do
                 if not j.config.isAsync then
                     network.private.execNetwork(cNetwork, i, _, serial, payload)
@@ -81,6 +89,7 @@ end)
 
 function network.private.fetchArg(index, pool)
     index = imports.tonumber(index) or 1
+    index = (((index - math.floor(index)) == 0) and index) or 1
     if not pool or (imports.type(pool) ~= "table") then return false end
     local argValue = pool[index]
     table.remove(pool, index)
@@ -94,7 +103,7 @@ function network.private.execNetwork(cNetwork, exec, cThread, serial, payload)
         else
             exec(table.unpack(payload.processArgs))
         end
-        local execData = cNetwork.handlers[exec]
+        local execData = cNetwork.priority.handlers[exec] or cNetwork.handlers[exec]
         execData.config.subscriptionCount = (execData.config.subscriptionLimit and (execData.config.subscriptionCount + 1)) or false
         if execData.config.subscriptionLimit and (execData.config.subscriptionCount >= execData.config.subscriptionLimit) then
             cNetwork:off(exec)
@@ -139,6 +148,7 @@ function network.private.deserializeExec(serial)
 end
 
 function network.public:create(...)
+    if self ~= network.public then return false end
     local cNetwork = self:createInstance()
     if cNetwork and not cNetwork:load(...) then
         cNetwork:destroyInstance()
@@ -158,7 +168,7 @@ function network.public:load(name, isCallback)
     self.name = name
     self.owner = network.public.identifier
     self.isCallback = (isCallback and true) or false
-    if not self.isCallback then self.handlers = {} end
+    if not self.isCallback then self.priority, self.handlers = {index = {}, handlers = {}}, {} end
     network.private.buffer[name] = self
     return true
 end
@@ -184,6 +194,7 @@ function network.public:on(exec, config)
     if not exec or (imports.type(exec) ~= "function") then return false end
     config = (config and (imports.type(config) == "table") and config) or {}
     config.isAsync = (config.isAsync and true) or false
+    config.isPrioritized = (not self.isCallback and config.isPrioritized and true) or false
     config.subscriptionLimit = (not self.isCallback and imports.tonumber(config.subscriptionLimit)) or false
     config.subscriptionLimit = (config.subscriptionLimit and math.max(1, config.subscriptionLimit)) or config.subscriptionLimit
     config.subscriptionCount = (config.subscriptionLimit and 0) or false
@@ -193,8 +204,11 @@ function network.public:on(exec, config)
             return true
         end
     else
-        if not self.handlers[exec] then
-            self.handlers[exec] = {config = config}
+        if not self.priority.handlers[exec] and not self.handlers[exec] then
+            if config.isPrioritized then
+                self.priority.handlers[exec] = {index = table.length(self.priority.index) + 1, config = config}
+                table.insert(self.priority.index, exec)
+            else self.handlers[exec] = {config = config} end
             return true
         end
     end
@@ -210,8 +224,15 @@ function network.public:off(exec)
             return true
         end
     else
-        if self.handlers[exec] then
-            self.handlers[exec] = nil
+        if self.priority.handlers[exec] or self.handlers[exec] then
+            if self.priority.handlers[exec] then
+                for i = self.priority.handlers[exec].index + 1, table.length(self.priority.index), 1 do
+                    local j = self.priority.index[i]
+                    self.priority.handlers[j].index = index - 1
+                end
+                table.remove(self.priority.index, self.priority.handlers[exec].index)
+                self.priority.handlers[exec] = nil
+            else self.handlers[exec] = nil end
             return true
         end
     end
@@ -244,27 +265,27 @@ function network.public:emit(...)
     if not payload.isRemote then
         imports.triggerEvent("Assetify:Networker:API", resourceRoot, network.public.identifier, payload)
     else
-        if payload.isReceiver then
-            if not payload.isLatent then
-                imports.triggerRemoteEvent(payload.isReceiver, "Assetify:Networker:API", resourceRoot, network.public.identifier, payload)
-            else
-                imports.triggerRemoteLatentEvent(payload.isReceiver, "Assetify:Networker:API", network.public.bandwidth, false, resourceRoot, network.public.identifier, payload)
-            end
-        else
+        if not payload.isReceiver then
             if not payload.isLatent then
                 imports.triggerRemoteEvent("Assetify:Networker:API", resourceRoot, network.public.identifier, payload)
             else
                 imports.triggerRemoteLatentEvent("Assetify:Networker:API", network.public.bandwidth, false, resourceRoot, network.public.identifier, payload)
+            end
+        else
+            if not payload.isLatent then
+                imports.triggerRemoteEvent(payload.isReceiver, "Assetify:Networker:API", resourceRoot, network.public.identifier, payload)
+            else
+                imports.triggerRemoteLatentEvent(payload.isReceiver, "Assetify:Networker:API", network.public.bandwidth, false, resourceRoot, network.public.identifier, payload)
             end
         end
     end
     return true
 end
 
-function network.public:emitCallback(cThread, ...)
-    if not self or not cThread or not thread:isInstance(cThread) then return false end
-    local cThread = cThread
-    local cArgs, cExec = table.pack(...), function(...) return cThread:resolve(...) end
+function network.public:emitCallback(...)
+    if not self or not thread:getThread() then return false end
+    local cPromise = thread:createPromise()
+    local cArgs, cExec = table.pack(...), cPromise.resolve
     local payload = {
         isRemote = false,
         isRestricted = false,
@@ -281,6 +302,7 @@ function network.public:emitCallback(cThread, ...)
             else
                 payload.isReceiver = network.private.fetchArg(_, cArgs)
                 payload.isReceiver = (payload.isReceiver and imports.isElement(payload.isReceiver) and (imports.getElementType(payload.isReceiver) == "player") and payload.isReceiver) or false
+                if not payload.isReceiver then return false end
             end
         end
     else
@@ -289,12 +311,21 @@ function network.public:emitCallback(cThread, ...)
     end
     payload.processArgs = cArgs
     if not payload.isRemote then
-        return function() imports.triggerEvent("Assetify:Networker:API", resourceRoot, network.public.identifier, payload) end
+        imports.triggerEvent("Assetify:Networker:API", resourceRoot, network.public.identifier, payload)
     else
-        if not payload.isLatent then
-            return function() imports.triggerRemoteEvent("Assetify:Networker:API", resourceRoot, network.public.identifier, payload) end
+        if not network.public.isServerInstance then
+            if not payload.isLatent then
+                imports.triggerRemoteEvent("Assetify:Networker:API", resourceRoot, network.public.identifier, payload)
+            else
+                imports.triggerRemoteLatentEvent("Assetify:Networker:API", network.public.bandwidth, false, resourceRoot, network.public.identifier, payload)
+            end
         else
-            return function() imports.triggerRemoteLatentEvent("Assetify:Networker:API", network.public.bandwidth, false, resourceRoot, network.public.identifier, payload) end
+            if not payload.isLatent then
+                imports.triggerRemoteEvent(payload.isReceiver, "Assetify:Networker:API", resourceRoot, network.public.identifier, payload)
+            else
+                imports.triggerRemoteLatentEvent(payload.isReceiver, "Assetify:Networker:API", network.public.bandwidth, false, resourceRoot, network.public.identifier, payload)
+            end
         end
     end
+    return cPromise
 end
