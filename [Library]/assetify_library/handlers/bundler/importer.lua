@@ -28,7 +28,7 @@ function import(...)
         table.remove(cArgs, 1)
         local buildImports, cImports, __cImports = {}, {}, {}
         local isCompleteFetch = false
-        if (#cArgs <= 0) then
+        if (table.length(cArgs) <= 0) then
             table.insert(buildImports, "core")
         elseif cArgs[1] == "*" then
             isCompleteFetch = true
@@ -38,7 +38,7 @@ function import(...)
         else
             buildImports = cArgs
         end
-        for i = 1, #buildImports, 1 do
+        for i = 1, table.length(buildImports), 1 do
             local j = buildImports[i]
             if (j ~= "imports") and bundler.private.buffer[j] and not __cImports[j] then
                 __cImports[j] = true
@@ -49,10 +49,10 @@ function import(...)
                 })
             end
         end
-        if #cImports <= 0 then return false end
+        if table.length(cImports) <= 0 then return false end
         return cImports, isCompleteFetch
     else
-        cArgs = ((#cArgs > 0) and ", \""..table.concat(cArgs, "\", \"").."\"") or ""
+        cArgs = ((table.length(cArgs) > 0) and ", \""..table.concat(cArgs, "\", \"").."\"") or ""
         return [[
         local cImports, isCompleteFetch = call(getResourceFromName("]]..syncer.libraryName..[["), "import", true]]..cArgs..[[)
         if not cImports then return false end
