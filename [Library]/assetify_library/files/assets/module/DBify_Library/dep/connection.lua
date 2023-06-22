@@ -5,14 +5,14 @@
 dbify = {
     settings = {
         credentials = {
-            username = "hocad49266",
-            password = "hocad49266@anwarb.com",
-            database = "hocad49266",
+            username = "cinadek634",
+            password = "cinadek634@akoption.com",
+            database = "cinadek634",
             host = "db4free.net",
             port = "3306",
             options = ""
         },
-        syncAccount = false,
-        syncSerial = true
+        syncNativeAccounts = false,
+        syncNativeSerials = true
     }
 }
