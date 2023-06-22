@@ -24,15 +24,15 @@ CPlayer.CChannel = {}
 
 CPlayer.fetch = function(cThread, serial)
     if not cThread then return false end
-    local result = imports.module.serial.fetchAll({
-        {imports.module.serial.__TMP.structure.key, serial}
+    local result = imports.dbify.module.serial.fetchAll({
+        {imports.dbify.module.serial.__TMP.structure.key, serial}
     })
     return result
 end
 
 CPlayer.setData = function(cThread, serial, serialDatas)
     if not cThread then return false end
-    local result = imports.module.serial.setData(serial, serialDatas)
+    local result = imports.dbify.module.serial.setData(serial, serialDatas)
     if result and CPlayer.CBuffer[serial] then
         for i = 1, #serialDatas, 1 do
             local j = serialDatas[i]
@@ -44,7 +44,7 @@ end
 
 CPlayer.getData = function(cThread, serial, serialDatas)
     if not cThread then return false end
-    local result = imports.module.serial.getData(serial, serialDatas)
+    local result = imports.dbify.module.serial.getData(serial, serialDatas)
     if result and CPlayer.CBuffer[serial] then
         for i = 1, #serialDatas, 1 do
             local j = serialDatas[i]
