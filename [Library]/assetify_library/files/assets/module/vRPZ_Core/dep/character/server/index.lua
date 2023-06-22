@@ -19,7 +19,7 @@ CCharacter.CBuffer = {}
 CCharacter.fetch = function(cThread, characterID)
     if not cThread then return false end
     local result = imports.dbify.module.character.fetchAll({
-        {dbify.module.character.__TMP.structure.key, characterID}
+        {dbify.module.character.__TMP.structure[(dbify.module.character.__TMP.structure.key)][1], characterID}
     })
     return result
 end

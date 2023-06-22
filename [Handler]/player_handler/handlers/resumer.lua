@@ -79,6 +79,7 @@ imports.assetify.network:create("Player:onToggleLoginUI"):on(function(source)
     imports.assetify.thread:create(function(self)
         local source = __source
         local DPlayer = CPlayer.fetch(self, serial)
+        iprint(DPlayer)
         DPlayer = DPlayer[1]
         DPlayer.character = imports.tonumber(DPlayer.character)
         CPlayer.CBuffer[serial] = DPlayer

@@ -25,7 +25,7 @@ CPlayer.CChannel = {}
 CPlayer.fetch = function(cThread, serial)
     if not cThread then return false end
     local result = imports.dbify.module.serial.fetchAll({
-        {imports.dbify.module.serial.__TMP.structure.key, serial}
+        {dbify.module.serial.__TMP.structure[(dbify.module.serial.__TMP.structure.key)][1], serial}
     })
     return result
 end

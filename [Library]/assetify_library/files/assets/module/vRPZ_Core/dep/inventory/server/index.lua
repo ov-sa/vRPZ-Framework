@@ -22,7 +22,7 @@ local imports = {
 CInventory.fetch = function(cThread, inventoryID)
     if not cThread then return false end
     local result = imports.dbify.module.inventory.fetchAll({
-        {dbify.module.inventory.__TMP.structure.key, inventoryID}
+        {dbify.module.inventory.__TMP.structure[(dbify.module.inventory.__TMP.structure.key)][1], inventoryID}
     })
     return result
 end
