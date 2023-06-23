@@ -22,10 +22,9 @@ local imports = {
 -----------------
 
 local cUtility = {
-    resetProgress = function(cThread, player, isForceReset, deps, saveProgress, loadProgress)
-        if isForceReset then
-            CGame.setEntityData(player, "Character:ID", nil)
-        end
+    resetProgress = function(player, isForceReset, deps, saveProgress, loadProgress)
+        if not imports.assetify.thread:getThread() then return false end
+        if isForceReset then CGame.setEntityData(player, "Character:ID", nil) end
         for i, j in imports.pairs(CPlayer.CAttachments[player]) do
             imports.destroyElement(j)
         end
@@ -75,7 +74,7 @@ local cUtility = {
 --[[ Module: Character ]]--
 ---------------------------
 
-CCharacter.loadInventory = function(cThread, player, deps)
+CCharacter.loadInventory = function(player, deps)
     if not imports.assetify.thread:getThread() then return false end
     if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") or not deps then return false end
     local DItemProperty = CInventory.getItemProperty(deps.inventoryID, CInventory.CRefs.index, {"amount"})
@@ -126,7 +125,7 @@ CCharacter.loadProgress = function(player, loadCharacterID, resetProgress)
     return true
 end
 
-CCharacter.saveProgress = function(cThread, player)
+CCharacter.saveProgress = function(player)
     if not imports.assetify.thread:getThread() then return false end
     if not CPlayer.isInitialized(player) then return false end
     local serial = CPlayer.getSerial(player)
@@ -135,7 +134,7 @@ CCharacter.saveProgress = function(cThread, player)
     CCharacter.setData(characterID, {
         {"location", imports.table.encode(CCharacter.getLocation(player))}
     })
-    cUtility.resetProgress(cThread, player, true, {
+    cUtility.resetProgress(player, true, {
         serial = serial,
         characterID = characterID,
         inventoryID = inventoryID

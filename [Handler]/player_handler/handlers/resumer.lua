@@ -147,7 +147,7 @@ imports.assetify.network:create("Player:onResume"):on(function(source, character
     imports.assetify.thread:create(function(self)
         local source = __source
         local characterID, inventoryID = characters[character].id, CCharacter.CBuffer[(characters[character].id)].inventory
-        if not CCharacter.loadInventory(self, source, {characterID = characterID, inventoryID = inventoryID}) then
+        if not CCharacter.loadInventory(source, {characterID = characterID, inventoryID = inventoryID}) then
             imports.assetify.network:emit("Player:onToggleLoginUI", false, source)
             return false
         end
