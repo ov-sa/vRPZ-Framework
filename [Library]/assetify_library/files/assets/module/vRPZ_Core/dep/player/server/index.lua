@@ -23,7 +23,7 @@ CPlayer.CBuffer = {}
 CPlayer.CChannel = {}
 
 CPlayer.fetch = function(serial)
-    if not cThread then return false end
+    if not imports.assetify.thread:getThread() then return false end
     local result = imports.dbify.module.serial.fetchAll({
         {dbify.module.serial.__TMP.structure[(dbify.module.serial.__TMP.structure.key)][1], serial}
     })
@@ -31,7 +31,7 @@ CPlayer.fetch = function(serial)
 end
 
 CPlayer.setData = function(serial, serialDatas)
-    if not cThread then return false end
+    if not imports.assetify.thread:getThread() then return false end
     local result = imports.dbify.module.serial.setData(serial, serialDatas)
     if result and CPlayer.CBuffer[serial] then
         for i = 1, #serialDatas, 1 do
@@ -43,7 +43,7 @@ CPlayer.setData = function(serial, serialDatas)
 end
 
 CPlayer.getData = function(serial, serialDatas)
-    if not cThread then return false end
+    if not imports.assetify.thread:getThread() then return false end
     local result = imports.dbify.module.serial.getData(serial, serialDatas)
     if result and CPlayer.CBuffer[serial] then
         for i = 1, #serialDatas, 1 do

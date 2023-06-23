@@ -12,6 +12,7 @@ local imports = {
     collectgarbage = collectgarbage,
     table = table,
     math = math,
+    assetify = assetify,
     dbify = dbify
 }
 
@@ -75,7 +76,7 @@ local cUtility = {
 ---------------------------
 
 CCharacter.loadInventory = function(cThread, player, deps)
-    if not cThread then return false end
+    if not imports.assetify.thread:getThread() then return false end
     if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") or not deps then return false end
     local DItemProperty = CInventory.getItemProperty(deps.inventoryID, CInventory.CRefs.index, {"amount"})
     if not DItemProperty and (#CInventory.CRefs.index > 0) then return false end
@@ -126,7 +127,7 @@ CCharacter.loadProgress = function(player, loadCharacterID, resetProgress)
 end
 
 CCharacter.saveProgress = function(cThread, player)
-    if not cThread then return false end
+    if not imports.assetify.thread:getThread() then return false end
     if not CPlayer.isInitialized(player) then return false end
     local serial = CPlayer.getSerial(player)
     local characterID = CPlayer.getCharacterID(player)
