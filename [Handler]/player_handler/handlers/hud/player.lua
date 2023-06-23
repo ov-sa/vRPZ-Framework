@@ -141,11 +141,11 @@ CGame.execOnModuleLoad(function()
             imports.beautify.native.drawImageSection(j.startX, j.startY + iconSize, j.size, j.size - iconSize, 0, nativeSize, j.texWidth, j.texHeight - nativeSize, j.iconTexture, 0, 0, 0, tocolor(200, 200, 200, 255), false)
         end
         --Primary Equipment--
-        imports.beautify.native.drawImage(hudUI.primary.startX, hudUI.primary.startY, hudUI.primary.width, hudUI.primary.height, hudUI.primary.bgTexture, 0, 0, 0, -1, false)
+        --imports.beautify.native.drawImage(hudUI.primary.startX, hudUI.primary.startY, hudUI.primary.width, hudUI.primary.height, hudUI.primary.bgTexture, 0, 0, 0, -1, false)
         imports.beautify.native.drawText("01", hudUI.primary.ammo.startX, hudUI.primary.ammo.startY, hudUI.primary.ammo.endX, hudUI.primary.ammo.endY, hudUI.primary.ammo.fontColor, 1, hudUI.primary.ammo.font.instance, "right", "bottom", false, false, false)
         imports.beautify.native.drawText("999", hudUI.primary.ammo.mag.startX, hudUI.primary.ammo.mag.startY, hudUI.primary.ammo.mag.endX, hudUI.primary.ammo.mag.endY, hudUI.primary.ammo.mag.fontColor, 1, hudUI.primary.ammo.mag.font.instance, "left", "bottom", false, false, false)
         --Secondary Equipment--
-        imports.beautify.native.drawImage(hudUI.secondary.startX, hudUI.secondary.startY, hudUI.secondary.width, hudUI.secondary.height, hudUI.secondary.bgTexture, 0, 0, 0, -1, false)
+        --imports.beautify.native.drawImage(hudUI.secondary.startX, hudUI.secondary.startY, hudUI.secondary.width, hudUI.secondary.height, hudUI.secondary.bgTexture, 0, 0, 0, -1, false)
         imports.beautify.native.drawText("01", hudUI.secondary.ammo.startX, hudUI.secondary.ammo.startY, hudUI.secondary.ammo.endX, hudUI.secondary.ammo.endY, hudUI.secondary.ammo.fontColor, 1, hudUI.secondary.ammo.font.instance, "right", "bottom", false, false, false)
         imports.beautify.native.drawText("999", hudUI.secondary.ammo.mag.startX, hudUI.secondary.ammo.mag.startY, hudUI.secondary.ammo.mag.endX, hudUI.secondary.ammo.mag.endY, hudUI.secondary.ammo.mag.fontColor, 1, hudUI.secondary.ammo.mag.font.instance, "left", "bottom", false, false, false)
         --Party List--
