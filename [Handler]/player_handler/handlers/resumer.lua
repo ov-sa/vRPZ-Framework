@@ -39,8 +39,8 @@ local resumeTicks = {}
 
 imports.assetify.network:create("Player:onDeleteCharacter"):on(function(source, characterID)
     imports.assetify.thread:create(function(self)
-        CInventory.delete(self, CCharacter.CBuffer[characterID].inventory)
-        CCharacter.delete(self, characterID)
+        CInventory.delete(CCharacter.CBuffer[characterID].inventory)
+        CCharacter.delete(characterID)
     end):resume()
 end)
 
@@ -51,9 +51,9 @@ imports.assetify.network:create("Player:onSaveCharacter"):on(function(source, ch
     local __source = source
     imports.assetify.thread:create(function(self)
         local source = __source
-        local characterID = CCharacter.create(self, serial)
-        local inventoryID = CInventory.create(self)
-        local bool = CCharacter.setData(self, characterID, {
+        local characterID = CCharacter.create(serial)
+        local inventoryID = CInventory.create()
+        local bool = CCharacter.setData(characterID, {
             {"identity", imports.table.encode(characters[character].identity)},
             {"inventory", inventoryID}
         })
@@ -92,7 +92,7 @@ imports.assetify.network:create("Player:onToggleLoginUI"):on(function(source)
         DPlayer.role = (DPlayer.role and CGame.getRole(DPlayer.role) and DPlayer.role) or FRAMEWORK_CONFIGS["Templates"]["Roles"].default
         DPlayer.vip = imports.tonumber(DPlayer.vip) or false
 
-        local DCharacter = CCharacter.fetchOwned(self, serial)
+        local DCharacter = CCharacter.fetchOwned(serial)
         if DCharacter and (#DCharacter > 0) then
             for i = 1, #DCharacter, 1 do
                 local j = DCharacter[i]

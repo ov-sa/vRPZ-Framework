@@ -16,7 +16,7 @@ local imports = {
 
 CCharacter.CBuffer = {}
 
-CCharacter.fetch = function(cThread, characterID)
+CCharacter.fetch = function(characterID)
     if not cThread then return false end
     local result = imports.dbify.module.character.fetchAll({
         {dbify.module.character.__TMP.structure[(dbify.module.character.__TMP.structure.key)][1], characterID}
@@ -24,7 +24,7 @@ CCharacter.fetch = function(cThread, characterID)
     return result
 end
 
-CCharacter.fetchOwned = function(cThread, serial)
+CCharacter.fetchOwned = function(serial)
     if not cThread then return false end
     local result = imports.dbify.module.character.fetchAll({
         {"owner", serial}
@@ -32,7 +32,7 @@ CCharacter.fetchOwned = function(cThread, serial)
     return result
 end
 
-CCharacter.create = function(cThread, serial)
+CCharacter.create = function(serial)
     if not cThread then return false end
     if (not serial or (imports.type(serial) ~= "string")) then return false end
     local characterID = imports.dbify.module.character.create()
@@ -43,14 +43,14 @@ CCharacter.create = function(cThread, serial)
     return characterID
 end
 
-CCharacter.delete = function(cThread, characterID)
+CCharacter.delete = function(characterID)
     if not cThread then return false end
     local result = imports.dbify.module.character.delete(characterID)
     if result then CCharacter.CBuffer[characterID] = nil end
     return result
 end
 
-CCharacter.setData = function(cThread, characterID, characterDatas)
+CCharacter.setData = function(characterID, characterDatas)
     if not cThread then return false end
     local result = imports.dbify.module.character.setData(characterID, characterDatas)
     if result and CCharacter.CBuffer[characterID] then
@@ -62,7 +62,7 @@ CCharacter.setData = function(cThread, characterID, characterDatas)
     return result
 end
 
-CCharacter.getData = function(cThread, characterID, characterDatas)
+CCharacter.getData = function(characterID, characterDatas)
     if not cThread then return false end
     local result = imports.dbify.module.character.getData(characterID, characterDatas)
     if result and CCharacter.CBuffer[characterID] then
