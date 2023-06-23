@@ -54,12 +54,14 @@ settings.assetPacks = {
         assetTransparency = false
     },
 
+    --[[
     ["object"] = {
         autoLoad = true,
         assetType = "object",
         assetBase = 1337,
         assetTransparency = false
     },
+    ]]
 
     ["inventory"] = {
         autoLoad = true,
