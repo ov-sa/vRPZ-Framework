@@ -138,11 +138,11 @@ else
 
     function loot:refresh(lootType)
         if self == loot then
-            thread:create(function(cThread)
+            thread:create(function()
                 if loot.buffer.loot[lootType] then
                     for i, j in imports.pairs(loot.buffer.loot[lootType]) do
                         if j then i:refresh() end
-                        thread.pause()
+                        imports.assetify.thread:pause()
                     end
                 else
                     for i = 1, #FRAMEWORK_CONFIGS["Loots"][lootType], 1 do
@@ -152,9 +152,9 @@ else
                             if k and v then
                                 imports.triggerClientEvent(k, "Loot_Handler:onRecieveLoot", k, cLoot.lootType, FRAMEWORK_CONFIGS["Loots"][(cLoot.lootType)][(cLoot.lootIndex)], cLoot.lootInstance)
                             end
-                            thread.pause()
+                            imports.assetify.thread:pause()
                         end
-                        thread.pause()
+                        imports.assetify.thread:pause()
                     end
                 end
             end):resume({
@@ -162,13 +162,13 @@ else
                 frames = 1
             })
         else
-            thread:create(function(cThread)
+            thread:create(function()
                 for i, j in imports.pairs(FRAMEWORK_CONFIGS["Inventory"]["Items"]) do
                     for k, v in imports.pairs(j) do
                         imports.setElementData(self.lootInstance, "Item:"..k, 0)
-                        thread.pause()
+                        imports.assetify.thread:pause()
                     end
-                    thread.pause()
+                    imports.assetify.thread:pause()
                 end
                 imports.setElementData(self.lootInstance, "Inventory:Slots", imports.math.random(FRAMEWORK_CONFIGS["Loots"][(self.lootType)].weight[1], FRAMEWORK_CONFIGS["Loots"][(self.lootType)].weight[2]))
                 for i = 1, #FRAMEWORK_CONFIGS["Loots"][(self.lootType)].items, 1 do
@@ -185,7 +185,7 @@ else
                             end
                         end
                     end
-                    thread.pause()
+                    imports.assetify.thread:pause()
                 end
             end):resume({
                 executions = syncSettings.syncRate,
@@ -199,12 +199,12 @@ else
     imports.addEventHandler("Loot_Handler:onRequestLoots", root, function()
         loot.loadedClients[source] = true
         local player = source
-        thread:create(function(cThread)
+        thread:create(function()
             for i, j in imports.pairs(loot.buffer.element) do
                 if i and j then
                     imports.triggerClientEvent(player, "Loot_Handler:onRecieveLoot", player, j.lootPack, j.lootType, FRAMEWORK_CONFIGS["Loots"][(j.lootType)][(j.lootIndex)], j.lootInstance)
                 end
-                thread.pause()
+                imports.assetify.thread:pause()
             end
         end):resume({
             executions = syncSettings.syncRate,
