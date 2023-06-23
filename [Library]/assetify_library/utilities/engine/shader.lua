@@ -158,8 +158,7 @@ if localPlayer then
 
     function shader.public:load(element, shaderCategory, shaderName, textureName, shaderTextures, shaderInputs, rwCache, shaderMaps, encryptKey, shaderPriority, shaderDistance, isStandalone, isInternal)
         if not shader.public:isInstance(self) then return false end
-        if shaderCategory == "player-nametag" then print("TEST 0") end
-        if not shaderCategory or not shaderName or (not manager:isInternal(isInternal) and not shader.public.remoteWhitelist[shaderName]) or (not shader.public.preLoaded[shaderName] and not shaderRW.buffer[shaderName]) or (not isStandalone and not textureName) or not shaderTextures or not shaderInputs or not rwCache then print("TEST 1: "..shaderCategory) return false end
+        if not shaderCategory or not shaderName or (not manager:isInternal(isInternal) and not shader.public.remoteWhitelist[shaderName]) or (not shader.public.preLoaded[shaderName] and not shaderRW.buffer[shaderName]) or (not isStandalone and not textureName) or not shaderTextures or not shaderInputs or not rwCache then return false end
         element = ((element and imports.isElement(element)) and element) or false
         textureName = textureName or false
         shaderPriority = imports.tonumber(shaderPriority) or shader.public.shaderPriority
@@ -232,8 +231,8 @@ if localPlayer then
         return imports.dxSetShaderValue(self.cShader, i, j or false)
     end
 
-    shader.public.preLoaded["Assetify_TextureClearer"] = shader.public:create(_, "Assetify-PreLoaded", "Assetify_TextureClearer", _, {baseTexture = 1}, {}, {texture = {[1] = shader.public.preLoadedTex.invisibleMap}}, _, _, shader.public.shaderPriority + 1, shader.public.shaderDistance, true)
-    shader.public.preLoaded["Assetify_OverlayGoogle"] = shader.public:create(_, "Assetify-PreLoaded", "Assetify_OverlayGoogle", _, {}, {}, {}, _, _, shader.public.shaderPriority + 1, shader.public.shaderDistance, true)
+    shader.public.preLoaded["Assetify_TextureClearer"] = shader.public:create(_, "Assetify | PreLoad", "Assetify_TextureClearer", _, {baseTexture = 1}, {}, {texture = {[1] = shader.public.preLoadedTex.invisibleMap}}, _, _, shader.public.shaderPriority + 1, shader.public.shaderDistance, true)
+    shader.public.preLoaded["Assetify_OverlayGoogle"] = shader.public:create(_, "Assetify | PreLoad", "Assetify_OverlayGoogle", _, {}, {}, {}, _, _, shader.public.shaderPriority + 1, shader.public.shaderDistance, true)
     renderer:setAntiAliasing(0)
     renderer:setDynamicPrelights(true)
     renderer:setDynamicSunColor(1*255, 0.7*255, 0.4*255)
