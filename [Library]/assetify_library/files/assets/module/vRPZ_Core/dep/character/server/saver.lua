@@ -77,7 +77,7 @@ local cUtility = {
 CCharacter.loadInventory = function(cThread, player, deps)
     if not cThread then return false end
     if not player or not imports.isElement(player) or (imports.getElementType(player) ~= "player") or not deps then return false end
-    local DItemProperty = CInventory.getItemProperty(cThread, deps.inventoryID, CInventory.CRefs.index, {"amount"})
+    local DItemProperty = CInventory.getItemProperty(deps.inventoryID, CInventory.CRefs.index, {"amount"})
     if not DItemProperty and (#CInventory.CRefs.index > 0) then return false end
     local DInventoryProperty = CInventory.getData(deps.inventoryID, {"max_slots", "slots"})
     DInventoryProperty = DInventoryProperty or {}

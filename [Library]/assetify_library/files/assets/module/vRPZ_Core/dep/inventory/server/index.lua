@@ -19,7 +19,7 @@ local imports = {
 --[[ Module: Inventory ]]--
 ---------------------------
 
-CInventory.fetch = function(cThread, inventoryID)
+CInventory.fetch = function(inventoryID)
     if not cThread then return false end
     local result = imports.dbify.module.inventory.fetchAll({
         {dbify.module.inventory.__TMP.structure[(dbify.module.inventory.__TMP.structure.key)][1], inventoryID}
@@ -29,61 +29,61 @@ end
 
 CInventory.ensureItems = imports.dbify.module.inventory.ensureItems
 
-CInventory.create = function(cThread)
+CInventory.create = function()
     if not cThread then return false end
     local inventoryID = imports.dbify.module.inventory.create()
     return inventoryID
 end
 
-CInventory.delete = function(cThread, inventoryID)
+CInventory.delete = function(inventoryID)
     if not cThread then return false end
     local result = imports.dbify.module.inventory.delete(inventoryID)
     return result
 end
 
-CInventory.setData = function(cThread, inventoryID, inventoryDatas)
+CInventory.setData = function(inventoryID, inventoryDatas)
     if not cThread then return false end
     local result = imports.dbify.module.inventory.setData(inventoryID, inventoryDatas)
     return result
 end
 
-CInventory.getData = function(cThread, inventoryID, inventoryDatas)
+CInventory.getData = function(inventoryID, inventoryDatas)
     if not cThread then return false end
     local result = imports.dbify.module.inventory.getData(inventoryID, inventoryDatas)
     return result
 end
 
-CInventory.addItem = function(cThread, inventoryID, inventoryItems)
+CInventory.addItem = function(inventoryID, inventoryItems)
     if not cThread then return false end
     local result = imports.dbify.module.inventory.item.add(inventoryID, inventoryItems)
     return result
 end
 
-CInventory.removeItem = function(cThread, inventoryID, inventoryItems)
+CInventory.removeItem = function(inventoryID, inventoryItems)
     if not cThread then return false end
     local result = imports.dbify.module.inventory.item.remove(inventoryID, inventoryItems)
     return result
 end
 
-CInventory.setItemProperty = function(cThread, inventoryID, inventoryItems, itemProperties)
+CInventory.setItemProperty = function(inventoryID, inventoryItems, itemProperties)
     if not cThread then return false end
     local result = imports.dbify.module.inventory.item.setProperty(inventoryID, inventoryItems, itemProperties)
     return result
 end
 
-CInventory.getItemProperty = function(cThread, inventoryID, inventoryItems, itemProperties)
+CInventory.getItemProperty = function(inventoryID, inventoryItems, itemProperties)
     if not cThread then return false end
     local result = imports.dbify.module.inventory.item.getProperty(inventoryID, inventoryItems, itemProperties)
     return result
 end
 
-CInventory.setItemData = function(cThread, inventoryID, inventoryItems, itemDatas)
+CInventory.setItemData = function(inventoryID, inventoryItems, itemDatas)
     if not cThread then return false end
     local result = imports.dbify.module.inventory.item.setData(inventoryID, inventoryItems, itemDatas)
     return result
 end
 
-CInventory.getItemData = function(cThread, inventoryID, inventoryItems, itemDatas)
+CInventory.getItemData = function(inventoryID, inventoryItems, itemDatas)
     if not cThread then return false end
     local result = imports.dbify.module.inventory.item.getData(inventoryID, inventoryItems, itemDatas)
     return result
