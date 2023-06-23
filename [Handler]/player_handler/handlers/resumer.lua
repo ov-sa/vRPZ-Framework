@@ -78,7 +78,7 @@ imports.assetify.network:create("Player:onToggleLoginUI"):on(function(source)
     local __source = source
     imports.assetify.thread:create(function(self)
         local source = __source
-        local DPlayer = CPlayer.fetch(self, serial)
+        local DPlayer = CPlayer.fetch(serial)
         DPlayer = DPlayer[1]
         DPlayer.character = imports.tonumber(DPlayer.character)
         CPlayer.CBuffer[serial] = DPlayer
@@ -154,7 +154,7 @@ imports.assetify.network:create("Player:onResume"):on(function(source, character
 
         CGame.setEntityData(source, "Character:ID", characterID)
         CGame.setEntityData(source, "Character:Identity", CCharacter.CBuffer[characterID].identity)
-        CPlayer.setData(self, serial, {
+        CPlayer.setData(serial, {
             {"character", character}
         })
         resumeTicks[source] = imports.getTickCount()
