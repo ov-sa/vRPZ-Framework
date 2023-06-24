@@ -219,10 +219,6 @@ end
 
 imports.assetify.scheduler.execOnLoad(function()
     imports.assetify.thread:create(function(self)
-        local CItems = {}
-        for i, j in imports.pairs(CInventory.CItems) do
-            CItems[(imports.string.lower(i))] = true
-        end
-        CInventory.ensureItems(CItems)
+        CInventory.ensureItems(CInventory.CRefs.ref)
     end):resume()
 end)
