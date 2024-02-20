@@ -69,6 +69,18 @@ function string.public.parseHex(baseString)
     return imports.tonumber("0x"..string.public.sub(baseString, 1, 2)) or 0, imports.tonumber("0x"..string.public.sub(baseString, 3, 4)) or 0, imports.tonumber("0x"..string.public.sub(baseString, 5, 6)) or 0
 end
 
+function string.public.formatTime(milliseconds)
+    milliseconds = imports.tonumber(milliseconds)
+    if not milliseconds then return false end
+    milliseconds = math.floor(milliseconds)
+    local totalSeconds = math.floor(milliseconds/1000)
+    local seconds = totalSeconds%60
+    local minutes = math.floor(totalSeconds/60)
+    local hours = math.floor(minutes/60)
+    minutes = minutes%60
+    return imports.string.format("%02d:%02d:%02d", hours, minutes, seconds)
+end
+
 function string.public.encode(baseString, type, options)
     if not baseString or (imports.type(baseString) ~= "string") then return false end
     return imports.encodeString(type, baseString, options)
