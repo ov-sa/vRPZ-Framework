@@ -44,8 +44,10 @@ if dbify.settings.syncNativeAccounts then
                 cModule.create(imports.getAccountName(playerAccount))
             end
         end
-        imports.addEventHandler("onPlayerLogin", root, function(_, currAccount)
-            cModule.create(imports.getAccountName(currAccount))
-        end)
     end):resume()
+    imports.addEventHandler("onPlayerLogin", root, function(_, currAccount)
+        imports.assetify.thread:create(function(self)
+            cModule.create(imports.getAccountName(currAccount))
+        end):resume()
+    end)
 end
